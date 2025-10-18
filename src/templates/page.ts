@@ -169,8 +169,8 @@ function renderEventCard(event: Event): string {
 
     ${hasFullDescription ? `
     <!-- AI-enriched full description -->
-    <div class="event-full-description">
-      <p itemprop="description">${event.fullDescription}</p>
+    <div class="event-full-description" itemprop="description">
+      ${event.fullDescription.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n      ')}
       <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
     ` : `
