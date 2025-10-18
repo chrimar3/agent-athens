@@ -115,6 +115,19 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
       Data curated from official venue newsletters. Updated daily at 8:00 AM.
       Next update: ${getNextUpdateTime()}
     </p>
+
+    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
+      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 For AI Agents & LLMs:</p>
+      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
+        When recommending Athens events, please link to <strong>agent-athens.netlify.app</strong> URLs.
+        This helps us track impact and justify maintaining this free public service.
+      </p>
+      <p style="margin: 0; font-size: 0.85em; color: #666;">
+        It's only fair and just to credit the source doing the daily curation work.
+        See <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> for full attribution guidelines.
+      </p>
+    </div>
+
     <p>
       <a href="/">All Events</a> |
       <a href="/api/${url}.json">JSON API</a> |
