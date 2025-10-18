@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Indie",
+    "price": "free",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.799Z",
+    "url": "https://agent-athens.netlify.app/free-indie-concert-tomorrow"
+  }
+}

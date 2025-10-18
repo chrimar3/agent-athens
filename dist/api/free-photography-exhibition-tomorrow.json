@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Photography",
+    "price": "free",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.809Z",
+    "url": "https://agent-athens.netlify.app/free-photography-exhibition-tomorrow"
+  }
+}

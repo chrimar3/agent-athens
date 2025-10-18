@@ -1,0 +1,47 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Pop",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "robbie-williams-concert-2025-10-02",
+      "title": "Robbie Williams Concert",
+      "description": "British pop icon Robbie Williams performs at the historic Panathenaic Stadium",
+      "startDate": "2025-10-02T21:00:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Pop"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Panathenaic Stadium",
+        "address": "Vassileos Konstantinou Avenue, Athens",
+        "neighborhood": "Pangrati",
+        "coordinates": {
+          "lat": 37.9682,
+          "lon": 23.7408
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 50,
+        "currency": "EUR",
+        "range": "€50-€150"
+      },
+      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
+      "source": "songkick.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "lastUpdate": "2025-10-18T18:21:06.780Z",
+    "url": "https://agent-athens.netlify.app/pop-concert"
+  }
+}

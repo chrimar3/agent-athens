@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Jazz",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.788Z",
+    "url": "https://agent-athens.netlify.app/jazz-concert-today"
+  }
+}

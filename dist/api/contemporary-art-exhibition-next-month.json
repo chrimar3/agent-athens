@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Contemporary art",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.804Z",
+    "url": "https://agent-athens.netlify.app/contemporary-art-exhibition-next-month"
+  }
+}

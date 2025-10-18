@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "theater",
+    "price": "free",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.769Z",
+    "url": "https://agent-athens.netlify.app/free-theater-today"
+  }
+}

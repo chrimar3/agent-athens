@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Pop",
+    "price": "paid",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.782Z",
+    "url": "https://agent-athens.netlify.app/paid-pop-concert-this-week"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Post-rock",
+    "price": "paid",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.787Z",
+    "url": "https://agent-athens.netlify.app/paid-post-rock-concert-tomorrow"
+  }
+}

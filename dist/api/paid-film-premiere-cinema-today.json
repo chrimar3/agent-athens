@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Film premiere",
+    "price": "paid",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.815Z",
+    "url": "https://agent-athens.netlify.app/paid-film-premiere-cinema-today"
+  }
+}

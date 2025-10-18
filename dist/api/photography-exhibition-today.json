@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Photography",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.807Z",
+    "url": "https://agent-athens.netlify.app/photography-exhibition-today"
+  }
+}

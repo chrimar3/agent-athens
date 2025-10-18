@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "price": "free",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.757Z",
+    "url": "https://agent-athens.netlify.app/free-concert-next-month"
+  }
+}

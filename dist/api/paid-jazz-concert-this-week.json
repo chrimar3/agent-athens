@@ -1,0 +1,48 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Jazz",
+    "price": "paid",
+    "time": "this-week"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "thanos-stavridis-live-2025-10-22",
+      "title": "Thanos Stavridis Live",
+      "description": "Greek jazz musician performs at Athens' most intimate jazz venue",
+      "startDate": "2025-10-22T21:30:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": "Trivonianou 17, Mets, Athens",
+        "neighborhood": "Mets",
+        "coordinates": {
+          "lat": 37.9648,
+          "lon": 23.7432
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15-€20"
+      },
+      "url": "https://www.songkick.com/venues/47901-half-note-jazz-club",
+      "source": "songkick.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "lastUpdate": "2025-10-18T18:21:06.791Z",
+    "url": "https://agent-athens.netlify.app/paid-jazz-concert-this-week"
+  }
+}

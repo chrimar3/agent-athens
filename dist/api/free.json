@@ -1,0 +1,141 @@
+{
+  "filters": {
+    "price": "free",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "stanley-whitney-return-to-the-garden-2025-10-02",
+      "title": "Stanley Whitney: Return to the Garden",
+      "description": "Solo exhibition by American abstract painter Stanley Whitney featuring colorful grid paintings. Exhibition runs until January 17, 2026",
+      "startDate": "2025-10-02T11:00:00+03:00",
+      "type": "exhibition",
+      "genres": [
+        "Contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Gagosian Athens",
+        "address": "Anapiron Polemou Street, Athens",
+        "neighborhood": "Kolonaki",
+        "coordinates": {
+          "lat": 37.9749,
+          "lon": 23.7341
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://gagosian.com/exhibitions",
+      "source": "gagosian.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "vegan-life-festival-athens-2025-2025-10-04",
+      "title": "Vegan Life Festival Athens 2025",
+      "description": "Greece's biggest vegan event returns for its ninth edition under the theme 'For Earth's Sake' with plant-based food, talks, and workshops. Runs October 4-5",
+      "startDate": "2025-10-04T11:00:00+03:00",
+      "type": "other",
+      "genres": [
+        "Festival"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Technopolis City of Athens",
+        "address": "100 Pireos Street, Gazi, Athens",
+        "neighborhood": "Gazi",
+        "coordinates": {
+          "lat": 37.9785,
+          "lon": 23.7152
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://athens-technopolis.gr",
+      "source": "athens-technopolis.gr",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "athenogates-group-art-exhibition-2025-10-08",
+      "title": "Athenogates Group Art Exhibition",
+      "description": "Opening night of group art exhibition featuring multiple contemporary artists. Exhibition runs through November",
+      "startDate": "2025-10-08T19:00:00+03:00",
+      "type": "exhibition",
+      "genres": [
+        "Contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Andie Art Gallery",
+        "address": "Athens",
+        "neighborhood": "Psyrri",
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7275
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://www.myguideathens.com/events",
+      "source": "myguideathens.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "onassis-stegi-street-party-2025-2025-10-09",
+      "title": "Onassis Stegi Street Party 2025",
+      "description": "15th anniversary celebration with street party featuring Daniel Avery and JG Wilkes (Optimo) B2B set, plus family activities by Bobos Arts Festival",
+      "startDate": "2025-10-09T18:00:00+03:00",
+      "type": "other",
+      "genres": [
+        "Street festival"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Onassis Stegi",
+        "address": "Syggrou Avenue 107-109, Neos Kosmos, Athens",
+        "neighborhood": "Neos Kosmos",
+        "coordinates": {
+          "lat": 37.954,
+          "lon": 23.7404
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://www.onassis.org",
+      "source": "onassis.org",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 4,
+    "lastUpdate": "2025-10-18T18:21:06.751Z",
+    "url": "https://agent-athens.netlify.app/free"
+  }
+}

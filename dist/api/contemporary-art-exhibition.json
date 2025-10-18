@@ -1,0 +1,78 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Contemporary art",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "stanley-whitney-return-to-the-garden-2025-10-02",
+      "title": "Stanley Whitney: Return to the Garden",
+      "description": "Solo exhibition by American abstract painter Stanley Whitney featuring colorful grid paintings. Exhibition runs until January 17, 2026",
+      "startDate": "2025-10-02T11:00:00+03:00",
+      "type": "exhibition",
+      "genres": [
+        "Contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Gagosian Athens",
+        "address": "Anapiron Polemou Street, Athens",
+        "neighborhood": "Kolonaki",
+        "coordinates": {
+          "lat": 37.9749,
+          "lon": 23.7341
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://gagosian.com/exhibitions",
+      "source": "gagosian.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "athenogates-group-art-exhibition-2025-10-08",
+      "title": "Athenogates Group Art Exhibition",
+      "description": "Opening night of group art exhibition featuring multiple contemporary artists. Exhibition runs through November",
+      "startDate": "2025-10-08T19:00:00+03:00",
+      "type": "exhibition",
+      "genres": [
+        "Contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Andie Art Gallery",
+        "address": "Athens",
+        "neighborhood": "Psyrri",
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7275
+        }
+      },
+      "price": {
+        "type": "free"
+      },
+      "url": "https://www.myguideathens.com/events",
+      "source": "myguideathens.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "lastUpdate": "2025-10-18T18:21:06.804Z",
+    "url": "https://agent-athens.netlify.app/contemporary-art-exhibition"
+  }
+}

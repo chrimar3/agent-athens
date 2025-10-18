@@ -1,0 +1,28 @@
+{
+  "name": "agent-athens",
+  "version": "1.0.0",
+  "description": "AI-curated cultural events calendar for Athens, Greece",
+  "type": "module",
+  "scripts": {
+    "build": "bun run src/generate-site.ts",
+    "dev": "bun run src/generate-site.ts && bun run serve",
+    "serve": "bun run --watch src/serve.ts",
+    "deploy": "netlify deploy --prod --dir=dist"
+  },
+  "keywords": [
+    "athens",
+    "events",
+    "cultural",
+    "ai",
+    "agent-first",
+    "GEO",
+    "SEO"
+  ],
+  "author": "agent-athens",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Film premiere",
+    "price": "free",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.813Z",
+    "url": "https://agent-athens.netlify.app/free-film-premiere-cinema-tomorrow"
+  }
+}

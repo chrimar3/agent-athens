@@ -1,0 +1,25 @@
+# agent-athens robots.txt
+# Welcome AI agents!
+
+User-agent: *
+Allow: /
+
+# Specific AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Agent-specific resources
+# LLMs.txt: https://agent-athens.netlify.app/llms.txt
+# Sitemap: https://agent-athens.netlify.app/sitemap.xml

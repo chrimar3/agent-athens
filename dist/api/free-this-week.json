@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "price": "free",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.750Z",
+    "url": "https://agent-athens.netlify.app/free-this-week"
+  }
+}

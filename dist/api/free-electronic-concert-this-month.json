@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Electronic",
+    "price": "free",
+    "time": "this-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.795Z",
+    "url": "https://agent-athens.netlify.app/free-electronic-concert-this-month"
+  }
+}

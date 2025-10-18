@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Electronic",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.793Z",
+    "url": "https://agent-athens.netlify.app/electronic-concert-this-week"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "filters": {
+    "type": "concert",
+    "price": "paid",
+    "time": "today"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "public-service-broadcasting-2025-10-18",
+      "title": "Public Service Broadcasting",
+      "description": "British indie band performs documentary samples, cinematic soundscapes, and indie electronica",
+      "startDate": "2025-10-18T21:00:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Indie/Electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte Ground Stage",
+        "address": "Voutadon 32-34, Gazi, Athens",
+        "neighborhood": "Gazi",
+        "coordinates": {
+          "lat": 37.9791,
+          "lon": 23.7164
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€25-€35"
+      },
+      "url": "https://www.gazarte.gr",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "dub-fx-and-mr-woodnote-2025-10-18",
+      "title": "Dub FX and Mr. Woodnote",
+      "description": "Australian live-looping artist Dub FX performs with British reggae artist Mr. Woodnote",
+      "startDate": "2025-10-18T21:30:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Dub/Reggae"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Fuzz Club",
+        "address": "Athens",
+        "neighborhood": "Exarcheia",
+        "coordinates": {
+          "lat": 37.9815,
+          "lon": 23.722
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20-€25"
+      },
+      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
+      "source": "songkick.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "lastUpdate": "2025-10-18T18:21:06.759Z",
+    "url": "https://agent-athens.netlify.app/paid-concert-today"
+  }
+}

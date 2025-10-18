@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Contemporary art",
+    "price": "paid",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.807Z",
+    "url": "https://agent-athens.netlify.app/paid-contemporary-art-exhibition-next-month"
+  }
+}

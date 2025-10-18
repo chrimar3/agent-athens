@@ -1,0 +1,46 @@
+{
+  "filters": {
+    "price": "paid",
+    "time": "this-weekend"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "barcelona-gipsy-balkan-orchestra-2025-10-25",
+      "title": "Barcelona Gipsy Balkan Orchestra",
+      "description": "Performance blending Balkan folk, rebetiko, jazz, klezmer, and Mediterranean rhythms",
+      "startDate": "2025-10-25T21:00:00+03:00",
+      "type": "concert",
+      "genres": [
+        "World music/Folk"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte Main Stage",
+        "address": "Voutadon 32-34, Gazi, Athens",
+        "neighborhood": "Gazi",
+        "coordinates": {
+          "lat": 37.9791,
+          "lon": 23.7164
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€25-€35"
+      },
+      "url": "https://www.gazarte.gr",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "lastUpdate": "2025-10-18T18:21:06.754Z",
+    "url": "https://agent-athens.netlify.app/paid-this-weekend"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Post-rock",
+    "price": "free",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.786Z",
+    "url": "https://agent-athens.netlify.app/free-post-rock-concert-next-month"
+  }
+}

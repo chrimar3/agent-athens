@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Jazz",
+    "price": "free",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.789Z",
+    "url": "https://agent-athens.netlify.app/free-jazz-concert-today"
+  }
+}

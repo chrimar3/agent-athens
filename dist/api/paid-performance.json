@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "performance",
+    "price": "paid",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.776Z",
+    "url": "https://agent-athens.netlify.app/paid-performance"
+  }
+}

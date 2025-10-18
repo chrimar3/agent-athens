@@ -1,0 +1,112 @@
+{
+  "filters": {
+    "price": "paid",
+    "time": "tomorrow"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "red-snapper-2025-10-19",
+      "title": "Red Snapper",
+      "description": "British trio performs acid jazz, trip-hop, and psychedelic surf music",
+      "startDate": "2025-10-19T21:00:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Acid jazz/Trip-hop"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte Roof Stage",
+        "address": "Voutadon 32-34, Gazi, Athens",
+        "neighborhood": "Gazi",
+        "coordinates": {
+          "lat": 37.9791,
+          "lon": 23.7164
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20-€30"
+      },
+      "url": "https://www.gazarte.gr",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "juergen-teller-you-are-invited-2025-10-19",
+      "title": "Juergen Teller: you are invited",
+      "description": "Inaugural exhibition at new Onassis Ready space featuring photographer Juergen Teller's most expansive solo presentation in Greece. Runs until December 30",
+      "startDate": "2025-10-19T18:00:00+03:00",
+      "type": "exhibition",
+      "genres": [
+        "Photography"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Onassis Ready",
+        "address": "Industrial district, Athens",
+        "neighborhood": "Athens",
+        "coordinates": {
+          "lat": 37.954,
+          "lon": 23.7404
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 8,
+        "currency": "EUR",
+        "range": "€8-€12"
+      },
+      "url": "https://www.onassis.org",
+      "source": "onassis.org",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "sunn-o-2025-10-19",
+      "title": "Sunn O)))",
+      "description": "American experimental drone metal duo performs immersive live show",
+      "startDate": "2025-10-19T21:00:00+03:00",
+      "type": "concert",
+      "genres": [
+        "Drone/Experimental"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gagarin 205",
+        "address": "Liosion 205, Athens",
+        "neighborhood": "Athens",
+        "coordinates": {
+          "lat": 38.0067,
+          "lon": 23.7282
+        }
+      },
+      "price": {
+        "type": "paid",
+        "amount": 30,
+        "currency": "EUR",
+        "range": "€30-€35"
+      },
+      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
+      "source": "songkick.com",
+      "createdAt": "2025-10-18T18:21:06.719Z",
+      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "language": "en"
+    }
+  ],
+  "meta": {
+    "total": 3,
+    "lastUpdate": "2025-10-18T18:21:06.753Z",
+    "url": "https://agent-athens.netlify.app/paid-tomorrow"
+  }
+}

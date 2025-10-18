@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.740Z",
+    "url": "https://agent-athens.netlify.app/exhibition-next-month"
+  }
+}

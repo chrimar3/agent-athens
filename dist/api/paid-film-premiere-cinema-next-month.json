@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Film premiere",
+    "price": "paid",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.816Z",
+    "url": "https://agent-athens.netlify.app/paid-film-premiere-cinema-next-month"
+  }
+}

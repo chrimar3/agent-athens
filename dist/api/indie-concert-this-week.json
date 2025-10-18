@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Indie",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2025-10-18T18:21:06.798Z",
+    "url": "https://agent-athens.netlify.app/indie-concert-this-week"
+  }
+}
