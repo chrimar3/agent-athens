@@ -6,6 +6,7 @@ export interface Event {
   id: string;
   title: string;
   description: string;
+  fullDescription?: string;  // Rich 400-word description
   startDate: string;  // ISO 8601
   endDate?: string;
   type: EventType;

@@ -10,6 +10,7 @@
       "id": "jazz-at-the-museum-myrto-papatanasiu-2025-10-24",
       "title": "Jazz at the Museum: Myrto Papatanasiu",
       "description": "Athens' much-loved Jazz at the Museum series returns for its sixth season...",
+      "fullDescription": "When the marble corridors of the Basil and Elise Goulandris Foundation transform into an intimate jazz venue, something magical happens. The sixth season of Athens' beloved Jazz at the Museum series opens on October 24th with an evening of sophisticated improvisation that bridges the gap between visual and sonic artistry. This unique concert series has become a cultural institution in its own right, proving that Pangrati's premier art museum is as comfortable hosting world-class musicians as it is displaying masterworks.\n\nMyrto Papatanasiu represents a generation of Greek jazz artists who have absorbed the language of the greats while developing a distinctly personal voice. Her approach to the piano combines technical precision with emotional depth, drawing from the Mediterranean melodic sensibility that has always set Greek jazz apart. Whether interpreting standards or presenting original compositions, Papatanasiu creates musical narratives that feel both timeless and urgently contemporary. Her performances are known for their dynamic range, moving from delicate, introspective moments to powerful, driving passages that showcase her command of the keyboard.\n\nThe setting itself enhances the experience. The Goulandris Foundation, one of Athens' most significant contemporary art spaces, provides an acoustically refined environment where every note resonates with clarity. The juxtaposition of visual art and live music creates a multisensory experience that enriches both mediums. Attending Jazz at the Museum isn't just about hearing great music; it's about experiencing culture in a holistic way that reflects Athens' growing sophistication as an international cultural capital.\n\nThis concert takes place on Friday evening at 8:30 PM, making it an ideal way to launch your weekend in the vibrant Pangrati neighborhood. The area surrounding the museum offers numerous options for pre-concert dining, from traditional tavernas to modern bistros, and the post-concert vibe in Pangrati's cafes and bars extends the cultural experience well into the night.\n\nTickets are available through the This is Athens platform. Don't miss this opportunity to experience jazz in one of Athens' most distinctive cultural spaces.",
       "startDate": "2025-10-24T20:30:00+03:00",
       "endDate": null,
       "type": "concert",
@@ -36,7 +37,7 @@
       "url": "https://www.thisisathens.org/events/jazz-at-the-museum-myrto-papatanasiu-goulandris-foundation",
       "source": "This is Athens",
       "createdAt": "2025-10-18T19:33:56.650Z",
-      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18 20:18:17",
       "language": "en"
     },
     {
@@ -45,6 +46,7 @@
       "id": "barcelona-gipsy-balkan-orchestra-2025-10-25",
       "title": "Barcelona Gipsy Balkan Orchestra",
       "description": "Performance blending Balkan folk, rebetiko, jazz, klezmer, and Mediterranean rhythms",
+      "fullDescription": "Music has always crossed borders more easily than people, and few ensembles demonstrate this truth more joyfully than the Barcelona Gipsy Balkan Orchestra. Coming to Gazarte's Main Stage on October 25th, this extraordinary collective brings together musical traditions from across the Mediterranean and Eastern Europe in a high-energy performance that defies simple categorization. Their sound blends Balkan folk music, Greek rebetiko, jazz improvisation, klezmer traditions, and Mediterranean rhythms into something entirely their own—a musical celebration that honors multiple cultural lineages while creating something genuinely new.\n\nThe ensemble's name tells part of the story but not all of it. Based in Barcelona, they've become ambassadors for a musical approach that recognizes the historical interconnections between Balkan, Jewish, Greek, and broader Mediterranean musical traditions. Their arrangements respect the source material while giving each musician space to showcase individual virtuosity. The result is music that feels both ancient and contemporary, grounded in tradition yet alive with spontaneous creativity. Whether navigating the complex time signatures of Balkan folk music or swinging through jazz-inflected passages, the orchestra maintains an infectious energy that transforms listeners into participants.\n\nFor Athens audiences, there's a special resonance to this music. Rebetiko, Greece's own urban folk tradition born in the early 20th century, shares deep roots with the musical cultures the Barcelona Gipsy Balkan Orchestra celebrates. Hearing these traditions interpreted by international artists offers a fresh perspective on musical forms that Athenians know intimately. It's a reminder that cultural exchange enriches rather than dilutes, and that authenticity can emerge from unexpected syntheses.\n\nGazarte in Gazi provides the ideal setting for this cross-cultural musical adventure. The venue's Main Stage has hosted countless memorable concerts, and its industrial-chic aesthetic matches the orchestra's blend of traditional and contemporary elements. The Gazi neighborhood itself embodies cultural transformation, having evolved from industrial district to cultural hotspot while maintaining its distinctive character.\n\nThe concert begins at 9 PM on Saturday evening. Tickets range from 25 to 35 euros and are available through Gazarte's website. Come prepared to dance, as this is music that refuses to let audiences sit still.",
       "startDate": "2025-10-25T21:00:00+03:00",
       "endDate": null,
       "type": "concert",
@@ -71,13 +73,13 @@
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
       "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18 20:18:17",
       "language": "en"
     }
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2025-10-18T19:52:38.085Z",
+    "lastUpdate": "2025-10-18T20:41:20.813Z",
     "url": "https://agent-athens.netlify.app/paid-this-weekend"
   }
 }
