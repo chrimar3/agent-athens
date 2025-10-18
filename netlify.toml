@@ -1,0 +1,40 @@
+# Netlify configuration for agent-athens
+
+[build]
+  # No build step needed - static HTML files
+  publish = "dist"
+  command = "echo 'Static site - no build needed'"
+
+# Redirect rules (optional - for future use)
+[[redirects]]
+  from = "/events"
+  to = "/index.html"
+  status = 200
+
+# Headers for better caching and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/api/*.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/feed.xml"
+  [headers.values]
+    Content-Type = "application/rss+xml"
+    Cache-Control = "public, max-age=3600"
+
+# HTML caching - refresh every hour since we update daily
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
