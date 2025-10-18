@@ -4,46 +4,10 @@
     "genre": "Film premiere",
     "time": "all-events"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "ScreeningEvent",
-      "id": "bugonia-greek-premiere-2025-10-01",
-      "title": "Bugonia - Greek Premiere",
-      "description": "Opening night of the 31st Athens International Film Festival featuring the Greek premiere of Yorgos Lanthimos' latest film 'Bugonia' starring Emma Stone and Jesse Plemons",
-      "startDate": "2025-10-01T20:00:00+03:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "Film premiere"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Athens Concert Hall (Megaron)",
-        "address": "Vassilissis Sofias & Kokkali, Athens",
-        "neighborhood": "Kolonaki",
-        "coordinates": {
-          "lat": 37.9813,
-          "lon": 23.7584
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8-€10"
-      },
-      "url": "https://en.aiff.gr",
-      "source": "aiff.gr",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-18T19:44:57.941Z",
+    "total": 0,
+    "lastUpdate": "2025-10-18T19:52:38.160Z",
     "url": "https://agent-athens.netlify.app/film-premiere-cinema"
   }
 }

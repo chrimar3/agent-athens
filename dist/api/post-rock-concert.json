@@ -4,46 +4,10 @@
     "genre": "Post-rock",
     "time": "all-events"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "mogwai-live-2025-10-09",
-      "title": "Mogwai Live",
-      "description": "Scottish post-rock legends Mogwai perform their atmospheric instrumental music",
-      "startDate": "2025-10-09T21:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "Post-rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Floyd Live Music Venue",
-        "address": "Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7275
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€25-€35"
-      },
-      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
-      "source": "songkick.com",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-18T19:44:57.913Z",
+    "total": 0,
+    "lastUpdate": "2025-10-18T19:52:38.131Z",
     "url": "https://agent-athens.netlify.app/post-rock-concert"
   }
 }

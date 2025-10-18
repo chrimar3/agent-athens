@@ -18,7 +18,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2025-10-18">
-  <meta name="last-modified" content="2025-10-18T19:44:57.870Z">
+  <meta name="last-modified" content="2025-10-18T19:52:38.080Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -82,8 +82,8 @@
       }
     ]
   },
-  "datePublished": "2025-10-18T19:44:57.870Z",
-  "dateModified": "2025-10-18T19:44:57.870Z"
+  "datePublished": "2025-10-18T19:52:38.080Z",
+  "dateModified": "2025-10-18T19:52:38.080Z"
 }
   </script>
 
@@ -96,9 +96,14 @@
     .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
     .last-update { font-size: 0.9rem; color: #999; }
     .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 10px; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; font-size: 0.9rem; color: #666; }
+    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; }
+    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
+    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
+    .event-full-description { margin-bottom: 20px; }
+    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
+    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
     .event-meta dt { font-weight: bold; }
     .event-meta dd { margin-left: 5px; }
     .price-free { color: #27ae60; font-weight: bold; }
@@ -117,7 +122,7 @@
       <strong>1 events</strong> is happening in Athens.
     </p>
     <p class="last-update">
-      Last updated: October 18, 2025 at 10:44 PM Athens time
+      Last updated: October 18, 2025 at 10:52 PM Athens time
     </p>
   </header>
 
@@ -125,9 +130,13 @@
     
     <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
       
-  <article class="event-card" itemscope itemtype="https://schema.org/Event">
+  <article class="event-card " itemscope itemtype="https://schema.org/Event">
     <h2 itemprop="name">29th Athens Cycling Tour</h2>
-    <p itemprop="description">The Athens Cycling Tour is back for its 29th edition...</p>
+
+    
+    <!-- Short description -->
+    <p itemprop="description" class="event-short-description">The Athens Cycling Tour is back for its 29th edition...</p>
+    
 
     <dl class="event-meta">
       <dt>Date:</dt>

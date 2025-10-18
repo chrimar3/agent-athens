@@ -63,9 +63,14 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
     .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
     .last-update { font-size: 0.9rem; color: #999; }
     .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 10px; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; font-size: 0.9rem; color: #666; }
+    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; }
+    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
+    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
+    .event-full-description { margin-bottom: 20px; }
+    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
+    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
     .event-meta dt { font-weight: bold; }
     .event-meta dd { margin-left: 5px; }
     .price-free { color: #27ae60; font-weight: bold; }
@@ -155,10 +160,23 @@ function renderEventCard(event: Event): string {
   const priceClass = event.price.type === 'free' ? 'price-free' : 'price-paid';
   const priceText = event.price.type === 'free' ? 'Free' : event.price.range || `€${event.price.amount}`;
 
+  const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
+  const eventId = event.id.replace(/[^a-z0-9]/gi, '-');
+
   return `
-  <article class="event-card" itemscope itemtype="https://schema.org/${event['@type']}">
+  <article class="event-card ${hasFullDescription ? 'enriched' : ''}" itemscope itemtype="https://schema.org/${event['@type']}">
     <h2 itemprop="name">${event.title}</h2>
-    <p itemprop="description">${event.description}</p>
+
+    ${hasFullDescription ? `
+    <!-- AI-enriched full description -->
+    <div class="event-full-description">
+      <p itemprop="description">${event.fullDescription}</p>
+      <div class="enrichment-badge">✨ AI-enriched content</div>
+    </div>
+    ` : `
+    <!-- Short description -->
+    <p itemprop="description" class="event-short-description">${event.description}</p>
+    `}
 
     <dl class="event-meta">
       <dt>Date:</dt>

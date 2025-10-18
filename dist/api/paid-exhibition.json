@@ -8,76 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "ExhibitionEvent",
-      "id": "allspice-michael-rakowitz-and-ancient-cultures-2025-05-13",
-      "title": "Allspice: Michael Rakowitz and Ancient Cultures",
-      "description": "Iraqi-American artist Michael Rakowitz enters into dialogue with ancient artefacts...",
-      "startDate": "2025-05-13T09:00:00+03:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "contemporary art"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "The Acropolis Museum",
-        "address": "Acropolis",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": "paid"
-      },
-      "url": "https://www.thisisathens.org/events/michael-rakowitz-ancient-cultures-neon-acropolis-museum",
-      "source": "This is Athens",
-      "createdAt": "2025-10-18T19:33:56.650Z",
-      "updatedAt": "2025-10-18T19:33:56.650Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "gates-of-transition-biennale-2025-collective-exhibition-of-contemporary-studio-jewelry-2025-05-29",
-      "title": "Gates of Transition: Biennale 2025 - Collective Exhibition of Contemporary Studio Jewelry",
-      "description": "Discover the cutting edge of contemporary art jewellery at the Museum of Modern Decorative Arts...",
-      "startDate": "2025-05-29T09:00:00+03:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "jewelry"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ilias Lalaounis Jewellery Museum",
-        "address": "Koukaki",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": "paid"
-      },
-      "url": "https://www.thisisathens.org/events/gates-of-transition-biennale-2025-collective-exhibition-contemporary-studio-jewelry",
-      "source": "This is Athens",
-      "createdAt": "2025-10-18T19:33:56.650Z",
-      "updatedAt": "2025-10-18T19:33:56.650Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
       "id": "juergen-teller-you-are-invited-2025-10-19",
       "title": "Juergen Teller: you are invited",
       "description": "German photographer Juergen Teller's first-ever exhibition at Onassis Ready...",
@@ -112,8 +42,8 @@
     }
   ],
   "meta": {
-    "total": 3,
-    "lastUpdate": "2025-10-18T19:44:57.891Z",
+    "total": 1,
+    "lastUpdate": "2025-10-18T19:52:38.109Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition"
   }
 }

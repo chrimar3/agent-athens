@@ -8,146 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "robbie-williams-concert-2025-10-02",
-      "title": "Robbie Williams Concert",
-      "description": "British pop icon Robbie Williams performs at the historic Panathenaic Stadium",
-      "startDate": "2025-10-02T21:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "Pop"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Panathenaic Stadium",
-        "address": "Vassileos Konstantinou Avenue, Athens",
-        "neighborhood": "Pangrati",
-        "coordinates": {
-          "lat": 37.9682,
-          "lon": 23.7408
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 50,
-        "currency": "EUR",
-        "range": "€50-€150"
-      },
-      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
-      "source": "songkick.com",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "mogwai-live-2025-10-09",
-      "title": "Mogwai Live",
-      "description": "Scottish post-rock legends Mogwai perform their atmospheric instrumental music",
-      "startDate": "2025-10-09T21:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "Post-rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Floyd Live Music Venue",
-        "address": "Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7275
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€25-€35"
-      },
-      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
-      "source": "songkick.com",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "hugo-kant-2025-10-11",
-      "title": "Hugo Kant",
-      "description": "French jazz pianist and electronic music producer Hugo Kant performs live",
-      "startDate": "2025-10-11T22:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "Jazz/Electronic fusion"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Arch Club",
-        "address": "Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7275
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15-€20"
-      },
-      "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
-      "source": "songkick.com",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "marc-almond-2025-10-16",
-      "title": "Marc Almond",
-      "description": "Legendary British synth-pop icon Marc Almond performs exclusive show. Also performing October 17",
-      "startDate": "2025-10-16T21:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "Synth-pop/New wave"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte Ground Stage",
-        "address": "Voutadon 32-34, Gazi, Athens",
-        "neighborhood": "Gazi",
-        "coordinates": {
-          "lat": 37.9791,
-          "lon": 23.7164
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": "€30-€40"
-      },
-      "url": "https://www.gazarte.gr",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T19:28:50.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "public-service-broadcasting-2025-10-18",
       "title": "Public Service Broadcasting",
       "description": "UK rock innovators Public Service Broadcasting land in Athens for one night only, bringing their signature blend of music, history, and cinematic visuals...",
@@ -637,8 +497,8 @@
     }
   ],
   "meta": {
-    "total": 18,
-    "lastUpdate": "2025-10-18T19:44:57.885Z",
+    "total": 14,
+    "lastUpdate": "2025-10-18T19:52:38.103Z",
     "url": "https://agent-athens.netlify.app/paid-concert"
   }
 }

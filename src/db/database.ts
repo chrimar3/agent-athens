@@ -51,7 +51,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $id: event.id,
     $title: event.title,
     $description: event.description || "",
-    $full_description: null, // Will be populated by enrichment
+    $full_description: event.fullDescription || null,
     $start_date: event.startDate,
     $end_date: event.endDate || null,
     $type: event.type,
@@ -87,6 +87,7 @@ export function rowToEvent(row: any): Event {
     id: row.id,
     title: row.title,
     description: row.description || "",
+    fullDescription: row.full_description || undefined,
     startDate: row.start_date,
     endDate: row.end_date,
     type: row.type,
@@ -281,6 +282,50 @@ export function cleanupOldEvents(retentionDays: number = 90): number {
   const result = stmt.run({ $cutoff: cutoffDate.toISOString() });
 
   return result.changes;
+}
+
+/**
+ * Update an existing event
+ */
+export function updateEvent(event: Event): boolean {
+  const db = getDatabase();
+  const row = eventToRow(event);
+
+  const stmt = db.prepare(`
+    UPDATE events
+    SET title = $title,
+        description = $description,
+        full_description = $full_description,
+        start_date = $start_date,
+        end_date = $end_date,
+        type = $type,
+        genres = $genres,
+        tags = $tags,
+        venue_name = $venue_name,
+        venue_address = $venue_address,
+        venue_neighborhood = $venue_neighborhood,
+        venue_lat = $venue_lat,
+        venue_lng = $venue_lng,
+        venue_capacity = $venue_capacity,
+        price_type = $price_type,
+        price_amount = $price_amount,
+        price_currency = $price_currency,
+        price_range = $price_range,
+        url = $url,
+        source = $source,
+        ai_context = $ai_context,
+        schema_json = $schema_json,
+        updated_at = $updated_at
+    WHERE id = $id
+  `);
+
+  try {
+    stmt.run(row);
+    return true;
+  } catch (error) {
+    console.error(`Error updating event ${event.id}:`, error);
+    return false;
+  }
 }
 
 /**

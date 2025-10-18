@@ -37,9 +37,28 @@ async function main() {
 
   // Load events from database
   console.log('📥 Loading events from database...');
-  const { getAllEvents } = await import('./db/database');
-  const events = getAllEvents();
-  console.log(`✅ Loaded ${events.length} events from SQLite\n`);
+  const { getAllEvents, cleanupOldEvents } = await import('./db/database');
+
+  // Clean up events that ended more than 1 day ago (keep recent history)
+  const cleaned = cleanupOldEvents(1);
+  if (cleaned > 0) {
+    console.log(`🗑️  Cleaned up ${cleaned} past events\n`);
+  }
+
+  // Load all upcoming and recent events
+  const allEvents = getAllEvents();
+
+  // Filter to only future events for public site (keep events that haven't ended yet)
+  const now = new Date();
+  const events = allEvents.filter(event => {
+    const eventDate = new Date(event.startDate);
+    // Keep events that are today or in the future
+    // This handles your "tomorrow becomes today" logic automatically
+    return eventDate >= new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  });
+
+  console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
+  console.log(`📅 Publishing ${events.length} current/upcoming events\n`);
 
   // Save normalized events
   const normalizedPath = join(DIST_DIR, 'data');
