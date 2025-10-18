@@ -7,10 +7,159 @@
     {
       "@context": "https://schema.org",
       "@type": "ExhibitionEvent",
+      "id": "kasper-bosmans-the-fuzzy-gaze-2025-04-03",
+      "title": "Kasper Bosmans: The Fuzzy Gaze",
+      "description": "Belgian artist Kasper Bosmans reflects on the shifting roles of animals in human society...",
+      "startDate": "2025-04-03T11:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "National Museum of Contemporary Art Athens (EMST)",
+        "address": "Koukaki",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/kasper-bosmans-the-fuzzy-gaze-emst",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "emma-talbot-human-nature-2025-04-03",
+      "title": "Emma Talbot: Human/Nature",
+      "description": "Emma Talbot's new installation explores the relationship between humans, animals, and the environment...",
+      "startDate": "2025-04-03T11:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "contemporary art"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "National Museum of Contemporary Art Athens (EMST)",
+        "address": "Koukaki",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/emma-talbot-human-nature-emst",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "simone-leigh-anatomy-of-architecture-2025-04-28",
+      "title": "Simone Leigh: Anatomy of Architecture",
+      "description": "Simone Leigh brings her monumental bronze sculptures to the SNFCC Agora...",
+      "startDate": "2025-04-28T06:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "sculpture"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Stavros Niarchos Foundation Cultural Centre",
+        "address": "Kallithea",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/simone-leigh-anatomy-architecture-snfcc",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "100-years-takis-2025-05-22",
+      "title": "100 Years Takis",
+      "description": "The Stavros Niarchos Foundation Cultural Centre marks the centenary of Takis with four of his outdoor sculptures...",
+      "startDate": "2025-05-22T06:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "sculpture"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Stavros Niarchos Foundation Cultural Centre",
+        "address": "Kallithea",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/100-years-takis-stavros-niarchos-foundation-cultural-centre",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
       "id": "stanley-whitney-return-to-the-garden-2025-10-02",
       "title": "Stanley Whitney: Return to the Garden",
       "description": "Solo exhibition by American abstract painter Stanley Whitney featuring colorful grid paintings. Exhibition runs until January 17, 2026",
       "startDate": "2025-10-02T11:00:00+03:00",
+      "endDate": null,
       "type": "exhibition",
       "genres": [
         "Contemporary art"
@@ -25,15 +174,19 @@
         "coordinates": {
           "lat": 37.9749,
           "lon": 23.7341
-        }
+        },
+        "capacity": null
       },
       "price": {
-        "type": "free"
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
       },
       "url": "https://gagosian.com/exhibitions",
       "source": "gagosian.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -43,6 +196,7 @@
       "title": "Vegan Life Festival Athens 2025",
       "description": "Greece's biggest vegan event returns for its ninth edition under the theme 'For Earth's Sake' with plant-based food, talks, and workshops. Runs October 4-5",
       "startDate": "2025-10-04T11:00:00+03:00",
+      "endDate": null,
       "type": "other",
       "genres": [
         "Festival"
@@ -57,15 +211,19 @@
         "coordinates": {
           "lat": 37.9785,
           "lon": 23.7152
-        }
+        },
+        "capacity": null
       },
       "price": {
-        "type": "free"
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
       },
       "url": "https://athens-technopolis.gr",
       "source": "athens-technopolis.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -75,6 +233,7 @@
       "title": "Athenogates Group Art Exhibition",
       "description": "Opening night of group art exhibition featuring multiple contemporary artists. Exhibition runs through November",
       "startDate": "2025-10-08T19:00:00+03:00",
+      "endDate": null,
       "type": "exhibition",
       "genres": [
         "Contemporary art"
@@ -89,15 +248,19 @@
         "coordinates": {
           "lat": 37.9838,
           "lon": 23.7275
-        }
+        },
+        "capacity": null
       },
       "price": {
-        "type": "free"
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
       },
       "url": "https://www.myguideathens.com/events",
       "source": "myguideathens.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -107,6 +270,7 @@
       "title": "Onassis Stegi Street Party 2025",
       "description": "15th anniversary celebration with street party featuring Daniel Avery and JG Wilkes (Optimo) B2B set, plus family activities by Bobos Arts Festival",
       "startDate": "2025-10-09T18:00:00+03:00",
+      "endDate": null,
       "type": "other",
       "genres": [
         "Street festival"
@@ -121,21 +285,99 @@
         "coordinates": {
           "lat": 37.954,
           "lon": 23.7404
-        }
+        },
+        "capacity": null
       },
       "price": {
-        "type": "free"
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
       },
       "url": "https://www.onassis.org",
       "source": "onassis.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "gazarte-s-rich-autumn-programme-2025-10-16",
+      "title": "Gazarte's Rich Autumn Programme",
+      "description": "This autumn, Gazarte unfolds a vibrant and diverse lineup with international icons and fresh voices...",
+      "startDate": "2025-10-16T20:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "various"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Gazarte",
+        "address": "Gazi",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/gazarte-rich-autumn-programme-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "29th-athens-cycling-tour-2025-10-19",
+      "title": "29th Athens Cycling Tour",
+      "description": "The Athens Cycling Tour is back for its 29th edition...",
+      "startDate": "2025-10-19T16:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "sports"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Athens",
+        "address": "Athens",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/29th-athens-cycling-tour-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2025-10-18T18:21:06.751Z",
+    "total": 10,
+    "lastUpdate": "2025-10-18T19:34:54.708Z",
     "url": "https://agent-athens.netlify.app/free"
   }
 }

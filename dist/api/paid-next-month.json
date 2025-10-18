@@ -3,10 +3,116 @@
     "price": "paid",
     "time": "next-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "monophonics-live-at-gazarte-2025-11-01",
+      "title": "Monophonics Live at Gazarte",
+      "description": "San Francisco's Monophonics bring their blend of '60s psych, deep soul, and modern funk...",
+      "startDate": "2025-11-01T21:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "soul"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "Gazi",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/monophonics-live-at-gazarte-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "athens-marathon-the-authentic-2025-2025-11-09",
+      "title": "Athens Marathon the Authentic 2025",
+      "description": "The Athens Marathon returns on 9 November 2025...",
+      "startDate": "2025-11-09T20:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Athens",
+        "address": "Athens",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/athens-marathon-the-authentic-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "kruder-dorfmeister-the-k-d-sessions-live-2025-11-27",
+      "title": "Kruder & Dorfmeister – The K&D Sessions Live",
+      "description": "The legendary Austrian duo bring their live version of The K&D Sessions to Greece...",
+      "startDate": "2025-11-27T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe Live Stage",
+        "address": "Aigaleo",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/kruder-dorfmeister-the-k-d-sessions-live",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T18:21:06.755Z",
+    "total": 3,
+    "lastUpdate": "2025-10-18T19:34:54.714Z",
     "url": "https://agent-athens.netlify.app/paid-next-month"
   }
 }

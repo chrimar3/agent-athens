@@ -5,44 +5,12 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "public-service-broadcasting-2025-10-18",
-      "title": "Public Service Broadcasting",
-      "description": "British indie band performs documentary samples, cinematic soundscapes, and indie electronica",
-      "startDate": "2025-10-18T21:00:00+03:00",
-      "type": "concert",
-      "genres": [
-        "Indie/Electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte Ground Stage",
-        "address": "Voutadon 32-34, Gazi, Athens",
-        "neighborhood": "Gazi",
-        "coordinates": {
-          "lat": 37.9791,
-          "lon": 23.7164
-        }
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€25-€35"
-      },
-      "url": "https://www.gazarte.gr",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
       "@type": "Event",
       "id": "hotel-experience-2025-2025-10-18",
       "title": "Hotel Experience 2025",
       "description": "Technopolis transforms into hospitality showcase with speakers from high-end hotels, resorts, architects, and designers. Runs October 18-19",
       "startDate": "2025-10-18T10:00:00+03:00",
+      "endDate": null,
       "type": "other",
       "genres": [
         "Conference/Exhibition"
@@ -55,7 +23,8 @@
         "coordinates": {
           "lat": 37.9785,
           "lon": 23.7152
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -65,8 +34,43 @@
       },
       "url": "https://athens-technopolis.gr",
       "source": "athens-technopolis.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "public-service-broadcasting-2025-10-18",
+      "title": "Public Service Broadcasting",
+      "description": "UK rock innovators Public Service Broadcasting land in Athens for one night only, bringing their signature blend of music, history, and cinematic visuals...",
+      "startDate": "2025-10-18T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "live music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "Keramikos",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/public-service-broadcasting",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -76,6 +80,7 @@
       "title": "Dub FX and Mr. Woodnote",
       "description": "Australian live-looping artist Dub FX performs with British reggae artist Mr. Woodnote",
       "startDate": "2025-10-18T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Dub/Reggae"
@@ -88,7 +93,8 @@
         "coordinates": {
           "lat": 37.9815,
           "lon": 23.722
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -98,8 +104,80 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "29th-athens-cycling-tour-2025-10-19",
+      "title": "29th Athens Cycling Tour",
+      "description": "The Athens Cycling Tour is back for its 29th edition...",
+      "startDate": "2025-10-19T16:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "sports"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Athens",
+        "address": "Athens",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/29th-athens-cycling-tour-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "juergen-teller-you-are-invited-2025-10-19",
+      "title": "Juergen Teller: you are invited",
+      "description": "German photographer Juergen Teller's first-ever exhibition at Onassis Ready...",
+      "startDate": "2025-10-19T18:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "photography"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Onassis Ready",
+        "address": "Ag. Ioannis Rentis",
+        "neighborhood": "Athens",
+        "coordinates": {
+          "lat": 37.954,
+          "lon": 23.7404
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/you-are-invited-juergen-teller-onassis-ready",
+      "source": "onassis.org",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -109,6 +187,7 @@
       "title": "Red Snapper",
       "description": "British trio performs acid jazz, trip-hop, and psychedelic surf music",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Acid jazz/Trip-hop"
@@ -121,7 +200,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -131,41 +211,8 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "juergen-teller-you-are-invited-2025-10-19",
-      "title": "Juergen Teller: you are invited",
-      "description": "Inaugural exhibition at new Onassis Ready space featuring photographer Juergen Teller's most expansive solo presentation in Greece. Runs until December 30",
-      "startDate": "2025-10-19T18:00:00+03:00",
-      "type": "exhibition",
-      "genres": [
-        "Photography"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Ready",
-        "address": "Industrial district, Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.954,
-          "lon": 23.7404
-        }
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8-€12"
-      },
-      "url": "https://www.onassis.org",
-      "source": "onassis.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -175,6 +222,7 @@
       "title": "Sunn O)))",
       "description": "American experimental drone metal duo performs immersive live show",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Drone/Experimental"
@@ -187,7 +235,8 @@
         "coordinates": {
           "lat": 38.0067,
           "lon": 23.7282
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -197,8 +246,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -208,6 +257,7 @@
       "title": "Athens International Music Festival 2025",
       "description": "Multi-day classical music festival featuring international performers. Festival runs October 21-25",
       "startDate": "2025-10-21T19:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Classical"
@@ -220,7 +270,8 @@
         "coordinates": {
           "lat": 37.9794,
           "lon": 23.7268
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -230,8 +281,8 @@
       },
       "url": "https://www.thisisathens.org/events",
       "source": "thisisathens.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -241,6 +292,7 @@
       "title": "Thanos Stavridis Live",
       "description": "Greek jazz musician performs at Athens' most intimate jazz venue",
       "startDate": "2025-10-22T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Jazz"
@@ -253,7 +305,8 @@
         "coordinates": {
           "lat": 37.9648,
           "lon": 23.7432
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -263,14 +316,49 @@
       },
       "url": "https://www.songkick.com/venues/47901-half-note-jazz-club",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "jazz-at-the-museum-myrto-papatanasiu-2025-10-24",
+      "title": "Jazz at the Museum: Myrto Papatanasiu",
+      "description": "Athens' much-loved Jazz at the Museum series returns for its sixth season...",
+      "startDate": "2025-10-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Basil and Elise Goulandris Foundation",
+        "address": "Pangrati",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/jazz-at-the-museum-myrto-papatanasiu-goulandris-foundation",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 8,
-    "lastUpdate": "2025-10-18T18:21:06.731Z",
+    "total": 10,
+    "lastUpdate": "2025-10-18T19:34:54.675Z",
     "url": "https://agent-athens.netlify.app/this-week"
   }
 }

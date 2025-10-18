@@ -12,6 +12,7 @@
       "title": "Robbie Williams Concert",
       "description": "British pop icon Robbie Williams performs at the historic Panathenaic Stadium",
       "startDate": "2025-10-02T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Pop"
@@ -24,7 +25,8 @@
         "coordinates": {
           "lat": 37.9682,
           "lon": 23.7408
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -34,14 +36,14 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2025-10-18T18:21:06.780Z",
+    "lastUpdate": "2025-10-18T19:34:54.750Z",
     "url": "https://agent-athens.netlify.app/pop-concert"
   }
 }

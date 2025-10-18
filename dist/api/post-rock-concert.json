@@ -12,6 +12,7 @@
       "title": "Mogwai Live",
       "description": "Scottish post-rock legends Mogwai perform their atmospheric instrumental music",
       "startDate": "2025-10-09T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Post-rock"
@@ -24,7 +25,8 @@
         "coordinates": {
           "lat": 37.9838,
           "lon": 23.7275
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -34,14 +36,14 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2025-10-18T18:21:06.785Z",
+    "lastUpdate": "2025-10-18T19:34:54.756Z",
     "url": "https://agent-athens.netlify.app/post-rock-concert"
   }
 }

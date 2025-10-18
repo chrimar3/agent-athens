@@ -13,6 +13,7 @@
       "title": "Bugonia - Greek Premiere",
       "description": "Opening night of the 31st Athens International Film Festival featuring the Greek premiere of Yorgos Lanthimos' latest film 'Bugonia' starring Emma Stone and Jesse Plemons",
       "startDate": "2025-10-01T20:00:00+03:00",
+      "endDate": null,
       "type": "cinema",
       "genres": [
         "Film premiere"
@@ -25,7 +26,8 @@
         "coordinates": {
           "lat": 37.9813,
           "lon": 23.7584
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -35,14 +37,14 @@
       },
       "url": "https://en.aiff.gr",
       "source": "aiff.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2025-10-18T18:21:06.816Z",
+    "lastUpdate": "2025-10-18T19:34:54.802Z",
     "url": "https://agent-athens.netlify.app/paid-film-premiere-cinema"
   }
 }

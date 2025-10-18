@@ -12,6 +12,7 @@
       "title": "Thanos Stavridis Live",
       "description": "Greek jazz musician performs at Athens' most intimate jazz venue",
       "startDate": "2025-10-22T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Jazz"
@@ -24,7 +25,8 @@
         "coordinates": {
           "lat": 37.9648,
           "lon": 23.7432
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -34,14 +36,14 @@
       },
       "url": "https://www.songkick.com/venues/47901-half-note-jazz-club",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2025-10-18T18:21:06.789Z",
+    "lastUpdate": "2025-10-18T19:34:54.763Z",
     "url": "https://agent-athens.netlify.app/jazz-concert"
   }
 }

@@ -11,6 +11,7 @@
       "title": "Red Snapper",
       "description": "British trio performs acid jazz, trip-hop, and psychedelic surf music",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Acid jazz/Trip-hop"
@@ -23,7 +24,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -33,8 +35,8 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -44,6 +46,7 @@
       "title": "Sunn O)))",
       "description": "American experimental drone metal duo performs immersive live show",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Drone/Experimental"
@@ -56,7 +59,8 @@
         "coordinates": {
           "lat": 38.0067,
           "lon": 23.7282
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -66,14 +70,14 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2025-10-18T18:21:06.736Z",
+    "lastUpdate": "2025-10-18T19:34:54.685Z",
     "url": "https://agent-athens.netlify.app/concert-tomorrow"
   }
 }

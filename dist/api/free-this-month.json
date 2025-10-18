@@ -3,10 +3,48 @@
     "price": "free",
     "time": "this-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "29th-athens-cycling-tour-2025-10-19",
+      "title": "29th Athens Cycling Tour",
+      "description": "The Athens Cycling Tour is back for its 29th edition...",
+      "startDate": "2025-10-19T16:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "sports"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Athens",
+        "address": "Athens",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/29th-athens-cycling-tour-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T18:21:06.751Z",
+    "total": 1,
+    "lastUpdate": "2025-10-18T19:34:54.707Z",
     "url": "https://agent-athens.netlify.app/free-this-month"
   }
 }

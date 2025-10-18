@@ -4,44 +4,10 @@
     "genre": "Photography",
     "time": "this-week"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "juergen-teller-you-are-invited-2025-10-19",
-      "title": "Juergen Teller: you are invited",
-      "description": "Inaugural exhibition at new Onassis Ready space featuring photographer Juergen Teller's most expansive solo presentation in Greece. Runs until December 30",
-      "startDate": "2025-10-19T18:00:00+03:00",
-      "type": "exhibition",
-      "genres": [
-        "Photography"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Ready",
-        "address": "Industrial district, Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.954,
-          "lon": 23.7404
-        }
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8-€12"
-      },
-      "url": "https://www.onassis.org",
-      "source": "onassis.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-18T18:21:06.808Z",
+    "total": 0,
+    "lastUpdate": "2025-10-18T19:34:54.790Z",
     "url": "https://agent-athens.netlify.app/photography-exhibition-this-week"
   }
 }

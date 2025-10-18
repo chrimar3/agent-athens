@@ -5,11 +5,84 @@
   "events": [
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "29th-athens-cycling-tour-2025-10-19",
+      "title": "29th Athens Cycling Tour",
+      "description": "The Athens Cycling Tour is back for its 29th edition...",
+      "startDate": "2025-10-19T16:00:00+03:00",
+      "endDate": null,
+      "type": "other",
+      "genres": [
+        "sports"
+      ],
+      "tags": [
+        "free"
+      ],
+      "venue": {
+        "name": "Athens",
+        "address": "Athens",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.thisisathens.org/events/29th-athens-cycling-tour-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "juergen-teller-you-are-invited-2025-10-19",
+      "title": "Juergen Teller: you are invited",
+      "description": "German photographer Juergen Teller's first-ever exhibition at Onassis Ready...",
+      "startDate": "2025-10-19T18:00:00+03:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "photography"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Onassis Ready",
+        "address": "Ag. Ioannis Rentis",
+        "neighborhood": "Athens",
+        "coordinates": {
+          "lat": 37.954,
+          "lon": 23.7404
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/you-are-invited-juergen-teller-onassis-ready",
+      "source": "onassis.org",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "red-snapper-2025-10-19",
       "title": "Red Snapper",
       "description": "British trio performs acid jazz, trip-hop, and psychedelic surf music",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Acid jazz/Trip-hop"
@@ -22,7 +95,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -32,41 +106,8 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "juergen-teller-you-are-invited-2025-10-19",
-      "title": "Juergen Teller: you are invited",
-      "description": "Inaugural exhibition at new Onassis Ready space featuring photographer Juergen Teller's most expansive solo presentation in Greece. Runs until December 30",
-      "startDate": "2025-10-19T18:00:00+03:00",
-      "type": "exhibition",
-      "genres": [
-        "Photography"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Ready",
-        "address": "Industrial district, Athens",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.954,
-          "lon": 23.7404
-        }
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8-€12"
-      },
-      "url": "https://www.onassis.org",
-      "source": "onassis.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -76,6 +117,7 @@
       "title": "Sunn O)))",
       "description": "American experimental drone metal duo performs immersive live show",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Drone/Experimental"
@@ -88,7 +130,8 @@
         "coordinates": {
           "lat": 38.0067,
           "lon": 23.7282
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -98,14 +141,14 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 3,
-    "lastUpdate": "2025-10-18T18:21:06.730Z",
+    "total": 4,
+    "lastUpdate": "2025-10-18T19:34:54.674Z",
     "url": "https://agent-athens.netlify.app/tomorrow"
   }
 }

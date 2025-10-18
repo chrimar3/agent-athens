@@ -35,11 +35,11 @@ async function main() {
     mkdirSync(DIST_DIR, { recursive: true });
   }
 
-  // Load and normalize events
-  console.log('📥 Loading sample events...');
-  const rawData = JSON.parse(readFileSync(join(DATA_DIR, 'sample-events.json'), 'utf-8'));
-  const events = normalizeEvents(rawData);
-  console.log(`✅ Loaded ${events.length} events\n`);
+  // Load events from database
+  console.log('📥 Loading events from database...');
+  const { getAllEvents } = await import('./db/database');
+  const events = getAllEvents();
+  console.log(`✅ Loaded ${events.length} events from SQLite\n`);
 
   // Save normalized events
   const normalizedPath = join(DIST_DIR, 'data');

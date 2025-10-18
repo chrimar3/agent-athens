@@ -9,32 +9,34 @@
       "@type": "MusicEvent",
       "id": "public-service-broadcasting-2025-10-18",
       "title": "Public Service Broadcasting",
-      "description": "British indie band performs documentary samples, cinematic soundscapes, and indie electronica",
-      "startDate": "2025-10-18T21:00:00+03:00",
+      "description": "UK rock innovators Public Service Broadcasting land in Athens for one night only, bringing their signature blend of music, history, and cinematic visuals...",
+      "startDate": "2025-10-18T20:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
-        "Indie/Electronic"
+        "live music"
       ],
       "tags": [],
       "venue": {
-        "name": "Gazarte Ground Stage",
-        "address": "Voutadon 32-34, Gazi, Athens",
-        "neighborhood": "Gazi",
+        "name": "Gazarte",
+        "address": "Keramikos",
+        "neighborhood": null,
         "coordinates": {
-          "lat": 37.9791,
-          "lon": 23.7164
-        }
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€25-€35"
+        "range": "paid"
       },
-      "url": "https://www.gazarte.gr",
+      "url": "https://www.thisisathens.org/events/public-service-broadcasting",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -44,6 +46,7 @@
       "title": "Dub FX and Mr. Woodnote",
       "description": "Australian live-looping artist Dub FX performs with British reggae artist Mr. Woodnote",
       "startDate": "2025-10-18T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Dub/Reggae"
@@ -56,7 +59,8 @@
         "coordinates": {
           "lat": 37.9815,
           "lon": 23.722
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -66,14 +70,14 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2025-10-18T18:21:06.736Z",
+    "lastUpdate": "2025-10-18T19:34:54.684Z",
     "url": "https://agent-athens.netlify.app/concert-today"
   }
 }

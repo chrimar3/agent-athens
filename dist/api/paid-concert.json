@@ -12,6 +12,7 @@
       "title": "Robbie Williams Concert",
       "description": "British pop icon Robbie Williams performs at the historic Panathenaic Stadium",
       "startDate": "2025-10-02T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Pop"
@@ -24,7 +25,8 @@
         "coordinates": {
           "lat": 37.9682,
           "lon": 23.7408
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -34,8 +36,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -45,6 +47,7 @@
       "title": "Mogwai Live",
       "description": "Scottish post-rock legends Mogwai perform their atmospheric instrumental music",
       "startDate": "2025-10-09T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Post-rock"
@@ -57,7 +60,8 @@
         "coordinates": {
           "lat": 37.9838,
           "lon": 23.7275
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -67,8 +71,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -78,6 +82,7 @@
       "title": "Hugo Kant",
       "description": "French jazz pianist and electronic music producer Hugo Kant performs live",
       "startDate": "2025-10-11T22:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Jazz/Electronic fusion"
@@ -90,7 +95,8 @@
         "coordinates": {
           "lat": 37.9838,
           "lon": 23.7275
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -100,8 +106,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -111,6 +117,7 @@
       "title": "Marc Almond",
       "description": "Legendary British synth-pop icon Marc Almond performs exclusive show. Also performing October 17",
       "startDate": "2025-10-16T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Synth-pop/New wave"
@@ -123,7 +130,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -133,8 +141,8 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -142,32 +150,34 @@
       "@type": "MusicEvent",
       "id": "public-service-broadcasting-2025-10-18",
       "title": "Public Service Broadcasting",
-      "description": "British indie band performs documentary samples, cinematic soundscapes, and indie electronica",
-      "startDate": "2025-10-18T21:00:00+03:00",
+      "description": "UK rock innovators Public Service Broadcasting land in Athens for one night only, bringing their signature blend of music, history, and cinematic visuals...",
+      "startDate": "2025-10-18T20:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
-        "Indie/Electronic"
+        "live music"
       ],
       "tags": [],
       "venue": {
-        "name": "Gazarte Ground Stage",
-        "address": "Voutadon 32-34, Gazi, Athens",
-        "neighborhood": "Gazi",
+        "name": "Gazarte",
+        "address": "Keramikos",
+        "neighborhood": null,
         "coordinates": {
-          "lat": 37.9791,
-          "lon": 23.7164
-        }
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€25-€35"
+        "range": "paid"
       },
-      "url": "https://www.gazarte.gr",
+      "url": "https://www.thisisathens.org/events/public-service-broadcasting",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -177,6 +187,7 @@
       "title": "Dub FX and Mr. Woodnote",
       "description": "Australian live-looping artist Dub FX performs with British reggae artist Mr. Woodnote",
       "startDate": "2025-10-18T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Dub/Reggae"
@@ -189,7 +200,8 @@
         "coordinates": {
           "lat": 37.9815,
           "lon": 23.722
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -199,8 +211,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -210,6 +222,7 @@
       "title": "Red Snapper",
       "description": "British trio performs acid jazz, trip-hop, and psychedelic surf music",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Acid jazz/Trip-hop"
@@ -222,7 +235,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -232,8 +246,8 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -243,6 +257,7 @@
       "title": "Sunn O)))",
       "description": "American experimental drone metal duo performs immersive live show",
       "startDate": "2025-10-19T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Drone/Experimental"
@@ -255,7 +270,8 @@
         "coordinates": {
           "lat": 38.0067,
           "lon": 23.7282
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -265,8 +281,8 @@
       },
       "url": "https://www.songkick.com/metro-areas/28976-greece-athens",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -276,6 +292,7 @@
       "title": "Athens International Music Festival 2025",
       "description": "Multi-day classical music festival featuring international performers. Festival runs October 21-25",
       "startDate": "2025-10-21T19:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Classical"
@@ -288,7 +305,8 @@
         "coordinates": {
           "lat": 37.9794,
           "lon": 23.7268
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -298,8 +316,8 @@
       },
       "url": "https://www.thisisathens.org/events",
       "source": "thisisathens.org",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
       "language": "en"
     },
     {
@@ -309,6 +327,7 @@
       "title": "Thanos Stavridis Live",
       "description": "Greek jazz musician performs at Athens' most intimate jazz venue",
       "startDate": "2025-10-22T21:30:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Jazz"
@@ -321,7 +340,8 @@
         "coordinates": {
           "lat": 37.9648,
           "lon": 23.7432
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -331,8 +351,43 @@
       },
       "url": "https://www.songkick.com/venues/47901-half-note-jazz-club",
       "source": "songkick.com",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "jazz-at-the-museum-myrto-papatanasiu-2025-10-24",
+      "title": "Jazz at the Museum: Myrto Papatanasiu",
+      "description": "Athens' much-loved Jazz at the Museum series returns for its sixth season...",
+      "startDate": "2025-10-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Basil and Elise Goulandris Foundation",
+        "address": "Pangrati",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/jazz-at-the-museum-myrto-papatanasiu-goulandris-foundation",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -342,6 +397,7 @@
       "title": "Barcelona Gipsy Balkan Orchestra",
       "description": "Performance blending Balkan folk, rebetiko, jazz, klezmer, and Mediterranean rhythms",
       "startDate": "2025-10-25T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "World music/Folk"
@@ -354,7 +410,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -364,8 +421,43 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "all-them-witches-house-of-mirrors-tour-2025-10-29",
+      "title": "All Them Witches - House of Mirrors tour",
+      "description": "Explosive Nashville psych-rockers All Them Witches stop in Athens for a one-night show...",
+      "startDate": "2025-10-29T20:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe Live Stage",
+        "address": "Aigaleo",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/all-them-witches-house-of-mirrors-tour",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     },
     {
@@ -375,6 +467,7 @@
       "title": "Brian Jackson Jacaranda",
       "description": "American jazz and soul legend Brian Jackson performs on Halloween night",
       "startDate": "2025-10-31T21:00:00+03:00",
+      "endDate": null,
       "type": "concert",
       "genres": [
         "Jazz/Soul"
@@ -387,7 +480,8 @@
         "coordinates": {
           "lat": 37.9791,
           "lon": 23.7164
-        }
+        },
+        "capacity": null
       },
       "price": {
         "type": "paid",
@@ -397,14 +491,154 @@
       },
       "url": "https://www.gazarte.gr",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-18T18:21:06.719Z",
-      "updatedAt": "2025-10-18T18:21:06.719Z",
+      "createdAt": "2025-10-18T19:28:50.911Z",
+      "updatedAt": "2025-10-18T19:28:50.911Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "monophonics-live-at-gazarte-2025-11-01",
+      "title": "Monophonics Live at Gazarte",
+      "description": "San Francisco's Monophonics bring their blend of '60s psych, deep soul, and modern funk...",
+      "startDate": "2025-11-01T21:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "soul"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "Gazi",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/monophonics-live-at-gazarte-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "kruder-dorfmeister-the-k-d-sessions-live-2025-11-27",
+      "title": "Kruder & Dorfmeister – The K&D Sessions Live",
+      "description": "The legendary Austrian duo bring their live version of The K&D Sessions to Greece...",
+      "startDate": "2025-11-27T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe Live Stage",
+        "address": "Aigaleo",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/kruder-dorfmeister-the-k-d-sessions-live",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "asaf-avidan-2025-2025-12-07",
+      "title": "Asaf Avidan 2025",
+      "description": "The charismatic Israeli singer-songwriter returns to Athens for an intimate show...",
+      "startDate": "2025-12-07T20:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "indie"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Floyd",
+        "address": "Keramikos",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/asaf-avidan-floyd-athens-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "morrissey-live-in-athens-2025-12-12",
+      "title": "Morrissey Live in Athens",
+      "description": "The former frontman of The Smiths will take the stage on Thursday 12 December...",
+      "startDate": "2025-12-12T19:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Tae Kwon Do Stadium",
+        "address": "Faliro",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": "paid"
+      },
+      "url": "https://www.thisisathens.org/events/morrissey-live-in-athens-2025",
+      "source": "This is Athens",
+      "createdAt": "2025-10-18T19:33:56.650Z",
+      "updatedAt": "2025-10-18T19:33:56.650Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 12,
-    "lastUpdate": "2025-10-18T18:21:06.761Z",
+    "total": 18,
+    "lastUpdate": "2025-10-18T19:34:54.724Z",
     "url": "https://agent-athens.netlify.app/paid-concert"
   }
 }
