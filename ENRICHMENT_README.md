@@ -1,25 +1,30 @@
 # Event Enrichment Guide
 
 ## Overview
-The enrichment script uses Claude Sonnet 4.5 to generate detailed 400-word descriptions for events, enhancing the basic scraped data with compelling cultural context and storytelling.
+Event enrichment uses Claude Code tool_agent to generate detailed 400-word descriptions for events, enhancing the basic scraped data with compelling cultural context and storytelling.
+
+This approach is **FREE** - it uses your existing Claude Code subscription instead of paying per API call.
 
 ## Setup
 
-### 1. Set API Key
+### Prerequisites
+- Claude Code CLI installed and authenticated
+- Events in database (run scraping first)
+
+### Run Enrichment
+Use Claude Code interactively:
+
 ```bash
-export ANTHROPIC_API_KEY=your-key-here
+# Ask Claude Code:
+"Generate 400-word descriptions for all events in the database that don't have fullDescription.
+Use the enrichment prompt template and update the database."
 ```
 
-Or add to your shell profile (~/.zshrc or ~/.bashrc):
-```bash
-echo 'export ANTHROPIC_API_KEY=your-key-here' >> ~/.zshrc
-source ~/.zshrc
-```
-
-### 2. Run Enrichment
-```bash
-bun run scripts/enrich-events.ts
-```
+Claude Code will:
+1. Query unenriched events from the database
+2. Generate compelling descriptions using extended thinking
+3. Update each event's `full_description` field
+4. Maintain rate limits automatically
 
 ## How It Works
 
@@ -103,9 +108,9 @@ This automatically handles:
 
 ## Cost Estimation
 
-- **API Cost**: ~$0.003 per event (using Claude Sonnet 4.5)
-- **36 events**: ~$0.11
-- **Daily updates (10 new events/day)**: ~$0.03/day = ~$1/month
+- **Claude Code**: $0 (included in subscription)
+- **Time investment**: ~2-3 minutes for 10 events
+- **Ideal for**: Daily/weekly enrichment workflows
 
 ## Error Handling
 

@@ -26,9 +26,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.67.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.4.1",
-    "dotenv": "^17.2.3"
+    "node-ical": "^0.21.0"
   }
 }
