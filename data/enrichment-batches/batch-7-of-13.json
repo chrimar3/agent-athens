@@ -1,0 +1,202 @@
+[
+  {
+    "id": "fe4d06fa670212b5",
+    "title": "Η Κατερίνα Ντίνου στο Caja de Música",
+    "type": "concert",
+    "start_date": "2025-11-01T22:00:00.000+02:00",
+    "venue_name": "Caja De Musica",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/i-katerina-ntinou-sto-caja-de-musica-1/",
+    "description": "Κατερίνα Ντίνου, μουσική βραδιά, μουσική σκηνή, βραδινή έξοδος, caja de musica, line stage, music stage, live music"
+  },
+  {
+    "id": "c28bb20c6fa6036a",
+    "title": "Μπουζούκια στην Πίστα |Γυάλινο Μουσικό Θέατρο",
+    "type": "concert",
+    "start_date": "2025-11-01T22:30:00.000+02:00",
+    "venue_name": "Γυαλινο Μουσικο Θεατρο",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-1/",
+    "description": "Καλησπέρα και καλή βραδιά! Καλωσήρθατε στα μπουζούκια του 1980!"
+  },
+  {
+    "id": "30702b185f95595b",
+    "title": "DIA DE LOS MUERTOS w VALERON live",
+    "type": "concert",
+    "start_date": "2025-11-01T23:00:00.000+02:00",
+    "venue_name": "Royal Theater",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/dia-de-los-muertos-w-valeron-live/",
+    "description": "DIA DE LOS MUERTOS w VALERON live Σάββατο 1 Νοεμβρίου Royal Theater"
+  },
+  {
+    "id": "e4f37de1f305b3f5",
+    "title": "The EPIC HALLOWEEN Party - AUX - 1 November",
+    "type": "concert",
+    "start_date": "2025-11-01T23:00:00.000+02:00",
+    "venue_name": "AUX CLUB",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/the-epic-halloween-party-aux-1-november/",
+    "description": "The EPIC HALLOWEEN PARTYΤο πιο ΕΠΙΚΟ Halloween Party έρχεται στο AUX!"
+  },
+  {
+    "id": "ddbf5dac92f717e6",
+    "title": "Encardia «Η Σονάτα του Σεληνόφωτος» (Γιάννης  Ρίτσος)",
+    "type": "concert",
+    "start_date": "2025-11-02T20:00:00.000+02:00",
+    "venue_name": "Theatre of the NO",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/encardia-ei-sonata-tou-selinofotos-giannis-ritsos/",
+    "description": "theatre of the no, encardia,Η Σονάτα του Σεληνόφωτος, Γιάννης Ρίτσος, ποίηση, μουσική, Μιχάλη Κονταξάκη, μουσικοθεατρική απόδοση, Κυριακές 2, 9, 16 και 30 Νοεμβρίου, στις 20:00"
+  },
+  {
+    "id": "daa6a85cc218a376",
+    "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
+    "type": "concert",
+    "start_date": "2025-11-02T20:30:00.000+02:00",
+    "venue_name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
+    "description": "JEWISH CHAMBER ORCHESTRA MUNICH:THE KEYS OF TOLEDO"
+  },
+  {
+    "id": "c52f9fc444fd1f93",
+    "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
+    "type": "concert",
+    "start_date": "2025-11-02T20:30:00.000+02:00",
+    "venue_name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/from-cabaret-to-rock-n-roll-and-all-that-jazz/",
+    "description": "Orient express, Μουσικό βαγόνι, σάββατο, μουσική παράσταση, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, Franky meets Ella, Paris-Istanbul, glitter grotesque, Christmas jazz"
+  },
+  {
+    "id": "b804b9b97e326330",
+    "title": "ΣΤΕΡΓΙΟΣ ΝΤΑΟΥΣΑΝΑΚΗΣ",
+    "type": "concert",
+    "start_date": "2025-11-02T21:00:00.000+02:00",
+    "venue_name": "Γυαλινο Μουσικο Θεατρο",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/stergios-ntaousanakis/",
+    "description": "ΣΤΕΡΓΙΟΣ ΝΤΑΟΥΣΑΝΑΚΗΣ, ΣΤΕΛΙΟΣ ΚΑΙ ΓΙΩΡΓΟΣ ΓΚΛΟΓΚΑΡΗΣ, ΑΝΘΙΣΜΕΝΟ ΡΕΜΠΕΤΙΚΟ, ΛΑΪΚΟ ΑΦΙΕΡΩΜΑ, ΓΥΑΛΙΝΟ, UPSTAGE, GIALINO"
+  },
+  {
+    "id": "8c51ecd8f7451c05",
+    "title": "ΣΤΕΛΙΟΣ ΔΑΒΑΡΗΣ Full Band Live",
+    "type": "concert",
+    "start_date": "2025-11-02T22:00:00.000+02:00",
+    "venue_name": "Caja De Musica",
+    "genres": "[\"rock\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/stelios-dabaris-full-band-live/",
+    "description": "Στελιος Δαβαρης, μουσικη σκηνη, μουσικη βραδια, ροκ, βραδινη εξοδος, caja de musica, live music, music stage"
+  },
+  {
+    "id": "65ee8b45e775f172",
+    "title": "ΑΛΕΚΑ ΚΑΝΕΛΛΙΔΟΥ - ΧΡΗΣΤΟΣ ΘΗΒΑΙΟΣ",
+    "type": "concert",
+    "start_date": "2025-11-03T20:30:00.000+02:00",
+    "venue_name": "Θεατρο Αλσος χειμερινο",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/aleka-kanellidou-xristos-thibaios/",
+    "description": "ΑΛΕΚΑ ΚΑΝΕΛΛΙΔΟΥ – ΧΡΗΣΤΟΣ ΘΗΒΑΙΟΣΓιάννης ΓιαννουσάκηςΑΠΟ ΔΕΥΤΕΡΑ 3 ΝΟΕΜΒΡΙΟΥ για λίγες εμφανίσεις στο ΘΕΑΤΡΟ ΑΛΣΟΣ ΔΕΗ"
+  },
+  {
+    "id": "8a0bae9377d0836c",
+    "title": "ΝΙΝΑ ΜΑΖΑΝΗ | ΣΤΑΥΡΟΣ ΤΙΟΥ ΝΟΤΟΥ CLUB",
+    "type": "concert",
+    "start_date": "2025-11-03T21:00:00.000+02:00",
+    "venue_name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/nina-mazani-stauros-tiou-notou-club/",
+    "description": "ΝΙΝΑ ΜΑΖΑΝΗ | ΣΤΑΥΡΟΣ ΤΙΟΥ ΝΟΤΟΥ CLUB"
+  },
+  {
+    "id": "746cebc8d60c69f9",
+    "title": "Leonidas Danezos feat. Deniz Angelaki & Amélie Joannides",
+    "type": "concert",
+    "start_date": "2025-11-03T21:00:00.000+02:00",
+    "venue_name": "Κεντρο ελεγχου τηλεορασεων",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/leonidas-danezos-feat-deniz-angelaki-amelie-joannides/",
+    "description": "Μια performance που στηρίζεται στη συνάντηση τριών προσεγγίσεων του ήχου, της εικόνας και της κίνησης."
+  },
+  {
+    "id": "a7184d2fcd5ef0c1",
+    "title": "ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION",
+    "type": "concert",
+    "start_date": "2025-11-04T20:30:00.000+02:00",
+    "venue_name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/dimos-dimitriadis-songs-in-revolution/",
+    "description": "ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION"
+  },
+  {
+    "id": "9a498120957c0146",
+    "title": "ΔΗΜΗΤΡΗΣ ΣΑΜΟΛΗΣ LIVE",
+    "type": "concert",
+    "start_date": "2025-11-04T21:00:00.000+02:00",
+    "venue_name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/dimitris-samolis-live/",
+    "description": "Δημήτρης Σαμόλης live"
+  },
+  {
+    "id": "1a2e2ec4ee37d92f",
+    "title": "Sound of Color #2",
+    "type": "concert",
+    "start_date": "2025-11-04T21:00:00.000+02:00",
+    "venue_name": "Κεντρο ελεγχου τηλεορασεων",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/sound-of-color-225/",
+    "description": "Ο οπτικοακουστικός κύκλος “Sound of Color” συνεχίζεται στο KET για ενδέκατη χρονιά, συνεχίζοντας να διερευνά τις συναντήσεις του ήχου με την εικόνα."
+  },
+  {
+    "id": "ea151a5780110044",
+    "title": "CATS - Athens",
+    "type": "concert",
+    "start_date": "2025-11-05T20:30:00.000+02:00",
+    "venue_name": "CHRISTMAS THEATER",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/the-cats/",
+    "description": "CATS, CHRISTMAS THEATER, ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ, ΜΜΘ, ΓΑΛΑΤΣΙ"
+  },
+  {
+    "id": "acb2d55bd548fe5f",
+    "title": "ΔΗΜΗΤΡΗΣ ΜΠΑΚΟΥΛΗΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
+    "type": "concert",
+    "start_date": "2025-11-05T21:00:00.000+02:00",
+    "venue_name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/dimitris-mpakoulis-stauros-tou-notou-club/",
+    "description": "ΔΗΜΗΤΡΗΣ ΜΠΑΚΟΥΛΗΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB"
+  },
+  {
+    "id": "84700202d98908e3",
+    "title": "YIANNIS VAGIANOS QUARTET “Second Take”",
+    "type": "concert",
+    "start_date": "2025-11-05T21:30:00.000+02:00",
+    "venue_name": "Half Note Jazz Club",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/yiannis-vagianos-quartet-second-take/",
+    "description": "YIANNIS VAGIANOS QUARTET“Second Take” Live RecordingΤετάρτη 5 ΝοεμβρίουHalf Note Jazz Club21:30"
+  },
+  {
+    "id": "7644f53e7aa72f37",
+    "title": "Budokan Boys / Eiger Drums Propaganda",
+    "type": "concert",
+    "start_date": "2025-11-06T20:00:00.000+02:00",
+    "venue_name": "Κεντρο ελεγχου τηλεορασεων",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/budokan-boys/eiger-drums-propaganda/",
+    "description": "Το ντουέτο των Budokan Boys (ΗΠΑ) παρουσιάζει ζωντανά το νέο του άλμπουμ, “THE OOZE”. Τη βραδιά ανοίγει ο Eiger Drums Propaganda (Γαλλία) με ένα σόλο σετ."
+  },
+  {
+    "id": "900bc4afa82409ef",
+    "title": "ΠΕΝΝΥ ΜΠΑΛΤΑΤΖΗ- HER SWING MAJESTY",
+    "type": "concert",
+    "start_date": "2025-11-06T21:00:00.000+02:00",
+    "venue_name": "Major Seven",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/penny-mpaltatzi-her-swing-majesty/",
+    "description": "Η αυθεντική ντίβα του swing και της jazz, η μοναδική Πέννυ Μπαλτατζή, επιστρέφει δυναμικά στη σκηνή και εγκαινιάζει τις μουσικές Πέμπτες του Νοεμβρίου στο ανακαινισμένο χώρο Stage7, με την παράσταση «"
+  }
+]

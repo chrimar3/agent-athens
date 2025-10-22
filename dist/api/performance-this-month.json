@@ -3,10 +3,3514 @@
     "type": "performance",
     "time": "this-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "819cd686106bcfa8",
+      "title": "ΛΟΣΑΝΤΖΕΛΕ comedy club",
+      "description": "22 Οκτ - 20 Δεκ ΛΟΣΑΝΤΖΕΛΕ comedy club Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/losantzele/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.305Z",
+      "updatedAt": "2025-10-22T17:16:25.305Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3cfeaa5c3cf4b45a",
+      "title": "ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS",
+      "description": "22 Οκτ - 26 Νοε ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/komodia-tis-geitonias-kostas-maliatsis-salas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.306Z",
+      "updatedAt": "2025-10-22T17:16:25.306Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ce50e073a6e7849e",
+      "title": "Night tour at Thissio Visitor Center (in english)",
+      "description": "22 - 31 Οκτωβριου Night tour at Thissio Visitor Center (in english) Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/night-tour-at-thissio-visitor-center/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9d05269b56c77ad3",
+      "title": "UNDERTHUMBS",
+      "description": "22 Οκτωβριου UNDERTHUMBS Κεντρο ελεγχου τηλεορασεων",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/underthumbs2/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "03fc04b6e1afba04",
+      "title": "BADO TRIVIAL QUIZ NIGHT #13",
+      "description": "22 - 23 Οκτωβριου BADO TRIVIAL QUIZ NIGHT #13 Πολλαπλοι χωροι",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bado-trivial-quiz-night-13/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d5dfe2c881482608",
+      "title": "Βραδινή ξενάγηση του ΚΕ Θησείου",
+      "description": "22 - 31 Οκτωβριου Βραδινή ξενάγηση του ΚΕ Θησείου Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bradini-ksenagisi-tou-ke-thiseiou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.308Z",
+      "updatedAt": "2025-10-22T17:16:25.308Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bc762a5a74b901c8",
+      "title": "BRAINSHOT FESTIVAL: TRANSFORMATIONS",
+      "description": "22 - 23 Οκτωβριου BRAINSHOT FESTIVAL: TRANSFORMATIONS Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/festival/brainshot-festival-transformations/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.308Z",
+      "updatedAt": "2025-10-22T17:16:25.308Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "68fe9621eac81f3a",
+      "title": "Maria Callas Museum",
+      "description": "22 Οκτ - 31 Δεκ Maria Callas Museum Maria Callas Museum",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Maria Callas Museum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/maria-callas-museum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.309Z",
+      "updatedAt": "2025-10-22T17:16:25.309Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "33e8b221552b4165",
+      "title": "The Garden of Pythia - Charles Sandison",
+      "description": "22 Οκτ - 29 Νοε The Garden of Pythia - Charles Sandison π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/the-garden-of-pythia-charles-sandison/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.310Z",
+      "updatedAt": "2025-10-22T17:16:25.310Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "11365b844d6e1234",
+      "title": "Stand Up Therapy",
+      "description": "23 Οκτ - 7 Δεκ Stand Up Therapy Πολλαπλοι χωροι",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/stand-up-therapy/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f85ce1983f676301",
+      "title": "ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ",
+      "description": "23 Οκτ - 27 Νοε ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ TGI Fridays™ Καπνικαρεας",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TGI Fridays™ Καπνικαρεας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/mpleksimo-me-tous-aleksandro-xarizani-kai-kosta-kryo/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "049d5205c0f083f6",
+      "title": "ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ",
+      "description": "23 - 30 Οκτωβριου ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ Κτημα Αριστη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/oi-mousikantides/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8737f1d9b4e81f80",
+      "title": "Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου",
+      "description": "23 - 30 Οκτωβριου Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου Teleport - Arena",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Arena",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/ena-prototypo-vr-taksidi-sta-mystiria-tis-aigyptou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.321Z",
+      "updatedAt": "2025-10-22T17:16:25.321Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "018550fed1e03707",
+      "title": "Ελληνικό Μουσείο Αυτοκινήτου",
+      "description": "23 Οκτ - 31 Δεκ Ελληνικό Μουσείο Αυτοκινήτου Ελληνικο Μουσειο Αυτοκινητου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικο Μουσειο Αυτοκινητου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/elliniko-mouseio-aytokinitou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19639414d188a672",
+      "title": "Εργαστήρι Κεραμικής για παιδιά",
+      "description": "23 Οκτ - 29 Νοε Εργαστήρι Κεραμικής για παιδιά Πηλομπερδεματα",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πηλομπερδεματα",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ergastiri-keramikis-gia-paidia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5282dcd3aa5cde85",
+      "title": "Ταξίδι στην Ανταρκτική",
+      "description": "23 - 30 Οκτωβριου Ταξίδι στην Ανταρκτική Teleport - Arena",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Arena",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/taksidi-stin-antarktiki/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3212874fa0307a13",
+      "title": "V Museum",
+      "description": "23 Οκτ - 2 Νοε V Museum vmuseum",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "vmuseum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/vmuseum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5e422ba9b1819c94",
+      "title": "Μουσείο Γέσιου εισιτήριο εισόδου",
+      "description": "23 - 31 Οκτωβριου Μουσείο Γέσιου εισιτήριο εισόδου Μουσειο Γεσιου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Γεσιου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/mouseio-gesiou-eisodos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ad4c65c2d070029c",
+      "title": "Video Games Museum Εισιτήρια",
+      "description": "23 Οκτ - 31 Δεκ Video Games Museum Εισιτήρια Video Games Museum - Video Games Museum",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Video Games Museum - Video Games Museum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/video-games-museum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fbd69cddded74419",
+      "title": "Βιομηχανικό Μουσείο Φωταερίου",
+      "description": "23 - 31 Οκτωβριου Βιομηχανικό Μουσείο Φωταερίου Βιομηχανικο Μουσειο Φωταεριου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Βιομηχανικο Μουσειο Φωταεριου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/biomixaniko-mouseio-fotaeriou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7fa3f580fdae0846",
+      "title": "Εισιτήριο Μουσείου Θύραθεν",
+      "description": "23 - 31 Οκτωβριου Εισιτήριο Μουσείου Θύραθεν Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/eisitirio-mouseiou-thirathen/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a7a0d6b3fb0a1c4b",
+      "title": "Ο Πλανήτης μας είναι το μέλλον μας",
+      "description": "23 - 30 Οκτωβριου Ο Πλανήτης μας είναι το μέλλον μας Teleport - Adventure",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Adventure",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/o-planitis-mas-einai-to-mellon-mas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4c2827f64aa15d91",
+      "title": "Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου",
+      "description": "23 Οκτ - 11 Δεκ Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου Ψυχαγωγικο Παρκο Φροντζου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ψυχαγωγικο Παρκο Φροντζου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bolta-sto-psyxagogiko-parko-frontzou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fb3a08af2147fb49",
+      "title": "Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών)",
+      "description": "23 Οκτωβριου Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paixnidi-yoga-lego-gia-paidia-3-6-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "32b65c6d7b1c891e",
+      "title": "Επίσκεψη στο Παιδικό Μουσείο της Αθήνας 2025",
+      "description": "24 Οκτ - 30 Νοε Επίσκεψη στο Παιδικό Μουσείο της Αθήνας 2025 Ελληνικο Παιδικο Μουσειο",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικο Παιδικο Μουσειο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/episkepsi-sto-paidiko-mouseio-tis-athinas-2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.333Z",
+      "updatedAt": "2025-10-22T17:16:25.333Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "af4b91beb2946543",
+      "title": "BEST OF ΜΙΧΑΛΗΣ ΣΕΒΑΣΤΕΡΗΣ",
+      "description": "24 Οκτ - 28 Νοε BEST OF ΜΙΧΑΛΗΣ ΣΕΒΑΣΤΕΡΗΣ Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/best-of-mixalis-sebasteris/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.334Z",
+      "updatedAt": "2025-10-22T17:16:25.334Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8652e67f09326b23",
+      "title": "ΚΑΡΟΤΟCAKE ΤΟΥ ΚΗΠΟΥΡΟΥ",
+      "description": "24 Οκτωβριου ΚΑΡΟΤΟCAKE ΤΟΥ ΚΗΠΟΥΡΟΥ Κτημα Αριστη",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/karotocake-tou-kipourou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.341Z",
+      "updatedAt": "2025-10-22T17:16:25.341Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "dd9f81726c8a8815",
+      "title": "Minoan's World 9D Experience",
+      "description": "24 - 31 Οκτωβριου Minoan's World 9D Experience MINOAN'S WORLD",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "MINOAN'S WORLD",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/minoans-world/3d-museum-and-9d-cinema-about-the-minoan-civilization/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.342Z",
+      "updatedAt": "2025-10-22T17:16:25.342Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8529cccf6d3c89c9",
+      "title": "🍂 «Πετάει, πετάει το Φθινόπωρο» Pop up event",
+      "description": "24 - 25 Οκτωβριου 🍂 «Πετάει, πετάει το Φθινόπωρο» Pop up event Για Φαντασου",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Για Φαντασου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/petaei-petaei-to-fthinoporo-pop-up-event/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.343Z",
+      "updatedAt": "2025-10-22T17:16:25.343Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5b308e9cdc965b08",
+      "title": "Pumpkin Sensory Fun: Κολοκύθες & Γελάκια (για παιδιά 2 – 4 ετών)",
+      "description": "24 Οκτωβριου Pumpkin Sensory Fun: Κολοκύθες & Γελάκια (για παιδιά 2 – 4 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/pumpkin-sensory-fun-kolokythes-gelakia-gia-paidia-2-4-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.343Z",
+      "updatedAt": "2025-10-22T17:16:25.343Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6b207cd3a0e4b34e",
+      "title": "ΠΑΝΙΩΝΙΟΣ - ΑΡΗΣ BETSSON",
+      "description": "25 Οκτωβριου ΠΑΝΙΩΝΙΟΣ - ΑΡΗΣ BETSSON Δ.Α.Κ Γλυφαδας \"Μακης Λιουγκας\"",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Γλυφαδας \"Μακης Λιουγκας\"",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/sports/panionios-aris-betsson/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.358Z",
+      "updatedAt": "2025-10-22T17:16:25.358Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "afd0ddbcee3705cd",
+      "title": "Mini Tennis",
+      "description": "25 - 26 Οκτωβριου Mini Tennis Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Υπαιθριος Χωρος Αθλοπαιδιων (No 21 στον Χαρτη)",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "21 στον Χαρτη)",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/sports/mini-tennis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.358Z",
+      "updatedAt": "2025-10-22T17:16:25.358Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ecb5ae0e7f52daff",
+      "title": "Α.Σ. ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ - ΕΘΝΙΚΟΣ ΛΙΒΑΔΕΙΑΣ (NL1 - 4Η ΑΓΩΝΙΣΤΙΚΗ)",
+      "description": "25 Οκτωβριου Α.Σ. ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ - ΕΘΝΙΚΟΣ ΛΙΒΑΔΕΙΑΣ (NL1 - 4Η ΑΓΩΝΙΣΤΙΚΗ) Κλειστο Γηπεδο Απολλωνα Πατρας",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Γηπεδο Απολλωνα Πατρας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/sports/a-s-apollon-patron-ethnikos-libadeias-nl1-4i-agonistiki/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.358Z",
+      "updatedAt": "2025-10-22T17:16:25.358Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fb71da5c66861b52",
+      "title": "ΛΕΩ ΝΑ ΠΑΡΩ ΚΑΚΤΟ - ΔΗΜΗΤΡΗΣ ΧΡΙΣΤΟΦΟΡΙΔΗΣ",
+      "description": "25 Οκτ - 29 Νοε ΛΕΩ ΝΑ ΠΑΡΩ ΚΑΚΤΟ - ΔΗΜΗΤΡΗΣ ΧΡΙΣΤΟΦΟΡΙΔΗΣ Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/leo-na-paro-kakto-dimitris-xristoforidis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.362Z",
+      "updatedAt": "2025-10-22T17:16:25.362Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9494d0bffe2dd8ae",
+      "title": "Ο ΚΑΡΑΓΚΙΟΖΗΣ ΣΤΗ ΖΟΥΓΚΛΑ",
+      "description": "25 Οκτωβριου Ο ΚΑΡΑΓΚΙΟΖΗΣ ΣΤΗ ΖΟΥΓΚΛΑ Κτημα Αριστη",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/o-karagkiozis-sti-zougkla/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.363Z",
+      "updatedAt": "2025-10-22T17:16:25.363Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "af39da19508c839b",
+      "title": "Σαββατιάτικα Εκπαιδευτικά Προγράμματα",
+      "description": "25 Οκτ - 29 Νοε Σαββατιάτικα Εκπαιδευτικά Προγράμματα Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/savvatiatika-ekpaideutika-programmata/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.365Z",
+      "updatedAt": "2025-10-22T17:16:25.365Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "042e9e8d4bd8ff4f",
+      "title": "Της Πλάκας Μυστικά",
+      "description": "25 Οκτ - 15 Νοε Της Πλάκας Μυστικά Πλακα",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πλακα",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/tis-plakas-mystika/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.365Z",
+      "updatedAt": "2025-10-22T17:16:25.365Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e720c99bb2864810",
+      "title": "Χρύσα Κατσαρίνη: Stand-up Comedy «Και τι έλεγα;» - Πόρος",
+      "description": "25 Οκτωβριου Χρύσα Κατσαρίνη: Stand-up Comedy «Και τι έλεγα;» - Πόρος Καθετη πολιτισμος & εκπαιδευση",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Καθετη πολιτισμος & εκπαιδευση",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/stand-up-comedy-kai-ti-elega/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.369Z",
+      "updatedAt": "2025-10-22T17:16:25.369Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "cf13a85d508531d8",
+      "title": "Μουσείο Αλέκος Φασιανός | Ξενάγηση κοινού",
+      "description": "25 Οκτ - 29 Νοε Μουσείο Αλέκος Φασιανός | Ξενάγηση κοινού Μουσειο Αλεκος Φασιανος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Αλεκος Φασιανος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/mouseio-alekos-fasianos-ksenagisi-koinou-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.370Z",
+      "updatedAt": "2025-10-22T17:16:25.370Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3da7c7216c275d66",
+      "title": "MESSY PLAY ROOM @Νέο Ψυχικό",
+      "description": "25 Οκτ - 8 Νοε MESSY PLAY ROOM @Νέο Ψυχικό CharaLab",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "CharaLab",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/messy-play-room-neo-psyxiko/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "da97d1decafda129",
+      "title": "\"Ταξιδεύουμε στο 1940\" για οικογένειες με παιδιά ηλικίας 7-12 ετών",
+      "description": "25 Οκτωβριου \"Ταξιδεύουμε στο 1940\" για οικογένειες με παιδιά ηλικίας 7-12 ετών Ελληνικο Παιδικο Μουσειο",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικο Παιδικο Μουσειο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/ekpaideutiko-programma-taksideuoume-sto-1940/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d7d379bf306c906d",
+      "title": "Καστόρι - Γεωργίτσι Λακωνίας, μονοήμερη εκδρομή",
+      "description": "25 Οκτωβριου Καστόρι - Γεωργίτσι Λακωνίας, μονοήμερη εκδρομή Metro Σταθμος Λαρισης",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Metro Σταθμος Λαρισης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/walk/kastori-georgitsi-lakonias-1-imeri/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ee89813ae3cfe7f2",
+      "title": "Εργαστήρι κεραμικής για οικογένειες με παιδιά 3-12 χρόνων",
+      "description": "25 Οκτ - 18 Ιουλ Εργαστήρι κεραμικής για οικογένειες με παιδιά 3-12 χρόνων Ελληνικο Παιδικο Μουσειο",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικο Παιδικο Μουσειο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/ergastiri-keramikis-gia-oikogeneies/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ae113535b80f8f06",
+      "title": "ΠΛΑΝΗΤΗΣ SOS - Η Αποστολή των Πουλιών",
+      "description": "25 Οκτ - 2 Νοε ΠΛΑΝΗΤΗΣ SOS - Η Αποστολή των Πουλιών Εθνικος Κηπος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εθνικος Κηπος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/planitis-sos-i-apostoli-ton-poulion/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e921cd2c91ac6cb5",
+      "title": "ΠΑΡΚΟ ΔΕΙΝΟΣΑΥΡΩΝ - ΠΟΛΙΤΙΣΤΙΚΟ ΠΑΡΚΟ",
+      "description": "25 Οκτ - 16 Νοε ΠΑΡΚΟ ΔΕΙΝΟΣΑΥΡΩΝ - ΠΟΛΙΤΙΣΤΙΚΟ ΠΑΡΚΟ Πολιτιστικο Παρκο",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολιτιστικο Παρκο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dromena/politistiko-parko-kerateas/parko-dinosavron-i-epoxi-ton-dinosavron/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.371Z",
+      "updatedAt": "2025-10-22T17:16:25.371Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "af7290c291d23497",
+      "title": "ΠΡΟΣΟΧΗ ΕΥΘΡΑΥΣΤΟΣ",
+      "description": "25 Οκτωβριου ΠΡΟΣΟΧΗ ΕΥΘΡΑΥΣΤΟΣ Θεατρο Αβατον",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αβατον",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/prosoxi-euthraustos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.372Z",
+      "updatedAt": "2025-10-22T17:16:25.372Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "186010b9e9eb3c65",
+      "title": "«Τέχνη από Μαγνήτη» oικογένειες & παιδιά 8-12",
+      "description": "25 Οκτωβριου «Τέχνη από Μαγνήτη» oικογένειες & παιδιά 8-12 Ιδρυμα Takis",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ιδρυμα Takis",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/texni-apo-magniti-oikogeneies-paidia-8-12/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.372Z",
+      "updatedAt": "2025-10-22T17:16:25.372Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "06fa24ecee861e53",
+      "title": "ΕΚΠΑΙΔΕΥΤΙΚΟ ΟΙΚΟΓΕΝΕΙΑΚΟ ΕΡΓΑΣΤΗΡΙΟ – ΔΙΝΟΝΤΑΣ ΧΡΩΜΑ ΣΤΙΣ ΑΝΑΜΝΗΣΕΙΣ",
+      "description": "25 Οκτωβριου ΕΚΠΑΙΔΕΥΤΙΚΟ ΟΙΚΟΓΕΝΕΙΑΚΟ ΕΡΓΑΣΤΗΡΙΟ – ΔΙΝΟΝΤΑΣ ΧΡΩΜΑ ΣΤΙΣ ΑΝΑΜΝΗΣΕΙΣ Μουσειο Αλεκος Φασιανος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Αλεκος Φασιανος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/children/ekpaideutiko-oikogeneiako-ergastirio-dinontas-xroma-stis-anamniseis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.372Z",
+      "updatedAt": "2025-10-22T17:16:25.372Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "794070930c7183c0",
+      "title": "Ημερήσιο Εισιτήριο ΝΟΗΣΙΣ",
+      "description": "25 - 26 Οκτωβριου Ημερήσιο Εισιτήριο ΝΟΗΣΙΣ Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/imerisio-eisitirio-noisis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.372Z",
+      "updatedAt": "2025-10-22T17:16:25.372Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b80e21654b975d0f",
+      "title": "Ο Εξωγήινος και τα Παιδιά των Σπηλαίων- Ταξίδι στο φως!",
+      "description": "25 Οκτ - 9 Νοε Ο Εξωγήινος και τα Παιδιά των Σπηλαίων- Ταξίδι στο φως! Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/o-eksogiinos-kai-to-paidi-ton-spilaion/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.372Z",
+      "updatedAt": "2025-10-22T17:16:25.372Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ced722a5c4fa96aa",
+      "title": "«Κινούμενα γλυπτά» για οικογένειες με παιδιά 5 – 7 ετών",
+      "description": "25 Οκτωβριου «Κινούμενα γλυπτά» για οικογένειες με παιδιά 5 – 7 ετών Ιδρυμα Takis",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ιδρυμα Takis",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/kinoumena-glypta-gia-oikogeneies-me-paidia-5-7-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "615829452bbd33f9",
+      "title": "Ξενάγηση για ενήλικες στο Μουσείο Μαρία Κάλλας",
+      "description": "25 Οκτωβριου Ξενάγηση για ενήλικες στο Μουσείο Μαρία Κάλλας Εκδηλωσεις Μουσειου Μαρια Καλλας",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εκδηλωσεις Μουσειου Μαρια Καλλας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/ksenagisi-gia-enilikes-sto-mouseio-maria-kallas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3291def3ebf828cf",
+      "title": "Οικογενειακή Ξεναγήση",
+      "description": "25 Οκτωβριου Οικογενειακή Ξεναγήση Εκδηλωσεις Μουσειου Μαρια Καλλας",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εκδηλωσεις Μουσειου Μαρια Καλλας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/offer/oikogeneiaki-ksenagisi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fa68cb5dfb0b6679",
+      "title": "ΤΑΞΙΔΙ ΣΤΟΝ ΚΟΣΜΟ ΤΩΝ ΔΕΙΝΟΣΑΥΡΩΝ",
+      "description": "25 Οκτ - 9 Νοε ΤΑΞΙΔΙ ΣΤΟΝ ΚΟΣΜΟ ΤΩΝ ΔΕΙΝΟΣΑΥΡΩΝ Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/taksidi-ston-kosmo-ton-deinosauron/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "149b467b2dc1fe8a",
+      "title": "ΣΤΑ ΧΝΑΡΙΑ ΤΟΥ EINSTEIN- Η ΜΑΓΕΙΑ ΤΗΣ ΒΑΡΥΤΗΤΑΣ",
+      "description": "25 Οκτ - 9 Νοε ΣΤΑ ΧΝΑΡΙΑ ΤΟΥ EINSTEIN- Η ΜΑΓΕΙΑ ΤΗΣ ΒΑΡΥΤΗΤΑΣ Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/ta-mystika-tis-barytitas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3503f3863dc3c169",
+      "title": "Μουσείο Τεχνολογίας ΝΟΗΣΙΣ",
+      "description": "25 - 26 Οκτωβριου Μουσείο Τεχνολογίας ΝΟΗΣΙΣ Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/mouseio-technologias-noisis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4b59fcd55c652d08",
+      "title": "Περιήγηση στην Αρχαία Ολυμπία",
+      "description": "25 Οκτ - 9 Νοε Περιήγηση στην Αρχαία Ολυμπία Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/periigisi-stin-arxaia-olumpia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8b724487fdac1415",
+      "title": "Τιτάνες στην Εποχή των Παγετώνων",
+      "description": "25 - 26 Οκτωβριου Τιτάνες στην Εποχή των Παγετώνων Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/titanes-stin-epoxi-ton-pagetonon/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2f897d0eadffc4ee",
+      "title": "Δεινόσαυροι: οι γίγαντες της Παταγονίας 3D (μόνο για θεατές άνω των 5 ετών)",
+      "description": "25 - 26 Οκτωβριου Δεινόσαυροι: οι γίγαντες της Παταγονίας 3D (μόνο για θεατές άνω των 5 ετών) Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/deinosavrii-ii-gigantes-tis-patagonias/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e0ca669dff975eb3",
+      "title": "Halloween Messy PLay @ CharaLab",
+      "description": "25 Οκτ - 1 Νοε Halloween Messy PLay @ CharaLab CharaLab",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "CharaLab",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/halloween-messy-play-2024-charalab/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b1308c08d3ddb8f7",
+      "title": "Touch the stars",
+      "description": "25 - 26 Οκτωβριου Touch the stars Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/touch-the-stars/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c6892f9b5179c220",
+      "title": "ΚΑΣΚΕΣ ΕΙΚΟΝΙΚΗΣ ΠΡΑΓΜΑΤΙΚΟΤΗΤΑΣ- VR",
+      "description": "25 - 26 Οκτωβριου ΚΑΣΚΕΣ ΕΙΚΟΝΙΚΗΣ ΠΡΑΓΜΑΤΙΚΟΤΗΤΑΣ- VR Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/kaskes-eikonikis-pragmatikotitas-vr/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.374Z",
+      "updatedAt": "2025-10-22T17:16:25.374Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e0101a3ed4e8704b",
+      "title": "Η ζωή του κ. Δεντρούλη 3D",
+      "description": "25 - 26 Οκτωβριου Η ζωή του κ. Δεντρούλη 3D Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/i-zoi-tou-k-dentrouli-3d/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.375Z",
+      "updatedAt": "2025-10-22T17:16:25.375Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f32e4daf05d0510c",
+      "title": "Τα θαύματα του σύμπαντος",
+      "description": "25 - 26 Οκτωβριου Τα θαύματα του σύμπαντος Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/ta-thaumata-tou-sympantos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.375Z",
+      "updatedAt": "2025-10-22T17:16:25.375Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ea219c7532b12600",
+      "title": "ΠΕΡΙΠΑΤΟΣ ΣΤΗΝ ΓΕΙΤΟΝΙΑ ΤΟΥ ΑΓΙΟΥ ΠΑΥΛΟΥ",
+      "description": "25 Οκτωβριου ΠΕΡΙΠΑΤΟΣ ΣΤΗΝ ΓΕΙΤΟΝΙΑ ΤΟΥ ΑΓΙΟΥ ΠΑΥΛΟΥ Μουσειο Αλεκος Φασιανος",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Αλεκος Φασιανος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/peripatos-stin-geitonia-tou-agiou-paulou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.375Z",
+      "updatedAt": "2025-10-22T17:16:25.375Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "22a011a35818e9a9",
+      "title": "Γονείς&Παιδιά",
+      "description": "25 Οκτ - 27 Ιουν Γονείς&Παιδιά Πηλος Εργαστηριο Κεραμικης",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πηλος Εργαστηριο Κεραμικης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/goneispaidia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.378Z",
+      "updatedAt": "2025-10-22T17:16:25.378Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0340f2b58dd594dd",
+      "title": "Πόλεις του Μέλλοντος 3D",
+      "description": "25 - 26 Οκτωβριου Πόλεις του Μέλλοντος 3D Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/poleis-tou-mellontos-3d/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.378Z",
+      "updatedAt": "2025-10-22T17:16:25.378Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b4011241ba4b0196",
+      "title": "Ο θρύλος του Μαγεμένου Ύφαλου",
+      "description": "25 - 26 Οκτωβριου Ο θρύλος του Μαγεμένου Ύφαλου Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/o-thrylos-tou-magemenou-yfalou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.378Z",
+      "updatedAt": "2025-10-22T17:16:25.378Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5a9b0c5377acbe15",
+      "title": "ΠΑΝΙΩΝΙΟΣ - ΑΡΗΣ BETSSON",
+      "description": "25 Οκτωβριου ΠΑΝΙΩΝΙΟΣ - ΑΡΗΣ BETSSON Δ.Α.Κ Γλυφαδας \"Μακης Λιουγκας\"",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δ.Α.Κ Γλυφαδας \"Μακης Λιουγκας\"",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/sports/panionios-aris-betsson/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.379Z",
+      "updatedAt": "2025-10-22T17:16:25.379Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5274f05f60056195",
+      "title": "Mini Tennis",
+      "description": "25 - 26 Οκτωβριου Mini Tennis Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Υπαιθριος Χωρος Αθλοπαιδιων (No 21 στον Χαρτη)",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Υπαιθριος Χωρος Αθλοπαιδιων (No 21 στον Χαρτη)",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/sports/mini-tennis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.379Z",
+      "updatedAt": "2025-10-22T17:16:25.379Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2a692961e4a93c4c",
+      "title": "Α.Σ. ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ - ΕΘΝΙΚΟΣ ΛΙΒΑΔΕΙΑΣ (NL1 - 4Η ΑΓΩΝΙΣΤΙΚΗ)",
+      "description": "25 Οκτωβριου Α.Σ. ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ - ΕΘΝΙΚΟΣ ΛΙΒΑΔΕΙΑΣ (NL1 - 4Η ΑΓΩΝΙΣΤΙΚΗ) Κλειστο Γηπεδο Απολλωνα Πατρας",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κλειστο Γηπεδο Απολλωνα Πατρας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/sports/a-s-apollon-patron-ethnikos-libadeias-nl1-4i-agonistiki/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.380Z",
+      "updatedAt": "2025-10-22T17:16:25.380Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "337c181c499f0fcc",
+      "title": "\"Thessaloniki variations\" - Ballet Preljocaj",
+      "description": "26 Οκτωβριου \"Thessaloniki variations\" - Ballet Preljocaj Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/ballet-preljocaj/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.396Z",
+      "updatedAt": "2025-10-22T17:16:25.396Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "437c263652b7b3f9",
+      "title": "Roller Skates για Όλους",
+      "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/roller-skates-gia-olous/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.396Z",
+      "updatedAt": "2025-10-22T17:16:25.396Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5dde3057b84633dc",
+      "title": "Avanti Maestro Χρώματα μουντζούρες και μουσικές",
+      "description": "26 Οκτ - 23 Νοε Avanti Maestro Χρώματα μουντζούρες και μουσικές Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/avanti-maestro-xromata-mountzoures-kai-mousikes/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.396Z",
+      "updatedAt": "2025-10-22T17:16:25.396Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "965319343f4e8a31",
+      "title": "COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ",
+      "description": "26 Οκτ - 30 Νοε COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/comedia-immortale-a-maliatsis-a-psyliakos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.397Z",
+      "updatedAt": "2025-10-22T17:16:25.397Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e287516a64e7e659",
+      "title": "Τι ξέρεις για την 28η Οκτωβρίου??",
+      "description": "26 Οκτωβριου Τι ξέρεις για την 28η Οκτωβρίου?? Circus Entertainment Hub",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Circus Entertainment Hub",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-ksereis-gia-tin-28i-oktobriou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.397Z",
+      "updatedAt": "2025-10-22T17:16:25.397Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f06e42701b72ff43",
+      "title": "Τι κρύβει το Φθινόπωρο;",
+      "description": "26 Οκτωβριου Τι κρύβει το Φθινόπωρο; Βοτανικο Παρκο Αττικης",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Βοτανικο Παρκο Αττικης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-krybei-to-fthinoporo/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.397Z",
+      "updatedAt": "2025-10-22T17:16:25.397Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ebd031ea22a1f923",
+      "title": "Κυριακάτικα Εκπαιδευτικά Προγράμματα",
+      "description": "26 Οκτ - 30 Νοε Κυριακάτικα Εκπαιδευτικά Προγράμματα Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/ekpaideutika-programmata/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.398Z",
+      "updatedAt": "2025-10-22T17:16:25.398Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "38f9382c32d6eab8",
+      "title": "ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ",
+      "description": "26 Οκτωβριου ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/epomeni-stasi-kypseli-theatriki-diadromi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.399Z",
+      "updatedAt": "2025-10-22T17:16:25.399Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5a0837940df8bc5e",
+      "title": "Επόμενη Στάση: Γκαζοχώρι",
+      "description": "26 Οκτωβριου Επόμενη Στάση: Γκαζοχώρι Τεχνοπολη Δημου Αθηναιων",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνοπολη Δημου Αθηναιων",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/offer/epomeni-stasi-gkazoxori/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.399Z",
+      "updatedAt": "2025-10-22T17:16:25.399Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b42321fff7362971",
+      "title": "Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή",
+      "description": "26 Οκτωβριου Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/diadrastiki-periigisi-stin-akropoli/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.402Z",
+      "updatedAt": "2025-10-22T17:16:25.402Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "cabcedecf21f514c",
+      "title": "Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη",
+      "description": "26 Οκτωβριου Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη Metro Σταθμος Λαρισης",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Metro Σταθμος Λαρισης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/walk/spilaio-limnon-kalabryta-odontotos-monoimeri/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.403Z",
+      "updatedAt": "2025-10-22T17:16:25.403Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "25b393f793c37121",
+      "title": "Thessaly Hot Air Balloon Festival 2025",
+      "description": "26 Οκτωβριου Thessaly Hot Air Balloon Festival 2025 Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/walk/festival/thessaly-hot-air-balloon-festival-2025-stadio-karditsas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.404Z",
+      "updatedAt": "2025-10-22T17:16:25.404Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "88265f0685ffe3e2",
+      "title": "Αγία Σοφία: 1.500 Χρόνια Ιστορίας",
+      "description": "26 Οκτ - 2 Νοε Αγία Σοφία: 1.500 Χρόνια Ιστορίας Ελληνικος Κοσμος – Μουσειο - Θολος",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/agia-sofia-1500-xronia-istorias/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.404Z",
+      "updatedAt": "2025-10-22T17:16:25.404Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "98fa49752d0e97b2",
+      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
+      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
+      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.422Z",
+      "updatedAt": "2025-10-22T17:16:25.422Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "00bed5ce27d0c041",
+      "title": "\"Commedia Divina\" - Χορευτές του Βορρά",
+      "description": "28 Οκτωβριου \"Commedia Divina\" - Χορευτές του Βορρά Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+      "startDate": "2025-10-28T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/commedia-divina-xoreutes-tou-borra/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.423Z",
+      "updatedAt": "2025-10-22T17:16:25.423Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "34b58f74ec1f5f00",
+      "title": "MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS",
+      "description": "28 Οκτ - 2 Δεκ MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS TGI Fridays™ Καπνικαρεας",
+      "startDate": "2025-10-28T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TGI Fridays™ Καπνικαρεας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/mikeius-incorrect-kathe-triti-sta-tgi-fridays/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.423Z",
+      "updatedAt": "2025-10-22T17:16:25.423Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "64828530560ef5b3",
+      "title": "ΝΤΕΚΑΝΤΑΝΣ - JEREMY",
+      "description": "28 Οκτ - 25 Νοε ΝΤΕΚΑΝΤΑΝΣ - JEREMY Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-28T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/bntekantans-jeremy/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.424Z",
+      "updatedAt": "2025-10-22T17:16:25.424Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "47adcd471086041f",
+      "title": "ΜΗΝΙΩΝ",
+      "description": "29 Οκτωβριου ΜΗΝΙΩΝ Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/minion/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "daeb59f1b708653a",
+      "title": "ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ",
+      "description": "29 Οκτωβριου ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mikroi-megaloi-paizoume-mazi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "038a710e6fddd494",
+      "title": "Παιδικό Parkour",
+      "description": "29 Οκτωβριου Παιδικό Parkour λιλιτζουμ",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paidiko-parkour-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b72ea3c39532eb29",
+      "title": "𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎",
+      "description": "29 Οκτωβριου 𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎 Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/akatastata-paixnidismata-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "93327defc5de937c",
+      "title": "ATHENS HALLOWEEN FESTIVAL 2025",
+      "description": "30 Οκτ - 2 Νοε ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/festival/athens-halloween-festival-2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.431Z",
+      "updatedAt": "2025-10-22T17:16:25.431Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "857bdbe5a2a97e04",
+      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ",
+      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-30/10-8mm-10mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.431Z",
+      "updatedAt": "2025-10-22T17:16:25.431Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f7822f8c748c52c7",
+      "title": "PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025",
+      "description": "30 Οκτωβριου PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/painting-with-koko-texnh/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.431Z",
+      "updatedAt": "2025-10-22T17:16:25.431Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e300d0c44f8370c8",
+      "title": "ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ",
+      "description": "30 Οκτωβριου ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ Θεατρο ACT",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο ACT",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/louis-patsalidis-plin30-patra/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.431Z",
+      "updatedAt": "2025-10-22T17:16:25.431Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a0e271138ada8350",
+      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ",
+      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-30/10-4mm-6mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.432Z",
+      "updatedAt": "2025-10-22T17:16:25.432Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "447f2f85fb1b5dbf",
+      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 6μμ - 8μμ",
+      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 6μμ - 8μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-3/10-6mm-8mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.432Z",
+      "updatedAt": "2025-10-22T17:16:25.432Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ceff2fca7ef3c348",
+      "title": "PUMPKIN PAINTING",
+      "description": "30 Οκτωβριου PUMPKIN PAINTING Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.432Z",
+      "updatedAt": "2025-10-22T17:16:25.432Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bc965336724bcaa3",
+      "title": "PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ",
+      "description": "30 Οκτωβριου PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-pempti-30/10-ora-2mm-4mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.432Z",
+      "updatedAt": "2025-10-22T17:16:25.432Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "785f44f28b26d015",
+      "title": "Παιχνίδι & Yoga: Η Αλίκη στη χώρα των θαυμάτων (για παιδιά 3 – 6 ετών)",
+      "description": "30 Οκτωβριου Παιχνίδι & Yoga: Η Αλίκη στη χώρα των θαυμάτων (για παιδιά 3 – 6 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paixnidi-yoga-i-aliki-sti-xora-ton-thaumaton-gia-paidia-3-6-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.432Z",
+      "updatedAt": "2025-10-22T17:16:25.432Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "11ffed9f6808b3cb",
+      "title": "Halloween Stand Up || Μ. Σαρόπουλος",
+      "description": "31 Οκτωβριου Halloween Stand Up || Μ. Σαρόπουλος Ian's Lounge Bar",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ian's Lounge Bar",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/halloween-stand-up-m-saropoulos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.440Z",
+      "updatedAt": "2025-10-22T17:16:25.440Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "180f2212df037e05",
+      "title": "ΜΟΝΑΡΧΗΣ - ΑΡΗΣ ΚΡΗΤΙΚΟΣ",
+      "description": "31 Οκτωβριου ΜΟΝΑΡΧΗΣ - ΑΡΗΣ ΚΡΗΤΙΚΟΣ TGI Fridays™ Καπνικαρεας",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TGI Fridays™ Καπνικαρεας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/monarxis-aris-kritikos-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.440Z",
+      "updatedAt": "2025-10-22T17:16:25.440Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "53b414458ed3b869",
+      "title": "PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 5μμ-7μμ",
+      "description": "31 Οκτωβριου PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 5μμ-7μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-paraskeui-31/10-ora-5mm-7mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.443Z",
+      "updatedAt": "2025-10-22T17:16:25.443Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e2dfd7856f65836d",
+      "title": "PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 9μμ-11μμ",
+      "description": "31 Οκτωβριου PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 9μμ-11μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-paraskeui-31/10-ora-9mm-11mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.443Z",
+      "updatedAt": "2025-10-22T17:16:25.443Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c0275a674d7c9147",
+      "title": "Late Night Ceramics: Halloween Edition 2025",
+      "description": "31 Οκτωβριου Late Night Ceramics: Halloween Edition 2025 Πηλος Εργαστηριο Κεραμικης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πηλος Εργαστηριο Κεραμικης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/late-night-ceramics-halloween-edition-2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.443Z",
+      "updatedAt": "2025-10-22T17:16:25.443Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "77c339045a6dd8a6",
+      "title": "Παιδική χορωδία",
+      "description": "31 Οκτ - 31 Δεκ Παιδική χορωδία Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/paidiki-xorodia-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3c01a6be19768fda",
+      "title": "PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 7μμ-9μμ",
+      "description": "31 Οκτωβριου PUMPKIN CARVING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 7μμ-9μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/pumpkin-carving-paraskeui-31/10-ora-7mm-9mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6f1fd518cce39621",
+      "title": "Yoga για παιδιά",
+      "description": "31 Οκτωβριου Yoga για παιδιά λιλιτζουμ",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/yoga-gia-paidia-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c1742cc98900f823",
+      "title": "Θ. Καλλίρης Live & Halloween Dinner",
+      "description": "31 Οκτωβριου Θ. Καλλίρης Live & Halloween Dinner Hyatt Regency Thessaloniki - Ambrosia Restaurant",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/th-kalliris-live-halloween-dinner/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d538a1fa28b02c5d",
+      "title": "PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ",
+      "description": "31 Οκτωβριου PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-paraskeui-31/10-ora-11pm-1mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "02289e75e536e6ac",
+      "title": "PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 1μμ-3μμ",
+      "description": "31 Οκτωβριου PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 1μμ-3μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-paraskeui-31/10-ora-1mm-3mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d76d20bdba4f6256",
+      "title": "PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 3μμ-5μμ",
+      "description": "31 Οκτωβριου PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ: 3μμ-5μμ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-paraskeui-31/10-ora-3mm-5mm/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.511Z",
+    "total": 113,
+    "lastUpdate": "2025-10-22T17:16:30.960Z",
     "url": "https://agent-athens.netlify.app/performance-this-month"
   }
 }

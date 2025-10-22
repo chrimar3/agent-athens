@@ -1,58 +1,85 @@
 #!/usr/bin/env bun
-// Event Enrichment Status Reporter
-// Generates a report of events needing AI enrichment
-
-import { getAllEvents } from '../src/db/database';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-
 /**
- * ENRICHMENT WORKFLOW (via Agent Tool):
+ * Event Enrichment Script - Option E: Next 30 Days
  *
- * This script doesn't do the enrichment directly.
- * Instead, ask Claude Code to use the Agent tool:
- *
- * Example: "Use the Agent tool to enrich the first 3 events with 400-word descriptions"
- *
- * The agent will handle the Claude API calls and database updates.
+ * Prepares batches of events for enrichment via Claude Code Task tool
+ * Focuses on events happening in the next 30 days
  */
 
-async function main() {
-  console.log('📋 Event Enrichment Status Report\n');
+import { Database } from 'bun:sqlite';
+import { writeFileSync, mkdirSync } from 'fs';
 
-  // Load all events
-  const events = getAllEvents();
-  const unenriched = events.filter(e => !e.fullDescription || e.fullDescription.length < 100);
+const db = new Database('data/events.db');
 
-  console.log(`📊 Statistics:`);
-  console.log(`   Total events: ${events.length}`);
-  console.log(`   Enriched: ${events.length - unenriched.length}`);
-  console.log(`   Need enrichment: ${unenriched.length}\n`);
+// Get events that need enrichment (next 30 days only)
+const today = new Date('2025-10-22');
+const thirtyDaysFromNow = new Date(today);
+thirtyDaysFromNow.setDate(today.getDate() + 30);
 
-  if (unenriched.length === 0) {
-    console.log('✅ All events are already enriched!');
-    return;
-  }
+const needEnrichment = db.query(`
+  SELECT id, title, type, start_date, venue_name, genres, url, description
+  FROM events
+  WHERE full_description IS NULL
+    AND start_date >= ?
+    AND start_date <= ?
+  ORDER BY start_date ASC
+`).all(
+  today.toISOString(),
+  thirtyDaysFromNow.toISOString()
+) as Array<{
+  id: string;
+  title: string;
+  type: string;
+  start_date: string;
+  venue_name: string;
+  genres: string;
+  url: string | null;
+  description: string;
+}>;
 
-  console.log('📝 Events needing enrichment:');
-  unenriched.slice(0, 10).forEach((event, i) => {
-    console.log(`   ${i + 1}. ${event.title}`);
-    console.log(`      Type: ${event.type} | Venue: ${event.venue.name}`);
-    console.log(`      Date: ${new Date(event.startDate).toLocaleDateString()}`);
-  });
+console.log('📊 Enrichment Plan (Next 30 Days):');
+console.log(`   Events needing enrichment: ${needEnrichment.length}`);
+console.log(`   Date range: ${today.toISOString().split('T')[0]} to ${thirtyDaysFromNow.toISOString().split('T')[0]}`);
+console.log(`   Batches (20 events each): ${Math.ceil(needEnrichment.length / 20)}`);
+console.log('');
 
-  if (unenriched.length > 10) {
-    console.log(`   ... and ${unenriched.length - 10} more`);
-  }
-
-  console.log('\n💡 To enrich these events:');
-  console.log('   Ask Claude Code: "Use the Agent tool to enrich the first 3 events with 400-word descriptions"');
-  console.log('   The agent will handle API calls and database updates.\n');
-
-  // Export event data for agent to use
-  const exportPath = join(import.meta.dir, '../data/unenriched-events.json');
-  writeFileSync(exportPath, JSON.stringify(unenriched, null, 2));
-  console.log(`📁 Exported ${unenriched.length} unenriched events to: data/unenriched-events.json`);
+if (needEnrichment.length === 0) {
+  console.log('✅ No events need enrichment!');
+  db.close();
+  process.exit(0);
 }
 
-main().catch(console.error);
+// Create batches of 20
+const BATCH_SIZE = 20;
+const batches: Array<typeof needEnrichment> = [];
+
+for (let i = 0; i < needEnrichment.length; i += BATCH_SIZE) {
+  batches.push(needEnrichment.slice(i, i + BATCH_SIZE));
+}
+
+// Create output directory
+try {
+  mkdirSync('data/enrichment-batches', { recursive: true });
+} catch (e) {
+  // Directory already exists
+}
+
+console.log(`📦 Creating ${batches.length} batch files...\n`);
+
+// Save each batch
+for (let i = 0; i < batches.length; i++) {
+  const batch = batches[i];
+  const filename = `data/enrichment-batches/batch-${i + 1}-of-${batches.length}.json`;
+
+  writeFileSync(filename, JSON.stringify(batch, null, 2));
+
+  console.log(`✅ Batch ${i + 1}/${batches.length}: ${batch.length} events`);
+  console.log(`   File: ${filename}`);
+  console.log(`   Date range: ${batch[0].start_date.split('T')[0]} to ${batch[batch.length - 1].start_date.split('T')[0]}`);
+  console.log('');
+}
+
+console.log('🎯 Ready for enrichment!\n');
+console.log('To start, ask Claude Code to process batch 1');
+
+db.close();

@@ -119,10 +119,15 @@ export function rowToEvent(row: any): Event {
 
 /**
  * Insert or update event
+ * Returns: { success: boolean, isNew: boolean }
  */
-export function upsertEvent(event: Event): boolean {
+export function upsertEvent(event: Event): { success: boolean; isNew: boolean } {
   const db = getDatabase();
   const row = eventToRow(event);
+
+  // Check if event already exists
+  const existing = db.prepare('SELECT id FROM events WHERE id = ?').get(event.id);
+  const isNew = !existing;
 
   const stmt = db.prepare(`
     INSERT INTO events (
@@ -163,10 +168,10 @@ export function upsertEvent(event: Event): boolean {
 
   try {
     stmt.run(row);
-    return true;
+    return { success: true, isNew };
   } catch (error) {
     console.error(`Error upserting event ${event.id}:`, error);
-    return false;
+    return { success: false, isNew: false };
   }
 }
 

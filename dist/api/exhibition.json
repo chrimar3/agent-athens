@@ -6,44 +6,566 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "juergen-teller-you-are-invited-2025-10-19",
-      "title": "Juergen Teller: you are invited",
-      "description": "German photographer Juergen Teller's first-ever exhibition at Onassis Ready...",
-      "fullDescription": "Juergen Teller doesn't take photos the way other fashion photographers do. Where the industry demands polish and perfection, the German-born artist delivers rawness, humor, and uncomfortable intimacy. His images have graced the pages of i-D, W Magazine, and countless Vivienne Westwood campaigns, yet they often look nothing like traditional fashion photography. Models appear unglamorous, celebrities look awkward, and luxury goods are presented with deliberate anti-glamour. It's fashion photography that questions fashion itself.\n\n\"you are invited\" marks Teller's first major exhibition at Onassis Ready, the contemporary art space in Ag. Ioannis Rentis that has quickly established itself as one of Athens' most important cultural venues. The exhibition arrives at a perfect moment, as Teller's influence on contemporary photography has never been more apparent. His aesthetic, once considered shocking, now defines an entire generation's understanding of what fashion imagery can be: personal, political, playful, and profoundly human.\n\nThe show brings together works spanning Teller's career, from his early breakthrough campaigns to recent projects that continue pushing boundaries. You'll encounter his famous portraits of Kate Moss looking decidedly unglamorous, celebrities photographed in mundane settings, and images that blur the line between high art and snapshot photography. Teller's genius lies in making the viewer question what they're looking at: is this fashion? Art? Documentary? The answer is always yes, all three, and something more.\n\nOnassis Ready provides an ideal setting for this encounter with one of photography's most provocative voices. The industrial space in Rentis has become Athens' go-to venue for challenging contemporary art, offering exhibitions that don't play it safe. The neighborhood itself, once purely industrial, is quietly transforming into a cultural destination, and Onassis Ready sits at the heart of this change.\n\nTeller's work rewards close looking and repeated viewing. These aren't images designed to be scrolled past on Instagram; they demand you slow down, look carefully, and consider what fashion photography can be when it refuses to follow the rules. The exhibition includes vintage prints, recent work, and potentially unpublished images that offer fresh perspectives on Teller's singular vision.\n\nFor anyone interested in photography, fashion, or contemporary art, this exhibition is essential viewing. Teller has fundamentally changed how we think about fashion imagery, and seeing his work in person reveals details and nuances impossible to appreciate on screen. The opening is October 19th at 18:00, and the show will run for several weeks. Make the journey to Rentis; it's absolutely worth it.",
-      "startDate": "2025-10-19T18:00:00+03:00",
+      "@type": "Event",
+      "id": "4f649dcf4bfcd8ae",
+      "title": "Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe",
+      "description": "22 Οκτ - 19 Δεκ Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
-        "photography"
+        "general"
       ],
       "tags": [],
       "venue": {
-        "name": "Onassis Ready",
-        "address": "Ag. Ioannis Rentis",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.954,
-          "lon": 23.7404
-        },
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "with-ticket",
         "amount": null,
         "currency": "EUR",
-        "range": "paid"
+        "range": null
       },
-      "url": "https://www.thisisathens.org/events/you-are-invited-juergen-teller-onassis-ready",
-      "source": "onassis.org",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T20:04:19.557Z",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/omades-paixnidiou-texnis-messy-play-hehe/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3ed9af4008ebeb17",
+      "title": "Messy Play with Hehe για παιδιά 1-4 ετών",
+      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 1-4 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-1-4-eton-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f755fa7651c40ab8",
+      "title": "Messy Play with Hehe για παιδιά 2-8 ετών",
+      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 2-8 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-2-8-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4828259d979ba42d",
+      "title": "Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\"",
+      "description": "24 Οκτ - 21 Νοε Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\" AiTHERION",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "AiTHERION",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/dimokratia-kai-eydaimonia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.340Z",
+      "updatedAt": "2025-10-22T17:16:25.340Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "749b10cc11cca019",
+      "title": "Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών",
+      "description": "24 Οκτ - 21 Δεκ Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/ekthesi-yparxei-se-ola-lysi-taksidi-ston-kosmo-ton-arxaion-ellinikon-mathimatikon/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.342Z",
+      "updatedAt": "2025-10-22T17:16:25.342Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bbfcba8bc710fd96",
+      "title": "Messy & Clay Play with Hehe για παιδιά 3-12 ετών",
+      "description": "24 Οκτ - 19 Δεκ Messy & Clay Play with Hehe για παιδιά 3-12 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-clay-play-with-hehe-gia-paidia-3-12-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.342Z",
+      "updatedAt": "2025-10-22T17:16:25.342Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f93ecd6116d2828e",
+      "title": "Από τη Γη στο Σύμπαν - From Earth to the Universe",
+      "description": "25 - 26 Οκτωβριου Από τη Γη στο Σύμπαν - From Earth to the Universe Νοησις",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοησις",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/apo-ti-gi-sto-sympan/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.373Z",
+      "updatedAt": "2025-10-22T17:16:25.373Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "520f92ef249209aa",
+      "title": "Halloween Messy Play στο Hehe!",
+      "description": "25 Οκτωβριου Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-messy-play-sto-hehe/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.379Z",
+      "updatedAt": "2025-10-22T17:16:25.379Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f412452f8564306a",
+      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
+      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τουριστικο Περιπτερο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.403Z",
+      "updatedAt": "2025-10-22T17:16:25.403Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a54ab805aa1d0275",
+      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
+      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
+      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.422Z",
+      "updatedAt": "2025-10-22T17:16:25.422Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a4f1d1cddd7b3b6a",
+      "title": "Εβδομάδα Halloween Messy Play στο Hehe!",
+      "description": "29 - 31 Οκτωβριου Εβδομάδα Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ebdomada-halloween-messy-play-sto-hehe/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "55fedd909d2218ed",
+      "title": "🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη",
+      "description": "31 Οκτωβριου 🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη Κτημα Αριστη",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/xali-pali-ktima-aristi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1f386c5705104396",
+      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
+      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
+      "startDate": "2025-11-01T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.457Z",
+      "updatedAt": "2025-10-22T17:16:25.457Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7d9e6b1f2d9c9859",
+      "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
+      "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-11-05T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-15-5-eton-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.483Z",
+      "updatedAt": "2025-10-22T17:16:25.483Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6e19492897e48bea",
+      "title": "ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό",
+      "description": "20 Νοε - 18 Ιουν ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό CharaLab",
+      "startDate": "2025-11-20T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "CharaLab",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/kallitexniko-ergastiri-art-spot-neo-psyxiko/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.551Z",
+      "updatedAt": "2025-10-22T17:16:25.551Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3d596866282d864f",
+      "title": "✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨",
+      "description": "21 Νοεμβριου ✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨ Κτημα Αριστη",
+      "startDate": "2025-11-21T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/neon-party-sto-ktima-aristi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.552Z",
+      "updatedAt": "2025-10-22T17:16:25.552Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9408b84dfccd3217",
+      "title": "On site - Crete Marketing Days",
+      "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
+      "startDate": "2025-11-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Theartemis Palace",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/on-site-crete-marketing-days/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.566Z",
+      "updatedAt": "2025-10-22T17:16:25.566Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "27cf94f275a8e334",
+      "title": "Athens English Comedy Club",
+      "description": "30 Νοεμβριου Athens English Comedy Club Θεατρο Eliart",
+      "startDate": "2025-11-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Eliart",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/athens-english-comedy-club/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.590Z",
+      "updatedAt": "2025-10-22T17:16:25.590Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-18T20:48:27.503Z",
+    "total": 18,
+    "lastUpdate": "2025-10-22T17:16:30.707Z",
     "url": "https://agent-athens.netlify.app/exhibition"
   }
 }

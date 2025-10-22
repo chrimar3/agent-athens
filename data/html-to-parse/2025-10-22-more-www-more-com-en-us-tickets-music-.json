@@ -1,0 +1,9 @@
+{
+  "site_id": "more",
+  "site_name": "more.com",
+  "url": "https://www.more.com/en-us/tickets/music/",
+  "fetched_at": "2025-10-22T13:55:56.999856",
+  "html_length": 59582,
+  "method": "playwright",
+  "success": true
+}

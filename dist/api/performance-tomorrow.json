@@ -3,10 +3,476 @@
     "type": "performance",
     "time": "tomorrow"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "11365b844d6e1234",
+      "title": "Stand Up Therapy",
+      "description": "23 Οκτ - 7 Δεκ Stand Up Therapy Πολλαπλοι χωροι",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/stand-up-therapy/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f85ce1983f676301",
+      "title": "ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ",
+      "description": "23 Οκτ - 27 Νοε ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ TGI Fridays™ Καπνικαρεας",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TGI Fridays™ Καπνικαρεας",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/mpleksimo-me-tous-aleksandro-xarizani-kai-kosta-kryo/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "049d5205c0f083f6",
+      "title": "ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ",
+      "description": "23 - 30 Οκτωβριου ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ Κτημα Αριστη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/oi-mousikantides/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8737f1d9b4e81f80",
+      "title": "Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου",
+      "description": "23 - 30 Οκτωβριου Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου Teleport - Arena",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Arena",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/ena-prototypo-vr-taksidi-sta-mystiria-tis-aigyptou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.321Z",
+      "updatedAt": "2025-10-22T17:16:25.321Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "018550fed1e03707",
+      "title": "Ελληνικό Μουσείο Αυτοκινήτου",
+      "description": "23 Οκτ - 31 Δεκ Ελληνικό Μουσείο Αυτοκινήτου Ελληνικο Μουσειο Αυτοκινητου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ελληνικο Μουσειο Αυτοκινητου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/elliniko-mouseio-aytokinitou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19639414d188a672",
+      "title": "Εργαστήρι Κεραμικής για παιδιά",
+      "description": "23 Οκτ - 29 Νοε Εργαστήρι Κεραμικής για παιδιά Πηλομπερδεματα",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πηλομπερδεματα",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ergastiri-keramikis-gia-paidia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5282dcd3aa5cde85",
+      "title": "Ταξίδι στην Ανταρκτική",
+      "description": "23 - 30 Οκτωβριου Ταξίδι στην Ανταρκτική Teleport - Arena",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Arena",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/taksidi-stin-antarktiki/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3212874fa0307a13",
+      "title": "V Museum",
+      "description": "23 Οκτ - 2 Νοε V Museum vmuseum",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "vmuseum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/vmuseum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5e422ba9b1819c94",
+      "title": "Μουσείο Γέσιου εισιτήριο εισόδου",
+      "description": "23 - 31 Οκτωβριου Μουσείο Γέσιου εισιτήριο εισόδου Μουσειο Γεσιου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Γεσιου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/mouseio-gesiou-eisodos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ad4c65c2d070029c",
+      "title": "Video Games Museum Εισιτήρια",
+      "description": "23 Οκτ - 31 Δεκ Video Games Museum Εισιτήρια Video Games Museum - Video Games Museum",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Video Games Museum - Video Games Museum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/video-games-museum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fbd69cddded74419",
+      "title": "Βιομηχανικό Μουσείο Φωταερίου",
+      "description": "23 - 31 Οκτωβριου Βιομηχανικό Μουσείο Φωταερίου Βιομηχανικο Μουσειο Φωταεριου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Βιομηχανικο Μουσειο Φωταεριου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/biomixaniko-mouseio-fotaeriou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7fa3f580fdae0846",
+      "title": "Εισιτήριο Μουσείου Θύραθεν",
+      "description": "23 - 31 Οκτωβριου Εισιτήριο Μουσείου Θύραθεν Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/eisitirio-mouseiou-thirathen/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a7a0d6b3fb0a1c4b",
+      "title": "Ο Πλανήτης μας είναι το μέλλον μας",
+      "description": "23 - 30 Οκτωβριου Ο Πλανήτης μας είναι το μέλλον μας Teleport - Adventure",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Teleport - Adventure",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/o-planitis-mas-einai-to-mellon-mas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4c2827f64aa15d91",
+      "title": "Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου",
+      "description": "23 Οκτ - 11 Δεκ Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου Ψυχαγωγικο Παρκο Φροντζου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ψυχαγωγικο Παρκο Φροντζου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bolta-sto-psyxagogiko-parko-frontzou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fb3a08af2147fb49",
+      "title": "Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών)",
+      "description": "23 Οκτωβριου Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paixnidi-yoga-lego-gia-paidia-3-6-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.510Z",
+    "total": 15,
+    "lastUpdate": "2025-10-22T17:16:30.945Z",
     "url": "https://agent-athens.netlify.app/performance-tomorrow"
   }
 }

@@ -3,10 +3,73 @@
     "type": "workshop",
     "time": "this-weekend"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2ef92c7f4aa3dd2d",
+      "title": "Halloween Cupcake Workshop by Miele - Με τον Χρήστο Βέργαδο",
+      "description": "24 Οκτωβριου Halloween Cupcake Workshop by Miele - Με τον Χρήστο Βέργαδο Miele Experience Center - Αγια Παρασκευη",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Miele Experience Center - Αγια Παρασκευη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/halloween-cupcake-workshop-by-miele-me-ton-xristo-bergado/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.341Z",
+      "updatedAt": "2025-10-22T17:16:25.341Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f993038ceffa5ef0",
+      "title": "ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside",
+      "description": "26 Οκτ - 2 Νοε ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside Πολλαπλοι χωροι",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/pilomperdemata-workshop-kids-outside/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.404Z",
+      "updatedAt": "2025-10-22T17:16:25.404Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.512Z",
+    "total": 2,
+    "lastUpdate": "2025-10-22T17:16:30.983Z",
     "url": "https://agent-athens.netlify.app/workshop-this-weekend"
   }
 }

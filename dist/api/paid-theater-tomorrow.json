@@ -4,10 +4,1437 @@
     "price": "paid",
     "time": "tomorrow"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e4a45d3c853a5cfe",
+      "title": "Η ΜΗΧΑΝΗ ΤΟΥ ΤΟΥΡΙΝΓΚ",
+      "description": "23 Οκτ - 30 Νοε Η ΜΗΧΑΝΗ ΤΟΥ ΤΟΥΡΙΝΓΚ Θεατρο Βασιλακου _ Μαριαννα Τολη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "_ Μαριαννα Τολη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/touring2025/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.313Z",
+      "updatedAt": "2025-10-22T17:16:25.313Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "29bf6c779a66f188",
+      "title": "ΆΝΘΡΩΠΟΙ ΚΑΙ ΠΟΝΤΙΚΙΑ του Τζον Στάινμπεκ",
+      "description": "23 Οκτ - 30 Νοε ΆΝΘΡΩΠΟΙ ΚΑΙ ΠΟΝΤΙΚΙΑ του Τζον Στάινμπεκ Cartel Τεχνοχωρος - Αιγαλεω",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνοχωρος - Αιγαλεω",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/anthropoi-kai-pontikia/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.313Z",
+      "updatedAt": "2025-10-22T17:16:25.313Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "61a68278e0b552b0",
+      "title": "ΠΡΟΣΕΧΕ ΠΟΙΟΝ ΣΚΟΤΩΝΕΙΣ",
+      "description": "23 Οκτ - 21 Δεκ ΠΡΟΣΕΧΕ ΠΟΙΟΝ ΣΚΟΤΩΝΕΙΣ Θεατρο Πειραιως 131",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Πειραιως 131",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/prosexe-poion-skotoneis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "be2ebb9467b45114",
+      "title": "ΟΙ 12 ΕΝΟΡΚΟΙ | 11ος χρόνος",
+      "description": "23 Οκτ - 28 Δεκ ΟΙ 12 ΕΝΟΡΚΟΙ | 11ος χρόνος Θεατρο Αλκμηνη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "χρόνος Θεατρο Αλκμηνη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/oi-12-enorkoi-11/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "40337d4e6e0d7906",
+      "title": "ΠΡΙΝ ΑΝΟΙΞΟΥΜΕ ΦΤΕΡΑ",
+      "description": "23 Οκτ - 23 Νοε ΠΡΙΝ ΑΝΟΙΞΟΥΜΕ ΦΤΕΡΑ ΙΜΚ Κεντρικη Σκηνη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΙΜΚ Κεντρικη Σκηνη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/prin-anoiksoume-ftera/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5ef275d2e05201d1",
+      "title": "Ο Αόρατος Επισκέπτης - 2ος Χρόνος",
+      "description": "23 Οκτ - 30 Νοε Ο Αόρατος Επισκέπτης - 2ος Χρόνος Θεατρο Κατια Δανδουλακη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Κατια Δανδουλακη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/o-aoratos-episkeptis-2os-xronos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4f2c5919464ecd34",
+      "title": "ΕΝΑΣ ΗΡΩΑΣ ΜΕ ΠΑΝΤΟΥΦΛΕΣ 2η Χρονιά",
+      "description": "23 Οκτ - 21 Δεκ ΕΝΑΣ ΗΡΩΑΣ ΜΕ ΠΑΝΤΟΥΦΛΕΣ 2η Χρονιά Θεατρο Βεμπο.",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Χρονιά Θεατρο Βεμπο.",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/enas-iroas-me-pantoufles-2i-xronia/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8aafe3cefb5c963c",
+      "title": "Κατερίνα Βρανά \"BEST HITS\"",
+      "description": "23 - 31 Οκτωβριου Κατερίνα Βρανά \"BEST HITS\" Πολλαπλοι χωροι",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "HITS\" Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/katerina-brana-best-hits-2/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a07d57a64155c5e0",
+      "title": "Το πιο όμορφο σώμα που έχει βρεθεί ποτέ σε αυτό το μέρος",
+      "description": "23 Οκτ - 16 Νοε Το πιο όμορφο σώμα που έχει βρεθεί ποτέ σε αυτό το μέρος Θεατρο Θησειον",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "μέρος Θεατρο Θησειον",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/to-pio-omorfo-soma/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.314Z",
+      "updatedAt": "2025-10-22T17:16:25.314Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "03fabe89c9c93362",
+      "title": "Linda - 2oς Χρόνος",
+      "description": "23 Οκτ - 30 Νοε Linda - 2oς Χρόνος Επι Κολωνω",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Χρόνος Επι Κολωνω",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/linda-2os-xronos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a92919a32ce253b9",
+      "title": "Η ΜΕΡΑ ΤΗΣ ΦΟΥΣΤΑΣ 2ος χρόνος",
+      "description": "23 Οκτ - 21 Δεκ Η ΜΕΡΑ ΤΗΣ ΦΟΥΣΤΑΣ 2ος χρόνος Θεατρο Διπυλον",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "χρόνος Θεατρο Διπυλον",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/i-mera-tis-foustas-2os-xronos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4d310e03c919a254",
+      "title": "ΧΑΣΑΜΕ ΤΗ ΘΕΙΑ ΣΤΟΠ",
+      "description": "23 Οκτ - 11 Ιαν ΧΑΣΑΜΕ ΤΗ ΘΕΙΑ ΣΤΟΠ ΘΕΑΤΡΟ ΦΙΛΙΠ",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΣΤΟΠ ΘΕΑΤΡΟ ΦΙΛΙΠ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/xasame-ti-theia-stop/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "dc62832c3e52a125",
+      "title": "ΕΙΔΑ ΜΑΤΙΑ | NoVan Theater Group",
+      "description": "23 - 25 Οκτωβριου ΕΙΔΑ ΜΑΤΙΑ | NoVan Theater Group Θεατρο Τεχνων Θεσσαλονικης",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Τεχνων Θεσσαλονικης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/eida-matia/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9aa02ac4e2ddfe8a",
+      "title": "Οι ερωτευμένοι του Σαμ Σέπαρντ",
+      "description": "23 Οκτ - 21 Δεκ Οι ερωτευμένοι του Σαμ Σέπαρντ BIOS",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Σαμ Σέπαρντ BIOS",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/oi-eroteumenoi-tou-sam-separnt/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "eef47e8948c36a26",
+      "title": "Πιρούνια σε ακριβά σπορτέξ",
+      "description": "23 Οκτ - 27 Νοε Πιρούνια σε ακριβά σπορτέξ Red Jasper Cabaret Theatre",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Jasper Cabaret Theatre",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/pirounia-se-akriba-sporteks/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7d862fe32281030e",
+      "title": "ΣΤΡΙΓΓΛΑ | βασισμένο στο έργο του Ο.Σαίξπηρ",
+      "description": "23 Οκτ - 16 Νοε ΣΤΡΙΓΓΛΑ | βασισμένο στο έργο του Ο.Σαίξπηρ Δημοτικο Θεατρο Πειραια - Φουαγιε",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πειραια - Φουαγιε",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/strygla/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "776b8e8ee67ac58d",
+      "title": "Ο Κόσμος που γύρισε ανάποδα",
+      "description": "23 Οκτ - 15 Ιαν Ο Κόσμος που γύρισε ανάποδα Θεατρο Αλκμηνη - Intermedia",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Αλκμηνη - Intermedia",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/o-kosmos-pou-gyrise-anapoda/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.315Z",
+      "updatedAt": "2025-10-22T17:16:25.315Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f122a9ea876eeb43",
+      "title": "Περιμένοντας τον Γκοντό(60ά ΔΗΜΗΤΡΙΑ)",
+      "description": "23 Οκτωβριου Περιμένοντας τον Γκοντό(60ά ΔΗΜΗΤΡΙΑ) Θεατρο Εταιρειας Μακεδονικων Σπουδων",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εταιρειας Μακεδονικων Σπουδων",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/perimenontas-ton-gkonto60a-dimitria/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5af03847c4e4a855",
+      "title": "ΠΟΣΟ ΧΡΟΝΟ ΕΧΩ ; ▪️ΒΑΓΓΕΛΗΣ ΧΑΡΙΣΟΠΟΥΛΟΣ",
+      "description": "23 - 30 Οκτωβριου ΠΟΣΟ ΧΡΟΝΟ ΕΧΩ ; ▪️ΒΑΓΓΕΛΗΣ ΧΑΡΙΣΟΠΟΥΛΟΣ Καφεθεατρο",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "▪️ΒΑΓΓΕΛΗΣ ΧΑΡΙΣΟΠΟΥΛΟΣ Καφεθεατρο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/poso-xrono-exo-baggelis-xarisopoulos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "dca4fd8d6a68e87a",
+      "title": "\"ΕΝΟΧΕΣ\" του Μιχάλη Παπαδόπουλου",
+      "description": "23 - 24 Οκτωβριου \"ΕΝΟΧΕΣ\" του Μιχάλη Παπαδόπουλου Θεατρο ΔΡΟΜΟΣ",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Παπαδόπουλου Θεατρο ΔΡΟΜΟΣ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/guilt/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b1746eb758e2321e",
+      "title": "Χρήστος Πέτρου - C.R.E.A.M.",
+      "description": "23 - 30 Οκτωβριου Χρήστος Πέτρου - C.R.E.A.M. Θεατρο Eliart",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "C.R.E.A.M. Θεατρο Eliart",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/xristos-petrou-c-r-e-a-m/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6467624fefcc9aac",
+      "title": "Ωριμότητα",
+      "description": "23 Οκτ - 2 Νοε Ωριμότητα Σκηνη Ωμεγα, Δημοτικο θεατρο Πειραια",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικο θεατρο Πειραια",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/orimotita/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "af6f8eb74e0a22ec",
+      "title": "ΛΥΣΙΣΤΡΑΤΗ",
+      "description": "23 - 26 Οκτωβριου ΛΥΣΙΣΤΡΑΤΗ Μηχανουργειο Πολυχωρος Πολιτισμου",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μηχανουργειο Πολυχωρος Πολιτισμου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/lysistrati/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "61314245ed72c87b",
+      "title": "Όταν μεγαλώσω θα γίνω Νάνα Μούσχουρη 3ος",
+      "description": "23 Οκτ - 25 Δεκ Όταν μεγαλώσω θα γίνω Νάνα Μούσχουρη 3ος Θεατρο Σταθμος 2023 - Stathmos Theater",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "- Stathmos Theater",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/otan-megaloso-tha-gino-nana-mousxouri-1/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9b86311ccf55f1a2",
+      "title": "Ο Σταθμάρχης",
+      "description": "23 Οκτ - 8 Ιαν Ο Σταθμάρχης Θεατρο Αργω - Studio",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Αργω - Studio",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/o-stathmarxis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "aebf01c8152f7008",
+      "title": "ΆΝΘΡΩΠΟΙ ΚΑΙ ΠΟΝΤΙΚΙΑ του Τζον Στάινμπεκ",
+      "description": "23 Οκτ - 30 Νοε ΆΝΘΡΩΠΟΙ ΚΑΙ ΠΟΝΤΙΚΙΑ του Τζον Στάινμπεκ Cartel Τεχνοχωρος - Αιγαλεω",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cartel Τεχνοχωρος - Αιγαλεω",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/anthropoi-kai-pontikia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.316Z",
+      "updatedAt": "2025-10-22T17:16:25.316Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fbc5fef3cf623412",
+      "title": "Η ΜΗΧΑΝΗ ΤΟΥ ΤΟΥΡΙΝΓΚ",
+      "description": "23 Οκτ - 30 Νοε Η ΜΗΧΑΝΗ ΤΟΥ ΤΟΥΡΙΝΓΚ Θεατρο Βασιλακου _ Μαριαννα Τολη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Βασιλακου _ Μαριαννα Τολη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/touring2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b9c4403d6863fddb",
+      "title": "ΟΙ 12 ΕΝΟΡΚΟΙ | 11ος χρόνος",
+      "description": "23 Οκτ - 28 Δεκ ΟΙ 12 ΕΝΟΡΚΟΙ | 11ος χρόνος Θεατρο Αλκμηνη",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αλκμηνη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d963a595b1c083ed",
+      "title": "ΕΝΑΣ ΗΡΩΑΣ ΜΕ ΠΑΝΤΟΥΦΛΕΣ 2η Χρονιά",
+      "description": "23 Οκτ - 21 Δεκ ΕΝΑΣ ΗΡΩΑΣ ΜΕ ΠΑΝΤΟΥΦΛΕΣ 2η Χρονιά Θεατρο Βεμπο.",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Βεμπο.",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/enas-iroas-me-pantoufles-2i-xronia/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "674470551b04cec6",
+      "title": "Κατερίνα Βρανά \"BEST HITS\"",
+      "description": "23 - 31 Οκτωβριου Κατερίνα Βρανά \"BEST HITS\" Πολλαπλοι χωροι",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/katerina-brana-best-hits-2/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8a12926de87a103a",
+      "title": "Το πιο όμορφο σώμα που έχει βρεθεί ποτέ σε αυτό το μέρος",
+      "description": "23 Οκτ - 16 Νοε Το πιο όμορφο σώμα που έχει βρεθεί ποτέ σε αυτό το μέρος Θεατρο Θησειον",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Θησειον",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/to-pio-omorfo-soma/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a78c739a26a60ddc",
+      "title": "Linda - 2oς Χρόνος",
+      "description": "23 Οκτ - 30 Νοε Linda - 2oς Χρόνος Επι Κολωνω",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Επι Κολωνω",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/linda-2os-xronos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4d51ff5bb7dcf444",
+      "title": "Η ΜΕΡΑ ΤΗΣ ΦΟΥΣΤΑΣ 2ος χρόνος",
+      "description": "23 Οκτ - 21 Δεκ Η ΜΕΡΑ ΤΗΣ ΦΟΥΣΤΑΣ 2ος χρόνος Θεατρο Διπυλον",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Διπυλον",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/i-mera-tis-foustas-2os-xronos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.317Z",
+      "updatedAt": "2025-10-22T17:16:25.317Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ac46e5f7de94e1a5",
+      "title": "Frida Kahlo Beyond the Icon Thessaloniki",
+      "description": "23 Οκτ - 12 Ιαν Frida Kahlo Beyond the Icon Thessaloniki Panorama Digital Theatre",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Panorama Digital Theatre",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/frida-kahlo-beyond-the-icon-thessaloniki/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c1d87bc122b18f25",
+      "title": "ΧΑΣΑΜΕ ΤΗ ΘΕΙΑ ΣΤΟΠ",
+      "description": "23 Οκτ - 11 Ιαν ΧΑΣΑΜΕ ΤΗ ΘΕΙΑ ΣΤΟΠ ΘΕΑΤΡΟ ΦΙΛΙΠ",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΘΕΑΤΡΟ ΦΙΛΙΠ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/xasame-ti-theia-stop/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "25df9c11aa500545",
+      "title": "Οι ερωτευμένοι του Σαμ Σέπαρντ",
+      "description": "23 Οκτ - 21 Δεκ Οι ερωτευμένοι του Σαμ Σέπαρντ BIOS",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "BIOS",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/oi-eroteumenoi-tou-sam-separnt/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e5e493efcc4d54d2",
+      "title": "Πιρούνια σε ακριβά σπορτέξ",
+      "description": "23 Οκτ - 27 Νοε Πιρούνια σε ακριβά σπορτέξ Red Jasper Cabaret Theatre",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Red Jasper Cabaret Theatre",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/pirounia-se-akriba-sporteks/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "964fd92022918217",
+      "title": "ΣΤΡΙΓΓΛΑ | βασισμένο στο έργο του Ο.Σαίξπηρ",
+      "description": "23 Οκτ - 16 Νοε ΣΤΡΙΓΓΛΑ | βασισμένο στο έργο του Ο.Σαίξπηρ Δημοτικο Θεατρο Πειραια - Φουαγιε",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικο Θεατρο Πειραια - Φουαγιε",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/strygla/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d68e6b2548b074c3",
+      "title": "Ο Κόσμος που γύρισε ανάποδα",
+      "description": "23 Οκτ - 15 Ιαν Ο Κόσμος που γύρισε ανάποδα Θεατρο Αλκμηνη - Intermedia",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αλκμηνη - Intermedia",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/o-kosmos-pou-gyrise-anapoda/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c65c3bd50eab0019",
+      "title": "Περιμένοντας τον Γκοντό(60ά ΔΗΜΗΤΡΙΑ)",
+      "description": "23 Οκτωβριου Περιμένοντας τον Γκοντό(60ά ΔΗΜΗΤΡΙΑ) Θεατρο Εταιρειας Μακεδονικων Σπουδων",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Εταιρειας Μακεδονικων Σπουδων",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/perimenontas-ton-gkonto60a-dimitria/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.318Z",
+      "updatedAt": "2025-10-22T17:16:25.318Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "24e534ce52c81868",
+      "title": "ΠΟΣΟ ΧΡΟΝΟ ΕΧΩ ; ▪️ΒΑΓΓΕΛΗΣ ΧΑΡΙΣΟΠΟΥΛΟΣ",
+      "description": "23 - 30 Οκτωβριου ΠΟΣΟ ΧΡΟΝΟ ΕΧΩ ; ▪️ΒΑΓΓΕΛΗΣ ΧΑΡΙΣΟΠΟΥΛΟΣ Καφεθεατρο",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθεατρο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/poso-xrono-exo-baggelis-xarisopoulos/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "03ac2981327c7665",
+      "title": "\"ΕΝΟΧΕΣ\" του Μιχάλη Παπαδόπουλου",
+      "description": "23 - 24 Οκτωβριου \"ΕΝΟΧΕΣ\" του Μιχάλη Παπαδόπουλου Θεατρο ΔΡΟΜΟΣ",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο ΔΡΟΜΟΣ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/guilt/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "97692576efdd265a",
+      "title": "Χρήστος Πέτρου - C.R.E.A.M.",
+      "description": "23 - 30 Οκτωβριου Χρήστος Πέτρου - C.R.E.A.M. Θεατρο Eliart",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Eliart",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/xristos-petrou-c-r-e-a-m/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e60056bcc8fd9c49",
+      "title": "Ωριμότητα",
+      "description": "23 Οκτ - 2 Νοε Ωριμότητα Σκηνη Ωμεγα, Δημοτικο θεατρο Πειραια",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Σκηνη Ωμεγα, Δημοτικο θεατρο Πειραια",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/orimotita/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.319Z",
+      "updatedAt": "2025-10-22T17:16:25.319Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ef7a225a1e8c7005",
+      "title": "Όταν μεγαλώσω θα γίνω Νάνα Μούσχουρη 3ος",
+      "description": "23 Οκτ - 25 Δεκ Όταν μεγαλώσω θα γίνω Νάνα Μούσχουρη 3ος Θεατρο Σταθμος 2023 - Stathmos Theater",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Σταθμος 2023 - Stathmos Theater",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/otan-megaloso-tha-gino-nana-mousxouri-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2c1dc6cbe4fe8efe",
+      "title": "Ο Σταθμάρχης",
+      "description": "23 Οκτ - 8 Ιαν Ο Σταθμάρχης Θεατρο Αργω - Studio",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αργω - Studio",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/o-stathmarxis/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.548Z",
+    "total": 46,
+    "lastUpdate": "2025-10-22T17:16:31.632Z",
     "url": "https://agent-athens.netlify.app/paid-theater-tomorrow"
   }
 }

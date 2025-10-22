@@ -3,10 +3,104 @@
     "type": "cinema",
     "time": "this-weekend"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fdc67a872bb7d360",
+      "title": "RELATED EVENTS",
+      "description": "RELATED EVENTS",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.343Z",
+      "updatedAt": "2025-10-22T17:16:25.343Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c263ae75e988b2ec",
+      "title": "GADJO DILO",
+      "description": "",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.343Z",
+      "updatedAt": "2025-10-22T17:16:25.343Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bf236821f654c379",
+      "title": "BARCELONA GIPSY BALKAN ORCHESTRA",
+      "description": "",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.380Z",
+      "updatedAt": "2025-10-22T17:16:25.380Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.505Z",
+    "total": 3,
+    "lastUpdate": "2025-10-22T17:16:30.710Z",
     "url": "https://agent-athens.netlify.app/cinema-this-weekend"
   }
 }

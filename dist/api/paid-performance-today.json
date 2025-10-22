@@ -4,10 +4,290 @@
     "price": "paid",
     "time": "today"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "819cd686106bcfa8",
+      "title": "ΛΟΣΑΝΤΖΕΛΕ comedy club",
+      "description": "22 Οκτ - 20 Δεκ ΛΟΣΑΝΤΖΕΛΕ comedy club Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/losantzele/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.305Z",
+      "updatedAt": "2025-10-22T17:16:25.305Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3cfeaa5c3cf4b45a",
+      "title": "ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS",
+      "description": "22 Οκτ - 26 Νοε ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS Λοσαντζελε Comedy Club",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Λοσαντζελε Comedy Club",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/komodia-tis-geitonias-kostas-maliatsis-salas/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.306Z",
+      "updatedAt": "2025-10-22T17:16:25.306Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ce50e073a6e7849e",
+      "title": "Night tour at Thissio Visitor Center (in english)",
+      "description": "22 - 31 Οκτωβριου Night tour at Thissio Visitor Center (in english) Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/night-tour-at-thissio-visitor-center/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9d05269b56c77ad3",
+      "title": "UNDERTHUMBS",
+      "description": "22 Οκτωβριου UNDERTHUMBS Κεντρο ελεγχου τηλεορασεων",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/underthumbs2/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "03fc04b6e1afba04",
+      "title": "BADO TRIVIAL QUIZ NIGHT #13",
+      "description": "22 - 23 Οκτωβριου BADO TRIVIAL QUIZ NIGHT #13 Πολλαπλοι χωροι",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bado-trivial-quiz-night-13/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.307Z",
+      "updatedAt": "2025-10-22T17:16:25.307Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d5dfe2c881482608",
+      "title": "Βραδινή ξενάγηση του ΚΕ Θησείου",
+      "description": "22 - 31 Οκτωβριου Βραδινή ξενάγηση του ΚΕ Θησείου Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/bradini-ksenagisi-tou-ke-thiseiou/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.308Z",
+      "updatedAt": "2025-10-22T17:16:25.308Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bc762a5a74b901c8",
+      "title": "BRAINSHOT FESTIVAL: TRANSFORMATIONS",
+      "description": "22 - 23 Οκτωβριου BRAINSHOT FESTIVAL: TRANSFORMATIONS Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/festival/brainshot-festival-transformations/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.308Z",
+      "updatedAt": "2025-10-22T17:16:25.308Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "68fe9621eac81f3a",
+      "title": "Maria Callas Museum",
+      "description": "22 Οκτ - 31 Δεκ Maria Callas Museum Maria Callas Museum",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Maria Callas Museum",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/maria-callas-museum/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.309Z",
+      "updatedAt": "2025-10-22T17:16:25.309Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "33e8b221552b4165",
+      "title": "The Garden of Pythia - Charles Sandison",
+      "description": "22 Οκτ - 29 Νοε The Garden of Pythia - Charles Sandison π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
+      "startDate": "2025-10-22T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/museums/the-garden-of-pythia-charles-sandison/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.310Z",
+      "updatedAt": "2025-10-22T17:16:25.310Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.554Z",
+    "total": 9,
+    "lastUpdate": "2025-10-22T17:16:31.806Z",
     "url": "https://agent-athens.netlify.app/paid-performance-today"
   }
 }

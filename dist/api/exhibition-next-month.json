@@ -3,10 +3,197 @@
     "type": "exhibition",
     "time": "next-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1f386c5705104396",
+      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
+      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
+      "startDate": "2025-11-01T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.457Z",
+      "updatedAt": "2025-10-22T17:16:25.457Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7d9e6b1f2d9c9859",
+      "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
+      "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-11-05T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-15-5-eton-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.483Z",
+      "updatedAt": "2025-10-22T17:16:25.483Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6e19492897e48bea",
+      "title": "ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό",
+      "description": "20 Νοε - 18 Ιουν ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό CharaLab",
+      "startDate": "2025-11-20T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "CharaLab",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/kallitexniko-ergastiri-art-spot-neo-psyxiko/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.551Z",
+      "updatedAt": "2025-10-22T17:16:25.551Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3d596866282d864f",
+      "title": "✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨",
+      "description": "21 Νοεμβριου ✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨ Κτημα Αριστη",
+      "startDate": "2025-11-21T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/neon-party-sto-ktima-aristi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.552Z",
+      "updatedAt": "2025-10-22T17:16:25.552Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9408b84dfccd3217",
+      "title": "On site - Crete Marketing Days",
+      "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
+      "startDate": "2025-11-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Theartemis Palace",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/on-site-crete-marketing-days/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.566Z",
+      "updatedAt": "2025-10-22T17:16:25.566Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "27cf94f275a8e334",
+      "title": "Athens English Comedy Club",
+      "description": "30 Νοεμβριου Athens English Comedy Club Θεατρο Eliart",
+      "startDate": "2025-11-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Eliart",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/athens-english-comedy-club/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.590Z",
+      "updatedAt": "2025-10-22T17:16:25.590Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.503Z",
+    "total": 6,
+    "lastUpdate": "2025-10-22T17:16:30.706Z",
     "url": "https://agent-athens.netlify.app/exhibition-next-month"
   }
 }

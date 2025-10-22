@@ -4,10 +4,166 @@
     "price": "paid",
     "time": "this-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2ef92c7f4aa3dd2d",
+      "title": "Halloween Cupcake Workshop by Miele - Με τον Χρήστο Βέργαδο",
+      "description": "24 Οκτωβριου Halloween Cupcake Workshop by Miele - Με τον Χρήστο Βέργαδο Miele Experience Center - Αγια Παρασκευη",
+      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Miele Experience Center - Αγια Παρασκευη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/halloween-cupcake-workshop-by-miele-me-ton-xristo-bergado/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.341Z",
+      "updatedAt": "2025-10-22T17:16:25.341Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f993038ceffa5ef0",
+      "title": "ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside",
+      "description": "26 Οκτ - 2 Νοε ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside Πολλαπλοι χωροι",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/pilomperdemata-workshop-kids-outside/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.404Z",
+      "updatedAt": "2025-10-22T17:16:25.404Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2bddd3737b54c9b9",
+      "title": "HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ",
+      "description": "31 Οκτωβριου HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/halloween-workshop-pumpkin-fanaraki/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e919494c5da89d46",
+      "title": "Workshop by Miele - Wine Tasting",
+      "description": "31 Οκτωβριου Workshop by Miele - Wine Tasting Miele Experience Center - Αγια Παρασκευη",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Miele Experience Center - Αγια Παρασκευη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/workshop-by-miele-wine-tasting/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "747bbc9e5a6a0026",
+      "title": "Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών)",
+      "description": "31 Οκτωβριου Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/to-spitaki-ton-teraton-halloween-themed-workshop-gia-paidia-4-6-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-18T20:48:27.560Z",
+    "total": 5,
+    "lastUpdate": "2025-10-22T17:16:31.845Z",
     "url": "https://agent-athens.netlify.app/paid-workshop-this-month"
   }
 }

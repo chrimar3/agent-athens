@@ -6,44 +6,101 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "juergen-teller-you-are-invited-2025-10-19",
-      "title": "Juergen Teller: you are invited",
-      "description": "German photographer Juergen Teller's first-ever exhibition at Onassis Ready...",
-      "fullDescription": "Juergen Teller doesn't take photos the way other fashion photographers do. Where the industry demands polish and perfection, the German-born artist delivers rawness, humor, and uncomfortable intimacy. His images have graced the pages of i-D, W Magazine, and countless Vivienne Westwood campaigns, yet they often look nothing like traditional fashion photography. Models appear unglamorous, celebrities look awkward, and luxury goods are presented with deliberate anti-glamour. It's fashion photography that questions fashion itself.\n\n\"you are invited\" marks Teller's first major exhibition at Onassis Ready, the contemporary art space in Ag. Ioannis Rentis that has quickly established itself as one of Athens' most important cultural venues. The exhibition arrives at a perfect moment, as Teller's influence on contemporary photography has never been more apparent. His aesthetic, once considered shocking, now defines an entire generation's understanding of what fashion imagery can be: personal, political, playful, and profoundly human.\n\nThe show brings together works spanning Teller's career, from his early breakthrough campaigns to recent projects that continue pushing boundaries. You'll encounter his famous portraits of Kate Moss looking decidedly unglamorous, celebrities photographed in mundane settings, and images that blur the line between high art and snapshot photography. Teller's genius lies in making the viewer question what they're looking at: is this fashion? Art? Documentary? The answer is always yes, all three, and something more.\n\nOnassis Ready provides an ideal setting for this encounter with one of photography's most provocative voices. The industrial space in Rentis has become Athens' go-to venue for challenging contemporary art, offering exhibitions that don't play it safe. The neighborhood itself, once purely industrial, is quietly transforming into a cultural destination, and Onassis Ready sits at the heart of this change.\n\nTeller's work rewards close looking and repeated viewing. These aren't images designed to be scrolled past on Instagram; they demand you slow down, look carefully, and consider what fashion photography can be when it refuses to follow the rules. The exhibition includes vintage prints, recent work, and potentially unpublished images that offer fresh perspectives on Teller's singular vision.\n\nFor anyone interested in photography, fashion, or contemporary art, this exhibition is essential viewing. Teller has fundamentally changed how we think about fashion imagery, and seeing his work in person reveals details and nuances impossible to appreciate on screen. The opening is October 19th at 18:00, and the show will run for several weeks. Make the journey to Rentis; it's absolutely worth it.",
-      "startDate": "2025-10-19T18:00:00+03:00",
+      "@type": "Event",
+      "id": "4f649dcf4bfcd8ae",
+      "title": "Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe",
+      "description": "22 Οκτ - 19 Δεκ Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
-        "photography"
+        "general"
       ],
       "tags": [],
       "venue": {
-        "name": "Onassis Ready",
-        "address": "Ag. Ioannis Rentis",
-        "neighborhood": "Athens",
-        "coordinates": {
-          "lat": 37.954,
-          "lon": 23.7404
-        },
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "with-ticket",
         "amount": null,
         "currency": "EUR",
-        "range": "paid"
+        "range": null
       },
-      "url": "https://www.thisisathens.org/events/you-are-invited-juergen-teller-onassis-ready",
-      "source": "onassis.org",
-      "createdAt": "2025-10-18T19:28:50.911Z",
-      "updatedAt": "2025-10-18T20:04:19.557Z",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/omades-paixnidiou-texnis-messy-play-hehe/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.322Z",
+      "updatedAt": "2025-10-22T17:16:25.322Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3ed9af4008ebeb17",
+      "title": "Messy Play with Hehe για παιδιά 1-4 ετών",
+      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 1-4 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-1-4-eton-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f755fa7651c40ab8",
+      "title": "Messy Play with Hehe για παιδιά 2-8 ετών",
+      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 2-8 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-23T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-2-8-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.323Z",
+      "updatedAt": "2025-10-22T17:16:25.323Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-18T20:48:27.501Z",
+    "total": 3,
+    "lastUpdate": "2025-10-22T17:16:30.703Z",
     "url": "https://agent-athens.netlify.app/exhibition-tomorrow"
   }
 }

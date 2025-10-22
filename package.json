@@ -7,7 +7,11 @@
     "build": "bun run src/generate-site.ts",
     "dev": "bun run src/generate-site.ts && bun run serve",
     "serve": "bun run --watch src/serve.ts",
-    "deploy": "netlify deploy --prod --dir=dist"
+    "deploy": "netlify deploy --prod --dir=dist",
+    "fetch-emails": "bun run src/ingest/email-ingestion.ts",
+    "scrape-web": "python3 scripts/scrape-all-sites.py",
+    "scrape-web-old": "bun run scripts/scrape-websites.ts",
+    "daily-update": "./scripts/daily-update.sh"
   },
   "keywords": [
     "athens",
@@ -26,8 +30,12 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.67.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.4.1",
+    "cheerio": "^1.1.2",
+    "imap-simple": "^5.1.0",
+    "mailparser": "^3.7.5",
     "node-ical": "^0.21.0"
   }
 }

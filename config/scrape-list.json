@@ -1,0 +1,255 @@
+{
+  "crawl_config": {
+    "total_sites": 16,
+    "expected_monthly_events": 3600,
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "default_delay_seconds": 2,
+    "default_crawl_frequency": "daily",
+    "default_timeout_ms": 30000,
+    "max_retries": 2
+  },
+  "sites": [
+    {
+      "id": "clubber",
+      "name": "Clubber.gr",
+      "url": "https://www.clubber.gr",
+      "tier": 1,
+      "difficulty": "easy",
+      "expected_events": 750,
+      "crawl_frequency": "daily",
+      "robots_allowed": true,
+      "pages": [
+        "https://www.clubber.gr/events/",
+        "https://www.clubber.gr/clubs&bars/",
+        "https://www.clubber.gr/sitemap_index.xml"
+      ],
+      "categories": ["electronic", "techno", "house", "clubbing"]
+    },
+    {
+      "id": "viva",
+      "name": "Viva.gr",
+      "url": "https://www.viva.gr",
+      "tier": 1,
+      "difficulty": "easy",
+      "expected_events": 1000,
+      "crawl_frequency": "daily",
+      "is_aggregator": true,
+      "pages": [
+        "https://www.viva.gr/tickets/",
+        "https://www.viva.gr/tickets/music/",
+        "https://www.viva.gr/tickets/theater/",
+        "https://www.viva.gr/tickets/sports/"
+      ],
+      "categories": ["concert", "theater", "sports", "exhibition"]
+    },
+    {
+      "id": "more",
+      "name": "more.com",
+      "url": "https://www.more.com",
+      "tier": 1,
+      "difficulty": "hard",
+      "expected_events": 650,
+      "crawl_frequency": "daily",
+      "is_aggregator": true,
+      "pages": [
+        "https://www.more.com/gr-el/tickets/",
+        "https://www.more.com/gr-el/tickets/music/",
+        "https://www.more.com/gr-el/tickets/theater/",
+        "https://www.more.com/gr-el/tickets/sports/"
+      ],
+      "categories": ["concert", "theater", "family", "entertainment", "sports"],
+      "notes": "Requires Playwright scraper (system Chrome). Successfully scraped with unified Python scraper.",
+      "skip": false
+    },
+    {
+      "id": "athinorama",
+      "name": "Athinorama.gr",
+      "url": "https://www.athinorama.gr",
+      "tier": 1,
+      "difficulty": "moderate",
+      "expected_events": 1750,
+      "crawl_frequency": "daily",
+      "has_newsletter": true,
+      "pages": [
+        "https://www.athinorama.gr/Going_out/",
+        "https://www.athinorama.gr/cinema/",
+        "https://www.athinorama.gr/theater/",
+        "https://www.athinorama.gr/music/",
+        "https://www.athinorama.gr/clubbing/",
+        "https://www.athinorama.gr/art/"
+      ],
+      "categories": ["concert", "theater", "cinema", "clubbing", "exhibition"]
+    },
+    {
+      "id": "halfnote",
+      "name": "Half Note Jazz Club",
+      "url": "https://www.halfnote.gr",
+      "tier": 2,
+      "difficulty": "moderate",
+      "expected_events": 25,
+      "crawl_frequency": "weekly",
+      "has_newsletter": true,
+      "pages": [
+        "https://www.halfnote.gr/en/program",
+        "https://www.halfnote.gr/en/calendar"
+      ],
+      "categories": ["jazz", "blues", "soul"]
+    },
+    {
+      "id": "gazarte",
+      "name": "Gazarte",
+      "url": "https://www.gazarte.gr",
+      "tier": 2,
+      "difficulty": "easy",
+      "expected_events": 75,
+      "crawl_frequency": "bi-weekly",
+      "has_newsletter": true,
+      "pages": [
+        "https://www.gazarte.gr/events",
+        "https://www.gazarte.gr/cinema",
+        "https://www.gazarte.gr/concerts",
+        "https://www.gazarte.gr/exhibitions"
+      ],
+      "categories": ["concert", "exhibition", "cinema", "theater"]
+    },
+    {
+      "id": "culture_athens",
+      "name": "Culture is Athens",
+      "url": "https://cultureisathens.gr/en/",
+      "tier": 2,
+      "difficulty": "moderate",
+      "expected_events": 75,
+      "crawl_frequency": "bi-weekly",
+      "pages": [
+        "https://cultureisathens.gr/en/"
+      ],
+      "categories": ["cultural", "theater", "music", "free_events"]
+    },
+    {
+      "id": "greek_festival",
+      "name": "Athens & Epidaurus Festival",
+      "url": "https://greekfestival.gr/en/",
+      "tier": 2,
+      "difficulty": "moderate",
+      "expected_events": 75,
+      "crawl_frequency": "weekly",
+      "seasonal": true,
+      "season": "june-october",
+      "has_newsletter": true,
+      "pages": [
+        "https://greekfestival.gr/en/program/",
+        "https://greekfestival.gr/en/calendar/"
+      ],
+      "categories": ["theater", "dance", "music", "opera"]
+    },
+    {
+      "id": "romantso",
+      "name": "Romantso",
+      "url": "https://romantso.gr",
+      "tier": 3,
+      "difficulty": "moderate",
+      "expected_events": 40,
+      "crawl_frequency": "bi-weekly",
+      "pages": [
+        "https://romantso.gr"
+      ],
+      "categories": ["alternative", "indie", "art", "workshop"]
+    },
+    {
+      "id": "gagarin205",
+      "name": "Gagarin 205",
+      "url": "https://www.gagarin205.gr",
+      "tier": 4,
+      "difficulty": "moderate",
+      "expected_events": 30,
+      "crawl_frequency": "weekly",
+      "pages": [
+        "https://www.gagarin205.gr"
+      ],
+      "categories": ["rock", "alternative", "indie"]
+    },
+    {
+      "id": "kyttaro",
+      "name": "Kyttaro",
+      "url": "https://www.kyttaro.gr",
+      "tier": 4,
+      "difficulty": "moderate",
+      "expected_events": 15,
+      "crawl_frequency": "weekly",
+      "pages": [
+        "https://www.kyttaro.gr"
+      ],
+      "categories": ["rock", "rebetiko", "greek_music"]
+    },
+    {
+      "id": "an_club",
+      "name": "AN Club",
+      "url": null,
+      "tier": 4,
+      "difficulty": "hard",
+      "expected_events": 15,
+      "crawl_frequency": "weekly",
+      "location": "Exarcheia",
+      "pages": [],
+      "scrape_method": "social_media_or_aggregator",
+      "categories": ["rock", "punk", "metal", "underground"]
+    },
+    {
+      "id": "temple_athens",
+      "name": "Temple Athens",
+      "url": null,
+      "tier": 4,
+      "difficulty": "hard",
+      "expected_events": 15,
+      "crawl_frequency": "weekly",
+      "pages": [],
+      "scrape_method": "social_media_or_aggregator",
+      "categories": ["rock", "darkwave", "punk", "techno", "drum_and_bass"]
+    },
+    {
+      "id": "fuzz_club",
+      "name": "Fuzz Live Music Club",
+      "url": null,
+      "tier": 4,
+      "difficulty": "hard",
+      "expected_events": 12,
+      "crawl_frequency": "weekly",
+      "pages": [],
+      "scrape_method": "social_media_or_aggregator",
+      "categories": ["rock", "indie", "alternative"]
+    },
+    {
+      "id": "floyd_venue",
+      "name": "Floyd Live Music Venue",
+      "url": null,
+      "tier": 4,
+      "difficulty": "hard",
+      "expected_events": 20,
+      "crawl_frequency": "weekly",
+      "pages": [],
+      "scrape_method": "social_media_or_aggregator",
+      "categories": ["rock", "alternative", "indie", "international"]
+    },
+    {
+      "id": "astron_bar",
+      "name": "Astron Bar",
+      "url": null,
+      "tier": 4,
+      "difficulty": "hard",
+      "expected_events": 15,
+      "crawl_frequency": "weekly",
+      "instagram": "@astronbar",
+      "pages": [],
+      "scrape_method": "instagram",
+      "categories": ["techno", "underground", "late_night"]
+    }
+  ],
+  "output_schema": {
+    "required": ["title", "date", "venue", "url", "source"],
+    "optional": ["time", "category", "genre", "price", "description", "image", "ticket_url", "artists"]
+  },
+  "deduplication": {
+    "match_fields": ["title", "date", "venue"],
+    "priority_sources": ["viva.gr", "more.com", "athinorama.gr", "clubber.gr"]
+  }
+}
