@@ -56,8 +56,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -87,8 +87,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -149,8 +149,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -163,7 +163,7 @@
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2025-10-22T17:16:31.845Z",
+    "lastUpdate": "2025-10-24T12:23:36.948Z",
     "url": "https://agent-athens.netlify.app/paid-workshop-this-month"
   }
 }

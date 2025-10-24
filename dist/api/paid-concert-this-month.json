@@ -8,688 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "01951d65bb863ee8",
-      "title": "G. C. MENOTTI - L’ AMOUR À TROIS / F. POULENC - LA VOIX HUMAINE",
-      "description": "22 - 24 Οκτωβριου G. C. MENOTTI - L’ AMOUR À TROIS / F. POULENC - LA VOIX HUMAINE Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/g-c-menotti-l-amour-a-trois/f-poulenc-la-voix-humaine/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.294Z",
-      "updatedAt": "2025-10-22T17:16:25.294Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f7040de925498761",
-      "title": "ΚΑΛΟΓΕΡΑΚΙΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS",
-      "description": "22 Οκτωβριου ΚΑΛΟΓΕΡΑΚΙΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS Σταυρος του Νοτου - Σταυρος του Νοτου Plus",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "του Νοτου Plus",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/kalogerakia-stauros-tou-notou-plus/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.294Z",
-      "updatedAt": "2025-10-22T17:16:25.294Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1aa1b9f7a9232d16",
-      "title": "THANOS STAVRIDIS QUARTET",
-      "description": "22 Οκτωβριου THANOS STAVRIDIS QUARTET Half Note Jazz Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/thanos-stavridis-half-note/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.294Z",
-      "updatedAt": "2025-10-22T17:16:25.294Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c07e3bf1c234468a",
-      "title": "Μιχάλης Κώτης και Μάνος Παπαδάκης",
-      "description": "22 Οκτωβριου Μιχάλης Κώτης και Μάνος Παπαδάκης Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσικων Οργανων «Θυραθεν»",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/mixalis-kotis-kai-manos-papadakis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.294Z",
-      "updatedAt": "2025-10-22T17:16:25.294Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "297a34b007f9df3d",
-      "title": "ΘΑΝΟΣ ΜΑΤΖΙΛΗΣ , ΚΕΛΛΥ ΒΟΥΔΟΥΡΗ, ΜΑΡΙΛΙΖΑ ΛΟΥΝΤΖΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "22 Οκτωβριου ΘΑΝΟΣ ΜΑΤΖΙΛΗΣ , ΚΕΛΛΥ ΒΟΥΔΟΥΡΗ, ΜΑΡΙΛΙΖΑ ΛΟΥΝΤΖΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/thanos-matzili-kelly-boudouri-mariliza-lountzi-stauros-tou-notou-club/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.294Z",
-      "updatedAt": "2025-10-22T17:16:25.294Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ae5254793e3a728f",
-      "title": "Τέλεση",
-      "description": "22 Οκτ - 6 Νοε Τέλεση Studio Μαυρομιχαλη",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τέλεση Studio Μαυρομιχαλη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/telesi/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.298Z",
-      "updatedAt": "2025-10-22T17:16:25.298Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b85c39c22922cbf6",
-      "title": "G. C. MENOTTI - L’ AMOUR À TROIS / F. POULENC - LA VOIX HUMAINE",
-      "description": "22 - 24 Οκτωβριου G. C. MENOTTI - L’ AMOUR À TROIS / F. POULENC - LA VOIX HUMAINE Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/g-c-menotti-l-amour-a-trois/f-poulenc-la-voix-humaine/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.307Z",
-      "updatedAt": "2025-10-22T17:16:25.307Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bd60a06f0bd9e1e7",
-      "title": "ΚΑΛΟΓΕΡΑΚΙΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS",
-      "description": "22 Οκτωβριου ΚΑΛΟΓΕΡΑΚΙΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS Σταυρος του Νοτου - Σταυρος του Νοτου Plus",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου Plus",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/kalogerakia-stauros-tou-notou-plus/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.308Z",
-      "updatedAt": "2025-10-22T17:16:25.308Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "cd63071c5ad5a0b6",
-      "title": "THANOS STAVRIDIS QUARTET",
-      "description": "22 Οκτωβριου THANOS STAVRIDIS QUARTET Half Note Jazz Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/thanos-stavridis-half-note/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.308Z",
-      "updatedAt": "2025-10-22T17:16:25.308Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "85cfe83c6d0efe4c",
-      "title": "Τέλεση",
-      "description": "22 Οκτ - 6 Νοε Τέλεση Studio Μαυρομιχαλη",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Studio Μαυρομιχαλη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/telesi/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.308Z",
-      "updatedAt": "2025-10-22T17:16:25.308Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0da54cd265bb5568",
-      "title": "Μιχάλης Κώτης και Μάνος Παπαδάκης",
-      "description": "22 Οκτωβριου Μιχάλης Κώτης και Μάνος Παπαδάκης Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mixalis-kotis-kai-manos-papadakis/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.309Z",
-      "updatedAt": "2025-10-22T17:16:25.309Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8dd067c290246be4",
-      "title": "ΘΑΝΟΣ ΜΑΤΖΙΛΗΣ , ΚΕΛΛΥ ΒΟΥΔΟΥΡΗ, ΜΑΡΙΛΙΖΑ ΛΟΥΝΤΖΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "22 Οκτωβριου ΘΑΝΟΣ ΜΑΤΖΙΛΗΣ , ΚΕΛΛΥ ΒΟΥΔΟΥΡΗ, ΜΑΡΙΛΙΖΑ ΛΟΥΝΤΖΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/thanos-matzili-kelly-boudouri-mariliza-lountzi-stauros-tou-notou-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.310Z",
-      "updatedAt": "2025-10-22T17:16:25.310Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4b47563a58296d3e",
-      "title": "Molly Nilsson Live at Death Disco",
-      "description": "23 - 25 Οκτωβριου Molly Nilsson Live at Death Disco Death Disco",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Disco Death Disco",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/molly-nilsson-live-at-death-disco/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.310Z",
-      "updatedAt": "2025-10-22T17:16:25.310Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1f616b7701a85d9b",
-      "title": "ROSANNA MAILAN - HAVANATHENS",
-      "description": "23 Οκτωβριου ROSANNA MAILAN - HAVANATHENS Half Note Jazz Club",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/rosanna-mailan-half-note/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.310Z",
-      "updatedAt": "2025-10-22T17:16:25.310Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "905f9585294dabef",
-      "title": "ΜΑΡΙΑ ΚΟΥΤΣΟΥΡΛΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "23 Οκτωβριου ΜΑΡΙΑ ΚΟΥΤΣΟΥΡΛΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/maria-koutsourli-stauros-tou-notou-club-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.310Z",
-      "updatedAt": "2025-10-22T17:16:25.310Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3229011f9197c8f4",
-      "title": "Mermaids Are Real",
-      "description": "23 Οκτωβριου Mermaids Are Real Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/mermaids-are-real/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.312Z",
-      "updatedAt": "2025-10-22T17:16:25.312Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5b2aab91da06fd26",
-      "title": "Alcedo Folk Band στο Caja de Música",
-      "description": "23 Οκτωβριου Alcedo Folk Band στο Caja de Música Caja De Musica",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/alcedo-folk-band-sto-caja-de-musica/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.313Z",
-      "updatedAt": "2025-10-22T17:16:25.313Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0145a94aadb38423",
-      "title": "ΝΤΡΙΜ της Αριάδνης Ζούπινα, βασισμένο στο έργο “Αυτή η νύχτα μένει” του Θάνου Αλεξανδρή",
-      "description": "23 - 26 Οκτωβριου ΝΤΡΙΜ της Αριάδνης Ζούπινα, βασισμένο στο έργο “Αυτή η νύχτα μένει” του Θάνου Αλεξανδρή Θεατρο Αμαλια",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αλεξανδρή Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ntrim-tis-ariadnis-zoupina/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.316Z",
-      "updatedAt": "2025-10-22T17:16:25.316Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5f7ff4c30cca0e5c",
-      "title": "Molly Nilsson Live at Death Disco",
-      "description": "23 - 25 Οκτωβριου Molly Nilsson Live at Death Disco Death Disco",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Death Disco",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/molly-nilsson-live-at-death-disco/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.317Z",
-      "updatedAt": "2025-10-22T17:16:25.317Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8c6f14f5f0a89d90",
-      "title": "ROSANNA MAILAN - HAVANATHENS",
-      "description": "23 Οκτωβριου ROSANNA MAILAN - HAVANATHENS Half Note Jazz Club",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/rosanna-mailan-half-note/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.318Z",
-      "updatedAt": "2025-10-22T17:16:25.318Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7852fe842af94455",
-      "title": "ΝΤΡΙΜ της Αριάδνης Ζούπινα, βασισμένο στο έργο “Αυτή η νύχτα μένει” του Θάνου Αλεξανδρή",
-      "description": "23 - 26 Οκτωβριου ΝΤΡΙΜ της Αριάδνης Ζούπινα, βασισμένο στο έργο “Αυτή η νύχτα μένει” του Θάνου Αλεξανδρή Θεατρο Αμαλια",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/ntrim-tis-ariadnis-zoupina/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.318Z",
-      "updatedAt": "2025-10-22T17:16:25.318Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "af8298f125d4894a",
-      "title": "ΜΑΡΙΑ ΚΟΥΤΣΟΥΡΛΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "23 Οκτωβριου ΜΑΡΙΑ ΚΟΥΤΣΟΥΡΛΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/maria-koutsourli-stauros-tou-notou-club-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.319Z",
-      "updatedAt": "2025-10-22T17:16:25.319Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f4fa272bb9242d42",
       "title": "Γιάννης Πλούταρχος - Κατερίνα Κακοσαίου",
       "description": "24 Οκτ - 1 Νοε Γιάννης Πλούταρχος - Κατερίνα Κακοσαίου Vergina Theatro!",
@@ -712,7 +30,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/giannis-ploutarxos-katerina-kakosaiou/",
+      "url": "https://www.more.com/gr-el/tickets/music/giannis-ploutarxos-katerina-kakosaiou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -743,7 +61,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/taylor-swift-night-showgirl-halloween-edition/",
+      "url": "https://www.more.com/gr-el/tickets/music/taylor-swift-night-showgirl-halloween-edition/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -774,7 +92,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/barcelona-gipsy-balkan-orchestra-in-greece/",
+      "url": "https://www.more.com/gr-el/tickets/music/barcelona-gipsy-balkan-orchestra-in-greece/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -805,7 +123,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/magic-de-spell-tsopana-rave-frank-panx-saltadoroi-live/",
+      "url": "https://www.more.com/gr-el/tickets/music/magic-de-spell-tsopana-rave-frank-panx-saltadoroi-live/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -836,7 +154,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/thy-art-is-murder-gagarin-205/",
+      "url": "https://www.more.com/gr-el/tickets/music/thy-art-is-murder-gagarin-205/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -867,7 +185,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/richard-galliano-new-viaggio-trio/",
+      "url": "https://www.more.com/gr-el/tickets/music/richard-galliano-new-viaggio-trio/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -898,7 +216,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/eurydiki-la-boheme-2/",
+      "url": "https://www.more.com/gr-el/tickets/music/eurydiki-la-boheme-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -929,7 +247,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/jazz-sto-mouseio/",
+      "url": "https://www.more.com/gr-el/tickets/music/jazz-sto-mouseio/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -960,7 +278,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/jazz-sto-mouseio-myrto-papatanasiu/",
+      "url": "https://www.more.com/gr-el/tickets/music/jazz-sto-mouseio-myrto-papatanasiu/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.324Z",
       "updatedAt": "2025-10-22T17:16:25.324Z",
@@ -991,7 +309,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/pasxalis-live-all-time-party/",
+      "url": "https://www.more.com/gr-el/tickets/music/pasxalis-live-all-time-party/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1022,7 +340,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/enastron-i-premiera-tis-xronias-me-natasa-the/",
+      "url": "https://www.more.com/gr-el/tickets/music/enastron-i-premiera-tis-xronias-me-natasa-the/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1053,7 +371,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/gadjo-dilo-1/",
+      "url": "https://www.more.com/gr-el/tickets/music/gadjo-dilo-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1084,7 +402,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/encardia-tarantella-party/",
+      "url": "https://www.more.com/gr-el/tickets/music/encardia-tarantella-party/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1115,7 +433,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/koupes-stauros-tou-notou-club-2/",
+      "url": "https://www.more.com/gr-el/tickets/music/koupes-stauros-tou-notou-club-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1146,7 +464,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-ioannina/",
+      "url": "https://www.more.com/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-ioannina/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1177,7 +495,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/oi-clism-tool-tribute-act-zontana-sto-ilion-plus/",
+      "url": "https://www.more.com/gr-el/tickets/music/oi-clism-tool-tribute-act-zontana-sto-ilion-plus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1208,7 +526,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/asarkos-intrigka-tour-2025/",
+      "url": "https://www.more.com/gr-el/tickets/music/asarkos-intrigka-tour-2025/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1239,7 +557,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/offer/xryspa-live/",
+      "url": "https://www.more.com/gr-el/tickets/music/offer/xryspa-live/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.325Z",
       "updatedAt": "2025-10-22T17:16:25.325Z",
@@ -1270,7 +588,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/biolontsela-ektos-programmatos/",
+      "url": "https://www.more.com/gr-el/tickets/music/biolontsela-ektos-programmatos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1301,7 +619,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/the-epic-party-10-years-celebration-circus/",
+      "url": "https://www.more.com/gr-el/tickets/music/the-epic-party-10-years-celebration-circus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1332,7 +650,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/aux-adriana-lopez/",
+      "url": "https://www.more.com/gr-el/tickets/music/aux-adriana-lopez/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1363,7 +681,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/doros-dimosthenous-eixa-foni-tin-piran-ta-poulia-stauros-tou-notou-plus/",
+      "url": "https://www.more.com/gr-el/tickets/music/doros-dimosthenous-eixa-foni-tin-piran-ta-poulia-stauros-tou-notou-plus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1394,7 +712,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/offer/chipper-libertalia-release-live-show/",
+      "url": "https://www.more.com/gr-el/tickets/music/offer/chipper-libertalia-release-live-show/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1425,7 +743,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/xrysiida-gkagkouti-full-band-i-megali-gorgona-on-tour/",
+      "url": "https://www.more.com/gr-el/tickets/music/xrysiida-gkagkouti-full-band-i-megali-gorgona-on-tour/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1456,7 +774,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/theodore-fire-release-show-eightball-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/theodore-fire-release-show-eightball-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1487,7 +805,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/eytyxia-mitritsa/",
+      "url": "https://www.more.com/gr-el/tickets/music/eytyxia-mitritsa/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.326Z",
       "updatedAt": "2025-10-22T17:16:25.326Z",
@@ -1518,7 +836,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-fiakas-tou-dimostheni-misitzi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-fiakas-tou-dimostheni-misitzi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.331Z",
       "updatedAt": "2025-10-22T17:16:25.331Z",
@@ -2226,12 +1544,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/pyks-laks-gia-tis-palies-agapes/",
+      "url": "https://www.more.com/gr-el/tickets/music/pyks-laks-gia-tis-palies-agapes/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.345Z",
       "updatedAt": "2025-10-22T17:16:25.345Z",
@@ -2257,12 +1575,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/l-papadopoulos-g-giokarinis-n-ziogalas-b-kazoulis-live-sto-kyttaro/",
+      "url": "https://www.more.com/gr-el/tickets/music/l-papadopoulos-g-giokarinis-n-ziogalas-b-kazoulis-live-sto-kyttaro/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2288,12 +1606,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 45,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/the-rasmus/",
+      "url": "https://www.more.com/gr-el/tickets/music/the-rasmus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2319,12 +1637,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/oddityclub/blend/seds/vlct/basswell-william-luck/",
+      "url": "https://www.more.com/gr-el/tickets/music/oddityclub/blend/seds/vlct/basswell-william-luck/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2350,12 +1668,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/jameson-connects-gizmo-varillas-monsieur-minimal/",
+      "url": "https://www.more.com/gr-el/tickets/music/jameson-connects-gizmo-varillas-monsieur-minimal/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2381,12 +1699,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/offer/eleni-dimou-live/",
+      "url": "https://www.more.com/gr-el/tickets/music/offer/eleni-dimou-live/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2412,12 +1730,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/i-iro-sto-caja-de-musica/",
+      "url": "https://www.more.com/gr-el/tickets/music/i-iro-sto-caja-de-musica/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2443,12 +1761,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 0,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/depeche-mode-party-dj-set-live/",
+      "url": "https://www.more.com/gr-el/tickets/music/depeche-mode-party-dj-set-live/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2474,12 +1792,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/mass-culture-gr/sidus/kiva/",
+      "url": "https://www.more.com/gr-el/tickets/music/mass-culture-gr/sidus/kiva/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.346Z",
       "updatedAt": "2025-10-22T17:16:25.346Z",
@@ -2505,12 +1823,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/dimitris-zerboudakis-spyros-grammenos-stauros-tou-notou/",
+      "url": "https://www.more.com/gr-el/tickets/music/dimitris-zerboudakis-spyros-grammenos-stauros-tou-notou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2536,12 +1854,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/the-epic-party-10-years-celebration-we/",
+      "url": "https://www.more.com/gr-el/tickets/music/the-epic-party-10-years-celebration-we/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2567,12 +1885,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/baro-passo-debut-album-live-presentation/ilion-plus/",
+      "url": "https://www.more.com/gr-el/tickets/music/baro-passo-debut-album-live-presentation/ilion-plus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2598,12 +1916,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-stin-patra/",
+      "url": "https://www.more.com/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-stin-patra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2629,12 +1947,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/trouf-strada-nera-tour-2025/",
+      "url": "https://www.more.com/gr-el/tickets/music/trouf-strada-nera-tour-2025/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2660,12 +1978,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/omixli-straficircus-larissa/",
+      "url": "https://www.more.com/gr-el/tickets/music/omixli-straficircus-larissa/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2691,12 +2009,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/giorgis-manolakis-1/",
+      "url": "https://www.more.com/gr-el/tickets/music/giorgis-manolakis-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2722,12 +2040,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/ath-dnb-unity-w/cause-4-concern-uk-sat-25-oct-aux-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/ath-dnb-unity-w/cause-4-concern-uk-sat-25-oct-aux-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.347Z",
       "updatedAt": "2025-10-22T17:16:25.347Z",
@@ -2753,12 +2071,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/lunar-all-about-image-live-stin-athina/",
+      "url": "https://www.more.com/gr-el/tickets/music/lunar-all-about-image-live-stin-athina/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.348Z",
       "updatedAt": "2025-10-22T17:16:25.348Z",
@@ -2784,12 +2102,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/tragouda-mou-fthinoporo/",
+      "url": "https://www.more.com/gr-el/tickets/music/tragouda-mou-fthinoporo/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.348Z",
       "updatedAt": "2025-10-22T17:16:25.348Z",
@@ -2815,12 +2133,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/parathyra-me-thea-stauros-tou-notou-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/parathyra-me-thea-stauros-tou-notou-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.348Z",
       "updatedAt": "2025-10-22T17:16:25.348Z",
@@ -2846,12 +2164,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/basilis-paiteris-samprina-nyxtes-magikes/",
+      "url": "https://www.more.com/gr-el/tickets/music/basilis-paiteris-samprina-nyxtes-magikes/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.348Z",
       "updatedAt": "2025-10-22T17:16:25.348Z",
@@ -2877,12 +2195,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/i-pentamorfi-kai-to-teras/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/i-pentamorfi-kai-to-teras/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.350Z",
       "updatedAt": "2025-10-22T17:16:25.350Z",
@@ -2908,12 +2226,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-mikri-skini/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-mikri-skini/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.356Z",
       "updatedAt": "2025-10-22T17:16:25.356Z",
@@ -2939,8 +2257,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2970,8 +2288,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3001,8 +2319,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 45,
         "currency": "EUR",
         "range": null
       },
@@ -3032,8 +2350,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3063,8 +2381,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -3094,8 +2412,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -3125,8 +2443,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 0,
         "currency": "EUR",
         "range": null
       },
@@ -3156,8 +2474,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3187,8 +2505,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3218,8 +2536,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 2.5,
         "currency": "EUR",
         "range": null
       },
@@ -3249,8 +2567,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3280,8 +2598,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -3311,8 +2629,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3342,8 +2660,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3373,8 +2691,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3404,8 +2722,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -3435,8 +2753,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -3466,8 +2784,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -3497,12 +2815,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 29,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/eden-presents-apparat/",
+      "url": "https://www.more.com/gr-el/tickets/music/eden-presents-apparat/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3528,12 +2846,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-kalamata/",
+      "url": "https://www.more.com/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-kalamata/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3559,12 +2877,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/allan-paul-sto-caja-de-musica/",
+      "url": "https://www.more.com/gr-el/tickets/music/allan-paul-sto-caja-de-musica/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3590,12 +2908,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/offer/nikos-mertzanos/",
+      "url": "https://www.more.com/gr-el/tickets/music/offer/nikos-mertzanos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3621,12 +2939,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
+      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3652,12 +2970,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
+      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.380Z",
       "updatedAt": "2025-10-22T17:16:25.380Z",
@@ -3688,7 +3006,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/o-lyrikos-theodorakis/",
+      "url": "https://www.more.com/gr-el/tickets/music/o-lyrikos-theodorakis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.381Z",
       "updatedAt": "2025-10-22T17:16:25.381Z",
@@ -3714,12 +3032,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-ksenodoxeio-ton-synaisthimaton/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-ksenodoxeio-ton-synaisthimaton/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.381Z",
       "updatedAt": "2025-10-22T17:16:25.381Z",
@@ -3745,12 +3063,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/arsen-loupen-to-mystirio-tis-koufias-belonas/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/arsen-loupen-to-mystirio-tis-koufias-belonas/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.381Z",
       "updatedAt": "2025-10-22T17:16:25.381Z",
@@ -3776,12 +3094,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peirates-tou-aigaiou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peirates-tou-aigaiou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.383Z",
       "updatedAt": "2025-10-22T17:16:25.383Z",
@@ -3807,12 +3125,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-theatro-stathmos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-theatro-stathmos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.389Z",
       "updatedAt": "2025-10-22T17:16:25.389Z",
@@ -3838,12 +3156,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peripeteies-tou-pinokio/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peripeteies-tou-pinokio/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.390Z",
       "updatedAt": "2025-10-22T17:16:25.390Z",
@@ -3869,8 +3187,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -3900,8 +3218,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 29,
         "currency": "EUR",
         "range": null
       },
@@ -3931,8 +3249,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -3962,8 +3280,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3993,8 +3311,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4024,8 +3342,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -4055,8 +3373,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -4117,12 +3435,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/xristos-dantiscircus-larissa/",
+      "url": "https://www.more.com/gr-el/tickets/music/xristos-dantiscircus-larissa/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.406Z",
       "updatedAt": "2025-10-22T17:16:25.406Z",
@@ -4148,12 +3466,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "url": "https://www.more.com/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.407Z",
       "updatedAt": "2025-10-22T17:16:25.407Z",
@@ -4179,12 +3497,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/three-times-three-125/",
+      "url": "https://www.more.com/gr-el/tickets/music/three-times-three-125/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.407Z",
       "updatedAt": "2025-10-22T17:16:25.407Z",
@@ -4210,12 +3528,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 200,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "url": "https://www.more.com/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.407Z",
       "updatedAt": "2025-10-22T17:16:25.407Z",
@@ -4241,12 +3559,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/hotel-amour/",
+      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.407Z",
       "updatedAt": "2025-10-22T17:16:25.407Z",
@@ -4272,8 +3590,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4303,8 +3621,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4334,8 +3652,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 200,
         "currency": "EUR",
         "range": null
       },
@@ -4365,12 +3683,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/creative-guitar-samarqandi/arapis/",
+      "url": "https://www.more.com/gr-el/tickets/music/creative-guitar-samarqandi/arapis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.423Z",
       "updatedAt": "2025-10-22T17:16:25.423Z",
@@ -4396,8 +3714,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -4427,12 +3745,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-22T17:16:25.424Z",
@@ -4458,12 +3776,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-22T17:16:25.424Z",
@@ -4494,7 +3812,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
+      "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-22T17:16:25.424Z",
@@ -4520,12 +3838,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-22T17:16:25.424Z",
@@ -4551,8 +3869,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -4582,8 +3900,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4613,8 +3931,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -4644,8 +3962,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4675,12 +3993,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/monophonics-live-in-greece/",
+      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4706,12 +4024,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/leon-a-nar-madre-salonico/",
+      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4737,12 +4055,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
+      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4768,12 +4086,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4799,12 +4117,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/giannis-papanikolaou/",
+      "url": "https://www.more.com/gr-el/tickets/music/giannis-papanikolaou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4830,12 +4148,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/festival/athens-spooks/",
+      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -4861,12 +4179,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
+      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.430Z",
       "updatedAt": "2025-10-22T17:16:25.430Z",
@@ -4892,12 +4210,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
+      "url": "https://www.more.com/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.430Z",
       "updatedAt": "2025-10-22T17:16:25.430Z",
@@ -4923,12 +4241,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
+      "url": "https://www.more.com/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.430Z",
       "updatedAt": "2025-10-22T17:16:25.430Z",
@@ -4954,8 +4272,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -4985,8 +4303,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5016,8 +4334,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -5047,8 +4365,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -5078,8 +4396,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
@@ -5109,8 +4427,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5140,12 +4458,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/synaulia-afieroma-sto-thano-mikroutsiko-me-tous-rita-antonopoulou-kai-tous-rebans/",
+      "url": "https://www.more.com/gr-el/tickets/music/synaulia-afieroma-sto-thano-mikroutsiko-me-tous-rita-antonopoulou-kai-tous-rebans/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.432Z",
       "updatedAt": "2025-10-22T17:16:25.432Z",
@@ -5171,12 +4489,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/paris-istanbul-7os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/music/paris-istanbul-7os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.432Z",
       "updatedAt": "2025-10-22T17:16:25.432Z",
@@ -5202,12 +4520,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/metallica-symphony-by-scream-inc/",
+      "url": "https://www.more.com/gr-el/tickets/music/metallica-symphony-by-scream-inc/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.434Z",
       "updatedAt": "2025-10-22T17:16:25.434Z",
@@ -5233,12 +4551,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/paidi-trauma-special-live-mazi-sti-deuteri-zoi/",
+      "url": "https://www.more.com/gr-el/tickets/music/paidi-trauma-special-live-mazi-sti-deuteri-zoi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.434Z",
       "updatedAt": "2025-10-22T17:16:25.434Z",
@@ -5264,12 +4582,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/ola-onabule-gilad-atzmon-quartet/",
+      "url": "https://www.more.com/gr-el/tickets/music/ola-onabule-gilad-atzmon-quartet/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.434Z",
       "updatedAt": "2025-10-22T17:16:25.434Z",
@@ -5295,12 +4613,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/the-ex-live-in-greece/",
+      "url": "https://www.more.com/gr-el/tickets/music/the-ex-live-in-greece/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.434Z",
       "updatedAt": "2025-10-22T17:16:25.434Z",
@@ -5326,12 +4644,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/two-lanes-piraeus-club-academy/",
+      "url": "https://www.more.com/gr-el/tickets/music/two-lanes-piraeus-club-academy/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5357,12 +4675,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/halloween-partara-arch-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/halloween-partara-arch-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5388,12 +4706,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
+      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5419,12 +4737,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/offer/xatou-dera-live-at-an-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/offer/xatou-dera-live-at-an-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5450,12 +4768,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/empty-frame-20-years-anniversary/",
+      "url": "https://www.more.com/gr-el/tickets/music/empty-frame-20-years-anniversary/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5481,12 +4799,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/o-xristos-bergos-live-sto-ilion-plus/",
+      "url": "https://www.more.com/gr-el/tickets/music/o-xristos-bergos-live-sto-ilion-plus/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5512,12 +4830,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/mple-stauros-tou-notou/",
+      "url": "https://www.more.com/gr-el/tickets/music/mple-stauros-tou-notou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -5543,12 +4861,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/fuel-eater-w/10code-the-heavy-hearts-vendetta-aux-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/fuel-eater-w/10code-the-heavy-hearts-vendetta-aux-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5574,12 +4892,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/baggelis-germanos-salina-gabala/",
+      "url": "https://www.more.com/gr-el/tickets/music/baggelis-germanos-salina-gabala/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5605,12 +4923,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/giorgos-nikiforou-zerbakis-bioleta-ikari-stauros-tou-notou-club/",
+      "url": "https://www.more.com/gr-el/tickets/music/giorgos-nikiforou-zerbakis-bioleta-ikari-stauros-tou-notou-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5636,12 +4954,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/argyris-loulatzis-sto-caja-de-musica/",
+      "url": "https://www.more.com/gr-el/tickets/music/argyris-loulatzis-sto-caja-de-musica/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5667,12 +4985,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/ghosts-of-halloween/",
+      "url": "https://www.more.com/gr-el/tickets/music/ghosts-of-halloween/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5698,12 +5016,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/zeds-dead/",
+      "url": "https://www.more.com/gr-el/tickets/music/zeds-dead/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5729,12 +5047,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/trashland-halloween/",
+      "url": "https://www.more.com/gr-el/tickets/music/trashland-halloween/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5760,12 +5078,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/semazen-george-klountzos-semazen-ensemble/",
+      "url": "https://www.more.com/gr-el/tickets/music/semazen-george-klountzos-semazen-ensemble/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -5791,8 +5109,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5822,8 +5140,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -5853,8 +5171,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5884,8 +5202,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5915,8 +5233,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5946,8 +5264,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
@@ -5977,8 +5295,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -6008,8 +5326,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -6039,8 +5357,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6070,8 +5388,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6101,8 +5419,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6132,8 +5450,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -6163,8 +5481,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6194,8 +5512,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -6225,8 +5543,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -6256,8 +5574,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -6287,8 +5605,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -6300,8 +5618,8 @@
     }
   ],
   "meta": {
-    "total": 203,
-    "lastUpdate": "2025-10-22T17:16:31.483Z",
+    "total": 181,
+    "lastUpdate": "2025-10-24T12:23:36.579Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-month"
   }
 }

@@ -8,99 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "4f649dcf4bfcd8ae",
-      "title": "Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe",
-      "description": "22 Οκτ - 19 Δεκ Οι Ομάδες Παιχνιδιού & Τέχνης του Messy Play Hehe Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/omades-paixnidiou-texnis-messy-play-hehe/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.322Z",
-      "updatedAt": "2025-10-22T17:16:25.322Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3ed9af4008ebeb17",
-      "title": "Messy Play with Hehe για παιδιά 1-4 ετών",
-      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 1-4 ετών Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-1-4-eton-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f755fa7651c40ab8",
-      "title": "Messy Play with Hehe για παιδιά 2-8 ετών",
-      "description": "23 Οκτ - 18 Δεκ Messy Play with Hehe για παιδιά 2-8 ετών Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-2-8-eton/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "4828259d979ba42d",
       "title": "Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\"",
       "description": "24 Οκτ - 21 Νοε Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\" AiTHERION",
@@ -211,8 +118,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -242,8 +149,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -273,8 +180,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 0,
         "currency": "EUR",
         "range": null
       },
@@ -304,8 +211,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -335,8 +242,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -379,8 +286,8 @@
     }
   ],
   "meta": {
-    "total": 12,
-    "lastUpdate": "2025-10-22T17:16:31.557Z",
+    "total": 9,
+    "lastUpdate": "2025-10-24T12:23:36.661Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-this-month"
   }
 }

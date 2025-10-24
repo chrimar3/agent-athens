@@ -55,8 +55,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -86,8 +86,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -148,8 +148,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -179,8 +179,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -210,8 +210,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -241,8 +241,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -334,8 +334,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -365,8 +365,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -396,8 +396,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -410,7 +410,7 @@
   ],
   "meta": {
     "total": 13,
-    "lastUpdate": "2025-10-22T17:16:30.985Z",
+    "lastUpdate": "2025-10-24T12:23:36.065Z",
     "url": "https://agent-athens.netlify.app/workshop"
   }
 }

@@ -24,8 +24,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -55,8 +55,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -117,8 +117,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -148,8 +148,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -179,12 +179,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "url": "https://www.more.com/tickets/venues/gazarte/",
       "source": "gazarte.gr",
       "createdAt": "2025-10-22T17:16:25.534Z",
       "updatedAt": "2025-10-22T17:16:25.534Z",
@@ -210,8 +210,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -241,8 +241,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -272,8 +272,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -303,8 +303,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 24,
         "currency": "EUR",
         "range": null
       },
@@ -334,8 +334,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -365,8 +365,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -379,7 +379,7 @@
   ],
   "meta": {
     "total": 12,
-    "lastUpdate": "2025-10-22T17:16:30.711Z",
+    "lastUpdate": "2025-10-24T12:23:35.781Z",
     "url": "https://agent-athens.netlify.app/cinema-next-month"
   }
 }

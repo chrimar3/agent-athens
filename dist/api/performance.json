@@ -7,750 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "819cd686106bcfa8",
-      "title": "ΛΟΣΑΝΤΖΕΛΕ comedy club",
-      "description": "22 Οκτ - 20 Δεκ ΛΟΣΑΝΤΖΕΛΕ comedy club Λοσαντζελε Comedy Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Λοσαντζελε Comedy Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/losantzele/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.305Z",
-      "updatedAt": "2025-10-22T17:16:25.305Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3cfeaa5c3cf4b45a",
-      "title": "ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS",
-      "description": "22 Οκτ - 26 Νοε ΚΩΜΩΔΙΑ ΤΗΣ ΓΕΙΤΟΝΙΑΣ 2 - ΚΩΣΤΑΣ ΜΑΛΙΑΤΣΗΣ SALAS Λοσαντζελε Comedy Club",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Λοσαντζελε Comedy Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/komodia-tis-geitonias-kostas-maliatsis-salas/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.306Z",
-      "updatedAt": "2025-10-22T17:16:25.306Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ce50e073a6e7849e",
-      "title": "Night tour at Thissio Visitor Center (in english)",
-      "description": "22 - 31 Οκτωβριου Night tour at Thissio Visitor Center (in english) Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/night-tour-at-thissio-visitor-center/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.307Z",
-      "updatedAt": "2025-10-22T17:16:25.307Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9d05269b56c77ad3",
-      "title": "UNDERTHUMBS",
-      "description": "22 Οκτωβριου UNDERTHUMBS Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/underthumbs2/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.307Z",
-      "updatedAt": "2025-10-22T17:16:25.307Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "03fc04b6e1afba04",
-      "title": "BADO TRIVIAL QUIZ NIGHT #13",
-      "description": "22 - 23 Οκτωβριου BADO TRIVIAL QUIZ NIGHT #13 Πολλαπλοι χωροι",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/bado-trivial-quiz-night-13/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.307Z",
-      "updatedAt": "2025-10-22T17:16:25.307Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d5dfe2c881482608",
-      "title": "Βραδινή ξενάγηση του ΚΕ Θησείου",
-      "description": "22 - 31 Οκτωβριου Βραδινή ξενάγηση του ΚΕ Θησείου Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Εθνικο Αστεροσκοπειο Αθηνων - Κεντρο Επισκεπτων Θησειου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/bradini-ksenagisi-tou-ke-thiseiou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.308Z",
-      "updatedAt": "2025-10-22T17:16:25.308Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bc762a5a74b901c8",
-      "title": "BRAINSHOT FESTIVAL: TRANSFORMATIONS",
-      "description": "22 - 23 Οκτωβριου BRAINSHOT FESTIVAL: TRANSFORMATIONS Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τεχνοπολη Δ. Αθηναιων-Αιθ. Μηχανουργειου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/festival/brainshot-festival-transformations/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.308Z",
-      "updatedAt": "2025-10-22T17:16:25.308Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "68fe9621eac81f3a",
-      "title": "Maria Callas Museum",
-      "description": "22 Οκτ - 31 Δεκ Maria Callas Museum Maria Callas Museum",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Maria Callas Museum",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/maria-callas-museum/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.309Z",
-      "updatedAt": "2025-10-22T17:16:25.309Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "33e8b221552b4165",
-      "title": "The Garden of Pythia - Charles Sandison",
-      "description": "22 Οκτ - 29 Νοε The Garden of Pythia - Charles Sandison π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
-      "startDate": "2025-10-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "π Παγκοσμιο Κεντρο Κυκλικης Οικονομιας Πολιτισμου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/the-garden-of-pythia-charles-sandison/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.310Z",
-      "updatedAt": "2025-10-22T17:16:25.310Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "11365b844d6e1234",
-      "title": "Stand Up Therapy",
-      "description": "23 Οκτ - 7 Δεκ Stand Up Therapy Πολλαπλοι χωροι",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/workshop/stand-up-therapy/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.317Z",
-      "updatedAt": "2025-10-22T17:16:25.317Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f85ce1983f676301",
-      "title": "ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ",
-      "description": "23 Οκτ - 27 Νοε ΜΠΛΕΞΙΜΟ - ΑΛΕΞΑΝΔΡΟΣ ΧΑΡΙΖΑΝΗΣ & ΚΩΣΤΑΣ ΚΡΥΟΣ TGI Fridays™ Καπνικαρεας",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "TGI Fridays™ Καπνικαρεας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/mpleksimo-me-tous-aleksandro-xarizani-kai-kosta-kryo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.318Z",
-      "updatedAt": "2025-10-22T17:16:25.318Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "049d5205c0f083f6",
-      "title": "ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ",
-      "description": "23 - 30 Οκτωβριου ΟΙ ΜΟΥΣΙΚΑΝΤΗΔΕΣ Κτημα Αριστη",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κτημα Αριστη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/oi-mousikantides/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.319Z",
-      "updatedAt": "2025-10-22T17:16:25.319Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8737f1d9b4e81f80",
-      "title": "Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου",
-      "description": "23 - 30 Οκτωβριου Ένα πρωτότυπο VR ταξίδι στα μυστήρια της Αιγύπτου Teleport - Arena",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Teleport - Arena",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/ena-prototypo-vr-taksidi-sta-mystiria-tis-aigyptou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.321Z",
-      "updatedAt": "2025-10-22T17:16:25.321Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "018550fed1e03707",
-      "title": "Ελληνικό Μουσείο Αυτοκινήτου",
-      "description": "23 Οκτ - 31 Δεκ Ελληνικό Μουσείο Αυτοκινήτου Ελληνικο Μουσειο Αυτοκινητου",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικο Μουσειο Αυτοκινητου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/elliniko-mouseio-aytokinitou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.322Z",
-      "updatedAt": "2025-10-22T17:16:25.322Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "19639414d188a672",
-      "title": "Εργαστήρι Κεραμικής για παιδιά",
-      "description": "23 Οκτ - 29 Νοε Εργαστήρι Κεραμικής για παιδιά Πηλομπερδεματα",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πηλομπερδεματα",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/ergastiri-keramikis-gia-paidia/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.322Z",
-      "updatedAt": "2025-10-22T17:16:25.322Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5282dcd3aa5cde85",
-      "title": "Ταξίδι στην Ανταρκτική",
-      "description": "23 - 30 Οκτωβριου Ταξίδι στην Ανταρκτική Teleport - Arena",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Teleport - Arena",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/taksidi-stin-antarktiki/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.322Z",
-      "updatedAt": "2025-10-22T17:16:25.322Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3212874fa0307a13",
-      "title": "V Museum",
-      "description": "23 Οκτ - 2 Νοε V Museum vmuseum",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "vmuseum",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/vmuseum/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.322Z",
-      "updatedAt": "2025-10-22T17:16:25.322Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5e422ba9b1819c94",
-      "title": "Μουσείο Γέσιου εισιτήριο εισόδου",
-      "description": "23 - 31 Οκτωβριου Μουσείο Γέσιου εισιτήριο εισόδου Μουσειο Γεσιου",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Γεσιου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/mouseio-gesiou-eisodos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ad4c65c2d070029c",
-      "title": "Video Games Museum Εισιτήρια",
-      "description": "23 Οκτ - 31 Δεκ Video Games Museum Εισιτήρια Video Games Museum - Video Games Museum",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Video Games Museum - Video Games Museum",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/video-games-museum/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fbd69cddded74419",
-      "title": "Βιομηχανικό Μουσείο Φωταερίου",
-      "description": "23 - 31 Οκτωβριου Βιομηχανικό Μουσείο Φωταερίου Βιομηχανικο Μουσειο Φωταεριου",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βιομηχανικο Μουσειο Φωταεριου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/biomixaniko-mouseio-fotaeriou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7fa3f580fdae0846",
-      "title": "Εισιτήριο Μουσείου Θύραθεν",
-      "description": "23 - 31 Οκτωβριου Εισιτήριο Μουσείου Θύραθεν Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/eisitirio-mouseiou-thirathen/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a7a0d6b3fb0a1c4b",
-      "title": "Ο Πλανήτης μας είναι το μέλλον μας",
-      "description": "23 - 30 Οκτωβριου Ο Πλανήτης μας είναι το μέλλον μας Teleport - Adventure",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Teleport - Adventure",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/o-planitis-mas-einai-to-mellon-mas/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4c2827f64aa15d91",
-      "title": "Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου",
-      "description": "23 Οκτ - 11 Δεκ Βόλτα στο Ψυχαγωγικό Πάρκο Φρόντζου Ψυχαγωγικο Παρκο Φροντζου",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ψυχαγωγικο Παρκο Φροντζου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/bolta-sto-psyxagogiko-parko-frontzou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fb3a08af2147fb49",
-      "title": "Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών)",
-      "description": "23 Οκτωβριου Παιχνίδι & Yoga: Lego (για παιδιά 3 – 6 ετών) Beesmall Concept Toy Store",
-      "startDate": "2025-10-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Beesmall Concept Toy Store",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/paixnidi-yoga-lego-gia-paidia-3-6-eton/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.323Z",
-      "updatedAt": "2025-10-22T17:16:25.323Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "32b65c6d7b1c891e",
       "title": "Επίσκεψη στο Παιδικό Μουσείο της Αθήνας 2025",
       "description": "24 Οκτ - 30 Νοε Επίσκεψη στο Παιδικό Μουσείο της Αθήνας 2025 Ελληνικο Παιδικο Μουσειο",
@@ -954,12 +210,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/panionios-aris-betsson/",
+      "url": "https://www.more.com/gr-el/tickets/sports/panionios-aris-betsson/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.358Z",
       "updatedAt": "2025-10-22T17:16:25.358Z",
@@ -990,7 +246,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/mini-tennis/",
+      "url": "https://www.more.com/gr-el/tickets/sports/mini-tennis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.358Z",
       "updatedAt": "2025-10-22T17:16:25.358Z",
@@ -1016,12 +272,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/a-s-apollon-patron-ethnikos-libadeias-nl1-4i-agonistiki/",
+      "url": "https://www.more.com/gr-el/tickets/sports/a-s-apollon-patron-ethnikos-libadeias-nl1-4i-agonistiki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.358Z",
       "updatedAt": "2025-10-22T17:16:25.358Z",
@@ -1047,8 +303,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1078,8 +334,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -1109,8 +365,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1140,8 +396,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1171,8 +427,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -1202,8 +458,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3,
         "currency": "EUR",
         "range": null
       },
@@ -1233,8 +489,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1264,8 +520,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -1295,8 +551,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -1326,8 +582,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1357,8 +613,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1388,8 +644,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1419,8 +675,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1450,8 +706,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1481,8 +737,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1512,8 +768,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1543,8 +799,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1574,8 +830,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1605,8 +861,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 4,
         "currency": "EUR",
         "range": null
       },
@@ -1636,8 +892,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1667,8 +923,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1698,8 +954,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1729,8 +985,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -1760,8 +1016,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -1791,8 +1047,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1822,8 +1078,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -1853,8 +1109,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1884,8 +1140,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -1915,8 +1171,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1946,8 +1202,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -1977,8 +1233,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -2039,8 +1295,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -2070,8 +1326,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -2101,8 +1357,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -2132,8 +1388,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2194,8 +1450,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2225,8 +1481,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2318,8 +1574,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2349,8 +1605,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2380,8 +1636,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -2411,8 +1667,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2442,8 +1698,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2473,8 +1729,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2504,8 +1760,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2535,8 +1791,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -2566,8 +1822,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2597,8 +1853,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2628,8 +1884,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2659,8 +1915,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2690,8 +1946,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -2721,8 +1977,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2752,8 +2008,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2783,8 +2039,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -2814,8 +2070,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -2845,8 +2101,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2876,8 +2132,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -2907,8 +2163,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2938,8 +2194,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -2969,8 +2225,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3000,8 +2256,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3031,8 +2287,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3062,8 +2318,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3093,8 +2349,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3124,8 +2380,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3155,8 +2411,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3217,8 +2473,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3248,8 +2504,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3279,8 +2535,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -3310,8 +2566,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 40,
         "currency": "EUR",
         "range": null
       },
@@ -3341,8 +2597,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3372,8 +2628,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3403,8 +2659,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -3465,8 +2721,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3496,8 +2752,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3527,12 +2783,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/2-games-pack/",
+      "url": "https://www.more.com/gr-el/tickets/sports/2-games-pack/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.453Z",
       "updatedAt": "2025-10-22T17:16:25.453Z",
@@ -3558,12 +2814,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.453Z",
       "updatedAt": "2025-10-22T17:16:25.453Z",
@@ -3589,12 +2845,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.453Z",
       "updatedAt": "2025-10-22T17:16:25.453Z",
@@ -3620,8 +2876,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -3651,8 +2907,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -3682,8 +2938,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -3713,8 +2969,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3744,8 +3000,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3775,8 +3031,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3806,8 +3062,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 315,
         "currency": "EUR",
         "range": null
       },
@@ -3837,8 +3093,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
@@ -3868,8 +3124,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3899,8 +3155,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 2.45,
         "currency": "EUR",
         "range": null
       },
@@ -3930,8 +3186,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -3961,8 +3217,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -3992,8 +3248,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4023,8 +3279,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -4054,8 +3310,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -4085,8 +3341,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4116,8 +3372,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
@@ -4147,8 +3403,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4178,8 +3434,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4209,8 +3465,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -4240,8 +3496,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -4271,8 +3527,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -4302,8 +3558,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4333,8 +3589,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4364,8 +3620,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -4395,8 +3651,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4426,8 +3682,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4457,8 +3713,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4488,12 +3744,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.479Z",
       "updatedAt": "2025-10-22T17:16:25.479Z",
@@ -4519,8 +3775,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4581,8 +3837,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -4612,8 +3868,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4643,8 +3899,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4674,8 +3930,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4705,8 +3961,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4736,8 +3992,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 24,
         "currency": "EUR",
         "range": null
       },
@@ -4767,8 +4023,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4798,8 +4054,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4829,8 +4085,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4860,8 +4116,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4891,8 +4147,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -4922,8 +4178,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4953,8 +4209,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4984,8 +4240,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -5015,8 +4271,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5046,8 +4302,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5077,12 +4333,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.510Z",
       "updatedAt": "2025-10-22T17:16:25.510Z",
@@ -5108,12 +4364,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/adrenaline-explosion-genesis/",
+      "url": "https://www.more.com/gr-el/tickets/sports/adrenaline-explosion-genesis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.510Z",
       "updatedAt": "2025-10-22T17:16:25.510Z",
@@ -5170,8 +4426,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5201,8 +4457,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5232,8 +4488,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -5325,8 +4581,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -5356,8 +4612,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -5449,8 +4705,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -5480,8 +4736,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7.5,
         "currency": "EUR",
         "range": null
       },
@@ -5511,8 +4767,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -5542,8 +4798,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -5573,8 +4829,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -5604,8 +4860,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5635,8 +4891,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5666,8 +4922,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5697,8 +4953,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5728,8 +4984,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -5759,8 +5015,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5790,8 +5046,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5821,12 +5077,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.557Z",
       "updatedAt": "2025-10-22T17:16:25.557Z",
@@ -5852,8 +5108,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -5883,8 +5139,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5914,8 +5170,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -5945,8 +5201,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -5976,8 +5232,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6007,8 +5263,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -6038,8 +5294,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 125,
         "currency": "EUR",
         "range": null
       },
@@ -6069,8 +5325,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6131,8 +5387,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6162,8 +5418,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6193,8 +5449,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6224,8 +5480,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -6255,8 +5511,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6286,8 +5542,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6317,8 +5573,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -6348,8 +5604,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -6379,8 +5635,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -6472,8 +5728,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -6596,8 +5852,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6658,8 +5914,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6720,8 +5976,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 90,
         "currency": "EUR",
         "range": null
       },
@@ -6751,8 +6007,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -6782,8 +6038,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 199,
         "currency": "EUR",
         "range": null
       },
@@ -6813,8 +6069,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -6844,8 +6100,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -6875,8 +6131,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6906,8 +6162,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 130,
         "currency": "EUR",
         "range": null
       },
@@ -6968,8 +6224,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -6999,8 +6255,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -7123,8 +6379,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 69,
         "currency": "EUR",
         "range": null
       },
@@ -7154,8 +6410,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 39,
         "currency": "EUR",
         "range": null
       },
@@ -7185,12 +6441,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/ao-amarynthiakos-kartamelous/",
+      "url": "https://www.more.com/gr-el/tickets/sports/ao-amarynthiakos-kartamelous/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.657Z",
       "updatedAt": "2025-10-22T17:16:25.657Z",
@@ -7216,12 +6472,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/karta-filathlou-ael/",
+      "url": "https://www.more.com/gr-el/tickets/sports/karta-filathlou-ael/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7247,12 +6503,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/karta-filathlou-a-s-aris-thessalonikis-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/sports/karta-filathlou-a-s-aris-thessalonikis-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7278,12 +6534,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 80,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kae-marousi-eisitiria-diarkeias-2025/26/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kae-marousi-eisitiria-diarkeias-2025/26/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7309,12 +6565,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 190,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-diarkeias-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-diarkeias-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7340,12 +6596,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/pas-giannina-eis-diarkeias-2025/26/",
+      "url": "https://www.more.com/gr-el/tickets/sports/pas-giannina-eis-diarkeias-2025/26/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7371,12 +6627,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 250,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/pae-aris-eisitiria-diarkeias-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/sports/pae-aris-eisitiria-diarkeias-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.658Z",
       "updatedAt": "2025-10-22T17:16:25.658Z",
@@ -7402,8 +6658,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -7433,8 +6689,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 80,
         "currency": "EUR",
         "range": null
       },
@@ -7464,8 +6720,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 250,
         "currency": "EUR",
         "range": null
       },
@@ -7495,12 +6751,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 200,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/aek-bc-season-tickets-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/sports/aek-bc-season-tickets-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.660Z",
       "updatedAt": "2025-10-22T17:16:25.660Z",
@@ -7526,12 +6782,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/apollon-patron-eisitiria-diarkeias-2025-1/",
+      "url": "https://www.more.com/gr-el/tickets/sports/apollon-patron-eisitiria-diarkeias-2025-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.660Z",
       "updatedAt": "2025-10-22T17:16:25.660Z",
@@ -7557,8 +6813,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 200,
         "currency": "EUR",
         "range": null
       },
@@ -7588,8 +6844,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -7601,8 +6857,8 @@
     }
   ],
   "meta": {
-    "total": 245,
-    "lastUpdate": "2025-10-22T17:16:30.980Z",
+    "total": 221,
+    "lastUpdate": "2025-10-24T12:23:36.059Z",
     "url": "https://agent-athens.netlify.app/performance"
   }
 }

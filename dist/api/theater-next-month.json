@@ -24,12 +24,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
+      "url": "https://www.more.com/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.450Z",
       "updatedAt": "2025-10-22T17:16:25.450Z",
@@ -55,12 +55,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/don-zouan-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/don-zouan-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.450Z",
       "updatedAt": "2025-10-22T17:16:25.450Z",
@@ -86,12 +86,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -117,12 +117,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/theatrotouvorra/o-serlok-xolms-kai-o-thisauros-tis-agkra-fargani/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/theatrotouvorra/o-serlok-xolms-kai-o-thisauros-tis-agkra-fargani/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -148,12 +148,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peripeteies-ti-peppa/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peripeteies-ti-peppa/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -179,12 +179,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -210,12 +210,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -241,12 +241,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/sokratous-xarites/",
+      "url": "https://www.more.com/gr-el/tickets/theater/sokratous-xarites/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -272,12 +272,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -303,12 +303,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/kratas-mystiko/",
+      "url": "https://www.more.com/gr-el/tickets/kratas-mystiko/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -334,12 +334,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-katsarida-k/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-katsarida-k/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -365,12 +365,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ruby-moon/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ruby-moon/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -396,12 +396,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/minion/",
+      "url": "https://www.more.com/gr-el/tickets/theater/minion/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -427,12 +427,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/prin-erthei-o-germanos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/prin-erthei-o-germanos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -458,12 +458,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-am-leaving-by-zo-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-am-leaving-by-zo-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -489,12 +489,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/soma-mideia-i-patra/",
+      "url": "https://www.more.com/gr-el/tickets/theater/soma-mideia-i-patra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -520,12 +520,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-nikaia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-nikaia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -551,12 +551,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-portreto-pinelopi-delta/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-portreto-pinelopi-delta/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -582,12 +582,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/palaiaaaa-diathiki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/palaiaaaa-diathiki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -613,8 +613,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -644,8 +644,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -675,8 +675,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -706,8 +706,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -737,8 +737,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -768,8 +768,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -799,8 +799,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -830,8 +830,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -861,8 +861,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -892,8 +892,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -923,8 +923,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -954,8 +954,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -985,8 +985,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1016,12 +1016,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/dyo-kserokefales-koutales/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/dyo-kserokefales-koutales/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.461Z",
       "updatedAt": "2025-10-22T17:16:25.461Z",
@@ -1047,12 +1047,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/sbise-to-fos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/sbise-to-fos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.461Z",
       "updatedAt": "2025-10-22T17:16:25.461Z",
@@ -1078,12 +1078,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/xakouna-matata/paidiki-parastasi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/xakouna-matata/paidiki-parastasi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1109,12 +1109,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ftou-kai-tr-aino-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ftou-kai-tr-aino-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1140,12 +1140,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xana-zoo/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1171,12 +1171,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1202,12 +1202,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/improv-sundays-2025-206/",
+      "url": "https://www.more.com/gr-el/tickets/theater/improv-sundays-2025-206/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1233,12 +1233,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/merilin-dimotiko-theatro-peiraia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/merilin-dimotiko-theatro-peiraia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1264,12 +1264,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/i-odysseia-tou-omirou-apo-ton-mikro-borra/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/i-odysseia-tou-omirou-apo-ton-mikro-borra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
@@ -1295,12 +1295,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/polykseni-2025-2026/",
+      "url": "https://www.more.com/gr-el/tickets/theater/polykseni-2025-2026/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1326,12 +1326,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-kynigi-tou-alithinou-thisaurou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-kynigi-tou-alithinou-thisaurou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1357,12 +1357,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/i-istoria-tou-gatou-pou-emathe-s-ena-glaro-na-petaei-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/i-istoria-tou-gatou-pou-emathe-s-ena-glaro-na-petaei-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1388,12 +1388,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/afino-anoixta/",
+      "url": "https://www.more.com/gr-el/tickets/theater/afino-anoixta/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1419,12 +1419,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xeimoniatiko-paramythi-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xeimoniatiko-paramythi-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1450,12 +1450,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-pyrobatis-ton-asterion/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-pyrobatis-ton-asterion/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.463Z",
       "updatedAt": "2025-10-22T17:16:25.463Z",
@@ -1481,12 +1481,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/prigkipissa-karampou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/prigkipissa-karampou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.465Z",
       "updatedAt": "2025-10-22T17:16:25.465Z",
@@ -1512,12 +1512,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-somatofylakes-tis-katsarolas/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-somatofylakes-tis-katsarolas/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.465Z",
       "updatedAt": "2025-10-22T17:16:25.465Z",
@@ -1543,12 +1543,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-mauros-monaxos-tou-anton-tsexof/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-mauros-monaxos-tou-anton-tsexof/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1574,12 +1574,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/otan-i-fonissa-synantise-ti-mideia-3/",
+      "url": "https://www.more.com/gr-el/tickets/theater/otan-i-fonissa-synantise-ti-mideia-3/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1605,12 +1605,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xainti-i-mikroula-ton-bounon-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xainti-i-mikroula-ton-bounon-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1636,12 +1636,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1667,12 +1667,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1698,12 +1698,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-3-gourounakia-kai-o-gkafatzis-lykos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-3-gourounakia-kai-o-gkafatzis-lykos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.466Z",
       "updatedAt": "2025-10-22T17:16:25.466Z",
@@ -1729,12 +1729,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/pocahontas-paidiki-theatriki-parastasi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/pocahontas-paidiki-theatriki-parastasi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.467Z",
       "updatedAt": "2025-10-22T17:16:25.467Z",
@@ -1760,8 +1760,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1791,8 +1791,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1822,8 +1822,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -1853,8 +1853,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -1884,8 +1884,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -1915,8 +1915,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -1946,8 +1946,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1977,8 +1977,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2008,8 +2008,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2039,8 +2039,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -2070,8 +2070,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2101,8 +2101,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2132,8 +2132,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2163,8 +2163,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2194,8 +2194,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -2225,8 +2225,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2256,8 +2256,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2287,8 +2287,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2318,8 +2318,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2349,12 +2349,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mesa-sto-myalo-sou-part-2-erotas-kai-xaos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mesa-sto-myalo-sou-part-2-erotas-kai-xaos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2380,12 +2380,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/fthinoporini-istoria-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/fthinoporini-istoria-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2411,12 +2411,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-arraboniastikia-tou-axillea-periodeia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-arraboniastikia-tou-axillea-periodeia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2442,12 +2442,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/terror-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/terror-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2473,12 +2473,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-katarameno-paidi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-katarameno-paidi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2504,12 +2504,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/danny-and-the-deep-blue-sea-se-skinothesia-lenas-drosaki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/danny-and-the-deep-blue-sea-se-skinothesia-lenas-drosaki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.474Z",
       "updatedAt": "2025-10-22T17:16:25.474Z",
@@ -2535,12 +2535,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/jokebox-return-of-the-five/",
+      "url": "https://www.more.com/gr-el/tickets/theater/jokebox-return-of-the-five/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.475Z",
       "updatedAt": "2025-10-22T17:16:25.475Z",
@@ -2566,12 +2566,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/artzentina-sti-famprika-the-bar/",
+      "url": "https://www.more.com/gr-el/tickets/theater/artzentina-sti-famprika-the-bar/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.475Z",
       "updatedAt": "2025-10-22T17:16:25.475Z",
@@ -2597,8 +2597,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -2628,8 +2628,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2659,8 +2659,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2690,8 +2690,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2721,8 +2721,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -2752,8 +2752,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -2783,8 +2783,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2814,8 +2814,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -2845,12 +2845,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/laidi-makbeth-3os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/laidi-makbeth-3os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.476Z",
       "updatedAt": "2025-10-22T17:16:25.476Z",
@@ -2876,12 +2876,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/eikosieksi-kai-mia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/eikosieksi-kai-mia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.477Z",
       "updatedAt": "2025-10-22T17:16:25.477Z",
@@ -2907,8 +2907,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2938,8 +2938,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2969,8 +2969,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -3000,12 +3000,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-diki-tou-kafka/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-diki-tou-kafka/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.478Z",
       "updatedAt": "2025-10-22T17:16:25.478Z",
@@ -3031,12 +3031,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/spilios-floros-sto-treksimo-on-tour-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/spilios-floros-sto-treksimo-on-tour-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.478Z",
       "updatedAt": "2025-10-22T17:16:25.478Z",
@@ -3062,12 +3062,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/to-noima-tis-zois-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/to-noima-tis-zois-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.478Z",
       "updatedAt": "2025-10-22T17:16:25.478Z",
@@ -3093,12 +3093,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/agones-kai-metamorfoseis-mias-gynaikas/",
+      "url": "https://www.more.com/gr-el/tickets/theater/agones-kai-metamorfoseis-mias-gynaikas/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.479Z",
       "updatedAt": "2025-10-22T17:16:25.479Z",
@@ -3124,12 +3124,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/wolves/ayto-to-paidi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/wolves/ayto-to-paidi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.479Z",
       "updatedAt": "2025-10-22T17:16:25.479Z",
@@ -3155,12 +3155,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/catastrophe/",
+      "url": "https://www.more.com/gr-el/tickets/theater/catastrophe/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.479Z",
       "updatedAt": "2025-10-22T17:16:25.479Z",
@@ -3186,8 +3186,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3217,8 +3217,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3248,8 +3248,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -3279,8 +3279,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3310,8 +3310,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3341,8 +3341,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3372,12 +3372,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-noima-tis-zois-no1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-noima-tis-zois-no1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.484Z",
       "updatedAt": "2025-10-22T17:16:25.484Z",
@@ -3403,12 +3403,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/xougia-i-thanatos-sofia-moutidou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/xougia-i-thanatos-sofia-moutidou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.484Z",
       "updatedAt": "2025-10-22T17:16:25.484Z",
@@ -3434,12 +3434,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mple-ygro/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mple-ygro/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.484Z",
       "updatedAt": "2025-10-22T17:16:25.484Z",
@@ -3465,12 +3465,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-noima-tou-sex-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-noima-tou-sex-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.484Z",
       "updatedAt": "2025-10-22T17:16:25.484Z",
@@ -3496,8 +3496,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -3527,8 +3527,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3558,8 +3558,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3589,8 +3589,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -3620,12 +3620,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.491Z",
       "updatedAt": "2025-10-22T17:16:25.491Z",
@@ -3651,12 +3651,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-kouzina-se-skinothesia-giorgou-koutli/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-kouzina-se-skinothesia-giorgou-koutli/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.491Z",
       "updatedAt": "2025-10-22T17:16:25.491Z",
@@ -3682,12 +3682,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/enta/",
+      "url": "https://www.more.com/gr-el/tickets/theater/enta/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.491Z",
       "updatedAt": "2025-10-22T17:16:25.491Z",
@@ -3713,12 +3713,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/pyreksia-tria-oramata-gia-ti-mesi-anatoli/",
+      "url": "https://www.more.com/gr-el/tickets/theater/pyreksia-tria-oramata-gia-ti-mesi-anatoli/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.491Z",
       "updatedAt": "2025-10-22T17:16:25.491Z",
@@ -3744,12 +3744,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ego-ki-esy/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ego-ki-esy/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3775,12 +3775,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-noima-tou-sex/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-noima-tou-sex/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3806,12 +3806,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/seawall-ioannina/",
+      "url": "https://www.more.com/gr-el/tickets/theater/seawall-ioannina/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3837,12 +3837,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/errikos-e/",
+      "url": "https://www.more.com/gr-el/tickets/theater/errikos-e/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3868,12 +3868,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/apopse-kaneis-den-pethainei/",
+      "url": "https://www.more.com/gr-el/tickets/theater/apopse-kaneis-den-pethainei/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3899,12 +3899,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/kapetanissa-laskarina-anastasia-rebi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/kapetanissa-laskarina-anastasia-rebi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3930,12 +3930,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/i-lela-kai-i-lela-theatro-fournos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/i-lela-kai-i-lela-theatro-fournos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3961,12 +3961,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/gouonangkata-angkous-tserini/",
+      "url": "https://www.more.com/gr-el/tickets/theater/gouonangkata-angkous-tserini/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -3992,12 +3992,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-imerologio-enos-trellou-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-imerologio-enos-trellou-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -4023,12 +4023,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/na-vgalo-ta-rouxa-mou-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/na-vgalo-ta-rouxa-mou-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.492Z",
       "updatedAt": "2025-10-22T17:16:25.492Z",
@@ -4054,12 +4054,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/paradosiakos-akatallilo/",
+      "url": "https://www.more.com/gr-el/tickets/theater/paradosiakos-akatallilo/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.493Z",
       "updatedAt": "2025-10-22T17:16:25.493Z",
@@ -4085,8 +4085,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4116,8 +4116,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4147,8 +4147,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -4178,8 +4178,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -4209,8 +4209,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4240,8 +4240,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4271,8 +4271,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -4302,8 +4302,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4333,8 +4333,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4364,8 +4364,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4395,8 +4395,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4426,8 +4426,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -4457,8 +4457,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -4488,12 +4488,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-diki-tou-kafka-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-diki-tou-kafka-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.502Z",
       "updatedAt": "2025-10-22T17:16:25.502Z",
@@ -4519,12 +4519,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/entoli-tis-didos-sotiriou-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/entoli-tis-didos-sotiriou-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.502Z",
       "updatedAt": "2025-10-22T17:16:25.502Z",
@@ -4550,12 +4550,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/o-alysodemenos-elefantas-sta-xania/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/o-alysodemenos-elefantas-sta-xania/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.502Z",
       "updatedAt": "2025-10-22T17:16:25.502Z",
@@ -4581,8 +4581,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4612,8 +4612,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -4643,8 +4643,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -4674,8 +4674,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4705,8 +4705,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4736,8 +4736,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4767,12 +4767,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/poupoulapp/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/poupoulapp/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.508Z",
       "updatedAt": "2025-10-22T17:16:25.508Z",
@@ -4798,12 +4798,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/apagoreuetai-i-mousiki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/apagoreuetai-i-mousiki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.508Z",
       "updatedAt": "2025-10-22T17:16:25.508Z",
@@ -4829,12 +4829,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/ta-genethlia-tis-ririkas-3i-xronia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/ta-genethlia-tis-ririkas-3i-xronia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.508Z",
       "updatedAt": "2025-10-22T17:16:25.508Z",
@@ -4860,12 +4860,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-gyros-tou-kosmou-me-5-paramythia-paramythoxora/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-gyros-tou-kosmou-me-5-paramythia-paramythoxora/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -4891,12 +4891,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/odyssebax/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/odyssebax/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -4922,12 +4922,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-stena-papoutsia-tis-zorz-sari-stin-patra/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-stena-papoutsia-tis-zorz-sari-stin-patra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -4953,12 +4953,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/alysodemenos-elefantas-kai-o-tromeros-exthros-sto-irakleio-kritis/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/alysodemenos-elefantas-kai-o-tromeros-exthros-sto-irakleio-kritis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -4984,12 +4984,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/20-bimata-mprosta-xorxe-mpoukai/",
+      "url": "https://www.more.com/gr-el/tickets/theater/20-bimata-mprosta-xorxe-mpoukai/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -5015,12 +5015,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/romaios-ioulieta-san-to-skylo-me-ti-gata/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/romaios-ioulieta-san-to-skylo-me-ti-gata/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -5046,12 +5046,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/redicolo-amalia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/redicolo-amalia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -5077,12 +5077,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-mikri-leksi-agapi-a-korto-3os-kyklos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-mikri-leksi-agapi-a-korto-3os-kyklos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.509Z",
       "updatedAt": "2025-10-22T17:16:25.509Z",
@@ -5108,12 +5108,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/theatro-marionetas-kouklotheatro/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/theatro-marionetas-kouklotheatro/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.510Z",
       "updatedAt": "2025-10-22T17:16:25.510Z",
@@ -5139,8 +5139,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5170,8 +5170,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5201,8 +5201,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5232,8 +5232,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -5263,8 +5263,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5294,8 +5294,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5325,8 +5325,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5356,8 +5356,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -5387,8 +5387,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -5418,8 +5418,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5449,8 +5449,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5480,12 +5480,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/barcelona/",
+      "url": "https://www.more.com/gr-el/tickets/theater/barcelona/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.516Z",
       "updatedAt": "2025-10-22T17:16:25.516Z",
@@ -5511,12 +5511,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/marika-me-eipane-marika-me-bgalane-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/marika-me-eipane-marika-me-bgalane-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.516Z",
       "updatedAt": "2025-10-22T17:16:25.516Z",
@@ -5542,12 +5542,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/aligatores/",
+      "url": "https://www.more.com/gr-el/tickets/theater/aligatores/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.516Z",
       "updatedAt": "2025-10-22T17:16:25.516Z",
@@ -5573,12 +5573,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-synarpastiki-eksegersi-tou-xoulio-togka/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-synarpastiki-eksegersi-tou-xoulio-togka/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.516Z",
       "updatedAt": "2025-10-22T17:16:25.516Z",
@@ -5604,12 +5604,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/nevermind/",
+      "url": "https://www.more.com/gr-el/tickets/theater/nevermind/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.516Z",
       "updatedAt": "2025-10-22T17:16:25.516Z",
@@ -5635,12 +5635,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/love-me-tinder/",
+      "url": "https://www.more.com/gr-el/tickets/theater/love-me-tinder/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.517Z",
       "updatedAt": "2025-10-22T17:16:25.517Z",
@@ -5666,12 +5666,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/desmotis/",
+      "url": "https://www.more.com/gr-el/tickets/theater/desmotis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.517Z",
       "updatedAt": "2025-10-22T17:16:25.517Z",
@@ -5697,8 +5697,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5728,8 +5728,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -5759,8 +5759,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -5790,8 +5790,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5821,8 +5821,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5852,8 +5852,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5883,8 +5883,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -5914,12 +5914,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/lithi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/lithi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.518Z",
       "updatedAt": "2025-10-22T17:16:25.518Z",
@@ -5945,12 +5945,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/misirlouthesuperhero/",
+      "url": "https://www.more.com/gr-el/tickets/theater/misirlouthesuperhero/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.518Z",
       "updatedAt": "2025-10-22T17:16:25.518Z",
@@ -5976,12 +5976,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-agnostos-prigkipas-paulos-sidiropoulosrodos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-agnostos-prigkipas-paulos-sidiropoulosrodos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.518Z",
       "updatedAt": "2025-10-22T17:16:25.518Z",
@@ -6007,8 +6007,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6038,12 +6038,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/spilios-floros-sto-treksimo-athina/",
+      "url": "https://www.more.com/gr-el/tickets/theater/spilios-floros-sto-treksimo-athina/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.520Z",
       "updatedAt": "2025-10-22T17:16:25.520Z",
@@ -6069,12 +6069,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/opos-sas-aresei-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/opos-sas-aresei-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.520Z",
       "updatedAt": "2025-10-22T17:16:25.520Z",
@@ -6100,12 +6100,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/taniko/",
+      "url": "https://www.more.com/gr-el/tickets/theater/taniko/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.520Z",
       "updatedAt": "2025-10-22T17:16:25.520Z",
@@ -6131,12 +6131,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/psycharis-to-taksidi-mou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/psycharis-to-taksidi-mou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.520Z",
       "updatedAt": "2025-10-22T17:16:25.520Z",
@@ -6162,8 +6162,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6193,8 +6193,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6224,8 +6224,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6255,8 +6255,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -6286,12 +6286,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/th-adamakos-basilias-tou-tipota-on-tour/",
+      "url": "https://www.more.com/gr-el/tickets/theater/th-adamakos-basilias-tou-tipota-on-tour/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.525Z",
       "updatedAt": "2025-10-22T17:16:25.525Z",
@@ -6317,8 +6317,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6348,12 +6348,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/alexandria/",
+      "url": "https://www.more.com/gr-el/tickets/theater/alexandria/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.528Z",
       "updatedAt": "2025-10-22T17:16:25.528Z",
@@ -6379,12 +6379,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/laponia-periodeia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/laponia-periodeia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.528Z",
       "updatedAt": "2025-10-22T17:16:25.528Z",
@@ -6410,12 +6410,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/1984-george-orwell-thessaloniki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/1984-george-orwell-thessaloniki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.529Z",
       "updatedAt": "2025-10-22T17:16:25.529Z",
@@ -6441,12 +6441,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/leoforeio-o-pothos-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/leoforeio-o-pothos-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.529Z",
       "updatedAt": "2025-10-22T17:16:25.529Z",
@@ -6472,12 +6472,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/petrixora/",
+      "url": "https://www.more.com/gr-el/tickets/theater/petrixora/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.529Z",
       "updatedAt": "2025-10-22T17:16:25.529Z",
@@ -6503,12 +6503,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-rixardos-sti-gaza/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-rixardos-sti-gaza/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.531Z",
       "updatedAt": "2025-10-22T17:16:25.531Z",
@@ -6534,12 +6534,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/no-womans-land/",
+      "url": "https://www.more.com/gr-el/tickets/theater/no-womans-land/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.531Z",
       "updatedAt": "2025-10-22T17:16:25.531Z",
@@ -6565,12 +6565,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ayto-pou-gennietai-kai-pethainei-sto-fos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ayto-pou-gennietai-kai-pethainei-sto-fos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.532Z",
       "updatedAt": "2025-10-22T17:16:25.532Z",
@@ -6596,12 +6596,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/killing-godot-by-nicholas-kazan/",
+      "url": "https://www.more.com/gr-el/tickets/theater/killing-godot-by-nicholas-kazan/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.532Z",
       "updatedAt": "2025-10-22T17:16:25.532Z",
@@ -6627,12 +6627,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/kamia-gynaika-den-to-aksizei/",
+      "url": "https://www.more.com/gr-el/tickets/theater/kamia-gynaika-den-to-aksizei/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.532Z",
       "updatedAt": "2025-10-22T17:16:25.532Z",
@@ -6658,8 +6658,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6689,8 +6689,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -6720,8 +6720,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -6751,8 +6751,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6782,8 +6782,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -6813,8 +6813,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -6844,8 +6844,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6875,8 +6875,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6906,12 +6906,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/sotiria2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/sotiria2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -6937,12 +6937,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/syggnomi-kyrie-poios-eiste/",
+      "url": "https://www.more.com/gr-el/tickets/syggnomi-kyrie-poios-eiste/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -6968,12 +6968,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/to-noima-tou-sex-no-1-thessaloniki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/to-noima-tou-sex-no-1-thessaloniki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -6999,12 +6999,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/fyki-ston-bytho-texnokosmos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/fyki-ston-bytho-texnokosmos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -7030,12 +7030,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-ergo-ton-dyo-xaraktiron-trikala/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-ergo-ton-dyo-xaraktiron-trikala/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -7061,12 +7061,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/o-alantin-kai-to-magiko-lyxnari-apo-to-theatro-marionetas-gkotsi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/o-alantin-kai-to-magiko-lyxnari-apo-to-theatro-marionetas-gkotsi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.536Z",
       "updatedAt": "2025-10-22T17:16:25.536Z",
@@ -7092,8 +7092,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7123,8 +7123,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -7154,8 +7154,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7185,8 +7185,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -7216,8 +7216,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -7247,12 +7247,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-stena-papoutsia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-stena-papoutsia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.541Z",
       "updatedAt": "2025-10-22T17:16:25.541Z",
@@ -7278,12 +7278,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mia-balitsa-paramythia-taksideuoune-sto-xrono/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mia-balitsa-paramythia-taksideuoune-sto-xrono/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.541Z",
       "updatedAt": "2025-10-22T17:16:25.541Z",
@@ -7309,12 +7309,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/omirou-odysseia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/omirou-odysseia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.542Z",
       "updatedAt": "2025-10-22T17:16:25.542Z",
@@ -7340,12 +7340,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-ai-basilis-erxetai-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-ai-basilis-erxetai-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.542Z",
       "updatedAt": "2025-10-22T17:16:25.542Z",
@@ -7371,12 +7371,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/to-noima-tis-zois-1-thessaloniki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/to-noima-tis-zois-1-thessaloniki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.542Z",
       "updatedAt": "2025-10-22T17:16:25.542Z",
@@ -7402,12 +7402,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/oi-kalpides-2os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/oi-kalpides-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.542Z",
       "updatedAt": "2025-10-22T17:16:25.542Z",
@@ -7433,8 +7433,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7464,8 +7464,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -7495,8 +7495,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -7526,8 +7526,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -7557,8 +7557,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -7588,12 +7588,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/plastelini-vassily-sigarev/",
+      "url": "https://www.more.com/gr-el/tickets/theater/plastelini-vassily-sigarev/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.544Z",
       "updatedAt": "2025-10-22T17:16:25.544Z",
@@ -7619,8 +7619,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -7650,12 +7650,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/oidipous-tyrannos-tou-sofokli-3os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/oidipous-tyrannos-tou-sofokli-3os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.544Z",
       "updatedAt": "2025-10-22T17:16:25.544Z",
@@ -7681,12 +7681,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/nikos-pantelis-ellinas-eksoterikou-guest/",
+      "url": "https://www.more.com/gr-el/tickets/theater/nikos-pantelis-ellinas-eksoterikou-guest/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.544Z",
       "updatedAt": "2025-10-22T17:16:25.544Z",
@@ -7712,12 +7712,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/oi-dimokratores/",
+      "url": "https://www.more.com/gr-el/tickets/theater/oi-dimokratores/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.544Z",
       "updatedAt": "2025-10-22T17:16:25.544Z",
@@ -7743,12 +7743,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/doriane/",
+      "url": "https://www.more.com/gr-el/tickets/theater/doriane/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.544Z",
       "updatedAt": "2025-10-22T17:16:25.544Z",
@@ -7774,8 +7774,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7805,8 +7805,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -7836,8 +7836,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -7867,8 +7867,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -7898,8 +7898,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7929,12 +7929,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-doukissa-tis-plakentias/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-doukissa-tis-plakentias/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.548Z",
       "updatedAt": "2025-10-22T17:16:25.548Z",
@@ -7960,12 +7960,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-leksi-proodos-sto-stoma-tis-miteras-mou-ixo/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-leksi-proodos-sto-stoma-tis-miteras-mou-ixo/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.549Z",
       "updatedAt": "2025-10-22T17:16:25.549Z",
@@ -7991,12 +7991,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/nemesis/",
+      "url": "https://www.more.com/gr-el/tickets/theater/nemesis/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.549Z",
       "updatedAt": "2025-10-22T17:16:25.549Z",
@@ -8022,12 +8022,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/agios-nektarios-apo-ti-gi-ston-ourano/",
+      "url": "https://www.more.com/gr-el/tickets/theater/agios-nektarios-apo-ti-gi-ston-ourano/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.549Z",
       "updatedAt": "2025-10-22T17:16:25.549Z",
@@ -8053,12 +8053,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mono-alitheies/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mono-alitheies/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.549Z",
       "updatedAt": "2025-10-22T17:16:25.549Z",
@@ -8084,8 +8084,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -8115,8 +8115,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -8146,8 +8146,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -8177,8 +8177,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -8208,12 +8208,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/symbainoun-auta-kamia-fora/",
+      "url": "https://www.more.com/gr-el/tickets/theater/symbainoun-auta-kamia-fora/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.551Z",
       "updatedAt": "2025-10-22T17:16:25.551Z",
@@ -8239,8 +8239,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -8270,12 +8270,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-gala-3os-xronos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-gala-3os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.552Z",
       "updatedAt": "2025-10-22T17:16:25.552Z",
@@ -8301,12 +8301,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/prin-kai-meta-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/prin-kai-meta-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.552Z",
       "updatedAt": "2025-10-22T17:16:25.552Z",
@@ -8332,8 +8332,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -8363,8 +8363,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -8394,12 +8394,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/theatro-attis/nora/",
+      "url": "https://www.more.com/gr-el/tickets/theater/theatro-attis/nora/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.557Z",
       "updatedAt": "2025-10-22T17:16:25.557Z",
@@ -8425,12 +8425,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/stella-xaskil/",
+      "url": "https://www.more.com/gr-el/tickets/theater/stella-xaskil/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.557Z",
       "updatedAt": "2025-10-22T17:16:25.557Z",
@@ -8456,12 +8456,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-palto-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-palto-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.557Z",
       "updatedAt": "2025-10-22T17:16:25.557Z",
@@ -8487,12 +8487,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-kata-fantasian-asthenis-tou-molierou-3/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-kata-fantasian-asthenis-tou-molierou-3/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.557Z",
       "updatedAt": "2025-10-22T17:16:25.557Z",
@@ -8518,8 +8518,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -8549,8 +8549,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -8580,8 +8580,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -8611,8 +8611,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -8642,8 +8642,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -8673,8 +8673,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -8704,8 +8704,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -8735,12 +8735,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/christmas/to-xristougenniatiko-taksidi-tou-olaf/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/christmas/to-xristougenniatiko-taksidi-tou-olaf/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.561Z",
       "updatedAt": "2025-10-22T17:16:25.561Z",
@@ -8766,12 +8766,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ego-to-ksotiko-1/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ego-to-ksotiko-1/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.561Z",
       "updatedAt": "2025-10-22T17:16:25.561Z",
@@ -8797,12 +8797,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/mia-xristougenniatiki-istoria/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/mia-xristougenniatiki-istoria/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.561Z",
       "updatedAt": "2025-10-22T17:16:25.561Z",
@@ -8828,12 +8828,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-erastis-tou-xarolnt-pinter/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-erastis-tou-xarolnt-pinter/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.562Z",
       "updatedAt": "2025-10-22T17:16:25.562Z",
@@ -8859,12 +8859,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offer/to-noima-tis-zois-2-thessaloniki/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offer/to-noima-tis-zois-2-thessaloniki/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.562Z",
       "updatedAt": "2025-10-22T17:16:25.562Z",
@@ -8890,12 +8890,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xristougenna-stin-tempeloxora-a-papadiamanti/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xristougenna-stin-tempeloxora-a-papadiamanti/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.564Z",
       "updatedAt": "2025-10-22T17:16:25.564Z",
@@ -8921,12 +8921,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-paidi-kai-to-rompot-o-algorithmos-tis-zois/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-paidi-kai-to-rompot-o-algorithmos-tis-zois/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.565Z",
       "updatedAt": "2025-10-22T17:16:25.565Z",
@@ -8952,12 +8952,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-magiko-elkithro-tou-ai-basili/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-magiko-elkithro-tou-ai-basili/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.565Z",
       "updatedAt": "2025-10-22T17:16:25.565Z",
@@ -8983,8 +8983,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -9014,8 +9014,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -9045,8 +9045,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -9076,8 +9076,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -9107,8 +9107,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -9138,8 +9138,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -9169,8 +9169,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -9200,12 +9200,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mairoula-thessaloniki-kolossaion/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mairoula-thessaloniki-kolossaion/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.567Z",
       "updatedAt": "2025-10-22T17:16:25.567Z",
@@ -9231,12 +9231,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/offelia/",
+      "url": "https://www.more.com/gr-el/tickets/theater/offelia/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.567Z",
       "updatedAt": "2025-10-22T17:16:25.567Z",
@@ -9262,12 +9262,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/eimai-i-gynaika-mou/",
+      "url": "https://www.more.com/gr-el/tickets/theater/eimai-i-gynaika-mou/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.568Z",
       "updatedAt": "2025-10-22T17:16:25.568Z",
@@ -9293,12 +9293,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mesa-stonarkopedio-mou-eipan-pos-tha-matho-na-xoreuo/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mesa-stonarkopedio-mou-eipan-pos-tha-matho-na-xoreuo/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.568Z",
       "updatedAt": "2025-10-22T17:16:25.568Z",
@@ -9324,12 +9324,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-ekdikisi-tou-foti/",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-ekdikisi-tou-foti/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.568Z",
       "updatedAt": "2025-10-22T17:16:25.568Z",
@@ -9355,12 +9355,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-5o-bima/",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-5o-bima/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.568Z",
       "updatedAt": "2025-10-22T17:16:25.568Z",
@@ -9391,7 +9391,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/agios-paisios/",
+      "url": "https://www.more.com/gr-el/tickets/theater/agios-paisios/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.568Z",
       "updatedAt": "2025-10-22T17:16:25.568Z",
@@ -9417,8 +9417,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -9448,8 +9448,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -9479,8 +9479,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -9510,8 +9510,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -9572,12 +9572,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/th-adamakos-basilias-tou-tipota-stand-up/",
+      "url": "https://www.more.com/gr-el/tickets/theater/th-adamakos-basilias-tou-tipota-stand-up/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.570Z",
       "updatedAt": "2025-10-22T17:16:25.570Z",
@@ -9603,8 +9603,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -9634,12 +9634,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-magemenos-boskos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-magemenos-boskos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.573Z",
       "updatedAt": "2025-10-22T17:16:25.573Z",
@@ -9665,8 +9665,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -9696,12 +9696,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/mnimi-lithi-tou-dimitri-dimitriadi/",
+      "url": "https://www.more.com/gr-el/tickets/theater/mnimi-lithi-tou-dimitri-dimitriadi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.577Z",
       "updatedAt": "2025-10-22T17:16:25.577Z",
@@ -9727,12 +9727,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ta-aspra-aloga-rosmersxolm/",
+      "url": "https://www.more.com/gr-el/tickets/theater/ta-aspra-aloga-rosmersxolm/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.577Z",
       "updatedAt": "2025-10-22T17:16:25.577Z",
@@ -9758,8 +9758,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -9789,8 +9789,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 11,
         "currency": "EUR",
         "range": null
       },
@@ -9820,12 +9820,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/leo-na-petakso/",
+      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.583Z",
       "updatedAt": "2025-10-22T17:16:25.583Z",
@@ -9851,12 +9851,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-xeria-den-xtypane-ta-xeria-agapane-ta-xristougenna/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-xeria-den-xtypane-ta-xeria-agapane-ta-xristougenna/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.583Z",
       "updatedAt": "2025-10-22T17:16:25.583Z",
@@ -9882,12 +9882,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/medousa-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/medousa-2/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.583Z",
       "updatedAt": "2025-10-22T17:16:25.583Z",
@@ -9913,12 +9913,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/matomenos-gamos/",
+      "url": "https://www.more.com/gr-el/tickets/theater/matomenos-gamos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.583Z",
       "updatedAt": "2025-10-22T17:16:25.583Z",
@@ -9944,12 +9944,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-koritsaki-me-ta-spirta-tou-antersen/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-koritsaki-me-ta-spirta-tou-antersen/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.584Z",
       "updatedAt": "2025-10-22T17:16:25.584Z",
@@ -9975,8 +9975,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -10006,8 +10006,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
@@ -10037,8 +10037,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -10068,12 +10068,12 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-ksotiko-kai-to-mystirio-ton-xristougennon/",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-ksotiko-kai-to-mystirio-ton-xristougennon/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.590Z",
       "updatedAt": "2025-10-22T17:16:25.590Z",
@@ -10099,8 +10099,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -10113,7 +10113,7 @@
   ],
   "meta": {
     "total": 326,
-    "lastUpdate": "2025-10-22T17:16:30.873Z",
+    "lastUpdate": "2025-10-24T12:23:35.951Z",
     "url": "https://agent-athens.netlify.app/theater-next-month"
   }
 }

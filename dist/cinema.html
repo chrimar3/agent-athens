@@ -17,8 +17,8 @@
   <link rel="canonical" href="https://agent-athens.netlify.app/cinema">
 
   <!-- GEO: Freshness signals -->
-  <meta name="date" content="2025-10-22">
-  <meta name="last-modified" content="2025-10-22T17:16:30.712Z">
+  <meta name="date" content="2025-10-24">
+  <meta name="last-modified" content="2025-10-24T12:23:35.781Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -132,7 +132,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -151,7 +151,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 28,
             "priceCurrency": "EUR"
           }
         }
@@ -170,7 +170,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -189,7 +189,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 15,
             "priceCurrency": "EUR"
           }
         }
@@ -227,7 +227,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -246,7 +246,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -265,7 +265,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -284,7 +284,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -303,7 +303,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -322,7 +322,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -341,7 +341,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 24,
             "priceCurrency": "EUR"
           }
         }
@@ -360,7 +360,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 15,
             "priceCurrency": "EUR"
           }
         }
@@ -379,7 +379,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -398,7 +398,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -417,7 +417,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -436,7 +436,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -455,7 +455,7 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
@@ -474,15 +474,15 @@
           },
           "offers": {
             "@type": "Offer",
-            "price": 0,
+            "price": 25,
             "priceCurrency": "EUR"
           }
         }
       }
     ]
   },
-  "datePublished": "2025-10-22T17:16:30.712Z",
-  "dateModified": "2025-10-22T17:16:30.712Z"
+  "datePublished": "2025-10-24T12:23:35.781Z",
+  "dateModified": "2025-10-24T12:23:35.781Z"
 }
   </script>
 
@@ -495,9 +495,12 @@
     .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
     .last-update { font-size: 0.9rem; color: #999; }
     .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; }
+    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
+    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
     .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+    .event-card h2 a { cursor: pointer; }
+    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
     .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
     .event-full-description { margin-bottom: 20px; }
     .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
@@ -521,7 +524,7 @@
       <strong>22 events</strong> are happening in Athens.
     </p>
     <p class="last-update">
-      Last updated: October 22, 2025 at 08:16 PM Athens time
+      Last updated: October 24, 2025 at 03:23 PM Athens time
     </p>
   </header>
 
@@ -530,7 +533,9 @@
     <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
       
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">RELATED EVENTS</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/tickets/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">RELATED EVENTS</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -554,25 +559,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price"><a href="https://www.more.com/tickets/venues/gazarte/" target="_blank" rel="noopener noreferrer">See pricing →</a></span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.viva.gr/tickets/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/tickets/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/fdc67a872bb7d360">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">GADJO DILO</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/tickets/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">GADJO DILO</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -596,25 +599,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price"><a href="https://www.more.com/tickets/venues/gazarte/" target="_blank" rel="noopener noreferrer">See pricing →</a></span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.viva.gr/tickets/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/tickets/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/c263ae75e988b2ec">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">BARCELONA GIPSY BALKAN ORCHESTRA</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">BARCELONA GIPSY BALKAN ORCHESTRA</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -638,25 +639,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price"><a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer">See pricing →</a></span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/bf236821f654c379">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">MONOPHONICS</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">MONOPHONICS</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -680,25 +679,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/2bd412e1bc481076">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">BRIAN JACKSON</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">BRIAN JACKSON</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -722,25 +719,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€28</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/73758c853f252feb">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">THE EX</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">THE EX</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -764,25 +759,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/19e63bf289f6f011">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">ΣΟΦΙΑ ΜΑΝΟΥΣΑΚΗ</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/gr-el/tickets/music/sofia-manousaki-live-gazarte-roof-stage/?evId=829903" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">ΣΟΦΙΑ ΜΑΝΟΥΣΑΚΗ</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -806,25 +799,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€15</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/gr-el/tickets/music/sofia-manousaki-live-gazarte-roof-stage/?evId=829903" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/gr-el/tickets/music/sofia-manousaki-live-gazarte-roof-stage/?evId=829903" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/0b6fc6dfdb4f6e14">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">CALIBRO 35</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">CALIBRO 35</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -848,25 +839,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price"><a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer">See pricing →</a></span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/373ae45f2f579ffe">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">THE SWINGIN’ CATS</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">THE SWINGIN’ CATS</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -890,25 +879,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/93286d27b5b31121">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">TURBONEGRO</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">TURBONEGRO</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -932,25 +919,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/8da43414745d004d">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">BOB MOULD</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/tickets/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">BOB MOULD</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -974,25 +959,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.viva.gr/tickets/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/tickets/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/521bb086c02c9438">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">MILD ORANGE</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">MILD ORANGE</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1016,25 +999,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/fb30605f8fe3492e">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">ADRIAN YOUNGE</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">ADRIAN YOUNGE</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1058,25 +1039,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/e05c1ea03298fdaf">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">BILLY COBHAM</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">BILLY COBHAM</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1100,25 +1079,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/8d2a2012a4b87470">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">MAKAYA McCRAVEN</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/gr-el/tickets/music/festival/makaya-mccraven-live-in-athens-scenius/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">MAKAYA McCRAVEN</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1142,25 +1119,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€24</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/gr-el/tickets/music/festival/makaya-mccraven-live-in-athens-scenius/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/gr-el/tickets/music/festival/makaya-mccraven-live-in-athens-scenius/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/03d5665c4e3295c0">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">Wail of the Banshees Vol. 1</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/gr-el/tickets/music/festival/wail-of-the-banshees-vol-1/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Wail of the Banshees Vol. 1</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1184,25 +1159,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€15</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/gr-el/tickets/music/festival/wail-of-the-banshees-vol-1/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/gr-el/tickets/music/festival/wail-of-the-banshees-vol-1/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/c82321a3018be4bf">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">KENNY GARRETT</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">KENNY GARRETT</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1226,25 +1199,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/cf0d4d829d800ba7">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">ΤΟ ΠΡΑΓΜΑ</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">ΤΟ ΠΡΑΓΜΑ</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1268,25 +1239,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/5d646c7ef4045249">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">ΓΙΑΓΚΙΝΗΔΕΣ</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">ΓΙΑΓΚΙΝΗΔΕΣ</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1310,25 +1279,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/4361ab2dd89c67b5">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">JOHN MEDESKI</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JOHN MEDESKI</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1352,25 +1319,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/961db556ca14946b">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">NIGHT TAPES</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">NIGHT TAPES</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1394,25 +1359,23 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/34a28ae239d3e9ee">
   </article>
 
   <article class="event-card " itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">STARSAILOR</h2>
+    <h2 itemprop="name">
+      <a href="https://www.more.com/venues/gazarte/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">STARSAILOR</a>
+    </h2>
 
     
     <!-- Short description -->
@@ -1436,21 +1399,17 @@
       <dt>Type:</dt>
       <dd>Cinema</dd>
 
-      <dt>Genre:</dt>
-      <dd>cinema</dd>
-
       <dt>Price:</dt>
       <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€null</span>
+        <span itemprop="price">€25</span>
         <meta itemprop="priceCurrency" content="EUR">
       </dd>
     </dl>
 
-    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank">Event Details →</a></p>
+    <p><a href="https://www.more.com/venues/gazarte/" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/3a8c9714b0ad9ab4">
   </article>
     </section>
     
@@ -1474,7 +1433,7 @@
     </p>
     <p>
       Data curated from official venue newsletters. Updated daily at 8:00 AM.
-      Next update: October 23, 2025 at 8:00 AM
+      Next update: October 25, 2025 at 8:00 AM
     </p>
 
     <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">

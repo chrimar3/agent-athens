@@ -63,9 +63,12 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
     .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
     .last-update { font-size: 0.9rem; color: #999; }
     .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; }
+    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
+    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
     .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+    .event-card h2 a { cursor: pointer; }
+    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
     .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
     .event-full-description { margin-bottom: 20px; }
     .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
@@ -157,15 +160,28 @@ function renderEventCard(event: Event): string {
     hour12: false
   });
 
-  const priceClass = event.price.type === 'free' ? 'price-free' : 'price-paid';
-  const priceText = event.price.type === 'free' ? 'Free' : event.price.range || `€${event.price.amount}`;
+  const priceClass = event.price.type === 'free' || event.price.type === 'open' ? 'price-free' : 'price-paid';
+  let priceText;
+  if (event.price.type === 'free' || event.price.type === 'open') {
+    priceText = 'Free Entry';
+  } else if (event.price.amount) {
+    priceText = `€${event.price.amount}`;
+  } else if (event.price.range) {
+    priceText = event.price.range;
+  } else if (event.url) {
+    priceText = '<a href="' + event.url + '" target="_blank" rel="noopener noreferrer">See pricing →</a>';
+  } else {
+    priceText = 'Tickets Required';
+  }
 
   const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
   const eventId = event.id.replace(/[^a-z0-9]/gi, '-');
 
   return `
   <article class="event-card ${hasFullDescription ? 'enriched' : ''}" itemscope itemtype="https://schema.org/${event['@type']}">
-    <h2 itemprop="name">${event.title}</h2>
+    <h2 itemprop="name">
+      ${event.url ? `<a href="${event.url}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">${event.title}</a>` : event.title}
+    </h2>
 
     ${hasFullDescription ? `
     <!-- AI-enriched full description -->
@@ -195,9 +211,6 @@ function renderEventCard(event: Event): string {
       <dt>Type:</dt>
       <dd>${capitalize(event.type)}</dd>
 
-      <dt>Genre:</dt>
-      <dd>${event.genres.join(', ')}</dd>
-
       <dt>Price:</dt>
       <dd class="${priceClass}" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
         <span itemprop="price">${priceText}</span>
@@ -205,11 +218,10 @@ function renderEventCard(event: Event): string {
       </dd>
     </dl>
 
-    ${event.url ? `<p><a href="${event.url}" itemprop="url" target="_blank">Event Details →</a></p>` : ''}
+    ${event.url ? `<p><a href="${event.url}" itemprop="url" target="_blank" rel="noopener noreferrer">Get Tickets / More Info →</a></p>` : ''}
 
     <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-    <link itemprop="url" href="https://agent-athens.netlify.app/event/${event.id}">
   </article>`;
 }
 

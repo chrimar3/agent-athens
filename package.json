@@ -11,6 +11,8 @@
     "fetch-emails": "bun run src/ingest/email-ingestion.ts",
     "scrape-web": "python3 scripts/scrape-all-sites.py",
     "scrape-web-old": "bun run scripts/scrape-websites.ts",
+    "fetch-prices": "python3 scripts/fetch-prices.py",
+    "update": "./scripts/update-site.sh",
     "daily-update": "./scripts/daily-update.sh"
   },
   "keywords": [

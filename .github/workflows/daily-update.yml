@@ -1,0 +1,72 @@
+name: Daily Site Update
+
+on:
+  # Run daily at 8:00 AM Athens time (6:00 AM UTC)
+  schedule:
+    - cron: '0 6 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  update-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          bun install
+          pip install playwright
+          playwright install chromium
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Run scraper
+        run: python3 scripts/scrape-all-sites.py
+        continue-on-error: true
+
+      - name: Parse HTML files
+        run: |
+          if [ -n "$(ls -A data/html-to-parse/*.html 2>/dev/null)" ]; then
+            bun run scripts/parse-helper.ts data/html-to-parse/*.html
+            mkdir -p data/html-archive
+            mv data/html-to-parse/*.html data/html-archive/ 2>/dev/null || true
+            mv data/html-to-parse/*.json data/html-archive/ 2>/dev/null || true
+          fi
+        continue-on-error: true
+
+      - name: Fetch prices
+        run: python3 scripts/fetch-prices.py
+        continue-on-error: true
+
+      - name: Build site
+        run: bun run build
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: netlify deploy --prod --dir=dist
+
+      - name: Commit updated database
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/events.db data/crawl-tracker.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Daily update: $(date +'%Y-%m-%d')"
+          git push
+        continue-on-error: true

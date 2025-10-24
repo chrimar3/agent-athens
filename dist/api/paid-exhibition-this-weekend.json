@@ -118,8 +118,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 3.5,
         "currency": "EUR",
         "range": null
       },
@@ -149,8 +149,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -180,8 +180,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 0,
         "currency": "EUR",
         "range": null
       },
@@ -194,7 +194,7 @@
   ],
   "meta": {
     "total": 6,
-    "lastUpdate": "2025-10-22T17:16:31.556Z",
+    "lastUpdate": "2025-10-24T12:23:36.657Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-this-weekend"
   }
 }

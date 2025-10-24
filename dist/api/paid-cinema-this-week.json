@@ -30,7 +30,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "url": "https://www.more.com/tickets/venues/gazarte/",
       "source": "gazarte.gr",
       "createdAt": "2025-10-22T17:16:25.343Z",
       "updatedAt": "2025-10-22T17:16:25.343Z",
@@ -61,7 +61,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "url": "https://www.more.com/tickets/venues/gazarte/",
       "source": "gazarte.gr",
       "createdAt": "2025-10-22T17:16:25.343Z",
       "updatedAt": "2025-10-22T17:16:25.343Z",
@@ -101,7 +101,7 @@
   ],
   "meta": {
     "total": 3,
-    "lastUpdate": "2025-10-22T17:16:31.562Z",
+    "lastUpdate": "2025-10-24T12:23:36.667Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-this-week"
   }
 }

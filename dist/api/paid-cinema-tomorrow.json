@@ -4,10 +4,42 @@
     "price": "paid",
     "time": "tomorrow"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bf236821f654c379",
+      "title": "BARCELONA GIPSY BALKAN ORCHESTRA",
+      "description": "",
+      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.380Z",
+      "updatedAt": "2025-10-22T17:16:25.380Z",
+      "language": "en"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2025-10-22T17:16:31.562Z",
+    "total": 1,
+    "lastUpdate": "2025-10-24T12:23:36.666Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-tomorrow"
   }
 }

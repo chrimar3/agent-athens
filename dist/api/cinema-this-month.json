@@ -29,7 +29,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "url": "https://www.more.com/tickets/venues/gazarte/",
       "source": "gazarte.gr",
       "createdAt": "2025-10-22T17:16:25.343Z",
       "updatedAt": "2025-10-22T17:16:25.343Z",
@@ -60,7 +60,7 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/tickets/venues/gazarte/",
+      "url": "https://www.more.com/tickets/venues/gazarte/",
       "source": "gazarte.gr",
       "createdAt": "2025-10-22T17:16:25.343Z",
       "updatedAt": "2025-10-22T17:16:25.343Z",
@@ -117,8 +117,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -148,8 +148,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -162,7 +162,7 @@
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2025-10-22T17:16:30.711Z",
+    "lastUpdate": "2025-10-24T12:23:35.780Z",
     "url": "https://agent-athens.netlify.app/cinema-this-month"
   }
 }
