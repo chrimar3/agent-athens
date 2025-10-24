@@ -10406,8 +10406,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -33656,8 +33656,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -57247,8 +57247,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 350,
         "currency": "EUR",
         "range": null
       },
@@ -58208,8 +58208,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -58239,8 +58239,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -58735,8 +58735,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 21,
         "currency": "EUR",
         "range": null
       },
@@ -59572,8 +59572,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 129,
         "currency": "EUR",
         "range": null
       },
@@ -61136,7 +61136,7 @@
   ],
   "meta": {
     "total": 1972,
-    "lastUpdate": "2025-10-24T12:32:11.099Z",
+    "lastUpdate": "2025-10-24T12:45:49.622Z",
     "url": "https://agent-athens.netlify.app/index"
   }
 }

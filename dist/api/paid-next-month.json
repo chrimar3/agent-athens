@@ -11029,8 +11029,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -25954,7 +25954,7 @@
   ],
   "meta": {
     "total": 837,
-    "lastUpdate": "2025-10-24T12:32:11.849Z",
+    "lastUpdate": "2025-10-24T12:45:50.415Z",
     "url": "https://agent-athens.netlify.app/paid-next-month"
   }
 }

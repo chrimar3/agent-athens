@@ -6349,8 +6349,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 129,
         "currency": "EUR",
         "range": null
       },
@@ -6859,7 +6859,7 @@
   ],
   "meta": {
     "total": 221,
-    "lastUpdate": "2025-10-24T12:32:12.388Z",
+    "lastUpdate": "2025-10-24T12:45:51.024Z",
     "url": "https://agent-athens.netlify.app/paid-performance"
   }
 }

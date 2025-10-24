@@ -10409,8 +10409,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -15445,7 +15445,7 @@
   ],
   "meta": {
     "total": 498,
-    "lastUpdate": "2025-10-24T12:32:11.754Z",
+    "lastUpdate": "2025-10-24T12:45:50.313Z",
     "url": "https://agent-athens.netlify.app/paid-this-weekend"
   }
 }

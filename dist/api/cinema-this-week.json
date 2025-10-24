@@ -86,8 +86,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -100,7 +100,7 @@
   ],
   "meta": {
     "total": 3,
-    "lastUpdate": "2025-10-24T12:32:11.264Z",
+    "lastUpdate": "2025-10-24T12:45:49.796Z",
     "url": "https://agent-athens.netlify.app/cinema-this-week"
   }
 }

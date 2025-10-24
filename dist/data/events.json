@@ -10404,8 +10404,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 25,
       "currency": "EUR",
       "range": null
     },
@@ -33654,8 +33654,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 25,
       "currency": "EUR",
       "range": null
     },
@@ -57245,8 +57245,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 350,
       "currency": "EUR",
       "range": null
     },
@@ -58206,8 +58206,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 12,
       "currency": "EUR",
       "range": null
     },
@@ -58237,8 +58237,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 15,
       "currency": "EUR",
       "range": null
     },
@@ -58733,8 +58733,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 21,
       "currency": "EUR",
       "range": null
     },
@@ -59570,8 +59570,8 @@
       "capacity": null
     },
     "price": {
-      "type": "with-ticket",
-      "amount": null,
+      "type": "paid",
+      "amount": 129,
       "currency": "EUR",
       "range": null
     },

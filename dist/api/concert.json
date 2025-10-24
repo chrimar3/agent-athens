@@ -23460,8 +23460,8 @@
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 21,
         "currency": "EUR",
         "range": null
       },
@@ -24962,7 +24962,7 @@
   ],
   "meta": {
     "total": 805,
-    "lastUpdate": "2025-10-24T12:32:11.252Z",
+    "lastUpdate": "2025-10-24T12:45:49.786Z",
     "url": "https://agent-athens.netlify.app/concert"
   }
 }
