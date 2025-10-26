@@ -38,6 +38,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "becc4b7df5daf1d5",
+      "title": "ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside",
+      "description": "26 Οκτ - 2 Νοε ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside Πολλαπλοι χωροι",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "Πολλαπλοι χωροι",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/pilomperdemata-workshop-kids-outside/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.875Z",
+      "updatedAt": "2025-10-26T21:21:00.875Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "2bddd3737b54c9b9",
       "title": "HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ",
       "description": "31 Οκτωβριου HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ Δημοτικη Αγορα Κυψελης",
@@ -131,6 +162,99 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "c0f807ce3365dbe5",
+      "title": "HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ",
+      "description": "31 Οκτωβριου HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ Δημοτικη Αγορα Κυψελης",
+      "startDate": "2025-10-31T20:00:00+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικη Αγορα Κυψελης",
+        "address": "Δημοτικη Αγορα Κυψελης",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/halloween-workshop-pumpkin-fanaraki/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.897Z",
+      "updatedAt": "2025-10-26T21:21:00.897Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "77f93e8b1ece3f7c",
+      "title": "Workshop by Miele - Wine Tasting",
+      "description": "31 Οκτωβριου Workshop by Miele - Wine Tasting Miele Experience Center - Αγια Παρασκευη",
+      "startDate": "2025-10-31T20:00:00+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Miele Experience Center - Αγια Παρασκευη",
+        "address": "Miele Experience Center - Αγια Παρασκευη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/workshop-by-miele-wine-tasting/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.897Z",
+      "updatedAt": "2025-10-26T21:21:00.897Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4da577ed8202cd0b",
+      "title": "Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών)",
+      "description": "31 Οκτωβριου Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών) Beesmall Concept Toy Store",
+      "startDate": "2025-10-31T20:00:00+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Beesmall Concept Toy Store",
+        "address": "Beesmall Concept Toy Store",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/to-spitaki-ton-teraton-halloween-themed-workshop-gia-paidia-4-6-eton/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.898Z",
+      "updatedAt": "2025-10-26T21:21:00.898Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "bccd2bbdc0d5cedd",
       "title": "Halloween Children's Workshop",
       "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
@@ -158,11 +282,42 @@
       "createdAt": "2025-10-22T17:16:25.460Z",
       "updatedAt": "2025-10-22T17:16:25.460Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "01ecdcf191635c55",
+      "title": "Halloween Children's Workshop",
+      "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
+      "startDate": "2025-11-01T20:00:00+02:00",
+      "endDate": null,
+      "type": "workshop",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πηλος Εργαστηριο Κεραμικης",
+        "address": "Πηλος Εργαστηριο Κεραμικης",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-childrens-workshop/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.905Z",
+      "updatedAt": "2025-10-26T21:21:00.905Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 5,
-    "lastUpdate": "2025-10-26T18:06:28.118Z",
+    "total": 10,
+    "lastUpdate": "2025-10-26T21:26:39.074Z",
     "url": "https://agent-athens.netlify.app/workshop-this-week"
   }
 }

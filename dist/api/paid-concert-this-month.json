@@ -8,6 +8,64 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "61d37255ce8a2849",
+      "title": "ATH DNB UNITY w/ CAUSE 4 CONCERN (UK) ★ Sat 25 Oct ★ Aux Club",
+      "description": "ATH DNB UNITY with CAUSE 4 CONCERN (UK)",
+      "startDate": "2025-10-25T23:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "AUX CLUB",
+        "address": "AUX CLUB",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/ath-dnb-unity-w/cause-4-concern-uk-sat-25-oct-aux-club/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.975Z",
+      "updatedAt": "2025-10-26T21:21:01.032Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c598a1341cf27a73",
+      "title": "VLCT Clubnight w/ Basswell & William Luck",
+      "description": "Velocity Clubnight με Baswell & William Luck στο Oddity! Σκληρά kicks, δυναμικά basslines, και σκοτεινή ενέργεια το Σάββατο 25 Οκτωβρίου.",
+      "startDate": "2025-10-25T23:59:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Oddity Club",
+        "address": "Oddity Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/oddityclub/blend/seds/vlct/basswell-william-luck/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.975Z",
+      "updatedAt": "2025-10-26T21:21:01.022Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "d1d0ead214786df8",
       "title": "EDEN presents APPARAT",
       "description": "26 Οκτωβριου EDEN presents APPARAT Athens Conservatoire (in Greek)",
@@ -504,6 +562,531 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "e070c48483491871",
+      "title": "EDEN presents APPARAT",
+      "description": "EDEN presents APPARAT+ special guests: NIGHT Manoeuvres & JAY JAY26 Οκτωβρίου 2025Ωδείο Αθηνών17:30 - 00:00 SUNDAYS ARE FOR LOVERS!",
+      "startDate": "2025-10-26T17:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Athens Conservatoire (in Greek)",
+        "address": "Athens Conservatoire (in Greek)",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/eden-presents-apparat/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.975Z",
+      "updatedAt": "2025-10-26T21:21:01.016Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e6b53f7ee812f69c",
+      "title": "Middle Earth - \"ROCKSTARS\" TOUR - (W/ Tight Spot)",
+      "description": "Middle Earth - ROCKSTARS TourSpecial Guests: Tight Spot (Tour)October 2025",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cafe Santan",
+        "address": "Cafe Santan",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.975Z",
+      "updatedAt": "2025-10-26T21:21:01.040Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0e845ca7309293ca",
+      "title": "EDEN presents APPARAT",
+      "description": "26 Οκτωβριου EDEN presents APPARAT Athens Conservatoire (in Greek)",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Conservatoire (in Greek)",
+        "address": "Conservatoire (in Greek)",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/eden-presents-apparat/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c9327bc4b1f3decb",
+      "title": "ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ",
+      "description": "26 Οκτωβριου ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ Καφεθεατρο",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ Καφεθεατρο",
+        "address": "ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ Καφεθεατρο",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/offer/nikos-mertzanos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ba107e005274736c",
+      "title": "Middle Earth - \"ROCKSTARS\" TOUR - (W/ Tight Spot)",
+      "description": "26 Οκτωβριου Middle Earth - \"ROCKSTARS\" TOUR - (W/ Tight Spot) Cafe Santan",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Spot) Cafe Santan",
+        "address": "Spot) Cafe Santan",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "dd7476e1b39750b7",
+      "title": "Ο Λυρικός Θεοδωράκης",
+      "description": "26 Οκτωβριου Ο Λυρικός Θεοδωράκης Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Δεσποτοπουλος Ωδειο Αθηνων",
+        "address": "Δεσποτοπουλος Ωδειο Αθηνων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/o-lyrikos-theodorakis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "52de1dbaad8c3d99",
+      "title": "Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα",
+      "description": "26 Οκτ - 28 Δεκ Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα Θεατρο Τεχνων Θεσσαλονικης",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Τεχνων Θεσσαλονικης",
+        "address": "Θεατρο Τεχνων Θεσσαλονικης",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-ksenodoxeio-ton-synaisthimaton/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "565263bc4b375425",
+      "title": "ΑΡΣΕΝ ΛΟΥΠΕΝ: Το μυστήριο της Κούφιας Βελόνας",
+      "description": "26 Οκτ - 14 Δεκ ΑΡΣΕΝ ΛΟΥΠΕΝ: Το μυστήριο της Κούφιας Βελόνας Θεατρο Αλαμπρα",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Βελόνας Θεατρο Αλαμπρα",
+        "address": "Βελόνας Θεατρο Αλαμπρα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/arsen-loupen-to-mystirio-tis-koufias-belonas/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.859Z",
+      "updatedAt": "2025-10-26T21:21:00.859Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fb1ecf7d58d289fc",
+      "title": "Οι Πειρατές του Αιγαίου του Ιουλίου Βερν",
+      "description": "26 Οκτ - 9 Νοε Οι Πειρατές του Αιγαίου του Ιουλίου Βερν Artbox Fargani Theater",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Artbox Fargani Theater",
+        "address": "Artbox Fargani Theater",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peirates-tou-aigaiou/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.860Z",
+      "updatedAt": "2025-10-26T21:21:00.860Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "62a1a39b81c0ace0",
+      "title": "Κόντρα στον Άνεμο: η Ιπτάμενη Περιπέτεια της Τίρα - Θεάτρο ΣΤΑΘΜΟΣ",
+      "description": "26 Οκτ - 14 Δεκ Κόντρα στον Άνεμο: η Ιπτάμενη Περιπέτεια της Τίρα - Θεάτρο ΣΤΑΘΜΟΣ Θεατρο Σταθμος 2023 - Stathmos Theater",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "- Stathmos Theater",
+        "address": "- Stathmos Theater",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-theatro-stathmos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.862Z",
+      "updatedAt": "2025-10-26T21:21:00.862Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e9636601cd4e727a",
+      "title": "Οι περιπέτειες του Πινόκιο - Παιδικό θέατρο",
+      "description": "26 Οκτ - 28 Δεκ Οι περιπέτειες του Πινόκιο - Παιδικό θέατρο Τεχνοχωρος Εργοταξιον",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "θέατρο Τεχνοχωρος Εργοταξιον",
+        "address": "θέατρο Τεχνοχωρος Εργοταξιον",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peripeteies-tou-pinokio/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.862Z",
+      "updatedAt": "2025-10-26T21:21:00.862Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "187ee1fa5081dda4",
+      "title": "ΑΡΣΕΝ ΛΟΥΠΕΝ: Το μυστήριο της Κούφιας Βελόνας",
+      "description": "26 Οκτ - 14 Δεκ ΑΡΣΕΝ ΛΟΥΠΕΝ: Το μυστήριο της Κούφιας Βελόνας Θεατρο Αλαμπρα",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αλαμπρα",
+        "address": "Θεατρο Αλαμπρα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/arsen-loupen-to-mystirio-tis-koufias-belonas/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.868Z",
+      "updatedAt": "2025-10-26T21:21:00.868Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "68416b59f76d471b",
+      "title": "Κόντρα στον Άνεμο: η Ιπτάμενη Περιπέτεια της Τίρα - Θεάτρο ΣΤΑΘΜΟΣ",
+      "description": "26 Οκτ - 14 Δεκ Κόντρα στον Άνεμο: η Ιπτάμενη Περιπέτεια της Τίρα - Θεάτρο ΣΤΑΘΜΟΣ Θεατρο Σταθμος 2023 - Stathmos Theater",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Σταθμος 2023 - Stathmos Theater",
+        "address": "Θεατρο Σταθμος 2023 - Stathmos Theater",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/kontra-ston-anemo-i-iptameni-peripeteia-tis-tira-theatro-stathmos/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.871Z",
+      "updatedAt": "2025-10-26T21:21:00.871Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4f729b97ce3748c9",
+      "title": "Οι περιπέτειες του Πινόκιο - Παιδικό θέατρο",
+      "description": "26 Οκτ - 28 Δεκ Οι περιπέτειες του Πινόκιο - Παιδικό θέατρο Τεχνοχωρος Εργοταξιον",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνοχωρος Εργοταξιον",
+        "address": "Τεχνοχωρος Εργοταξιον",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peripeteies-tou-pinokio/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.871Z",
+      "updatedAt": "2025-10-26T21:21:00.871Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9281e8af14d74d30",
+      "title": "Ο Λυρικός Θεοδωράκης",
+      "description": "Η εκδήλωση γίνεται στο πλαίσιο της συμπλήρωσης 100 χρόνων από τη γέννηση του Μίκη Θεοδωράκη και εντάσσεται στη σειρά εκδηλώσεων\"Το ΕΚΠΑ την Πόλη\", που διοργανώνεται από το Πανεπιστήμιο Αθηνών και τον",
+      "startDate": "2025-10-26T20:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
+        "address": "Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/o-lyrikos-theodorakis/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.040Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6cf43d5ca75584d3",
+      "title": "ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ",
+      "description": "ΝΙΚΟΣ ΜΕΡΤΖΑΝΟΣ LIVE ΣΤΑΣΟΥ ΛΙΓΟ ΣΥΝΑΥΛΙΑ ΜΟΥΣΙΚΗ",
+      "startDate": "2025-10-26T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθεατρο",
+        "address": "Καφεθεατρο",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/offer/nikos-mertzanos/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.035Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d3be2d9568cb97c1",
+      "title": "Allan Paul στο Caja de Música",
+      "description": "Allan Paul, Caja de Musica, Pop, Rock, Soul, live stage, live music, μουσικη σκηνη, μουσικη βραδιά",
+      "startDate": "2025-10-26T22:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Caja De Musica",
+        "address": "Caja De Musica",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/allan-paul-sto-caja-de-musica/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.034Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "52691058713782a0",
       "title": "Χρηστος Δαντης@Circus.Larissa",
       "description": "27 Οκτωβριου Χρηστος Δαντης@Circus.Larissa Circus Entertainment Hub",
@@ -752,6 +1335,219 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "52f6afb827d613c3",
+      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
+      "description": "27 Οκτωβριου KOSTAS PATSIOTIS QUARTET “Childhood Heroes” Half Note Jazz Club",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Note Jazz Club",
+        "address": "Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2b4ce2ced60e9cb1",
+      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
+      "description": "27 Οκτωβριου H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ Royal Hall",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΜΑΛΙΑ Royal Hall",
+        "address": "ΜΑΛΙΑ Royal Hall",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f68d401068b53298",
+      "title": "HOTEL AMOUR",
+      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "address": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/hotel-amour/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0aed6267e799d3ae",
+      "title": "HOTEL AMOUR",
+      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "address": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.881Z",
+      "updatedAt": "2025-10-26T21:21:00.881Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ec6f68892f626a52",
+      "title": "Three Times Three #1",
+      "description": "Το μηνιαίο ραντεβού “Three Times Three” φέρνει σε επαφή καλλιτέχνιδες και καλλιτέχνες από τον χώρο του σύγχρονου χορού και της πειραματικής μουσικής.",
+      "startDate": "2025-10-27T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "Κεντρο ελεγχου τηλεορασεων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/three-times-three-125/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.048Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "11c7d0784ae5d278",
+      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
+      "description": "KOSTAS PATSIOTIS QUARTET“Childhood Heroes” Παρουσίαση Νέου ΆλμπουμΔΕΥΤΕΡΑ 27 ΟΚΤΩΒΡΙΟΥHalf Note Jazz Club21:30",
+      "startDate": "2025-10-27T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": "Half Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.033Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0f4028c761ccec24",
+      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
+      "description": "?? Η Πάολα Live στο ROYAL HALL στα Μάλια Ηρακλείου ! ?? Δευτέρα 27 Οκτωβρίου 2025 ?? Κλείσε τραπέζι από 200€: ?? Κράτηση μόνο με ένα τηλεφώνημα στα: 6974813537 ή 6972202940??? ROYAL HALL, Μάλια Ηρακλε",
+      "startDate": "2025-10-27T23:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Royal Hall",
+        "address": "Royal Hall",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.049Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "b330adaf6481cdb4",
       "title": "Creative Guitar: Kawol Samarqandi / Giannis Arapis",
       "description": "28 Οκτωβριου Creative Guitar: Kawol Samarqandi / Giannis Arapis Κεντρο ελεγχου τηλεορασεων",
@@ -809,6 +1605,68 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-22T17:16:25.424Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "49d8cd6767666899",
+      "title": "Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας",
+      "description": "28 Οκτωβριου Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας Caja De Musica",
+      "startDate": "2025-10-28T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Caja De Musica",
+        "address": "Caja De Musica",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/nosokoma-dimitria-kai-to-domatio-therapeias/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.884Z",
+      "updatedAt": "2025-10-26T21:21:00.884Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "59036c62d89bd0d9",
+      "title": "Creative Guitar: Kawol Samarqandi / Giannis Arapis",
+      "description": "Στην πρώτη συναυλία συμμετέχει ο κιθαρίστας Kawol Samarqandi από την Ιαπωνία, ενώ τη συναυλία θα ανοίξει ο Γιάννης Αράπης.",
+      "startDate": "2025-10-28T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "Κεντρο ελεγχου τηλεορασεων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/creative-guitar-samarqandi/arapis/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.049Z",
       "language": "en"
     },
     {
@@ -1057,6 +1915,252 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e1bb230e6c774242",
+      "title": "All Them Witches - House of Mirrors",
+      "description": "Οι εκρηκτικοί All Them Witches επιστρέφουν στην Αθήνα για μία και μοναδική εμφάνιση στις 29 Οκτωβρίου στο Universe Club!",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe - Multispace",
+        "address": "Universe - Multispace",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.044Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b7d043ceaf1d5757",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοτου - Club",
+        "address": "Νοτου - Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.884Z",
+      "updatedAt": "2025-10-26T21:21:00.884Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9d96b3c1ad828230",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Note Jazz Club",
+        "address": "Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.885Z",
+      "updatedAt": "2025-10-26T21:21:00.885Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4eac8f00dd524735",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσικων Οργανων «Θυραθεν»",
+        "address": "Μουσικων Οργανων «Θυραθεν»",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.885Z",
+      "updatedAt": "2025-10-26T21:21:00.885Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "16f655344badb1a6",
+      "title": "Music Tales",
+      "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "λιλιτζουμ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/music-tales/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d3037608b91880ec",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ LIVE Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧΣταυρός του Νότου club ΤΕΤΑΡΤΗ 29 ΟΚΤΩΒΡΙΟΥ",
+      "startDate": "2025-10-29T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.025Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7ba323791779d595",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "μουσειο θυραθεν",
+      "startDate": "2025-10-29T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "address": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.051Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "49f81cb4c9ac37dd",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "Tilemachos Moussas Farm – Live @ Half Note Jazz Club",
+      "startDate": "2025-10-29T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": "Half Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.040Z",
       "language": "en"
     },
     {
@@ -1491,6 +2595,496 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.431Z",
       "updatedAt": "2025-10-22T17:16:25.431Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b8582fb47fcf02da",
+      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
+      "description": "ATHENS SPOOKS: When Apples Fall from Trees – Το Halloween ζωντανεύει στην Αθήνα με τους Lucifer, The Abbey, The Blackwall και ελληνικές μπάντες, στο Κύτταρο στις 30 Οκτωβρίου. Μια βραδιά σκοτεινής μου",
+      "startDate": "2025-10-30T19:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κυτταρο Live",
+        "address": "Κυτταρο Live",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/festival/athens-spooks/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.030Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e1db3b34e8e9b2f5",
+      "title": "MONOPHONICS live in Greece",
+      "description": "30 Οκτ - 1 Νοε MONOPHONICS live in Greece Πολλαπλοι χωροι",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Greece Πολλαπλοι χωροι",
+        "address": "Greece Πολλαπλοι χωροι",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/monophonics-live-in-greece/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6e7c6b46e9c7e0de",
+      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Αιθουσα Αιμιλιος Ριαδης",
+        "address": "Αιθουσα Αιμιλιος Ριαδης",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/leon-a-nar-madre-salonico/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "350a8a68867e125f",
+      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
+      "description": "30 Οκτ - 2 Νοε Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης Θεατρο Αμαλια",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Καλογεράκης Θεατρο Αμαλια",
+        "address": "Καλογεράκης Θεατρο Αμαλια",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4d187e67dfc2c222",
+      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
+      "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Βαγονι Orient Express",
+        "address": "Βαγονι Orient Express",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b5ffe4a211668948",
+      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
+      "description": "30 Οκτωβριου ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ Κυτταρο Live",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΚΥΤΤΑΡΟ Κυτταρο Live",
+        "address": "ΚΥΤΤΑΡΟ Κυτταρο Live",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/festival/athens-spooks/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "04cf8d3ad73ffadd",
+      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
+      "description": "30 Οκτωβριου ANDREAS POLYZOGOPOULOS ELECTRIC 4ET Half Note Jazz Club",
+      "startDate": "2025-10-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Note Jazz Club",
+        "address": "Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "69e32e51c2a780c0",
+      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
+      "description": "Orient express, Μουσικό βαγόνι, πέμπτη, μουσική παράσταση, άρτεμις ματαφιά, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, μεγάλες κυρίες τραγουδούν",
+      "startDate": "2025-10-30T20:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+        "address": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.024Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1216227055730072",
+      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "description": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/leon-a-nar-madre-salonico/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.019Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19be49201a7f6d0e",
+      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
+      "description": "Για τέσσερις μόνο παραστάσεις, στις 30, 31 Οκτωβρίου και 1, 2 Νοεμβρίου, τα Καλογεράκια παρουσιάζουν τα Ρεμπώτικα: ένα καλλιτεχνικά τολμηρό έργο, όπου συναντιούνται δύο κόσμοι: η ποίηση του Αρθούρου Ρ",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αμαλια",
+        "address": "Θεατρο Αμαλια",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.021Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d5a482aa14eeab25",
+      "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
+      "description": "Το “Chants to the Moon” είναι ένας διαλογικός πειραματισμός ανάμεσα στη φωνή και τη δόνηση, τη σιγή και τον ήχο, τη σκιά και το φως — ένα ντουέτο της Μαρίσσας Μπίλη και του Barry Yuk Bun Wan.",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "Κεντρο ελεγχου τηλεορασεων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.043Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3706749bc5d419dd",
+      "title": "Κρινιώ Νικολάου - “Κόντρα Ρόλος”",
+      "description": "Κρινιώ Νικολάου, Γιώργος Γιαννόπουλος, caja de musica, live music, musicstage, μουσικη βραδια",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Caja De Musica",
+        "address": "Caja De Musica",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.982Z",
+      "updatedAt": "2025-10-26T21:21:01.051Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3c73cfec9e485c8a",
+      "title": "MONOPHONICS live in Greece",
+      "description": "Οι Monophonics, μία από τις πιο δυναμικές μπάντες της soul σκηνής, επιστρέφουν στην Ελλάδα, στην Θεσσαλονίκη την Πέμπτη 30 Οκτωβρίου 2025 στο WE και στην Αθήνα στο Ground Stage του Gazarte, την Παρασκ",
+      "startDate": "2025-10-30T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "Πολλαπλοι χωροι",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/monophonics-live-in-greece/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.983Z",
+      "updatedAt": "2025-10-26T21:21:01.015Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ad13d61c2d0f2f27",
+      "title": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ",
+      "description": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ, ΓΙΩΤΑ ΒΟΚΑΛΗ, ΓΙΩΡΓΟΣ ΠΑΓΙΑΤΗΣ, ΠΕΜΠΤΗ, ΓΥΑΛΙΝΟ ΜΟΥΣΙΚΟ ΘΕΑΤΡΟ, ΣΚΗΝΗ UPSTAGE",
+      "startDate": "2025-10-30T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Γυαλινο Μουσικο Θεατρο",
+        "address": "Γυαλινο Μουσικο Θεατρο",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/giannis-papanikolaou/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.983Z",
+      "updatedAt": "2025-10-26T21:21:01.030Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3b6cc54d85c14176",
+      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
+      "description": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET H “ηλεκτρική” πλευρά ενός κορυφαίου τρομπετίστα Πέμπτη 30 ΟκτωβρίουHalf Note Jazz Club21:30",
+      "startDate": "2025-10-30T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": "Half Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.985Z",
+      "updatedAt": "2025-10-26T21:21:01.032Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f66f132d0b9af395",
+      "title": "ZED'S DEAD",
+      "description": "ZED'S DEAD, Halloween, House, Techno, Rave, Pulse Tribe, HARDVISION, Athens, Bass, Spooky Night, DJ Set, Live Performance, Underground, Dancefloor, Party People, Club Culture, Nightlife Athens, Late N",
+      "startDate": "2025-10-31T00:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Zed_Athens",
+        "address": "Zed_Athens",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/zeds-dead/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.985Z",
+      "updatedAt": "2025-10-26T21:21:01.042Z",
       "language": "en"
     },
     {
@@ -2673,8 +4267,8 @@
     }
   ],
   "meta": {
-    "total": 86,
-    "lastUpdate": "2025-10-26T18:06:28.525Z",
+    "total": 138,
+    "lastUpdate": "2025-10-26T21:26:39.867Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-month"
   }
 }

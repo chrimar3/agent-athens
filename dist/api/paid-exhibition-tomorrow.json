@@ -35,11 +35,42 @@
       "createdAt": "2025-10-22T17:16:25.422Z",
       "updatedAt": "2025-10-22T17:16:25.422Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3757df65d0de8a34",
+      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
+      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "Play ART Repeat Πολυχωρος",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.883Z",
+      "updatedAt": "2025-10-26T21:21:00.883Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-26T18:06:28.594Z",
+    "total": 2,
+    "lastUpdate": "2025-10-26T21:26:39.998Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-tomorrow"
   }
 }

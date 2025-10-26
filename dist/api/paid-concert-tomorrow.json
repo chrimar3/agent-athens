@@ -252,11 +252,224 @@
       "createdAt": "2025-10-22T17:16:25.423Z",
       "updatedAt": "2025-10-22T17:16:25.423Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "52f6afb827d613c3",
+      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
+      "description": "27 Οκτωβριου KOSTAS PATSIOTIS QUARTET “Childhood Heroes” Half Note Jazz Club",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Note Jazz Club",
+        "address": "Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "2b4ce2ced60e9cb1",
+      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
+      "description": "27 Οκτωβριου H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ Royal Hall",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΜΑΛΙΑ Royal Hall",
+        "address": "ΜΑΛΙΑ Royal Hall",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f68d401068b53298",
+      "title": "HOTEL AMOUR",
+      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "address": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/theater/hotel-amour/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-26T21:21:00.876Z",
+      "updatedAt": "2025-10-26T21:21:00.876Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0aed6267e799d3ae",
+      "title": "HOTEL AMOUR",
+      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "address": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.881Z",
+      "updatedAt": "2025-10-26T21:21:00.881Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ec6f68892f626a52",
+      "title": "Three Times Three #1",
+      "description": "Το μηνιαίο ραντεβού “Three Times Three” φέρνει σε επαφή καλλιτέχνιδες και καλλιτέχνες από τον χώρο του σύγχρονου χορού και της πειραματικής μουσικής.",
+      "startDate": "2025-10-27T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "Κεντρο ελεγχου τηλεορασεων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/three-times-three-125/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.048Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "11c7d0784ae5d278",
+      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
+      "description": "KOSTAS PATSIOTIS QUARTET“Childhood Heroes” Παρουσίαση Νέου ΆλμπουμΔΕΥΤΕΡΑ 27 ΟΚΤΩΒΡΙΟΥHalf Note Jazz Club21:30",
+      "startDate": "2025-10-27T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": "Half Note Jazz Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.033Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0f4028c761ccec24",
+      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
+      "description": "?? Η Πάολα Live στο ROYAL HALL στα Μάλια Ηρακλείου ! ?? Δευτέρα 27 Οκτωβρίου 2025 ?? Κλείσε τραπέζι από 200€: ?? Κράτηση μόνο με ένα τηλεφώνημα στα: 6974813537 ή 6972202940??? ROYAL HALL, Μάλια Ηρακλε",
+      "startDate": "2025-10-27T23:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Royal Hall",
+        "address": "Royal Hall",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "source": "Viva.gr",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.049Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 8,
-    "lastUpdate": "2025-10-26T18:06:28.502Z",
+    "total": 15,
+    "lastUpdate": "2025-10-26T21:26:39.831Z",
     "url": "https://agent-athens.netlify.app/paid-concert-tomorrow"
   }
 }

@@ -38,6 +38,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "0d7847da065fe4ac",
+      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
+      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
+      "startDate": "2025-10-26T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τουριστικο Περιπτερο",
+        "address": "Τουριστικο Περιπτερο",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.871Z",
+      "updatedAt": "2025-10-26T21:21:00.871Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "a54ab805aa1d0275",
       "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
       "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
@@ -64,6 +95,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.422Z",
       "updatedAt": "2025-10-22T17:16:25.422Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3757df65d0de8a34",
+      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
+      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "Play ART Repeat Πολυχωρος",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.883Z",
+      "updatedAt": "2025-10-26T21:21:00.883Z",
       "language": "en"
     },
     {
@@ -100,6 +162,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "d6f97b8ffa306287",
+      "title": "Εβδομάδα Halloween Messy Play στο Hehe!",
+      "description": "29 - 31 Οκτωβριου Εβδομάδα Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "Messy Play, Art & Therapy • by Hehe",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ebdomada-halloween-messy-play-sto-hehe/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "55fedd909d2218ed",
       "title": "🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη",
       "description": "31 Οκτωβριου 🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη Κτημα Αριστη",
@@ -126,6 +219,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.444Z",
       "updatedAt": "2025-10-22T17:16:25.444Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a0674239c88599f9",
+      "title": "🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη",
+      "description": "31 Οκτωβριου 🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη Κτημα Αριστη",
+      "startDate": "2025-10-31T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "Κτημα Αριστη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/xali-pali-ktima-aristi/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.897Z",
+      "updatedAt": "2025-10-26T21:21:00.897Z",
       "language": "en"
     },
     {
@@ -162,6 +286,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "e82819fbd688278d",
+      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
+      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
+      "startDate": "2025-11-01T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Play ART Repeat Πολυχωρος",
+        "address": "Play ART Repeat Πολυχωρος",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.904Z",
+      "updatedAt": "2025-10-26T21:21:00.904Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "7d9e6b1f2d9c9859",
       "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
       "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
@@ -188,6 +343,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.483Z",
       "updatedAt": "2025-10-22T17:16:25.483Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "41f9d1b4eed05526",
+      "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
+      "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-11-05T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "Messy Play, Art & Therapy • by Hehe",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-15-5-eton-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.919Z",
+      "updatedAt": "2025-10-26T21:21:00.919Z",
       "language": "en"
     },
     {
@@ -224,6 +410,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "40bf98f7907a73ba",
+      "title": "ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό",
+      "description": "20 Νοε - 18 Ιουν ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό CharaLab",
+      "startDate": "2025-11-20T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "CharaLab",
+        "address": "CharaLab",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/kallitexniko-ergastiri-art-spot-neo-psyxiko/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.956Z",
+      "updatedAt": "2025-10-26T21:21:00.956Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "3d596866282d864f",
       "title": "✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨",
       "description": "21 Νοεμβριου ✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨ Κτημα Αριστη",
@@ -250,6 +467,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.552Z",
       "updatedAt": "2025-10-22T17:16:25.552Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "53ee61d13e13902b",
+      "title": "✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨",
+      "description": "21 Νοεμβριου ✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨ Κτημα Αριστη",
+      "startDate": "2025-11-21T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "Κτημα Αριστη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/neon-party-sto-ktima-aristi/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.959Z",
+      "updatedAt": "2025-10-26T21:21:00.959Z",
       "language": "en"
     },
     {
@@ -286,6 +534,37 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "10257e59454dc6db",
+      "title": "On site - Crete Marketing Days",
+      "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
+      "startDate": "2025-11-23T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Theartemis Palace",
+        "address": "Theartemis Palace",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/seminar/on-site-crete-marketing-days/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.963Z",
+      "updatedAt": "2025-10-26T21:21:00.963Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "27cf94f275a8e334",
       "title": "Athens English Comedy Club",
       "description": "30 Νοεμβριου Athens English Comedy Club Θεατρο Eliart",
@@ -313,11 +592,42 @@
       "createdAt": "2025-10-22T17:16:25.590Z",
       "updatedAt": "2025-10-22T17:16:25.590Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "20fe08bef0c7f074",
+      "title": "Athens English Comedy Club",
+      "description": "30 Νοεμβριου Athens English Comedy Club Θεατρο Eliart",
+      "startDate": "2025-11-30T20:00:00+02:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Eliart",
+        "address": "Θεατρο Eliart",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/athens-english-comedy-club/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.976Z",
+      "updatedAt": "2025-10-26T21:21:00.976Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 10,
-    "lastUpdate": "2025-10-26T18:06:27.893Z",
+    "total": 20,
+    "lastUpdate": "2025-10-26T21:26:38.687Z",
     "url": "https://agent-athens.netlify.app/exhibition"
   }
 }

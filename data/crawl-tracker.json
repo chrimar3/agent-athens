@@ -1,68 +1,68 @@
 {
   "gazarte": {
-    "last_crawled": "2025-10-22T19:59:19.750938",
-    "last_success": "2025-10-22T19:59:19.750953",
-    "total_crawls": 3,
+    "last_crawled": "2025-10-26T21:08:45.227693",
+    "last_success": "2025-10-26T21:08:45.227715",
+    "total_crawls": 4,
     "failed_crawls": 1
   },
   "clubber": {
-    "last_crawled": "2025-10-22T14:19:44.219217",
-    "last_success": "2025-10-22T14:19:44.219438",
-    "total_crawls": 3,
+    "last_crawled": "2025-10-26T21:07:38.423323",
+    "last_success": "2025-10-26T21:07:38.423364",
+    "total_crawls": 4,
     "failed_crawls": 1
   },
   "athinorama": {
-    "last_crawled": "2025-10-22T14:20:33.817262",
-    "last_success": "2025-10-22T14:20:33.817300",
-    "total_crawls": 2,
+    "last_crawled": "2025-10-26T21:08:22.261882",
+    "last_success": "2025-10-26T21:08:22.261905",
+    "total_crawls": 3,
     "failed_crawls": 1
   },
   "more": {
-    "last_crawled": "2025-10-22T19:58:29.045353",
-    "last_success": "2025-10-22T19:58:29.045372",
-    "total_crawls": 3,
+    "last_crawled": "2025-10-26T21:08:06.762261",
+    "last_success": "2025-10-26T21:08:06.762282",
+    "total_crawls": 4,
     "failed_crawls": 1
   },
   "viva": {
-    "last_crawled": "2025-10-22T19:58:03.816155",
-    "last_success": "2025-10-22T19:58:03.816177",
-    "total_crawls": 3,
+    "last_crawled": "2025-10-26T21:07:52.195997",
+    "last_success": "2025-10-26T21:07:52.196030",
+    "total_crawls": 4,
     "failed_crawls": 0
   },
   "halfnote": {
-    "last_crawled": "2025-10-22T14:26:58.667557",
-    "last_success": "2025-10-22T14:26:58.667592",
-    "total_crawls": 1,
+    "last_crawled": "2025-10-26T21:08:32.723341",
+    "last_success": "2025-10-26T21:08:32.723369",
+    "total_crawls": 2,
     "failed_crawls": 0
   },
   "culture_athens": {
-    "last_crawled": "2025-10-22T14:27:17.221454",
-    "last_success": "2025-10-22T14:27:17.221492",
-    "total_crawls": 1,
+    "last_crawled": "2025-10-26T21:08:49.197953",
+    "last_success": "2025-10-26T21:08:49.197972",
+    "total_crawls": 2,
     "failed_crawls": 0
   },
   "greek_festival": {
-    "last_crawled": "2025-10-22T14:27:53.255729",
+    "last_crawled": "2025-10-26T21:09:25.946503",
     "last_success": "",
-    "total_crawls": 1,
-    "failed_crawls": 1
+    "total_crawls": 2,
+    "failed_crawls": 2
   },
   "romantso": {
-    "last_crawled": "2025-10-22T14:30:54.701376",
-    "last_success": "2025-10-22T14:30:54.701398",
-    "total_crawls": 1,
+    "last_crawled": "2025-10-26T21:09:29.127620",
+    "last_success": "2025-10-26T21:09:29.127629",
+    "total_crawls": 2,
     "failed_crawls": 0
   },
   "gagarin205": {
-    "last_crawled": "2025-10-22T14:30:59.021584",
-    "last_success": "2025-10-22T14:30:59.021595",
-    "total_crawls": 1,
+    "last_crawled": "2025-10-26T21:09:34.595486",
+    "last_success": "2025-10-26T21:09:34.595519",
+    "total_crawls": 2,
     "failed_crawls": 0
   },
   "kyttaro": {
-    "last_crawled": "2025-10-22T14:31:03.547972",
-    "last_success": "2025-10-22T14:31:03.547997",
-    "total_crawls": 1,
+    "last_crawled": "2025-10-26T21:09:37.731192",
+    "last_success": "2025-10-26T21:09:37.731208",
+    "total_crawls": 2,
     "failed_crawls": 0
   }
 }

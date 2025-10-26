@@ -34,11 +34,42 @@
       "createdAt": "2025-10-22T17:16:25.422Z",
       "updatedAt": "2025-10-22T17:16:25.422Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "328b4f1ec5abca48",
+      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
+      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
+      "startDate": "2025-10-27T20:00:00+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "Κτημα Αριστη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.883Z",
+      "updatedAt": "2025-10-26T21:21:00.883Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2025-10-26T18:06:28.086Z",
+    "total": 2,
+    "lastUpdate": "2025-10-26T21:26:39.020Z",
     "url": "https://agent-athens.netlify.app/performance-tomorrow"
   }
 }
