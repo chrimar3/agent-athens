@@ -255,37 +255,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c1742cc98900f823",
-      "title": "Θ. Καλλίρης Live & Halloween Dinner",
-      "description": "31 Οκτωβριου Θ. Καλλίρης Live & Halloween Dinner Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/th-kalliris-live-halloween-dinner/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "d538a1fa28b02c5d",
       "title": "PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ",
       "description": "31 Οκτωβριου PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ Δημοτικη Αγορα Κυψελης",
@@ -1123,37 +1092,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "adf9074a6a34823e",
-      "title": "Go Brunch || Spanish Cuisine",
-      "description": "2 Νοεμβριου Go Brunch || Spanish Cuisine Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/go-brunch-spanish-cuisine/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.470Z",
-      "updatedAt": "2025-10-22T17:16:25.470Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "dc5ba217c2d84fbd",
       "title": "PUMPKIN PAINTING ΚΥΡΙΑΚΗ 2/11 ΩΡΑ: 12μμ-2μμ",
       "description": "2 Νοεμβριου PUMPKIN PAINTING ΚΥΡΙΑΚΗ 2/11 ΩΡΑ: 12μμ-2μμ Δημοτικη Αγορα Κυψελης",
@@ -1184,8 +1122,8 @@
     }
   ],
   "meta": {
-    "total": 38,
-    "lastUpdate": "2025-10-26T11:39:40.843Z",
+    "total": 36,
+    "lastUpdate": "2025-10-26T18:06:28.095Z",
     "url": "https://agent-athens.netlify.app/performance-this-weekend"
   }
 }

@@ -37,37 +37,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e447a3cb412be971",
-      "title": "Τακι Τσαν & Dj ALX - \"Δεν Είναι Κακο Rap Party\" - Καλαμάτα",
-      "description": "26 Οκτωβριου Τακι Τσαν & Dj ALX - \"Δεν Είναι Κακο Rap Party\" - Καλαμάτα Brooklyn Live Stage",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Brooklyn Live Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-kalamata/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.380Z",
-      "updatedAt": "2025-10-22T17:16:25.380Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "551d4bdbbdb17baa",
       "title": "Allan Paul στο Caja de Música",
       "description": "26 Οκτωβριου Allan Paul στο Caja de Música Caja De Musica",
@@ -161,37 +130,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c4c4e8ca8531c367",
-      "title": "Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot)",
-      "description": "26 Οκτωβριου Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot) Cafe Santan",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Spot) Cafe Santan",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.380Z",
-      "updatedAt": "2025-10-22T17:16:25.380Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2e690da35ec79e75",
       "title": "Ο Λυρικός Θεοδωράκης",
       "description": "26 Οκτωβριου Ο Λυρικός Θεοδωράκης Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
@@ -246,37 +184,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/aneksartita-krati-2os-xronos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.381Z",
-      "updatedAt": "2025-10-22T17:16:25.381Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8d95590d9f70b2af",
-      "title": "Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα",
-      "description": "26 Οκτ - 28 Δεκ Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/to-ksenodoxeio-ton-synaisthimaton/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.381Z",
       "updatedAt": "2025-10-22T17:16:25.381Z",
@@ -2827,37 +2734,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "337c181c499f0fcc",
-      "title": "\"Thessaloniki variations\" - Ballet Preljocaj",
-      "description": "26 Οκτωβριου \"Thessaloniki variations\" - Ballet Preljocaj Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/ballet-preljocaj/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "ee064e6659b2cf32",
       "title": "«ΟΤΑΝ Ο ΜΙΚΗΣ ΗΤΑΝ ΠΑΙΔΙ»",
       "description": "26 Οκτ - 30 Νοε «ΟΤΑΝ Ο ΜΙΚΗΣ ΗΤΑΝ ΠΑΙΔΙ» ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
@@ -4183,37 +4059,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7747a93fa20ecf13",
-      "title": "Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot)",
-      "description": "26 Οκτωβριου Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot) Cafe Santan",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cafe Santan",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.403Z",
       "updatedAt": "2025-10-22T17:16:25.403Z",
@@ -7942,37 +7787,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "00bed5ce27d0c041",
-      "title": "\"Commedia Divina\" - Χορευτές του Βορρά",
-      "description": "28 Οκτωβριου \"Commedia Divina\" - Χορευτές του Βορρά Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/commedia-divina-xoreutes-tou-borra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.423Z",
-      "updatedAt": "2025-10-22T17:16:25.423Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "34b58f74ec1f5f00",
       "title": "MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS",
       "description": "28 Οκτ - 2 Δεκ MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS TGI Fridays™ Καπνικαρεας",
@@ -9337,37 +9151,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0736d70eb8a10b84",
-      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "93327defc5de937c",
       "title": "ATHENS HALLOWEEN FESTIVAL 2025",
       "description": "30 Οκτ - 2 Νοε ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
@@ -10701,37 +10484,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e821c8b672ebe7db",
-      "title": "ART της Γιασμίνα Ρεζά | Triple Threat Productions",
-      "description": "31 Οκτ - 9 Νοε ART της Γιασμίνα Ρεζά | Triple Threat Productions Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f0b3b96d1a20563a",
       "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
       "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
@@ -11972,37 +11724,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c1742cc98900f823",
-      "title": "Θ. Καλλίρης Live & Halloween Dinner",
-      "description": "31 Οκτωβριου Θ. Καλλίρης Live & Halloween Dinner Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/th-kalliris-live-halloween-dinner/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "e53907cae17d507b",
       "title": "Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΣΑΛΑΜΙΝΑ",
       "description": "31 Οκτωβριου Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΣΑΛΑΜΙΝΑ Δημαρχειο Σαλαμινας ΑΙΘΟΥΣΑ \"ΜΠΟΓΡΗΣ\"",
@@ -12623,37 +12344,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "301de10d0c0fc987",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.447Z",
-      "updatedAt": "2025-10-22T17:16:25.447Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c283aa64f92bd499",
       "title": "DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR)",
       "description": "1 Νοεμβριου DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR) AUX CLUB",
@@ -12964,68 +12654,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a9b9b1bffebdb409",
-      "title": "«Λέω να πετάξω» στην Θεσσαλονίκη!",
-      "description": "1 - 9 Νοεμβριου «Λέω να πετάξω» στην Θεσσαλονίκη! Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καλαμαριας \"Μελινα Μερκουρη\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fe0918f3f824e3da",
-      "title": "Ο Σέρλοκ Χολμς και ο θησαυρός της Άγκρα | Θεσσαλονίκη",
-      "description": "1 - 22 Νοεμβριου Ο Σέρλοκ Χολμς και ο θησαυρός της Άγκρα | Θεσσαλονίκη Artbox Fargani Theater",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Artbox Fargani Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/theatrotouvorra/o-serlok-xolms-kai-o-thisauros-tis-agkra-fargani/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "83176266bf812e3b",
       "title": "ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ",
       "description": "1 - 30 Νοεμβριου ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ Πολλαπλοι χωροι",
@@ -13080,37 +12708,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9f9c93c7579f8219",
-      "title": "Οι Μικροί Κηπουροί | The Little Foxes",
-      "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -13359,37 +12956,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/i-am-leaving-by-zo-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.452Z",
-      "updatedAt": "2025-10-22T17:16:25.452Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0b8d85fdc8675c4c",
-      "title": "Σώμα Μήδεια Ι Πάτρα",
-      "description": "1 - 2 Νοεμβριου Σώμα Μήδεια Ι Πάτρα Μηχανουργειο Πολυχωρος Πολιτισμου",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μηχανουργειο Πολυχωρος Πολιτισμου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/soma-mideia-i-patra/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.452Z",
       "updatedAt": "2025-10-22T17:16:25.452Z",
@@ -13669,37 +13235,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/don-zouan-2os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.453Z",
-      "updatedAt": "2025-10-22T17:16:25.453Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d7b0501f5b70fd4a",
-      "title": "«Λέω να πετάξω» στην Θεσσαλονίκη!",
-      "description": "1 - 9 Νοεμβριου «Λέω να πετάξω» στην Θεσσαλονίκη! Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.453Z",
       "updatedAt": "2025-10-22T17:16:25.453Z",
@@ -14049,37 +13584,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "eb8ac5658169c387",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "1 Νοεμβριου ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f022bc016be8f5f7",
       "title": "Solar Fake",
       "description": "1 Νοεμβριου Solar Fake Death Disco",
@@ -14134,37 +13638,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4fd8bfd5b97cda12",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.455Z",
       "updatedAt": "2025-10-22T17:16:25.455Z",
@@ -14978,8 +14451,8 @@
     }
   ],
   "meta": {
-    "total": 483,
-    "lastUpdate": "2025-10-26T11:39:40.211Z",
+    "total": 466,
+    "lastUpdate": "2025-10-26T18:06:27.502Z",
     "url": "https://agent-athens.netlify.app/this-week"
   }
 }

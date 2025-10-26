@@ -4,6 +4,7 @@
 import { Database } from "bun:sqlite";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { isAthensEvent } from "../utils/athens-filter";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -120,8 +121,15 @@ export function rowToEvent(row: any): Event {
 /**
  * Insert or update event
  * Returns: { success: boolean, isNew: boolean }
+ * NOTE: Automatically filters out non-Athens events
  */
 export function upsertEvent(event: Event): { success: boolean; isNew: boolean } {
+  // Filter out non-Athens events
+  if (!isAthensEvent(event)) {
+    console.log(`⚠️  Skipping non-Athens event: ${event.title}`);
+    return { success: false, isNew: false };
+  }
+
   const db = getDatabase();
   const row = eventToRow(event);
 

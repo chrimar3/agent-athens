@@ -7355,37 +7355,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e821c8b672ebe7db",
-      "title": "ART της Γιασμίνα Ρεζά | Triple Threat Productions",
-      "description": "31 Οκτ - 9 Νοε ART της Γιασμίνα Ρεζά | Triple Threat Productions Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f0b3b96d1a20563a",
       "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
       "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
@@ -7788,8 +7757,8 @@
     }
   ],
   "meta": {
-    "total": 251,
-    "lastUpdate": "2025-10-26T11:39:41.485Z",
+    "total": 250,
+    "lastUpdate": "2025-10-26T18:06:28.701Z",
     "url": "https://agent-athens.netlify.app/paid-theater-this-month"
   }
 }

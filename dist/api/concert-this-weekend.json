@@ -1588,37 +1588,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "301de10d0c0fc987",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.447Z",
-      "updatedAt": "2025-10-22T17:16:25.447Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c283aa64f92bd499",
       "title": "DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR)",
       "description": "1 Νοεμβριου DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR) AUX CLUB",
@@ -2177,37 +2146,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "eb8ac5658169c387",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "1 Νοεμβριου ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f022bc016be8f5f7",
       "title": "Solar Fake",
       "description": "1 Νοεμβριου Solar Fake Death Disco",
@@ -2231,37 +2169,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/solar-fake/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4fd8bfd5b97cda12",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.455Z",
       "updatedAt": "2025-10-22T17:16:25.455Z",
@@ -2642,37 +2549,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "daa6a85cc218a376",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "2 Νοεμβριου JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.467Z",
-      "updatedAt": "2025-10-22T17:16:25.467Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c09df3627f01de4f",
       "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
       "description": "2 Νοε - 25 Ιαν From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
@@ -2796,8 +2672,8 @@
     }
   ],
   "meta": {
-    "total": 90,
-    "lastUpdate": "2025-10-26T11:39:40.553Z",
+    "total": 86,
+    "lastUpdate": "2025-10-26T18:06:27.812Z",
     "url": "https://agent-athens.netlify.app/concert-this-weekend"
   }
 }

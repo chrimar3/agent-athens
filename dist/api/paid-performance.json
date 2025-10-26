@@ -8,37 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "337c181c499f0fcc",
-      "title": "\"Thessaloniki variations\" - Ballet Preljocaj",
-      "description": "26 Οκτωβριου \"Thessaloniki variations\" - Ballet Preljocaj Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/ballet-preljocaj/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "437c263652b7b3f9",
       "title": "Roller Skates για Όλους",
       "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
@@ -437,37 +406,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.422Z",
       "updatedAt": "2025-10-22T17:16:25.422Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "00bed5ce27d0c041",
-      "title": "\"Commedia Divina\" - Χορευτές του Βορρά",
-      "description": "28 Οκτωβριου \"Commedia Divina\" - Χορευτές του Βορρά Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/commedia-divina-xoreutes-tou-borra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.423Z",
-      "updatedAt": "2025-10-22T17:16:25.423Z",
       "language": "en"
     },
     {
@@ -1181,37 +1119,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.444Z",
       "updatedAt": "2025-10-22T17:16:25.444Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c1742cc98900f823",
-      "title": "Θ. Καλλίρης Live & Halloween Dinner",
-      "description": "31 Οκτωβριου Θ. Καλλίρης Live & Halloween Dinner Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/th-kalliris-live-halloween-dinner/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
       "language": "en"
     },
     {
@@ -2054,37 +1961,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "adf9074a6a34823e",
-      "title": "Go Brunch || Spanish Cuisine",
-      "description": "2 Νοεμβριου Go Brunch || Spanish Cuisine Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/go-brunch-spanish-cuisine/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.470Z",
-      "updatedAt": "2025-10-22T17:16:25.470Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "dc5ba217c2d84fbd",
       "title": "PUMPKIN PAINTING ΚΥΡΙΑΚΗ 2/11 ΩΡΑ: 12μμ-2μμ",
       "description": "2 Νοεμβριου PUMPKIN PAINTING ΚΥΡΙΑΚΗ 2/11 ΩΡΑ: 12μμ-2μμ Δημοτικη Αγορα Κυψελης",
@@ -2638,37 +2514,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.493Z",
       "updatedAt": "2025-10-22T17:16:25.493Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6d40116d5b52a873",
-      "title": "Wine Explorers Thessaloniki",
-      "description": "7 - 9 Νοεμβριου Wine Explorers Thessaloniki Electra Palace Thessaloniki",
-      "startDate": "2025-11-07T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Electra Palace Thessaloniki",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/festival/wine-explorers-thessaloniki/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.494Z",
-      "updatedAt": "2025-10-22T17:16:25.494Z",
       "language": "en"
     },
     {
@@ -3289,37 +3134,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.537Z",
       "updatedAt": "2025-10-22T17:16:25.537Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4d593fc5cc14ddb3",
-      "title": "Παναγία Σουμελά-Θεσσαλονίκη-Όσιος Παΐσιος, διήμερη εκδρομή",
-      "description": "15 Νοεμβριου Παναγία Σουμελά-Θεσσαλονίκη-Όσιος Παΐσιος, διήμερη εκδρομή Metro Σταθμος Λαρισης",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Metro Σταθμος Λαρισης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 50,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/thessaloniki-osios-paisios-soumela-diimeri-ekdromi/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.540Z",
-      "updatedAt": "2025-10-22T17:16:25.540Z",
       "language": "en"
     },
     {
@@ -4565,37 +4379,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8a24d3acd04c75ca",
-      "title": "Θεσσαλονίκη - Ονειρούπολη, τριήμερη εκδρομή",
-      "description": "24 Δεκεμβριου Θεσσαλονίκη - Ονειρούπολη, τριήμερη εκδρομή Metro Σταθμος Λαρισης",
-      "startDate": "2025-12-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Metro Σταθμος Λαρισης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 199,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/thessaloniki-oneiroupoli-triimeri-ekdromi/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.625Z",
-      "updatedAt": "2025-10-22T17:16:25.625Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "3f1e88260726a5dd",
       "title": "S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ",
       "description": "27 - 28 Δεκεμβριου S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
@@ -5401,8 +5184,8 @@
     }
   ],
   "meta": {
-    "total": 174,
-    "lastUpdate": "2025-10-26T11:39:41.599Z",
+    "total": 167,
+    "lastUpdate": "2025-10-26T18:06:28.805Z",
     "url": "https://agent-athens.netlify.app/paid-performance"
   }
 }

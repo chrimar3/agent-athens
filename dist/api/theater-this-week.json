@@ -7354,37 +7354,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e821c8b672ebe7db",
-      "title": "ART της Γιασμίνα Ρεζά | Triple Threat Productions",
-      "description": "31 Οκτ - 9 Νοε ART της Γιασμίνα Ρεζά | Triple Threat Productions Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f0b3b96d1a20563a",
       "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
       "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
@@ -7850,68 +7819,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a9b9b1bffebdb409",
-      "title": "«Λέω να πετάξω» στην Θεσσαλονίκη!",
-      "description": "1 - 9 Νοεμβριου «Λέω να πετάξω» στην Θεσσαλονίκη! Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καλαμαριας \"Μελινα Μερκουρη\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fe0918f3f824e3da",
-      "title": "Ο Σέρλοκ Χολμς και ο θησαυρός της Άγκρα | Θεσσαλονίκη",
-      "description": "1 - 22 Νοεμβριου Ο Σέρλοκ Χολμς και ο θησαυρός της Άγκρα | Θεσσαλονίκη Artbox Fargani Theater",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Artbox Fargani Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/theatrotouvorra/o-serlok-xolms-kai-o-thisauros-tis-agkra-fargani/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "83176266bf812e3b",
       "title": "ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ",
       "description": "1 - 30 Νοεμβριου ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ Πολλαπλοι χωροι",
@@ -7966,37 +7873,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9f9c93c7579f8219",
-      "title": "Οι Μικροί Κηπουροί | The Little Foxes",
-      "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.451Z",
       "updatedAt": "2025-10-22T17:16:25.451Z",
@@ -8253,37 +8129,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0b8d85fdc8675c4c",
-      "title": "Σώμα Μήδεια Ι Πάτρα",
-      "description": "1 - 2 Νοεμβριου Σώμα Μήδεια Ι Πάτρα Μηχανουργειο Πολυχωρος Πολιτισμου",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μηχανουργειο Πολυχωρος Πολιτισμου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/soma-mideia-i-patra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.452Z",
-      "updatedAt": "2025-10-22T17:16:25.452Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c140765806d8b8d0",
       "title": "Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΝΙΚΑΙΑ",
       "description": "1 Νοεμβριου Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΝΙΚΑΙΑ ΕΝΩΣΗ ΣΜΥΡΝΑΙΩΝ ΝΙΚΑΙΑΣ",
@@ -8431,37 +8276,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/don-zouan-2os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.453Z",
-      "updatedAt": "2025-10-22T17:16:25.453Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d7b0501f5b70fd4a",
-      "title": "«Λέω να πετάξω» στην Θεσσαλονίκη!",
-      "description": "1 - 9 Νοεμβριου «Λέω να πετάξω» στην Θεσσαλονίκη! Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικο Θεατρο Καλαμαριας \"Μελινα Μερκουρη\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/leo-na-petakso-stin-thessaloniki/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.453Z",
       "updatedAt": "2025-10-22T17:16:25.453Z",
@@ -8779,8 +8593,8 @@
     }
   ],
   "meta": {
-    "total": 283,
-    "lastUpdate": "2025-10-26T11:39:40.731Z",
+    "total": 277,
+    "lastUpdate": "2025-10-26T18:06:27.977Z",
     "url": "https://agent-athens.netlify.app/theater-this-week"
   }
 }

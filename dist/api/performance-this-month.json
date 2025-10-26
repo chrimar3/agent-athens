@@ -7,37 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "337c181c499f0fcc",
-      "title": "\"Thessaloniki variations\" - Ballet Preljocaj",
-      "description": "26 Οκτωβριου \"Thessaloniki variations\" - Ballet Preljocaj Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/ballet-preljocaj/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "437c263652b7b3f9",
       "title": "Roller Skates για Όλους",
       "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
@@ -436,37 +405,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.422Z",
       "updatedAt": "2025-10-22T17:16:25.422Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "00bed5ce27d0c041",
-      "title": "\"Commedia Divina\" - Χορευτές του Βορρά",
-      "description": "28 Οκτωβριου \"Commedia Divina\" - Χορευτές του Βορρά Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/commedia-divina-xoreutes-tou-borra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.423Z",
-      "updatedAt": "2025-10-22T17:16:25.423Z",
       "language": "en"
     },
     {
@@ -1185,37 +1123,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c1742cc98900f823",
-      "title": "Θ. Καλλίρης Live & Halloween Dinner",
-      "description": "31 Οκτωβριου Θ. Καλλίρης Live & Halloween Dinner Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Hyatt Regency Thessaloniki - Ambrosia Restaurant",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/th-kalliris-live-halloween-dinner/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "d538a1fa28b02c5d",
       "title": "PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ",
       "description": "31 Οκτωβριου PUMPKIN PAINTING ΠΑΡΑΣΚΕΥΗ 31/10 ΩΡΑ 11πμ-1μμ Δημοτικη Αγορα Κυψελης",
@@ -1308,8 +1215,8 @@
     }
   ],
   "meta": {
-    "total": 42,
-    "lastUpdate": "2025-10-26T11:39:40.846Z",
+    "total": 39,
+    "lastUpdate": "2025-10-26T18:06:28.098Z",
     "url": "https://agent-athens.netlify.app/performance-this-month"
   }
 }

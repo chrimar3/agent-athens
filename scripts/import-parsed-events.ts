@@ -6,6 +6,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { getDatabase } from '../src/db/database';
+import { filterAthensEvents, logFilterResults } from '../src/utils/athens-filter';
 import type { Event } from '../src/types';
 
 async function main() {
@@ -13,9 +14,14 @@ async function main() {
 
   // Load parsed events from batch 1
   const parsedPath = join(import.meta.dir, '../data/enrichment-batches/batch-1-of-13.json');
-  const events = JSON.parse(readFileSync(parsedPath, 'utf-8'));
+  const allEvents = JSON.parse(readFileSync(parsedPath, 'utf-8'));
 
-  console.log(`📊 Found ${events.length} events\n`);
+  console.log(`📊 Found ${allEvents.length} events\n`);
+
+  // Filter to Athens-only events
+  const events = filterAthensEvents(allEvents);
+  logFilterResults(allEvents, 'Parsed Events');
+  console.log('');
 
   // Get database
   const db = getDatabase();

@@ -7,37 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "337c181c499f0fcc",
-      "title": "\"Thessaloniki variations\" - Ballet Preljocaj",
-      "description": "26 Οκτωβριου \"Thessaloniki variations\" - Ballet Preljocaj Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/ballet-preljocaj/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "437c263652b7b3f9",
       "title": "Roller Skates για Όλους",
       "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
@@ -409,8 +378,8 @@
     }
   ],
   "meta": {
-    "total": 13,
-    "lastUpdate": "2025-10-26T11:39:40.833Z",
+    "total": 12,
+    "lastUpdate": "2025-10-26T18:06:28.085Z",
     "url": "https://agent-athens.netlify.app/performance-today"
   }
 }

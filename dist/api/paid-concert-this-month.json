@@ -39,37 +39,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e447a3cb412be971",
-      "title": "Τακι Τσαν & Dj ALX - \"Δεν Είναι Κακο Rap Party\" - Καλαμάτα",
-      "description": "26 Οκτωβριου Τακι Τσαν & Dj ALX - \"Δεν Είναι Κακο Rap Party\" - Καλαμάτα Brooklyn Live Stage",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Brooklyn Live Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/taki-tsan-dj-alx-den-einai-kako-rap-party-kalamata/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.380Z",
-      "updatedAt": "2025-10-22T17:16:25.380Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "551d4bdbbdb17baa",
       "title": "Allan Paul στο Caja de Música",
       "description": "26 Οκτωβριου Allan Paul στο Caja de Música Caja De Musica",
@@ -163,37 +132,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c4c4e8ca8531c367",
-      "title": "Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot)",
-      "description": "26 Οκτωβριου Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot) Cafe Santan",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Spot) Cafe Santan",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.380Z",
-      "updatedAt": "2025-10-22T17:16:25.380Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2e690da35ec79e75",
       "title": "Ο Λυρικός Θεοδωράκης",
       "description": "26 Οκτωβριου Ο Λυρικός Θεοδωράκης Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
@@ -217,37 +155,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/o-lyrikos-theodorakis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.381Z",
-      "updatedAt": "2025-10-22T17:16:25.381Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8d95590d9f70b2af",
-      "title": "Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα",
-      "description": "26 Οκτ - 28 Δεκ Το Ξενοδοχείο των Συναισθημάτων | Το Παγκόσμιο Best Seller της Lidia Brankovic στην Ελλάδα Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/to-ksenodoxeio-ton-synaisthimaton/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.381Z",
       "updatedAt": "2025-10-22T17:16:25.381Z",
@@ -558,37 +465,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-w/tight-spot/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7747a93fa20ecf13",
-      "title": "Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot)",
-      "description": "26 Οκτωβριου Middle Earth - \"ROCKSTARS\" TOUR - Volos 26/10 - (W/ Tight Spot) Cafe Santan",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cafe Santan",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/middle-earth-rockstars-tour-volos-26/10-w/tight-spot/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.403Z",
       "updatedAt": "2025-10-22T17:16:25.403Z",
@@ -1491,37 +1367,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.430Z",
       "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0736d70eb8a10b84",
-      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
       "language": "en"
     },
     {
@@ -2828,8 +2673,8 @@
     }
   ],
   "meta": {
-    "total": 91,
-    "lastUpdate": "2025-10-26T11:39:41.296Z",
+    "total": 86,
+    "lastUpdate": "2025-10-26T18:06:28.525Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-month"
   }
 }

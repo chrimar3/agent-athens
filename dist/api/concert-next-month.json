@@ -410,37 +410,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "301de10d0c0fc987",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.447Z",
-      "updatedAt": "2025-10-22T17:16:25.447Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c283aa64f92bd499",
       "title": "DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR)",
       "description": "1 Νοεμβριου DUCTAPE (TR) LIVE IN ATHENS / OPENING ACT MECHANIMAL (GR) AUX CLUB",
@@ -999,37 +968,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "eb8ac5658169c387",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "1 Νοεμβριου ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f022bc016be8f5f7",
       "title": "Solar Fake",
       "description": "1 Νοεμβριου Solar Fake Death Disco",
@@ -1053,37 +991,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/solar-fake/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.455Z",
-      "updatedAt": "2025-10-22T17:16:25.455Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4fd8bfd5b97cda12",
-      "title": "ΛΕΞ live στη Θεσσαλονίκη",
-      "description": "1 Νοεμβριου ΛΕΞ live στη Θεσσαλονίκη Καυτανζογλειο Σταδιο",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καυτανζογλειο Σταδιο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/lexskg2025/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.455Z",
       "updatedAt": "2025-10-22T17:16:25.455Z",
@@ -1459,37 +1366,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.462Z",
       "updatedAt": "2025-10-22T17:16:25.462Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "daa6a85cc218a376",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "2 Νοεμβριου JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.467Z",
-      "updatedAt": "2025-10-22T17:16:25.467Z",
       "language": "en"
     },
     {
@@ -1890,37 +1766,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/dimitris-samolis-live/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.477Z",
-      "updatedAt": "2025-10-22T17:16:25.477Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a7184d2fcd5ef0c1",
-      "title": "ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION",
-      "description": "4 Νοεμβριου ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-04T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/dimos-dimitriadis-songs-in-revolution/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.477Z",
       "updatedAt": "2025-10-22T17:16:25.477Z",
@@ -3161,37 +3006,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/tonis-sfinos-live-antonella-playmates/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.493Z",
-      "updatedAt": "2025-10-22T17:16:25.493Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1b15e06ac137a096",
-      "title": "8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ: Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ",
-      "description": "7 - 15 Νοεμβριου 8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ: Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-07T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/8o-festibal-mparok-mousikis-i-epoxi-ton-metabaseon/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.493Z",
       "updatedAt": "2025-10-22T17:16:25.493Z",
@@ -4688,37 +4502,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "23b1c15766a01c9f",
-      "title": "JONAS KAUFMANN",
-      "description": "9 Νοεμβριου JONAS KAUFMANN Μεγαρο Μουσικης Θεσσαλονικης",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jonas-kaufmann/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.508Z",
-      "updatedAt": "2025-10-22T17:16:25.508Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "5a81e56aa1fa4502",
       "title": "Του κόκορα τα πάθη | Μουσικές Αφηγήσεις",
       "description": "9 Νοεμβριου Του κόκορα τα πάθη | Μουσικές Αφηγήσεις Πολυχωρος Πολιτισμου \"Διελευσις\"",
@@ -5215,37 +4998,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "245f4da23751319f",
-      "title": "CATS - Thessaloniki",
-      "description": "12 - 16 Νοεμβριου CATS - Thessaloniki Μεγαρο Μουσικης Θεσσαλονικης",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 60,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-cats-thessalonikidemo-den-poleitai-antig/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.519Z",
-      "updatedAt": "2025-10-22T17:16:25.519Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "742f51df81c8d5db",
       "title": "GORAN BREGOVIC - Wedding & Funeral Band",
       "description": "12 Νοεμβριου GORAN BREGOVIC - Wedding & Funeral Band CHRISTMAS THEATER",
@@ -5365,37 +5117,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.519Z",
       "updatedAt": "2025-10-22T17:16:25.519Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e5e284b4d14c3336",
-      "title": "HIGH ON FIRE live in Thessaloniki",
-      "description": "12 Νοεμβριου HIGH ON FIRE live in Thessaloniki Eightball Club",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Thessaloniki Eightball Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/high-on-fire/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.520Z",
-      "updatedAt": "2025-10-22T17:16:25.520Z",
       "language": "en"
     },
     {
@@ -5610,68 +5331,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/giannis-tseros-stauros-tou-notou-plus/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.524Z",
-      "updatedAt": "2025-10-22T17:16:25.524Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "96cd86b5163bbee4",
-      "title": "HIGH ON FIRE live in Thessaloniki",
-      "description": "12 Νοεμβριου HIGH ON FIRE live in Thessaloniki Eightball Club",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Eightball Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/high-on-fire/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.524Z",
-      "updatedAt": "2025-10-22T17:16:25.524Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "904d058dc1343824",
-      "title": "ΕΡΓΑ ΓΙΑ ΣΑΞΟΦΩΝΟ & ΚΟΥΑΡΤΕΤΟ ΕΓΧΟΡΔΩΝ",
-      "description": "12 Νοεμβριου ΕΡΓΑ ΓΙΑ ΣΑΞΟΦΩΝΟ & ΚΟΥΑΡΤΕΤΟ ΕΓΧΟΡΔΩΝ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/erga-gia-saksofono-kouarteto-egxordon/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.524Z",
       "updatedAt": "2025-10-22T17:16:25.524Z",
@@ -7788,37 +7447,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c4720caa42c0aecd",
-      "title": "ENSEMBLE SINEQUANON BERLIN & ΚΥΠΡΙΑΝΟΣ ΚΑΤΣΑΡΗΣ",
-      "description": "16 Νοεμβριου ENSEMBLE SINEQUANON BERLIN & ΚΥΠΡΙΑΝΟΣ ΚΑΤΣΑΡΗΣ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-16T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ensemble-sinequanon-berlin-kyprianos-katsaris/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.542Z",
-      "updatedAt": "2025-10-22T17:16:25.542Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "fb5a1f09878e0187",
       "title": "Άκου τη Μουσική",
       "description": "16 Νοεμβριου Άκου τη Μουσική Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
@@ -8749,37 +8377,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "feaeb23494296687",
-      "title": "ΧΡΙΣΤΟΦΟΡΟΣ ΧΡΙΣΤΟΦΗΣ: Ο ΤΥΡΑΝΝΟΣ ΚΑΙ Η ΚΟΡΗ",
-      "description": "21 - 22 Νοεμβριου ΧΡΙΣΤΟΦΟΡΟΣ ΧΡΙΣΤΟΦΗΣ: Ο ΤΥΡΑΝΝΟΣ ΚΑΙ Η ΚΟΡΗ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-21T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/xristoforos-xristofis-o-tyrannos-kai-i-kori/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.553Z",
-      "updatedAt": "2025-10-22T17:16:25.553Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "57a4737287987525",
       "title": "The KUSTOMS & The SENCES Live ! “ATHENS SHAKEDOWN”",
       "description": "21 Νοεμβριου The KUSTOMS & The SENCES Live ! “ATHENS SHAKEDOWN” Κυτταρο Live",
@@ -8834,37 +8431,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/giannis-kotsiras-stauros-tou-notou-2/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.556Z",
-      "updatedAt": "2025-10-22T17:16:25.556Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ee3303619124c0a0",
-      "title": "KENT NAGANO DRESDNER FESTSPIELORCHESTER",
-      "description": "22 Νοεμβριου KENT NAGANO DRESDNER FESTSPIELORCHESTER Μεγαρο Μουσικης Θεσσαλονικης",
-      "startDate": "2025-11-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/kent-nagano-dresdner-festspielorchester/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.556Z",
       "updatedAt": "2025-10-22T17:16:25.556Z",
@@ -9927,37 +9493,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "46b4c7f1fd1b54ba",
-      "title": "TRIO KOROBEINIKOV/MOSER/GLUZMAN",
-      "description": "25 Νοεμβριου TRIO KOROBEINIKOV/MOSER/GLUZMAN Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-25T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/trio-korobeinikov/moser/gluzman/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.570Z",
-      "updatedAt": "2025-10-22T17:16:25.570Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "e6a3ae9d0fd376c5",
       "title": "MadWalk 2025 by Three Cents",
       "description": "26 Νοεμβριου MadWalk 2025 by Three Cents Tae Kwon Do, Madwalk",
@@ -10136,37 +9671,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/madwalk-2025-by-three-cents/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.574Z",
-      "updatedAt": "2025-10-22T17:16:25.574Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "150e27bdb14edfc1",
-      "title": "QUARTETTO DI CREMONA",
-      "description": "26 Νοεμβριου QUARTETTO DI CREMONA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/quartetto-di-cremona/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.574Z",
       "updatedAt": "2025-10-22T17:16:25.574Z",
@@ -10423,37 +9927,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c9a0b7afa6ffb9b3",
-      "title": "DITZ (UK) · Thessaloniki",
-      "description": "27 Νοεμβριου DITZ (UK) · Thessaloniki Rover Bar",
-      "startDate": "2025-11-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Thessaloniki Rover Bar",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ditz-uk-thessaloniki/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.575Z",
-      "updatedAt": "2025-10-22T17:16:25.575Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c745efb8ec31ef5d",
       "title": "SLOVAK CHAMBER ORCHESTRA",
       "description": "27 Νοεμβριου SLOVAK CHAMBER ORCHESTRA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
@@ -10573,68 +10046,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.575Z",
       "updatedAt": "2025-10-22T17:16:25.575Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "01c5212db4d3791e",
-      "title": "DITZ (UK) · Thessaloniki",
-      "description": "27 Νοεμβριου DITZ (UK) · Thessaloniki Rover Bar",
-      "startDate": "2025-11-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Rover Bar",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ditz-uk-thessaloniki/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.576Z",
-      "updatedAt": "2025-10-22T17:16:25.576Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "eac3cfeff0057793",
-      "title": "SLOVAK CHAMBER ORCHESTRA",
-      "description": "27 Νοεμβριου SLOVAK CHAMBER ORCHESTRA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/slovak-chamber-orchestra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.576Z",
-      "updatedAt": "2025-10-22T17:16:25.576Z",
       "language": "en"
     },
     {
@@ -10852,37 +10263,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.576Z",
       "updatedAt": "2025-10-22T17:16:25.576Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "118ed3f7c4a635b1",
-      "title": "SONS [BE] - Live in Thessaloniki",
-      "description": "28 Νοεμβριου SONS [BE] - Live in Thessaloniki Eightball Club",
-      "startDate": "2025-11-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Thessaloniki Eightball Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/sons-be-live-in-thessaloniki/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.577Z",
-      "updatedAt": "2025-10-22T17:16:25.577Z",
       "language": "en"
     },
     {
@@ -11193,37 +10573,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.578Z",
       "updatedAt": "2025-10-22T17:16:25.578Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6a665d091ac15765",
-      "title": "SONS [BE] - Live in Thessaloniki",
-      "description": "28 Νοεμβριου SONS [BE] - Live in Thessaloniki Eightball Club",
-      "startDate": "2025-11-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Eightball Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/sons-be-live-in-thessaloniki/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.579Z",
-      "updatedAt": "2025-10-22T17:16:25.579Z",
       "language": "en"
     },
     {
@@ -12066,37 +11415,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "dcbfd630fc1c88c7",
-      "title": "Alestorm live in Thessaloniki",
-      "description": "30 Νοεμβριου Alestorm live in Thessaloniki Block 33",
-      "startDate": "2025-11-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Thessaloniki Block 33",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/alestorm-live-in-thessaloniki/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.586Z",
-      "updatedAt": "2025-10-22T17:16:25.586Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "864973b69fa4c91b",
       "title": "EDEN presents MARCEL DETTMANN",
       "description": "30 Νοεμβριου EDEN presents MARCEL DETTMANN Athens Conservatoire (in Greek)",
@@ -12283,37 +11601,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "ec7ed3513d82fc26",
-      "title": "Alestorm live in Thessaloniki",
-      "description": "30 Νοεμβριου Alestorm live in Thessaloniki Block 33",
-      "startDate": "2025-11-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Block 33",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/alestorm-live-in-thessaloniki/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.590Z",
-      "updatedAt": "2025-10-22T17:16:25.590Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "839720f3c98aaaa8",
       "title": "EDEN presents MARCEL DETTMANN",
       "description": "30 Νοεμβριου EDEN presents MARCEL DETTMANN Athens Conservatoire (in Greek)",
@@ -12403,42 +11690,11 @@
       "createdAt": "2025-10-22T17:16:25.591Z",
       "updatedAt": "2025-10-22T17:16:25.591Z",
       "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3530714e56a11224",
-      "title": "ΑΛΕΞΑΝΔΡΟΣ ΠΑΠΑΔΙΑΜΑΝΤΗΣ: ΣΤΟ ΧΡΙΣΤΟ ΣΤΟ ΚΑΣΤΡΟ",
-      "description": "30 Νοεμβριου ΑΛΕΞΑΝΔΡΟΣ ΠΑΠΑΔΙΑΜΑΝΤΗΣ: ΣΤΟ ΧΡΙΣΤΟ ΣΤΟ ΚΑΣΤΡΟ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/aleksandros-papadiamantis-sto-xristo-sto-kastro/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.591Z",
-      "updatedAt": "2025-10-22T17:16:25.591Z",
-      "language": "en"
     }
   ],
   "meta": {
-    "total": 401,
-    "lastUpdate": "2025-10-26T11:39:40.588Z",
+    "total": 377,
+    "lastUpdate": "2025-10-26T18:06:27.844Z",
     "url": "https://agent-athens.netlify.app/concert-next-month"
   }
 }
