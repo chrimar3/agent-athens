@@ -7,72 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "fdc67a872bb7d360",
-      "title": "RELATED EVENTS",
-      "description": "RELATED EVENTS",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/tickets/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.343Z",
-      "updatedAt": "2025-10-22T17:16:25.343Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c263ae75e988b2ec",
-      "title": "GADJO DILO",
+      "id": "2bd412e1bc481076",
+      "title": "MONOPHONICS",
       "description": "",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/tickets/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.343Z",
-      "updatedAt": "2025-10-22T17:16:25.343Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bf236821f654c379",
-      "title": "BARCELONA GIPSY BALKAN ORCHESTRA",
-      "description": "",
-      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
       "endDate": null,
       "type": "cinema",
       "genres": [
@@ -93,14 +31,76 @@
       },
       "url": "https://www.more.com/venues/gazarte/",
       "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.380Z",
-      "updatedAt": "2025-10-22T17:16:25.380Z",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "73758c853f252feb",
+      "title": "BRIAN JACKSON",
+      "description": "",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 28,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.445Z",
+      "updatedAt": "2025-10-22T17:16:25.445Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19e63bf289f6f011",
+      "title": "THE EX",
+      "description": "",
+      "startDate": "2025-11-02T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.471Z",
+      "updatedAt": "2025-10-22T17:16:25.471Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 3,
-    "lastUpdate": "2025-10-24T12:45:49.797Z",
+    "lastUpdate": "2025-10-26T11:39:40.646Z",
     "url": "https://agent-athens.netlify.app/cinema-this-weekend"
   }
 }

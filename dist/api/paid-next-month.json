@@ -2734,6 +2734,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "76e178eceddf85df",
+      "title": "Νικόλας Αναδολής: Αυτοσχεδιασμοί",
+      "description": "Νικόλας Αναδολής: Αυτοσχεδιασμοί Ο Νικόλας Αναδολής παρουσιάζει έναν νέο κύκλο έργων με ρομαντική, κινηματογραφική και τζαζ αύρα — πρελούδια, τραγούδια χωρίς λόγια και ιντερμέτζο που γεφυρώνουν την κλασική με τη σύγχρονη μουσική. Το πρόγραμμα συμπληρώνουν διασκευές από τη Λίμνη των Κύκνων και το Cinema Paradiso.",
+      "startDate": "2025-11-01T20:30:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/nikolas-anadolis-aftoschediasmoi/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.748Z",
+      "updatedAt": "2025-10-26T11:38:19.790Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "Event",
       "id": "e8d1625d111395c0",
       "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
@@ -4842,6 +4873,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "9c1ecf9dff380f6f",
+      "title": "Mozart Concerti",
+      "description": "Mozart Concerti Αυθεντικοί ήχοι από την εποχή του Μότσαρτ ζωντανεύουν μέσα από τη δεξιοτεχνία των μουσικών της Καμεράτας και διακεκριμένων ελλήνων σολίστ, υπό τη διεύθυνση του Γιώργου Πέτρου. Με ιστορικά όργανα, φαγκότο και φλάουτο τραβέρσο της κλασικής περιόδου, άρπα του 1802 και δύο πιάνα αντίγραφα του θρυλικού Άντον Βάλτερ, η συναυλία προσφέρει ένα συναρπαστικό ταξίδι στο μουσικό σύμπαν του Μότσαρτ — γεμάτο φαντασία, λυρισμό και εκρηκτική ενέργεια.",
+      "startDate": "2025-11-02T20:30:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/mozart-concertikamerata-orchistra-ton-filon-tis-mousikis/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.744Z",
+      "updatedAt": "2025-10-26T11:38:19.785Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "Event",
       "id": "65ee8b45e775f172",
       "title": "ΑΛΕΚΑ ΚΑΝΕΛΛΙΔΟΥ - ΧΡΗΣΤΟΣ ΘΗΒΑΙΟΣ",
@@ -6667,6 +6729,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.483Z",
       "updatedAt": "2025-10-22T17:16:25.483Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "8ba859d61dac8ddf",
+      "title": "Δήμος Δημητριάδης: Songs in Revolution",
+      "description": "Δήμος Δημητριάδης: Songs in Revolution Ο Δήμος Δημητριάδης και το κουιντέτο του παρουσιάζουν αποσπάσματα από τα Dream Modes και Songs in Revolution: σύγχρονη τζαζ με μεσογειακές και κινηματογραφικές αποχρώσεις, γεμάτη ρυθμό, αυτοσχεδιασμό και φαντασία.",
+      "startDate": "2025-11-05T20:30:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/nikolas-anadolis-aftoschediasmoi/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.748Z",
+      "updatedAt": "2025-10-26T11:38:19.790Z",
       "language": "en"
     },
     {
@@ -11073,6 +11166,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "4c29d74ab4ff928d",
+      "title": "Dimitris Kalantzis 4tet: “Master’s Voice” – Τσιτσάνης",
+      "description": "Dimitris Kalantzis 4tet: “Master’s Voice” – Τσιτσάνης Το κουαρτέτο του Δημήτρη Καλαντζή και τα έγχορδα της Ορχήστρας Φιλαρμόνια αποδίδουν με τζαζ πνοή τα αθάνατα τραγούδια του Βασίλη Τσιτσάνη – 100% τζαζ, 100% Τσιτσάνης.",
+      "startDate": "2025-11-08T21:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/annexm-tzeni-marketou-folly-for-songs-for-funk-kinships/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.748Z",
+      "updatedAt": "2025-10-26T11:38:19.791Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "Event",
       "id": "0a7ff6602b39420e",
       "title": "ΑΝ ΑΚΟΥΣΕΙΣ ΤΑ ΠΑΙΔΙΑ: ΜΟΥΣΙΚΗ ΠΑΡΑΣΤΑΣΗ ΜΕ ΑΓΑΠΗΜΕΝΑ ΠΑΙΔΙΚΑ ΤΡΑΓΟΥΔΙΑ ΜΕ ΤΟΝ ΛΕΥΤΕΡΗ ΕΛΕΥΘΕΡΙΟΥ & ΤΟΝ ΑΛΚΙΒΙΑΔΗ ΚΩΝΣΤΑΝΤΟΠΟΥΛΟ",
@@ -14634,6 +14758,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.526Z",
       "updatedAt": "2025-10-22T17:16:25.526Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "bfad53577023c8da",
+      "title": "Stacey Kent Trio",
+      "description": "Stacey Kent Trio Η βραβευμένη τραγουδίστρια Stacey Kent, με τη μοναδική φωνή και το πολύγλωσσο ρεπερτόριό της, επιστρέφει με τζαζ τραγούδια, σανσόν και μπόσα νόβα από τα άλμπουμ A Time for Love και Songs From Other Places. Μαζί της, ο Art Hirahara και ο Jim Tomlinson σε μια βραδιά γεμάτη κομψότητα και τζαζ μαγεία.",
+      "startDate": "2025-11-13T21:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/nikolas-anadolis-aftoschediasmoi/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.748Z",
+      "updatedAt": "2025-10-26T11:38:19.791Z",
       "language": "en"
     },
     {
@@ -18389,6 +18544,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b0bc0015dfae7bfb",
+      "title": "Richard Bona – Alfredo Rodriguez Trio",
+      "description": "Richard Bona – Alfredo Rodriguez Trio Ο Richard Bona και ο Alfredo Rodríguez, δύο διεθνείς δεξιοτέχνες που τους ενώνει ο θρύλος Quincy Jones, συναντιούνται σε μια εκρηκτική σύμπραξη γεμάτη ρυθμό, πάθος και αυτοσχεδιασμό — από την Κούβα ως το Καμερούν.",
+      "startDate": "2025-11-18T21:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/annexm-tzeni-marketou-folly-for-songs-for-funk-kinships/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.748Z",
+      "updatedAt": "2025-10-26T11:38:19.791Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "Event",
       "id": "495df5bfe1d007db",
       "title": "STANLEY CLARKE",
@@ -19067,6 +19253,37 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.550Z",
       "updatedAt": "2025-10-22T17:16:25.550Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "f81be532589fd214",
+      "title": "Schubert 8 – Beethoven 5",
+      "description": "Schubert 8 – Beethoven 5 Ο Γιώργος Πέτρου, κορυφαίος διεθνώς μαέστρος και ειδικός στην ιστορική ερμηνεία, διευθύνει την Καμεράτα Ορχήστρα των Φίλων της Μουσικής σε όργανα εποχής. Στο πρόγραμμα, δύο από τα πιο εμβληματικά έργα του ρομαντισμού: η «Ημιτελής» Συμφωνία του Σούμπερτ, με τη λυρική της μελαγχολία, και η Πέμπτη Συμφωνία του Μπετόβεν, σύμβολο πάλης και θριάμβου του ανθρώπινου πνεύματος.",
+      "startDate": "2025-11-19T20:30:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.megaron.gr/event/schubert-8-beethoven-5kamerata-orchistra-ton-filon-tis-mousikis/",
+      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
+      "createdAt": "2025-10-26T11:37:07.747Z",
+      "updatedAt": "2025-10-26T11:38:19.789Z",
       "language": "en"
     },
     {
@@ -25953,8 +26170,8 @@
     }
   ],
   "meta": {
-    "total": 837,
-    "lastUpdate": "2025-10-24T12:45:50.415Z",
+    "total": 844,
+    "lastUpdate": "2025-10-26T11:39:41.122Z",
     "url": "https://agent-athens.netlify.app/paid-next-month"
   }
 }

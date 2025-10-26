@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f93ecd6116d2828e",
-      "title": "Από τη Γη στο Σύμπαν - From Earth to the Universe",
-      "description": "25 - 26 Οκτωβριου Από τη Γη στο Σύμπαν - From Earth to the Universe Νοησις",
-      "startDate": "2025-10-25T00:00:00.000+02:00",
+      "id": "a54ab805aa1d0275",
+      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
+      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
+      "startDate": "2025-10-27T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -18,38 +18,7 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Νοησις",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3.5,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/apo-ti-gi-sto-sympan/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.373Z",
-      "updatedAt": "2025-10-22T17:16:25.373Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "520f92ef249209aa",
-      "title": "Halloween Messy Play στο Hehe!",
-      "description": "25 Οκτωβριου Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-25T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
+        "name": "Play ART Repeat Πολυχωρος",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -60,16 +29,16 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-messy-play-sto-hehe/",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.379Z",
-      "updatedAt": "2025-10-22T17:16:25.379Z",
+      "createdAt": "2025-10-22T17:16:25.422Z",
+      "updatedAt": "2025-10-22T17:16:25.422Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-24T12:45:49.789Z",
+    "total": 1,
+    "lastUpdate": "2025-10-26T11:39:40.638Z",
     "url": "https://agent-athens.netlify.app/exhibition-tomorrow"
   }
 }

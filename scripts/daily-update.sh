@@ -18,13 +18,18 @@ echo "🕷️  Step 2: Scraping websites..."
 python3 scripts/scrape-all-sites.py
 echo ""
 
-# 3. Summary
+# 3. Clean up old events (7-day retention)
+echo "🧹 Step 3: Database cleanup..."
+bun run scripts/cleanup-old-events.ts
+echo ""
+
+# 4. Summary
 echo "📊 Summary:"
 echo "   - Emails saved to: data/emails-to-parse/"
 echo "   - HTML saved to: data/html-to-parse/"
 echo ""
 
-# 4. Next steps
+# 5. Next steps
 echo "💡 Next Steps (with Claude Code):"
 echo "   1. Ask: 'Parse emails in data/emails-to-parse/ and add events to database'"
 echo "   2. Ask: 'Parse HTML in data/html-to-parse/ and extract events'"
@@ -34,3 +39,8 @@ echo "   5. Commit and deploy"
 echo ""
 
 echo "✅ Daily update preparation complete!"
+echo ""
+
+# 6. Send notification to user
+echo "🔔 Sending notification..."
+osascript -e "display notification \"Data collection complete! Ready for Claude Code parsing.\" with title \"Agent Athens\" sound name \"Glass\""

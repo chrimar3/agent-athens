@@ -8,10 +8,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "4828259d979ba42d",
-      "title": "Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\"",
-      "description": "24 Οκτ - 21 Νοε Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\" AiTHERION",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "id": "f412452f8564306a",
+      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
+      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
+      "startDate": "2025-10-26T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -19,89 +19,27 @@
       ],
       "tags": [],
       "venue": {
-        "name": "AiTHERION",
+        "name": "Τουριστικο Περιπτερο",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 0,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/museums/dimokratia-kai-eydaimonia/",
+      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.340Z",
-      "updatedAt": "2025-10-22T17:16:25.340Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "749b10cc11cca019",
-      "title": "Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών",
-      "description": "24 Οκτ - 21 Δεκ Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/ekthesi-yparxei-se-ola-lysi-taksidi-ston-kosmo-ton-arxaion-ellinikon-mathimatikon/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.342Z",
-      "updatedAt": "2025-10-22T17:16:25.342Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bbfcba8bc710fd96",
-      "title": "Messy & Clay Play with Hehe για παιδιά 3-12 ετών",
-      "description": "24 Οκτ - 19 Δεκ Messy & Clay Play with Hehe για παιδιά 3-12 ετών Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-clay-play-with-hehe-gia-paidia-3-12-eton/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.342Z",
-      "updatedAt": "2025-10-22T17:16:25.342Z",
+      "createdAt": "2025-10-22T17:16:25.403Z",
+      "updatedAt": "2025-10-22T17:16:25.403Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 3,
-    "lastUpdate": "2025-10-24T12:45:50.722Z",
+    "total": 1,
+    "lastUpdate": "2025-10-26T11:39:41.369Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-today"
   }
 }

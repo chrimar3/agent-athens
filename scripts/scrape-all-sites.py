@@ -142,7 +142,15 @@ class UnifiedScraper:
         if not last_crawled:
             return True
 
-        last_crawl_dt = datetime.fromisoformat(last_crawled.replace('Z', '+00:00'))
+        # Parse timestamp and make it timezone-aware if needed
+        last_crawled_clean = last_crawled.replace('Z', '+00:00')
+        last_crawl_dt = datetime.fromisoformat(last_crawled_clean)
+
+        # Ensure both datetimes are timezone-aware
+        if last_crawl_dt.tzinfo is None:
+            from datetime import timezone
+            last_crawl_dt = last_crawl_dt.replace(tzinfo=timezone.utc)
+
         now_aware = datetime.now().astimezone()
         hours_since = (now_aware - last_crawl_dt).total_seconds() / 3600
 

@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "4828259d979ba42d",
-      "title": "Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\"",
-      "description": "24 Οκτ - 21 Νοε Διαδραστική Έκθεση \"Δημοκρατία και Ευδαιμονία\" AiTHERION",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "id": "55fedd909d2218ed",
+      "title": "🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη",
+      "description": "31 Οκτωβριου 🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη Κτημα Αριστη",
+      "startDate": "2025-10-31T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -18,7 +18,7 @@
       ],
       "tags": [],
       "venue": {
-        "name": "AiTHERION",
+        "name": "Κτημα Αριστη",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -29,19 +29,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/museums/dimokratia-kai-eydaimonia/",
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/xali-pali-ktima-aristi/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.340Z",
-      "updatedAt": "2025-10-22T17:16:25.340Z",
+      "createdAt": "2025-10-22T17:16:25.444Z",
+      "updatedAt": "2025-10-22T17:16:25.444Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "749b10cc11cca019",
-      "title": "Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών",
-      "description": "24 Οκτ - 21 Δεκ Έκθεση: Υπάρχει σε όλα λύση; Ταξίδι στον κόσμο των αρχαίων Ελληνικών μαθηματικών Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
+      "id": "1f386c5705104396",
+      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
+      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
+      "startDate": "2025-11-01T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -49,151 +49,27 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/ekthesi-yparxei-se-ola-lysi-taksidi-ston-kosmo-ton-arxaion-ellinikon-mathimatikon/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.342Z",
-      "updatedAt": "2025-10-22T17:16:25.342Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bbfcba8bc710fd96",
-      "title": "Messy & Clay Play with Hehe για παιδιά 3-12 ετών",
-      "description": "24 Οκτ - 19 Δεκ Messy & Clay Play with Hehe για παιδιά 3-12 ετών Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-clay-play-with-hehe-gia-paidia-3-12-eton/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.342Z",
-      "updatedAt": "2025-10-22T17:16:25.342Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f93ecd6116d2828e",
-      "title": "Από τη Γη στο Σύμπαν - From Earth to the Universe",
-      "description": "25 - 26 Οκτωβριου Από τη Γη στο Σύμπαν - From Earth to the Universe Νοησις",
-      "startDate": "2025-10-25T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοησις",
+        "name": "Play ART Repeat Πολυχωρος",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 3.5,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/museums/apo-ti-gi-sto-sympan/",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.373Z",
-      "updatedAt": "2025-10-22T17:16:25.373Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "520f92ef249209aa",
-      "title": "Halloween Messy Play στο Hehe!",
-      "description": "25 Οκτωβριου Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-10-25T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-messy-play-sto-hehe/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.379Z",
-      "updatedAt": "2025-10-22T17:16:25.379Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f412452f8564306a",
-      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
-      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τουριστικο Περιπτερο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 0,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
+      "createdAt": "2025-10-22T17:16:25.457Z",
+      "updatedAt": "2025-10-22T17:16:25.457Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 6,
-    "lastUpdate": "2025-10-24T12:45:49.791Z",
+    "total": 2,
+    "lastUpdate": "2025-10-26T11:39:40.640Z",
     "url": "https://agent-athens.netlify.app/exhibition-this-weekend"
   }
 }

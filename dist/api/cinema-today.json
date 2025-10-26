@@ -3,73 +3,10 @@
     "type": "cinema",
     "time": "today"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fdc67a872bb7d360",
-      "title": "RELATED EVENTS",
-      "description": "RELATED EVENTS",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/tickets/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.343Z",
-      "updatedAt": "2025-10-22T17:16:25.343Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c263ae75e988b2ec",
-      "title": "GADJO DILO",
-      "description": "",
-      "startDate": "2025-10-24T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/tickets/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.343Z",
-      "updatedAt": "2025-10-22T17:16:25.343Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-24T12:45:49.796Z",
+    "total": 0,
+    "lastUpdate": "2025-10-26T11:39:40.645Z",
     "url": "https://agent-athens.netlify.app/cinema-today"
   }
 }
