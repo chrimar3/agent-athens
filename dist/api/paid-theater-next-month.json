@@ -814,37 +814,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e1f800a388b25c5b",
-      "title": "Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour",
-      "description": "31 Οκτ - 22 Νοε Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/jeremy-ntekantans/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.460Z",
-      "updatedAt": "2025-10-22T17:16:25.460Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f5e0a099ab431be4",
       "title": "ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ",
       "description": "1 - 9 Νοεμβριου ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ Πολλαπλοι χωροι",
@@ -8533,37 +8502,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "200d1133aa6e28f6",
-      "title": "ΚΑΠΕΤΑΝΙΣΣΑ ΛΑΣΚΑΡΙΝΑ - ΑΝΑΣΤΑΣΙΑ ΡΕΒΗ",
-      "description": "7 - 10 Νοεμβριου ΚΑΠΕΤΑΝΙΣΣΑ ΛΑΣΚΑΡΙΝΑ - ΑΝΑΣΤΑΣΙΑ ΡΕΒΗ Πολλαπλοι χωροι",
-      "startDate": "2025-11-08T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/kapetanissa-laskarina-anastasia-rebi/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.507Z",
-      "updatedAt": "2025-10-22T17:16:25.507Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "38f95337c24c95aa",
       "title": "Η ΔΙΚΗ ΤΟΥ ΚΑΦΚΑ",
       "description": "8 - 23 Νοεμβριου Η ΔΙΚΗ ΤΟΥ ΚΑΦΚΑ Θεατρο Μοντερνοι Καιροι",
@@ -12059,37 +11997,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/kamia-gynaika-den-to-aksizei/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.534Z",
-      "updatedAt": "2025-10-22T17:16:25.534Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d71f6fd862778d99",
-      "title": "Θ. ΑΔΑΜΑΚΟΣ - ΒΑΣΙΛΙΑΣ ΤΟΥ ΤΙΠΟΤΑ ON TOUR",
-      "description": "13 Νοε - 14 Δεκ Θ. ΑΔΑΜΑΚΟΣ - ΒΑΣΙΛΙΑΣ ΤΟΥ ΤΙΠΟΤΑ ON TOUR Πολλαπλοι χωροι",
-      "startDate": "2025-11-14T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/th-adamakos-basilias-tou-tipota-on-tour/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.534Z",
       "updatedAt": "2025-10-22T17:16:25.534Z",
@@ -18204,8 +18111,8 @@
     }
   ],
   "meta": {
-    "total": 587,
-    "lastUpdate": "2025-10-28T12:28:03.100Z",
+    "total": 584,
+    "lastUpdate": "2025-10-28T12:43:25.388Z",
     "url": "https://agent-athens.netlify.app/paid-theater-next-month"
   }
 }

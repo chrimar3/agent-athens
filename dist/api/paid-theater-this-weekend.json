@@ -2147,37 +2147,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e1f800a388b25c5b",
-      "title": "Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour",
-      "description": "31 Οκτ - 22 Νοε Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/jeremy-ntekantans/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.460Z",
-      "updatedAt": "2025-10-22T17:16:25.460Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "f5e0a099ab431be4",
       "title": "ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ",
       "description": "1 - 9 Νοεμβριου ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ Πολλαπλοι χωροι",
@@ -5401,8 +5370,8 @@
     }
   ],
   "meta": {
-    "total": 174,
-    "lastUpdate": "2025-10-28T12:28:03.063Z",
+    "total": 173,
+    "lastUpdate": "2025-10-28T12:43:25.352Z",
     "url": "https://agent-athens.netlify.app/paid-theater-this-weekend"
   }
 }

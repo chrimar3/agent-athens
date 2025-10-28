@@ -2673,37 +2673,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f6a29f5bfb62495d",
-      "title": "ZED'S DEAD",
-      "description": "31 Οκτωβριου ZED'S DEAD Zed_Athens",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Zed_Athens",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/zeds-dead/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.443Z",
-      "updatedAt": "2025-10-22T17:16:25.443Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "09382df657bdc720",
       "title": "TRASHLAND HALLOWEEN",
       "description": "31 Οκτωβριου TRASHLAND HALLOWEEN Death Disco",
@@ -7195,8 +7164,8 @@
     }
   ],
   "meta": {
-    "total": 233,
-    "lastUpdate": "2025-10-28T12:28:02.842Z",
+    "total": 232,
+    "lastUpdate": "2025-10-28T12:43:25.133Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-week"
   }
 }
