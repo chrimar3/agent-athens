@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "98fa49752d0e97b2",
-      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
-      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "47adcd471086041f",
+      "title": "ΜΗΝΙΩΝ",
+      "description": "29 Οκτωβριου ΜΗΝΙΩΝ Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "performance",
       "genres": [
@@ -29,19 +29,112 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/minion/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.422Z",
-      "updatedAt": "2025-10-22T17:16:25.422Z",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "328b4f1ec5abca48",
-      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
-      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
-      "startDate": "2025-10-27T20:00:00+02:00",
+      "id": "daeb59f1b708653a",
+      "title": "ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ",
+      "description": "29 Οκτωβριου ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mikroi-megaloi-paizoume-mazi/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "038a710e6fddd494",
+      "title": "Παιδικό Parkour",
+      "description": "29 Οκτωβριου Παιδικό Parkour λιλιτζουμ",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paidiko-parkour-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b72ea3c39532eb29",
+      "title": "𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎",
+      "description": "29 Οκτωβριου 𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎 Κτημα Αριστη",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/akatastata-paixnidismata-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7ee47ac65a4f2661",
+      "title": "ΜΗΝΙΩΝ",
+      "description": "29 Οκτωβριου ΜΗΝΙΩΝ Κτημα Αριστη",
+      "startDate": "2025-10-29T20:00:00+02:00",
       "endDate": null,
       "type": "performance",
       "genres": [
@@ -56,20 +149,113 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/minion/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.883Z",
-      "updatedAt": "2025-10-26T21:21:00.883Z",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ed2d665f5b5d7b51",
+      "title": "ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ",
+      "description": "29 Οκτωβριου ΜΙΚΡΟΙ ΜΕΓΑΛΟΙ...ΠΑΙΖΟΥΜΕ ΜΑΖΙ Κτημα Αριστη",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "Κτημα Αριστη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mikroi-megaloi-paizoume-mazi/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b76e77c54c5eb2e4",
+      "title": "Παιδικό Parkour",
+      "description": "29 Οκτωβριου Παιδικό Parkour λιλιτζουμ",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "λιλιτζουμ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/paidiko-parkour-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ea084d4063f5c530",
+      "title": "𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎",
+      "description": "29 Οκτωβριου 𖡎 ΑΚΑΤΑΣΤΑΤΑ ΠΑΙΧΝΙΔΙΣΜΑΤΑ 𖡎 Κτημα Αριστη",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κτημα Αριστη",
+        "address": "Κτημα Αριστη",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/akatastata-paixnidismata-1/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-26T21:34:22.080Z",
+    "total": 8,
+    "lastUpdate": "2025-10-28T11:18:35.370Z",
     "url": "https://agent-athens.netlify.app/performance-tomorrow"
   }
 }

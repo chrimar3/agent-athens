@@ -8,812 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "437c263652b7b3f9",
-      "title": "Roller Skates για Όλους",
-      "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/roller-skates-gia-olous/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5dde3057b84633dc",
-      "title": "Avanti Maestro Χρώματα μουντζούρες και μουσικές",
-      "description": "26 Οκτ - 23 Νοε Avanti Maestro Χρώματα μουντζούρες και μουσικές Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/avanti-maestro-xromata-mountzoures-kai-mousikes/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.396Z",
-      "updatedAt": "2025-10-22T17:16:25.396Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "965319343f4e8a31",
-      "title": "COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ",
-      "description": "26 Οκτ - 30 Νοε COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ Λοσαντζελε Comedy Club",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Λοσαντζελε Comedy Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/comedia-immortale-a-maliatsis-a-psyliakos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.397Z",
-      "updatedAt": "2025-10-22T17:16:25.397Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e287516a64e7e659",
-      "title": "Τι ξέρεις για την 28η Οκτωβρίου??",
-      "description": "26 Οκτωβριου Τι ξέρεις για την 28η Οκτωβρίου?? Circus Entertainment Hub",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Circus Entertainment Hub",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-ksereis-gia-tin-28i-oktobriou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.397Z",
-      "updatedAt": "2025-10-22T17:16:25.397Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f06e42701b72ff43",
-      "title": "Τι κρύβει το Φθινόπωρο;",
-      "description": "26 Οκτωβριου Τι κρύβει το Φθινόπωρο; Βοτανικο Παρκο Αττικης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βοτανικο Παρκο Αττικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-krybei-to-fthinoporo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.397Z",
-      "updatedAt": "2025-10-22T17:16:25.397Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ebd031ea22a1f923",
-      "title": "Κυριακάτικα Εκπαιδευτικά Προγράμματα",
-      "description": "26 Οκτ - 30 Νοε Κυριακάτικα Εκπαιδευτικά Προγράμματα Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/ekpaideutika-programmata/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.398Z",
-      "updatedAt": "2025-10-22T17:16:25.398Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "38f9382c32d6eab8",
-      "title": "ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ",
-      "description": "26 Οκτωβριου ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/epomeni-stasi-kypseli-theatriki-diadromi/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.399Z",
-      "updatedAt": "2025-10-22T17:16:25.399Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5a0837940df8bc5e",
-      "title": "Επόμενη Στάση: Γκαζοχώρι",
-      "description": "26 Οκτωβριου Επόμενη Στάση: Γκαζοχώρι Τεχνοπολη Δημου Αθηναιων",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τεχνοπολη Δημου Αθηναιων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/offer/epomeni-stasi-gkazoxori/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.399Z",
-      "updatedAt": "2025-10-22T17:16:25.399Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b42321fff7362971",
-      "title": "Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή",
-      "description": "26 Οκτωβριου Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή Ελληνικος Κοσμος – Μουσειο - Θολος",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/diadrastiki-periigisi-stin-akropoli/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.402Z",
-      "updatedAt": "2025-10-22T17:16:25.402Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "cabcedecf21f514c",
-      "title": "Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη",
-      "description": "26 Οκτωβριου Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη Metro Σταθμος Λαρισης",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Metro Σταθμος Λαρισης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/spilaio-limnon-kalabryta-odontotos-monoimeri/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "25b393f793c37121",
-      "title": "Thessaly Hot Air Balloon Festival 2025",
-      "description": "26 Οκτωβριου Thessaly Hot Air Balloon Festival 2025 Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/festival/thessaly-hot-air-balloon-festival-2025-stadio-karditsas/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.404Z",
-      "updatedAt": "2025-10-22T17:16:25.404Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "88265f0685ffe3e2",
-      "title": "Αγία Σοφία: 1.500 Χρόνια Ιστορίας",
-      "description": "26 Οκτ - 2 Νοε Αγία Σοφία: 1.500 Χρόνια Ιστορίας Ελληνικος Κοσμος – Μουσειο - Θολος",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/agia-sofia-1500-xronia-istorias/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.404Z",
-      "updatedAt": "2025-10-22T17:16:25.404Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "09ead9ed7aa44cb3",
-      "title": "Roller Skates για Όλους",
-      "description": "26 Οκτωβριου Roller Skates για Όλους Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
-        "address": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Bus Parking",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/roller-skates-gia-olous/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.869Z",
-      "updatedAt": "2025-10-26T21:21:00.869Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ae96cc6bdd6e7734",
-      "title": "Avanti Maestro Χρώματα μουντζούρες και μουσικές",
-      "description": "26 Οκτ - 23 Νοε Avanti Maestro Χρώματα μουντζούρες και μουσικές Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
-        "address": "Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/avanti-maestro-xromata-mountzoures-kai-mousikes/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.869Z",
-      "updatedAt": "2025-10-26T21:21:00.869Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "dd8d9a4ebaf67668",
-      "title": "COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ",
-      "description": "26 Οκτ - 30 Νοε COMMEDIA IMMORTALE - Α. ΜΑΛΙΑΤΣΗΣ & Α. ΨΥΛΙΑΚΟΣ Λοσαντζελε Comedy Club",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Λοσαντζελε Comedy Club",
-        "address": "Λοσαντζελε Comedy Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/comedia-immortale-a-maliatsis-a-psyliakos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.869Z",
-      "updatedAt": "2025-10-26T21:21:00.869Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ab6a0df5fbd18008",
-      "title": "Τι ξέρεις για την 28η Οκτωβρίου??",
-      "description": "26 Οκτωβριου Τι ξέρεις για την 28η Οκτωβρίου?? Circus Entertainment Hub",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Circus Entertainment Hub",
-        "address": "Circus Entertainment Hub",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-ksereis-gia-tin-28i-oktobriou/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.870Z",
-      "updatedAt": "2025-10-26T21:21:00.870Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "033e6bd106f598ac",
-      "title": "Τι κρύβει το Φθινόπωρο;",
-      "description": "26 Οκτωβριου Τι κρύβει το Φθινόπωρο; Βοτανικο Παρκο Αττικης",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βοτανικο Παρκο Αττικης",
-        "address": "Βοτανικο Παρκο Αττικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/ti-krybei-to-fthinoporo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.870Z",
-      "updatedAt": "2025-10-26T21:21:00.870Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "427cb2b86bde15b9",
-      "title": "Κυριακάτικα Εκπαιδευτικά Προγράμματα",
-      "description": "26 Οκτ - 30 Νοε Κυριακάτικα Εκπαιδευτικά Προγράμματα Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-        "address": "Κεντρο Πολιτισμου Ελληνικος Κοσμος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/ekpaideutika-programmata/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.870Z",
-      "updatedAt": "2025-10-26T21:21:00.870Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fb84c93be5e81293",
-      "title": "ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ",
-      "description": "26 Οκτωβριου ΕΠΟΜΕΝΗ ΣΤΑΣΗ ΚΥΨΕΛΗ | ΘΕΑΤΡΙΚΗ ΔΙΑΔΡΟΜΗ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/epomeni-stasi-kypseli-theatriki-diadromi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.871Z",
-      "updatedAt": "2025-10-26T21:21:00.871Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "74596c40a9833d70",
-      "title": "Επόμενη Στάση: Γκαζοχώρι",
-      "description": "26 Οκτωβριου Επόμενη Στάση: Γκαζοχώρι Τεχνοπολη Δημου Αθηναιων",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τεχνοπολη Δημου Αθηναιων",
-        "address": "Τεχνοπολη Δημου Αθηναιων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/offer/epomeni-stasi-gkazoxori/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.871Z",
-      "updatedAt": "2025-10-26T21:21:00.871Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6516b8bcd68ff357",
-      "title": "Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή",
-      "description": "26 Οκτωβριου Διαδραστική Περιήγηση στην Ακρόπολη της εποχής του Περικλή Ελληνικος Κοσμος – Μουσειο - Θολος",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "address": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/diadrastiki-periigisi-stin-akropoli/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.871Z",
-      "updatedAt": "2025-10-26T21:21:00.871Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "284cf1123d279613",
-      "title": "Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη",
-      "description": "26 Οκτωβριου Οδοντωτός-Καλάβρυτα-Σπήλαιο Λιμνών, μονοήμερη Metro Σταθμος Λαρισης",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Metro Σταθμος Λαρισης",
-        "address": "Metro Σταθμος Λαρισης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/spilaio-limnon-kalabryta-odontotos-monoimeri/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.872Z",
-      "updatedAt": "2025-10-26T21:21:00.872Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a33ac6e8d888fadf",
-      "title": "Thessaly Hot Air Balloon Festival 2025",
-      "description": "26 Οκτωβριου Thessaly Hot Air Balloon Festival 2025 Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
-        "address": "Γηπεδο Αλκαζαρ - Εθνικο Αθλητικο Κεντρο Λαρισας",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/walk/festival/thessaly-hot-air-balloon-festival-2025-stadio-karditsas/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.874Z",
-      "updatedAt": "2025-10-26T21:21:00.874Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e9d70eccff29b345",
-      "title": "Αγία Σοφία: 1.500 Χρόνια Ιστορίας",
-      "description": "26 Οκτ - 2 Νοε Αγία Σοφία: 1.500 Χρόνια Ιστορίας Ελληνικος Κοσμος – Μουσειο - Θολος",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "address": "Ελληνικος Κοσμος – Μουσειο - Θολος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museum/ellinikos-kosmos/agia-sofia-1500-xronia-istorias/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.875Z",
-      "updatedAt": "2025-10-26T21:21:00.875Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "98fa49752d0e97b2",
-      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
-      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κτημα Αριστη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.422Z",
-      "updatedAt": "2025-10-22T17:16:25.422Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "328b4f1ec5abca48",
-      "title": "🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒",
-      "description": "27 Οκτωβριου 🎒 ΜΠΕΡΔΕΜΕΝΗ ΒΑΛΙΤΣΑ🎒 Κτημα Αριστη",
-      "startDate": "2025-10-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κτημα Αριστη",
-        "address": "Κτημα Αριστη",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/mperdemeni-balitsa/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.883Z",
-      "updatedAt": "2025-10-26T21:21:00.883Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "34b58f74ec1f5f00",
       "title": "MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS",
       "description": "28 Οκτ - 2 Δεκ MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS TGI Fridays™ Καπνικαρεας",
@@ -894,7 +88,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -925,7 +119,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -956,7 +150,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1111,7 +305,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1142,7 +336,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1173,7 +367,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -1204,7 +398,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1302,37 +496,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/painting-with-koko-texnh/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e300d0c44f8370c8",
-      "title": "ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ",
-      "description": "30 Οκτωβριου ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ Θεατρο ACT",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο ACT",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/louis-patsalidis-plin30-patra/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.431Z",
       "updatedAt": "2025-10-22T17:16:25.431Z",
@@ -1514,7 +677,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1545,7 +708,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1576,42 +739,11 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/painting-with-koko-texnh/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.890Z",
-      "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1bb25910c7e3fca0",
-      "title": "ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ",
-      "description": "30 Οκτωβριου ΛΟΥΗΣ ΠΑΤΣΑΛΙΔΗΣ | ΠΛΗΝ30 | ΠΑΤΡΑ Θεατρο ACT",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο ACT",
-        "address": "Θεατρο ACT",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/louis-patsalidis-plin30-patra/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.890Z",
       "updatedAt": "2025-10-26T21:21:00.890Z",
@@ -1638,7 +770,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1669,7 +801,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1700,7 +832,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1731,7 +863,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1762,7 +894,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2134,7 +1266,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2196,7 +1328,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2227,7 +1359,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2258,7 +1390,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -2289,7 +1421,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 40,
         "currency": "EUR",
         "range": null
       },
@@ -2320,7 +1452,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2351,7 +1483,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2382,7 +1514,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -2444,7 +1576,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -2475,7 +1607,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -2971,12 +2103,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/2-games-pack/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/2-games-pack/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -3002,12 +2134,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.903Z",
       "updatedAt": "2025-10-26T21:21:00.903Z",
       "language": "en"
@@ -3033,12 +2165,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.903Z",
       "updatedAt": "2025-10-26T21:21:00.903Z",
       "language": "en"
@@ -3064,7 +2196,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -3095,7 +2227,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -3126,7 +2258,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -3157,7 +2289,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3188,7 +2320,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3219,7 +2351,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3250,7 +2382,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 315,
         "currency": "EUR",
         "range": null
       },
@@ -3281,7 +2413,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
@@ -3312,7 +2444,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3343,7 +2475,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 2.45,
         "currency": "EUR",
         "range": null
       },
@@ -3374,7 +2506,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -3405,7 +2537,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -3746,7 +2878,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3777,7 +2909,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -3808,7 +2940,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -3839,7 +2971,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3870,7 +3002,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
@@ -3901,7 +3033,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3932,7 +3064,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -3963,7 +3095,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -3994,7 +3126,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -4025,7 +3157,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -4056,7 +3188,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4149,7 +3281,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4180,7 +3312,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -4304,7 +3436,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4335,7 +3467,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4366,7 +3498,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4521,12 +3653,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.918Z",
       "updatedAt": "2025-10-26T21:21:00.918Z",
       "language": "en"
@@ -4552,7 +3684,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4614,7 +3746,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -4831,7 +3963,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -4862,7 +3994,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4893,7 +4025,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4924,7 +4056,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -4955,7 +4087,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 24,
         "currency": "EUR",
         "range": null
       },
@@ -4986,7 +4118,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5110,7 +4242,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5141,7 +4273,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5172,7 +4304,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -5358,7 +4490,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5389,7 +4521,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5420,7 +4552,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -5451,7 +4583,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5482,7 +4614,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5823,12 +4955,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.933Z",
       "updatedAt": "2025-10-26T21:21:00.933Z",
       "language": "en"
@@ -5854,12 +4986,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/adrenaline-explosion-genesis/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/adrenaline-explosion-genesis/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.933Z",
       "updatedAt": "2025-10-26T21:21:00.933Z",
       "language": "en"
@@ -5947,7 +5079,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -5978,7 +5110,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -6071,7 +5203,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -6102,7 +5234,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -6288,7 +5420,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -6412,7 +5544,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7.5,
         "currency": "EUR",
         "range": null
       },
@@ -6443,7 +5575,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -6474,7 +5606,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -6660,7 +5792,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6691,7 +5823,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6722,7 +5854,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -6753,7 +5885,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -6784,7 +5916,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -6846,7 +5978,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -6908,7 +6040,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -7001,12 +6133,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.960Z",
       "updatedAt": "2025-10-26T21:21:00.960Z",
       "language": "en"
@@ -7032,7 +6164,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -7040,37 +6172,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.961Z",
       "updatedAt": "2025-10-26T21:21:00.961Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9a68b400b6907d57",
-      "title": "ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ",
-      "description": "23 Νοεμβριου ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ Κινηματοθεατρο Πανθεον",
-      "startDate": "2025-11-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κινηματοθεατρο Πανθεον",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/xrysa-katsarini-kai-ti-elega-patra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.566Z",
-      "updatedAt": "2025-10-22T17:16:25.566Z",
       "language": "en"
     },
     {
@@ -7169,37 +6270,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e04474dd42e9da9b",
-      "title": "ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ",
-      "description": "23 Νοεμβριου ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ Κινηματοθεατρο Πανθεον",
-      "startDate": "2025-11-23T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κινηματοθεατρο Πανθεον",
-        "address": "Κινηματοθεατρο Πανθεον",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/xrysa-katsarini-kai-ti-elega-patra/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.962Z",
-      "updatedAt": "2025-10-26T21:21:00.962Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "aef36236312b94e7",
       "title": "Crete Marketing Days",
       "description": "23 Νοεμβριου Crete Marketing Days Πολλαπλοι χωροι",
@@ -7218,7 +6288,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -7249,7 +6319,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -7280,7 +6350,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -7404,7 +6474,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -7435,7 +6505,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 125,
         "currency": "EUR",
         "range": null
       },
@@ -7466,7 +6536,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -7590,7 +6660,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -7652,7 +6722,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7807,7 +6877,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -7838,7 +6908,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -7869,7 +6939,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -7900,7 +6970,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -7993,7 +7063,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -8024,7 +7094,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -8086,7 +7156,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -8272,7 +7342,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -8582,7 +7652,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -8644,7 +7714,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -8768,7 +7838,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 90,
         "currency": "EUR",
         "range": null
       },
@@ -8838,68 +7908,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.992Z",
       "updatedAt": "2025-10-26T21:21:00.992Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3f1e88260726a5dd",
-      "title": "S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ",
-      "description": "27 - 28 Δεκεμβριου S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
-      "startDate": "2025-12-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/s-prokofiev-i-staxtopouta/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.627Z",
-      "updatedAt": "2025-10-22T17:16:25.627Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4ee80dfbb50724d6",
-      "title": "S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ",
-      "description": "27 - 28 Δεκεμβριου S. PROKOFIEV: Η ΣΤΑΧΤΟΠΟΥΤΑ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
-      "startDate": "2025-12-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
-        "address": "ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/s-prokofiev-i-staxtopouta/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.995Z",
-      "updatedAt": "2025-10-26T21:21:00.995Z",
       "language": "en"
     },
     {
@@ -8985,7 +7993,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -9016,7 +8024,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -9078,7 +8086,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 130,
         "currency": "EUR",
         "range": null
       },
@@ -9202,7 +8210,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -9264,7 +8272,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -9512,7 +8520,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 129,
         "currency": "EUR",
         "range": null
       },
@@ -9543,7 +8551,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 69,
         "currency": "EUR",
         "range": null
       },
@@ -9574,7 +8582,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 39,
         "currency": "EUR",
         "range": null
       },
@@ -9640,72 +8648,10 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/ao-amarynthiakos-kartamelous/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/ao-amarynthiakos-kartamelous/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.011Z",
       "updatedAt": "2025-10-26T21:21:01.011Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e2cbdbd890ffea33",
-      "title": "Κάρτα φιλάθλου ΑΘΛΗΤΙΚΗ ΕΝΩΣΗ ΛΑΡΙΣΑΣ - Α.Ε.Λ",
-      "description": "Αγωνιστικη περιοδος Κάρτα φιλάθλου ΑΘΛΗΤΙΚΗ ΕΝΩΣΗ ΛΑΡΙΣΑΣ - Α.Ε.Λ AEL FC ARENA",
-      "startDate": "2026-06-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AEL FC ARENA",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 5,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/karta-filathlou-ael/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.658Z",
-      "updatedAt": "2025-10-22T17:16:25.658Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "278bce1ad8fd64ca",
-      "title": "ΚΑΡΤΑ ΦΙΛΑΘΛΟΥ Α.Σ. ΑΡΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ 2025-2026",
-      "description": "Αγωνιστικη περιοδος ΚΑΡΤΑ ΦΙΛΑΘΛΟΥ Α.Σ. ΑΡΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ 2025-2026 ΑΣ ΑΡΗΣ",
-      "startDate": "2026-06-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "2025-2026 ΑΣ ΑΡΗΣ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/karta-filathlou-a-s-aris-thessalonikis-2025-2026/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.658Z",
-      "updatedAt": "2025-10-22T17:16:25.658Z",
       "language": "en"
     },
     {
@@ -9835,37 +8781,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "d048acec2f23eb28",
-      "title": "ΚΑΡΤΑ ΦΙΛΑΘΛΟΥ Α.Σ. ΑΡΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ 2025-2026",
-      "description": "Αγωνιστικη περιοδος ΚΑΡΤΑ ΦΙΛΑΘΛΟΥ Α.Σ. ΑΡΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ 2025-2026 ΑΣ ΑΡΗΣ",
-      "startDate": "2026-06-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΑΣ ΑΡΗΣ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/karta-filathlou-a-s-aris-thessalonikis-2025-2026/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.659Z",
-      "updatedAt": "2025-10-22T17:16:25.659Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2dea8a3e71cabb3f",
       "title": "ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26",
       "description": "ΕΙΣΙΤΗΡΙΟ ΔΙΑΡΚΕΙΑΣ ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26 Κλειστο Γηπεδο Αμαρουσιου, Αγιος Θωμας",
@@ -9928,37 +8843,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8b555fe2fffe59ee",
-      "title": "Κάρτα φιλάθλου ΑΘΛΗΤΙΚΗ ΕΝΩΣΗ ΛΑΡΙΣΑΣ - Α.Ε.Λ",
-      "description": "Αγωνιστικη περιοδος Κάρτα φιλάθλου ΑΘΛΗΤΙΚΗ ΕΝΩΣΗ ΛΑΡΙΣΑΣ - Α.Ε.Λ AEL FC ARENA",
-      "startDate": "2026-06-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AEL FC ARENA",
-        "address": "AEL FC ARENA",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/karta-filathlou-ael/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:01.012Z",
-      "updatedAt": "2025-10-26T21:21:01.012Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1cda39ed612a08a6",
       "title": "ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26",
       "description": "ΕΙΣΙΤΗΡΙΟ ΔΙΑΡΚΕΙΑΣ ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26 Κλειστο Γηπεδο Αμαρουσιου, Αγιος Θωμας",
@@ -9981,8 +8865,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kae-marousi-eisitiria-diarkeias-2025/26/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kae-marousi-eisitiria-diarkeias-2025/26/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10012,8 +8896,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-diarkeias-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-diarkeias-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10043,8 +8927,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/pas-giannina-eis-diarkeias-2025/26/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/pas-giannina-eis-diarkeias-2025/26/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10074,8 +8958,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/pae-aris-eisitiria-diarkeias-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/pae-aris-eisitiria-diarkeias-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10291,8 +9175,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/aek-bc-season-tickets-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/aek-bc-season-tickets-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10322,8 +9206,8 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/apollon-patron-eisitiria-diarkeias-2025-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/apollon-patron-eisitiria-diarkeias-2025-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:01.012Z",
       "updatedAt": "2025-10-26T21:21:01.012Z",
       "language": "en"
@@ -10392,8 +9276,8 @@
     }
   ],
   "meta": {
-    "total": 335,
-    "lastUpdate": "2025-10-26T21:34:23.323Z",
+    "total": 299,
+    "lastUpdate": "2025-10-28T11:18:36.324Z",
     "url": "https://agent-athens.netlify.app/paid-performance"
   }
 }

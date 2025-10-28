@@ -118,7 +118,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -180,7 +180,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -242,7 +242,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -335,7 +335,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -366,7 +366,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -379,7 +379,7 @@
   ],
   "meta": {
     "total": 12,
-    "lastUpdate": "2025-10-26T21:34:22.127Z",
+    "lastUpdate": "2025-10-28T11:18:35.414Z",
     "url": "https://agent-athens.netlify.app/workshop-this-weekend"
   }
 }

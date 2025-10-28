@@ -491,12 +491,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/2-games-pack/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/2-games-pack/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -522,12 +522,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.903Z",
       "updatedAt": "2025-10-26T21:21:00.903Z",
       "language": "en"
@@ -553,12 +553,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-panionios/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.903Z",
       "updatedAt": "2025-10-26T21:21:00.903Z",
       "language": "en"
@@ -584,7 +584,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -615,7 +615,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 35,
         "currency": "EUR",
         "range": null
       },
@@ -646,7 +646,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -677,7 +677,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -708,7 +708,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -739,7 +739,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -770,7 +770,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 315,
         "currency": "EUR",
         "range": null
       },
@@ -801,7 +801,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
@@ -832,7 +832,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -863,7 +863,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 2.45,
         "currency": "EUR",
         "range": null
       },
@@ -894,7 +894,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -925,7 +925,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -1266,7 +1266,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -1297,7 +1297,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
@@ -1328,7 +1328,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 14,
         "currency": "EUR",
         "range": null
       },
@@ -1359,7 +1359,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1390,7 +1390,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 22,
         "currency": "EUR",
         "range": null
       },
@@ -1421,7 +1421,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1452,7 +1452,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1483,7 +1483,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -1514,7 +1514,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -1545,7 +1545,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -1576,7 +1576,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -1669,7 +1669,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1700,7 +1700,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -1824,7 +1824,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1855,7 +1855,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1886,7 +1886,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2041,12 +2041,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kae-aris-betsson-eisitiria-agonon-bkt-eurocup-2025-26/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.918Z",
       "updatedAt": "2025-10-26T21:21:00.918Z",
       "language": "en"
@@ -2072,7 +2072,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2134,7 +2134,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -2351,7 +2351,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2382,7 +2382,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2413,7 +2413,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2444,7 +2444,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2475,7 +2475,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 24,
         "currency": "EUR",
         "range": null
       },
@@ -2506,7 +2506,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2630,7 +2630,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2661,7 +2661,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2692,7 +2692,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -2878,7 +2878,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2909,7 +2909,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2940,7 +2940,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -2971,7 +2971,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -3002,7 +3002,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -3343,12 +3343,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-promitheas-bikos-cola/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.933Z",
       "updatedAt": "2025-10-26T21:21:00.933Z",
       "language": "en"
@@ -3374,12 +3374,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/adrenaline-explosion-genesis/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/adrenaline-explosion-genesis/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.933Z",
       "updatedAt": "2025-10-26T21:21:00.933Z",
       "language": "en"
@@ -3467,7 +3467,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -3498,7 +3498,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -3591,7 +3591,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
@@ -3622,7 +3622,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -3808,7 +3808,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -3932,7 +3932,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7.5,
         "currency": "EUR",
         "range": null
       },
@@ -3963,7 +3963,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 18,
         "currency": "EUR",
         "range": null
       },
@@ -3994,7 +3994,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 100,
         "currency": "EUR",
         "range": null
       },
@@ -4180,7 +4180,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4211,7 +4211,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4242,7 +4242,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4273,7 +4273,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -4304,7 +4304,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
@@ -4366,7 +4366,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -4428,7 +4428,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4521,12 +4521,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-peristeri/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.960Z",
       "updatedAt": "2025-10-26T21:21:00.960Z",
       "language": "en"
@@ -4552,7 +4552,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 17,
         "currency": "EUR",
         "range": null
       },
@@ -4560,37 +4560,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.961Z",
       "updatedAt": "2025-10-26T21:21:00.961Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9a68b400b6907d57",
-      "title": "ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ",
-      "description": "23 Νοεμβριου ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ Κινηματοθεατρο Πανθεον",
-      "startDate": "2025-11-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κινηματοθεατρο Πανθεον",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/xrysa-katsarini-kai-ti-elega-patra/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.566Z",
-      "updatedAt": "2025-10-22T17:16:25.566Z",
       "language": "en"
     },
     {
@@ -4689,37 +4658,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e04474dd42e9da9b",
-      "title": "ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ",
-      "description": "23 Νοεμβριου ΧΡΥΣΑ ΚΑΤΣΑΡΙΝΗ - \"Και τι έλεγα;\" ΠΑΤΡΑ Κινηματοθεατρο Πανθεον",
-      "startDate": "2025-11-23T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κινηματοθεατρο Πανθεον",
-        "address": "Κινηματοθεατρο Πανθεον",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/xrysa-katsarini-kai-ti-elega-patra/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.962Z",
-      "updatedAt": "2025-10-26T21:21:00.962Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "aef36236312b94e7",
       "title": "Crete Marketing Days",
       "description": "23 Νοεμβριου Crete Marketing Days Πολλαπλοι χωροι",
@@ -4738,7 +4676,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -4769,7 +4707,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 60,
         "currency": "EUR",
         "range": null
       },
@@ -4800,7 +4738,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -4924,7 +4862,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -4955,7 +4893,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 125,
         "currency": "EUR",
         "range": null
       },
@@ -4986,7 +4924,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5110,7 +5048,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5172,7 +5110,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5327,7 +5265,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5358,7 +5296,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -5389,7 +5327,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 20,
         "currency": "EUR",
         "range": null
       },
@@ -5420,7 +5358,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5494,8 +5432,8 @@
     }
   ],
   "meta": {
-    "total": 177,
-    "lastUpdate": "2025-10-26T21:34:23.304Z",
+    "total": 175,
+    "lastUpdate": "2025-10-28T11:18:36.307Z",
     "url": "https://agent-athens.netlify.app/paid-performance-next-month"
   }
 }

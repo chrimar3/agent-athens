@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a54ab805aa1d0275",
-      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
-      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "a4f1d1cddd7b3b6a",
+      "title": "Εβδομάδα Halloween Messy Play στο Hehe!",
+      "description": "29 - 31 Οκτωβριου Εβδομάδα Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -18,7 +18,7 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
+        "name": "Messy Play, Art & Therapy • by Hehe",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -29,19 +29,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ebdomada-halloween-messy-play-sto-hehe/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.422Z",
-      "updatedAt": "2025-10-22T17:16:25.422Z",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3757df65d0de8a34",
-      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
-      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
-      "startDate": "2025-10-27T20:00:00+02:00",
+      "id": "d6f97b8ffa306287",
+      "title": "Εβδομάδα Halloween Messy Play στο Hehe!",
+      "description": "29 - 31 Οκτωβριου Εβδομάδα Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
+      "startDate": "2025-10-29T20:00:00+02:00",
       "endDate": null,
       "type": "exhibition",
       "genres": [
@@ -49,27 +49,27 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
-        "address": "Play ART Repeat Πολυχωρος",
+        "name": "Messy Play, Art & Therapy • by Hehe",
+        "address": "Messy Play, Art & Therapy • by Hehe",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/ebdomada-halloween-messy-play-sto-hehe/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.883Z",
-      "updatedAt": "2025-10-26T21:21:00.883Z",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
       "language": "en"
     }
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2025-10-26T21:34:21.769Z",
+    "lastUpdate": "2025-10-28T11:18:35.169Z",
     "url": "https://agent-athens.netlify.app/exhibition-tomorrow"
   }
 }

@@ -119,7 +119,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -132,7 +132,7 @@
   ],
   "meta": {
     "total": 4,
-    "lastUpdate": "2025-10-26T21:34:22.962Z",
+    "lastUpdate": "2025-10-28T11:18:36.082Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-this-weekend"
   }
 }

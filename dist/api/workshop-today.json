@@ -3,73 +3,10 @@
     "type": "workshop",
     "time": "today"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f993038ceffa5ef0",
-      "title": "ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside",
-      "description": "26 Οκτ - 2 Νοε ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside Πολλαπλοι χωροι",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/pilomperdemata-workshop-kids-outside/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.404Z",
-      "updatedAt": "2025-10-22T17:16:25.404Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "becc4b7df5daf1d5",
-      "title": "ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside",
-      "description": "26 Οκτ - 2 Νοε ΠΗΛΟΜΠΕΡΔΕΜΑΤΑ: Workshop Kids Outside Πολλαπλοι χωροι",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/pilomperdemata-workshop-kids-outside/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.875Z",
-      "updatedAt": "2025-10-26T21:21:00.875Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-26T21:34:22.125Z",
+    "total": 0,
+    "lastUpdate": "2025-10-28T11:18:35.412Z",
     "url": "https://agent-athens.netlify.app/workshop-today"
   }
 }

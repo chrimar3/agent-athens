@@ -88,7 +88,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -119,7 +119,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -181,7 +181,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -194,7 +194,7 @@
   ],
   "meta": {
     "total": 6,
-    "lastUpdate": "2025-10-26T21:34:22.971Z",
+    "lastUpdate": "2025-10-28T11:18:36.090Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-this-weekend"
   }
 }

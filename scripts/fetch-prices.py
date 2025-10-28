@@ -56,9 +56,12 @@ class PriceFetcher:
 
     async def fetch_price(self, url: str) -> Optional[Dict[str, Any]]:
         """Fetch price from event page"""
+        page = None
         try:
             page = await self.context.new_page()
-            await page.goto(url, wait_until='domcontentloaded')
+
+            # Increased timeout and better error handling
+            await page.goto(url, wait_until='domcontentloaded', timeout=20000)
 
             # Get page content
             html = await page.content()
@@ -69,7 +72,6 @@ class PriceFetcher:
             if json_match:
                 price_text = json_match.group(1).strip()
                 price = self.parse_price(price_text)
-                await page.close()
                 return price
 
             # Pattern 2: Look for price in HTML
@@ -79,15 +81,19 @@ class PriceFetcher:
                 from collections import Counter
                 most_common = Counter(price_matches).most_common(1)[0][0]
                 price = self.parse_price(most_common)
-                await page.close()
                 return price
 
-            await page.close()
             return None
 
         except Exception as e:
-            logger.error(f"   Error fetching {url}: {e}")
+            logger.error(f"   Error fetching {url}: {str(e)[:100]}")
             return None
+        finally:
+            if page:
+                try:
+                    await page.close()
+                except:
+                    pass
 
     def parse_price(self, price_text: str) -> Dict[str, Any]:
         """Parse price text into structured data"""
@@ -192,8 +198,8 @@ class PriceFetcher:
                 logger.info(f"   ❌ No price found")
                 failed += 1
 
-            # Polite delay
-            await asyncio.sleep(1)
+            # Reduced delay for faster processing
+            await asyncio.sleep(0.3)
 
         # Close browser
         await self.close_browser()

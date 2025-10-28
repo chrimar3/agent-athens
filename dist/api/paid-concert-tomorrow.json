@@ -8,10 +8,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "52691058713782a0",
-      "title": "Χρηστος Δαντης@Circus.Larissa",
-      "description": "27 Οκτωβριου Χρηστος Δαντης@Circus.Larissa Circus Entertainment Hub",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "b2042c9462bd6a36",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -19,30 +19,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Circus Entertainment Hub",
+        "name": "Νοτου - Club",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 15,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/xristos-dantiscircus-larissa/",
+      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.406Z",
-      "updatedAt": "2025-10-22T17:16:25.406Z",
+      "createdAt": "2025-10-22T17:16:25.424Z",
+      "updatedAt": "2025-10-22T17:16:25.424Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8d14c384bee88320",
-      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
-      "description": "27 Οκτωβριου KOSTAS PATSIOTIS QUARTET “Childhood Heroes” Half Note Jazz Club",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "d216459f41a0ac41",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -61,19 +61,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.407Z",
-      "updatedAt": "2025-10-22T17:16:25.407Z",
+      "createdAt": "2025-10-22T17:16:25.424Z",
+      "updatedAt": "2025-10-22T17:16:25.424Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f7c015041a8bfb89",
-      "title": "Three Times Three #1",
-      "description": "27 Οκτωβριου Three Times Three #1 Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "683ebc1e0b18a2fb",
+      "title": "All Them Witches - House of Mirrors",
+      "description": "29 Οκτωβριου All Them Witches - House of Mirrors Universe - Multispace",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -81,7 +81,38 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "name": "Universe - Multispace",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 40,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.424Z",
+      "updatedAt": "2025-10-22T17:16:25.424Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "eb57b6de1bf22e21",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσικων Οργανων «Θυραθεν»",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -92,19 +123,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/three-times-three-125/",
+      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.407Z",
-      "updatedAt": "2025-10-22T17:16:25.407Z",
+      "createdAt": "2025-10-22T17:16:25.424Z",
+      "updatedAt": "2025-10-22T17:16:25.424Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6e9e3d92a673fb50",
-      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
-      "description": "27 Οκτωβριου H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ Royal Hall",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "2301ca6f550fec2f",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -112,92 +143,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "ΜΑΛΙΑ Royal Hall",
+        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 200,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.407Z",
-      "updatedAt": "2025-10-22T17:16:25.407Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2d07983c8715b8a6",
-      "title": "HOTEL AMOUR",
-      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.407Z",
-      "updatedAt": "2025-10-22T17:16:25.407Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5a726b9f3bb698ab",
-      "title": "HOTEL AMOUR",
-      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
+      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.415Z",
-      "updatedAt": "2025-10-22T17:16:25.415Z",
+      "createdAt": "2025-10-22T17:16:25.427Z",
+      "updatedAt": "2025-10-22T17:16:25.427Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "051b1d8760767a28",
-      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
-      "description": "27 Οκτωβριου KOSTAS PATSIOTIS QUARTET “Childhood Heroes” Half Note Jazz Club",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "6a83bdf84276b4f8",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -216,19 +185,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
+      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.421Z",
-      "updatedAt": "2025-10-22T17:16:25.421Z",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3ebf2cc59bd3bba0",
-      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
-      "description": "27 Οκτωβριου H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ Royal Hall",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
+      "id": "c82f9a3f0cd36dc2",
+      "title": "Music Tales",
+      "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -236,30 +205,123 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Royal Hall",
+        "name": "λιλιτζουμ",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 200,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/music-tales/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.423Z",
-      "updatedAt": "2025-10-22T17:16:25.423Z",
+      "createdAt": "2025-10-22T17:16:25.428Z",
+      "updatedAt": "2025-10-22T17:16:25.428Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "52f6afb827d613c3",
-      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
-      "description": "27 Οκτωβριου KOSTAS PATSIOTIS QUARTET “Childhood Heroes” Half Note Jazz Club",
-      "startDate": "2025-10-27T20:00:00+02:00",
+      "id": "1e64d9fe1d381a3a",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "source": "more.com",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e1bb230e6c774242",
+      "title": "All Them Witches - House of Mirrors",
+      "description": "Οι εκρηκτικοί All Them Witches επιστρέφουν στην Αθήνα για μία και μοναδική εμφάνιση στις 29 Οκτωβρίου στο Universe Club!",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "rock"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe - Multispace",
+        "address": "Universe - Multispace",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 40,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.044Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b7d043ceaf1d5757",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Νοτου - Club",
+        "address": "Νοτου - Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.884Z",
+      "updatedAt": "2025-10-26T21:21:00.884Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9d96b3c1ad828230",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
+      "startDate": "2025-10-29T20:00:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -274,150 +336,150 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:00.876Z",
-      "updatedAt": "2025-10-26T21:21:00.876Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2b4ce2ced60e9cb1",
-      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
-      "description": "27 Οκτωβριου H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ Royal Hall",
-      "startDate": "2025-10-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΜΑΛΙΑ Royal Hall",
-        "address": "ΜΑΛΙΑ Royal Hall",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:00.876Z",
-      "updatedAt": "2025-10-26T21:21:00.876Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f68d401068b53298",
-      "title": "HOTEL AMOUR",
-      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "startDate": "2025-10-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "address": "AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/hotel-amour/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:00.876Z",
-      "updatedAt": "2025-10-26T21:21:00.876Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0aed6267e799d3ae",
-      "title": "HOTEL AMOUR",
-      "description": "27 Οκτ - 25 Νοε HOTEL AMOUR ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "startDate": "2025-10-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "address": "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/hotel-amour/",
+      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.881Z",
-      "updatedAt": "2025-10-26T21:21:00.881Z",
+      "createdAt": "2025-10-26T21:21:00.885Z",
+      "updatedAt": "2025-10-26T21:21:00.885Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "ec6f68892f626a52",
-      "title": "Three Times Three #1",
-      "description": "Το μηνιαίο ραντεβού “Three Times Three” φέρνει σε επαφή καλλιτέχνιδες και καλλιτέχνες από τον χώρο του σύγχρονου χορού και της πειραματικής μουσικής.",
-      "startDate": "2025-10-27T21:00:00+02:00",
+      "id": "4eac8f00dd524735",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μουσικων Οργανων «Θυραθεν»",
+        "address": "Μουσικων Οργανων «Θυραθεν»",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.885Z",
+      "updatedAt": "2025-10-26T21:21:00.885Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "16f655344badb1a6",
+      "title": "Music Tales",
+      "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
+      "startDate": "2025-10-29T20:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "λιλιτζουμ",
+        "address": "λιλιτζουμ",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/children/workshop/music-tales/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:21:00.888Z",
+      "updatedAt": "2025-10-26T21:21:00.888Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d3037608b91880ec",
+      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
+      "description": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ LIVE Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧΣταυρός του Νότου club ΤΕΤΑΡΤΗ 29 ΟΚΤΩΒΡΙΟΥ",
+      "startDate": "2025-10-29T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.025Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7ba323791779d595",
+      "title": "Τοπία από ήχους και άλλες ιστορίες",
+      "description": "μουσειο θυραθεν",
+      "startDate": "2025-10-29T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "address": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.976Z",
+      "updatedAt": "2025-10-26T21:21:01.051Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "49f81cb4c9ac37dd",
+      "title": "Tilemachos Moussas Farm - Half Note",
+      "description": "Tilemachos Moussas Farm – Live @ Half Note Jazz Club",
+      "startDate": "2025-10-29T21:30:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
         "other"
       ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "Κεντρο ελεγχου τηλεορασεων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/three-times-three-125/",
-      "source": "Viva.gr",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.048Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "11c7d0784ae5d278",
-      "title": "KOSTAS PATSIOTIS QUARTET “Childhood Heroes”",
-      "description": "KOSTAS PATSIOTIS QUARTET“Childhood Heroes” Παρουσίαση Νέου ΆλμπουμΔΕΥΤΕΡΑ 27 ΟΚΤΩΒΡΙΟΥHalf Note Jazz Club21:30",
-      "startDate": "2025-10-27T21:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
       "tags": [],
       "venue": {
         "name": "Half Note Jazz Club",
@@ -427,49 +489,20 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/music/kostas-patsiotis-quartet-childhood-heroes/",
-      "source": "Viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.033Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0f4028c761ccec24",
-      "title": "H ΠΑΟΛΑ ΣΤΟ ROYAL HALL ΣΤΑ ΜΑΛΙΑ",
-      "description": "?? Η Πάολα Live στο ROYAL HALL στα Μάλια Ηρακλείου ! ?? Δευτέρα 27 Οκτωβρίου 2025 ?? Κλείσε τραπέζι από 200€: ?? Κράτηση μόνο με ένα τηλεφώνημα στα: 6974813537 ή 6972202940??? ROYAL HALL, Μάλια Ηρακλε",
-      "startDate": "2025-10-27T23:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Royal Hall",
-        "address": "Royal Hall",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/h-paola-sto-royal-hall-sta-malia/",
-      "source": "Viva.gr",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.049Z",
+      "updatedAt": "2025-10-26T21:21:01.040Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 15,
-    "lastUpdate": "2025-10-26T21:34:22.804Z",
+    "total": 16,
+    "lastUpdate": "2025-10-28T11:18:35.938Z",
     "url": "https://agent-athens.netlify.app/paid-concert-tomorrow"
   }
 }

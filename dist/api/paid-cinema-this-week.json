@@ -88,7 +88,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -119,7 +119,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 28,
         "currency": "EUR",
         "range": null
       },
@@ -128,11 +128,73 @@
       "createdAt": "2025-10-26T21:21:00.898Z",
       "updatedAt": "2025-10-26T21:21:00.898Z",
       "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19e63bf289f6f011",
+      "title": "THE EX",
+      "description": "",
+      "startDate": "2025-11-02T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-22T17:16:25.471Z",
+      "updatedAt": "2025-10-22T17:16:25.471Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "aa81aa54112b4b11",
+      "title": "THE EX",
+      "description": "",
+      "startDate": "2025-11-02T20:00:00+02:00",
+      "endDate": null,
+      "type": "cinema",
+      "genres": [
+        "cinema"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazarte",
+        "address": "Gazarte",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/venues/gazarte/",
+      "source": "gazarte.gr",
+      "createdAt": "2025-10-26T21:21:00.912Z",
+      "updatedAt": "2025-10-26T21:21:00.912Z",
+      "language": "en"
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2025-10-26T21:34:22.971Z",
+    "total": 6,
+    "lastUpdate": "2025-10-28T11:18:36.089Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-this-week"
   }
 }

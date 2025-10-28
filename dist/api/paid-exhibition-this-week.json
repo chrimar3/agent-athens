@@ -8,130 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f412452f8564306a",
-      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
-      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τουριστικο Περιπτερο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 0,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0d7847da065fe4ac",
-      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
-      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τουριστικο Περιπτερο",
-        "address": "Τουριστικο Περιπτερο",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.871Z",
-      "updatedAt": "2025-10-26T21:21:00.871Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a54ab805aa1d0275",
-      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
-      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
-      "startDate": "2025-10-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.422Z",
-      "updatedAt": "2025-10-22T17:16:25.422Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3757df65d0de8a34",
-      "title": "ONE WEEK TRICK OR TREAT ACTIVITIES",
-      "description": "27 - 31 Οκτωβριου ONE WEEK TRICK OR TREAT ACTIVITIES Play ART Repeat Πολυχωρος",
-      "startDate": "2025-10-27T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
-        "address": "Play ART Repeat Πολυχωρος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/one-week-trick-or-treat-activities/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.883Z",
-      "updatedAt": "2025-10-26T21:21:00.883Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "a4f1d1cddd7b3b6a",
       "title": "Εβδομάδα Halloween Messy Play στο Hehe!",
       "description": "29 - 31 Οκτωβριου Εβδομάδα Halloween Messy Play στο Hehe! Messy Play, Art & Therapy • by Hehe",
@@ -181,7 +57,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -305,7 +181,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -317,8 +193,8 @@
     }
   ],
   "meta": {
-    "total": 10,
-    "lastUpdate": "2025-10-26T21:34:22.962Z",
+    "total": 6,
+    "lastUpdate": "2025-10-28T11:18:36.081Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-this-week"
   }
 }

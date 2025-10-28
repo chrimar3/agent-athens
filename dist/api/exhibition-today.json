@@ -3,73 +3,10 @@
     "type": "exhibition",
     "time": "today"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f412452f8564306a",
-      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
-      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
-      "startDate": "2025-10-26T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τουριστικο Περιπτερο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 0,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.403Z",
-      "updatedAt": "2025-10-22T17:16:25.403Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0d7847da065fe4ac",
-      "title": "Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world”",
-      "description": "26 Οκτωβριου Malvasia Festival Monemvasia | Έκθεση οίνων Μαλβαζία & Masterclass “Malvasia of the world” Τουριστικο Περιπτερο",
-      "startDate": "2025-10-26T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τουριστικο Περιπτερο",
-        "address": "Τουριστικο Περιπτερο",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/malvasia-festival-monemvasia-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.871Z",
-      "updatedAt": "2025-10-26T21:21:00.871Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-26T21:34:21.769Z",
+    "total": 0,
+    "lastUpdate": "2025-10-28T11:18:35.169Z",
     "url": "https://agent-athens.netlify.app/exhibition-today"
   }
 }

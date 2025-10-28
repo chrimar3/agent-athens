@@ -677,12 +677,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 4,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/happenings/children/festival/folia-halloween-festival/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/folia-halloween-festival/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -708,12 +708,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-tabli-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-tabli-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -739,12 +739,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-kibotio-tou-ari-aleksandrou-gia-10i-xronia/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-kibotio-tou-ari-aleksandrou-gia-10i-xronia/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -770,12 +770,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/as-perimenoun-oi-gynaikes/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/as-perimenoun-oi-gynaikes/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -801,12 +801,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/eksi-mathimata-xorou-se-eksi-ebdomades/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/eksi-mathimata-xorou-se-eksi-ebdomades/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -832,12 +832,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/pyrkagies/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/pyrkagies/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.892Z",
       "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
@@ -863,12 +863,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/pos-na-prospoieiste-oti-tha-erthoun-kalyteres-m/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/pos-na-prospoieiste-oti-tha-erthoun-kalyteres-m/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.894Z",
       "updatedAt": "2025-10-26T21:21:00.894Z",
       "language": "en"
@@ -894,12 +894,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/sillilab-no-difference-between-ho-ho-ho-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/sillilab-no-difference-between-ho-ho-ho-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -925,12 +925,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/art-triplethreat/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -956,12 +956,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ektrofeio-teraton-pagkosmia-proti/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/ektrofeio-teraton-pagkosmia-proti/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -987,12 +987,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/standupcomedy/festival/athens-halloween-festival31102025/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/standupcomedy/festival/athens-halloween-festival31102025/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -1018,12 +1018,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/jeremy-ntekantans/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/jeremy-ntekantans/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -1049,12 +1049,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ypo-enan-oro-ii-i-epistrofi/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/ypo-enan-oro-ii-i-epistrofi/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -1080,12 +1080,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-salamina/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-salamina/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
       "language": "en"
@@ -1111,7 +1111,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 4,
         "currency": "EUR",
         "range": null
       },
@@ -1142,7 +1142,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1173,7 +1173,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -1204,7 +1204,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -1235,7 +1235,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
@@ -1266,7 +1266,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -1297,7 +1297,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -1328,7 +1328,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -2196,12 +2196,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.899Z",
       "updatedAt": "2025-10-26T21:21:00.899Z",
       "language": "en"
@@ -2227,12 +2227,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/don-zouan-2os-xronos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/don-zouan-2os-xronos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.899Z",
       "updatedAt": "2025-10-26T21:21:00.899Z",
       "language": "en"
@@ -2258,12 +2258,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-peripeteies-ti-peppa/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peripeteies-ti-peppa/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.901Z",
       "updatedAt": "2025-10-26T21:21:00.901Z",
       "language": "en"
@@ -2289,12 +2289,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2320,12 +2320,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 3,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2351,12 +2351,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/sokratous-xarites/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/sokratous-xarites/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2382,12 +2382,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2413,12 +2413,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/kratas-mystiko/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/kratas-mystiko/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2444,12 +2444,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-katsarida-k/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-katsarida-k/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2475,12 +2475,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 6,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ruby-moon/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/ruby-moon/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2506,12 +2506,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/minion/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/minion/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2537,12 +2537,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/prin-erthei-o-germanos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/prin-erthei-o-germanos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2568,12 +2568,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/i-am-leaving-by-zo-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-am-leaving-by-zo-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2599,12 +2599,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-nikaia/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-nikaia/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2630,12 +2630,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/to-portreto-pinelopi-delta/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/to-portreto-pinelopi-delta/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2661,12 +2661,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/palaiaaaa-diathiki/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/palaiaaaa-diathiki/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
@@ -2692,7 +2692,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2723,7 +2723,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -2754,7 +2754,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2785,7 +2785,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2816,7 +2816,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -2847,7 +2847,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -2878,7 +2878,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2909,7 +2909,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -2940,7 +2940,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -2971,7 +2971,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3002,7 +3002,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -3033,7 +3033,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -3666,68 +3666,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "305e9e714bb25f1b",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.466Z",
-      "updatedAt": "2025-10-22T17:16:25.466Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0a323693b3c70330",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ Πνευματικο Κεντρο Δημου Τρικκαιων",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Δημου Τρικκαιων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.466Z",
-      "updatedAt": "2025-10-22T17:16:25.466Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "6a02c06fae157121",
       "title": "Τα 3 Γουρουνάκια και ο γκαφατζής Λύκος",
       "description": "2 - 9 Νοεμβριου Τα 3 Γουρουνάκια και ο γκαφατζής Λύκος Τεχνοκοσμος Θεατρικη Σκηνη",
@@ -3937,37 +3875,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.468Z",
-      "updatedAt": "2025-10-22T17:16:25.468Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0a4c2a61222fb461",
-      "title": "Μία Κάμπια Πολύ Πεινασμένη",
-      "description": "2 - 23 Νοεμβριου Μία Κάμπια Πολύ Πεινασμένη ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.468Z",
       "updatedAt": "2025-10-22T17:16:25.468Z",
@@ -4255,68 +4162,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "fe845401a99015f0",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ξενοδοχειο Σαμαρας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.470Z",
-      "updatedAt": "2025-10-22T17:16:25.470Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3640184544802839",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ Πνευματικο Κεντρο Δημου Τρικκαιων",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πνευματικο Κεντρο Δημου Τρικκαιων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.471Z",
-      "updatedAt": "2025-10-22T17:16:25.471Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0cf777b3108ed590",
       "title": "\"ΠΟΚΑΧΟΝΤΑΣ\" - Παιδική Θεατρική Παράσταση",
       "description": "2 - 30 Νοεμβριου \"ΠΟΚΑΧΟΝΤΑΣ\" - Παιδική Θεατρική Παράσταση Θεατρο Λυχνος Τεχνης & Πολιτισμου",
@@ -4397,12 +4242,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/dyo-kserokefales-koutales/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/dyo-kserokefales-koutales/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4428,12 +4273,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/sbise-to-fos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/sbise-to-fos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4459,12 +4304,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/xakouna-matata/paidiki-parastasi/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/xakouna-matata/paidiki-parastasi/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4490,12 +4335,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/ftou-kai-tr-aino-2os-xronos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/ftou-kai-tr-aino-2os-xronos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4521,12 +4366,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xana-zoo/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4552,12 +4397,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
@@ -4583,12 +4428,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/improv-sundays-2025-206/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/improv-sundays-2025-206/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.908Z",
       "updatedAt": "2025-10-26T21:21:00.908Z",
       "language": "en"
@@ -4614,12 +4459,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/merilin-dimotiko-theatro-peiraia/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/merilin-dimotiko-theatro-peiraia/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4645,12 +4490,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/i-odysseia-tou-omirou-apo-ton-mikro-borra/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/i-odysseia-tou-omirou-apo-ton-mikro-borra/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4676,12 +4521,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/polykseni-2025-2026/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/polykseni-2025-2026/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4707,12 +4552,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/to-kynigi-tou-alithinou-thisaurou/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/to-kynigi-tou-alithinou-thisaurou/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4738,12 +4583,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/i-istoria-tou-gatou-pou-emathe-s-ena-glaro-na-petaei-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/i-istoria-tou-gatou-pou-emathe-s-ena-glaro-na-petaei-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4769,12 +4614,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/afino-anoixta/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/afino-anoixta/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4800,12 +4645,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 13,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xeimoniatiko-paramythi-1/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xeimoniatiko-paramythi-1/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
       "language": "en"
@@ -4831,12 +4676,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-pyrobatis-ton-asterion/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/o-pyrobatis-ton-asterion/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -4862,12 +4707,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 5,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/prigkipissa-karampou/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/prigkipissa-karampou/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -4893,12 +4738,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/oi-somatofylakes-tis-katsarolas/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-somatofylakes-tis-katsarolas/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -4924,12 +4769,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/o-mauros-monaxos-tou-anton-tsexof/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-mauros-monaxos-tou-anton-tsexof/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -4955,12 +4800,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/otan-i-fonissa-synantise-ti-mideia-3/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/otan-i-fonissa-synantise-ti-mideia-3/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -4986,74 +4831,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/xainti-i-mikroula-ton-bounon-2os-xronos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:00.910Z",
-      "updatedAt": "2025-10-26T21:21:00.910Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "79814952829413be",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-        "address": "ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-26T21:21:00.910Z",
-      "updatedAt": "2025-10-26T21:21:00.910Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "54eb68425fc6e30b",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ Πνευματικο Κεντρο Δημου Τρικκαιων",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Δημου Τρικκαιων",
-        "address": "Κεντρο Δημου Τρικκαιων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/xainti-i-mikroula-ton-bounon-2os-xronos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -5079,12 +4862,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/ta-3-gourounakia-kai-o-gkafatzis-lykos/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-3-gourounakia-kai-o-gkafatzis-lykos/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -5110,12 +4893,12 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.viva.gr/gr-el/tickets/theater/children/offer/pocahontas-paidiki-theatriki-parastasi/",
-      "source": "viva.gr",
+      "url": "https://www.more.com/gr-el/tickets/theater/children/offer/pocahontas-paidiki-theatriki-parastasi/",
+      "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.910Z",
       "updatedAt": "2025-10-26T21:21:00.910Z",
       "language": "en"
@@ -5141,7 +4924,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5172,7 +4955,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5203,7 +4986,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5234,7 +5017,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -5265,42 +5048,11 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.911Z",
-      "updatedAt": "2025-10-26T21:21:00.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d0e8cd5d1a1863f4",
-      "title": "Μία Κάμπια Πολύ Πεινασμένη",
-      "description": "2 - 23 Νοεμβριου Μία Κάμπια Πολύ Πεινασμένη ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-        "address": "ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/mia-kampia-poly-peinasmeni/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.911Z",
       "updatedAt": "2025-10-26T21:21:00.911Z",
@@ -5327,7 +5079,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5358,7 +5110,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5389,7 +5141,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5420,7 +5172,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 9,
         "currency": "EUR",
         "range": null
       },
@@ -5451,7 +5203,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 12,
         "currency": "EUR",
         "range": null
       },
@@ -5482,7 +5234,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 10,
         "currency": "EUR",
         "range": null
       },
@@ -5513,7 +5265,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5544,7 +5296,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5575,73 +5327,11 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 50,
         "currency": "EUR",
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/workshop/ergastirio-systimikis-anaparastasis/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.912Z",
-      "updatedAt": "2025-10-26T21:21:00.912Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6658825aafd01495",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΛΑΜΙΑ Ξενοδοχειο Σαμαρας",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ξενοδοχειο Σαμαρας",
-        "address": "Ξενοδοχειο Σαμαρας",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-lamia/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.912Z",
-      "updatedAt": "2025-10-26T21:21:00.912Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "64f9c90f07a03f2c",
-      "title": "Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ",
-      "description": "2 Νοεμβριου Ο Καραγκιόζης και η συμμορία του κάστρου - ΤΡΙΚΑΛΑ Πνευματικο Κεντρο Δημου Τρικκαιων",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πνευματικο Κεντρο Δημου Τρικκαιων",
-        "address": "Πνευματικο Κεντρο Δημου Τρικκαιων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-i-symmoria-tou-kastrou-trikala/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.912Z",
       "updatedAt": "2025-10-26T21:21:00.912Z",
@@ -5668,7 +5358,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
@@ -5699,7 +5389,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 7,
         "currency": "EUR",
         "range": null
       },
@@ -5711,8 +5401,8 @@
     }
   ],
   "meta": {
-    "total": 184,
-    "lastUpdate": "2025-10-26T21:34:23.122Z",
+    "total": 174,
+    "lastUpdate": "2025-10-28T11:18:36.176Z",
     "url": "https://agent-athens.netlify.app/paid-theater-this-weekend"
   }
 }

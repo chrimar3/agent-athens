@@ -57,7 +57,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -150,7 +150,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -181,7 +181,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 15,
         "currency": "EUR",
         "range": null
       },
@@ -367,7 +367,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
@@ -429,7 +429,7 @@
       },
       "price": {
         "type": "paid",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
         "range": null
       },
@@ -442,7 +442,7 @@
   ],
   "meta": {
     "total": 14,
-    "lastUpdate": "2025-10-26T21:34:23.330Z",
+    "lastUpdate": "2025-10-28T11:18:36.333Z",
     "url": "https://agent-athens.netlify.app/paid-workshop-next-month"
   }
 }
