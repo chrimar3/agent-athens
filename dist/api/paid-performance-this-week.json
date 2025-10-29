@@ -1558,37 +1558,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "22be0ec5852fa114",
-      "title": "The Space Is Us από τους Rest in Beat",
-      "description": "3 Νοεμβριου The Space Is Us από τους Rest in Beat Θεατρο Αμαλια",
-      "startDate": "2025-11-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/the-space-is-us-apo-tous-rest-in-beat/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.475Z",
-      "updatedAt": "2025-10-22T17:16:25.475Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "da9677164391039b",
       "title": "ΤΟΣΟ ΟΣΟ ΜΕ ΤΟΥΣ ΗΛΙΑ ΦΟΥΝΤΟΥΛΗ ΚΑΙ ΑΓΓΕΛΟ ΣΠΗΛΙΟΠΟΥΛΟ",
       "description": "3 Νοε - 29 Δεκ ΤΟΣΟ ΟΣΟ ΜΕ ΤΟΥΣ ΗΛΙΑ ΦΟΥΝΤΟΥΛΗ ΚΑΙ ΑΓΓΕΛΟ ΣΠΗΛΙΟΠΟΥΛΟ TGI Fridays™ Καπνικαρεας",
@@ -1651,37 +1620,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3ce0c579b0c0ef92",
-      "title": "ΟΝ των Καλαδάμη και Ξεναρίου",
-      "description": "4 - 11 Νοεμβριου ΟΝ των Καλαδάμη και Ξεναρίου Θεατρο Αμαλια",
-      "startDate": "2025-11-04T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/dance/on-tis-ilianas-kaladami/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.917Z",
-      "updatedAt": "2025-10-26T21:21:00.917Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "ba808b0193343be6",
       "title": "ΛΑΣΠΟΚΤΗΜΑ",
       "description": "4 - 25 Νοεμβριου ΛΑΣΠΟΚΤΗΜΑ Κτημα Αριστη",
@@ -1712,8 +1650,8 @@
     }
   ],
   "meta": {
-    "total": 55,
-    "lastUpdate": "2025-10-29T10:47:23.006Z",
+    "total": 53,
+    "lastUpdate": "2025-10-29T10:59:23.472Z",
     "url": "https://agent-athens.netlify.app/paid-performance-this-week"
   }
 }

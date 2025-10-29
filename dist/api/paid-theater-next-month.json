@@ -2798,37 +2798,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7522e061a0dd4cf5",
-      "title": "Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία",
-      "description": "9 Νοε - 15 Μαρ Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία Θεατρο Αμαλια",
-      "startDate": "2025-11-09T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/redicolo-amalia/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.934Z",
-      "updatedAt": "2025-10-26T21:21:00.934Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "72bd2caf229909b2",
       "title": "Barcelona",
       "description": "10 Νοε - 30 Δεκ Barcelona ΠΤΙ ΠΑΛΑΙ",
@@ -4131,37 +4100,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3a92903c04921904",
-      "title": "Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο",
-      "description": "20 Νοε - 21 Δεκ Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο Θεατρο Αμαλια",
-      "startDate": "2025-11-20T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/symbainoun-auta-kamia-fora/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.955Z",
-      "updatedAt": "2025-10-26T21:21:00.955Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "5d0203a42c778a92",
       "title": "ΤΟ ΓΑΛΑ 3ος χρόνος",
       "description": "21 Νοε - 28 Δεκ ΤΟ ΓΑΛΑ 3ος χρόνος Θεατρο Σταθμος 2023 - Stathmos Theater",
@@ -5122,8 +5060,8 @@
     }
   ],
   "meta": {
-    "total": 165,
-    "lastUpdate": "2025-10-29T10:47:22.977Z",
+    "total": 163,
+    "lastUpdate": "2025-10-29T10:59:23.444Z",
     "url": "https://agent-athens.netlify.app/paid-theater-next-month"
   }
 }

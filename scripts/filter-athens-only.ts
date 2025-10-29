@@ -29,6 +29,14 @@ const NON_ATHENS_PATTERNS = [
   // Add more as needed
 ];
 
+// Define specific venue names that are ONLY in non-Athens cities
+// (venues with same name exist in multiple cities)
+const NON_ATHENS_VENUES = [
+  'Θεατρο Αμαλια',           // Thessaloniki (different from Athens venues)
+  'Θεατρο Τεχνων Θεσσαλονικης',  // Thessaloniki
+  // Add more specific venue names as discovered
+];
+
 // Count before filtering
 const beforeCount = db.prepare('SELECT COUNT(*) as count FROM events WHERE start_date >= date("now")').get() as { count: number };
 console.log(`📊 Events before filtering: ${beforeCount.count}`);
@@ -44,6 +52,19 @@ for (const pattern of NON_ATHENS_PATTERNS) {
       AND venue_name LIKE ?
     GROUP BY venue_name
   `).all(pattern) as Array<{ venue_name: string; count: number }>;
+
+  nonAthensEvents.push(...found);
+}
+
+// Also check for specific venue names (exact match)
+for (const venueName of NON_ATHENS_VENUES) {
+  const found = db.prepare(`
+    SELECT venue_name, COUNT(*) as count
+    FROM events
+    WHERE start_date >= date('now')
+      AND venue_name = ?
+    GROUP BY venue_name
+  `).all(venueName) as Array<{ venue_name: string; count: number }>;
 
   nonAthensEvents.push(...found);
 }
@@ -65,14 +86,25 @@ nonAthensEvents.forEach((venue, index) => {
 console.log(`\n📊 Total non-Athens events to remove: ${totalToRemove}\n`);
 
 // Remove non-Athens events
-const deleteStmt = db.prepare(`
+const deletePatternStmt = db.prepare(`
   DELETE FROM events
   WHERE venue_name LIKE ?
 `);
 
+const deleteExactStmt = db.prepare(`
+  DELETE FROM events
+  WHERE venue_name = ?
+`);
+
 const transaction = db.transaction(() => {
+  // Delete by pattern
   for (const pattern of NON_ATHENS_PATTERNS) {
-    deleteStmt.run(pattern);
+    deletePatternStmt.run(pattern);
+  }
+
+  // Delete by exact venue name
+  for (const venueName of NON_ATHENS_VENUES) {
+    deleteExactStmt.run(venueName);
   }
 });
 

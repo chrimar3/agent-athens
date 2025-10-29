@@ -1236,37 +1236,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "11aa355725c9b620",
-      "title": "Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\"",
-      "description": "6 - 16 Νοεμβριου Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\" Θεατρο Αμαλια",
-      "startDate": "2025-11-06T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "\"Κατά-φωνή\" Θεατρο Αμαλια",
-        "address": "\"Κατά-φωνή\" Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/giaksempore-sxima-kata-foni-deuteros-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.919Z",
-      "updatedAt": "2025-10-26T21:21:00.919Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0326ada1b23cd7bf",
       "title": "Harris Lambrakis Quartet",
       "description": "6 Νοεμβριου Harris Lambrakis Quartet Theatre of the NO",
@@ -6137,8 +6106,8 @@
     }
   ],
   "meta": {
-    "total": 200,
-    "lastUpdate": "2025-10-29T10:47:22.917Z",
+    "total": 199,
+    "lastUpdate": "2025-10-29T10:59:23.382Z",
     "url": "https://agent-athens.netlify.app/paid-concert-next-month"
   }
 }

@@ -3479,37 +3479,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7522e061a0dd4cf5",
-      "title": "Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία",
-      "description": "9 Νοε - 15 Μαρ Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία Θεατρο Αμαλια",
-      "startDate": "2025-11-09T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/redicolo-amalia/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.934Z",
-      "updatedAt": "2025-10-26T21:21:00.934Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "72bd2caf229909b2",
       "title": "Barcelona",
       "description": "10 Νοε - 30 Δεκ Barcelona ΠΤΙ ΠΑΛΑΙ",
@@ -4812,37 +4781,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3a92903c04921904",
-      "title": "Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο",
-      "description": "20 Νοε - 21 Δεκ Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο Θεατρο Αμαλια",
-      "startDate": "2025-11-20T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/symbainoun-auta-kamia-fora/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.955Z",
-      "updatedAt": "2025-10-26T21:21:00.955Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "5d0203a42c778a92",
       "title": "ΤΟ ΓΑΛΑ 3ος χρόνος",
       "description": "21 Νοε - 28 Δεκ ΤΟ ΓΑΛΑ 3ος χρόνος Θεατρο Σταθμος 2023 - Stathmos Theater",
@@ -5866,37 +5804,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "30ebb8e329ac9f9d",
-      "title": "Το φάντασμα: stage fright",
-      "description": "1 - 16 Δεκεμβριου Το φάντασμα: stage fright Θεατρο Αμαλια",
-      "startDate": "2025-12-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/to-fantasma-stage-fright/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.977Z",
-      "updatedAt": "2025-10-26T21:21:00.977Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "4b84f169445a0f51",
       "title": "ΝΙΚΟΣ ΞΥΛΟΥΡΗΣ- Ο ΑΡΧΑΓΓΕΛΟΣ ΤΗΣ ΚΡΗΤΗΣ",
       "description": "3 - 21 Δεκεμβριου ΝΙΚΟΣ ΞΥΛΟΥΡΗΣ- Ο ΑΡΧΑΓΓΕΛΟΣ ΤΗΣ ΚΡΗΤΗΣ Θεατρο ΗΒΗ",
@@ -6763,37 +6670,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7677ed3ab977371c",
-      "title": "Π.Ο.Π: Προστατευόμενη Ονομασία Προέλευσης",
-      "description": "8 Ιαν - 1 Φεβ Π.Ο.Π: Προστατευόμενη Ονομασία Προέλευσης Θεατρο Αμαλια",
-      "startDate": "2026-01-08T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/p-o-p-tou-thanasi-kritsaki/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.996Z",
-      "updatedAt": "2025-10-26T21:21:00.996Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "3ef4148b02ac9aca",
       "title": "UNDERWATER BUBBLE SHOW",
       "description": "10 - 11 Ιανουαριου UNDERWATER BUBBLE SHOW CHRISTMAS THEATER, Athens",
@@ -6851,37 +6727,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.997Z",
       "updatedAt": "2025-10-26T21:21:00.997Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "10b9f7816e59356d",
-      "title": "Cry της Λένας Κιτσοπούλου",
-      "description": "12 - 27 Ιανουαριου Cry της Λένας Κιτσοπούλου Θεατρο Αμαλια",
-      "startDate": "2026-01-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/cry-tis-lenas-kitsopoulou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.633Z",
-      "updatedAt": "2025-10-22T17:16:25.633Z",
       "language": "en"
     },
     {
@@ -7414,37 +7259,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "78e276d405e94cb5",
-      "title": "96% - του Πρόδρομου Τσινικόρη",
-      "description": "5 - 22 Μαρτιου 96% - του Πρόδρομου Τσινικόρη Θεατρο Αμαλια",
-      "startDate": "2026-03-05T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τσινικόρη Θεατρο Αμαλια",
-        "address": "Τσινικόρη Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/96-tou-prodromou-tsinikori/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:01.004Z",
-      "updatedAt": "2025-10-26T21:21:01.004Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0e65597154da69a0",
       "title": "Dara Ó Briain",
       "description": "11 Μαρτιου Dara Ó Briain Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
@@ -7783,8 +7597,8 @@
     }
   ],
   "meta": {
-    "total": 251,
-    "lastUpdate": "2025-10-29T10:47:22.693Z",
+    "total": 245,
+    "lastUpdate": "2025-10-29T10:59:23.166Z",
     "url": "https://agent-athens.netlify.app/theater"
   }
 }

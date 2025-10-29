@@ -101,37 +101,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "19be49201a7f6d0e",
-      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
-      "description": "Για τέσσερις μόνο παραστάσεις, στις 30, 31 Οκτωβρίου και 1, 2 Νοεμβρίου, τα Καλογεράκια παρουσιάζουν τα Ρεμπώτικα: ένα καλλιτεχνικά τολμηρό έργο, όπου συναντιούνται δύο κόσμοι: η ποίηση του Αρθούρου Ρ",
-      "startDate": "2025-10-30T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.977Z",
-      "updatedAt": "2025-10-26T21:21:01.021Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "d5a482aa14eeab25",
       "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
       "description": "Το “Chants to the Moon” είναι ένας διαλογικός πειραματισμός ανάμεσα στη φωνή και τη δόνηση, τη σιγή και τον ήχο, τη σκιά και το φως — ένα ντουέτο της Μαρίσσας Μπίλη και του Barry Yuk Bun Wan.",
@@ -253,8 +222,8 @@
     }
   ],
   "meta": {
-    "total": 8,
-    "lastUpdate": "2025-10-29T10:47:22.897Z",
+    "total": 7,
+    "lastUpdate": "2025-10-29T10:59:23.362Z",
     "url": "https://agent-athens.netlify.app/paid-concert-tomorrow"
   }
 }

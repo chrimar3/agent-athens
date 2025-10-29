@@ -932,37 +932,6 @@
   {
     "@context": "https://schema.org",
     "@type": "Event",
-    "id": "19be49201a7f6d0e",
-    "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
-    "description": "Για τέσσερις μόνο παραστάσεις, στις 30, 31 Οκτωβρίου και 1, 2 Νοεμβρίου, τα Καλογεράκια παρουσιάζουν τα Ρεμπώτικα: ένα καλλιτεχνικά τολμηρό έργο, όπου συναντιούνται δύο κόσμοι: η ποίηση του Αρθούρου Ρ",
-    "startDate": "2025-10-30T21:00:00+02:00",
-    "endDate": null,
-    "type": "concert",
-    "genres": [
-      "other"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 14,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:20:09.977Z",
-    "updatedAt": "2025-10-26T21:21:01.021Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
     "id": "d5a482aa14eeab25",
     "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
     "description": "Το “Chants to the Moon” είναι ένας διαλογικός πειραματισμός ανάμεσα στη φωνή και τη δόνηση, τη σιγή και τον ήχο, τη σκιά και το φως — ένα ντουέτο της Μαρίσσας Μπίλη και του Barry Yuk Bun Wan.",
@@ -5628,37 +5597,6 @@
   {
     "@context": "https://schema.org",
     "@type": "Event",
-    "id": "22be0ec5852fa114",
-    "title": "The Space Is Us από τους Rest in Beat",
-    "description": "3 Νοεμβριου The Space Is Us από τους Rest in Beat Θεατρο Αμαλια",
-    "startDate": "2025-11-03T00:00:00.000+02:00",
-    "endDate": null,
-    "type": "performance",
-    "genres": [
-      "general"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 10,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/dance/the-space-is-us-apo-tous-rest-in-beat/",
-    "source": "more.com",
-    "createdAt": "2025-10-22T17:16:25.475Z",
-    "updatedAt": "2025-10-22T17:16:25.475Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
     "id": "3e0339d886500d94",
     "title": "TERROR",
     "description": "3 Νοε - 13 Ιαν TERROR ΘΕΑΤΡΟ ΦΙΛΙΠ",
@@ -6085,37 +6023,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/tickets/theater/eikosieksi-kai-mia/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.917Z",
-    "updatedAt": "2025-10-26T21:21:00.917Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "3ce0c579b0c0ef92",
-    "title": "ΟΝ των Καλαδάμη και Ξεναρίου",
-    "description": "4 - 11 Νοεμβριου ΟΝ των Καλαδάμη και Ξεναρίου Θεατρο Αμαλια",
-    "startDate": "2025-11-04T20:00:00+02:00",
-    "endDate": null,
-    "type": "performance",
-    "genres": [
-      "general"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 10,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/dance/on-tis-ilianas-kaladami/",
     "source": "more.com",
     "createdAt": "2025-10-26T21:21:00.917Z",
     "updatedAt": "2025-10-26T21:21:00.917Z",
@@ -7015,37 +6922,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/tickets/music/penny-mpaltatzi-her-swing-majesty/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.919Z",
-    "updatedAt": "2025-10-26T21:21:00.919Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "11aa355725c9b620",
-    "title": "Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\"",
-    "description": "6 - 16 Νοεμβριου Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\" Θεατρο Αμαλια",
-    "startDate": "2025-11-06T20:00:00+02:00",
-    "endDate": null,
-    "type": "concert",
-    "genres": [
-      "music"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "\"Κατά-φωνή\" Θεατρο Αμαλια",
-      "address": "\"Κατά-φωνή\" Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/music/giaksempore-sxima-kata-foni-deuteros-xronos/",
     "source": "more.com",
     "createdAt": "2025-10-26T21:21:00.919Z",
     "updatedAt": "2025-10-26T21:21:00.919Z",
@@ -10068,37 +9944,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/tickets/theater/children/romaios-ioulieta-san-to-skylo-me-ti-gata/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.934Z",
-    "updatedAt": "2025-10-26T21:21:00.934Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "7522e061a0dd4cf5",
-    "title": "Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία",
-    "description": "9 Νοε - 15 Μαρ Θέατρο Κούκλας από τους Redicolo στο Θέατρο Αμαλία Θεατρο Αμαλια",
-    "startDate": "2025-11-09T20:00:00+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 10,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/redicolo-amalia/",
     "source": "more.com",
     "createdAt": "2025-10-26T21:21:00.934Z",
     "updatedAt": "2025-10-26T21:21:00.934Z",
@@ -13774,37 +13619,6 @@
   {
     "@context": "https://schema.org",
     "@type": "Event",
-    "id": "3a92903c04921904",
-    "title": "Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο",
-    "description": "20 Νοε - 21 Δεκ Η Φαλακρή Τραγουδίστρια του Ευγένιου Ιονέσκο Θεατρο Αμαλια",
-    "startDate": "2025-11-20T20:00:00+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/symbainoun-auta-kamia-fora/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.955Z",
-    "updatedAt": "2025-10-26T21:21:00.955Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
     "id": "40bf98f7907a73ba",
     "title": "ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό",
     "description": "20 Νοε - 18 Ιουν ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό CharaLab",
@@ -15308,37 +15122,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/tickets/conference/genai-summit-4/",
-    "source": "more.com",
-    "createdAt": "2025-10-22T17:16:25.569Z",
-    "updatedAt": "2025-10-22T17:16:25.569Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "32edb10f6b55078b",
-    "title": "RUNWAY της Χριστιάνας Κοσιάρη",
-    "description": "24 Νοεμβριου RUNWAY της Χριστιάνας Κοσιάρη Θεατρο Αμαλια",
-    "startDate": "2025-11-24T00:00:00.000+02:00",
-    "endDate": null,
-    "type": "performance",
-    "genres": [
-      "general"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 10,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/dance/runway/",
     "source": "more.com",
     "createdAt": "2025-10-22T17:16:25.569Z",
     "updatedAt": "2025-10-22T17:16:25.569Z",
@@ -17340,37 +17123,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/subscriptions/karta-filou/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.977Z",
-    "updatedAt": "2025-10-26T21:21:00.977Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "30ebb8e329ac9f9d",
-    "title": "Το φάντασμα: stage fright",
-    "description": "1 - 16 Δεκεμβριου Το φάντασμα: stage fright Θεατρο Αμαλια",
-    "startDate": "2025-12-01T20:00:00+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 10,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/to-fantasma-stage-fright/",
     "source": "more.com",
     "createdAt": "2025-10-26T21:21:00.977Z",
     "updatedAt": "2025-10-26T21:21:00.977Z",
@@ -20635,37 +20387,6 @@
   {
     "@context": "https://schema.org",
     "@type": "Event",
-    "id": "7677ed3ab977371c",
-    "title": "Π.Ο.Π: Προστατευόμενη Ονομασία Προέλευσης",
-    "description": "8 Ιαν - 1 Φεβ Π.Ο.Π: Προστατευόμενη Ονομασία Προέλευσης Θεατρο Αμαλια",
-    "startDate": "2026-01-08T20:00:00+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/p-o-p-tou-thanasi-kritsaki/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:00.996Z",
-    "updatedAt": "2025-10-26T21:21:00.996Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
     "id": "19d98a443b910edd",
     "title": "DECIUS live",
     "description": "10 Ιανουαριου DECIUS live AN Club",
@@ -20843,37 +20564,6 @@
     "source": "more.com",
     "createdAt": "2025-10-26T21:20:10.035Z",
     "updatedAt": "2025-10-26T21:21:01.043Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "10b9f7816e59356d",
-    "title": "Cry της Λένας Κιτσοπούλου",
-    "description": "12 - 27 Ιανουαριου Cry της Λένας Κιτσοπούλου Θεατρο Αμαλια",
-    "startDate": "2026-01-12T00:00:00.000+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/cry-tis-lenas-kitsopoulou/",
-    "source": "more.com",
-    "createdAt": "2025-10-22T17:16:25.633Z",
-    "updatedAt": "2025-10-22T17:16:25.633Z",
     "language": "en"
   },
   {
@@ -21619,37 +21309,6 @@
   {
     "@context": "https://schema.org",
     "@type": "Event",
-    "id": "528b2fac2794d677",
-    "title": "Τοπικοί Τροπικοί - Πλειάδες",
-    "description": "5 Φεβ - 1 Μαρ Τοπικοί Τροπικοί - Πλειάδες Θεατρο Αμαλια",
-    "startDate": "2026-02-05T20:00:00+02:00",
-    "endDate": null,
-    "type": "concert",
-    "genres": [
-      "music"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Θεατρο Αμαλια",
-      "address": "Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/topikoi-tropikoi-pleiades/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:01.003Z",
-    "updatedAt": "2025-10-26T21:21:01.003Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
     "id": "2e84220d5a50eb96",
     "title": "“200+4 Χρόνια Δανεικά ,1821-2025” Ηράκλειο",
     "description": "7 - 8 Φεβρουαριου “200+4 Χρόνια Δανεικά ,1821-2025” Ηράκλειο Κινηματοθεατρο Αστορια",
@@ -21983,37 +21642,6 @@
       "range": null
     },
     "url": "https://www.more.com/gr-el/tickets/music/wavves/",
-    "source": "more.com",
-    "createdAt": "2025-10-26T21:21:01.004Z",
-    "updatedAt": "2025-10-26T21:21:01.004Z",
-    "language": "en"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    "id": "78e276d405e94cb5",
-    "title": "96% - του Πρόδρομου Τσινικόρη",
-    "description": "5 - 22 Μαρτιου 96% - του Πρόδρομου Τσινικόρη Θεατρο Αμαλια",
-    "startDate": "2026-03-05T20:00:00+02:00",
-    "endDate": null,
-    "type": "theater",
-    "genres": [
-      "theater"
-    ],
-    "tags": [],
-    "venue": {
-      "name": "Τσινικόρη Θεατρο Αμαλια",
-      "address": "Τσινικόρη Θεατρο Αμαλια",
-      "neighborhood": null,
-      "capacity": null
-    },
-    "price": {
-      "type": "paid",
-      "amount": 12,
-      "currency": "EUR",
-      "range": null
-    },
-    "url": "https://www.more.com/gr-el/tickets/theater/96-tou-prodromou-tsinikori/",
     "source": "more.com",
     "createdAt": "2025-10-26T21:21:01.004Z",
     "updatedAt": "2025-10-26T21:21:01.004Z",
