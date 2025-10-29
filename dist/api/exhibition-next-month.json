@@ -131,37 +131,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "53ee61d13e13902b",
-      "title": "✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨",
-      "description": "21 Νοεμβριου ✨NEON PARTY ΣΤΟ ΚΤΗΜΑ ΑΡΙΣΤΗ ✨ Κτημα Αριστη",
-      "startDate": "2025-11-21T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κτημα Αριστη",
-        "address": "Κτημα Αριστη",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/neon-party-sto-ktima-aristi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.959Z",
-      "updatedAt": "2025-10-26T21:21:00.959Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "10257e59454dc6db",
       "title": "On site - Crete Marketing Days",
       "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
@@ -223,8 +192,8 @@
     }
   ],
   "meta": {
-    "total": 7,
-    "lastUpdate": "2025-10-29T10:17:15.782Z",
+    "total": 6,
+    "lastUpdate": "2025-10-29T10:22:28.243Z",
     "url": "https://agent-athens.netlify.app/exhibition-next-month"
   }
 }

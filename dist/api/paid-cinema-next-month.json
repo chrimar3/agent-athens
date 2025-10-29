@@ -132,37 +132,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a096f6fd5dfda707",
-      "title": "TURBONEGRO",
-      "description": "",
-      "startDate": "2025-11-09T20:00:00+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "Gazarte",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-26T21:21:00.935Z",
-      "updatedAt": "2025-10-26T21:21:00.935Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "8e877be97e17e9be",
       "title": "BOB MOULD",
       "description": "",
@@ -348,8 +317,8 @@
     }
   ],
   "meta": {
-    "total": 11,
-    "lastUpdate": "2025-10-29T10:17:16.246Z",
+    "total": 10,
+    "lastUpdate": "2025-10-29T10:22:28.639Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-next-month"
   }
 }

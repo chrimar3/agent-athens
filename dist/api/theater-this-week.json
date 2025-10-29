@@ -410,68 +410,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f651cfd2b059aa33",
-      "title": "FoLia Halloween Festival",
-      "description": "31 Οκτ - 8 Νοε FoLia Halloween Festival Folia Culture and Education",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Culture and Education",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 4,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/folia-halloween-festival/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5c010958ee60aeba",
-      "title": "ΤΟ ΤάΒΛΙ",
-      "description": "31 Οκτ - 9 Νοε ΤΟ ΤάΒΛΙ Metropolitan Urban Theater",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Metropolitan Urban Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/to-tabli-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1ad52123196aa8e0",
       "title": "Το Κιβώτιο του Άρη Αλεξάνδρου για 10η χρονιά",
       "description": "31 Οκτ - 7 Απρ Το Κιβώτιο του Άρη Αλεξάνδρου για 10η χρονιά Studio Μαυρομιχαλη",
@@ -498,161 +436,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.437Z",
       "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "837685a2635a998b",
-      "title": "Ας Περιμένουν οι Γυναίκες - Μια κωμωδία βασισμένη στην ταινία του Σταύρου Τσιώλη",
-      "description": "31 Οκτ - 7 Δεκ Ας Περιμένουν οι Γυναίκες - Μια κωμωδία βασισμένη στην ταινία του Σταύρου Τσιώλη Artbox Fargani Theater",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Artbox Fargani Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/as-perimenoun-oi-gynaikes/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3cb039b2ab2d8d6f",
-      "title": "ΠΥΡΚΑΓΙΕΣ",
-      "description": "31 Οκτ - 8 Νοε ΠΥΡΚΑΓΙΕΣ Εκκοκκιστηριο ΙΔΕΩΝ",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΥΡΚΑΓΙΕΣ Εκκοκκιστηριο ΙΔΕΩΝ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/pyrkagies/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "035f3af8224680f6",
-      "title": "Πώς να προσποιείστε ότι θα έρθουν καλύτερες μέρες: Στον Βυσσινόκηπο του Τσέχωφ",
-      "description": "31 Οκτ - 14 Δεκ Πώς να προσποιείστε ότι θα έρθουν καλύτερες μέρες: Στον Βυσσινόκηπο του Τσέχωφ ΓΚΡΑΝ ΓΚΙΝΙΟΛ Λαμπ",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΓΚΡΑΝ ΓΚΙΝΙΟΛ Λαμπ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/pos-na-prospoieiste-oti-tha-erthoun-kalyteres-m/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f0b3b96d1a20563a",
-      "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
-      "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Μικρος Κεραμεικος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/ektrofeio-teraton-pagkosmia-proti/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "51d051da5506c25a",
-      "title": "ATHENS HALLOWEEN FESTIVAL - BOO HA HA SHOW",
-      "description": "31 Οκτωβριου ATHENS HALLOWEEN FESTIVAL - BOO HA HA SHOW Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/festival/athens-halloween-festival31102025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
       "language": "en"
     },
     {
@@ -1087,68 +870,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.895Z",
       "updatedAt": "2025-10-26T21:21:00.895Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "545b1caeea846ec0",
-      "title": "Έξι μαθήματα χορού σε έξι εβδομάδες",
-      "description": "31 Οκτ - 30 Νοε Έξι μαθήματα χορού σε έξι εβδομάδες ΠΤΙ ΠΑΛΑΙ",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΤΙ ΠΑΛΑΙ",
-        "address": "ΠΤΙ ΠΑΛΑΙ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/eksi-mathimata-xorou-se-eksi-ebdomades/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.895Z",
-      "updatedAt": "2025-10-26T21:21:00.895Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0e7b63960d5a1dc5",
-      "title": "Sillilab: No difference between ho ho ho!!!",
-      "description": "31 Οκτ - 30 Νοε Sillilab: No difference between ho ho ho!!! Θεατρο Εταιρειας Μακεδονικων Σπουδων",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Εταιρειας Μακεδονικων Σπουδων",
-        "address": "Θεατρο Εταιρειας Μακεδονικων Σπουδων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/sillilab-no-difference-between-ho-ho-ho-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.896Z",
-      "updatedAt": "2025-10-26T21:21:00.896Z",
       "language": "en"
     },
     {
@@ -1862,37 +1583,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c679cee55972796d",
-      "title": "ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ",
-      "description": "1 - 9 Νοεμβριου ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.903Z",
-      "updatedAt": "2025-10-26T21:21:00.903Z",
       "language": "en"
     },
     {
@@ -2890,68 +2580,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "bd85d35d9c96cbde",
-      "title": "Το καταραμένο παιδί",
-      "description": "3 Νοε - 30 Δεκ Το καταραμένο παιδί ΘΕΑΤΡΟ ARROYO",
-      "startDate": "2025-11-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "παιδί ΘΕΑΤΡΟ ARROYO",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/to-katarameno-paidi/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.474Z",
-      "updatedAt": "2025-10-22T17:16:25.474Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3d3d1c94988fa4b2",
-      "title": "Jokebox: Return of the Five",
-      "description": "3 Νοε - 29 Δεκ Jokebox: Return of the Five Ραδιο Μουσικη Σκηνη",
-      "startDate": "2025-11-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ραδιο Μουσικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/jokebox-return-of-the-five/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.475Z",
-      "updatedAt": "2025-10-22T17:16:25.475Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "d8e517cb3dbc6bb4",
       "title": "ΑΡΤΖΕΝΤΙΝΑ",
       "description": "3 Νοε - 19 Ιαν ΑΡΤΖΕΝΤΙΝΑ Fabrica the bar - Fabrica the bar",
@@ -3355,37 +2983,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1eeabb2e61a0722b",
-      "title": "TERROR",
-      "description": "3 Νοε - 13 Ιαν TERROR ΘΕΑΤΡΟ ΦΙΛΙΠ",
-      "startDate": "2025-11-03T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ ΦΙΛΙΠ",
-        "address": "ΘΕΑΤΡΟ ΦΙΛΙΠ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/terror-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.916Z",
-      "updatedAt": "2025-10-26T21:21:00.916Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2c3e06f8278c1310",
       "title": "ΑΡΤΖΕΝΤΙΝΑ",
       "description": "3 Νοε - 19 Ιαν ΑΡΤΖΕΝΤΙΝΑ Fabrica the bar - Fabrica the bar",
@@ -3409,37 +3006,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/artzentina-sti-famprika-the-bar/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.916Z",
-      "updatedAt": "2025-10-26T21:21:00.916Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "00fa6f4201bf1bd2",
-      "title": "Θέατρο για όλους | Θεατρική ομάδα ενηλίκων",
-      "description": "Δευτερες απο 3/11 Θέατρο για όλους | Θεατρική ομάδα ενηλίκων Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-11-03T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 100,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/offer/theatro-gia-olous-theatriki-omada-enilikon/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.916Z",
       "updatedAt": "2025-10-26T21:21:00.916Z",
@@ -3571,8 +3137,8 @@
     }
   ],
   "meta": {
-    "total": 115,
-    "lastUpdate": "2025-10-29T10:17:15.820Z",
+    "total": 101,
+    "lastUpdate": "2025-10-29T10:22:28.275Z",
     "url": "https://agent-athens.netlify.app/theater-this-week"
   }
 }

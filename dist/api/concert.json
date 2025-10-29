@@ -594,285 +594,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "86d45f4dfcd4a33c",
-      "title": "ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ",
-      "description": "31 Οκτωβριου ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ Κυτταρο Live",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΡΕΒΑΝΣ Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-afieroma-sto-thano-mikroutsiko-me-tous-rita-antonopoulou-kai-tous-rebans/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.432Z",
-      "updatedAt": "2025-10-22T17:16:25.432Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "527efbe2eeba4b0e",
-      "title": "OLA ONABULÉ & GILAD ATZMON QUARTET",
-      "description": "31 Οκτ - 3 Νοε OLA ONABULÉ & GILAD ATZMON QUARTET Half Note Jazz Club",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ola-onabule-gilad-atzmon-quartet/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.434Z",
-      "updatedAt": "2025-10-22T17:16:25.434Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2c8dc994d5941b0b",
-      "title": "THE EX (NL) live in Greece",
-      "description": "31 Οκτ - 2 Νοε THE EX (NL) live in Greece Πολλαπλοι χωροι",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Greece Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 22,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-ex-live-in-greece/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.434Z",
-      "updatedAt": "2025-10-22T17:16:25.434Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "60bacacdf365494a",
-      "title": "TWO LANES @ PIRAEUS CLUB ACADEMY",
-      "description": "31 Οκτωβριου TWO LANES @ PIRAEUS CLUB ACADEMY Piraeus Club Academy",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Piraeus Club Academy",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 22,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/two-lanes-piraeus-club-academy/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8d7835e2cfe7012a",
-      "title": "HALLOWEEN PARTARA @ ARCH CLUB",
-      "description": "31 Οκτωβριου HALLOWEEN PARTARA @ ARCH CLUB ARCH",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ARCH CLUB ARCH",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/halloween-partara-arch-club/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6c9178644649693d",
-      "title": "Xάτου Δερά live at An Club!",
-      "description": "31 Οκτωβριου Xάτου Δερά live at An Club! AN Club",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Club! AN Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/offer/xatou-dera-live-at-an-club/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6aab1eb9a066e2f1",
-      "title": "O Χρήστος Βέργος live στο Ίλιον Plus",
-      "description": "31 Οκτωβριου O Χρήστος Βέργος live στο Ίλιον Plus ΙΛΙΟΝ Plus",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Plus ΙΛΙΟΝ Plus",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/o-xristos-bergos-live-sto-ilion-plus/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2d8958ae0699777c",
-      "title": "ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ - ΣΑΛΙΝΑ ΓΑΒΑΛΑ",
-      "description": "31 Οκτ - 28 Νοε ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ - ΣΑΛΙΝΑ ΓΑΒΑΛΑ Γυαλινο Μουσικο Θεατρο",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γυαλινο Μουσικο Θεατρο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/baggelis-germanos-salina-gabala/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6d2aa5babe67585f",
-      "title": "Αργύρης Λούλατζης στο Caja de Música",
-      "description": "31 Οκτωβριου Αργύρης Λούλατζης στο Caja de Música Caja De Musica",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/argyris-loulatzis-sto-caja-de-musica/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "16caa44c58e119e9",
       "title": "GHOSTS OF HALLOWEEN",
       "description": "31 Οκτωβριου GHOSTS OF HALLOWEEN ΧΟΡΟΣΤΑΣΙΟ",
@@ -904,68 +625,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "64ea06a2ae9e96a3",
-      "title": "ZED'S DEAD",
-      "description": "31 Οκτωβριου ZED'S DEAD Zed_Athens",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ZED'S DEAD Zed_Athens",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/zeds-dead/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2de8b2f06d816391",
-      "title": "\"Semazen\" │ George Klountzos & Semazen Ensemble",
-      "description": "31 Οκτωβριου \"Semazen\" │ George Klountzos & Semazen Ensemble Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/semazen-george-klountzos-semazen-ensemble/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "89793bb617c9cfa4",
       "title": "Paris-Istanbul (7ος χρόνος)",
       "description": "31 Οκτ - 30 Ιαν Paris-Istanbul (7ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
@@ -989,37 +648,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/paris-istanbul-7os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.439Z",
-      "updatedAt": "2025-10-22T17:16:25.439Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2572de304a362d27",
-      "title": "METALLICA & SYMPHONY by SCREAM INC",
-      "description": "31 Οκτωβριου METALLICA & SYMPHONY by SCREAM INC CHRISTMAS THEATER",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "CHRISTMAS THEATER",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/metallica-symphony-by-scream-inc/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.439Z",
       "updatedAt": "2025-10-22T17:16:25.439Z",
@@ -1617,37 +1245,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "95b738f3879c2fa3",
-      "title": "FUEL EATER w/ 10CODE + THE HEAVY HEARTS VENDETTA • AUX CLUB",
-      "description": "FUEL EATER w/ 10CODE + THE HEAVY HEARTS VENDETTA AT AUX CLUB",
-      "startDate": "2025-10-31T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AUX CLUB",
-        "address": "AUX CLUB",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/fuel-eater-w/10code-the-heavy-hearts-vendetta-aux-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.985Z",
-      "updatedAt": "2025-10-26T21:21:01.039Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "4ceb3f1e5d584e06",
       "title": "TWO LANES @ PIRAEUS CLUB ACADEMY",
       "description": "Οι Βερολινέζοι TWO LANES για πρώτη φορά στην Ελλάδα στο PIRAEUS CLUB ACADEMY",
@@ -1705,35 +1302,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:09.985Z",
       "updatedAt": "2025-10-26T21:21:01.048Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3128419a1fcee579",
-      "title": "Paris-Istanbul (7ος χρόνος)",
-      "description": "Orient express, Μουσικό βαγόνι, σάββατο, μουσική παράσταση, Paris - Istanbul, τρένο στο ρουφ, αμαξοστοιχία-θέατρο",
-      "startDate": "2025-10-31T21:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "address": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/paris-istanbul-7os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.985Z",
-      "updatedAt": "2025-10-26T21:21:01.021Z",
       "language": "en"
     },
     {
@@ -1827,37 +1395,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:09.986Z",
       "updatedAt": "2025-10-26T21:21:01.035Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7fe436e231b53ee3",
-      "title": "ΓΙΩΡΓΟΣ ΝΙΚΗΦΟΡΟΥ ΖΕΡΒΑΚΗΣ - ΒΙΟΛΕΤΑ ΙΚΑΡΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "Γιώργος Νικηφόρου Ζερβάκης – Βιολέτα Ίκαρη",
-      "startDate": "2025-10-31T22:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/giorgos-nikiforou-zerbakis-bioleta-ikari-stauros-tou-notou-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.986Z",
-      "updatedAt": "2025-10-26T21:21:01.041Z",
       "language": "en"
     },
     {
@@ -3275,68 +2812,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "65ee8b45e775f172",
-      "title": "ΑΛΕΚΑ ΚΑΝΕΛΛΙΔΟΥ - ΧΡΗΣΤΟΣ ΘΗΒΑΙΟΣ",
-      "description": "3 Νοε - 29 Δεκ ΑΛΕΚΑ ΚΑΝΕΛΛΙΔΟΥ - ΧΡΗΣΤΟΣ ΘΗΒΑΙΟΣ Θεατρο Αλσος χειμερινο",
-      "startDate": "2025-11-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αλσος χειμερινο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/aleka-kanellidou-xristos-thibaios/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.473Z",
-      "updatedAt": "2025-10-22T17:16:25.473Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0848da4465eb4881",
-      "title": "Leonidas Danezos feat. Deniz Angelaki & Amélie Joannides",
-      "description": "3 Νοεμβριου Leonidas Danezos feat. Deniz Angelaki & Amélie Joannides Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-11-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leonidas-danezos-feat-deniz-angelaki-amelie-joannides/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.474Z",
-      "updatedAt": "2025-10-22T17:16:25.474Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "8a0bae9377d0836c",
       "title": "ΝΙΝΑ ΜΑΖΑΝΗ | ΣΤΑΥΡΟΣ ΤΙΟΥ ΝΟΤΟΥ CLUB",
       "description": "3 Νοεμβριου ΝΙΝΑ ΜΑΖΑΝΗ | ΣΤΑΥΡΟΣ ΤΙΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
@@ -3828,192 +3303,6 @@
       "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
       "createdAt": "2025-10-26T11:37:07.748Z",
       "updatedAt": "2025-10-26T11:38:19.790Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "33a7a32054235dd1",
-      "title": "KATERINA ADAMOPOULOU JAZZ QUARTET",
-      "description": "6 Νοεμβριου KATERINA ADAMOPOULOU JAZZ QUARTET Half Note Jazz Club",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/katerina-adamopoulou-jazz-quartet/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.483Z",
-      "updatedAt": "2025-10-22T17:16:25.483Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "08feff65a670ccef",
-      "title": "ΠΕΝΝΥ ΜΠΑΛΤΑΤΖΗ- HER SWING MAJESTY",
-      "description": "6 - 27 Νοεμβριου ΠΕΝΝΥ ΜΠΑΛΤΑΤΖΗ- HER SWING MAJESTY Major Seven",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "MAJESTY Major Seven",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/penny-mpaltatzi-her-swing-majesty/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.483Z",
-      "updatedAt": "2025-10-22T17:16:25.483Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0dfb2b0fb4c96618",
-      "title": "Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\"",
-      "description": "6 - 16 Νοεμβριου Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\" Θεατρο Αμαλια",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "\"Κατά-φωνή\" Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/giaksempore-sxima-kata-foni-deuteros-xronos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.483Z",
-      "updatedAt": "2025-10-22T17:16:25.483Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7644f53e7aa72f37",
-      "title": "Budokan Boys / Eiger Drums Propaganda",
-      "description": "6 Νοεμβριου Budokan Boys / Eiger Drums Propaganda Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/budokan-boys/eiger-drums-propaganda/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.483Z",
-      "updatedAt": "2025-10-22T17:16:25.483Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fa868ec388dcf0a0",
-      "title": "Μιχάλης Τζουγανάκης στο Caja de Música",
-      "description": "6 - 27 Νοεμβριου Μιχάλης Τζουγανάκης στο Caja de Música Caja De Musica",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mixalis-tzouganakis-sto-caja-de-musica/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.484Z",
-      "updatedAt": "2025-10-22T17:16:25.484Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3155e2abb82d1694",
-      "title": "Harris Lambrakis Quartet",
-      "description": "6 Νοεμβριου Harris Lambrakis Quartet Theatre of the NO",
-      "startDate": "2025-11-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "of the NO",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/harris-lambrakis-quartet-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.484Z",
-      "updatedAt": "2025-10-22T17:16:25.484Z",
       "language": "en"
     },
     {
@@ -6018,68 +5307,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "5a81e56aa1fa4502",
-      "title": "Του κόκορα τα πάθη | Μουσικές Αφηγήσεις",
-      "description": "9 Νοεμβριου Του κόκορα τα πάθη | Μουσικές Αφηγήσεις Πολυχωρος Πολιτισμου \"Διελευσις\"",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολυχωρος Πολιτισμου \"Διελευσις\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/tou-kokora-ta-pathi-mousikes-afigiseis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.508Z",
-      "updatedAt": "2025-10-22T17:16:25.508Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "57db487597eff5af",
-      "title": "TURBONEGRO live in ATHENS",
-      "description": "9 Νοεμβριου TURBONEGRO live in ATHENS Gazarte - Ground Stage",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte - Ground Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 45,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/turbonegro-live-in-athens/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.511Z",
-      "updatedAt": "2025-10-22T17:16:25.511Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "90a4e87765b41ee9",
       "title": "ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΤΣΑΒΑΚΗΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS",
       "description": "9 Νοεμβριου ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΥΤΣΑΒΑΚΗΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS Σταυρος του Νοτου - Σταυρος του Νοτου Plus",
@@ -6230,37 +5457,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.932Z",
       "updatedAt": "2025-10-26T21:21:00.932Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0bc13462053f5c3e",
-      "title": "Μοτίβο- Ένα Καμπαρέ δωματίου",
-      "description": "9 Νοε - 28 Δεκ Μοτίβο- Ένα Καμπαρέ δωματίου Red Jasper Cabaret Theatre",
-      "startDate": "2025-11-09T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Red Jasper Cabaret Theatre",
-        "address": "Red Jasper Cabaret Theatre",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/motibo-ena-kampare-domatiou/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.935Z",
-      "updatedAt": "2025-10-26T21:21:00.935Z",
       "language": "en"
     },
     {
@@ -6576,37 +5772,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6db8c98013a41045",
-      "title": "GORAN BREGOVIC - Wedding & Funeral Band",
-      "description": "12 Νοεμβριου GORAN BREGOVIC - Wedding & Funeral Band CHRISTMAS THEATER",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "CHRISTMAS THEATER",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/goran-bregovic-wedding-funeral-band-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.520Z",
-      "updatedAt": "2025-10-22T17:16:25.520Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1f718bf7551bf10e",
       "title": "Σύμφωνο Eπιβίωσης - Gagarin 205",
       "description": "12 Νοεμβριου Σύμφωνο Eπιβίωσης - Gagarin 205 Gagarin 205 Live Music Space",
@@ -6661,37 +5826,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/epilogos-tou-aleksandrou-gorgoliou-basilis-prodromou-mariana-katsimixa-stauros-tou-notou-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.523Z",
-      "updatedAt": "2025-10-22T17:16:25.523Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8e8b4641c1e42121",
-      "title": "Νένα Βενετσάνου-Σκληρές Βιολέτες (2ος κύκλος)",
-      "description": "12 Νοε - 3 Δεκ Νένα Βενετσάνου-Σκληρές Βιολέτες (2ος κύκλος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Θεατρικο Βαγονι",
-      "startDate": "2025-11-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Θεατρικο Βαγονι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/nena-benetsanou-sklires-bioletes-2os-kyklos/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.523Z",
       "updatedAt": "2025-10-22T17:16:25.523Z",
@@ -6824,37 +5958,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "4ec48367c0ad7385",
-      "title": "Σύμφωνο Eπιβίωσης - Gagarin 205",
-      "description": "12 Νοεμβριου Σύμφωνο Eπιβίωσης - Gagarin 205 Gagarin 205 Live Music Space",
-      "startDate": "2025-11-12T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gagarin 205 Live Music Space",
-        "address": "Gagarin 205 Live Music Space",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/symfono-epibiosis-gagarin-205/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.940Z",
-      "updatedAt": "2025-10-26T21:21:00.940Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "30c52e31f96e24f1",
       "title": "GORAN BREGOVIC - Wedding & Funeral Band",
       "description": "GORAN BREGOVIC - Wedding & Funeral Band Από τον «Καιρό των Τσιγγάνων» μέχρι το «Underground» και το «Arizona Dream» η μουσική των Βαλκανίων ταξιδεύει σε όλο τον κόσμο! 12 Νοεμβρίου 2025 Christmas Thea",
@@ -6943,37 +6046,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.001Z",
       "updatedAt": "2025-10-26T21:21:01.040Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "602dd4d58ea113a1",
-      "title": "«ΕΠΙΛΟΓΟΣ» ΤΟΥ ΑΛΕΞΑΝΔΡΟΥ ΓΟΥΡΓΟΥΛΙΟΥ | ΒΑΣΙΛΗΣ ΠΡΟΔΡΟΜΟΥ - ΜΑΡΙΑΝΑ ΚΑΤΣΙΜΙΧΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "«ΕΠΙΛΟΓΟΣ» ΤΟΥ ΑΛΕΞΑΝΔΡΟΥ ΓΟΡΓΟΛΙΟΥ | ΒΑΣΙΛΗΣ ΠΡΟΔΡΟΜΟΥ - ΜΑΡΙΑΝΑ ΚΑΤΣΙΜΙΧΑ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "startDate": "2025-11-12T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/epilogos-tou-aleksandrou-gorgoliou-basilis-prodromou-mariana-katsimixa-stauros-tou-notou-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.001Z",
-      "updatedAt": "2025-10-26T21:21:01.041Z",
       "language": "en"
     },
     {
@@ -8176,37 +7248,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f06de47cf5641b8f",
-      "title": "The Great Gig - A Tribute to Pink Floyd",
-      "description": "15 Νοεμβριου The Great Gig - A Tribute to Pink Floyd Μεγαρο Μουσικης Κομοτηνης",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Κομοτηνης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-great-gig-a-tribute-to-pink-floyd/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.535Z",
-      "updatedAt": "2025-10-22T17:16:25.535Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "7d614b7a567d6fa1",
       "title": "Ο ΟΡΦΕΑΣ ΠΕΡΙΔΗΣ στο ΚΥΤΤΑΡΟ",
       "description": "15 - 29 Νοεμβριου Ο ΟΡΦΕΑΣ ΠΕΡΙΔΗΣ στο ΚΥΤΤΑΡΟ Κυτταρο Live",
@@ -8230,37 +7271,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/o-orfeas-peridis-sto-kyttaro/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.535Z",
-      "updatedAt": "2025-10-22T17:16:25.535Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "028661f387d2c001",
-      "title": "GEMMA (GR) LIVE IN ATHENS",
-      "description": "15 Νοεμβριου GEMMA (GR) LIVE IN ATHENS AUX CLUB",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ATHENS AUX CLUB",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/gemma-gr-live-in-athens/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.535Z",
       "updatedAt": "2025-10-22T17:16:25.535Z",
@@ -8295,99 +7305,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.535Z",
       "updatedAt": "2025-10-22T17:16:25.535Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e28753450233ba48",
-      "title": "KING GARCIA X URSTAAT",
-      "description": "15 Νοεμβριου KING GARCIA X URSTAAT Piraeus Club Academy",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Piraeus Club Academy",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/king-garcia-x-urstaat/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.535Z",
-      "updatedAt": "2025-10-22T17:16:25.535Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "531d0addaef32ea0",
-      "title": "Poets Missing",
-      "description": "15 Νοεμβριου Poets Missing Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/poets-missing/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.536Z",
-      "updatedAt": "2025-10-22T17:16:25.536Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "039edd4e670505b8",
-      "title": "Sad Lovers & Giants + Forever Grey",
-      "description": "15 Νοεμβριου Sad Lovers & Giants + Forever Grey Gagarin 205 Live Music Space",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gagarin 205 Live Music Space",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/sad-lovers-giants-forever-grey/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.537Z",
-      "updatedAt": "2025-10-22T17:16:25.537Z",
       "language": "en"
     },
     {
@@ -8450,37 +7367,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.540Z",
       "updatedAt": "2025-10-22T17:16:25.540Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "42251ced0fb0e71f",
-      "title": "Daenoma: Album Release Show w// Pretend We Are Dead + Karuzel",
-      "description": "15 Νοεμβριου Daenoma: Album Release Show w// Pretend We Are Dead + Karuzel ΙΛΙΟΝ Plus",
-      "startDate": "2025-11-15T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΙΛΙΟΝ Plus",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/daenoma-album-release-show-w/pretend-we-are-dead-karuzel/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.541Z",
-      "updatedAt": "2025-10-22T17:16:25.541Z",
       "language": "en"
     },
     {
@@ -9590,68 +8476,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "5ccdb21b05384e96",
-      "title": "Π.Ι.Ε.Β. x Viktoras | \"DETROIT\" | Concept Live Album Presentation at ΠΛΥΦΑ",
-      "description": "21 Νοεμβριου Π.Ι.Ε.Β. x Viktoras | \"DETROIT\" | Concept Live Album Presentation at ΠΛΥΦΑ ΠΛΥΦΑ - 7Α",
-      "startDate": "2025-11-21T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΛΥΦΑ - 7Α",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/p-i-e-b-x-viktoras-detroit-concept-live-album-presentation-at-plyfa/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.552Z",
-      "updatedAt": "2025-10-22T17:16:25.552Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d2635ec453484191",
-      "title": "ΧΡΙΣΤΟΦΟΡΟΣ ΧΡΙΣΤΟΦΗΣ: Ο ΤΥΡΑΝΝΟΣ ΚΑΙ Η ΚΟΡΗ",
-      "description": "21 - 22 Νοεμβριου ΧΡΙΣΤΟΦΟΡΟΣ ΧΡΙΣΤΟΦΗΣ: Ο ΤΥΡΑΝΝΟΣ ΚΑΙ Η ΚΟΡΗ Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-21T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/xristoforos-xristofis-o-tyrannos-kai-i-kori/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.552Z",
-      "updatedAt": "2025-10-22T17:16:25.552Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "8caaf954118a22f3",
       "title": "DAFNE' KRITHARAS - 1st Time Live in Greece",
       "description": "21 Νοεμβριου DAFNE' KRITHARAS - 1st Time Live in Greece Gazarte - Ground Stage",
@@ -9675,37 +8499,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/dafne-kritharas-1st-time-live-in-greece/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.553Z",
-      "updatedAt": "2025-10-22T17:16:25.553Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "57a4737287987525",
-      "title": "The KUSTOMS & The SENCES Live ! “ATHENS SHAKEDOWN”",
-      "description": "21 Νοεμβριου The KUSTOMS & The SENCES Live ! “ATHENS SHAKEDOWN” Κυτταρο Live",
-      "startDate": "2025-11-21T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-kustoms-the-sences-live-athens-shakedown/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.553Z",
       "updatedAt": "2025-10-22T17:16:25.553Z",
@@ -10234,37 +9027,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.960Z",
       "updatedAt": "2025-10-26T21:21:00.960Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "796d19de38b2c0bb",
-      "title": "Lemon Περιοδεία 2025 🍋",
-      "description": "15 Νοε - 28 Φεβ Lemon Περιοδεία 2025 🍋 Πολλαπλοι χωροι",
-      "startDate": "2025-11-22T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/tour/lemon-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.961Z",
-      "updatedAt": "2025-10-26T21:21:00.961Z",
       "language": "en"
     },
     {
@@ -11068,68 +9830,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a50a1164496bfca4",
-      "title": "Guitar Experience 2025 - Let there be guitar - vol.3",
-      "description": "27 Νοεμβριου Guitar Experience 2025 - Let there be guitar - vol.3 Piraeus Club Academy",
-      "startDate": "2025-11-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Piraeus Club Academy",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/guitar-experience-2025-let-there-be-guitar-vol-3/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.575Z",
-      "updatedAt": "2025-10-22T17:16:25.575Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c745efb8ec31ef5d",
-      "title": "SLOVAK CHAMBER ORCHESTRA",
-      "description": "27 Νοεμβριου SLOVAK CHAMBER ORCHESTRA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/slovak-chamber-orchestra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.575Z",
-      "updatedAt": "2025-10-22T17:16:25.575Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "53d09656dba67e12",
       "title": "Wim Mertens live in Athens",
       "description": "27 - 28 Νοεμβριου Wim Mertens live in Athens Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων",
@@ -11278,37 +9978,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.013Z",
       "updatedAt": "2025-10-26T21:21:01.025Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "061b46f4350627c3",
-      "title": "ΑΛΕΞΑΝΔΡΟΣ ΔΑΙΚΟΣ - OTRA ROTA Live @ ΚΥΤΤΑΡΟ",
-      "description": "ΑΛΕΞΑΝΔΡΟΣ ΔΑΙΚΟΣ & OTRA ROTA Live στο ΚΥΤΤΑΡΟ!ΠΕΜΠΤΗ 27 ΝΟΕΜΒΡΙΟΥ",
-      "startDate": "2025-11-27T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "Κυτταρο Live",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/aleksandros-daikos-otra-rota-live-kyttaro/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.013Z",
-      "updatedAt": "2025-10-26T21:21:01.020Z",
       "language": "en"
     },
     {
@@ -12455,68 +11124,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "839720f3c98aaaa8",
-      "title": "EDEN presents MARCEL DETTMANN",
-      "description": "30 Νοεμβριου EDEN presents MARCEL DETTMANN Athens Conservatoire (in Greek)",
-      "startDate": "2025-11-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Athens Conservatoire (in Greek)",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 19,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/eden-presents-marcel-dettmann/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.590Z",
-      "updatedAt": "2025-10-22T17:16:25.590Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "855816de3791ac2d",
-      "title": "MEDUSAS WRATH -DENTURES-DAISY ON A SHELF -KYTTARO live",
-      "description": "30 Νοεμβριου MEDUSAS WRATH -DENTURES-DAISY ON A SHELF -KYTTARO live Κυτταρο Live",
-      "startDate": "2025-11-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/medusas-wrath-guests-kyttaro-live/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.591Z",
-      "updatedAt": "2025-10-22T17:16:25.591Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0c94b5a6d260b5c0",
       "title": "EDEN presents MARCEL DETTMANN",
       "description": "EDEN presents MARCEL DETTMANN+ special guests: MarcelDune |Ophelia 30 Νοεμβρίου 2025Ωδείο Αθηνών17:30 - 00:00SUNDAYS ARE FOR LOVERS!",
@@ -12880,68 +11487,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.977Z",
       "updatedAt": "2025-10-26T21:21:00.977Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2a6aa769c04f5de6",
-      "title": "ΤΑ ΛΑΙΚΑ ΜΑΚΕΔΟΝΑΣ - ΝΕΓΚΑ",
-      "description": "3 Δεκεμβριου ΤΑ ΛΑΙΚΑ ΜΑΚΕΔΟΝΑΣ - ΝΕΓΚΑ Δημοτικο Θεατρο «Βαγγελης Παπαθανασιου»",
-      "startDate": "2025-12-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο «Βαγγελης Παπαθανασιου»",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ta-laika-makedonas-negka/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.594Z",
-      "updatedAt": "2025-10-22T17:16:25.594Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "fcf7c208336a5c0a",
-      "title": "QUATUOR ÉBÈNE",
-      "description": "3 Δεκεμβριου QUATUOR ÉBÈNE Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-12-03T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/quatuor-ebene/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.594Z",
-      "updatedAt": "2025-10-22T17:16:25.594Z",
       "language": "en"
     },
     {
@@ -13530,37 +12075,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6477b2aff4297102",
-      "title": "JOHN MEDESKI SOLO live in Athens",
-      "description": "6 Δεκεμβριου JOHN MEDESKI SOLO live in Athens Gazarte Main Stage!",
-      "startDate": "2025-12-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte Main Stage!",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/john-medeski-live-in-athens/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.601Z",
-      "updatedAt": "2025-10-22T17:16:25.601Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "680aa27ce7340592",
       "title": "ΡΕΜΠΕΤΙΣΣΕΣ ΨΥΧΕΣ",
       "description": "6 Δεκ - 4 Απρ ΡΕΜΠΕΤΙΣΣΕΣ ΨΥΧΕΣ Αγγελων Βημα - Φουαγιε",
@@ -13587,68 +12101,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.601Z",
       "updatedAt": "2025-10-22T17:16:25.601Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "74831c7ffb51bcba",
-      "title": "Mirror-Passage-StygianPath",
-      "description": "6 Δεκεμβριου Mirror-Passage-StygianPath Piraeus Club Academy",
-      "startDate": "2025-12-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Piraeus Club Academy",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mirror-passage-stygianpath/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.602Z",
-      "updatedAt": "2025-10-22T17:16:25.602Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6c77ade27ecf3302",
-      "title": "Τα Χριστούγεννα του Ίκαρου Ποντίκαρου",
-      "description": "6 - 28 Δεκεμβριου Τα Χριστούγεννα του Ίκαρου Ποντίκαρου ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
-      "startDate": "2025-12-06T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Αιθουσα 1",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-xristougenna-tou-ikarou-pontikarou/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.602Z",
-      "updatedAt": "2025-10-22T17:16:25.602Z",
       "language": "en"
     },
     {
@@ -14049,37 +12501,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "79178b3a11f3e977",
-      "title": "NIGHT TAPES live in Athens",
-      "description": "9 Δεκεμβριου NIGHT TAPES live in Athens Gazarte - Ground Stage",
-      "startDate": "2025-12-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte - Ground Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/night-tapes-live-in-athens/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.609Z",
-      "updatedAt": "2025-10-22T17:16:25.609Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "12b8de08afe53fbc",
       "title": "NIGHT TAPES live in Athens",
       "description": "Οι Night Tapes, ένα από τα πιο ατμοσφαιρικά και ιδιαίτερα ονόματα της βρετανικής dream pop / electronic σκηνής, έρχονται για πρώτη φορά στην Ελλάδα για μια μαγευτική εμφάνιση στην Αθήνα, την Τρίτη 9 Δ",
@@ -14235,68 +12656,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1d17fb73cf43f9c0",
-      "title": "Candlelight Kirtan στην Αγγλικανική Εκκλησία του Αγίου Παύλου",
-      "description": "12 Δεκεμβριου Candlelight Kirtan στην Αγγλικανική Εκκλησία του Αγίου Παύλου Αγγλικανικη Εκκλησια Αγιου Παυλου",
-      "startDate": "2025-12-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Εκκλησια Αγιου Παυλου",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 19,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/chanting-from-the-heart-kirtan-stin-agglikaniki-ekklisia-tou-agiou-paulou/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.611Z",
-      "updatedAt": "2025-10-22T17:16:25.611Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "636736e9bd1c398a",
-      "title": "Robben Ford Live @ Fuzz Club 12/12/2025",
-      "description": "12 Δεκεμβριου Robben Ford Live @ Fuzz Club 12/12/2025 Fuzz Club",
-      "startDate": "2025-12-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "12/12/2025 Fuzz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 35,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/robben-ford-live-fuzz-club-12/12/2025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.611Z",
-      "updatedAt": "2025-10-22T17:16:25.611Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "17b1e97a551653ae",
       "title": "Jazz στο Μουσείο: Michalis & Christos Kalkanis “Seeds” Duet ft. Alcmini – “The First Bloom”",
       "description": "12 Δεκεμβριου Jazz στο Μουσείο: Michalis & Christos Kalkanis “Seeds” Duet ft. Alcmini – “The First Bloom” Ιδρυμα Βασιλη και Ελιζας Γουλανδρη",
@@ -14323,68 +12682,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.611Z",
       "updatedAt": "2025-10-22T17:16:25.611Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0b13f7120ad5201b",
-      "title": "HONEYBADGER “Let There Be Light” Release Show",
-      "description": "12 Δεκεμβριου HONEYBADGER “Let There Be Light” Release Show AN Club",
-      "startDate": "2025-12-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Show AN Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/offer/honeybadger-let-there-be-light-release-show/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.611Z",
-      "updatedAt": "2025-10-22T17:16:25.611Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "60e2ea8ef72a8990",
-      "title": "Morrissey",
-      "description": "12 Δεκεμβριου Morrissey Γηπεδο Tae Kwon Do, Φαληρο",
-      "startDate": "2025-12-12T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γηπεδο Tae Kwon Do, Φαληρο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 55,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/morrissey2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.614Z",
-      "updatedAt": "2025-10-22T17:16:25.614Z",
       "language": "en"
     },
     {
@@ -14662,35 +12959,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.026Z",
       "updatedAt": "2025-10-26T21:21:01.021Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b335a59c105f6e10",
-      "title": "QUANTIC (UK) LIVE IN ATHENS",
-      "description": "QUANTIC LIVE IN ATHENS",
-      "startDate": "2025-12-12T22:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "ARCH",
-        "address": "ARCH",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 22,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/quantic-uk-live-in-athens/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.026Z",
-      "updatedAt": "2025-10-26T21:21:01.031Z",
       "language": "en"
     },
     {
@@ -15860,37 +14128,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1c8d24d60958015e",
-      "title": "10ο Φεστιβάλ Βαλκανικής Μουσικής",
-      "description": "5 Ιανουαριου 10ο Φεστιβάλ Βαλκανικής Μουσικής ΠΛΑΤΕΙΑ ΠΑΝΑΓ ΚΟΥΜΠΕΛΙΔΙΚΗΣ",
-      "startDate": "2026-01-05T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΛΑΤΕΙΑ ΠΑΝΑΓ ΚΟΥΜΠΕΛΙΔΙΚΗΣ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/10o-festibal-balkanikis-mousikis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.628Z",
-      "updatedAt": "2025-10-22T17:16:25.628Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "83e09f2477a9cfb9",
       "title": "10ο Φεστιβάλ Βαλκανικής Μουσικής",
       "description": "10ο Φεστιβάλ Βαλκανικής το μεγάλο πολιτιστικό γεγονός της Μουσικής Δυτικής Μακεδονίας την Δευτέρα 5 Ιανουαρίου 2026 στο ιστορικό κέντρο της Καστοριάς DOMINUS PRODUCTIONS & SHAKE HAND PRODUCTIONS",
@@ -16070,37 +14307,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.035Z",
       "updatedAt": "2025-10-26T21:21:01.049Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "245769be39250773",
-      "title": "Reflection - Athens",
-      "description": "11 Ιανουαριου Reflection - Athens Κυτταρο Live",
-      "startDate": "2026-01-11T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/reflection-athens/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.632Z",
-      "updatedAt": "2025-10-22T17:16:25.632Z",
       "language": "en"
     },
     {
@@ -16376,37 +14582,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.998Z",
       "updatedAt": "2025-10-26T21:21:00.998Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9153061369933fea",
-      "title": "Split 5-Years Anniversary live",
-      "description": "23 - 30 Ιανουαριου Split 5-Years Anniversary live Πολλαπλοι χωροι",
-      "startDate": "2026-01-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "live Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/split-5-years-anniversary-live/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.635Z",
-      "updatedAt": "2025-10-22T17:16:25.635Z",
       "language": "en"
     },
     {
@@ -17402,37 +15577,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "686cb625bca1e954",
-      "title": "IOTUNN - PIRAEUS CLUB ACADEMY ATHENS",
-      "description": "27 Μαρτιου IOTUNN - PIRAEUS CLUB ACADEMY ATHENS Piraeus Club Academy",
-      "startDate": "2026-03-27T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Piraeus Club Academy",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 24.3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/iotunn-piraeus-club-academy-athens/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.650Z",
-      "updatedAt": "2025-10-22T17:16:25.650Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2a1d32eb69a5985b",
       "title": "LORD OF THE LOST",
       "description": "Παρασκευή 27.03.2026GAGARIN205LORD OF THE LOSTTOVR NOIRSPECIAL GUESTS: AD INFINITUM",
@@ -17803,37 +15947,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0a21a3dddf6cd48a",
-      "title": "The Aristocrats - The Duck Tour @ Fuzz 05/04/2026",
-      "description": "THE ARISTOCRATS - THE DUCK TOUR @ FUZZ 05/04/2026",
-      "startDate": "2026-04-05T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Fuzz Club",
-        "address": "Fuzz Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 35,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-aristocrats-the-duck-tour-fuzz-05/04/2026/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.037Z",
-      "updatedAt": "2025-10-26T21:21:01.030Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "08073533d5ab982c",
       "title": "FM – 40 Years of “Indiscreet”, Live in Athens",
       "description": "Μετά τη sold out συναυλία των FM το Νοέμβριο του 2024, σκεφτήκαμε ότι θα ήταν μία καλή ευκαιρία να πείσουμε τους FM να παίξουν ζωντανά ολόκληρο το “Indiscreet” -σε ένα αποκλειστικό για τη χώρα μας sho",
@@ -17920,37 +16033,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.037Z",
       "updatedAt": "2025-10-26T21:21:01.048Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8b19a4ebc073d43b",
-      "title": "GODFLESH (UK) LIVE IN ATHENS",
-      "description": "2 Μαιου GODFLESH (UK) LIVE IN ATHENS ARCH",
-      "startDate": "2026-05-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "IN ATHENS ARCH",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 31,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/godflesh-uk-live-in-athens/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.656Z",
-      "updatedAt": "2025-10-22T17:16:25.656Z",
       "language": "en"
     },
     {
@@ -18140,37 +16222,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8723f6558309b804",
-      "title": "RELEASE ATHENS 2026 X SNF NOSTOS / GORILLAZ",
-      "description": "25 Ιουνιου RELEASE ATHENS 2026 X SNF NOSTOS / GORILLAZ Πλατεια Νερου, Φαληρο",
-      "startDate": "2026-06-25T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πλατεια Νερου, Φαληρο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/release-athens-2026-x-snf-nostos/gorillaz/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.658Z",
-      "updatedAt": "2025-10-22T17:16:25.658Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "89903ec9114b6214",
       "title": "RELEASE ATHENS 2026 X SNF NOSTOS / GORILLAZ",
       "description": "Την Πέμπτη 25 Ιουνίου, οι Gorillaz, το πρωτοποριακό project του Damon Albarn, έρχονται για πρώτη φορά στην Ελλάδα, για να μας προσφέρουν μια εκρηκτική οπτικοακουστική εμπειρία, στην Πλατεία Νερού.",
@@ -18354,8 +16405,8 @@
     }
   ],
   "meta": {
-    "total": 596,
-    "lastUpdate": "2025-10-29T10:17:15.778Z",
+    "total": 533,
+    "lastUpdate": "2025-10-29T10:22:28.240Z",
     "url": "https://agent-athens.netlify.app/concert"
   }
 }

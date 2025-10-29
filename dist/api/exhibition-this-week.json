@@ -69,37 +69,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "a0674239c88599f9",
-      "title": "🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη",
-      "description": "31 Οκτωβριου 🎃👻 XΑΛΙ ΠΑΛΙ 👻🎃 Halloween Party στο Κτήμα Αρίστη Κτημα Αριστη",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κτημα Αριστη",
-        "address": "Κτημα Αριστη",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/children/festival/xali-pali-ktima-aristi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.897Z",
-      "updatedAt": "2025-10-26T21:21:00.897Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1f386c5705104396",
       "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
       "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
@@ -130,8 +99,8 @@
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2025-10-29T10:17:15.780Z",
+    "total": 3,
+    "lastUpdate": "2025-10-29T10:22:28.242Z",
     "url": "https://agent-athens.netlify.app/exhibition-this-week"
   }
 }

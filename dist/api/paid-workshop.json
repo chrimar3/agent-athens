@@ -101,99 +101,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c0f807ce3365dbe5",
-      "title": "HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ",
-      "description": "31 Οκτωβριου HALLOWEEN WORKSHOP - PUMPKIN ΦΑΝΑΡΑΚΙ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/halloween-workshop-pumpkin-fanaraki/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.897Z",
-      "updatedAt": "2025-10-26T21:21:00.897Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "77f93e8b1ece3f7c",
-      "title": "Workshop by Miele - Wine Tasting",
-      "description": "31 Οκτωβριου Workshop by Miele - Wine Tasting Miele Experience Center - Αγια Παρασκευη",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Miele Experience Center - Αγια Παρασκευη",
-        "address": "Miele Experience Center - Αγια Παρασκευη",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/workshop/workshop-by-miele-wine-tasting/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.897Z",
-      "updatedAt": "2025-10-26T21:21:00.897Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4da577ed8202cd0b",
-      "title": "Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών)",
-      "description": "31 Οκτωβριου Το Σπιτάκι των Τεράτων – Halloween themed workshop (για παιδιά 4 – 6 ετών) Beesmall Concept Toy Store",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Beesmall Concept Toy Store",
-        "address": "Beesmall Concept Toy Store",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/to-spitaki-ton-teraton-halloween-themed-workshop-gia-paidia-4-6-eton/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.898Z",
-      "updatedAt": "2025-10-26T21:21:00.898Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "01ecdcf191635c55",
       "title": "Halloween Children's Workshop",
       "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
@@ -380,37 +287,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "efa3cb1b9a550201",
-      "title": "THERAPEIA SYNOLON - Live Workshop",
-      "description": "15 - 16 Νοεμβριου THERAPEIA SYNOLON - Live Workshop Θεατρο Altera Pars",
-      "startDate": "2025-11-15T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Altera Pars",
-        "address": "Θεατρο Altera Pars",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/therapeia-synolon-live-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.949Z",
-      "updatedAt": "2025-10-26T21:21:00.949Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "366f49a66bb03d0c",
       "title": "Σεμινάριο «Μέσα στον παιδικό εγκέφαλο»",
       "description": "16 Νοεμβριου Σεμινάριο «Μέσα στον παιδικό εγκέφαλο» Ελληνικο Παιδικο Μουσειο",
@@ -469,42 +345,11 @@
       "createdAt": "2025-10-22T17:16:25.594Z",
       "updatedAt": "2025-10-22T17:16:25.594Z",
       "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2e8af3ceaada8b66",
-      "title": "Σεμινάριο Συνήθειες & Πειθαρχία",
-      "description": "3 Δεκεμβριου Σεμινάριο Συνήθειες & Πειθαρχία Emmantina Hotel",
-      "startDate": "2025-12-03T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Emmantina Hotel",
-        "address": "Emmantina Hotel",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 17,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/seminario-synitheies-peitharxia-by-sabbas-geo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.978Z",
-      "updatedAt": "2025-10-26T21:21:00.978Z",
-      "language": "en"
     }
   ],
   "meta": {
-    "total": 16,
-    "lastUpdate": "2025-10-29T10:17:16.372Z",
+    "total": 11,
+    "lastUpdate": "2025-10-29T10:22:28.746Z",
     "url": "https://agent-athens.netlify.app/paid-workshop"
   }
 }

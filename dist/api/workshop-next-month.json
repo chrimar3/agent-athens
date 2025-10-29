@@ -193,37 +193,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "efa3cb1b9a550201",
-      "title": "THERAPEIA SYNOLON - Live Workshop",
-      "description": "15 - 16 Νοεμβριου THERAPEIA SYNOLON - Live Workshop Θεατρο Altera Pars",
-      "startDate": "2025-11-15T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Altera Pars",
-        "address": "Θεατρο Altera Pars",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/therapeia-synolon-live-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.949Z",
-      "updatedAt": "2025-10-26T21:21:00.949Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "366f49a66bb03d0c",
       "title": "Σεμινάριο «Μέσα στον παιδικό εγκέφαλο»",
       "description": "16 Νοεμβριου Σεμινάριο «Μέσα στον παιδικό εγκέφαλο» Ελληνικο Παιδικο Μουσειο",
@@ -254,8 +223,8 @@
     }
   ],
   "meta": {
-    "total": 8,
-    "lastUpdate": "2025-10-29T10:17:15.908Z",
+    "total": 7,
+    "lastUpdate": "2025-10-29T10:22:28.350Z",
     "url": "https://agent-athens.netlify.app/workshop-next-month"
   }
 }
