@@ -8,197 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b330adaf6481cdb4",
-      "title": "Creative Guitar: Kawol Samarqandi / Giannis Arapis",
-      "description": "28 Οκτωβριου Creative Guitar: Kawol Samarqandi / Giannis Arapis Κεντρο ελεγχου τηλεορασεων",
-      "fullDescription": "Το Κέντρο Ελέγχου Τηλεοράσεων παρουσιάζει το \"Creative Guitar\" με τους Kawol Samarqandi και Γιάννη Αράπη στις 28 Οκτωβρίου, προσφέροντας στο αθηναϊκό κοινό μια βραδιά αφιερωμένη στη δημιουργική εξερεύνηση της κιθάρας. Αυτή η συναυλία φέρνει μαζί δύο μουσικούς με διαφορετικές μουσικές παραδόσεις και προσεγγίσεις, δημιουργώντας έναν διάλογο που υπερβαίνει τα γεωγραφικά και μουσικά σύνορα. Η συνεργασία αυτή αντιπροσωπεύει ακριβώς το είδος της καλλιτεχνικής ανταλλαγής που εμπλουτίζει την πολιτιστική σκηνή της Αθήνας.\n\nΟ Kawol Samarqandi φέρνει στη σκηνή μουσικές επιρροές από την Κεντρική Ασία, συνδυάζοντας παραδοσιακές μελωδίες με σύγχρονες τεχνικές κιθάρας. Η προσέγγισή του στο όργανο αντλεί από πλούσια πολιτιστική κληρονομιά ενώ αγκαλιάζει την πειραματικότητα και την αυτοσχεδιαστική ελευθερία. Αυτός ο συνδυασμός παράδοσης και καινοτομίας δημιουργεί μουσική που είναι ταυτόχρονα βαθιά ριζωμένη και τολμηρά μοντέρνα.\n\nΟ Γιάννης Αράπης έχει καθιερωθεί στην ελληνική μουσική σκηνή ως κιθαρίστας με βαθιά κατανόηση τόσο της jazz παράδοσης όσο και της σύγχρονης πειραματικής μουσικής. Η τεχνική του επιδεξιότητα συνδυάζεται με ευαισθησία για τη δυναμική και τον χώρο, δημιουργώντας παραστάσεις που προσκαλούν προσεκτική ακρόαση. Η πολυετής εμπειρία του στη συνεργασία με μουσικούς από διάφορα είδη τον έχει καταστήσει ιδανικό συνεργάτη για διαπολιτισμικές μουσικές εξερευνήσεις.\n\nΤο Κέντρο Ελέγχου Τηλεοράσεων έχει καθιερωθεί ως ένας από τους πιο περιπετειώδεις χώρους της Αθήνας για ζωντανή μουσική που ξεφεύγει από τα συμβατικά όρια. Ο χώρος προσελκύει κοινό που αναζητά μουσικές εμπειρίες πέρα από το mainstream, που εκτιμά τον πειραματισμό και τη διαπολιτισμική ανταλλαγή. Η οικεία ατμόσφαιρα του χώρου δημιουργεί το ιδανικό περιβάλλον για τη δημιουργική κιθάρα, όπου οι λεπτές αποχρώσεις του ήχου μπορούν να εκτιμηθούν πλήρως.\n\nΑυτό που κάνει τέτοιες συναυλίες ιδιαίτερα πολύτιμες είναι η ευκαιρία που προσφέρουν για μουσική σύγκλιση που προκύπτει από διάλογο παρά από συγχώνευση. Οι δύο μουσικοί φέρνουν τις ξεχωριστές φωνές τους στη σκηνή, δημιουργώντας στιγμές όπου οι παραδόσεις τους συναντιούνται, συνομιλούν και αμοιβαία εμπλουτίζονται χωρίς να χάνουν την ατομική τους ταυτότητα. Για τους λάτρεις της κιθάρας και τους ακροατές που αναζητούν μουσική που προκαλεί και επεκτείνει τις μουσικές προσδοκίες, αυτή η συναυλία προσφέρει ευκαιρία που δεν πρέπει να χαθεί. Τα εισιτήρια απαιτούνται για αυτή την εκδήλωση στο Κέντρο Ελέγχου Τηλεοράσεων.",
-      "startDate": "2025-10-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/creative-guitar-samarqandi/arapis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.423Z",
-      "updatedAt": "2025-10-28 11:23:38",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ac6492c84e29bccc",
-      "title": "Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας",
-      "description": "28 Οκτωβριου Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας Caja De Musica",
-      "startDate": "2025-10-28T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/nosokoma-dimitria-kai-to-domatio-therapeias/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-22T17:16:25.424Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "49d8cd6767666899",
-      "title": "Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας",
-      "description": "28 Οκτωβριου Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας Caja De Musica",
-      "fullDescription": "Η Caja De Musica παρουσιάζει τη \"Νοσοκόμα Δημητρία και το Δωμάτιο Θεραπείας\", μια μουσική παράσταση που φέρνει την ελληνική underground μουσική σκηνή στο προσκήνιο. Αυτή η εκδήλωση αντιπροσωπεύει τη δέσμευση του venue στην υποστήριξη τοπικών καλλιτεχνών που εργάζονται εκτός των mainstream μουσικών κατηγοριών, δημιουργώντας χώρους όπου η πειραματική και εναλλακτική μουσική μπορεί να βρει αφοσιωμένο κοινό. Η Νοσοκόμα Δημητρία αντιπροσωπεύει είδος μουσικής προσωπικότητας που θεωρεί την απόδοση ως κάτι περισσότερο από απλή μουσική παρουσίαση αλλά ως ολοκληρωμένη καλλιτεχνική εμπειρία.\n\nΤο Δωμάτιο Θεραπείας ως έννοια προτείνει χώρο αποκατάστασης, θεραπείας ή μετασχηματισμού. Σε μουσικό πλαίσιο, αυτό μπορεί να αντιπροσωπεύει την ιδέα της μουσικής ως θεραπευτική πρακτική, του προχώρου ως αποκαθιστώντος χώρου, ή της απόδοσης ως τελετουργικού που προσφέρει είδος συναισθηματικής κάθαρσης. Οι καλλιτέχνες της underground σκηνής συχνά προσεγγίζουν τη μουσική με αυτό το είδος σοβαρότητας σκοπού, βλέποντας τις παραστάσεις τους ως κάτι περισσότερο από ψυχαγωγία.\n\nΗ Caja De Musica έχει καθιερωθεί ως κρίσιμος χώρος για την αθηναϊκή εναλλακτική μουσική σκηνή, προσφέροντας ακουστικά και περιβάλλον που επιτρέπουν στην πειραματική μουσική να ακουστεί σωστά. Η οικεία χωρητικότητα του club δημιουργεί ατμόσφαιρα όπου η μουσική που απαιτεί προσεκτική ακρόαση μπορεί να βρει προσεκτικό κοινό. Ο χώρος προσελκύει μουσικόφιλους που αναζητούν ήχους που προκαλούν και επεκτείνουν τις μουσικές προσδοκίες.\n\nΤο όνομα Νοσοκόμα Δημητρία συνδυάζει την οικειότητα ενός ελληνικού ονόματος με το επάγγελμα της νοσοκόμας, δημιουργώντας persona που προτείνει φροντίδα, προσοχή και ίσως μια άκρη του ιατρικού ή θεραπευτικού. Στο πλαίσιο της underground μουσικής, τέτοια ονόματα συχνά λειτουργούν ως alter egos που επιτρέπουν στους καλλιτέχνες να εξερευνήσουν διαφορετικές πτυχές της καλλιτεχνικής τους ταυτότητας.\n\nΓια όσους αναζητούν μουσική που ξεφεύγει από εμπορικούς τύπους, που προσφέρει κάτι πιο προσωπικό, πειραματικό ή συναισθηματικά αυθεντικό από τη mainstream παραγωγή, αυτού του είδους οι παραστάσεις παρέχουν ουσιαστικές εμπειρίες. Τα εισιτήρια απαιτούνται για αυτή την εκδήλωση στη Caja De Musica.",
-      "startDate": "2025-10-28T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "Caja De Musica",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/nosokoma-dimitria-kai-to-domatio-therapeias/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.884Z",
-      "updatedAt": "2025-10-28 11:30:46",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "59036c62d89bd0d9",
-      "title": "Creative Guitar: Kawol Samarqandi / Giannis Arapis",
-      "description": "Στην πρώτη συναυλία συμμετέχει ο κιθαρίστας Kawol Samarqandi από την Ιαπωνία, ενώ τη συναυλία θα ανοίξει ο Γιάννης Αράπης.",
-      "fullDescription": "Το Κέντρο Ελέγχου Τηλεοράσεων παρουσιάζει το \"Creative Guitar\" με τους Kawol Samarqandi και Γιάννη Αράπη στις 28 Οκτωβρίου στις 21:00, προσφέροντας στο αθηναϊκό κοινό μια βραδιά αφιερωμένη στη δημιουργική εξερεύνηση της κιθάρας. Ο Samarqandi έρχεται από την Ιαπωνία φέρνοντας προοπτική που συνδυάζει τεχνική virtuosity με μουσικές επιρροές από την Ανατολή, ενώ ο Αράπης αντιπροσωπεύει την ελληνική σύγχρονη jazz σκηνή. Η συναυλία ανοίγει με τον Αράπη, δημιουργώντας το υπόβαθρο για διαπολιτισμικό μουσικό διάλογο.\n\nΤο Κέντρο Ελέγχου Τηλεοράσεων έχει καθιερωθεί ως ένας από τους πιο περιπετειώδεις χώρους της Αθήνας για ζωντανή μουσική που ξεφεύγει από συμβατικά όρια. Ο χώρος προσελκύει κοινό που αναζητά μουσικές εμπειρίες πέρα από το mainstream, που εκτιμά τον πειραματισμό και τη διαπολιτισμική ανταλλαγή. Η οικεία ατμόσφαιρα δημιουργεί ιδανικό περιβάλλον για τη δημιουργική κιθάρα, όπου οι λεπτές αποχρώσεις του ήχου μπορούν να εκτιμηθούν πλήρως.\n\nΗ κιθάρα ως όργανο προσφέρεται σε άπειρες μουσικές εξερευνήσεις, από την κλασική παράδοση μέχρι το jazz, το rock και την πειραματική μουσική. Όταν δύο μουσικοί από διαφορετικά πολιτιστικά πλαίσια συναντιούνται στη σκηνή, δημιουργούνται στιγμές όπου οι παραδόσεις τους συνομιλούν, δημιουργώντας κάτι νέο που δεν ανήκει αποκλειστικά σε καμία από τις δύο αλλά αντλεί από αμφότερες. Αυτού του είδους οι μουσικές συναντήσεις εμπλουτίζουν την πολιτιστική σκηνή της Αθήνας.\n\nΤα εισιτήρια κοστίζουν 10 ευρώ, προσιτή τιμή που κάνει την εκδήλωση διαθέσιμη σε ευρύ κοινό. Για τους λάτρεις της κιθάρας και τους ακροατές που αναζητούν μουσική που προκαλεί και επεκτείνει τις μουσικές προσδοκίες, αυτή η συναυλία προσφέρει ευκαιρία να βιώσουν δύο musicians με διακριτές φωνές που συναντιούνται για μια βραδιά δημιουργικής εξερεύνησης στο Κέντρο Ελέγχου Τηλεοράσεων.",
-      "startDate": "2025-10-28T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "Κεντρο ελεγχου τηλεορασεων",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/creative-guitar-samarqandi/arapis/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-28 12:24:50",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b2042c9462bd6a36",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "fullDescription": "Ο Σταύρος Τσαντές παρουσιάζει το \"Η Δημοκρατία του Αχ\" στις 29 Οκτωβρίου στο Σταύρος του Νότου Club, συνεχίζοντας την πορεία του ως ένας από τους πιο διακριτούς φωνές στην ελληνική μουσική σκηνή. Ο Τσαντές έχει χτίσει καριέρα που συνδυάζει ποιητική ευαισθησία με μουσική καινοτομία, δημιουργώντας τραγούδια που μιλούν τόσο στην καρδιά όσο και στο μυαλό. Οι ζωντανές του εμφανίσεις προσφέρουν εμπειρία που ξεπερνά την απλή αναπαραγωγή ηχογραφημένου υλικού, μετατρέποντας κάθε συναυλία σε μοναδικό γεγονός.\n\nΤο Σταύρος του Νότου έχει καθιερωθεί ως σημαντικός χώρος για την εναλλακτική ελληνική μουσική σκηνή, προσφέροντας περιβάλλον όπου καλλιτέχνες με ξεχωριστή καλλιτεχνική φωνή μπορούν να συνδεθούν με αφοσιωμένο κοινό. Το club κατανοεί ότι η ποιοτική μουσική απαιτεί χώρο που σέβεται τόσο τους performers όσο και τους ακροατές, δημιουργώντας ατμόσφαιρα όπου η μουσική μπορεί να ακουστεί με την προσοχή που αξίζει.\n\nΟ τίτλος \"Η Δημοκρατία του Αχ\" υποδηλώνει θεματολογία που αντιμετωπίζει δυσκολίες, πόνο και ίσως κοινωνική κριτική. Το \"αχ\" ως έκφραση πόνου, δυσφορίας ή απογοήτευσης αποτελεί κοινή ανθρώπινη εμπειρία που μεταφράζεται σε πολύπλοκα συναισθήματα όταν διοχετεύεται μέσα από τη μουσική και την ποίηση. Η δημοκρατικοποίηση αυτής της εμπειρίας υποδηλώνει αναγνώριση ότι η δυσκολία και η απογοήτευση είναι συλλογικά φαινόμενα, όχι ατομικές αποτυχίες.\n\nΤα εισιτήρια κοστίζουν 13 ευρώ, προσιτή τιμή για ζωντανή μουσική από καθιερωμένο καλλιτέχνη σε κατάλληλο χώρο. Για όσους εκτιμούν την ελληνική μουσική που συνδυάζει ποιητικό λόγο με μουσική ουσία, που προσφέρει περισσότερα από παθητική ψυχαγωγία, αυτή η συναυλία παρέχει ευκαιρία να βιώσουν καλλιτέχνη που έχει αφιερώσει τη δουλειά του στη δημιουργία τραγουδιών που σημαίνουν κάτι.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d216459f41a0ac41",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
-      "fullDescription": "Το Half Note Jazz Club παρουσιάζει το Tilemachos Moussas Farm στις 29 Οκτωβρίου, φέρνοντας σύγχρονη ελληνική jazz στην κεντρική σκηνή του club. Το Half Note έχει καθιερωθεί ως ο πρωταρχικός χώρος για jazz στην Αθήνα, με ιστορία που εκτείνεται σε δεκαετίες φιλοξενίας τόσο διεθνών όσο και ελληνικών jazz ensembles. Ο χώρος προσφέρει ακουστικά, ατμόσφαιρα και κοινό που κατανοούν και εκτιμούν τη jazz ως τέχνη που απαιτεί και επιβραβεύει προσεκτική ακρόαση.\n\nΤο Moussas Farm αντιπροσωπεύει την παράδοση των μικρών jazz ensembles που επιτρέπουν βαθύ διάλογο μεταξύ των μουσικών, όπου κάθε παίκτης έχει χώρο να συνεισφέρει στη συλλογική ηχητική υφή ενώ διατηρεί ατομική φωνή. Αυτού του είδους τα σύνολα ζουν ή πεθαίνουν με βάση τη χημεία μεταξύ των μελών τους, την ικανότητά τους να ακούν ο ένας τον άλλον και να ανταποκρίνονται σε πραγματικό χρόνο, δημιουργώντας μουσική που δεν θα μπορούσε να υπάρξει με άλλον συνδυασμό ατόμων.\n\nΗ jazz παράδοση στην Αθήνα έχει αναπτυχθεί σημαντικά τις τελευταίες δεκαετίες, με γενιά ελλήνων μουσικών που έχουν σπουδάσει σε διεθνή ωδεία και φέρνουν πίσω εμπειρίες που εμπλουτίζουν την τοπική σκηνή. Το Half Note παίζει κρίσιμο ρόλο σε αυτή την ανάπτυξη, παρέχοντας σταθερό χώρο όπου οι μουσικοί μπορούν να αναπτύξουν την τέχνη τους και το κοινό μπορεί να ανακαλύψει νέες φωνές στην ελληνική jazz.\n\nΤα εισιτήρια κοστίζουν 12 ευρώ, ανταγωνιστική τιμή για ζωντανή jazz σε χώρο με την υποδομή και την ιστορία του Half Note. Για τους λάτρεις της jazz που αναζητούν αυθεντική, ζωντανή απόδοση σε περιβάλλον που σέβεται το είδος, αυτή η συναυλία προσφέρει ευκαιρία να βιώσουν σύγχρονη ελληνική jazz στο φυσικό της οικότοπο.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "683ebc1e0b18a2fb",
       "title": "All Them Witches - House of Mirrors",
       "description": "29 Οκτωβριου All Them Witches - House of Mirrors Universe - Multispace",
@@ -223,38 +32,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "eb57b6de1bf22e21",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "fullDescription": "Το Μουσείο Μουσικών Οργάνων \"Θυράθεν\" παρουσιάζει τα \"Τοπία από ήχους και άλλες ιστορίες\" στις 29 Οκτωβρίου, μια εκδήλωση που συνδυάζει μουσική με αφήγηση σε περιβάλλον αφιερωμένο στην ιστορία των μουσικών οργάνων. Το μουσείο προσφέρει μοναδικό πλαίσιο για μουσικές εκδηλώσεις, όπου τα ίδια τα όργανα γίνονται μέρος της εμπειρίας, υπενθυμίζοντας ότι η μουσική ζει όχι μόνο στις νότες αλλά και στα φυσικά αντικείμενα που τις παράγουν.\n\nΟ τίτλος \"Τοπία από ήχους\" υποδηλώνει εξερεύνηση του πώς οι ήχοι μπορούν να δημιουργήσουν νοητικές εικόνες, να μεταφέρουν τους ακροατές σε διαφορετικά μέρη και χρόνους χωρίς οπτικά ερεθίσματα. Αυτή η ιδέα έχει βαθιές ρίζες στη μουσική παράδοση, όπου οι συνθέτες και οι performers έχουν πάντα επιδιώξει να αποτυπώσουν εμπειρίες και τοποθεσίες μέσω του ήχου. Το μουσείο παρέχει ιδανικό περιβάλλον για τέτοια εξερεύνηση.\n\nΗ προσθήκη \"άλλες ιστορίες\" στον τίτλο προτείνει ότι η εκδήλωση περιλαμβάνει αφηγηματικά στοιχεία, ίσως ιστορίες που συνοδεύονται από μουσική ή μουσική που αφηγείται τις δικές της ιστορίες. Αυτός ο συνδυασμός λόγου και ήχου δημιουργεί πολυδιάστατη εμπειρία που εμπλέκει τη φαντασία με διαφορετικούς τρόπους από την καθαρή μουσική ή λογοτεχνική παράσταση.\n\nΤα εισιτήρια κοστίζουν 10 ευρώ, προσιτή τιμή που κάνει την εκδήλωση διαθέσιμη σε ευρύ κοινό. Για οικογένειες, παιδιά και ενήλικες που αναζητούν πολιτιστικές εμπειρίες που εκπαιδεύουν ενώ διασκεδάζουν, που προσφέρουν κάτι διαφορετικό από τις συμβατικές συναυλίες, αυτή η εκδήλωση στο Μουσείο Μουσικών Οργάνων \"Θυράθεν\" παρέχει μοναδική ευκαιρία να εξερευνήσουν τη σχέση μεταξύ ήχου, ιστορίας και φαντασίας.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσικων Οργανων «Θυραθεν»",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.424Z",
       "updatedAt": "2025-10-28 12:24:50",
@@ -449,37 +226,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "9d96b3c1ad828230",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "Note Jazz Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.885Z",
-      "updatedAt": "2025-10-26T21:21:00.885Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "4eac8f00dd524735",
       "title": "Τοπία από ήχους και άλλες ιστορίες",
       "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
@@ -542,66 +288,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "d3037608b91880ec",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ LIVE Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧΣταυρός του Νότου club ΤΕΤΑΡΤΗ 29 ΟΚΤΩΒΡΙΟΥ",
-      "startDate": "2025-10-29T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "art music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.025Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7ba323791779d595",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "μουσειο θυραθεν",
-      "startDate": "2025-10-29T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "address": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.051Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "49f81cb4c9ac37dd",
       "title": "Tilemachos Moussas Farm - Half Note",
       "description": "Tilemachos Moussas Farm – Live @ Half Note Jazz Club",
@@ -628,37 +314,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:09.976Z",
       "updatedAt": "2025-10-26T21:21:01.040Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4e866d1d2759ed44",
-      "title": "MONOPHONICS live in Greece",
-      "description": "30 Οκτ - 1 Νοε MONOPHONICS live in Greece Πολλαπλοι χωροι",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Greece Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
       "language": "en"
     },
     {
@@ -718,37 +373,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9d1c4b68ac408340",
-      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
-      "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βαγονι Orient Express",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.429Z",
       "updatedAt": "2025-10-22T17:16:25.429Z",
@@ -943,37 +567,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f82a0452758642aa",
-      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
-      "description": "30 Οκτ - 2 Νοε Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης Θεατρο Αμαλια",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "668723996690528f",
       "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
       "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
@@ -1000,192 +593,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.431Z",
       "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e4fe017b9dccc0ae",
-      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
-      "description": "30 Οκτωβριου ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ Κυτταρο Live",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 23,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b70aa4a3556158de",
-      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
-      "description": "30 Οκτωβριου ANDREAS POLYZOGOPOULOS ELECTRIC 4ET Half Note Jazz Club",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b8582fb47fcf02da",
-      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
-      "description": "ATHENS SPOOKS: When Apples Fall from Trees – Το Halloween ζωντανεύει στην Αθήνα με τους Lucifer, The Abbey, The Blackwall και ελληνικές μπάντες, στο Κύτταρο στις 30 Οκτωβρίου. Μια βραδιά σκοτεινής μου",
-      "startDate": "2025-10-30T19:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "Κυτταρο Live",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 23,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.030Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e1db3b34e8e9b2f5",
-      "title": "MONOPHONICS live in Greece",
-      "description": "30 Οκτ - 1 Νοε MONOPHONICS live in Greece Πολλαπλοι χωροι",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Greece Πολλαπλοι χωροι",
-        "address": "Greece Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.889Z",
-      "updatedAt": "2025-10-26T21:21:00.889Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6e7c6b46e9c7e0de",
-      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.889Z",
-      "updatedAt": "2025-10-26T21:21:00.889Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "350a8a68867e125f",
-      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
-      "description": "30 Οκτ - 2 Νοε Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης Θεατρο Αμαλια",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καλογεράκης Θεατρο Αμαλια",
-        "address": "Καλογεράκης Θεατρο Αμαλια",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.889Z",
-      "updatedAt": "2025-10-26T21:21:00.889Z",
       "language": "en"
     },
     {
@@ -1279,37 +686,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.889Z",
       "updatedAt": "2025-10-26T21:21:00.889Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "69e32e51c2a780c0",
-      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
-      "description": "Orient express, Μουσικό βαγόνι, πέμπτη, μουσική παράσταση, άρτεμις ματαφιά, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, μεγάλες κυρίες τραγουδούν",
-      "startDate": "2025-10-30T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "art music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "address": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.024Z",
       "language": "en"
     },
     {
@@ -1499,64 +875,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "3b6cc54d85c14176",
-      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
-      "description": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET H “ηλεκτρική” πλευρά ενός κορυφαίου τρομπετίστα Πέμπτη 30 ΟκτωβρίουHalf Note Jazz Club21:30",
-      "startDate": "2025-10-30T21:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "Half Note Jazz Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.985Z",
-      "updatedAt": "2025-10-26T21:21:01.032Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "f66f132d0b9af395",
-      "title": "ZED'S DEAD",
-      "description": "ZED'S DEAD, Halloween, House, Techno, Rave, Pulse Tribe, HARDVISION, Athens, Bass, Spooky Night, DJ Set, Live Performance, Underground, Dancefloor, Party People, Club Culture, Nightlife Athens, Late N",
-      "startDate": "2025-10-31T00:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Zed_Athens",
-        "address": "Zed_Athens",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/zeds-dead/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.985Z",
-      "updatedAt": "2025-10-26T21:21:01.042Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "86d45f4dfcd4a33c",
       "title": "ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ",
       "description": "31 Οκτωβριου ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ Κυτταρο Live",
@@ -1583,99 +901,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.432Z",
       "updatedAt": "2025-10-22T17:16:25.432Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ce16b9f5cbf08415",
-      "title": "Paris-Istanbul (7ος χρόνος)",
-      "description": "31 Οκτ - 30 Ιαν Paris-Istanbul (7ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βαγονι Orient Express",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/paris-istanbul-7os-xronos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.432Z",
-      "updatedAt": "2025-10-22T17:16:25.432Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "38430ef1e0e48a5d",
-      "title": "METALLICA & SYMPHONY by SCREAM INC",
-      "description": "31 Οκτωβριου METALLICA & SYMPHONY by SCREAM INC CHRISTMAS THEATER",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "INC CHRISTMAS THEATER",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/metallica-symphony-by-scream-inc/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.434Z",
-      "updatedAt": "2025-10-22T17:16:25.434Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7c344fe3368bc437",
-      "title": "Παιδί Τραύμα - Special Live | Μαζί στη Δεύτερη Ζωή",
-      "description": "31 Οκτ - 13 Δεκ Παιδί Τραύμα - Special Live | Μαζί στη Δεύτερη Ζωή ΠΛΥΦΑ - Κτιριο 7Γ",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Κτιριο 7Γ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/paidi-trauma-special-live-mazi-sti-deuteri-zoi/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.434Z",
-      "updatedAt": "2025-10-22T17:16:25.434Z",
       "language": "en"
     },
     {
@@ -1805,37 +1030,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b9357042764c76db",
-      "title": "Brian Jackson (US) ζωντανά στην Αθήνα",
-      "description": "31 Οκτωβριου Brian Jackson (US) ζωντανά στην Αθήνα Gazarte - Ground Stage",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Ground Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 28,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "6c9178644649693d",
       "title": "Xάτου Δερά live at An Club!",
       "description": "31 Οκτωβριου Xάτου Δερά live at An Club! AN Club",
@@ -1859,37 +1053,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/offer/xatou-dera-live-at-an-club/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "537cfc70fbe51107",
-      "title": "EMPTY FRAME - 20 Years Anniversary",
-      "description": "31 Οκτωβριου EMPTY FRAME - 20 Years Anniversary Death Disco",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Anniversary Death Disco",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/empty-frame-20-years-anniversary/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.435Z",
       "updatedAt": "2025-10-22T17:16:25.435Z",
@@ -1929,68 +1092,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "ee1135b395d4a351",
-      "title": "ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
-      "description": "31 Οκτωβριου ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ Σταυρος του Νοτου - Κεντρικη Σκηνη",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Κεντρικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mple-stauros-tou-notou/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.435Z",
-      "updatedAt": "2025-10-22T17:16:25.435Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e65d5d9a5718e2df",
-      "title": "FUEL EATER w/ 10CODE + THE HEAVY HEARTS VENDETTA • AUX CLUB",
-      "description": "31 Οκτωβριου FUEL EATER w/ 10CODE + THE HEAVY HEARTS VENDETTA • AUX CLUB AUX CLUB",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "CLUB AUX CLUB",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/fuel-eater-w/10code-the-heavy-hearts-vendetta-aux-club/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2d8958ae0699777c",
       "title": "ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ - ΣΑΛΙΝΑ ΓΑΒΑΛΑ",
       "description": "31 Οκτ - 28 Νοε ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ - ΣΑΛΙΝΑ ΓΑΒΑΛΑ Γυαλινο Μουσικο Θεατρο",
@@ -2014,37 +1115,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/baggelis-germanos-salina-gabala/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e1d1d246395c03ec",
-      "title": "ΓΙΩΡΓΟΣ ΝΙΚΗΦΟΡΟΥ ΖΕΡΒΑΚΗΣ - ΒΙΟΛΕΤΑ ΙΚΑΡΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
-      "description": "31 Οκτ - 7 Νοε ΓΙΩΡΓΟΣ ΝΙΚΗΦΟΡΟΥ ΖΕΡΒΑΚΗΣ - ΒΙΟΛΕΤΑ ΙΚΑΡΗ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοτου - Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/giorgos-nikiforou-zerbakis-bioleta-ikari-stauros-tou-notou-club/",
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
@@ -2146,37 +1216,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0c827a5813b44f0f",
-      "title": "TRASHLAND HALLOWEEN",
-      "description": "31 Οκτωβριου TRASHLAND HALLOWEEN Death Disco",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "HALLOWEEN Death Disco",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/trashland-halloween/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2de8b2f06d816391",
       "title": "\"Semazen\" │ George Klountzos & Semazen Ensemble",
       "description": "31 Οκτωβριου \"Semazen\" │ George Klountzos & Semazen Ensemble Κεντρο ελεγχου τηλεορασεων",
@@ -2203,37 +1242,6 @@
       "source": "viva.gr",
       "createdAt": "2025-10-22T17:16:25.436Z",
       "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a683a8b8318c6a8d",
-      "title": "ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ",
-      "description": "31 Οκτωβριου ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ Κυτταρο Live",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-afieroma-sto-thano-mikroutsiko-me-tous-rita-antonopoulou-kai-tous-rebans/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
       "language": "en"
     },
     {
@@ -2332,99 +1340,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "9810791d8c4be6b7",
-      "title": "OLA ONABULÉ & GILAD ATZMON QUARTET",
-      "description": "31 Οκτ - 3 Νοε OLA ONABULÉ & GILAD ATZMON QUARTET Half Note Jazz Club",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ola-onabule-gilad-atzmon-quartet/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.439Z",
-      "updatedAt": "2025-10-22T17:16:25.439Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e367fac835e842ee",
-      "title": "THE EX (NL) live in Greece",
-      "description": "31 Οκτ - 2 Νοε THE EX (NL) live in Greece Πολλαπλοι χωροι",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 22,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/the-ex-live-in-greece/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.439Z",
-      "updatedAt": "2025-10-22T17:16:25.439Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ced304cce24935c4",
-      "title": "HALLOWEEN PARTARA @ ARCH CLUB",
-      "description": "31 Οκτωβριου HALLOWEEN PARTARA @ ARCH CLUB ARCH",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ARCH",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/halloween-partara-arch-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.441Z",
-      "updatedAt": "2025-10-22T17:16:25.441Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "94108fda320bbcf3",
       "title": "Brian Jackson (US) ζωντανά στην Αθήνα",
       "description": "31 Οκτωβριου Brian Jackson (US) ζωντανά στην Αθήνα Gazarte - Ground Stage",
@@ -2456,37 +1371,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "d22f27784a3754dc",
-      "title": "Xάτου Δερά live at An Club!",
-      "description": "31 Οκτωβριου Xάτου Δερά live at An Club! AN Club",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "AN Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/offer/xatou-dera-live-at-an-club/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.442Z",
-      "updatedAt": "2025-10-22T17:16:25.442Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1714b14664f6ba45",
       "title": "EMPTY FRAME - 20 Years Anniversary",
       "description": "31 Οκτωβριου EMPTY FRAME - 20 Years Anniversary Death Disco",
@@ -2510,37 +1394,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/empty-frame-20-years-anniversary/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.442Z",
-      "updatedAt": "2025-10-22T17:16:25.442Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b713874cd66cac0a",
-      "title": "O Χρήστος Βέργος live στο Ίλιον Plus",
-      "description": "31 Οκτωβριου O Χρήστος Βέργος live στο Ίλιον Plus ΙΛΙΟΝ Plus",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΙΛΙΟΝ Plus",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/o-xristos-bergos-live-sto-ilion-plus/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.442Z",
       "updatedAt": "2025-10-22T17:16:25.442Z",
@@ -2642,37 +1495,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f4d3a5e2237c849f",
-      "title": "GHOSTS OF HALLOWEEN",
-      "description": "31 Οκτωβριου GHOSTS OF HALLOWEEN ΧΟΡΟΣΤΑΣΙΟ",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΧΟΡΟΣΤΑΣΙΟ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ghosts-of-halloween/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.443Z",
-      "updatedAt": "2025-10-22T17:16:25.443Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "09382df657bdc720",
       "title": "TRASHLAND HALLOWEEN",
       "description": "31 Οκτωβριου TRASHLAND HALLOWEEN Death Disco",
@@ -2703,8 +1525,8 @@
     }
   ],
   "meta": {
-    "total": 87,
-    "lastUpdate": "2025-10-28T12:43:25.150Z",
+    "total": 49,
+    "lastUpdate": "2025-10-29T10:04:55.420Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-month"
   }
 }

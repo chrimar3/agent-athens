@@ -7,11 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b2042c9462bd6a36",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "fullDescription": "Ο Σταύρος Τσαντές παρουσιάζει το \"Η Δημοκρατία του Αχ\" στις 29 Οκτωβρίου στο Σταύρος του Νότου Club, συνεχίζοντας την πορεία του ως ένας από τους πιο διακριτούς φωνές στην ελληνική μουσική σκηνή. Ο Τσαντές έχει χτίσει καριέρα που συνδυάζει ποιητική ευαισθησία με μουσική καινοτομία, δημιουργώντας τραγούδια που μιλούν τόσο στην καρδιά όσο και στο μυαλό. Οι ζωντανές του εμφανίσεις προσφέρουν εμπειρία που ξεπερνά την απλή αναπαραγωγή ηχογραφημένου υλικού, μετατρέποντας κάθε συναυλία σε μοναδικό γεγονός.\n\nΤο Σταύρος του Νότου έχει καθιερωθεί ως σημαντικός χώρος για την εναλλακτική ελληνική μουσική σκηνή, προσφέροντας περιβάλλον όπου καλλιτέχνες με ξεχωριστή καλλιτεχνική φωνή μπορούν να συνδεθούν με αφοσιωμένο κοινό. Το club κατανοεί ότι η ποιοτική μουσική απαιτεί χώρο που σέβεται τόσο τους performers όσο και τους ακροατές, δημιουργώντας ατμόσφαιρα όπου η μουσική μπορεί να ακουστεί με την προσοχή που αξίζει.\n\nΟ τίτλος \"Η Δημοκρατία του Αχ\" υποδηλώνει θεματολογία που αντιμετωπίζει δυσκολίες, πόνο και ίσως κοινωνική κριτική. Το \"αχ\" ως έκφραση πόνου, δυσφορίας ή απογοήτευσης αποτελεί κοινή ανθρώπινη εμπειρία που μεταφράζεται σε πολύπλοκα συναισθήματα όταν διοχετεύεται μέσα από τη μουσική και την ποίηση. Η δημοκρατικοποίηση αυτής της εμπειρίας υποδηλώνει αναγνώριση ότι η δυσκολία και η απογοήτευση είναι συλλογικά φαινόμενα, όχι ατομικές αποτυχίες.\n\nΤα εισιτήρια κοστίζουν 13 ευρώ, προσιτή τιμή για ζωντανή μουσική από καθιερωμένο καλλιτέχνη σε κατάλληλο χώρο. Για όσους εκτιμούν την ελληνική μουσική που συνδυάζει ποιητικό λόγο με μουσική ουσία, που προσφέρει περισσότερα από παθητική ψυχαγωγία, αυτή η συναυλία παρέχει ευκαιρία να βιώσουν καλλιτέχνη που έχει αφιερώσει τη δουλειά του στη δημιουργία τραγουδιών που σημαίνουν κάτι.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "7236f5ff396ef2d4",
+      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -19,31 +18,123 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Νοτου - Club",
+        "name": "Αιθουσα Αιμιλιος Ριαδης",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 13,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "d216459f41a0ac41",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
-      "fullDescription": "Το Half Note Jazz Club παρουσιάζει το Tilemachos Moussas Farm στις 29 Οκτωβρίου, φέρνοντας σύγχρονη ελληνική jazz στην κεντρική σκηνή του club. Το Half Note έχει καθιερωθεί ως ο πρωταρχικός χώρος για jazz στην Αθήνα, με ιστορία που εκτείνεται σε δεκαετίες φιλοξενίας τόσο διεθνών όσο και ελληνικών jazz ensembles. Ο χώρος προσφέρει ακουστικά, ατμόσφαιρα και κοινό που κατανοούν και εκτιμούν τη jazz ως τέχνη που απαιτεί και επιβραβεύει προσεκτική ακρόαση.\n\nΤο Moussas Farm αντιπροσωπεύει την παράδοση των μικρών jazz ensembles που επιτρέπουν βαθύ διάλογο μεταξύ των μουσικών, όπου κάθε παίκτης έχει χώρο να συνεισφέρει στη συλλογική ηχητική υφή ενώ διατηρεί ατομική φωνή. Αυτού του είδους τα σύνολα ζουν ή πεθαίνουν με βάση τη χημεία μεταξύ των μελών τους, την ικανότητά τους να ακούν ο ένας τον άλλον και να ανταποκρίνονται σε πραγματικό χρόνο, δημιουργώντας μουσική που δεν θα μπορούσε να υπάρξει με άλλον συνδυασμό ατόμων.\n\nΗ jazz παράδοση στην Αθήνα έχει αναπτυχθεί σημαντικά τις τελευταίες δεκαετίες, με γενιά ελλήνων μουσικών που έχουν σπουδάσει σε διεθνή ωδεία και φέρνουν πίσω εμπειρίες που εμπλουτίζουν την τοπική σκηνή. Το Half Note παίζει κρίσιμο ρόλο σε αυτή την ανάπτυξη, παρέχοντας σταθερό χώρο όπου οι μουσικοί μπορούν να αναπτύξουν την τέχνη τους και το κοινό μπορεί να ανακαλύψει νέες φωνές στην ελληνική jazz.\n\nΤα εισιτήρια κοστίζουν 12 ευρώ, ανταγωνιστική τιμή για ζωντανή jazz σε χώρο με την υποδομή και την ιστορία του Half Note. Για τους λάτρεις της jazz που αναζητούν αυθεντική, ζωντανή απόδοση σε περιβάλλον που σέβεται το είδος, αυτή η συναυλία προσφέρει ευκαιρία να βιώσουν σύγχρονη ελληνική jazz στο φυσικό της οικότοπο.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "c73d2b52703b835a",
+      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
+      "description": "30 Οκτ - 2 Νοε Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης Θεατρο Αμαλια",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Καλογεράκης Θεατρο Αμαλια",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 14,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8da4207d0b2a2ce8",
+      "title": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ",
+      "description": "30 Οκτ - 27 Νοε ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ Γυαλινο Μουσικο Θεατρο",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Γυαλινο Μουσικο Θεατρο",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/giannis-papanikolaou/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3e36c03bec6c400b",
+      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
+      "description": "30 Οκτωβριου ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ Κυτταρο Live",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΚΥΤΤΑΡΟ Κυτταρο Live",
+        "address": "",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 23,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.429Z",
+      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7facb080bd1db68b",
+      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
+      "description": "30 Οκτωβριου ANDREAS POLYZOGOPOULOS ELECTRIC 4ET Half Note Jazz Club",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -62,20 +153,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
+      "createdAt": "2025-10-22T17:16:25.430Z",
+      "updatedAt": "2025-10-22T17:16:25.430Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "683ebc1e0b18a2fb",
-      "title": "All Them Witches - House of Mirrors",
-      "description": "29 Οκτωβριου All Them Witches - House of Mirrors Universe - Multispace",
-      "fullDescription": "Το Universe Multispace φιλοξενεί τους All Them Witches από το Nashville στις 29 Οκτωβρίου με το album τους \"House of Mirrors\", φέρνοντας διεθνή psychedelic rock στην αθηναϊκή σκηνή. Οι All Them Witches έχουν χτίσει διεθνή φήμη μέσω ήχου που συνδυάζει stoner rock, blues και psychedelia, δημιουργώντας μουσική που είναι ταυτόχρονα βαριά και υπνωτική. Οι ζωντανές τους εμφανίσεις προσφέρουν εμπειρία που διαφέρει σημαντικά από τα studio albums τους, με εκτεταμένες improvisational εξερευνήσεις.\n\nΤο Universe Multispace έχει καθιερωθεί ως κρίσιμος χώρος για διεθνείς rock και alternative acts στην Αθήνα, προσφέροντας τεχνική υποδομή και χωρητικότητα που επιτρέπουν σε μεγαλύτερες παραγωγές να παρουσιαστούν σωστά. Ο χώρος κατανοεί τις ανάγκες του rock concert, από την ποιότητα ήχου μέχρι την ατμόσφαιρα που επιτρέπει στο κοινό να βυθιστεί πλήρως στην εμπειρία.\n\nΟι All Them Witches αντιπροσωπεύουν σύγχρονη παράδοση rock που αντλεί από τις ρίζες του είδους στο blues και την psychedelia ενώ προσθέτει σύγχρονη αισθησιοτροπία. Η μουσική τους απευθύνεται σε όσους εκτιμούν το rock που προτεραιοποιεί το groove και την ατμόσφαιρα πάνω από την ταχύτητα ή την τεχνική εντυπωσιοθηρία, που δημιουργεί ηχητικά τοπία που καλούν τους ακροατές να χαθούν μέσα τους.\n\nΤα εισιτήρια κοστίζουν 40 ευρώ, αντανακλώντας το διεθνές status του συγκροτήματος και τα κόστη που εμπλέκονται στην περιοδεία από τις Ηνωμένες Πολιτείες. Η τιμή τοποθετεί τη συναυλία στην κατηγορία premium διεθνών acts. Για τους λάτρεις του psychedelic και stoner rock, αυτή η εμφάνιση προσφέρει ευκαιρία να δουν ένα από τα πιο σεβαστά συγκροτήματα του είδους σε ζωντανό περιβάλλον.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "e2012253f120150a",
+      "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
+      "description": "30 Οκτωβριου “Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan Κεντρο ελεγχου τηλεορασεων",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -83,39 +173,7 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Universe - Multispace",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 40,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "eb57b6de1bf22e21",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "fullDescription": "Το Μουσείο Μουσικών Οργάνων \"Θυράθεν\" παρουσιάζει τα \"Τοπία από ήχους και άλλες ιστορίες\" στις 29 Οκτωβρίου, μια εκδήλωση που συνδυάζει μουσική με αφήγηση σε περιβάλλον αφιερωμένο στην ιστορία των μουσικών οργάνων. Το μουσείο προσφέρει μοναδικό πλαίσιο για μουσικές εκδηλώσεις, όπου τα ίδια τα όργανα γίνονται μέρος της εμπειρίας, υπενθυμίζοντας ότι η μουσική ζει όχι μόνο στις νότες αλλά και στα φυσικά αντικείμενα που τις παράγουν.\n\nΟ τίτλος \"Τοπία από ήχους\" υποδηλώνει εξερεύνηση του πώς οι ήχοι μπορούν να δημιουργήσουν νοητικές εικόνες, να μεταφέρουν τους ακροατές σε διαφορετικά μέρη και χρόνους χωρίς οπτικά ερεθίσματα. Αυτή η ιδέα έχει βαθιές ρίζες στη μουσική παράδοση, όπου οι συνθέτες και οι performers έχουν πάντα επιδιώξει να αποτυπώσουν εμπειρίες και τοποθεσίες μέσω του ήχου. Το μουσείο παρέχει ιδανικό περιβάλλον για τέτοια εξερεύνηση.\n\nΗ προσθήκη \"άλλες ιστορίες\" στον τίτλο προτείνει ότι η εκδήλωση περιλαμβάνει αφηγηματικά στοιχεία, ίσως ιστορίες που συνοδεύονται από μουσική ή μουσική που αφηγείται τις δικές της ιστορίες. Αυτός ο συνδυασμός λόγου και ήχου δημιουργεί πολυδιάστατη εμπειρία που εμπλέκει τη φαντασία με διαφορετικούς τρόπους από την καθαρή μουσική ή λογοτεχνική παράσταση.\n\nΤα εισιτήρια κοστίζουν 10 ευρώ, προσιτή τιμή που κάνει την εκδήλωση διαθέσιμη σε ευρύ κοινό. Για οικογένειες, παιδιά και ενήλικες που αναζητούν πολιτιστικές εμπειρίες που εκπαιδεύουν ενώ διασκεδάζουν, που προσφέρουν κάτι διαφορετικό από τις συμβατικές συναυλίες, αυτή η εκδήλωση στο Μουσείο Μουσικών Οργάνων \"Θυράθεν\" παρέχει μοναδική ευκαιρία να εξερευνήσουν τη σχέση μεταξύ ήχου, ιστορίας και φαντασίας.",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσικων Οργανων «Θυραθεν»",
+        "name": "Κεντρο ελεγχου τηλεορασεων",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -126,19 +184,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "url": "https://www.more.com/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
       "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.424Z",
-      "updatedAt": "2025-10-28 12:24:50",
+      "createdAt": "2025-10-22T17:16:25.430Z",
+      "updatedAt": "2025-10-22T17:16:25.430Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "2301ca6f550fec2f",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "734e127a28fdeaff",
+      "title": "Κρινιώ Νικολάου - “Κόντρα Ρόλος”",
+      "description": "30 Οκτωβριου Κρινιώ Νικολάου - “Κόντρα Ρόλος” Caja De Musica",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -146,7 +204,7 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
+        "name": "Caja De Musica",
         "address": "",
         "neighborhood": null,
         "capacity": null
@@ -157,19 +215,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
+      "url": "https://www.more.com/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
+      "source": "viva.gr",
+      "createdAt": "2025-10-22T17:16:25.430Z",
+      "updatedAt": "2025-10-22T17:16:25.430Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6a83bdf84276b4f8",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "202c7ec60abedb6f",
+      "title": "MONOPHONICS live in Greece",
+      "description": "30 Οκτ - 1 Νοε MONOPHONICS live in Greece Πολλαπλοι χωροι",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -177,30 +235,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Half Note Jazz Club",
+        "name": "Πολλαπλοι χωροι",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 30,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.428Z",
-      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "createdAt": "2025-10-22T17:16:25.430Z",
+      "updatedAt": "2025-10-22T17:16:25.430Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c82f9a3f0cd36dc2",
-      "title": "Music Tales",
-      "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "668723996690528f",
+      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
+      "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+      "startDate": "2025-10-30T00:00:00.000+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -208,30 +266,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "λιλιτζουμ",
+        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
         "address": "",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 13,
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/music-tales/",
+      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.428Z",
-      "updatedAt": "2025-10-22T17:16:25.428Z",
+      "createdAt": "2025-10-22T17:16:25.431Z",
+      "updatedAt": "2025-10-22T17:16:25.431Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1e64d9fe1d381a3a",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
+      "id": "4d187e67dfc2c222",
+      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
+      "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
+      "startDate": "2025-10-30T20:00:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -239,61 +297,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "address": "",
+        "name": "Βαγονι Orient Express",
+        "address": "Βαγονι Orient Express",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 10,
+        "amount": 16,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
+      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
       "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e1bb230e6c774242",
-      "title": "All Them Witches - House of Mirrors",
-      "description": "Οι εκρηκτικοί All Them Witches επιστρέφουν στην Αθήνα για μία και μοναδική εμφάνιση στις 29 Οκτωβρίου στο Universe Club!",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "rock"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Universe - Multispace",
-        "address": "Universe - Multispace",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 40,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/all-them-witches-house-of-mirrors/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.044Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b7d043ceaf1d5757",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-29T20:00:00+02:00",
+      "id": "b5ffe4a211668948",
+      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
+      "description": "30 Οκτωβριου ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ Κυτταρο Live",
+      "startDate": "2025-10-30T20:00:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -301,30 +328,30 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Νοτου - Club",
-        "address": "Νοτου - Club",
+        "name": "ΚΥΤΤΑΡΟ Κυτταρο Live",
+        "address": "ΚΥΤΤΑΡΟ Κυτταρο Live",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 13,
+        "amount": 23,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
+      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.884Z",
-      "updatedAt": "2025-10-26T21:21:00.884Z",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "9d96b3c1ad828230",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "29 Οκτωβριου Tilemachos Moussas Farm - Half Note Half Note Jazz Club",
-      "startDate": "2025-10-29T20:00:00+02:00",
+      "id": "04cf8d3ad73ffadd",
+      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
+      "description": "30 Οκτωβριου ANDREAS POLYZOGOPOULOS ELECTRIC 4ET Half Note Jazz Club",
+      "startDate": "2025-10-30T20:00:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -343,141 +370,19 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.885Z",
-      "updatedAt": "2025-10-26T21:21:00.885Z",
+      "createdAt": "2025-10-26T21:21:00.889Z",
+      "updatedAt": "2025-10-26T21:21:00.889Z",
       "language": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "4eac8f00dd524735",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσικων Οργανων «Θυραθεν»",
-        "address": "Μουσικων Οργανων «Θυραθεν»",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.885Z",
-      "updatedAt": "2025-10-26T21:21:00.885Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "16f655344badb1a6",
-      "title": "Music Tales",
-      "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "λιλιτζουμ",
-        "address": "λιλιτζουμ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/music-tales/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.888Z",
-      "updatedAt": "2025-10-26T21:21:00.888Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d3037608b91880ec",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ LIVE Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧΣταυρός του Νότου club ΤΕΤΑΡΤΗ 29 ΟΚΤΩΒΡΙΟΥ",
-      "startDate": "2025-10-29T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "art music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "address": "Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.025Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7ba323791779d595",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "μουσειο θυραθεν",
-      "startDate": "2025-10-29T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "address": "Μουσειο Μουσικων Οργανων «Θυραθεν»",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.051Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "49f81cb4c9ac37dd",
-      "title": "Tilemachos Moussas Farm - Half Note",
-      "description": "Tilemachos Moussas Farm – Live @ Half Note Jazz Club",
-      "startDate": "2025-10-29T21:30:00+02:00",
+      "id": "1216227055730072",
+      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "description": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
+      "startDate": "2025-10-30T21:00:00+02:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -485,27 +390,180 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Half Note Jazz Club",
-        "address": "Half Note Jazz Club",
+        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 8,
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.more.com/gr-el/tickets/music/tilemachos-moussas-farm-half-note/",
+      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
       "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.976Z",
-      "updatedAt": "2025-10-26T21:21:01.040Z",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.019Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "19be49201a7f6d0e",
+      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
+      "description": "Για τέσσερις μόνο παραστάσεις, στις 30, 31 Οκτωβρίου και 1, 2 Νοεμβρίου, τα Καλογεράκια παρουσιάζουν τα Ρεμπώτικα: ένα καλλιτεχνικά τολμηρό έργο, όπου συναντιούνται δύο κόσμοι: η ποίηση του Αρθούρου Ρ",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θεατρο Αμαλια",
+        "address": "Θεατρο Αμαλια",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 14,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.021Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d5a482aa14eeab25",
+      "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
+      "description": "Το “Chants to the Moon” είναι ένας διαλογικός πειραματισμός ανάμεσα στη φωνή και τη δόνηση, τη σιγή και τον ήχο, τη σκιά και το φως — ένα ντουέτο της Μαρίσσας Μπίλη και του Barry Yuk Bun Wan.",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Κεντρο ελεγχου τηλεορασεων",
+        "address": "Κεντρο ελεγχου τηλεορασεων",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.977Z",
+      "updatedAt": "2025-10-26T21:21:01.043Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3706749bc5d419dd",
+      "title": "Κρινιώ Νικολάου - “Κόντρα Ρόλος”",
+      "description": "Κρινιώ Νικολάου, Γιώργος Γιαννόπουλος, caja de musica, live music, musicstage, μουσικη βραδια",
+      "startDate": "2025-10-30T21:00:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "art music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Caja De Musica",
+        "address": "Caja De Musica",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.982Z",
+      "updatedAt": "2025-10-26T21:21:01.051Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3c73cfec9e485c8a",
+      "title": "MONOPHONICS live in Greece",
+      "description": "Οι Monophonics, μία από τις πιο δυναμικές μπάντες της soul σκηνής, επιστρέφουν στην Ελλάδα, στην Θεσσαλονίκη την Πέμπτη 30 Οκτωβρίου 2025 στο WE και στην Αθήνα στο Ground Stage του Gazarte, την Παρασκ",
+      "startDate": "2025-10-30T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "other"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοι χωροι",
+        "address": "Πολλαπλοι χωροι",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 30,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.983Z",
+      "updatedAt": "2025-10-26T21:21:01.015Z",
+      "language": "en"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ad13d61c2d0f2f27",
+      "title": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ",
+      "description": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ, ΓΙΩΤΑ ΒΟΚΑΛΗ, ΓΙΩΡΓΟΣ ΠΑΓΙΑΤΗΣ, ΠΕΜΠΤΗ, ΓΥΑΛΙΝΟ ΜΟΥΣΙΚΟ ΘΕΑΤΡΟ, ΣΚΗΝΗ UPSTAGE",
+      "startDate": "2025-10-30T21:30:00+02:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Γυαλινο Μουσικο Θεατρο",
+        "address": "Γυαλινο Μουσικο Θεατρο",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/giannis-papanikolaou/",
+      "source": "more.com",
+      "createdAt": "2025-10-26T21:20:09.983Z",
+      "updatedAt": "2025-10-26T21:21:01.030Z",
       "language": "en"
     }
   ],
   "meta": {
-    "total": 16,
-    "lastUpdate": "2025-10-28T12:43:24.213Z",
+    "total": 18,
+    "lastUpdate": "2025-10-29T10:04:54.785Z",
     "url": "https://agent-athens.netlify.app/concert-tomorrow"
   }
 }
