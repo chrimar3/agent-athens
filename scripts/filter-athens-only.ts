@@ -30,9 +30,9 @@ const NON_ATHENS_PATTERNS = [
 ];
 
 // Define specific venue names that are ONLY in non-Athens cities
-// (venues with same name exist in multiple cities)
+// (these venues do NOT exist in Athens at all)
 const NON_ATHENS_VENUES = [
-  'Θεατρο Αμαλια',           // Thessaloniki (different from Athens venues)
+  'Θεατρο Αμαλια',           // Thessaloniki ONLY (no Athens location)
   'Θεατρο Τεχνων Θεσσαλονικης',  // Thessaloniki
   // Add more specific venue names as discovered
 ];
