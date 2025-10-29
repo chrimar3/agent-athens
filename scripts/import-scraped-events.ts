@@ -50,6 +50,10 @@ async function main() {
   for (const [priceType, count] of Object.entries(stats.byPriceType)) {
     console.log(`    ${priceType}: ${count}`);
   }
+
+  // Remind about Athens-only filtering
+  console.log('\n🗺️  IMPORTANT: Remember to filter for Athens-only events:');
+  console.log('   bun run scripts/filter-athens-only.ts\n');
 }
 
 main().catch(console.error);

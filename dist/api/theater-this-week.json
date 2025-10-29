@@ -503,37 +503,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "99db4166d43f3920",
-      "title": "ART της Γιασμίνα Ρεζά | Triple Threat Productions",
-      "description": "31 Οκτ - 9 Νοε ART της Γιασμίνα Ρεζά | Triple Threat Productions Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.895Z",
-      "updatedAt": "2025-10-26T21:21:00.895Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "96bc6bb828938d4c",
       "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
       "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
@@ -839,37 +808,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.899Z",
       "updatedAt": "2025-10-26T21:21:00.899Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b935604be37ec010",
-      "title": "Οι Μικροί Κηπουροί | The Little Foxes",
-      "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.902Z",
-      "updatedAt": "2025-10-26T21:21:00.902Z",
       "language": "en"
     },
     {
@@ -2269,8 +2207,8 @@
     }
   ],
   "meta": {
-    "total": 73,
-    "lastUpdate": "2025-10-29T10:30:00.067Z",
+    "total": 71,
+    "lastUpdate": "2025-10-29T10:47:22.665Z",
     "url": "https://agent-athens.netlify.app/theater-this-week"
   }
 }

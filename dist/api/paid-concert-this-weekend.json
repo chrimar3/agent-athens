@@ -996,37 +996,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "2ec32b1b399c8a19",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "ΣΥΝΑΥΛΙΑ MOYSA",
-      "startDate": "2025-11-01T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.987Z",
-      "updatedAt": "2025-10-26T21:21:01.032Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "3e288525635e1b42",
       "title": "Laura Krieg // Uphor!a // Doric | ILION PLUS",
       "description": "«Όλα καταρρέουν, όλα πάνε καλά» Στην πέμπτη της συνάθροιση, η ομάδα Nowa Atena αφιερώνεται στον μινιμαλιστικό ηλεκτρονικό synth ήχο, παρουσιάζοντας τρία ξεχωριστά live acts.",
@@ -1393,37 +1362,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "177eab83876864e6",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "JEWISH CHAMBER ORCHESTRA MUNICH:THE KEYS OF TOLEDO",
-      "startDate": "2025-11-02T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.988Z",
-      "updatedAt": "2025-10-26T21:21:01.021Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "07b3f4f35340e8cb",
       "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
       "description": "Orient express, Μουσικό βαγόνι, σάββατο, μουσική παράσταση, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, Franky meets Ella, Paris-Istanbul, glitter grotesque, Christmas jazz",
@@ -1543,8 +1481,8 @@
     }
   ],
   "meta": {
-    "total": 50,
-    "lastUpdate": "2025-10-29T10:30:00.330Z",
+    "total": 48,
+    "lastUpdate": "2025-10-29T10:47:22.904Z",
     "url": "https://agent-athens.netlify.app/paid-concert-this-weekend"
   }
 }

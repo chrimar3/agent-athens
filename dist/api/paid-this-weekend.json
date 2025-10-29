@@ -1123,37 +1123,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "99db4166d43f3920",
-      "title": "ART της Γιασμίνα Ρεζά | Triple Threat Productions",
-      "description": "31 Οκτ - 9 Νοε ART της Γιασμίνα Ρεζά | Triple Threat Productions Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/art-triplethreat/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.895Z",
-      "updatedAt": "2025-10-26T21:21:00.895Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "96bc6bb828938d4c",
       "title": "Εκτροφείο τεράτων - Παγκόσμια πρώτη",
       "description": "31 Οκτ - 2 Ιαν Εκτροφείο τεράτων - Παγκόσμια πρώτη Θεατρο Μικρος Κεραμεικος",
@@ -2266,37 +2235,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b935604be37ec010",
-      "title": "Οι Μικροί Κηπουροί | The Little Foxes",
-      "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.902Z",
-      "updatedAt": "2025-10-26T21:21:00.902Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2c90bfe6c9394c87",
       "title": "ΣΩΚΡΑΤΟΥΣ ΧΑΡΙΤΕΣ",
       "description": "1 - 2 Νοεμβριου ΣΩΚΡΑΤΟΥΣ ΧΑΡΙΤΕΣ Θεατρο Altera Pars",
@@ -2881,37 +2819,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.905Z",
       "updatedAt": "2025-10-26T21:21:00.905Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2ec32b1b399c8a19",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "ΣΥΝΑΥΛΙΑ MOYSA",
-      "startDate": "2025-11-01T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.987Z",
-      "updatedAt": "2025-10-26T21:21:01.032Z",
       "language": "en"
     },
     {
@@ -4430,37 +4337,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "177eab83876864e6",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "JEWISH CHAMBER ORCHESTRA MUNICH:THE KEYS OF TOLEDO",
-      "startDate": "2025-11-02T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.988Z",
-      "updatedAt": "2025-10-26T21:21:01.021Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "07b3f4f35340e8cb",
       "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
       "description": "Orient express, Μουσικό βαγόνι, σάββατο, μουσική παράσταση, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, Franky meets Ella, Paris-Istanbul, glitter grotesque, Christmas jazz",
@@ -4580,8 +4456,8 @@
     }
   ],
   "meta": {
-    "total": 148,
-    "lastUpdate": "2025-10-29T10:30:00.202Z",
+    "total": 144,
+    "lastUpdate": "2025-10-29T10:47:22.796Z",
     "url": "https://agent-athens.netlify.app/paid-this-weekend"
   }
 }

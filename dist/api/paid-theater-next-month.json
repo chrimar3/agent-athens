@@ -132,37 +132,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b935604be37ec010",
-      "title": "Οι Μικροί Κηπουροί | The Little Foxes",
-      "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 3,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-mikroi-kipouroi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.902Z",
-      "updatedAt": "2025-10-26T21:21:00.902Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2c90bfe6c9394c87",
       "title": "ΣΩΚΡΑΤΟΥΣ ΧΑΡΙΤΕΣ",
       "description": "1 - 2 Νοεμβριου ΣΩΚΡΑΤΟΥΣ ΧΑΡΙΤΕΣ Θεατρο Altera Pars",
@@ -1837,37 +1806,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "5647b189735990bb",
-      "title": "Seawall | Ιωάννινα",
-      "description": "7 - 16 Νοεμβριου Seawall | Ιωάννινα Θεατρο Κυκλος (πρωην Εκφραση) Ιωαννινα",
-      "startDate": "2025-11-07T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "(πρωην Εκφραση) Ιωαννινα",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/seawall-ioannina/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.492Z",
-      "updatedAt": "2025-10-22T17:16:25.492Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "20f465a812bc7f72",
       "title": "Η ΚΟΥΖΙΝΑ σε σκηνοθεσία Γιώργου Κουτλή",
       "description": "7 Νοε - 21 Δεκ Η ΚΟΥΖΙΝΑ σε σκηνοθεσία Γιώργου Κουτλή Θεατρο Κιβωτος",
@@ -3382,37 +3320,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.534Z",
       "updatedAt": "2025-10-22T17:16:25.534Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4b22866cd4c78443",
-      "title": "Ο Ριχάρδος στη Γάζα",
-      "description": "14 - 29 Νοεμβριου Ο Ριχάρδος στη Γάζα Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-14T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/o-rixardos-sti-gaza/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.945Z",
-      "updatedAt": "2025-10-26T21:21:00.945Z",
       "language": "en"
     },
     {
@@ -5092,37 +4999,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "75a0d61799c73027",
-      "title": "Τα Χέρια δεν Χτυπάνε, Τα Χέρια Αγαπάνε Τα Χριστούγεννα",
-      "description": "29 Νοε - 2 Ιαν Τα Χέρια δεν Χτυπάνε, Τα Χέρια Αγαπάνε Τα Χριστούγεννα Θεατρο Τεχνων Θεσσαλονικης",
-      "startDate": "2025-11-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τεχνων Θεσσαλονικης",
-        "address": "Θεατρο Τεχνων Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-xeria-den-xtypane-ta-xeria-agapane-ta-xristougenna/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.973Z",
-      "updatedAt": "2025-10-26T21:21:00.973Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "823b2f9407ee8f46",
       "title": "ΜΕΔΟΥΣΑ",
       "description": "29 Νοε - 21 Δεκ ΜΕΔΟΥΣΑ ΘΕΑΤΡΟ ΑΘΗΝΑΙΟΝ ΘΕΣΣΑΛΟΝΙΚΗ - Αιθουσα 1",
@@ -5246,8 +5122,8 @@
     }
   ],
   "meta": {
-    "total": 169,
-    "lastUpdate": "2025-10-29T10:30:00.408Z",
+    "total": 165,
+    "lastUpdate": "2025-10-29T10:47:22.977Z",
     "url": "https://agent-athens.netlify.app/paid-theater-next-month"
   }
 }

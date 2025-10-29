@@ -346,37 +346,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "2ec32b1b399c8a19",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "ΣΥΝΑΥΛΙΑ MOYSA",
-      "startDate": "2025-11-01T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.987Z",
-      "updatedAt": "2025-10-26T21:21:01.032Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "3e288525635e1b42",
       "title": "Laura Krieg // Uphor!a // Doric | ILION PLUS",
       "description": "«Όλα καταρρέουν, όλα πάνε καλά» Στην πέμπτη της συνάθροιση, η ομάδα Nowa Atena αφιερώνεται στον μινιμαλιστικό ηλεκτρονικό synth ήχο, παρουσιάζοντας τρία ξεχωριστά live acts.",
@@ -743,37 +712,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "177eab83876864e6",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "JEWISH CHAMBER ORCHESTRA MUNICH:THE KEYS OF TOLEDO",
-      "startDate": "2025-11-02T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.988Z",
-      "updatedAt": "2025-10-26T21:21:01.021Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "07b3f4f35340e8cb",
       "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
       "description": "Orient express, Μουσικό βαγόνι, σάββατο, μουσική παράσταση, τρένο στο ρουφ, αμαξοστοιχία-θέατρο, Franky meets Ella, Paris-Istanbul, glitter grotesque, Christmas jazz",
@@ -1044,37 +982,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.477Z",
       "updatedAt": "2025-10-22T17:16:25.477Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "024c953f0d245c9a",
-      "title": "ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION",
-      "description": "ΔΗΜΟΣ ΔΗΜΗΤΡΙΑΔΗΣ: SONGS IN REVOLUTION",
-      "startDate": "2025-11-04T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/dimos-dimitriadis-songs-in-revolution/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.990Z",
-      "updatedAt": "2025-10-26T21:21:01.042Z",
       "language": "en"
     },
     {
@@ -1722,37 +1629,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.924Z",
       "updatedAt": "2025-10-26T21:21:00.924Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4b38a4c218468434",
-      "title": "8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ: Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ",
-      "description": "8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ:Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ",
-      "startDate": "2025-11-07T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/8o-festibal-mparok-mousikis-i-epoxi-ton-metabaseon/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.996Z",
-      "updatedAt": "2025-10-26T21:21:01.019Z",
       "language": "en"
     },
     {
@@ -2738,37 +2614,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7cf76a987096122f",
-      "title": "JONAS KAUFMANN",
-      "description": "JONAS KAUFMANN",
-      "startDate": "2025-11-09T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jonas-kaufmann/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.000Z",
-      "updatedAt": "2025-10-26T21:21:01.047Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "59eb1c1fdcf04941",
       "title": "TURBONEGRO live in ATHENS",
       "description": "???????Την Κυριακή 9 Νοεμβρίου 2025, το Gazarte Ground Stage παίρνει φωτιά, καθώς οι Turbonegro επιστρέφουν στην Αθήνα!",
@@ -3167,37 +3012,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:10.001Z",
       "updatedAt": "2025-10-26T21:21:01.016Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4af90c07479ba037",
-      "title": "ΕΡΓΑ ΓΙΑ ΣΑΞΟΦΩΝΟ & ΚΟΥΑΡΤΕΤΟ ΕΓΧΟΡΔΩΝ",
-      "description": "ΕΡΓΑ ΓΙΑ ΣΑΞΟΦΩΝΟ & ΚΟΥΑΡΤΕΤΟ ΕΓΧΟΡΔΩΝ",
-      "startDate": "2025-11-12T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/erga-gia-saksofono-kouarteto-egxordon/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.001Z",
-      "updatedAt": "2025-10-26T21:21:01.048Z",
       "language": "en"
     },
     {
@@ -4303,37 +4117,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "361d6f9b724e3171",
-      "title": "ENSEMBLE SINEQUANON BERLIN & ΚΥΠΡΙΑΝΟΣ ΚΑΤΣΑΡΗΣ",
-      "description": "ENSEMBLE SINEQUANON BERLIN& ΚΥΠΡΙΑΝΟΣ ΚΑΤΣΑΡΗΣ",
-      "startDate": "2025-11-16T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ensemble-sinequanon-berlin-kyprianos-katsaris/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.010Z",
-      "updatedAt": "2025-10-26T21:21:01.032Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "7cc8b2b47e6b48f7",
       "title": "ADRIAN YOUNGE live in Athens",
       "description": "Ο πολυδιάστατος μουσικός, παραγωγός και συνθέτης Adrian Younge, μία από τις πιο ξεχωριστές μορφές της σύγχρονης soul, jazz και cinematic funk σκηνής, στην Αθήνα, για μια μοναδική εμφάνιση στο Gazarte",
@@ -5099,37 +4882,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "85d064bc478c7846",
-      "title": "KENT NAGANO DRESDNER FESTSPIELORCHESTER",
-      "description": "KENT NAGANODRESDNER FESTSPIELORCHESTER",
-      "startDate": "2025-11-22T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/kent-nagano-dresdner-festspielorchester/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.011Z",
-      "updatedAt": "2025-10-26T21:21:01.023Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "9b4a3a43a378fb0e",
       "title": "ΜΩΡΑ στη ΦΩΤΙΑ Live στο ΚΥΤΤΑΡΟ",
       "description": "ΜΩΡΑ στη ΦΩΤΙΑ Live στο ΚΥΤΤΑΡΟΣάββατο 22 Νοεμβρίου 2025Special Guest: ΠΤΕΡΥΓΑ 3",
@@ -5465,37 +5217,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "55b22ba0ec59963b",
-      "title": "TRIO KOROBEINIKOV/MOSER/GLUZMAN",
-      "description": "TRIO KOROBEINIKOV/MOSER/GLUZMAN",
-      "startDate": "2025-11-25T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/trio-korobeinikov/moser/gluzman/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.012Z",
-      "updatedAt": "2025-10-26T21:21:01.047Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "612f5c3993624f2a",
       "title": "MadWalk 2025 by Three Cents",
       "description": "26 Νοεμβριου MadWalk 2025 by Three Cents Tae Kwon Do, Madwalk",
@@ -5553,37 +5274,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.967Z",
       "updatedAt": "2025-10-26T21:21:00.967Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "af4c96c589757d22",
-      "title": "QUARTETTO DI CREMONA",
-      "description": "QUARTETTO DI CREMONA",
-      "startDate": "2025-11-26T20:30:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/quartetto-di-cremona/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:10.012Z",
-      "updatedAt": "2025-10-26T21:21:01.047Z",
       "language": "en"
     },
     {
@@ -6446,8 +6136,8 @@
     }
   ],
   "meta": {
-    "total": 210,
-    "lastUpdate": "2025-10-29T10:30:00.018Z",
+    "total": 200,
+    "lastUpdate": "2025-10-29T10:47:22.620Z",
     "url": "https://agent-athens.netlify.app/concert-next-month"
   }
 }

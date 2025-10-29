@@ -441,37 +441,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1216227055730072",
-      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "description": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "startDate": "2025-10-30T21:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "other"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "address": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:20:09.977Z",
-      "updatedAt": "2025-10-26T21:21:01.019Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "19be49201a7f6d0e",
       "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
       "description": "Για τέσσερις μόνο παραστάσεις, στις 30, 31 Οκτωβρίου και 1, 2 Νοεμβρίου, τα Καλογεράκια παρουσιάζουν τα Ρεμπώτικα: ένα καλλιτεχνικά τολμηρό έργο, όπου συναντιούνται δύο κόσμοι: η ποίηση του Αρθούρου Ρ",
@@ -624,8 +593,8 @@
     }
   ],
   "meta": {
-    "total": 20,
-    "lastUpdate": "2025-10-29T10:30:00.180Z",
+    "total": 19,
+    "lastUpdate": "2025-10-29T10:47:22.776Z",
     "url": "https://agent-athens.netlify.app/paid-tomorrow"
   }
 }
