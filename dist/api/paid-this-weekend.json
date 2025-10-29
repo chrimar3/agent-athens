@@ -7,161 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "16caa44c58e119e9",
-      "title": "GHOSTS OF HALLOWEEN",
-      "description": "31 Οκτωβριου GHOSTS OF HALLOWEEN ΧΟΡΟΣΤΑΣΙΟ",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "OF HALLOWEEN ΧΟΡΟΣΤΑΣΙΟ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/ghosts-of-halloween/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.436Z",
-      "updatedAt": "2025-10-22T17:16:25.436Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1ad52123196aa8e0",
-      "title": "Το Κιβώτιο του Άρη Αλεξάνδρου για 10η χρονιά",
-      "description": "31 Οκτ - 7 Απρ Το Κιβώτιο του Άρη Αλεξάνδρου για 10η χρονιά Studio Μαυρομιχαλη",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "χρονιά Studio Μαυρομιχαλη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/to-kibotio-tou-ari-aleksandrou-gia-10i-xronia/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.437Z",
-      "updatedAt": "2025-10-22T17:16:25.437Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "ec8d3dfb653eb1bc",
-      "title": "Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour",
-      "description": "31 Οκτ - 22 Νοε Jeremy \"ΝΤΕΚΑΝΤΑΝΣ\" on Tour Πολλαπλοι χωροι",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Tour Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/jeremy-ntekantans/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0a3d3527e43dc0ac",
-      "title": "Υπό έναν Όρο (ΙΙ)- Η επιστροφή",
-      "description": "31 Οκτ - 7 Δεκ Υπό έναν Όρο (ΙΙ)- Η επιστροφή Γραμμες Τεχνης Αχαια Πατρα",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Τεχνης Αχαια Πατρα",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/ypo-enan-oro-ii-i-epistrofi/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "11ddc58496de4a01",
-      "title": "Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΣΑΛΑΜΙΝΑ",
-      "description": "31 Οκτωβριου Ο Καραγκιόζης και ο Ταρζάν στη Φωλιά του Γορίλα - ΣΑΛΑΜΙΝΑ Δημαρχειο Σαλαμινας ΑΙΘΟΥΣΑ \"ΜΠΟΓΡΗΣ\"",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σαλαμινας ΑΙΘΟΥΣΑ \"ΜΠΟΓΡΗΣ\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/o-karagkiozis-kai-o-tarzan-sti-folia-tou-gorila-salamina/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.438Z",
-      "updatedAt": "2025-10-22T17:16:25.438Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "2b7cda34a86cd936",
       "title": "Έξι μαθήματα χορού σε έξι εβδομάδες",
       "description": "31 Οκτ - 30 Νοε Έξι μαθήματα χορού σε έξι εβδομάδες ΠΤΙ ΠΑΛΑΙ",
@@ -317,37 +162,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "94108fda320bbcf3",
-      "title": "Brian Jackson (US) ζωντανά στην Αθήνα",
-      "description": "31 Οκτωβριου Brian Jackson (US) ζωντανά στην Αθήνα Gazarte - Ground Stage",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte - Ground Stage",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 28,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.442Z",
-      "updatedAt": "2025-10-22T17:16:25.442Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1714b14664f6ba45",
       "title": "EMPTY FRAME - 20 Years Anniversary",
       "description": "31 Οκτωβριου EMPTY FRAME - 20 Years Anniversary Death Disco",
@@ -405,37 +219,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.442Z",
       "updatedAt": "2025-10-22T17:16:25.442Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "d9483db65ccfadbe",
-      "title": "ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
-      "description": "31 Οκτωβριου ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ Σταυρος του Νοτου - Κεντρικη Σκηνη",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρος του Νοτου - Κεντρικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mple-stauros-tou-notou/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.443Z",
-      "updatedAt": "2025-10-22T17:16:25.443Z",
       "language": "en"
     },
     {
@@ -937,68 +720,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "2bd412e1bc481076",
-      "title": "MONOPHONICS",
-      "description": "",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "73758c853f252feb",
-      "title": "BRIAN JACKSON",
-      "description": "",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 28,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "498c1e5876bb69c7",
       "title": "ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ",
       "description": "31 Οκτωβριου ΣΥΝΑΥΛΙΑ-ΑΦΙΕΡΩΜΑ στο ΘΑΝΟ ΜΙΚΡΟΥΤΣΙΚΟ με την ΡΙΤΑ ΑΝΤΩΝΟΠΟΥΛΟΥ και τους ΡΕΒΑΝΣ Κυτταρο Live",
@@ -1025,37 +746,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.890Z",
       "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "59383866da812208",
-      "title": "Παιδί Τραύμα - Special Live | Μαζί στη Δεύτερη Ζωή",
-      "description": "31 Οκτ - 13 Δεκ Παιδί Τραύμα - Special Live | Μαζί στη Δεύτερη Ζωή ΠΛΥΦΑ - Κτιριο 7Γ",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Κτιριο 7Γ",
-        "address": "- Κτιριο 7Γ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/paidi-trauma-special-live-mazi-sti-deuteri-zoi/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.891Z",
-      "updatedAt": "2025-10-26T21:21:00.891Z",
       "language": "en"
     },
     {
@@ -1216,68 +906,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "9fc9a609137a32a5",
-      "title": "EMPTY FRAME - 20 Years Anniversary",
-      "description": "31 Οκτωβριου EMPTY FRAME - 20 Years Anniversary Death Disco",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Anniversary Death Disco",
-        "address": "Anniversary Death Disco",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/empty-frame-20-years-anniversary/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.891Z",
-      "updatedAt": "2025-10-26T21:21:00.891Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "9fee03c43d96e6d7",
-      "title": "O Χρήστος Βέργος live στο Ίλιον Plus",
-      "description": "31 Οκτωβριου O Χρήστος Βέργος live στο Ίλιον Plus ΙΛΙΟΝ Plus",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Plus ΙΛΙΟΝ Plus",
-        "address": "Plus ΙΛΙΟΝ Plus",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/o-xristos-bergos-live-sto-ilion-plus/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.891Z",
-      "updatedAt": "2025-10-26T21:21:00.891Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "d42f72eea3af5fc7",
       "title": "ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
       "description": "31 Οκτωβριου ΜΠΛΕ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ Σταυρος του Νοτου - Κεντρικη Σκηνη",
@@ -1335,37 +963,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.891Z",
       "updatedAt": "2025-10-26T21:21:00.891Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1caf263763f0d67e",
-      "title": "TRASHLAND HALLOWEEN",
-      "description": "31 Οκτωβριου TRASHLAND HALLOWEEN Death Disco",
-      "startDate": "2025-10-31T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "HALLOWEEN Death Disco",
-        "address": "HALLOWEEN Death Disco",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/trashland-halloween/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.892Z",
-      "updatedAt": "2025-10-26T21:21:00.892Z",
       "language": "en"
     },
     {
@@ -1989,254 +1586,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "1c0b50edcce435b0",
-      "title": "YUCATAN SHOW | DAY OF THE DEAD",
-      "description": "1 Νοεμβριου YUCATAN SHOW | DAY OF THE DEAD Ωδειο Αθηνων - Ω2 - Αμφιθεατρο Ιωαννης Δεσποτοπουλος",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αμφιθεατρο Ιωαννης Δεσποτοπουλος",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/yucatan-show-the-day-of-the-dead/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.446Z",
-      "updatedAt": "2025-10-22T17:16:25.446Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "afccdb637721f7b6",
-      "title": "Franky meets Ella on the Orient Express (5ος χρόνος)",
-      "description": "1 Νοε - 4 Απρ Franky meets Ella on the Orient Express (5ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βαγονι Orient Express",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/franky-meets-ella-on-the-orient-express-5os-xronos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.446Z",
-      "updatedAt": "2025-10-22T17:16:25.446Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b9a1bb7f2c569b18",
-      "title": "AEON - ΠΑΡΟΥΣΙΑΣΗ ΔΊΣΚΟΥ \"ΧΑΪΜΑΛΙΝΑ\"",
-      "description": "1 Νοεμβριου AEON - ΠΑΡΟΥΣΙΑΣΗ ΔΊΣΚΟΥ \"ΧΑΪΜΑΛΙΝΑ\" Fuzz Club",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "\"ΧΑΪΜΑΛΙΝΑ\" Fuzz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/aeon-parousiasi-diskou-xaimalina/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.446Z",
-      "updatedAt": "2025-10-22T17:16:25.446Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a4af77303ac6fe15",
-      "title": "ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA",
-      "description": "1 Νοεμβριου ΣΥΝΑΥΛΙΑ 10 ΧΡΟΝΙΑ MOYSA Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/synaulia-moysa-2/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.447Z",
-      "updatedAt": "2025-10-22T17:16:25.447Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "308b2269467e51e7",
-      "title": "Solar Fake",
-      "description": "1 Νοεμβριου Solar Fake Death Disco",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Fake Death Disco",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/solar-fake/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.447Z",
-      "updatedAt": "2025-10-22T17:16:25.447Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4b253d7db2cd11f2",
-      "title": "ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ",
-      "description": "1 - 9 Νοεμβριου ΦΘΙΝΟΠΩΡΙΝΗ ΙΣΤΟΡΙΑ | ΠΕΡΙΟΔΕΙΑ Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΕΡΙΟΔΕΙΑ Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/fthinoporini-istoria-bolos-patra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.450Z",
-      "updatedAt": "2025-10-22T17:16:25.450Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "85a76ee8d21d045c",
-      "title": "Το Ασχημόπαπο από τον Μικρό Βορρά",
-      "description": "1 - 9 Νοεμβριου Το Ασχημόπαπο από τον Μικρό Βορρά Θεατρο Ανετον",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βορρά Θεατρο Ανετον",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/to-asximopapo-apo-ton-mikro-borra/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.451Z",
-      "updatedAt": "2025-10-22T17:16:25.451Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "412149c3a50ed1ec",
-      "title": "ΔΟΝ ΖΟΥΑΝ 2ος ΧΡΟΝΟΣ",
-      "description": "1 - 30 Νοεμβριου ΔΟΝ ΖΟΥΑΝ 2ος ΧΡΟΝΟΣ Θεατρο Βεακη",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Βεακη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/don-zouan-2os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.453Z",
-      "updatedAt": "2025-10-22T17:16:25.453Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "724721bd9d2bba8c",
       "title": "Mortal Torment - 20 YEARS OF PUTRID ART",
       "description": "1 Νοεμβριου Mortal Torment - 20 YEARS OF PUTRID ART AN Club",
@@ -2260,37 +1609,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/music/offer/mortal-torment-20-years-of-putrid-art/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.454Z",
-      "updatedAt": "2025-10-22T17:16:25.454Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0b68c61cbdbb9d07",
-      "title": "ΜΙΧΑΛΗΣ ΔΕΛΤΑ - ΠΝΟΗ | Takis 1∞",
-      "description": "1 Νοεμβριου ΜΙΧΑΛΗΣ ΔΕΛΤΑ - ΠΝΟΗ | Takis 1∞ Ιδρυμα Βασιλη και Ελιζας Γουλανδρη",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ιδρυμα Βασιλη και Ελιζας Γουλανδρη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/mikael-delta-pnoe/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.454Z",
       "updatedAt": "2025-10-22T17:16:25.454Z",
@@ -2547,37 +1865,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "48ad50d1f546eccf",
-      "title": "ΜΙΝΙΟΝ",
-      "description": "1 Νοεμβριου ΜΙΝΙΟΝ Κινηματογραφος Απολλων - Αιθουσα 2",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κινηματογραφος Απολλων - Αιθουσα 2",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/minion/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.459Z",
-      "updatedAt": "2025-10-22T17:16:25.459Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "84241a1d4ceb0aee",
       "title": "Ανωτέρα Δραματική Σχολή “Βασίλης Ρίτσος”",
       "description": "1 Νοεμβριου Ανωτέρα Δραματική Σχολή “Βασίλης Ρίτσος” Βασιλης Ριτσος - Ανωτερα Δραματικη Σχολη",
@@ -2824,37 +2111,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7ff161257d1ced2d",
-      "title": "Mortal Torment - 20 YEARS OF PUTRID ART",
-      "description": "1 Νοεμβριου Mortal Torment - 20 YEARS OF PUTRID ART AN Club",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ART AN Club",
-        "address": "ART AN Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/offer/mortal-torment-20-years-of-putrid-art/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.898Z",
-      "updatedAt": "2025-10-26T21:21:00.898Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0ebf478c5d1cd7c5",
       "title": "ΥΠΟΓΕΙΑ ΡΕΥΜΑΤΑ & ΑΓΓΕΛΙΚΗ ΤΟΥΜΠΑΝΑΚΗ BAND LIVE",
       "description": "1 Νοεμβριου ΥΠΟΓΕΙΑ ΡΕΥΜΑΤΑ & ΑΓΓΕΛΙΚΗ ΤΟΥΜΠΑΝΑΚΗ BAND LIVE Κυτταρο Live",
@@ -2948,68 +2204,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "31a2610851f83c66",
-      "title": "Immune 5-Year Anniversary Tour 2025",
-      "description": "1 - 9 Νοεμβριου Immune 5-Year Anniversary Tour 2025 Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "2025 Πολλαπλοι χωροι",
-        "address": "2025 Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/immune-5-year-anniversary-tour-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.899Z",
-      "updatedAt": "2025-10-26T21:21:00.899Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "43f1fb992f6fca32",
-      "title": "Alekos Vretos Quartet «Mediterranean Echoes»",
-      "description": "1 Νοεμβριου Alekos Vretos Quartet «Mediterranean Echoes» Theatre of the NO",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "of the NO",
-        "address": "of the NO",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/alekos-vretos-quartet-mediterranean-echoes/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.899Z",
-      "updatedAt": "2025-10-26T21:21:00.899Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1cbe98dae36102ed",
       "title": "Annie",
       "description": "1 Νοε - 21 Δεκ Annie Θεατρο Παλλας",
@@ -3072,37 +2266,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "670991d15779f4f4",
-      "title": "ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ",
-      "description": "1 - 30 Νοεμβριου ΟΙ ΠΕΡΙΠΕΤΕΙΕΣ ΤΗΣ ΠΕΠΠΑ Πολλαπλοι χωροι",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΠΕΠΠΑ Πολλαπλοι χωροι",
-        "address": "ΠΕΠΠΑ Πολλαπλοι χωροι",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/oi-peripeteies-ti-peppa/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.901Z",
-      "updatedAt": "2025-10-26T21:21:00.901Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "b935604be37ec010",
       "title": "Οι Μικροί Κηπουροί | The Little Foxes",
       "description": "1 - 29 Νοεμβριου Οι Μικροί Κηπουροί | The Little Foxes Θεατρο Τεχνων Θεσσαλονικης",
@@ -3157,68 +2320,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/sokratous-xarites/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.902Z",
-      "updatedAt": "2025-10-26T21:21:00.902Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c22ef11cad3c8315",
-      "title": "ΤΑ ΤΡΙΑ ΓΟΥΡΟΥΝΑΚΙΑ (14ος χρόνος) / ΚΟΡΙΝΘΟΣ",
-      "description": "1 Νοεμβριου ΤΑ ΤΡΙΑ ΓΟΥΡΟΥΝΑΚΙΑ (14ος χρόνος) / ΚΟΡΙΝΘΟΣ Κινηματογραφος ΑΠΟΛΛΩΝ",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΚΟΡΙΝΘΟΣ Κινηματογραφος ΑΠΟΛΛΩΝ",
-        "address": "ΚΟΡΙΝΘΟΣ Κινηματογραφος ΑΠΟΛΛΩΝ",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/ta-tria-gourounakia-14os-xronos/korinthos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.902Z",
-      "updatedAt": "2025-10-26T21:21:00.902Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "80fabeb26049daac",
-      "title": "Κρατάς Μυστικό;",
-      "description": "1 Νοε - 27 Δεκ Κρατάς Μυστικό; Θεατρο Κατω απ΄τη γεφυρα",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κατω απ΄τη γεφυρα",
-        "address": "Κατω απ΄τη γεφυρα",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/kratas-mystiko/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.902Z",
       "updatedAt": "2025-10-26T21:21:00.902Z",
@@ -3846,37 +2947,6 @@
     },
     {
       "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "76e178eceddf85df",
-      "title": "Νικόλας Αναδολής: Αυτοσχεδιασμοί",
-      "description": "Νικόλας Αναδολής: Αυτοσχεδιασμοί Ο Νικόλας Αναδολής παρουσιάζει έναν νέο κύκλο έργων με ρομαντική, κινηματογραφική και τζαζ αύρα — πρελούδια, τραγούδια χωρίς λόγια και ιντερμέτζο που γεφυρώνουν την κλασική με τη σύγχρονη μουσική. Το πρόγραμμα συμπληρώνουν διασκευές από τη Λίμνη των Κύκνων και το Cinema Paradiso.",
-      "startDate": "2025-11-01T20:30:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "jazz"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.megaron.gr/event/nikolas-anadolis-aftoschediasmoi/",
-      "source": "\"MEGARON - THE ATHENS CONCERT HALL\" <info@megaron.gr>",
-      "createdAt": "2025-10-26T11:37:07.748Z",
-      "updatedAt": "2025-10-26T11:38:19.790Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
       "@type": "Event",
       "id": "281240ee4f327bdc",
       "title": "Κώστας Τουρνάς - Διονύσης Τσακνής",
@@ -4120,161 +3190,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e8d1625d111395c0",
-      "title": "JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO",
-      "description": "2 Νοεμβριου JEWISH CHAMBER ORCHESTRA MUNICH: THE KEYS OF TOLEDO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/jewish-chamber-orchestra-munich-the-keys-of-toledo/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.461Z",
-      "updatedAt": "2025-10-22T17:16:25.461Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4b276d1c72a89026",
-      "title": "ΔΥΟ ΞΕΡΟΚΕΦΑΛΕΣ ΚΟΥΤΑΛΕΣ",
-      "description": "2 Νοε - 28 Δεκ ΔΥΟ ΞΕΡΟΚΕΦΑΛΕΣ ΚΟΥΤΑΛΕΣ Θεατρο Αργω - Κεντρικη Σκηνη",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Κεντρικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/dyo-kserokefales-koutales/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.461Z",
-      "updatedAt": "2025-10-22T17:16:25.461Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "56c502cd8390efaa",
-      "title": "ΣΒΗΣΕ ΤΟ ΦΩΣ",
-      "description": "2 Νοε - 28 Δεκ ΣΒΗΣΕ ΤΟ ΦΩΣ Θεατρο OLVIO",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΦΩΣ Θεατρο OLVIO",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/sbise-to-fos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.461Z",
-      "updatedAt": "2025-10-22T17:16:25.461Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4beaec0567eda7d4",
-      "title": "Improv Sundays Season 4",
-      "description": "2 Νοε - 31 Μαι Improv Sundays Season 4 Θεατρο Αβατον",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "4 Θεατρο Αβατον",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/improv-sundays-2025-206/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.462Z",
-      "updatedAt": "2025-10-22T17:16:25.462Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2031d5086b821ffe",
-      "title": "Η ιστορία του γάτου που έμαθε σ' ένα γλάρο να πετάει",
-      "description": "2 Νοε - 5 Απρ Η ιστορία του γάτου που έμαθε σ' ένα γλάρο να πετάει Θεατρο Κατω απ΄τη γεφυρα",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κατω απ΄τη γεφυρα",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 9,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/i-istoria-tou-gatou-pou-emathe-s-ena-glaro-na-petaei-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.463Z",
-      "updatedAt": "2025-10-22T17:16:25.463Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "9b10c90a1e039951",
       "title": "Φτου και Τρ_αίνω! (2ος χρόνος!)",
       "description": "2 Νοε - 5 Απρ Φτου και Τρ_αίνω! (2ος χρόνος!) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ",
@@ -4306,37 +3221,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "c09df3627f01de4f",
-      "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
-      "description": "2 Νοε - 25 Ιαν From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/from-cabaret-to-rock-n-roll-and-all-that-jazz/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.468Z",
-      "updatedAt": "2025-10-22T17:16:25.468Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "263cd113f8d9c0ca",
       "title": "🦍 XANA ZOO 🐖🐄 ΠΑΙΔΙΚΗ ΠΑΡΑΣΤΑΣΗ 🎭",
       "description": "2 - 9 Νοεμβριου 🦍 XANA ZOO 🐖🐄 ΠΑΙΔΙΚΗ ΠΑΡΑΣΤΑΣΗ 🎭 Δαναος - Αιθουσα 1",
@@ -4360,37 +3244,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.468Z",
-      "updatedAt": "2025-10-22T17:16:25.468Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b06418272db5a0ca",
-      "title": "ΤΙ ΕΙΝΑΙ ΑΥΤΟ;",
-      "description": "2 - 23 Νοεμβριου ΤΙ ΕΙΝΑΙ ΑΥΤΟ; Θεατρο Σταθμος 2023 - Stathmos Theater",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Σταθμος 2023 - Stathmos Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/ti-einai-auto/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.468Z",
       "updatedAt": "2025-10-22T17:16:25.468Z",
@@ -4518,37 +3371,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.469Z",
       "updatedAt": "2025-10-22T17:16:25.469Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3d6044aa223a980c",
-      "title": "''Ο ΜΑΥΡΟΣ ΜΟΝΑΧΟΣ'' του Αντόν Τσέχωφ",
-      "description": "2 Νοε - 29 Μαρ ''Ο ΜΑΥΡΟΣ ΜΟΝΑΧΟΣ'' του Αντόν Τσέχωφ Σκηνη BRECHT - 2510",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Σκηνη BRECHT - 2510",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/o-mauros-monaxos-tou-anton-tsexof/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.470Z",
-      "updatedAt": "2025-10-22T17:16:25.470Z",
       "language": "en"
     },
     {
@@ -4709,37 +3531,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "19e63bf289f6f011",
-      "title": "THE EX",
-      "description": "",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.471Z",
-      "updatedAt": "2025-10-22T17:16:25.471Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "e77a318ade2033ca",
       "title": "Encardia «Η Σονάτα του Σεληνόφωτος» (Γιάννης  Ρίτσος)",
       "description": "theatre of the no, encardia,Η Σονάτα του Σεληνόφωτος, Γιάννης Ρίτσος, ποίηση, μουσική, Μιχάλη Κονταξάκη, μουσικοθεατρική απόδοση, Κυριακές 2, 9, 16 και 30 Νοεμβρίου, στις 20:00",
@@ -4766,37 +3557,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:20:09.988Z",
       "updatedAt": "2025-10-26T21:21:01.049Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2e454aba0b730f16",
-      "title": "From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque",
-      "description": "2 Νοε - 25 Ιαν From Cabaret to Rock n Roll ...and Αll that Jazz! with Glitter Grotesque Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Βαγονι Orient Express",
-        "address": "Βαγονι Orient Express",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/from-cabaret-to-rock-n-roll-and-all-that-jazz/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.906Z",
-      "updatedAt": "2025-10-26T21:21:00.906Z",
       "language": "en"
     },
     {
@@ -4856,37 +3616,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/i-farma-ton-zoon-the-musical/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.906Z",
-      "updatedAt": "2025-10-26T21:21:00.906Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2e6070000a4978a4",
-      "title": "🦍 XANA ZOO 🐖🐄 ΠΑΙΔΙΚΗ ΠΑΡΑΣΤΑΣΗ 🎭",
-      "description": "2 - 9 Νοεμβριου 🦍 XANA ZOO 🐖🐄 ΠΑΙΔΙΚΗ ΠΑΡΑΣΤΑΣΗ 🎭 Δαναος - Αιθουσα 1",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Αιθουσα 1",
-        "address": "- Αιθουσα 1",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/children/xana-zoo/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.906Z",
       "updatedAt": "2025-10-26T21:21:00.906Z",
@@ -5011,37 +3740,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/children/offer/i-odysseia-tou-omirou-apo-ton-mikro-borra/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.909Z",
-      "updatedAt": "2025-10-26T21:21:00.909Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "a094969eebeb44ed",
-      "title": "ΠΟΛΥΞΕΝΗ 2025-2026",
-      "description": "2 Νοε - 2 Ιαν ΠΟΛΥΞΕΝΗ 2025-2026 Βασιλικο Θεατρο",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "2025-2026 Βασιλικο Θεατρο",
-        "address": "2025-2026 Βασιλικο Θεατρο",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 7,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/polykseni-2025-2026/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.909Z",
       "updatedAt": "2025-10-26T21:21:00.909Z",
@@ -5670,37 +4368,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0f1bcfaadfc2c7eb",
-      "title": "Encardia «Η Σονάτα του Σεληνόφωτος» (Γιάννης Ρίτσος)",
-      "description": "2 - 30 Νοεμβριου Encardia «Η Σονάτα του Σεληνόφωτος» (Γιάννης Ρίτσος) Theatre of the NO",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Theatre of the NO",
-        "address": "Theatre of the NO",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/encardia-ei-sonata-tou-selinofotos-giannis-ritsos/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.912Z",
-      "updatedAt": "2025-10-26T21:21:00.912Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "121a5325e2e5ae03",
       "title": "Go Brunch || Spanish Cuisine",
       "description": "2 Νοεμβριου Go Brunch || Spanish Cuisine Hyatt Regency Thessaloniki - Ambrosia Restaurant",
@@ -5913,8 +4580,8 @@
     }
   ],
   "meta": {
-    "total": 191,
-    "lastUpdate": "2025-10-29T10:22:28.443Z",
+    "total": 148,
+    "lastUpdate": "2025-10-29T10:30:00.202Z",
     "url": "https://agent-athens.netlify.app/paid-this-weekend"
   }
 }

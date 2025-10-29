@@ -2487,37 +2487,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6a9d795c888e9562",
-      "title": "Adrenaline Explosion: Genesis",
-      "description": "9 Νοεμβριου Adrenaline Explosion: Genesis ΑΘΛΗΤΙΚΟ ΚΕΝΤΡΟ ΧΑΝΘ. \"ΜΙΜΗΣ ΤΣΙΚΙΝΑΣ\"",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΑΘΛΗΤΙΚΟ ΚΕΝΤΡΟ ΧΑΝΘ. \"ΜΙΜΗΣ ΤΣΙΚΙΝΑΣ\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/adrenaline-explosion-genesis/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.515Z",
-      "updatedAt": "2025-10-22T17:16:25.515Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c82a13eecc041143",
       "title": "ΚΟΛΟΣΣΟΣ H HOTELS COLLECTION - ΠΡΟΜΗΘΕΑΣ ΒΙΚΟΣ COLA",
       "description": "9 Νοεμβριου ΚΟΛΟΣΣΟΣ H HOTELS COLLECTION - ΠΡΟΜΗΘΕΑΣ ΒΙΚΟΣ COLA KALLITHEA INDOOR HALL",
@@ -4285,37 +4254,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "2dea8a3e71cabb3f",
-      "title": "ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26",
-      "description": "ΕΙΣΙΤΗΡΙΟ ΔΙΑΡΚΕΙΑΣ ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26 Κλειστο Γηπεδο Αμαρουσιου, Αγιος Θωμας",
-      "startDate": "2026-06-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κλειστο Γηπεδο Αμαρουσιου, Αγιος Θωμας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 80,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/kae-marousi-eisitiria-diarkeias-2025/26/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.659Z",
-      "updatedAt": "2025-10-22T17:16:25.659Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1cda39ed612a08a6",
       "title": "ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26",
       "description": "ΕΙΣΙΤΗΡΙΟ ΔΙΑΡΚΕΙΑΣ ΚΑΕ ΜΑΡΟΥΣΙ - ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-26 Κλειστο Γηπεδο Αμαρουσιου, Αγιος Θωμας",
@@ -4440,68 +4378,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "693c97655663216d",
-      "title": "ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ | ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-2026",
-      "description": "ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ ΑΠΟΛΛΩΝ ΠΑΤΡΩΝ | ΕΙΣΙΤΗΡΙΑ ΔΙΑΡΚΕΙΑΣ 2025-2026 Κλειστο Γηπεδο Απολλωνα Πατρας",
-      "startDate": "2026-07-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γηπεδο Απολλωνα Πατρας",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 60,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/apollon-patron-eisitiria-diarkeias-2025-1/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.660Z",
-      "updatedAt": "2025-10-22T17:16:25.660Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "97889b85e9ac7703",
-      "title": "AEK BC SEASON TICKETS 2025-2026",
-      "description": "SEASON TICKETS AEK BC SEASON TICKETS 2025-2026 SUNEL ARENA",
-      "startDate": "2026-07-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "SUNEL ARENA",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 200,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/aek-bc-season-tickets-2025-2026/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.660Z",
-      "updatedAt": "2025-10-22T17:16:25.660Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "399ca24492503cdd",
       "title": "AEK BC SEASON TICKETS 2025-2026",
       "description": "SEASON TICKETS AEK BC SEASON TICKETS 2025-2026 SUNEL ARENA",
@@ -4563,8 +4439,8 @@
     }
   ],
   "meta": {
-    "total": 147,
-    "lastUpdate": "2025-10-29T10:22:28.346Z",
+    "total": 143,
+    "lastUpdate": "2025-10-29T10:30:00.126Z",
     "url": "https://agent-athens.netlify.app/performance"
   }
 }

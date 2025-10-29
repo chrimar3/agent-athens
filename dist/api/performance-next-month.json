@@ -1743,37 +1743,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "6a9d795c888e9562",
-      "title": "Adrenaline Explosion: Genesis",
-      "description": "9 Νοεμβριου Adrenaline Explosion: Genesis ΑΘΛΗΤΙΚΟ ΚΕΝΤΡΟ ΧΑΝΘ. \"ΜΙΜΗΣ ΤΣΙΚΙΝΑΣ\"",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "sports"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΑΘΛΗΤΙΚΟ ΚΕΝΤΡΟ ΧΑΝΘ. \"ΜΙΜΗΣ ΤΣΙΚΙΝΑΣ\"",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/sports/adrenaline-explosion-genesis/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.515Z",
-      "updatedAt": "2025-10-22T17:16:25.515Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "c82a13eecc041143",
       "title": "ΚΟΛΟΣΣΟΣ H HOTELS COLLECTION - ΠΡΟΜΗΘΕΑΣ ΒΙΚΟΣ COLA",
       "description": "9 Νοεμβριου ΚΟΛΟΣΣΟΣ H HOTELS COLLECTION - ΠΡΟΜΗΘΕΑΣ ΒΙΚΟΣ COLA KALLITHEA INDOOR HALL",
@@ -2765,8 +2734,8 @@
     }
   ],
   "meta": {
-    "total": 89,
-    "lastUpdate": "2025-10-29T10:22:28.338Z",
+    "total": 88,
+    "lastUpdate": "2025-10-29T10:30:00.118Z",
     "url": "https://agent-athens.netlify.app/performance-next-month"
   }
 }

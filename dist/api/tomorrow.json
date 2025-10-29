@@ -6,99 +6,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "7236f5ff396ef2d4",
-      "title": "ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO",
-      "description": "30 - 31 Οκτωβριου ΛΕΩΝ Α. ΝΑΡ - MADRE SALONICO Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αιθουσα Αιμιλιος Ριαδης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/leon-a-nar-madre-salonico/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "c73d2b52703b835a",
-      "title": "Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης",
-      "description": "30 Οκτ - 2 Νοε Ρεμπώτικα - Μιχάλης και Παντελής Καλογεράκης Θεατρο Αμαλια",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Καλογεράκης Θεατρο Αμαλια",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 14,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/rempotika-mixalis-kai-pantelis-kalogerakis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "668723996690528f",
-      "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
-      "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/megales-kyries-tragoudoun-sto-mousiko-bagoni-2os-xronos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "857bdbe5a2a97e04",
       "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ",
       "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ Δημοτικη Αγορα Κυψελης",
@@ -716,8 +623,8 @@
     }
   ],
   "meta": {
-    "total": 23,
-    "lastUpdate": "2025-10-29T10:22:27.974Z",
+    "total": 20,
+    "lastUpdate": "2025-10-29T10:29:59.846Z",
     "url": "https://agent-athens.netlify.app/tomorrow"
   }
 }

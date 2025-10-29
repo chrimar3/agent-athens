@@ -7,130 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "0e3cfc5914298ba7",
-      "title": "Κοιμούνται τα ψάρια;",
-      "description": "29 Οκτ - 17 Δεκ Κοιμούνται τα ψάρια; Θεατρο Σταθμος 2023 - Stathmos Theater",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Stathmos Theater",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/koimountai-ta-psaria/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "0732c54282f3f9ea",
-      "title": "SAMMY OBEID SETTLES IN LIMASSOL",
-      "description": "29 Οκτωβριου SAMMY OBEID SETTLES IN LIMASSOL Κυκλος Μουσικη",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "LIMASSOL Κυκλος Μουσικη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 35,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/sammy-obeid-settles-in-limassol/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "497166c28d46f348",
-      "title": "ΦΥΓΕ… ΑΝ ΜΠΟΡΕΙΣ",
-      "description": "29 Οκτ - 7 Ιαν ΦΥΓΕ… ΑΝ ΜΠΟΡΕΙΣ Θεατρο Αλκμηνη - Κεντρικη Σκηνη",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "- Κεντρικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/fyge-an-mporeis/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8a24c68b17901630",
-      "title": "ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ",
-      "description": "29 Οκτ - 21 Δεκ ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ Θεατρο Αργω - Κεντρικη Σκηνη",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Αργω - Κεντρικη Σκηνη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "5d44aae21a6c85a0",
       "title": "“200+4 Χρόνια Δανεικά , 1821-2025”",
       "description": "29 Οκτ - 28 Ιαν “200+4 Χρόνια Δανεικά , 1821-2025” Θεατρο Τζενη Καρεζη",
@@ -316,8 +192,8 @@
     }
   ],
   "meta": {
-    "total": 10,
-    "lastUpdate": "2025-10-29T10:22:28.268Z",
+    "total": 6,
+    "lastUpdate": "2025-10-29T10:30:00.062Z",
     "url": "https://agent-athens.netlify.app/theater-today"
   }
 }

@@ -4,73 +4,10 @@
     "price": "paid",
     "time": "this-month"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2bd412e1bc481076",
-      "title": "MONOPHONICS",
-      "description": "",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "73758c853f252feb",
-      "title": "BRIAN JACKSON",
-      "description": "",
-      "startDate": "2025-10-31T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 28,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/brian-jackson-us-zontana-stin-athina/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.445Z",
-      "updatedAt": "2025-10-22T17:16:25.445Z",
-      "language": "en"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2025-10-29T10:22:28.638Z",
+    "total": 0,
+    "lastUpdate": "2025-10-29T10:30:00.371Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-this-month"
   }
 }

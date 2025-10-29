@@ -132,68 +132,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "b7d043ceaf1d5757",
-      "title": "ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ",
-      "description": "29 Οκτωβριου ΣΤΑΥΡΟΣ ΤΣΑΝΤΕΣ | Η ΔΗΜΟΚΡΑΤΙΑ ΤΟΥ ΑΧ Σταυρος του Νοτου - Σταυρος του Νοτου - Club",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Νοτου - Club",
-        "address": "Νοτου - Club",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/stauros-tsantes-i-dimokratia-tou-ax/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.884Z",
-      "updatedAt": "2025-10-26T21:21:00.884Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "4eac8f00dd524735",
-      "title": "Τοπία από ήχους και άλλες ιστορίες",
-      "description": "29 Οκτωβριου Τοπία από ήχους και άλλες ιστορίες Μουσειο Μουσικων Οργανων «Θυραθεν»",
-      "startDate": "2025-10-29T20:00:00+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσικων Οργανων «Θυραθεν»",
-        "address": "Μουσικων Οργανων «Θυραθεν»",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/to-mouseio-brisketai-stin-plateia-riga-feraio/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.885Z",
-      "updatedAt": "2025-10-26T21:21:00.885Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "16f655344badb1a6",
       "title": "Music Tales",
       "description": "29 Οκτωβριου Music Tales λιλιτζουμ",
@@ -224,8 +162,8 @@
     }
   ],
   "meta": {
-    "total": 7,
-    "lastUpdate": "2025-10-29T10:22:28.571Z",
+    "total": 5,
+    "lastUpdate": "2025-10-29T10:30:00.322Z",
     "url": "https://agent-athens.netlify.app/paid-concert-today"
   }
 }

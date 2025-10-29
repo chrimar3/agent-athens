@@ -8,37 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "19e63bf289f6f011",
-      "title": "THE EX",
-      "description": "",
-      "startDate": "2025-11-02T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.471Z",
-      "updatedAt": "2025-10-22T17:16:25.471Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0b6fc6dfdb4f6e14",
       "title": "ΣΟΦΙΑ ΜΑΝΟΥΣΑΚΗ",
       "description": "",
@@ -101,37 +70,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8da43414745d004d",
-      "title": "TURBONEGRO",
-      "description": "",
-      "startDate": "2025-11-09T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.515Z",
-      "updatedAt": "2025-10-22T17:16:25.515Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "8e877be97e17e9be",
       "title": "BOB MOULD",
       "description": "",
@@ -159,166 +97,11 @@
       "createdAt": "2025-10-26T21:21:00.947Z",
       "updatedAt": "2025-10-26T21:21:00.947Z",
       "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "32b21580d2df50fb",
-      "title": "MILD ORANGE",
-      "description": "",
-      "startDate": "2025-11-14T20:00:00+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "Gazarte",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-26T21:21:00.947Z",
-      "updatedAt": "2025-10-26T21:21:00.947Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "17e44842c06dac0d",
-      "title": "ADRIAN YOUNGE",
-      "description": "",
-      "startDate": "2025-11-16T20:00:00+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "Gazarte",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-26T21:21:00.953Z",
-      "updatedAt": "2025-10-26T21:21:00.953Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "8d2a2012a4b87470",
-      "title": "BILLY COBHAM",
-      "description": "",
-      "startDate": "2025-11-20T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.552Z",
-      "updatedAt": "2025-10-22T17:16:25.552Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "03d5665c4e3295c0",
-      "title": "MAKAYA McCRAVEN",
-      "description": "",
-      "startDate": "2025-11-22T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 24,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/makaya-mccraven-live-in-athens-scenius/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.560Z",
-      "updatedAt": "2025-10-22T17:16:25.560Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "cf0d4d829d800ba7",
-      "title": "KENNY GARRETT",
-      "description": "",
-      "startDate": "2025-11-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "cinema",
-      "genres": [
-        "cinema"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/venues/gazarte/",
-      "source": "gazarte.gr",
-      "createdAt": "2025-10-22T17:16:25.586Z",
-      "updatedAt": "2025-10-22T17:16:25.586Z",
-      "language": "en"
     }
   ],
   "meta": {
-    "total": 10,
-    "lastUpdate": "2025-10-29T10:22:28.639Z",
+    "total": 3,
+    "lastUpdate": "2025-10-29T10:30:00.372Z",
     "url": "https://agent-athens.netlify.app/paid-cinema-next-month"
   }
 }
