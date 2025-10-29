@@ -97,42 +97,11 @@
       "createdAt": "2025-10-22T17:16:25.457Z",
       "updatedAt": "2025-10-22T17:16:25.457Z",
       "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e82819fbd688278d",
-      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
-      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
-        "address": "Play ART Repeat Πολυχωρος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.904Z",
-      "updatedAt": "2025-10-26T21:21:00.904Z",
-      "language": "en"
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2025-10-29T10:04:55.492Z",
+    "total": 3,
+    "lastUpdate": "2025-10-29T10:17:16.237Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-this-weekend"
   }
 }

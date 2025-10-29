@@ -194,37 +194,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "bccd2bbdc0d5cedd",
-      "title": "Halloween Children's Workshop",
-      "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πηλος Εργαστηριο Κεραμικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-childrens-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.460Z",
-      "updatedAt": "2025-10-22T17:16:25.460Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "01ecdcf191635c55",
       "title": "Halloween Children's Workshop",
       "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
@@ -314,73 +283,11 @@
       "createdAt": "2025-10-22T17:16:25.469Z",
       "updatedAt": "2025-10-22T17:16:25.469Z",
       "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e6153eb8c7a382f3",
-      "title": "PAINT YOUR ''THING'' WORKSHOP",
-      "description": "2 Νοεμβριου PAINT YOUR ''THING'' WORKSHOP Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/festival/carnival/paint-your-thing-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.911Z",
-      "updatedAt": "2025-10-26T21:21:00.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "da0dde484827d9f5",
-      "title": "CORPSE BRIDE - MAKE UP WORKSHOP",
-      "description": "2 Νοεμβριου CORPSE BRIDE - MAKE UP WORKSHOP Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/corpse-bride-make-up-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.911Z",
-      "updatedAt": "2025-10-26T21:21:00.911Z",
-      "language": "en"
     }
   ],
   "meta": {
-    "total": 12,
-    "lastUpdate": "2025-10-29T10:04:55.675Z",
+    "total": 9,
+    "lastUpdate": "2025-10-29T10:17:16.370Z",
     "url": "https://agent-athens.netlify.app/paid-workshop-this-weekend"
   }
 }

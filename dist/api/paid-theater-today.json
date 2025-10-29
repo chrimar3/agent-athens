@@ -8,37 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "5104a11a54b6f9c6",
-      "title": "“200+4 Χρόνια Δανεικά , 1821-2025”",
-      "description": "29 Οκτ - 28 Ιαν “200+4 Χρόνια Δανεικά , 1821-2025” Θεατρο Τζενη Καρεζη",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Τζενη Καρεζη",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/200-xronia-daneika-bmeros/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.425Z",
-      "updatedAt": "2025-10-22T17:16:25.425Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0e3cfc5914298ba7",
       "title": "Κοιμούνται τα ψάρια;",
       "description": "29 Οκτ - 17 Δεκ Κοιμούνται τα ψάρια; Θεατρο Σταθμος 2023 - Stathmos Theater",
@@ -155,37 +124,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.427Z",
-      "updatedAt": "2025-10-22T17:16:25.427Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1fa60a4c725836ae",
-      "title": "Ο ΠΑΤΕΡΑΣ ΜΟΥ 2025-26-ΠΡΟΣΦΟΡΑ",
-      "description": "29 Οκτ - 16 Ιαν Ο ΠΑΤΕΡΑΣ ΜΟΥ 2025-26-ΠΡΟΣΦΟΡΑ Θεατρο Στοα",
-      "startDate": "2025-10-29T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Θεατρο Στοα",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/offer/o-pateras-mou-2025-26-prosfora/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.427Z",
       "updatedAt": "2025-10-22T17:16:25.427Z",
@@ -379,8 +317,8 @@
     }
   ],
   "meta": {
-    "total": 12,
-    "lastUpdate": "2025-10-29T10:04:55.544Z",
+    "total": 10,
+    "lastUpdate": "2025-10-29T10:17:16.273Z",
     "url": "https://agent-athens.netlify.app/paid-theater-today"
   }
 }

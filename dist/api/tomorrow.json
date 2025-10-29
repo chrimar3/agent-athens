@@ -68,316 +68,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "8da4207d0b2a2ce8",
-      "title": "ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ",
-      "description": "30 Οκτ - 27 Νοε ΓΙΑΝΝΗΣ ΠΑΠΑΝΙΚΟΛΑΟΥ Γυαλινο Μουσικο Θεατρο",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Γυαλινο Μουσικο Θεατρο",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/giannis-papanikolaou/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "3e36c03bec6c400b",
-      "title": "ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ",
-      "description": "30 Οκτωβριου ATHENS SPOOKS: Lucifer - The Abbey | ΚΥΤΤΑΡΟ Κυτταρο Live",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΚΥΤΤΑΡΟ Κυτταρο Live",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 23,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/festival/athens-spooks/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.429Z",
-      "updatedAt": "2025-10-22T17:16:25.429Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7facb080bd1db68b",
-      "title": "ANDREAS POLYZOGOPOULOS ELECTRIC 4ET",
-      "description": "30 Οκτωβριου ANDREAS POLYZOGOPOULOS ELECTRIC 4ET Half Note Jazz Club",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Note Jazz Club",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/andreas-polyzogopoulos-electric-4et-2/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e2012253f120150a",
-      "title": "“Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan",
-      "description": "30 Οκτωβριου “Chants to the Moon” | Marissa Bili & Barry Yuk Bun Wan Κεντρο ελεγχου τηλεορασεων",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο ελεγχου τηλεορασεων",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/marissa-bili-barry-yuk-bun-wan/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "734e127a28fdeaff",
-      "title": "Κρινιώ Νικολάου - “Κόντρα Ρόλος”",
-      "description": "30 Οκτωβριου Κρινιώ Νικολάου - “Κόντρα Ρόλος” Caja De Musica",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Caja De Musica",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/krinio-nikolaou-kontra-rolos/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "5be2d6b7eac15f3e",
-      "title": "Η ΜΗΤΕΡΑ ΤΟΥ ΣΚΥΛΟΥ για 2ο χρόνο στο ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "description": "30 Οκτ - 11 Ιαν Η ΜΗΤΕΡΑ ΤΟΥ ΣΚΥΛΟΥ για 2ο χρόνο στο ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "ΑΚΡΟΠΟΛ ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/imiteratouskylou/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6f52728f254fbe65",
-      "title": "STAND UP COMEDY - HA HA HALLOWEEN",
-      "description": "30 Οκτωβριου STAND UP COMEDY - HA HA HALLOWEEN Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/standupcomedy/festival/athens-halloween-festival30102025/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "2737b5ce680de3ea",
-      "title": "ΓΙΑΝΝΗ ΡΙΤΣΟΥ - ΙΣΜΗΝΗ 3ος Χρόνος",
-      "description": "30 Οκτ - 18 Δεκ ΓΙΑΝΝΗ ΡΙΤΣΟΥ - ΙΣΜΗΝΗ 3ος Χρόνος Θεατρο ΔΡΟΜΟΣ",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Χρόνος Θεατρο ΔΡΟΜΟΣ",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/ismini/",
-      "source": "viva.gr",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "202c7ec60abedb6f",
-      "title": "MONOPHONICS live in Greece",
-      "description": "30 Οκτ - 1 Νοε MONOPHONICS live in Greece Πολλαπλοι χωροι",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πολλαπλοι χωροι",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/music/monophonics-live-in-greece/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.430Z",
-      "updatedAt": "2025-10-22T17:16:25.430Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "93327defc5de937c",
-      "title": "ATHENS HALLOWEEN FESTIVAL 2025",
-      "description": "30 Οκτ - 2 Νοε ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/happenings/festival/athens-halloween-festival-2025/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "668723996690528f",
       "title": "Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος)",
       "description": "30 Οκτ - 29 Ιαν Μεγάλες Κυρίες τραγουδούν… στο Μουσικό Βαγόνι (2ος χρόνος) Αμαξοστοιχια - Θεατρο το Τρενο στο Ρουφ - Μουσικο Βαγονι Orient Express",
@@ -440,37 +130,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f7822f8c748c52c7",
-      "title": "PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025",
-      "description": "30 Οκτωβριου PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/painting-with-koko-texnh/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.431Z",
-      "updatedAt": "2025-10-22T17:16:25.431Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "a0e271138ada8350",
       "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ",
       "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ Δημοτικη Αγορα Κυψελης",
@@ -502,37 +161,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "447f2f85fb1b5dbf",
-      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 6μμ - 8μμ",
-      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 6μμ - 8μμ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-3/10-6mm-8mm/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.432Z",
-      "updatedAt": "2025-10-22T17:16:25.432Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "ceff2fca7ef3c348",
       "title": "PUMPKIN PAINTING",
       "description": "30 Οκτωβριου PUMPKIN PAINTING Δημοτικη Αγορα Κυψελης",
@@ -556,37 +184,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.432Z",
-      "updatedAt": "2025-10-22T17:16:25.432Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "bc965336724bcaa3",
-      "title": "PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ",
-      "description": "30 Οκτωβριου PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-pempti-30/10-ora-2mm-4mm/",
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.432Z",
       "updatedAt": "2025-10-22T17:16:25.432Z",
@@ -843,37 +440,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "94503ae07e3c7fe4",
-      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ",
-      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 8μμ - 10μμ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-30/10-8mm-10mm/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.890Z",
-      "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "0324e0e3ea8d1b0d",
       "title": "PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025",
       "description": "30 Οκτωβριου PAINTING WITH KOKO TEXNH - ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης",
@@ -897,37 +463,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/painting-with-koko-texnh/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.890Z",
-      "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b8ac6b763617d8f5",
-      "title": "PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ",
-      "description": "30 Οκτωβριου PUMPKIN CARVING ΠΕΜΠΤΗ 30/10 4μμ - 6μμ Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-carving-pempti-30/10-4mm-6mm/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.890Z",
       "updatedAt": "2025-10-26T21:21:00.890Z",
@@ -967,37 +502,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "f8d035cd200b68b7",
-      "title": "PUMPKIN PAINTING",
-      "description": "30 Οκτωβριου PUMPKIN PAINTING Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 20,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.890Z",
-      "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "71e57cbe67dd484a",
       "title": "PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ",
       "description": "30 Οκτωβριου PUMPKIN PAINTING ΠΕΜΠΤΗ 30/10 ΩΡΑ: 2μμ-4μμ Δημοτικη Αγορα Κυψελης",
@@ -1021,37 +525,6 @@
         "range": null
       },
       "url": "https://www.more.com/gr-el/tickets/seminar/children/offer/festival/pumpkin-painting-pempti-30/10-ora-2mm-4mm/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.890Z",
-      "updatedAt": "2025-10-26T21:21:00.890Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "b61e9b447b70e654",
-      "title": "Παιχνίδι & Yoga: Η Αλίκη στη χώρα των θαυμάτων (για παιδιά 3 – 6 ετών)",
-      "description": "30 Οκτωβριου Παιχνίδι & Yoga: Η Αλίκη στη χώρα των θαυμάτων (για παιδιά 3 – 6 ετών) Beesmall Concept Toy Store",
-      "startDate": "2025-10-30T20:00:00+02:00",
-      "endDate": null,
-      "type": "performance",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Beesmall Concept Toy Store",
-        "address": "Beesmall Concept Toy Store",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/paixnidi-yoga-i-aliki-sti-xora-ton-thaumaton-gia-paidia-3-6-eton/",
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.890Z",
       "updatedAt": "2025-10-26T21:21:00.890Z",
@@ -1243,8 +716,8 @@
     }
   ],
   "meta": {
-    "total": 40,
-    "lastUpdate": "2025-10-29T10:04:54.473Z",
+    "total": 23,
+    "lastUpdate": "2025-10-29T10:17:15.471Z",
     "url": "https://agent-athens.netlify.app/tomorrow"
   }
 }

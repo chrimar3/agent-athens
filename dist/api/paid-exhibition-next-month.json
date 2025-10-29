@@ -39,68 +39,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e82819fbd688278d",
-      "title": "TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT",
-      "description": "1 Νοεμβριου TRICK OR TREAT HALLOWEEN ΣΤΟ PLAY ART REPEAT Play ART Repeat Πολυχωρος",
-      "startDate": "2025-11-01T20:00:00+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Play ART Repeat Πολυχωρος",
-        "address": "Play ART Repeat Πολυχωρος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/trick-or-treat-halloween-sto-play-art-repeat/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.904Z",
-      "updatedAt": "2025-10-26T21:21:00.904Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "7d9e6b1f2d9c9859",
-      "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
-      "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
-      "startDate": "2025-11-05T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Messy Play, Art & Therapy • by Hehe",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/messy-play-with-hehe-gia-paidia-15-5-eton-1/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.483Z",
-      "updatedAt": "2025-10-22T17:16:25.483Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "41f9d1b4eed05526",
       "title": "Messy Play with Hehe για παιδιά 1,5-5 ετών",
       "description": "22 Οκτ - 17 Δεκ Messy Play with Hehe για παιδιά 1,5-5 ετών Messy Play, Art & Therapy • by Hehe",
@@ -127,37 +65,6 @@
       "source": "more.com",
       "createdAt": "2025-10-26T21:21:00.919Z",
       "updatedAt": "2025-10-26T21:21:00.919Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "6e19492897e48bea",
-      "title": "ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό",
-      "description": "20 Νοε - 18 Ιουν ΚΑΛΛΙΤΕΧΝΙΚΟ ΕΡΓΑΣΤΗΡΙ - ART SPOT @Νέο Ψυχικό CharaLab",
-      "startDate": "2025-11-20T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "CharaLab",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/kallitexniko-ergastiri-art-spot-neo-psyxiko/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.551Z",
-      "updatedAt": "2025-10-22T17:16:25.551Z",
       "language": "en"
     },
     {
@@ -256,37 +163,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "9408b84dfccd3217",
-      "title": "On site - Crete Marketing Days",
-      "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
-      "startDate": "2025-11-23T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Theartemis Palace",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 90,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/on-site-crete-marketing-days/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.566Z",
-      "updatedAt": "2025-10-22T17:16:25.566Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "10257e59454dc6db",
       "title": "On site - Crete Marketing Days",
       "description": "23 Νοεμβριου On site - Crete Marketing Days Theartemis Palace",
@@ -348,8 +224,8 @@
     }
   ],
   "meta": {
-    "total": 11,
-    "lastUpdate": "2025-10-29T10:04:55.494Z",
+    "total": 7,
+    "lastUpdate": "2025-10-29T10:17:16.238Z",
     "url": "https://agent-athens.netlify.app/paid-exhibition-next-month"
   }
 }

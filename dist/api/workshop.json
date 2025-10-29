@@ -193,37 +193,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "bccd2bbdc0d5cedd",
-      "title": "Halloween Children's Workshop",
-      "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
-      "startDate": "2025-11-01T00:00:00.000+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Πηλος Εργαστηριο Κεραμικης",
-        "address": "",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/children/workshop/halloween-childrens-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-22T17:16:25.460Z",
-      "updatedAt": "2025-10-22T17:16:25.460Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "01ecdcf191635c55",
       "title": "Halloween Children's Workshop",
       "description": "1 Νοεμβριου Halloween Children's Workshop Πηλος Εργαστηριο Κεραμικης",
@@ -317,68 +286,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "e6153eb8c7a382f3",
-      "title": "PAINT YOUR ''THING'' WORKSHOP",
-      "description": "2 Νοεμβριου PAINT YOUR ''THING'' WORKSHOP Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 30,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/festival/carnival/paint-your-thing-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.911Z",
-      "updatedAt": "2025-10-26T21:21:00.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "da0dde484827d9f5",
-      "title": "CORPSE BRIDE - MAKE UP WORKSHOP",
-      "description": "2 Νοεμβριου CORPSE BRIDE - MAKE UP WORKSHOP Δημοτικη Αγορα Κυψελης",
-      "startDate": "2025-11-02T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικη Αγορα Κυψελης",
-        "address": "Δημοτικη Αγορα Κυψελης",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/seminar/offer/festival/carnival/corpse-bride-make-up-workshop/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.911Z",
-      "updatedAt": "2025-10-26T21:21:00.911Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "248d9c2288e6a7b8",
       "title": "Η ΑΡΧΙΤΕΚΤΟΝΙΚΉ ΤΗΣ ΚΊΝΗΣΗΣ: WORKSHOP ΧΟΡΟΎ",
       "description": "8 Νοεμβριου Η ΑΡΧΙΤΕΚΤΟΝΙΚΉ ΤΗΣ ΚΊΝΗΣΗΣ: WORKSHOP ΧΟΡΟΎ Μουσειο Αλεκος Φασιανος",
@@ -410,37 +317,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "770ee864db5b2b1c",
-      "title": "Η ΑΡΧΙΤΕΚΤΟΝΙΚΉ ΤΗΣ ΚΊΝΗΣΗΣ: WORKSHOP ΧΟΡΟΎ",
-      "description": "8 Νοεμβριου Η ΑΡΧΙΤΕΚΤΟΝΙΚΉ ΤΗΣ ΚΊΝΗΣΗΣ: WORKSHOP ΧΟΡΟΎ Μουσειο Αλεκος Φασιανος",
-      "startDate": "2025-11-08T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσειο Αλεκος Φασιανος",
-        "address": "Μουσειο Αλεκος Φασιανος",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/i-arxitektoniki-tis-kinisis-workshop-xoroy/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.931Z",
-      "updatedAt": "2025-10-26T21:21:00.931Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "43bfd05d807e02ba",
       "title": "Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing)",
       "description": "11 Νοε - 9 Φεβ Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing) Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space",
@@ -467,37 +343,6 @@
       "source": "more.com",
       "createdAt": "2025-10-22T17:16:25.519Z",
       "updatedAt": "2025-10-22T17:16:25.519Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "e66d83bab7e7a084",
-      "title": "Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing)",
-      "description": "11 Νοε - 9 Φεβ Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing) Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space",
-      "startDate": "2025-11-11T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space",
-        "address": "Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/workshop/ergastirio-trisdiastatis-ektyposis-3d-printing/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.939Z",
-      "updatedAt": "2025-10-26T21:21:00.939Z",
       "language": "en"
     },
     {
@@ -596,37 +441,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "51fc469ee7efbc07",
-      "title": "Σεμινάριο «Μέσα στον παιδικό εγκέφαλο»",
-      "description": "16 Νοεμβριου Σεμινάριο «Μέσα στον παιδικό εγκέφαλο» Ελληνικο Παιδικο Μουσειο",
-      "startDate": "2025-11-16T20:00:00+02:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "general"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Ελληνικο Παιδικο Μουσειο",
-        "address": "Ελληνικο Παιδικο Μουσειο",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 25,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.more.com/gr-el/tickets/museums/seminario-mesa-ston-paidiko-egkefalo/",
-      "source": "more.com",
-      "createdAt": "2025-10-26T21:21:00.953Z",
-      "updatedAt": "2025-10-26T21:21:00.953Z",
-      "language": "en"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "435301402018f2e9",
       "title": "Σεμινάριο Συνήθειες & Πειθαρχία",
       "description": "3 Δεκεμβριου Σεμινάριο Συνήθειες & Πειθαρχία Emmantina Hotel",
@@ -688,8 +502,8 @@
     }
   ],
   "meta": {
-    "total": 22,
-    "lastUpdate": "2025-10-29T10:04:55.057Z",
+    "total": 16,
+    "lastUpdate": "2025-10-29T10:17:15.909Z",
     "url": "https://agent-athens.netlify.app/workshop"
   }
 }
