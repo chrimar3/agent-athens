@@ -3,15 +3,14 @@
  * 🏛️ Agent Athens - Master Scraper
  * "One scraper to rule them all"
  *
- * Scrapes events from all 10 configured sources:
- * - more.com (ticketing platform - includes viva.gr)
+ * Scrapes events from all configured sources:
+ * - more.com (ticketing platform)
  * - athinorama.gr (cultural guide)
  * - clubber.gr (electronic/clubs - iCal)
  * - ticketservices.gr (concerts/theater)
  * - halfnote.gr (jazz club - iCal)
  * - residentadvisor (electronic - GraphQL API)
  * - megaron.gr (Athens Concert Hall - classical)
- * - snfcc (Stavros Niarchos Foundation)
  * - onassis (Onassis Stegi exhibitions)
  * - benaki (Benaki Museum exhibitions)
  *
@@ -69,7 +68,7 @@ interface ScrapeResult {
   duration: number;
 }
 
-type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'snfcc' | 'onassis' | 'benaki' | 'megaron';
+type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'onassis' | 'benaki' | 'megaron';
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -1364,7 +1363,9 @@ const SOURCES: Record<SourceId, { name: string; scraper: () => Promise<ScrapedEv
   ticketservices: { name: 'TicketServices.gr', scraper: scrapeTicketServices },
   halfnote: { name: 'Half Note Jazz', scraper: scrapeHalfNote },
   ra: { name: 'Resident Advisor', scraper: scrapeResidentAdvisor },
-  snfcc: { name: 'SNFCC', scraper: scrapeSNFCCAdapter },
+  // SNFCC disabled: scraper picks up non-events (fountains, tours, camps, patron programs)
+  // and all URLs point to generic snfcc.org/el/events. Real SNFCC events come via athinorama/ticketservices.
+  // snfcc: { name: 'SNFCC', scraper: scrapeSNFCCAdapter },
   onassis: { name: 'Onassis Stegi', scraper: scrapeOnassisAdapter },
   benaki: { name: 'Benaki Museum', scraper: scrapeBenakiAdapter },
   megaron: { name: 'Megaron Mousikis', scraper: scrapeMegaronAdapter },

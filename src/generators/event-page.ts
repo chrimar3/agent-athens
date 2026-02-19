@@ -15,6 +15,7 @@ import { generatePracticalBlock, generateInlinePractical } from './practical-blo
 import { formatGreekDateOnly, formatGreekTime, formatPriceGreek, toSchemaOrg } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { stripInfoTable } from '../utils/description-utils';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -234,11 +235,17 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
   const typeLabel = TYPE_TRANSLATIONS[event.type] || event.type;
   const categorySlug = TYPE_TO_CATEGORY[event.type] || '';
 
-  // Description content
+  // Description content — strip Info metadata table from enriched descriptions
   const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
-  const descriptionHtml = hasFullDescription
-    ? String(event.fullDescription).split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n')
-    : `<p>${event.description}</p>`;
+  let descriptionHtml: string;
+  let hiddenMetadataHtml = '';
+  if (hasFullDescription) {
+    const { narrative, metadataHtml } = stripInfoTable(String(event.fullDescription));
+    descriptionHtml = narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n');
+    hiddenMetadataHtml = metadataHtml;
+  } else {
+    descriptionHtml = `<p>${event.description}</p>`;
+  }
 
   // Related events (max 5, upcoming only)
   const relatedHtml = relatedEvents.length > 0
@@ -369,6 +376,7 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
       ${descriptionHtml}
       ${hasFullDescription ? '<div class="enriched-badge">AI-enriched content</div>' : ''}
     </section>
+    ${hiddenMetadataHtml}
 
     ${practicalBlock}
 

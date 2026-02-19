@@ -3550,47 +3550,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "ae9d61f0df50bf61",
-      "title": "LORD OF THE LOST",
-      "description": "27 Μαρτιου LORD OF THE LOST Gagarin 205 Live Music Space",
-      "fullDescription": "The stage at Live Music Space holds gear that suggests something theatrical. LORD OF THE LOST arrives with the production values that define German gothic metal — visual elements matching sonic ambition. You take your position as the space prepares for a show that operates on multiple registers.\n\nLORD OF THE LOST has built their reputation through albums that refuse category. Gothic metal provides the foundation, but the band incorporates industrial elements, symphonic passages, moments of genuine pop accessibility. Chris Harms' voice moves between registers as the material demands. The result attracts listeners from multiple alternative tribes.\n\nThe German band represents the contemporary face of gothic metal — not nostalgic for the genre's origins but actively developing what it can become. Their Eurovision appearance introduced them to audiences who would never seek metal on their own. Tonight's show rewards both the curious and the devoted.\n\nLive Music Space provides the venue this production requires. The stage accommodates the visual elements LORD OF THE LOST brings — the lighting, the theatricality, the elements that make their shows more than simple concerts. The sound system handles the sonic range, from quiet piano passages to full industrial assault.\n\nThe crowd tonight mixes metal devotees with gothic scene participants and curious newcomers drawn by the band's broader visibility. The diversity reflects the band's cross-genre appeal — you can arrive from multiple alternative starting points and find entry to what LORD OF THE LOST delivers.\n\nGothic metal's theatrical tradition means shows that prioritize experience over simple performance. Expect visual elements, expect dynamics that create narrative, expect the sense that you're witnessing something staged as carefully as theater while maintaining metal's authentic energy.\n\nIf you need stripped-back performance or genre purity, LORD OF THE LOST's hybrid approach will challenge your categories. The band deliberately resists easy classification, finding power in the spaces between established sounds. But if you've been seeking contemporary gothic metal that respects its roots while reaching beyond them — Live Music Space holds this evening.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, March 27, 2026 |\n| **Venue** | Live Music Space |\n| **Artist** | LORD OF THE LOST (Germany) |\n| **Genre** | Gothic metal / industrial |\n| **Production** | Theatrical staging |\n| **Tickets** | Check venue |\n\nLORD OF THE LOST at Live Music Space — German gothic metal with the production values it deserves.",
-      "startDate": "2026-03-27T20:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Live Music Space",
-        "address": "Athens, Greece",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": "with-ticket"
-      },
-      "url": "https://www.viva.gr/gr-el/tickets/music/lord-of-the-lost/",
-      "ticketUrl": "https://www.viva.gr/gr-el/tickets/music/lord-of-the-lost/",
-      "source": "viva.gr",
-      "createdAt": "2026-01-28T04:02:03.641Z",
-      "updatedAt": "2026-02-18 06:09:07",
-      "language": "en",
-      "timeDoors": "20:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "6eef81b1914056c8",
       "title": "NLS PETER MOLVAER GROUP",
       "description": "",
@@ -4172,8 +4131,8 @@
     }
   ],
   "meta": {
-    "total": 114,
-    "lastUpdate": "2026-02-19T09:53:56.027Z",
+    "total": 113,
+    "lastUpdate": "2026-02-19T10:36:13.913Z",
     "url": "https://agentathens.netlify.app/next-month"
   }
 }

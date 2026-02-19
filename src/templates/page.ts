@@ -7,6 +7,7 @@ import type { Event, PageMetadata } from '../types';
 import { formatGreekDate, formatGreekDateOnly, formatGreekTime, formatPriceGreek, toSchemaOrg, generateKeywords } from '../utils/i18n';
 import { getEventURL, isValidURLFormat, addUTMParameters } from '../utils/url-validator';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { stripInfoTable } from '../utils/description-utils';
 import { renderCategoryNav, type CategoryConfig } from './category-page';
 
 // Load categories for navigation
@@ -226,8 +227,8 @@ function renderEventCard(event: Event): string {
     timeStr = getEventTime(event);
   }
 
-  // Prefer ticketUrl (direct purchase) over url (listing page)
-  const bestUrl = event.ticketUrl || event.url;
+  // Prefer specific event url over ticketUrl (which is often a generic category page)
+  const bestUrl = event.url || event.ticketUrl;
 
   // Get validated URL
   const { url: rawEventUrl, isFallback } = getEventURL(bestUrl, event.title, event.venue.name);
@@ -293,13 +294,16 @@ function renderEventCard(event: Event): string {
       ${eventUrl && !isFallback ? `<a href="${eventUrl}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">${event.title}</a>` : event.title}
     </h2>
 
-    ${hasFullDescription ? `
+    ${hasFullDescription ? (() => {
+      const { narrative, metadataHtml } = stripInfoTable(String(event.fullDescription || ''));
+      return `
     <!-- AI-enriched full description -->
     <div class="event-full-description" itemprop="description">
-      ${String(event.fullDescription || '').split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n      ')}
+      ${narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n      ')}
       <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    ` : `
+    ${metadataHtml}`;
+    })() : `
     <!-- Short description -->
     <p itemprop="description" class="event-short-description">${event.description}</p>
     `}

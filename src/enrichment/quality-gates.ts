@@ -633,6 +633,21 @@ function validateTechnical(
     }
   }
 
+  // Check for multiple markdown tables (Info table should not be in descriptions)
+  const tableHeaderCount = (description.match(/^\|[^|]+\|[^|]+\|$/gm) || [])
+    .filter(line => /^\|\s*\w/.test(line)).length;
+  const tableSeparatorCount = (description.match(/^\|[-| ]+\|$/gm) || []).length;
+  if (tableSeparatorCount > 1) {
+    issues.push(
+      createIssue(
+        'technical',
+        'warning',
+        'MULTIPLE_TABLES',
+        `Description contains ${tableSeparatorCount} markdown tables — only the Aspect/Details table should be in the narrative. Info/practical metadata belongs in DB fields.`
+      )
+    );
+  }
+
   // Check for valid tags
   if (lowerDesc.includes('tags:')) {
     const tagsMatch = description.match(/tags:\s*([^\n]+)/i);
