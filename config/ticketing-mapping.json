@@ -1,0 +1,138 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-26",
+  "notes": "Maps venues to their primary ticketing platforms. Use for constructing ticket URLs.",
+
+  "platforms": {
+    "more.com": {
+      "name": "More.com (formerly Viva.gr)",
+      "base_url": "https://www.more.com",
+      "search_pattern": "/gr/el/tickets/search?query=",
+      "description": "Main ticketing platform for concerts and theater"
+    },
+    "ticketservices.gr": {
+      "name": "TicketServices.gr",
+      "base_url": "https://www.ticketservices.gr",
+      "search_pattern": "/en/search?query=",
+      "description": "Festivals, classical, Epidaurus"
+    },
+    "residentadvisor.net": {
+      "name": "Resident Advisor",
+      "base_url": "https://ra.co",
+      "search_pattern": "/events/gr/athens",
+      "description": "Electronic music events"
+    },
+    "halfnote.gr": {
+      "name": "Half Note Jazz Club",
+      "base_url": "https://www.halfnote.gr",
+      "direct_purchase": true,
+      "description": "Direct from venue"
+    }
+  },
+
+  "venue_to_platform": {
+    "Gazarte": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/music/gazarte/",
+      "notes": "All stages - Main, Ground, Roof"
+    },
+    "Gagarin 205": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/music/gagarin-205/",
+      "notes": "Metal, rock concerts"
+    },
+    "Fuzz Club": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/music/fuzz/",
+      "notes": "Athens' best indoor venue"
+    },
+    "Floyd": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/music/floyd/",
+      "notes": "Large capacity venue"
+    },
+    "Κύτταρο": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/music/kyttaro/",
+      "notes": "Historic rock venue"
+    },
+    "Half Note Jazz Club": {
+      "platform": "halfnote.gr",
+      "url_pattern": "https://www.halfnote.gr/events/",
+      "notes": "Book direct, reservations essential"
+    },
+    "SMUT Athens": {
+      "platform": "residentadvisor.net",
+      "url_pattern": "https://ra.co/clubs/",
+      "notes": "RA tickets = priority entry, not guaranteed"
+    },
+    "Astron": {
+      "platform": "residentadvisor.net",
+      "url_pattern": "https://ra.co/clubs/",
+      "notes": "Electronic events"
+    },
+    "Temple": {
+      "platform": "residentadvisor.net",
+      "url_pattern": "https://ra.co/clubs/",
+      "notes": "Big-room techno"
+    },
+    "Six D.O.G.S": {
+      "platform": "residentadvisor.net",
+      "url_pattern": "https://ra.co/clubs/",
+      "notes": "Electronic and live music"
+    },
+    "Δημοτικό Θέατρο Λυκαβηττού": {
+      "platform": "ticketservices.gr",
+      "url_pattern": "https://www.ticketservices.gr/en/LiveConcerts/",
+      "notes": "Summer open-air theater"
+    },
+    "Ηρώδειο": {
+      "platform": "ticketservices.gr",
+      "url_pattern": "https://www.ticketservices.gr/en/LiveConcerts/",
+      "notes": "Herod Atticus, Athens Epidaurus Festival"
+    },
+    "ΟΑΚΑ": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/",
+      "notes": "Olympic Stadium events"
+    },
+    "Πλατεία Νερού": {
+      "platform": "more.com",
+      "url_pattern": "https://www.more.com/gr/el/tickets/",
+      "notes": "Release Athens venue"
+    }
+  },
+
+  "venue_type_defaults": {
+    "electronic_club": "residentadvisor.net",
+    "concert_venue": "more.com",
+    "jazz_club": "halfnote.gr",
+    "classical_theater": "ticketservices.gr",
+    "festival": "ticketservices.gr"
+  },
+
+  "fallback_order": [
+    "more.com",
+    "ticketservices.gr",
+    "residentadvisor.net"
+  ],
+
+  "door_only_venues": [
+    "Stoa Athanaton",
+    "Klimataria",
+    "Kavouras",
+    "Romantso",
+    "Bios",
+    "AUX Club",
+    "IT Athens",
+    "Oddity",
+    "Death Disco",
+    "AN Club"
+  ],
+
+  "url_validation": {
+    "check_http_status": true,
+    "reject_homepage_redirects": true,
+    "mark_unverified_if_fails": true
+  }
+}

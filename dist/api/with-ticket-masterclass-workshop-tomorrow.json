@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "workshop",
+    "genre": "Masterclass",
+    "price": "with-ticket",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.003Z",
+    "url": "https://agentathens.netlify.app/with-ticket-masterclass-workshop-tomorrow"
+  }
+}

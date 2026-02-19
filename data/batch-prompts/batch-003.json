@@ -1,0 +1,366 @@
+{
+  "batchNumber": 3,
+  "totalBatches": 12,
+  "events": [
+    {
+      "id": "72bd2caf229909b2",
+      "title": "Barcelona",
+      "eventInfo": "Event Details:\n- Title: Barcelona\n- Type: theater\n- Venue: ΠΤΙ ΠΑΛΑΙ\n- Date: 2025-11-10\n- Time: 00:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (1116 chars):\nΠόσα συναισθήματα χωράνε σε μια βραδιά; Πώς ανατρέπεται η ζωή δυο νέων ανθρώπων; Πώς μπορείς ένα φιλί να οδηγήσει σε μια ξέφρενη πάλη δυο φαινομενικά χαλαρούς παίκτες;\n\nΤο ερωτικό θρίλερBarcelona, της Bess Wohl, μία από τις μεγαλύτερες επιτυχίας της περασμένης σεζόν στο Λονδίνο, παρουσιάζεται για πρώτη φορά στην Ελλάδα .Ο Μιχάλης Λεβεντογιάννης ερμηνεύει τον σκοτεινό και μυστηριώδη Μανουέλ και συναντά επί σκηνής τη Ηλιάνα Μαυρομάτη, στον ρόλο της αντιφατικής και τολμηρής Ιρέν.\n\nΗ ιστορία εξελίσσεται σε ένα μόνο βράδυ. Ξεκινάει όταν ο γοητευτικός Μανουέλ επιστρέφει στο διαμέρισμά του στη Βαρκελώνη με την Ιρέν, μία νεαρή και μεθυσμένη Αμερικανίδα τουρίστρια. Οι δυο τους, χαρούμενοι, δείχνουν ότι θέλουν να απολαύσουν μια ερωτική βραδιά χωρίς δεσμεύσεις. Όμως σύντομα εμφανίζονται εντάσεις, δημιουργούνται ρωγμές. Σώματα και πολιτισμοί συγκρούονται έντονα και πίσω από την αρχική ρομαντική τους διάθεση διαφαίνεται πως και οι δύο έχουν κρυφές προθέσεις. Την ερωτική ατμόσφαιρα διαδέχονται η αγωνία και η απειλή του θανάτου, ενώ απρόσμενα, οι πολιτικές τους απόψεις αλλάζουν δραματικά την μεταξύ τους κατάσταση.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "4957ade2dbf419d3",
+      "title": "ΜΑΡΙΚΑ ΜΕ ΕΙΠΑΝΕ- ΜΑΡΙΚΑ ΜΕ ΒΓΑΛΑΝΕ",
+      "eventInfo": "Event Details:\n- Title: ΜΑΡΙΚΑ ΜΕ ΕΙΠΑΝΕ- ΜΑΡΙΚΑ ΜΕ ΒΓΑΛΑΝΕ\n- Type: theater\n- Venue: Embassy Theater\n- Date: 2025-11-10\n- Time: 00:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (3308 chars):\nΕΜBASSYTHEATER\n\nΘεατρική περίοδος 2025-2026\n\nΓΙΩΡΓΟΣ ΑΝΔΡΕΟΥ- ΟΔΥΣΣΕΑΣΙΩΑΝΝΟΥ«Μαρίκα με είπανε - Μαρίκα με βγάλανε»Ιστορίες γυναικών του Λαϊκού Τραγουδιού\n\nΕΝΑΡΞΗ : ΔΕΥΤΕΡΑ 10 ΝΟΕΜΒΡΙΟΥ\n\nΗ μουσικοθεατρική παράσταση«ΜΑΡΙΚΑ με είπανε, ΜΑΡΙΚΑ με βγάλανε»σε κείμενα Οδυσσέα Ιωάννου, μουσική σύνθεση & ενορχήστρωση του Γιώργου Ανδρέου, και σκηνοθεσία του καλλιτεχνικού διευθυντή του ΚΘΒΕ Αστέρη Πελτέκη, μετά από μία ιδιαίτερα επιτυχημένη διαδρομή στη Μονή Λαζαριστών του Κρατικού Βορείου Ελλάδος τον περασμένο χειμώνα, θα παρουσιαστεί και στην Αθήνα, από τις 10 Νοεμβρίου στο Embassy Theater για περιορισμένο χρονικό διάστημα, σε συμπαραγωγή με το ΚΘΒΕ, κάθε Δευτέρα και Τρίτη.\n\nΟι δύο σημαντικές γυναικείες μορφές – οι δύο θρυλικές Μαρίκες του ρεμπέτικου τραγουδιού - ηΜαρίκαΠαπαγκίκακαι ηΜαρίκα Νίνου, θα συναντηθούν για λίγες παραστάσεις στοEmbassyTheaterστην Αθήνα, για να διηγηθούν, να ερμηνεύσουν και να δώσουν ζωή σε γεγονότα που έζησαν και σε άλλα, που δεν έζησαν αλλά που θα μπορούσαν να είχαν συμβεί εκείνες τις αγρίως ρομαντικές εποχές, που όλα ήταν πιθανά.\n\nΌλα συνέβησαν τότε, στο πρώτο μισό του 20ουαιώνα, όταν ο κόσμος άλλαξε ξαφνικά και έγινε - από ασπρόμαυρος - έγχρωμος, όταν οι κοινωνίες «άνοιξαν» τα παράθυρα σε νέες ιδέες και σε νέα καλλιτεχνικά πρότυπα, ενώ παράλληλα, γεννούσαν νέες συναρπαστικές συνθήκες και προοπτικές, κοινωνικές και καλλιτεχνικές. Οι Ελληνίδες ερμηνεύτριες του τραγουδιού μας, έδωσαν την μάχη για την ιδιωτική όσο και την δημόσια εικόνα τους, για την γυναικεία αξιοπρέπεια, για το δικαίωμα τους στον αυτοκαθορισμό, «σηκώθηκαν από την καρέκλα και στάθηκαν στο πάλκο όρθιες» (λέγεται πως η Μαρίκα Νίνου σηκώθηκε πρώτη απ’ όλες).\n\nΟ σκηνοθέτης γράφει στο σκηνοθετικό του σημείωμα: «Με χαρά ανέλαβα τη σκηνοθεσία αυτού του δύσκολου εγχειρήματος, όταν με τίμησαν με την πρότασή τους οι δύο σπουδαίοι δημιουργοί και νιώθω ευγνώμων που όλοι οι συντελεστές αυτού του έργου δίνουν τον καλύτερό τους εαυτό επί σκηνής.\n\n«Η Μαρίκα της Αθήνας κι η Μαρίκα της Αμερικής δεν συναντήθηκαν ποτέ. Αυτό θα διορθώσουμε απόψε. Απόψε η Μαρίκα της Αθήνας θα βρει κόρη και μητέρα. Απόψε οι δυο γυναίκες θα πουν τα δικά τους».\n\nΔύο Μαρίκες. Οι «Αγίες» του Λαϊκού μας Τραγουδιού, μυθικές γυναικείες παρουσίες - σε μια παράσταση όπου ο άντρας «λάμπει» διά της απουσίας του- φωτίζουν το πάλκο και τα ιστορικά νυχτερινά κέντρα στην Ελλάδα και στο εξωτερικό, ξετυλίγοντας το νήμα της ιστορίας τους, μέσα από αφηγήσεις και αγαπημένα τραγούδια που έχουν περάσει στο συλλογικό μας ασυνείδητο - σμυρνέικα, παραδοσιακά, ρεμπέτικα, λαϊκά, αλλά και πρωτότυπα τραγούδια του Γιώργου Ανδρέου και του Οδυσσέα Ιωάννου.\n\nΑπό την Δευτέρα 10 Νοεμβρίου και για περιορισμένο αριθμό παραστάσεων, στο Embassy Theater.\n\nΠαραγωγή: STAGES NETWORK ΜΟΝΟΠΡΟΣΩΠΗ ΑΕ\n\nEmbassyTheater\n\nΠατριάρχου Ιωακείμ 5, Αθήνα  10673\n\nΤηλ: 211 1000 365\n\nΗμέρες & Ώρες παραστάσεων:\n\nΔευτέρα και Τρίτη : 20:00\n\nΤιμές εισιτηρίων:\n\nVIP: 35  Ευρώ, VIP2: 30 Ευρώ,Α΄ΖΏΝΗ: 25Ευρώ,Β΄Ζώνη:20 Ευρώ,Γ' Ζώνη :18 ΕυρώΦοιτητικό, Ανέργων, Παιδικό (έως 12 ετών),ΑΜΕΑ (χωρίς αμαξίδιο), Συνοδός ΑΜΕΑστηνB' Ζώνη: 18 Ευρώ και 16 Ευρώ στηνΓ' Ζώνη\n\nΕισιτήρια:\n\nΓια Ομαδικές Κρατήσεις:\n\nΚώστας Μπάλτας & Γιώτα Καραίσκου: 211- 1026277 & 210-2117240 (εσωτ. 305)  Δευτ- Παρ : 10:00 -19:00\n\nΕmailΤμήματος Ομαδικών Κρατήσεων:reservations@a-th.gr\n\nΠληροφορίες:www.a-th.gr",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "939af16ec61cb9d6",
+      "title": "Η Συναρπαστική Εξέγερση του Χούλιο Τόγκα",
+      "eventInfo": "Event Details:\n- Title: Η Συναρπαστική Εξέγερση του Χούλιο Τόγκα\n- Type: theater\n- Venue: Θεατρο Προσκηνιο\n- Date: 2025-11-10\n- Time: 00:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (1295 chars):\n“Το θέμα δεν είναι πόσα σε κάνουν να θες να αντιδράσεις, αλλά πόσα σε σταματάνε.”\n\nΟ αεικίνητος συγγραφέας και ηθοποιός Βασίλης Μαγουλιώτης [Merde, Παίχτες, Talk Show, Λεωφορείον ο Πόθος] σκηνοθετεί σε κείμενο του ασόβαρα σουβλερού και πολιτικά ανήσυχου Suyako, στο θέατρο Προσκήνιο. Με μουσική επι σκηνής, αυτοσαρκαστική διάθεση, και τρυφερότητα το έργο φωτίζει την αμηχανία μας να σταθούμε απέναντι σε ένα σύστημα που μας ταίζει, αλλά δεν χωνεύεται με τίποτα.\n\nΟ Χούλιο Τόγκα - ο πρωταγωνιστικός χαρακτήρας - είναι περφόρμερ, εικονοκλάστης και ακτιβιστής. Ήταν πάντα για το κατεστημένο ό,τι είναι ένας εξωτικός αχινός για την γυμνή πατούσα. Τώρα είναι με το ένα πόδι στο απόγειο της επιτυχίας του και με το άλλο στην κρίση μέσης ηλικίας του.\n\nΌταν ένα από τα μεγάλα ιδιωτικά ιδρύματα που έχουν αναλάβει τα ινία του Πολιτισμού του αναθέτει να αναλάβει την τελετή έναρξης του νέου τους πολυτελούς κέντρου, ο Χούλιο έρχεται αντιμέτωπος με διλήμματα που ορίζουν την ελευθερία και την ευτυχία του καθενός:\n\nΠοιο είναι το κέρδος και ποιο το κόστος της αντίδρασης; Ποιος πρέπει να το πληρώσει;  Ποια γενιά έχει την ευθύνη για αλλαγή; H δικιά μας ή η πρoηγούμενη; Και πότε είναι η ώρα για την επόμενη;\n\nΌλα αυτά σε μια Αργεντινή λίγο μετά την οικονομική κρίση. Σε μια Αργεντινή που παραθυμίζει Ελλάδα.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "gwomen-4o-2025-11-10",
+      "title": "GWomen - 4o Συνέδριο Γυναικείου Αθλητισμού",
+      "eventInfo": "Event Details:\n- Title: GWomen - 4o Συνέδριο Γυναικείου Αθλητισμού\n- Type: concert\n- Venue: Δημοτικο Θεατρο Πειραια\n- Date: 2025-11-10\n- Time: 16:00\n- Genre: \n- Price: paid\n\nFULL SOURCE DESCRIPTION (1004 chars):\n4ο ΣΥΝΕΔΡΙΟ ΓΥΝΑΙΚΕΙΟΥ ΑΘΛΗΤΙΣΜΟΥ από το GAZZETTA WOMEN\n\nTHE GWOMEN SPORTS SUMMIT10ΝΟΕΜΒΡΙΟΥ2025 - ΔΗΜΟΤΙΚΟΘΕΑΤΡΟΠΕΙΡΑΙΑ\n\nTOGETHER. STRONGER. UNSTOPPABLE.ΤοGazzettaκαι τοGazzetta Womenπαρουσιάζουν το 4ο GWomen Sports Summit, τη μοναδική διοργάνωση στην Ελλάδα αφιερωμένη αποκλειστικά στο γυναικείο αθλητισμό.Με φετινό μήνυμα«Together. Stronger. Unstoppable»το συνέδριο επιστρέφει με στόχο να αναδείξει τις αθέατες πλευρές του αθλητισμού, να δώσει χώρο στις ιστορίες που σπάνια ακούγονται και να ανοίξει έναν ουσιαστικό διάλογο γύρω από την ψυχική ανθεκτικότητα, την ισότητα, την ισότιμη προβολή και τη δύναμη της αυθεντικότητας.ΤοGWomen Summit 2025υπερβαίνει τα όρια του αθλητισμού, φωτίζοντας τα κοινωνικά και ψυχολογικά ζητήματα που αντιμετωπίζουν οι γυναίκες στο δρόμο προς την επιτυχία.Μέσα από βιωματικές συζητήσεις, έρευνες, προσωπικές μαρτυρίες και παραδείγματα έμπνευσης, επιχειρεί να μετατρέψει αυτό το συνέδριο σε ένα χώρο ουσιαστικής αλλαγής.Tickets*:\n\nΓενική είσοδος: 15€Άνεργοι, ΑΜΕΑ: Δωρεάν",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "15eed2a046713d39",
+      "title": "ΤΑ ΚΟΡΙΤΣΙΑ ΤΟΥ ΑΥΓΟΥΣΤΟΥ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB",
+      "eventInfo": "Event Details:\n- Title: ΤΑ ΚΟΡΙΤΣΙΑ ΤΟΥ ΑΥΓΟΥΣΤΟΥ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB\n- Type: concert\n- Venue: Νοτου - Club\n- Date: 2025-11-10\n- Time: 20:00\n- Genre: music\n- Price: paid\n\nFULL SOURCE DESCRIPTION (1271 chars):\nΤΑ ΚΟΡΙΤΣΙΑ ΤΟΥ ΑΥΓΟΥΣΤΟΥ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ CLUB\n\nΧωράει ένας Αύγουστος μέσα σε 30 τραγούδια;\n\nΤέσσερις ιστορίες που έζησαν τέσσερα διαφορετικά καλοκαίρια\n\nχωρούν σε μια βραδιά;Πόσα θαύματα μπορούν να συμβούν στην διάρκεια μιας βραδιάς;\n\nΑφήνω τις ερωτήσεις και πιάνω το δεύτερο ενικό.\n\nΣου έχω διαλέξει τριάντα τραγούδιαγια να σου πω όσα δεν κατάφερααπό κοντά.Έχω δανειστεί τριάντα τραγούδια που ξέρω ό,τι ξέρεις, αφού σε έχω ακούσει να τα τραγουδάς.Τριάντα τραγούδια που ακούγαμε σε εκείνο το στικάκι και που είχες μάθει την σειρά απέξω.\n\nΣτο νησί ή στην Αθήνα που βασιλεύει το καθετί πριν δύσει …Γιατί και η Αθήνα γίνεται ένα μεγάλο νησί όταν ζεις εσύ εκεί.\n\nΑφού το καλοκαίρι είσαι εσύ.\n\nΜια μουσική παράσταση για όσους συντηρούν, φωταγωγούν και ζεσταίνουν τους γύρω τους με το καλοκαίριπου θριαμβεύει μέσα τους.\n\nΜια πλανόδια μπάντα τραγουδά όσα μας ενώνουν κάθε καλοκαίρι.Από το χτες μέχρι το τώρα.Και από το τώρα μέχρι το πάντα!\n\nΠρωταγωνιστούν:\n\nΈλενα Λεώνη: Τραγούδι/Άρπα\n\nΧρήστος Βέργος: Τραγούδι/Κιθάρα\n\nΙάσονας Χρόνης: Τραγούδι/Κιθάρα\n\nΚωστής Βήχος: Μπάσο\n\nΓιώργος Κουρέλης: Πλήκτρα\n\nΔιονύσης Μόρφης: Κιθάρες\n\nΚωνσταντίνος Αντωνόπουλος: Τσέλο\n\nΑλέξης Σταυρόπουλος: Τύμπανα\n\nΕνορχήστρωση: Κωστής Βήχος\n\nΣενάριο/Σκηνοθεσία/\n\nΜουσική Επιμέλεια: Πάνος Σουρούνης",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "295f068bc2ddb803",
+      "title": "Kassandra Charalampi + Konstantinos Stouraitis trio feat. Takis Paterelis",
+      "eventInfo": "Event Details:\n- Title: Kassandra Charalampi + Konstantinos Stouraitis trio feat. Takis Paterelis\n- Type: concert\n- Venue: Note Jazz Club\n- Date: 2025-11-10\n- Time: 20:00\n- Genre: music\n- Price: paid\n\nFULL SOURCE DESCRIPTION (2929 chars):\nΤο Half Note Jazz Club υποδέχεται για πρώτη φορά την εξαιρετική τραγουδίστρια Κασσάνδρα Χαραλάμπη και το κουιντέτο της, σε μία μοναδική βραδιά ακουστικής jazz με άρωμα Νέας Υόρκης. Η νεαρή βοκαλίστ, με πορεία που ξεκινά από την Αθήνα και φτάνει ως τη Νέα Υόρκη, θα παρουσιάσει ένα πολυπολιτισμικό πρόγραμμα που αντικατοπτρίζει τις πλούσιες μουσικές της εμπειρίες: από τις τζαζ σκηνές της Ισπανίας έως την καρδιά της διεθνούς jazz, το Μεγάλο Μήλο.Η Κασσάνδρα Χαραλάμπη γεννήθηκε και μεγάλωσε στην Αθήνα, με τη μουσική να αποτελεί αναπόσπαστο κομμάτι της ζωής της ήδη από τα τέσσερά της χρόνια, όταν ξεκίνησε μαθήματα πιάνου με τον πατέρα της. Αν και ακολούθησε διαφορετική ακαδημαϊκή πορεία αρχικά, το πάθος της για τη μουσική την οδήγησε το 2012 στο Musikene – την Ανώτερη Μουσική Σχολή της Χώρας των Βάσκων – όπου σπούδασε jazz και αποφοίτησε το 2017. Εκεί, είχε την τύχη να μαθητεύσει δίπλα σε σπουδαίους καλλιτέχνες, όπως οι Judy Niemack, Deborah Carter, Bob Sands και Guillermo McGill, εμβαθύνοντας στην παράδοση και το πνεύμα της τζαζ.Κατά την παραμονή της στην Ισπανία, συμμετείχε ενεργά στη τοπική jazz σκηνή, με εμφανίσεις σε σημαντικά φεστιβάλ και χώρους όπως το Heineken Jazzaldia στο Σαν Σεμπαστιάν, το Bogui Jazz στη Μαδρίτη και το Jimmy Glass στη Βαλένθια, ενώ συνεργάστηκε με θρύλους της soul σκηνής, όπως οι Kim Weston, Dee Dee Sharp και Mitch Ryder.Το 2018, συνέχισε τις σπουδές της στη Νέα Υόρκη, στο μεταπτυχιακό πρόγραμμα του Aaron Copland School of Music στο Queens College, απ’ όπου αποφοίτησε το 2020. Έκτοτε ζει και δραστηριοποιείται στη Νέα Υόρκη, έχοντας μοιραστεί τη σκηνή με σπουδαία ονόματα της jazz όπως οι Johnny O’Neal, Emmet Cohen, Saul Rubin και Michael Kanan, ενώ έχει εμφανιστεί σε εμβληματικά jazz clubs όπως το Minton’s Playhouse, το Zinc Bar, το Mezzrow και το The Django.Στο Half Note θα παρουσιάσει ένα πρόγραμμα γεμάτο δυναμικά swing, αισθαντικά boleros, αλλά και ανατρεπτικές εκτελέσεις αγαπημένων τραγουδιών των Beatles και του Sam Cooke. Μαζί της, το Konstantinos Stouraitis trio, ένα σχήμα με εξαιρετικούς μουσικούς που έχουν στο ενεργητικό τους συναυλίες από τη Στέγη Γραμμάτων και Τεχνών, μέχρι το Jamboree Jazz Club της Βαρκελώνης και το West Village της Νέας Υόρκης. Special guest θα είναι ο διακεκριμένος σαξοφωνίστας και αναπόσπαστο μέρος της Ελληνικής ιστορίας της τζαζ, ο σπουδαίος Τάκης Πατερέλης.\n\nΤο Konstantinos Stouraitis trio απαρτίζουν οι :\n\nΚωνσταντίνος Στουραΐτης στην κιθάρα,Κίμωνας Καρούτζος στο κοντραμπάσο – και οι δύο συμφοιτητές της στη Νέα Υόρκη (Queens College & Manhattan School of Music) –και ο ανερχόμενος Παναγιώτης Θέμας στα τύμπανα.\n\nΜια βραδιά που ενώνει την ελληνική ψυχή, τη μεσογειακή φλόγα και την αυθεντικότητα της Νέας Υόρκης, μέσα από την τέχνη μιας τραγουδίστριας με διεθνή προοπτική.\n\nΠαίζουν:Κασσάνδρα Χαραλάμπη – φωνή\n\nΤάκης Πατερέλης - τενόρο σαξόφωνοΚωνσταντίνος Στουραΐτης – κιθάραΚίμωνας Καρούτζος – κοντραμπάσοΠαναγιώτης Θέμας – τύμπανα",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "49bc555e9cd8e27e",
+      "title": "NEVERMIND",
+      "eventInfo": "Event Details:\n- Title: NEVERMIND\n- Type: theater\n- Venue: Theatre Nous-Creative space\n- Date: 2025-11-10\n- Time: 20:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (651 chars):\nΈνα ζευγάρι προσπαθεί να επαναπροσδιορίσει τη σχέση του μέσα από μια σειράσυνεδριών ψυχοθεραπείας ζεύγους. Προσπαθούν να βρουν λέξεις για όλα όσαδεν ειπώθηκαν, δεν έγιναν, δεν σώθηκαν.Μέσα στο θεραπευτικό δωμάτιο,η θεραπεία γίνεται σκηνή αντιπαράθεσης, ομολογίας,αλλά και τρυφερότητας.Το έργο εξερευνά τη λεπτή γραμμή ανάμεσα στην αγάπη και τη φθορά, στη στοργήκαι τη σιωπή, στο παρελθόν και την πιθανότητα ενός κοινού μέλλοντος ή σε μίασυνεχόμενη διαδικασία ανεύρεσης του εαυτού.Το έργο είναι μια «παράλογη» εξερεύνηση της ανθρώπινης ύπαρξης, όπου οι χαρακτήρεςπροσπαθούν να κατανοήσουν τη θέση τους σε έναν κόσμο γεμάτο από φόβο, πόνο καιαναστάτωση.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "7f64b4b9c956542d",
+      "title": "(Love me) Tinder",
+      "eventInfo": "Event Details:\n- Title: (Love me) Tinder\n- Type: theater\n- Venue: Theatre of the NO\n- Date: 2025-11-10\n- Time: 20:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (5294 chars):\n(Love me) Tinder\n\nCreated, Written & Directed by Nico Fytas\n\nTHEATRE OF THE NO\n\nPremiere: Monday, November 10th\n\n“Can love survive when all we do is swipe?”Nico Fytas’ new play, (Love me) Tinder, premieres at Theatre of the NO,Athens' first English-speaking theatre, on Monday, November 10th, at 21:00.A bilingual, polyphonic performance that explores love and “connection”in the age of algorithms, where desire meets data, and every confessionturns into a notification.Greek and English intertwine with performance, theatre, dance, song, live-looping, projections, data leaks and sound layers, creating an experiencethat feels less like a play and more like an electric confession.From dusk till dawn, five characters meet in the home of a meta-pop star.Alcohol flows, masks fall, and systems of belief clash as love is performed,betrayed, and redefined. Campari dissolves resistance, while champagne —for the daring few turns into tinder pink. By sunrise, the plural we collides withthe singular I, leaving only what cannot be captured in a screenshot.More than a story about dating or social media, (Love me) Tinder is an inquiryinto how desire, language, and technology reshape the human experience.The performance stands at the heart of Theatre of the NO’s dramaturgicalvision for the 2025–2026 season, reflecting Athens’ polyglot coexistence andasserting that multilingual theatre is not an exception, but a necessity in a citythat continually reinvents its voice.Production DetailsGenre: Contemporary situational comedy with tragic overtonesLanguage: Multilingual (Greek/English with subtitles)Music: Live music and song\n\nCreditsConcept – Text – Direction: Nico FytasScenography: Dimitris ZampopoulosOriginal Music: Nalia ZikuChoreography: Eleftheria Agapaki\n\nLighting Design: Ion SofikitisStage Constructions: Kimon SofikitisConstructions: Kimon SofikitisCostumes - Video Projections: Nico FytasPoster Design: Sotiria BramouPR & Communication: Eleftheria Sakareli\n\nCastGina Stavroulaki, Marilena Cavazi, Teresa Vrondisi,Giannis Oichaliotis, Nasos ToliasPerformancesEvery Monday & Tuesday at 21:00Ticket price: 15€   Students, Unemployed, Disabled: 12€ Actors, Drama school students: 10€Pre-sale: more.com\n\nBar Available: Beer 4€, Drinks 6-8€\n\nTHEATRE OF THE NO: Konstantinou Palaiologou 3, Athens Ι +306946851001(opposite the Athens City Hall)Website & Social Media: TheatreoftheNO I Facebook I Instagram\n\n(Love me) Tinder\n\nΣύλληψη – Κείμενο – Σκηνοθεσία: Νίκος Φυτάςστο THEATRE OF THE NOΠρεμιέρα: Δευτέρα 10 Νοεμβρίου\n\n«Μπορεί ο έρωτας να επιβιώσει όταν το μόνο που κάνουμε είναι swipe;»\n\nΤο νέο έργο του Νίκου Φυτά, (Love me) Tinder, κάνει πρεμιέρα στο Theatreof the NO, το πρώτο αγγλόφωνο θέατρο της Αθήνας, τη Δευτέρα 10Νοεμβρίου στις 21:00.Πρόκειται για μια δίγλωσση, πολυφωνική performance γύρω από τονέρωτα και τη “σύνδεση” στην εποχή των αλγορίθμων, εκεί όπου ηεπιθυμία συναντά τα δεδομένα και κάθε εξομολόγηση μετατρέπεται σεειδοποίηση.Ελληνικά και αγγλικά διασταυρώνονται με θέατρο, χορό, τραγούδι,performance, live-looping, προβολές, data leaks και ηχητικά layers,δημιουργώντας μια εμπειρία που θυμίζει περισσότερο ηλεκτρική εξομολόγησηπαρά θεατρική παράσταση. Από το σούρουπο ως την αυγή, πέντεχαρακτήρες συναντιούνται στο σπίτι μιας meta-pop star. Το ποτό ρέει, οιμάσκες πέφτουν και τα συστήματα πεποιθήσεων συγκρούονται καθώς οισχέσεις δοκιμάζονται, καταρρέουν και ξαναχτίζονται.Περισσότερο από μια ιστορία για το dating ή τα social media, το (Love me)Tinder ερευνά πώς ο λόγος, η επιθυμία και η τεχνολογία μεταμορφώνουν τησύγχρονη εμπειρία.Η παράσταση αποτελεί τον πυρήνα του φετινού δραματουργικού σχεδιασμούτου NO, μιας σεζόν που επιδιώκει να αιτιολογήσει γιατί το αγγλόφωνοθέατρο ανήκει στην Αθήνα, γιατί η ίδια η πόλη είναι πολύγλωσση, αντιφατικήκαι απρόβλεπτη, όπως και ο έρωτας.Σημείωμα Σκηνοθέτη«Το (Love me) Tinder προσεγγίζει τον έρωτα ως ένα ζωντανό σύστημα. Ησκηνή χαρτογραφείται ανάμεσα στο ιδιωτικό και το δημόσιο, όπου η γλώσσα,ο ήχος και το σώμα συνυπάρχουν.Κάθε παράσταση είναι ένα εργαστήριο ζωντανής γραφής: το υλικόανακυκλώνεται, μετασχηματίζεται και ξαναγράφεται μπροστά στα μάτια του\n\nκοινού. Με ενδιαφέρει πώς η γλώσσα αλλοιώνεται μέσα από τα social mediaκαι τα chatbots, πώς η μνήμη επιμένει σαν screenshot και η επιθυμίααντιστέκεται στην καταμέτρηση. Αν ένα ρίγος ή μια σιωπή φτάσει στο κοινό,το πείραμα έχει πετύχει.»— Νίκος ΦυτάςΤαυτότητα Παράστασης:Είδος: Σύγχρονη κωμωδία καταστάσεων με τραγικές αποχρώσειςΓλώσσα: Πολύγλωσση (Ελληνικά/Αγγλικά με υπότιτλους)Μουσική: Ζωντανή μουσική και τραγούδιΣυντελεστές ΠαράστασηςΣύλληψη-Κείμενο-Σκηνοθεσία: Νίκος ΦυτάςΣκηνογραφία: Δημήτρης ΖαμπόπουλοςΠρωτότυπη Μουσική: Νάλια ΖήκουΧορογραφίες: Ελευθερία ΑγαπάκηΕπιμέλεια Φωτισμών: Ίων ΣοφικίτηςΚατασκευές: Κίμων ΣοφικίτηςΚοστούμια - Video Projections – Φωτογραφίες: Νίκος ΦυτάςΠαίζουν: Τζίνα Σταυρουλάκη, Μαριλένα Καβάζη, Τερέζα Βροντίση,Γιάννης Οιχαλιώτης, Νάσος ΤόλιαςCreditsΣχεδιασμός Αφίσας: Σωτηρία ΜπράμουΕπικοινωνία & Δημόσιες Σχέσεις: Ελευθερία ΣακαρέληΗμ/νιες παραστάσεων:Κάθε Δευτέρα και Τρίτη στις 21.00Τιμή Εισιτηρίου: 15€    Φοιτητικό, Ανέργων, ΑΜΕΑ: 12€ Ατέλεια: 10€Προπώληση: : more.com\n\nTHEATRE OF THE NO: Κωνσταντίνου Παλαιολόγου 3, Αθήνα Ι 6946851001(απέναντι από το Δημαρχείο)Website & Social Media: TheatreoftheNO I Facebook I Instagram",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "4669ebb0d862fc9d",
+      "title": "Three Times Three #2",
+      "eventInfo": "Event Details:\n- Title: Three Times Three #2\n- Type: concert\n- Venue: Κεντρο ελεγχου τηλεορασεων\n- Date: 2025-11-10\n- Time: 21:00\n- Genre: other\n- Price: paid\n\nFULL SOURCE DESCRIPTION (2020 chars):\nΤο μηνιαίο ραντεβού“Three Times Three”φέρνει κοντά καλλιτέχνιδες και καλλιτέχνες από τον χώρο του σύγχρονου χορού και της πειραματικής μουσικής. Τρεις μουσικοί και τρεις χορεύτριες ή χορευτές γνωρίζονται επί σκηνής, χωρίς πρόβα. Στην αρχή της βραδιάς σχηματίζονται με κλήρωση τρία τυχαία ζευγάρια, τα οποία αυτοσχεδιάζουν για 15 λεπτά. Στο τέλος, όλες και όλοι μαζί συμμετέχουν σε έναν συλλογικό αυτοσχεδιασμό διάρκειας 30 λεπτών.\n\nΤην καλλιτεχνική επιμέλεια έχει ο συνθέτης και ερευνητήςΣπύρος Πολυχρονόπουλος(Spyweirdos), ο οποίος από τα τέλη της δεκαετίας του ’90 διερευνά τη σχέση του ήχου με την υλικότητα και τον χώρο — τόσο μέσα από τη δισκογραφία και τις ζωντανές εμφανίσεις του, όσο και ως διδάσκων στο Τμήμα Μουσικής Τεχνολογίας και Ακουστικής του ΕΛΜΕΠΑ.\n\nΣτη δεύτερη διοργάνωση της σεζόν, συναντιούνται επί σκηνής:•Βιβή Μπουτάτη, χορεύτρια με σπουδές στην Κρατική Σχολή Ορχηστικής Τέχνης και στη Jasmine Vardimon Company (Ηνωμένο Βασίλειο), με πολυετή συνεργασία σε παραγωγές χορού και θεάτρου στην Ελλάδα και την Ευρώπη.•Χρυσάνθη Φύτιζα, χορογράφος και ερμηνεύτρια, μέλος του ντουέτουSatanellas, που δραστηριοποιείται στον χώρο του σύγχρονου χορού ως δημιουργός και δασκάλα, συνδυάζοντας χιούμορ, σωματικότητα και θεατρικότητα.•Δάφνη Μπουκουβάλα, απόφοιτη της Κρατικής Σχολής Ορχηστικής Τέχνης, η οποία δραστηριοποιείται στον χώρο του σωματικού θεάτρου και της εκπαίδευσης.•Βύρωνας Ντόλας, κιθαρίστας της αυτοσχεδιαστικής και της τζαζ σκηνής, με τρεις προσωπικούς δίσκους και συνεργασίες με πολλούς μουσικούς της ελληνικής σκηνής.•Νίκη Κοκκόλη, σαξοφωνίστρια με ενεργή παρουσία στη διεθνή σκηνή του ελεύθερου αυτοσχεδιασμού, με εμφανίσεις σε φεστιβάλ και χώρους όπως τοCafé Otoκαι τοFylkingen, καθώς και πρόσφατο solo project για σαξόφωνο και ηλεκτρονικά.•Σπύρος Πολυχρονόπουλος, στα ηλεκτρονικά.\n\n__________________________________________________\n\nΚέντρο Ελέγχου Τηλεοράσεων\n\nΚύπρου 91Α, Κυψέλη, Αθήνα\n\n☎ 213 00 40 496 | 69 45 34 84 45\n\n✉info@polychorosket.gr\n\nSITE❘FB❘INSTA❘MASTODON❘NEWSLETTER❘SUPPORT US",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "-2025-11-10",
+      "title": "Το Γάλα | Αιθ. Μ. Αλέξανδρος",
+      "eventInfo": "Event Details:\n- Title: Το Γάλα | Αιθ. Μ. Αλέξανδρος\n- Type: concert\n- Venue: Αιθουσα Τεχνης & Πολιτισμου Μ.Αλεξανδρος\n- Date: 2025-11-10\n- Time: 21:00\n- Genre: \n- Price: paid\n\nFULL SOURCE DESCRIPTION (1887 chars):\nΤο Γάλα του Βασίλη Κατσικονούρη\n\nΔευτέρα 10 Νοεμβρίου στην Αίθουσα Τέχνης και Πολιτισμού Μ. Αλάξανδρος\n\nΝα μπορούσε να ξαναγίνειΔεν μπορεί να ξαναγίνειτίποτα δεν ξαναγίνεται ρε Λευτέρη\n\nΗ μεγάλη επιτυχία του Θεάτρου Σταθμός (Βραβείο ΚοινούAll4FunΚαλύτερης Παράστασης 2024) επαναλαμβάνεται για τρίτη θεατρική σεζόν. Το έργο – τομή του νεοελληνικού θεάτρου, που υπολογίζεται ότι έχουν δει σε όλη την Ελλάδα και το εξωτερικό πάνω από 500.000 θεατές, επανέρχεται στη σκηνή του Θεάτρου Σταθμός – είκοσι χρόνια από τη συγγραφή του και δέκα μετά το τελευταίο του ανέβασμα στη σκηνή. Το γάλα στα ρωσικά λέγεται “μαλακό”. Έτσι, περίεργα, μια ελληνική λέξη, σπαρμένη μέσα σε μια άλλη γλώσσα, δίνει εκεί, στο ξένο χωράφι, πολύ πιο άμεσα και ανάγλυφα την αίσθηση του πράγματος, απ’ ό,τι η αντίστοιχη που το ονοματίζει στα ελληνικά.\n\nΓι’ αυτήν ακριβώς την αίσθηση θέλει να μιλήσει “Το γάλα” τουΒασίλη Κατσικονούρηκαι οι ήρωες του. Μια μητέρα από την πρώην Σοβιετική ένωση και οι δυο της γιοι συνθέτουν μια συγκλονιστική οικογενειακή ιστορία όπου φωτίζεται δεξιοτεχνικά από τον συγγραφέα ο συναισθηματικός κόσμος των ηρώων και οι ανησυχίες τους, όπως αυτές πηγάζουν μέσα από το κοινωνικό τους περιβάλλον, αλλά κυρίως η αίσθηση που έχει κανείς πως όλα μέσα του μαλακώνουν και ζεσταίνονται, όταν σταματάει πια να κλαίει και να πονάει γιατί δέχεται την τροφή του. Αγαπιέται… Κι όταν αυτό δεν συμβαίνει, τότε νιώθει ξένος. Σαν πρόσφυγας ανάμεσα σε δυο πατρίδες. Ξένες κι αυτές. Τη σκηνοθεσία – έχοντας στη διάθεσή τους μια εξαιρετική διανομή – υπογράφουν οΜάνος Καρατζογιάννηςμε μακρά θητεία στο ελληνικό έργο και ηΕρμίνα Κυριαζή, η οποία σκηνοθέτησε την περασμένη σεζόν και το πιο πρόσφατο έργο του Βασίλη Κατσικονούρη “Τσιτάχ. Η ερημιά του τερματοφύλακα”. Η παράσταση αφιερώνεται στη μνήμη του Κωνσταντίνου Παπαχρόνη, που πρώτος ερμήνευσε τον ρόλο του Λευτέρη το 2006 στην παράσταση του Εθνικού Θεάτρου.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "43bfd05d807e02ba",
+      "title": "Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing)",
+      "eventInfo": "Event Details:\n- Title: Εργαστήρισ για άτομα 65+: Εργαστήριο Τρισδιάστατης Εκτύπωσης (3D Printing)\n- Type: workshop\n- Venue: Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space\n- Date: 2025-11-11\n- Time: 00:00\n- Genre: general\n- Price: with-ticket\n\nFULL SOURCE DESCRIPTION (1309 chars):\nΕλάτε να γνωρίσουμε πώς η τεχνολογία μπορεί να κάνει την καθημερινότητά μας πιο εύκολη και δημιουργική!\n\nΤο εργαστήριο έχει στόχο την πρακτική και δημιουργική εξοικείωση με την τεχνολογία της τρισδιάστατης εκτύπωσης. Μέσα από μια σειρά παραδειγμάτων, μαθαίνουμε πώς η τεχνολογία αυτή μπορεί να αποτελέσει εργαλείο ενίσχυσης της αυτονομίας στην καθημερινή ζωή με την εκτύπωση προσαρμοσμένων βοηθητικών αντικειμένων, όπως  εργονομικές λαβές, βοηθήματα για κουμπώματα ρούχων, βάσεις που διευκολύνουν τη χρήση κινητού τηλεφώνου ή βιβλίων, κ.ά.\n\nΣτόχοι του εργαστηρίου:\n\nΓνωριμία με τις βασικές αρχές της τρισδιάστατης εκτύπωσης\n\nΚατανόηση τον τρόπων με τους οποίους η τεχνολογία μπορεί να απαντήσει σε προσωπικές και καθημερινές ανάγκες\n\nΕνίσχυση της δημιουργικότητας, της αυτοπεποίθησης και της ανεξαρτησίας\n\nΚαλλιέργεια κοινωνικής αλληλεπίδρασης μέσα από απλές ομαδικές ασκήσεις.\n\nΣχεδιασμός – Υλοποίηση:\n\nΜαριάνθη Λιάπη - Αρχιτέκτονας\n\nΟυρανία Αλτουβά - Αρχιτέκτονας/Εκπαιδευτικός\n\nΕιρήνη Βαλληνδρά - Αρχιτέκτονας/Μουσικός\n\nΧρύσα Γεωργίου - Αρχιτέκτονας\n\nΕύχαρις Γουρουντή - Αρχιτέκτονας\n\nΔιονυσία Δασκαλάκη - Αρχιτέκτονας\n\nΓεωργία Μανουσογιαννάκη - Αρχιτέκτονας\n\nΤο εκπαιδευτικό πρόγραμμα υλοποιείται με την επιστημονική επιμέλεια του Εργαστηρίου TUC TIE Lab της Αρχιτεκτονικής Σχολής του Πολυτεχνείου Κρήτης.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "8b43e7d7293d5910",
+      "title": "Άρης Μάθεσης: Τζόγος | Live Παρουσίαση Δίσκου",
+      "eventInfo": "Event Details:\n- Title: Άρης Μάθεσης: Τζόγος | Live Παρουσίαση Δίσκου\n- Type: concert\n- Venue: Δίσκου ΙΛΙΟΝ Plus\n- Date: 2025-11-11\n- Time: 20:00\n- Genre: music\n- Price: paid\n\nFULL SOURCE DESCRIPTION (1390 chars):\nΆρης Μάθεσης \"Τζόγος\" : Album Full Band Alive Presentation\n\nΕρμηνεύουν :Σεμέλη Μελία Παπαβασιλείου & Αυγερινή Γάτση\n\n11 Τράκς, Ζωντανή Παρουσίαση του προσωπικού  δίσκου του ΆρηΜάθεση ο οποίος αποτελεί μια βουτιά σε πολυσχιδή ηχοτοπία που  ποντάρουνε στην θεμελιώδη μαθηματική λογική ,\n\nστην βαρύτητα  κ στους νομούς της φυσικήςμε στόχο ίσως ,να απαντήσει  σε ερωτήσεις -τζόγου-μεταφυσικής προσέγγισης..\n\nΜουσικά ρεύματα παρελαύνουν χέρι-χέρι το ένα με τ άλλο χωρίς επιτήδευση αλλά με βαθιά γνώση και αγάπη για το καθένα ξεχωριστά.  Διαστημικά Μπουζούκια , Φωνές από τα Αστέρια & η μπάντα να παίζει σαν να είναι η τελευταία βραδιά της Γης κ ίσως  η πρώτη μέρα της Διαστρικής σφαίρας που λέγεται Κόκκινος Πλανήτης\n\nCrewΣεμέλη Μελία Παπαβασιλείου - ΤραγούδιΑυγερινή Γάτση - Πιάνο, ΤραγούδιΣωτήρης Ντούβας - ΤύμπαναΆγγελος Αγγελίδης - Ηλεκτρική ΚιθάραΠαναγιώτης Διαμάντης - ΚιθάραΑντώνης Πρίφτης  - ΜπάσοΔημήτρης Τσάκας - ΣαξόφωνοΑλεξάνδρα Παπαστεργιοπούλου - Τσέλο, ΦλάουτοΒασίλης Γιαννούσης - ΦλάουτοΆρης Μάθεσης - ΜπουζούκιΚαλεσμένη μας η τραγουδίστρια Ακριβή Αποστολάτου\n\niNFOΤρίτη 11 ΝοέμβρηΈναρξη: 21:00Support Damage: 11€ΙΛΙΟΝ plusΠατησίων & Κοδριγκτώνος 172108824383\n\nΑσσόΔυα σκληρά Μέσα στη βιοπάληΤο δέκα το καλό Στον κούκο τον μονόμια καινούρια ζάληΠονταρίσματα στη ΖωήΓια μια στιγμή μεγάληΤο Άλφα το διπλόΚαζίνο και προπόΕξάρες μ ένα ζάριKαι μια Κυριακή που περιμένουμε να ξημερώσει",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "7f3982609ee89c8c",
+      "title": "ΛΗΘΗ",
+      "eventInfo": "Event Details:\n- Title: ΛΗΘΗ\n- Type: theater\n- Venue: BIOS\n- Date: 2025-11-11\n- Time: 20:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (853 chars):\nΈνας έρημος τόπος γίνεται πεδίο μνήμης και σιωπής.Κάθε βήμα χαράζει αποτύπωμα· κάθε αποτύπωμα γεννά μορφή.\n\nΣώματα που μάχονται και θρηνούν.Αμφιβάλλουν, δηλώνουν, σπαράζουν, σιωπούν.Κάθε κίνηση, μια ρωγμή. Κάθε ανάσα, ένα βάρος.Λες και η λήθη είναι αμνησία.\n\nΛόγος και κίνηση πλέκονται σε έναν χορό που οδηγεί στη λύτρωση.Οι λέξεις γίνονται ψίθυροι· οι ψίθυροι κραυγές· οι κραυγές ανάσες που χτυπούν τον αέρα.\n\nΗΛΗΘΗδεν αφηγείται μια ιστορία. Δημιουργεί έναν κόσμο όπου το παρελθόν δεν μένει ποτέ θαμμένο· επιστρέφει σαν παλίρροια για να δοκιμάσει την αντοχή του σώματος και του νου.\n\nΣτην άκρη του ορίζοντα, η ερώτηση που δεν μπορείς να αποφύγεις:Αν η μνήμη σε κρατά δεμένο, τι θα θυσίαζες για να σπάσεις την πέτρα;\n\nΜια σωματική και ψυχική κατάβαση, εμπνευσμένη από το έργο ΛΗΘΗ του Δημήτρη Δημητριάδη, που μεταμορφώνεται σε μια χοροθεατρική εμπειρία.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "mikeius-incorrect-tgi-fridays-2025-11-11",
+      "title": "MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS",
+      "eventInfo": "Event Details:\n- Title: MIKEIUS INCORRECT ΚΑΘΕ ΤΡΙΤΗ ΣΤΑ TGI FRIDAYS\n- Type: concert\n- Venue: TGI Fridays™ Καπνικαρεας\n- Date: 2025-11-11\n- Time: 21:20\n- Genre: \n- Price: paid\n\nFULL SOURCE DESCRIPTION (1249 chars):\nΤα έχουμε ξαναπεί για τονMikeius,για την συνεισφορά του στην Youtube κοινότητα αλλά και πόσο αγαπάει…να τον μισεί κόσμος και κοσμάκης, ανά την επικράτεια, είτε παρακολουθεί τα «ΜΠΡΑΦ», είτε  τον ακολουθεί σε κάποιο social media του.\n\nΌπως και να έχει η προηγούμενη παράσταση του με τίτλο“#CancelMikeius”ακολουθήθηκε από χιλιάδες κόσμο σε όλη την Ελλάδα και την Κύπρο, αγαπήθηκε και έγινε για άλλη μία φορά αφορμή, για να θυμηθούμε πως η σκληρή γλώσσα, καμιά φορά κρύβει τις μεγαλύτερες αλήθειες.\n\nΤο σωτήριο έτος 2025 λοιπόν, οmasterτουPoliticallyIncorrect, φέρνεικάθε Τρίτη στα TGI Fridays Καπνικαρέας, νέα κείμενα, νέες σκέψεις και ιστορίες, έχοντας απέναντι έναν πλανήτη, που μέρα με τη μέρα βρίσκεται απέναντι στις ίδιες της επιλογές του περί πολιτικής ορθότητας.\n\nΜε κοφτερό λόγο και την χρήση οπτικοακουστικών μέσων, οMikeius, βάζει το χιούμορ ως απαραίτητο αλατοπίπερο, απέναντι σε έννοιες, πολιτικές και φόρμες που έχουμε συνηθίσει να φοβόμαστε να ακουμπήσουμε, μήπως χαρακτηριστούμε αρνητικά.\n\nΤίποτα δεν ξεφεύγει από την κοφτερή ματιά τουMikeius, τίποτα δεν μένει ασχολίαστο και αν μη τι άλλο θα μας κάνει για άλλη μια φορά να επαναξιολογήσουμε τον όρο«Incorrect».\n\nΣας περιμένουμε σε κάθε γωνιά της Ελλάδας, της Κύπρου και του εξωτερικού!",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "1415cca319466bcc",
+      "title": "ΣΠΗΛΙΟΣ ΦΛΩΡΟΣ - ΣΤΟ ΤΡΕΞΙΜΟ ΑΘΗΝΑ",
+      "eventInfo": "Event Details:\n- Title: ΣΠΗΛΙΟΣ ΦΛΩΡΟΣ - ΣΤΟ ΤΡΕΞΙΜΟ ΑΘΗΝΑ\n- Type: theater\n- Venue: ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ\n- Date: 2025-11-12\n- Time: 00:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (1052 chars):\n\"Στο Τρέξιμο\" Stand-Up ComedyΟ Σπήλιος Φλώρος, ένας από τους πιο επιτυχημένους κωμικούς της Ελλάδας, επιστρέφει με την τρίτη του σόλο παράσταση, \"Στο Τρέξιμο\".Μετά από τις τεράστιες επιτυχίες των Stand up Comedy παραστάσεών του \"Ξέρω τις Κινήσεις\" και \"Ακάλεστος στο Πάρτυ\", που έκαναν sold out εμφανίσεις τόσο στην Ελλάδα όσο και στο εξωτερικό, ο Σπήλιος φέρνει ένα ολοκαίνουριο set, γεμάτο γέλιο, τζέρτζελο και τη χαρακτηριστική του ενέργεια.Η παράσταση \"Στο Τρέξιμο\" γράφτηκε – κυριολεκτικά – στο τρέξιμο και μιλάει για όλα αυτά που μας κάνουν να γελάμε και να ταυτιζόμαστε.Από τους αγώνες στίβου για υπερήλικες (είπαμε κυριολεκτικά στο τρέξιμο) μέχρι και την ζωή μετά τα 25. Απο την οικογένεια, στις ερωτικές σχέσεις μέχρι και τη ζωή μετά τον θάνατο.Το “Στο Τρέξιμο” είναι η πιο αστεία παράσταση του Σπήλιου, γεμάτη με φρέσκα κείμενα και ιδέες.Ότι δηλαδή  χρειάζεστε για να περάσετε ένα αξέχαστο βράδυ.Τρέξτε… να πάρετε εισιτήρια!!Διάρκεια παράστασης: 70 λεπτά (με opening act)Eίσοδος: 10ευρώ Early Birds, 12 ευρώΠληροφορίες & κρατήσεις: 6946801431",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "1f718bf7551bf10e",
+      "title": "Σύμφωνο Eπιβίωσης - Gagarin 205",
+      "eventInfo": "Event Details:\n- Title: Σύμφωνο Eπιβίωσης - Gagarin 205\n- Type: concert\n- Venue: Gagarin 205 Live Music Space\n- Date: 2025-11-12\n- Time: 00:00\n- Genre: general\n- Price: paid\n\nFULL SOURCE DESCRIPTION (779 chars):\n«Σύμφωνο επιβίωσης»12.11.25Gagarin 205«Σύμφωνο επιβίωσης» είναι ο τίτλος της παράστασης που συν σκηνοθετούν ο Αντώνης Κρόμπας και ο Λευτέρης Ελευθερίου σε κείμενα του πρώτου.\n\nΤο γνωστό κωμικό δίδυμο υπογράφει ένα καταιγιστικό, σκληροπυρηνικό δίωρο.\n\nΟι δυο τους έχουν αναλάβει και, τον πρωταγωνιστικό ρόλο σε αυτό το comedy show που δεν αφήνει τίποτα όρθιο. Σχολιάζουν, σατιρίζουν, κάνουν λογοπαίγνια, μιμούνται πρόσωπα και καταστάσεις της επικαιρότητας, με το δικό του ξεχωριστό ύφος ο καθένας, στοχεύουν να χαρίσουν στο κοινό ένα δίωρο γέλιου και χαλάρωσης.\n\nΚείμενα: Αντώνης Κρόμπας\n\nΠαίζουν Αντώνης Κρόμπας & Λευτέρης Ελευθερίου\n\nΣκηνοθεσία: Αντώνης Κρόμπας & Λευτέρης Ελευθερίου\n\nΗ παράσταση απευθύνεται σε ηλικίες 13 και άνω\n\nΕισιτήρια: 15€\n\nΠληροφορίες:www.detoxevents.gr",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "3fac53fe1ff2724a",
+      "title": "ΓΙΑΝΝΗΣ ΤΣΕΡΟΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS",
+      "eventInfo": "Event Details:\n- Title: ΓΙΑΝΝΗΣ ΤΣΕΡΟΣ | ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ PLUS\n- Type: concert\n- Venue: Σταυρος του Νοτου - Σταυρος του Νοτου Plus\n- Date: 2025-11-12\n- Time: 00:00\n- Genre: music\n- Price: paid\n\nFULL SOURCE DESCRIPTION (2499 chars):\nΟ Γιάννης Τσέρος κυκλοφορεί το νέο του album.Τετάρτη 12 ΝοεμβρίουΟ τραγουδοποιός και ερμηνευτήςΓιάννης Τσέροςπαρουσιάζει το νέο του δισκογραφικό έργο, ένα album που αποτυπώνει μελωδίες και στίχους γεμάτους συναίσθημα, προσωπικές ιστορίες και ηχοχρώματα της σύγχρονης ελληνικής μουσικής.Το album περιλαμβάνει 11 τραγούδια, στα οποία συνυπάρχουν ηλεκτρικοί και ακουστικοί ήχοι, παραδοσιακές επιρροές αλλά και σύγχρονες ενορχηστρώσεις.Κάθε κομμάτι αποτελεί ένα ταξίδι, με οδηγό τη φωνή και τη χαρακτηριστική ερμηνεία του Γιάννη Τσέρου. Η θεματολογία των τραγουδιών κινείται γύρω από την αγάπη, την καθημερινότητα, την εσωτερική αναζήτηση και τα κοινωνικά μηνύματα. Με αυτόν τον δίσκο, ο καλλιτέχνης επιχειρεί να έρθει πιο κοντά στο κοινό του, ανοίγοντας έναν ειλικρινή διάλογο μέσα από τη μουσική.Το album διατίθεται σε όλες τις ψηφιακές πλατφόρμες από την [ημερομηνία κυκλοφορίας] και σύντομα θα είναι διαθέσιμο και σε φυσική μορφή (CD)Σχετικά με τον Γιάννη Τσέρο.\n\nΟ Γιάννης Τσέρος είναι τραγουδοποιός και ερμηνευτής με ξεχωριστή καλλιτεχνική ταυτότητα, που συνδυάζει την παράδοση με τον σύγχρονο ήχο. Η μουσική του διαδρομή ξεκίνησε από μικρή ηλικία, με σπουδές αρχικά στη κιθάρα και έπειτα και στη φωνητική, και συνεχίστηκε με ζωντανές εμφανίσεις σε μουσικές σκηνές σε διάφορες περιοχές της Ελλάδας καθώς και της Βόρειας Ευρώπης.Με ιδιαίτερο στιχουργικό λόγο και βαθιά ερμηνεία, ο Γιάννης δημιουργεί τραγούδια που κινούνται ανάμεσα στο έντεχνο, το ροκ και το σύγχρονο ελληνικό και ξένο ρεπερτόριο.Στην πορεία του έχει συνεργαστεί με σημαντικούς μουσικούς και δημιουργούς, όπως τους Χάρη και Πάνο Κατσιμίχα, τον Βασίλη Καζούλη, τον Μανώλη Φάμελλο, τη Σοφία Τσέρου, τον Δημήτρη Καρρά και τον Ηρακλή Κοντό, ενώ έχει εμφανιστεί σε γνωστές μουσικές σκηνές, αφήνοντας το δικό του αποτύπωμα.Το 2013 κυκλοφόρησε το πρώτο του album με τίτλο «Friday night tips», ανοίγοντας ένα νέο κεφάλαιο στη δισκογραφική του παρουσία.\n\nΤο 2018 παρουσίασε ένα αφιέρωμα στον Bob Dylan με τη Σοφία Τσέρου και το σχήμα Back Pages, με τη καλλιτεχνική επιμέλεια του Πάνου Κατσιμίχα και το 2020, με το ίδιο σχήμα παρουσίασε ένα αφιέρωμα στους Beatles, επίσης με την καλλιτεχνική επιμέλεια του Πάνου Κατσιμίχα.\n\nΤο 2021 κυκλοφόρησε ψηφιακά το single «Glory comes», με το σχήμα Back Pages και τη συμμετοχή του Frankie McLaughlin (Rumjacks, Liptons Orfan).Σήμερα, συνεχίζει με συνέπεια και πάθος να υπηρετεί τη μουσική, παρουσιάζοντας νέες δημιουργίες που αποτυπώνουν την καλλιτεχνική του ωριμότητα και την αφοσίωσή του στην τέχνη.",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "bbc20591a19c74ed",
+      "title": "Μαθήματα Α' Βοηθειών (για ενήλικες)",
+      "eventInfo": "Event Details:\n- Title: Μαθήματα Α' Βοηθειών (για ενήλικες)\n- Type: performance\n- Venue: Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space\n- Date: 2025-11-12\n- Time: 00:00\n- Genre: general\n- Price: with-ticket\n\nFULL SOURCE DESCRIPTION (899 chars):\nΣε αυτή τη συνάντηση, οι συμμετέχοντες έχουν την ευκαιρία να ενημερωθούν σε θεωρητικό και πρακτικό επίπεδο στην αντιμετώπιση ανακοπής με την καρδιοαναπνευστική αναζωογόνηση, την αναγνώριση και χρήση αυτόματου εξωτερικού απινιδωτή, καθώς και την αντιμετώπιση κρουσμάτων πνιγμού και πνιγμονής.\n\nΣχεδιασμός-Υλοποίηση: Αναγέννηση & Πρόοδος\n\nΈως 15 συμμετοχές ανά εργαστήριοΓια ενήλικες και παιδιά από 15 ετών και άνω*\n\n*Η συμμετοχή των εφήβων 15-17 ετών γίνεται με άδεια και παρουσία κηδεμόνα.\n\nΓια τη συμμετοχή σας χρειάζεται να βρίσκεστε στο χώρο 15 λεπτά πριν την έναρξη της δραστηριότητας.\n\nΟι ηλεκτρονικές κρατήσεις ακυρώνονται 15 λεπτά πριν την έναρξη, εφόσον οι κάτοχοί τους δεν έχουν παρουσιαστεί στον χώρο διεξαγωγής της εκδήλωσης.\n\nΤετάρτη | 18:00 – 19:30\n\nΆνοιγμα προεγγραφών: Κάθε προηγούμενη Τετάρτη στις 12:00 για την Τετάρτη της δραστηριότητας\n\nΔιάρκεια:1 ώρα και 30 λεπτά (1 μάθημα/slot)",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "190070ebc6979ce4",
+      "title": "ΦΕΝΙΑ ΠΑΠΑΔΟΔΗΜΑ – WOMEN’S PRAYERS – ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ",
+      "eventInfo": "Event Details:\n- Title: ΦΕΝΙΑ ΠΑΠΑΔΟΔΗΜΑ – WOMEN’S PRAYERS – ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ\n- Type: concert\n- Venue: Half Note Jazz Club\n- Date: 2025-11-12\n- Time: 00:00\n- Genre: music\n- Price: paid\n\nFULL SOURCE DESCRIPTION (2299 chars):\nHΦένια Παπαδόδημαεπιστρέφει στοHalfNoteJazzClubτηνΤετάρτη 12 Νοεμβρίου, με τη συναυλίαWomen’sPrayers-Redemption. Έχοντας πάντα σαν οδηγό γυναικείες φωνές που άφησαν εποχή με τον ήχο και την ερμηνεία τους, αυτή τη φορά παρουσιάζει πρωτότυπες δικές της συνθέσεις στον απόηχο της Βραζιλιάνικης bossa nova, γνωστά και αγαπημένα τραγούδια της ευρύτερης Βραζιλιάνικης τζαζ σκηνής, με ρεπερτόριο τηςEllisRegina, τουAntoniaCarlosJobim, τηςFloraPurim, αλλά και τηςCesariaEvora, και της μουσικής από τοCapoVerde, και τραγούδια της Μεσογείου διασκευασμένα σε μία τζαζ εκδοχή.\n\nΜέσα στο ζεστό αυτό κλίμα η πολυχρωμία των μελωδιών που χρησιμοποιεί ταξιδεύουν τον ακροατή από την Λατινική Αμερική στην Ανατολή με σταθμούς από την Ν. Υόρκη, το Παρίσι, μέχρι την Αλεξάνδρεια και τη Σμύρνη. Οι μουσικές παραδόσεις του κόσμου συγχέονται, τα τραγούδια αποκτούν έναν νέο πρωτότυπο ήχο, μέσα από μία φρέσκια αυτοσχεδιαστική προσέγγιση χάρις στους κορυφαίους μουσικούςΑνδρέα Πολυζωγόπουλο,Γιώργο Παλαμιώτη,Ραφαήλ ΜελετέακαιΠαναγιώτη Κωστόπουλο. Μαζί τους δημιουργεί μια μοναδικήJazz&HeritageoftheWorldμπάντα, μια  μουσική εμπειρία, όπου όλες αυτές οι διαφορετικές παραδόσεις  επαναπροσδιορίζονται μέσα από ένα σύγχρονο και απρόσμενο ήχο.\n\nΙδιαίτερα επηρεασμένη από την πρωτοπόρο vocalistDeeDeeBridgewaterκαι το ιδιαίτερο ρεύμα τηςJazz&Heritage, παντρεύει την Αφροαμερικανική και Αφροβραζιλιάνικη μουσική με την Ευρωπαϊκή, Μεσογειακή, Σεφαραδίτικη και Ανατολική παράδοση.\n\nΠολλά από αυτά τα τραγούδια έμειναν στην ιστορία γιατί αγαπήθηκαν από ένα ευρύ κοινό παγκοσμίως μέσα στις δεκαετίες. Για τις γυναίκες που τα τραγούδησαν λειτούργησαν σαν ευχές – προσευχές για ελευθερία, ειρήνη, αγάπη, τρυφερότητα, αποδοχή. Γι’ αυτό και επηρέασαν βαθιά τις συνειδήσεις των ανθρώπων τον τελευταίο αιώνα.  Prayers of WOMEN all over the world.\n\nΣυντελεστές:\n\nΦένιαΠαπαδόδημα:φωνή\n\nΡαφαήλ Μελετέας:πιάνο\n\nΑντρέας Πολυζογώπουλος: τρομπέτα\n\nΓιώργος Παλαμιώτης:μπάσο\n\nΠαναγιώτης Κωστόπουλος: τύμπανα\n\nΣχεδιασμός Αφίσας:Sugatank Γιάννης Ρουμπάνης\n\nΕπικοινωνία:Ελευθερία Σακαρέλη\n\nInfo\n\nΦΕΝΙΑ ΠΑΠΑΔΟΔΗΜΑ –WOMEN’SPRAYERS\n\nΤετάρτη 12 Νοεμβρίου  Έναρξη 21:30\n\nHalf Note Jazz ClubΤριβωνιανού 17, Μετςwww.halfnote.gr210 9213310\n\nΤιμές εισιτηρίων: από  12€\n\nΠροπώλησηhttps://www.more.com/gr-el/tickets/music/fenia-papadodima-womens-prayers-parousia",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    },
+    {
+      "id": "985346a9ea02e20f",
+      "title": "Όπως σας αρέσει",
+      "eventInfo": "Event Details:\n- Title: Όπως σας αρέσει\n- Type: theater\n- Venue: Θεατρο Αλκμηνη - Secret Room (Μικρη Σκηνη)\n- Date: 2025-11-12\n- Time: 20:00\n- Genre: theater\n- Price: paid\n\nFULL SOURCE DESCRIPTION (2366 chars):\nΗκαλλιτεχνική ομάδα Άλμπατροςπαρουσιάζει την κλασική κωμωδία«Όπως σας αρέσει»τουΟυίλιαμ Σαίξπηρ(As You Like It), σε ένα μοντέρνο και ανατρεπτικό ανέβασμα του έργου, υπό τη σκηνοθεσία τουΓιάννη Κόκα.\n\nΟιδύο ηθοποιοί,Γιάννης ΒασιλώττοςκαιΑιλιάνα Μαρκάκη,ενσαρκώνουν πάνω από24 ρόλους!Απαγγέλλουν, λέξη προς λέξη,2.000 στίχους! Χωρίς κοστούμια, χωρίς σκηνικό διάκοσμο, αντιμετωπίζοντας με δικό τους τρόπο τον Σαίξπηρ και τον Έρωτα.\n\nΧορός, τραγούδι, παντομίμα και σκηνικοί αυτοσχεδιασμοί παντρεύονται τόσο με τον σαιξπηρικό λόγο του έργουΌπως σας αρέσει, όσο και με τις ερμηνείες των δύο ηθοποιών της παράστασης, ακολουθώντας μια ξέφρενηροήεικόνων,ρόλωνκαισυναισθημάτων. Η σκηνοθεσία τουΓιάννη Κόκατονίζει την απόδραση δύο νέων ανθρώπων στον έρωτα και στη ζωή ως πράξη επανάστασης — στο τώρα και στο τότε.\n\nΔεν υπάρχει καλύτερη αφιέρωση σε αυτόν τον «γάμο» από τα σχόλια του ίδιου του μεταφραστή,Σάββα Στρούμπουαναφορικά με το έργο:\n\n«(...) Σ’ έναν χώρο – και – χρόνο όπου η ερωτική επιθυμία κυκλοφορεί χωρίς όρους και όρια, πόσο μπορούμε να λαμβάνουμε υπ’ όψιν μας τα κοινωνικά θεσμισμένα όρια δόμησης και κωδικοποίησης των φύλων;Ποιος, πώς και μέχρι πού είναι ο άντρας;Ποια, πώς και μέχρι πού είναι η γυναίκα;Ο Σαίξπηρ είναι πρόδρομος στην ιστορία του δυτικοευρωπαϊκού πολιτισμού σ’ αυτό ακριβώς: αντιλαμβάνεται την ερωτική επιθυμία και παρόρμηση ως μανιοδότες και αγωγούς εκρηκτικών προταγμάτων απέναντι σε αποστεωμένες μορφές ύπαρξης — κοινωνιών και ανθρώπων.Μέσα από την ομορφιά της ερωτικής συνάντησης, την ένταση της ερωτικής έλξης και το σύμπαν συναισθημάτων που γεννά η ερωτική επιθυμία, ο Σαίξπηρ επιτίθεται στον σάπιο κόσμο που τον περιβάλλει και αναζητά τρόπους, αν όχι ανατροπής του, τουλάχιστον διεξόδου και διαφυγής...»\n\nΑπόσπασμα από το βιβλίο  Όπως σας αρέσει, εκδ. Αλφειός/ΘέατροΠερίληψη έργου:Σε αυτή την κλασική κωμωδία του Σαίξπηρ, η Ροζαλίντα και η ξαδέλφη της Σήλια δραπετεύουν μεταμφιεσμένες στο δάσος του Άρντεν, για να γλιτώσουν από τον εχθρικό δούκα και την αυλή του. Ο Ορλάντο, εξόριστος κι αυτός στο δάσος, ερωτευμένος με τη Ροζαλίντα, την αναζητεί παντού και μέχρι να τη βρει, παίρνει μαθήματα από τον δάσκαλο του δάσους Γανυμήδη, για τις γυναίκες, το φλερτ, τον έρωτα… Μεταμφιέσεις, παρεξηγήσεις και ένα πλήθος χαρακτήρων, σε αυλή και δάσος, διδάσκουν τον Ορλάντο, τη Ροζαλίντα και το κοινό τι σημαίνει… αγάπη.Διάρκεια παράστασης:75 λεπτά",
+      "requirements": [
+        "Write exactly 400 words (±20 words acceptable)",
+        "**CRITICAL**: Mention ALL performers/artists by name from the source above",
+        "Focus on cultural context and what makes this event special",
+        "Include artist/performer background if mentioned in source",
+        "Mention the Athens neighborhood and venue atmosphere",
+        "Write in an authentic, engaging tone (not marketing fluff)",
+        "Include practical details naturally (time, location, price)",
+        "Target audience: Both AI answer engines and human readers",
+        "CRITICAL: Do not fabricate information. Only use the details provided above.",
+        "If performer names are mentioned in the source, you MUST include them.",
+        "Write in a narrative style that would make someone want to attend."
+      ]
+    }
+  ]
+}

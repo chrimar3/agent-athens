@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "type": "dance",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.790Z",
+    "url": "https://agentathens.netlify.app/dance-today"
+  }
+}

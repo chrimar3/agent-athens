@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Synth-pop",
+    "price": "open",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.912Z",
+    "url": "https://agentathens.netlify.app/open-synth-pop-concert-this-weekend"
+  }
+}

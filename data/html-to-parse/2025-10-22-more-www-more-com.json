@@ -1,0 +1,9 @@
+{
+  "site_id": "more",
+  "site_name": "more.com",
+  "url": "https://www.more.com",
+  "fetched_at": "2025-10-22T13:55:31.579570",
+  "html_length": 340692,
+  "method": "playwright",
+  "success": true
+}

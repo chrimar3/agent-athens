@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "dj_set",
+    "genre": "Electronic",
+    "price": "with-ticket",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.918Z",
+    "url": "https://agentathens.netlify.app/with-ticket-electronic-dj_set"
+  }
+}

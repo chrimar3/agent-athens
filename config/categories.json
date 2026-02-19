@@ -1,0 +1,116 @@
+{
+  "categories": [
+    {
+      "slug": "concerts",
+      "title": "Συναυλίες στην Αθήνα",
+      "titleEn": "Concerts in Athens",
+      "description": "Ανακαλύψτε τις καλύτερες συναυλίες στην Αθήνα",
+      "filter": {
+        "type": "concert"
+      },
+      "icon": "music"
+    },
+    {
+      "slug": "clubs",
+      "title": "Clubs & Ηλεκτρονική Μουσική",
+      "titleEn": "Clubs & Electronic Music",
+      "description": "Techno, house, electronic events σε clubs της Αθήνας",
+      "filter": {
+        "type": "dj_set"
+      },
+      "icon": "headphones"
+    },
+    {
+      "slug": "rebetiko",
+      "title": "Ρεμπέτικο & Λαϊκά",
+      "titleEn": "Rebetiko & Greek Folk",
+      "description": "Ρεμπέτικα και λαϊκά στην Αθήνα",
+      "filter": {
+        "type": "concert",
+        "genresInclude": ["rebetiko", "laiko", "greek folk", "traditional"]
+      },
+      "icon": "bouzouki"
+    },
+    {
+      "slug": "jazz",
+      "title": "Jazz στην Αθήνα",
+      "titleEn": "Jazz in Athens",
+      "description": "Τζαζ συναυλίες και live sessions στην Αθήνα",
+      "filter": {
+        "type": "concert",
+        "genresInclude": ["jazz", "blues", "soul"]
+      },
+      "icon": "saxophone"
+    },
+    {
+      "slug": "dance",
+      "title": "Χορός στην Αθήνα",
+      "titleEn": "Dance in Athens",
+      "description": "Μπαλέτο, σύγχρονος χορός, tango και χορευτικές παραστάσεις",
+      "filter": {
+        "type": "dance"
+      },
+      "icon": "dance"
+    },
+    {
+      "slug": "theatre",
+      "title": "Θέατρο στην Αθήνα",
+      "titleEn": "Theatre in Athens",
+      "description": "Θεατρικές παραστάσεις και performances στην Αθήνα",
+      "filter": {
+        "type": "theater"
+      },
+      "icon": "theater"
+    },
+    {
+      "slug": "comedy",
+      "title": "Κωμωδία & Shows",
+      "titleEn": "Comedy & Shows",
+      "description": "Stand-up comedy, cabaret και variety shows",
+      "filter": {
+        "type": "show"
+      },
+      "icon": "laugh"
+    },
+    {
+      "slug": "exhibitions",
+      "title": "Εκθέσεις στην Αθήνα",
+      "titleEn": "Exhibitions in Athens",
+      "description": "Τρέχουσες και επερχόμενες εκθέσεις στην Αθήνα",
+      "filter": {
+        "type": "exhibition"
+      },
+      "icon": "gallery"
+    },
+    {
+      "slug": "cinema",
+      "title": "Σινεμά στην Αθήνα",
+      "titleEn": "Cinema in Athens",
+      "description": "Κινηματογραφικές προβολές και premieres",
+      "filter": {
+        "type": "cinema"
+      },
+      "icon": "film"
+    },
+    {
+      "slug": "screenings",
+      "title": "Θερινά Σινεμά & Προβολές",
+      "titleEn": "Outdoor Cinema & Screenings",
+      "description": "Open-air σινεμά και ειδικές προβολές στην Αθήνα",
+      "filter": {
+        "type": "screening"
+      },
+      "icon": "projector"
+    },
+    {
+      "slug": "workshops",
+      "title": "Εργαστήρια & Masterclasses",
+      "titleEn": "Workshops & Masterclasses",
+      "description": "Εκπαιδευτικά εργαστήρια και masterclasses στην Αθήνα",
+      "filter": {
+        "type": "workshop"
+      },
+      "icon": "tools"
+    }
+  ]
+}

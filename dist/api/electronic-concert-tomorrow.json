@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Electronic",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-03T00:20:37.357Z",
+    "url": "https://agentathens.netlify.app/electronic-concert-tomorrow"
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "filters": {
+    "type": "dj_set",
+    "price": "with-ticket",
+    "time": "today"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "bef274060062838a",
+      "title": "Rave At Your Fictional Borders",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "EXA",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€10-18"
+      },
+      "url": "https://www.athinorama.gr/music/gig/rave_at_your_fictional_borders-10089152/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:41",
+      "language": "en",
+      "timeSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "03de53e1d902429d",
+      "title": "Low End Pres. Metaman + Autow Nite Superstore",
+      "description": "",
+      "startDate": "2026-02-19T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": "€5"
+      },
+      "url": "https://www.clubber.gr/events/low-end-pres-metaman-autow-nite-superstore/",
+      "ticketUrl": "https://www.clubber.gr/events/low-end-pres-metaman-autow-nite-superstore/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "025bbb96e8b7966f",
+      "title": "Mas Amor",
+      "description": "",
+      "startDate": "2026-02-19T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Dybbuk",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/mas-amor-10/",
+      "ticketUrl": "https://www.clubber.gr/events/mas-amor-10/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "3e3a1338b9899b73",
+      "title": "Sneaky club",
+      "description": "",
+      "startDate": "2026-02-19T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Zelus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/sneaky-club-11/",
+      "ticketUrl": "https://www.clubber.gr/events/sneaky-club-11/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "0ef91be9123b4e86",
+      "title": "Astron Club Night with Jipan / Odile Nyx / No.lights",
+      "description": "",
+      "startDate": "2026-02-19T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 7,
+        "currency": "EUR",
+        "range": "€7"
+      },
+      "url": "https://ra.co/events/2364442",
+      "ticketUrl": "https://ra.co/events/2364442",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-15 06:47:14",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "38643482b77524dc",
+      "title": "Jipan + Odile Nyx + No.Lights",
+      "description": "",
+      "startDate": "2026-02-19T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 7,
+        "currency": "EUR",
+        "range": "€7"
+      },
+      "url": "https://www.clubber.gr/events/jipan-odile-nyx-no-lights/",
+      "ticketUrl": "https://www.clubber.gr/events/jipan-odile-nyx-no-lights/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 6,
+    "lastUpdate": "2026-02-19T08:56:08.858Z",
+    "url": "https://agentathens.netlify.app/with-ticket-dj_set-today"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Photography",
+    "price": "open",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.939Z",
+    "url": "https://agentathens.netlify.app/open-photography-exhibition-today"
+  }
+}

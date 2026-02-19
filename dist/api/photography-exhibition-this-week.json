@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Photography",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.938Z",
+    "url": "https://agentathens.netlify.app/photography-exhibition-this-week"
+  }
+}

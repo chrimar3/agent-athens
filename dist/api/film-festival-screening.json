@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "screening",
+    "genre": "Film festival",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.957Z",
+    "url": "https://agentathens.netlify.app/film-festival-screening"
+  }
+}

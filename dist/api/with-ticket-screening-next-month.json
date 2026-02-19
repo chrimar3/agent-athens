@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "screening",
+    "price": "with-ticket",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.873Z",
+    "url": "https://agentathens.netlify.app/with-ticket-screening-next-month"
+  }
+}

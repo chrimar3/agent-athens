@@ -1,0 +1,202 @@
+[
+  {
+    "id": "1686c7819503bb0d",
+    "title": "Γιάξεμπόρε - ένα μουσικό μπουλούκι \"Κατά-φωνή\"",
+    "type": "concert",
+    "start_date": "2025-11-06T21:00:00.000+02:00",
+    "venue_name": "Θεατρο Αμαλια",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/giaksempore-sxima-kata-foni-deuteros-xronos/",
+    "description": "ΜΟΥΣΙΚΗ ΠΑΡΑΣΤΑΣH «ΓΙΑΞΕΜΠΟΡΕ»ένα μουσικό μπουλούκι στο ιστορικό θέατρο Αμαλία!2ος χρόνοςΜΟΥΣΙΚΗ - ΟΠΕΡΕΤΕΣ - ΣΚΕΤΣ - ΕΛΑΦΡΟ ΤΡΑΓΟΥ?Ι - ΑΛΗΘΙΝΕΣ ΙΣΤΟΡΙΕΣ"
+  },
+  {
+    "id": "370ba90dfc723592",
+    "title": "KATERINA ADAMOPOULOU JAZZ QUARTET",
+    "type": "concert",
+    "start_date": "2025-11-06T21:30:00.000+02:00",
+    "venue_name": "Half Note Jazz Club",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/katerina-adamopoulou-jazz-quartet/",
+    "description": "KATERINA ADAMOPOULOU JAZZ QUARTETΠέμπτη 6 ΝοεμβρίουHalf Note Jazz Club21:30"
+  },
+  {
+    "id": "f6a8891b8a123b6a",
+    "title": "Harris Lambrakis Quartet",
+    "type": "concert",
+    "start_date": "2025-11-06T21:30:00.000+02:00",
+    "venue_name": "Theatre of the NO",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/harris-lambrakis-quartet-1/",
+    "description": "THEATRE OF THE NO, ENGLISH SPEAKING THEATRE, Harris Lambrakis Quartet,"
+  },
+  {
+    "id": "fa868ec388dcf0a0",
+    "title": "Μιχάλης Τζουγανάκης στο Caja de Música",
+    "type": "concert",
+    "start_date": "2025-11-06T22:00:00.000+02:00",
+    "venue_name": "Caja De Musica",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/mixalis-tzouganakis-sto-caja-de-musica/",
+    "description": "Live music, music stage, caja de musica, Τζουγανακης, ζωντανη μουσικη, μουσικη βραδια, κρητικο τραγουδι, κρητικη βραδια"
+  },
+  {
+    "id": "25a3ee567dbb1bd8",
+    "title": "Nosfer - Παρουσίαση Δίσκου \"Paradox\"",
+    "type": "concert",
+    "start_date": "2025-11-07T20:00:00.000+02:00",
+    "venue_name": "Fuzz Club",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/nosfer-paradox/",
+    "description": "Nosfer Paradox Παρουσίαση δίσκου live nosfer logos timis live novel 729 jaul retro simadi συναυλία nosfer andriko antignomos logos timis beck jako septimo frs smok5 sponty κξ katohos K287 xplicit stoi"
+  },
+  {
+    "id": "cb509bff9c9e8c77",
+    "title": "Samael (CH) live στην Ελλάδα",
+    "type": "concert",
+    "start_date": "2025-11-07T20:00:00.000+02:00",
+    "venue_name": "Πολλαπλοι χωροι",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/samael-gr-2025/",
+    "description": "Οι θρυλικοί Samael, ένα από τα πιο επιδραστικά και καινοτόμα συγκροτήματα του black και industrial metal, επιστρέφουν στην Ελλάδα για δύο συναυλίες."
+  },
+  {
+    "id": "6c7b9837012f6f94",
+    "title": "Mpelafon live στην Αθήνα",
+    "type": "concert",
+    "start_date": "2025-11-07T20:00:00.000+02:00",
+    "venue_name": "Piraeus 117 Academy",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/mpelafon-live-stin-athina-1/",
+    "description": "Ο Mpelafon παρουσιάζει τα νέα EPs 616 & Summerverse, ζωντανά στην Αθήνα."
+  },
+  {
+    "id": "4338d7591b730f98",
+    "title": "Μελωδίες Ρωσικού ρομαντισμού",
+    "type": "concert",
+    "start_date": "2025-11-07T20:00:00.000+02:00",
+    "venue_name": "Πολυχωρος Πολιτισμου \"Διελευσις\"",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/melodies-rosikou-romantismou/",
+    "description": "Η μέτζο σοπράνο Τατιάνα Πέτρου και ο πιανίστας Άρης Γραικούσης παρουσιάζουν μια μουσική βραδιά αφιερωμένη στο ρωσικό ρομάντζο και στην πλούσια πιανιστική παράδοση της Ρωσίας!"
+  },
+  {
+    "id": "1b15e06ac137a096",
+    "title": "8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ: Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ",
+    "type": "concert",
+    "start_date": "2025-11-07T20:30:00.000+02:00",
+    "venue_name": "Μεγαρο Μουσικης Θεσσαλονικης - Αιθουσα Αιμιλιος Ριαδης",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/8o-festibal-mparok-mousikis-i-epoxi-ton-metabaseon/",
+    "description": "8ο ΦΕΣΤΙΒΑΛ ΜΠΑΡΟΚ ΜΟΥΣΙΚΗΣ:Η ΕΠΟΧΗ ΤΩΝ ΜΕΤΑΒΑΣΕΩΝ"
+  },
+  {
+    "id": "f550ec8b4bad78e9",
+    "title": "Jacques Greene x Nosaj Thing - LIVE 2025",
+    "type": "concert",
+    "start_date": "2025-11-07T20:30:00.000+02:00",
+    "venue_name": "Bios Ρομαντσο",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/jacques-greene-x-nosaj-thing-live-2025/",
+    "description": "JACQUES GREENE & NOSAJ THING - LIVE 2025 +special guest: AUTOW NITE SUPERSTORE 7 November 2025 ROMANTSO"
+  },
+  {
+    "id": "251afbca904aa276",
+    "title": "Μαρίνα Σπανού - Circus  Λάρισα",
+    "type": "concert",
+    "start_date": "2025-11-07T21:00:00.000+02:00",
+    "venue_name": "Circus Entertainment Hub",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/marina-spanou-circus-larisa/",
+    "description": "Μαρίνα Σπανού - Circus Entertainment Hub Λάρισα"
+  },
+  {
+    "id": "281f7948e1974ddc",
+    "title": "Traitrs 2025",
+    "type": "concert",
+    "start_date": "2025-11-07T21:00:00.000+02:00",
+    "venue_name": "Death Disco",
+    "genres": "[\"rock\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/traitrs-2025/",
+    "description": "Traitrs live death disco post punk cure depeche mode smiths darkwave"
+  },
+  {
+    "id": "fdb78e34e6f47b22",
+    "title": "“Sound Dreams of Istanbul” — προβολή + live set των Anıl Eraslan & Merve Salgar",
+    "type": "concert",
+    "start_date": "2025-11-07T21:00:00.000+02:00",
+    "venue_name": "Κεντρο ελεγχου τηλεορασεων",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/sound-dreams-of-istanbul/",
+    "description": "Ο μουσικός και σκηνοθέτης An?l Eraslan παρουσιάζει το ντοκιμαντέρ “Sound Dreams of Istanbul” (2025, 70’), αφιερωμένο στην κοινότητα της πειραματικής και αυτοσχεδιαστικής μουσικής της Κωνσταντινούπολης"
+  },
+  {
+    "id": "975b22a56d2bb448",
+    "title": "MORE THEN MUSIC... A TRIBUTE TO A.JACKSON",
+    "type": "concert",
+    "start_date": "2025-11-07T21:00:00.000+02:00",
+    "venue_name": "Μουσικη Σκηνη Αθηνα Live",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/more-then-music-a-tribute-to-a-jackson/",
+    "description": "jazz, tribute, antony jackson, galvaz, guitar"
+  },
+  {
+    "id": "ed85a35e5a1081c6",
+    "title": "Μουσικές του Κόσμου - με άρωμα Μπουάτ",
+    "type": "concert",
+    "start_date": "2025-11-07T21:00:00.000+02:00",
+    "venue_name": "Caja De Musica",
+    "genres": "[\"art music\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/mousikes-tou-kosmou-me-aroma-mpouat/",
+    "description": "Μουσικη βραδια, μουσικη σκηνη, μπουατ, εντεχνη μουσικη, live music, music stage, caja de musica"
+  },
+  {
+    "id": "6326fc39ad2aa074",
+    "title": "ΣΟΦΙΑ ΜΑΝΟΥΣΑΚΗ LIVE | GAZARTE - ROOF STAGE",
+    "type": "concert",
+    "start_date": "2025-11-07T21:30:00.000+02:00",
+    "venue_name": "Gazarte - Roof Stage",
+    "genres": "[\"rock\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/sofia-manousaki-live-gazarte-roof-stage/",
+    "description": "Μετά τα εντυπωσιακά sold out της εμφάνισης στο Θέατρο Παλλάς και στο Θέατρο Κήπου στην Θεσσαλονίκη η Σοφία Μανουσάκη ετοιμάζεται για τις χειμερινές της συναυλίες μαζί με μια ομάδα εξαίρετων μουσικών."
+  },
+  {
+    "id": "f14ff6f41b014fa1",
+    "title": "Ο Γιώργος Παπαγεωργίου και οι Polkar για μια βραδιά στο ΚΥΤΤΑΡΟ",
+    "type": "concert",
+    "start_date": "2025-11-07T21:30:00.000+02:00",
+    "venue_name": "Κυτταρο Live",
+    "genres": "[\"rock\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/o-giorgos-papageorgiou-kai-oi-polkar-gia-mia-bradia-sto-kyttaro-2/",
+    "description": "Ο Γιώργος Παπαγεωργίου και οι Polkar για μια βραδιά στο ΚΥΤΤΑΡΟΠαρασκευή 7 Νοεμβρίου"
+  },
+  {
+    "id": "6d2b99a48190dfab",
+    "title": "PINK TURNS BLUE live in Greece!",
+    "type": "concert",
+    "start_date": "2025-11-07T21:30:00.000+02:00",
+    "venue_name": "Πολλαπλοι χωροι",
+    "genres": "[\"rock\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/pink-turns-blue-live-in-greece/",
+    "description": "PINK TURNS BLUE LIVE IN GREECEBLACK SWAN TOUR 20257 NOV | THESSALONIKI, THE HOST (LATE SHOW / DOORS OPEN 21.30)8 NOV | THESSALONIKI, THE HOST (EARLY SHOW / DOORS OPEN 19.00)9 NOV | ATHENS, KYTTARO LIV"
+  },
+  {
+    "id": "dca5039d8f895029",
+    "title": "Los Tre: \"Taha Mu\" album presentation @ ILION PlUS",
+    "type": "concert",
+    "start_date": "2025-11-07T21:30:00.000+02:00",
+    "venue_name": "ΙΛΙΟΝ Plus",
+    "genres": "[]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/los-tre-taha-mu-album-presentation-ilion-plus/",
+    "description": "Τον Οκτώβριο του 2025, οι Los Tre επιστρέφουν δισκογραφικά με το έκτο τους άλμπουμ, που φέρει τον τίτλο «Taha Mu», συνεχίζοντας το ταξίδι τους σε αχαρτογράφητα ηχητικά τοπία."
+  },
+  {
+    "id": "ca6897dd1df13e16",
+    "title": "Σολ Δίαιτα",
+    "type": "concert",
+    "start_date": "2025-11-07T21:30:00.000+02:00",
+    "venue_name": "Θεατρο Μεταξουργειο",
+    "genres": "[\"other\"]",
+    "url": "https://www.viva.gr/gr-el/tickets/music/sol-diaita/",
+    "description": "Σολ Δίαιτα: μουσική παράσταση για έρωτες που πήγαν αλλού & δίαιτες που δεν πήγαν πουθενά. Οι Κουαρτέτοιοι μαγειρεύουν τραγούδια για αυτά που μας τρώνε. Μεταθερμιδικό καμπαρέ: χιούμορ μαριναρισμένο σε"
+  }
+]

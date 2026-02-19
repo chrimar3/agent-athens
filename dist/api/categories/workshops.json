@@ -1,0 +1,14 @@
+{
+  "category": {
+    "slug": "workshops",
+    "title": "Εργαστήρια & Masterclasses",
+    "titleEn": "Workshops & Masterclasses",
+    "description": "Εκπαιδευτικά εργαστήρια και masterclasses στην Αθήνα"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.020Z",
+    "url": "https://agentathens.netlify.app/workshops"
+  }
+}

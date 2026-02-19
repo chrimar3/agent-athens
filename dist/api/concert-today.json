@@ -1,0 +1,679 @@
+{
+  "filters": {
+    "type": "concert",
+    "time": "today"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "15cebc3b972cee3c",
+      "title": "Dimitris Kalantzis Quartet",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €20"
+      },
+      "url": "https://www.athinorama.gr/music/gig/dimitris_kalantzis_quartet-10029153/",
+      "ticketUrl": "https://www.halfnote.gr/en/calendar/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:29",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "e12bf71e05e82ca3",
+      "title": "Banda Entopica",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κύτταρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/banda_entopica-10081374/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:30",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "48dc73f96c6924c8",
+      "title": "Μαριάννα Καρακώστα",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Caja de Música",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/marianna_karakosta-10088295/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:31",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "eddcf1510d4abd05",
+      "title": "&#171;Παλκογραφία&#187;",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Άλσος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10 - €25"
+      },
+      "url": "https://www.athinorama.gr/music/gig/palkografia-10089109/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:32",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "8e55f84515437c6f",
+      "title": "ΦΑΟΣ",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρός του Νότου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/faos_-10089112/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:34",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "03069b0dd9cca649",
+      "title": "Sound of Color #5",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Ελέγχου Τηλεοράσεων",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/sound_of_color_5-10089125/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:37",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a335e8d8b879dd15",
+      "title": "&#171;Strings Between Words&#187;",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Concert #1 Baumstrasse",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/strings_between_words-10089131/",
+      "ticketUrl": "https://www.ticketservices.gr/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:38",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "22872bef7720c9ca",
+      "title": "Prolapse - Bokomolech",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Αρχιτεκτονική",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18 - €24"
+      },
+      "url": "https://www.athinorama.gr/music/gig/prolapse___bokomolech-10089137/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/prolapse___bokomolech-10089137/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:39",
+      "language": "en",
+      "timeDoors": "20:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7d52868a1afd0cc3",
+      "title": "Ξεναγήσεις",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "71b1c12e62a59d6b",
+      "title": "Χορογραφημένα σιντριβάνια",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d0112eb22cfb9099",
+      "title": "Summer Camp Activities",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6a2d9b759ef65128",
+      "title": "Stavros Niarchos Park Patrons Program",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a07b2a457832f5ad",
+      "title": "Φάρος",
+      "description": "Δεσπόζει στην κορυφή του κτιρίου της Εθνικής Λυρικής Σκηνής και περιβάλλεται από γυαλί, προσφέροντας πανοραμική θέα σε όλη την Αθήνα, τον Πειραιά και τον Σαρωνικό Κόλπο.",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "fe96ea6d0a0ae412",
+      "title": "Πύργος Βιβλίων",
+      "description": "Ο εμβληματικός Πύργος Βιβλίων είναι ορατός από τον χώρο της Αγοράς μέσω της γυάλινης όψης δηλώνοντας έτσι την ταυτότητα του κτiρίου στο κοινό πριν καν μπει μέσα.",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "493f40600d3a0008",
+      "title": "WOW – Women of the World",
+      "description": "Από τις 27 έως τις 30 Μαρτίου 2026 το Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ), σε συνεργασία με το WOW Foundation, παρουσιάζει για τέταρτη χρονιά το φεστιβάλ WOW – Women of the World, τη μεγαλύτερη διοργάνωση στον κόσμο για γυναίκες, θηλυκότητες και μη δυαδικά άτομα. Από το 2010, που διοργανώθηκε το πρώτο φεστιβάλ στο Λονδίνο, μέχρι σήμερα, το WOW αριθμεί περισσότερα από 100 φεστιβάλ και εκδηλώσεις φτάνοντας σε πάνω από πέντε εκατομμύρια άτομα σε 45 τοποθεσίες σε έξι ηπείρους.1",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "af3dc6f8c6d70e37",
+      "title": "Ανοιχτή Πρόσκληση: WOW Athens Marketplace 2026",
+      "description": "Είμαστε στην ευχάριστη θέση να σας ανακοινώσουμε ότι οι αιτήσεις συμμετοχής στο Marketplace  του WOW – Women of the World Athens 2026 είναι ανοιχτές!  Το WOW είναι η μεγαλύτερη διοργάνωση στον κόσμο αφιερωμένη σε γυναίκες, θηλυκότητες και μη-δυαδικά άτομα και πραγματοποιείται για τέταρτη συνεχή χρονιά στην Ελλάδα, στο Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ), από την Παρασκευή 27 έως και τη Δευτέρα 30 Μαρτίου 2026.  Το Marketplace βρίσκεται στην Αγορά, στην «καρδιά» του ΚΠΙΣΝ, και παρουσιάζει μια ανοιχτή, πολυσύχναστη αγορά με επιχειρήσεις, ακτιβιστικές και1",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "e5a8c14ef1975370",
+      "title": "Open Call: SNFCC Youth Council",
+      "description": "Αγαπάς τις τέχνες και τον Πολιτισμό; Θέλεις να αναλάβεις την επιμέλεια ενός καλλιτεχνικού προγράμματος;  Ονειρεύεσαι να γίνεις μέρος μιας ομάδας που κάνει τις δημιουργικές της ιδέες πραγματικότητα;   Για τέταρτη συνεχόμενη χρονιά, το Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ) απευθύνει ανοιχτό κάλεσμα σε άτομα ηλικίας 16 έως 25 ετών που ενδιαφέρονται για τον πολιτιστικό προγραμματισμό και την παραγωγή εκδηλώσεων, στο πλαίσιο της πρωτοβουλίας SNFCC Youth Council.  Το SNFCC Youth Council επιστρέφει χάρη στη δωρεά του Ιδρύματος Σταύρος Νιάρχος (ΙΣΝ) και αφορά1",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.snfcc.org/el/events",
+      "source": "snfcc",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7783a465bca89f66",
+      "title": "National Theatre",
+      "description": "National Theatre «Κάτι σάπιο υπάρχει στο βασίλειο της Δανιμαρκίας.» Ο νεαρός Πρίγκιπας Άμλετ παλεύει ανάμεσα σε καθήκον και αμφισβήτηση σε αυτήν την οξυδερκή, γεμάτη μαύρο χιούμορ διασκευή. Σκηνοθεσία",
+      "fullDescription": "The National Theatre orchestra files onto the Megaron stage with the particular precision of musicians who've spent their careers in synchronization. Instruments warm up in the chaos of individual practice, then silence falls. The conductor raises the baton.\n\nWhen Greece's National Theatre brings its orchestra to the Megaron Mousikis, the event carries institutional weight. This isn't a pickup ensemble or visiting group — this is the symphonic arm of the country's premier theatrical institution, musicians who've spent decades interpreting the full range of orchestral literature.\n\nThe program draws from the concert repertoire that anchors any serious orchestra's season. The selections represent centuries of compositional evolution, from the foundational classics to the works that expanded what an orchestra could express. Each piece demands its own kind of attention, rewards its own kind of listening.\n\nThe Christos Lambrakis Hall provides acoustic perfection for exactly this purpose. Megaron was built to house these sounds — the full dynamic range from whispered string passages to brass fortissimo, all delivered with the clarity that lesser halls would muddy. When an orchestra of this caliber plays in this space, the combination justifies both.\n\nThe audience includes season subscribers who've been attending Megaron concerts for decades, younger listeners discovering what orchestral music offers, visitors who recognize that this hall and this orchestra together represent something significant. The mix creates an atmosphere of genuine attention — this isn't background music for socializing.\n\nIf you need amplification and contemporary sounds, the National Theatre orchestra operates in different territory. This is acoustic music performed at the highest level, the technology nothing more than wood and brass and trained hands. But if you've been waiting for the kind of evening where Greece's premier orchestra meets Greece's premier hall, where the institution performs at home — you take your seat before the first downbeat.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 19, 2026 |\n| **Doors** | 19:00 |\n| **Concert** | 20:30 |\n| **Duration** | ~2 hours including intermission |\n| **Venue** | Megaron Mousikis, Christos Lambrakis Hall |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Price** | Check Megaron website |\n\nWhen the National Theatre orchestra plays the Megaron, both institutions perform at full capacity.",
+      "startDate": "2026-02-19T20:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/national-theatre-hamlet-2/",
+      "ticketUrl": "https://www.megaron.gr/event/national-theatre-hamlet-2/",
+      "source": "megaron.gr",
+      "createdAt": "2026-01-30T04:02:12.432Z",
+      "updatedAt": "2026-02-18 06:09:07",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a3803d7f5a231e64",
+      "title": "Αναδρομές",
+      "description": "Αναδρομές Συνθέτης που κινείται με άνεση ανάμεσα σε διαφορετικά μουσικά ιδιώματα, συνδυάζει σύγχρονη ευρωπαϊκή γραφή, βυζαντινές αναφορές και ελληνική ποίηση. Sinfonietta (A Byzantine Tale), κύκλοι τρ",
+      "fullDescription": "The Megaron Mousikis lobby holds that particular pre-concert energy — well-dressed crowds moving toward halls, programs being purchased, the anticipation of shared cultural experience. Then the lights dim in the concert hall, and \"Anadromes\" begins. The retrospective journey through Greek jazz starts now.\n\n\"Anadromes\" translates to \"Retrospectives\" — and tonight's concert delivers exactly that. A look backward through the development of jazz in Greece, the musicians who shaped it, the compositions that defined it. Megaron provides the ideal stage for this kind of examination: world-class acoustics, seating that positions every audience member in relationship to the sound, production values that match the music's ambition.\n\nGreek jazz has its own story, distinct from American templates while remaining in conversation with them. The retrospective format allows audiences to hear that evolution — from early adaptations through the development of a genuinely Greek jazz voice. The musicians assembled for tonight understand this history personally, having contributed to chapters of it.\n\nThe Megaron audience for jazz programming has particular characteristics. These are people comfortable in formal concert settings, who've dressed for the occasion, who treat the evening as cultural event rather than casual entertainment. But the music itself resists formality — jazz, even in retrospective concert format, maintains its essential improvisatory nature.\n\nThe concert hall at Megaron holds over a thousand, but the acoustics create intimacy despite scale. Every instrumental detail reaches the back rows with the same clarity as the front. When the rhythm section locks in, when a soloist takes flight, the room holds its collective breath.\n\nIf you prefer jazz in smoky clubs with drinks at hand, if formal concert settings feel restrictive, Megaron operates differently. The listening here is focused, the applause positioned at composition's end rather than after solos, the experience closer to classical concert than club night. But if you've been waiting for Greek jazz performed at the highest production level, where the genre's history receives the institutional recognition it deserves — Megaron delivers what no club can.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 19, 2026 |\n| **Venue** | Megaron Mousikis Athinon, Vasilissis Sofias & Kokkali |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Format** | Formal concert setting |\n| **Dress** | Smart casual to formal |\n| **Tickets** | Check Megaron website |\n\n\"Anadromes\": Greek jazz history performed where it belongs.",
+      "startDate": "2026-02-19T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/periklis-koukos-anadromes/",
+      "ticketUrl": "https://www.megaron.gr/event/periklis-koukos-anadromes/",
+      "source": "megaron.gr",
+      "createdAt": "2026-01-30T04:02:12.432Z",
+      "updatedAt": "2026-02-18 06:09:07",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "40c376ca80caf16a",
+      "title": "DIMITRIS KALANTZIS QUARTET Tribute M. LEGRAND",
+      "description": "",
+      "fullDescription": "The first notes of a Michel Legrand melody fill Half Note, and something shifts in the room. These compositions — from \"The Umbrellas of Cherbourg\" to \"The Thomas Crown Affair\" — carry decades of accumulated meaning. Dimitris Kalantzis raises his saxophone to pay tribute.\n\nLegrand's music defined an era. His film scores created the emotional architecture for stories that shaped how generations understood romance, mystery, sophistication. The melodies are immediately recognizable, but Kalantzis and his quartet aren't here for simple reproduction. They're here to explore what these compositions can become in jazz hands, to honor the source while finding new territory within it.\n\nKalantzis has built his reputation through exactly this kind of thoughtful interpretation. His saxophone work balances technical precision with emotional depth, the kind of playing that serves the composition while revealing the player's perspective. The quartet format allows space for each musician to contribute to the reimagining — piano, bass, drums each finding their relationship to Legrand's immortal themes.\n\nHalf Note in February provides the ideal setting. The room's acoustics capture every nuance of the saxophone's tone, every subtle interaction between the players. Around 200 seats, all positioned for optimal listening, the audience settled into that particular attention jazz demands. The regulars here know Kalantzis's work; tonight they'll hear him in conversation with one of cinema's great composers.\n\nThe crowd for tribute programming has a specific quality. These are people who carry the original recordings in memory, who can measure the quartet's interpretations against decades of familiarity with the source material. The knowledge creates expectations, but also allows appreciation of every inventive choice.\n\nIf you need straight recreation, if tribute means exact reproduction, this quartet operates differently. Jazz interpretation means transformation, means finding what the original didn't say but implied. But if you've been waiting for Legrand's film music explored by a Greek saxophonist who understands both the tradition and the need to extend it — Half Note is exactly the right room.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 19, 2026 |\n| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-min walk |\n| **Reservations** | Essential — book ahead |\n| **Price** | Table 15-20 EUR, bar 10-15 EUR |\n| **Focus** | Michel Legrand tribute |\n\nDimitris Kalantzis reimagines Michel Legrand: film music transformed into jazz at the temple.",
+      "startDate": "2026-02-19T21:30:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "από €12"
+      },
+      "url": "https://www.halfnote.gr/event/dimitris-kalantzis-quartet-tribute-m-legrand/",
+      "ticketUrl": "https://www.halfnote.gr/event/dimitris-kalantzis-quartet-tribute-m-legrand/",
+      "source": "halfnote",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 20,
+    "lastUpdate": "2026-02-19T08:56:08.755Z",
+    "url": "https://agentathens.netlify.app/concert-today"
+  }
+}

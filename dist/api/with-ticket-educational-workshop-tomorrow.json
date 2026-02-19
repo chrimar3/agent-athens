@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "workshop",
+    "genre": "Educational",
+    "price": "with-ticket",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.006Z",
+    "url": "https://agentathens.netlify.app/with-ticket-educational-workshop-tomorrow"
+  }
+}

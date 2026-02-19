@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "dance",
+    "genre": "Contemporary",
+    "price": "open",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.975Z",
+    "url": "https://agentathens.netlify.app/open-contemporary-dance"
+  }
+}

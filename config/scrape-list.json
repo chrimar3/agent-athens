@@ -1,0 +1,142 @@
+{
+  "crawl_config": {
+    "total_sites": 6,
+    "expected_monthly_events": 6500,
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "default_delay_seconds": 2,
+    "default_crawl_frequency": "daily",
+    "default_timeout_ms": 30000,
+    "max_retries": 2
+  },
+  "sites": [
+    {
+      "id": "more",
+      "name": "More.com",
+      "url": "https://www.more.com/gr/el/tickets/",
+      "tier": 1,
+      "difficulty": "medium",
+      "expected_events": 2000,
+      "crawl_frequency": "daily",
+      "pages": [
+        "https://www.more.com/gr/el/tickets/",
+        "https://www.more.com/gr/el/tickets/music/",
+        "https://www.more.com/gr/el/tickets/theater/",
+        "https://www.more.com/gr/el/tickets/sports/"
+      ],
+      "categories": ["music", "theater", "sports", "events"],
+      "skip": false,
+      "scrape_method": "playwright",
+      "parser": "parse_tier1_sites.py",
+      "importer": "import-more-events.ts",
+      "notes": "Major ticketing platform - 98% unique events, comprehensive coverage"
+    },
+    {
+      "id": "athinorama",
+      "name": "Athinorama.gr",
+      "url": "https://www.athinorama.gr",
+      "tier": 1,
+      "difficulty": "easy",
+      "expected_events": 700,
+      "crawl_frequency": "daily",
+      "pages": [
+        "https://www.athinorama.gr/music/guide",
+        "https://www.athinorama.gr/theatre/guide",
+        "https://www.athinorama.gr/cinema/guide"
+      ],
+      "categories": ["music", "theater", "cinema"],
+      "skip": false,
+      "scrape_method": "curl",
+      "parser": "parse_athinorama.py",
+      "importer": "import-athinorama-events.ts",
+      "notes": "Athens cultural guide - 95% unique events, editorial content, music/theater/cinema"
+    },
+    {
+      "id": "clubber",
+      "name": "Clubber.gr",
+      "url": "https://www.clubber.gr",
+      "tier": 1,
+      "difficulty": "easy",
+      "expected_events": 50,
+      "crawl_frequency": "weekly",
+      "pages": [],
+      "ical_feed": "https://www.clubber.gr/events/?ical=1",
+      "categories": ["electronic", "techno", "house", "clubbing"],
+      "skip": false,
+      "scrape_method": "ical",
+      "parser": "ical-parser.ts",
+      "importer": "import-clubber-events.ts",
+      "notes": "Electronic/techno scene - 100% unique events, venues like Astron, Dybbuk, Romantso not in other sources"
+    },
+    {
+      "id": "ticketservices",
+      "name": "TicketServices.gr",
+      "url": "https://www.ticketservices.gr",
+      "tier": 2,
+      "difficulty": "medium",
+      "expected_events": 100,
+      "crawl_frequency": "daily",
+      "pages": [
+        "https://www.ticketservices.gr/en/LiveConcerts/"
+      ],
+      "categories": ["concerts", "theater", "classical"],
+      "skip": false,
+      "scrape_method": "bun",
+      "parser": "scrape-ticketservices.ts",
+      "importer": "scrape-ticketservices.ts",
+      "notes": "Secondary ticketing - 94 Athens events, handles Lycabettus/Herod Atticus, Greek encoding (windows-1253)"
+    },
+    {
+      "id": "halfnote",
+      "name": "Half Note Jazz Club",
+      "url": "https://www.halfnote.gr",
+      "tier": 2,
+      "difficulty": "easy",
+      "expected_events": 25,
+      "crawl_frequency": "weekly",
+      "pages": [],
+      "ical_feed": "https://www.halfnote.gr/events/?ical=1",
+      "categories": ["jazz", "concerts"],
+      "skip": false,
+      "scrape_method": "ical",
+      "parser": "scrape-halfnote.ts",
+      "importer": "scrape-halfnote.ts",
+      "notes": "Jazz club in Mets - 21 events, prices in description (€12-€20), verified Athens venue"
+    },
+    {
+      "id": "residentadvisor",
+      "name": "Resident Advisor",
+      "url": "https://ra.co/events/gr/athens",
+      "tier": 1,
+      "difficulty": "medium",
+      "expected_events": 70,
+      "crawl_frequency": "daily",
+      "pages": [],
+      "api_endpoint": "https://ra.co/graphql",
+      "categories": ["electronic", "techno", "house", "clubbing"],
+      "skip": false,
+      "scrape_method": "graphql",
+      "parser": "scrape-residentadvisor.ts",
+      "importer": "scrape-residentadvisor.ts",
+      "notes": "Electronic music - 71 Athens events, GraphQL API, has prices for ~50%, same venues as clubber.gr"
+    },
+    {
+      "id": "snfcc",
+      "name": "SNFCC (Stavros Niarchos Foundation)",
+      "url": "https://www.snfcc.org",
+      "tier": 1,
+      "difficulty": "medium",
+      "expected_events": 20,
+      "crawl_frequency": "weekly",
+      "pages": [
+        "https://www.snfcc.org/el/events",
+        "https://www.snfcc.org/el/exhibitions"
+      ],
+      "categories": ["exhibitions", "concerts", "performances", "workshops"],
+      "skip": false,
+      "scrape_method": "puppeteer",
+      "parser": "scrape-snfcc.ts",
+      "importer": "scrape-snfcc.ts",
+      "notes": "Major cultural center - exhibitions, events, free admission, verified Athens venue (ΚΠΙΣΝ)"
+    }
+  ]
+}

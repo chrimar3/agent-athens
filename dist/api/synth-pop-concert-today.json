@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Synth-pop",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.910Z",
+    "url": "https://agentathens.netlify.app/synth-pop-concert-today"
+  }
+}

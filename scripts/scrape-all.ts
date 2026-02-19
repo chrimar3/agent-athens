@@ -1,0 +1,1495 @@
+#!/usr/bin/env bun
+/**
+ * 🏛️ Agent Athens - Master Scraper
+ * "One scraper to rule them all"
+ *
+ * Scrapes events from all 10 configured sources:
+ * - more.com (ticketing platform - includes viva.gr)
+ * - athinorama.gr (cultural guide)
+ * - clubber.gr (electronic/clubs - iCal)
+ * - ticketservices.gr (concerts/theater)
+ * - halfnote.gr (jazz club - iCal)
+ * - residentadvisor (electronic - GraphQL API)
+ * - megaron.gr (Athens Concert Hall - classical)
+ * - snfcc (Stavros Niarchos Foundation)
+ * - onassis (Onassis Stegi exhibitions)
+ * - benaki (Benaki Museum exhibitions)
+ *
+ * Usage:
+ *   bun run scripts/scrape-all.ts                    # Scrape all sources
+ *   bun run scripts/scrape-all.ts --dry-run          # Don't save to DB
+ *   bun run scripts/scrape-all.ts --source more      # Only scrape more.com
+ *   bun run scripts/scrape-all.ts --source clubber,ra # Multiple sources
+ *   bun run scripts/scrape-all.ts --crossref         # Also run price cross-reference
+ */
+
+import { Database } from 'bun:sqlite';
+import { join } from 'path';
+import { createHash } from 'crypto';
+import puppeteer from 'puppeteer-core';
+import { scrapeSNFCC, ScrapedExhibition } from './scrape-snfcc';
+import { scrapeOnassis, ScrapedExhibition as OnassisExhibition } from './scrape-onassis';
+import { scrapeBenaki, ScrapedExhibition as BenakiExhibition } from './scrape-benaki';
+import { scrapeMegaron } from './scrape-megaron';
+import { log, logSummary, type SourceStats } from '../src/utils/logger';
+import { shouldExcludeEvent } from '../src/validators/scope-filter';
+import { validateSeasonalEvent } from '../src/validators/seasonal-filter';
+import { categorizeEventSimple } from '../src/categorizer';
+import { normalizeTheaterSpelling } from '../src/validators/event-categorizer';
+
+const DB_PATH = join(import.meta.dir, '../data/events.db');
+const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface ScrapedEvent {
+  id: string;
+  title: string;
+  description: string;
+  start_date: string;
+  time: string;
+  type: string;
+  genres: string;
+  venue_name: string;
+  url: string;
+  price_type: string;
+  price_amount: number | null;
+  price_range: string | null;
+  source: string;
+  location_status?: string;
+}
+
+interface ScrapeResult {
+  source: string;
+  events: ScrapedEvent[];
+  success: boolean;
+  error?: string;
+  duration: number;
+}
+
+type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'snfcc' | 'onassis' | 'benaki' | 'megaron';
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+function generateEventId(title: string, date: string, venue: string): string {
+  const normalized = `${title.toLowerCase().trim()}|${date}|${venue.toLowerCase().trim()}`;
+  return createHash('md5').update(normalized).digest('hex').substring(0, 16);
+}
+
+function decodeWindows1253(buffer: ArrayBuffer): string {
+  const decoder = new TextDecoder('windows-1253');
+  return decoder.decode(buffer);
+}
+
+function unescapeICalText(text: string): string {
+  return text
+    .replace(/\\,/g, ',')
+    .replace(/\\;/g, ';')
+    .replace(/\\n/g, '\n')
+    .replace(/\\\\/g, '\\');
+}
+
+function parseICalDate(dateStr: string): { date: string; time: string } {
+  const match = dateStr.match(/(\d{8})T(\d{6})/);
+  if (!match) return { date: '', time: '' };
+  const [, datePart, timePart] = match;
+  const date = `${datePart.slice(0, 4)}-${datePart.slice(4, 6)}-${datePart.slice(6, 8)}`;
+  const time = `${timePart.slice(0, 2)}:${timePart.slice(2, 4)}`;
+  return { date, time };
+}
+
+// ============================================================================
+// HTTP/1.1 FALLBACK UTILITY
+// ============================================================================
+
+/**
+ * Fetch with HTTP/1.1 fallback for sites with HTTP/2 stream issues (like More.com)
+ * Tries standard fetch first, falls back to curl with --http1.1 on failure
+ */
+async function fetchWithHttp1Fallback(url: string, options: {
+  headers?: Record<string, string>;
+  maxRetries?: number;
+  timeoutMs?: number;
+} = {}): Promise<{ ok: boolean; text: () => Promise<string>; status: number }> {
+  const { headers = {}, maxRetries = 2, timeoutMs = 30000 } = options;
+
+  // Add default User-Agent if not provided
+  const defaultHeaders = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+    ...headers
+  };
+
+  // Try standard fetch first
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      // Add timeout using AbortController
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+      const response = await fetch(url, {
+        headers: defaultHeaders,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      return {
+        ok: response.ok,
+        text: () => response.text(),
+        status: response.status
+      };
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      const isHttp2Error = errorMsg.includes('HTTP/2') ||
+                           errorMsg.includes('stream') ||
+                           errorMsg.includes('INTERNAL_ERROR');
+      const isTimeout = errorMsg.includes('abort') || errorMsg.includes('timeout');
+
+      // If HTTP/2 error or timeout on last attempt, try curl with --http1.1
+      if ((isHttp2Error || isTimeout) && attempt === maxRetries) {
+        console.log(`   ⚠️ HTTP/2 error, falling back to HTTP/1.1 for: ${url.substring(0, 60)}...`);
+        try {
+          const curlHeaders = Object.entries(defaultHeaders)
+            .map(([k, v]) => `-H "${k}: ${v}"`)
+            .join(' ');
+
+          const proc = Bun.spawn(['curl', '-s', '--http1.1', '--max-time', '30', '-H', `User-Agent: ${defaultHeaders['User-Agent']}`, url], {
+            stdout: 'pipe',
+            stderr: 'pipe'
+          });
+
+          const text = await new Response(proc.stdout).text();
+          const exitCode = await proc.exited;
+
+          if (exitCode === 0 && text.length > 0) {
+            return {
+              ok: true,
+              text: async () => text,
+              status: 200
+            };
+          }
+        } catch (curlError) {
+          console.log(`   ❌ Curl fallback also failed: ${curlError}`);
+        }
+      }
+
+      // Add delay between retries
+      if (attempt < maxRetries) {
+        await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+      }
+    }
+  }
+
+  // All attempts failed
+  return { ok: false, text: async () => '', status: 0 };
+}
+
+/**
+ * Fetch using curl directly (for sites where HTTP/2 is completely broken)
+ * Faster than fetchWithHttp1Fallback since it skips the failing fetch attempts
+ */
+async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Promise<string>; status: number }> {
+  try {
+    const proc = Bun.spawn([
+      'curl', '-s', '--http1.1', '--max-time', '15',
+      '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+      url
+    ], {
+      stdout: 'pipe',
+      stderr: 'pipe'
+    });
+
+    const text = await new Response(proc.stdout).text();
+    const exitCode = await proc.exited;
+
+    if (exitCode === 0 && text.length > 0) {
+      return {
+        ok: true,
+        text: async () => text,
+        status: 200
+      };
+    }
+  } catch (error) {
+    // Curl failed
+  }
+
+  return { ok: false, text: async () => '', status: 0 };
+}
+
+// ============================================================================
+// MORE.COM SCRAPER
+// ============================================================================
+
+async function scrapeMore(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching more.com categories...');
+  const events: ScrapedEvent[] = [];
+  const categories = ['music', 'theatre', 'sports'];
+  const today = new Date().toISOString().split('T')[0];
+
+  for (const category of categories) {
+    const url = `https://www.more.com/gr-el/tickets/${category}/`;
+    try {
+      // Use curl directly for More.com (HTTP/2 is consistently broken)
+      const response = await fetchWithCurl(url);
+      if (!response.ok) continue;
+
+      const html = await response.text();
+
+      // Extract event links from listing
+      const linkPattern = /href="(\/gr-el\/tickets\/(?:music|theatre|sports|theater)\/[a-z0-9-]+\/)"/gi;
+      const links = new Set<string>();
+      let match;
+      while ((match = linkPattern.exec(html)) !== null) {
+        // Skip category pages and special pages
+        if (!match[1].includes('/city/') && !match[1].includes('/offers/') && !match[1].includes('/new-events/')) {
+          links.add(`https://www.more.com${match[1]}`);
+        }
+      }
+
+      console.log(`   Found ${links.size} ${category} events`);
+
+      // Process first 20 events per category (to avoid rate limits)
+      let count = 0;
+      let processed = 0;
+      for (const eventUrl of links) {
+        if (count >= 20) break;
+        count++;
+
+        try {
+          // Use curl directly for More.com event pages (HTTP/2 is broken)
+          if (processed % 5 === 0) {
+            console.log(`   ... processing event ${processed + 1}/20`);
+          }
+          processed++;
+          const eventResponse = await fetchWithCurl(eventUrl);
+          if (!eventResponse.ok) continue;
+
+          const eventHtml = await eventResponse.text();
+
+          // Extract title from og:title or <title>
+          const titleMatch = eventHtml.match(/og:title"\s+content="([^"|]+)/);
+          const title = titleMatch ? titleMatch[1].replace(/\s*\|.*$/, '').trim() : null;
+          if (!title) continue;
+
+          // Extract venue from "venue-name":"..."
+          const venueMatch = eventHtml.match(/"venue-name":"([^"]+)"/);
+          const venueName = venueMatch ? venueMatch[1] : 'TBA';
+
+          // Extract all dates (YYYY-MM-DD format)
+          const dateMatches = eventHtml.match(/\b(202[5-7]-\d{2}-\d{2})\b/g);
+          const futureDates = dateMatches
+            ? [...new Set(dateMatches)].filter(d => d >= today).sort()
+            : [];
+
+          if (futureDates.length === 0) continue;
+
+          // Extract price from "prices":"<span class='money'>XX€</span>"
+          const priceMatch = eventHtml.match(/"prices":"[^"]*?(\d+)€/);
+          const price = priceMatch ? parseInt(priceMatch[1]) : null;
+          const priceRange = price ? `€${price}` : null;
+
+          // Create event for first future date
+          const startDate = futureDates[0];
+          events.push({
+            id: generateEventId(title, startDate, venueName),
+            title,
+            description: '',
+            start_date: startDate,
+            time: '',
+            type: category === 'music' ? 'concert' : category,
+            genres: '',
+            venue_name: venueName,
+            url: eventUrl,
+            price_type: price ? 'paid' : 'tba',
+            price_amount: price,
+            price_range: priceRange,
+            source: 'more.com'
+          });
+
+          await new Promise(r => setTimeout(r, 500)); // Rate limit
+        } catch (e) {
+          processed++;
+          /* Event fetch error - continue to next */
+        }
+      }
+      console.log(`   ✓ Processed ${processed} ${category} events, extracted ${events.length} valid`);
+    } catch (e) {
+      console.log(`   ⚠️ Error fetching ${category}: ${e}`);
+    }
+  }
+
+  return events;
+}
+
+// ============================================================================
+// ATHINORAMA SCRAPER
+// ============================================================================
+
+/**
+ * Fetch with retry and exponential backoff for Athinorama
+ * Returns null on complete failure (graceful degradation)
+ */
+async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<string | null> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15_000);
+
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        }
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.text();
+    } catch (err: any) {
+      const delay = Math.pow(2, attempt) * 1000;  // 2s, 4s, 8s
+      console.warn(`   ⚠️ Attempt ${attempt}/${maxRetries} failed: ${err.message}`);
+      if (attempt < maxRetries) {
+        console.log(`   Retrying in ${delay}ms...`);
+        await Bun.sleep(delay);
+      }
+    }
+  }
+  console.error(`   ❌ All ${maxRetries} attempts failed for ${url}`);
+  return null;  // Graceful failure
+}
+
+async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching athinorama.gr guides...');
+
+  // Early connectivity test before processing
+  const testPage = await fetchWithRetryAthinorama('https://www.athinorama.gr/music/guide');
+  if (!testPage) {
+    console.warn('   ⚠️ Athinorama unreachable — skipping source');
+    return [];  // Exit clean, don't crash pipeline
+  }
+  const events: ScrapedEvent[] = [];
+  // Now includes theater with date range support
+  const guides = [
+    { url: 'https://www.athinorama.gr/music/guide', type: 'concert', hasDateRanges: false, cachedHtml: testPage },
+    { url: 'https://www.athinorama.gr/theatre/guide', type: 'theater', hasDateRanges: true, cachedHtml: null as string | null },
+  ];
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const today = now.toISOString().split('T')[0];
+
+  for (const guide of guides) {
+    try {
+      // Use cached HTML from connectivity test or fetch with retry
+      const html = guide.cachedHtml || await fetchWithRetryAthinorama(guide.url);
+      if (!html) {
+        console.warn(`   ⚠️ Failed to fetch ${guide.type} guide, skipping`);
+        continue;
+      }
+
+      // Extract event cards - athinorama uses div.item.horizontal-dt.card-item
+      const eventPattern = /<div class="item\s+horizontal-dt card-item">([\s\S]*?)(?=<div class="item\s+horizontal-dt card-item">|<div class="item adv-banner">|<\/div>\s*<\/div>\s*<\/div>\s*$)/gi;
+      let match;
+      let count = 0;
+
+      // Remove the count < 40 limit - fetch ALL events
+      while ((match = eventPattern.exec(html)) !== null) {
+        const card = match[1];
+
+        // Extract title from h2.item-title > a
+        const titleMatch = card.match(/<h2 class="item-title[^"]*">\s*<a href="([^"]+)">([^<]+)<\/a>/i);
+        if (!titleMatch) continue;
+        const eventUrl = titleMatch[1];
+        const title = titleMatch[2].trim();
+
+        // Extract venue from nested h4 > a with /halls/ in href
+        const venueMatch = card.match(/<h4><a href="[^"]*\/halls\/[^"]*">\s*([^<]+)<\/a><\/h4>/i);
+        const venue = venueMatch ? venueMatch[1].trim() : 'TBA';
+
+        // For theater: handle date ranges like "17/12 - Εως: 25/01" or "Εως 25/01"
+        let startDate: string | null = null;
+        let endDate: string | null = null;
+
+        if (guide.hasDateRanges) {
+          // Theater page format: "Εως: </strong>DD/MM" - date is AFTER the closing tag
+          // Pattern 1: "Πρεμιέρα: </strong>DD/MM" followed by "Εως: </strong>DD/MM"
+          const premiereMatch = card.match(/Πρεμιέρα:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
+          // Pattern 2: "Εως: </strong>DD/MM" (ongoing show with end date)
+          const untilMatch = card.match(/Εως:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
+
+          // Both premiere and end date
+          const rangeMatch = premiereMatch && untilMatch;
+          // Only end date (ongoing)
+          const ongoingMatch = !premiereMatch && untilMatch;
+          // Only premiere (no end date yet)
+          const singleMatch = premiereMatch && !untilMatch;
+
+          if (rangeMatch && premiereMatch && untilMatch) {
+            // Both premiere and end date
+            const [, startDay, startMonth] = premiereMatch;
+            const [, endDay, endMonth] = untilMatch;
+            let startYear = currentYear;
+            let endYear = currentYear;
+
+            const sm = parseInt(startMonth);
+            const em = parseInt(endMonth);
+
+            if (sm < currentMonth) startYear++;
+            if (em < currentMonth || (em < sm && startYear === currentYear)) endYear++;
+
+            startDate = `${startYear}-${String(sm).padStart(2, '0')}-${String(parseInt(startDay)).padStart(2, '0')}`;
+            endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+          } else if (ongoingMatch && untilMatch) {
+            // Ongoing show - use today as start, parse end
+            const [, endDay, endMonth] = untilMatch;
+            let endYear = currentYear;
+            const em = parseInt(endMonth);
+            if (em < currentMonth) endYear++;
+
+            startDate = today; // Already running
+            endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+          } else if (singleMatch && premiereMatch) {
+            // Premiere - single performance
+            const [, day, month] = premiereMatch;
+            const d = parseInt(day);
+            const m = parseInt(month);
+            let year = currentYear;
+            if (m < currentMonth || (m === currentMonth && d < now.getDate())) {
+              year++;
+            }
+            startDate = `${year}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          }
+
+          // Skip if end date is in the past
+          if (endDate && endDate < today) continue;
+          // Skip if no valid date
+          if (!startDate) continue;
+        } else {
+          // Music: single date format
+          const dateMatch = card.match(/<strong>\s*(\d{1,2})\/(\d{1,2})\s*<\/strong>/);
+          if (!dateMatch) continue;
+
+          const day = parseInt(dateMatch[1]);
+          const month = parseInt(dateMatch[2]);
+
+          let year = currentYear;
+          if (month < currentMonth || (month === currentMonth && day < now.getDate())) {
+            year = currentYear + 1;
+          }
+
+          startDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          if (startDate < today) continue;
+        }
+
+        events.push({
+          id: generateEventId(title, startDate!, venue),
+          title,
+          description: endDate ? `Εως ${endDate}` : '',
+          start_date: startDate!,
+          time: '',
+          type: guide.type,
+          genres: '',
+          venue_name: venue,
+          url: `https://www.athinorama.gr${eventUrl}`,
+          price_type: 'tba',
+          price_amount: null,
+          price_range: null,
+          source: 'athinorama.gr'
+        });
+        count++;
+      }
+
+      console.log(`   Found ${count} ${guide.type} events`);
+    } catch (e) {
+      console.log(`   ⚠️ Error fetching ${guide.type}: ${e}`);
+    }
+  }
+
+  // Fetch prices from ALL event pages (removed limit)
+  console.log('   Fetching prices from event pages...');
+  let pricesFound = 0;
+  for (let i = 0; i < events.length; i++) {
+    const event = events[i];
+    try {
+      // Use retry helper for individual event pages (fewer retries, faster timeout)
+      const eventHtml = await fetchWithRetryAthinorama(event.url, 2);
+      if (!eventHtml) continue;
+
+      // Expanded price patterns for Greek text
+      let priceMatch = null;
+
+      // Pattern 1: "Είσ.: € 15-11" or "Είσ.: € 15" (standard Athinorama)
+      priceMatch = eventHtml.match(/Είσ\.?:?\s*€?\s*(\d+)(?:\s*-\s*(\d+))?/i);
+
+      // Pattern 2: "Τιμή: €15" or "Τιμή: 15€"
+      if (!priceMatch) {
+        priceMatch = eventHtml.match(/Τιμ[έή]:?\s*€?\s*(\d+)(?:\s*€)?(?:\s*-\s*€?\s*(\d+))?/i);
+      }
+
+      // Pattern 3: "Από €15" or "από 15€"
+      if (!priceMatch) {
+        priceMatch = eventHtml.match(/[Αα]πό\s*€?\s*(\d+)(?:\s*€)?/i);
+      }
+
+      // Pattern 4: "€15 - €20" or "€15-€20"
+      if (!priceMatch) {
+        priceMatch = eventHtml.match(/€\s*(\d+)(?:\s*-\s*€?\s*(\d+))?/);
+      }
+
+      // Pattern 5: "15€ - 20€" or "15€"
+      if (!priceMatch) {
+        priceMatch = eventHtml.match(/(\d+)\s*€(?:\s*-\s*(\d+)\s*€)?/);
+      }
+
+      // Pattern 6: "Εισιτήριο: 15" or "Εισιτήρια: 15-20"
+      if (!priceMatch) {
+        priceMatch = eventHtml.match(/Εισιτ[ήη]ρι[οα]:?\s*€?\s*(\d+)(?:\s*-\s*(\d+))?/i);
+      }
+
+      if (priceMatch) {
+        const price1 = parseInt(priceMatch[1]);
+        const price2 = priceMatch[2] ? parseInt(priceMatch[2]) : null;
+
+        // Validate price range (5-200€ is reasonable)
+        if (price1 >= 5 && price1 <= 200) {
+          // Prices might be reversed (higher-lower), normalize to min-max
+          const minPrice = price2 ? Math.min(price1, price2) : price1;
+          const maxPrice = price2 ? Math.max(price1, price2) : price1;
+
+          event.price_amount = minPrice;
+          event.price_type = 'paid';
+          event.price_range = price2 ? `€${minPrice} - €${maxPrice}` : `€${minPrice}`;
+          pricesFound++;
+        }
+      }
+
+      // Progress indicator every 20 events
+      if ((i + 1) % 20 === 0) {
+        console.log(`   ... ${i + 1}/${events.length} pages processed, ${pricesFound} with prices`);
+      }
+
+      await new Promise(r => setTimeout(r, 300)); // Rate limit
+    } catch (err) { /* Skip on error */ }
+  }
+  console.log(`   Found prices for ${pricesFound}/${events.length} events`);
+
+  return events;
+}
+
+// ============================================================================
+// CLUBBER.GR SCRAPER (iCal)
+// ============================================================================
+
+async function scrapeClubber(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching clubber.gr iCal feed...');
+  const events: ScrapedEvent[] = [];
+  const today = new Date().toISOString().split('T')[0];
+
+  try {
+    const response = await fetch('https://www.clubber.gr/events/?ical=1', {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'text/calendar, */*' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const ical = await response.text();
+    const eventBlocks = ical.split('BEGIN:VEVENT');
+
+    for (let i = 1; i < eventBlocks.length; i++) {
+      const block = eventBlocks[i].split('END:VEVENT')[0];
+      const unfoldedBlock = block.replace(/\r?\n[ \t]/g, '');
+      const lines = unfoldedBlock.split(/\r?\n/);
+
+      const event: any = {};
+      for (const line of lines) {
+        const colonIndex = line.indexOf(':');
+        if (colonIndex === -1) continue;
+        const key = line.substring(0, colonIndex).split(';')[0].toUpperCase();
+        const value = line.substring(colonIndex + 1);
+
+        switch (key) {
+          case 'SUMMARY': event.title = unescapeICalText(value); break;
+          case 'DTSTART': event.dtstart = line; break;
+          case 'URL': event.url = value; break;
+          case 'LOCATION': event.venue = unescapeICalText(value); break;
+        }
+      }
+
+      if (!event.title || !event.dtstart) continue;
+
+      const { date, time } = parseICalDate(event.dtstart);
+      if (!date || date < today) continue;
+
+      events.push({
+        id: generateEventId(event.title, date, event.venue || 'TBA'),
+        title: event.title,
+        description: '',
+        start_date: date,
+        time,
+        type: 'concert',
+        genres: '["electronic"]',
+        venue_name: event.venue || 'TBA',
+        url: event.url || 'https://www.clubber.gr/events/',
+        price_type: 'door',
+        price_amount: null,
+        price_range: 'Door price',
+        source: 'clubber.gr'
+      });
+    }
+
+    console.log(`   Found ${events.length} events`);
+  } catch (e) {
+    console.log(`   ⚠️ Error: ${e}`);
+  }
+
+  return events;
+}
+
+// ============================================================================
+// TICKETSERVICES.GR SCRAPER
+// ============================================================================
+
+async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching ticketservices.gr listing...');
+  const events: ScrapedEvent[] = [];
+  const today = new Date().toISOString().split('T')[0];
+
+  try {
+    const response = await fetch('https://www.ticketservices.gr/en/LiveConcerts/', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const buffer = await response.arrayBuffer();
+    const html = decodeWindows1253(buffer);
+
+    // Parse events from listing
+    const eventPattern = /<li[^>]+data-eventid='(\d+)'[^>]+data-dates='([^']*)'[^>]+data-areaids='([^']*)'[^>]*data-venues='([^']*)'[^>]+data-title='([^']*)'/g;
+    const eventList: Array<{ id: string; dates: string[]; area: string; venue: string; title: string }> = [];
+
+    let match;
+    while ((match = eventPattern.exec(html)) !== null) {
+      const [, eventId, datesStr, areaIds, venue, title] = match;
+      const dates = datesStr.split('|').filter(d => d && d >= today);
+      if (dates.length === 0) continue;
+
+      // Only Athens area (area 1)
+      if (!areaIds.includes('1')) continue;
+
+      eventList.push({
+        id: eventId,
+        dates,
+        area: areaIds,
+        venue: venue.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<br\s*\/?>/gi, ' ').trim(),
+        title: title.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<br\s*\/?>/gi, ' ').trim()
+      });
+    }
+
+    console.log(`   Found ${eventList.length} Athens events, fetching prices...`);
+
+    // First add all events without prices, then try to add prices
+    for (const e of eventList) {
+      for (const date of e.dates) {
+        events.push({
+          id: generateEventId(e.title, date, e.venue),
+          title: e.title,
+          description: '',
+          start_date: date,
+          time: '',
+          type: 'concert',
+          genres: '',
+          venue_name: e.venue,
+          url: `https://www.ticketservices.gr/event/${e.id}/`,
+          price_type: 'tba',
+          price_amount: null,
+          price_range: null,
+          source: 'ticketservices'
+        });
+      }
+    }
+
+    console.log(`   Extracted ${events.length} events with dates`);
+
+    // Use Puppeteer to get prices (must click on show to see prices)
+    let pricesFound = 0;
+    let browser = null;
+    try {
+      browser = await puppeteer.launch({
+        headless: true,
+        executablePath: CHROME_PATH,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+
+      const page = await browser.newPage();
+      await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
+
+      // Process all unique events (prices are per event, not per date)
+      const uniqueEvents = eventList;
+      console.log(`   Fetching prices for ${uniqueEvents.length} events...`);
+
+      for (let i = 0; i < uniqueEvents.length; i++) {
+        const e = uniqueEvents[i];
+        try {
+          // Go to event page
+          await page.goto(`https://www.ticketservices.gr/event/${e.id}/`, {
+            waitUntil: 'networkidle2',
+            timeout: 15000
+          });
+
+          // Wait for show list to load
+          await page.waitForSelector('li[data-showid]', { timeout: 5000 }).catch(() => {});
+
+          // Click on the first show's booking button to reveal prices
+          const clicked = await page.evaluate(() => {
+            const btn = document.querySelector('.openshow.cbtn_plain, a.openshow');
+            if (btn) {
+              (btn as HTMLElement).click();
+              return true;
+            }
+            return false;
+          });
+
+          if (clicked) {
+            // Wait for price content to load
+            await new Promise(r => setTimeout(r, 2000));
+          }
+
+          // Extract prices from the page (now visible after clicking)
+          const prices = await page.evaluate(() => {
+            const priceValues: number[] = [];
+            const text = document.body.innerText;
+
+            // Match prices like "30€", "28€", etc.
+            const matches = text.match(/(\d+)\s*€/g);
+            if (matches) {
+              matches.forEach(m => {
+                const p = parseInt(m.replace('€', '').trim());
+                if (p >= 5 && p <= 300) priceValues.push(p);
+              });
+            }
+
+            return [...new Set(priceValues)]; // Remove duplicates
+          });
+
+          if (prices.length > 0) {
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const priceRange = minPrice === maxPrice ? `€${minPrice}` : `€${minPrice} - €${maxPrice}`;
+
+            // Update all events with this title
+            for (const event of events) {
+              if (event.title === e.title && event.source === 'ticketservices') {
+                event.price_type = 'paid';
+                event.price_amount = minPrice;
+                event.price_range = priceRange;
+              }
+            }
+            pricesFound++;
+
+            // Progress indicator every 10 events
+            if ((i + 1) % 10 === 0 || i === uniqueEvents.length - 1) {
+              console.log(`   ... ${i + 1}/${uniqueEvents.length} events processed, ${pricesFound} with prices`);
+            }
+          }
+        } catch (err) { /* Skip on error */ }
+      }
+    } catch (browserErr) {
+      console.log(`   ⚠️ Browser error: ${browserErr}`);
+    } finally {
+      if (browser) await browser.close();
+    }
+
+    console.log(`   ✓ Found prices for ${pricesFound}/${eventList.length} unique events`);
+  } catch (e) {
+    console.log(`   ⚠️ Error: ${e}`);
+  }
+
+  return events;
+}
+
+// ============================================================================
+// HALF NOTE JAZZ CLUB SCRAPER (iCal)
+// ============================================================================
+
+async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching halfnote.gr iCal feed...');
+  const events: ScrapedEvent[] = [];
+  const today = new Date().toISOString().split('T')[0];
+
+  try {
+    const response = await fetch('https://www.halfnote.gr/events/?ical=1', {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'text/calendar, */*' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const ical = await response.text();
+    const eventBlocks = ical.split('BEGIN:VEVENT');
+
+    for (let i = 1; i < eventBlocks.length; i++) {
+      const block = eventBlocks[i].split('END:VEVENT')[0];
+      const unfoldedBlock = block.replace(/\r?\n[ \t]/g, '');
+      const lines = unfoldedBlock.split(/\r?\n/);
+
+      const event: any = {};
+      for (const line of lines) {
+        const colonIndex = line.indexOf(':');
+        if (colonIndex === -1) continue;
+        const key = line.substring(0, colonIndex).split(';')[0].toUpperCase();
+        const value = line.substring(colonIndex + 1);
+
+        switch (key) {
+          case 'SUMMARY': event.title = unescapeICalText(value); break;
+          case 'DESCRIPTION': event.description = unescapeICalText(value); break;
+          case 'DTSTART': event.dtstart = line; break;
+          case 'URL': event.url = value; break;
+        }
+      }
+
+      if (!event.title || !event.dtstart) continue;
+
+      const { date, time } = parseICalDate(event.dtstart);
+      if (!date || date < today) continue;
+
+      // Extract price from description
+      let price: number | null = null;
+      let priceRange: string | null = null;
+      if (event.description) {
+        const priceMatch = event.description.match(/(?:από|τιμ[έή])\s*:?\s*(\d+)\s*€/i);
+        if (priceMatch) {
+          price = parseInt(priceMatch[1]);
+          priceRange = `από €${price}`;
+        }
+      }
+
+      events.push({
+        id: generateEventId(event.title, date, 'Half Note Jazz Club'),
+        title: event.title,
+        description: '',
+        start_date: date,
+        time,
+        type: 'concert',
+        genres: '["jazz"]',
+        venue_name: 'Half Note Jazz Club',
+        url: event.url || 'https://www.halfnote.gr/events/',
+        price_type: price ? 'paid' : 'tba',
+        price_amount: price,
+        price_range: priceRange,
+        source: 'halfnote',
+        location_status: 'verified_athens'
+      });
+    }
+
+    console.log(`   Found ${events.length} events`);
+  } catch (e) {
+    console.log(`   ⚠️ Error: ${e}`);
+  }
+
+  return events;
+}
+
+// ============================================================================
+// RESIDENT ADVISOR SCRAPER (GraphQL)
+// ============================================================================
+
+async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
+  console.log('   Fetching ra.co GraphQL API...');
+  const events: ScrapedEvent[] = [];
+  const today = new Date().toISOString().split('T')[0];
+
+  const query = `{
+    eventListings(
+      filters: { areas: { eq: 549 }, listingDate: { gte: "${today}" } },
+      pageSize: 100,
+      page: 1
+    ) {
+      data {
+        event {
+          id
+          title
+          date
+          startTime
+          venue { name id }
+          contentUrl
+          cost
+        }
+      }
+      totalResults
+    }
+  }`;
+
+  try {
+    const response = await fetch('https://ra.co/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0'
+      },
+      body: JSON.stringify({ query })
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const result = await response.json() as any;
+    if (result.errors) throw new Error(JSON.stringify(result.errors));
+
+    const raEvents = result.data.eventListings.data.map((item: any) => item.event);
+    console.log(`   Found ${raEvents.length} events (${result.data.eventListings.totalResults} total)`);
+
+    for (const e of raEvents) {
+      const date = e.date.split('T')[0];
+      const time = e.startTime?.match(/T(\d{2}:\d{2})/)?.[1] || '';
+
+      // Parse cost
+      let price: number | null = null;
+      let priceRange: string | null = null;
+      let priceType = 'tba';
+
+      if (e.cost && e.cost !== 'TBA') {
+        if (e.cost === '0' || e.cost.toLowerCase() === 'free') {
+          price = 0;
+          priceRange = 'Free';
+          priceType = 'free';
+        } else {
+          const rangeMatch = e.cost.match(/(\d+)\s*[-–]\s*(\d+)/);
+          if (rangeMatch) {
+            price = parseInt(rangeMatch[1]);
+            priceRange = `€${rangeMatch[1]} - €${rangeMatch[2]}`;
+            priceType = 'paid';
+          } else {
+            const singleMatch = e.cost.match(/(\d+(?:\.\d{2})?)/);
+            if (singleMatch) {
+              price = parseFloat(singleMatch[1]);
+              priceRange = `€${Math.round(price)}`;
+              priceType = 'paid';
+            }
+          }
+        }
+      }
+
+      events.push({
+        id: generateEventId(e.title, date, e.venue.name),
+        title: e.title,
+        description: '',
+        start_date: date,
+        time,
+        type: 'concert',
+        genres: '["electronic"]',
+        venue_name: e.venue.name,
+        url: `https://ra.co${e.contentUrl}`,
+        price_type: priceType,
+        price_amount: price,
+        price_range: priceRange,
+        source: 'residentadvisor'
+      });
+    }
+
+    // Fetch prices from event pages for TBA events (up to 20)
+    const tbaEvents = events.filter(e => e.price_type === 'tba');
+    if (tbaEvents.length > 0) {
+      console.log(`   Fetching prices for ${Math.min(tbaEvents.length, 20)} TBA events from event pages...`);
+      let pricesFound = 0;
+
+      for (let i = 0; i < Math.min(tbaEvents.length, 20); i++) {
+        const event = tbaEvents[i];
+        try {
+          const pageResponse = await fetch(event.url, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }
+          });
+          if (!pageResponse.ok) continue;
+
+          const pageHtml = await pageResponse.text();
+
+          // Look for price patterns on RA event pages
+          // Pattern 1: "€15" or "€15 - €20"
+          let priceMatch = pageHtml.match(/(?:Cost|Price|Entry|Tickets?)[:\s]*€?\s*(\d+)(?:\s*[-–]\s*€?\s*(\d+))?/i);
+          // Pattern 2: Just "€15" in the cost section
+          if (!priceMatch) {
+            priceMatch = pageHtml.match(/<span[^>]*>€(\d+)(?:\s*[-–]\s*€?(\d+))?<\/span>/i);
+          }
+          // Pattern 3: "15€" format
+          if (!priceMatch) {
+            priceMatch = pageHtml.match(/(\d+)\s*€(?:\s*[-–]\s*(\d+)\s*€)?/);
+          }
+
+          if (priceMatch) {
+            const price1 = parseInt(priceMatch[1]);
+            const price2 = priceMatch[2] ? parseInt(priceMatch[2]) : null;
+
+            if (price1 >= 5 && price1 <= 100) {
+              event.price_amount = price1;
+              event.price_type = 'paid';
+              event.price_range = price2 ? `€${price1} - €${price2}` : `€${price1}`;
+              pricesFound++;
+            }
+          }
+
+          await new Promise(r => setTimeout(r, 500)); // Rate limit
+        } catch (err) { /* Skip on error */ }
+      }
+
+      console.log(`   Found ${pricesFound} additional prices from event pages`);
+    }
+  } catch (e) {
+    console.log(`   ⚠️ Error: ${e}`);
+  }
+
+  return events;
+}
+
+// ============================================================================
+// PRICE CROSS-REFERENCE (Clubber ↔ RA)
+// ============================================================================
+
+async function crossReferenceClubberPrices(clubberEvents: ScrapedEvent[], raEvents: ScrapedEvent[]): Promise<number> {
+  console.log('\n🔄 Cross-referencing Clubber ↔ RA prices...');
+
+  // Expanded venue aliases (30+ Athens venues)
+  const venueAliases: Record<string, string[]> = {
+    // Electronic/Club venues
+    'astron': ['astron club', 'astron', 'astron bar'],
+    'dybbuk': ['dybbuk', 'dybbuk athens', 'dybuk'],
+    'smut': ['smut athens', 'smut', 's.m.u.t.'],
+    'universe': ['universe athens', 'universe', 'universe club'],
+    'romantso': ['romantso', 'ρομαντσο', 'romanzo'],
+    'oddity': ['oddity club', 'oddity', 'oddity athens'],
+    '2ten': ['2ten', 'two ten'],
+    'six dogs': ['six d.o.g.s', '6 d.o.g.s', 'six d.o.g.s.', '6dogs', 'six dogs athens'],
+    'bios': ['bios athens', 'bios', 'βιος'],
+    'temple': ['temple athens', 'temple club', 'temple'],
+    'death disco': ['death disco athens', 'death disco', 'deathdisco'],
+    'booze': ['booze cooperativa', 'booze', 'booze bar'],
+    'an club': ['an club', 'a.n. club', 'an club athens'],
+    'fuzz': ['fuzz club', 'fuzz live', 'fuzz athens', 'fuzz'],
+    'piraeus academy': ['piraeus academy', 'piraeus 117 academy'],
+    'piraeus 117': ['piraeus 117', 'piraeus 117 academy'],
+    'void': ['void athens', 'void club', 'void'],
+    'noise': ['noise athens', 'noise'],
+    'island': ['island athens', 'island club', 'island'],
+    'akrotiri': ['akrotiri', 'akrotiri beach bar', 'akrotiri lounge'],
+    'bolivar': ['bolivar beach bar', 'bolivar', 'bolivar athens'],
+    'second skin': ['second skin', 'second skin club'],
+    'dude': ['dude', 'the dude', 'dude athens'],
+    // Concert halls
+    'gagarin': ['gagarin 205', 'gagarin', 'gagarin athens'],
+    'floyd': ['floyd athens', 'floyd', 'floyd club'],
+    'gazarte': ['gazarte', 'gazarte roof', 'gazarte athens', 'γκαζαρτε'],
+    'technopolis': ['technopolis', 'τεχνοπολις', 'technopolis athens', 'gazi technopolis'],
+    'stavros niarchos': ['snfcc', 'stavros niarchos foundation', 'κπισν', 'niarchos', 'snf'],
+    'faliro': ['faliro pavilion', 'faliro arena', 'tae kwon do', 'taekwondo'],
+    'olympic': ['olympic athletic center', 'oaka', 'ολυμπιακο'],
+    // Cultural spaces
+    'onassis': ['onassis stegi', 'stegi', 'onassis cultural', 'ονασης'],
+    'megaron': ['megaron mousikis', 'megaron', 'μεγαρο μουσικης'],
+    'herodion': ['herod atticus', 'herodion', 'ηρωδειο', 'herodes atticus'],
+    'lycabettus': ['lycabettus theater', 'lycabettus', 'λυκαβηττος'],
+  };
+
+  function normalizeVenue(v: string): string {
+    return v.toLowerCase().replace(/\s+/g, ' ').replace(/athens|club/gi, '').trim();
+  }
+
+  function venuesMatch(v1: string, v2: string): boolean {
+    const n1 = normalizeVenue(v1);
+    const n2 = normalizeVenue(v2);
+    if (n1 === n2) return true;
+
+    // Direct substring check for short venue names
+    if (n1.length > 3 && n2.length > 3) {
+      if (n1.includes(n2) || n2.includes(n1)) return true;
+    }
+
+    for (const [key, aliases] of Object.entries(venueAliases)) {
+      const m1 = n1.includes(key) || aliases.some(a => n1.includes(a.toLowerCase()));
+      const m2 = n2.includes(key) || aliases.some(a => n2.includes(a.toLowerCase()));
+      if (m1 && m2) return true;
+    }
+    return false;
+  }
+
+  let updated = 0;
+  for (const clubber of clubberEvents) {
+    if (clubber.price_amount !== null) continue; // Already has price
+
+    const date = clubber.start_date;
+    const raMatch = raEvents.find(ra =>
+      ra.start_date === date &&
+      venuesMatch(clubber.venue_name, ra.venue_name) &&
+      ra.price_amount !== null
+    );
+
+    if (raMatch) {
+      clubber.price_amount = raMatch.price_amount;
+      clubber.price_range = raMatch.price_range;
+      clubber.price_type = raMatch.price_type;
+      updated++;
+      console.log(`   ✅ ${clubber.title.substring(0, 40)} → ${raMatch.price_range}`);
+    }
+  }
+
+  console.log(`   Updated ${updated} clubber events with RA prices`);
+  return updated;
+}
+
+// ============================================================================
+// DATABASE OPERATIONS
+// ============================================================================
+
+/**
+ * Record scrape statistics to the database for monitoring
+ */
+function recordScrapeStats(
+  source: string,
+  eventsFound: number,
+  eventsNew: number,
+  eventsUpdated: number,
+  durationMs: number,
+  success: boolean,
+  errorMessage: string | null
+): void {
+  try {
+    const db = new Database(DB_PATH);
+    db.prepare(`
+      INSERT INTO scrape_stats (source, scraped_at, events_found, events_new, events_updated, duration_ms, success, error_message)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      source,
+      new Date().toISOString(),
+      eventsFound,
+      eventsNew,
+      eventsUpdated,
+      durationMs,
+      success ? 1 : 0,
+      errorMessage
+    );
+    db.close();
+  } catch (err) {
+    // Log but don't fail the scrape
+    console.log(`   ⚠️ Failed to record scrape stats: ${err}`);
+  }
+}
+
+function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; outOfScope: number } {
+  if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0 };
+
+  const db = new Database(DB_PATH);
+  let saved = 0;
+  let outOfScope = 0;
+
+  const stmt = db.prepare(`
+    INSERT INTO events (
+      id, title, description, start_date, time_doors, time_source, type, genres,
+      venue_name, url, price_type, price_amount, price_range, source,
+      location_status, needs_enrichment, created_at, updated_at
+    ) VALUES (
+      $id, $title, $description, $start_date, $time_doors, $time_source, $type, $genres,
+      $venue_name, $url, $price_type, $price_amount, $price_range, $source,
+      $location_status, 1, datetime('now'), datetime('now')
+    )
+    ON CONFLICT(id) DO UPDATE SET
+      title = $title,
+      url = $url,
+      type = $type,
+      price_type = COALESCE($price_type, price_type),
+      price_amount = COALESCE($price_amount, price_amount),
+      price_range = COALESCE($price_range, price_range),
+      time_doors = COALESCE($time_doors, time_doors),
+      time_source = COALESCE($time_source, time_source),
+      updated_at = datetime('now')
+  `);
+
+  for (const e of events) {
+    try {
+      // Scope filter: exclude non-cultural events (sports, corporate, etc.)
+      const scopeResult = shouldExcludeEvent({
+        title: e.title,
+        venue: e.venue_name,
+        description: e.description
+      });
+
+      if (!scopeResult.inScope) {
+        console.log(`   ⛔ Out of scope: ${e.title.substring(0, 50)}... (${scopeResult.reason})`);
+        outOfScope++;
+        continue;
+      }
+
+      // Seasonal filter: check if venue is open on event date
+      const seasonalResult = validateSeasonalEvent(e.venue_name, e.start_date);
+      if (!seasonalResult.valid) {
+        console.log(`   🌴 Seasonal closure: ${e.title.substring(0, 40)}... (${seasonalResult.reason})`);
+        outOfScope++;
+        continue;
+      }
+      if (seasonalResult.warning) {
+        console.log(`   ⚠️  Seasonal warning: ${e.title.substring(0, 40)}... (${seasonalResult.warning})`);
+      }
+
+      // Normalize theater/theatre spelling
+      let eventType = normalizeTheaterSpelling(e.type);
+
+      // Re-categorize event using the hybrid categorizer
+      eventType = categorizeEventSimple({
+        title: e.title,
+        description: e.description,
+        venue: e.venue_name,
+        source: e.source,
+        currentType: eventType
+      });
+
+      // Append time to start_date if available, and save time separately to time_doors
+      const startDateTime = e.time ? `${e.start_date}T${e.time}:00` : e.start_date;
+      const timeSource = e.time ? 'scraped_listing' : null;
+      stmt.run({
+        $id: e.id,
+        $title: e.title,
+        $description: e.description,
+        $start_date: startDateTime,
+        $time_doors: e.time || null,
+        $time_source: timeSource,
+        $type: eventType,
+        $genres: e.genres,
+        $venue_name: e.venue_name,
+        $url: e.url,
+        $price_type: e.price_type,
+        $price_amount: e.price_amount,
+        $price_range: e.price_range,
+        $source: e.source,
+        $location_status: e.location_status || 'unverified'
+      });
+      saved++;
+    } catch (err) {
+      // Silently skip duplicates
+    }
+  }
+
+  db.close();
+  return { saved, outOfScope };
+}
+
+// ============================================================================
+// MAIN ORCHESTRATOR
+// ============================================================================
+
+// Adapter to convert exhibition events to standard format
+async function scrapeSNFCCAdapter(): Promise<ScrapedEvent[]> {
+  const exhibitions = await scrapeSNFCC();
+  return exhibitions.map(e => ({
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    start_date: e.start_date,
+    time: e.time,
+    type: e.type,
+    genres: e.genres,
+    venue_name: e.venue_name,
+    url: e.url,
+    price_type: e.price_type,
+    price_amount: e.price_amount,
+    price_range: e.price_range,
+    source: e.source,
+    location_status: e.location_status
+  }));
+}
+
+// Adapter for Onassis Stegi exhibitions
+async function scrapeOnassisAdapter(): Promise<ScrapedEvent[]> {
+  const exhibitions = await scrapeOnassis();
+  return exhibitions.map(e => ({
+    id: generateEventId(e.title, e.start_date, e.venue_name),
+    title: e.title,
+    description: e.description,
+    start_date: e.start_date,
+    time: '11:00', // Default opening time
+    type: 'exhibition',
+    genres: JSON.stringify(['Art', 'Contemporary']),
+    venue_name: e.venue_name || 'Onassis Stegi',
+    url: e.url,
+    price_type: e.price_type,
+    price_amount: null,
+    price_range: null,
+    source: 'onassis',
+    location_status: 'verified_athens'
+  }));
+}
+
+// Adapter for Benaki Museum exhibitions
+async function scrapeBenakiAdapter(): Promise<ScrapedEvent[]> {
+  const exhibitions = await scrapeBenaki();
+  return exhibitions.map(e => ({
+    id: generateEventId(e.title, e.start_date, e.venue_key),
+    title: e.title,
+    description: e.description,
+    start_date: e.start_date,
+    time: '10:00', // Default opening time
+    type: 'exhibition',
+    genres: JSON.stringify(['Art', 'History', 'Culture']),
+    venue_name: e.venue_key === 'pireos' ? 'Μουσείο Μπενάκη - Πειραιώς 138' :
+                e.venue_key === 'islamic' ? 'Μουσείο Ισλαμικής Τέχνης' :
+                'Μουσείο Μπενάκη Ελληνικού Πολιτισμού',
+    url: e.url,
+    price_type: e.price_type,
+    price_amount: null,
+    price_range: null,
+    source: 'benaki',
+    location_status: 'verified_athens'
+  }));
+}
+
+// Adapter for Megaron Mousikis concerts
+async function scrapeMegaronAdapter(): Promise<ScrapedEvent[]> {
+  const events = await scrapeMegaron();
+  return events.map(e => ({
+    id: generateEventId(e.title, e.start_date, e.venue_name),
+    title: e.title,
+    description: e.description,
+    start_date: e.start_date,
+    time: e.time,
+    type: e.type as 'concert' | 'theater' | 'exhibition' | 'performance' | 'workshop' | 'cinema' | 'other',
+    genres: JSON.stringify(['Classical', 'Concert']),
+    venue_name: e.venue_name,
+    url: e.url,
+    price_type: e.price_type,
+    price_amount: null,
+    price_range: null,
+    source: 'megaron.gr',
+    location_status: 'verified_athens'
+  }));
+}
+
+const SOURCES: Record<SourceId, { name: string; scraper: () => Promise<ScrapedEvent[]> }> = {
+  more: { name: 'More.com', scraper: scrapeMore },
+  athinorama: { name: 'Athinorama.gr', scraper: scrapeAthinorama },
+  clubber: { name: 'Clubber.gr', scraper: scrapeClubber },
+  ticketservices: { name: 'TicketServices.gr', scraper: scrapeTicketServices },
+  halfnote: { name: 'Half Note Jazz', scraper: scrapeHalfNote },
+  ra: { name: 'Resident Advisor', scraper: scrapeResidentAdvisor },
+  snfcc: { name: 'SNFCC', scraper: scrapeSNFCCAdapter },
+  onassis: { name: 'Onassis Stegi', scraper: scrapeOnassisAdapter },
+  benaki: { name: 'Benaki Museum', scraper: scrapeBenakiAdapter },
+  megaron: { name: 'Megaron Mousikis', scraper: scrapeMegaronAdapter },
+};
+
+async function main() {
+  console.log('');
+  console.log('╔══════════════════════════════════════════════════════════════╗');
+  console.log('║  🏛️  AGENT ATHENS - Master Scraper                           ║');
+  console.log('║     "One scraper to rule them all"                           ║');
+  console.log('╚══════════════════════════════════════════════════════════════╝');
+  console.log('');
+
+  // Parse args
+  const args = process.argv.slice(2);
+  const dryRun = args.includes('--dry-run');
+  const doCrossRef = args.includes('--crossref');
+
+  const sourceIdx = args.indexOf('--source');
+  const selectedSources = sourceIdx >= 0
+    ? args[sourceIdx + 1].split(',') as SourceId[]
+    : Object.keys(SOURCES) as SourceId[];
+
+  if (dryRun) {
+    console.log('🔍 DRY RUN MODE - No changes will be saved\n');
+  }
+
+  console.log(`📋 Sources to scrape: ${selectedSources.join(', ')}\n`);
+
+  // Run scrapers
+  const results: ScrapeResult[] = [];
+  const allEvents: ScrapedEvent[] = [];
+  let clubberEvents: ScrapedEvent[] = [];
+  let raEvents: ScrapedEvent[] = [];
+
+  for (const sourceId of selectedSources) {
+    const source = SOURCES[sourceId];
+    if (!source) {
+      log('WARN', 'system', `Unknown source: ${sourceId}`);
+      continue;
+    }
+
+    console.log(`\n📥 ${source.name}`);
+    console.log('─'.repeat(50));
+
+    log('INFO', sourceId, `Starting scrape for ${source.name}`);
+    const start = Date.now();
+    try {
+      const events = await source.scraper();
+      const duration = Date.now() - start;
+
+      results.push({ source: sourceId, events, success: true, duration });
+      allEvents.push(...events);
+
+      if (sourceId === 'clubber') clubberEvents = events;
+      if (sourceId === 'ra') raEvents = events;
+
+      // Record stats to database (events_new/updated will be calculated after save)
+      if (!dryRun) {
+        recordScrapeStats(sourceId, events.length, 0, 0, duration, true, null);
+      }
+
+      log('INFO', sourceId, `Completed: ${events.length} events in ${(duration / 1000).toFixed(1)}s`);
+      console.log(`   ✅ ${events.length} events in ${(duration / 1000).toFixed(1)}s`);
+    } catch (error: any) {
+      const duration = Date.now() - start;
+      results.push({ source: sourceId, events: [], success: false, error: error.message, duration });
+
+      // Record failure stats
+      if (!dryRun) {
+        recordScrapeStats(sourceId, 0, 0, 0, duration, false, error.message);
+      }
+
+      log('ERROR', sourceId, `Scrape failed: ${error.message}`, error);
+      console.log(`   ❌ Error: ${error.message}`);
+    }
+  }
+
+  // Cross-reference if both clubber and RA were scraped
+  if (doCrossRef && clubberEvents.length > 0 && raEvents.length > 0) {
+    await crossReferenceClubberPrices(clubberEvents, raEvents);
+  }
+
+  // Summary
+  console.log('\n');
+  console.log('╔══════════════════════════════════════════════════════════════╗');
+  console.log('║  📊  SUMMARY                                                 ║');
+  console.log('╚══════════════════════════════════════════════════════════════╝');
+
+  let totalEvents = 0;
+  let totalWithPrice = 0;
+
+  for (const r of results) {
+    const status = r.success ? '✅' : '❌';
+    const priceCount = r.events.filter(e => e.price_amount !== null).length;
+    totalEvents += r.events.length;
+    totalWithPrice += priceCount;
+
+    console.log(`${status} ${SOURCES[r.source as SourceId].name.padEnd(20)} | ${String(r.events.length).padStart(4)} events | ${String(priceCount).padStart(4)} with price | ${(r.duration / 1000).toFixed(1)}s`);
+  }
+
+  console.log('─'.repeat(64));
+  console.log(`   ${'TOTAL'.padEnd(20)} | ${String(totalEvents).padStart(4)} events | ${String(totalWithPrice).padStart(4)} with price`);
+
+  // Save to database
+  if (!dryRun && allEvents.length > 0) {
+    console.log('\n💾 Saving to database...');
+    const { saved, outOfScope } = saveEvents(allEvents, dryRun);
+    log('INFO', 'system', `Saved ${saved} events to database (${outOfScope} out of scope)`);
+    console.log(`   ✅ Saved ${saved} events`);
+    if (outOfScope > 0) {
+      console.log(`   ⛔ Filtered ${outOfScope} out-of-scope events (sports, corporate, etc.)`);
+    }
+  }
+
+  // Write structured summary to log file
+  const summaryStats: SourceStats[] = results.map(r => ({
+    source: r.source,
+    events: r.events.length,
+    errors: r.success ? 0 : 1,
+    duration: r.duration
+  }));
+  logSummary(summaryStats);
+
+  console.log('\n✨ Done!\n');
+}
+
+main().catch(console.error);

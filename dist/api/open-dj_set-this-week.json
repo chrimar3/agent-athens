@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "dj_set",
+    "price": "open",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.854Z",
+    "url": "https://agentathens.netlify.app/open-dj_set-this-week"
+  }
+}

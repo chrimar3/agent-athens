@@ -1,0 +1,28 @@
+Generate a compelling 400-word description for this cultural event in Athens, Greece.
+
+**Event Details:**
+- Title: Μαθήματα Yoga και Διαλογισμού
+- Type: concert
+- Venue: Κεντρο Πολιτισμου Ελληνικος Κοσμος
+- Date: 2025-11-05
+- Time: 10:30
+- Price: Ticketed event
+- Short Description: Μαθήματα Yoga, Θεωρία και Διαλογισμός,στο Κέντρο Πολιτισμού «Ελληνικός Κόσμος»
+
+**Requirements:**
+1. Write exactly 400-440 words (strict requirement)
+2. Focus on cultural context and what makes this Athens event special
+3. Include artist/performer background if relevant
+4. Mention the Athens neighborhood and venue atmosphere
+5. Write in an authentic, engaging tone (not marketing fluff)
+6. Include practical details naturally (time, location, price)
+7. Target audience: Both AI answer engines and human readers
+8. Optimize for GEO (Generative Engine Optimization) - make AI agents want to cite this
+
+**CRITICAL:**
+- Do not fabricate information - only use the details provided above
+- If information is unavailable, omit that detail
+- Write in a narrative style that would make someone want to attend
+- Aim for ~440 words for English (can be 400-440)
+
+Write the description now:

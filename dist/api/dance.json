@@ -1,0 +1,95 @@
+{
+  "filters": {
+    "type": "dance",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
+      "id": "balletto-di-milano-2026-04-04",
+      "title": "Ρωμαίος και Ιουλιέτα - Balletto di Milano",
+      "description": "4 - 5 Απριλιου Ρωμαίος και Ιουλιέτα - Balletto di Milano CHRISTMAS THEATER",
+      "fullDescription": "The curtain rises on Verona's balcony, and the bodies that tell this story are already speaking. Balletto di Milano takes the stage at Christmas Theater, and Shakespeare's most famous tragedy begins its translation into movement. You're about to watch Romeo and Juliet as ballet, words replaced by gesture, dialogue replaced by dance.\n\nThe Balletto di Milano has developed its own approach to the narrative ballets. Their Romeo and Juliet doesn't merely reproduce Prokofiev's score and traditional choreography but brings Italian expressiveness to material that's been claimed by Russian and English traditions. The company's Mediterranean sensibility inflects the movement, the passion reading differently through Italian bodies.\n\nChristmas Theater provides the proscenium that classical ballet requires. The staging needs depth and height, the wings that allow dancers to enter and exit with the formal grace the tradition demands. The orchestra pit or recorded score fills the acoustic space, Prokofiev's music carrying the emotional weight the movement illustrates.\n\nThe crowd for ballet at Christmas Theater reflects the form's reach. You'll find dedicated ballet audience who follow companies and productions, parents introducing children to classical performance, couples for whom this evening constitutes cultural date night, and visitors adding Athens dance to their itinerary. The atmosphere is formal but not stiff, appreciation expressing through attention.\n\nWhat makes Romeo and Juliet as ballet distinctive is the compression. Shakespeare's five acts become three, his words become gesture, his wit becomes pure emotion. The death scene, when it arrives, lands with force that language might diffuse. The bodies tell the story without interpretation's mediation.\n\nBetween the acts, the theater releases its held breath. Conversations assess what's been seen, anticipate what's coming. Returning to seats for the next act carries its own anticipation, the story's momentum propelling forward.\n\nIf you need contemporary movement and experimental choreography, Romeo and Juliet offers classical vocabulary. This is ballet as tradition has shaped it, steps and positions codified over centuries. But if you're ready for Shakespeare's tragedy told through the body's language, if you want to feel what happens when Juliet's hand touches the poison, you find your seat at Christmas Theater.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, April 4, 2026 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | Check venue |\n| **Getting there** | Check venue for location |\n\nBalletto di Milano: where Shakespeare becomes silence and movement.",
+      "startDate": "2026-04-04T20:00:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Christmas Theater",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": 3600
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 60,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/balletto-di-milano/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/dance/balletto-di-milano/",
+      "source": "more.com",
+      "createdAt": "2025-10-31T12:22:35.864Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "extracted_from_start_date",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
+      "id": "marcos-ayala-tango-the-golden-years-2026-04-22",
+      "title": "MARCOS AYALA TANGO - The Golden Years",
+      "description": "22 Απριλιου MARCOS AYALA TANGO - The Golden Years Christmas Theater, Athens",
+      "fullDescription": "The bandoneon exhales its first note and the room transforms. You're no longer in Athens — you're in Buenos Aires, 1940-something, the air thick with smoke and longing and the particular tension that precedes the embrace. Christmas Theater's stage holds dancers who've spent lifetimes learning this single conversation between bodies.\n\nMarcos Ayala brings \"The Golden Years\" to Athens — a tango production that traces the dance's evolution through its most celebrated era. The golden age of tango, roughly 1935-1955, produced the music and movement vocabulary that still defines the form. Tonight's performance honors that heritage while proving its vitality, the choreography speaking a language that translates across decades and continents.\n\nAyala's company performs tango as it was meant to be witnessed — intimate enough to see the communication between partners, theatrical enough to appreciate the artistry involved in making such precise movement appear spontaneous. The dancers carry training from Buenos Aires studios where tradition passes person to person, their bodies archives of accumulated knowledge.\n\nChristmas Theater provides the proper frame for this presentation. The venue's theatrical configuration creates the distance that allows appreciation while maintaining connection. The music — likely a mix of golden age recordings and live orchestration — fills the space with the arrangements that made D'Arienzo and Troilo masters of their craft.\n\nThe audience for tango in Athens crosses cultural boundaries. Greek milongueros who've made the dance their practice. Argentinean expats seeking connection to home. Dance enthusiasts curious about tango's particular magic. Couples for whom this evening might spark something. The conversations at intermission mix languages, the shared vocabulary the dance itself.\n\nIf you need contemporary choreographic innovation or dance that distances itself from tradition, \"The Golden Years\" operates in different territory. This is tango as preservation and celebration, honoring the forms that made the dance legendary. But if you've been looking for an evening where movement tells stories words cannot — Christmas Theater holds this particular poetry.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, April 22, 2026 |\n| **Time** | Evening |\n| **Venue** | Christmas Theater |\n| **Company** | Marcos Ayala Tango |\n| **Style** | Golden Age tango |\n| **Price** | Check venue |\n| **Duration** | ~90 minutes |\n\nMarcos Ayala — tango's golden years, alive tonight.",
+      "startDate": "2026-04-22T20:00:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Christmas Theater",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "από €15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/dance/marcos-ayala-tango-the-golden-years/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/dance/marcos-ayala-tango-the-golden-years/",
+      "source": "more.com",
+      "createdAt": "2025-10-31T12:22:35.864Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "extracted_from_start_date",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "lastUpdate": "2026-02-19T08:56:08.791Z",
+    "url": "https://agentathens.netlify.app/dance"
+  }
+}

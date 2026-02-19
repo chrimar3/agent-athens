@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "type": "performance",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.792Z",
+    "url": "https://agentathens.netlify.app/performance-this-week"
+  }
+}

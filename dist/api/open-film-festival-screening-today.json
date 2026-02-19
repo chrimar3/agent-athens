@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "screening",
+    "genre": "Film festival",
+    "price": "open",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.957Z",
+    "url": "https://agentathens.netlify.app/open-film-festival-screening-today"
+  }
+}

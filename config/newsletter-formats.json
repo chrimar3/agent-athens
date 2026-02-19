@@ -1,0 +1,169 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-01-20",
+  "formats": [
+    {
+      "id": "this-is-athens",
+      "name": "This Is Athens",
+      "senders": [
+        "newsletter@thisisathens.org",
+        "events@thisisathens.org",
+        "noreply@thisisathens.org"
+      ],
+      "subjectPatterns": [
+        "This Week in Athens",
+        "Athens Events",
+        "What's On in Athens"
+      ],
+      "parserModule": "./this-is-athens",
+      "enabled": true,
+      "priority": 10
+    },
+    {
+      "id": "lifo-guide",
+      "name": "Lifo Guide",
+      "senders": [
+        "guide@lifo.gr",
+        "newsletter@lifo.gr",
+        "noreply@lifo.gr"
+      ],
+      "subjectPatterns": [
+        "Lifo Guide",
+        "Εβδομαδιαίος Οδηγός",
+        "Lifo Weekly"
+      ],
+      "parserModule": "./lifo-guide",
+      "enabled": true,
+      "priority": 10
+    },
+    {
+      "id": "athinorama",
+      "name": "Athinorama",
+      "senders": [
+        "weekly@athinorama.gr",
+        "newsletter@athinorama.gr",
+        "noreply@athinorama.gr"
+      ],
+      "subjectPatterns": [
+        "Athinorama Weekly",
+        "Αθηνόραμα",
+        "Weekly Events"
+      ],
+      "parserModule": "./athinorama",
+      "enabled": true,
+      "priority": 5
+    },
+    {
+      "id": "viva-gr",
+      "name": "Viva.gr Events",
+      "senders": [
+        "newsletter@viva.gr",
+        "events@viva.gr"
+      ],
+      "subjectPatterns": [
+        "Viva Events",
+        "Εκδηλώσεις Viva"
+      ],
+      "parserModule": "./viva-gr",
+      "enabled": true,
+      "priority": 5
+    },
+    {
+      "id": "more-com",
+      "name": "More.com Events",
+      "senders": [
+        "newsletter@more.com",
+        "events@more.com"
+      ],
+      "subjectPatterns": [
+        "More Events",
+        "This Week"
+      ],
+      "parserModule": "./more-com",
+      "enabled": true,
+      "priority": 5
+    },
+    {
+      "id": "gazarte",
+      "name": "Gazarte Newsletter",
+      "senders": [
+        "newsletter@gazarte.gr",
+        "info@gazarte.gr"
+      ],
+      "subjectPatterns": [
+        "Gazarte",
+        "Γκαζάρτε"
+      ],
+      "parserModule": "./gazarte",
+      "enabled": true,
+      "priority": 8
+    },
+    {
+      "id": "snfcc",
+      "name": "SNFCC Newsletter",
+      "senders": [
+        "newsletter@snfcc.org",
+        "info@snfcc.org"
+      ],
+      "subjectPatterns": [
+        "SNFCC",
+        "Stavros Niarchos",
+        "Κέντρο Πολιτισμού"
+      ],
+      "parserModule": "./snfcc",
+      "enabled": true,
+      "priority": 8
+    },
+    {
+      "id": "six-dogs",
+      "name": "Six D.O.G.S Newsletter",
+      "senders": [
+        "newsletter@sixdogs.gr",
+        "info@sixdogs.gr"
+      ],
+      "subjectPatterns": [
+        "Six D\\.O\\.G\\.S",
+        "Six Dogs"
+      ],
+      "parserModule": "./six-dogs",
+      "enabled": true,
+      "priority": 8
+    },
+    {
+      "id": "megaron",
+      "name": "Megaron - The Athens Concert Hall",
+      "senders": [
+        "info@megaron.gr",
+        "newsletter@megaron.gr",
+        "noreply@megaron.gr"
+      ],
+      "subjectPatterns": [
+        "Megaron",
+        "Μέγαρο Μουσικής",
+        "Athens Concert Hall"
+      ],
+      "parserModule": "./megaron",
+      "enabled": true,
+      "priority": 9
+    },
+    {
+      "id": "aaathens-art",
+      "name": "AAA Athens Art",
+      "senders": [
+        "chiaracrespi@aaathens.art",
+        "newsletter@aaathens.art",
+        "info@aaathens.art",
+        "noreply@aaathens.art"
+      ],
+      "subjectPatterns": [
+        "aaathens",
+        "AAA Athens",
+        "What's On",
+        "exhibitions.*Athens"
+      ],
+      "parserModule": "./aaathens-art",
+      "enabled": true,
+      "priority": 8
+    }
+  ]
+}

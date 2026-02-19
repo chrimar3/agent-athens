@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2025-10-26T20:35:57.171Z",
+  "totalSites": 15,
+  "totalFiles": 69,
+  "batches": [
+    {
+      "site": "viva",
+      "files": 8,
+      "sizeMB": 10.36
+    },
+    {
+      "site": "kyttaro",
+      "files": 2,
+      "sizeMB": 0.06
+    },
+    {
+      "site": "gagarin205",
+      "files": 2,
+      "sizeMB": 0.53
+    },
+    {
+      "site": "halfnote",
+      "files": 4,
+      "sizeMB": 0.41
+    },
+    {
+      "site": "clubber",
+      "files": 6,
+      "sizeMB": 0.46
+    },
+    {
+      "site": "athinorama",
+      "files": 12,
+      "sizeMB": 1.44
+    },
+    {
+      "site": "more",
+      "files": 17,
+      "sizeMB": 22.35
+    },
+    {
+      "site": "romantso",
+      "files": 2,
+      "sizeMB": 0.03
+    },
+    {
+      "site": "greek_festival",
+      "files": 2,
+      "sizeMB": 0.21
+    },
+    {
+      "site": "gazarte",
+      "files": 8,
+      "sizeMB": 0.46
+    },
+    {
+      "site": "culture_athens",
+      "files": 2,
+      "sizeMB": 0.72
+    },
+    {
+      "site": "gazarte.html",
+      "files": 1,
+      "sizeMB": 0.08
+    },
+    {
+      "site": "clubber.html",
+      "files": 1,
+      "sizeMB": 0
+    },
+    {
+      "site": "viva.html",
+      "files": 1,
+      "sizeMB": 0.15
+    },
+    {
+      "site": "athinorama.html",
+      "files": 1,
+      "sizeMB": 0.16
+    }
+  ]
+}

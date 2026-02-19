@@ -1,0 +1,54 @@
+Generate a compelling Greek (ελληνικά) description for this cultural event in Athens, Greece.
+
+Event Details:
+- Title: ATHENS HALLOWEEN FESTIVAL 2025
+- Type: performance
+- Venue: Δημοτικη Αγορα Κυψελης
+- Date: 2025-10-30T20:00:00+02:00
+- Price: €20
+- Event Description: 30 Οκτ - 2 Νοε ATHENS HALLOWEEN FESTIVAL 2025 Δημοτικη Αγορα Κυψελης
+
+Venue Context:
+Δημοτικη Αγορα Κυψελης, a cultural venue in Athens.
+
+
+
+
+What to Expect at This Type of Event:
+A live artistic presentation that may combine elements of theater, dance, music, or multimedia. Performances often explore experimental or interdisciplinary approaches to live art, pushing boundaries of traditional formats.
+
+Semantic Keywords (use naturally in your writing):
+live performance, performing arts, Athens cultural scene
+
+Requirements:
+1. Write exactly 430 words (acceptable range: 390-450 words)
+2. Write in Greek (ελληνικά)
+3. Include artist background if provided above
+4. Describe venue atmosphere and Athens neighborhood context
+5. Use semantic keywords naturally throughout (DO NOT list them)
+6. Explain what attendees can expect at this type of performance
+7. Write in authentic Greek journalism tone (not marketing fluff)
+8. Include practical details naturally (time, location, price)
+9. Target audience: Both AI answer engines and human readers
+10. For those seeking performance in Athens...
+
+CRITICAL WORD COUNT REQUIREMENT FOR GREEK:
+- Your description MUST be at least 390 words in Greek
+- Target: exactly 430 words (acceptable range: 390-450 words)
+- Count your words carefully before submitting
+- If your first draft is below 390 words, you MUST expand it by adding:
+  * More details about the venue atmosphere and neighborhood
+  * Historical context about the venue or Athens cultural scene
+  * Deeper explanation of what attendees can expect
+  * Additional cultural significance and context
+  * More descriptive details about the event format
+- Do NOT submit a description shorter than 390 words
+- Greek descriptions should match English content richness
+
+CRITICAL: Only use the information provided above. Do not fabricate artist details, venue history, or event specifics. If information is unavailable, focus on general context and what makes this type of event valuable.
+
+Γράψε σε φυσική, σύγχρονη ελληνική γλώσσα. Όχι μεταφρασμένο ύφος.
+
+ΠΡΟΣΟΧΗ: Η περιγραφή πρέπει να είναι τουλάχιστον 390 λέξεις. Μέτρησε προσεκτικά τις λέξεις σου.
+
+Write the full 430-word description now. Return ONLY the description text, no preamble.

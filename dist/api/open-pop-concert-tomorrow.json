@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Pop",
+    "price": "open",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.894Z",
+    "url": "https://agentathens.netlify.app/open-pop-concert-tomorrow"
+  }
+}

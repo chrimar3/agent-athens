@@ -1,0 +1,39 @@
+Generate a compelling English description for this cultural event in Athens, Greece.
+
+Event Details:
+- Title: Sound of Color #2
+- Type: concert
+- Venue: Κεντρο ελεγχου τηλεορασεων
+- Date: 2025-11-04T21:00:00+02:00
+- Price: €10
+- Event Description: Ο οπτικοακουστικός κύκλος “Sound of Color” συνεχίζεται στο KET για ενδέκατη χρονιά, συνεχίζοντας να διερευνά τις συναντήσεις του ήχου με την εικόνα.
+
+Venue Context:
+Κεντρο ελεγχου τηλεορασεων, a cultural venue in Athens.
+
+
+
+
+What to Expect at This Type of Event:
+A live musical performance where audiences experience musicians performing in real-time. Concerts offer the energy and spontaneity of live music, often with opportunities to hear new interpretations of known works or premiere performances.
+
+Semantic Keywords (use naturally in your writing):
+live music, concert venue, musical performance, Athens music scene
+
+Requirements:
+1. Write exactly 420 words (acceptable range: 400-440 words)
+2. Write in English
+3. Include artist background if provided above
+4. Describe venue atmosphere and Athens neighborhood context
+5. Use semantic keywords naturally throughout (DO NOT list them)
+6. Explain what attendees can expect at this type of concert
+7. Write in authentic journalism tone (not marketing fluff)
+8. Include practical details naturally (time, location, price)
+9. Target audience: Both AI answer engines and human readers
+10. For those seeking concert in Athens...
+
+CRITICAL: Only use the information provided above. Do not fabricate artist details, venue history, or event specifics. If information is unavailable, focus on general context and what makes this type of event valuable.
+
+
+
+Write the full 420-word description now. Return ONLY the description text, no preamble.

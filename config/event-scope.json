@@ -1,0 +1,38 @@
+{
+  "excludedKeywords": [
+    "αγώνας", "αγώνες", "match", "game", "derby",
+    "μπάσκετ", "basketball", "ποδόσφαιρο", "football", "soccer",
+    "βόλεϊ", "volleyball", "τένις", "tennis", "πόλο", "polo",
+    "στίβος", "athletics", "κολύμβηση", "swimming", "μαραθώνιος", "marathon",
+    "ΑΕΚ", "Ολυμπιακός", "Παναθηναϊκός", "ΠΑΟΚ", "Άρης", "Aris",
+    "Olympiakos", "Panathinaikos", "OSFP", "PAO",
+    "Euroleague", "Eurobasket", "Champions League", "Europa League",
+    "Super League", "Basket League", "Volley League",
+    "season tickets", "διαρκείας", "membership", "fan club",
+    "corporate", "εταιρικό", "εταιρική", "conference", "συνέδριο",
+    "meeting", "seminar", "webinar", "networking", "team building",
+    "business", "επιχειρηματικ",
+    "graduation", "αποφοίτηση", "wedding", "γάμος", "γαμήλι",
+    "baptism", "βάπτιση", "βαφτίσι", "funeral", "κηδεία",
+    "religious service", "λειτουργία", "πανηγύρι", "θρησκευτικ",
+    "εκκλησία", "church service", "mass"
+  ],
+  "excludedVenues": [
+    "ΟΑΚΑ", "OAKA", "SEF", "ΣΕΦ",
+    "Γήπεδο Καραϊσκάκη", "Καραϊσκάκης", "Karaiskakis",
+    "Olympic Stadium", "Ολυμπιακό Στάδιο",
+    "Νίκος Γκάλης", "Nick Galis Hall",
+    "Ολυμπιακό Κέντρο", "Olympic Athletic Center",
+    "Peace and Friendship Stadium", "Στάδιο Ειρήνης και Φιλίας",
+    "Apostolos Nikolaidis", "Λεωφόρος Αλεξάνδρας",
+    "Nea Smyrni Stadium", "Γήπεδο Νέας Σμύρνης",
+    "Rizoupoli Stadium", "Ριζούπολη"
+  ],
+  "allowedKeywordsOverride": [
+    "contemporary dance", "σύγχρονος χορός",
+    "ballet", "μπαλέτο", "tango", "ταγκό",
+    "dance performance", "χορευτική παράσταση",
+    "dance theater", "χοροθέατρο", "physical theater",
+    "flamenco", "φλαμένκο", "salsa", "swing dance"
+  ]
+}

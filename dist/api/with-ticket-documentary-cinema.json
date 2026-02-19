@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Documentary",
+    "price": "with-ticket",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.953Z",
+    "url": "https://agentathens.netlify.app/with-ticket-documentary-cinema"
+  }
+}

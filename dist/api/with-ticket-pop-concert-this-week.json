@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "concert",
+    "genre": "Pop",
+    "price": "with-ticket",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.896Z",
+    "url": "https://agentathens.netlify.app/with-ticket-pop-concert-this-week"
+  }
+}

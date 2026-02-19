@@ -1,0 +1,86 @@
+{
+  "gazarte": {
+    "last_crawled": "2025-12-04T16:15:41.172000",
+    "last_success": "2025-12-04T16:15:41.172023",
+    "total_crawls": 6,
+    "failed_crawls": 1
+  },
+  "clubber": {
+    "last_crawled": "2026-02-18T06:01:34.464760",
+    "last_success": "2026-02-18T06:01:34.464776",
+    "total_crawls": 18,
+    "failed_crawls": 4
+  },
+  "athinorama": {
+    "last_crawled": "2026-02-18T06:00:38.630205",
+    "last_success": "2026-02-18T06:00:38.630251",
+    "total_crawls": 19,
+    "failed_crawls": 1
+  },
+  "more": {
+    "last_crawled": "2026-02-18T06:00:31.242857",
+    "last_success": "2026-02-18T06:00:31.242897",
+    "total_crawls": 17,
+    "failed_crawls": 2
+  },
+  "viva": {
+    "last_crawled": "2026-01-19T06:00:38.084754",
+    "last_success": "2026-01-19T06:00:38.084791",
+    "total_crawls": 14,
+    "failed_crawls": 1
+  },
+  "halfnote": {
+    "last_crawled": "2026-02-18T06:01:46.156584",
+    "last_success": "2026-02-18T06:01:46.156603",
+    "total_crawls": 5,
+    "failed_crawls": 0
+  },
+  "culture_athens": {
+    "last_crawled": "2025-10-30T11:36:19.358454",
+    "last_success": "2025-10-30T11:36:19.358497",
+    "total_crawls": 3,
+    "failed_crawls": 0
+  },
+  "greek_festival": {
+    "last_crawled": "2025-10-26T21:09:25.946503",
+    "last_success": "",
+    "total_crawls": 2,
+    "failed_crawls": 2
+  },
+  "romantso": {
+    "last_crawled": "2025-10-30T11:36:22.231520",
+    "last_success": "2025-10-30T11:36:22.231554",
+    "total_crawls": 3,
+    "failed_crawls": 0
+  },
+  "gagarin205": {
+    "last_crawled": "2025-10-26T21:09:34.595486",
+    "last_success": "2025-10-26T21:09:34.595519",
+    "total_crawls": 2,
+    "failed_crawls": 0
+  },
+  "kyttaro": {
+    "last_crawled": "2025-10-26T21:09:37.731192",
+    "last_success": "2025-10-26T21:09:37.731208",
+    "total_crawls": 2,
+    "failed_crawls": 0
+  },
+  "ticketservices": {
+    "last_crawled": "2026-02-18T06:01:38.703620",
+    "last_success": "2026-02-18T06:01:38.703661",
+    "total_crawls": 5,
+    "failed_crawls": 0
+  },
+  "residentadvisor": {
+    "last_crawled": "",
+    "last_success": "",
+    "total_crawls": 0,
+    "failed_crawls": 0
+  },
+  "snfcc": {
+    "last_crawled": "2026-02-18T06:01:54.215106",
+    "last_success": "2026-02-18T06:01:54.215130",
+    "total_crawls": 2,
+    "failed_crawls": 0
+  }
+}

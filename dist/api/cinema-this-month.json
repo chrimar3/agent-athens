@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "type": "cinema",
+    "time": "this-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.782Z",
+    "url": "https://agentathens.netlify.app/cinema-this-month"
+  }
+}

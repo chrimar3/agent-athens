@@ -1,0 +1,868 @@
+{
+  "filters": {
+    "type": "theater",
+    "price": "with-ticket",
+    "time": "this-week"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "68b35d9368017c25",
+      "title": "Mountain",
+      "description": "Εως 2026-02-22",
+      "fullDescription": "The stage at FIAT sits in darkness before the lights find the first performer. The venue — converted from the automobile showroom its name remembers — holds its industrial DNA while serving entirely different purposes now. Tonight, theater.\n\n\"Mountain\" arrives at FIAT as physical theater, dance, or something between categories. The production uses the body as primary vocabulary, the performers moving through narratives that language can't quite capture. The mountain of the title becomes metaphor — obstacle, aspiration, the thing that must be climbed or circumnavigated.\n\nPhysical theater requires different attention than text-based performance. The meaning lives in gesture, in the relationship between bodies in space, in the rhythm of movement and stillness. FIAT's industrial aesthetic provides the right container — no proscenium arch, no theater's usual signals. Just space and performers and whatever they build between.\n\nThe FIAT crowd has developed around programming that refuses easy categories. Visual artists, dancers, the Athens experimental scene that exists parallel to mainstream culture. You'll recognize them by how they watch — the specific attention that physical performance demands, the willingness to find meaning in forms that don't announce themselves.\n\nThe venue's history as automobile showroom creates unintentional resonance. The same floor that once displayed vehicles now hosts bodies in motion, the machinery replaced by something more fundamental. FIAT has reinvented itself as a space where Athens experimental culture gathers.\n\nIf you need narrative clarity and spoken dialogue, \"Mountain\" may frustrate you. Physical theater operates in registers that resist summary, creates meaning through accumulation rather than statement. But if you've been curious about what performance looks like when words step aside, when the body becomes the text — FIAT holds the ascent.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 19, 2026 |\n| **Doors** | 20:00 |\n| **Showtime** | 21:00 |\n| **Venue** | FIAT |\n| **Price** | Check venue |\n\nWhere automobiles once waited, bodies now tell stories.",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΦΙΑΤ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/mountain-10086376/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-02 14:58:08",
+      "updatedAt": "2026-02-19 08:49:28",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "ba0367e0e9485656",
+      "title": "Ready Freddie Show",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/ready_freddie_show-10089114/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:35",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "259914337c513908",
+      "title": "Open Mic Challenge",
+      "description": "",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theatre Of The No",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": "€5"
+      },
+      "url": "https://www.athinorama.gr/music/gig/open_mic_challenge-10089118/",
+      "ticketUrl": "https://www.more.com/gr-el/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:36",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "09387cf2ab72f148",
+      "title": "Γουέστερν",
+      "description": "Εως 2026-04-30",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μικρός Κεραμεικός",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 16,
+        "currency": "EUR",
+        "range": "€16"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/gouestern-10089162/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:43",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "3fc8f13bdfa0c128",
+      "title": "Ουρανός απ’ άλλους τόπους - ρόδα στο μαντίλι",
+      "description": "Εως 2026-03-27",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Φούρνος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/ouranos_ap%e2%80%99_allous_topous___roda_sto_mantili_-10089156/",
+      "ticketUrl": "https://www.more.com/theater/oyranos-ap-allous-topous-roda-sto-mantili",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:44",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "b148c2a918f2023b",
+      "title": "Πορφυρό ποτάμι",
+      "description": "Εως 2026-04-03",
+      "startDate": "2026-02-19",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Μεταξουργείο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/porfuro_potami-10089160/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:45",
+      "language": "en",
+      "timeDoors": "20:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "69be43bc44b6fe61",
+      "title": "Ουρανός απ άλλους τόπους-ρόδα στο μαντίλι",
+      "description": "19 Φεβ - 27 Μαρ Ουρανός απ άλλους τόπους-ρόδα στο μαντίλι Θεατρο Φουρνος",
+      "fullDescription": "The seats at Theatro Fournos are close enough to see the actors breathe. The space is intimate in the Greek theater tradition — no distant stages, no amplification creating distance between performer and witness. When \"Ouranos ap' allous topous\" begins, you're not watching. You're inside it.\n\nThe title translates to \"Sky from Other Places\" — and the production delivers on that promise of displacement. Greek theater has always grappled with questions of belonging and exile, of homes left behind and destinations never quite reached. This performance carries that tradition into contemporary territory, exploring what it means to look up at unfamiliar constellations.\n\nTheatro Fournos occupies a specific position in Athens' theatrical landscape. The venue — its name means \"Oven Theater\" — has hosted experimental and traditional work since becoming one of the city's essential small stages. The space itself informs the work performed there, forcing intimacy, demanding that actors and audience share the same air.\n\nThe crowd for Greek-language theater at Fournos arrives with expectations. These are people who follow particular directors and playwrights, who read reviews in Athinorama and track what's happening beyond the mainstream houses. You'll find theater professionals alongside devoted audiences, people for whom a Thursday evening at Fournos represents the week's cultural anchor.\n\nThe performance unfolds with that particular intensity small-theater work allows. Every gesture visible, every whispered line audible, the space between performer and viewer collapsed to nothing. The subject matter — displacement, longing, the search for home under different skies — resonates differently in Athens, a city that has absorbed waves of arrival and departure across millennia.\n\nIf you need English supertitles, if Greek-language theater presents a barrier, this production asks for linguistic fluency. The intimacy works only if you can follow the words. But if you carry the language, if you've been looking for theater that treats its audience as intelligent participants, where the questions raised linger after the house lights come up — Theatro Fournos is exactly where this story should be told.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 19, 2026 |\n| **Venue** | Theatro Fournos |\n| **Language** | Greek |\n| **Style** | Contemporary Greek theater |\n| **Good to know** | Intimate venue — book in advance |\n\n\"Sky from Other Places\": Greek theater exploring displacement in a space small enough to feel it.",
+      "startDate": "2026-02-19T20:00:00+03:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Φούρνος",
+        "address": "Μαυρομιχάλη 168",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 14,
+        "currency": "EUR",
+        "range": "από €14"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/oyranos-ap-allous-topous-roda-sto-mantili/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/oyranos-ap-allous-topous-roda-sto-mantili/",
+      "source": "more.com",
+      "createdAt": "2026-01-19T15:20:14.340Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "c0ea82dbcc512735",
+      "title": "«Nina Simone - 4 οκτάβες Ελευθερίας»",
+      "description": "",
+      "fullDescription": "The stage at ARROYO Theater holds the weight of expectation. Nina Simone's music carries decades of history — civil rights anthems, jazz standards reimagined, the voice that contained multitudes. \"4 Oktaves Eleftherias\" — Four Octaves of Freedom — promises to honor that legacy. The lights dim.\n\nSimone was never just a singer. Classically trained pianist, activist, prophet, artist who refused every category. Her four-octave range was the least of her power; the real force came from what she did with those notes, how she bent songs into new shapes, how she made \"Mississippi Goddam\" and \"Feeling Good\" emerge from the same artistic vision.\n\nThe tribute format allows this complexity to surface. The production isn't simple recreation — it's exploration, an attempt to understand what Simone meant and means. The performers tonight carry the responsibility of representing not just a voice but a worldview, not just songs but a stance.\n\nARROYO Theater provides an intimate space for this kind of examination. The room holds audiences close enough to see every emotion cross the performer's face, close enough that the music becomes conversation rather than broadcast. When the band finds the groove of \"I Put a Spell on You,\" you're not watching from distance. You're inside the spell.\n\nThe audience for Nina Simone tribute programming has expectations shaped by deep familiarity. These are people who know the original recordings intimately, who carry \"Baltimore\" and \"Sinnerman\" as personal talismans. They've come to see whether tonight's interpretation can add to their understanding or will simply remind them of what they already know.\n\nIf you need Simone herself, no tribute can satisfy. Her presence was singular, unreproducible. But if you've been waiting for artists to grapple seriously with what she represented, to use her music as lens for examining questions of freedom that remain urgent — ARROYO Theater tonight becomes the room where that examination happens.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, February 20, 2026 |\n| **Venue** | ARROYO Theater |\n| **Focus** | Nina Simone tribute |\n| **Title** | \"4 Oktaves Eleftherias\" (Four Octaves of Freedom) |\n| **Style** | Concert tribute with band |\n| **Good to know** | Intimate theater setting |\n\nNina Simone's legacy explored through performance: freedom in four octaves.",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ARROYO THEATER",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18 - €22"
+      },
+      "url": "https://www.ticketservices.gr/event/13581/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13581/",
+      "source": "ticketservices",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "3b3f4e90fd06f493",
+      "title": "Εσύ και τα σύννεφά σου",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Μετς",
+        "address": "Αιδεσίου 19-23, Αθήνα 11636",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/esu_kai_ta_sunnefa_sou-10089158/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/esu_kai_ta_sunnefa_sou-10089158/",
+      "source": "more.com",
+      "createdAt": "2026-02-09 16:48:30",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "c9ccc5df45ac523a",
+      "title": "Encardia",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theatre Of The No",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/encardia-10038135/",
+      "ticketUrl": "https://www.more.com/gr-el/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "fbf1cc9a0dfc6277",
+      "title": "SOMA EP",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΙΛΙΟΝ Plus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/music/gig/soma_ep-10089111/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "15b79ceef17d6847",
+      "title": "Νίκος Βασιλικός &amp; Μιχάλης Κακέπης",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Γυάλινο Μουσικό Θέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/nikos_basilikos_kai_mixalis_kakepis-10089128/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "970c47062ba70a72",
+      "title": "Η μαύρη πεταλούδα",
+      "description": "Εως 2026-03-15",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "H.ug Art Space",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/i_mauri_petalouda-10089166/",
+      "ticketUrl": "https://www.more.com/theater/i-mauri-petalouda",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "900e37a5e61f7e46",
+      "title": "Superstar",
+      "description": "Εως 2026-03-01",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΠΛΥΦΑ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/superstar-10089159/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "bb180021734c0f49",
+      "title": "Μπουζούκια στην Πίστα |Γυάλινο Μουσικό Θέατρο",
+      "description": "20 Φεβ - 28 Μαρ Μπουζούκια στην Πίστα |Γυάλινο Μουσικό Θέατρο Γυαλινο Μουσικο Θεατρο",
+      "fullDescription": "The bouzouki's opening trill cuts through the murmur of the crowd, and the room shifts into a different mode. Gyalino Mousiko Theatro fills with that particular energy that only bouzoukia nights generate — anticipation for the kind of performance that connects modern Athens to its laiko roots. The pista awaits.\n\n\"Mpouzoukia stin Pista\" — Bouzoukia on the Dance Floor — delivers exactly what the title promises. This is laiko music in its natural habitat, performed for an audience that knows how to respond. The dance floor isn't metaphor; it's invitation. When the familiar songs begin, the space between listener and performer collapses.\n\nLaiko carries complex cultural weight in Greece. The music emerged from rebetiko traditions, evolved through decades of commercial development, now occupies space from high-end clubs to neighborhood gatherings. Tonight's setting at Gyalino — the Glass Musical Theater — positions the genre in a room that respects its craft while maintaining accessibility.\n\nThe crowd for bouzoukia nights has a specific character. These are Greeks who grew up with these songs, who know the words without thinking, for whom the music triggers memories of family celebrations and late summer nights. But you'll also find younger listeners discovering the tradition, absorbing the vocabulary through osmosis, learning when to sing along and when to listen.\n\nThe evening will build through the classic laiko arc. Slower songs establishing mood, tempo gradually increasing, the pista filling as inhibitions drop. By midnight the room has achieved that state where everyone's participating, where the line between stage and floor has been decisively crossed.\n\nIf you need translations to understand, if the cultural codes are unfamiliar, bouzoukia nights can feel opaque. The music speaks to those who already know the language. But if you carry Greek in your bones or want to witness the tradition at full intensity, if you've been waiting for laiko performed for an audience that can match its energy — Gyalino tonight is the place.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, February 20, 2026 |\n| **Venue** | Gyalino Mousiko Theatro |\n| **Style** | Laiko / bouzoukia |\n| **Format** | Live performance with dance floor |\n| **Crowd** | Greek-speaking audience |\n| **Good to know** | Bouzoukia nights run late — pace yourself |\n\nBouzoukia on the pista: laiko music performed where the dance floor is the point.",
+      "startDate": "2026-02-20T20:00:00+03:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Γυάλινο Μουσικό Θέατρο",
+        "address": "Λ. Συγγρού 143",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "από €15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-2/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-2/",
+      "source": "more.com",
+      "createdAt": "2026-01-19T15:20:14.340Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "22:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "dac17f052230afcb",
+      "title": "Νίκος Μερτζάνος",
+      "description": "",
+      "startDate": "2026-02-21",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/nikos_mertzanos-10063792/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "c3b24e83652b6f22",
+      "title": "Να σου πω μια ιστορία",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-21",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Studio Μαυρομιχάλη",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/na_sou_po_mia_istoria-10072531/",
+      "ticketUrl": "https://www.more.com/theater/na-sou-po-mia-istoria",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "d63a6e6400993f13",
+      "title": "Χορεύοντας στη Λούνασα",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-21",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Κάτω Από Τη Γέφυρα",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "6159c16594a96552",
+      "title": "Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος",
+      "description": "21 Φεβ - 5 Απρ Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος Studio Μαυρομιχαλη",
+      "fullDescription": "The stage at Studio Mavromichali is close enough to touch. The intimacy is the point — when Jorge Bucay's words are being performed, the distance between speaker and listener should be measured in breaths, not rows. \"Na sou po mia istoria\" — Let Me Tell You a Story — begins.\n\nBucay's work occupies a specific cultural position. The Argentine psychotherapist turned his therapeutic practice into storytelling, parables that function as mirrors, narratives that sound simple until they start working on you. Greek theater has embraced his stories, finding in them material that translates without losing power.\n\nStudio Mavromichali provides the container this material demands. The venue's intimate dimensions — perhaps 80 seats in configurations that shift with productions — creates the feeling of personal address. When the performer speaks, they're speaking to you. When a story lands, you feel it land.\n\nThe crowd for this kind of theatrical storytelling has particular characteristics. These are Greeks who've encountered Bucay's books, who understand the tradition of therapeutic parable, who come seeking the particular pleasure of hearing wisdom disguised as entertainment. The venue's neighborhood in central Athens draws an audience comfortable with experimental and intimate performance.\n\nThe performance will unfold through stories that seem to address specific audience members. Bucay's technique involves universality through specificity — tales that could be about anyone become stories about everyone. The performer's task is to make that alchemy visible, to transform reading into experience.\n\nIf you need spectacle and production values, if theater means elaborate staging, Studio Mavromichali operates at a different scale. The intimacy here is the production value, the closeness the special effect. But if you've been waiting for Bucay's stories to find voice in Athens, for therapeutic wisdom to become theatrical event, for stories that continue working after you've left the theater — this is where they're being told.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Studio Mavromichali |\n| **Source** | Jorge Bucay stories |\n| **Language** | Greek |\n| **Format** | Intimate theatrical storytelling |\n| **Good to know** | Small venue — book in advance |\n\nJorge Bucay's stories find Greek voice: therapeutic parables in Athens' intimate theater tradition.",
+      "startDate": "2026-02-21T20:00:00+03:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Studio Μαυρομιχάλη",
+        "address": "Μαυρομιχάλη 134",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "από €10"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
+      "source": "more.com",
+      "createdAt": "2026-01-19T15:20:14.340Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "ed34ef67109e69e9",
+      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
+      "description": "",
+      "startDate": "2026-02-22",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "7ec7cbce0b64d858",
+      "title": "Σαβίνα Γιαννάτου - Σπύρος Μάνεσης",
+      "description": "",
+      "startDate": "2026-02-22",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theatre Of The No",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/sabina_giannatou___spuros_manesis-10080392/",
+      "ticketUrl": "https://www.more.com/gr-el/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "563f8860dd46590e",
+      "title": "Μαρί Αντουανέτ - Savon Original: Η ασφυξία του πούπουλου όταν πέφτει",
+      "description": "",
+      "startDate": "2026-02-23",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο του Νέου Κόσμου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 16,
+        "currency": "EUR",
+        "range": "€16"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/mari_antouanet___savon_original_i_asfuksia_tou_poupoulou_otan_peftei-10087773/",
+      "ticketUrl": "https://www.viva.gr/tickets/theater/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-09 16:12:58",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "19787c80a91d2a5a",
+      "title": "Ταξιδεύοντας στη Θράκη με το τρένο",
+      "description": "Εως 2026-04-01",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Lib'ro",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "5156ac5c7a7ef3f2",
+      "title": "Μήδεια Έξοδος ΙΙΙ",
+      "description": "Εως 2026-03-15",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Εθνική Γλυπτοθήκη",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "22cbbad268f11889",
+      "title": "Louis C.K.",
+      "description": "25 - 26 Φεβρουαριου Louis C.K. CHRISTMAS THEATER",
+      "fullDescription": "The lights go down and the Christmas Theater holds its breath. Two thousand seats, one microphone, and whatever Louis C.K. has decided to say tonight. No warm-up act. No production values beyond a man standing in a spotlight. This is stand-up stripped to its essentials.\n\nLouis C.K. returns to Athens carrying both his reputation and his history. The comedy that made him one of the most influential voices of his generation — the unflinching observations about marriage, parenting, aging, and the absurdities of human existence — now exists alongside everything that happened after. He's addressed it onstage, folded it into the work. The audiences who show up in 2026 know what they're getting: someone who turned his own implosion into material.\n\nThe Christmas Theater crowd for this show represents a particular slice of comedy appreciation. You'll find expats who followed Louis from his American club days, Greeks who discovered him through specials and podcasts, and curious observers who want to see what he does with an Athens audience. The laughter comes in waves — sometimes surprised, sometimes uncomfortable, always engaged with a performer who has never taken the easy path.\n\nThe venue provides the scale this show needs. Purpose-built for performance, the Christmas Theater offers sightlines that work from every seat and acoustics that carry a single voice to the back rows without effort. When Louis lands a punchline, you hear the reaction ripple through two thousand people simultaneously.\n\nIf you need comedy that stays in safe territory, that avoids the complicated parts of its performer's biography, this isn't your show. Louis C.K. has built his late-career sets around the premise that nothing is off-limits — including himself. But if you want to see one of the most influential stand-ups of his generation working without a net, testing material on an audience that came specifically to see what he'd do — you end up here.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 19:30 |\n| **Show** | 21:00 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | €40-80 depending on seating |\n| **Language** | English |\n\nNo safety net. No apologies. Just a comedian and whatever he's decided to say.",
+      "startDate": "2026-02-25T20:00:00+03:00",
+      "endDate": null,
+      "type": "theater",
+      "genres": [
+        "theater"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Christmas Theater",
+        "address": "Λεωφ. Βεΐκου 137",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 35,
+        "currency": "EUR",
+        "range": "από €35"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/louis-c-k/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/louis-c-k/",
+      "source": "more.com",
+      "createdAt": "2026-01-12T21:21:44.838Z",
+      "updatedAt": "2026-02-13 10:29:36",
+      "language": "en",
+      "timeDoors": "19:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 25,
+    "lastUpdate": "2026-02-19T08:56:08.878Z",
+    "url": "https://agentathens.netlify.app/with-ticket-theater-this-week"
+  }
+}

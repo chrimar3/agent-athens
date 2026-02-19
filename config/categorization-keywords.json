@@ -1,0 +1,418 @@
+{
+  "_description": "Keyword rules for event categorization (Pass 2)",
+  "_version": "1.0",
+  "_last_updated": "2025-02-10",
+  "_notes": "Priority order matters - first match wins. Check dj_set before concert, dance before theater, etc.",
+
+  "priority_order": [
+    "dj_set",
+    "theater",
+    "dance",
+    "opera",
+    "classical",
+    "comedy",
+    "workshop",
+    "exhibition",
+    "screening",
+    "show",
+    "festival",
+    "concert"
+  ],
+
+  "categories": {
+    "dj_set": {
+      "title_keywords": [
+        "DJ",
+        "dj set",
+        "dj night",
+        "party",
+        "rave",
+        "techno night",
+        "house night",
+        "afterhours",
+        "after hours",
+        "electronic night",
+        "club night",
+        "warehouse party"
+      ],
+      "description_keywords": [
+        "DJ",
+        "dj set",
+        "techno",
+        "house music",
+        "electronic music",
+        "dance floor",
+        "dancefloor"
+      ],
+      "genres": [
+        "Electronic",
+        "Techno",
+        "House",
+        "Trance",
+        "Drum and Bass",
+        "Dubstep",
+        "Ambient",
+        "Minimal",
+        "Deep House",
+        "Tech House",
+        "Electro"
+      ],
+      "negative_keywords": [
+        "live",
+        "συναυλία",
+        "concert",
+        "in concert"
+      ]
+    },
+
+    "theater": {
+      "title_keywords": [
+        "παράσταση",
+        "σκηνοθεσία",
+        "θεατρικ",
+        "μονόλογος",
+        "θέατρο",
+        "θεατρο",
+        "theater",
+        "theatre",
+        "theatrical",
+        "play",
+        "drama",
+        "τραγωδία",
+        "tragedy"
+      ],
+      "description_keywords": [
+        "σκηνοθεσία",
+        "σκηνοθέτης",
+        "ηθοποιός",
+        "ηθοποιοί",
+        "πρωταγωνιστ",
+        "σκηνικά",
+        "κοστούμια",
+        "θεατρική παραγωγή",
+        "πρεμιέρα θεατρικ"
+      ],
+      "genres": [
+        "Theater",
+        "Theatre",
+        "Drama"
+      ]
+    },
+
+    "dance": {
+      "title_keywords": [
+        "χορός",
+        "χορευτικ",
+        "ballet",
+        "μπαλέτο",
+        "χοροθέατρο",
+        "contemporary dance",
+        "σύγχρονος χορός",
+        "modern dance",
+        "tango",
+        "ταγκό",
+        "flamenco",
+        "φλαμένκο",
+        "milonga",
+        "μιλόνγκα"
+      ],
+      "description_keywords": [
+        "χορογραφία",
+        "χορογράφος",
+        "χορευτ",
+        "dancer",
+        "dancers",
+        "choreograph"
+      ],
+      "genres": [
+        "Dance",
+        "Ballet",
+        "Contemporary",
+        "Tango",
+        "Modern Dance",
+        "Flamenco"
+      ],
+      "negative_keywords": [
+        "αποκριάτικος χορός",
+        "χορός ερωτευμένων",
+        "χοροεσπερίδα",
+        "πάρτυ"
+      ]
+    },
+
+    "opera": {
+      "title_keywords": [
+        "όπερα",
+        "opera",
+        "οπερέτα",
+        "operetta",
+        "λυρική"
+      ],
+      "description_keywords": [
+        "λυρικός",
+        "λυρική σκηνή",
+        "operatic",
+        "soprano",
+        "tenor",
+        "baritone",
+        "μετζοσοπράνο",
+        "mezzo",
+        "aria"
+      ],
+      "genres": [
+        "Opera",
+        "Operetta",
+        "Lyric"
+      ]
+    },
+
+    "classical": {
+      "title_keywords": [
+        "ορχήστρα",
+        "orchestra",
+        "κουαρτέτο",
+        "quartet",
+        "ρεσιτάλ",
+        "recital",
+        "συμφωνικ",
+        "symphonic",
+        "symphony",
+        "κονσέρτο",
+        "concerto",
+        "φιλαρμονική",
+        "philharmonic",
+        "σονάτα",
+        "sonata"
+      ],
+      "description_keywords": [
+        "κλασική μουσική",
+        "classical music",
+        "μαέστρος",
+        "conductor",
+        "μουσική δωματίου",
+        "chamber music"
+      ],
+      "genres": [
+        "Classical",
+        "Orchestral",
+        "Chamber",
+        "Symphonic"
+      ]
+    },
+
+    "comedy": {
+      "title_keywords": [
+        "stand-up",
+        "stand up",
+        "standup",
+        "comedy night",
+        "comedy show",
+        "κωμικ",
+        "one man show",
+        "one woman show",
+        "comedy club"
+      ],
+      "description_keywords": [
+        "stand-up comedy",
+        "κωμωδός",
+        "comedian",
+        "laugh",
+        "γέλιο"
+      ],
+      "genres": [
+        "Comedy",
+        "Stand-up"
+      ],
+      "notes": "Watch out for 'κωμωδία' in theater context - that should stay as theater"
+    },
+
+    "workshop": {
+      "title_keywords": [
+        "workshop",
+        "εργαστήρι",
+        "εργαστήριο",
+        "σεμινάρι",
+        "σεμινάριο",
+        "masterclass",
+        "master class",
+        "μάθημα",
+        "course"
+      ],
+      "description_keywords": [
+        "hands-on",
+        "πρακτικό",
+        "μάθετε",
+        "learn how"
+      ],
+      "genres": [
+        "Workshop",
+        "Educational",
+        "Masterclass"
+      ]
+    },
+
+    "exhibition": {
+      "title_keywords": [
+        "έκθεση",
+        "εκθεση",
+        "exhibition",
+        "εγκατάσταση",
+        "installation",
+        "gallery",
+        "γκαλερί"
+      ],
+      "description_keywords": [
+        "εκθεσιακός",
+        "εκθέματα",
+        "exhibits",
+        "gallery space",
+        "art show"
+      ],
+      "genres": [
+        "Art",
+        "Photography",
+        "Contemporary Art",
+        "Sculpture",
+        "Installation",
+        "Visual Art"
+      ]
+    },
+
+    "screening": {
+      "title_keywords": [
+        "προβολή",
+        "screening",
+        "ταινία",
+        "film",
+        "ντοκιμαντέρ",
+        "documentary",
+        "movie night",
+        "cinema night"
+      ],
+      "description_keywords": [
+        "projection",
+        "screening room",
+        "σκηνοθεσία ταινίας",
+        "film director"
+      ],
+      "genres": [
+        "Film",
+        "Documentary",
+        "Short Film",
+        "Screening"
+      ]
+    },
+
+    "show": {
+      "title_keywords": [
+        "cabaret",
+        "καμπαρέ",
+        "variety",
+        "τσίρκο",
+        "circus",
+        "burlesque",
+        "drag show",
+        "magic show"
+      ],
+      "description_keywords": [
+        "variety show",
+        "cabaret night",
+        "performance art"
+      ],
+      "genres": [
+        "Cabaret",
+        "Variety",
+        "Burlesque",
+        "Circus"
+      ]
+    },
+
+    "festival": {
+      "title_keywords": [
+        "festival",
+        "φεστιβάλ"
+      ],
+      "description_keywords": [
+        "multi-day",
+        "πολυήμερο",
+        "outdoor festival"
+      ],
+      "genres": [
+        "Festival"
+      ]
+    },
+
+    "concert": {
+      "title_keywords": [
+        "συναυλία",
+        "concert",
+        "live",
+        "in concert",
+        "gig",
+        "unplugged"
+      ],
+      "description_keywords": [
+        "live performance",
+        "live music",
+        "μουσική σκηνή",
+        "στη σκηνή"
+      ],
+      "genres": [
+        "Rock",
+        "Jazz",
+        "Pop",
+        "Blues",
+        "Soul",
+        "Indie",
+        "Metal",
+        "Punk",
+        "Hip-Hop",
+        "R&B",
+        "Rebetiko",
+        "Greek",
+        "Latin",
+        "Folk",
+        "World"
+      ],
+      "notes": "This is the catch-all for music events - check LAST after more specific categories"
+    }
+  },
+
+  "whole_word_only": [
+    "class",
+    "cine",
+    "live",
+    "DJ"
+  ],
+
+  "concert_override_keywords": [
+    "jazz",
+    "quartet",
+    "trio",
+    "quintet",
+    "sextet",
+    "ορχήστρα",
+    "orchestra",
+    "συναυλία",
+    "concert",
+    "recital",
+    "ρεσιτάλ",
+    "live music",
+    "live band"
+  ],
+
+  "schema_org_mapping": {
+    "concert": "MusicEvent",
+    "dj_set": "MusicEvent",
+    "theater": "TheaterEvent",
+    "dance": "DanceEvent",
+    "opera": "MusicEvent",
+    "classical": "MusicEvent",
+    "comedy": "ComedyEvent",
+    "workshop": "EducationEvent",
+    "exhibition": "ExhibitionEvent",
+    "show": "Event",
+    "screening": "ScreeningEvent",
+    "festival": "Festival"
+  }
+}

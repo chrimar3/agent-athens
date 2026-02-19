@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "workshop",
+    "genre": "Educational",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.004Z",
+    "url": "https://agentathens.netlify.app/educational-workshop-next-month"
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-01-26",
+  "notes": "Seasonal rules for Athens nightlife. Most indoor venues reduce operations May-September.",
+
+  "seasons": {
+    "summer": {
+      "months": [5, 6, 7, 8, 9],
+      "description": "Indoor clubs close or reduce operations. Nightlife migrates to Athens Riviera.",
+
+      "inactive_venues": [
+        "Half Note Jazz Club",
+        "Stoa Athanaton",
+        "Klimataria",
+        "Kavouras",
+        "Perivoli tou Ouranou",
+        "Hamam"
+      ],
+
+      "reduced_operations": [
+        "Most Gazi clubs",
+        "Indoor rebetiko venues"
+      ],
+
+      "migrated_venues": {
+        "bouzoukia": {
+          "from": ["Gazi", "Syngrou Avenue"],
+          "to": "Poseidonos Avenue"
+        }
+      },
+
+      "priority_areas": [
+        "Athens Riviera",
+        "Alimos",
+        "Glyfada",
+        "Vouliagmeni",
+        "Varkiza"
+      ],
+
+      "priority_venues": [
+        "Bolivar",
+        "Astir Beach",
+        "Island Athens"
+      ],
+
+      "additional_sources": [
+        "bolivar.gr",
+        "island-athens.gr",
+        "astir.gr"
+      ],
+
+      "notes": [
+        "No metro access to Athens Riviera - taxi required",
+        "Beach clubs operate primarily May-September",
+        "Indoor venue programming heavily reduced"
+      ]
+    },
+
+    "winter": {
+      "months": [10, 11, 12, 1, 2, 3, 4],
+      "description": "Full indoor operations. Rebetiko season. Half Note jazz active.",
+
+      "full_operations": true,
+
+      "active_categories": [
+        "rebetiko",
+        "jazz",
+        "techno",
+        "live_music",
+        "theater"
+      ],
+
+      "priority_sources": [
+        "clubber.gr",
+        "halfnote.gr",
+        "residentadvisor.net",
+        "athinorama.gr"
+      ],
+
+      "reopening_venues": [
+        {
+          "venue": "Half Note Jazz Club",
+          "reopens": "October",
+          "season_concerts": 250
+        },
+        {
+          "venue": "Stoa Athanaton",
+          "reopens": "October",
+          "schedule": "Fri/Sat 22:30, Sun 13:00"
+        }
+      ]
+    }
+  },
+
+  "venue_seasonal_status": {
+    "Half Note Jazz Club": {
+      "type": "seasonal",
+      "open_months": [10, 11, 12, 1, 2, 3, 4, 5],
+      "closed_months": [6, 7, 8, 9],
+      "note": "October-May only"
+    },
+    "Stoa Athanaton": {
+      "type": "seasonal",
+      "open_months": [10, 11, 12, 1, 2, 3, 4],
+      "closed_months": [5, 6, 7, 8, 9],
+      "note": "Rebetiko venue, winter only"
+    },
+    "Klimataria": {
+      "type": "seasonal",
+      "open_months": [10, 11, 12, 1, 2, 3, 4],
+      "closed_months": [5, 6, 7, 8, 9],
+      "note": "Rebetiko venue, winter only"
+    },
+    "Perivoli tou Ouranou": {
+      "type": "seasonal",
+      "open_months": [10, 11, 12, 1, 2, 3, 4],
+      "closed_months": [5, 6, 7, 8, 9],
+      "note": "Winter only"
+    },
+    "Bolivar": {
+      "type": "seasonal",
+      "open_months": [5, 6, 7, 8, 9],
+      "closed_months": [10, 11, 12, 1, 2, 3, 4],
+      "note": "Beach club, summer only"
+    },
+    "Astir Beach": {
+      "type": "seasonal",
+      "open_months": [5, 6, 7, 8, 9],
+      "closed_months": [10, 11, 12, 1, 2, 3, 4],
+      "note": "Beach club, summer only"
+    }
+  },
+
+  "validation_rules": {
+    "reject_if_closed": true,
+    "warn_if_seasonal_mismatch": true,
+    "log_seasonal_rejections": true
+  }
+}

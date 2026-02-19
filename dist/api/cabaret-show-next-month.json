@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "show",
+    "genre": "Cabaret",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.992Z",
+    "url": "https://agentathens.netlify.app/cabaret-show-next-month"
+  }
+}

@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Environment
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts (keep dist/ for Netlify)
+# dist/ is committed for static hosting
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+temp/
+tmp/
+
+# Local Netlify folder
+.netlify
+.git-old/

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "workshop",
+    "genre": "Educational",
+    "price": "open",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.005Z",
+    "url": "https://agentathens.netlify.app/open-educational-workshop-this-week"
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-02-05",
+  "notes": "Locations that should trigger automatic rejection of events",
+  "cities": [
+    {
+      "greek": "Θεσσαλονίκη",
+      "latin": "Thessaloniki"
+    },
+    {
+      "greek": "Πάτρα",
+      "latin": "Patras"
+    },
+    {
+      "greek": "Ηράκλειο",
+      "latin": "Heraklion"
+    },
+    {
+      "greek": "Λάρισα",
+      "latin": "Larissa"
+    },
+    {
+      "greek": "Βόλος",
+      "latin": "Volos"
+    },
+    {
+      "greek": "Ιωάννινα",
+      "latin": "Ioannina"
+    },
+    {
+      "greek": "Πτολεμαΐδα",
+      "latin": "Ptolemaida"
+    },
+    {
+      "greek": "Βέροια",
+      "latin": "Veria"
+    },
+    {
+      "greek": "Κοζάνη",
+      "latin": "Kozani"
+    },
+    {
+      "greek": "Καβάλα",
+      "latin": "Kavala"
+    },
+    {
+      "greek": "Σέρρες",
+      "latin": "Serres"
+    },
+    {
+      "greek": "Αλεξανδρούπολη",
+      "latin": "Alexandroupoli"
+    },
+    {
+      "greek": "Τρίκαλα",
+      "latin": "Trikala"
+    },
+    {
+      "greek": "Καλαμάτα",
+      "latin": "Kalamata"
+    },
+    {
+      "greek": "Χανιά",
+      "latin": "Chania"
+    },
+    {
+      "greek": "Ρόδος",
+      "latin": "Rhodes"
+    },
+    {
+      "greek": "Κέρκυρα",
+      "latin": "Corfu"
+    },
+    {
+      "greek": "Μύκονος",
+      "latin": "Mykonos"
+    },
+    {
+      "greek": "Σαντορίνη",
+      "latin": "Santorini"
+    },
+    {
+      "greek": "Αμάρυνθος",
+      "latin": "Amarynthos"
+    },
+    {
+      "greek": "Κύπρος",
+      "latin": "Cyprus"
+    },
+    {
+      "greek": "Κομοτηνή",
+      "latin": "Komotini"
+    },
+    {
+      "greek": "Επίδαυρος",
+      "latin": "Epidaurus"
+    }
+  ],
+  "regions": [
+    {
+      "greek": "Χαλκιδική",
+      "latin": "Halkidiki"
+    },
+    {
+      "greek": "Κρήτη",
+      "latin": "Crete"
+    },
+    {
+      "greek": "Πελοπόννησος",
+      "latin": "Peloponnese"
+    },
+    {
+      "greek": "Εύβοια",
+      "latin": "Evia"
+    }
+  ],
+  "venues": [
+    {
+      "name": "CineStar Βέροια",
+      "reason": "Veria cinema"
+    },
+    {
+      "name": "Cyprus Monte Caputo",
+      "reason": "Cyprus venue"
+    },
+    {
+      "name": "Γηπεδο Απολλωνα Πατρας",
+      "reason": "Patras stadium"
+    },
+    {
+      "name": "Πνευματικο Κεντρο Πτολεμαιδας",
+      "reason": "Ptolemaida cultural center"
+    },
+    {
+      "name": "Δημοτικο Σταδιο Αμαρυνθου",
+      "reason": "Evia stadium"
+    },
+    {
+      "name": "Δημοτικό Στάδιο Αμαρύνθου",
+      "reason": "Evia stadium"
+    },
+    {
+      "name": "AEL FC ARENA",
+      "reason": "Larissa football stadium"
+    },
+    {
+      "name": "Principal Mylos Complex",
+      "reason": "Thessaloniki venue"
+    },
+    {
+      "name": "Χαριλαου \"Κλεανθης Βικελιδης\"",
+      "reason": "Thessaloniki (PAOK stadium)"
+    },
+    {
+      "name": "Ε.Σ.Ι \"Οι Ζωσιμαδες\"",
+      "reason": "Ioannina venue"
+    },
+    {
+      "name": "Κεντρο Ν. Σαρμανης",
+      "reason": "Not in Athens"
+    },
+    {
+      "name": "ΔΗΜΟΤΙΚΟ ΘΕΑΤΡΟ ΒΟΛΟΥ «ΒΑΓΓΕΛΗΣ ΠΑΠΑΘΑΝΑΣΙΟΥ»",
+      "reason": "Auto-rejected by batch review"
+    },
+    {
+      "name": "ΠΟΛΥΤΕΧΝΟ - ΚΕΡΚΥΡΑ",
+      "reason": "Auto-rejected by batch review"
+    },
+    {
+      "name": "CIRCUS ENTERTAINMENT HUB - ΛΑΡΙΣΑ",
+      "reason": "Auto-rejected by batch review"
+    },
+    {
+      "name": "Κεντρο Ν. Σαρμανης",
+      "reason": "Nea Anchialos, not Athens"
+    },
+    {
+      "name": "ΠΟΛΙΤΙΣΤΙΚΟ ΣΥΝΕΔΡΙΑΚΟ ΚΕΝΤΡΟ ΗΡΑΚΛΕΙΟΥ",
+      "reason": "Heraklion, Crete"
+    },
+    {
+      "name": "ΔΗΠΕΘΕ ΚΟΜΟΤΗΝΗΣ",
+      "reason": "Komotini"
+    },
+    {
+      "name": "ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ ΚΟΜΟΤΗΝΗΣ",
+      "reason": "Komotini"
+    },
+    {
+      "name": "Αρχαίο Θέατρο Επιδαύρου",
+      "reason": "Epidaurus, Peloponnese"
+    },
+    {
+      "name": "Costa Navarino",
+      "reason": "Messinia, Peloponnese"
+    },
+    {
+      "name": "Εκθεσιακό Κέντρο Αρκαλοχωρίου",
+      "reason": "Arkalokhori, Crete"
+    },
+    {
+      "name": "Γήπεδο Χαριλάου",
+      "reason": "Thessaloniki (Aris FC stadium)"
+    },
+    {
+      "name": "Γήπεδο Χαριλάου \\",
+      "reason": "Thessaloniki (Aris FC stadium)"
+    },
+    {
+      "name": "ΑΣ ΑΡΗΣ",
+      "reason": "Thessaloniki football club"
+    },
+    {
+      "name": "Τσινικόρη Θεατρο Αμαλια",
+      "reason": "Θέατρο Αμαλία is in Thessaloniki (Αμαλίας 71)"
+    },
+    {
+      "name": "Θέατρο Αμαλία",
+      "reason": "Thessaloniki venue (Αμαλίας 71)"
+    },
+    {
+      "name": "Vergina Theatro",
+      "reason": "Thessaloniki venue (not in Athens)"
+    },
+    {
+      "name": "Καφενείο Ο Σωκράτης Αμφισσα",
+      "reason": "Amfissa venue - note: there's ALSO 'Καφενείο «Ο Σωκράτης»' in Athens (Χίου 42) which is valid"
+    },
+    {
+      "name": "Vergina Theatro!",
+      "reason": "Thessaloniki venue (variation with exclamation)"
+    }
+  ],
+  "problematic_entries": {
+    "description": "These are not real venues - events with these should be flagged for review",
+    "entries": [
+      {
+        "name": "TBA",
+        "reason": "Means 'To Be Announced' - not a venue"
+      },
+      {
+        "name": "Live Music Venue",
+        "reason": "Generic placeholder, not a real venue"
+      },
+      {
+        "name": "Αιθουσα 1",
+        "reason": "Just 'Hall 1' - no venue specified"
+      },
+      {
+        "name": "Μαριάννα Τόλη",
+        "reason": "Person name (actress/singer), not a venue"
+      },
+      {
+        "name": "Εκκίνηση: Πάρνηθα",
+        "reason": "Hiking starting point, not a venue"
+      },
+      {
+        "name": "Εκκίνηση:",
+        "reason": "Hiking/activity starting point pattern, not a venue"
+      },
+      {
+        "name": "TGI Fridays",
+        "reason": "Restaurant chain, not a cultural venue"
+      }
+    ]
+  }
+}

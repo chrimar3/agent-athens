@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "email_ingestion": {
+    "enabled": true,
+    "frequency": "daily",
+    "command": ["bun", "run", "scripts/ingest-emails.ts"],
+    "timeout_ms": 60000,
+    "retry_count": 2,
+    "priority": 0
+  },
+  "sources": [
+    {
+      "id": "viva.gr",
+      "name": "Viva.gr",
+      "enabled": true,
+      "frequency": "daily",
+      "scraper": {
+        "type": "python",
+        "command": ["python3", "scripts/scrape-all-sites.py", "--site", "viva"],
+        "timeout_ms": 120000,
+        "retry_count": 3
+      },
+      "parser": {
+        "type": "python",
+        "categories": ["music", "theater", "sports"],
+        "script": "parse_tier1_sites.py",
+        "input_pattern": "data/html-to-parse/*viva*.html"
+      },
+      "importer": {
+        "type": "bun",
+        "script": "scripts/import-viva-events.ts"
+      },
+      "rate_limit_ms": 2000,
+      "priority": 1
+    },
+    {
+      "id": "more.com",
+      "name": "More.com",
+      "enabled": true,
+      "frequency": "daily",
+      "scraper": {
+        "type": "python",
+        "command": ["python3", "scripts/scrape-all-sites.py", "--site", "more"],
+        "timeout_ms": 120000,
+        "retry_count": 3
+      },
+      "parser": {
+        "type": "python",
+        "categories": ["music", "theater", "sports"],
+        "script": "parse_tier1_sites.py",
+        "input_pattern": "data/html-to-parse/*more*.html"
+      },
+      "importer": {
+        "type": "bun",
+        "script": "scripts/import-more-events.ts"
+      },
+      "rate_limit_ms": 2000,
+      "priority": 1
+    },
+    {
+      "id": "gazarte.gr",
+      "name": "Gazarte",
+      "enabled": true,
+      "frequency": "weekly",
+      "scraper": {
+        "type": "python",
+        "command": ["python3", "scripts/scrape-all-sites.py", "--site", "gazarte"],
+        "timeout_ms": 60000,
+        "retry_count": 2
+      },
+      "parser": {
+        "type": "python",
+        "categories": ["program"],
+        "script": "parse_tier1_sites.py",
+        "input_pattern": "data/html-to-parse/*gazarte*.html"
+      },
+      "importer": {
+        "type": "bun",
+        "script": "scripts/import-tier1-events.ts"
+      },
+      "rate_limit_ms": 5000,
+      "priority": 3
+    }
+  ]
+}

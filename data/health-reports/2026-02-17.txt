@@ -1,0 +1,33 @@
+AGENT ATHENS HEALTH REPORT - 2026-02-17
+==================================================
+
+SCRAPING
+--------------------------------------------------
+  v athinorama          366 events (-5)
+  v benaki                4 events (same)
+  v clubber              72 events (same)
+  v halfnote             20 events (-1)
+  v megaron               0 events (same)
+  v more                 57 events (+5)
+  v onassis               3 events (same)
+  v ra                   90 events (+20)
+  v snfcc                10 events (same)
+  v ticketservices      120 events (+2)
+
+DATABASE
+--------------------------------------------------
+  Total: 904 | Visible: 502 | Hidden: 402
+  New unverified venues: 20
+
+BUILD
+--------------------------------------------------
+  v 0.5s | 1527 pages | Schema valid: 507/502
+
+ENRICHMENT
+--------------------------------------------------
+  207/502 (41.2%) enriched
+
+ALERTS
+--------------------------------------------------
+  ! megaron returned 0 events
+  ? 20 new unverified venues - run venue review

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "dance",
+    "genre": "Flamenco",
+    "price": "with-ticket",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.982Z",
+    "url": "https://agentathens.netlify.app/with-ticket-flamenco-dance-this-weekend"
+  }
+}

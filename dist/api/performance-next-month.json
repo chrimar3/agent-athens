@@ -1,0 +1,177 @@
+{
+  "filters": {
+    "type": "performance",
+    "time": "next-month"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "d9923d001fbb6d0e",
+      "title": "Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ",
+      "description": "1 Μαρ - 26 Απρ Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ Πολλαπλοι χωροι",
+      "fullDescription": "The energy spreads across the city. Multiple venues, simultaneous events, thousands of participants moving toward the same purpose. You feel the collective momentum before you reach any single location — Athens mobilizing for something that matters.\n\n\"All Together We Can\" brings athletic competition to venues throughout the city under a banner of solidarity. The name captures the spirit — community sports as collective action, physical activity as social bond. The events range from organized races to team challenges, individual achievement measured against the backdrop of shared effort.\n\nThe organization behind these games has built something that transcends typical athletic events. Participation matters more than placement. Personal bests count as victories. The competitive element exists but operates within a framework designed to include rather than exclude. First-timers run alongside veterans, the distance between them irrelevant to the celebration.\n\nMultiple venues mean finding the event that suits your interest and ability. Some locations host running events, others feature team sports, still others offer adaptive competitions designed for participants across physical capabilities. The diversity of offerings reflects the diversity of the city participating.\n\nThe crowd at \"All Together We Can\" events defies easy categorization. Serious athletes training for competition mix with families treating the day as occasion. Young runners push their limits while older participants focus on completion over time. The cheering sections blur these distinctions — everyone celebrating everyone else's finish.\n\nAthens hosts many athletic events, but this one carries particular meaning. The charitable dimension transforms personal achievement into collective benefit. Every kilometer logged, every team victory claimed contributes to causes that matter beyond the individual. Sports as service, competition as community.\n\nIf you need elite-level competition and record-chasing intensity, \"All Together We Can\" operates at a different frequency. The emphasis here falls on participation over performance, solidarity over supremacy. But if you've been looking for athletic events that remember sports exist to bring people together — these games offer that reminder across multiple venues.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, March 1, 2026 |\n| **Time** | Throughout the day |\n| **Venues** | Multiple locations across Athens |\n| **Registration** | Check event organizers |\n| **Spirit** | Inclusive, charitable, community-focused |\n\nAll Together We Can — sports as the excuse for something larger.",
+      "startDate": "2026-03-01T20:00:00+03:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "sports"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Πολλαπλοί Χώροι",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.more.com/gr-el/tickets/sports/oloi-mazi-mporoume-agones-gia-to-periballon/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/sports/oloi-mazi-mporoume-agones-gia-to-periballon/",
+      "source": "more.com",
+      "createdAt": "2026-01-19T15:20:14.340Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "10:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "pass_through"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "dr-jordan-b-peterson-an-evening-to-transform-your-life-2026-03-07",
+      "title": "Dr. Jordan B. Peterson: An Evening to Transform Your Life",
+      "description": "7 Μαρτιου Dr. Jordan B. Peterson: An Evening to Transform Your Life Sunel Arena",
+      "fullDescription": "The arena settles into an anticipatory hush that holds three thousand individual silences. You've taken your seat among an audience that spans demographics wider than expected — suits next to students, elderly couples beside young families. The stage holds a single lectern. Dr. Jordan B. Peterson prepares to speak.\n\nPeterson occupies a particular position in contemporary public discourse — a clinical psychologist from the University of Toronto who became an unlikely public intellectual through YouTube lectures, bestselling books, and a willingness to engage controversies that others avoid. His \"12 Rules for Life\" has sold millions of copies worldwide. His lectures draw audiences who might never attend academic presentations.\n\nThe format tonight extends his classroom approach to arena scale. Peterson speaks without notes for extended periods, weaving psychology, mythology, religious tradition, and personal observation into arguments that build across hours. The style is professorial but urgent — like a lecture where the stakes have suddenly become existential.\n\nSunel Arena provides the scale his current audience demands. The venue has hosted concerts and sporting events, but tonight's setup is intimate despite the capacity — stage lights focused on a single figure, the sound system configured for the spoken word's dynamics. When Peterson's voice drops to emphasize a point, the back rows still catch every syllable.\n\nThe audience arrives with different relationships to the material. Some have consumed hundreds of hours of his online content and could predict his arguments. Others come curious, drawn by controversy or recommendation, wanting to evaluate firsthand. The Q&A sessions that often follow these lectures reveal this diversity — questions ranging from the devoted to the genuinely interrogative.\n\nIf you need speakers who avoid provocation or prefer academic caution, Peterson's style will challenge your comfort. His work attracts critics as ardent as his supporters, and his positions on certain topics have generated significant backlash. But if you've been curious about the phenomenon — if you want to understand why his ideas resonate with millions or to evaluate his arguments directly — the arena holds that opportunity.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, March 7, 2026 |\n| **Time** | Evening |\n| **Venue** | Sunel Arena |\n| **Duration** | 2-3 hours typically |\n| **Tickets** | Check venue / official tour site |\n| **Format** | Lecture with potential Q&A |\n\nDr. Jordan B. Peterson in Athens — public intellectualism at arena scale, ideas that demand engagement.",
+      "startDate": "2026-03-07T20:00:00+03:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Sunel Arena",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 45,
+        "currency": "EUR",
+        "range": "από €45"
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/jordan-peterson/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/happenings/jordan-peterson/",
+      "source": "more.com",
+      "createdAt": "2025-10-31T12:22:35.864Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "extracted_from_start_date",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "65-2026-03-09",
+      "title": "Εργαστήρια για άτομα 65+: Διάβαση, σε συνεργασία με το Ίδρυμα Ευγενίδου",
+      "description": "9 Μαρτιου Εργαστήρια για άτομα 65+: Διάβαση, σε συνεργασία με το Ίδρυμα Ευγενίδου Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Πυργος Βιβλιων ΕΒΕ",
+      "fullDescription": "The SNFCC campus holds the particular energy of intentional gathering. You've joined others who share at least one characteristic — the years that qualify for these workshops, the experience that those years represent. The Stavros Niarchos Foundation Cultural Center has programmed something specifically for those 65 and older.\n\nThe workshops operate on a different premise than youth programming. The participants bring accumulated skill, perspective, and purpose. Whatever today's activities involve — movement, craft, discussion, creative practice — they build on decades of living rather than introducing fundamentals to beginners.\n\nSNFCC provides setting that honors these participants. The architecture itself makes a statement about cultural investment, the park surrounding the buildings offering space before and after for conversation and reflection. The programming team has developed specific expertise in creating workshops that respect the capacities and interests of older participants.\n\nThe crowd this morning carries particular character. These are people who chose to be here, who found the event listing and made the decision to participate rather than observe. Some arrive in groups that suggest prior friendship; others come alone and find connection in shared activity. By workshop's end, the distinction often dissolves.\n\nAthens demographics include a significant elderly population, but programming specifically designed for this group remains relatively rare. The SNFCC workshops fill a gap, offering structured activity in world-class facilities to participants often overlooked by cultural programming that targets younger audiences.\n\nIf you're under 65 or seeking passive entertainment, this morning serves different purposes. The programming requires participation, the energy runs toward active engagement rather than consumption. But if you qualify by age and have been looking for cultural activities that treat maturity as asset rather than limitation — SNFCC has created this space specifically for you.\n\n| Info | Details |\n|------|---------|\n| **Date** | Monday, March 9, 2026 |\n| **Time** | Morning/Daytime |\n| **Venue** | SNFCC (Stavros Niarchos Foundation Cultural Center) |\n| **Getting there** | Syntagma Metro + bus or taxi |\n| **Eligibility** | Ages 65+ |\n| **Format** | Workshop (participation required) |\n| **Price** | Check SNFCC website |\n\nSNFCC Workshops for 65+ — programming that honors experience, community building through shared activity.",
+      "startDate": "2026-03-09T20:00:00+03:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΚΠΙΣΝ",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/diabasi-se-synergasia-me-to-idryma-eygenidou/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/workshop/diabasi-se-synergasia-me-to-idryma-eygenidou/",
+      "source": "more.com",
+      "createdAt": "2025-11-13T09:14:04.321Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "extracted_from_start_date",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "65-2026-03-13",
+      "title": "Εργαστήρια για άτομα 65+: Δημιουργώντας Ανάγλυφες Ιστορίες με Πηλο",
+      "description": "13 Μαρ - 19 Μαι Εργαστήρια για άτομα 65+: Δημιουργώντας Ανάγλυφες Ιστορίες με Πηλο Κεντρο Πολιτισμου Ιδρυμα Σταυρος Νιαρχος - Maker Space",
+      "fullDescription": "The clay is cool under your fingers. You're seated at a work table in the SNFCC Maker Space, the material responding to pressure with the particular resistance that defines the medium. Around you, others in the workshop discover the same sensation — the surprising difficulty and reward of shaping something from nothing.\n\nThis workshop is designed specifically for participants 65 and older, and that specificity matters. The pace allows for consideration rather than rush. The instructor's guidance accounts for varying physical capabilities, for hands that may have held tools differently throughout their lives. \"Embossed Stories with Clay\" treats age as context rather than limitation.\n\nThe Stavros Niarchos Foundation Cultural Center's Maker Space represents a particular vision of cultural engagement. The space exists to make creation accessible, to demystify the tools and materials that produce objects. Today's clay workshop extends that mission to participants who might have assumed such activities belonged to younger hands.\n\nWorking with clay activates different modes of attention. The material demands presence — you can't shape it while thinking about something else. The conversations that develop around the work tables carry this quality of absorption, participants sharing not just technique but the stories that emerge when hands are busy and minds are free.\n\nThe workshop format builds toward individual expression. After learning basic techniques, participants create their own pieces — embossed with personal symbols, shaped by individual vision. The instructor provides guidance but not templates. By the session's end, each table holds work that couldn't have been predicted at the start.\n\nCommunity forms around shared making. The participants in today's workshop may arrive as strangers but depart with the particular bond of people who've created alongside each other. The clay objects they take home carry the memory of the afternoon, physical evidence of time spent differently than usual.\n\nIf you need fast results or digital tools, clay's patience will frustrate your pace. The medium works slowly, demands acceptance of imperfection. But if you've been looking for creative engagement that honors experience rather than dismissing it, for a workshop that treats making as meaningful at any age — the SNFCC Maker Space holds this afternoon.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, March 13, 2026 |\n| **Venue** | SNFCC Maker Space |\n| **Workshop** | Embossed Stories with Clay |\n| **Age** | 65+ |\n| **Setting** | Hands-on creative workshop |\n| **Materials** | Provided |\n| **Price** | Check SNFCC |\n\nClay, stories, and hands that have learned from decades — creation without age limits.",
+      "startDate": "2026-03-13T20:00:00+03:00",
+      "endDate": null,
+      "type": "performance",
+      "genres": [
+        "general"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ΚΠΙΣΝ",
+        "address": "Λεωφ. Ανδρέα Συγγρού 364, Καλλιθέα 176 74",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": 100
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.more.com/gr-el/tickets/workshop/dimiourgontas-anaglyfes-istories-me-pilo/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/workshop/dimiourgontas-anaglyfes-istories-me-pilo/",
+      "source": "more.com",
+      "createdAt": "2025-10-31T12:22:35.864Z",
+      "updatedAt": "2026-02-13 10:29:36",
+      "language": "en",
+      "timeDoors": "10:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 4,
+    "lastUpdate": "2026-02-19T08:56:08.792Z",
+    "url": "https://agentathens.netlify.app/performance-next-month"
+  }
+}

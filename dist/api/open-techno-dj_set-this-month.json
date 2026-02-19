@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "dj_set",
+    "genre": "Techno",
+    "price": "open",
+    "time": "this-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.921Z",
+    "url": "https://agentathens.netlify.app/open-techno-dj_set-this-month"
+  }
+}

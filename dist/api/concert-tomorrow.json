@@ -1,0 +1,599 @@
+{
+  "filters": {
+    "type": "concert",
+    "time": "tomorrow"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "869d28d7031ae04c",
+      "title": "Costas Baltazanis &amp; JAK Trio",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Concert #1 Baumstrasse",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.ticketservices.gr/event/14067/",
+      "ticketUrl": "https://www.ticketservices.gr/event/14067/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "ba57903862729cd1",
+      "title": "Doros Dimosthenous sings Elvis -",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/doros-dimosthenous-sings-elvis-carnival-with-the-king/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/music/doros-dimosthenous-sings-elvis-carnival-with-the-king/",
+      "source": "more.com",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-16 08:00:38",
+      "language": "en",
+      "timeDoors": "22:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6fc2137ad36d93e0",
+      "title": "QUIZBALL LIVE SHOW",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Floyd",
+        "address": "Πειραιώς 117",
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://www.more.com/gr-el/tickets/sports/quizball-live-show/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/sports/quizball-live-show/",
+      "source": "more.com",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "19:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "63278d8421c4d1b3",
+      "title": "Xatzifrageta The Band",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρός του Νότου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/xatzifrageta_the_band-10054544/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "4dc09daf84e521dd",
+      "title": "Λάκης Παπαδόπουλος, Γιάννης Γιοκαρίνης, Βασίλης Καζούλης &amp; Νίκος Ζιώγαλας",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κύτταρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/lakis_papadopoulos_giannis_giokarinis_basilis_kazoulis_kai_nikos_ziogalas-10082410/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "5a49e19b497828d9",
+      "title": "&#171;Carnival with the King&#187;",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15 - €25"
+      },
+      "url": "https://www.athinorama.gr/music/gig/carnival_with_the_king-10089105/",
+      "ticketUrl": "https://www.halfnote.gr/en/calendar/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "8f9d1545b12258f2",
+      "title": "Μπλε",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Rohas Athens Live Stage",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.athinorama.gr/music/gig/mple-10040585/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/mple-10040585/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "9b0c0781360bf1d2",
+      "title": "Βαρυπενθούσα unplugged",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Underflow",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": "€13"
+      },
+      "url": "https://www.athinorama.gr/music/gig/barupenthousa_unplugged-10089113/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "316602fad9d8bd47",
+      "title": "Partara Maske-Mask Off",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€8-15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/partara_maske_mask_off_-10089115/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b905e0bf4afa0344",
+      "title": "Thrashland-Το αποκριάτικο",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Death Disco",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 6,
+        "currency": "EUR",
+        "range": "€6"
+      },
+      "url": "https://www.athinorama.gr/music/gig/thrashland_to_apokriatiko-10089117/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7db2cef4eb004b5c",
+      "title": "Αλέξανδρος Ιακώβου, Γιώργος Μιχαήλ &amp; Κώστας Λεμονίδης",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "HolyWood Stage",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/aleksandros_iakobou_giorgos_mixail_kai_kostas_lemonidis-10089120/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "165d013a00a26098",
+      "title": "&#171;Αγαπήσω Σε Κύριε Μου&#187;",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ιερός Ναός Αγίου Νικολάου Ραγκαβά",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/music/gig/agapiso_se_kurie_mou-10089123/",
+      "ticketUrl": "https://www.ticketservices.gr/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d9b395e3a0765669",
+      "title": "Psynonima Bash",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΚΠΙΣΝ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/_psynonima_bash-10089124/",
+      "ticketUrl": "https://www.snfcc.org/events",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "aef9640ba48a9295",
+      "title": "LAPTOP",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Ελέγχου Τηλεοράσεων",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/laptop-10089126/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "c08c98aaf445c784",
+      "title": "Between Strings",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Poetry Bar",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/music/gig/between_strings-10089147/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/between_strings-10089147/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d095852282ad9def",
+      "title": "&#171;Sonic Almanac&#187;",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ον Off Studio",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/sonic_almanac-10089149/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "9aa52deedc611970",
+      "title": "Κατερίνα Παπουτσάκη ft. Jerome Kaluta",
+      "description": "",
+      "startDate": "2026-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Doors",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€12-20"
+      },
+      "url": "https://www.athinorama.gr/music/gig/katerina_papoutsaki_ft_jerome_kaluta-10089153/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "eac723a9016bec8f",
+      "title": "Doros Dimosthenous sings Elvis - \"Carnival with… the King\"",
+      "description": "",
+      "fullDescription": "The bass line starts walking, and suddenly you're somewhere else. Half Note transforms when rock and roll history enters — the jazz temple making room for hips that want to shake. Doros Dimosthenous takes the microphone, and Elvis Presley lives again in Athens. It's carnival season.\n\nElvis as jazz club material might surprise, but the connection runs deeper than novelty. Presley's early recordings drew from the same roots — blues, gospel, the spontaneous energy that defines improvised music. Dimosthenous understands this lineage. His interpretations don't just impersonate; they excavate, finding the musical intelligence beneath the cultural phenomenon.\n\nHalf Note during carnival season operates differently. The venue's usual solemnity softens, makes room for celebration that jazz purists might question but that the music itself endorses. The King's catalog — from \"Heartbreak Hotel\" through \"Suspicious Minds\" — contains multitudes that a jazz quartet can explore without betraying either tradition.\n\nThe crowd for carnival programming at Half Note mixes regulars with those drawn by the specific promise. You'll find people who've never entered the venue alongside those who hold season subscriptions, united by curiosity about what happens when Elvis meets Mets district, when rock iconography enters jazz territory.\n\nThe set will likely span the catalog's range — uptempo numbers that get even Half Note's reserved audience moving, ballads that reveal the songs' emotional architecture, deep cuts that reward the faithful. Dimosthenous and his band navigate between faithful tribute and jazz-informed reinterpretation, finding space for both.\n\nIf you need Elvis as historical artifact, if tribute to you means museum-piece recreation, this performance operates differently. The carnival context gives permission for joy that strict recreation wouldn't allow. But if you've been wondering what happens when a Greek vocalist applies jazz sensibility to the King's legacy, if carnival season means permission to dance at the temple — Half Note tonight answers the question.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, February 20, 2026 |\n| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-min walk |\n| **Context** | Carnival season special |\n| **Style** | Elvis tribute with jazz interpretation |\n| **Reservations** | Essential — book ahead |\n\nElvis at the jazz temple: carnival gives permission for what the music always wanted.",
+      "startDate": "2026-02-20T22:30:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "από €15"
+      },
+      "url": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king/2026-02-20/",
+      "ticketUrl": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king/",
+      "source": "halfnote",
+      "createdAt": "2026-02-02 14:58:08",
+      "updatedAt": "2026-02-19 08:49:27",
+      "language": "en",
+      "timeDoors": "22:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 18,
+    "lastUpdate": "2026-02-19T08:56:08.755Z",
+    "url": "https://agentathens.netlify.app/concert-tomorrow"
+  }
+}

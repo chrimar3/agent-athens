@@ -1,0 +1,173 @@
+{
+  "filters": {
+    "type": "show",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1e4add97884526f",
+      "title": "Louis C.K. - Ridiculous",
+      "description": "με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλληλη...",
+      "fullDescription": "The house lights dim and the Christmas Theater contracts around a single figure at center stage. Louis C.K. with a microphone and whatever accumulated observations he's decided to share tonight. No props. No projected visuals. No comfort blanket of production values. Just language delivered with precision.\n\n\"Ridiculous\" marks Louis C.K.'s second Athens date, continuing a European tour that's proven demand persists despite — or perhaps because of — everything that changed his career's trajectory. The comedy hasn't softened. If anything, the years since his public reckoning have sharpened the writing, adding layers of self-examination to material that was already unflinching. He's not asking for forgiveness; he's analyzing the condition.\n\nThe crowd that fills the Christmas Theater for night two has made a specific choice. They've processed the debates about separation between art and artist and decided to be present. The laughter arrives in complex waves — sometimes pure amusement, sometimes uncomfortable recognition, sometimes the particular sound of an audience not sure if they're allowed to find something funny. Louis has been working this tension for years now.\n\nThe Christmas Theater handles this show with technical competence — strong sightlines, acoustics calibrated for spoken word, seating that keeps even the distant rows connected to the stage. But the real work happens in the space between comedian and audience, that fragile transaction of trust and discomfort that defines live stand-up.\n\nIf you want comedy that provides escape, that leaves you lighter than you arrived, Louis C.K. in 2026 isn't designed for that. He's processing darkness publicly, finding humor in places most people don't want to look. But if you believe the best comedy emerges from genuine risk, from a performer willing to alienate portions of his audience in pursuit of something true — you understand why this room is full.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 26, 2026 |\n| **Doors** | 19:30 |\n| **Show** | 21:00 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | €40-80 depending on seating |\n| **Language** | English |\n\n\"Ridiculous\" isn't just the title. It's the operating principle.",
+      "startDate": "2026-02-26T19:30:00+03:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [
+        "comedy"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Christmas Theater",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 35,
+        "currency": "EUR",
+        "range": "€35"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
+      "ticketUrl": "https://www.more.com/theater/louis-c-k",
+      "source": "athinorama.gr",
+      "createdAt": "2026-01-12T21:21:44.966Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1b6f76804993183f",
+      "title": "Geoff Tate@Operation Mindcrime",
+      "description": "2 Απριλιου Geoff Tate@Operation Mindcrime Circus Entertainment Hub",
+      "fullDescription": "The opening synthesizer wash fills the room, and you're transported to 1988. Geoff Tate steps to the microphone, and Operation Mindcrime begins its resurrection. Circus Entertainment Hub holds its breath as the concept album that defined progressive metal's possibilities unfolds in real time.\n\nOperation Mindcrime landed in 1988 as a challenge to what metal could attempt. A political concept album following a drug-addicted assassin through revolutionary conspiracy, it married Tate's operatic vocals to arrangements that moved through movements rather than tracks. The album announced Queensryche as something beyond standard metal, a band willing to treat their genre as vehicle for ambition.\n\nTate carries this material with the authority of its creator. He wrote these lyrics, conceived these characters, performed these songs for audiences across decades. When he revisits Operation Mindcrime now, it's not tribute but return, the original voice delivering the original vision to audiences who may have discovered it yesterday or thirty years ago.\n\nCircus Entertainment Hub provides the scale this production requires. The venue handles the dynamic range the material demands, from whispered passages to full orchestral assault. The staging respects the album's narrative arc, visual elements supporting rather than distracting from the musical story.\n\nThe crowd tonight spans the generations that Operation Mindcrime has gathered. Some were there in 1988, buying the album on vinyl or cassette, playing it until they knew every word. Others discovered it through the ongoing metal conversation, understanding its influence before experiencing it directly. What unites them is recognition of what the album attempted and achieved.\n\nThe performance moves through the album's sequence, honoring the original structure while allowing for the interpretive freedom that decades of performance have earned. Between movements, Tate provides context that deepens understanding without interrupting flow.\n\nIf you need contemporary sounds and current trends, Operation Mindcrime delivers deliberate anachronism. This is a performance that argues for the album's ongoing relevance through the quality of its execution. But if you've been waiting to hear these songs from the voice that invented them, if you understand why this album mattered and want to experience that mattering live, you find your way to Circus.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, April 2, 2026 |\n| **Venue** | Circus Entertainment Hub |\n| **Price** | Check venue |\n| **Getting there** | Check venue for location |\n\nGeoff Tate performs Operation Mindcrime: 1988 lives in 2026.",
+      "startDate": "2026-04-02T20:00:00+03:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Circus Entertainment Hub",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 30,
+        "currency": "EUR",
+        "range": "€30"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/geoff-tateoperation-mindcrime/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/music/geoff-tateoperation-mindcrime/",
+      "source": "more.com",
+      "createdAt": "2026-01-12T21:21:44.838Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "extracted_from_start_date",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "cat-festival-2026-2026-04-25",
+      "title": "Cat Festival 2026",
+      "description": "Γάτα Φεστιβάλ Γατα Φεστιβαλ Cat festival αμαξοστασιο συναυλίες, stand up, δραστηριοτητες για παιδια, ομιλίες φιλοζωικές",
+      "fullDescription": "The old tram depot has transformed overnight. Stages emerge from industrial corners, food stalls line the central corridor, and everywhere — cats. Murals, sculptures, costumes, the feline aesthetic infiltrating every surface. You've entered Cat Festival, and Athens is celebrating something genuinely strange.\n\nThe Palaio Amaxostasio OSY provides the setting this festival deserves. The historic tram depot's industrial bones create atmosphere that new construction couldn't replicate. High ceilings allow sound to travel, while distinct spaces offer variety — move from stage to stage, from vendor to vendor, from experience to experience without leaving the site.\n\nCat Festival brings together music, art, and Athens' peculiar ability to make festivals feel like parties you stumbled into rather than events you bought tickets for. The lineup spans genres, the art installations reward exploration, the food options fuel extended stays. The cat theme provides organizing principle without demanding explanation — Athens loves its cats, festivals love themes, the synthesis makes its own sense.\n\nMultiple stages mean programming runs simultaneous rather than sequential. You'll miss things while watching other things. This is the festival's gift — forcing choices that make each person's experience unique. The decisions you make shape your night. The stages you skip become stories other people tell you later.\n\nThe crowd at Greek festivals carries particular energy. Families early, young adults later, the demographic shifting as hours pass. Everyone seems to know someone, the small world of Athens nightlife collapsing into encounters and reunions. By midnight the stranger-to-friend conversion rate exceeds normal event parameters.\n\nIf you need predictable scheduling or comprehensive coverage, Cat Festival's sprawl will frustrate your completionist instincts. The experience here rewards wandering over planning, discovery over optimization. But if you've been seeking festivals that feel organic rather than corporate, where the venues matter as much as the lineup — the old tram depot holds this particular celebration.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, April 25, 2026 |\n| **Time** | All day and evening |\n| **Venue** | Palaio Amaxostasio OSY (Old Tram Depot) |\n| **Format** | Multi-stage festival |\n| **Price** | Check organizers |\n| **Prepare for** | Walking, exploring |\n\nCat Festival 2026 — where Athens celebrates its strangest enthusiasms.",
+      "startDate": "2026-04-25T10:00:00+03:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [
+        "festival"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Παλιό Αμαξοστάσιο ΟΣΥ",
+        "address": "Ερμού 1 & Πειραιώς, 11854, Γκάζι",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Δωρεάν"
+      },
+      "url": "https://www.more.com/gr-el/tickets/happenings/festival/cat-festival-2026/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/happenings/festival/cat-festival-2026/",
+      "source": "more.com",
+      "createdAt": "2025-10-31T12:22:35.864Z",
+      "updatedAt": "2026-02-14 09:59:49",
+      "language": "en",
+      "timeDoors": "10:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "53fd6789904b3cfb",
+      "title": "Ένας καταπληκτικός καταθλιπτικός",
+      "description": "του Αντώνη Καλομοιράκη. Ο Ευτύχης είναι ένας life coach που γράφει βιβλία αυτοβελτίωσης, δίνει συμβουλές ζωής μεγάλης αξίας και πιστεύει ότι όλα στη ζωή είναι θετικά. Είναι...",
+      "fullDescription": "The title announces depression with exclamation mark. \"An Amazing Depressive!\" enters Art 63 like a paradox the moment demands examining. The performance promises comedy sourced from mental health, from the specific dark humor that people living with depression develop as survival tool.\n\nThe show likely explores how depression and creativity coexist, how mental illness can become asset in artistic hands, how naming darkness sometimes requires humor. The monologue format means one person carrying the whole emotional weight — the intensity of solo performance amplifying the intimacy of the subject.\n\nArt 63 provides the appropriate setting for performance that centers psychological difficulty. The venue's track record with intelligent programming means audiences arrive expecting sophistication. The intimate scale creates uncomfortable proximity — you can't hide from the performance's directness, and the performer can't hide from your recognition.\n\nThe show will likely move between funny and devastating. The jokes will catch you laughing at moments you feel guilty laughing. The serious passages will hit harder because the context was just laughter. The performance refuses register consistency — it lets you feel the complexity of living with depression, the way pain and humor coexist in actually lived experience.\n\nThe crowd arrives predisposed to engagement with mental health content. People with direct experience seeking recognition. Theater enthusiasts respecting work that takes emotional risks. Those interested in how comedy can handle serious subjects. The conversations after the show will extend longer than typical comedy setups.\n\nIf you need light entertainment or performances that maintain emotional distance, \"An Amazing Depressive!\" will demand vulnerability. The show announces its subject, your entry a statement. But if you've been seeking performances that honor the complexity of living with mental illness — Art 63 holds this particular recognition.\n\n| Info | Details |\n|------|---------| \n| **Date** | Wednesday, December 2, 2026 |\n| **Time** | Evening |\n| **Venue** | Art 63 |\n| **Title** | An Amazing Depressive! |\n| **Genre** | Comedy / Monologue |\n| **Content** | Mental health-focused |\n| **Language** | Greek |\n| **Price** | Check venue |\n\nAn Amazing Depressive — comedy from the depths.",
+      "startDate": "2026-12-02T21:00:00+03:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [
+        "comedy"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Art 63",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 17,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/",
+      "source": "athinorama.gr",
+      "createdAt": "2025-12-04T16:32:23.858Z",
+      "updatedAt": "2026-02-12 11:12:20",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 4,
+    "lastUpdate": "2026-02-19T08:56:08.794Z",
+    "url": "https://agentathens.netlify.app/show"
+  }
+}

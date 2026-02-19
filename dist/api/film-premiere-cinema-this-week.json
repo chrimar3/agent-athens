@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Film premiere",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.948Z",
+    "url": "https://agentathens.netlify.app/film-premiere-cinema-this-week"
+  }
+}

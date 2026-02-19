@@ -1,0 +1,58 @@
+{
+  "name": "agent-athens",
+  "version": "1.0.0",
+  "description": "AI-curated cultural events calendar for Athens, Greece",
+  "type": "module",
+  "scripts": {
+    "build": "bun run src/generate-site.ts",
+    "dev": "bun run src/generate-site.ts && bun run serve",
+    "serve": "bun run --watch src/serve.ts",
+    "deploy": "netlify deploy --prod --dir=dist",
+    "test": "bun run scripts/test-pipeline.ts",
+    "test:full": "bun run scripts/test-pipeline.ts --full",
+    "test:quick": "bun run scripts/test-pipeline.ts --no-scrape",
+    "test:unit": "bun test tests/unit",
+    "test:db": "bun test tests/database",
+    "test:integration": "bun test tests/integration",
+    "test:templates": "bun test tests/templates",
+    "test:all": "bun test tests/",
+    "test:watch": "bun test --watch tests/",
+    "test:coverage": "bun test --coverage tests/",
+    "fetch-emails": "bun run src/ingest/email-ingestion.ts",
+    "scrape-web": "python3 scripts/scrape-all-sites.py",
+    "scrape-web-old": "bun run scripts/scrape-websites.ts",
+    "fetch-prices": "python3 scripts/fetch-prices.py",
+    "update": "./scripts/update-site.sh",
+    "daily-update": "./scripts/daily-update.sh"
+  },
+  "keywords": [
+    "athens",
+    "events",
+    "cultural",
+    "ai",
+    "agent-first",
+    "GEO",
+    "SEO"
+  ],
+  "author": "agent-athens",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.67.0",
+    "@google/generative-ai": "^0.24.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/luxon": "^3.7.1",
+    "better-sqlite3": "^12.4.1",
+    "cheerio": "^1.1.2",
+    "imap-simple": "^5.1.0",
+    "luxon": "^3.7.2",
+    "mailparser": "^3.7.5",
+    "node-ical": "^0.21.0",
+    "puppeteer": "^24.36.1",
+    "puppeteer-core": "^24.36.0"
+  }
+}

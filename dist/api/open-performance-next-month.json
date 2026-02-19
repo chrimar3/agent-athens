@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "performance",
+    "price": "open",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.885Z",
+    "url": "https://agentathens.netlify.app/open-performance-next-month"
+  }
+}

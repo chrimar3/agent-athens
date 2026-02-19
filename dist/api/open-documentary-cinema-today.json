@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "cinema",
+    "genre": "Documentary",
+    "price": "open",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.951Z",
+    "url": "https://agentathens.netlify.app/open-documentary-cinema-today"
+  }
+}

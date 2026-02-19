@@ -1,0 +1,39 @@
+Generate a compelling English description for this cultural event in Athens, Greece.
+
+Event Details:
+- Title: ΕΙΚΟΣΙΕΞΙ και μία.. του Μαξίμ Γκόργκυ
+- Type: theater
+- Venue: Room (Μικρη Σκηνη)
+- Date: 2025-11-04T20:00:00+02:00
+- Price: €12
+- Event Description: 4 Νοε - 24 Φεβ ΕΙΚΟΣΙΕΞΙ και μία.. του Μαξίμ Γκόργκυ Θεατρο Αλκμηνη - Secret Room (Μικρη Σκηνη)
+
+Venue Context:
+Room (Μικρη Σκηνη), a cultural venue in Athens.
+
+
+
+
+What to Expect at This Type of Event:
+A live theatrical performance featuring actors, staging, and dramatic narrative. Theater offers the immediacy of live storytelling, where performers and audiences share the same space and moment, creating a unique communal experience.
+
+Semantic Keywords (use naturally in your writing):
+theatrical performance, theater production, Athens theater
+
+Requirements:
+1. Write exactly 420 words (acceptable range: 400-440 words)
+2. Write in English
+3. Include artist background if provided above
+4. Describe venue atmosphere and Athens neighborhood context
+5. Use semantic keywords naturally throughout (DO NOT list them)
+6. Explain what attendees can expect at this type of theater
+7. Write in authentic journalism tone (not marketing fluff)
+8. Include practical details naturally (time, location, price)
+9. Target audience: Both AI answer engines and human readers
+10. For those seeking theater in Athens...
+
+CRITICAL: Only use the information provided above. Do not fabricate artist details, venue history, or event specifics. If information is unavailable, focus on general context and what makes this type of event valuable.
+
+
+
+Write the full 420-word description now. Return ONLY the description text, no preamble.

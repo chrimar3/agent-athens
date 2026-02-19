@@ -1,0 +1,14 @@
+{
+  "category": {
+    "slug": "screenings",
+    "title": "Θερινά Σινεμά & Προβολές",
+    "titleEn": "Outdoor Cinema & Screenings",
+    "description": "Open-air σινεμά και ειδικές προβολές στην Αθήνα"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:09.020Z",
+    "url": "https://agentathens.netlify.app/screenings"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "exhibition",
+    "genre": "Contemporary art",
+    "price": "open",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-19T08:56:08.937Z",
+    "url": "https://agentathens.netlify.app/open-contemporary-art-exhibition-next-month"
+  }
+}
