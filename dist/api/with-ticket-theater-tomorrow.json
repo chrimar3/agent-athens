@@ -8,149 +8,16 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "c0ea82dbcc512735",
-      "title": "«Nina Simone - 4 οκτάβες Ελευθερίας»",
+      "id": "dac17f052230afcb",
+      "title": "Νίκος Μερτζάνος",
       "description": "",
-      "fullDescription": "The stage at ARROYO Theater holds the weight of expectation. Nina Simone's music carries decades of history — civil rights anthems, jazz standards reimagined, the voice that contained multitudes. \"4 Oktaves Eleftherias\" — Four Octaves of Freedom — promises to honor that legacy. The lights dim.\n\nSimone was never just a singer. Classically trained pianist, activist, prophet, artist who refused every category. Her four-octave range was the least of her power; the real force came from what she did with those notes, how she bent songs into new shapes, how she made \"Mississippi Goddam\" and \"Feeling Good\" emerge from the same artistic vision.\n\nThe tribute format allows this complexity to surface. The production isn't simple recreation — it's exploration, an attempt to understand what Simone meant and means. The performers tonight carry the responsibility of representing not just a voice but a worldview, not just songs but a stance.\n\nARROYO Theater provides an intimate space for this kind of examination. The room holds audiences close enough to see every emotion cross the performer's face, close enough that the music becomes conversation rather than broadcast. When the band finds the groove of \"I Put a Spell on You,\" you're not watching from distance. You're inside the spell.\n\nThe audience for Nina Simone tribute programming has expectations shaped by deep familiarity. These are people who know the original recordings intimately, who carry \"Baltimore\" and \"Sinnerman\" as personal talismans. They've come to see whether tonight's interpretation can add to their understanding or will simply remind them of what they already know.\n\nIf you need Simone herself, no tribute can satisfy. Her presence was singular, unreproducible. But if you've been waiting for artists to grapple seriously with what she represented, to use her music as lens for examining questions of freedom that remain urgent — ARROYO Theater tonight becomes the room where that examination happens.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, February 20, 2026 |\n| **Venue** | ARROYO Theater |\n| **Focus** | Nina Simone tribute |\n| **Title** | \"4 Oktaves Eleftherias\" (Four Octaves of Freedom) |\n| **Style** | Concert tribute with band |\n| **Good to know** | Intimate theater setting |\n\nNina Simone's legacy explored through performance: freedom in four octaves.",
-      "startDate": "2026-02-20",
+      "startDate": "2026-02-21",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "ARROYO THEATER",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": "€18 - €22"
-      },
-      "url": "https://www.ticketservices.gr/event/13581/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13581/",
-      "source": "ticketservices",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-19 08:49:27",
-      "language": "en",
-      "timeDoors": "21:15",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "3b3f4e90fd06f493",
-      "title": "Εσύ και τα σύννεφά σου",
-      "description": "",
-      "startDate": "2026-02-20",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Θέατρο Μετς",
-        "address": "Αιδεσίου 19-23, Αθήνα 11636",
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 18,
-        "currency": "EUR",
-        "range": "€18"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/esu_kai_ta_sunnefa_sou-10089158/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/esu_kai_ta_sunnefa_sou-10089158/",
-      "source": "more.com",
-      "createdAt": "2026-02-09 16:48:30",
-      "updatedAt": "2026-02-19 08:49:27",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "c9ccc5df45ac523a",
-      "title": "Encardia",
-      "description": "",
-      "startDate": "2026-02-20",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Theatre Of The No",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.athinorama.gr/music/gig/encardia-10038135/",
-      "ticketUrl": "https://www.more.com/gr-el/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-19 08:49:27",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "fbf1cc9a0dfc6277",
-      "title": "SOMA EP",
-      "description": "",
-      "startDate": "2026-02-20",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "ΙΛΙΟΝ Plus",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.athinorama.gr/music/gig/soma_ep-10089111/",
-      "ticketUrl": "https://www.viva.gr/tickets/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-19 08:49:27",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "15b79ceef17d6847",
-      "title": "Νίκος Βασιλικός &amp; Μιχάλης Κακέπης",
-      "description": "",
-      "startDate": "2026-02-20",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Γυάλινο Μουσικό Θέατρο",
+        "name": "Καφεθέατρο",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -161,11 +28,11 @@
         "currency": "EUR",
         "range": "€12"
       },
-      "url": "https://www.athinorama.gr/music/gig/nikos_basilikos_kai_mixalis_kakepis-10089128/",
+      "url": "https://www.athinorama.gr/music/gig/nikos_mertzanos-10063792/",
       "ticketUrl": "https://www.viva.gr/tickets/theater/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-20 07:51:02",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -173,16 +40,16 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "970c47062ba70a72",
-      "title": "Η μαύρη πεταλούδα",
-      "description": "Εως 2026-03-15",
-      "startDate": "2026-02-20",
+      "id": "c3b24e83652b6f22",
+      "title": "Να σου πω μια ιστορία",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-21",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "H.ug Art Space",
+        "name": "Studio Μαυρομιχάλη",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -193,11 +60,11 @@
         "currency": "EUR",
         "range": "€15"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/i_mauri_petalouda-10089166/",
-      "ticketUrl": "https://www.more.com/theater/i-mauri-petalouda",
+      "url": "https://www.athinorama.gr/theatre/performance/na_sou_po_mia_istoria-10072531/",
+      "ticketUrl": "https://www.more.com/theater/na-sou-po-mia-istoria",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-20 07:51:02",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -205,16 +72,16 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "900e37a5e61f7e46",
-      "title": "Superstar",
-      "description": "Εως 2026-03-01",
-      "startDate": "2026-02-20",
+      "id": "d63a6e6400993f13",
+      "title": "Χορεύοντας στη Λούνασα",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-21",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "ΠΛΥΦΑ",
+        "name": "Θέατρο Κάτω Από Τη Γέφυρα",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -225,11 +92,11 @@
         "currency": "EUR",
         "range": "€18"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/superstar-10089159/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "url": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-20 07:51:03",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -237,20 +104,20 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "bb180021734c0f49",
-      "title": "Μπουζούκια στην Πίστα |Γυάλινο Μουσικό Θέατρο",
-      "description": "20 Φεβ - 28 Μαρ Μπουζούκια στην Πίστα |Γυάλινο Μουσικό Θέατρο Γυαλινο Μουσικο Θεατρο",
-      "fullDescription": "The bouzouki's opening trill cuts through the murmur of the crowd, and the room shifts into a different mode. Gyalino Mousiko Theatro fills with that particular energy that only bouzoukia nights generate — anticipation for the kind of performance that connects modern Athens to its laiko roots. The pista awaits.\n\n\"Mpouzoukia stin Pista\" — Bouzoukia on the Dance Floor — delivers exactly what the title promises. This is laiko music in its natural habitat, performed for an audience that knows how to respond. The dance floor isn't metaphor; it's invitation. When the familiar songs begin, the space between listener and performer collapses.\n\nLaiko carries complex cultural weight in Greece. The music emerged from rebetiko traditions, evolved through decades of commercial development, now occupies space from high-end clubs to neighborhood gatherings. Tonight's setting at Gyalino — the Glass Musical Theater — positions the genre in a room that respects its craft while maintaining accessibility.\n\nThe crowd for bouzoukia nights has a specific character. These are Greeks who grew up with these songs, who know the words without thinking, for whom the music triggers memories of family celebrations and late summer nights. But you'll also find younger listeners discovering the tradition, absorbing the vocabulary through osmosis, learning when to sing along and when to listen.\n\nThe evening will build through the classic laiko arc. Slower songs establishing mood, tempo gradually increasing, the pista filling as inhibitions drop. By midnight the room has achieved that state where everyone's participating, where the line between stage and floor has been decisively crossed.\n\nIf you need translations to understand, if the cultural codes are unfamiliar, bouzoukia nights can feel opaque. The music speaks to those who already know the language. But if you carry Greek in your bones or want to witness the tradition at full intensity, if you've been waiting for laiko performed for an audience that can match its energy — Gyalino tonight is the place.\n\n| Info | Details |\n|------|---------|\n| **Date** | Friday, February 20, 2026 |\n| **Venue** | Gyalino Mousiko Theatro |\n| **Style** | Laiko / bouzoukia |\n| **Format** | Live performance with dance floor |\n| **Crowd** | Greek-speaking audience |\n| **Good to know** | Bouzoukia nights run late — pace yourself |\n\nBouzoukia on the pista: laiko music performed where the dance floor is the point.",
-      "startDate": "2026-02-20T20:00:00+03:00",
+      "id": "6159c16594a96552",
+      "title": "Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος",
+      "description": "21 Φεβ - 5 Απρ Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος Studio Μαυρομιχαλη",
+      "fullDescription": "The stage at Studio Mavromichali is close enough to touch. The intimacy is the point — when Jorge Bucay's words are being performed, the distance between speaker and listener should be measured in breaths, not rows. \"Na sou po mia istoria\" — Let Me Tell You a Story — begins.\n\nBucay's work occupies a specific cultural position. The Argentine psychotherapist turned his therapeutic practice into storytelling, parables that function as mirrors, narratives that sound simple until they start working on you. Greek theater has embraced his stories, finding in them material that translates without losing power.\n\nStudio Mavromichali provides the container this material demands. The venue's intimate dimensions — perhaps 80 seats in configurations that shift with productions — creates the feeling of personal address. When the performer speaks, they're speaking to you. When a story lands, you feel it land.\n\nThe crowd for this kind of theatrical storytelling has particular characteristics. These are Greeks who've encountered Bucay's books, who understand the tradition of therapeutic parable, who come seeking the particular pleasure of hearing wisdom disguised as entertainment. The venue's neighborhood in central Athens draws an audience comfortable with experimental and intimate performance.\n\nThe performance will unfold through stories that seem to address specific audience members. Bucay's technique involves universality through specificity — tales that could be about anyone become stories about everyone. The performer's task is to make that alchemy visible, to transform reading into experience.\n\nIf you need spectacle and production values, if theater means elaborate staging, Studio Mavromichali operates at a different scale. The intimacy here is the production value, the closeness the special effect. But if you've been waiting for Bucay's stories to find voice in Athens, for therapeutic wisdom to become theatrical event, for stories that continue working after you've left the theater — this is where they're being told.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Studio Mavromichali |\n| **Source** | Jorge Bucay stories |\n| **Language** | Greek |\n| **Format** | Intimate theatrical storytelling |\n| **Good to know** | Small venue — book in advance |\n\nJorge Bucay's stories find Greek voice: therapeutic parables in Athens' intimate theater tradition.",
+      "startDate": "2026-02-21T20:00:00+03:00",
       "endDate": null,
       "type": "theater",
       "genres": [
-        "music"
+        "theater"
       ],
       "tags": [],
       "venue": {
-        "name": "Γυάλινο Μουσικό Θέατρο",
-        "address": "Λ. Συγγρού 143",
+        "name": "Studio Μαυρομιχάλη",
+        "address": "Μαυρομιχάλη 134",
         "neighborhood": null,
         "coordinates": {
           "lat": 37.9838,
@@ -260,25 +127,25 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 15,
+        "amount": 10,
         "currency": "EUR",
-        "range": "από €15"
+        "range": "από €10"
       },
-      "url": "https://www.more.com/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-2/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-2/",
+      "url": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
       "source": "more.com",
       "createdAt": "2026-01-19T15:20:14.340Z",
       "updatedAt": "2026-02-12 11:12:20",
       "language": "en",
-      "timeDoors": "22:30",
+      "timeDoors": "21:00",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 8,
-    "lastUpdate": "2026-02-19T10:36:14.065Z",
+    "total": 4,
+    "lastUpdate": "2026-02-20T07:52:51.356Z",
     "url": "https://agentathens.netlify.app/with-ticket-theater-tomorrow"
   }
 }
