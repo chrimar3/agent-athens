@@ -195,3 +195,18 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 | pass_through | 11 |
 | problematic | 5 |
 | unverified | 0 |
+
+## Claude Code Optimization (2026-02-21)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Session diagnostic script (`scripts/session-diagnostic.sh`) | Data-driven session planning — surfaces enrichment gaps, weekend coverage, stale sources before starting work | 2026-02-21 |
+| Slash commands for workflow checklists | Referenced in CLAUDE.md but never created; enforce reading mistakes.md and patterns.md before scraping/enrichment/venue work | 2026-02-21 |
+| `.claude/settings.json` with auto-approve permissions | Reduces friction for safe read-only commands (sqlite3, ls, cat, grep) and build commands (bun test, generate-site) | 2026-02-21 |
+| PostToolUse hook for tsc on Write/Edit | Catches type errors immediately after every file edit; `\|\| true` prevents blocking on pre-existing errors | 2026-02-21 |
+| Hook runs on ALL edits, not just .ts files | Simpler config; catches indirect breakage from JSON/config changes that affect type resolution | 2026-02-21 |
+| No Stop hook yet | Conservative approach — add automation incrementally, validate each layer before adding the next | 2026-02-21 |
+
+### Rollback Plan
+- Hook problems: delete `hooks` key from `.claude/settings.json`, keep permissions
+- settings.json breaks CC entirely: delete the file (clean slate)

@@ -204,3 +204,27 @@ SELECT time_source, COUNT(*) FROM events
 WHERE start_date >= date('now')
 GROUP BY time_source;
 ```
+
+## Session Start Pattern
+
+Every Claude Code session should start with:
+
+```bash
+# 1. Run diagnostic to see what needs work
+./scripts/session-diagnostic.sh
+
+# 2. Use the appropriate pre-check slash command
+/project:pre-scrape-check    # Before scraping
+/project:pre-enrich-check    # Before enrichment
+/project:pre-venue-check     # Before venue config changes
+```
+
+The slash commands enforce reading `mistakes.md` and `patterns.md` before starting work — prevents repeating known pitfalls.
+
+## Exhibition-Safe Date Queries
+
+All queries that filter "current/upcoming" events must use:
+```sql
+WHERE date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
+```
+This pattern appears in `session-diagnostic.sh` and should be used everywhere.
