@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "hackathon",
+    "genre": "Innovation",
+    "price": "with-ticket",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.884Z",
+    "url": "https://agentathens.netlify.app/with-ticket-innovation-hackathon-this-week"
+  }
+}

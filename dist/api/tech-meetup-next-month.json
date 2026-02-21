@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "meetup",
+    "genre": "Tech",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.866Z",
+    "url": "https://agentathens.netlify.app/tech-meetup-next-month"
+  }
+}

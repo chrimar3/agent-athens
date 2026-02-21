@@ -8,10 +8,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "7531897aa94ef9cf",
-      "title": "Michael Dotson",
+      "id": "495b0f1462a55d29",
+      "title": "Manos Saridakis Trio",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
@@ -28,11 +28,11 @@
         "currency": "EUR",
         "range": "€12"
       },
-      "url": "https://www.athinorama.gr/music/gig/michael_dotson-10063440/",
+      "url": "https://www.athinorama.gr/music/gig/manos_saridakis_trio-10059438/",
       "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -40,30 +40,31 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "5727668e68f5e340",
-      "title": "Λόγος Απειλή",
+      "id": "e85025a5ce85e093",
+      "title": "Μαντώ, Μπίγαλης, Πωλίνα &amp; Σοφία Βόσσου",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "AN Club",
+        "name": "Κύτταρο",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 15,
         "currency": "EUR",
-        "range": "€12"
+        "range": "€15"
       },
-      "url": "https://www.athinorama.gr/music/gig/logos_apeili-10018999/",
+      "url": "https://www.athinorama.gr/music/gig/manto_mpigalis_polina_kai_sofia_bossou-10012433/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -71,10 +72,42 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "df1fb75235b562b0",
-      "title": "Αθηναϊκή Χορωδία &amp; Μαντολινάτα &#171;Ο Διονύσιος Λαυράγκας&#187;",
+      "id": "4cc43d46b661e320",
+      "title": "&#171;Επί Σκηνής&#187;",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "MÉTRON Stage",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/epi_skinis-10089100/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-21 07:51:30",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "46a80c8aad4e9f9d",
+      "title": "Από αρχαίες άριες στις Παραλλαγές Αίνιγμα",
+      "description": "",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
@@ -86,16 +119,16 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
-        "amount": 5,
+        "type": "tba",
+        "amount": null,
         "currency": "EUR",
-        "range": "€5 - €10"
+        "range": null
       },
-      "url": "https://www.athinorama.gr/music/gig/athinaiki_xorodia_kai_mantolinata_o_dionusios_lauragkas-10089101/",
+      "url": "https://www.athinorama.gr/music/gig/apo_arxaies_aries_stis_parallages_ainigma-10089108/",
       "ticketUrl": "https://www.ticketservices.gr/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -103,16 +136,16 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "40749423e03fc722",
-      "title": "Velocity Zero",
+      "id": "f9132f1dc6e1bd2f",
+      "title": "Music Alchemy",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Universe",
+        "name": "Κ4",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -123,109 +156,11 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://www.athinorama.gr/music/gig/velocity_zero-10089104/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "041289683824f658",
-      "title": "&#171;Σολ Δίαιτα&#187;",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.athinorama.gr/music/gig/sol_diaita-10089107/",
-      "ticketUrl": "https://www.athinorama.gr/music/gig/sol_diaita-10089107/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "e8f49a87a57c6674",
-      "title": "ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Gustav Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12 - €15"
-      },
-      "url": "https://www.ticketservices.gr/event/13882/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13882/",
-      "source": "ticketservices",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "21:45",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "6f0c53dd3fcb622a",
-      "title": "Βασίλης Λέκκας",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Caja de Música",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.athinorama.gr/music/gig/basilis_lekkas-10018021/",
+      "url": "https://www.athinorama.gr/music/gig/music_alchemy-10089116/",
       "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -233,31 +168,31 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "2dd057c8eb4225f6",
-      "title": "Αλέξανδρος Κτιστάκης",
+      "id": "3783bd626de35a06",
+      "title": "NOFREN&#216;, Μαύρα Ρόδα και Χρώμα",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Σταυρός του Νότου",
+        "name": "Route 06",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 14,
+        "amount": 10,
         "currency": "EUR",
-        "range": "€14"
+        "range": "€10"
       },
-      "url": "https://www.athinorama.gr/music/gig/aleksandros_ktistakis-10064974/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "url": "https://www.athinorama.gr/music/gig/nofreno_maura_roda_kai_xroma-10089129/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/nofreno_maura_roda_kai_xroma-10089129/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -265,191 +200,31 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "ee5e77142879509a",
-      "title": "Γιάννης Παπαγεωργίου",
+      "id": "23a800f05cdb5b8c",
+      "title": "&#171;Η Μουσική των 5 Αιώνων&#187;",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Καταφύ",
+        "name": "Μουσείο Γουλανδρή",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 11,
         "currency": "EUR",
-        "range": "€12"
+        "range": "€11 - €13"
       },
-      "url": "https://www.athinorama.gr/music/gig/giannis_papageorgiou-10077007/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "622185ab1ca10c96",
-      "title": "&#171;Η διασκέδαση πέθανε!&#187;",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Fuzz Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8"
-      },
-      "url": "https://www.athinorama.gr/music/gig/i_diaskedasi_pethane!-10089110/",
-      "ticketUrl": "https://www.more.com/theater/offer/1000-logoi-gia-na-tsakotheis",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "f7c3ba486bc7cc4e",
-      "title": "&#171;Lycabettus black box&#187;",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Underflow",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/music/gig/lycabettus_black_box-10089127/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "b4aeba5b01050d8a",
-      "title": "PLAN B",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "HolyWood Stage",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": "€13"
-      },
-      "url": "https://www.athinorama.gr/music/gig/plan_b-10011705/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:19",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "026052f787b488b4",
-      "title": "Bαγγέλης Γερμανός",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Gustav Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/music/gig/baggelis_germanos-10061363/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13882/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:19",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "60c18c21432824df",
-      "title": "Unplugged with Kat",
-      "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Ράδιο",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€10-18"
-      },
-      "url": "https://www.athinorama.gr/music/gig/unplugged_with_kat-10089141/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "url": "https://www.athinorama.gr/music/gig/i_mousiki_ton_5_aionon-10089136/",
+      "ticketUrl": "https://www.goulandris.gr/el/events",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -457,42 +232,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "def50989a3a8b26d",
-      "title": "Μελίνα Κανά, Αλέξανδρος Δάικος &amp; Otra Rota",
+      "id": "83093b896757fc56",
+      "title": "Celebrate The Carnival As A Raver: 2Delta + Marthe",
       "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Σταυρός του Νότου",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": "€13"
-      },
-      "url": "https://www.athinorama.gr/music/gig/melina_kana_aleksandros_daikos_kai_otra_rota-10089143/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "4d1308398dab01ad",
-      "title": "Inco + Stoa + Oblivion",
-      "description": "",
-      "startDate": "2026-02-21T01:30:00+03:00",
+      "startDate": "2026-02-22T15:00:00+03:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -500,8 +243,8 @@
       ],
       "tags": [],
       "venue": {
-        "name": "El Chapo",
-        "address": "El Chapo, Φίλωνος 95, Πειραιάς, Αθήνα, 18535, Greece",
+        "name": "Daddy's All Day Bar",
+        "address": "Daddy's all day bar, Ναυάρχου Αποστόλη 10, Ψυρρή, Αθήνα, 10554, Greece",
         "neighborhood": null,
         "coordinates": {
           "lat": 37.9838,
@@ -515,8 +258,46 @@
         "currency": "EUR",
         "range": "with-ticket"
       },
-      "url": "https://www.clubber.gr/events/inco-stoa-oblivion/",
-      "ticketUrl": "https://www.clubber.gr/events/inco-stoa-oblivion/",
+      "url": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
+      "ticketUrl": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "541c95a62e97c800",
+      "title": "Palms Trax",
+      "description": "",
+      "startDate": "2026-02-22T18:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": "Burger Disco Club, Νίκης 11, Σύνταγμα, Αθήνα, 10557, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": "with-ticket"
+      },
+      "url": "https://www.clubber.gr/events/palms-trax/",
+      "ticketUrl": "https://www.clubber.gr/events/palms-trax/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10T04:01:24.900Z",
       "updatedAt": "2026-02-18T04:02:27.840Z",
@@ -527,11 +308,90 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "0febebdc542bc194",
+      "id": "9ba58276727ac49b",
+      "title": "EDEN presents DARIA KOLOSOVA b2b HECTOR OAKS",
+      "description": "22 Φεβρουαριου EDEN presents DARIA KOLOSOVA b2b HECTOR OAKS Athens Conservatoire (in Greek)",
+      "fullDescription": "The concert hall was built for classical music. Tonight it will discover what happens when Ukrainian techno precision meets Spanish-Berlin industrial weight, and neither artist has any interest in being polite about it.\n\nDaria Kolosova has built her reputation on sets that refuse release. She accumulates intensity through layered percussion, hypnotic repetition, the relentless forward motion that defines Ukrainian techno's contribution to the European scene. Hector Oaks matches that intensity with different tools — his productions favor the hardware growl, sounds that feel machined rather than programmed. When they meet for back-to-back sets, the negotiation becomes the performance.\n\nEDEN has secured the Athens Conservatoire for this encounter, and the setting sharpens everything. The venue has trained musicians since the 19th century; its halls carry the weight of tradition. Tonight that tradition absorbs frequencies its architects never anticipated, and the contrast makes the music hit differently. Dancing where classical musicians practiced scales — the irony operates on everyone present.\n\nThe crowd comes prepared for the collision. These are techno heads who track EDEN announcements, who recognize both names and understand what the B2B format promises. The Conservatoire's unfamiliar setting adds a layer — people genuinely curious whether the architecture can handle what's coming. (It can. The acoustics were built for sound, after all.)\n\nIf you need your techno in industrial spaces, if the venue should match the music's rawness, tonight inverts those expectations. The formality becomes fuel. But if you've been searching for the night that proves electronic music belongs in every room that's ever hosted serious music — the Conservatoire tonight learns new lessons from its students.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, February 22, 2026 |\n| **Venue** | The Conservatoire (Odeio Athinon) |\n| **Getting there** | Central Athens location |\n| **Price** | Check EDEN announcements |\n\nDaria Kolosova. Hector Oaks. The Conservatoire. Read those names again.",
+      "startDate": "2026-02-22T20:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ωδείο Αθηνών",
+        "address": "Athens, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€20-50"
+      },
+      "url": "https://www.viva.gr/gr-el/tickets/music/eden-presents-daria-kolosova-b2b-hector-oaks/",
+      "ticketUrl": "https://www.viva.gr/gr-el/tickets/music/eden-presents-daria-kolosova-b2b-hector-oaks/",
+      "source": "more.com",
+      "createdAt": "2026-01-19T23:07:36.324Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "17:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "115c879d06c87ccb",
+      "title": "Tribal Carnival: Thèna + Mareen b2b Tsouko G + Dino MFU + Babett b2b Ethérro",
+      "description": "",
+      "startDate": "2026-02-22T21:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Boo!",
+        "address": "Boo!, Λεπενιώτου 22, Αθήνα, 10554, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": "with-ticket"
+      },
+      "url": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
+      "ticketUrl": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7954e19a7e7569ae",
       "title": "Doros Dimosthenous sings Elvis - \"Carnival with… the King\"",
       "description": "",
-      "fullDescription": "The blue spotlight hits the stage and suddenly you're in Memphis. The pompadour, the curled lip, the stance — but the voice that emerges carries something else, something that learned rock and roll through Greek speakers and Athenian nights.\n\nDoros Dimosthenous has spent years channeling Elvis Presley, not as impersonation but as conversation. When a Greek singer inhabits the King's catalog, something strange and wonderful happens. The songs that defined American rebellion — \"Suspicious Minds,\" \"Can't Help Falling in Love,\" \"Jailhouse Rock\" — absorb Mediterranean inflection, the warmth of a culture that understood passion before rock and roll named it.\n\nHalf Note Jazz Club provides the setting this tribute deserves. Since 1979, this Mets institution has hosted jazz royalty, and tonight it bends its programming to honor a different kind of royalty. The room holds maybe 200 people, close enough to catch the performer's expression, intimate enough that Elvis's ballads fill the space without straining. The jazz club acoustic treats the voice as the instrument it is — every vibrato, every dramatic pause, every moment of surrender audible.\n\nThe crowd mixes unexpectedly. Elvis devotees who've seen every tribute share tables with Half Note regulars curious about the venue's departure from jazz. Greeks who grew up on rock and roll's international wave. Couples who fell in love to songs that Doros is about to deliver. The pre-show energy carries affection — people ready to be transported, permission already granted.\n\nIf you need pure authenticity, if only Elvis himself will do, tribute is always translation. Doros channels rather than copies, and the Greek angle adds rather than subtracts. But if you've been searching for an evening where the King's songbook meets Half Note's warmth, where rock and roll romance gets the intimate treatment it deserves — tonight, the blue suede shoes dance in Mets.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Half Note Jazz Club |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-minute walk |\n| **Price** | Table: 15-20 euro, Bar: 10-15 euro |\n| **Reservations** | Essential - call ahead, arrive 20 min early |\n\nElvis left the building decades ago. Tonight at Half Note, his songs find new rooms.",
-      "startDate": "2026-02-21T22:30:00",
+      "fullDescription": "The sideburns catch the light before you hear the first note. Then the band kicks in and Memphis arrives in Mets, filtered through an Athenian voice that's spent years learning how the King made sound become feeling.\n\nDoros Dimosthenous returns to Half Note for the second night of his Elvis tribute, and the word \"tribute\" barely covers it. This is inhabited performance — the gestures, the timing, the vocal catches that made Presley's catalog survive decades of imitation. Dimosthenous doesn't impersonate so much as channel, and the difference matters when the songs are ones you thought you knew completely.\n\nHalf Note Jazz Club offers the setting these ballads deserve. The Mets institution has hosted jazz royalty since 1979, and tonight it bends its programming toward rock and roll royalty of a different kind. The room holds maybe 200 people, close enough to catch the performer's expression, intimate enough that \"Love Me Tender\" actually feels tender rather than theatrical.\n\nThe Sunday night crowd differs subtly from Saturday's. Some are returners — people who came last night and couldn't stay away. Others are the ones who needed to hear how the first night went before committing. The result is a room even more prepared for what Dimosthenous delivers, permission for transport already granted before he takes the stage.\n\nIf you're a purist who believes no one should touch the King's catalog, if tribute feels inherently lesser, this evening asks you to reconsider. Dimosthenous proves that devotion can be creative, that interpretation honors rather than diminishes. But if you've been ready for an evening where Elvis's songs meet Half Note's acoustic intimacy, where the love songs land the way they're meant to — tonight, the King's spirit visits Mets again.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, February 22, 2026 |\n| **Venue** | Half Note Jazz Club |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-minute walk |\n| **Price** | Table: 15-20 euro, Bar: 10-15 euro |\n| **Reservations** | Essential - book ahead |\n\nSame voice, same venue, different night. The songs remain immortal.",
+      "startDate": "2026-02-22T21:30:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -550,13 +410,13 @@
         "currency": "EUR",
         "range": "από €15"
       },
-      "url": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king/2026-02-21/",
-      "ticketUrl": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king-2026-02-21/",
+      "url": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king/2026-02-22/",
+      "ticketUrl": "https://www.halfnote.gr/event/doros-dimosthenous-sings-elvis-carnival-with-the-king-2026-02-22/",
       "source": "halfnote",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
-      "timeDoors": "22:30",
+      "timeDoors": "21:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -564,10 +424,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "18bd1bf1f0713a7",
-      "title": "Nick Jojo",
+      "id": "5415d74464d1587a",
+      "title": "Blind Spot: NOID + AMH + DIMI.D",
       "description": "",
-      "startDate": "2026-02-21T23:00:00+03:00",
+      "startDate": "2026-02-22T23:45:00+03:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -575,8 +435,8 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Zelus",
-        "address": "Zelus, Πλουτάρχου 9, Κολωνάκι, Αθήνα, Greece",
+        "name": "IT Athens",
+        "address": "IT Athens, Σολωμού 30 &amp; Μπόταση 9, Εξάρχεια, Αθήνα, Greece",
         "neighborhood": null,
         "coordinates": {
           "lat": 37.9838,
@@ -590,57 +450,18 @@
         "currency": "EUR",
         "range": "with-ticket"
       },
-      "url": "https://www.clubber.gr/events/nick-jojo-35/",
-      "ticketUrl": "https://www.clubber.gr/events/nick-jojo-35/",
+      "url": "https://www.clubber.gr/events/blind-spot-noid-amh-dimi-d/",
       "source": "clubber.gr",
-      "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18T04:02:27.840Z",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "7ef79ee18e2db58c",
-      "title": "Anne + Ben Sims + Elisa Batti",
-      "description": "",
-      "startDate": "2026-02-21T23:45:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Smut",
-        "address": "Smut, Βατσαξή 4, 10438, Αθήνα, Greece",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.clubber.gr/events/anne-ben-sims-elisa-batti/",
-      "ticketUrl": "https://www.clubber.gr/events/anne-ben-sims-elisa-batti/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18 06:09:07",
+      "createdAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 19,
-    "lastUpdate": "2026-02-20T07:52:51.309Z",
+    "total": 13,
+    "lastUpdate": "2026-02-21T07:53:38.620Z",
     "url": "https://agentathens.netlify.app/with-ticket-concert-tomorrow"
   }
 }

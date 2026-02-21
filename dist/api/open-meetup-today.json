@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "meetup",
+    "price": "open",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.712Z",
+    "url": "https://agentathens.netlify.app/open-meetup-today"
+  }
+}

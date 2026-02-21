@@ -190,6 +190,18 @@ export const EVENT_TYPE_CONTEXT: Record<EventType, string> = {
 
   cinema:
     'A film screening featuring independent, international, classic, or art house cinema in a dedicated theater environment. Cinema screenings provide communal viewing experiences with professional projection and sound design.',
+
+  conference:
+    'A multi-day professional gathering with keynotes, panels, and networking. Conferences bring together practitioners, researchers, and industry leaders around shared technology or business domains.',
+
+  meetup:
+    'A community gathering where practitioners share knowledge and connect. Meetups offer talks, demos, and informal networking in a relaxed setting, building local tech community bonds.',
+
+  hackathon:
+    'An intensive coding event where teams build projects under time pressure. Hackathons combine competition, collaboration, and creativity, often yielding surprisingly functional prototypes.',
+
+  seminar:
+    'An academic or research presentation where experts share cutting-edge findings. Seminars offer deep dives into specific topics with Q&A, bridging the gap between research and practice.',
 };
 
 /**
@@ -244,6 +256,30 @@ function getEventTypeKeywords(type: EventType): string[] {
       'educational workshop',
       'creative learning',
       'Athens workshops',
+    ],
+    conference: [
+      'tech conference',
+      'AI summit',
+      'developer conference',
+      'Athens tech scene',
+    ],
+    meetup: [
+      'tech meetup',
+      'community gathering',
+      'developer community',
+      'Athens tech community',
+    ],
+    hackathon: [
+      'coding hackathon',
+      'AI hackathon',
+      'innovation challenge',
+      'Athens hackathon',
+    ],
+    seminar: [
+      'research seminar',
+      'academic talk',
+      'AI research',
+      'Athens research community',
     ],
   };
 

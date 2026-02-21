@@ -14,7 +14,9 @@
         "Μέγαρο Μουσικής - Αίθουσα «Γιάννης Μαρίνος»",
         "Μέγαρο Μουσικής - αίθουσα «Χρήστος Λαμπράκης»",
         "Μέγαρο Μουσικής Αθηνών - Γιάννης Μαρίνος",
-        "ΜΟΥΣΙΚΗ ΒΙΒΛΙΟΘΗΚΗ ΣΤΟ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ"
+        "ΜΟΥΣΙΚΗ ΒΙΒΛΙΟΘΗΚΗ ΣΤΟ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ",
+        "Megaron Athens International Conference Centre",
+        "Megaron International Conference Centre"
       ],
       "neighborhood": "Ilisia"
     },
@@ -2581,6 +2583,127 @@
       "variations": [],
       "address": "Οδυσσέως 8, Αθήνα 104 37",
       "neighborhood": "Central Athens"
+    },
+    {
+      "canonical_name": "Eugenides Foundation Conference Centre",
+      "variations": [
+        "Eugenides Foundation",
+        "Ίδρυμα Ευγενίδου",
+        "Idryma Eugenidou",
+        "Eugenides Conference Centre"
+      ],
+      "address": "387 Syngrou Avenue, Paleo Faliro 175 64",
+      "neighborhood": "Paleo Faliro"
+    },
+    {
+      "canonical_name": "OTEAcademy",
+      "variations": [
+        "OTE Academy",
+        "OTEAcademy Conference Center",
+        "ΟΤΕ Academy"
+      ],
+      "address": "Pelika 3 & Spartis, Maroussi 151 22",
+      "neighborhood": "Marousi"
+    },
+    {
+      "canonical_name": "ACE AUEB",
+      "variations": [
+        "ACE Athens Center for Entrepreneurship",
+        "Athens Center for Entrepreneurship and Innovation",
+        "ACE - AUEB"
+      ],
+      "address": "Troias 2, Athens 113 62",
+      "neighborhood": "Central Athens"
+    },
+    {
+      "canonical_name": "Epignosis HQ",
+      "variations": [
+        "Epignosis Athens",
+        "Epignosis Headquarters"
+      ],
+      "address": "Aristotelous 1 & Filellinon, Syntagma, Athens 105 59",
+      "neighborhood": "Syntagma"
+    },
+    {
+      "canonical_name": "Archimedes Amphitheatre",
+      "variations": [
+        "Archimedes Amphitheatre (Athena Research Center)",
+        "Athena RC Amphitheatre",
+        "Archimedes Unit"
+      ],
+      "address": "1 Artemidos Street, Marousi 151 25",
+      "neighborhood": "Marousi"
+    },
+    {
+      "canonical_name": "The Ellinikon Experience Centre",
+      "variations": [
+        "Ellinikon Experience Centre",
+        "The Ellinikon Experience Center",
+        "Ellinikon EC"
+      ],
+      "address": "Ellinikon, Athens 167 77",
+      "neighborhood": "Ellinikon"
+    },
+    {
+      "canonical_name": "Asteria Domus Glyfada",
+      "variations": [
+        "Asteria Domus",
+        "Asteria Glyfada"
+      ],
+      "address": "Glyfada, Athens 166 74",
+      "neighborhood": "Glyfada"
+    },
+    {
+      "canonical_name": "Ζάππειο Μέγαρο",
+      "variations": [
+        "Zappeion",
+        "Zappeion Hall",
+        "Zappeion Exhibition & Conference Hall",
+        "Zappeion Conference Hall",
+        "Ζάππειον",
+        "Ζάππειο"
+      ],
+      "address": "Leoforos Vasilissis Olgas, Athens 105 57",
+      "neighborhood": "Syntagma"
+    },
+    {
+      "canonical_name": "Athens Marriott Hotel",
+      "variations": [
+        "Marriott Athens",
+        "Athens Marriott"
+      ],
+      "address": "Leof. Andrea Siggrou 385, Paleo Faliro 175 64",
+      "neighborhood": "Paleo Faliro"
+    },
+    {
+      "canonical_name": "Παλαιό Αμαξοστάσιο Ο.ΣΥ.",
+      "variations": [
+        "Palaio Amaxostasio O.SY",
+        "Palaio Amaxostasio",
+        "Παλιό Αμαξοστάσιο",
+        "Παλαιό Αμαξοστάσιο"
+      ],
+      "address": "Pireos 260, Athens 177 78",
+      "neighborhood": "Gazi"
+    },
+    {
+      "canonical_name": "SAE Athens",
+      "variations": [
+        "SAE Technology Group Athens",
+        "SAE Athens Campus",
+        "SAE Institute Athens"
+      ],
+      "address": "Patission & Kodrigtonos 33, Athens 104 32",
+      "neighborhood": "Patisia"
+    },
+    {
+      "canonical_name": "Mediterranean Exhibition Centre",
+      "variations": [
+        "MEC Athens",
+        "MEC Peania"
+      ],
+      "address": "Peania, Attica",
+      "neighborhood": "Peania"
     }
   ],
   "neighborhoods": [
@@ -2663,7 +2786,15 @@
     "Περιστέρι",
     "Peristeri",
     "Ομόνοια",
-    "Omonoia"
+    "Omonoia",
+    "Μαρούσι",
+    "Marousi",
+    "Παλαιό Φάληρο",
+    "Paleo Faliro",
+    "Γλυφάδα",
+    "Glyfada",
+    "Ελληνικό",
+    "Ellinikon"
   ],
   "pass_through_venues": [
     "Πολλαπλοί Χώροι",

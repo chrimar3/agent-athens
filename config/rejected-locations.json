@@ -262,6 +262,22 @@
       {
         "name": "TGI Fridays",
         "reason": "Restaurant chain, not a cultural venue"
+      },
+      {
+        "name": "Athens",
+        "reason": "City name, not a specific venue (Eventbrite default)"
+      },
+      {
+        "name": "Αθήνα",
+        "reason": "City name, not a specific venue"
+      },
+      {
+        "name": "Greece",
+        "reason": "Country name, not a specific venue"
+      },
+      {
+        "name": "Ελλάδα",
+        "reason": "Country name, not a specific venue"
       }
     ]
   }

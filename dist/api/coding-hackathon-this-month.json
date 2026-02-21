@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "hackathon",
+    "genre": "Coding",
+    "time": "this-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.885Z",
+    "url": "https://agentathens.netlify.app/coding-hackathon-this-month"
+  }
+}

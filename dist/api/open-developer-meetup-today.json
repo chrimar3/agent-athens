@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "meetup",
+    "genre": "Developer",
+    "price": "open",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.874Z",
+    "url": "https://agentathens.netlify.app/open-developer-meetup-today"
+  }
+}

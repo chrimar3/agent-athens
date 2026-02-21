@@ -1,116 +1,4 @@
 {
-  "c0ea82dbcc512735": [
-    "c0ea82db-arroyo-theater-nina-simone-4"
-  ],
-  "869d28d7031ae04c": [
-    "869d28d7-concert-1-baumstrasse-costas-baltazanis-amp-jak-trio"
-  ],
-  "3b3f4e90fd06f493": [
-    "3b3f4e90--"
-  ],
-  "ba57903862729cd1": [
-    "ba579038-half-note-jazz-club-doros-dimosthenous-sings-elvis"
-  ],
-  "6fc2137ad36d93e0": [
-    "6fc2137a-floyd-quizball-live-show"
-  ],
-  "63278d8421c4d1b3": [
-    "63278d84--xatzifrageta-the-band"
-  ],
-  "4dc09daf84e521dd": [
-    "4dc09daf--amp"
-  ],
-  "5a49e19b497828d9": [
-    "5a49e19b-half-note-jazz-club-171-carnival-with-the-king-187"
-  ],
-  "c9ccc5df45ac523a": [
-    "c9ccc5df-theatre-of-the-no-encardia"
-  ],
-  "8f9d1545b12258f2": [
-    "8f9d1545-rohas-athens-live-stage-"
-  ],
-  "fbf1cc9a0dfc6277": [
-    "fbf1cc9a-plus-soma-ep"
-  ],
-  "9b0c0781360bf1d2": [
-    "9b0c0781-underflow-unplugged"
-  ],
-  "316602fad9d8bd47": [
-    "316602fa-aux-club-partara-maske-mask-off"
-  ],
-  "b905e0bf4afa0344": [
-    "b905e0bf-death-disco-thrashland"
-  ],
-  "f38892fdf7e42bc3": [
-    "f38892fd--"
-  ],
-  "7db2cef4eb004b5c": [
-    "7db2cef4-holywood-stage-amp"
-  ],
-  "165d013a00a26098": [
-    "165d013a--171-187"
-  ],
-  "d9b395e3a0765669": [
-    "d9b395e3--psynonima-bash"
-  ],
-  "aef9640ba48a9295": [
-    "aef9640b--laptop"
-  ],
-  "15b79ceef17d6847": [
-    "15b79cee--amp"
-  ],
-  "851ae9bdd556da16": [
-    "851ae9bd-architecture-soul-fingers"
-  ],
-  "c08c98aaf445c784": [
-    "c08c98aa-poetry-bar-between-strings"
-  ],
-  "d095852282ad9def": [
-    "d0958522-off-studio-171-sonic-almanac-187"
-  ],
-  "9aa52deedc611970": [
-    "9aa52dee-doors-ft-jerome-kaluta"
-  ],
-  "970c47062ba70a72": [
-    "970c4706-h-ug-art-space-"
-  ],
-  "900e37a5e61f7e46": [
-    "900e37a5--superstar"
-  ],
-  "bb180021734c0f49": [
-    "bb180021--"
-  ],
-  "eac723a9016bec8f": [
-    "eac723a9-half-note-jazz-club-doros-dimosthenous-sings-elvis-carnival-with-the-king"
-  ],
-  "53bf5966579a932b": [
-    "53bf5966-dybbuk-barbossa-adano-geo"
-  ],
-  "95c34bcea7e05925": [
-    "95c34bce-zelus-ajna"
-  ],
-  "c3f8ecc917af7a8a": [
-    "c3f8ecc9-astron-astron-club-night-with-liou-nausicaa-dj-gus"
-  ],
-  "344b5d9dbb896652": [
-    "344b5d9d-cantina-social-evripidis-and-his-tragedies"
-  ],
-  "73e5ea245ed27a6c": [
-    "73e5ea24-crust-viton-friends"
-  ],
-  "4318d7a800731f65": [
-    "4318d7a8-oddity-unitechno-pres-carv-siasios-tanison"
-  ],
-  "a3efc96c5eff3c53": [
-    "a3efc96c-it-athens-survival-grounds-vol-1-nadrya-nyereia-yope-r4st"
-  ],
-  "b3d7ebd4520b6a03": [
-    "b3d7ebd4-oddity-unitechno-w-carv",
-    "b3d7ebd4-oddity-club-unitechno-w-carv"
-  ],
-  "049efe8ac70abcf5": [
-    "049efe8a-it-athens-survival-grounds-vol-1"
-  ],
   "7531897aa94ef9cf": [
     "7531897a-jazzet-cafe-michael-dotson"
   ],
@@ -174,11 +62,47 @@
   "d63a6e6400993f13": [
     "d63a6e64--"
   ],
+  "a655ff7061f97f28": [
+    "a655ff70--h"
+  ],
+  "8bd38c6011842007": [
+    "8bd38c60-theatre-of-the-no-"
+  ],
+  "b72e50b6294b05f0": [
+    "b72e50b6--171-187"
+  ],
+  "16903a9488952603": [
+    "16903a94--"
+  ],
+  "2eda69c1b66ada3a": [
+    "2eda69c1-astron-evelyn-evelyn-the-musical"
+  ],
+  "24b320461958b963": [
+    "24b32046--"
+  ],
+  "1c1a77fd99e2d212": [
+    "1c1a77fd--"
+  ],
+  "7dbf7d09c6250b65": [
+    "7dbf7d09--"
+  ],
+  "af9b873a9c28abdd": [
+    "af9b873a--171-187"
+  ],
+  "6dee0c3b124fb950": [
+    "6dee0c3b-el-chapo-inco-stoa-oblivion"
+  ],
   "4d1308398dab01ad": [
     "4d130839-el-chapo-inco-stoa-oblivion"
   ],
   "30af168a6a28d4c1": [
     "30af168a-skullbar-afterhours-poorjdarr"
+  ],
+  "f67e2338db3fc119": [
+    "f67e2338-skullbar-afterhours-poorjdarr-jay-jay"
+  ],
+  "9196b9b0e908a686": [
+    "9196b9b0-burger-disco-club-xtracavanza"
   ],
   "6159c16594a96552": [
     "6159c165-studio-5"
@@ -187,11 +111,23 @@
     "e8355f56-plus-this-is-linta",
     "e8355f56-ilion-plus-this-is-linta"
   ],
+  "bcc2c763055819f7": [
+    "bcc2c763-boo-tribal-carnival-christos-fourkis"
+  ],
+  "474bce75d711cca5": [
+    "474bce75-boo-tribal-carnival-christos-fourkis"
+  ],
   "c035cdf16b0850dc": [
     "c035cdf1-stoa-athens-555-carnival-bass-party"
   ],
   "74651705c5e23ae6": [
     "74651705-b-side-athens-techno-underdogs-free-entrance"
+  ],
+  "deef76058f0fe804": [
+    "deef7605-b-side-athens-a2-workshop-demonstration"
+  ],
+  "a2f990c5a8699576": [
+    "a2f990c5-b-side-athens-datalogs-extase-urbaine"
   ],
   "0febebdc542bc194": [
     "0febebdc-half-note-jazz-club-doros-dimosthenous-sings-elvis-carnival-with-the-king"
@@ -211,8 +147,26 @@
   "d1bb055675095fe6": [
     "d1bb0556-cantina-social-icarus-in-love-kancheli"
   ],
+  "e76219bdb6d00f8f": [
+    "e76219bd-astron-florence-the-sound-of-modal-analysis"
+  ],
+  "a7a5037bbd52056a": [
+    "a7a5037b-cantina-social-kancheli-bassiani-icarus-in-love"
+  ],
+  "d2b25706d4992ca3": [
+    "d2b25706-dybbuk-tripolism-gv"
+  ],
+  "9865a8b9509eb79a": [
+    "9865a8b9-bios-we-are-house-akylla-pascal-christo-z"
+  ],
+  "c9553fbbec69dae1": [
+    "c9553fbb-cantina-social-kancheli-tbilisi-bassiani-icarus-in-love"
+  ],
   "18bd1bf1f0713a7": [
     "18bd1bf1-zelus-nick-jojo"
+  ],
+  "3b2c4cbd76c23f3c": [
+    "3b2c4cbd-bios-we-are-house-akylla-pascal-christo-z"
   ],
   "06ab2e9f8a7c71ca": [
     "06ab2e9f-universe-velocity-pres-adiel-speedy-j-colin-benders-ate-x-salin-cirkl",
@@ -227,6 +181,12 @@
   ],
   "07c20ed3a074b32f": [
     "07c20ed3-n-a-o-s-sir-dance-a-lot-kill-emil-vs-insom-blk-cld-ofnder"
+  ],
+  "bf9b805619565910": [
+    "bf9b8056-universe-velocity-pres-adiel-speedy-j-colin-benders-ate-x-salin-cirkl"
+  ],
+  "c43d865de0b4d545": [
+    "c43d865d-smut-4-10438-greece-anne-ben-sims-elisa-batti"
   ],
   "7ef79ee18e2db58c": [
     "7ef79ee1-smut-anne-ben-sims-elisa-batti"
@@ -244,6 +204,12 @@
   ],
   "fa582315f19093a8": [
     "fa582315-it-athens-old-school-never-fails"
+  ],
+  "e1b1889926b75399": [
+    "e1b18899-dybbuk-tripolism-all-night-long"
+  ],
+  "a02f91c38b955067": [
+    "a02f91c3-crust-clubkid-x-leo-son"
   ],
   "495b0f1462a55d29": [
     "495b0f14-jazzet-cafe-manos-saridakis-trio"
@@ -281,8 +247,20 @@
   "d3acf85b1ca21ad6": [
     "d3acf85b--rosanna-mail-225-n-amp-the-orchestra"
   ],
+  "902cd7ba957890a9": [
+    "902cd7ba--misery"
+  ],
   "3c28ffd306973521": [
     "3c28ffd3-el-chapo-marthe-galactik-geisha-zoi-andreou-s-ant"
+  ],
+  "b5ef7ebcf4ad9408": [
+    "b5ef7ebc-skullbar-afterhours-bonso-suneater-hutt"
+  ],
+  "e1bf4200daae664e": [
+    "e1bf4200-daddy-s-all-day-bar-celebrate-the-carnival-as-a-raver-2delta-marthe"
+  ],
+  "83093b896757fc56": [
+    "83093b89-daddy-s-all-day-bar-celebrate-the-carnival-as-a-raver-2delta-marthe"
   ],
   "8cacd4cb8c20d4b0": [
     "8cacd4cb--eden-presents-daria-kolosova-b2b-hector-oaks",
@@ -294,15 +272,30 @@
   "a46bebaf1cd2efb7": [
     "a46bebaf-burger-disco-club-sundays-at-the-church"
   ],
+  "af3fc7498858a515": [
+    "af3fc749-burger-disco-club-palms-trax"
+  ],
+  "207c62645e916c29": [
+    "207c6264-burger-disco-club-no-more-fake-disco"
+  ],
   "541c95a62e97c800": [
     "541c95a6-burger-disco-club-palms-trax"
   ],
   "9ba58276727ac49b": [
-    "9ba58276-conservatoire-in-greek-eden-presents-daria-kolosova-b2b-hector-oaks",
-    "9ba58276--eden-presents-daria-kolosova-b2b-hector-oaks"
+    "9ba58276--eden-presents-daria-kolosova-b2b-hector-oaks",
+    "9ba58276-conservatoire-in-greek-eden-presents-daria-kolosova-b2b-hector-oaks"
   ],
   "aa0a11c49a85a9c2": [
     "aa0a11c4-cantina-social-matltoni"
+  ],
+  "65333f70629fb00c": [
+    "65333f70-b-side-athens-victor-zala"
+  ],
+  "560078f590a3ce3f": [
+    "560078f5-boo-tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2"
+  ],
+  "115c879d06c87ccb": [
+    "115c879d-boo-tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2"
   ],
   "7954e19a7e7569ae": [
     "7954e19a-half-note-jazz-club-doros-dimosthenous-sings-elvis-carnival-with-the-king"
@@ -313,8 +306,20 @@
   "77de8eb23fb3bc10": [
     "77de8eb2-astron-cannibal-radio-clubnight-mr-m-nuumett-mr-roussos"
   ],
+  "96b3c83f254d9618": [
+    "96b3c83f-bios-trash-x-rave-carnival-edition"
+  ],
+  "77d964b4cb0b5da3": [
+    "77d964b4-astron-cannibal-radio-clubnight"
+  ],
   "43a537d72f43d7c4": [
     "43a537d7-aux-club-303-rave-x-422m-deherian-b2b-sctr-imperium-kinspin-b2b-mari-"
+  ],
+  "b47136e11a378e8c": [
+    "b47136e1-it-athens-blind-spot-noid-amh-dimi-d"
+  ],
+  "5415d74464d1587a": [
+    "5415d744-it-athens-blind-spot-noid-amh-dimi-d"
   ],
   "da96469391f2d52b": [
     "da964693-aux-club-303-rave-x-422m-10hrs-rave-athens"
@@ -328,17 +333,29 @@
   "0ec4801955f99a58": [
     "0ec48019--171-187"
   ],
+  "a3ff3b4b813124ad": [
+    "a3ff3b4b--"
+  ],
   "60e541889d263c93": [
     "60e54188-doors-vaginahood"
   ],
   "0fc2ce17f13d5e1d": [
     "0fc2ce17-half-note-jazz-club-stelios-chatzikaleas-quartet"
   ],
+  "b3c570f40394bf77": [
+    "b3c570f4-radar-"
+  ],
   "acfd5251dc5e1abb": [
     "acfd5251--"
   ],
   "9917302714fc5847": [
     "99173027--gregory-jusdanis"
+  ],
+  "7773db249ca94111": [
+    "7773db24--gregory-jusdanis-8211"
+  ],
+  "2efea9c11c0da7d8": [
+    "2efea9c1--gregory-jusdanis"
   ],
   "2c137884ef2d83ae": [
     "2c137884-half-note-jazz-club-stelios-chatzikaleas-quartet-the-sea-inside"
@@ -374,6 +391,24 @@
   "5156ac5c7a7ef3f2": [
     "5156ac5c--"
   ],
+  "e36dbf1416f0bb91": [
+    "e36dbf14-171-187-"
+  ],
+  "8bad79eee365a357": [
+    "8bad79ee-christmas-theater-louis-c-k-ridiculous"
+  ],
+  "f2e0c357cad1aabb": [
+    "f2e0c357--dolls"
+  ],
+  "fabf477dfb311940": [
+    "fabf477d--171-187"
+  ],
+  "d5807be5622407f4": [
+    "d5807be5--"
+  ],
+  "7ff8b6211b6100ee": [
+    "7ff8b621--"
+  ],
   "8787e304dbc782c4": [
     "8787e304-138-20"
   ],
@@ -383,11 +418,41 @@
   "a234d27047c5d50f": [
     "a234d270-cantina-social-lockbird"
   ],
+  "de0baa80377df380": [
+    "de0baa80-cantina-social-lockbird"
+  ],
   "77c23d075980afcd": [
     "77c23d07-half-note-jazz-club-stathis-anninos-unsilent-place"
   ],
   "bf03c503fbae62ad": [
     "bf03c503-plus-shadow-knight"
+  ],
+  "c7ef21d36410eb42": [
+    "c7ef21d3-half-note-jazz-club-miranda-verouli-quintet"
+  ],
+  "944f6f629770adfd": [
+    "944f6f62--three-times-three-5"
+  ],
+  "8297d866e4f7e939": [
+    "8297d866--"
+  ],
+  "cead5028f1b91e7f": [
+    "cead5028--171-viva-la-mamma-187"
+  ],
+  "e2874bd3230feee7": [
+    "e2874bd3-plus-shadow-knight-phyrosun-amp-frs"
+  ],
+  "69b5e3bad5341b32": [
+    "69b5e3ba-underflow-joanna-mattrey"
+  ],
+  "6ae26526b4ecd654": [
+    "6ae26526--"
+  ],
+  "b921cecb62005587": [
+    "b921cecb--amp"
+  ],
+  "42503c43d0d8e57e": [
+    "42503c43--"
   ],
   "1e4add97884526f": [
     "1e4add97-christmas-theater-louis-c-k-ridiculous"
@@ -398,6 +463,12 @@
   "4eeeba9927541cfa": [
     "4eeeba99--"
   ],
+  "21fbbeae70952831": [
+    "21fbbeae--8211-v"
+  ],
+  "b30566d842782915": [
+    "b30566d8--v"
+  ],
   "1ae8fc4ec471d76f": [
     "1ae8fc4e-cantina-social-irini-karaoglou"
   ],
@@ -406,6 +477,9 @@
   ],
   "6bb5965b47173e2e": [
     "6bb5965b-zelus-sneaky-club"
+  ],
+  "d267eb676e666885": [
+    "d267eb67-dybbuk-agent-greg-stephanos"
   ],
   "cbd3864cb7bbeb99": [
     "cbd3864c-dybbuk-agent-greg-stephanos"
@@ -422,6 +496,69 @@
   "4c6506d821c3c9ed": [
     "4c6506d8--"
   ],
+  "cfb666d0772257af": [
+    "cfb666d0-stage-7-"
+  ],
+  "d3d3fe010b8053c3": [
+    "d3d3fe01-exa-angelika-dusk"
+  ],
+  "d6980de0eb72f0a3": [
+    "d6980de0-caja-de-musica-"
+  ],
+  "b4cd5ccee9adc7d3": [
+    "b4cd5cce--"
+  ],
+  "69f35feff40adfb2": [
+    "69f35fef--amp"
+  ],
+  "c7e9c8aee4d0e709": [
+    "c7e9c8ae-theatre-of-the-no-yiannis-kassetas"
+  ],
+  "e4cede832d1c8289": [
+    "e4cede83--"
+  ],
+  "d406548e2284d3d6": [
+    "d406548e-fuzz-club-"
+  ],
+  "5fcf54f2f89a0ccb": [
+    "5fcf54f2-half-note-jazz-club-"
+  ],
+  "d9c0e533e2faab74": [
+    "d9c0e533-171-187-"
+  ],
+  "22d71034286db915": [
+    "22d71034-death-disco-pop-girlies-night-vol-3"
+  ],
+  "a00afb8c8852dcd9": [
+    "a00afb8c-oddity-marika-rossa"
+  ],
+  "b5f1d1ee0e86a940": [
+    "b5f1d1ee--171-187"
+  ],
+  "f7af5f1fa078ab23": [
+    "f7af5f1f--"
+  ],
+  "629c869f54864b79": [
+    "629c869f--laura-agnusdei-amp-free-piece-of-tape"
+  ],
+  "d46b3db6e422c6a0": [
+    "d46b3db6-arch-club-"
+  ],
+  "4235c7cee742227d": [
+    "4235c7ce-off-studio-amaguk"
+  ],
+  "f9d313043f98394d": [
+    "f9d31304-temple-skullcrush-fest"
+  ],
+  "bf071df45370afe0": [
+    "bf071df4-plus-voidtech"
+  ],
+  "d75dabf592ecde45": [
+    "d75dabf5--"
+  ],
+  "643bd62a8311ff0f": [
+    "643bd62a--"
+  ],
   "33d3c3e64c6d483c": [
     "33d3c3e6--"
   ],
@@ -433,6 +570,12 @@
   ],
   "5a6a596855b5765c": [
     "5a6a5968--"
+  ],
+  "a71cd6a78384547f": [
+    "a71cd6a7--1821-1896"
+  ],
+  "6a352d23019bd720": [
+    "6a352d23--"
   ],
   "f4351782b6f9b0bc": [
     "f4351782-big-table-imprint-01-w-ulla-apu-nanu-manos-plitsis-raed-torn"
@@ -455,6 +598,9 @@
   "ecf67fd2d3906fee": [
     "ecf67fd2-cantina-social-romphea"
   ],
+  "a05fe2d52a605be6": [
+    "a05fe2d5-dybbuk-jonathan-kaspar-mironas-rezo"
+  ],
   "748b129e4a89bfae": [
     "748b129e-dybbuk-jonathan-kaspar-mironas-rezo"
   ],
@@ -464,8 +610,71 @@
   "8aea69aaf4cef0c0": [
     "8aea69aa-oddity-exilium-pres-marika-rossa"
   ],
+  "bb384531f459b828": [
+    "bb384531-it-athens-kits-and-rave-carnival-edition"
+  ],
   "f8c8641d8aeb4744": [
     "f8c8641d-vox-live-vox"
+  ],
+  "c1c0c9c9dc43abed": [
+    "c1c0c9c9-temple-pure-show-heavenly-the-vaxtones-party"
+  ],
+  "ae47c083b3fe8f66": [
+    "ae47c083-half-note-jazz-club-"
+  ],
+  "3ae9de55073081f0": [
+    "3ae9de55-caja-de-musica-"
+  ],
+  "00083371aa53b35a": [
+    "00083371-rohas-athens-live-stage-1550"
+  ],
+  "cb0416af396b6973": [
+    "cb0416af-gazarte-disco-night-80s-90s-party"
+  ],
+  "4423daf92f99973f": [
+    "4423daf9--171-187"
+  ],
+  "8c4fa9d9099241fe": [
+    "8c4fa9d9-temple-heavenly-amp-the-vaxtones"
+  ],
+  "cf433cca45183b99": [
+    "cf433cca-aux-club-ath-dub-unity-w-tr-tactics"
+  ],
+  "13a5bc41858ca507": [
+    "13a5bc41-aux-club-aux-anagenisis-w-mari-ferrari"
+  ],
+  "34fc7512698b13ab": [
+    "34fc7512--"
+  ],
+  "e504d6ff975e7248": [
+    "e504d6ff--"
+  ],
+  "60748af924c56ecc": [
+    "60748af9-concert-1-baumstrasse-the-greek-jazz-book-concert-1"
+  ],
+  "0a9c257425188990": [
+    "0a9c2574-jazzet-cafe-human-touch"
+  ],
+  "bc749a0c51694263": [
+    "bc749a0c-cafe-bar-the-stroryville-ragtimers"
+  ],
+  "91554202949ad78c": [
+    "91554202-off-studio-"
+  ],
+  "b3ed2d3e72509de3": [
+    "b3ed2d3e--"
+  ],
+  "72c731e7d8a2fae2": [
+    "72c731e7--"
+  ],
+  "ad9ef805ca52549b": [
+    "ad9ef805--"
+  ],
+  "58b945f4579cf2c9": [
+    "58b945f4-gustav-athens-"
+  ],
+  "7690cef6908b44e4": [
+    "7690cef6--the-mr-and-mrs-bubble-show"
   ],
   "acc2e97b2d6a0651": [
     "acc2e97b-skull-bar-you-are-what-you-dance"
@@ -485,11 +694,17 @@
   "bce237d23c21c2e3": [
     "bce237d2--1896-1922"
   ],
+  "4650121dda8187b5": [
+    "4650121d--1896-1922"
+  ],
   "de4acc79c181b029": [
     "de4acc79-mona-athens-purim-athens"
   ],
   "1bb09ff7dc81ddda": [
     "1bb09ff7-temple-pure-show-heavenly-the-vaxtones-party"
+  ],
+  "af507bd891e13968": [
+    "af507bd8-b-side-athens-techno-underdogs-free-entrance"
   ],
   "8bc1dc30a4504dab": [
     "8bc1dc30-half-note-jazz-club-you-only-live-once-yolo"
@@ -509,8 +724,14 @@
   "3774fd583d8000d9": [
     "3774fd58-cantina-social-mjw"
   ],
+  "366932a5963b5213": [
+    "366932a5-astron-impvlsiv-bolosis-piece-of-kate"
+  ],
   "6ac49a3feb8c46e5": [
     "6ac49a3f-zelus-nick-jojo"
+  ],
+  "248fcda96d78943c": [
+    "248fcda9-astron-impvlsiv-bolosis-piece-of-kate"
   ],
   "0818ff80fe029598": [
     "0818ff80-crust-fragk-hutt-louie-dima"
@@ -530,6 +751,9 @@
   "ea1161f404e96f3a": [
     "ea1161f4-plus-street-fighter-honda"
   ],
+  "2afae0621a2d9099": [
+    "2afae062-aux-club-aux-anagenesis-with-mari-ferrari"
+  ],
   "7c51b591a1195a8f": [
     "7c51b591-parnassos-literary-society-"
   ],
@@ -538,6 +762,60 @@
   ],
   "29495798aed83acf": [
     "29495798--"
+  ],
+  "6f3e3398fa249671": [
+    "6f3e3398--"
+  ],
+  "42f11248de5a242f": [
+    "42f11248--"
+  ],
+  "31a966329487fc7b": [
+    "31a96632-half-note-jazz-club-ad-233-d-232-j-236"
+  ],
+  "0c2742b18caedeb9": [
+    "0c2742b1--"
+  ],
+  "db29f36b5e190688": [
+    "db29f36b-gazarte-panarmonia"
+  ],
+  "2c59d08e536b51d8": [
+    "2c59d08e--"
+  ],
+  "56b29678f03d5bf9": [
+    "56b29678-theatre-of-the-no-alef"
+  ],
+  "be9c82e898f98970": [
+    "be9c82e8--171-187"
+  ],
+  "0c0696c92c3f9ee4": [
+    "0c0696c9--171-187"
+  ],
+  "1a5aa5cda4e8d23d": [
+    "1a5aa5cd-171-187-camerata-junior"
+  ],
+  "4fa575b838530c68": [
+    "4fa575b8--"
+  ],
+  "10ba1fb33fc875e7": [
+    "10ba1fb3--"
+  ],
+  "5cff359feb56ae55": [
+    "5cff359f-off-studio-0-thetis"
+  ],
+  "291885e430f5d6ab": [
+    "291885e4--"
+  ],
+  "1647764215728394": [
+    "16477642-tba-atharea-revolt-hosts-shuffle-with-paleman-uk"
+  ],
+  "927f06b4e18b4c29": [
+    "927f06b4-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai"
+  ],
+  "0390b33cca8e3b7a": [
+    "0390b33c-burger-disco-club-house-on-the-beach"
+  ],
+  "63e9da002017c110": [
+    "63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai"
   ],
   "d9923d001fbb6d0e": [
     "d9923d00--"
@@ -551,6 +829,21 @@
   "b8b4548b07aa8011": [
     "b8b4548b--1922-1940"
   ],
+  "871383e537315e2e": [
+    "871383e5--8211"
+  ],
+  "4bc47d9867c8371b": [
+    "4bc47d98--1922-1940"
+  ],
+  "8337bb1c620387cb": [
+    "8337bb1c--"
+  ],
+  "a961080e1afbc1a0": [
+    "a961080e-cantina-social-ad-hoc"
+  ],
+  "952dec4d826e940d": [
+    "952dec4d-cantina-social-ad-hoc"
+  ],
   "f61493ffcfb01c4e": [
     "f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion"
   ],
@@ -560,8 +853,44 @@
   "8fb818ee9e8710c0": [
     "8fb818ee-roes-theater-vol-2"
   ],
+  "d7f545bb188417c3": [
+    "d7f545bb--amp-kubara-project"
+  ],
+  "415eb4a016777ded": [
+    "415eb4a0-half-note-jazz-club-blues-cargo-amp-michael-dotson"
+  ],
+  "75e9f12f69c2c523": [
+    "75e9f12f-vox-"
+  ],
+  "24f7e6cd14175a0c": [
+    "24f7e6cd--"
+  ],
+  "ba2bedb98a68fdcf": [
+    "ba2bedb9--"
+  ],
+  "630dfe55339bd791": [
+    "630dfe55-radar-"
+  ],
+  "961a5c5d7012a516": [
+    "961a5c5d--171-187"
+  ],
+  "e7a11193b9847fda": [
+    "e7a11193--"
+  ],
+  "4aef7802e0080c1e": [
+    "4aef7802--"
+  ],
+  "e0d2ed4d8ec1dda0": [
+    "e0d2ed4d-newman-cinema-meta"
+  ],
+  "2a95be130348e806": [
+    "2a95be13-concert-1-baumstrasse-"
+  ],
   "cc171a5444a7e5e5": [
     "cc171a54--"
+  ],
+  "ebe64ca43b9346be": [
+    "ebe64ca4--"
   ],
   "66d57dc45ae2ba87": [
     "66d57dc4-half-note-jazz-club-blues-cargo-special-guest-michael-dotson"
@@ -572,16 +901,46 @@
   "d15da23b5f33046e": [
     "d15da23b-roes-theater-vol-2"
   ],
+  "b17333d013411051": [
+    "b17333d0--h-228-xan-live-soundtrack"
+  ],
+  "481fa33c00e2824d": [
+    "481fa33c-radar-"
+  ],
+  "d2de20293b07a148": [
+    "d2de2029-gazarte-leon-of-athens"
+  ],
+  "43a25215f2269011": [
+    "43a25215-half-note-jazz-club-5tet"
+  ],
+  "f1c82536547d4eb1": [
+    "f1c82536--"
+  ],
+  "d6657b53c248699e": [
+    "d6657b53-brecht-2510-jazz-standards"
+  ],
+  "223287e3fb68543b": [
+    "223287e3--"
+  ],
   "870952a13a27e601": [
     "870952a1-half-note-jazz-club-for-women-5tet"
   ],
+  "12a636c21c029493": [
+    "12a636c2--"
+  ],
+  "2053fb8e1bc2584e": [
+    "2053fb8e--"
+  ],
+  "026cd1d2db9c3c5b": [
+    "026cd1d2-gazarte-eden-live-presents-stavroz"
+  ],
   "556bbebc8881d699": [
-    "556bbebc-wavves-bios-wavves",
-    "556bbebc-bios-wavves"
+    "556bbebc-bios-wavves",
+    "556bbebc-wavves-bios-wavves"
   ],
   "477e7970a8eba73f": [
-    "477e7970-ground-stage-eden-live-presents-stavroz",
-    "477e7970-gazarte-eden-live-presents-stavroz"
+    "477e7970-gazarte-eden-live-presents-stavroz",
+    "477e7970-ground-stage-eden-live-presents-stavroz"
   ],
   "22290993f31d9160": [
     "22290993-half-note-jazz-club-spyros-manesis-trio"
@@ -602,6 +961,15 @@
   "4c121d5eb2629a64": [
     "4c121d5e-plus-billie-kark-x-ody-icons"
   ],
+  "d765bc6c424b5090": [
+    "d765bc6c--"
+  ],
+  "282ef93b3f829ac6": [
+    "282ef93b--duo-duende"
+  ],
+  "8956507ab9ee66b3": [
+    "8956507a-ace-aueb-ai-hackathon-greece-2026"
+  ],
   "e844d2764b937db": [
     "e844d276-gazarte-conan-live-in-athens"
   ],
@@ -610,6 +978,9 @@
   ],
   "03d5e08eadab313e": [
     "03d5e08e--mondrian-pollock"
+  ],
+  "74b2b7e2f0d79806": [
+    "74b2b7e2--mondrian-pollock"
   ],
   "f6992f070c060c23": [
     "f6992f07-half-note-jazz-club-christie-dashiell-quartet"
@@ -621,11 +992,35 @@
   "eb0ad0261a6f2d20": [
     "eb0ad026-universe-dimitri-vegas-in-athens"
   ],
+  "d1a79f3ccba2c11f": [
+    "d1a79f3c-universe-dimitri-vegas-manolaco-lost-prince"
+  ],
+  "55bcdd372399c236": [
+    "55bcdd37-universe-dimitri-vegas-manolaco-lost-prince"
+  ],
+  "e3a19a7e32b1665a": [
+    "e3a19a7e-astron-espectro-oculto-with-cortical-systematics-rnxrx-marianella-n"
+  ],
+  "c4692c14b0fef7d2": [
+    "c4692c14-oddity-enlight-frequencies-with-byorn"
+  ],
+  "32e5285f136dc52a": [
+    "32e5285f-aux-club-aux-fenimore"
+  ],
+  "4f778cbacc953eef": [
+    "4f778cba-aux-club-aux-fenim0re"
+  ],
   "79903b7661368b64": [
     "79903b76--"
   ],
   "fba1c7ce5b2ac36e": [
     "fba1c7ce-christmas-theater-fight-for-glory-iii"
+  ],
+  "d9f56fd79ee55f18": [
+    "d9f56fd7-concert-1-baumstrasse-"
+  ],
+  "b8039d674a183baa": [
+    "b8039d67-piraeus-club-academy-oathswan-the-heirloom-piraeus-club-academy"
   ],
   "dr-jordan-b-peterson-an-evening-to-transform-your-life-2026-03-07": [
     "dr-jorda-sunel-arena-dr-jordan-b-peterson-an-evening-to-transform-your-life"
@@ -636,24 +1031,54 @@
   "b927511b94a0e456": [
     "b927511b--london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow"
   ],
+  "73f95b1d6f434695": [
+    "73f95b1d--london-philharmonic-orchestra-8211-paavo-jarvi-8211-alexandr"
+  ],
+  "53e004d37e2e04e9": [
+    "53e004d3--london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow"
+  ],
   "52bde444d003f936": [
     "52bde444-2ten-gl57-by-zair"
   ],
   "801551fbd8348b12": [
     "801551fb-half-note-jazz-club-christie-dashiell-quartet"
   ],
+  "0ca00f0e078e5e4c": [
+    "0ca00f0e-universe-rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissima"
+  ],
+  "433d6fc3cacf7ab3": [
+    "433d6fc3-astron-soft-crush-w-dj-yazi-outermost-katra"
+  ],
+  "d4ba06520768e76a": [
+    "d4ba0652-n-a-o-s-kollektiv-raw-state-techno-takeover"
+  ],
+  "56f54d115e5e0e87": [
+    "56f54d11-universe-solace-pre-party"
+  ],
   "c0b6e77433c27809": [
-    "c0b6e774-n-a-o-s-not-an-ordinary-space-kollektiv-raw-state-techno-takeover",
-    "c0b6e774-n-a-o-s-kollektiv-raw-state-techno-takeover"
+    "c0b6e774-n-a-o-s-kollektiv-raw-state-techno-takeover",
+    "c0b6e774-n-a-o-s-not-an-ordinary-space-kollektiv-raw-state-techno-takeover"
   ],
   "0777d3470dcf136a": [
     "0777d347-astron-espectro-oculto-with-cortical-systematics-rnxrx-marianella-n"
   ],
+  "9ef3e44821ebba07": [
+    "9ef3e448-smut-4-10438-greece-coma-talismann-laure-croft-jerm"
+  ],
+  "63856bea50c70fc7": [
+    "63856bea-smut-coma-talismann-laure-croft-jerm"
+  ],
   "c7b63ec9a83394c7": [
     "c7b63ec9-smut-athens-coma-x-smut-x-talismann-x-laure-croft-x-jerm"
   ],
+  "6166dccac02b0236": [
+    "6166dcca-it-athens-the-7th-gate-by-lory-aka-archaic"
+  ],
   "c208b81d61df51fa": [
     "c208b81d-myrtillo-cafe-alcedo-folk-band"
+  ],
+  "4020dcb2b77b5406": [
+    "4020dcb2-christmas-theater-"
   ],
   "44be7705b186e980": [
     "44be7705-an-club-lamp-of-murmuur-special-guest"
@@ -664,6 +1089,12 @@
   "1a7152010289ed60": [
     "1a715201-roes-theater-vol-2"
   ],
+  "c68c6e0086ab458c": [
+    "c68c6e00--resonances-2"
+  ],
+  "b57e30643152c76a": [
+    "b57e3064-radar-"
+  ],
   "65-2026-03-09": [
     "65-2026---65"
   ],
@@ -672,6 +1103,9 @@
   ],
   "b0cc94be77e51a6a": [
     "b0cc94be-roes-theater-vol-2"
+  ],
+  "36c78d21db8f7986": [
+    "36c78d21-radar-"
   ],
   "242e47fb0c022e62": [
     "242e47fb--"
@@ -688,11 +1122,20 @@
   "4219bcc2be1b9bbf": [
     "4219bcc2--14"
   ],
+  "dae85c760dec8819": [
+    "dae85c76--14"
+  ],
   "b8347235796d5614": [
     "b8347235--"
   ],
   "15da2955f1212183": [
     "15da2955--live"
+  ],
+  "3be4e977d5aa1acc": [
+    "3be4e977-live-up-the-hammers-xx-2026-legacy-edition"
+  ],
+  "4ad745aafcfe8890": [
+    "4ad745aa-concert-1-baumstrasse-kojam-orchestra"
   ],
   "211c4c72d60dd1a1": [
     "211c4c72-hood-art-space-"
@@ -700,16 +1143,22 @@
   "d7315ae7be008ce0": [
     "d7315ae7--"
   ],
+  "f14bae6f03088b2a": [
+    "f14bae6f--"
+  ],
   "732e8ea1f426edd4": [
     "732e8ea1-parnassos-literary-society-hermaphrodite-apos-s-child-60s"
+  ],
+  "c5c84489a22d2047": [
+    "c5c84489-live-up-the-hammers-xx-2026-legacy-edition"
   ],
   "65-2026-03-13": [
     "65-2026---65",
     "65-2026--maker-space-65"
   ],
   "1a56a706b7c1e84": [
-    "1a56a706-ground-stage-heretoir-live-in-athens",
-    "1a56a706-gazarte-heretoir-live-in-athens"
+    "1a56a706-gazarte-heretoir-live-in-athens",
+    "1a56a706-ground-stage-heretoir-live-in-athens"
   ],
   "4ad34c4984813e6c": [
     "4ad34c49--jazz-evi-mazi-manos-kitsikopoulos"
@@ -717,11 +1166,20 @@
   "6200f1847c6d91ff": [
     "6200f184--"
   ],
+  "f6bc49f853c604de": [
+    "f6bc49f8--"
+  ],
   "2fe6c223659ef15e": [
     "2fe6c223-2ten-all-night-long-matea-x-alisa-murphy"
   ],
   "a2b7fe2387c57d81": [
     "a2b7fe23--"
+  ],
+  "7fd6eb02dd1caf83": [
+    "7fd6eb02-live-up-the-hammers-xx-2026-legacy-edition"
+  ],
+  "a5c4581b5cf7103f": [
+    "a5c4581b-st-paul-s-anglican-church-"
   ],
   "d1061a8e5c95ae39": [
     "d1061a8e-bios-cannilab-3"
@@ -734,6 +1192,9 @@
   ],
   "27fe5ed091e2673d": [
     "27fe5ed0--"
+  ],
+  "60c26eb477ddb695": [
+    "60c26eb4--"
   ],
   "055ec0f802a0b8c3": [
     "055ec0f8-smut-athens-smut-x-fadi-mohem-x-philippa-pacho-x-onur"
@@ -761,6 +1222,9 @@
   "b825ee68656373d2": [
     "b825ee68-roes-theater-vol-2"
   ],
+  "5d5f6f99cbdbb7b9": [
+    "5d5f6f99-radar-"
+  ],
   "25090c8701c8570c": [
     "25090c87-radar-"
   ],
@@ -769,6 +1233,9 @@
   ],
   "d630060646e34c7d": [
     "d6300606--ballet-du-grand-theatre-de-geneve-eastman-ihsane-sidi-larbi-"
+  ],
+  "202f5af00be76332": [
+    "202f5af0--ballet-du-grand-theatre-de-geneve-eastman-ihsane-sidi-larbi-"
   ],
   "324e622322bf5d02": [
     "324e6223--"
@@ -779,14 +1246,26 @@
   "adf58810692ade9c": [
     "adf58810--chamber-orchestra-of-europe"
   ],
+  "1f26655c508234e8": [
+    "1f26655c--chamber-orchestra-of-europe"
+  ],
   "4de7f1a6ad982756": [
     "4de7f1a6-half-note-jazz-club-nassia-gofa-the-jazz-tales-ft-max-hacker"
   ],
   "4579f83837c14d8e": [
     "4579f838--astoria"
   ],
+  "576dad5fac6e4ad6": [
+    "576dad5f-parnassos-literary-society-nikolai-lugansky"
+  ],
   "ae1e4ed7ed3ef0e1": [
     "ae1e4ed7-plus-billie-kark-x-ody-icons"
+  ],
+  "4668c24970537fec": [
+    "4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste"
+  ],
+  "c6509aeeb9b8e6d2": [
+    "c6509aee--195"
   ],
   "3b8828cb2a82195f": [
     "3b8828cb-christmas-theater-alban-skenderaj-motiv"
@@ -797,17 +1276,35 @@
   "339f4643e2fc8f0e": [
     "339f4643-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle"
   ],
+  "b79b7ecb2574f7fd": [
+    "b79b7ecb-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle"
+  ],
   "22d378a55ee6d788": [
     "22d378a5-smut-athens-purple-night-10-year-anniversary-x-smut"
   ],
   "7f3e561bdd21dfe1": [
     "7f3e561b-universe-vlct-zero-with-dvs1-oscar-mulero-yanamaste"
   ],
+  "55adb240748d4fb9": [
+    "55adb240-oddity-4-years-exilium-eli-brown"
+  ],
+  "7f0deecd13b36bcc": [
+    "7f0deecd-oddity-4-years-exilium-with-eli-brown"
+  ],
+  "85e63b22b7fbb752": [
+    "85e63b22-it-athens-underdogs-techno"
+  ],
   "f9dd3b6f874038bf": [
     "f9dd3b6f--dream-requiem-rufus-wainwright"
   ],
+  "2afdd949f9dc5e8e": [
+    "2afdd949--dream-requiem-rufus-wainwright"
+  ],
   "2b4eae8e8c53caee": [
     "2b4eae8e-roes-theater-vol-2"
+  ],
+  "6255a6993d035391": [
+    "6255a699--20"
   ],
   "f67d6fb1769f3cdb": [
     "f67d6fb1-roes-theater-vol-2"
@@ -816,11 +1313,17 @@
     "8ec1384c-astron-tropism-w-legowelt-live",
     "8ec1384c-astron-club-tropism-w-legowelt-live"
   ],
+  "989a73edeea63976": [
+    "989a73ed-astron-tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins"
+  ],
   "312023bb2253392e": [
     "312023bb-astron-tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins"
   ],
   "df3f20545c636aeb": [
     "df3f2054-smut-athens-eerste-communie-10yrs-x-smut"
+  ],
+  "d1322ce7a4eb01fe": [
+    "d1322ce7-aux-club-dj-guest-list-the-muffin-man"
   ],
   "9098f810cf258631": [
     "9098f810--thr3e"
@@ -849,11 +1352,20 @@
   "855da7a8ba6c7f9e": [
     "855da7a8--"
   ],
+  "c67ce2df813c6995": [
+    "c67ce2df--"
+  ],
   "9a9ef6d303d60697": [
     "9a9ef6d3-half-note-jazz-club-nls-peter-molvaer-group"
   ],
   "dda7e9216e020da5": [
     "dda7e921-astron-society-3000-with-ben-pest-live"
+  ],
+  "ec374fb369c6d2d8": [
+    "ec374fb3-astron-society-3000-invites-ben-pest-live"
+  ],
+  "b2299a9aea4e9a5b": [
+    "b2299a9a-oddity-zona-mutante-iii-w-blame-the-mono"
   ],
   "0aad363524ba8351": [
     "0aad3635-smut-athens-smut-x-marr-n-x-ogazon-x-decoder"
@@ -871,12 +1383,21 @@
   "9c4c4c3cad8ddfb4": [
     "9c4c4c3c-roes-theater-vol-2"
   ],
+  "3150b8cc19047a6a": [
+    "3150b8cc--alexis-bove"
+  ],
+  "8bc94f9219a05cf6": [
+    "8bc94f92-asteria-domus-glyfada-infraai-global-summit-2026"
+  ],
   "523def0775a979d4": [
     "523def07--dire-straits-legacy-live-in-greece"
   ],
   "1e5812cdf2116dbe": [
-    "1e5812cd-chronoboros-malignant-unmother-an-club-catharsis-w-chronoboros-malignant-unmother",
-    "1e5812cd-an-club-catharsis-w-chronoboros-malignant-unmother"
+    "1e5812cd-an-club-catharsis-w-chronoboros-malignant-unmother",
+    "1e5812cd-chronoboros-malignant-unmother-an-club-catharsis-w-chronoboros-malignant-unmother"
+  ],
+  "207351a380fcbc41": [
+    "207351a3--"
   ],
   "81d7e749a8b1d739": [
     "81d7e749-half-note-jazz-club-nls-peter-molvaer-group"
@@ -887,15 +1408,33 @@
   "1c5e9d8af4effeda": [
     "1c5e9d8a--"
   ],
+  "7714ae06bd2fe57c": [
+    "7714ae06--"
+  ],
+  "9037ee8b9d1000a3": [
+    "9037ee8b--8211"
+  ],
+  "e9e697c57724086d": [
+    "e9e697c5--"
+  ],
+  "2dfa4996de182707": [
+    "2dfa4996--"
+  ],
+  "4e1bac9ba550ae09": [
+    "4e1bac9b--live"
+  ],
   "1b6f76804993183f": [
     "1b6f7680-circus-entertainment-hub-geoff-tate-operation-mindcrime"
   ],
   "4c8ab467ac64f462": [
     "4c8ab467-plus-billie-kark-x-ody-icons"
   ],
+  "0820d4422a956131": [
+    "0820d442-fuzz-club-"
+  ],
   "56d0608f7c4c1a0e": [
-    "56d0608f-ground-stage-death-disco-indoor-festival-2026",
-    "56d0608f-gazarte-death-disco-indoor-festival-2026"
+    "56d0608f-gazarte-death-disco-indoor-festival-2026",
+    "56d0608f-ground-stage-death-disco-indoor-festival-2026"
   ],
   "1504103a5eb31ba1": [
     "1504103a--jazz-idylle-piano-trio-idylle-piano-trio"
@@ -903,8 +1442,14 @@
   "a8c1ed58541ffde2": [
     "a8c1ed58--sir-john-eliot-gardiner-constellation-choir-and-orchestra"
   ],
+  "8f79c8aecfd5ae12": [
+    "8f79c8ae--sir-john-eliot-gardiner-constellation-choir-and-orchestra"
+  ],
   "5c45bc0185b49d77": [
     "5c45bc01-gazarte-dj-koco-aka-shimokita-first-time-in-athens-special-guests-ti"
+  ],
+  "f9786873e473afaa": [
+    "f9786873-an-club-friends"
   ],
   "balletto-di-milano-2026-04-04": [
     "balletto-christmas-theater-balletto-di-milano"
@@ -915,15 +1460,27 @@
   "683312e4cea8bd20": [
     "683312e4--7-8"
   ],
+  "b2f081a6621684a3": [
+    "b2f081a6--7-8"
+  ],
+  "37e327cc337618fd": [
+    "37e327cc-universe-velocity-arena-pres-i-hate-models-dj-hyperdrive-lokier-ate-p"
+  ],
   "9eb7373fc8eac8ec": [
     "9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026"
   ],
   "cab5ddea7e7fa4ac": [
     "cab5ddea--"
   ],
+  "47dd1fce566c7682": [
+    "47dd1fce--"
+  ],
   "84a3a33d85d2dcd9": [
     "84a3a33d--requiem-vakhtang-kakhidze",
     "84a3a33d-greek-national-opera-snfcc-requiem-vakhtang-kakhidze"
+  ],
+  "b5751121a8f10275": [
+    "b5751121-aux-club-bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin"
   ],
   "8514e9ec4482c26f": [
     "8514e9ec-aux-club-bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin"
@@ -946,18 +1503,27 @@
     "9443dd66-universe-freddie-gibbs-us-live-in-athens"
   ],
   "5b80b55f3baac9ed": [
-    "5b80b55f-ground-stage-a-place-to-bury-strangers-live-in-athens",
-    "5b80b55f-gazarte-a-place-to-bury-strangers-live-in-athens"
+    "5b80b55f-gazarte-a-place-to-bury-strangers-live-in-athens",
+    "5b80b55f-ground-stage-a-place-to-bury-strangers-live-in-athens"
   ],
   "c4f9d1e4dd4573a6": [
-    "c4f9d1e4-athens-live-fm-40-years-of-indiscreet-live-in-athens",
-    "c4f9d1e4--fm-40-years-of-indiscreet-live-in-athens"
+    "c4f9d1e4--fm-40-years-of-indiscreet-live-in-athens",
+    "c4f9d1e4-athens-live-fm-40-years-of-indiscreet-live-in-athens"
   ],
   "1e65e1007917e82c": [
     "1e65e100--triumpher"
   ],
+  "39815e5a423befc2": [
+    "39815e5a--polis-ensemble-polis-ensemble"
+  ],
   "889e1649e4f1feb5": [
     "889e1649--5"
+  ],
+  "7e0d2c68bc807ba8": [
+    "7e0d2c68--"
+  ],
+  "3017f4e51028525a": [
+    "3017f4e5-epignosis-hq-mindstone-athens-april-ai-meetup"
   ],
   "marcos-ayala-tango-the-golden-years-2026-04-22": [
     "marcos-a-christmas-theater-marcos-ayala-tango-the-golden-years"
@@ -965,8 +1531,20 @@
   "bd77e953d8d947b2": [
     "bd77e953-parnassos-literary-society-joep-beving-liminal-tour-2026"
   ],
+  "1f89f6d32a1da8c4": [
+    "1f89f6d3--"
+  ],
+  "e0abea86b2c50b69": [
+    "e0abea86--devoxx-greece-2026"
+  ],
   "e77ea334319e2220": [
     "e77ea334--carmen-by-antonio-gades-carlos-saura-compania-antonio-gades"
+  ],
+  "9c9fc81e3e781f26": [
+    "9c9fc81e--carmen-by-antonio-gades-038-carlos-saura-compania-antonio-ga"
+  ],
+  "76812621a28658a5": [
+    "76812621--carmen-by-antonio-gades-carlos-saura-compania-antonio-gades"
   ],
   "47b03e95d3a1e64c": [
     "47b03e95-bolivar-bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph",
@@ -998,6 +1576,12 @@
   "46455c2090590296": [
     "46455c20-parnassos-literary-society-the-necks-athens-residency"
   ],
+  "8fa3b804c0907b5a": [
+    "8fa3b804--engineering-the-world-2026"
+  ],
+  "b3a08b43170bedbc": [
+    "b3a08b43-parnassos-literary-society-the-necks-athens-residency"
+  ],
   "ae70b9883fea210a": [
     "ae70b988--jazz-george-kontrafouris-quartet-international-jazz-day"
   ],
@@ -1008,11 +1592,20 @@
     "db458e80-gazarte-the-69-eyes-fi-live-in-athens",
     "db458e80-gazarte-ground-stage-the-69-eyes-fi-live-in-athens"
   ],
+  "d1b3dcc816ce1036": [
+    "d1b3dcc8-bolivar-mind-against-i-fri-may-8"
+  ],
   "2b4d123fb9b08811": [
     "2b4d123f-universe-teletech-athens-2026-pre-registration"
   ],
   "429aa68f4ddabe58": [
     "429aa68f--"
+  ],
+  "7abb5c2b2557cd4d": [
+    "7abb5c2b--"
+  ],
+  "231d98330a514091": [
+    "231d9833-universe-blend-x-seds-x-vlct-pres-teletech-azyr-fantasm-ate-b2b-salin"
   ],
   "10984e4e893bb823": [
     "10984e4e--"
@@ -1020,11 +1613,20 @@
   "1df1929fbb50ca2a": [
     "1df1929f--"
   ],
+  "12bbd124c284f0b9": [
+    "12bbd124--"
+  ],
+  "d4f66bc87584effa": [
+    "d4f66bc8--"
+  ],
   "0573ab33c1544927": [
     "0573ab33-onassis-stegi-by-heart-tiago-rodrigues"
   ],
   "2b3e9206ffe9f074": [
     "2b3e9206-onassis-stegi-by-heart-tiago-rodrigues"
+  ],
+  "b8dfa50fba055eff": [
+    "b8dfa50f-oteacademy-disrupt-ai-summit-2026"
   ],
   "9454cac8ff50ab94": [
     "9454cac8-christmas-theater-this-is-michael-tribute-show-michael-jackson-15-christmas-th"
@@ -1042,9 +1644,18 @@
     "560b76f0--crippled-symmetries-motifs-in-contemporary-music",
     "560b76f0-greek-national-opera-snfcc-crippled-symmetries-motifs-in-contemporary-music"
   ],
+  "7f21642935ba1c9b": [
+    "7f216429-bolivar-mayans-with-guy-j-b2b-guy-mantzur-i-thu-21-may"
+  ],
+  "751e22533893151e": [
+    "751e2253-the-ellinikon-experience-centre-athens-seo-2026"
+  ],
   "e3e49595dde4439b": [
     "e3e49595--the-two-sides-of-the-atlantic-poetry-and-colour-in-music",
     "e3e49595-greek-national-opera-snfcc-the-two-sides-of-the-atlantic-poetry-and-colour-in-music"
+  ],
+  "84fe907376df144f": [
+    "84fe9073--dialog-across-oceans-poetry-and-colour-in-music"
   ],
   "c6e08f271f2268ca": [
     "c6e08f27-floyd-clutch"
@@ -1088,6 +1699,9 @@
   "72b101522a2ab12a": [
     "72b10152-bolivar-bolivar-blend-seds-pres-indira-paganotto-bec-steve-sai-b2b-s"
   ],
+  "2e98efaebf4ca8ff": [
+    "2e98efae--release-athens-2026"
+  ],
   "84c0516f11627ec": [
     "84c0516f--release-athens-2026-limp-bizkit"
   ],
@@ -1096,6 +1710,9 @@
   ],
   "af8281ff0499a841": [
     "af8281ff--release-athens-2026"
+  ],
+  "fe0943646d6fe81e": [
+    "fe094364--release-athens-2026-x-snf-nostos"
   ],
   "2b73d0705f4a1483": [
     "2b73d070--release-athens-2026-x-snf-nostos-david-byrne-who-is-the-sky-"
@@ -1144,6 +1761,9 @@
   ],
   "4fb6b5517b0f3b7b": [
     "4fb6b551--ejekt-festival-2026-florence-the-machine"
+  ],
+  "4acf6b9d4beda2c9": [
+    "4acf6b9d-eugenides-foundation-conference-centre-greeks-in-ai-2026"
   ],
   "ejekt-festival-2026-the-cure-2026-07-15": [
     "ejekt-fe--ejekt-festival-2026-the-cure"
@@ -1213,8 +1833,8 @@
     "9f1343f4--"
   ],
   "161db7297a22697b": [
-    "161db729-orient-express-",
-    "161db729--"
+    "161db729--",
+    "161db729-orient-express-"
   ],
   "2c666d43169ce1f6": [
     "2c666d43-gazarte-"
@@ -1232,12 +1852,12 @@
     "665995dd-exa-"
   ],
   "cdf376879907aed8": [
-    "cdf37687-plus-",
-    "cdf37687--"
+    "cdf37687--",
+    "cdf37687-plus-"
   ],
   "974715390f1e5558": [
-    "97471539-club-",
-    "97471539--"
+    "97471539--",
+    "97471539-club-"
   ],
   "12663b972c36ee87": [
     "12663b97-half-note-jazz-club-dimitria-kalantzis-quartet"
@@ -1256,5 +1876,17 @@
   ],
   "2c77b9fd5b23c1b1": [
     "2c77b9fd-newman-cinema-171-lone-187"
+  ],
+  "639ce6622e840e4f": [
+    "639ce662-half-note-jazz-club-trio"
+  ],
+  "030d1241b2a6f0e7": [
+    "030d1241-onassis-stegi-stegi-radio-takeover-2026"
+  ],
+  "8ad40e93de76c87c": [
+    "8ad40e93-exa-amp-mira"
+  ],
+  "df232ee713ccb2f6": [
+    "df232ee7--171-187"
   ]
 }

@@ -50,6 +50,10 @@ export type EventType =
   | 'performance'  // Hybrid/experimental performances
   | 'show'         // Cabaret, variety shows
   | 'workshop'     // Interactive workshops, masterclasses
+  | 'conference'   // Tech/AI conferences, summits
+  | 'meetup'       // Community meetups, tech gatherings
+  | 'hackathon'    // Coding hackathons, innovation events
+  | 'seminar'      // Academic seminars, research talks
   | 'other';
 
 export interface Venue {

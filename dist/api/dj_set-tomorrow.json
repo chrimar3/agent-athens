@@ -7,42 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "94d1038f726d96ec",
-      "title": "Blend x Seds w/ Anfisa Letyago",
+      "id": "c53ac38b60296774",
+      "title": "Gazarte Carnival Party",
       "description": "",
-      "startDate": "2026-02-21",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Oddity",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.athinorama.gr/music/gig/blend_x_seds_w_anfisa_letyago-10089106/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:02",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "717b0ba10d0e7c67",
-      "title": "Disco Night - 80s-90s Party",
-      "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "dj_set",
       "genres": [],
@@ -59,11 +27,11 @@
         "currency": "EUR",
         "range": "€10-25"
       },
-      "url": "https://www.athinorama.gr/music/gig/disco_night___80s_90s_party-10089130/",
+      "url": "https://www.athinorama.gr/music/gig/gazarte_carnival_party-10089102/",
       "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-17 12:08:52",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -71,10 +39,46 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "30af168a6a28d4c1",
-      "title": "Afterhours: Poorjdarr",
+      "id": "3c28ffd306973521",
+      "title": "Marthe + Galactik Geisha + Zoi Andreou + S.ant",
       "description": "",
-      "startDate": "2026-02-21T05:00:00",
+      "startDate": "2026-02-22T01:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "El Chapo",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/marthe-galactik-geisha-zoi-andreou-s-ant/",
+      "ticketUrl": "https://www.clubber.gr/events/marthe-galactik-geisha-zoi-andreou-s-ant/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-20 07:51:03",
+      "language": "en",
+      "timeDoors": "01:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b5ef7ebcf4ad9408",
+      "title": "Afterhours: Bonso + Suneater + Hutt",
+      "description": "",
+      "startDate": "2026-02-22T05:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -93,11 +97,11 @@
         "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/afterhours-poorjdarr/",
-      "ticketUrl": "https://www.clubber.gr/events/afterhours-poorjdarr/",
+      "url": "https://www.clubber.gr/events/afterhours-bonso-suneater-hutt/",
+      "ticketUrl": "https://www.clubber.gr/events/afterhours-bonso-suneater-hutt/",
       "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-19 08:49:27",
+      "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "05:00",
       "timeSource": "scraped_listing",
@@ -107,11 +111,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "e8355f56af3af627",
-      "title": "THIS IS LINTA!",
+      "id": "e1bf4200daae664e",
+      "title": "Celebrate The Carnival As A Raver: 2Delta + Marthe",
       "description": "",
-      "fullDescription": "The bass drops before you've acclimated to the darkness. Ilion Plus holds that specific energy of electronic music rooms that know their purpose — sound system calibrated, lighting designed for disappearance, the night already in motion. THIS IS LINTA! arrives with exactly the intensity the name suggests.\n\nLINTA has built a following through consistent delivery of electronic nights that don't compromise. The collective understands that great programming requires more than booking names — it demands attention to the full arc of the evening, from opening selection to closing moment. Tonight at Ilion Plus, they bring that philosophy to a room equipped to realize it.\n\nIlion Plus occupies specific territory in Athens' electronic landscape. The venue provides enough capacity to create collective energy while maintaining intimacy, sound system quality that earns its reputation through technical precision. When the programming matches the room, nights here become reference points.\n\nThe crowd arriving for THIS IS LINTA! has already done their research. These are people who've followed the collective through previous events, who understand the aesthetic being cultivated. First-timers either convert or discover they've stumbled into something they didn't know they needed. By 2am the room has achieved that density where individual becomes collective.\n\nThe set progression will likely build through territories familiar to electronic heads while finding unexpected corners. LINTA's booking philosophy favors coherent journeys over disconnected peaks — each selector adding to what came before, the night shaped as single sustained experience rather than compilation of moments.\n\nIf you need familiar hands-in-the-air anthems, if electronic music means festival main stages, THIS IS LINTA! operates in different territory. The commitment here is to the craft of the DJ set, to the art of programming that rewards attention. But if you've been hunting for Athens electronic nights where the collective's taste defines the experience, where the room fills with people who came for exactly this — Ilion Plus tonight is the destination.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Ilion Plus |\n| **Event** | THIS IS LINTA! |\n| **Style** | Electronic, dance |\n| **Peak time** | After midnight |\n| **Good to know** | Collective-curated programming |\n\nTHIS IS LINTA!: when a collective's vision meets a room that can hold it.",
-      "startDate": "2026-02-21T21:00:00",
+      "startDate": "2026-02-22T15:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -119,7 +122,44 @@
       ],
       "tags": [],
       "venue": {
-        "name": "ΙΛΙΟΝ Plus",
+        "name": "Daddy's All Day Bar",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
+      "ticketUrl": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "15:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a46bebaf1cd2efb7",
+      "title": "SUNDAYS AT THE CHURCH",
+      "description": "",
+      "fullDescription": "The Sunday afternoon light shifts differently in Exarchia. Outside, the square's political murals argue with each other. Inside Burger Disco Club, a different kind of congregation gathers — people who understand that weekends deserve proper endings.\n\nSundays at the Church has established itself as Exarchia's answer to the Monday-morning question. The party begins early by Athens standards, respecting the work week while refusing to surrender the weekend prematurely. The electronic selections keep things moving without the warehouse intensity of Saturday nights — this is about pleasure rather than endurance.\n\nBurger Disco Club provides the setting: intimate, intentionally unpretentious, a space that matches Exarchia's refusal to perform sophistication. The sound system handles electronic music with clarity, the bar serves drinks that fuel rather than sedate, and the room size ensures that dancing means participating rather than observing.\n\nThe crowd arrives with Sunday sensibility. These are people who scheduled their weekends to end here, who understand that the best cure for Saturday night is Sunday afternoon. Students and artists, the neighborhood regulars, whoever followed the Exarchia social calendar to this address. The energy differs from peak clubbing — more smiles, more conversation, more space to actually dance.\n\nIf you want the escalating intensity of prime-time techno, if you need nights that go until dawn, Sundays at the Church operates on different logic. This is the softer closure, the weekend's final breath before reality returns. But if you've been searching for the electronic party that respects both your body and your calendar, that understands Sunday should taste different than Saturday — Burger Disco Club becomes your new church.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, February 22, 2026 |\n| **Venue** | Burger Disco Club |\n| **Neighborhood** | Exarchia |\n| **Price** | Check venue |\n| **Getting there** | Near Omonoia, walking distance |\n\nThe weekend doesn't end. It transforms.",
+      "startDate": "2026-02-22T18:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -130,10 +170,118 @@
         "currency": "EUR",
         "range": "€10"
       },
-      "url": "https://ra.co/events/2351972",
-      "ticketUrl": "https://ra.co/events/2351972",
+      "url": "https://ra.co/events/2346522",
+      "ticketUrl": "https://ra.co/events/2346522",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-16 08:00:38",
+      "language": "en",
+      "timeDoors": "18:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "af3fc7498858a515",
+      "title": "Palms Trax",
+      "description": "",
+      "startDate": "2026-02-22T18:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.clubber.gr/events/palms-trax/",
+      "ticketUrl": "https://www.clubber.gr/events/palms-trax/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "18:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "207c62645e916c29",
+      "title": "NO MORE FAKE DISCO",
+      "description": "",
+      "startDate": "2026-02-22T18:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2346522",
+      "ticketUrl": "https://ra.co/events/2346522",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "18:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "aa0a11c49a85a9c2",
+      "title": "Matltoni",
+      "description": "",
+      "startDate": "2026-02-22T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cantina Social",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/matltoni-2/",
+      "ticketUrl": "https://www.clubber.gr/events/matltoni-2/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
       "updatedAt": "2026-02-20 07:51:03",
       "language": "en",
       "timeDoors": "21:00",
@@ -144,48 +292,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "c035cdf16b0850dc",
-      "title": "555 Carnival Bass Party",
+      "id": "65333f70629fb00c",
+      "title": "Victor Zala",
       "description": "",
-      "fullDescription": "The bass hits different during carnival. Something about the season licenses abandon, transforms ordinary club nights into something wilder. Stoa Athens knows this, which is why 555 Carnival Bass Party exists — a collision of bottom-end frequencies and carnival energy that starts at 555 and doesn't stop.\n\nStoa Athens positions itself at the intersection of underground credentials and accessibility. The venue books artists who earn their slots through craft, provides a sound system that handles bass-heavy music without distortion, creates an environment where diverse crowds can share the same floor. Tonight's carnival edition amplifies all of that.\n\nThe bass party format indicates programming priorities. This isn't minimal techno or ambient exploration — it's music designed to move bodies through low-frequency pressure. The 555 designation hints at intensity without explaining it fully. Those who know, know. Those who don't will learn.\n\nThe crowd for carnival bass programming mixes dedicated heads with seasonal revelers. Some arrive in costume, embracing the carnival permission to be someone else for a night. Others come in their usual club attire, the bass the only costume they need. By peak hours the floor has become a single organism, moving together to frequencies you feel more than hear.\n\nCarnival in Athens carries particular weight. The tradition predates most of the electronic music that fills these rooms, but the energy transfers perfectly. The ancient permission for excess, for boundary-crossing, for becoming something beyond ordinary — bass music channels all of it.\n\nIf you need subtlety and restraint, if club nights for you mean quiet corners for conversation, 555 Carnival Bass Party will overwhelm you. The volume here is the point, the physical impact of sound the entire thesis. But if you've been waiting for bass music performed during the one season that matches its intensity, if carnival means permission to disappear into frequencies — Stoa Athens becomes the temple.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Stoa Athens |\n| **Event** | 555 Carnival Bass Party |\n| **Style** | Bass music, electronic |\n| **Context** | Carnival season |\n| **Good to know** | Bass-heavy — bring earplugs if sensitive |\n\n555 Carnival Bass Party: low-end frequencies meet carnival permission at Stoa Athens.",
-      "startDate": "2026-02-21T22:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Stoa Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://ra.co/events/2350929",
-      "ticketUrl": "https://ra.co/events/2350929",
-      "source": "residentadvisor",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "22:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "74651705c5e23ae6",
-      "title": "Techno Underdogs | Free Entrance ",
-      "description": "",
-      "fullDescription": "The kick drum finds you before you find the room. B side Athens holds that specific character of venues that know exactly what they are — committed to the sound, indifferent to trends, built for those who understand what they're entering. Techno Underdogs arrives with a name that declares its position.\n\n\"Underdogs\" suggests something about philosophy. These aren't the headliners commanding festival main stages — these are the artists building reputations through craft, earning respect from those who pay attention to tracklists and production choices. B side provides the perfect platform for this aesthetic: intimate enough for discovery, equipped enough for serious sound.\n\nThe programming for Techno Underdogs likely favors artists on the ascent over names already peaked. The lineup represents bets on where the genre is going rather than where it's been. For audiences who track emerging producers and rising DJs, nights like this provide early access to artists who'll command bigger rooms later.\n\nThe crowd at B side for underdog programming has particular characteristics. These are the scene's students and future stars, the people who arrive with Shazam ready, who'll discuss production techniques in the smoking area. You'll find industry people scouting alongside enthusiasts discovering. The knowledge level creates a certain electricity.\n\nB side Athens operates in that intersection of underground credibility and sonic quality that defines the best small venues. The room is intimate but not cramped, the sound system serious without being overwhelming. When the underdogs bring their best, the venue amplifies rather than constrains.\n\nIf you need familiar names and guaranteed bangers, Techno Underdogs asks for different investment. The payoff here is discovery, not confirmation. But if you've been hunting for the corners of Athens techno where the next wave is forming, where the talent hasn't yet been priced out of reach, where Saturday night means finding what Sunday morning will be talking about — B side Athens is where the underdogs become known.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | B side Athens |\n| **Event** | Techno Underdogs |\n| **Style** | Techno, emerging artists |\n| **Peak time** | Late — fills after midnight |\n| **Good to know** | Discovery-focused programming |\n\nTechno Underdogs at B side: where emerging talent meets audiences who want to find it first.",
-      "startDate": "2026-02-21T22:00:00",
+      "startDate": "2026-02-22T21:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -199,16 +309,88 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
-        "amount": 0,
+        "type": "tba",
+        "amount": null,
         "currency": "EUR",
-        "range": "€0"
+        "range": null
       },
-      "url": "https://ra.co/events/2360057",
-      "ticketUrl": "https://ra.co/events/2360057",
+      "url": "https://ra.co/events/2372361",
+      "ticketUrl": "https://ra.co/events/2372361",
       "source": "residentadvisor",
-      "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-15 06:47:14",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "560078f590a3ce3f",
+      "title": "Tribal Carnival: Thèna + Mareen b2b Tsouko G + Dino MFU + Babett b2b Ethérro",
+      "description": "",
+      "startDate": "2026-02-22T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Boo!",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
+      "ticketUrl": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "c31f69055a8cae0d",
+      "title": "MUZIK SAVEZ with Nico Rac 'CARNIVAL EDITION' at COZMO || 22 FEB",
+      "description": "",
+      "startDate": "2026-02-22T22:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cozmo Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2368989",
+      "ticketUrl": "https://ra.co/events/2368989",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "22:00",
       "timeSource": "scraped_listing",
@@ -218,10 +400,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "ce622d5cd393bd86",
-      "title": "Florien: The Sound of Modal Analysis",
+      "id": "77de8eb23fb3bc10",
+      "title": "Cannibal Radio Clubnight: Mr.M + Nuumett + Mr. Roussos",
       "description": "",
-      "startDate": "2026-02-21T23:00:00",
+      "startDate": "2026-02-22T23:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -236,50 +418,14 @@
       },
       "price": {
         "type": "paid",
-        "amount": 13,
+        "amount": 12,
         "currency": "EUR",
-        "range": "€13"
+        "range": "€12"
       },
-      "url": "https://ra.co/events/2364565",
-      "ticketUrl": "https://ra.co/events/2364565",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "dda91653fc886068",
-      "title": "Nick Jojo",
-      "description": "",
-      "startDate": "2026-02-21T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Zelus",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/nick-jojo-35/",
-      "ticketUrl": "https://www.clubber.gr/events/nick-jojo-35/",
+      "url": "https://www.clubber.gr/events/cannibal-radio-clubnight-mr-m-nuumett-mr-roussos/",
+      "ticketUrl": "https://www.clubber.gr/events/cannibal-radio-clubnight-mr-m-nuumett-mr-roussos/",
       "source": "clubber.gr",
-      "createdAt": "2026-02-10 10:38:06",
+      "createdAt": "2026-02-13 10:29:36",
       "updatedAt": "2026-02-20 07:51:03",
       "language": "en",
       "timeDoors": "23:00",
@@ -290,10 +436,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "e39f8c3a132c3f86",
-      "title": "WE ARE HOUSE: Akylla • Pascal • Christo Z 21 Feb 2026",
+      "id": "96b3c83f254d9618",
+      "title": "TRASH x RAVE Carnival Edition",
       "description": "",
-      "startDate": "2026-02-21T23:00:00",
+      "startDate": "2026-02-22T23:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -308,14 +454,14 @@
       },
       "price": {
         "type": "paid",
-        "amount": 10,
+        "amount": 6,
         "currency": "EUR",
-        "range": "€10 - €12"
+        "range": "€6 - €10"
       },
-      "url": "https://ra.co/events/2369171",
+      "url": "https://ra.co/events/2372465",
       "source": "residentadvisor",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:03",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -325,10 +471,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "4893bd363d9c11e2",
-      "title": "The Sound Of Modal Analysis: Delta Funktionen + Lycurgus (live) + Fragedis + 3.14 b2b Kondaktor",
+      "id": "77d964b4cb0b5da3",
+      "title": "Cannibal Radio clubnight ",
       "description": "",
-      "startDate": "2026-02-21T23:00:00",
+      "startDate": "2026-02-22T23:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -343,196 +489,50 @@
       },
       "price": {
         "type": "paid",
-        "amount": 13,
-        "currency": "EUR",
-        "range": "€13"
-      },
-      "url": "https://www.clubber.gr/events/the-sound-of-modal-analysis-delta-funktionen-lycurgus-live-fragedis-3-14-b2b-kondaktor/",
-      "ticketUrl": "https://www.clubber.gr/events/the-sound-of-modal-analysis-delta-funktionen-lycurgus-live-fragedis-3-14-b2b-kondaktor/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "d1bb055675095fe6",
-      "title": "Icarus In Love + Kancheli",
-      "description": "",
-      "startDate": "2026-02-21T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cantina Social",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "free",
-        "amount": 0,
-        "currency": "EUR",
-        "range": "Free"
-      },
-      "url": "https://www.clubber.gr/events/icarus-in-love-kancheli/",
-      "ticketUrl": "https://www.clubber.gr/events/icarus-in-love-kancheli/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "06ab2e9f8a7c71ca",
-      "title": "Velocity pres. Adiel + Speedy J + Colin Benders + Até x Salin + Cirkle",
-      "description": "",
-      "fullDescription": "The ceiling disappears first. Then the walls. The sound system at Universe Saturn Area opens dimensions you forgot existed, and tonight three architects of hard techno meet to prove what velocity can build.\n\nAdiel brings the Rome-via-Berlin weight that's made her one of techno's most respected selectors. Speedy J — Jochem Paap — carries thirty years of electronic innovation, from Rotterdam's early rave explosions to the industrial-grade productions that defined an era. Colin Benders adds the modular synthesist's unpredictability, machines that generate rather than replay. When these three occupy the same evening, the mathematics of dance music achieve something theoretical.\n\nUniverse Saturn Area delivers the rig this summit demands. Part of the Universe Athens complex, the Saturn room exists for nights exactly like this — sound pressure that becomes physical presence, bass that reorganizes your internal organs, a space built around the understanding that hard techno is meant to be experienced with your whole body.\n\nThe crowd knows exactly what they signed up for. These are the dancers who track Resident Advisor announcements, who recognize all three names and understand what the combination promises. No tourists tonight — everyone here came prepared for hours of escalation, dressed for movement, hydrated for endurance. By 3am, the room will have achieved that particular state where individual dancers disappear into collective motion.\n\nIf you need melody, if you want peaks and valleys and rest, Velocity operates at sustained altitude. This is techno that trusts you to maintain intensity, that respects your endurance. But if you've been training for a night where the BPM refuses to apologize, where Europe's heaviest selectors meet Athens' most serious system — the Saturn Area tonight becomes mission control.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Universe Saturn Area |\n| **Doors** | Late night (check RA for times) |\n| **Peak time** | 2:00-5:00am |\n| **Price** | Check Resident Advisor |\n| **Getting there** | Check venue for location |\n| **Door policy** | Selection possible on peak nights |\n\nAdiel. Speedy J. Colin Benders. The names alone explain everything.",
-      "startDate": "2026-02-21T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Universe",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/velocity-pres-adiel-speedy-j-colin-benders-ate-x-salin-cirkle/",
-      "ticketUrl": "https://www.clubber.gr/events/velocity-pres-adiel-speedy-j-colin-benders-ate-x-salin-cirkle/",
-      "source": "clubber.gr",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-14 09:28:13",
-      "language": "en",
-      "timeDoors": "23:45",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "9f378d56ba34fef3",
-      "title": "Blend x SEDS pres. Anfisa Letyago + Mikee + Fell Reis",
-      "description": "",
-      "fullDescription": "The kick drum arrives like a medical event. Anfisa Letyago doesn't ease you in — she announces that the next several hours belong to her, and the Oddity floor responds by losing its mind.\n\nLetyago has ascended through techno's ranks with productions that refuse subtlety. The Ninze & Okaxy remix that broke doors open, the releases on Drumcode that established her as a headline act, the festival sets that proved she could control rooms of any size. Tonight she brings that artillery to Athens via Blend and SEDS, two collectives who understand what proper techno requires.\n\nOddity provides the intimate counterpoint to the music's scale. Tucked away in Thissio, the venue holds around 200 people in a space designed for progressive and melodic sounds — tonight bent toward harder territory. The Funktion-One system handles the transposition, translating Letyago's industrial weight into the room's dimensions. When she drops the bass, the walls become participants.\n\nThe crowd forms through careful curation. Blend attracts listeners who track the melodic techno calendar, SEDS brings the party infrastructure, and Anfisa's name pulls the pure techno heads. The overlap creates a room where everyone understands the assignment. By 2am, conversation stops — not because the music's too loud, but because nobody has anything left to say except with their bodies.\n\nIf you need breathing room, if the relentless approach exhausts rather than elevates, Letyago's style takes no prisoners. She builds and builds without offering escape routes. But if you've been waiting for a night where one of techno's rising forces meets a room built for communion, where the progressive venue hosts the hard approach — Oddity tonight hosts the takeover.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Oddity |\n| **Address** | Irakleidon 61, Thissio |\n| **Getting there** | Thissio Metro (Green line) |\n| **Entry** | 8-15 euro |\n| **Peak time** | After 2:00am |\n\nAnfisa Letyago came to make a statement. Oddity is listening.",
-      "startDate": "2026-02-21T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Oddity",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/blend-x-seds-pres-anfisa-letyago-mikee-fell-reis/",
-      "source": "clubber.gr",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:45",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "9ffa9f3eacbba8e6",
-      "title": "Clubkid & friends",
-      "description": "",
-      "startDate": "2026-02-21T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Crust",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/clubkid-friends-2/",
-      "ticketUrl": "https://www.clubber.gr/events/clubkid-friends-2/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:45",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "07c20ed3a074b32f",
-      "title": "Sir Dance-A-Lot: Kill Emil vs Insom + Blk Cld + OfNder",
-      "description": "",
-      "startDate": "2026-02-21T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "N.A.O.S.",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
         "amount": 12,
         "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2370091",
+      "ticketUrl": "https://ra.co/events/2370091",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "43a537d72f43d7c4",
+      "title": "303 Rave x 422M: Deherian b2b SCTR + Imperium + Kinspin b2b Mariø + Oxytocin + Se7en + Siasios + Sl/Sh b2b Mvru",
+      "description": "",
+      "startDate": "2026-02-22T23:45:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 10,
+        "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/sir-dance-a-lot-kill-emil-vs-insom-blk-cld-ofnder/",
-      "ticketUrl": "https://www.clubber.gr/events/sir-dance-a-lot-kill-emil-vs-insom-blk-cld-ofnder/",
+      "url": "https://www.clubber.gr/events/303-rave-x-422m-deherian-b2b-sctr-imperium-kinspin-b2b-mario-oxytocin-se7en-siasios-sl-sh-b2b-mvru/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:45",
       "timeSource": "scraped_listing",
@@ -542,11 +542,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "df021477fb4d7f9b",
-      "title": "VLCT ZERO with Adiel - Speedy J - Colin Benders",
+      "id": "b47136e11a378e8c",
+      "title": "Blind Spot: NOID + AMH + DIMI.D",
       "description": "",
-      "fullDescription": "The monitors go hot and something industrial enters Athens. VLCT ZERO promises velocity at ground zero, and when Adiel and Speedy J align behind the decks, that promise becomes pressure.\n\nAdiel's trajectory through techno marks her as a selector who understands the difference between loud and heavy. Her sets construct rather than assault, building intensity through layers until the room realizes how far it's traveled. Speedy J brings the legacy — thirty years of electronic music history, from early Rotterdam hardcore through the industrial refinements that influenced a generation. Together, they represent European techno at its most uncompromising.\n\nUniverse Athens houses the main room for this gathering, the flagship space in a complex that's established itself as Athens' most serious electronic music destination. The sound system exists for nights exactly like this one — bass frequencies that arrive as physical sensation, a rig calibrated for extended exposure. When the clock passes 3am and both artists are deep in their selections, the room achieves a state that only happens at the intersection of proper sound and proper programming.\n\nThe crowd arrives prepared. These are the dancers who cleared their schedules, who understand that a night with these names requires commitment. No casual observers tonight — everyone present has made the decision that the next several hours belong to this room. The energy before the first beat already carries intention; what follows is the fulfillment.\n\nIf you need variety, if you want the DJ to take you on gentle journeys, VLCT ZERO operates in different territory. This is techno that respects its audience by assuming their endurance, that trusts the dance floor to keep up. But if you've been searching for the night where Athens meets Berlin's weight class, where the sound system and the selectors achieve mutual understanding — Universe hosts the convergence.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Universe Athens |\n| **Peak time** | 2:00-5:00am |\n| **Price** | Check Resident Advisor |\n| **Door policy** | Selection possible |\n\nVelocity. Zero. The name is the instruction manual.",
-      "startDate": "2026-02-21T23:59:00",
+      "startDate": "2026-02-22T23:45:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -554,24 +553,23 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Universe",
+        "name": "IT Athens",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "door",
         "amount": null,
         "currency": "EUR",
-        "range": null
+        "range": "Door price"
       },
-      "url": "https://ra.co/events/2351129",
-      "ticketUrl": "https://ra.co/events/2351129",
-      "source": "residentadvisor",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "url": "https://www.clubber.gr/events/blind-spot-noid-amh-dimi-d/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
-      "timeDoors": "23:59",
+      "timeDoors": "23:45",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -579,11 +577,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "c8fc860148e813fc",
-      "title": "SMUT x ANNĒ x Ben Sims x Elisa Batti",
+      "id": "da96469391f2d52b",
+      "title": "303 Rave x 422M - 10Hrs Rave Athens",
       "description": "",
-      "fullDescription": "The door opens and the dress code speaks before anyone says a word. At SMUT, what you wear is the first language. Tonight, four selectors arrive to prove that techno can be as precise about its boundaries as it is about its bass.\n\nSMUT. Anne. Ben Sims. Elisa Batti. The billing reads like a summit of approaches — SMUT's queer Athens identity meeting Anne's European circuit presence, Ben Sims bringing three decades of UK techno history, Elisa Batti adding the Italian dimension. When these sensibilities occupy the same room, the night becomes negotiation and synthesis.\n\nSMUT Athens has built something specific in the Athenian landscape. The venue exists for a community that understands dress codes as expression rather than barrier, where creative and fetish attire signal belonging rather than performance. The room holds around 300 people in a space that enforces its own gravity — once inside, the outside world stops existing.\n\nThe crowd is the point. SMUT's door policy means everyone present has made a decision, has dressed with intention, has committed to the evening's terms. The queer techno community and allies who understand that inclusivity and selectivity can coexist. By peak hours, the room has achieved the safety that strictness paradoxically creates — everyone belongs because everyone chose to belong.\n\nIf you want easy access, if you prefer to show up as you are, SMUT asks more. The door is an audition, the dress code a conversation you need to have with your wardrobe first. But if you've been searching for the intersection where techno meets identity, where the party creates sanctuary, where four heavyweight selectors serve a room that understands what it's building — tonight, SMUT becomes the church.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | SMUT Athens |\n| **Address** | Vatsaxi 4 |\n| **Entry** | 15-20 euro via Resident Advisor |\n| **Door policy** | STRICT - creative/fetish attire required |\n| **Tickets** | RA tickets give priority, not guaranteed entry |\n\nThe dress code is the manifesto. The music is the consequence.",
-      "startDate": "2026-02-21T23:59:00",
+      "startDate": "2026-02-22T23:59:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -591,22 +588,21 @@
       ],
       "tags": [],
       "venue": {
-        "name": "SMUT Athens",
+        "name": "Aux Club",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
-        "range": "€15-20"
+        "range": "€15"
       },
-      "url": "https://ra.co/events/2338806",
-      "ticketUrl": "https://ra.co/events/2338806",
+      "url": "https://ra.co/events/2366830",
       "source": "residentadvisor",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "createdAt": "2026-02-09 16:12:58",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -616,46 +612,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "50f9581998717174",
-      "title": "Blend x SEDS with Anfisa Letyago",
+      "id": "b58d1ffc1b5c8d3a",
+      "title": "Blind Spot present Sunday Night Techno",
       "description": "",
-      "fullDescription": "The bass drops and your chest cavity becomes part of the sound system. Anfisa Letyago has that effect — the productions that made her name hit frequencies designed to rearrange your interior architecture.\n\nBlend and SEDS have coordinated to bring Letyago to Oddity, a combination that promises more than the sum of its bookings. Blend's reputation for progressive and melodic programming meets Letyago's harder edge, creating a tension the evening will have to resolve. SEDS adds the party expertise that ensures the resolution happens on the dance floor.\n\nLetyago arrives in Athens at a career peak. The Drumcode releases, the festival headline slots, the touring schedule that touches every continent with a sound system — all of it builds toward nights in rooms this size, where 200 people experience what stadiums only approximate. The intimacy matters. At Oddity, you see her work.\n\nThe Thissio venue provides the counterweight to the music's industrial intentions. Oddity built its identity on sounds gentler than this, which means tonight's takeover carries extra charge. The regulars who know the room for melodic journeys meet the Letyago devotees who came for pressure. By 3am, the distinction has dissolved — everyone's dancing to whatever she's playing.\n\nIf you need the build-and-release of progressive techno, if you want your peaks telegraphed in advance, Letyago's approach works differently. She escalates without offering exit routes, trusting the room to match her intensity. But if you've been waiting for one of electronic music's most vital talents to prove what she can do in an intimate room — tonight, Oddity discovers what happens when the small space meets the big sound.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Oddity Club |\n| **Address** | Irakleidon 61, Thissio |\n| **Getting there** | Thissio Metro (Green line) |\n| **Entry** | 8-15 euro |\n\nAnfisa Letyago in 200 square meters. Do the math.",
-      "startDate": "2026-02-21T23:59:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Oddity",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://ra.co/events/2350022",
-      "source": "residentadvisor",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:59",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "fa582315f19093a8",
-      "title": "Old School Never Fails",
-      "description": "",
-      "startDate": "2026-02-21T23:59:00",
+      "startDate": "2026-02-22T23:59:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -674,10 +634,10 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://ra.co/events/2363048",
+      "url": "https://ra.co/events/2370124",
       "source": "residentadvisor",
-      "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:03",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -686,8 +646,8 @@
     }
   ],
   "meta": {
-    "total": 19,
-    "lastUpdate": "2026-02-20T07:52:51.210Z",
+    "total": 18,
+    "lastUpdate": "2026-02-21T07:53:38.492Z",
     "url": "https://agentathens.netlify.app/dj_set-tomorrow"
   }
 }

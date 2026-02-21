@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "DevOps",
+    "price": "open",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.860Z",
+    "url": "https://agentathens.netlify.app/open-devops-conference-next-month"
+  }
+}

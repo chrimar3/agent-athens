@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "price": "open",
+    "time": "this-week"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.709Z",
+    "url": "https://agentathens.netlify.app/open-conference-this-week"
+  }
+}

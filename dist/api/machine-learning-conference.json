@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "Machine Learning",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.849Z",
+    "url": "https://agentathens.netlify.app/machine-learning-conference"
+  }
+}

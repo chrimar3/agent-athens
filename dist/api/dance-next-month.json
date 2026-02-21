@@ -3,10 +3,45 @@
     "type": "dance",
     "time": "next-month"
   },
-  "events": [],
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
+      "id": "202f5af00be76332",
+      "title": "Ballet du Grand Théâtre de Genève + Eastman – Ihsane του Sidi Larbi Cherkaoui",
+      "description": "",
+      "startDate": "2026-03-17T20:30:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
+      "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:24.085Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
   "meta": {
-    "total": 0,
-    "lastUpdate": "2026-02-20T07:52:51.242Z",
+    "total": 1,
+    "lastUpdate": "2026-02-21T07:53:38.524Z",
     "url": "https://agentathens.netlify.app/dance-next-month"
   }
 }

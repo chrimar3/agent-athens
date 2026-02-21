@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "seminar",
+    "genre": "Machine Learning",
+    "price": "with-ticket",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.896Z",
+    "url": "https://agentathens.netlify.app/with-ticket-machine-learning-seminar-this-weekend"
+  }
+}

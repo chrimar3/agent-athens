@@ -452,6 +452,94 @@
 
 ---
 
+## TECH / AI / CONFERENCE
+
+### Eugenides Foundation Conference Centre
+| Field | Data |
+|-------|------|
+| **Address** | 387 Syngrou Avenue, Paleo Faliro |
+| **Transport** | Bus 550/B2 to Eugenides stop. Bus 126 to Syngrou-Fix metro (Red). Trolley 10 to Chrisaki. |
+| **Capacity** | Up to 520 (main auditorium) + smaller halls + exhibition foyers |
+| **Parking** | Limited on-site. Paid: Pentelis 25, Zisimopoulou 24, Ellinidon 21. Disabled: 11 Pentelis St. |
+| **Accessibility** | Fully accessible for mobility-impaired attendees |
+| **Character** | Modern conference centre, 60+ years hosting international events, state-of-the-art AV. Landmark building complex. |
+| **Events** | Greeks in AI 2026 (July 15-17) |
+| **Note** | Paleo Faliro district — NOT central Athens. Allow 30-40 min from Syntagma by public transport. |
+
+---
+
+### OTEAcademy
+| Field | Data |
+|-------|------|
+| **Address** | Pelika 3 & Spartis, Maroussi |
+| **Transport** | Neratziotissa metro (Blue) + 10-min walk/taxi. Maroussi is NOT central — factor in 30-40 min from city center. |
+| **Capacity** | 500+ |
+| **Character** | Corporate conference center, northern Athens business district. Professional, clean, functional — purpose-built for multi-day conferences. |
+| **Events** | Disrupt AI Summit (May 14-15, 2026) |
+
+---
+
+### Epignosis HQ
+| Field | Data |
+|-------|------|
+| **Address** | Likourgou 1, central Athens |
+| **Transport** | Monastiraki metro (Blue/Green), 5-min walk |
+| **Capacity** | ~80-100 (meetup configuration) |
+| **Character** | Tech company office space repurposed for community events. Casual — whiteboards still up from the day's work, startup energy. Not a dedicated venue. |
+| **Events** | Mindstone Athens #PracticalAI (monthly, Tuesdays 18:30-21:00) |
+
+---
+
+### ACE AUEB (Athens Center for Entrepreneurship & Innovation)
+| Field | Data |
+|-------|------|
+| **Address** | Troias 2, central Athens |
+| **Transport** | Walkable from Omonoia metro (Red/Blue) |
+| **Character** | University startup hub at Athens University of Economics & Business. FT-ranked leading European startup hub 2025. Workshop and hackathon-ready spaces. Operating as standalone unit for 10+ years — the hub, not just the university. |
+| **Events** | AI Hackathon Greece (annual, March) |
+
+---
+
+### Archimedes Amphitheatre (Athena Research Center)
+| Field | Data |
+|-------|------|
+| **Address** | 1 Artemidos Street, Marousi |
+| **Transport** | Bus/taxi from Neratziotissa metro (Blue). KAT Hospital area. |
+| **Capacity** | ~100-150 (amphitheatre format) |
+| **Character** | Research center lecture hall with proper acoustics for talks. Also streams seminars via Microsoft Teams. Not a polished conference — a working research environment where frontier AI research is presented. |
+| **Events** | Archimedes Seminars (multiple per month, irregular) |
+| **Speakers caliber** | Michael I. Jordan (Berkeley), Paul Goldberg (Oxford), Francis Bach (INRIA), Christos Papadimitriou (Columbia) |
+| **Mailing list** | Subscribe by emailing sympa@lists.athenarc.gr with subject "subscribe archimedes-news Firstname LastName" |
+
+---
+
+### The Ellinikon Experience Centre
+| Field | Data |
+|-------|------|
+| **Address** | Ellinikon, southern Athens |
+| **Transport** | Elliniko metro (Red) |
+| **Capacity** | 200 (main hall) |
+| **Character** | Contemporary venue in Europe's largest urban regeneration project (former Athens airport site). Modern, architectural. |
+| **Events** | Athens SEO 2026 (May 22-23) |
+
+---
+
+### Asteria Domus Glyfada
+| Field | Data |
+|-------|------|
+| **Address** | Glyfada (Athenian Riviera) |
+| **Transport** | Taxi only (~30 min, €25-35 from center). NO metro access. |
+| **Character** | Premium beachfront venue. Luxury destination conference format. Curated attendance. |
+| **Events** | InfraAI Global Summit (March 30 - April 1, 2026) |
+| **Entry** | $1,000+ |
+| **Note** | Premium pricing. C-suite/investor crowd. Not a community event. |
+
+---
+
+*Cross-reference: Megaron Mousikis is already profiled under Classical / Cultural Venues. For tech usage: Devoxx Greece 2026 (April 23-25) — 3-day developer conference, part of global Devoxx family. Transport: Megaro Moussikis metro (Blue), directly adjacent.*
+
+---
+
 # SECTION 2: COLLECTIVES & REGULAR NIGHTS
 
 | Collective | Sound | Venues | Notes |
@@ -461,6 +549,53 @@
 | **Blend** | Progressive/melodic | Oddity, Universe | Musical journeys |
 | **VLCT/Velocity** | Hard techno, rave | AUX | High energy |
 | **Slam!** | Queer house/acid/italo | Six D.O.G.S. | Monthly |
+
+---
+
+# SECTION 2B: TECH / AI COMMUNITIES & EVENTS
+
+## Recurring Community Events
+
+| Community | Focus | Size | Frequency | Venue | Entry |
+|-----------|-------|------|-----------|-------|-------|
+| **Mindstone Athens #PracticalAI** | LLMs, AI workflows, productivity | 56+ members (growing fast) | Monthly (Tuesdays, 18:30-21:00) | Epignosis HQ, Likourgou 1 | Open, RSVP required |
+| **Archimedes Seminars** | Frontier AI research, algorithms, data science | Academic network | Multiple per month (irregular) | Archimedes Amphitheatre, Marousi | Open (also via Teams) |
+| **Athens Big Data** | Big data, analytics | 2,144 members | Irregular | Various | Varies |
+| **PyData Piraeus** | Python, data science | 442 members | Irregular | Various | Varies |
+
+## Annual AI/Tech Events (Athens)
+
+| Event | Dates (2026) | Venue | Character | Entry |
+|-------|-------------|-------|-----------|-------|
+| **AI Hackathon Greece** | March 6-8 | ACE AUEB | Greece's largest AI hackathon. 3rd year. Application-based. 8 challenge tracks. | Application |
+| **InfraAI Global Summit** | March 30 - April 1 | Asteria Domus Glyfada | Premium AI infrastructure summit. C-suite, investors. 200+ attendees. | $1,000+ |
+| **Devoxx Greece** | April 23-25 | Megaron Mousikis | Developer conference. AI/ML track. Part of global Devoxx family. Community-driven. | Ticketed (early bird available) |
+| **Disrupt AI Summit** | May 14-15 | OTEAcademy, Maroussi | Corporate/practitioner. 500+ attendees. Includes GenAI Bootcamp. | Ticketed |
+| **Athens SEO** | May 22-23 | Ellinikon Experience Centre | Technical SEO + AI in search. Europe-facing. | Ticketed |
+| **Athens Institute AI & Data Science** | June 29 - July 3 | Athens | Academic paper-presentation conference. 7th edition. | Academic registration |
+| **Greeks in AI** | July 15-17 | Eugenides Foundation, Paleo Faliro | THE flagship. Greek AI diaspora meets local ecosystem. Research + industry + networking. | Registration via greeksin.ai |
+| **HackerX Athens** | April 2, October 5 | TBA | Invite-only developer recruiting events (speed-dating format). | Invite-only |
+
+## Key Organizations
+
+| Organization | Role | Website |
+|-------------|------|---------|
+| **Archimedes Unit (Athena RC)** | Greece's flagship AI research unit. Daskalakis (MIT) + Papadimitriou (Columbia) as Principal Scientists. | archimedesai.gr |
+| **PHAROS — Greek AI Factory** | National AI hub. EU-backed (EuroHPC). €30M budget. DAEDALUS supercomputer (89 Pflops) coming online 2026. | pharos-aifactory.eu |
+| **ACE AUEB** | Leading startup hub. FT-ranked. Runs AI Hackathon Greece. | ace.aueb.gr |
+| **Found.ation** | Startup support, incubation. 67% success rate for program graduates. | thefoundation.gr |
+| **Greeks in AI** | Diaspora community organization. Annual symposium. | greeksin.ai |
+| **Product-Led Hub** | Conference organizer. Runs Disrupt AI Summit. | productledhub.com |
+
+## Greek AI Ecosystem Context
+
+For enrichment writers: Greece's AI ecosystem is larger than its Athens events suggest. Key context that informs event descriptions:
+
+- **Brain drain + return:** 11% of NeurIPS 2019 oral presentations were by Greek researchers. Most work abroad (MIT, Stanford, UPenn, Amsterdam, Edinburgh). Events like Greeks in AI explicitly address this.
+- **Funding momentum:** Greek AI startups attracted €123M+ in 2024, ranking 2nd in Central & Eastern Europe. Total startup investment 2025: €732.2M (35% YoY increase).
+- **Infrastructure arriving:** PHAROS (EU AI Factory) approved December 2025. DAEDALUS supercomputer operational Q1 2026. This is new — previous enrichments couldn't reference it.
+- **Research strength:** Archimedes Unit (Athena RC), NCSR Demokritos, NTUA, AUEB, FORTH all have active AI programs. Not a startup-only ecosystem — deep academic roots.
+- **Key companies:** Omilia (conversational AI), Persado (AI marketing language), Workable (AI recruiting), Hack The Box (cybersecurity). Plus newer wave: EVO Human Performance, Lambda Automata, Langaware, StiQ.
 
 ---
 
@@ -638,6 +773,23 @@
 | TicketServices.gr | Festivals (Athens Epidaurus) |
 | Resident Advisor | Electronic events, SMUT tickets |
 
+## AI / Tech Event Sources
+
+| Source | What | Check Frequency |
+|--------|------|-----------------|
+| greeksin.ai | Greeks in AI symposium | Monthly |
+| archimedesai.gr/en | Archimedes research seminars | Weekly |
+| pharos-aifactory.eu | PHAROS AI Factory events & programs | Monthly |
+| hackathongreece.ai | AI Hackathon Greece (annual) | Annually (watch for CFP) |
+| community.mindstone.com/events | Mindstone monthly meetup | Monthly |
+| devoxx.gr | Devoxx Greece developer conference | Quarterly |
+| productledhub.com | Disrupt AI Summit | Quarterly |
+| meetup.com/topics/ai/gr | All Greek AI meetups | Weekly |
+| eventbrite.com (Athens + Technology) | Mixed tech events | Weekly |
+| starttech.vc/events | Startup events | Monthly |
+| lu.ma (Athens search) | Community events, new format | Weekly |
+| dev.events/hackathons/EU/GR | Hackathons | Monthly |
+
 ---
 
 # SECTION 11: GREEK JAZZ ARTISTS
@@ -665,6 +817,10 @@ For enrichment context when these names appear:
 | **Monastiraki/Plaka** | Monastiraki | Tourist central, rooftop views | All day, fades midnight |
 | **Kolonaki** | Syntagma/Evangelismos | Upscale, 50-100% higher prices | 19:00-01:00 |
 | **Piraeus** | Piraeus (30+ min) | Port city, rebetiko history | Venue-specific |
+| **Marousi** | Neratziotissa (Blue) | Corporate, research centers, not nightlife | Business hours |
+| **Paleo Faliro** | Bus from Syngrou-Fix (Red) | Coastal, cultural venues (Eugenides, SNFCC) | Event-specific |
+| **Glyfada** | Taxi only | Athenian Riviera, premium, no metro | Event-specific |
+| **Ellinikon** | Elliniko (Red) | Urban regeneration, contemporary venues | Event-specific |
 
 ---
 
@@ -678,6 +834,10 @@ For enrichment context when these names appear:
 
 ## Verified Operational
 - **Stoa Athanaton** — Confirmed operational January 2026
+- **Eugenides Foundation** — Confirmed operational, Greeks in AI 2026 announced
+- **OTEAcademy** — Confirmed operational, Disrupt AI Summit 2026 announced
+- **ACE AUEB** — Confirmed operational, AI Hackathon Greece 2026 held March 6-8
+- **Archimedes Amphitheatre** — Confirmed operational, regular seminars ongoing 2026
 
 ---
 

@@ -1,0 +1,51 @@
+{
+  "filters": {
+    "type": "meetup",
+    "price": "with-ticket",
+    "time": "all-events"
+  },
+  "events": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8fa3b804c0907b5a",
+      "title": "Engineering the World 2026",
+      "description": "Where engineers, innovators and industry leaders come together for a 3-day global event to tackle Data Scarcity and build what’s next.",
+      "fullDescription": "Red brick smokestacks rise above a complex of 19th-century gasworks buildings, their industrial silhouettes softened by the late-April light that slants across the Gazi neighborhood around five in the afternoon. Technopolis -- Athens's converted industrial museum and event campus -- is the kind of venue where you walk between sessions through open courtyards framed by preserved machinery and iron structural beams, the history of one engineering era literally surrounding the conversations about the next one.\n\nEngineering the World runs for three days at the end of April, and its central focus is a problem that has quietly become one of the defining constraints of the current technical moment: data scarcity. The conference gathers engineers, innovators, and industry leaders who are working at the edges of what you can build when the data you need does not exist in convenient, labeled abundance. That means sessions touching synthetic data generation, few-shot and zero-shot learning approaches, transfer learning strategies, data augmentation pipelines, and the organizational challenges of building products when your training set is thin, biased, expensive to acquire, or all three at once.\n\nThe venue itself shapes the experience. Technopolis is not a single auditorium -- it is a campus of multiple buildings and outdoor areas near Keramikos metro station. You move between indoor presentation halls with high ceilings and exposed industrial architecture and open-air zones where the break conversations happen against a backdrop that reminds you engineering has always been about building with constraints. The mix of spaces means the event breathes differently than a hotel conference center. There is room to step outside, decompress, and return.\n\nIf you are an engineer or technical leader dealing with real-world data limitations -- in machine learning, in IoT, in manufacturing, in any domain where the textbook assumption of plentiful clean data collides with reality -- the program is built around your actual problems. If you are a researcher whose work touches data efficiency, or a founder building products where data acquisition cost is a line item that keeps you awake, the three-day format gives enough time to go past surface-level overviews.\n\nThis is a ticketed event, so plan accordingly. The multi-day structure starting at 17:00 each day suggests an afternoon-and-evening cadence, which means you can work during the day and arrive for focused sessions as Athens shifts into its evening energy.\n\nThe neighborhood rewards sticking around after hours. Gazi's density of restaurants, bars, and rooftop terraces sits directly outside the Technopolis gates. Three days in the same venue builds the kind of accumulating familiarity with fellow attendees that single-day events rarely achieve -- by the final evening, the conversations will be different from where they started.",
+      "startDate": "2026-04-28T17:00:00",
+      "endDate": "2026-04-30",
+      "type": "meetup",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Τεχνόπολη",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.eventbrite.com/e/engineering-the-world-2026-tickets-1981954401969",
+      "ticketUrl": "https://www.eventbrite.com/e/engineering-the-world-2026-tickets-1981954401969",
+      "source": "eventbrite",
+      "createdAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "17:00",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "lastUpdate": "2026-02-21T07:53:38.715Z",
+    "url": "https://agentathens.netlify.app/with-ticket-meetup"
+  }
+}

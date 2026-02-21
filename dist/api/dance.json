@@ -7,6 +7,40 @@
     {
       "@context": "https://schema.org",
       "@type": "DanceEvent",
+      "id": "202f5af00be76332",
+      "title": "Ballet du Grand Théâtre de Genève + Eastman – Ihsane του Sidi Larbi Cherkaoui",
+      "description": "",
+      "startDate": "2026-03-17T20:30:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
+      "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:24.085Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
       "id": "balletto-di-milano-2026-04-04",
       "title": "Ρωμαίος και Ιουλιέτα - Balletto di Milano",
       "description": "4 - 5 Απριλιου Ρωμαίος και Ιουλιέτα - Balletto di Milano CHRISTMAS THEATER",
@@ -85,11 +119,79 @@
       "timeSource": "extracted_from_start_date",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
+      "id": "9c9fc81e3e781f26",
+      "title": "CARMEN by Antonio Gades &#038; Carlos Saura – Με την Compañía Antonio Gades",
+      "description": "",
+      "startDate": "2026-04-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
+      "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:24.087Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "DanceEvent",
+      "id": "76812621a28658a5",
+      "title": "CARMEN by Antonio Gades & Carlos Saura – Με την Compañía Antonio Gades",
+      "description": "",
+      "startDate": "2026-04-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "dance",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
+      "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:37.970Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2026-02-20T07:52:51.242Z",
+    "total": 5,
+    "lastUpdate": "2026-02-21T07:53:38.524Z",
     "url": "https://agentathens.netlify.app/dance"
   }
 }

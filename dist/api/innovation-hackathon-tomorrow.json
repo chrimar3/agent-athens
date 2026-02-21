@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "hackathon",
+    "genre": "Innovation",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.882Z",
+    "url": "https://agentathens.netlify.app/innovation-hackathon-tomorrow"
+  }
+}

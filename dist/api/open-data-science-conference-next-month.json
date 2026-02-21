@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "Data Science",
+    "price": "open",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.853Z",
+    "url": "https://agentathens.netlify.app/open-data-science-conference-next-month"
+  }
+}

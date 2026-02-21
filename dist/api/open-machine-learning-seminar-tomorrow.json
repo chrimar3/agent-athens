@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "seminar",
+    "genre": "Machine Learning",
+    "price": "open",
+    "time": "tomorrow"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.895Z",
+    "url": "https://agentathens.netlify.app/open-machine-learning-seminar-tomorrow"
+  }
+}

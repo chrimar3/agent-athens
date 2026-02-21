@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "Data Science",
+    "time": "today"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.851Z",
+    "url": "https://agentathens.netlify.app/data-science-conference-today"
+  }
+}

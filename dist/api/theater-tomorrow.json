@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "dac17f052230afcb",
-      "title": "Νίκος Μερτζάνος",
+      "id": "ed34ef67109e69e9",
+      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
       "description": "",
-      "startDate": "2026-02-21",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "theater",
       "genres": [],
@@ -27,11 +27,11 @@
         "currency": "EUR",
         "range": "€12"
       },
-      "url": "https://www.athinorama.gr/music/gig/nikos_mertzanos-10063792/",
+      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
       "ticketUrl": "https://www.viva.gr/tickets/theater/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -39,16 +39,16 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "c3b24e83652b6f22",
-      "title": "Να σου πω μια ιστορία",
-      "description": "Εως 2026-04-05",
-      "startDate": "2026-02-21",
+      "id": "7ec7cbce0b64d858",
+      "title": "Σαβίνα Γιαννάτου - Σπύρος Μάνεσης",
+      "description": "",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Studio Μαυρομιχάλη",
+        "name": "Theatre Of The No",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -59,11 +59,11 @@
         "currency": "EUR",
         "range": "€15"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/na_sou_po_mia_istoria-10072531/",
-      "ticketUrl": "https://www.more.com/theater/na-sou-po-mia-istoria",
+      "url": "https://www.athinorama.gr/music/gig/sabina_giannatou___spuros_manesis-10080392/",
+      "ticketUrl": "https://www.more.com/gr-el/theater/",
       "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:02",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -71,80 +71,39 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "d63a6e6400993f13",
-      "title": "Χορεύοντας στη Λούνασα",
-      "description": "Εως 2026-04-05",
-      "startDate": "2026-02-21",
+      "id": "902cd7ba957890a9",
+      "title": "MISERY",
+      "description": "",
+      "startDate": "2026-02-22",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Θέατρο Κάτω Από Τη Γέφυρα",
+        "name": "Άνεσις",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 18,
+        "amount": 15,
         "currency": "EUR",
-        "range": "€18"
+        "range": "€15"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/xoreuontas_sti_lounasa-10089163/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "6159c16594a96552",
-      "title": "Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος",
-      "description": "21 Φεβ - 5 Απρ Να σου πω μια ιστορία του Χόρχε Μπουκάι 5ος χρόνος Studio Μαυρομιχαλη",
-      "fullDescription": "The stage at Studio Mavromichali is close enough to touch. The intimacy is the point — when Jorge Bucay's words are being performed, the distance between speaker and listener should be measured in breaths, not rows. \"Na sou po mia istoria\" — Let Me Tell You a Story — begins.\n\nBucay's work occupies a specific cultural position. The Argentine psychotherapist turned his therapeutic practice into storytelling, parables that function as mirrors, narratives that sound simple until they start working on you. Greek theater has embraced his stories, finding in them material that translates without losing power.\n\nStudio Mavromichali provides the container this material demands. The venue's intimate dimensions — perhaps 80 seats in configurations that shift with productions — creates the feeling of personal address. When the performer speaks, they're speaking to you. When a story lands, you feel it land.\n\nThe crowd for this kind of theatrical storytelling has particular characteristics. These are Greeks who've encountered Bucay's books, who understand the tradition of therapeutic parable, who come seeking the particular pleasure of hearing wisdom disguised as entertainment. The venue's neighborhood in central Athens draws an audience comfortable with experimental and intimate performance.\n\nThe performance will unfold through stories that seem to address specific audience members. Bucay's technique involves universality through specificity — tales that could be about anyone become stories about everyone. The performer's task is to make that alchemy visible, to transform reading into experience.\n\nIf you need spectacle and production values, if theater means elaborate staging, Studio Mavromichali operates at a different scale. The intimacy here is the production value, the closeness the special effect. But if you've been waiting for Bucay's stories to find voice in Athens, for therapeutic wisdom to become theatrical event, for stories that continue working after you've left the theater — this is where they're being told.\n\n| Info | Details |\n|------|---------|\n| **Date** | Saturday, February 21, 2026 |\n| **Venue** | Studio Mavromichali |\n| **Source** | Jorge Bucay stories |\n| **Language** | Greek |\n| **Format** | Intimate theatrical storytelling |\n| **Good to know** | Small venue — book in advance |\n\nJorge Bucay's stories find Greek voice: therapeutic parables in Athens' intimate theater tradition.",
-      "startDate": "2026-02-21T20:00:00+03:00",
-      "endDate": null,
-      "type": "theater",
-      "genres": [
-        "theater"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Studio Μαυρομιχάλη",
-        "address": "Μαυρομιχάλη 134",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "από €10"
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/na-sou-po-mia-istoria/",
+      "url": "https://www.more.com/gr-el/tickets/theater/misery/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/misery/",
       "source": "more.com",
-      "createdAt": "2026-01-19T15:20:14.340Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2026-02-20T07:52:51.233Z",
+    "total": 3,
+    "lastUpdate": "2026-02-21T07:53:38.514Z",
     "url": "https://agentathens.netlify.app/theater-tomorrow"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "meetup",
+    "genre": "Startup",
+    "price": "with-ticket",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.872Z",
+    "url": "https://agentathens.netlify.app/with-ticket-startup-meetup-this-weekend"
+  }
+}

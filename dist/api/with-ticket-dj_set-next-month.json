@@ -33,10 +33,154 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13744/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "18:30",
       "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "1647764215728394",
+      "title": "REVOLT hosts SHUFFLE with Paleman (UK)",
+      "description": "",
+      "startDate": "2026-03-01T14:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TBA - ATHarea",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2373393",
+      "ticketUrl": "https://ra.co/events/2373393",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "14:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "927f06b4e18b4c29",
+      "title": "House On The Beach: Timmy Regisford + DJ Thai",
+      "description": "",
+      "startDate": "2026-03-01T19:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.clubber.gr/events/house-on-the-beach-timmy-regisford-dj-thai/",
+      "ticketUrl": "https://www.clubber.gr/events/house-on-the-beach-timmy-regisford-dj-thai/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "19:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "0390b33cca8e3b7a",
+      "title": "HOUSE ON THE BEACH",
+      "description": "",
+      "startDate": "2026-03-01T19:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367791",
+      "ticketUrl": "https://ra.co/events/2367791",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "19:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a961080e1afbc1a0",
+      "title": "Ad Hoc",
+      "description": "",
+      "startDate": "2026-03-01T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cantina Social",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/ad-hoc-19/",
+      "ticketUrl": "https://www.clubber.gr/events/ad-hoc-19/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -67,7 +211,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14089/",
       "source": "ticketservices",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -138,9 +282,186 @@
       "ticketUrl": "https://ra.co/events/2367935",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d1a79f3ccba2c11f",
+      "title": "Dimitri Vegas + Manolaco + Lost Prince",
+      "description": "",
+      "startDate": "2026-03-06T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 30,
+        "currency": "EUR",
+        "range": "€30"
+      },
+      "url": "https://www.clubber.gr/events/dimitri-vegas-manolaco-lost-prince/",
+      "ticketUrl": "https://www.clubber.gr/events/dimitri-vegas-manolaco-lost-prince/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "e3a19a7e32b1665a",
+      "title": "Espectro Oculto with Cortical Systematics (RNXRX & Marianella), Non Punire, FRAGEDIS & Mint ",
+      "description": "",
+      "startDate": "2026-03-06T23:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://ra.co/events/2367102",
+      "ticketUrl": "https://ra.co/events/2367102",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "c4692c14b0fef7d2",
+      "title": "Enlight Frequencies with BYORN",
+      "description": "",
+      "startDate": "2026-03-06T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://ra.co/events/2372809",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "32e5285f136dc52a",
+      "title": "aux: Fenimore",
+      "description": "",
+      "startDate": "2026-03-06T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2373138",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "4f778cbacc953eef",
+      "title": "aux: FENIM0RE",
+      "description": "",
+      "startDate": "2026-03-06T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2373138",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:59",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -175,9 +496,153 @@
       "ticketUrl": "https://ra.co/events/2355602",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "22:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "0ca00f0e078e5e4c",
+      "title": "Rejuv pres. Solace pre-party: DBBD + Amor Satyr + DJ Spit + Evissimax + DJ egoshooter1000 + MAXImum + Fiama + Troy Violens",
+      "description": "",
+      "startDate": "2026-03-07T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.clubber.gr/events/rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissimax-dj-egoshooter1000-maximum-fiama-troy-violens/",
+      "ticketUrl": "https://www.clubber.gr/events/rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissimax-dj-egoshooter1000-maximum-fiama-troy-violens/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-15 06:47:14",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "433d6fc3cacf7ab3",
+      "title": "Soft Crush w/. DJ Yazi // Outermost // Katra",
+      "description": "",
+      "startDate": "2026-03-07T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://ra.co/events/2371861",
+      "ticketUrl": "https://ra.co/events/2371861",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d4ba06520768e76a",
+      "title": "Kollektiv: Raw State - Techno Takeover",
+      "description": "",
+      "startDate": "2026-03-07T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "N.A.O.S.",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€10-18"
+      },
+      "url": "https://www.clubber.gr/events/kollektiv-raw-state-techno-takeover/",
+      "ticketUrl": "https://www.clubber.gr/events/kollektiv-raw-state-techno-takeover/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "56f54d115e5e0e87",
+      "title": "SOLACE: PRE-PARTY",
+      "description": "",
+      "startDate": "2026-03-07T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Universe",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://ra.co/events/2335052",
+      "ticketUrl": "https://ra.co/events/2335052",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -219,6 +684,42 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
+      "id": "9ef3e44821ebba07",
+      "title": "Coma: Talismann + Laure Croft + Jerm",
+      "description": "",
+      "startDate": "2026-03-07T23:45:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Smut, Βατσαξή 4, 10438, Αθήνα, Greece",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/coma-talismann-laure-croft-jerm/",
+      "ticketUrl": "https://www.clubber.gr/events/coma-talismann-laure-croft-jerm/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:45",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
       "id": "c7b63ec9a83394c7",
       "title": "COMA x SMUT x Talismann x Laure Croft x JERM",
       "description": "",
@@ -246,7 +747,42 @@
       "ticketUrl": "https://ra.co/events/2359292",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6166dccac02b0236",
+      "title": "The 7th Gate by Lory aka Archaic",
+      "description": "",
+      "startDate": "2026-03-07T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "IT Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2373543",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -281,7 +817,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13926/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -317,7 +853,7 @@
       "ticketUrl": "https://ra.co/events/2369567",
       "source": "residentadvisor",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -352,7 +888,7 @@
       "url": "https://ra.co/events/2365382",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "17:00",
       "timeSource": "scraped_listing",
@@ -389,7 +925,7 @@
       "ticketUrl": "https://ra.co/events/2345963",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -423,7 +959,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/",
       "source": "more.com",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "12:45",
       "timeSource": "scraped_listing",
@@ -459,7 +995,7 @@
       "ticketUrl": "https://ra.co/events/2364676",
       "source": "residentadvisor",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_listing",
@@ -494,10 +1030,42 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13543/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "576dad5fac6e4ad6",
+      "title": "Δύο ρεσιτάλ πιάνου του Nikolai Lugansky",
+      "description": "",
+      "startDate": "2026-03-19",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Parnassos Literary Society",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": "€5 - €60"
+      },
+      "url": "https://www.ticketservices.gr/event/13543/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13543/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -531,7 +1099,7 @@
       "ticketUrl": "https://ra.co/events/2360636",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -567,7 +1135,112 @@
       "ticketUrl": "https://ra.co/events/2369026",
       "source": "residentadvisor",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "55adb240748d4fb9",
+      "title": "4 Years Exilium - Eli Brown",
+      "description": "",
+      "startDate": "2026-03-21T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2371932",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7f0deecd13b36bcc",
+      "title": "4 Years Exilium with Eli Brown",
+      "description": "",
+      "startDate": "2026-03-21T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2371932",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "85e63b22b7fbb752",
+      "title": "Underdogs Techno",
+      "description": "",
+      "startDate": "2026-03-21T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "IT Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2375082",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -604,7 +1277,43 @@
       "ticketUrl": "https://ra.co/events/2357209",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
+      "language": "en",
+      "timeDoors": "23:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "989a73edeea63976",
+      "title": "Tropism: Legowelt (live) + Jerky T + DJ Problems b2b Kazteins",
+      "description": "",
+      "startDate": "2026-03-24T23:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.clubber.gr/events/tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins/",
+      "ticketUrl": "https://www.clubber.gr/events/tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:30",
       "timeSource": "scraped_listing",
@@ -640,7 +1349,42 @@
       "ticketUrl": "https://ra.co/events/2368725",
       "source": "residentadvisor",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d1322ce7a4eb01fe",
+      "title": "Dj Guest List & The Muffin Man",
+      "description": "",
+      "startDate": "2026-03-24T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€25"
+      },
+      "url": "https://ra.co/events/2372666",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -676,7 +1420,7 @@
       "url": "https://ra.co/events/2349059",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -712,7 +1456,7 @@
       "ticketUrl": "https://ra.co/events/2367186",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -749,7 +1493,7 @@
       "ticketUrl": "https://ra.co/events/2355605",
       "source": "residentadvisor",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "05:00",
       "timeSource": "scraped_listing",
@@ -795,6 +1539,77 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
+      "id": "ec374fb369c6d2d8",
+      "title": "SOCIETY 3000 invites Ben Pest (Live)",
+      "description": "",
+      "startDate": "2026-03-28T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://ra.co/events/2370430",
+      "ticketUrl": "https://ra.co/events/2370430",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b2299a9aea4e9a5b",
+      "title": "ZONA MUTANTE III w/ Blame The Mono ",
+      "description": "",
+      "startDate": "2026-03-28T23:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://ra.co/events/2374710",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "23:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
       "id": "0aad363524ba8351",
       "title": "SMUT x MARRØN x Ogazón x Decoder",
       "description": "",
@@ -822,7 +1637,7 @@
       "ticketUrl": "https://ra.co/events/2346992",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-21 07:51:30",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -831,8 +1646,8 @@
     }
   ],
   "meta": {
-    "total": 23,
-    "lastUpdate": "2026-02-20T07:52:51.335Z",
+    "total": 46,
+    "lastUpdate": "2026-02-21T07:53:38.658Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-next-month"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "meetup",
+    "genre": "Developer",
+    "price": "with-ticket",
+    "time": "all-events"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.875Z",
+    "url": "https://agentathens.netlify.app/with-ticket-developer-meetup"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "DevOps",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.859Z",
+    "url": "https://agentathens.netlify.app/devops-conference-next-month"
+  }
+}

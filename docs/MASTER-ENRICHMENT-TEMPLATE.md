@@ -168,6 +168,20 @@ are quiet and specific.
 | **Door** | Reservation only — no walk-ins |
 ```
 
+### Details Table — Tech/Conference Variant
+
+For tech events (conferences, meetups, hackathons, seminars), replace **Sound** and **Door** rows:
+
+| Aspect | Details |
+|--------|---------|
+| **Setting** | [VENUE_TYPE + capacity + key feature] |
+| **Vibe** | [2-3 atmosphere descriptors] |
+| **Format** | [Talks / Workshops / Hands-on / Panels / Networking / Hackathon / Seminar] |
+| **Access** | [Open / RSVP / Ticketed / Application-based / Invite-only] |
+
+Use the music variant (Sound/Door) for: concerts, DJ sets, live music, club nights, rebetiko.
+Use the tech variant (Format/Access) for: conferences, meetups, hackathons, workshops, seminars.
+
 ---
 
 ## E. The Experience (Arc of the Night)
@@ -271,6 +285,15 @@ These fields are stored separately in the database and rendered by the site temp
 | `tags` | string[] | Clickable filter chips + meta tags |
 | `last_verified` | timestamp | Footer: "Last verified: Feb 2026" |
 
+## Event Types
+
+The recognized event types: `concert` `exhibition` `cinema` `theater` `performance` `workshop` `conference` `meetup` `hackathon` `seminar`
+
+- **conference** — Multi-session, typically multi-day events with keynotes, panels, breakouts
+- **meetup** — Recurring community gatherings, typically single-evening, informal
+- **hackathon** — Competitive build events, typically 24-72 hours
+- **seminar** — Single-speaker academic or research presentations
+
 ## Tags Field
 
 Tags are stored as an array in the database:
@@ -315,22 +338,22 @@ Rendered in a small footer: `Last verified: February 2026`
 # PART 3: TAG TAXONOMY
 
 ## Genre
-`Jazz` `Electronic` `Techno` `House` `Hard-techno` `Melodic-techno` `Progressive` `Darkwave` `EBM` `Industrial` `Rebetiko` `Laiko` `Entechno` `Greek-singer-songwriter` `Rock` `Metal` `Punk` `Hip-hop` `Indie` `Experimental` `Classical` `World` `Greek-Traditional` `Mediterranean-Fusion` `DJ-set` `Live-band` `Live-act`
+`Jazz` `Electronic` `Techno` `House` `Hard-techno` `Melodic-techno` `Progressive` `Darkwave` `EBM` `Industrial` `Rebetiko` `Laiko` `Entechno` `Greek-singer-songwriter` `Rock` `Metal` `Punk` `Hip-hop` `Indie` `Experimental` `Classical` `World` `Greek-Traditional` `Mediterranean-Fusion` `DJ-set` `Live-band` `Live-act` `AI` `Machine-Learning` `Data-Science` `Tech-Conference` `Hackathon` `Developer-Conference` `Research-Seminar` `Startup-Event`
 
 ## Neighborhood
-`Gazi` `Exarchia` `Psiri` `Koukaki` `Monastiraki` `Metaxourgeio` `Kolonaki` `Piraeus` `Neos-Kosmos` `Mets` `Petralona` `Kypseli` `Tavros` `Athens-Riviera` `Pagrati` `Ampelokipoi`
+`Gazi` `Exarchia` `Psiri` `Koukaki` `Monastiraki` `Metaxourgeio` `Kolonaki` `Piraeus` `Neos-Kosmos` `Mets` `Petralona` `Kypseli` `Tavros` `Athens-Riviera` `Pagrati` `Ampelokipoi` `Marousi` `Paleo-Faliro` `Glyfada` `Ellinikon`
 
 ## Atmosphere
-`Industrial-chic` `Intimate` `Underground` `Mainstream` `Tourist-friendly` `Local-favorite` `Warehouse` `Rooftop` `Basement` `Garden` `Raw` `Polished` `Inclusive` `Selective-door` `Historic` `Listening-room`
+`Industrial-chic` `Intimate` `Underground` `Mainstream` `Tourist-friendly` `Local-favorite` `Warehouse` `Rooftop` `Basement` `Garden` `Raw` `Polished` `Inclusive` `Selective-door` `Historic` `Listening-room` `Academic` `Corporate` `Startup-energy` `Hands-on` `Conference-center`
 
 ## Crowd (for AI query matching)
-`20s-30s` `30s-40s` `Mixed-ages` `Students` `Young-professionals` `Expats` `Greek-locals` `Mixed-international` `Music-heads` `Industry-people` `LGBTQ-friendly` `Queer` `Date-night` `Groups` `Solo-friendly`
+`20s-30s` `30s-40s` `Mixed-ages` `Students` `Young-professionals` `Expats` `Greek-locals` `Mixed-international` `Music-heads` `Industry-people` `LGBTQ-friendly` `Queer` `Date-night` `Groups` `Solo-friendly` `Tech-professionals` `Developers` `Founders` `AI-researchers` `AI-practitioners` `Academic-researchers` `C-suite` `Diaspora` `PhD-students`
 
 ## Experience
-`Standing-room` `Seated` `Dance-floor` `Listening-room` `Late-night` `Early-evening` `All-night` `Afterhours` `Fills-after-2am` `Concert-format`
+`Standing-room` `Seated` `Dance-floor` `Listening-room` `Late-night` `Early-evening` `All-night` `Afterhours` `Fills-after-2am` `Concert-format` `Workshop-format` `Conference-format` `Hackathon-format` `Seminar-format` `Multi-day` `Networking-event` `Bootcamp` `Daytime-event`
 
 ## Practical
-`Metro-accessible` `Taxi-recommended` `Taxi-required` `Cash-only` `Card-accepted` `Cash-preferred` `Reservation-required` `Walk-in-friendly` `Smoking-area` `Outdoor` `Heated` `Air-conditioned` `Funktion-One` `RA-tickets` `Door-selection`
+`Metro-accessible` `Taxi-recommended` `Taxi-required` `Cash-only` `Card-accepted` `Cash-preferred` `Reservation-required` `Walk-in-friendly` `Smoking-area` `Outdoor` `Heated` `Air-conditioned` `Funktion-One` `RA-tickets` `Door-selection` `Laptop-recommended` `Wi-Fi-available` `Catered` `RSVP-required` `Application-based` `Invite-only` `Streaming-available` `English-language` `Bilingual-GR-EN`
 
 ---
 
@@ -397,6 +420,14 @@ An AI answer engine should be able to extract **at least 2 standalone sentences*
 | "authentic experience" | "Someone at the next table is mouthing the words without realizing it" |
 | "great atmosphere" | "By 2am the room has reorganized itself around whoever's dancing hardest" |
 | "popular venue" | "Regulars who've followed this collective through three venue changes" |
+| "leading AI conference" | "Keynotes from researchers whose papers you've been citing for three years" |
+| "great networking opportunities" | "By lunch, three people at your table have already exchanged GitHub repos" |
+| "hands-on workshop" | "You walk out with a deployed app that didn't exist four hours ago" |
+| "international speakers" | "The panelist on the left flew in from MIT, the one on the right walked over from Marousi" |
+| "growing community" | "Last edition had forty people. This one has a waitlist" |
+| "cutting-edge research" | "The paper being presented was posted on arXiv six days ago" |
+| "innovative startups" | "Three of the presenting teams are already in talks with VCs in the hallway" |
+| "diverse attendees" | "PhD students, CTOs, and a government advisor all reaching for the same coffee pot" |
 
 ---
 

@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "Data Science",
+    "time": "next-month"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.852Z",
+    "url": "https://agentathens.netlify.app/data-science-conference-next-month"
+  }
+}

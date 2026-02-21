@@ -1,0 +1,12 @@
+{
+  "filters": {
+    "type": "conference",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.535Z",
+    "url": "https://agentathens.netlify.app/conference-this-weekend"
+  }
+}

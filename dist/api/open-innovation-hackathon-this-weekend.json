@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "hackathon",
+    "genre": "Innovation",
+    "price": "open",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.883Z",
+    "url": "https://agentathens.netlify.app/open-innovation-hackathon-this-weekend"
+  }
+}

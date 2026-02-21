@@ -313,7 +313,17 @@ export function checkLocation(event: EventLocation): LocationResult {
 
       // Substring matching only for longer names (avoid "AN" matching in "random")
       if (canonicalNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
-        if (normalizedVenue.includes(canonicalNorm) ||
+        // Venue name contains the canonical name (safe: "Θέατρο Κάρολος Κουν Αθήνα" includes "κάρολος κουν")
+        if (normalizedVenue.includes(canonicalNorm)) {
+          return {
+            status: 'verified_athens',
+            matched_venue: venueConfig.canonical_name,
+            original_venue: venueName,
+          };
+        }
+        // Canonical contains venue name (risky: require venue to be >40% of canonical length)
+        if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
+            normalizedVenue.length >= canonicalNorm.length * 0.4 &&
             canonicalNorm.includes(normalizedVenue)) {
           return {
             status: 'verified_athens',
@@ -338,11 +348,21 @@ export function checkLocation(event: EventLocation): LocationResult {
 
         // Substring matching only for longer variations
         if (variationNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
-          if (normalizedVenue.includes(variationNorm) ||
+          // Venue name contains the variation (safe direction)
+          if (normalizedVenue.includes(variationNorm)) {
+            return {
+              status: 'verified_athens',
+              matched_venue: venueConfig.canonical_name,
+              original_venue: venueName,
+            };
+          }
+          // Variation contains venue name (risky: require venue to be >40% of variation length)
+          if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
+              normalizedVenue.length >= variationNorm.length * 0.4 &&
               variationNorm.includes(normalizedVenue)) {
             return {
               status: 'verified_athens',
-              matched_venue: venueConfig.canonical_name, // Auto-merge to canonical
+              matched_venue: venueConfig.canonical_name,
               original_venue: venueName,
             };
           }

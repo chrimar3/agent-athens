@@ -55,7 +55,11 @@ export type EventType =
   | 'cinema'
   | 'theater'
   | 'performance'
-  | 'workshop';
+  | 'workshop'
+  | 'conference'
+  | 'meetup'
+  | 'hackathon'
+  | 'seminar';
 
 export interface EnrichmentStats {
   total_events: number;

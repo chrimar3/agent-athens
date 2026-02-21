@@ -52,7 +52,8 @@ function recordGenerationStats(
 
 const EVENT_TYPES: EventType[] = [
   'concert', 'dj_set', 'exhibition', 'cinema', 'screening',
-  'theater', 'dance', 'performance', 'show', 'workshop'
+  'theater', 'dance', 'performance', 'show', 'workshop',
+  'conference', 'meetup', 'hackathon', 'seminar'
 ];
 const TIME_RANGES: TimeRange[] = ['today', 'tomorrow', 'this-week', 'this-weekend', 'this-month', 'next-month', 'all-events'];
 const PRICE_FILTERS: PriceFilter[] = ['open', 'with-ticket', 'all'];
@@ -69,6 +70,10 @@ const GENRES: Record<EventType, string[]> = {
   performance: ['Experimental', 'Multimedia'],
   show: ['Cabaret', 'Stand-up', 'Variety'],
   workshop: ['Masterclass', 'Educational'],
+  conference: ['AI', 'Machine Learning', 'Data Science', 'Cloud', 'DevOps'],
+  meetup: ['AI', 'Tech', 'Startup', 'Developer', 'Data Science'],
+  hackathon: ['AI', 'Innovation', 'Coding', 'Startup'],
+  seminar: ['AI Research', 'Machine Learning', 'Academic'],
   other: []
 };
 

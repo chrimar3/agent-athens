@@ -1,0 +1,14 @@
+{
+  "filters": {
+    "type": "seminar",
+    "genre": "Academic",
+    "price": "open",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.898Z",
+    "url": "https://agentathens.netlify.app/open-academic-seminar-this-weekend"
+  }
+}

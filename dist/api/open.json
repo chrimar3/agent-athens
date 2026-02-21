@@ -6,6 +6,112 @@
   "events": [
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "8956507ab9ee66b3",
+      "title": "AI Hackathon Greece 2026",
+      "description": "Greece's largest AI hackathon. 3rd year. Application-based. 8 challenge tracks.",
+      "fullDescription": "The hum of sixty laptops, the scratch of markers on whiteboards, the low murmur of teams negotiating architecture decisions at two in the morning -- this is what fills the halls of ACE AUEB on Troias 2 in central Athens every March. AI Hackathon Greece returns for its third year as the country's largest AI hackathon, and the energy inside the Athens Center for Entrepreneurship and Innovation carries the particular intensity of people building something from nothing against a ticking clock.\n\nYou arrive on Friday, March 6, with a laptop bag over your shoulder and an idea half-formed. Over the next 48 hours, you choose from eight challenge tracks spanning applied AI, each one demanding a working prototype by Sunday afternoon. The format is application-based -- you submit before you show up, which means the people around you have already been filtered for seriousness. Teams form, dissolve, re-form. Strangers become collaborators over shared APIs and cold pizza.\n\nACE AUEB, housed within the Athens University of Economics and Business, has been running startup and technology events for over a decade. That institutional experience shows in the logistics: the wifi holds, the mentors circulate, the judging criteria are posted clearly from the start. The venue itself sits in the dense urban fabric of central Athens, a short walk from Omonia, where the surrounding streets offer cheap souvlaki at 3 AM for teams pulling all-nighters.\n\nThe hackathon's rhythm is distinct from a conference. There are no keynotes to sit through, no lanyards to collect. The work is the event. You spend hours debugging a model, testing an inference pipeline, arguing with teammates about whether the demo needs one more feature or one fewer. The satisfaction, when it comes, is concrete: something that did not exist on Friday runs on Sunday.\n\nWhat draws people back for a third edition is the density of technical talent in a single room, working simultaneously on parallel problems. You overhear conversations about fine-tuning strategies at the next table. You borrow a GPU configuration tip from a team working a different track. The cross-pollination is constant and unscripted.\n\nThe event is free to attend, which removes one barrier, but the application process adds another -- a deliberate trade. ACE wants participants who will build, not spectators who will watch.\n\nIf you write code under pressure and find that deadlines sharpen rather than scatter your thinking, this is your weekend. If you prefer to learn about AI through polished presentations and curated panels, a conference will serve you better.\n\nAthens in early March carries a chill, but inside the ACE AUEB building, the air runs warm from laptops and bodies and the particular metabolic heat of concentrated effort.",
+      "startDate": "2026-03-06",
+      "endDate": "2026-03-08",
+      "type": "hackathon",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "ACE AUEB",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://hackathongreece.ai/",
+      "source": "hackathongreece.ai",
+      "createdAt": "2026-02-20 16:12:10",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3017f4e51028525a",
+      "title": "Mindstone Athens April AI Meetup",
+      "description": "Please Note: This event is advertised on multiple platforms. Please RSVP and get a ticket on Mindstone to view the agenda and guarantee a spot.\n\n\nWelcome to the most electrifying and ground-breaking AI Meetup in Athens!\n\n\nJoin us once a month as we delve into the world of artificial intelligence, explore its cutting-edge practical applications, and marvel at the astonishing projects that are shaping our future.\n\n\nWhy should you attend?\n\n• Get up close and personal with the AI projects that are r",
+      "fullDescription": "The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Epignosis headquarters smells like fresh coffee and the particular ozone tang of too many laptops running in one room. By half past six on a Tuesday evening, the chairs are filling with people who still have their work backpacks on, laptops half-open, Slack notifications pinging as they settle in for one of Athens's longest-running monthly AI gatherings.\n\nMindstone's April meetup follows a rhythm the regulars already know. There will be talks -- sometimes a deep technical walkthrough of a model architecture, sometimes a live demo where something breaks and the room collectively troubleshoots, sometimes an open discussion where the format loosens and people argue about inference costs or whether the latest open-source release actually changes anything. The exact agenda lands closer to the date. What stays consistent is the room itself: a working ed-tech company's headquarters in central Athens, borrowed for the evening and filled with people who spend their days inside neural networks, training pipelines, and product backlogs.\n\nThe crowd here is not uniform. You will find ML engineers who want to talk about quantization techniques sitting next to startup founders who want to understand what is actually feasible to build on a seed budget. Data scientists from Greek enterprises rub shoulders with freelance developers who picked up PyTorch six months ago and are trying to figure out what to do with it. The conversations between talks are often where the real density lives -- someone sketching a system diagram on a napkin, two people discovering they have been independently working on similar retrieval-augmented pipelines, a quick exchange of GitHub handles.\n\nIf you work with AI daily and want a room where you can speak in acronyms without explaining them, this is that room. If you are earlier in the journey -- maybe you have completed some courses, built a side project, and want to see what practitioners in Athens are actually shipping -- this is equally your room. The community has been growing month over month as the city's AI ecosystem expands, and the meetup reflects that gradient of experience without gatekeeping it.\n\nThere is no entrance fee. You register through the Mindstone platform to claim your spot, and spots do fill as the community has scaled. Epignosis provides the space, which means the infrastructure is solid -- good wifi, a proper screen, enough power outlets for the laptop-dependent crowd.\n\nThe evening tends to wind down organically. After the scheduled content wraps, clusters of people drift toward continued conversation, sometimes spilling out to nearby streets where the restaurant and bar density makes extending the night easy. Bring a charger. Your phone battery will not survive the networking.",
+      "startDate": "2026-04-21T18:30:00",
+      "endDate": "2026-04-21",
+      "type": "meetup",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Epignosis HQ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.eventbrite.co.uk/e/mindstone-athens-april-ai-meetup-tickets-1980368772308",
+      "source": "eventbrite",
+      "createdAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "18:30",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4acf6b9d4beda2c9",
+      "title": "Greeks in AI 2026",
+      "description": "The flagship Greek AI diaspora symposium. Research + industry + networking. Greek AI researchers from MIT, Stanford, and top European institutions meet the local ecosystem.",
+      "fullDescription": "The Eugenides Foundation Conference Centre stands on Syngrou Avenue at number 387, in Paleo Faliro, where the long coastal road meets the sea. A science education institution with a planetarium dome visible from the street, it hosts Greeks in AI from July 15 through 17 -- the flagship symposium that brings the Greek AI diaspora home to meet the local ecosystem.\n\nYou walk into a room where researchers from MIT, Stanford, Oxford, and INRIA sit alongside engineers and founders building AI companies in Athens, Thessaloniki, and Patras. The gathering operates at the junction of academic research and industry application, and the particular texture of the event comes from this collision: rigorous technical presentations followed by conversations about commercialization, talent pipelines, and how to build lasting bridges between Greek researchers abroad and institutions at home.\n\nThe diaspora element gives the conference its distinctive character. Greek AI researchers hold positions at some of the world's leading laboratories and universities. Many left Greece during the years when academic funding contracted and industry opportunities were scarce. The country's AI ecosystem has since grown substantially, and Greeks in AI creates the physical space for reunion and reassessment -- for people to see what has changed, what has been built, and where collaboration can take root.\n\nThe three-day program spans research talks, industry panels, and structured networking sessions. The research presentations reflect the breadth of where Greek AI talent has landed: computer vision, natural language processing, reinforcement learning, robotics, and the mathematical foundations that underpin them. The industry sessions ground this in the practical: startup formation, investment climate, partnerships between Greek universities and international labs.\n\nThe Eugenides Foundation itself shapes the experience. The conference facilities overlook the sea, and the institution's identity as a center for science education lends a seriousness of purpose to the proceedings. The planetarium dome next door is a reminder that this is a place built for making complex knowledge accessible -- an ethos that aligns with a conference designed to connect dispersed expertise with local opportunity.\n\nThe event is free to attend, which reflects its mission: this is not a commercial conference but a community gathering with institutional support. The absence of a ticket price lowers the barrier for students, early-career researchers, and local practitioners who might otherwise be priced out.\n\nIf you are a Greek AI researcher or practitioner -- whether based in Athens or abroad -- and you want to reconnect with the community building the country's AI future, this is the annual gathering point. If you have no connection to the Greek AI ecosystem and are looking for a general-purpose AI conference, the diaspora focus will feel peripheral to your interests.\n\nMid-July in Athens is hot. The sea breeze at Paleo Faliro offers some relief, and the walk along the coastal promenade from the Eugenides Foundation toward the marina provides the kind of evening decompression that conference centers in landlocked cities cannot replicate.",
+      "startDate": "2026-07-15",
+      "endDate": "2026-07-17",
+      "type": "conference",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Eugenides Foundation Conference Centre",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.greeksin.ai/",
+      "source": "greeksin.ai",
+      "createdAt": "2026-02-20 16:12:10",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "6d6bd82369b5ffe0",
       "title": "SONIC SISTERS FESTIVAL",
@@ -39,8 +145,8 @@
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-20T07:52:51.253Z",
+    "total": 4,
+    "lastUpdate": "2026-02-21T07:53:38.547Z",
     "url": "https://agentathens.netlify.app/open"
   }
 }

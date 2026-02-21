@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "type": "conference",
+    "genre": "Cloud",
+    "time": "this-weekend"
+  },
+  "events": [],
+  "meta": {
+    "total": 0,
+    "lastUpdate": "2026-02-21T07:53:38.855Z",
+    "url": "https://agentathens.netlify.app/cloud-conference-this-weekend"
+  }
+}

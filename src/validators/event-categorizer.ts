@@ -74,6 +74,22 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
   performance: {
     keywords: ['performance', 'experimental', 'πειραματικό', 'multimedia', 'installation', 'site-specific']
   },
+  conference: {
+    keywords: ['conference', 'summit', 'symposium', 'congress', 'συνέδριο'],
+    venueHints: ['megaron', 'oteacademy', 'eugenides', 'ellinikon']
+  },
+  meetup: {
+    keywords: ['meetup', 'meet-up', 'community event', 'networking'],
+    venueHints: ['epignosis', 'found.ation', 'impact hub']
+  },
+  hackathon: {
+    keywords: ['hackathon', 'hack-a-thon', 'coding challenge', 'codeathon'],
+    venueHints: ['ace aueb']
+  },
+  seminar: {
+    keywords: ['seminar', 'research talk', 'lecture series', 'academic talk'],
+    venueHints: ['archimedes', 'athena rc']
+  },
   other: { keywords: [] }
 };
 
@@ -155,6 +171,10 @@ export function categorizeEvent(event: {
     'cinema',      // Film screenings in cinemas
     'concert',     // Live music (general)
     'theater',     // Theater productions
+    'conference',  // Tech/AI conferences
+    'meetup',      // Community meetups
+    'hackathon',   // Coding hackathons
+    'seminar',     // Research seminars
     'performance'  // Experimental/hybrid (last resort before other)
   ];
 
