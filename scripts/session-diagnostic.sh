@@ -202,21 +202,26 @@ echo ""
 # =============================================================================
 # 7. LAST SCRAPE TIMESTAMPS
 # =============================================================================
-echo -e "${CYAN}${BOLD}7. LAST SCRAPE PER SOURCE${NC}"
+echo -e "${CYAN}${BOLD}7. DATA FRESHNESS PER SOURCE${NC}"
 echo -e "────────────────────────────────────────────────────────────────"
 
+printf "   ${BOLD}%-16s %-22s %-22s${NC}\n" "Source" "Last scraped_at" "Last updated_at"
+printf "   %-16s %-22s %-22s\n" "────────────────" "──────────────────────" "──────────────────────"
+
 sqlite3 "$DB" "
-  SELECT source, MAX(scraped_at) as last_scrape
+  SELECT
+    source,
+    COALESCE(MAX(scraped_at), '—') as last_scraped,
+    COALESCE(MAX(updated_at), '—') as last_updated
   FROM events
-  WHERE scraped_at IS NOT NULL
+  WHERE date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
   GROUP BY source
-  ORDER BY last_scrape DESC;
-" | while IFS='|' read source last_scrape; do
-    if [ -n "$last_scrape" ]; then
-        printf "   %-20s %s\n" "$source" "$last_scrape"
-    else
-        printf "   %-20s %s\n" "$source" "(never)"
-    fi
+  ORDER BY last_updated DESC;
+" | while IFS='|' read source scraped updated; do
+    # Trim to date+time for readability
+    scraped_short=$(echo "$scraped" | cut -c1-19 | sed 's/T/ /')
+    updated_short=$(echo "$updated" | cut -c1-19 | sed 's/T/ /')
+    printf "   %-16s %-22s %-22s\n" "$source" "$scraped_short" "$updated_short"
 done
 
 # Also check scrape_stats if it exists
@@ -225,7 +230,7 @@ if [ "$HAS_STATS" -eq 1 ]; then
     LAST_RUN=$(sqlite3 "$DB" "SELECT MAX(scraped_at) FROM scrape_stats;")
     if [ -n "$LAST_RUN" ] && [ "$LAST_RUN" != "" ]; then
         echo ""
-        echo "   Last scrape run: $LAST_RUN"
+        echo "   Last pipeline run: $LAST_RUN"
     fi
 fi
 echo ""
