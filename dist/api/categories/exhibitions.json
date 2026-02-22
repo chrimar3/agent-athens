@@ -81,9 +81,46 @@
       "ticketUrl": "https://www.benaki.org",
       "source": "benaki",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "timeDoors": "10:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "id": "1b7ed35a3b33c973",
+      "title": "Yorgos Lanthimos: Photographs",
+      "description": "Photographs from the past five years by acclaimed filmmaker Yorgos Lanthimos, including work made around film productions and soundstage environments, alongside a distinct series created in Athens and the Aegean.",
+      "startDate": "2026-03-07T11:00:00",
+      "endDate": null,
+      "type": "exhibition",
+      "genres": [
+        "Art",
+        "Contemporary"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Onassis Stegi",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€10-35"
+      },
+      "url": "https://www.onassis.org/onassis-stegi",
+      "ticketUrl": "https://www.onassis.org/onassis-stegi",
+      "source": "onassis",
+      "createdAt": "2026-02-21 17:29:16",
+      "updatedAt": "2026-02-22 09:51:51",
+      "language": "en",
+      "timeDoors": "11:00",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -161,7 +198,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/heart",
       "source": "onassis",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -242,7 +279,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs",
       "source": "onassis",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -279,7 +316,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/ongoing-tilda-swinton",
       "source": "onassis",
       "createdAt": "2026-02-15 06:47:14",
-      "updatedAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -288,8 +325,8 @@
     }
   ],
   "meta": {
-    "total": 7,
-    "lastUpdate": "2026-02-21T07:53:38.921Z",
+    "total": 8,
+    "lastUpdate": "2026-02-22T11:37:04.241Z",
     "url": "https://agentathens.netlify.app/exhibitions"
   }
 }

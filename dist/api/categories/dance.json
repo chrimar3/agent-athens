@@ -35,7 +35,7 @@
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -185,7 +185,7 @@
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.970Z",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -193,7 +193,7 @@
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2026-02-21T07:53:38.916Z",
+    "lastUpdate": "2026-02-22T11:37:04.236Z",
     "url": "https://agentathens.netlify.app/dance"
   }
 }

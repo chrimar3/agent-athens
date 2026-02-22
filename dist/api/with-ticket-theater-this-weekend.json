@@ -33,7 +33,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13581/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -67,7 +67,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/yiannis_kassetas-10052168/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -99,7 +99,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/loukis_laras-10089247/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -131,7 +131,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xruspa-10089213/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -163,7 +163,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/voidtech-10089232/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -195,7 +195,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_kos_zul-10089257/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -227,7 +227,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/bibilena-10089217/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -259,7 +259,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/thanatos_pallikariou-10089239/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -291,7 +291,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mikroi_farisaioi-10089243/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -323,7 +323,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/the_mr_and_mrs_bubble_show-10089261/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -396,7 +396,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/manto-10079631/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -428,7 +428,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/alef_-10089216/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -460,7 +460,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/theodoros_kolokotronis_o_theos_ebale_tin_upografi_tou-10089241/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -492,7 +492,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/i_fokia-10089242/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -524,7 +524,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/eleutheria_kiniseon-10079251/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -532,7 +532,7 @@
   ],
   "meta": {
     "total": 16,
-    "lastUpdate": "2026-02-21T07:53:38.684Z",
+    "lastUpdate": "2026-02-22T11:37:03.941Z",
     "url": "https://agentathens.netlify.app/with-ticket-theater-this-weekend"
   }
 }

@@ -7,31 +7,31 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "ed34ef67109e69e9",
-      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
+      "id": "563f8860dd46590e",
+      "title": "Μαρί Αντουανέτ - Savon Original: Η ασφυξία του πούπουλου όταν πέφτει",
       "description": "",
-      "startDate": "2026-02-22",
+      "startDate": "2026-02-23",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Καφεθέατρο",
+        "name": "Θέατρο του Νέου Κόσμου",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 16,
         "currency": "EUR",
-        "range": "€12"
+        "range": "€16"
       },
-      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
+      "url": "https://www.athinorama.gr/theatre/performance/mari_antouanet___savon_original_i_asfuksia_tou_poupoulou_otan_peftei-10087773/",
       "ticketUrl": "https://www.viva.gr/tickets/theater/",
       "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-21 07:51:30",
+      "createdAt": "2026-02-09 16:12:58",
+      "updatedAt": "2026-02-22 09:51:51",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -39,71 +39,39 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "7ec7cbce0b64d858",
-      "title": "Σαβίνα Γιαννάτου - Σπύρος Μάνεσης",
+      "id": "a3ff3b4b813124ad",
+      "title": "Ο ΦΟΝΙΑΣ - ΕΓΚΛΗΜΑ ΚΑΙ ΑΘΩΩΣΗ",
       "description": "",
-      "startDate": "2026-02-22",
+      "startDate": "2026-02-23",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Theatre Of The No",
+        "name": "Δημοτικό Θέατρο Πειραιά",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 15,
+        "amount": 10,
         "currency": "EUR",
-        "range": "€15"
+        "range": "€10"
       },
-      "url": "https://www.athinorama.gr/music/gig/sabina_giannatou___spuros_manesis-10080392/",
-      "ticketUrl": "https://www.more.com/gr-el/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-21 07:51:30",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "902cd7ba957890a9",
-      "title": "MISERY",
-      "description": "",
-      "startDate": "2026-02-22",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Άνεσις",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/misery/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/misery/",
+      "url": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
       "source": "more.com",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-22 09:51:50",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 3,
-    "lastUpdate": "2026-02-21T07:53:38.514Z",
+    "total": 2,
+    "lastUpdate": "2026-02-22T11:37:03.762Z",
     "url": "https://agentathens.netlify.app/theater-tomorrow"
   }
 }

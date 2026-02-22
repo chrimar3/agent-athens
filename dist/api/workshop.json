@@ -3,47 +3,10 @@
     "type": "workshop",
     "time": "all-events"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "EducationEvent",
-      "id": "deef76058f0fe804",
-      "title": "A2 Workshop Demonstration",
-      "description": "",
-      "startDate": "2026-02-21T22:00:00",
-      "endDate": null,
-      "type": "workshop",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "B side Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://ra.co/events/2372364",
-      "ticketUrl": "https://ra.co/events/2372364",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "timeDoors": "22:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-21T07:53:38.533Z",
+    "total": 0,
+    "lastUpdate": "2026-02-22T11:37:03.783Z",
     "url": "https://agentathens.netlify.app/workshop"
   }
 }
