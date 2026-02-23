@@ -80,7 +80,7 @@
       "ticketUrl": "https://www.benaki.org",
       "source": "benaki",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -90,7 +90,7 @@
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2026-02-22T11:37:03.908Z",
+    "lastUpdate": "2026-02-23T16:42:03.185Z",
     "url": "https://agentathens.netlify.app/with-ticket-exhibition-this-week"
   }
 }

@@ -79,7 +79,7 @@
       "ticketUrl": "https://www.benaki.org",
       "source": "benaki",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -196,7 +196,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/heart",
       "source": "onassis",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -277,7 +277,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs",
       "source": "onassis",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -314,7 +314,7 @@
       "ticketUrl": "https://www.onassis.org/el/whats-on/ongoing-tilda-swinton",
       "source": "onassis",
       "createdAt": "2026-02-15 06:47:14",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "11:00",
       "timeSource": "scraped_listing",
@@ -324,7 +324,7 @@
   ],
   "meta": {
     "total": 8,
-    "lastUpdate": "2026-02-22T11:37:03.754Z",
+    "lastUpdate": "2026-02-23T16:42:03.067Z",
     "url": "https://agentathens.netlify.app/exhibition"
   }
 }

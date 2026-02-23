@@ -8,106 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "ed34ef67109e69e9",
-      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
-      "description": "",
-      "startDate": "2026-02-22",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Καφεθέατρο",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
-      "ticketUrl": "https://www.viva.gr/tickets/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-22 10:22:16",
-      "language": "en",
-      "timeDoors": "21:15",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "7ec7cbce0b64d858",
-      "title": "Σαβίνα Γιαννάτου - Σπύρος Μάνεσης",
-      "description": "",
-      "startDate": "2026-02-22",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Theatre Of The No",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.athinorama.gr/music/gig/sabina_giannatou___spuros_manesis-10080392/",
-      "ticketUrl": "https://www.more.com/gr-el/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-22 10:22:17",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "902cd7ba957890a9",
-      "title": "MISERY",
-      "description": "",
-      "startDate": "2026-02-22",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Άνεσις",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/misery/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/misery/",
-      "source": "more.com",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
       "id": "563f8860dd46590e",
       "title": "Μαρί Αντουανέτ - Savon Original: Η ασφυξία του πούπουλου όταν πέφτει",
       "description": "",
@@ -132,8 +32,10 @@
       "ticketUrl": "https://www.viva.gr/tickets/theater/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -156,15 +58,15 @@
       },
       "price": {
         "type": "paid",
-        "amount": 10,
+        "amount": 20,
         "currency": "EUR",
-        "range": "€10"
+        "range": "€20"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
       "ticketUrl": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
       "source": "more.com",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -228,7 +130,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -260,7 +162,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -292,7 +194,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/dolls-10089237/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -324,7 +226,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_nautikos-10089246/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -356,7 +258,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/oti_pareis_ekato-10089254/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -463,7 +365,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -495,7 +397,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -527,7 +429,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -551,7 +453,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 18,
         "currency": "EUR",
         "range": "€18 - €22"
@@ -560,7 +462,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13581/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -594,7 +496,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/yiannis_kassetas-10052168/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -626,7 +528,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/loukis_laras-10089247/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -658,7 +560,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xruspa-10089213/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -690,7 +592,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/voidtech-10089232/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -722,15 +624,15 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_kos_zul-10089257/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 22,
-    "lastUpdate": "2026-02-22T11:37:03.942Z",
+    "total": 19,
+    "lastUpdate": "2026-02-23T16:42:03.207Z",
     "url": "https://agentathens.netlify.app/with-ticket-theater-this-month"
   }
 }

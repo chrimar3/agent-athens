@@ -4,75 +4,10 @@
     "price": "with-ticket",
     "time": "tomorrow"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "563f8860dd46590e",
-      "title": "Μαρί Αντουανέτ - Savon Original: Η ασφυξία του πούπουλου όταν πέφτει",
-      "description": "",
-      "startDate": "2026-02-23",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Θέατρο του Νέου Κόσμου",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 16,
-        "currency": "EUR",
-        "range": "€16"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/mari_antouanet___savon_original_i_asfuksia_tou_poupoulou_otan_peftei-10087773/",
-      "ticketUrl": "https://www.viva.gr/tickets/theater/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "a3ff3b4b813124ad",
-      "title": "Ο ΦΟΝΙΑΣ - ΕΓΚΛΗΜΑ ΚΑΙ ΑΘΩΩΣΗ",
-      "description": "",
-      "startDate": "2026-02-23",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Δημοτικό Θέατρο Πειραιά",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/o-fonias-egklima-kai-athoosi/",
-      "source": "more.com",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2026-02-22T11:37:03.939Z",
+    "total": 0,
+    "lastUpdate": "2026-02-23T16:42:03.203Z",
     "url": "https://agentathens.netlify.app/with-ticket-theater-tomorrow"
   }
 }

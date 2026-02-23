@@ -8,647 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "c53ac38b60296774",
-      "title": "Gazarte Carnival Party",
-      "description": "",
-      "startDate": "2026-02-22",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Gazarte",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€10-25"
-      },
-      "url": "https://www.athinorama.gr/music/gig/gazarte_carnival_party-10089102/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-22 10:08:21",
-      "language": "en",
-      "timeSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "3c28ffd306973521",
-      "title": "Marthe + Galactik Geisha + Zoi Andreou + S.ant",
-      "description": "",
-      "startDate": "2026-02-22T01:30:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "El Chapo",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/marthe-galactik-geisha-zoi-andreou-s-ant/",
-      "ticketUrl": "https://www.clubber.gr/events/marthe-galactik-geisha-zoi-andreou-s-ant/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "01:30",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "b5ef7ebcf4ad9408",
-      "title": "Afterhours: Bonso + Suneater + Hutt",
-      "description": "",
-      "startDate": "2026-02-22T05:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Skullbar",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/afterhours-bonso-suneater-hutt/",
-      "ticketUrl": "https://www.clubber.gr/events/afterhours-bonso-suneater-hutt/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "timeDoors": "05:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "e1bf4200daae664e",
-      "title": "Celebrate The Carnival As A Raver: 2Delta + Marthe",
-      "description": "",
-      "startDate": "2026-02-22T15:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Daddy's All Day Bar",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
-      "ticketUrl": "https://www.clubber.gr/events/celebrate-the-carnival-as-a-raver-2delta-marthe/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "timeDoors": "15:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "a46bebaf1cd2efb7",
-      "title": "SUNDAYS AT THE CHURCH",
-      "description": "",
-      "fullDescription": "The Sunday afternoon light shifts differently in Exarchia. Outside, the square's political murals argue with each other. Inside Burger Disco Club, a different kind of congregation gathers — people who understand that weekends deserve proper endings.\n\nSundays at the Church has established itself as Exarchia's answer to the Monday-morning question. The party begins early by Athens standards, respecting the work week while refusing to surrender the weekend prematurely. The electronic selections keep things moving without the warehouse intensity of Saturday nights — this is about pleasure rather than endurance.\n\nBurger Disco Club provides the setting: intimate, intentionally unpretentious, a space that matches Exarchia's refusal to perform sophistication. The sound system handles electronic music with clarity, the bar serves drinks that fuel rather than sedate, and the room size ensures that dancing means participating rather than observing.\n\nThe crowd arrives with Sunday sensibility. These are people who scheduled their weekends to end here, who understand that the best cure for Saturday night is Sunday afternoon. Students and artists, the neighborhood regulars, whoever followed the Exarchia social calendar to this address. The energy differs from peak clubbing — more smiles, more conversation, more space to actually dance.\n\nIf you want the escalating intensity of prime-time techno, if you need nights that go until dawn, Sundays at the Church operates on different logic. This is the softer closure, the weekend's final breath before reality returns. But if you've been searching for the electronic party that respects both your body and your calendar, that understands Sunday should taste different than Saturday — Burger Disco Club becomes your new church.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, February 22, 2026 |\n| **Venue** | Burger Disco Club |\n| **Neighborhood** | Exarchia |\n| **Price** | Check venue |\n| **Getting there** | Near Omonoia, walking distance |\n\nThe weekend doesn't end. It transforms.",
-      "startDate": "2026-02-22T18:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Burger Disco Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://ra.co/events/2346522",
-      "ticketUrl": "https://ra.co/events/2346522",
-      "source": "residentadvisor",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-16 08:00:38",
-      "language": "en",
-      "timeDoors": "18:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "af3fc7498858a515",
-      "title": "Palms Trax",
-      "description": "",
-      "startDate": "2026-02-22T18:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Burger Disco Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.clubber.gr/events/palms-trax/",
-      "ticketUrl": "https://www.clubber.gr/events/palms-trax/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "timeDoors": "18:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "207c62645e916c29",
-      "title": "NO MORE FAKE DISCO",
-      "description": "",
-      "startDate": "2026-02-22T18:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Burger Disco Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://ra.co/events/2346522",
-      "ticketUrl": "https://ra.co/events/2346522",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "18:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "aa0a11c49a85a9c2",
-      "title": "Matltoni",
-      "description": "",
-      "startDate": "2026-02-22T21:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cantina Social",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/matltoni-2/",
-      "ticketUrl": "https://www.clubber.gr/events/matltoni-2/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "65333f70629fb00c",
-      "title": "Victor Zala",
-      "description": "",
-      "startDate": "2026-02-22T21:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "B side Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://ra.co/events/2372361",
-      "ticketUrl": "https://ra.co/events/2372361",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "560078f590a3ce3f",
-      "title": "Tribal Carnival: Thèna + Mareen b2b Tsouko G + Dino MFU + Babett b2b Ethérro",
-      "description": "",
-      "startDate": "2026-02-22T21:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Boo!",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
-      "ticketUrl": "https://www.clubber.gr/events/tribal-carnival-thena-mareen-b2b-tsouko-g-dino-mfu-babett-b2b-etherro/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "c31f69055a8cae0d",
-      "title": "MUZIK SAVEZ with Nico Rac 'CARNIVAL EDITION' at COZMO || 22 FEB",
-      "description": "",
-      "startDate": "2026-02-22T22:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cozmo Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://ra.co/events/2368989",
-      "ticketUrl": "https://ra.co/events/2368989",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "22:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "77de8eb23fb3bc10",
-      "title": "Cannibal Radio Clubnight: Mr.M + Nuumett + Mr. Roussos",
-      "description": "",
-      "startDate": "2026-02-22T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Astron",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.clubber.gr/events/cannibal-radio-clubnight-mr-m-nuumett-mr-roussos/",
-      "ticketUrl": "https://www.clubber.gr/events/cannibal-radio-clubnight-mr-m-nuumett-mr-roussos/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "96b3c83f254d9618",
-      "title": "TRASH x RAVE Carnival Edition",
-      "description": "",
-      "startDate": "2026-02-22T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Bios Ρομάντσο",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 6,
-        "currency": "EUR",
-        "range": "€6 - €10"
-      },
-      "url": "https://ra.co/events/2372465",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "77d964b4cb0b5da3",
-      "title": "Cannibal Radio clubnight ",
-      "description": "",
-      "startDate": "2026-02-22T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Astron",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://ra.co/events/2370091",
-      "ticketUrl": "https://ra.co/events/2370091",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "43a537d72f43d7c4",
-      "title": "303 Rave x 422M: Deherian b2b SCTR + Imperium + Kinspin b2b Mariø + Oxytocin + Se7en + Siasios + Sl/Sh b2b Mvru",
-      "description": "",
-      "startDate": "2026-02-22T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Aux Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/303-rave-x-422m-deherian-b2b-sctr-imperium-kinspin-b2b-mario-oxytocin-se7en-siasios-sl-sh-b2b-mvru/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:45",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "b47136e11a378e8c",
-      "title": "Blind Spot: NOID + AMH + DIMI.D",
-      "description": "",
-      "startDate": "2026-02-22T23:45:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "IT Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": null,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/blind-spot-noid-amh-dimi-d/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:45",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "da96469391f2d52b",
-      "title": "303 Rave x 422M - 10Hrs Rave Athens",
-      "description": "",
-      "startDate": "2026-02-22T23:59:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Aux Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://ra.co/events/2366830",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:59",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "b58d1ffc1b5c8d3a",
-      "title": "Blind Spot present Sunday Night Techno",
-      "description": "",
-      "startDate": "2026-02-22T23:59:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "IT Athens",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://ra.co/events/2370124",
-      "source": "residentadvisor",
-      "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-22 09:51:51",
-      "language": "en",
-      "timeDoors": "23:59",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "a234d27047c5d50f",
       "title": "Lockbird",
       "description": "",
@@ -816,7 +175,7 @@
       "url": "https://www.athinorama.gr/music/gig/marika_rossa-10089203/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -848,7 +207,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/skullcrush_fest-10089226/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -882,7 +241,7 @@
       "ticketUrl": "https://ra.co/events/2370129",
       "source": "residentadvisor",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -954,7 +313,7 @@
       "ticketUrl": "https://ra.co/events/2367246",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -1025,7 +384,7 @@
       "url": "https://www.clubber.gr/events/gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samantha-togni/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -1168,7 +527,7 @@
       "url": "https://ra.co/events/2309038",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1203,7 +562,7 @@
       "url": "https://ra.co/events/2371703",
       "source": "residentadvisor",
       "createdAt": "2026-02-16 08:00:38",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1237,7 +596,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/music/heavenly-live-vaxtones-pure-party/",
       "source": "more.com",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1269,7 +628,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/disco_night___80s_90s_party-10089130/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1301,7 +660,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/heavenly_kai_the_vaxtones-10089202/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-23 15:21:15",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1336,7 +695,7 @@
       "ticketUrl": "https://ra.co/events/2342704",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "05:00",
       "timeSource": "scraped_listing",
@@ -1408,7 +767,7 @@
       "ticketUrl": "https://ra.co/events/2367430",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -1481,7 +840,7 @@
       "ticketUrl": "https://ra.co/events/2360057",
       "source": "residentadvisor",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "22:00",
       "timeSource": "scraped_listing",
@@ -1517,7 +876,7 @@
       "url": "https://ra.co/events/2347850",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -1589,7 +948,7 @@
       "ticketUrl": "https://ra.co/events/2364445",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -1806,7 +1165,7 @@
       "ticketUrl": "https://ra.co/events/2341772",
       "source": "residentadvisor",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1841,7 +1200,7 @@
       "url": "https://ra.co/events/2363051",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1876,7 +1235,7 @@
       "url": "https://ra.co/events/2362389",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1912,7 +1271,7 @@
       "ticketUrl": "https://ra.co/events/2364691",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -1947,17 +1306,196 @@
       "url": "https://ra.co/events/2372162",
       "source": "residentadvisor",
       "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7c51b591a1195a8f",
+      "title": "ΣΟΦΙΑ ΒΕΜΠΟ - ΣΤΕΛΛΑ ΓΚΡΕΚΑ «Δύο Ντίβες του Μεσοπολέμου»",
+      "description": "",
+      "fullDescription": "The Parnassos Literary Society holds itself with particular dignity — marble floors, high ceilings, the accumulated weight of 150 years of Athenian cultural life. You enter through doors that have welcomed poets and politicians, and tonight they welcome admirers of Sophia Vembo.\n\nStella Greka takes the stage to channel one of Greek music's most remarkable figures. Sophia Vembo lived through the war years singing songs that became anthems of resistance, her voice carrying hope through radio waves into occupied homes. The material Greka performs tonight spans that era — not just the famous songs but the deeper catalog that reveals the full range of what Vembo meant.\n\nTribute performances walk a narrow path. Too faithful and they become museum pieces. Too interpretive and they lose connection to the original. Greka has found the balance that honors Vembo while acknowledging the century of distance. The voice is her own, but the phrasing echoes the master. The arrangements update without erasing.\n\nParnassos provides the acoustic and atmospheric context this material requires. The hall has hosted similar evenings for generations — the kind of performance where Greek cultural memory gets transmitted to new ears. The audience tonight spans ages, some who remember Vembo's voice from childhood radios, others discovering the songs through this contemporary lens.\n\nThe crowd at Parnassos concerts carries the particular reverence of people for whom this music is heritage. These aren't casual attendees but pilgrims of a sort. Conversations before curtain compare memories, debate which songs should have made the setlist. The silence when Greka begins is absolute — the kind of attention that performance at this level earns.\n\nIf you need English lyrics or contemporary reference points, this evening will leave you at a distance. Vembo's significance requires Greek context, historical awareness, the ability to hear how these songs functioned when they first aired. But if you've been looking for entry into Greek musical heritage, for a performer who can bridge decades without betraying either side — Parnassos holds this evening for you.\n\n| Info | Details |\n|------|---------|\n| **Date** | Sunday, March 1, 2026 |\n| **Time** | Evening |\n| **Venue** | Parnassos Literary Society |\n| **Metro** | Syntagma or Monastiraki |\n| **Price** | Check venue |\n\nStella Greka channeling Sophia Vembo — the songs that sustained a nation through darkness, rendered fresh.",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Parnassos Literary Society",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €30"
+      },
+      "url": "https://www.ticketservices.gr/event/13744/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13744/",
+      "source": "ticketservices",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "timeDoors": "18:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "1647764215728394",
+      "title": "REVOLT hosts SHUFFLE with Paleman (UK)",
+      "description": "",
+      "startDate": "2026-03-01T14:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "TBA - ATHarea",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2373393",
+      "ticketUrl": "https://ra.co/events/2373393",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "timeDoors": "14:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "927f06b4e18b4c29",
+      "title": "House On The Beach: Timmy Regisford + DJ Thai",
+      "description": "",
+      "startDate": "2026-03-01T19:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.clubber.gr/events/house-on-the-beach-timmy-regisford-dj-thai/",
+      "ticketUrl": "https://www.clubber.gr/events/house-on-the-beach-timmy-regisford-dj-thai/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "19:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "0390b33cca8e3b7a",
+      "title": "HOUSE ON THE BEACH",
+      "description": "",
+      "startDate": "2026-03-01T19:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Burger Disco Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367791",
+      "ticketUrl": "https://ra.co/events/2367791",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "timeDoors": "19:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a961080e1afbc1a0",
+      "title": "Ad Hoc",
+      "description": "",
+      "startDate": "2026-03-01T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cantina Social",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/ad-hoc-19/",
+      "ticketUrl": "https://www.clubber.gr/events/ad-hoc-19/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "timeDoors": "21:00",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 55,
-    "lastUpdate": "2026-02-22T11:37:03.895Z",
+    "total": 42,
+    "lastUpdate": "2026-02-23T16:42:03.173Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-this-week"
   }
 }
