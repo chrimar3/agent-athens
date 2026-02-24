@@ -230,6 +230,14 @@
     {
       "name": "Vergina Theatro!",
       "reason": "Thessaloniki venue (variation with exclamation)"
+    },
+    {
+      "name": "Terra Vibe",
+      "reason": "Malakasa, outside Athens metro area"
+    },
+    {
+      "name": "Δημοτικό Γήπεδο Σερρών \\",
+      "reason": "Serres (trailing backslash variation)"
     }
   ],
   "problematic_entries": {
