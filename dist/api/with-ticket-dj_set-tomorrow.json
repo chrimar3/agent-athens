@@ -34,7 +34,7 @@
       "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -44,7 +44,7 @@
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-24T08:14:55.029Z",
+    "lastUpdate": "2026-02-24T09:57:29.210Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-tomorrow"
   }
 }

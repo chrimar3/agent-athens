@@ -63,7 +63,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -95,7 +95,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -127,7 +127,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/dolls-10089237/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -159,7 +159,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_nautikos-10089246/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -191,7 +191,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/oti_pareis_ekato-10089254/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -298,7 +298,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -330,7 +330,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -362,7 +362,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -386,7 +386,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 18,
         "currency": "EUR",
         "range": "€18 - €22"
@@ -395,7 +395,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13581/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -429,7 +429,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/yiannis_kassetas-10052168/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -461,7 +461,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/loukis_laras-10089247/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -493,7 +493,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xruspa-10089213/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -525,7 +525,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/voidtech-10089232/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -557,7 +557,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_kos_zul-10089257/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -589,7 +589,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/bibilena-10089217/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -621,7 +621,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/thanatos_pallikariou-10089239/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -653,7 +653,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mikroi_farisaioi-10089243/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -685,7 +685,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/the_mr_and_mrs_bubble_show-10089261/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -758,7 +758,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/manto-10079631/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -790,7 +790,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/alef_-10089216/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -822,7 +822,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/theodoros_kolokotronis_o_theos_ebale_tin_upografi_tou-10089241/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -854,7 +854,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/i_fokia-10089242/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -886,7 +886,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/eleutheria_kiniseon-10079251/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -909,7 +909,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -918,7 +918,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -952,7 +952,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/i_dunami_tis_sunitheias-10084463/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -984,7 +984,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/metadramatiko-10082380/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1016,7 +1016,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mikres_tapeinoseis-10089258/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1039,7 +1039,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1048,7 +1048,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1082,7 +1082,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/jazz_standards-10089256/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1114,7 +1114,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_mikros_egiolf-10089253/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1146,7 +1146,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/broxi_sto_tzami-10085897/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1179,7 +1179,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/laponia-10085107/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1236,7 +1236,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15 - €36"
@@ -1245,7 +1245,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14092/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -1271,7 +1271,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1280,7 +1280,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1305,7 +1305,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1314,7 +1314,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1497,7 +1497,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1506,7 +1506,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1531,7 +1531,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1540,7 +1540,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1574,7 +1574,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/theater/astoria/",
       "source": "more.com",
       "createdAt": "2026-02-09 16:48:30",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_listing",
@@ -1599,7 +1599,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15 - €36"
@@ -1608,7 +1608,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14092/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -1674,7 +1674,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1683,7 +1683,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1708,7 +1708,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1717,7 +1717,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1776,7 +1776,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1785,7 +1785,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1810,7 +1810,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €15"
@@ -1819,7 +1819,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13911/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1844,7 +1844,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15 - €36"
@@ -1853,7 +1853,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14092/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -1887,7 +1887,7 @@
       "ticketUrl": "https://www.viva.gr/tickets/theater/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1910,7 +1910,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 18,
         "currency": "EUR",
         "range": "€18 - €100"
@@ -1919,7 +1919,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14085/",
       "source": "ticketservices",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -1985,7 +1985,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/theater/rountolf-nouregief-alma-pros-tin-eleutheria-2/",
       "source": "more.com",
       "createdAt": "2026-02-09 16:48:30",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
@@ -2300,7 +2300,7 @@
       "url": "https://www.athinorama.gr/theatre/performance/sto_soma-10088238/",
       "source": "athinorama.gr",
       "createdAt": "2025-12-04T16:32:23.858Z",
-      "updatedAt": "2026-02-24 08:07:24",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2347,7 +2347,7 @@
   ],
   "meta": {
     "total": 68,
-    "lastUpdate": "2026-02-24T08:14:54.937Z",
+    "lastUpdate": "2026-02-24T09:57:29.113Z",
     "url": "https://agentathens.netlify.app/theater"
   }
 }

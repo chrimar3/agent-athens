@@ -32,7 +32,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13919/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -67,7 +67,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14015/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -102,7 +102,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13912/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -212,7 +212,7 @@
       "ticketUrl": "https://www.halfnote.gr/en/calendar/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -244,7 +244,7 @@
       "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -276,7 +276,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14015/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -308,7 +308,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13912/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -340,7 +340,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -372,7 +372,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-16 08:00:38",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -404,7 +404,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -436,7 +436,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/dolls-10089237/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -468,7 +468,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -500,7 +500,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_nautikos-10089246/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -532,7 +532,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/oti_pareis_ekato-10089254/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -568,7 +568,7 @@
       "ticketUrl": "https://www.benaki.org",
       "source": "benaki",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -645,7 +645,7 @@
       "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -720,7 +720,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
       "source": "halfnote",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -730,7 +730,7 @@
   ],
   "meta": {
     "total": 21,
-    "lastUpdate": "2026-02-24T08:14:54.970Z",
+    "lastUpdate": "2026-02-24T09:57:29.150Z",
     "url": "https://agentathens.netlify.app/with-ticket-tomorrow"
   }
 }

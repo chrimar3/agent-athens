@@ -31,7 +31,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13330/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -65,7 +65,7 @@
       "ticketUrl": "https://www.halfnote.gr/en/calendar/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-24 08:07:24",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_detail",
@@ -99,7 +99,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 08:07:26",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -208,7 +208,7 @@
       "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-24 08:07:24",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -243,7 +243,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
       "source": "halfnote",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -253,7 +253,7 @@
   ],
   "meta": {
     "total": 7,
-    "lastUpdate": "2026-02-24T08:14:54.897Z",
+    "lastUpdate": "2026-02-24T09:57:29.069Z",
     "url": "https://agentathens.netlify.app/concert-today"
   }
 }
