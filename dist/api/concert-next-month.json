@@ -23,7 +23,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 12,
         "currency": "EUR",
         "range": "€12 - €50"
@@ -32,7 +32,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13997/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -66,7 +66,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/adedeji_-10076834/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -98,7 +98,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/panarmonia-10089200/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -130,7 +130,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xristos_mpotsis-10089208/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -162,7 +162,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/mousikes_tou_kosmou_me_aroma_mpouat-10089219/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -194,7 +194,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/duo_ntibes_tou_mesopolemou-10089224/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -226,7 +226,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/sunola_mousikis_domatiou_camerata_junior-10089228/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -258,7 +258,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/0kaithetis-10089233/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -403,7 +403,7 @@
       "ticketUrl": "https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -437,7 +437,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.960Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -509,7 +509,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/adedeji-afrofunk-explosion/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -543,7 +543,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/martha_frintzila_kai_kubara_project-10046247/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -575,7 +575,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/blues_cargo_kai_michael_dotson-10068497/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -607,7 +607,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/minos_matsas-10081096/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -639,7 +639,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/skiadareses_-10086497/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -671,7 +671,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/iro_sa%ce%90a-10088026/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -694,7 +694,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -703,8 +703,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -735,7 +737,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/aksios_logos-10089225/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -767,7 +769,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/pantelis_mpenetatos-10044567/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -801,7 +803,7 @@
       "ticketUrl": "https://www.megaron.gr/event/pos-milaei-i-mousiki-gia-ton-eafto-tis/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -836,7 +838,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/blues-cargo-special-guest-michael-dotson-3/",
       "source": "halfnote",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -861,7 +863,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €50"
@@ -870,7 +872,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14079/",
       "source": "ticketservices",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -904,7 +906,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/haxan_live_soundtrack-10089221/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -927,7 +929,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -936,8 +938,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -968,7 +972,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/leon_of_athens-10045689/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1000,7 +1004,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/aggeliki_toumpanaki_5tet_-10075938/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1032,7 +1036,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/stauros_tsantes_-10087558/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1066,7 +1070,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/for-women-angeliki-toubanaki-5tet-2/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -1134,7 +1138,7 @@
       "ticketUrl": "https://ra.co/events/2314100",
       "source": "residentadvisor",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_listing",
@@ -1174,7 +1178,7 @@
       "url": "https://www.viva.gr/gr-el/tickets/music/wavves/",
       "source": "more.com",
       "createdAt": "2026-01-19T23:07:36.324Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -1252,7 +1256,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/spyros-manesis-trio-2/",
       "source": "halfnote",
       "createdAt": "2026-02-09 16:12:58",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -1278,7 +1282,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €50"
@@ -1287,7 +1291,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13956/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -1312,7 +1316,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 8,
         "currency": "EUR",
         "range": "€8 - €25"
@@ -1321,7 +1325,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14072/",
       "source": "ticketservices",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -1355,7 +1359,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/duo_duende-10089251/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1471,7 +1475,7 @@
       "ticketUrl": "https://www.megaron.gr/event/apo-tin-archaia-elliniki-skepsi-ston-mondrian-kai-ton-pollockathanasios-fokas/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1505,7 +1509,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/christie-dashiell-quartet/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -1577,7 +1581,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14130/",
       "source": "ticketservices",
       "createdAt": "2026-02-15 06:47:14",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1718,7 +1722,7 @@
       "ticketUrl": "https://www.megaron.gr/event/london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.961Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1752,7 +1756,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/christie-dashiell-quartet-2/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -1855,7 +1859,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 12,
         "currency": "EUR",
         "range": "€12 - €50"
@@ -1864,7 +1868,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13997/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -1936,7 +1940,7 @@
       "url": "https://www.viva.gr/gr-el/tickets/music/offer/lamp-of-murmuur-special-guest-thlipsis/",
       "source": "more.com",
       "createdAt": "2026-01-19T23:07:36.324Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -1972,7 +1976,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/christie-dashiell-quartet-3/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -1997,7 +2001,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €50"
@@ -2006,7 +2010,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14145/",
       "source": "ticketservices",
       "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2029,7 +2033,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -2038,8 +2042,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -2072,7 +2078,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/christie-dashiell-quartet-4/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -2097,7 +2103,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -2106,8 +2112,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -2130,7 +2138,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15"
@@ -2139,7 +2147,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13919/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -2175,7 +2183,7 @@
       "ticketUrl": "https://www.megaron.gr/event/i-14i-tou-sostakovits/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.084Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2239,7 +2247,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/12084/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "pass_through"
@@ -2273,7 +2281,7 @@
       "ticketUrl": "https://www.megaron.gr/event/to-theatro-tis-archaias-karthaias-stin-kea/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.084Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2305,7 +2313,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/12084/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "pass_through"
@@ -2421,7 +2429,7 @@
       "ticketUrl": "https://www.megaron.gr/event/fones-kai-mnimes/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2453,7 +2461,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/12084/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "pass_through"
@@ -2476,7 +2484,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 15,
         "currency": "EUR",
         "range": "€15 - €20"
@@ -2485,7 +2493,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13967/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2599,7 +2607,7 @@
       "ticketUrl": "https://www.megaron.gr/event/to-travma-tou-polemou-kai-to-thavma-tis-anagennisis/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2623,7 +2631,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 12,
         "currency": "EUR",
         "range": "€12 - €50"
@@ -2632,7 +2640,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13997/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -2667,7 +2675,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/12084/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "18:00",
       "timeSource": "scraped_detail",
@@ -2693,7 +2701,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 15,
         "currency": "EUR",
         "range": "€15 - €20"
@@ -2702,7 +2710,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13967/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -2728,7 +2736,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 12,
         "currency": "EUR",
         "range": "€12"
@@ -2737,7 +2745,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13539/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_detail",
@@ -2762,7 +2770,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -2771,8 +2779,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -2794,7 +2804,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -2803,7 +2813,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -2829,7 +2839,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15"
@@ -2838,7 +2848,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13919/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -2874,7 +2884,7 @@
       "ticketUrl": "https://www.megaron.gr/event/chamber-orchestra-of-europe-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2908,7 +2918,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/nassia-gofa-the-jazz-tales-ft-max-hacker/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -3089,7 +3099,7 @@
       "ticketUrl": "https://www.megaron.gr/event/dream-requiem-tou-rufus-wainwright/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3112,7 +3122,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €50"
@@ -3121,7 +3131,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14166/",
       "source": "ticketservices",
       "createdAt": "2026-02-20 07:51:03",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3184,7 +3194,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €50"
@@ -3193,7 +3203,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13427/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -3270,7 +3280,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/nls-peter-molvaer-group/",
       "source": "halfnote",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -3304,7 +3314,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14051/",
       "source": "ticketservices",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:00",
       "timeSource": "scraped_detail",
@@ -3340,7 +3350,7 @@
       "ticketUrl": "https://www.megaron.gr/event/dimitris-maramis-tetralogia-erotokritos-stoicheiomenoi-kapetan-michalis-eleftherios-venizelos/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3374,7 +3384,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/nls-peter-molvaer-group/2026-03-28/",
       "source": "halfnote",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -3400,7 +3410,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 12,
         "currency": "EUR",
         "range": "€12 - €50"
@@ -3409,7 +3419,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13997/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_detail",
@@ -3445,7 +3455,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/nls-peter-molvaer-group/2026-03-29/",
       "source": "halfnote",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -3471,7 +3481,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 10,
         "currency": "EUR",
         "range": "€10 - €25"
@@ -3480,7 +3490,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13999/",
       "source": "ticketservices",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -3505,7 +3515,7 @@
         "capacity": null
       },
       "price": {
-        "type": "paid",
+        "type": "tba",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €50"
@@ -3514,7 +3524,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14146/",
       "source": "ticketservices",
       "createdAt": "2026-02-17 12:08:52",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3593,7 +3603,7 @@
       "url": "https://www.viva.gr/gr-el/tickets/music/offer/catharsis-w/chronoboros/malignant/unmother/",
       "source": "more.com",
       "createdAt": "2026-01-19T23:07:36.324Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "scraped_listing",
@@ -3629,7 +3639,7 @@
       "ticketUrl": "https://www.megaron.gr/event/anoichti-prova-ta-kontserta-tou-rachmaninof-ntenis-kozouchin/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3663,7 +3673,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/nls-peter-molvaer-group/2026-03-30/",
       "source": "halfnote",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -3673,7 +3683,7 @@
   ],
   "meta": {
     "total": 105,
-    "lastUpdate": "2026-02-23T16:42:03.041Z",
+    "lastUpdate": "2026-02-24T08:14:54.905Z",
     "url": "https://agentathens.netlify.app/concert-next-month"
   }
 }

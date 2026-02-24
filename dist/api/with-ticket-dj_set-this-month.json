@@ -175,7 +175,7 @@
       "url": "https://www.athinorama.gr/music/gig/marika_rossa-10089203/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -207,7 +207,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/skullcrush_fest-10089226/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -241,7 +241,7 @@
       "ticketUrl": "https://ra.co/events/2370129",
       "source": "residentadvisor",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -384,7 +384,7 @@
       "url": "https://www.clubber.gr/events/gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samantha-togni/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -527,7 +527,7 @@
       "url": "https://ra.co/events/2309038",
       "source": "residentadvisor",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -562,7 +562,7 @@
       "url": "https://ra.co/events/2371703",
       "source": "residentadvisor",
       "createdAt": "2026-02-16 08:00:38",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "timeDoors": "23:59",
       "timeSource": "scraped_listing",
@@ -572,7 +572,7 @@
   ],
   "meta": {
     "total": 16,
-    "lastUpdate": "2026-02-23T16:42:03.176Z",
+    "lastUpdate": "2026-02-24T08:14:55.031Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-this-month"
   }
 }

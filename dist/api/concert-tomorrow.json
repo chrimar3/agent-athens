@@ -7,16 +7,17 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "60e541889d263c93",
-      "title": "Vaginahood",
+      "id": "408554c97fd06091",
+      "title": "ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ «ΟΠΕΚΕΜΠΛΕ»",
       "description": "",
-      "startDate": "2026-02-24",
+      "fullDescription": "The bouzouki starts and history begins to argue with itself. Apostolis Barbagiannis takes the stage at Stavros tou Notou, and OPEKEMBLE announces that Greek folk tradition is neither museum piece nor comfortable memory.\n\nThe name sounds like nonsense until you hear what it contains — the collision of traditional Greek music with whatever it's absorbed over decades of change. Barbagiannis has built his reputation on refusal: refusing to preserve tradition unchanged, refusing to abandon it for novelty. The foustanella might appear, but the sounds around it carry jazz voicings, rock dynamics, electric possibilities.\n\nStavros tou Notou houses this creative explosion with understanding. The venue has carved its identity in the Athens live music landscape as the space where Greek music goes to evolve. The room is intimate enough that Barbagiannis's personality fills it, small enough that his band's energy reaches every corner. When the traditional rhythms start shifting under contemporary weight, you feel the tension productively.\n\nThe crowd knows what they came for. These are not tourists seeking \"authentic Greek experience\" — this is too alive for that category. Greek musicians come to see what Barbagiannis is doing with their inheritance. Folk enthusiasts arrive alongside those who just follow Stavros tou Notou's programming. By the second set, people are dancing — not traditional steps exactly, but not abandoning them either.\n\nIf you want your folk music preserved in amber, if tradition should remain unchanged, OPEKEMBLE arrives as provocation. Barbagiannis treats inheritance as material rather than monument. But if you've been waiting for Greek music that breathes with the present, that asks what tradition means when it's genuinely alive — tonight, Stavros tou Notou hosts the revolution.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Venue** | Stavros tou Notou |\n| **Entry** | 15 euro |\n| **Getting there** | Check venue for address |\n\nTradition isn't what you preserve. It's what you risk.",
+      "startDate": "2026-02-25",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Doors",
+        "name": "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -25,15 +26,15 @@
         "type": "paid",
         "amount": 15,
         "currency": "EUR",
-        "range": "€15 - €30"
+        "range": "€15"
       },
-      "url": "https://www.ticketservices.gr/event/13330/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13330/",
+      "url": "https://www.ticketservices.gr/event/13919/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13919/",
       "source": "ticketservices",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
-      "timeDoors": "21:15",
+      "timeDoors": "20:30",
       "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -41,10 +42,45 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "0fc2ce17f13d5e1d",
-      "title": "Stelios Chatzikaleas Quartet",
+      "id": "20b768080a3a5d03",
+      "title": "ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ  ΠΕΡΙΚΛΗΣ ΧΕΙΛΑΣ «ΣΤΗΝ ΚΑΡΔΙΑ ΤΟΥ ΚΟΥΡΤΣ»",
       "description": "",
-      "startDate": "2026-02-24",
+      "fullDescription": "The guitar cuts through the room before you find your seat. You're in Baumstrasse, one of Athens' more intimate live venues, and the sound already tells you this isn't going to be background music. The chairs are close enough that you can see the calluses on the performer's fingers.\n\nPeriklis Cheilas presents \"Stin Kardia tou Kurtz\" — a title that references Conrad's Heart of Darkness and immediately signals this won't be a comfortable evening of soft melodies. Cheilas has carved a specific niche in the Greek music scene: songs that wrestle with difficult territory, lyrics that don't offer easy resolutions. His approach to guitar work favors texture over technique, serving the words rather than showing off.\n\nThe Baumstrasse crowd tends toward those who actively seek out smaller rooms. You'll find people who've followed Cheilas through his previous work, who know the albums and came specifically for these songs. Conversations before the show touch on lyrics and meanings, the kind of audience that treats a concert as something worth preparing for. By the time the lights dim, the room has achieved that particular quiet that signals collective investment.\n\nThe venue itself operates on an intimate scale that rewards attention. No distant stage, no barriers between performer and audience. When Cheilas leans into a difficult verse, you're close enough to see it land on his face. The sound system handles acoustic guitar with the clarity this music demands — every picked string audible, every whispered word reaching the back row.\n\nIf you need spectacle and production, if you want music that makes easy promises, this evening will challenge you. Cheilas writes for listeners who are willing to sit with discomfort, who understand that art sometimes needs to darken before it illuminates. But if you've been searching for songwriting that treats you as an adult, that doesn't prettify the difficult parts of being human — you're in the right room.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 21:00 |\n| **Venue** | Baumstrasse, Athens |\n| **Price** | Check venue |\n| **Good to know** | Arrive early for better seating in this intimate space |\n\nThe heart of Kurtz isn't pretty. Cheilas doesn't pretend otherwise.",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Concert #1 Baumstrasse",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.ticketservices.gr/event/13912/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13912/",
+      "source": "ticketservices",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "8ca4d95f7cd9aaec",
+      "title": "Stathis Anninos Quartet",
+      "description": "",
+      "startDate": "2026-02-25",
       "endDate": null,
       "type": "concert",
       "genres": [],
@@ -61,11 +97,11 @@
         "currency": "EUR",
         "range": "€12 - €18"
       },
-      "url": "https://www.athinorama.gr/music/gig/stelios_chatzikaleas_quartet-10088384/",
+      "url": "https://www.athinorama.gr/music/gig/stathis_anninos_quartet_-10063282/",
       "ticketUrl": "https://www.halfnote.gr/en/calendar/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -73,31 +109,63 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "b3c570f40394bf77",
-      "title": "Η Ωραία Ελένη στην Κοιλάδα  των Νεκρών Ερώτων",
+      "id": "70de929e1d64249c",
+      "title": "Απόστολος Κίτσος",
       "description": "",
-      "startDate": "2026-02-24",
+      "startDate": "2026-02-25",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "ΘΕΑΤΡΟ RADAR",
+        "name": "Σταυρός του Νότου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €14"
+      },
+      "url": "https://www.athinorama.gr/music/gig/apostolos_kitsos-10071633/",
+      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "ddd247b1cc1af514",
+      "title": "Παντελής Σταματέλος &amp; Γιάννης Μιχαηλίδης",
+      "description": "",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "tba",
-        "amount": 5,
+        "amount": null,
         "currency": "EUR",
-        "range": "€5 - €15"
+        "range": null
       },
-      "url": "https://www.ticketservices.gr/event/14054/",
-      "ticketUrl": "https://www.ticketservices.gr/event/14054/",
-      "source": "ticketservices",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "url": "https://www.athinorama.gr/music/gig/pantelis_stamatelos_kai_giannis_mixailidis-10089133/",
+      "ticketUrl": "https://www.ticketservices.gr/event/14015/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -105,20 +173,115 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "acfd5251dc5e1abb",
-      "title": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
-      "description": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
-      "fullDescription": "The Megaron Mousikis opens its doors and you enter a space built for acoustic perfection. The Athens Concert Hall has hosted the world's finest orchestras; tonight it welcomes a name that carries weight differently.\n\nELIVIP arrives at the Megaron for a concert that promises something between classical formality and Greek musical instinct. The name itself suggests the territory — a bridge between worlds, sounds that know their European classical training but haven't forgotten where they come from.\n\nThe Athens Concert Hall provides the ideal vessel for this material. The acoustic has been calibrated by decades of world-class programming; every note arrives with the clarity the composer intended. When the ensemble reaches for dynamic range, the hall expands to contain it. The seats themselves become part of the experience — this is formal listening, the kind that asks for your attention and rewards it.\n\nThe audience self-selects with care. These are concertgoers who follow the Megaron calendar, who understand that tickets here represent investment in musical experience. Greeks who recognize what ELIVIP brings from local tradition sit alongside classical music enthusiasts who came for the hall itself. The pre-concert murmur carries anticipation that differs from casual entertainment.\n\nIf you want relaxed atmosphere, if you prefer music as background, the Megaron asks something different. This is foreground listening — you dress for it, you schedule around it, you bring your attention as offering. But if you've been ready for an evening where serious musical craft meets world-class acoustics, where the concert hall tradition extends to embrace Greek musical voice — tonight, the Megaron proves why it remains Athens' highest stage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Megaron Mousikis Athens |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Price** | Check Megaron website |\n| **Dress code** | Smart attire appropriate |\n\nThe Concert Hall where Athens meets the world. ELIVIP makes the introduction.",
-      "startDate": "2026-02-24T19:00:00+03:00",
+      "id": "e545b255a7115f5c",
+      "title": "Περικλής Χειλάς",
+      "description": "",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Concert #1 Baumstrasse",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/periklis_xeilas-10089135/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13912/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "e36dbf1416f0bb91",
+      "title": "Αντιστοιχίες",
+      "description": "",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 8,
+        "currency": "EUR",
+        "range": "€8"
+      },
+      "url": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "fabf477dfb311940",
+      "title": "&#171;Καραβάκι του Αιγαίου και στη Μυτιλήνη τράβα!&#187;",
+      "description": "",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ωδείο Αθηνών",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€20-50"
+      },
+      "url": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "de0baa80377df380",
+      "title": "Lockbird",
+      "description": "",
+      "startDate": "2026-02-25T21:00:00+03:00",
       "endDate": null,
       "type": "concert",
       "genres": [
-        "jazz"
+        "music"
       ],
       "tags": [],
       "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "name": "Cantina Social",
+        "address": "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece",
         "neighborhood": null,
         "coordinates": {
           "lat": 37.9838,
@@ -128,48 +291,14 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": "with-ticket"
       },
-      "url": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
-      "ticketUrl": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
-      "source": "megaron.gr",
-      "createdAt": "2026-01-30T04:02:12.432Z",
-      "updatedAt": "2026-02-18 06:09:07",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "7773db249ca94111",
-      "title": "Gregory Jusdanis &#8211; Βιογραφώντας τον Κ.Π.Καβάφη",
-      "description": "",
-      "startDate": "2026-02-24T20:30:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "classical"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
-        "neighborhood": "Kolonaki",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€15-80"
-      },
-      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "source": "megaron.gr",
-      "createdAt": "2026-02-18T09:24:24.081Z",
+      "url": "https://www.clubber.gr/events/lockbird-26/",
+      "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18T04:02:27.840Z",
       "updatedAt": "2026-02-21 07:51:31",
       "language": "en",
       "permanentCollection": false,
@@ -178,45 +307,11 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "2efea9c11c0da7d8",
-      "title": "Gregory Jusdanis – Βιογραφώντας τον Κ.Π.Καβάφη",
+      "id": "77c23d075980afcd",
+      "title": "Stathis Anninos - UNSILENT PLACE",
       "description": "",
-      "startDate": "2026-02-24T20:30:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "classical"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
-        "neighborhood": "Kolonaki",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€15-80"
-      },
-      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "source": "megaron.gr",
-      "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-23 15:21:16",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "2c137884ef2d83ae",
-      "title": "Stelios Chatzikaleas Quartet “The Sea Inside”",
-      "description": "",
-      "fullDescription": "The quartet counts off and suddenly you're somewhere vast and deep. Stelios Chatzikaleas titled his project \"The Sea Inside\" — and from the first phrases, you understand that geography is only the beginning.\n\nChatzikaleas has built his reputation at the intersection of Greek jazz and something harder to name. His quartet operates in that space where improvisation meets composition, where the players know their parts but also know when to abandon them. Tonight at Half Note, \"The Sea Inside\" receives the intimate presentation its themes demand.\n\nHalf Note Jazz Club provides the vessel for this voyage. Since 1979, this Mets institution has hosted jazz that matters — 250 concerts per season from October through May, each carefully selected. The room holds maybe 200 people, close enough to hear the breath before a solo, intimate enough that the music's emotional weight arrives unmediated by distance.\n\nThe crowd arrives with jazz sensibility. These are listeners who follow the Half Note calendar, who know Greek jazz musicians by name, who understand that Chatzikaleas brings something specific to this tradition. Local jazz heads sit with conservatory students; casual listeners sit with the devoted. By the second set, the room has achieved that particular quiet where everyone understands something is happening.\n\nIf you need your music obvious, if subtlety reads as absence, \"The Sea Inside\" asks different attention. The quartet works in shades and depths, finding the music between the notes as much as in them. But if you've been searching for jazz that rewards concentration, that treats the listener as partner rather than audience — Half Note tonight becomes the port for the voyage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Half Note Jazz Club |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-minute walk |\n| **Price** | Table: 15-20 euro, Bar: 10-15 euro |\n| **Reservations** | Essential - call ahead |\n| **Season** | October-May only |\n\nThe sea inside. Half Note listens.",
-      "startDate": "2026-02-24T21:30:00",
+      "fullDescription": "You descend the stairs into Half Note and the room embraces you with its dimensions. Intimate isn't a marketing word here — it's physics. The tables cluster close to the small stage, the bar occupies one wall, and the acoustic treatment means every note reaches every seat with identical clarity. This is Athens' jazz institution operating at its most essential.\n\nStathis Anninos presents \"Unsilent Place\" — a title that captures his approach to composition. Anninos has built his reputation on music that refuses the easy paths, horn lines that interrogate rather than comfort. His work draws from the Greek musical heritage while pushing into territories that owe as much to contemporary European jazz as to Mediterranean tradition. The musicians he's assembled understand the assignment: controlled intensity, conversation between instruments.\n\nThe Half Note crowd on a night like this arrives with intention. These aren't casual observers who wandered in from dinner. You'll recognize them by how they listen — leaning forward, tracking the interplay between players, nodding at phrases that work. Conversations between sets touch on recordings and influences, the kind of informed appreciation that comes from years of following this music closely.\n\nSince 1979, Half Note has maintained its position as Athens' premier jazz room. The venue's intimacy creates accountability — every musical choice lands on an audience close enough to notice. When Anninos takes a solo, you're near enough to see the thought process, to watch ideas form and resolve. The sound system handles acoustic instruments with respect, amplification serving clarity rather than volume.\n\nIf you need jazz that swings predictably, that stays in comfortable harmonic territory, Anninos will challenge you. His compositions operate in zones that require attention, phrases that resolve in unexpected places. But if you've been waiting for Athens jazz that takes risks in a room built to reward them — if you want to hear where Greek jazz is pushing its boundaries — you end up here.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 20:00 |\n| **Music** | 21:30 |\n| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10 min walk |\n| **Price** | €15-20 table, €10-15 bar |\n| **Reservations** | Essential — book ahead, confirm same day |\n\nThe silence between notes is where this music lives. The title isn't ironic.",
+      "startDate": "2026-02-25T21:30:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -235,11 +330,11 @@
         "currency": "EUR",
         "range": "από €12"
       },
-      "url": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
-      "ticketUrl": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
+      "url": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
+      "ticketUrl": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
       "source": "halfnote",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -248,8 +343,8 @@
     }
   ],
   "meta": {
-    "total": 7,
-    "lastUpdate": "2026-02-23T16:42:03.032Z",
+    "total": 10,
+    "lastUpdate": "2026-02-24T08:14:54.898Z",
     "url": "https://agentathens.netlify.app/concert-tomorrow"
   }
 }

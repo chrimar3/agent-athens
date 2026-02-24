@@ -8,39 +8,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "0ec4801955f99a58",
-      "title": "Ουρανού και γης &#171;πανήγυρις&#187;",
-      "description": "",
-      "startDate": "2026-02-23",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "ΚΠΙΣΝ",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.athinorama.gr/music/gig/ouranou_kai_gis_paniguris-10089146/",
-      "ticketUrl": "https://www.snfcc.org/events",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:17",
-      "language": "en",
-      "timeSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "60e541889d263c93",
       "title": "Vaginahood",
       "description": "",
@@ -65,7 +32,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13330/",
       "source": "ticketservices",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_detail",
@@ -99,8 +66,10 @@
       "ticketUrl": "https://www.halfnote.gr/en/calendar/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -122,7 +91,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 5,
         "currency": "EUR",
         "range": "€5 - €15"
@@ -131,8 +100,10 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14054/",
       "source": "ticketservices",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:26",
       "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -238,7 +209,7 @@
       "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -273,7 +244,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
       "source": "halfnote",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -299,7 +270,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 15,
         "currency": "EUR",
         "range": "€15"
@@ -308,7 +279,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13919/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
@@ -334,7 +305,7 @@
         "capacity": null
       },
       "price": {
-        "type": "tba",
+        "type": "paid",
         "amount": 10,
         "currency": "EUR",
         "range": "€10"
@@ -343,7 +314,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13912/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
@@ -377,7 +348,7 @@
       "ticketUrl": "https://www.halfnote.gr/en/calendar/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -409,7 +380,7 @@
       "ticketUrl": "https://www.more.com/gr-el/music/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -441,7 +412,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14015/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -473,7 +444,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13912/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -505,7 +476,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-16 08:00:38",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -537,7 +508,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -610,7 +581,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
       "source": "halfnote",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -644,7 +615,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/miranda_verouli_quintet-10069976/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -676,7 +647,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/three_times_three_5-10084877/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -708,7 +679,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/joanna_mattrey-10089214/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -740,7 +711,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -847,7 +818,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -882,7 +853,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/miranda-verouli-quintet-gal-costa-musa-tropical/",
       "source": "halfnote",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -992,7 +963,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/petros_gaitanos-10029517/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1024,7 +995,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/angelika_dusk-10036905/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1056,7 +1027,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/katerina_ntinou-10050361/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1088,7 +1059,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/mora_sti_fotia-10050651/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1120,7 +1091,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/thanos_olumpios_kai_sotiris_proiskos-10051132/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1152,7 +1123,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xatzigfragketa-10058545/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1184,7 +1155,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/eisboleas-10067518/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1216,7 +1187,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/mirela_paxou___adam_tsarouxis-10078679/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1247,7 +1218,7 @@
       "url": "https://www.athinorama.gr/music/gig/pop_girlies_night_vol3-10089199/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1279,7 +1250,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/laura_agnusdei_kai_free_piece_of_tape-10089220/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1311,7 +1282,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/zorz_pilali-10024445/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1343,7 +1314,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/amaguk-10063838/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1455,7 +1426,7 @@
       "ticketUrl": "https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1489,7 +1460,7 @@
       "ticketUrl": "https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.082Z",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 08:07:24",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1524,7 +1495,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/mirela-pachou-adam-tsarouxis/",
       "source": "halfnote",
       "createdAt": "2026-02-02 14:58:08",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -1571,8 +1542,8 @@
     }
   ],
   "meta": {
-    "total": 46,
-    "lastUpdate": "2026-02-23T16:42:03.156Z",
+    "total": 45,
+    "lastUpdate": "2026-02-24T08:14:55.013Z",
     "url": "https://agentathens.netlify.app/with-ticket-concert-this-month"
   }
 }

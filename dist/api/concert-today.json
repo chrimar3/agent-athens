@@ -7,40 +7,253 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "0ec4801955f99a58",
-      "title": "Ουρανού και γης &#171;πανήγυρις&#187;",
+      "id": "60e541889d263c93",
+      "title": "Vaginahood",
       "description": "",
-      "startDate": "2026-02-23",
+      "startDate": "2026-02-24",
       "endDate": null,
       "type": "concert",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "ΚΠΙΣΝ",
+        "name": "Doors",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "tba",
-        "amount": null,
+        "type": "paid",
+        "amount": 15,
         "currency": "EUR",
-        "range": null
+        "range": "€15 - €30"
       },
-      "url": "https://www.athinorama.gr/music/gig/ouranou_kai_gis_paniguris-10089146/",
-      "ticketUrl": "https://www.snfcc.org/events",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-23 15:21:17",
+      "url": "https://www.ticketservices.gr/event/13330/",
+      "ticketUrl": "https://www.ticketservices.gr/event/13330/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-24 07:59:09",
       "language": "en",
-      "timeSource": "not_found",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "0fc2ce17f13d5e1d",
+      "title": "Stelios Chatzikaleas Quartet",
+      "description": "",
+      "startDate": "2026-02-24",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €18"
+      },
+      "url": "https://www.athinorama.gr/music/gig/stelios_chatzikaleas_quartet-10088384/",
+      "ticketUrl": "https://www.halfnote.gr/en/calendar/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-10 14:59:00",
+      "updatedAt": "2026-02-24 08:07:24",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b3c570f40394bf77",
+      "title": "Η Ωραία Ελένη στην Κοιλάδα  των Νεκρών Ερώτων",
+      "description": "",
+      "startDate": "2026-02-24",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΘΕΑΤΡΟ RADAR",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 5,
+        "currency": "EUR",
+        "range": "€5 - €15"
+      },
+      "url": "https://www.ticketservices.gr/event/14054/",
+      "ticketUrl": "https://www.ticketservices.gr/event/14054/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 08:07:26",
+      "language": "en",
+      "timeDoors": "21:15",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "acfd5251dc5e1abb",
+      "title": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
+      "description": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
+      "fullDescription": "The Megaron Mousikis opens its doors and you enter a space built for acoustic perfection. The Athens Concert Hall has hosted the world's finest orchestras; tonight it welcomes a name that carries weight differently.\n\nELIVIP arrives at the Megaron for a concert that promises something between classical formality and Greek musical instinct. The name itself suggests the territory — a bridge between worlds, sounds that know their European classical training but haven't forgotten where they come from.\n\nThe Athens Concert Hall provides the ideal vessel for this material. The acoustic has been calibrated by decades of world-class programming; every note arrives with the clarity the composer intended. When the ensemble reaches for dynamic range, the hall expands to contain it. The seats themselves become part of the experience — this is formal listening, the kind that asks for your attention and rewards it.\n\nThe audience self-selects with care. These are concertgoers who follow the Megaron calendar, who understand that tickets here represent investment in musical experience. Greeks who recognize what ELIVIP brings from local tradition sit alongside classical music enthusiasts who came for the hall itself. The pre-concert murmur carries anticipation that differs from casual entertainment.\n\nIf you want relaxed atmosphere, if you prefer music as background, the Megaron asks something different. This is foreground listening — you dress for it, you schedule around it, you bring your attention as offering. But if you've been ready for an evening where serious musical craft meets world-class acoustics, where the concert hall tradition extends to embrace Greek musical voice — tonight, the Megaron proves why it remains Athens' highest stage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Megaron Mousikis Athens |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Price** | Check Megaron website |\n| **Dress code** | Smart attire appropriate |\n\nThe Concert Hall where Athens meets the world. ELIVIP makes the introduction.",
+      "startDate": "2026-02-24T19:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
+      "ticketUrl": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
+      "source": "megaron.gr",
+      "createdAt": "2026-01-30T04:02:12.432Z",
+      "updatedAt": "2026-02-18 06:09:07",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7773db249ca94111",
+      "title": "Gregory Jusdanis &#8211; Βιογραφώντας τον Κ.Π.Καβάφη",
+      "description": "",
+      "startDate": "2026-02-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
+      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:24.081Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "2efea9c11c0da7d8",
+      "title": "Gregory Jusdanis – Βιογραφώντας τον Κ.Π.Καβάφη",
+      "description": "",
+      "startDate": "2026-02-24T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
+      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:37.958Z",
+      "updatedAt": "2026-02-24 08:07:24",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "2c137884ef2d83ae",
+      "title": "Stelios Chatzikaleas Quartet “The Sea Inside”",
+      "description": "",
+      "fullDescription": "The quartet counts off and suddenly you're somewhere vast and deep. Stelios Chatzikaleas titled his project \"The Sea Inside\" — and from the first phrases, you understand that geography is only the beginning.\n\nChatzikaleas has built his reputation at the intersection of Greek jazz and something harder to name. His quartet operates in that space where improvisation meets composition, where the players know their parts but also know when to abandon them. Tonight at Half Note, \"The Sea Inside\" receives the intimate presentation its themes demand.\n\nHalf Note Jazz Club provides the vessel for this voyage. Since 1979, this Mets institution has hosted jazz that matters — 250 concerts per season from October through May, each carefully selected. The room holds maybe 200 people, close enough to hear the breath before a solo, intimate enough that the music's emotional weight arrives unmediated by distance.\n\nThe crowd arrives with jazz sensibility. These are listeners who follow the Half Note calendar, who know Greek jazz musicians by name, who understand that Chatzikaleas brings something specific to this tradition. Local jazz heads sit with conservatory students; casual listeners sit with the devoted. By the second set, the room has achieved that particular quiet where everyone understands something is happening.\n\nIf you need your music obvious, if subtlety reads as absence, \"The Sea Inside\" asks different attention. The quartet works in shades and depths, finding the music between the notes as much as in them. But if you've been searching for jazz that rewards concentration, that treats the listener as partner rather than audience — Half Note tonight becomes the port for the voyage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Half Note Jazz Club |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-minute walk |\n| **Price** | Table: 15-20 euro, Bar: 10-15 euro |\n| **Reservations** | Essential - call ahead |\n| **Season** | October-May only |\n\nThe sea inside. Half Note listens.",
+      "startDate": "2026-02-24T21:30:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "από €12"
+      },
+      "url": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
+      "ticketUrl": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
+      "source": "halfnote",
+      "createdAt": "2026-01-26 13:11:15",
+      "updatedAt": "2026-02-24 07:59:09",
+      "language": "en",
+      "timeDoors": "21:30",
+      "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-23T16:42:03.031Z",
+    "total": 7,
+    "lastUpdate": "2026-02-24T08:14:54.897Z",
     "url": "https://agentathens.netlify.app/concert-today"
   }
 }
