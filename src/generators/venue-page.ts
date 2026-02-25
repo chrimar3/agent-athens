@@ -9,7 +9,7 @@
  * - Venue must have complete data (address + neighborhood)
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
@@ -19,6 +19,12 @@ import { getAthensTimezone } from '../enrichment/quality-gates';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
+
+// Load IndexNow config for Bing WMT verification
+const indexNowConfig = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../config/indexnow.json'), 'utf-8')
+);
+const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
 
 interface VenueData {
   name: string;
@@ -159,6 +165,7 @@ function renderVenuePage(venue: VenueData): string {
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
   <meta name="geo.placename" content="Athens">
+  ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   ${schemaJson ? `
   <!-- Schema.org JSON-LD -->
@@ -336,6 +343,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   <link rel="alternate" hreflang="el" href="${BASE_URL}/venues/">
   <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/">
   <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/">
+  ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }

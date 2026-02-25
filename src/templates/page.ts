@@ -15,6 +15,12 @@ const categoriesConfig = JSON.parse(
   readFileSync(join(import.meta.dir, '../../config/categories.json'), 'utf-8')
 ) as { categories: CategoryConfig[] };
 
+// Load IndexNow config for Bing WMT verification
+const indexNowConfig = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../config/indexnow.json'), 'utf-8')
+);
+const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
+
 /**
  * Generate a tracked URL that goes through the /go/ redirect endpoint
  * This allows us to track clicks while still working on a static site
@@ -63,6 +69,7 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
+  ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <!-- OpenGraph: Greek Primary, English Secondary -->
   <meta property="og:title" content="${title}">

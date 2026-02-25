@@ -350,6 +350,26 @@ run_deploy() {
     fi
 }
 
+# Phase 6: IndexNow ping (notify search engines)
+run_indexnow_ping() {
+    log_phase "INDEXNOW PING"
+    log "Notifying search engines about updated URLs..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/ping-indexnow.ts --dry-run"
+        bun run scripts/ping-indexnow.ts --dry-run >> "$LOG_FILE" 2>&1 || true
+        return 0
+    fi
+
+    if bun run scripts/ping-indexnow.ts >> "$LOG_FILE" 2>&1; then
+        log "IndexNow ping completed"
+        return 0
+    else
+        log_error "IndexNow ping failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # ============================================================================
 # Summary
 # ============================================================================
@@ -450,6 +470,11 @@ main() {
 
     if [[ $failed -eq 0 ]]; then
         run_deploy || failed=1
+    fi
+
+    # IndexNow ping (only after successful deploy)
+    if [[ $failed -eq 0 ]]; then
+        run_indexnow_ping
     fi
 
     # Print summary

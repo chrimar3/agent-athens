@@ -20,6 +20,12 @@ import { stripInfoTable } from '../utils/description-utils';
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
 
+// Load IndexNow config for Bing WMT verification
+const indexNowConfig = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../config/indexnow.json'), 'utf-8')
+);
+const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
+
 // Default OG images by event type
 const DEFAULT_OG_IMAGES: Record<string, string> = {
   concert: '/images/og/concert-default.jpg',
@@ -311,6 +317,7 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
   <meta name="geo.placename" content="Athens">
+  ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <!-- Freshness signals -->
   <meta name="date" content="${new Date().toISOString().split('T')[0]}">

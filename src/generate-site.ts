@@ -266,6 +266,7 @@ async function main() {
   await generateLLMsTxt();
   await generateRobotsTxt();
   await generateSitemap(generatedUrls);
+  await generateIndexNowKeyFile();
 
   const buildDurationMs = Date.now() - buildStartTime;
 
@@ -486,6 +487,24 @@ ${entries.join('\n')}
 
   writeFileSync(join(DIST_DIR, 'sitemap.xml'), sitemap);
   console.log(`  ✓ sitemap.xml (${generatedUrls.length} URLs)`);
+}
+
+async function generateIndexNowKeyFile() {
+  try {
+    const configPath = join(import.meta.dir, '../config/indexnow.json');
+    const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+    const key = config.indexnow_key;
+
+    if (!key || key.length < 16) {
+      console.log('  ⏭️ IndexNow key file skipped (no valid key in config)');
+      return;
+    }
+
+    writeFileSync(join(DIST_DIR, `${key}.txt`), key);
+    console.log(`  ✓ IndexNow key file (${key}.txt)`);
+  } catch (err) {
+    console.log(`  ⚠️ IndexNow key file skipped: ${err}`);
+  }
 }
 
 // Run generator
