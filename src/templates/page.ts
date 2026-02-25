@@ -64,7 +64,7 @@ export const TYPE_ICONS: Record<string, string> = {
   other: '📌',
 };
 
-export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[]): string {
+export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
   const schemaMarkup = generateSchemaMarkup(events, metadata);
@@ -172,6 +172,8 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
     ${filterBarHTML}
 
+    ${preContentHtml || ''}
+
     <main>
       ${eventCount > 0 ? `
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
@@ -210,7 +212,22 @@ function getEventTime(event: Event): string {
   return '';
 }
 
-function renderEventCard(event: Event): string {
+export interface CardData {
+  dateStr: string;
+  priceText: string;
+  href: string;
+  badgeLabel: string;
+  colorVar: string;
+  lightText: string;
+  icon: string;
+  venueText: string;
+  shortDesc: string;
+  numericPrice: number;
+  exhibitionIsOpen: boolean;
+  schemaType: string;
+}
+
+export function prepareCardData(event: Event): CardData {
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
@@ -263,6 +280,12 @@ function renderEventCard(event: Event): string {
   // Numeric price for data attribute (sort-by-price)
   const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
 
+  return { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType };
+}
+
+function renderEventCard(event: Event): string {
+  const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
+
   return `
   <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
     <div class="card-image-wrapper">
@@ -273,7 +296,7 @@ function renderEventCard(event: Event): string {
     </div>
     <div class="card-body">
       <h3 class="card-title" itemprop="name">${event.title}</h3>
-      <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${isExhibition && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
+      <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${event.type === 'exhibition' && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
       <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
       <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${priceText}</span>${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}</span>
     </div>

@@ -35,6 +35,7 @@ export function renderHamburgerMenu(): string {
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -62,6 +63,7 @@ export function renderSiteFooter(): string {
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>

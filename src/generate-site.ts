@@ -12,11 +12,12 @@ import { buildURL, buildPageMetadata } from './utils/urls';
 import { renderPage } from './templates/page';
 import {
   renderCategoryPage,
-  renderCategoryNav,
   type CategoryConfig
 } from './templates/category-page';
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
+import { renderFeaturedCarousel } from './templates/card-variants';
+import { renderContentPage } from './templates/content-page';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -164,8 +165,10 @@ async function main() {
     pagesGenerated++;
   }
 
-  // Generate homepage (all events)
-  const homeUrl = await generatePage({}, events);
+  // Generate homepage (all events) with today's featured carousel
+  const todayEvents = filterEvents(events, { time: 'today' as TimeRange });
+  const carouselHtml = renderFeaturedCarousel(todayEvents);
+  const homeUrl = await generatePage({}, events, carouselHtml);
   generatedUrls.push(homeUrl);
   pagesGenerated++;
 
@@ -268,6 +271,75 @@ async function main() {
   generatedUrls.push(...venuePageUrls);
   pagesGenerated += venuePageUrls.length;
 
+  // Generate content pages (about, editorial, corrections)
+  console.log('\n📄 Generating content pages...');
+  const contentPages = [
+    {
+      slug: 'about',
+      title: 'Σχετικά',
+      bodyHtml: `
+        <h1>Σχετικά με το agent athens</h1>
+        <p>Το agent athens είναι ένα ημερολόγιο πολιτιστικών εκδηλώσεων για την Αθήνα, που ενημερώνεται καθημερινά με τεχνητή νοημοσύνη.</p>
+
+        <h2>Τι κάνουμε</h2>
+        <p>Συγκεντρώνουμε εκδηλώσεις από πάνω από 10 επαληθευμένους χώρους και πηγές στην Αθήνα. Συναυλίες, εκθέσεις, θέατρο, σινεμά, παραστάσεις, εργαστήρια — όλα σε ένα μέρος.</p>
+        <p>Τα δεδομένα ενημερώνονται κάθε πρωί στις 08:00 ώρα Αθήνας.</p>
+
+        <h2>Πώς λειτουργεί</h2>
+        <p>Χρησιμοποιούμε αυτοματοποιημένη συλλογή δεδομένων και τεχνητή νοημοσύνη για να επιβεβαιώσουμε τις πληροφορίες, να εμπλουτίσουμε τις περιγραφές, και να διασφαλίσουμε ότι κάθε εκδήλωση αφορά πραγματικά την Αθήνα.</p>
+
+        <h2>Επικοινωνία</h2>
+        <p>Για ερωτήσεις ή προτάσεις, επικοινωνήστε μαζί μας μέσω <a href="https://github.com/chrimar3/agent-athens/issues">GitHub Issues</a>.</p>
+      `
+    },
+    {
+      slug: 'editorial',
+      title: 'Σύνταξη',
+      bodyHtml: `
+        <h1>Συντακτική πολιτική</h1>
+        <p>Η συντακτική μας ομάδα αποτελείται από συνδυασμό αυτοματοποιημένων εργαλείων και ανθρώπινης επίβλεψης.</p>
+
+        <h2>Πηγές δεδομένων</h2>
+        <p>Συλλέγουμε εκδηλώσεις από επαληθευμένες πηγές, συμπεριλαμβανομένων ιστοσελίδων χώρων, πλατφορμών εισιτηρίων, και πολιτιστικών ημερολογίων.</p>
+
+        <h2>Επαλήθευση</h2>
+        <p>Κάθε εκδήλωση ελέγχεται αυτόματα για την τοποθεσία της (μόνο Αθήνα) και τα βασικά στοιχεία της. Οι εμπλουτισμένες περιγραφές βασίζονται αποκλειστικά σε πραγματικές πληροφορίες.</p>
+
+        <h2>Ενημερώσεις</h2>
+        <p>Το ημερολόγιο ενημερώνεται καθημερινά. Οι παρελθούσες εκδηλώσεις αφαιρούνται αυτόματα.</p>
+      `
+    },
+    {
+      slug: 'corrections',
+      title: 'Διορθώσεις',
+      bodyHtml: `
+        <h1>Πολιτική διορθώσεων</h1>
+        <p>Δεσμευόμαστε για ακρίβεια. Αν εντοπίσετε κάποιο σφάλμα, ενημερώστε μας.</p>
+
+        <h2>Αναφορά σφάλματος</h2>
+        <p>Αν βρείτε λανθασμένη πληροφορία (λάθος ημερομηνία, τιμή, χώρος), δημιουργήστε ένα issue στο <a href="https://github.com/chrimar3/agent-athens/issues">GitHub</a> ή στείλτε email στο cmarag8@gmail.com.</p>
+
+        <h2>Χρόνος απόκρισης</h2>
+        <p>Οι διορθώσεις εφαρμόζονται εντός 24 ωρών και αντικατοπτρίζονται στο επόμενο καθημερινό build.</p>
+
+        <h3>Τι μπορεί να αναφερθεί</h3>
+        <p>Λάθος ημερομηνίες ή ώρες, εσφαλμένες τιμές εισιτηρίων, λανθασμένοι χώροι, εκδηλώσεις που δεν αφορούν την Αθήνα, ελλιπείς ή παραπλανητικές περιγραφές.</p>
+      `
+    },
+  ];
+
+  for (const page of contentPages) {
+    const html = renderContentPage(page.slug, page.title, page.bodyHtml);
+    const pageDir = join(DIST_DIR, page.slug);
+    if (!existsSync(pageDir)) {
+      mkdirSync(pageDir, { recursive: true });
+    }
+    writeFileSync(join(pageDir, 'index.html'), html);
+    generatedUrls.push(`${page.slug}/`);
+    pagesGenerated++;
+    console.log(`  ✓ /${page.slug}/`);
+  }
+
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');
   await generateLLMsTxt();
@@ -289,13 +361,13 @@ async function main() {
   console.log(`📁 Output directory: ${DIST_DIR}`);
 }
 
-async function generatePage(filters: Filters, allEvents: Event[]): Promise<string> {
+async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
   const filteredEvents = filterEvents(allEvents, filters);
   const url = buildURL(filters);
   const metadata = buildPageMetadata(filters, filteredEvents.length);
 
-  // Generate HTML
-  const html = renderPage(metadata, filteredEvents);
+  // Generate HTML (pass allEvents for filter bar count computation)
+  const html = renderPage(metadata, filteredEvents, allEvents, preContentHtml);
 
   // Write HTML file
   const filename = url === 'index' ? 'index.html' : `${url}.html`;
