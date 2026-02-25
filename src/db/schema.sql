@@ -131,3 +131,18 @@ CREATE TABLE IF NOT EXISTS generation_stats (
   build_duration_ms INTEGER,
   deploy_success INTEGER DEFAULT 0
 );
+
+-- Table for deduplication merge audit log
+-- Each row records one merge: winner absorbed loser's best fields, then loser was deleted.
+-- loser_snapshot contains the full row JSON for undo.
+CREATE TABLE IF NOT EXISTS dedup_merges (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  winner_id TEXT NOT NULL,
+  loser_id TEXT NOT NULL,
+  confidence REAL NOT NULL,
+  match_layer TEXT NOT NULL,
+  match_reason TEXT,
+  fields_merged TEXT,           -- JSON array of field names that were updated
+  loser_snapshot TEXT,          -- Full JSON of deleted record for undo
+  merged_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

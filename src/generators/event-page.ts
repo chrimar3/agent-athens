@@ -17,7 +17,7 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -31,21 +31,25 @@ const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
 
 // Default OG images by event type
 const DEFAULT_OG_IMAGES: Record<string, string> = {
-  concert: '/images/og/concert-default.jpg',
-  dj_set: '/images/og/dj-default.jpg',
-  classical: '/images/og/classical-default.jpg',
-  opera: '/images/og/classical-default.jpg',
-  theater: '/images/og/theater-default.jpg',
-  dance: '/images/og/dance-default.jpg',
-  comedy: '/images/og/comedy-default.jpg',
-  exhibition: '/images/og/exhibition-default.jpg',
-  screening: '/images/og/cinema-default.jpg',
-  cinema: '/images/og/cinema-default.jpg',
-  workshop: '/images/og/workshop-default.jpg',
-  show: '/images/og/show-default.jpg',
-  festival: '/images/og/festival-default.jpg',
-  performance: '/images/og/performance-default.jpg',
-  default: '/images/og/agentathens-default.jpg'
+  concert: '/images/og/concert-default.png',
+  dj_set: '/images/og/dj-set-default.png',
+  classical: '/images/og/classical-default.png',
+  opera: '/images/og/opera-default.png',
+  theater: '/images/og/theater-default.png',
+  dance: '/images/og/dance-default.png',
+  comedy: '/images/og/comedy-default.png',
+  exhibition: '/images/og/exhibition-default.png',
+  screening: '/images/og/screening-default.png',
+  cinema: '/images/og/cinema-default.png',
+  workshop: '/images/og/workshop-default.png',
+  show: '/images/og/show-default.png',
+  festival: '/images/og/festival-default.png',
+  performance: '/images/og/performance-default.png',
+  conference: '/images/og/conference-default.png',
+  meetup: '/images/og/agentathens-default.png',
+  hackathon: '/images/og/agentathens-default.png',
+  seminar: '/images/og/agentathens-default.png',
+  default: '/images/og/agentathens-default.png'
 };
 
 // Type translations for Greek display
@@ -326,6 +330,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  ${renderFaviconLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>

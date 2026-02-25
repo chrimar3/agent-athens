@@ -119,6 +119,18 @@ a:hover {
   text-decoration: underline;
 }
 
+/* ── View Transitions API ───────────────────────────── */
+
+@view-transition { navigation: auto; }
+::view-transition-old(root) {
+  animation: var(--t-fast) var(--ease-out) both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: var(--t-fast) var(--ease-out) both vt-fade-in;
+}
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+
 /* ── Reduced Motion ──────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -181,6 +193,22 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* ── Image Lazy-Load Fade ──────────────────────────── */
+
+.card-image,
+.feature-image-wrapper img,
+.list-image-wrapper img,
+.carousel-card-image {
+  opacity: 0;
+  transition: opacity var(--t-normal) var(--ease-out);
+}
+.card-image.is-loaded,
+.feature-image-wrapper img.is-loaded,
+.list-image-wrapper img.is-loaded,
+.carousel-card-image.is-loaded {
+  opacity: 1;
 }
 
 .card-placeholder-icon {

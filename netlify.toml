@@ -46,3 +46,20 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+
+# OG images - refresh daily (regenerated each build)
+[[headers]]
+  for = "/images/og/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Favicons - cache for 1 week (rarely change)
+[[headers]]
+  for = "/favicon*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/apple-touch-icon.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

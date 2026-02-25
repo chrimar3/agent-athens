@@ -7,7 +7,7 @@ import type { Event, PageMetadata } from '../types';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { generateEventSlug } from '../generators/event-page';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from './site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './site-chrome';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 
 // Load IndexNow config for Bing WMT verification
@@ -121,6 +121,13 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta property="og:locale" content="el_GR">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
+  <meta name="twitter:image" content="https://agentathens.netlify.app${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -137,6 +144,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- Design system -->
   <meta name="view-transition" content="same-origin">
+  ${renderFaviconLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <!-- Page-specific styling -->

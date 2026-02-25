@@ -16,6 +16,7 @@ import {
 } from './templates/category-page';
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
+import { generateOgImages, generateFavicons } from './generators/og-image';
 import { renderFeaturedCarousel } from './templates/card-variants';
 import { renderContentPage } from './templates/content-page';
 
@@ -98,6 +99,11 @@ async function main() {
     join(import.meta.dir, 'styles/design-system.css'),
     join(DIST_DIR, 'styles/design-system.css')
   );
+
+  // Generate OG images and favicons
+  console.log('🖼️  Generating OG images and favicons...');
+  await generateOgImages();
+  await generateFavicons();
 
   // Load events from database
   console.log('📥 Loading events from database...');

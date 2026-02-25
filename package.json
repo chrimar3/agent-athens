@@ -45,6 +45,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.0",
     "@google/generative-ai": "^0.24.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/better-sqlite3": "^7.6.13",
     "@types/luxon": "^3.7.1",
     "better-sqlite3": "^12.4.1",
@@ -54,6 +55,7 @@
     "mailparser": "^3.7.5",
     "node-ical": "^0.21.0",
     "puppeteer": "^24.36.1",
-    "puppeteer-core": "^24.36.0"
+    "puppeteer-core": "^24.36.0",
+    "satori": "^0.19.2"
   }
 }

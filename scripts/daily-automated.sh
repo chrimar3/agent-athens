@@ -179,6 +179,44 @@ run_quality() {
     return 0
 }
 
+# Phase 3a-i: Same-source deduplication
+run_dedup_removal() {
+    log_phase "DEDUP - SAME-SOURCE"
+    log "Removing same-source duplicate events..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/remove-duplicates.ts"
+        return 0
+    fi
+
+    if bun run scripts/remove-duplicates.ts >> "$LOG_FILE" 2>&1; then
+        log "Same-source dedup completed"
+        return 0
+    else
+        log_error "Same-source dedup failed (continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
+# Phase 3a-ii: Cross-source deduplication with field merging
+run_dedup_merge() {
+    log_phase "DEDUP - CROSS-SOURCE MERGE"
+    log "Merging cross-source duplicate events..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75"
+        return 0
+    fi
+
+    if bun run scripts/merge-duplicates.ts --execute --min-confidence 0.9 >> "$LOG_FILE" 2>&1; then
+        log "Cross-source merge completed"
+        return 0
+    else
+        log_error "Cross-source merge failed (continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # Phase 3b: Price acquisition
 run_prices() {
     log_phase "PRICE ACQUISITION"
@@ -467,6 +505,12 @@ main() {
     if [[ $failed -eq 0 ]]; then
         run_quality || failed=1
     fi
+
+    # Deduplication — same-source (non-fatal)
+    run_dedup_removal
+
+    # Deduplication — cross-source merge (non-fatal)
+    run_dedup_merge
 
     # Price acquisition (non-fatal)
     run_prices

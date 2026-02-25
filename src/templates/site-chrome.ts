@@ -88,6 +88,12 @@ export function renderSiteFooter(): string {
 </footer>`;
 }
 
+export function renderFaviconLinks(): string {
+  return `<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">`;
+}
+
 export function renderHamburgerScript(): string {
   return `<script>
 (function() {
@@ -123,6 +129,11 @@ export function renderHamburgerScript(): string {
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>`;

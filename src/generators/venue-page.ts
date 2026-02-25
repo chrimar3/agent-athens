@@ -17,7 +17,7 @@ import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -145,6 +145,7 @@ function renderVenuePage(venue: VenueData): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  ${renderFaviconLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${venue.name} - Εκδηλώσεις | agent-athens</title>
@@ -165,6 +166,13 @@ function renderVenuePage(venue: VenueData): string {
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="${BASE_URL}/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${venue.name} - Εκδηλώσεις">
+  <meta name="twitter:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${venue.name}">
+  <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -330,6 +338,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  ${renderFaviconLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
@@ -342,6 +351,21 @@ function generateVenueIndex(venues: VenueData[]): void {
   <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/">
   <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/">
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Χώροι Εκδηλώσεων Αθήνας">
+  <meta property="og:description" content="${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
+  <meta property="og:url" content="${BASE_URL}/venues/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="el_GR">
+  <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="${BASE_URL}/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Χώροι Εκδηλώσεων Αθήνας">
+  <meta name="twitter:description" content="${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
+  <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">
 
   <style>
     .venue-index-content { max-width: 800px; margin: 0 auto; padding: 20px; }
