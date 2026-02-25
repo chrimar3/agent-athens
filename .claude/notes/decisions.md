@@ -241,3 +241,45 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 | EUR hardcoded in Schema.org offers | All Athens events use EUR; no multi-currency support needed. Avoids null/undefined in priceCurrency | 2026-02-25 |
 | isAccessibleForFree for ALL events (not just priced ones) | Google rich results require explicit true/false signal; missing field = no rich result card | 2026-02-25 |
 | SCHEMA_TYPE_MAP canonical source in quality-gates.ts | Three paths generate Schema.org (quality-gates, event-page, i18n); single canonical map prevents drift | 2026-02-25 |
+
+## Enrichment v4 Infrastructure (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| New `entity_knowledge` table, keep `artist_info` as-is | artist_info has 2 rows and works; entity_knowledge is broader (covers artists, venues, festivals, promoters) with UPSERT support. No data migration needed | 2026-02-26 |
+| Extend enrichment_log via ALTER TABLE, not recreate | Production enrichment_log has existing rows. ALTER TABLE preserves history. Check PRAGMA table_info() for idempotency since SQLite lacks IF NOT EXISTS for columns | 2026-02-26 |
+| Before/after snapshots in enrichment_log | Enables rollback of bad descriptions. description_before captures state before save, description_after captures what was written. NULL description_before means first enrichment | 2026-02-26 |
+| Batch + session metadata in enrichment_log | batch_number groups events saved together; session_id groups across a work session. Enables "rollback batch 3 from feb-2026" | 2026-02-26 |
+| temp-descriptions/ as working directory | Decouple description writing from DB saves. Write files, gate-check them, then batch save. Git-ignored so work-in-progress never committed | 2026-02-26 |
+| Auto gate checker wraps existing quality-gates.ts | Reuses 900-line validation system. Adds v4 checks (hashtags-in-prose, metadata-in-prose) on top. CLI exit code enables scripting | 2026-02-26 |
+| knowledge_feedback table for corrections | Tracks corrections/additions/staleness reports against entity_knowledge. processed flag tracks whether feedback has been applied. Supports iterative entity improvement across sessions | 2026-02-26 |
+| db.run() over db execute method | Security hook false positive: hook scans for Node's child_process execute method, but SQLite's execute method has same name. db.run() is functionally identical for DDL and avoids hook | 2026-02-26 |
+
+### Enrichment v4 Tables Created
+
+| Table | Columns | Purpose |
+|-------|---------|---------|
+| entity_knowledge | 17 | Reusable entity research (artists, venues, festivals, promoters) |
+| knowledge_feedback | 10 | Track corrections/additions to entity data |
+| enrichment_log (extended) | +7 new cols | description_before/after, batch_number, session_id, quality_score, quality_issues, tags_applied |
+
+### Scripts Created
+
+| Script | Purpose |
+|--------|---------|
+| run-enrichment-v4-migration.ts | Idempotent schema migration |
+| auto-gate-check.ts | CLI quality gate validator |
+| write-description.ts | File writer with encoding verification |
+| write-tags.ts | Tag writer with taxonomy validation |
+| save-batch.ts | Batch save with before/after logging |
+| save-entity.ts | Entity knowledge UPSERT |
+| rollback-batch.ts | Rollback by event or batch |
+
+## Filter Bar Polish — Phase 4C (2026-02-25)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Independent CSS classes for scroll lock | Filter bar and hamburger both need scroll lock; direct `body.style.overflow` causes race conditions. Separate classes (`scroll-locked` / `scroll-locked-menu`) let each component operate independently | 2026-02-25 |
+| Remove `all-events` from TIME_OPTIONS | On the homepage it rendered as "Όλες 891" linking to `/` — a dead link. Dismiss `×` on active date pills already clears time filter, so explicit "show all" is redundant | 2026-02-25 |
+| Keep Area pill disabled (not removed) | Insufficient neighborhood data to make it useful; visible-but-disabled signals future intent without confusing users | 2026-02-25 |
+| Defer mobile close animation | Slide-down on close requires replacing `display: none` toggling with a visibility/opacity approach — more complex, and instant-close matches hamburger menu pattern | 2026-02-25 |

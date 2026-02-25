@@ -27,6 +27,10 @@ Thumbs.db
 temp/
 tmp/
 
+# Enrichment working directories
+temp-descriptions/
+temp-research/
+
 # Local Netlify folder
 .netlify
 .git-old/

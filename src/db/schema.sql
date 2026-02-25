@@ -146,3 +146,55 @@ CREATE TABLE IF NOT EXISTS dedup_merges (
   loser_snapshot TEXT,          -- Full JSON of deleted record for undo
   merged_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- ============================================================================
+-- Enrichment v4 Tables
+-- ============================================================================
+
+-- Enrichment log: tracks every description change with before/after snapshots.
+-- Base columns created by earlier migration; v4 adds: description_before,
+-- description_after, batch_number, session_id, quality_score, quality_issues,
+-- tags_applied. Use ALTER TABLE to add these to existing production table.
+-- NOTE: enrichment_log is created via migration scripts, not here, because
+-- production already has the table. This comment documents the full schema.
+
+-- Entity knowledge: reusable research about artists, venues, festivals, promoters.
+-- Broader than artist_info (which remains as legacy with 2 rows).
+-- canonical_name is lowercased for case-insensitive matching.
+CREATE TABLE IF NOT EXISTS entity_knowledge (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  entity_type TEXT NOT NULL,          -- 'artist' | 'venue' | 'festival' | 'promoter'
+  name TEXT NOT NULL,
+  canonical_name TEXT,                -- lowercased for matching
+  bio TEXT,
+  genre TEXT,                         -- JSON array
+  notable_works TEXT,
+  career_highlights TEXT,
+  active_since INTEGER,
+  athens_context TEXT,                -- Athens-specific notes
+  fun_facts TEXT,
+  source TEXT,
+  source_url TEXT,
+  confidence TEXT DEFAULT 'medium',   -- 'high' | 'medium' | 'low'
+  last_verified TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now')),
+  UNIQUE(entity_type, canonical_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_ek_type_name ON entity_knowledge(entity_type, canonical_name);
+
+-- Knowledge feedback: corrections, additions, staleness reports for entity data.
+-- Processed flag tracks whether feedback has been applied to the entity record.
+CREATE TABLE IF NOT EXISTS knowledge_feedback (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  entity_id INTEGER REFERENCES entity_knowledge(id),
+  event_id TEXT,
+  session_id TEXT,
+  feedback_type TEXT NOT NULL,       -- 'correction' | 'addition' | 'stale'
+  field_name TEXT,
+  old_value TEXT,
+  new_value TEXT,
+  processed INTEGER DEFAULT 0,
+  created_at TEXT DEFAULT (datetime('now'))
+);
