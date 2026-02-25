@@ -2,13 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>Δωρεάν AI Meetup στην Αθήνα Σήμερα | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="Βρείτε 0 δωρεάν ai meetup στην Αθήνα σήμερα. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.">
+  <meta name="description" content="0 δωρεάν ai εκδηλώσεις in Athens today. Curated daily from 10+ venues. Open events highlighted.">
 
   <!-- Secondary Description: English for International Discovery -->
   <meta name="description" lang="en" content="0 cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:52.283Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.321Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -72,57 +72,71 @@
     "numberOfItems": 0,
     "itemListElement": []
   },
-  "datePublished": "2026-02-25T10:07:52.283Z",
-  "dateModified": "2026-02-25T10:07:52.283Z"
+  "datePublished": "2026-02-25T15:57:18.321Z",
+  "dateModified": "2026-02-25T15:57:18.321Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Δωρεάν AI Meetup στην Αθήνα Σήμερα</h1>
-    <p class="summary">
-      <strong>0 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>Δωρεάν AI Meetup στην Αθήνα Σήμερα</h1>
+      <p class="summary">
+        <strong>0 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -140,21 +154,21 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
-    <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
-    
+    <main>
+      
+      <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
+      <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
+      
 
-    
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -164,35 +178,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/open-ai-meetup-today.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

@@ -2,13 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>Με Εισιτήριο Show στην Αθήνα | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="Βρείτε 6 show στην Αθήνα. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.">
+  <meta name="description" content="6 εκδηλώσεις in Athens. Curated daily from 10+ venues. Open events highlighted.">
 
   <!-- Secondary Description: English for International Discovery -->
   <meta name="description" lang="en" content="6 cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:52.130Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.187Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -241,57 +241,71 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T10:07:52.130Z",
-  "dateModified": "2026-02-25T10:07:52.130Z"
+  "datePublished": "2026-02-25T15:57:18.187Z",
+  "dateModified": "2026-02-25T15:57:18.187Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Με Εισιτήριο Show στην Αθήνα</h1>
-    <p class="summary">
-      <strong>6 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>Με Εισιτήριο Show στην Αθήνα</h1>
+      <p class="summary">
+        <strong>6 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -309,379 +323,122 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
+    <main>
       
-  <article class="event-card" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Δεν θα πεθάνουμε κιόλας</a>
-    </h2>
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        <h2 class="date-group-header">Τετάρτη 25 Φεβρουαρίου</h2>
 
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Εως 2026-03-06</p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
+  <a href="/events/64336df6-red-jasper-cabaret-theatre-/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Red Jasper Cabaret Theatre</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/64336df6b74db57f?url=https%3A%2F%2Fwww.athinorama.gr%2Ftheatre%2Fperformance%2Fden_tha_pethanoume_kiolas-10088694%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Εως 2026-02-26</p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Red Jasper Cabaret Theatre</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/484df1bd27d4bed8?url=https%3A%2F%2Fwww.athinorama.gr%2Ftheatre%2Fperformance%2Frizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Louis C.K. - Ridiculous</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The house lights dim and the Christmas Theater contracts around a single figure at center stage. Louis C.K. with a microphone and whatever accumulated observations he's decided to share tonight. No props. No projected visuals. No comfort blanket of production values. Just language delivered with precision.</p>
-      <p>"Ridiculous" marks Louis C.K.'s second Athens date, continuing a European tour that's proven demand persists despite — or perhaps because of — everything that changed his career's trajectory. The comedy hasn't softened. If anything, the years since his public reckoning have sharpened the writing, adding layers of self-examination to material that was already unflinching. He's not asking for forgiveness; he's analyzing the condition.</p>
-      <p>The crowd that fills the Christmas Theater for night two has made a specific choice. They've processed the debates about separation between art and artist and decided to be present. The laughter arrives in complex waves — sometimes pure amusement, sometimes uncomfortable recognition, sometimes the particular sound of an audience not sure if they're allowed to find something funny. Louis has been working this tension for years now.</p>
-      <p>The Christmas Theater handles this show with technical competence — strong sightlines, acoustics calibrated for spoken word, seating that keeps even the distant rows connected to the stage. But the real work happens in the space between comedian and audience, that fragile transaction of trust and discomfort that defines live stand-up.</p>
-      <p>If you want comedy that provides escape, that leaves you lighter than you arrived, Louis C.K. in 2026 isn't designed for that. He's processing darkness publicly, finding humor in places most people don't want to look. But if you believe the best comedy emerges from genuine risk, from a performer willing to alienate portions of his audience in pursuit of something true — you understand why this room is full.</p>
-      <p>"Ridiculous" isn't just the title. It's the operating principle.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Thursday, February 26, 2026 |
-| **Doors** | 19:30 |
-| **Show** | 21:00 |
-| **Venue** | Christmas Theater, Athens |
-| **Price** | €40-80 depending on seating |
-| **Language** | English |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-26T19:30:00+03:00">
-          Πέμπτη 26 Φεβρουαρίου στις 19:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Christmas Theater</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€35</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/1e4add97884526f?url=https%3A%2F%2Fwww.athinorama.gr%2Ftheatre%2Fperformance%2Flouis_ck___ridiculous-10088136%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/music/geoff-tateoperation-mindcrime/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Geoff Tate@Operation Mindcrime</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The opening synthesizer wash fills the room, and you're transported to 1988. Geoff Tate steps to the microphone, and Operation Mindcrime begins its resurrection. Circus Entertainment Hub holds its breath as the concept album that defined progressive metal's possibilities unfolds in real time.</p>
-      <p>Operation Mindcrime landed in 1988 as a challenge to what metal could attempt. A political concept album following a drug-addicted assassin through revolutionary conspiracy, it married Tate's operatic vocals to arrangements that moved through movements rather than tracks. The album announced Queensryche as something beyond standard metal, a band willing to treat their genre as vehicle for ambition.</p>
-      <p>Tate carries this material with the authority of its creator. He wrote these lyrics, conceived these characters, performed these songs for audiences across decades. When he revisits Operation Mindcrime now, it's not tribute but return, the original voice delivering the original vision to audiences who may have discovered it yesterday or thirty years ago.</p>
-      <p>Circus Entertainment Hub provides the scale this production requires. The venue handles the dynamic range the material demands, from whispered passages to full orchestral assault. The staging respects the album's narrative arc, visual elements supporting rather than distracting from the musical story.</p>
-      <p>The crowd tonight spans the generations that Operation Mindcrime has gathered. Some were there in 1988, buying the album on vinyl or cassette, playing it until they knew every word. Others discovered it through the ongoing metal conversation, understanding its influence before experiencing it directly. What unites them is recognition of what the album attempted and achieved.</p>
-      <p>The performance moves through the album's sequence, honoring the original structure while allowing for the interpretive freedom that decades of performance have earned. Between movements, Tate provides context that deepens understanding without interrupting flow.</p>
-      <p>If you need contemporary sounds and current trends, Operation Mindcrime delivers deliberate anachronism. This is a performance that argues for the album's ongoing relevance through the quality of its execution. But if you've been waiting to hear these songs from the voice that invented them, if you understand why this album mattered and want to experience that mattering live, you find your way to Circus.</p>
-      <p>Geoff Tate performs Operation Mindcrime: 1988 lives in 2026.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Δεν θα πεθάνουμε κιόλας</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Red Jasper Cabaret Theatre</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Thursday, April 2, 2026 |
-| **Venue** | Circus Entertainment Hub |
-| **Price** | Check venue |
-| **Getting there** | Check venue for location |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-04-02T20:00:00+03:00">
-          Πέμπτη 2 Απριλίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Circus Entertainment Hub</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€30</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/1b6f76804993183f?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fmusic%2Fgeoff-tateoperation-mindcrime%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="Εως 2026-03-06">
+  </a>
 
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/happenings/festival/cat-festival-2026/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Cat Festival 2026</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The old tram depot has transformed overnight. Stages emerge from industrial corners, food stalls line the central corridor, and everywhere — cats. Murals, sculptures, costumes, the feline aesthetic infiltrating every surface. You've entered Cat Festival, and Athens is celebrating something genuinely strange.</p>
-      <p>The Palaio Amaxostasio OSY provides the setting this festival deserves. The historic tram depot's industrial bones create atmosphere that new construction couldn't replicate. High ceilings allow sound to travel, while distinct spaces offer variety — move from stage to stage, from vendor to vendor, from experience to experience without leaving the site.</p>
-      <p>Cat Festival brings together music, art, and Athens' peculiar ability to make festivals feel like parties you stumbled into rather than events you bought tickets for. The lineup spans genres, the art installations reward exploration, the food options fuel extended stays. The cat theme provides organizing principle without demanding explanation — Athens loves its cats, festivals love themes, the synthesis makes its own sense.</p>
-      <p>Multiple stages mean programming runs simultaneous rather than sequential. You'll miss things while watching other things. This is the festival's gift — forcing choices that make each person's experience unique. The decisions you make shape your night. The stages you skip become stories other people tell you later.</p>
-      <p>The crowd at Greek festivals carries particular energy. Families early, young adults later, the demographic shifting as hours pass. Everyone seems to know someone, the small world of Athens nightlife collapsing into encounters and reunions. By midnight the stranger-to-friend conversion rate exceeds normal event parameters.</p>
-      <p>If you need predictable scheduling or comprehensive coverage, Cat Festival's sprawl will frustrate your completionist instincts. The experience here rewards wandering over planning, discovery over optimization. But if you've been seeking festivals that feel organic rather than corporate, where the venues matter as much as the lineup — the old tram depot holds this particular celebration.</p>
-      <p>Cat Festival 2026 — where Athens celebrates its strangest enthusiasms.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+  <a href="/events/484df1bd-red-jasper-cabaret-theatre-/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
+      
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Saturday, April 25, 2026 |
-| **Time** | All day and evening |
-| **Venue** | Palaio Amaxostasio OSY (Old Tram Depot) |
-| **Format** | Multi-stage festival |
-| **Price** | Check organizers |
-| **Prepare for** | Walking, exploring |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-04-25T10:00:00+03:00">
-          Σάββατο 25 Απριλίου στις 10:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Παλιό Αμαξοστάσιο ΟΣΥ</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/cat-festival-2026-2026-04-25?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fhappenings%2Ffestival%2Fcat-festival-2026%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/cat-festival-2026-2026-04-25?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fhappenings%2Ffestival%2Fcat-festival-2026%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/?utm_source=agentathens&utm_medium=referral&utm_campaign=show" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ένας καταπληκτικός καταθλιπτικός</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The title announces depression with exclamation mark. "An Amazing Depressive!" enters Art 63 like a paradox the moment demands examining. The performance promises comedy sourced from mental health, from the specific dark humor that people living with depression develop as survival tool.</p>
-      <p>The show likely explores how depression and creativity coexist, how mental illness can become asset in artistic hands, how naming darkness sometimes requires humor. The monologue format means one person carrying the whole emotional weight — the intensity of solo performance amplifying the intimacy of the subject.</p>
-      <p>Art 63 provides the appropriate setting for performance that centers psychological difficulty. The venue's track record with intelligent programming means audiences arrive expecting sophistication. The intimate scale creates uncomfortable proximity — you can't hide from the performance's directness, and the performer can't hide from your recognition.</p>
-      <p>The show will likely move between funny and devastating. The jokes will catch you laughing at moments you feel guilty laughing. The serious passages will hit harder because the context was just laughter. The performance refuses register consistency — it lets you feel the complexity of living with depression, the way pain and humor coexist in actually lived experience.</p>
-      <p>The crowd arrives predisposed to engagement with mental health content. People with direct experience seeking recognition. Theater enthusiasts respecting work that takes emotional risks. Those interested in how comedy can handle serious subjects. The conversations after the show will extend longer than typical comedy setups.</p>
-      <p>If you need light entertainment or performances that maintain emotional distance, "An Amazing Depressive!" will demand vulnerability. The show announces its subject, your entry a statement. But if you've been seeking performances that honor the complexity of living with mental illness — Art 63 holds this particular recognition.</p>
-      <p>An Amazing Depressive — comedy from the depths.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Red Jasper Cabaret Theatre</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------| 
-| **Date** | Wednesday, December 2, 2026 |
-| **Time** | Evening |
-| **Venue** | Art 63 |
-| **Title** | An Amazing Depressive! |
-| **Genre** | Comedy / Monologue |
-| **Content** | Mental health-focused |
-| **Language** | Greek |
-| **Price** | Check venue |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-12-02T21:00:00+03:00">
-          Τετάρτη 2 Δεκεμβρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Art 63</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Show</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€17</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/53fd6789904b3cfb?url=https%3A%2F%2Fwww.athinorama.gr%2Ftheatre%2Fperformance%2Fenas_katapliktikos_katathliptikos-10082932%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dshow" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-    </section>
-    
+    <meta itemprop="description" content="Εως 2026-02-26">
+  </a>
+<h2 class="date-group-header">Πέμπτη 26 Φεβρουαρίου</h2>
 
-    
+  <a href="/events/1e4add97-christmas-theater-louis-c-k-ridiculous/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Louis C.K. - Ridiculous</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-26T19:30:00+03:00">Πέμπτη 26 Φεβρουαρίου στις 19:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Christmas Theater</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€35</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλλ">
+  </a>
+<h2 class="date-group-header">Πέμπτη 2 Απριλίου</h2>
+
+  <a href="/events/1b6f7680-circus-entertainment-hub-geoff-tate-operation-mindcrime/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Geoff Tate@Operation Mindcrime</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-04-02T20:00:00+03:00">Πέμπτη 2 Απριλίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Circus Entertainment Hub</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€30</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="2 Απριλιου Geoff Tate@Operation Mindcrime Circus Entertainment Hub">
+  </a>
+<h2 class="date-group-header">Σάββατο 25 Απριλίου</h2>
+
+  <a href="/events/cat-fest--cat-festival-2026/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Cat Festival 2026</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-04-25T10:00:00+03:00">Σάββατο 25 Απριλίου στις 10:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Παλιό Αμαξοστάσιο ΟΣΥ</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Γάτα Φεστιβάλ Γατα Φεστιβαλ Cat festival αμαξοστασιο συναυλίες, stand up, δραστηριοτητες για παιδια, ομιλίες φιλοζωικές">
+  </a>
+<h2 class="date-group-header">Τετάρτη 2 Δεκεμβρίου</h2>
+
+  <a href="/events/53fd6789-art-63-/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">✨</span>
+      <span class="card-badge" style="background: var(--color-show)">SHOW</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ένας καταπληκτικός καταθλιπτικός</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-12-02T21:00:00+03:00">Τετάρτη 2 Δεκεμβρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Art 63</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€17</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="του Αντώνη Καλομοιράκη. Ο Ευτύχης είναι ένας life coach που γράφει βιβλία αυτοβελτίωσης, δίνει συμβουλές ζωής μεγάλης αξίας και πιστεύει ότι όλα στη ζωή είναι θ">
+  </a>
+      </section>
+      
+
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -692,35 +449,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/with-ticket-show.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

@@ -2,13 +2,12 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Mindstone Athens April AI Meetup | Epignosis HQ | agent-athens</title>
-  <meta name="description" content="Please Note: This event is advertised on multiple platforms. Please RSVP and get a ticket on Mindstone to view the agenda and guarantee a spot.
-
-
-Welcome to the">
+  <meta name="description" content="The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Updated daily.">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/3017f4e5-epignosis-hq-mindstone-athens-april-ai-meetup/">
@@ -85,17 +84,14 @@ Welcome to the most electrifying and ground-breaking A">
   </script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    .breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #2980b9; text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
 
     .event-header { margin-bottom: 30px; }
     .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: #666; font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: #2980b9; color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
+    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
+    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
     .type-badge.exhibition { background: #10b981; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
 
@@ -103,54 +99,81 @@ Welcome to the most electrifying and ground-breaking A">
     .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
     .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
 
-    .event-connections { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; color: #2980b9; text-decoration: none; margin-bottom: 8px; }
-    .event-connections a:hover { text-decoration: underline; }
+    .event-connections a { display: block; margin-bottom: 8px; }
 
     .related-events { margin: 30px 0; }
     .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
     .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid #eee; }
-    .related-events a { color: #2980b9; text-decoration: none; }
-    .related-events a:hover { text-decoration: underline; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
   </style>
 </head>
 <body>
-  <nav class="breadcrumb">
-    <a href="/">agent-athens</a>
-    
-    › Epignosis HQ
-  </nav>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  <article class="event-detail" itemscope itemtype="https://schema.org/Event">
-    <header class="event-header">
-      <span class="type-badge">meetup</span>
+  <div class="event-page-content">
+    <nav class="breadcrumb">
+      <a href="/">agent-athens</a>
       
-      <h1 itemprop="name">Mindstone Athens April AI Meetup</h1>
-      <p class="event-meta-inline">
-        <time itemprop="startDate" datetime="2026-04-21T18:30:00">Τρίτη 21 Απριλίου στις 18:30</time>
-        
-        | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Epignosis HQ</span></span>
-      </p>
-    </header>
+      › Epignosis HQ
+    </nav>
 
-    <section class="event-description" itemprop="description">
-      <p>The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Epignosis headquarters smells like fresh coffee and the particular ozone tang of too many laptops running in one room. By half past six on a Tuesday evening, the chairs are filling with people who still have their work backpacks on, laptops half-open, Slack notifications pinging as they settle in for one of Athens's longest-running monthly AI gatherings.</p>
+    <article class="event-detail" itemscope itemtype="https://schema.org/Event">
+      <header class="event-header">
+        <span class="type-badge">meetup</span>
+        
+        <h1 itemprop="name">Mindstone Athens April AI Meetup</h1>
+        <p class="event-meta-inline">
+          <time itemprop="startDate" datetime="2026-04-21T18:30:00">Τρίτη 21 Απριλίου στις 18:30</time>
+          
+          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Epignosis HQ</span></span>
+        </p>
+      </header>
+
+      <section class="event-description" itemprop="description">
+        <p>The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Epignosis headquarters smells like fresh coffee and the particular ozone tang of too many laptops running in one room. By half past six on a Tuesday evening, the chairs are filling with people who still have their work backpacks on, laptops half-open, Slack notifications pinging as they settle in for one of Athens's longest-running monthly AI gatherings.</p>
 <p>Mindstone's April meetup follows a rhythm the regulars already know. There will be talks -- sometimes a deep technical walkthrough of a model architecture, sometimes a live demo where something breaks and the room collectively troubleshoots, sometimes an open discussion where the format loosens and people argue about inference costs or whether the latest open-source release actually changes anything. The exact agenda lands closer to the date. What stays consistent is the room itself: a working ed-tech company's headquarters in central Athens, borrowed for the evening and filled with people who spend their days inside neural networks, training pipelines, and product backlogs.</p>
 <p>The crowd here is not uniform. You will find ML engineers who want to talk about quantization techniques sitting next to startup founders who want to understand what is actually feasible to build on a seed budget. Data scientists from Greek enterprises rub shoulders with freelance developers who picked up PyTorch six months ago and are trying to figure out what to do with it. The conversations between talks are often where the real density lives -- someone sketching a system diagram on a napkin, two people discovering they have been independently working on similar retrieval-augmented pipelines, a quick exchange of GitHub handles.</p>
 <p>If you work with AI daily and want a room where you can speak in acronyms without explaining them, this is that room. If you are earlier in the journey -- maybe you have completed some courses, built a side project, and want to see what practitioners in Athens are actually shipping -- this is equally your room. The community has been growing month over month as the city's AI ecosystem expands, and the meetup reflects that gradient of experience without gatekeeping it.</p>
 <p>There is no entrance fee. You register through the Mindstone platform to claim your spot, and spots do fill as the community has scaled. Epignosis provides the space, which means the infrastructure is solid -- good wifi, a proper screen, enough power outlets for the laptop-dependent crowd.</p>
 <p>The evening tends to wind down organically. After the scheduled content wraps, clusters of people drift toward continued conversation, sometimes spilling out to nearby streets where the restaurant and bar density makes extending the night easy. Bring a charger. Your phone battery will not survive the networking.</p>
-      <div class="enriched-badge">AI-enriched content</div>
-    </section>
-    
+        <div class="enriched-badge">AI-enriched content</div>
+      </section>
+      
 
-    
+      
   <section class="event-practical" aria-label="Πρακτικές πληροφορίες">
     <h3>Πρακτικές Πληροφορίες</h3>
     <dl class="practical-grid">
@@ -177,33 +200,100 @@ Welcome to the most electrifying and ground-breaking A">
       </div>
     </dl>
     <style>
-      .event-practical { margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
-      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: #333; }
+      .event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
+      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
       .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 0; }
       .practical-item { display: flex; flex-direction: column; }
-      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: #666; margin-bottom: 4px; }
-      .practical-item dd { margin: 0; font-size: 1rem; color: #333; }
+      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
+      .practical-item dd { margin: 0; font-size: 1rem; }
       .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
     </style>
   </section>
 
-    <nav class="event-connections" aria-label="Σχετικές σελίδες">
-      <h3>Εξερευνήστε περισσότερα</h3>
-      <a href="/venues/epignosis-hq/">Περισσότερες εκδηλώσεις στο Epignosis HQ</a>
-    </nav>
+      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+        <h3>Εξερευνήστε περισσότερα</h3>
+        <a href="/venues/epignosis-hq/">Περισσότερες εκδηλώσεις στο Epignosis HQ</a>
+      </nav>
 
-    
-  </article>
+      
+    </article>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
+      </p>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

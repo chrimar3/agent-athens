@@ -2,10 +2,12 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Release Athens 2026 / Limp Bizkit | Πλατεία Νερού | agent-athens</title>
-  <meta name="description" content="15 Ιουνιου Release Athens 2026 / Limp Bizkit Πλατεια Νερου, Φαληρο">
+  <meta name="description" content="Limp Bizkit arrives at Piazza Nerú as a statement about what rock meant to Millennials and what it still means to the people who... Updated daily.">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/84c0516f--release-athens-2026-limp-bizkit/">
@@ -81,17 +83,14 @@
   </script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    .breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #2980b9; text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
 
     .event-header { margin-bottom: 30px; }
     .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: #666; font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: #2980b9; color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
+    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
+    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
     .type-badge.exhibition { background: #10b981; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
 
@@ -99,44 +98,71 @@
     .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
     .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
 
-    .event-connections { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; color: #2980b9; text-decoration: none; margin-bottom: 8px; }
-    .event-connections a:hover { text-decoration: underline; }
+    .event-connections a { display: block; margin-bottom: 8px; }
 
     .related-events { margin: 30px 0; }
     .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
     .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid #eee; }
-    .related-events a { color: #2980b9; text-decoration: none; }
-    .related-events a:hover { text-decoration: underline; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
   </style>
 </head>
 <body>
-  <nav class="breadcrumb">
-    <a href="/">agent-athens</a>
-     › <a href="/concerts/">Συναυλία</a>
-    › Πλατεία Νερού
-  </nav>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-    <header class="event-header">
-      <span class="type-badge">Συναυλία</span>
-      
-      <h1 itemprop="name">Release Athens 2026 / Limp Bizkit</h1>
-      <p class="event-meta-inline">
-        <time itemprop="startDate" datetime="2026-06-15T20:00:00+03:00">Δευτέρα 15 Ιουνίου στις 20:00</time>
+  <div class="event-page-content">
+    <nav class="breadcrumb">
+      <a href="/">agent-athens</a>
+       › <a href="/concerts/">Συναυλία</a>
+      › Πλατεία Νερού
+    </nav>
+
+    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
+      <header class="event-header">
+        <span class="type-badge">Συναυλία</span>
         
-        | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Πλατεία Νερού</span></span>
-      </p>
-    </header>
+        <h1 itemprop="name">Release Athens 2026 / Limp Bizkit</h1>
+        <p class="event-meta-inline">
+          <time itemprop="startDate" datetime="2026-06-15T20:00:00+03:00">Δευτέρα 15 Ιουνίου στις 20:00</time>
+          
+          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Πλατεία Νερού</span></span>
+        </p>
+      </header>
 
-    <section class="event-description" itemprop="description">
-      <p>Limp Bizkit arrives at Piazza Nerú as a statement about what rock meant to Millennials and what it still means to the people who followed them from 1997 forward. You're watching a band that defined the boundary between rock and hip-hop, then spent 20 years proving they understood both sides of that line. The 1999-2001 albums still matter to the people who lived through them. The newer material proves they're not relying on nostalgia.</p>
+      <section class="event-description" itemprop="description">
+        <p>Limp Bizkit arrives at Piazza Nerú as a statement about what rock meant to Millennials and what it still means to the people who followed them from 1997 forward. You're watching a band that defined the boundary between rock and hip-hop, then spent 20 years proving they understood both sides of that line. The 1999-2001 albums still matter to the people who lived through them. The newer material proves they're not relying on nostalgia.</p>
 <p>Fred Durst and the band operate with the understanding that this isn't about showing up and playing hits. The performance is invested: the energy is specific, the setlist balances hits against deep cuts, the band interacts with the crowd as if they're actually together, not separated by a stage. The DJ (part of Limp Bizkit's core identity) adds another layer — the show is band plus production, not band fronted by production.</p>
 <p>The crowd at a 2026 Limp Bizkit show is specific: the original fans (now mid-40s), younger people discovering them through parents or streaming, tourists for whom "Nookie" is culturally significant. Mixed genders, mixed ages, mostly couples or friend groups. High energy but not aggressive. Everyone here has processed that this band spent years being written off and is back making music that matters to people who understand the genre.</p>
 <p>Piazza Nerú is water-facing, open-air, large enough for multiple bands across a day. The sound system is festival-grade. The light show is coordinated. By 21:00 the space is full and the energy is aligned. The crowd feels like a community rather than an audience — people moved here together over the course of the day.</p>
@@ -147,9 +173,9 @@
 | **Sound** | Live rock band with DJ elements, festival sound system |
 | **Door** | Festival entry |</p>
 <p>If you need intimate performance, festival stages don't provide it. But if you want to understand what Limp Bizkit means to the people who followed them from the beginning — if you want to see a band that's earned the right to command a crowd this size and knows it — this is the specific moment.</p>
-      <div class="enriched-badge">AI-enriched content</div>
-    </section>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
+        <div class="enriched-badge">AI-enriched content</div>
+      </section>
+      <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Monday, June 15, 2026 |
 | **Doors** | 15:00 (gates) |
@@ -163,7 +189,7 @@
 | **Payment** | Cards and cash |
 | **Good to know** | Limp Bizkit typically plays late (21:00+) on festival schedules. Confirm setlist/timing on day-of. The crowd for their set will be the festival's largest — arrive early to main stage if you want good positioning. |</div>
 
-    
+      
   <section class="event-practical" aria-label="Πρακτικές πληροφορίες">
     <h3>Πρακτικές Πληροφορίες</h3>
     <dl class="practical-grid">
@@ -194,23 +220,23 @@
       </div>
     </dl>
     <style>
-      .event-practical { margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
-      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: #333; }
+      .event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
+      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
       .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 0; }
       .practical-item { display: flex; flex-direction: column; }
-      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: #666; margin-bottom: 4px; }
-      .practical-item dd { margin: 0; font-size: 1rem; color: #333; }
+      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
+      .practical-item dd { margin: 0; font-size: 1rem; }
       .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
     </style>
   </section>
 
-    <nav class="event-connections" aria-label="Σχετικές σελίδες">
-      <h3>Εξερευνήστε περισσότερα</h3>
-      <a href="/concerts/">Όλες οι Συναυλία</a>
-      <a href="/venues//">Περισσότερες εκδηλώσεις στο Πλατεία Νερού</a>
-    </nav>
+      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+        <h3>Εξερευνήστε περισσότερα</h3>
+        <a href="/concerts/">Όλες οι Συναυλία</a>
+        <a href="/venues//">Περισσότερες εκδηλώσεις στο Πλατεία Νερού</a>
+      </nav>
 
-    
+      
     <section class="related-events">
       <h3>Επόμενες εκδηλώσεις στο Πλατεία Νερού</h3>
       <ul>
@@ -221,17 +247,84 @@
         <li><a href="/events/5e228903--release-athens-2026-x-snf-nostos-gorillaz/">RELEASE ATHENS 2026 X SNF NOSTOS / GORILLAZ</a> - Πέμπτη 25 Ιουνίου</li>
       </ul>
     </section>
-  </article>
+    </article>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
+      </p>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

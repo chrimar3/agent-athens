@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>Εκθέσεις στην Αθήνα | agent-athens</title>
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:52.338Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.365Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -297,55 +297,45 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T10:07:52.338Z",
-  "dateModified": "2026-02-25T10:07:52.338Z"
+  "datePublished": "2026-02-25T15:57:18.365Z",
+  "dateModified": "2026-02-25T15:57:18.365Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Εκθέσεις στην Αθήνα</h1>
-    <p class="summary">
-      <strong>8 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
 
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
@@ -364,15 +354,39 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>Εκθέσεις στην Αθήνα</h1>
+      <p class="summary">
+        <strong>8 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -390,434 +404,154 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
+    <main>
       
-  <article class="event-card enriched exhibition currently-open" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα
-    </h2>
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        <h2 class="date-group-header">Τετάρτη 25 Φεβρουαρίου</h2>
 
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>You walk through the converted warehouse on Pireos Street and the scale of what MIET has collected becomes apparent. Room after room of Greek art spanning a century — canvases that trace the country's visual evolution from traditionalism through modernism and into contemporary expression. The walls hold more than paintings; they hold arguments about what Greek art should be.</p>
-      <p>The Benaki Museum at Pireos houses MIET's permanent collection of 20th-century Greek art — an assembly that functions as both education and provocation. You'll find works by artists whose names anchor any serious conversation about Greek modernism, alongside pieces by figures who remain underappreciated beyond specialist circles. The chronological arrangement creates its own narrative, each room representing a different moment in the country's cultural self-definition.</p>
-      <p>The visitors here move differently than typical museum crowds. These are people who pause at specific works, who return to earlier rooms after seeing what came later, who understand that collections tell stories through juxtaposition. Art students with notebooks share space with older visitors who remember when some of these works first appeared. The quiet is purposeful, the attention genuine.</p>
-      <p>The Pireos branch of the Benaki provides the industrial shell this collection needs. High ceilings accommodate larger works without overwhelming them. Natural light from the converted warehouse spaces changes throughout the day, offering different perspectives on the same pieces. The building's former life as a working space adds layers to experiencing art made during periods when Greece was itself being rebuilt.</p>
-      <p>If you want international celebrity names and blockbuster exhibitions, this collection will seem local and unfamiliar. The focus here is specifically Greek — the questions these artists asked about identity, tradition, and modernity emerged from a particular history. But if you're ready to understand what 20th-century Greek artists were wrestling with, how they positioned themselves between East and West, tradition and rupture — this collection rewards the investment.</p>
-      <p>A century of Greek art arguing with itself about what Greek art should become.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+  <a href="/events/580fe29c-138-20/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      <span class="card-badge-open">ΑΝΟΙΧΤΗ</span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Wednesday, February 25, 2026 |
-| **Hours** | 10:00-18:00 |
-| **Venue** | Benaki Museum Pireos, Pireos 138 |
-| **Getting there** | Kerameikos Metro (Blue line), 10 min walk |
-| **Admission** | Standard museum entry |</div>
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          25 Φεβ - 26 Απρ <span class="open-now-badge">Τώρα ανοιχτή</span>
-        </time>
-        <meta itemprop="endDate" content="2026-04-26">
-      </dd>
-
-      
-      <dt>Ωράριο:</dt>
-      <dd>Σήμερα: 10:00-18:00</dd>
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μουσείο Μπενάκη - Πειραιώς 138</span>
-         (Γκάζι)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">Με εισιτήριο</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card exhibition currently-open" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25T10:00:00">
-          25 Φεβ - Συνεχίζεται <span class="open-now-badge">Τώρα ανοιχτή</span>
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μουσείο Μπενάκη - Πειραιώς 138</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">Με εισιτήριο</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/onassis-stegi?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Yorgos Lanthimos: Photographs</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Photographs from the past five years by acclaimed filmmaker Yorgos Lanthimos, including work made around film productions and soundstage environments, alongside a distinct series created in Athens and the Aegean.</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-07T11:00:00">
-          7 Μαρ - Συνεχίζεται
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/1b7ed35a3b33c973?url=https%3A%2F%2Fwww.onassis.org%2Fonassis-stegi%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/el/whats-on/heart?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">By Heart | Tiago Rodrigues</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Θέατρο</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-05-12">
-          12 Μαΐ - Συνεχίζεται
-        </time>
-        
-      </dd>
-
-      
-      <dt>Ωράριο:</dt>
-      <dd>Σήμερα: 11:00-20:00</dd>
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-         (Κουκάκι)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/0573ab33c1544927?url=https%3A%2F%2Fwww.onassis.org%2Fel%2Fwhats-on%2Fheart%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/el/whats-on/heart?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">By Heart | Tiago Rodrigues</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Θέατρο</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-05-12T11:00:00">
-          12 Μαΐ - Συνεχίζεται
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/2b3e9206ffe9f074?url=https%3A%2F%2Fwww.onassis.org%2Fel%2Fwhats-on%2Fheart%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Yorgos Lanthimos: Photographs</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>"Yorgos Lanthimos: Photographs" opens at Onassis Stegi in Athens on May 17, 2026. This exhibition presents the acclaimed Greek filmmaker's photography work at one of Athens' premier cultural venues.</p>
-      <p>Yorgos Lanthimos has earned international recognition through films including "The Favourite," "Poor Things," and "The Lobster." His visual sensibility extends to photography, offering audiences insight into the director's eye beyond cinema.</p>
-      <p>Onassis Stegi provides world-class exhibition spaces suited to presenting work from artists of this caliber. The venue's commitment to contemporary culture aligns with Lanthimos's artistic vision.</p>
-      <p>This exhibition offers rare opportunity to experience Lanthimos's photography at one of Athens' most distinguished cultural venues.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">25 Φεβ - 26 Απρ · Ανοιχτή</time><meta itemprop="endDate" content="2026-04-26"></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μουσείο Μπενάκη - Πειραιώς 138 · Γκάζι</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-05-17">
-          17 Μαΐ - Συνεχίζεται
-        </time>
-        
-      </dd>
-
-      
-      <dt>Ωράριο:</dt>
-      <dd>Σήμερα: 11:00-20:00</dd>
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-         (Κουκάκι)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/299d3c7b29579f17?url=https%3A%2F%2Fwww.onassis.org%2Fel%2Fwhats-on%2Fyorgos-lanthimos-photographs%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmak">
+  </a>
 
-  <article class="event-card exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Yorgos Lanthimos: Photographs</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Έκθεση</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-05-17T11:00:00">
-          17 Μαΐ - Συνεχίζεται
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/ba1cb764c001ee17?url=https%3A%2F%2Fwww.onassis.org%2Fel%2Fwhats-on%2Fyorgos-lanthimos-photographs%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+  <a href="/events/8787e304-138-20/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      <span class="card-badge-open">ΑΝΟΙΧΤΗ</span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25T10:00:00">25 Φεβ - Συνεχίζεται · Ανοιχτή</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μουσείο Μπενάκη - Πειραιώς 138</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmak">
+  </a>
+<h2 class="date-group-header">Σάββατο 7 Μαρτίου</h2>
 
-  <article class="event-card exhibition" itemscope itemtype="https://schema.org/ExhibitionEvent">
-    <h2 itemprop="name">
-      <a href="https://www.onassis.org/el/whats-on/ongoing-tilda-swinton?utm_source=agentathens&utm_medium=referral&utm_campaign=exhibition" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ongoing | Tilda Swinton</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">Έκθεση</p>
-    
-
-    <dl class="event-meta">
-      <dt>Διάρκεια:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-06-28T11:00:00">
-          28 Ιουν - Συνεχίζεται
-        </time>
-        
-      </dd>
-
+  <a href="/events/1b7ed35a-onassis-stegi-yorgos-lanthimos-photographs/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Onassis Stegi</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Έκθεση</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/13c8a305c6f66494?url=https%3A%2F%2Fwww.onassis.org%2Fel%2Fwhats-on%2Fongoing-tilda-swinton%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dexhibition" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Yorgos Lanthimos: Photographs</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-07T11:00:00">7 Μαρ - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-    </section>
-    
+    <meta itemprop="description" content="Photographs from the past five years by acclaimed filmmaker Yorgos Lanthimos, including work made around film productions and soundstage environments, alongside">
+  </a>
+<h2 class="date-group-header">Τρίτη 12 Μαΐου</h2>
 
-    
+  <a href="/events/0573ab33-onassis-stegi-by-heart-tiago-rodrigues/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">By Heart | Tiago Rodrigues</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-05-12">12 Μαΐ - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi · Κουκάκι</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Θέατρο">
+  </a>
+
+  <a href="/events/2b3e9206-onassis-stegi-by-heart-tiago-rodrigues/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">By Heart | Tiago Rodrigues</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-05-12T11:00:00">12 Μαΐ - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Θέατρο">
+  </a>
+<h2 class="date-group-header">Κυριακή 17 Μαΐου</h2>
+
+  <a href="/events/299d3c7b-onassis-stegi-yorgos-lanthimos-photographs/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Yorgos Lanthimos: Photographs</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-05-17">17 Μαΐ - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi · Κουκάκι</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Έκθεση">
+  </a>
+
+  <a href="/events/ba1cb764-onassis-stegi-yorgos-lanthimos-photographs/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Yorgos Lanthimos: Photographs</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-05-17T11:00:00">17 Μαΐ - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Έκθεση">
+  </a>
+<h2 class="date-group-header">Κυριακή 28 Ιουνίου</h2>
+
+  <a href="/events/13c8a305-onassis-stegi-ongoing-tilda-swinton/" class="event-card" itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ongoing | Tilda Swinton</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-06-28T11:00:00">28 Ιουν - Συνεχίζεται</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Onassis Stegi</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Έκθεση">
+  </a>
+      </section>
+      
+
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -828,35 +562,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/exhibitions.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

@@ -2,10 +2,12 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Athens SEO 2026 | The Ellinikon Experience Centre | agent-athens</title>
-  <meta name="description" content="Technical SEO + AI in search. Europe-facing.">
+  <meta name="description" content="Concrete, glass, and the faint residual geometry of runways -- The Ellinikon Experience Centre sits on the site of the former Athens... Updated daily.">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/751e2253-the-ellinikon-experience-centre-athens-seo-2026/">
@@ -77,17 +79,14 @@
   </script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    .breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #2980b9; text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
 
     .event-header { margin-bottom: 30px; }
     .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: #666; font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: #2980b9; color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
+    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
+    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
     .type-badge.exhibition { background: #10b981; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
 
@@ -95,55 +94,82 @@
     .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
     .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
 
-    .event-connections { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; color: #2980b9; text-decoration: none; margin-bottom: 8px; }
-    .event-connections a:hover { text-decoration: underline; }
+    .event-connections a { display: block; margin-bottom: 8px; }
 
     .related-events { margin: 30px 0; }
     .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
     .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid #eee; }
-    .related-events a { color: #2980b9; text-decoration: none; }
-    .related-events a:hover { text-decoration: underline; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
   </style>
 </head>
 <body>
-  <nav class="breadcrumb">
-    <a href="/">agent-athens</a>
-    
-    › The Ellinikon Experience Centre
-  </nav>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  <article class="event-detail" itemscope itemtype="https://schema.org/EducationEvent">
-    <header class="event-header">
-      <span class="type-badge">conference</span>
+  <div class="event-page-content">
+    <nav class="breadcrumb">
+      <a href="/">agent-athens</a>
       
-      <h1 itemprop="name">Athens SEO 2026</h1>
-      <p class="event-meta-inline">
-        <time itemprop="startDate" datetime="2026-05-22">Παρασκευή 22 Μαΐου στις 00:00</time>
-        
-        | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">The Ellinikon Experience Centre</span></span>
-      </p>
-    </header>
+      › The Ellinikon Experience Centre
+    </nav>
 
-    <section class="event-description" itemprop="description">
-      <p>Concrete, glass, and the faint residual geometry of runways -- The Ellinikon Experience Centre sits on the site of the former Athens International Airport, now in the middle of one of Europe's largest urban redevelopment projects on the southern coast. On May 22-23, this venue hosts Athens SEO 2026, a conference built at the intersection of technical search engine optimization and the AI systems that are rewriting how search works.</p>
+    <article class="event-detail" itemscope itemtype="https://schema.org/EducationEvent">
+      <header class="event-header">
+        <span class="type-badge">conference</span>
+        
+        <h1 itemprop="name">Athens SEO 2026</h1>
+        <p class="event-meta-inline">
+          <time itemprop="startDate" datetime="2026-05-22">Παρασκευή 22 Μαΐου στις 00:00</time>
+          
+          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">The Ellinikon Experience Centre</span></span>
+        </p>
+      </header>
+
+      <section class="event-description" itemprop="description">
+        <p>Concrete, glass, and the faint residual geometry of runways -- The Ellinikon Experience Centre sits on the site of the former Athens International Airport, now in the middle of one of Europe's largest urban redevelopment projects on the southern coast. On May 22-23, this venue hosts Athens SEO 2026, a conference built at the intersection of technical search engine optimization and the AI systems that are rewriting how search works.</p>
 <p>You arrive at a venue that embodies transformation -- a decommissioned airport becoming a mixed-use district -- to discuss a field undergoing its own fundamental shift. The conference addresses the technical mechanics of search visibility in an era when AI-generated answers, large language model integrations, and shifting crawl behaviors are changing the rules that SEO practitioners have relied on for a decade. The content is Europe-facing, drawing speakers and attendees who work across markets with different languages, regulations, and search behaviors.</p>
 <p>The sessions go deep into the plumbing: structured data, crawl budget optimization, log file analysis, Core Web Vitals, and the emerging question of how to maintain visibility when search engines increasingly synthesize answers rather than serve links. The AI thread runs through the program not as a separate track but as an integrated concern -- because for anyone working in search today, the AI layer is no longer optional context.</p>
 <p>The Ellinikon Experience Centre provides a modern, purpose-built event space that reflects the ambition of the surrounding development project. Located in the southern Athens suburb of Ellinikon, the venue is accessible via the tram line that runs along the coast or by car from the city center. The coastal location means breaks between sessions come with glimpses of the Saronic Gulf, and the late-May weather makes outdoor networking areas genuinely usable.</p>
 <p>The two-day format allows the program to layer foundational technical sessions on day one with more advanced and speculative content on day two. The European orientation of the conference means the case studies reflect the complexity of multi-market, multi-language SEO -- not just the English-language, US-centric perspective that dominates many search conferences.</p>
 <p>If you work in technical SEO and need to understand how AI is reshaping search infrastructure, ranking systems, and content discovery, this conference addresses your professional reality directly. If your interest in SEO is primarily content strategy or brand marketing without a technical foundation, the depth of the sessions will outpace you.</p>
 <p>The Ellinikon site carries a particular atmosphere in late May -- open sky, sea air, and the visible evidence of a coastline being reimagined. Between sessions, the scale of the surrounding construction project serves as an unintentional metaphor for the industry under discussion: familiar ground, fundamentally restructured.</p>
-      <div class="enriched-badge">AI-enriched content</div>
-    </section>
-    
+        <div class="enriched-badge">AI-enriched content</div>
+      </section>
+      
 
-    
+      
   <section class="event-practical" aria-label="Πρακτικές πληροφορίες">
     <h3>Πρακτικές Πληροφορίες</h3>
     <dl class="practical-grid">
@@ -162,33 +188,100 @@
       </div>
     </dl>
     <style>
-      .event-practical { margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
-      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: #333; }
+      .event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
+      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
       .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 0; }
       .practical-item { display: flex; flex-direction: column; }
-      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: #666; margin-bottom: 4px; }
-      .practical-item dd { margin: 0; font-size: 1rem; color: #333; }
+      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
+      .practical-item dd { margin: 0; font-size: 1rem; }
       .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
     </style>
   </section>
 
-    <nav class="event-connections" aria-label="Σχετικές σελίδες">
-      <h3>Εξερευνήστε περισσότερα</h3>
-      <a href="/venues/the-ellinikon-experience-centre/">Περισσότερες εκδηλώσεις στο The Ellinikon Experience Centre</a>
-    </nav>
+      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+        <h3>Εξερευνήστε περισσότερα</h3>
+        <a href="/venues/the-ellinikon-experience-centre/">Περισσότερες εκδηλώσεις στο The Ellinikon Experience Centre</a>
+      </nav>
 
-    
-  </article>
+      
+    </article>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
+      </p>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

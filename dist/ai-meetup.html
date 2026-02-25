@@ -2,13 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>AI Meetup στην Αθήνα | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="Βρείτε 2 ai meetup στην Αθήνα. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.">
+  <meta name="description" content="2 ai εκδηλώσεις in Athens. Curated daily from 10+ venues. Open events highlighted.">
 
   <!-- Secondary Description: English for International Discovery -->
   <meta name="description" lang="en" content="2 cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:52.283Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.320Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -129,57 +129,71 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T10:07:52.283Z",
-  "dateModified": "2026-02-25T10:07:52.283Z"
+  "datePublished": "2026-02-25T15:57:18.320Z",
+  "dateModified": "2026-02-25T15:57:18.320Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>AI Meetup στην Αθήνα</h1>
-    <p class="summary">
-      <strong>2 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>AI Meetup στην Αθήνα</h1>
+      <p class="summary">
+        <strong>2 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -197,135 +211,58 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
+    <main>
       
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.eventbrite.co.uk/e/mindstone-athens-april-ai-meetup-tickets-1980368772308?utm_source=agentathens&utm_medium=referral&utm_campaign=meetup" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Mindstone Athens April AI Meetup</a>
-    </h2>
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        <h2 class="date-group-header">Τρίτη 21 Απριλίου</h2>
 
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Epignosis headquarters smells like fresh coffee and the particular ozone tang of too many laptops running in one room. By half past six on a Tuesday evening, the chairs are filling with people who still have their work backpacks on, laptops half-open, Slack notifications pinging as they settle in for one of Athens's longest-running monthly AI gatherings.</p>
-      <p>Mindstone's April meetup follows a rhythm the regulars already know. There will be talks -- sometimes a deep technical walkthrough of a model architecture, sometimes a live demo where something breaks and the room collectively troubleshoots, sometimes an open discussion where the format loosens and people argue about inference costs or whether the latest open-source release actually changes anything. The exact agenda lands closer to the date. What stays consistent is the room itself: a working ed-tech company's headquarters in central Athens, borrowed for the evening and filled with people who spend their days inside neural networks, training pipelines, and product backlogs.</p>
-      <p>The crowd here is not uniform. You will find ML engineers who want to talk about quantization techniques sitting next to startup founders who want to understand what is actually feasible to build on a seed budget. Data scientists from Greek enterprises rub shoulders with freelance developers who picked up PyTorch six months ago and are trying to figure out what to do with it. The conversations between talks are often where the real density lives -- someone sketching a system diagram on a napkin, two people discovering they have been independently working on similar retrieval-augmented pipelines, a quick exchange of GitHub handles.</p>
-      <p>If you work with AI daily and want a room where you can speak in acronyms without explaining them, this is that room. If you are earlier in the journey -- maybe you have completed some courses, built a side project, and want to see what practitioners in Athens are actually shipping -- this is equally your room. The community has been growing month over month as the city's AI ecosystem expands, and the meetup reflects that gradient of experience without gatekeeping it.</p>
-      <p>There is no entrance fee. You register through the Mindstone platform to claim your spot, and spots do fill as the community has scaled. Epignosis provides the space, which means the infrastructure is solid -- good wifi, a proper screen, enough power outlets for the laptop-dependent crowd.</p>
-      <p>The evening tends to wind down organically. After the scheduled content wraps, clusters of people drift toward continued conversation, sometimes spilling out to nearby streets where the restaurant and bar density makes extending the night easy. Bring a charger. Your phone battery will not survive the networking.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+  <a href="/events/3017f4e5-epignosis-hq-mindstone-athens-april-ai-meetup/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🤝</span>
+      <span class="card-badge" style="background: var(--color-meetup)">MEETUP</span>
+      
     </div>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-04-21T18:30:00">
-          Τρίτη 21 Απριλίου στις 18:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Epignosis HQ</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Meetup</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-free" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">Δωρεάν είσοδος</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/3017f4e51028525a?url=https%3A%2F%2Fwww.eventbrite.co.uk%2Fe%2Fmindstone-athens-april-ai-meetup-tickets-1980368772308%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dmeetup" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/Event">
-    <h2 itemprop="name">
-      <a href="https://www.eventbrite.com/e/engineering-the-world-2026-tickets-1981954401969?utm_source=agentathens&utm_medium=referral&utm_campaign=meetup" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Engineering the World 2026</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>Red brick smokestacks rise above a complex of 19th-century gasworks buildings, their industrial silhouettes softened by the late-April light that slants across the Gazi neighborhood around five in the afternoon. Technopolis -- Athens's converted industrial museum and event campus -- is the kind of venue where you walk between sessions through open courtyards framed by preserved machinery and iron structural beams, the history of one engineering era literally surrounding the conversations about the next one.</p>
-      <p>Engineering the World runs for three days at the end of April, and its central focus is a problem that has quietly become one of the defining constraints of the current technical moment: data scarcity. The conference gathers engineers, innovators, and industry leaders who are working at the edges of what you can build when the data you need does not exist in convenient, labeled abundance. That means sessions touching synthetic data generation, few-shot and zero-shot learning approaches, transfer learning strategies, data augmentation pipelines, and the organizational challenges of building products when your training set is thin, biased, expensive to acquire, or all three at once.</p>
-      <p>The venue itself shapes the experience. Technopolis is not a single auditorium -- it is a campus of multiple buildings and outdoor areas near Keramikos metro station. You move between indoor presentation halls with high ceilings and exposed industrial architecture and open-air zones where the break conversations happen against a backdrop that reminds you engineering has always been about building with constraints. The mix of spaces means the event breathes differently than a hotel conference center. There is room to step outside, decompress, and return.</p>
-      <p>If you are an engineer or technical leader dealing with real-world data limitations -- in machine learning, in IoT, in manufacturing, in any domain where the textbook assumption of plentiful clean data collides with reality -- the program is built around your actual problems. If you are a researcher whose work touches data efficiency, or a founder building products where data acquisition cost is a line item that keeps you awake, the three-day format gives enough time to go past surface-level overviews.</p>
-      <p>This is a ticketed event, so plan accordingly. The multi-day structure starting at 17:00 each day suggests an afternoon-and-evening cadence, which means you can work during the day and arrive for focused sessions as Athens shifts into its evening energy.</p>
-      <p>The neighborhood rewards sticking around after hours. Gazi's density of restaurants, bars, and rooftop terraces sits directly outside the Technopolis gates. Three days in the same venue builds the kind of accumulating familiarity with fellow attendees that single-day events rarely achieve -- by the final evening, the conversations will be different from where they started.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Mindstone Athens April AI Meetup</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-04-21T18:30:00">Τρίτη 21 Απριλίου στις 18:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Epignosis HQ</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Δωρεάν</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-04-28T17:00:00">
-          Τρίτη 28 Απριλίου στις 17:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Τεχνόπολη</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Meetup</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/8fa3b804c0907b5a?url=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Fengineering-the-world-2026-tickets-1981954401969%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dmeetup" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/8fa3b804c0907b5a?url=https%3A%2F%2Fwww.eventbrite.com%2Fe%2Fengineering-the-world-2026-tickets-1981954401969%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dmeetup" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-    </section>
-    
+    <meta itemprop="description" content="Please Note: This event is advertised on multiple platforms. Please RSVP and get a ticket on Mindstone to view the agenda and guarantee a spot.
 
-    
+
+Welcome to the">
+  </a>
+<h2 class="date-group-header">Τρίτη 28 Απριλίου</h2>
+
+  <a href="/events/8fa3b804--engineering-the-world-2026/" class="event-card" itemscope itemtype="https://schema.org/Event">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🤝</span>
+      <span class="card-badge" style="background: var(--color-meetup)">MEETUP</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Engineering the World 2026</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-04-28T17:00:00">Τρίτη 28 Απριλίου στις 17:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Τεχνόπολη</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Where engineers, innovators and industry leaders come together for a 3-day global event to tackle Data Scarcity and build what’s next.">
+  </a>
+      </section>
+      
+
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -336,35 +273,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/ai-meetup.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

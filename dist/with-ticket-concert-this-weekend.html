@@ -2,13 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>Με Εισιτήριο Συναυλίες στην Αθήνα Αυτό το Σαββατοκύριακο | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="Βρείτε 59 συναυλίες στην Αθήνα αυτό το σαββατοκύριακο. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.">
+  <meta name="description" content="59 συναυλίες in Athens this weekend. Curated daily from 10+ venues. Open events highlighted.">
 
   <!-- Secondary Description: English for International Discovery -->
   <meta name="description" lang="en" content="59 cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:52.050Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.135Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -1725,57 +1725,71 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T10:07:52.050Z",
-  "dateModified": "2026-02-25T10:07:52.050Z"
+  "datePublished": "2026-02-25T15:57:18.135Z",
+  "dateModified": "2026-02-25T15:57:18.135Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Με Εισιτήριο Συναυλίες στην Αθήνα Αυτό το Σαββατοκύριακο</h1>
-    <p class="summary">
-      <strong>59 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>Με Εισιτήριο Συναυλίες στην Αθήνα Αυτό το Σαββατοκύριακο</h1>
+      <p class="summary">
+        <strong>59 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -1793,3063 +1807,968 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
+    <main>
       
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/music/skiadareses-1/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Σκιαδαρέσες live στο WE</a>
-    </h2>
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        <h2 class="date-group-header">Παρασκευή 27 Φεβρουαρίου</h2>
 
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
+  <a href="/events/a8be9023-we-live-we/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">WE Πολυχώρος</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/a8be9023f5ea0d46?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fmusic%2Fskiadareses-1%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/petros_gaitanos-10029517/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Πέτρος Γαϊτάνος</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Stage 7</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/cfb666d0772257af?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpetros_gaitanos-10029517%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/cfb666d0772257af?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpetros_gaitanos-10029517%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/angelika_dusk-10036905/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Angelika Dusk</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">EXA</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/d3d3fe010b8053c3?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fangelika_dusk-10036905%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/katerina_ntinou-10050361/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Κατερίνα Ντίνου</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 22:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Caja de Música</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/d6980de0eb72f0a3?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fkaterina_ntinou-10050361%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/mora_sti_fotia-10050651/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Μωρά στη φωτιά</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Κύτταρο</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€13</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/b4cd5ccee9adc7d3?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fmora_sti_fotia-10050651%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/thanos_olumpios_kai_sotiris_proiskos-10051132/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Θάνος Ολύμπιος &amp; Σωτήρης Προίσκος</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Αίθουσα Διδασκαλίας Μεγάρου Μουσικής</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/69f35feff40adfb2?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fthanos_olumpios_kai_sotiris_proiskos-10051132%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/69f35feff40adfb2?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fthanos_olumpios_kai_sotiris_proiskos-10051132%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/xatzigfragketa-10058545/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Χατζηγφραγκέτα</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 22:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Σταυρός του Νότου</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/e4cede832d1c8289?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fxatzigfragketa-10058545%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/eisboleas-10067518/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Εισβολέας</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Fuzz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/d406548e2284d3d6?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Feisboleas-10067518%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/mirela_paxou___adam_tsarouxis-10078679/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Μιρέλα Πάχου - Αδάμ Τσαρούχης</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 22:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/5fcf54f2f89a0ccb?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fmirela_paxou___adam_tsarouxis-10078679%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/pop_girlies_night_vol3-10089199/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Pop Girlies Night Vol.3</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Death Disco</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€13</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/22d71034286db915?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpop_girlies_night_vol3-10089199%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/laura_agnusdei_kai_free_piece_of_tape-10089220/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Laura Agnusdei &amp; Free Piece of Tape</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Κέντρο Ελέγχου Τηλεοράσεων</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/629c869f54864b79?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Flaura_agnusdei_kai_free_piece_of_tape-10089220%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/zorz_pilali-10024445/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ζωρζ Πιλαλί</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 22:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">ARCH Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/d46b3db6e422c6a0?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fzorz_pilali-10024445%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/amaguk-10063838/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Amaguk</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ον Off Studio</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€7</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/4235c7cee742227d?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Famaguk-10063838%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/music/eisvoleas-live/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΕΙΣΒΟΛΕΑΣ LIVE</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27">
-          Παρασκευή 27 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Fuzz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/abbac5538c6757b9?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fmusic%2Feisvoleas-live%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ομιλητής: Μιχάλης Κοσμόπουλος</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>You settle into the lecture hall at Megaron Mousikis and the academic atmosphere is palpable. This isn't performance but discourse — a space where ideas get examined in real time, where expertise meets curious audience. Michalis Kosmopoulos takes the podium with something to say.</p>
-      <p>The Megaron hosts lecture series that complement its performance calendar, offering intellectual engagement with topics that touch the arts, history, and Greek culture. Kosmopoulos speaks from a position of authority in his field, bringing specialized knowledge to an audience of engaged listeners. The format allows for depth that popular presentations sacrifice.</p>
-      <p>The crowd for Megaron lectures differs from concert audiences. You'll find academics and students, yes, but also educated general audiences who seek substantive discourse. Notebooks appear. Questions form behind attentive eyes. The silence is the productive kind — active listening rather than passive attendance. When Kosmopoulos makes a particular point, you can feel heads tilting in recognition or resistance.</p>
-      <p>The lecture halls at Megaron provide the technical infrastructure these presentations require — good acoustics, comfortable seating for extended attention, projection capabilities for visual materials. The architecture suggests seriousness of purpose without being oppressive. You're in a space designed for ideas to circulate.</p>
-      <p>If you need entertainment and spectacle, if you want passive consumption, a Megaron lecture requires too much of you. These events assume an audience willing to follow complex arguments, to sit with difficulty, to let ideas accumulate. But if you're hungry for discourse that respects your intelligence, for expertise shared generously with those prepared to receive it — this is how Athens does public intellect.</p>
-      <p>When Megaron shifts from performance to ideas, the audience leans forward instead of back.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Friday, February 27, 2026 |
-| **Time** | 19:00 |
-| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |
-| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |
-| **Price** | Often free with registration; check program |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T19:00:00+03:00">
-          Παρασκευή 27 Φεβρουαρίου στις 19:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/33d3c3e64c6d483c?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fthisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Η Αθήνα από την Ανατολή στη Δύση 1821-1896</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The Megaron's main hall fills with an audience carrying specific historical awareness. Tonight's program traces Athens through 75 years — 1821 to 1896, from revolutionary capital of a newborn nation to established European city. The music is the vehicle; the history is the destination.</p>
-      <p>"Athens 1821-1896" represents programmatic ambition. The selection spans the music that accompanied the city's transformation — from the folk melodies of a recently liberated people through the classical compositions that marked Greece's entry into European cultural life. Each piece carries context: this is what Athens sounded like during the reign of Otto, during the Megali Idea period, during the first modern Olympics.</p>
-      <p>The audience for historically-themed concerts brings particular engagement. These are listeners who understand the dates referenced, who can place musical choices in political and social context. You'll find history enthusiasts alongside music devotees, each finding different entry points into the same material. The program notes become companions to the performance.</p>
-      <p>The Megaron Mousikis provides the ceremonial weight this kind of historical project requires. The main hall's capacity and acoustic excellence match the ambition of the programming. When the orchestra plays music from a specific era, the setting amplifies the sense of occasion — this is Athens now, honoring Athens then.</p>
-      <p>If you want pure musical entertainment divorced from historical narrative, this program's scholarly framework might feel constraining. The evening works best for those who want both — beautiful music and the story it tells. But if you're curious about how Athens sounded to itself during its first 75 years as a modern capital, if you want to experience musical nation-building — this is the concert that attempts that synthesis.</p>
-      <p>Seventy-five years of a city finding its voice, performed in a hall built to carry such stories.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Σκιαδαρέσες live στο WE</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">WE Πολυχώρος</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Friday, February 27, 2026 |
-| **Doors** | 19:00 |
-| **Concert** | 20:00 |
-| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |
-| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |
-| **Price** | €12-40 |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T20:00:00+03:00">
-          Παρασκευή 27 Φεβρουαρίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/21e99b75e6d07303?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-apo-tin-anatoli-sti-dysi-1821-1896%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Η Αθήνα από την Ανατολή στη Δύση 1821-1896</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T20:30:00+03:00">
-          Παρασκευή 27 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/cfb666d0-stage-7-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/a71cd6a78384547f?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-apo-tin-anatoli-sti-dysi-1821-1896%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/a71cd6a78384547f?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-apo-tin-anatoli-sti-dysi-1821-1896%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Θησαυροί της γης και της μνήμης. Η συμβολή της Ακαδημίας Αθηνών στην ελληνική αρχαιολογία – Μιχάλης Κοσμόπουλος</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T20:30:00+03:00">
-          Παρασκευή 27 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/6a352d23019bd720?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fthisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/6a352d23019bd720?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fthisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.halfnote.gr/event/mirela-pachou-adam-tsarouxis/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΜΙΡΕΛΑ ΠΑΧΟΥ & ΑΔΑΜ ΤΣΑΡΟΥΧΗΣ - ΤΑ ΝΤΟΥΕΤΑ ΤΟΥ ΕΛΛΗΝΙΚΟΥ ΚΙΝΗΜΑΤΟΓΡΑΦΟΥ</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>You descend into Half Note and the dimensions embrace you. Tables close enough to the stage that you could hand the musicians a drink. The bar along one wall. The specific acoustic treatment that means nothing gets lost between performer and audience. Tonight, two Greek voices share this intimate stage.</p>
-      <p>Mirela Pachou and Adam Tsarouchis represent a particular strand of Greek jazz — artists who've absorbed the international vocabulary but sing in their own accent. Pachou's voice carries the influence of her Mediterranean roots into jazz phrasing. Tsarouchis brings his own approach, complementary yet distinct. Together they offer an evening of interplay that couldn't happen in larger rooms.</p>
-      <p>The Half Note crowd for a double bill like this arrives with appreciation already formed. These are listeners who follow Greek jazz specifically, who know both artists' previous work. The conversations before the show reference recordings and past performances. By the time the music starts, the room has achieved that particular focus that Half Note cultivates.</p>
-      <p>Since 1979, this venue has maintained its position as Athens' essential jazz room. The intimacy isn't compromise — it's philosophy. When Pachou leans into a quiet phrase, every seat receives it. When Tsarouchis responds, the exchange happens close enough that you're almost part of the conversation. The sound system serves rather than dominates.</p>
-      <p>If you need spectacle and production values, Half Note's scale will feel limiting. The power here comes from proximity — seeing decisions made in real time, watching musicians think out loud. But if you've been waiting for Greek jazz performed by two distinct voices in a room built for exactly this kind of musical dialogue — if you understand what Half Note represents — you find yourself here.</p>
-      <p>Two voices, one stage, a room small enough for real conversation.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Friday, February 27, 2026 |
-| **Doors** | 20:00 |
-| **Music** | 21:30 |
-| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |
-| **Getting there** | Akropoli Metro (Red line), 10 min walk |
-| **Price** | €15-20 table, €10-15 bar |
-| **Reservations** | Essential — book ahead, confirm same day |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T22:30:00">
-          Παρασκευή 27 Φεβρουαρίου στις 22:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/4d9e2f9b3cc81cc1?url=https%3A%2F%2Fwww.halfnote.gr%2Fevent%2Fmirela-pachou-adam-tsarouxis%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/jonathan-kaspar-mironas-rezo/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Jonathan Kaspar + Mironas + Rezo</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-27T23:00:00+03:00">
-          Παρασκευή 27 Φεβρουαρίου στις 23:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Dybbuk</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/748b129e4a89bfae?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fjonathan-kaspar-mironas-rezo%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/music/o-panos-blaxos-live-sto-vox/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ο ΠΑΝΟΣ ΒΛΑΧΟΣ LIVE ΣΤΟ VOX</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>VOX fills with an energy that precedes the music. You're surrounded by an audience that's already humming, already anticipating. Panos Vlachos takes the stage tonight, and the room knows what that means — Greek rock from someone who's spent years earning the right to fill this space.</p>
-      <p>Vlachos has built his reputation through the Greek rock tradition — melodic but muscular, lyrics that matter, performances that earn their crescendos. His live shows are known for the connection he builds with audiences, that particular chemistry between a performer who gives everything and crowds who receive it fully. Tonight at VOX, that exchange happens in a venue sized for impact.</p>
-      <p>The crowd carries the specific energy of Greek rock fans. These are people who've followed the scene, who know the albums and the stories, who came specifically for this artist on this night. You'll hear songs being anticipated before they begin, choruses joining in from the start. The barrier between stage and audience is more of a suggestion.</p>
-      <p>VOX provides the technical backbone these performances need. The sound system handles the full dynamic range — quiet verses that land with clarity, choruses that push into physical territory. The venue's configuration creates sightlines that work throughout the room. When Vlachos hits a particular moment, every seat receives it equally.</p>
-      <p>If you need English-language rock with international references, Greek rock operates in its own tradition that doesn't require translation — it requires presence. The music is accessible without being simple, passionate without being manipulative. But if you've been waiting to experience Greek rock at full intensity, from an artist who's earned his position through years of work — you're in the room that makes that happen.</p>
-      <p>Greek rock lives when someone like Vlachos stands in front of a crowd that knows all the words.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Πέτρος Γαϊτάνος</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Stage 7</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Saturday, February 28, 2026 |
-| **Doors** | 20:30 |
-| **Show** | 21:30 |
-| **Venue** | VOX, Athens |
-| **Price** | €15-25 |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 22:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">VOX</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/f8c8641d8aeb4744?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fmusic%2Fo-panos-blaxos-live-sto-vox%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/iro-10016632/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ηρώ</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 22:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/d3d3fe01-exa-angelika-dusk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/ae47c083b3fe8f66?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Firo-10016632%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/basilis_lekkas-10017422/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Βασίλης Λέκκας</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 22:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Caja de Música</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/3ae9de55073081f0?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fbasilis_lekkas-10017422%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/1550-10053881/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">1550</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 23:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Rohas Athens Live Stage</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/00083371aa53b35a?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2F1550-10053881%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/apo_ton_klasikismo_sto_simera-10089201/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">&#171;Από τον Κλασικισμό στο σήμερα&#187;</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ωδείο Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€8</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/4423daf92f99973f?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fapo_ton_klasikismo_sto_simera-10089201%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/ath_dub_unity_w_tr_tactics-10089204/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ath Dub Unity w/ Tr Tactics</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Aux Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/cf433cca45183b99?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fath_dub_unity_w_tr_tactics-10089204%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/aux_anagenisis_w_mari_ferrari-10089205/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">aux Anagenisis w/ Mari Ferrari</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Aux Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/13a5bc41858ca507?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Faux_anagenisis_w_mari_ferrari-10089205%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/kumides_-10089218/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Κύμηδες</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Πολυχώρος Διέλευσις</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/e504d6ff975e7248?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fkumides_-10089218%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/the_greek_jazz_book_concert_1-10089222/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">The Greek Jazz Book Concert #1</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Concert #1 Baumstrasse</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/60748af924c56ecc?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fthe_greek_jazz_book_concert_1-10089222%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/human_touch-10017239/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Human Touch</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Jazzet Cafe</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/0a9c257425188990?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fhuman_touch-10017239%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/the_stroryville_ragtimers_-10079151/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">The Stroryville Ragtimers</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ορφέας Cafe Bar</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€8</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/bc749a0c51694263?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fthe_stroryville_ragtimers_-10079151%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/stefanos_mparmpalias-10081896/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Στέφανος Μπαρμπαλιάς</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ον Off Studio</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/91554202949ad78c?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fstefanos_mparmpalias-10081896%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/91554202949ad78c?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fstefanos_mparmpalias-10081896%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/melodies_aries_kai_tragoudia-10089227/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Μελωδίες: Άριες και Τραγούδια</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ωδείο Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/b3ed2d3e72509de3?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fmelodies_aries_kai_tragoudia-10089227%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.ticketservices.gr/event/13882/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 21:45
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Gustav Athens</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/58b945f4579cf2c9?url=https%3A%2F%2Fwww.ticketservices.gr%2Fevent%2F13882%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/giannis_sabbidakis-10065296/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Γιάννης Σαββιδάκης</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου στις 22:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">MÉTRON Stage</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/ae384aa05940e3a6?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fgiannis_sabbidakis-10065296%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.more.com/gr-el/tickets/music/miltos-pasxalidis-stauros-tou-notou-3/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΜΙΛΤΟΣ ΠΑΣΧΑΛΙΔΗΣ</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28">
-          Σάββατο 28 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Σταυρός του Νότου</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€17</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/a72d5c4949673ea0?url=https%3A%2F%2Fwww.more.com%2Fgr-el%2Ftickets%2Fmusic%2Fmiltos-pasxalidis-stauros-tou-notou-3%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/annex-m-giorgos-drivas-symfonia37/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Η προσωπογραφία ενός αλγόριθμου</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>You enter the Megaron's gallery space and encounter something that doesn't look like traditional exhibition. "The Portrait of an Algorithm" — the title prepares you for territory where art and technology intersect, where the old categories might not apply. The walls hold works that make you question who or what made them.</p>
-      <p>This exhibition represents the current state of dialogue between artificial intelligence and visual art. The pieces on display emerged from processes that involve machine learning, generative systems, and artistic curation working in concert. The question hanging over every work: what happens when creativity becomes computational? The answers here are multiple and contradictory.</p>
-      <p>The audience for this kind of exhibition brings tech-curious alongside art-curious. You'll find people approaching from software backgrounds, trying to understand the artistic choices. You'll find traditional art viewers confronting unfamiliar production methods. The conversations that happen in gallery corners touch on authorship, intentionality, beauty, and what any of those words mean when algorithms get involved.</p>
-      <p>The Megaron's exhibition spaces provide the institutional weight this material needs. These questions aren't fringe anymore — they're being asked in major cultural venues, given the presentation context that signals seriousness. The curation treats the works as art first, technology second, even while the technology is the subject.</p>
-      <p>If you need traditional hand-made objects and human authorship clearly established, this exhibition will unsettle you. That's partly the point — to examine assumptions about where art comes from and what counts. But if you're ready to engage with questions that will only become more pressing as these technologies develop, if you want to see how artists and institutions are beginning to frame the algorithmic — this is how Athens joins that conversation.</p>
-      <p>When an algorithm sits for its portrait, what looks back at us?</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Saturday, February 28, 2026 |
-| **Hours** | 10:00-18:00 |
-| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |
-| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |
-| **Admission** | Check Megaron program |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T19:00:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 19:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/66badb8aafa8c70c?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fannex-m-giorgos-drivas-symfonia37%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">1896-1922</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The Christos Lambrakis Hall settles into that specific silence that precedes orchestral performance. Two thousand seats fill with an audience that understands what tonight represents. You're here for a journey through a particular chapter of Greek history, translated into sound.</p>
-      <p>1896-1922. The dates carry weight for anyone who knows Greek history. From the first modern Olympics to the Asia Minor catastrophe, these years reshaped everything. The music written during this period captured transformation — the optimism of a young state finding its place, the trauma of displacement that would mark generations. Tonight, Megaron's stage hosts the sounds of that era.</p>
-      <p>The program brings together compositions that documented their moment. You'll hear the concert halls of Athens at the turn of the century, the cafes of Smyrna before the fire, the emerging Greek art music that tried to synthesize European classical training with the melodies of the street. The orchestra interprets across a century of distance, finding the living pulse in archival scores.</p>
-      <p>Megaron Mousikis provides the acoustic architecture these compositions deserve. The hall's design amplifies without distorting, creates intimacy despite scale. When the strings reach pianissimo, the back row hears every note. When the full orchestra swells, the sound fills without overwhelming. This is what the hall was built for — music that requires space.</p>
-      <p>The audience tonight spans generations who carry different relationships to this history. Older listeners remember grandparents who lived these events. Younger ones encounter the era as archive. But the music bridges the temporal gap, creating common ground in the listening. By intermission, conversations connect personal histories with the evening's themes.</p>
-      <p>Greek classical music from this period remains underperformed internationally. Tonight's concert represents an act of recovery — bringing these compositions to modern audiences who might never otherwise encounter them. The orchestra treats the material with the seriousness it deserves, neither museum piece nor curiosity, but living music that still speaks.</p>
-      <p>If you need lighter entertainment or familiar repertoire, this program offers something different. The material demands historical engagement, the duration extends beyond casual interest. But if you've been looking for entry into Greek art music of the early twentieth century, if you want to understand what that transformation sounded like — Megaron holds the answer.</p>
-      <p>Music as history, history as music — 1896 to 1922 rendered in orchestral color.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Angelika Dusk</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">EXA</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Saturday, February 28, 2026 |
-| **Doors** | 18:00 |
-| **Concert** | 20:00 |
-| **Duration** | ~2.5 hours with intermission |
-| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |
-| **Getting there** | Megaro Moussikis Metro (Blue line) |
-| **Price** | Check Megaron website |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T20:00:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/cd32e2a474ac3299?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-kai-i-megali-idea-1896-1922%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Η Αθήνα και η μεγάλη ιδέα 1896-1922</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T20:30:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/d6980de0-caja-de-musica-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/4650121dda8187b5?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-kai-i-megali-idea-1896-1922%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/4650121dda8187b5?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-kai-i-megali-idea-1896-1922%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.halfnote.gr/event/iro-you-only-live-once-yolo/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΗΡΩ “You only live once” (YOLO)</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The lights go down and a single voice cuts through the darkness—raw, unguarded, filling every corner of the room. You lean forward in your seat, drink forgotten, completely absorbed. This is the kind of performance that reminds you why live music matters.</p>
-      <p>Iro, one of Greece's most distinctive vocalists, presents "You Only Live Once" (YOLO)—an evening that promises the spontaneity and emotional directness that has defined her career. Known for refusing to play it safe, Iro brings jazz sensibility to Greek material and Greek soul to jazz standards.</p>
-      <p>The Half Note crowd for Greek vocalists skews toward those who've followed these artists for years. You'll recognize people from the front row at previous shows, musicians who've come to listen rather than network, and couples for whom a night of live music is a regular ritual rather than a special occasion.</p>
-      <p>| Aspect | Details |
-|--------|---------|
-| **Setting** | Historic jazz club, intimate 150-seat room |
-| **Vibe** | Intense, emotionally charged, focused |
-| **Sound** | Crystal-clear vocal mix in a room built for listening |
-| **Seating** | Reserved tables, some bar seating |</p>
-      <p>The set will likely move between languages and genres—expect the unexpected. The late 22:30 start means this is a night for those who don't have early mornings.</p>
-      <p>If you want background music for conversation, look elsewhere. But if you're ready to be moved by a performer who holds nothing back, this is your night.</p>
-      <p>Iro at Half Note represents the intersection of Greek vocal tradition and jazz club intimacy that's hard to find anywhere else.</p>
-      <p>**Tags:** Jazz, Intimate, Greek-locals, 30s-40s, Metro-accessible, Reservation-required</p>
-      <p>**Last verified:** February 2026</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Saturday, February 28, 2026 |
-| **Doors** | 22:00 |
-| **Music starts** | 22:30 |
-| **Duration** | ~2 hours |
-| **Price** | €15-20 table / €10-15 bar |
-| **Tickets** | halfnote.gr |
-| **Address** | Trivonianou 17, Mets |
-| **Getting there** | Akropoli Metro (Red Line), 10 min walk |
-| **Last metro** | 00:15 (may need taxi home) |
-| **Payment** | Cards and cash |
-| **Good to know** | Saturday shows book out—reserve early in the week |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T22:30:00">
-          Σάββατο 28 Φεβρουαρίου στις 22:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/8bc1dc30a4504dab?url=https%3A%2F%2Fwww.halfnote.gr%2Fevent%2Firo-you-only-live-once-yolo%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/nick-jojo-36/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Nick Jojo</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T23:00:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 23:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Zelus</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/6ac49a3feb8c46e5?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fnick-jojo-36%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/6ac49a3feb8c46e5?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fnick-jojo-36%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/impvlsiv-bolosis-piece-of-kate/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">IMPVLSIV + Bolosis + Piece of Kate</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T23:00:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 23:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Astron</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/248fcda96d78943c?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fimpvlsiv-bolosis-piece-of-kate%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/mikee-zarkon-aristo/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Mikee + Zarkon + Aristo</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-28T23:30:00+03:00">
-          Σάββατο 28 Φεβρουαρίου στις 23:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Gazi View</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/165940b521a9dcba?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fmikee-zarkon-aristo%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/165940b521a9dcba?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fmikee-zarkon-aristo%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.ticketservices.gr/event/13997/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ALCEDO FOLK BAND ΤΑ ΛΟΥΛΟΥΔΙΑ ΜΑΡΤΥΡΟΥΝ</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>Myrtillo Cafe wears its personality on the walls — vintage finds, exposed wood, the kind of decoration that suggests someone with taste lived their obsessions. You take a table near the small stage, close enough that when the musicians start, their breathing becomes part of the performance.</p>
-      <p>Alcedo Folk Band brings acoustic instruments and traditional material to a room built for exactly this kind of evening. The band's approach to folk music operates in the space between preservation and reinterpretation — songs that carry history but arrive with present-tense energy. Greek folk traditions, European influences, Mediterranean warmth woven through arrangements that never feel academic.</p>
-      <p>The cafe setting shapes everything. No separation between performer and audience, no elevated stage to create distance. The musicians play at conversational volume, dynamic enough to command attention but intimate enough that the space between notes carries its own meaning. When a voice rises, the room listens. When instruments whisper, you lean forward without realizing.</p>
-      <p>Myrtillo's regular crowd knows what the venue offers — programming that respects its listeners, evenings that treat music as the main event rather than background. For Alcedo's performance, the usual coffee drinkers mix with folk enthusiasts who've followed the band across Athens venues. The conversation level before music starts suggests anticipation rather than indifference.</p>
-      <p>Folk music in Athens occupies a specific niche. Not quite traditional enough for the purists who haunt rebetiko venues, not commercial enough for mainstream attention. Alcedo operates in this middle ground, satisfying those who want acoustic instruments and rooted melodies without ethnomusicological homework. The songs work because they're good songs, regardless of their historical freight.</p>
-      <p>If you need amplification and spectacle, Myrtillo's intimate scale will feel limited. The experience here rewards patience, attention, the willingness to meet music on its own terms. But if you've been looking for folk performance that feels like a living room gathering rather than a concert hall event — this is what you've been searching for.</p>
-      <p>Alcedo Folk Band at Myrtillo — music that treats tradition as a starting point rather than a destination.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Κατερίνα Ντίνου</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 22:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Caja de Música</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Sunday, March 1, 2026 |
-| **Time** | Evening |
-| **Venue** | Myrtillo Cafe |
-| **Setting** | Intimate cafe performance |
-| **Price** | Check venue |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Myrtillo Cafe</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/66e164e9238ad8b5?url=https%3A%2F%2Fwww.ticketservices.gr%2Fevent%2F13997%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/adedeji_-10076834/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ad&#233;d&#232;j&#236;</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 21:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/b4cd5cce--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/31a966329487fc7b?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fadedeji_-10076834%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/alcedo_folk_band-10083433/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Alcedo folk band</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μύρτιλλο</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/5449a68378ecbb72?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Falcedo_folk_band-10083433%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/panarmonia-10089200/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">PanArmonia</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Gazarte</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/db29f36b5e190688?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpanarmonia-10089200%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/xristos_mpotsis-10089208/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Χρήστος Μπότσης</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Σταυρός του Νότου</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€13</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/2c59d08e536b51d8?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fxristos_mpotsis-10089208%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/mousikes_tou_kosmou_me_aroma_mpouat-10089219/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">&#171;Μουσικές του κόσμου με άρωμα μπουάτ&#187;</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Πολυχώρος Διέλευσις</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/be9c82e898f98970?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fmousikes_tou_kosmou_me_aroma_mpouat-10089219%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/duo_ntibes_tou_mesopolemou-10089224/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">&#171;Δύο Ντίβες του Μεσοπολέμου&#187;</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 18:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Παρνασσός</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/0c0696c92c3f9ee4?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fduo_ntibes_tou_mesopolemou-10089224%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/sunola_mousikis_domatiou_camerata_junior-10089228/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Σύνολα Μουσικής Δωματίου Camerata Junior</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 19:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/1a5aa5cda4e8d23d?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fsunola_mousikis_domatiou_camerata_junior-10089228%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/1a5aa5cda4e8d23d?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fsunola_mousikis_domatiou_camerata_junior-10089228%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/0kaithetis-10089233/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">0+Thetis</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01">
-          Κυριακή 1 Μαρτίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ον Off Studio</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€7</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/5cff359feb56ae55?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2F0kaithetis-10089233%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/house-on-the-beach-timmy-regisford-dj-thai/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">House On The Beach: Timmy Regisford + DJ Thai</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T19:00:00+03:00">
-          Κυριακή 1 Μαρτίου στις 19:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Burger Disco Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/63e9da002017c110?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fhouse-on-the-beach-timmy-regisford-dj-thai%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/63e9da002017c110?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fhouse-on-the-beach-timmy-regisford-dj-thai%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">1922-1940</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The Christos Lambrakis Hall holds its breath as the orchestra prepares. Two thousand seats occupied by listeners who know this evening continues a story. 1922-1940. The dates frame a Greece transformed by catastrophe and struggling toward recovery. You're here to hear what that sounded like.</p>
-      <p>The concert follows yesterday's journey through 1896-1922, picking up where trauma meets adaptation. The Asia Minor disaster of 1922 changed everything — populations displaced, cities abandoned, millions of refugees remaking Greek culture from the ground up. The music written between the wars carries this weight, the compositions shaped by loss and the determination to survive it.</p>
-      <p>Megaron's program tonight includes works that documented their era. You'll hear the influence of rebetiko's emergence, the new sounds refugees brought from Smyrna, the art music composers struggling to synthesize European training with the transformed Greek street. Some pieces are elegiac, processing what was lost. Others pulse with the determination to build something new.</p>
-      <p>The orchestra interprets across nearly a century of distance. The challenge is technical but also emotional — finding the living pulse in historical scores, making archival compositions breathe again. When they succeed, and tonight they succeed often, the past becomes present. The grief and hope of 1930s Athens fills a 2020s concert hall.</p>
-      <p>The audience for these concerts spans generations of relationship to this history. Some listeners carry family memories of the events these compositions reference. Others encounter the period purely as archive. But music creates common ground — the emotional content translates across temporal distance in ways that historical narrative cannot.</p>
-      <p>If you need light entertainment or familiar classical repertoire, this second installment demands more. The material requires historical awareness, the duration extends beyond casual listening. But if you've been drawn into the first concert's journey and want to continue forward — if you need to understand what Greece sounded like between the wars — Megaron continues the story.</p>
-      <p>1922 to 1940 — the music of a nation rebuilding from catastrophe.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Sunday, March 1, 2026 |
-| **Doors** | 18:00 |
-| **Concert** | 20:00 |
-| **Duration** | ~2.5 hours with intermission |
-| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |
-| **Getting there** | Megaro Moussikis Metro (Blue line) |
-| **Note** | Second in series; first concert covers 1896-1922 |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T20:00:00+03:00">
-          Κυριακή 1 Μαρτίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/8c8b263e76dae499?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-tou-mesopolemou-1922-1940%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Μωρά στη φωτιά</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Κύτταρο</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€13</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Αλένα Μπάεβα &#8211; Βαντίμ Χολοντένκο</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">
-          Κυριακή 1 Μαρτίου στις 20:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/69f35fef--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/871383e537315e2e?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Falena-baeva-vantim-cholontenko%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Θάνος Ολύμπιος &amp; Σωτήρης Προίσκος</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Αίθουσα Διδασκαλίας Μεγάρου Μουσικής</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Η Αθήνα του Μεσοπολέμου 1922-1940</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">
-          Κυριακή 1 Μαρτίου στις 20:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/e4cede83--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/4bc47d9867c8371b?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-tou-mesopolemou-1922-1940%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/4bc47d9867c8371b?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Fi-athina-tou-mesopolemou-1922-1940%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Χατζηγφραγκέτα</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 22:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Σταυρός του Νότου</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Αλένα Μπάεβα – Βαντίμ Χολοντένκο</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">
-          Κυριακή 1 Μαρτίου στις 20:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/d406548e-fuzz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Μέγαρο Μουσικής Αθηνών</span>
-         (Kolonaki)
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/8337bb1c620387cb?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Falena-baeva-vantim-cholontenko%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/8337bb1c620387cb?url=https%3A%2F%2Fwww.megaron.gr%2Fevent%2Falena-baeva-vantim-cholontenko%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Εισβολέας</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Fuzz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/ad-hoc-19/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Ad Hoc</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T21:00:00+03:00">
-          Κυριακή 1 Μαρτίου στις 21:00
-        </time>
-        
-      </dd>
-
+  <a href="/events/5fcf54f2-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Cantina Social</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/952dec4d826e940d?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fad-hoc-19%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/952dec4d826e940d?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Fad-hoc-19%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Μιρέλα Πάχου - Αδάμ Τσαρούχης</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 22:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.halfnote.gr/event/adedeji-afrofunk-explosion/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ADEDEJI - AFROFUNK EXPLOSION</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-03-01T21:30:00">
-          Κυριακή 1 Μαρτίου στις 21:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/22d71034-death-disco-pop-girlies-night-vol-3/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/f61493ffcfb01c4e?url=https%3A%2F%2Fwww.halfnote.gr%2Fevent%2Fadedeji-afrofunk-explosion%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Pop Girlies Night Vol.3</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Death Disco</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€13</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-    </section>
-    
+    <meta itemprop="description" content="">
+  </a>
 
-    
+  <a href="/events/629c869f--laura-agnusdei-amp-free-piece-of-tape/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Laura Agnusdei &amp; Free Piece of Tape</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Κέντρο Ελέγχου Τηλεοράσεων</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/d46b3db6-arch-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ζωρζ Πιλαλί</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 22:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">ARCH Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/4235c7ce-off-studio-amaguk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Amaguk</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ον Off Studio</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€7</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/abbac553-fuzz-club-live/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΕΙΣΒΟΛΕΑΣ LIVE</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Fuzz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/33d3c3e6--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ομιλητής: Μιχάλης Κοσμόπουλος</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T19:00:00+03:00">Παρασκευή 27 Φεβρουαρίου στις 19:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Ομιλητής: Μιχάλης Κοσμόπουλος">
+  </a>
+
+  <a href="/events/21e99b75--1821-1896/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Η Αθήνα από την Ανατολή στη Δύση 1821-1896</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T20:00:00+03:00">Παρασκευή 27 Φεβρουαρίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Η Αθήνα από την Ανατολή στη Δύση 1821-1896 Πώς ήταν η Αθήνα, μια μικρή οθωμανική πόλη, στις αρχές του 20ού αιώνα; Πώς σε λιγότερο από έναν αιώνα μεταμορφώθηκε σ">
+  </a>
+
+  <a href="/events/a71cd6a7--1821-1896/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Η Αθήνα από την Ανατολή στη Δύση 1821-1896</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T20:30:00+03:00">Παρασκευή 27 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/6a352d23--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Θησαυροί της γης και της μνήμης. Η συμβολή της Ακαδημίας Αθηνών στην ελληνική αρχαιολογία – Μιχάλης Κοσμόπουλος</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T20:30:00+03:00">Παρασκευή 27 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/4d9e2f9b-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΜΙΡΕΛΑ ΠΑΧΟΥ & ΑΔΑΜ ΤΣΑΡΟΥΧΗΣ - ΤΑ ΝΤΟΥΕΤΑ ΤΟΥ ΕΛΛΗΝΙΚΟΥ ΚΙΝΗΜΑΤΟΓΡΑΦΟΥ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T22:30:00">Παρασκευή 27 Φεβρουαρίου στις 22:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/748b129e-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Jonathan Kaspar + Mironas + Rezo</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-27T23:00:00+03:00">Παρασκευή 27 Φεβρουαρίου στις 23:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Dybbuk</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+<h2 class="date-group-header">Σάββατο 28 Φεβρουαρίου</h2>
+
+  <a href="/events/f8c8641d-vox-live-vox/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ο ΠΑΝΟΣ ΒΛΑΧΟΣ LIVE ΣΤΟ VOX</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 22:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">VOX</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/ae47c083-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ηρώ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 22:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/3ae9de55-caja-de-musica-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Βασίλης Λέκκας</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 22:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Caja de Música</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/00083371-rohas-athens-live-stage-1550/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">1550</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 23:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Rohas Athens Live Stage</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/4423daf9--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">&#171;Από τον Κλασικισμό στο σήμερα&#187;</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ωδείο Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€8</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/cf433cca-aux-club-ath-dub-unity-w-tr-tactics/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ath Dub Unity w/ Tr Tactics</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Aux Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/13a5bc41-aux-club-aux-anagenisis-w-mari-ferrari/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">aux Anagenisis w/ Mari Ferrari</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Aux Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/e504d6ff--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Κύμηδες</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Πολυχώρος Διέλευσις</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/60748af9-concert-1-baumstrasse-the-greek-jazz-book-concert-1/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">The Greek Jazz Book Concert #1</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Concert #1 Baumstrasse</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/0a9c2574-jazzet-cafe-human-touch/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Human Touch</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Jazzet Cafe</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/bc749a0c-cafe-bar-the-stroryville-ragtimers/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">The Stroryville Ragtimers</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ορφέας Cafe Bar</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€8</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/91554202-off-studio-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Στέφανος Μπαρμπαλιάς</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ον Off Studio</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/b3ed2d3e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Μελωδίες: Άριες και Τραγούδια</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ωδείο Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/58b945f4-gustav-athens-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 21:45</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Gustav Athens</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/ae384aa0-metron-stage-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Γιάννης Σαββιδάκης</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου στις 22:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">MÉTRON Stage</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/a72d5c49--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΜΙΛΤΟΣ ΠΑΣΧΑΛΙΔΗΣ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Σταυρός του Νότου</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€17</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/66badb8a--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Η προσωπογραφία ενός αλγόριθμου</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T19:00:00+03:00">Σάββατο 28 Φεβρουαρίου στις 19:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="Η προσωπογραφία ενός αλγόριθμου Ο Γιώργος Δρίβας παρουσιάζει μια περιπατητική δράση/έκθεση στο Μέγαρο, όπου ήχος, βίντεο, μουσική και περφόρμανς δημιουργούνται ">
+  </a>
+
+  <a href="/events/cd32e2a4--1896-1922/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">1896-1922</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T20:00:00+03:00">Σάββατο 28 Φεβρουαρίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="1896-1922 Aπό την Αθήνα της Μπελ Επόκ στη νέα Αθήνα της δεκαετίας του 1920: Πως ήταν η ζωή στην Αθήνα μετά τους πρώτους Ολυμπιακούς Αγώνες του 1896; Γιατί πήγαν">
+  </a>
+
+  <a href="/events/4650121d--1896-1922/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Η Αθήνα και η μεγάλη ιδέα 1896-1922</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T20:30:00+03:00">Σάββατο 28 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/8bc1dc30-half-note-jazz-club-you-only-live-once-yolo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΗΡΩ “You only live once” (YOLO)</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T22:30:00">Σάββατο 28 Φεβρουαρίου στις 22:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/6ac49a3f-zelus-nick-jojo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Nick Jojo</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T23:00:00+03:00">Σάββατο 28 Φεβρουαρίου στις 23:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Zelus</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/248fcda9-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">IMPVLSIV + Bolosis + Piece of Kate</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T23:00:00+03:00">Σάββατο 28 Φεβρουαρίου στις 23:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Astron</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/165940b5-gazi-view-mikee-zarkon-aristo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Mikee + Zarkon + Aristo</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-28T23:30:00+03:00">Σάββατο 28 Φεβρουαρίου στις 23:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Gazi View</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+<h2 class="date-group-header">Κυριακή 1 Μαρτίου</h2>
+
+  <a href="/events/66e164e9-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ALCEDO FOLK BAND ΤΑ ΛΟΥΛΟΥΔΙΑ ΜΑΡΤΥΡΟΥΝ</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Myrtillo Cafe</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/31a96632-half-note-jazz-club-ad-233-d-232-j-236/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ad&#233;d&#232;j&#236;</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/5449a683--alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Alcedo folk band</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μύρτιλλο</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/db29f36b-gazarte-panarmonia/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">PanArmonia</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Gazarte</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/2c59d08e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Χρήστος Μπότσης</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Σταυρός του Νότου</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€13</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/be9c82e8--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">&#171;Μουσικές του κόσμου με άρωμα μπουάτ&#187;</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Πολυχώρος Διέλευσις</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/0c0696c9--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">&#171;Δύο Ντίβες του Μεσοπολέμου&#187;</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 18:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Παρνασσός</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/1a5aa5cd-171-187-camerata-junior/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Σύνολα Μουσικής Δωματίου Camerata Junior</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 19:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/5cff359f-off-studio-0-thetis/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">0+Thetis</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01">Κυριακή 1 Μαρτίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ον Off Studio</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€7</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">House On The Beach: Timmy Regisford + DJ Thai</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T19:00:00+03:00">Κυριακή 1 Μαρτίου στις 19:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Burger Disco Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/8c8b263e--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">1922-1940</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T20:00:00+03:00">Κυριακή 1 Μαρτίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="1922-1940 Πώς ήταν η Αθήνα του Μεσοπολέμου; Ήταν μόνο μια πόλη σε διχασμό ανάμεσα σε βενιζελικούς και μοναρχικούς ή και άλλα πράγματα μαζί; Οι αφηγήσεις, οι φωτ">
+  </a>
+
+  <a href="/events/871383e5--8211/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Αλένα Μπάεβα &#8211; Βαντίμ Χολοντένκο</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">Κυριακή 1 Μαρτίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/4bc47d98--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Η Αθήνα του Μεσοπολέμου 1922-1940</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">Κυριακή 1 Μαρτίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/8337bb1c--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Αλένα Μπάεβα – Βαντίμ Χολοντένκο</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T20:30:00+03:00">Κυριακή 1 Μαρτίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μέγαρο Μουσικής Αθηνών · Kolonaki</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/952dec4d-cantina-social-ad-hoc/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Ad Hoc</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T21:00:00+03:00">Κυριακή 1 Μαρτίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Cantina Social</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ADEDEJI - AFROFUNK EXPLOSION</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-03-01T21:30:00">Κυριακή 1 Μαρτίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+      </section>
+      
+
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -4860,35 +2779,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/with-ticket-concert-this-weekend.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>

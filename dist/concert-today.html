@@ -2,13 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>Συναυλίες στην Αθήνα Σήμερα | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="Βρείτε 10 συναυλίες στην Αθήνα σήμερα. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.">
+  <meta name="description" content="10 συναυλίες in Athens today. Curated daily from 10+ venues. Open events highlighted.">
 
   <!-- Secondary Description: English for International Discovery -->
   <meta name="description" lang="en" content="10 cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T10:07:51.886Z">
+  <meta name="last-modified" content="2026-02-25T15:57:18.026Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -353,57 +353,71 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T10:07:51.886Z",
-  "dateModified": "2026-02-25T10:07:51.886Z"
+  "datePublished": "2026-02-25T15:57:18.026Z",
+  "dateModified": "2026-02-25T15:57:18.026Z"
 }
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Συναυλίες στην Αθήνα Σήμερα</h1>
-    <p class="summary">
-      <strong>10 εκδηλώσεις</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 12:07 μμ ώρα Αθήνας
-    </p>
-  </header>
+  <header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-left">
+      <a href="/" class="site-logo">agent athens</a>
+    </div>
+    <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+        <span class="hamburger-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+  <div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="Close menu">×</button>
+  <ul class="mobile-menu-items">
+    <li><a href="/">Εκδηλώσεις</a></li>
+    <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/llms.txt">Για AI Agents</a></li>
+  </ul>
+  <div class="mobile-menu-lang">
+    <a href="#" class="lang-toggle-item active">EL</a>
+    <a href="#" class="lang-toggle-item">EN</a>
+  </div>
+</nav>
 
-  
+  <div class="page-container">
+    <header class="page-header">
+      <h1>Συναυλίες στην Αθήνα Σήμερα</h1>
+      <p class="summary">
+        <strong>10 εκδηλώσεις</strong> στην Αθήνα.
+      </p>
+      <p class="last-update">
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 05:57 μμ ώρα Αθήνας
+      </p>
+    </header>
+
+    
   <nav class="category-nav" aria-label="Event categories">
     <div class="category-nav-container">
       <a href="/" class="category-nav-item active">Όλα</a>
@@ -421,554 +435,182 @@
       <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>
 
-  <main>
-    
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
+    <main>
       
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.ticketservices.gr/event/13919/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ «ΟΠΕΚΕΜΠΛΕ»</a>
-    </h2>
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        <h2 class="date-group-header">Τετάρτη 25 Φεβρουαρίου</h2>
 
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The bouzouki starts and history begins to argue with itself. Apostolis Barbagiannis takes the stage at Stavros tou Notou, and OPEKEMBLE announces that Greek folk tradition is neither museum piece nor comfortable memory.</p>
-      <p>The name sounds like nonsense until you hear what it contains — the collision of traditional Greek music with whatever it's absorbed over decades of change. Barbagiannis has built his reputation on refusal: refusing to preserve tradition unchanged, refusing to abandon it for novelty. The foustanella might appear, but the sounds around it carry jazz voicings, rock dynamics, electric possibilities.</p>
-      <p>Stavros tou Notou houses this creative explosion with understanding. The venue has carved its identity in the Athens live music landscape as the space where Greek music goes to evolve. The room is intimate enough that Barbagiannis's personality fills it, small enough that his band's energy reaches every corner. When the traditional rhythms start shifting under contemporary weight, you feel the tension productively.</p>
-      <p>The crowd knows what they came for. These are not tourists seeking "authentic Greek experience" — this is too alive for that category. Greek musicians come to see what Barbagiannis is doing with their inheritance. Folk enthusiasts arrive alongside those who just follow Stavros tou Notou's programming. By the second set, people are dancing — not traditional steps exactly, but not abandoning them either.</p>
-      <p>If you want your folk music preserved in amber, if tradition should remain unchanged, OPEKEMBLE arrives as provocation. Barbagiannis treats inheritance as material rather than monument. But if you've been waiting for Greek music that breathes with the present, that asks what tradition means when it's genuinely alive — tonight, Stavros tou Notou hosts the revolution.</p>
-      <p>Tradition isn't what you preserve. It's what you risk.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+  <a href="/events/408554c9--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Wednesday, February 25, 2026 |
-| **Venue** | Stavros tou Notou |
-| **Entry** | 15 euro |
-| **Getting there** | Check venue for address |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€15</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/408554c97fd06091?url=https%3A%2F%2Fwww.ticketservices.gr%2Fevent%2F13919%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.ticketservices.gr/event/13912/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ  ΠΕΡΙΚΛΗΣ ΧΕΙΛΑΣ «ΣΤΗΝ ΚΑΡΔΙΑ ΤΟΥ ΚΟΥΡΤΣ»</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>The guitar cuts through the room before you find your seat. You're in Baumstrasse, one of Athens' more intimate live venues, and the sound already tells you this isn't going to be background music. The chairs are close enough that you can see the calluses on the performer's fingers.</p>
-      <p>Periklis Cheilas presents "Stin Kardia tou Kurtz" — a title that references Conrad's Heart of Darkness and immediately signals this won't be a comfortable evening of soft melodies. Cheilas has carved a specific niche in the Greek music scene: songs that wrestle with difficult territory, lyrics that don't offer easy resolutions. His approach to guitar work favors texture over technique, serving the words rather than showing off.</p>
-      <p>The Baumstrasse crowd tends toward those who actively seek out smaller rooms. You'll find people who've followed Cheilas through his previous work, who know the albums and came specifically for these songs. Conversations before the show touch on lyrics and meanings, the kind of audience that treats a concert as something worth preparing for. By the time the lights dim, the room has achieved that particular quiet that signals collective investment.</p>
-      <p>The venue itself operates on an intimate scale that rewards attention. No distant stage, no barriers between performer and audience. When Cheilas leans into a difficult verse, you're close enough to see it land on his face. The sound system handles acoustic guitar with the clarity this music demands — every picked string audible, every whispered word reaching the back row.</p>
-      <p>If you need spectacle and production, if you want music that makes easy promises, this evening will challenge you. Cheilas writes for listeners who are willing to sit with discomfort, who understand that art sometimes needs to darken before it illuminates. But if you've been searching for songwriting that treats you as an adult, that doesn't prettify the difficult parts of being human — you're in the right room.</p>
-      <p>The heart of Kurtz isn't pretty. Cheilas doesn't pretend otherwise.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ «ΟΠΕΚΕΜΠΛΕ»</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€15</span><meta itemprop="priceCurrency" content="EUR"></span>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Wednesday, February 25, 2026 |
-| **Doors** | 21:00 |
-| **Venue** | Baumstrasse, Athens |
-| **Price** | Check venue |
-| **Good to know** | Arrive early for better seating in this intimate space |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Concert #1 Baumstrasse</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/20b768080a3a5d03?url=https%3A%2F%2Fwww.ticketservices.gr%2Fevent%2F13912%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
+    <meta itemprop="description" content="">
+  </a>
 
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/stathis_anninos_quartet_-10063282/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Stathis Anninos Quartet</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
+  <a href="/events/20b76808-concert-1-baumstrasse-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/8ca4d95f7cd9aaec?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fstathis_anninos_quartet_-10063282%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/apostolos_kitsos-10071633/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Απόστολος Κίτσος</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Σταυρός του Νότου</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/70de929e1d64249c?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fapostolos_kitsos-10071633%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/pantelis_stamatelos_kai_giannis_mixailidis-10089133/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Παντελής Σταματέλος &amp; Γιάννης Μιχαηλίδης</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Αίθουσα Διδασκαλίας Μεγάρου Μουσικής</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/ddd247b1cc1af514?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpantelis_stamatelos_kai_giannis_mixailidis-10089133%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/ddd247b1cc1af514?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fpantelis_stamatelos_kai_giannis_mixailidis-10089133%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/periklis_xeilas-10089135/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Περικλής Χειλάς</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Concert #1 Baumstrasse</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€10</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/e545b255a7115f5c?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fperiklis_xeilas-10089135%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/antistoixies-10088735/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Αντιστοιχίες</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 20:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€8</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/e36dbf1416f0bb91?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fantistoixies-10088735%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">&#171;Καραβάκι του Αιγαίου και στη Μυτιλήνη τράβα!&#187;</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25">
-          Τετάρτη 25 Φεβρουαρίου στις 20:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Ωδείο Αθηνών</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€25</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/fabf477dfb311940?url=https%3A%2F%2Fwww.athinorama.gr%2Fmusic%2Fgig%2Fkarabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.clubber.gr/events/lockbird-26/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Lockbird</a>
-    </h2>
-
-    
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description"></p>
-    
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25T21:00:00+03:00">
-          Τετάρτη 25 Φεβρουαρίου στις 21:00
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Cantina Social</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price"><a href="/go/de0baa80377df380?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Flockbird-26%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" rel="noopener">Δείτε τιμές →</a></span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/de0baa80377df380?url=https%3A%2F%2Fwww.clubber.gr%2Fevents%2Flockbird-26%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-
-  <article class="event-card enriched" itemscope itemtype="https://schema.org/MusicEvent">
-    <h2 itemprop="name">
-      <a href="https://www.halfnote.gr/event/stathis-anninos-unsilent-place/?utm_source=agentathens&utm_medium=referral&utm_campaign=concert" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">Stathis Anninos - UNSILENT PLACE</a>
-    </h2>
-
-    
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      <p>You descend the stairs into Half Note and the room embraces you with its dimensions. Intimate isn't a marketing word here — it's physics. The tables cluster close to the small stage, the bar occupies one wall, and the acoustic treatment means every note reaches every seat with identical clarity. This is Athens' jazz institution operating at its most essential.</p>
-      <p>Stathis Anninos presents "Unsilent Place" — a title that captures his approach to composition. Anninos has built his reputation on music that refuses the easy paths, horn lines that interrogate rather than comfort. His work draws from the Greek musical heritage while pushing into territories that owe as much to contemporary European jazz as to Mediterranean tradition. The musicians he's assembled understand the assignment: controlled intensity, conversation between instruments.</p>
-      <p>The Half Note crowd on a night like this arrives with intention. These aren't casual observers who wandered in from dinner. You'll recognize them by how they listen — leaning forward, tracking the interplay between players, nodding at phrases that work. Conversations between sets touch on recordings and influences, the kind of informed appreciation that comes from years of following this music closely.</p>
-      <p>Since 1979, Half Note has maintained its position as Athens' premier jazz room. The venue's intimacy creates accountability — every musical choice lands on an audience close enough to notice. When Anninos takes a solo, you're near enough to see the thought process, to watch ideas form and resolve. The sound system handles acoustic instruments with respect, amplification serving clarity rather than volume.</p>
-      <p>If you need jazz that swings predictably, that stays in comfortable harmonic territory, Anninos will challenge you. His compositions operate in zones that require attention, phrases that resolve in unexpected places. But if you've been waiting for Athens jazz that takes risks in a room built to reward them — if you want to hear where Greek jazz is pushing its boundaries — you end up here.</p>
-      <p>The silence between notes is where this music lives. The title isn't ironic.</p>
-      <div class="enrichment-badge">✨ AI-enriched content</div>
     </div>
-    <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
-|------|---------|
-| **Date** | Wednesday, February 25, 2026 |
-| **Doors** | 20:00 |
-| **Music** | 21:30 |
-| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |
-| **Getting there** | Akropoli Metro (Red line), 10 min walk |
-| **Price** | €15-20 table, €10-15 bar |
-| **Reservations** | Essential — book ahead, confirm same day |</div>
-
-    <dl class="event-meta">
-      <dt>Ημερομηνία:</dt>
-      <dd>
-        <time itemprop="startDate" datetime="2026-02-25T21:30:00">
-          Τετάρτη 25 Φεβρουαρίου στις 21:30
-        </time>
-        
-      </dd>
-
-      
-
-      
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">Half Note Jazz Club</span>
-        
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>Concert</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="price-paid" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">€12</span>
-        <meta itemprop="priceCurrency" content="EUR">
-      </dd>
-    </dl>
-
-    
-    <p>
-      <a href="/go/77c23d075980afcd?url=https%3A%2F%2Fwww.halfnote.gr%2Fevent%2Fstathis-anninos-unsilent-place%2F%3Futm_source%3Dagentathens%26utm_medium%3Dreferral%26utm_campaign%3Dconcert" itemprop="url" rel="noopener">Εισιτήρια / Περισσότερες Πληροφορίες →</a>
-    </p>
-    
-
-    <!-- Hidden metadata for Schema.org -->
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ  ΠΕΡΙΚΛΗΣ ΧΕΙΛΑΣ «ΣΤΗΝ ΚΑΡΔΙΑ ΤΟΥ ΚΟΥΡΤΣ»</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Concert #1 Baumstrasse</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>
-    </section>
-    
+    <meta itemprop="description" content="">
+  </a>
 
-    
+  <a href="/events/8ca4d95f-half-note-jazz-club-stathis-anninos-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Stathis Anninos Quartet</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/70de929e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Απόστολος Κίτσος</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Σταυρός του Νότου</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/ddd247b1--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Παντελής Σταματέλος &amp; Γιάννης Μιχαηλίδης</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Αίθουσα Διδασκαλίας Μεγάρου Μουσικής</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/e545b255-concert-1-baumstrasse-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Περικλής Χειλάς</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Concert #1 Baumstrasse</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€10</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/e36dbf14-171-187-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Αντιστοιχίες</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 20:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€8</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/fabf477d--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">&#171;Καραβάκι του Αιγαίου και στη Μυτιλήνη τράβα!&#187;</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου στις 20:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Ωδείο Αθηνών</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€25</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/de0baa80-cantina-social-lockbird/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Lockbird</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25T21:00:00+03:00">Τετάρτη 25 Φεβρουαρίου στις 21:00</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Cantina Social</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">Με εισιτήριο</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+
+  <a href="/events/77c23d07-half-note-jazz-club-stathis-anninos-unsilent-place/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">Stathis Anninos - UNSILENT PLACE</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="2026-02-25T21:30:00">Τετάρτη 25 Φεβρουαρίου στις 21:30</time></span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Half Note Jazz Club</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">€12</span><meta itemprop="priceCurrency" content="EUR"></span>
+    </div>
+    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="description" content="">
+  </a>
+      </section>
+      
+
+      
   <aside class="related-pages">
     <h2>Σχετικές Σελίδες</h2>
     <ul>
@@ -979,35 +621,84 @@
 <li><a href="/">Όλες οι εκδηλώσεις</a></li>
     </ul>
   </aside>
-  </main>
+    </main>
+  </div>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: 26 Φεβρουαρίου 2026 στις 8:00 π.μ.
-    </p>
+  <footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="site-logo">agent athens</a>
+        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <ul class="footer-links">
+          <li><a href="/">Εκδηλώσεις</a></li>
+          <li><a href="/venues/">Χώροι</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Σχετικά</h3>
+        <ul class="footer-links">
+          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
 
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
-      </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+    <div class="footer-ai-callout">
+      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+        <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/concert-today.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 agent athens</span>
+      <div class="lang-toggle">
+        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
+        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script>
+(function() {
+  var btn = document.querySelector('.hamburger-btn');
+  var menu = document.querySelector('.mobile-menu');
+  var overlay = document.querySelector('.mobile-overlay');
+  var closeBtn = document.querySelector('.mobile-menu-close');
+  if (!btn || !menu || !overlay) return;
+
+  function open() {
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.contains('open');
+    isOpen ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
 </body>
 </html>
