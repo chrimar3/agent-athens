@@ -27,15 +27,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -177,15 +177,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.970Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.785Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -193,7 +193,7 @@
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2026-02-25T08:43:56.707Z",
+    "lastUpdate": "2026-02-25T08:52:23.555Z",
     "url": "https://agentathens.netlify.app/dance"
   }
 }

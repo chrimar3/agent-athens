@@ -111,6 +111,16 @@
         "type": "workshop"
       },
       "icon": "tools"
+    },
+    {
+      "slug": "tech",
+      "title": "Tech & AI στην Αθήνα",
+      "titleEn": "Tech & AI in Athens",
+      "description": "Συνέδρια, meetups και hackathons τεχνολογίας και AI στην Αθήνα",
+      "filter": {
+        "types": ["conference", "meetup", "hackathon", "seminar"]
+      },
+      "icon": "cpu"
     }
   ]
 }

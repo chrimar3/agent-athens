@@ -1074,15 +1074,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1108,15 +1108,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/",
       "ticketUrl": "https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.082Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2821,15 +2821,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.082Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4695,15 +4695,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.782Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4729,15 +4729,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/",
       "ticketUrl": "https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.960Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4855,7 +4855,7 @@
   ],
   "meta": {
     "total": 143,
-    "lastUpdate": "2026-02-25T08:43:56.396Z",
+    "lastUpdate": "2026-02-25T08:52:23.274Z",
     "url": "https://agentathens.netlify.app/with-ticket-this-weekend"
   }
 }

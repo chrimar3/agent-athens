@@ -682,15 +682,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.777Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -919,7 +919,7 @@
   ],
   "meta": {
     "total": 27,
-    "lastUpdate": "2026-02-25T08:43:56.389Z",
+    "lastUpdate": "2026-02-25T08:52:23.266Z",
     "url": "https://agentathens.netlify.app/with-ticket-tomorrow"
   }
 }

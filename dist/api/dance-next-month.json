@@ -25,15 +25,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -41,7 +41,7 @@
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T08:43:56.350Z",
+    "lastUpdate": "2026-02-25T08:52:23.238Z",
     "url": "https://agentathens.netlify.app/dance-next-month"
   }
 }

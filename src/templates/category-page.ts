@@ -17,6 +17,7 @@ export interface CategoryConfig {
   description: string;
   filter: {
     type?: string;
+    types?: string[];
     genresInclude?: string[];
   };
   icon: string;
@@ -27,8 +28,10 @@ export interface CategoryConfig {
  */
 export function filterEventsByCategory(events: Event[], category: CategoryConfig): Event[] {
   return events.filter(event => {
-    // Check type filter
-    if (category.filter.type && event.type !== category.filter.type) {
+    // Check type filter (single type or array of types)
+    if (category.filter.types && category.filter.types.length > 0) {
+      if (!category.filter.types.includes(event.type)) return false;
+    } else if (category.filter.type && event.type !== category.filter.type) {
       return false;
     }
 

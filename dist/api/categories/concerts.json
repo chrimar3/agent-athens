@@ -565,15 +565,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.777Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1235,15 +1235,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-apo-tin-anatoli-sti-dysi-1821-1896/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1269,15 +1269,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/",
       "ticketUrl": "https://www.megaron.gr/event/thisavroi-tis-gis-kai-tis-mnimis-i-symvoli-tis-akadimias-athinon-stin-elliniki-archaiologiamichalis-kosmopoulos/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.082Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1967,15 +1967,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-kai-i-megali-idea-1896-1922/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.082Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2552,15 +2552,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/",
       "ticketUrl": "https://www.megaron.gr/event/i-athina-tou-mesopolemou-1922-1940/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.782Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2586,15 +2586,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/",
       "ticketUrl": "https://www.megaron.gr/event/alena-baeva-vantim-cholontenko/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.960Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.781Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2983,15 +2983,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/pos-milaei-i-mousiki-gia-ton-eafto-tis/",
       "ticketUrl": "https://www.megaron.gr/event/pos-milaei-i-mousiki-gia-ton-eafto-tis/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.782Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3655,15 +3655,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/apo-tin-archaia-elliniki-skepsi-ston-mondrian-kai-ton-pollockathanasios-fokas/",
       "ticketUrl": "https://www.megaron.gr/event/apo-tin-archaia-elliniki-skepsi-ston-mondrian-kai-ton-pollockathanasios-fokas/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.083Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.782Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3933,15 +3933,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow-2/",
       "ticketUrl": "https://www.megaron.gr/event/london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.961Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4425,15 +4425,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/i-14i-tou-sostakovits/",
       "ticketUrl": "https://www.megaron.gr/event/i-14i-tou-sostakovits/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.084Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4523,15 +4523,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/to-theatro-tis-archaias-karthaias-stin-kea/",
       "ticketUrl": "https://www.megaron.gr/event/to-theatro-tis-archaias-karthaias-stin-kea/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.084Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4671,15 +4671,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/fones-kai-mnimes/",
       "ticketUrl": "https://www.megaron.gr/event/fones-kai-mnimes/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -4849,15 +4849,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/to-travma-tou-polemou-kai-to-thavma-tis-anagennisis/",
       "ticketUrl": "https://www.megaron.gr/event/to-travma-tou-polemou-kai-to-thavma-tis-anagennisis/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -5162,15 +5162,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/chamber-orchestra-of-europe-2/",
       "ticketUrl": "https://www.megaron.gr/event/chamber-orchestra-of-europe-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.783Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -5377,15 +5377,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/dream-requiem-tou-rufus-wainwright/",
       "ticketUrl": "https://www.megaron.gr/event/dream-requiem-tou-rufus-wainwright/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -5845,15 +5845,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/dimitris-maramis-tetralogia-erotokritos-stoicheiomenoi-kapetan-michalis-eleftherios-venizelos/",
       "ticketUrl": "https://www.megaron.gr/event/dimitris-maramis-tetralogia-erotokritos-stoicheiomenoi-kapetan-michalis-eleftherios-venizelos/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6165,15 +6165,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/anoichti-prova-ta-kontserta-tou-rachmaninof-ntenis-kozouchin/",
       "ticketUrl": "https://www.megaron.gr/event/anoichti-prova-ta-kontserta-tou-rachmaninof-ntenis-kozouchin/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.086Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6334,15 +6334,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/ta-kontserta-tou-rachmaninof-ntenis-kozouchin/",
       "ticketUrl": "https://www.megaron.gr/event/ta-kontserta-tou-rachmaninof-ntenis-kozouchin/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.963Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6368,15 +6368,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/archaio-theatro-thasou/",
       "ticketUrl": "https://www.megaron.gr/event/archaio-theatro-thasou/",
       "source": "megaron.gr",
       "createdAt": "2026-02-20T06:19:56.487Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6548,15 +6548,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/sir-john-eliot-gardiner-constellation-choir-and-orchestra-2/",
       "ticketUrl": "https://www.megaron.gr/event/sir-john-eliot-gardiner-constellation-choir-and-orchestra-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6654,15 +6654,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/se-7-8-koudounizontas-se-choro-kyklotiko-paramythia-me-to-mousiko-metro/",
       "ticketUrl": "https://www.megaron.gr/event/se-7-8-koudounizontas-se-choro-kyklotiko-paramythia-me-to-mousiko-metro/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -6765,15 +6765,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/diadrastiki-synavlia-2/",
       "ticketUrl": "https://www.megaron.gr/event/diadrastiki-synavlia-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.784Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -7372,15 +7372,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/taxidi-ston-kosmo-ton-ichon-kai-ton-synaisthimaton/",
       "ticketUrl": "https://www.megaron.gr/event/taxidi-ston-kosmo-ton-ichon-kai-ton-synaisthimaton/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.785Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -7406,15 +7406,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/to-fos-o-ichos-kai-ta-tessera-stoicheia-2/",
       "ticketUrl": "https://www.megaron.gr/event/to-fos-o-ichos-kai-ta-tessera-stoicheia-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.088Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.785Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -7440,15 +7440,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": 25,
+        "amount": null,
         "currency": "EUR",
-        "range": "€15-80"
+        "range": null
       },
       "url": "https://www.megaron.gr/event/anazitontas-ton-icho-5/",
       "ticketUrl": "https://www.megaron.gr/event/anazitontas-ton-icho-5/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.088Z",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25T08:47:31.785Z",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -9529,7 +9529,7 @@
   ],
   "meta": {
     "total": 270,
-    "lastUpdate": "2026-02-25T08:43:56.702Z",
+    "lastUpdate": "2026-02-25T08:52:23.550Z",
     "url": "https://agentathens.netlify.app/concerts"
   }
 }
