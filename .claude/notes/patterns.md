@@ -257,3 +257,17 @@ All page types must include 3 hreflang tags:
 ```
 
 Applied in: `page.ts` (filter pages), `event-page.ts` (event detail), `venue-page.ts` (individual + index).
+
+## Test Sweep Pattern
+
+When quality gate terminology changes (e.g., `FILLER_PHRASES` → `LAZY_ADJECTIVES`, error message "filler" → "lazy adjectives"), **sweep all tests in the same commit**. Check:
+- Error message string assertions (`e.includes('filler')` → `e.includes('lazy')`)
+- Exported constant content assertions (`toContain('unforgettable experience')` → `toContain('unforgettable')`)
+- Test helper word lists — if a word gets added to a rejection list (like "vibrant" added to `LAZY_ADJECTIVES`), test helpers that generate "valid" text must not contain it
+
+## Problematic Venue Variants Pattern
+
+Generic venue placeholders come in variants. When adding one to `config/rejected-locations.json` `problematic_entries`, add common synonyms:
+- "Live Music Venue" AND "Live Music Space"
+- "TBA" (already covered)
+- Watch for: "Live Music Hall", "Concert Venue", "Event Space", etc.

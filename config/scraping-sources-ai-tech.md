@@ -161,6 +161,70 @@ Official pages for specific recurring events/organizations. Check per schedule n
 
 ---
 
+## TIER 2B: STARTUP-SPECIFIC SOURCES
+
+### 17. Panathēnea Festival (Check: Monthly from Feb, weekly from March)
+
+- **Primary:** https://www.panathenea.org/
+- **Speakers page:** https://www.panathenea.org/speakers26/
+- **Pitch application:** Google Form linked from panathenea.org main page
+- **Tickets:** https://www.panathenea.org/tickets/
+- **Also on:** Eventbrite, Lu.ma
+- **Event:** May 27-29, 2026 (annual, springtime)
+
+### 18. Doers Summit (Check: Monthly, weekly from August)
+
+- **Primary:** https://doerssummit.com/
+- **Athens tickets:** https://doerssummit.com/tickets/
+- **Startup applications:** https://doerssummit.com/ (startup section)
+- **Also on:** Eventbrite, Lu.ma
+- **Event:** October 2026 (Athens). Also Limassol May 21-22.
+
+### 19. egg Accelerator / Eurobank (Check: Monthly)
+
+- **Primary:** https://www.theegg.gr/en/
+- **Press releases:** https://www.eurobank.gr/en/group/grafeio-tupou/
+- **Events/news:** https://www.theegg.gr/en/about-us/new-actions-announcements/news-and-events
+- **Key dates 2026:** Innovation Summit (Feb 11-13), Qualifying pitches (Apr 8-9), Acceleration starts (May 1)
+
+### 20. Endeavor Greece (Check: Monthly)
+
+- **Primary:** https://www.endeavor.org.gr/events/
+- **Blog:** https://www.endeavor.org.gr/blog/
+
+### 21. Startup Grind Athens (Check: Monthly)
+
+- **Primary:** https://www.startupgrind.com/athens/
+- **Meetup:** Search Meetup.com for "Startup Grind Athens"
+
+### 22. Vestbee Startup Events (Check: Monthly)
+
+- **Events list:** https://www.vestbee.com/events-list
+- **Must-attend list:** https://www.vestbee.com/insights/articles/must-attend-startup-and-vc-events-in-2026
+- **Why:** Best aggregator for European startup & VC events. Filter for Athens/Greece.
+
+### 23. Hellenic Innovation Network (Check: Monthly)
+
+- **Primary:** https://hellenic.org/all-events/
+- **Why:** Greek diaspora entrepreneur events, connects international founders with Athens ecosystem.
+
+### 24. Found.ation (Check: Monthly)
+
+- **Primary:** https://thefoundation.gr/
+- **Why:** Demo days, workshops, startup events.
+
+### 25. Orange Grove (Check: Monthly)
+
+- **Primary:** https://orangegrove.eu/
+- **Why:** Incubator events, workshops, demo days. Dutch Embassy-backed.
+
+### 26. Elevate Greece (Check: Quarterly)
+
+- **Primary:** https://elevategreece.gov.gr/
+- **Why:** Government startup registry. Policy announcements affect ecosystem events.
+
+---
+
 # TIER 3: AGGREGATORS & DISCOVERY (Check Monthly)
 
 Wider net. Higher noise. Catch events the specific sources miss.
@@ -245,6 +309,16 @@ For every event discovered from any source, extract:
 - First edition of new recurring events
 - Events from known organizers (ACE, Found.ation, Product-Led Hub)
 
+**HIGH (startup-specific additions):**
+- Panathēnea Festival (any update — speakers, program, pitch applications)
+- Doers Summit Athens (any update)
+- egg Investor Day / Innovation Summit
+
+**MEDIUM (startup-specific additions):**
+- Startup Grind Athens fireside chats (notable founders/investors)
+- Found.ation or Orange Grove demo days
+- Endeavor Greece events
+
 **LOW (enrich if capacity allows):**
 - One-off small workshops (< 50 people)
 - Virtual-only events with Athens organizer
@@ -268,6 +342,7 @@ For every event discovered from any source, extract:
 | **Friday** | Triage | Review week's discoveries, assign enrichment priority |
 | **1st of month** | Monthly deep sweep | dev.events, Conference Alerts, all org-specific sources, Mindstone next edition |
 | **Quarterly** | Calendar review | Greeks in AI, Devoxx, Disrupt, AI Hackathon — new editions/announcements |
+| **Quarterly** | Startup calendar review | Panathēnea, Doers, egg, Endeavor — check for new editions, speaker announcements, application deadlines |
 
 ---
 

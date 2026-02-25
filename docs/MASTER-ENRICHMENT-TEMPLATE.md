@@ -287,12 +287,15 @@ These fields are stored separately in the database and rendered by the site temp
 
 ## Event Types
 
-The recognized event types: `concert` `exhibition` `cinema` `theater` `performance` `workshop` `conference` `meetup` `hackathon` `seminar`
+The recognized event types: `concert` `exhibition` `cinema` `theater` `performance` `workshop` `conference` `meetup` `hackathon` `seminar` `pitch-night` `summit` `demo-day`
 
 - **conference** — Multi-session, typically multi-day events with keynotes, panels, breakouts
 - **meetup** — Recurring community gatherings, typically single-evening, informal
 - **hackathon** — Competitive build events, typically 24-72 hours
 - **seminar** — Single-speaker academic or research presentations
+- **pitch-night** — Single-evening events focused on startup pitching to investors/judges
+- **summit** — Large-scale multi-day gatherings combining keynotes, pitching, networking, expo
+- **demo-day** — Accelerator showcase events where cohort startups present to investors
 
 ## Tags Field
 
@@ -338,22 +341,22 @@ Rendered in a small footer: `Last verified: February 2026`
 # PART 3: TAG TAXONOMY
 
 ## Genre
-`Jazz` `Electronic` `Techno` `House` `Hard-techno` `Melodic-techno` `Progressive` `Darkwave` `EBM` `Industrial` `Rebetiko` `Laiko` `Entechno` `Greek-singer-songwriter` `Rock` `Metal` `Punk` `Hip-hop` `Indie` `Experimental` `Classical` `World` `Greek-Traditional` `Mediterranean-Fusion` `DJ-set` `Live-band` `Live-act` `AI` `Machine-Learning` `Data-Science` `Tech-Conference` `Hackathon` `Developer-Conference` `Research-Seminar` `Startup-Event`
+`Jazz` `Electronic` `Techno` `House` `Hard-techno` `Melodic-techno` `Progressive` `Darkwave` `EBM` `Industrial` `Rebetiko` `Laiko` `Entechno` `Greek-singer-songwriter` `Rock` `Metal` `Punk` `Hip-hop` `Indie` `Experimental` `Classical` `World` `Greek-Traditional` `Mediterranean-Fusion` `DJ-set` `Live-band` `Live-act` `AI` `Machine-Learning` `Data-Science` `Tech-Conference` `Hackathon` `Developer-Conference` `Research-Seminar` `Startup-Event` `Startup-Summit` `Pitch-Competition` `Demo-Day` `Investor-Day` `Accelerator-Program`
 
 ## Neighborhood
 `Gazi` `Exarchia` `Psiri` `Koukaki` `Monastiraki` `Metaxourgeio` `Kolonaki` `Piraeus` `Neos-Kosmos` `Mets` `Petralona` `Kypseli` `Tavros` `Athens-Riviera` `Pagrati` `Ampelokipoi` `Marousi` `Paleo-Faliro` `Glyfada` `Ellinikon`
 
 ## Atmosphere
-`Industrial-chic` `Intimate` `Underground` `Mainstream` `Tourist-friendly` `Local-favorite` `Warehouse` `Rooftop` `Basement` `Garden` `Raw` `Polished` `Inclusive` `Selective-door` `Historic` `Listening-room` `Academic` `Corporate` `Startup-energy` `Hands-on` `Conference-center`
+`Industrial-chic` `Intimate` `Underground` `Mainstream` `Tourist-friendly` `Local-favorite` `Warehouse` `Rooftop` `Basement` `Garden` `Raw` `Polished` `Inclusive` `Selective-door` `Historic` `Listening-room` `Academic` `Corporate` `Startup-energy` `Hands-on` `Conference-center` `Festival-energy` `Pitch-stage` `Matchmaking` `Curated-attendance`
 
 ## Crowd (for AI query matching)
-`20s-30s` `30s-40s` `Mixed-ages` `Students` `Young-professionals` `Expats` `Greek-locals` `Mixed-international` `Music-heads` `Industry-people` `LGBTQ-friendly` `Queer` `Date-night` `Groups` `Solo-friendly` `Tech-professionals` `Developers` `Founders` `AI-researchers` `AI-practitioners` `Academic-researchers` `C-suite` `Diaspora` `PhD-students`
+`20s-30s` `30s-40s` `Mixed-ages` `Students` `Young-professionals` `Expats` `Greek-locals` `Mixed-international` `Music-heads` `Industry-people` `LGBTQ-friendly` `Queer` `Date-night` `Groups` `Solo-friendly` `Tech-professionals` `Developers` `Founders` `AI-researchers` `AI-practitioners` `Academic-researchers` `C-suite` `Diaspora` `PhD-students` `Investors` `VCs` `Angels` `Accelerator-alumni` `Pre-seed` `Seed-stage` `Series-A`
 
 ## Experience
-`Standing-room` `Seated` `Dance-floor` `Listening-room` `Late-night` `Early-evening` `All-night` `Afterhours` `Fills-after-2am` `Concert-format` `Workshop-format` `Conference-format` `Hackathon-format` `Seminar-format` `Multi-day` `Networking-event` `Bootcamp` `Daytime-event`
+`Standing-room` `Seated` `Dance-floor` `Listening-room` `Late-night` `Early-evening` `All-night` `Afterhours` `Fills-after-2am` `Concert-format` `Workshop-format` `Conference-format` `Hackathon-format` `Seminar-format` `Multi-day` `Networking-event` `Bootcamp` `Daytime-event` `Pitch-format` `Expo-format` `City-wide` `Side-events` `Closing-party`
 
 ## Practical
-`Metro-accessible` `Taxi-recommended` `Taxi-required` `Cash-only` `Card-accepted` `Cash-preferred` `Reservation-required` `Walk-in-friendly` `Smoking-area` `Outdoor` `Heated` `Air-conditioned` `Funktion-One` `RA-tickets` `Door-selection` `Laptop-recommended` `Wi-Fi-available` `Catered` `RSVP-required` `Application-based` `Invite-only` `Streaming-available` `English-language` `Bilingual-GR-EN`
+`Metro-accessible` `Taxi-recommended` `Taxi-required` `Cash-only` `Card-accepted` `Cash-preferred` `Reservation-required` `Walk-in-friendly` `Smoking-area` `Outdoor` `Heated` `Air-conditioned` `Funktion-One` `RA-tickets` `Door-selection` `Laptop-recommended` `Wi-Fi-available` `Catered` `RSVP-required` `Application-based` `Invite-only` `Streaming-available` `English-language` `Bilingual-GR-EN` `Apply-to-pitch` `Matchmaking-app` `Founders-day` `Talent-pass` `Expo-area`
 
 ---
 

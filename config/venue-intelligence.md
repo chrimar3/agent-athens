@@ -536,6 +536,53 @@
 
 ---
 
+### Zappeion Hall (Zappeion Megaron)
+| Field | Data |
+|-------|------|
+| **Address** | Vassilissis Olgas & Vassilissis Amalias, next to National Garden |
+| **Transport** | Syntagma metro (Red/Blue), 10-min walk through National Garden. Trolleybus 1, 2, 4, 5, 11. |
+| **Capacity** | 4,546 sqm exhibition & congress halls + Peristyle Central Circular Atrium |
+| **Parking** | Limited. Garages at Syntagma Square and Filellinon Street. |
+| **Character** | Neoclassical landmark (1888), fully equipped conference center. Translation systems in 9 languages. Exhibition halls + congress rooms. Iconic Athens location next to Parliament, National Garden, Panathenaic Stadium. |
+| **Events** | Panathēnea 2026 (May 27-29), eCommerce & Digital Marketing Expo |
+| **Note** | Heavy traffic in city center during events. Walk from Syntagma recommended over driving. |
+
+---
+
+### Athens Conservatory (Odeio Athinon)
+| Field | Data |
+|-------|------|
+| **Address** | Vassileos Georgiou B' 17-19, central Athens |
+| **Transport** | Central Athens, walkable from Syntagma metro |
+| **Character** | Oldest performing arts institution in modern Greece (founded 1871). Historic building with multiple halls. |
+| **Events** | Panathēnea 2025 (main venue), cultural events year-round |
+
+---
+
+### Technopolis City of Athens (Startup Summit Use)
+| Field | Data |
+|-------|------|
+| **Address** | Pireos 100, Gazi |
+| **Transport** | Kerameikos metro (Blue), 5-min walk |
+| **Capacity** | Large — multiple buildings across former gasworks complex |
+| **Character** | Major cultural/event complex in converted 19th-century gasworks. Industrial architecture, multiple indoor and outdoor spaces. Increasingly used for startup summits. |
+| **Startup events** | Doers Summit 2025 & 2026 (Oct), startup showcases |
+| **Note** | Already profiled under live music context — adding startup summit use |
+
+---
+
+### EGG Hub (Eurobank egg Accelerator)
+| Field | Data |
+|-------|------|
+| **Address** | Thessalonikis 75 & Florinis, Moschato 18345 |
+| **Transport** | Bus from Syngrou-Fix metro (Red) or taxi (~15 min, €10-15 from center). No direct metro. |
+| **Capacity** | Purpose-built accelerator hub, multiple event/coworking spaces |
+| **Character** | Ultra-modern startup hub. Opened 2022, inaugurated by Minister of Digital Governance. Home to egg accelerator programs, Investor Days, Innovation Summits. Purpose-built — coworking, mentoring rooms, pitch stage, event spaces. |
+| **Events** | egg Investor Day (annual Feb), Innovation & Investment Summit (Feb 2026), qualifying pitches (Apr) |
+| **Contact** | info@theegg.gr, +30 211 624 1700 |
+
+---
+
 *Cross-reference: Megaron Mousikis is already profiled under Classical / Cultural Venues. For tech usage: Devoxx Greece 2026 (April 23-25) — 3-day developer conference, part of global Devoxx family. Transport: Megaro Moussikis metro (Blue), directly adjacent.*
 
 ---
@@ -596,6 +643,105 @@ For enrichment writers: Greece's AI ecosystem is larger than its Athens events s
 - **Infrastructure arriving:** PHAROS (EU AI Factory) approved December 2025. DAEDALUS supercomputer operational Q1 2026. This is new — previous enrichments couldn't reference it.
 - **Research strength:** Archimedes Unit (Athena RC), NCSR Demokritos, NTUA, AUEB, FORTH all have active AI programs. Not a startup-only ecosystem — deep academic roots.
 - **Key companies:** Omilia (conversational AI), Persado (AI marketing language), Workable (AI recruiting), Hack The Box (cybersecurity). Plus newer wave: EVO Human Performance, Lambda Automata, Langaware, StiQ.
+
+---
+
+# SECTION 4C: STARTUP ECOSYSTEM
+
+## Flagship Startup Events (Athens)
+
+### Panathēnea Festival
+- **What:** Athens' answer to Web Summit. Tech, business, and art festival reimagining the ancient Panathenaia. Startup pitching competition, keynotes, exhibitions, networking, city-wide side events, closing street party under the Acropolis.
+- **Dates 2026:** May 27-29
+- **Venue 2026:** Zappeion Hall (2025 was Athens Conservatory)
+- **Scale:** 10,000 target attendees (3,100+ at inaugural 2025 edition from 44 countries). 250+ speakers, 5 stages, 70+ side events.
+- **Pitch competition:** Apply via Google Form at panathenea.org. Pre-seed and seed-stage companies. Pitch to Tier-1 VCs on main stage.
+- **Confirmed 2026 speakers:** Neil Rimer (Index Ventures), George Robson (Sequoia), Anastasis Germanidis (Runway CTO), Laura Modiano (OpenAI), Christian Bach (Netlify co-founder), Ben Blume (Atomico), Kitty Mayo (Project Europe), Dean Dimizas (Cambridge Associates)
+- **VCs attending 2026:** Lakestar, Index Ventures, Sequoia, Atomico confirmed
+- **Format:** Mornings = stage content (keynotes, panels, pitches). Afternoons = networking + city-wide side events in galleries, cafés, rooftops, museums. Culminates in street party.
+- **Special:** Founders Day (pre-festival, exclusive, private peer-learning). Talent Pass for 100 selected university students.
+- **Organized by:** Nonprofit, student-led with experienced advisory board. Founded Athens 2024.
+- **Tickets:** Early bird -50% available. Multiple tiers (Startup, Investor, Media, Talent).
+- **Website:** panathenea.org
+- **Scrape:** panathenea.org, eventbrite, lu.ma
+
+### Doers Summit
+- **What:** Concentrated gathering of founders, investors, and operators from Emerging Europe & GCC. Startup showcase, pitch competitions, matchmaking, expo, keynotes.
+- **Dates 2026:** October (Athens, exact dates TBA). Also: Limassol May 21-22, Dubai November.
+- **Venue:** Technopolis City of Athens, Pireos 100, Gazi
+- **Scale:** 2,000+ attendees (capped), 50+ speakers, 70+ exhibitors, 2 stages
+- **Pitch competition:** Startup showcase — apply via doerssummit.com. Startups pitch on stage to VCs.
+- **Matchmaking:** AI-powered Brella app for targeted networking and investor meetings.
+- **2025 highlights:** 50%+ international exhibitor booths. Partners: Endeavor Greece, XM, Skroutz, National Bank of Greece. Speakers: Lars Rasmussen (Google Maps co-founder), Apostolos Apostolakis (VentureFriends).
+- **Tickets:** €80 Doer / €200 Doer+ (lounge, parking, co-working) / €400-500 Investor (Investor Lounge, meeting rooms, roundtables)
+- **Organized by:** The Doers Company (team behind Reflect Festival, Cyprus). Operating since 2017.
+- **Website:** doerssummit.com
+- **Scrape:** doerssummit.com, lu.ma, eventbrite
+
+### egg Innovation & Investment Summit + Investor Day
+- **What:** Eurobank's accelerator showcase. Startups pitch to VCs, corporate investors, and angel investors from Greece, CEE, Israel, US, Canada, UK. Greece's most established accelerator pipeline.
+- **Latest:** Innovation & Investment Summit ran February 11-13, 2026 at EGG Hub. 18 startups presented. MoUs signed with BioInnovation Greece and EBAN (European Business Angel Network).
+- **Investor Day:** Annual, February. 40+ startups pitch to 100-200+ investors.
+- **Qualifying pitches:** April 8-9, 2026. Acceleration starts May 1, 2026.
+- **Venue:** EGG Hub, Thessalonikis 75, Moschato
+- **Track record:** Since 2013. 460+ business groups, 1,600+ entrepreneurs, 230 companies formed, €55.7M raised by alumni, €49.2M cumulative turnover. FT/Statista ranked top European startup hub.
+- **Partnerships:** DMZ Toronto, InnovX Romania, Cyprus Seeds, 10+ Greek universities, Corallia Ventures, EBAN.
+- **How to participate:** Apply at theegg.gr. Greek, EU, or third-country citizens eligible. Start-Up platform (incubation) or Scale-Up platform (acceleration).
+- **Website:** theegg.gr/en, eurobank.gr (search egg)
+- **Scrape:** theegg.gr/en, eurobank.gr press releases
+
+## Accelerators & Incubators
+
+| Organization | Type | Focus | Key Events | Website |
+|-------------|------|-------|------------|---------|
+| **egg (Eurobank)** | Accelerator | All sectors, emphasis on HealthTech, FinTech, DeepTech, Sustainability | Investor Day (Feb), Innovation Summit (Feb), Qualifying Pitches (Apr) | theegg.gr |
+| **ACE AUEB** | University hub | AI, tech, all sectors | AI Hackathon Greece (Mar), workshops year-round | ace.aueb.gr |
+| **Found.ation** | Incubator/support | Startups, digital | Workshops, demo days, mentoring. 67% program success rate. | thefoundation.gr |
+| **Orange Grove** | Incubator | International startups in Greece | Workshops, training, demo days. Dutch Embassy-backed. Strong international network. | orangegrove.eu |
+| **Impact Hub Athens** | Coworking + programs | Social impact, sustainability | Community events, workshops | impacthub.net/athens |
+| **Endeavor Greece** | Scale-up support | High-impact entrepreneurs | Innovation Summit, mentoring, scale-up programs | endeavor.org.gr |
+
+## Key VCs & Investors (Athens-based or Greece-focused)
+
+| Fund | Stage | Focus | Notable Investments |
+|------|-------|-------|-------------------|
+| **VentureFriends** | Pre-seed to Series A | FinTech, PropTech, B2C, Marketplaces, SaaS | €250M+ deployed across Europe, MENA, LatAm |
+| **Metavallon VC** | Pre-seed, Seed | All sectors, Greek founders, global focus | |
+| **Marathon Venture Capital** | Seed | Tech companies by ambitious founders | |
+| **Big Pi Ventures** | Seed, Series A | DeepTech, science-based | |
+| **Uni.Fund** | Pre-seed, Seed | University spin-offs, research-based | |
+| **Growthfund (HDBI)** | Various | National development bank investments, VC fund participations | |
+| **Startup Grind Athens** | Community | Monthly fireside chats, networking | startupgrind.com/athens |
+
+## Government Programs
+
+| Program | What | Relevance |
+|---------|------|-----------|
+| **Elevate Greece** | National Startup Registry | Registered startups get tax benefits, Golden Visa for startup investment |
+| **Digital Nomad Visa** | Residency for remote workers | €3,500/month income requirement, 12-month renewable |
+| **Startup Golden Visa** | Investment visa | €250K investment in registered startup |
+| **PHAROS AI Factory** | National AI hub | Computing resources, datasets, tools for AI startups |
+
+## Greek Startup Ecosystem Context (for enrichment writers)
+
+Key numbers that inform event descriptions:
+- **Total startup investment 2025:** €732.2M (35% YoY increase)
+- **VC investment 2025:** €234M, projected €320M for 2026
+- **AI accounts for:** 50%+ of global VC investment (cited by egg's Head of Venture Banking, Feb 2026)
+- **Athens startups:** ~228 (75% of Greek total), ranked 47th globally
+- **Notable exits:** Viva Wallet (€1.7B, J.P. Morgan), BETA CAE (€1.24B), InstaShop ($360M, Delivery Hero), Softomotive ($150M+, Microsoft), Beat (Daimler)
+- **Active players:** Omilia, Persado, Workable, Blueground, Hack The Box, Skroutz
+
+## Show-Don't-Tell for Startup Events
+
+| Instead of this (telling) | Write this (showing) |
+|---------------------------|----------------------|
+| "great pitch competition" | "The founder who won last year's competition closed a seed round in the hallway before the closing party" |
+| "top investors present" | "Sequoia, Index, and Atomico all have partners in the room — not associates, partners" |
+| "supportive ecosystem" | "The mentor assigned to your team exited his own company for €50M three years ago" |
+| "international event" | "Name badges from 44 countries, and the conversations switch between Greek, English, and French mid-sentence" |
+| "valuable networking" | "By the second coffee break, you've exchanged more term sheet stories than LinkedIn connections" |
+| "rising ecosystem" | "Three of the startups presenting today were in an egg cohort eighteen months ago — one just closed Series A" |
 
 ---
 
@@ -790,6 +936,23 @@ For enrichment writers: Greece's AI ecosystem is larger than its Athens events s
 | lu.ma (Athens search) | Community events, new format | Weekly |
 | dev.events/hackathons/EU/GR | Hackathons | Monthly |
 
+## Startup Event Sources
+
+| Source | What | Check Frequency |
+|--------|------|-----------------|
+| panathenea.org | Panathēnea Festival — speakers, program, pitch applications | Monthly (weekly from March) |
+| doerssummit.com | Doers Summit Athens — tickets, speakers, startup applications | Monthly (weekly from August) |
+| theegg.gr/en | egg accelerator — Investor Day, Innovation Summit, cohort pitches | Monthly |
+| eurobank.gr/en/group/grafeio-tupou | Eurobank press releases about egg events | Monthly |
+| endeavor.org.gr/events | Endeavor Greece events, Innovation Summit | Monthly |
+| startupgrind.com/athens | Startup Grind Athens fireside chats | Monthly |
+| thefoundation.gr | Found.ation events, workshops, demo days | Monthly |
+| orangegrove.eu | Orange Grove workshops, demo days | Monthly |
+| vestbee.com/events-list | European startup events aggregator (filter: Athens/Greece) | Monthly |
+| startupblink.com/blog | Global startup events list (check for Athens) | Quarterly |
+| hellenic.org/all-events | Hellenic Innovation Network diaspora events | Monthly |
+| elevategreece.gov.gr | Government startup programs, announcements | Monthly |
+
 ---
 
 # SECTION 11: GREEK JAZZ ARTISTS
@@ -821,6 +984,7 @@ For enrichment context when these names appear:
 | **Paleo Faliro** | Bus from Syngrou-Fix (Red) | Coastal, cultural venues (Eugenides, SNFCC) | Event-specific |
 | **Glyfada** | Taxi only | Athenian Riviera, premium, no metro | Event-specific |
 | **Ellinikon** | Elliniko (Red) | Urban regeneration, contemporary venues | Event-specific |
+| **Moschato** | Bus from Syngrou-Fix (Red) | Residential/industrial, EGG Hub, not a destination | Business hours |
 
 ---
 
@@ -838,6 +1002,9 @@ For enrichment context when these names appear:
 - **OTEAcademy** — Confirmed operational, Disrupt AI Summit 2026 announced
 - **ACE AUEB** — Confirmed operational, AI Hackathon Greece 2026 held March 6-8
 - **Archimedes Amphitheatre** — Confirmed operational, regular seminars ongoing 2026
+- **Zappeion Hall** — Confirmed operational, Panathēnea 2026 announced (May 27-29)
+- **EGG Hub Moschato** — Confirmed operational, egg Innovation & Investment Summit held February 11-13, 2026
+- **Technopolis** — Confirmed operational (already known), Doers Summit October 2026 announced
 
 ---
 
