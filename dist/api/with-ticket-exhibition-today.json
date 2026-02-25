@@ -4,95 +4,10 @@
     "price": "with-ticket",
     "time": "today"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "580fe29c88b0d8f1",
-      "title": "Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα",
-      "description": "More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.",
-      "fullDescription": "You walk through the converted warehouse on Pireos Street and the scale of what MIET has collected becomes apparent. Room after room of Greek art spanning a century — canvases that trace the country's visual evolution from traditionalism through modernism and into contemporary expression. The walls hold more than paintings; they hold arguments about what Greek art should be.\n\nThe Benaki Museum at Pireos houses MIET's permanent collection of 20th-century Greek art — an assembly that functions as both education and provocation. You'll find works by artists whose names anchor any serious conversation about Greek modernism, alongside pieces by figures who remain underappreciated beyond specialist circles. The chronological arrangement creates its own narrative, each room representing a different moment in the country's cultural self-definition.\n\nThe visitors here move differently than typical museum crowds. These are people who pause at specific works, who return to earlier rooms after seeing what came later, who understand that collections tell stories through juxtaposition. Art students with notebooks share space with older visitors who remember when some of these works first appeared. The quiet is purposeful, the attention genuine.\n\nThe Pireos branch of the Benaki provides the industrial shell this collection needs. High ceilings accommodate larger works without overwhelming them. Natural light from the converted warehouse spaces changes throughout the day, offering different perspectives on the same pieces. The building's former life as a working space adds layers to experiencing art made during periods when Greece was itself being rebuilt.\n\nIf you want international celebrity names and blockbuster exhibitions, this collection will seem local and unfamiliar. The focus here is specifically Greek — the questions these artists asked about identity, tradition, and modernity emerged from a particular history. But if you're ready to understand what 20th-century Greek artists were wrestling with, how they positioned themselves between East and West, tradition and rupture — this collection rewards the investment.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Hours** | 10:00-18:00 |\n| **Venue** | Benaki Museum Pireos, Pireos 138 |\n| **Getting there** | Kerameikos Metro (Blue line), 10 min walk |\n| **Admission** | Standard museum entry |\n\nA century of Greek art arguing with itself about what Greek art should become.",
-      "startDate": "2026-02-25",
-      "endDate": "2026-04-26",
-      "type": "exhibition",
-      "genres": [
-        "visual-arts"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσείο Μπενάκη - Πειραιώς 138",
-        "address": "Πειραιώς 138, Αθήνα",
-        "neighborhood": "Γκάζι",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.benaki.org",
-      "ticketUrl": "https://www.benaki.org",
-      "source": "benaki",
-      "createdAt": "2026-01-30T15:08:45.203Z",
-      "updatedAt": "2026-02-25 17:45:56",
-      "language": "en",
-      "imageSource": "not_found",
-      "openingHours": {
-        "mon": "closed",
-        "tue": "closed",
-        "wed": "10:00-18:00",
-        "thu": "10:00-22:00",
-        "fri": "10:00-18:00",
-        "sat": "10:00-18:00",
-        "sun": "10:00-16:00"
-      },
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "8787e304dbc782c4",
-      "title": "Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα",
-      "description": "More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.",
-      "startDate": "2026-02-25T10:00:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "Art",
-        "History",
-        "Culture"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσείο Μπενάκη - Πειραιώς 138",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.benaki.org",
-      "ticketUrl": "https://www.benaki.org",
-      "source": "benaki",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-25 17:45:56",
-      "language": "en",
-      "timeDoors": "10:00",
-      "timeSource": "scraped_listing",
-      "imageSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 2,
-    "lastUpdate": "2026-02-25T17:50:14.705Z",
+    "total": 0,
+    "lastUpdate": "2026-02-25T22:53:19.987Z",
     "url": "https://agentathens.netlify.app/with-ticket-exhibition-today"
   }
 }

@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T17:50:15.544Z">
+  <meta name="last-modified" content="2026-02-25T22:53:20.578Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -40,6 +40,13 @@
   <meta property="og:locale" content="el_GR">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/meetup-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Startup Meetup στην Αθήνα Αυτόν τον Μήνα">
+  <meta name="twitter:description" content="0 εκδηλώσεις στην Αθήνα">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/meetup-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -72,13 +79,16 @@
     "numberOfItems": 0,
     "itemListElement": []
   },
-  "datePublished": "2026-02-25T17:50:15.544Z",
-  "dateModified": "2026-02-25T17:50:15.544Z"
+  "datePublished": "2026-02-25T22:53:20.578Z",
+  "dateModified": "2026-02-25T22:53:20.578Z"
 }
   </script>
 
   <!-- Design system -->
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <!-- Page-specific styling -->
@@ -117,6 +127,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -132,7 +143,7 @@
         <strong>0 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:50 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 26 Φεβρουαρίου 2026 στις 12:53 πμ ώρα Αθήνας
       </p>
     </header>
 
@@ -178,6 +189,8 @@
   </div>
   <div class="filter-panel-backdrop"></div>
 
+    
+
     <main>
       
       <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
@@ -215,6 +228,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -271,6 +285,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

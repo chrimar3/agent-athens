@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Ανδριάνα Δημητρίου | ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ | agent-athens</title>
@@ -103,6 +106,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -220,6 +224,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -276,6 +281,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

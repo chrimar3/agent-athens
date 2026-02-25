@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="7 upcoming events at Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;. Next: Αντιστοιχίες on Feb 25, 2026.">
+  <meta name="description" content="6 upcoming events at Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;. Next: Λουκής Λάρας on Feb 27, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/171-187/">
@@ -19,11 +22,18 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; - Εκδηλώσεις">
-  <meta property="og:description" content="7 επερχόμενες εκδηλώσεις στο Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;">
+  <meta property="og:description" content="6 επερχόμενες εκδηλώσεις στο Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;">
   <meta property="og:url" content="https://agentathens.netlify.app/venues/171-187/">
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; - Εκδηλώσεις">
+  <meta name="twitter:description" content="6 επερχόμενες εκδηλώσεις στο Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -80,6 +90,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -98,7 +109,7 @@
       <div class="venue-meta">
         
         
-        <p>7 επερχόμενες εκδηλώσεις (5 concert, 1 theater, 1 classical)</p>
+        <p>6 επερχόμενες εκδηλώσεις (1 theater, 4 concert, 1 classical)</p>
       </div>
     </header>
 
@@ -106,13 +117,6 @@
       <h2>Επερχόμενες Εκδηλώσεις</h2>
       <ul>
         
-      <li class="venue-event-item ">
-        <a href="/events/e36dbf14-171-187-/">Αντιστοιχίες</a>
-        
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
-        <span class="event-type">concert</span>
-      </li>
-
       <li class="venue-event-item ">
         <a href="/events/d9c0e533-171-187-/">Λουκής Λάρας</a>
         
@@ -176,6 +180,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -232,6 +237,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

@@ -9,45 +9,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "77c23d075980afcd",
-      "title": "Stathis Anninos - UNSILENT PLACE",
-      "description": "",
-      "fullDescription": "You descend the stairs into Half Note and the room embraces you with its dimensions. Intimate isn't a marketing word here — it's physics. The tables cluster close to the small stage, the bar occupies one wall, and the acoustic treatment means every note reaches every seat with identical clarity. This is Athens' jazz institution operating at its most essential.\n\nStathis Anninos presents \"Unsilent Place\" — a title that captures his approach to composition. Anninos has built his reputation on music that refuses the easy paths, horn lines that interrogate rather than comfort. His work draws from the Greek musical heritage while pushing into territories that owe as much to contemporary European jazz as to Mediterranean tradition. The musicians he's assembled understand the assignment: controlled intensity, conversation between instruments.\n\nThe Half Note crowd on a night like this arrives with intention. These aren't casual observers who wandered in from dinner. You'll recognize them by how they listen — leaning forward, tracking the interplay between players, nodding at phrases that work. Conversations between sets touch on recordings and influences, the kind of informed appreciation that comes from years of following this music closely.\n\nSince 1979, Half Note has maintained its position as Athens' premier jazz room. The venue's intimacy creates accountability — every musical choice lands on an audience close enough to notice. When Anninos takes a solo, you're near enough to see the thought process, to watch ideas form and resolve. The sound system handles acoustic instruments with respect, amplification serving clarity rather than volume.\n\nIf you need jazz that swings predictably, that stays in comfortable harmonic territory, Anninos will challenge you. His compositions operate in zones that require attention, phrases that resolve in unexpected places. But if you've been waiting for Athens jazz that takes risks in a room built to reward them — if you want to hear where Greek jazz is pushing its boundaries — you end up here.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 20:00 |\n| **Music** | 21:30 |\n| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10 min walk |\n| **Price** | €15-20 table, €10-15 bar |\n| **Reservations** | Essential — book ahead, confirm same day |\n\nThe silence between notes is where this music lives. The title isn't ironic.",
-      "startDate": "2026-02-25T21:30:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "jazz"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "από €12"
-      },
-      "url": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
-      "ticketUrl": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
-      "source": "halfnote",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-25 17:43:47",
-      "language": "en",
-      "timeDoors": "21:30",
-      "timeSource": "scraped_listing",
-      "imageUrl": "https://www.halfnote.gr/wp-content/uploads/2026/01/more2-1.jpg",
-      "imageSource": "backfill",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "4eeeba9927541cfa",
       "title": "Με κέντρο τον Ραχμάνινοφ",
       "description": "Με κέντρο τον Ραχμάνινοφ Η διεθνώς αναγνωρισμένη ελληνο-βενεζουελανή πιανίστρια παρουσιάζει στο Μέγαρο ένα απαιτητικό ρεσιτάλ με τρεις Σονάτες για πιάνο, έργα κορυφαίων ρώσων συνθετών. Ξεχωρίζει η Πρώ",
@@ -1177,8 +1138,8 @@
     }
   ],
   "meta": {
-    "total": 30,
-    "lastUpdate": "2026-02-25T17:50:15.661Z",
+    "total": 29,
+    "lastUpdate": "2026-02-25T22:53:20.668Z",
     "url": "https://agentathens.netlify.app/jazz"
   }
 }

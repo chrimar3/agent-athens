@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>ΣΩΚΡΑΤΗΣ ΣΙΝΟΠΟΥΛΟΣ QUARTET «Metamodal» | Concert #1 Baumstrasse | agent-athens</title>
@@ -103,6 +106,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -194,36 +198,6 @@
         <h3>Επόμενες εκδηλώσεις στο Concert #1 Baumstrasse</h3>
         <div class="card-grid">
           
-  <a href="/events/20b76808-concert-1-baumstrasse-/" class="event-card">
-    <div class="card-image-wrapper">
-      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_59075_thumbnail.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
-      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
-      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
-      
-    </div>
-    <div class="card-body">
-      <h3 class="card-title">ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ  ΠΕΡΙΚΛΗΣ ΧΕΙΛΑΣ «ΣΤΗΝ ΚΑΡΔΙΑ ΤΟΥ ΚΟΥΡΤΣ»</h3>
-      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
-      <span class="card-venue">Concert #1 Baumstrasse</span>
-      <span class="card-price">€10</span>
-    </div>
-  </a>
-
-  <a href="/events/e545b255-concert-1-baumstrasse-/" class="event-card">
-    <div class="card-image-wrapper">
-      
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
-      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
-      
-    </div>
-    <div class="card-body">
-      <h3 class="card-title">Περικλής Χειλάς</h3>
-      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
-      <span class="card-venue">Concert #1 Baumstrasse</span>
-      <span class="card-price">€10</span>
-    </div>
-  </a>
-
   <a href="/events/60748af9-concert-1-baumstrasse-the-greek-jazz-book-concert-1/" class="event-card">
     <div class="card-image-wrapper">
       
@@ -283,6 +257,21 @@
       <span class="card-price">€12</span>
     </div>
   </a>
+
+  <a href="/events/28514821-concert-1-baumstrasse-/" class="event-card">
+    <div class="card-image-wrapper">
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60672_or_IMG_2093.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">ΠΝΟΕΣ ΚΑΙ ΠΛΗΚΤΡΑ</h3>
+      <span class="card-date"><time datetime="2026-03-15">Κυριακή 15 Μαρτίου</time></span>
+      <span class="card-venue">Concert #1 Baumstrasse</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
         </div>
       </section>
     </div>
@@ -315,6 +304,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -371,6 +361,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

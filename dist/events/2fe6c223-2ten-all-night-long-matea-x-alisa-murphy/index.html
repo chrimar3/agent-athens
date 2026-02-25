@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>All Night Long MATEA x Alisa Murphy | 2ten | agent-athens</title>
@@ -22,7 +25,7 @@
   <meta property="og:description" content="">
   <meta property="og:url" content="https://agentathens.netlify.app/events/2fe6c223-2ten-all-night-long-matea-x-alisa-murphy/">
   <meta property="og:type" content="event">
-  <meta property="og:image" content="https://agentathens.netlify.app/images/og/dj-default.jpg">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/dj-set-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="el_GR">
@@ -32,7 +35,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="All Night Long MATEA x Alisa Murphy">
   <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/dj-default.jpg">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/dj-set-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -73,7 +76,7 @@
     "url": "https://ra.co/events/2369567",
     "validFrom": "2026-02-12 11:12:20"
   },
-  "image": "https://agentathens.netlify.app/images/og/dj-default.jpg"
+  "image": "https://agentathens.netlify.app/images/og/dj-set-default.png"
 }
   </script>
 </head>
@@ -103,6 +106,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -244,6 +248,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -300,6 +305,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

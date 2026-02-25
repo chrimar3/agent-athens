@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Cantina Social - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="7 upcoming events at Cantina Social. Next: Lockbird on Feb 25, 2026.">
+  <meta name="description" content="5 upcoming events at Cantina Social. Next: Irini Karaoglou on Feb 26, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/cantina-social/">
@@ -19,11 +22,18 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Cantina Social - Εκδηλώσεις">
-  <meta property="og:description" content="7 επερχόμενες εκδηλώσεις στο Cantina Social">
+  <meta property="og:description" content="5 επερχόμενες εκδηλώσεις στο Cantina Social">
   <meta property="og:url" content="https://agentathens.netlify.app/venues/cantina-social/">
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cantina Social - Εκδηλώσεις">
+  <meta name="twitter:description" content="5 επερχόμενες εκδηλώσεις στο Cantina Social">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -46,18 +56,6 @@
   },
   "url": "https://agentathens.netlify.app/venues/cantina-social/",
   "event": [
-    {
-      "@type": "Event",
-      "name": "Lockbird",
-      "startDate": "2026-02-25T21:00:00+03:00",
-      "url": "https://agentathens.netlify.app/events/de0baa80-cantina-social-lockbird/"
-    },
-    {
-      "@type": "Event",
-      "name": "Lockbird",
-      "startDate": "2026-02-25T21:00:00+02:00",
-      "url": "https://agentathens.netlify.app/events/a234d270-cantina-social-lockbird/"
-    },
     {
       "@type": "Event",
       "name": "Irini Karaoglou",
@@ -141,6 +139,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -159,7 +158,7 @@
       <div class="venue-meta">
         
         <p itemprop="address">Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece</p>
-        <p>7 επερχόμενες εκδηλώσεις (2 concert, 5 dj_set)</p>
+        <p>5 επερχόμενες εκδηλώσεις (4 dj_set, 1 concert)</p>
       </div>
     </header>
 
@@ -167,20 +166,6 @@
       <h2>Επερχόμενες Εκδηλώσεις</h2>
       <ul>
         
-      <li class="venue-event-item ">
-        <a href="/events/de0baa80-cantina-social-lockbird/">Lockbird</a>
-        
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 21:00</span>
-        <span class="event-type">concert</span>
-      </li>
-
-      <li class="venue-event-item ">
-        <a href="/events/a234d270-cantina-social-lockbird/">Lockbird</a>
-        
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 21:00</span>
-        <span class="event-type">dj_set</span>
-      </li>
-
       <li class="venue-event-item ">
         <a href="/events/1ae8fc4e-cantina-social-irini-karaoglou/">Irini Karaoglou</a>
         
@@ -237,6 +222,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -293,6 +279,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

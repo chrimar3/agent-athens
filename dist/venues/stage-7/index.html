@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Stage 7 - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="3 upcoming events at Stage 7. Next: Πλην 30 on Feb 25, 2026.">
+  <meta name="description" content="2 upcoming events at Stage 7. Next: Πέτρος Γαϊτάνος on Feb 27, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/stage-7/">
@@ -19,11 +22,18 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Stage 7 - Εκδηλώσεις">
-  <meta property="og:description" content="3 επερχόμενες εκδηλώσεις στο Stage 7">
+  <meta property="og:description" content="2 επερχόμενες εκδηλώσεις στο Stage 7">
   <meta property="og:url" content="https://agentathens.netlify.app/venues/stage-7/">
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stage 7 - Εκδηλώσεις">
+  <meta name="twitter:description" content="2 επερχόμενες εκδηλώσεις στο Stage 7">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -80,6 +90,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -98,7 +109,7 @@
       <div class="venue-meta">
         
         
-        <p>3 επερχόμενες εκδηλώσεις (1 theater, 2 concert)</p>
+        <p>2 επερχόμενες εκδηλώσεις (2 concert)</p>
       </div>
     </header>
 
@@ -106,13 +117,6 @@
       <h2>Επερχόμενες Εκδηλώσεις</h2>
       <ul>
         
-      <li class="venue-event-item ">
-        <a href="/events/4b6ba24a-stage-7-30/">Πλην 30</a>
-        
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
-        <span class="event-type">theater</span>
-      </li>
-
       <li class="venue-event-item ">
         <a href="/events/cfb666d0-stage-7-/">Πέτρος Γαϊτάνος</a>
         
@@ -148,6 +152,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -204,6 +209,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

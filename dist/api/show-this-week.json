@@ -7,78 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
-      "id": "64336df6b74db57f",
-      "title": "Δεν θα πεθάνουμε κιόλας",
-      "description": "Εως 2026-03-06",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "show",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Red Jasper Cabaret Theatre",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:15:13",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088694/list.jpg",
-      "imageSource": "backfill",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "484df1bd27d4bed8",
-      "title": "Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ",
-      "description": "Εως 2026-02-26",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "show",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Red Jasper Cabaret Theatre",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:17:42",
-      "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_listing",
-      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10079266/list.jpg",
-      "imageSource": "backfill",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
       "id": "1e4add97884526f",
       "title": "Louis C.K. - Ridiculous",
       "description": "με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλληλη...",
@@ -119,8 +47,8 @@
     }
   ],
   "meta": {
-    "total": 3,
-    "lastUpdate": "2026-02-25T17:50:14.524Z",
+    "total": 1,
+    "lastUpdate": "2026-02-25T22:53:19.847Z",
     "url": "https://agentathens.netlify.app/show-this-week"
   }
 }

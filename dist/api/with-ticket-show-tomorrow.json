@@ -4,52 +4,10 @@
     "price": "with-ticket",
     "time": "tomorrow"
   },
-  "events": [
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "id": "1e4add97884526f",
-      "title": "Louis C.K. - Ridiculous",
-      "description": "με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλληλη...",
-      "fullDescription": "The house lights dim and the Christmas Theater contracts around a single figure at center stage. Louis C.K. with a microphone and whatever accumulated observations he's decided to share tonight. No props. No projected visuals. No comfort blanket of production values. Just language delivered with precision.\n\n\"Ridiculous\" marks Louis C.K.'s second Athens date, continuing a European tour that's proven demand persists despite — or perhaps because of — everything that changed his career's trajectory. The comedy hasn't softened. If anything, the years since his public reckoning have sharpened the writing, adding layers of self-examination to material that was already unflinching. He's not asking for forgiveness; he's analyzing the condition.\n\nThe crowd that fills the Christmas Theater for night two has made a specific choice. They've processed the debates about separation between art and artist and decided to be present. The laughter arrives in complex waves — sometimes pure amusement, sometimes uncomfortable recognition, sometimes the particular sound of an audience not sure if they're allowed to find something funny. Louis has been working this tension for years now.\n\nThe Christmas Theater handles this show with technical competence — strong sightlines, acoustics calibrated for spoken word, seating that keeps even the distant rows connected to the stage. But the real work happens in the space between comedian and audience, that fragile transaction of trust and discomfort that defines live stand-up.\n\nIf you want comedy that provides escape, that leaves you lighter than you arrived, Louis C.K. in 2026 isn't designed for that. He's processing darkness publicly, finding humor in places most people don't want to look. But if you believe the best comedy emerges from genuine risk, from a performer willing to alienate portions of his audience in pursuit of something true — you understand why this room is full.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 26, 2026 |\n| **Doors** | 19:30 |\n| **Show** | 21:00 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | €40-80 depending on seating |\n| **Language** | English |\n\n\"Ridiculous\" isn't just the title. It's the operating principle.",
-      "startDate": "2026-02-26T19:30:00+03:00",
-      "endDate": null,
-      "type": "show",
-      "genres": [
-        "comedy"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Christmas Theater",
-        "address": "Athens, Greece",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 35,
-        "currency": "EUR",
-        "range": "€35"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
-      "ticketUrl": "https://www.more.com/theater/louis-c-k",
-      "source": "athinorama.gr",
-      "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-25 17:14:01",
-      "language": "en",
-      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088136/list.jpg",
-      "imageSource": "backfill",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    }
-  ],
+  "events": [],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-25T17:50:14.791Z",
+    "total": 0,
+    "lastUpdate": "2026-02-25T22:53:20.040Z",
     "url": "https://agentathens.netlify.app/with-ticket-show-tomorrow"
   }
 }

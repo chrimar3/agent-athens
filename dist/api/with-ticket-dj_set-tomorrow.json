@@ -8,10 +8,77 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "008fd413d592ab71",
+      "id": "a00afb8c8852dcd9",
+      "title": "Marika Rossa",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 13,
+        "currency": "EUR",
+        "range": "€13 - €22"
+      },
+      "url": "https://www.athinorama.gr/music/gig/marika_rossa-10089203/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-25 17:13:49",
+      "language": "en",
+      "timeDoors": "23:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "f9d313043f98394d",
+      "title": "Skullcrush Fest",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Temple",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10 - €12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/skullcrush_fest-10089226/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/skullcrush_fest-10089226/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-25 17:13:56",
+      "language": "en",
+      "timeDoors": "20:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "30837c7cd898cafc",
       "title": "PHARAOH Vinyl Selection",
       "description": "",
-      "startDate": "2026-02-26T20:30:00",
+      "startDate": "2026-02-27T20:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -30,13 +97,13 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://ra.co/events/2378584",
-      "ticketUrl": "https://ra.co/events/2378584",
+      "url": "https://ra.co/events/2378593",
+      "ticketUrl": "https://ra.co/events/2378593",
       "source": "residentadvisor",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:16:14",
+      "updatedAt": "2026-02-25 17:15:58",
       "language": "en",
-      "timeDoors": "20:30",
+      "timeDoors": "20:00",
       "timeSource": "scraped_listing",
       "imageSource": "not_found",
       "permanentCollection": false,
@@ -45,10 +112,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "1ae8fc4ec471d76f",
-      "title": "Irini Karaoglou",
+      "id": "f4351782b6f9b0bc",
+      "title": "Imprint: 01 W/ Ulla, Apu Nanu, Manos Plitsis, Raed, Torn",
       "description": "",
-      "startDate": "2026-02-26T21:00:00",
+      "startDate": "2026-02-27T21:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -56,22 +123,22 @@
       ],
       "tags": [],
       "venue": {
-        "name": "Cantina Social",
+        "name": "Big Table",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "door",
-        "amount": null,
+        "type": "paid",
+        "amount": 5,
         "currency": "EUR",
-        "range": "Door price"
+        "range": "€5 - €8"
       },
-      "url": "https://www.clubber.gr/events/irini-karaoglou-3/",
-      "ticketUrl": "https://www.clubber.gr/events/irini-karaoglou-3/",
-      "source": "clubber.gr",
+      "url": "https://ra.co/events/2370129",
+      "ticketUrl": "https://ra.co/events/2370129",
+      "source": "residentadvisor",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-25 17:41:54",
+      "updatedAt": "2026-02-25 17:15:50",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -82,10 +149,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "3820a5a5e35e049d",
-      "title": "Mama Athens with Lencasea / K.Perrakis",
+      "id": "6abdcdb729abcf08",
+      "title": "Bonso / Roussos",
       "description": "",
-      "startDate": "2026-02-26T21:00:00",
+      "startDate": "2026-02-27T22:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -104,13 +171,13 @@
         "currency": "EUR",
         "range": null
       },
-      "url": "https://ra.co/events/2379022",
-      "ticketUrl": "https://ra.co/events/2379022",
+      "url": "https://ra.co/events/2379024",
+      "ticketUrl": "https://ra.co/events/2379024",
       "source": "residentadvisor",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:16:06",
+      "updatedAt": "2026-02-25 17:15:41",
       "language": "en",
-      "timeDoors": "21:00",
+      "timeDoors": "22:00",
       "timeSource": "scraped_listing",
       "imageSource": "not_found",
       "permanentCollection": false,
@@ -119,10 +186,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "6bb5965b47173e2e",
-      "title": "Sneaky club",
+      "id": "1373094e1a2d4651",
+      "title": "Mimi x Fy",
       "description": "",
-      "startDate": "2026-02-26T23:00:00",
+      "startDate": "2026-02-27T23:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -141,11 +208,11 @@
         "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/sneaky-club-12/",
-      "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
+      "url": "https://www.clubber.gr/events/mimi-x-fy-2/",
+      "ticketUrl": "https://www.clubber.gr/events/mimi-x-fy-2/",
       "source": "clubber.gr",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-25 17:41:53",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-25 17:41:47",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -156,10 +223,157 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "d267eb676e666885",
-      "title": "Agent Greg + Stephanos",
+      "id": "73d01fbb124c0c29",
+      "title": "Astron Club Night with Greta b2b Miss Trouli / KOKETAMC b2b Socrates Antypas",
       "description": "",
-      "startDate": "2026-02-26T23:00:00",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367246",
+      "ticketUrl": "https://ra.co/events/2367246",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-25 17:15:33",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "9d2c62a70f05d8a3",
+      "title": "Greta b2b Miss Trouli + KOKETAMC b2b Socrates Antypas",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/",
+      "ticketUrl": "https://www.clubber.gr/events/greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-25 17:41:48",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "cbc54bb073b9f844",
+      "title": "Gegen Athens: Bill Sanders + IVRA + Luigi Di Venere + Mar/us + Samantha Togni",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Aux Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samantha-togni/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-25 17:41:49",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "ecf67fd2d3906fee",
+      "title": "Romphea",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Cantina Social",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/romphea-2/",
+      "ticketUrl": "https://www.clubber.gr/events/romphea-2/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-25 17:41:50",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "a05fe2d52a605be6",
+      "title": "Jonathan Kaspar + Mironas + Rezo",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -178,13 +392,159 @@
         "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/agent-greg-stephanos/",
-      "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "url": "https://www.clubber.gr/events/jonathan-kaspar-mironas-rezo/",
+      "ticketUrl": "https://www.clubber.gr/events/jonathan-kaspar-mironas-rezo/",
       "source": "clubber.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-25 17:41:51",
+      "updatedAt": "2026-02-25 17:41:46",
       "language": "en",
       "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7591f68d1d596e25",
+      "title": "Tendervore with Greta b2b Miss Trouli / KOKETAMC b2b Socrates Antypas",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367246",
+      "ticketUrl": "https://ra.co/events/2367246",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-25 17:15:33",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "3188e6d3d0b29752",
+      "title": "DJ Gus + Liou",
+      "description": "",
+      "startDate": "2026-02-27T23:45:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Crust",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/dj-gus-liou-10/",
+      "ticketUrl": "https://www.clubber.gr/events/dj-gus-liou-10/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-25 17:41:45",
+      "language": "en",
+      "timeDoors": "23:45",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "8aea69aaf4cef0c0",
+      "title": "Exilium pres Marika Rossa",
+      "description": "",
+      "startDate": "2026-02-27T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Oddity",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2309038",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-08 12:53:02",
+      "updatedAt": "2026-02-25 17:15:16",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "imageSource": "not_found",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "bb384531f459b828",
+      "title": "Kits and Rave - Carnival Edition",
+      "description": "",
+      "startDate": "2026-02-27T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "IT Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2371703",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-25 17:15:24",
+      "language": "en",
+      "timeDoors": "23:59",
       "timeSource": "scraped_listing",
       "imageSource": "not_found",
       "permanentCollection": false,
@@ -192,8 +552,8 @@
     }
   ],
   "meta": {
-    "total": 5,
-    "lastUpdate": "2026-02-25T17:50:14.690Z",
+    "total": 15,
+    "lastUpdate": "2026-02-25T22:53:19.974Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-tomorrow"
   }
 }
