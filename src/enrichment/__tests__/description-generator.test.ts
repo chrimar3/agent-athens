@@ -69,7 +69,7 @@ function generateWords(count: number, variety = false): string {
       'showcases', 'her', 'distinct', 'vocal', 'style', 'blending', 'traditional',
       'Greek', 'music', 'alongside', 'modern', 'electronic', 'sounds', 'creating',
       'memorable', 'moments', 'for', 'audiences', 'seeking', 'authentic',
-      'cultural', 'entertainment', 'Athens', 'vibrant', 'local', 'scene',
+      'cultural', 'entertainment', 'Athens', 'popular', 'local', 'scene',
     ];
     const result: string[] = [];
     for (let i = 0; i < count; i++) {
@@ -273,7 +273,7 @@ describe('Description Generator', () => {
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.toLowerCase().includes('filler'))).toBe(true);
+      expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
     test('rejects description with "must-see event"', () => {
@@ -281,7 +281,7 @@ describe('Description Generator', () => {
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.toLowerCase().includes('filler'))).toBe(true);
+      expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
     test('rejects description with "don\'t miss"', () => {
@@ -289,7 +289,7 @@ describe('Description Generator', () => {
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.toLowerCase().includes('filler'))).toBe(true);
+      expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
     test('rejects description with "once in a lifetime"', () => {
@@ -297,7 +297,7 @@ describe('Description Generator', () => {
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.toLowerCase().includes('filler'))).toBe(true);
+      expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
     test('rejects description with "not to be missed"', () => {
@@ -366,7 +366,7 @@ describe('Description Generator', () => {
 
   describe('FILLER_PHRASES', () => {
     test('contains common filler phrases', () => {
-      expect(FILLER_PHRASES).toContain('unforgettable experience');
+      expect(FILLER_PHRASES).toContain('unforgettable');
       expect(FILLER_PHRASES).toContain('must-see');
       expect(FILLER_PHRASES).toContain("don't miss");
     });
