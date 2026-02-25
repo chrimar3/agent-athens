@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/agentathens-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,26 +111,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-      
-      › Eugenides Foundation Conference Centre
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/EducationEvent">
-      <header class="event-header">
-        <span class="type-badge">conference</span>
-        
-        <h1 itemprop="name">Greeks in AI 2026</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-07-15">Τετάρτη 15 Ιουλίου στις 00:00</time>
+  <article itemscope itemtype="https://schema.org/EducationEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-conference)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
           
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Eugenides Foundation Conference Centre</span></span>
-        </p>
-      </header>
+          › Eugenides Foundation Conference Centre
+        </nav>
+        <span class="edp-type-badge">conference</span>
+        
+        <header>
+          <h1 class="edp-title" itemprop="name">Greeks in AI 2026</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-07-15">Τετάρτη 15 Ιουλίου στις 00:00</time></span>
+            · <a href="/venues/eugenides-foundation-conference-centre/">Eugenides Foundation Conference Centre</a>
+            · Δωρεάν είσοδος
+          </div>
+          
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The Eugenides Foundation Conference Centre stands on Syngrou Avenue at number 387, in Paleo Faliro, where the long coastal road meets the sea. A science education institution with a planetarium dome visible from the street, it hosts Greeks in AI from July 15 through 17 -- the flagship symposium that brings the Greek AI diaspora home to meet the local ecosystem.</p>
 <p>You walk into a room where researchers from MIT, Stanford, Oxford, and INRIA sit alongside engineers and founders building AI companies in Athens, Thessaloniki, and Patras. The gathering operates at the junction of academic research and industry application, and the particular texture of the event comes from this collision: rigorous technical presentations followed by conversations about commercialization, talent pipelines, and how to build lasting bridges between Greek researchers abroad and institutions at home.</p>
 <p>The diaspora element gives the conference its distinctive character. Greek AI researchers hold positions at some of the world's leading laboratories and universities. Many left Greece during the years when academic funding contracted and industry opportunities were scarce. The country's AI ecosystem has since grown substantially, and Greeks in AI creates the physical space for reunion and reassessment -- for people to see what has changed, what has been built, and where collaboration can take root.</p>
@@ -165,8 +143,9 @@
 <p>The event is free to attend, which reflects its mission: this is not a commercial conference but a community gathering with institutional support. The absence of a ticket price lowers the barrier for students, early-career researchers, and local practitioners who might otherwise be priced out.</p>
 <p>If you are a Greek AI researcher or practitioner -- whether based in Athens or abroad -- and you want to reconnect with the community building the country's AI future, this is the annual gathering point. If you have no connection to the Greek AI ecosystem and are looking for a general-purpose AI conference, the diaspora focus will feel peripheral to your interests.</p>
 <p>Mid-July in Athens is hot. The sea breeze at Paleo Faliro offers some relief, and the walk along the coastal promenade from the Eugenides Foundation toward the marina provides the kind of evening decompression that conference centers in landlocked cities cannot replicate.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       
 
       
@@ -198,14 +177,25 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Eugenides Foundation Conference Centre</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/Eugenides%20Foundation%20Conference%20Centre%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.greeksin.ai/" rel="noopener" target="_blank">greeksin.ai</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/venues/eugenides-foundation-conference-centre/">Περισσότερες εκδηλώσεις στο Eugenides Foundation Conference Centre</a>
       </nav>
 
       
-    </article>
-  </div>
+    </div>
+  </article>
+
+  
 
   <footer class="site-footer">
   <div class="site-footer-inner">
@@ -281,6 +271,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

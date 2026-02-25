@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/theater-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,34 +111,39 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/theatre/">Θέατρο</a>
-      › ARROYO THEATER
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/TheaterEvent">
-      <header class="event-header">
-        <span class="type-badge">Θέατρο</span>
+  <article itemscope itemtype="https://schema.org/TheaterEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-theater)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/theatre/">Θέατρο</a>
+          › ARROYO THEATER
+        </nav>
+        <span class="edp-type-badge">Θέατρο</span>
         
-        <h1 itemprop="name">«Nina Simone - 4 οκτάβες Ελευθερίας»</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 00:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">ARROYO THEATER</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">«Nina Simone - 4 οκτάβες Ελευθερίας»</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου στις 00:00</time></span>
+            · <a href="/venues/arroyo-theater/">ARROYO THEATER</a>
+            · €18
+          </div>
+          <a href="https://www.ticketservices.gr/event/13581/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The Arroyo Theater darkens and something in the air shifts. You're about to spend an evening with Nina Simone — not the woman herself, but the music, the legacy, the four octaves that contained multitudes. A tribute performance faces impossible standards. This one leans into that impossibility.</p>
 <p>"4 Octaves of Freedom" — the title captures what made Simone singular. That voice spanned everything from whispered intimacy to full-throated righteous fury, often within the same song. She was classically trained yet bluesy, technically precise yet emotionally unguarded. The tribute performer taking this on understands they're not imitating — they're channeling.</p>
 <p>The audience for Nina Simone tribute shows brings particular expectations. You'll find people who know every album, who can tell you which version of which song they prefer. There are those discovering her through this entry point, led here by covers they've heard or recommendations they've received. And there are those for whom Simone represented something political, who heard freedom in those four octaves before anyone called it protest music.</p>
 <p>The Arroyo Theater provides an appropriate setting — intimate enough that the emotional weight of this material lands, but substantial enough to contain the moments when the music opens up. Simone's catalog includes quiet devastation and soaring triumph, and both need room to breathe.</p>
 <p>If you want a nostalgic greatest-hits cabaret, a comfortable trip through familiar melodies, this production likely has other ambitions. Simone's music was never comfortable. She made songs that forced audiences to feel things they'd rather avoid. A tribute that honors her would do the same. But if you're ready to experience what those four octaves carried — freedom, yes, but also pain, rage, beauty, and defiance — you're in for an evening that earns its title.</p>
 <p>Four octaves carried everything Nina Simone needed to say. The tribute attempts the same.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Friday, February 27, 2026 |
@@ -206,22 +185,80 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>ARROYO THEATER</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/ARROYO%20THEATER%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.ticketservices.gr/event/13581/" rel="noopener" target="_blank">ticketservices</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/theatre/">Όλες οι Θέατρο</a>
         <a href="/venues/arroyo-theater/">Περισσότερες εκδηλώσεις στο ARROYO THEATER</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο ARROYO THEATER</h3>
-      <ul>
-        <li><a href="/events/6281aa54-arroyo-theater-/">Βάσσα - Μια μητέρα</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/97a5f6f0-arroyo-theater-/">Λίγεια</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/956ce251-arroyo-theater-nina-simone-4/">Nina Simone – 4 οκτάβες ελευθερίας</a> - Τετάρτη 25 Φεβρουαρίου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο ARROYO THEATER</h3>
+        <div class="card-grid">
+          
+  <a href="/events/6281aa54-arroyo-theater-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Βάσσα - Μια μητέρα</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">ARROYO THEATER</span>
+      <span class="card-price">€16</span>
+    </div>
+  </a>
+
+  <a href="/events/97a5f6f0-arroyo-theater-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Λίγεια</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">ARROYO THEATER</span>
+      <span class="card-price">€8</span>
+    </div>
+  </a>
+
+  <a href="/events/956ce251-arroyo-theater-nina-simone-4/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Nina Simone – 4 οκτάβες ελευθερίας</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">ARROYO THEATER</span>
+      <span class="card-price">€22</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">«Nina Simone - 4 οκτάβες Ελευθερίας»</div>
+        <div class="edp-mobile-bar-price">€18</div>
+      </div>
+      <a href="https://www.ticketservices.gr/event/13581/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -298,6 +335,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

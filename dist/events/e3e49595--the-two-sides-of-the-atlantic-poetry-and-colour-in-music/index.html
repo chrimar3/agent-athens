@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,26 +111,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › ΚΠΙΣΝ
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › ΚΠΙΣΝ
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">The Two Sides of the Atlantic Poetry and Colour in Music</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-05-23">Σάββατο 23 Μαΐου στις 00:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">ΚΠΙΣΝ</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">The Two Sides of the Atlantic Poetry and Colour in Music</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-05-23">Σάββατο 23 Μαΐου στις 00:00</time></span>
+            · <a href="/venues//">ΚΠΙΣΝ</a>
+            · Επί πληρωμή
+          </div>
+          <a href="https://www.ticketservices.gr/event/13513/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The Stavros Xarhalambidis Quartet fills the Megaron's recital space with something rare in contemporary classical programming — a conversation between two continents that stopped pretending to be separate centuries ago. You're surrounded by SNFCC's polished modernism, but the sound tells a different story.</p>
 <p>This isn't a lecture on "East meets West." It's four Greek musicians playing American standard bebop vocabulary over traditional Cretan harmonic structures, then inverting it. Xarhalambidis (piano) and Kostas Kouvakas (vibraphone) lead a rhythm section that understands both swing and the asymmetrical pulses of rebetiko. The program traces two centuries of cultural transmission — Portuguese traders bringing African rhythms to Greece, Greek immigrants bringing bouzouki sensibilities to Manhattan's 1920s, then modern players collapsing the distinction.</p>
 <p>You'll find serious concert-goers: musicians familiar with Greek jazz traditions, classical patrons curious about the edges, tourists who stumbled in looking for opera. No one's checking their phone. People arrive early to read the program notes; they stay after to ask questions.</p>
@@ -168,8 +146,9 @@
 | **Sound** | Acoustic jazz in classical concert setting — prepared for close listening |
 | **Door** | Standard classical concert protocols — no door selection |</p>
 <p>If you need loud beats and crowds moving together, this is a concert hall, not a club. But if you want to hear how two musical traditions can speak the same language without erasing their origins — if you're curious about what Greek jazz actually sounds like when it stops apologizing — this is where that conversation happens at the highest level.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Saturday, May 23, 2026 |
@@ -217,24 +196,122 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>ΚΠΙΣΝ</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/%CE%9A%CE%A0%CE%99%CE%A3%CE%9D%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.ticketservices.gr/event/13513/" rel="noopener" target="_blank">ticketservices</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues//">Περισσότερες εκδηλώσεις στο ΚΠΙΣΝ</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο ΚΠΙΣΝ</h3>
-      <ul>
-        <li><a href="/events/6f3e3398--/">Αθλητισμός για Όλους</a> - Κυριακή 1 Μαρτίου</li>
-        <li><a href="/events/65-2026---65/">Εργαστήρια για άτομα 65+: Διάβαση, σε συνεργασία με το Ίδρυμα Ευγενίδου</a> - Δευτέρα 9 Μαρτίου</li>
-        <li><a href="/events/65-2026---65/">Εργαστήρια για άτομα 65+: Δημιουργώντας Ανάγλυφες Ιστορίες με Πηλο</a> - Παρασκευή 13 Μαρτίου</li>
-        <li><a href="/events/7ff03bc6--wow-sounds-imany/">WOW Sounds: Imany</a> - Δευτέρα 30 Μαρτίου</li>
-        <li><a href="/events/84a3a33d--requiem-vakhtang-kakhidze/">Requiem του Vakhtang Kakhidze</a> - Τετάρτη 8 Απριλίου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο ΚΠΙΣΝ</h3>
+        <div class="card-grid">
+          
+  <a href="/events/6f3e3398--/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">📌</span>
+      <span class="card-badge" style="background: var(--color-sports)">ΑΛΛΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Αθλητισμός για Όλους</h3>
+      <span class="card-date"><time datetime="2026-03-01">Κυριακή 1 Μαρτίου</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+
+  <a href="/events/65-2026---65/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎤</span>
+      <span class="card-badge card-badge--light-text" style="background: var(--color-performance)">PERFORMANCE</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Εργαστήρια για άτομα 65+: Διάβαση, σε συνεργασία με το Ίδρυμα Ευγενίδου</h3>
+      <span class="card-date"><time datetime="2026-03-09T20:00:00+03:00">Δευτέρα 9 Μαρτίου στις 20:00</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+
+  <a href="/events/65-2026---65/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎤</span>
+      <span class="card-badge card-badge--light-text" style="background: var(--color-performance)">PERFORMANCE</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Εργαστήρια για άτομα 65+: Δημιουργώντας Ανάγλυφες Ιστορίες με Πηλο</h3>
+      <span class="card-date"><time datetime="2026-03-13T20:00:00+03:00">Παρασκευή 13 Μαρτίου στις 20:00</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+
+  <a href="/events/7ff03bc6--wow-sounds-imany/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">WOW Sounds: Imany</h3>
+      <span class="card-date"><time datetime="2026-03-30">Δευτέρα 30 Μαρτίου</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">€10</span>
+    </div>
+  </a>
+
+  <a href="/events/84a3a33d--requiem-vakhtang-kakhidze/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎼</span>
+      <span class="card-badge" style="background: var(--color-opera)">ΟΠΕΡΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Requiem του Vakhtang Kakhidze</h3>
+      <span class="card-date"><time datetime="2026-04-08">Τετάρτη 8 Απριλίου</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">€12</span>
+    </div>
+  </a>
+
+  <a href="/events/560b76f0--crippled-symmetries-motifs-in-contemporary-music/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎼</span>
+      <span class="card-badge" style="background: var(--color-opera)">ΟΠΕΡΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Crippled Symmetries Motifs in Contemporary Music</h3>
+      <span class="card-date"><time datetime="2026-05-21">Πέμπτη 21 Μαΐου</time></span>
+      <span class="card-venue">ΚΠΙΣΝ</span>
+      <span class="card-price">€10</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">The Two Sides of the Atlantic Poetry and Colour in Music</div>
+        <div class="edp-mobile-bar-price">Επί πληρωμή</div>
+      </div>
+      <a href="https://www.ticketservices.gr/event/13513/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -311,6 +388,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

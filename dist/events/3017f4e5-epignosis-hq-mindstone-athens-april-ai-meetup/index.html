@@ -82,32 +82,6 @@ Welcome to the most electrifying and ground-breaking A">
   "image": "https://agentathens.netlify.app/images/og/agentathens-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -143,34 +117,39 @@ Welcome to the most electrifying and ground-breaking A">
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-      
-      › Epignosis HQ
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/Event">
-      <header class="event-header">
-        <span class="type-badge">meetup</span>
-        
-        <h1 itemprop="name">Mindstone Athens April AI Meetup</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-04-21T18:30:00">Τρίτη 21 Απριλίου στις 18:30</time>
+  <article itemscope itemtype="https://schema.org/Event">
+    <section class="edp-hero" style="--edp-type-color: var(--color-meetup)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
           
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Epignosis HQ</span></span>
-        </p>
-      </header>
+          › Epignosis HQ
+        </nav>
+        <span class="edp-type-badge">meetup</span>
+        
+        <header>
+          <h1 class="edp-title" itemprop="name">Mindstone Athens April AI Meetup</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-04-21T18:30:00">Τρίτη 21 Απριλίου στις 18:30</time></span>
+            · <a href="/venues/epignosis-hq/">Epignosis HQ</a>
+            · Δωρεάν είσοδος
+          </div>
+          
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The elevator opens onto an open-plan office floor where someone has already started rearranging desks to face a projector screen. Epignosis headquarters smells like fresh coffee and the particular ozone tang of too many laptops running in one room. By half past six on a Tuesday evening, the chairs are filling with people who still have their work backpacks on, laptops half-open, Slack notifications pinging as they settle in for one of Athens's longest-running monthly AI gatherings.</p>
 <p>Mindstone's April meetup follows a rhythm the regulars already know. There will be talks -- sometimes a deep technical walkthrough of a model architecture, sometimes a live demo where something breaks and the room collectively troubleshoots, sometimes an open discussion where the format loosens and people argue about inference costs or whether the latest open-source release actually changes anything. The exact agenda lands closer to the date. What stays consistent is the room itself: a working ed-tech company's headquarters in central Athens, borrowed for the evening and filled with people who spend their days inside neural networks, training pipelines, and product backlogs.</p>
 <p>The crowd here is not uniform. You will find ML engineers who want to talk about quantization techniques sitting next to startup founders who want to understand what is actually feasible to build on a seed budget. Data scientists from Greek enterprises rub shoulders with freelance developers who picked up PyTorch six months ago and are trying to figure out what to do with it. The conversations between talks are often where the real density lives -- someone sketching a system diagram on a napkin, two people discovering they have been independently working on similar retrieval-augmented pipelines, a quick exchange of GitHub handles.</p>
 <p>If you work with AI daily and want a room where you can speak in acronyms without explaining them, this is that room. If you are earlier in the journey -- maybe you have completed some courses, built a side project, and want to see what practitioners in Athens are actually shipping -- this is equally your room. The community has been growing month over month as the city's AI ecosystem expands, and the meetup reflects that gradient of experience without gatekeeping it.</p>
 <p>There is no entrance fee. You register through the Mindstone platform to claim your spot, and spots do fill as the community has scaled. Epignosis provides the space, which means the infrastructure is solid -- good wifi, a proper screen, enough power outlets for the laptop-dependent crowd.</p>
 <p>The evening tends to wind down organically. After the scheduled content wraps, clusters of people drift toward continued conversation, sometimes spilling out to nearby streets where the restaurant and bar density makes extending the night easy. Bring a charger. Your phone battery will not survive the networking.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       
 
       
@@ -210,14 +189,25 @@ Welcome to the most electrifying and ground-breaking A">
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Epignosis HQ</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/Epignosis%20HQ%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.eventbrite.co.uk/e/mindstone-athens-april-ai-meetup-tickets-1980368772308" rel="noopener" target="_blank">eventbrite</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/venues/epignosis-hq/">Περισσότερες εκδηλώσεις στο Epignosis HQ</a>
       </nav>
 
       
-    </article>
-  </div>
+    </div>
+  </article>
+
+  
 
   <footer class="site-footer">
   <div class="site-footer-inner">
@@ -293,6 +283,28 @@ Welcome to the most electrifying and ground-breaking A">
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

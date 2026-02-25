@@ -23,7 +23,7 @@ const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
 
 // ── Badge & icon lookup maps ───────────────────────────
 
-const BADGE_LABELS: Record<string, string> = {
+export const BADGE_LABELS: Record<string, string> = {
   concert: 'ΣΥΝΑΥΛΙΑ',
   dj_set: 'DJ SET',
   exhibition: 'ΕΚΘΕΣΗ',
@@ -45,9 +45,9 @@ const BADGE_LABELS: Record<string, string> = {
   other: 'ΑΛΛΟ',
 };
 
-const LIGHT_TEXT_BADGES = new Set(['performance', 'dance', 'cinema', 'screening']);
+export const LIGHT_TEXT_BADGES = new Set(['performance', 'dance', 'cinema', 'screening']);
 
-const TYPE_ICONS: Record<string, string> = {
+export const TYPE_ICONS: Record<string, string> = {
   concert: '🎵',
   dj_set: '🎧',
   exhibition: '🎨',

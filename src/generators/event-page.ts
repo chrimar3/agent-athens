@@ -11,13 +11,14 @@
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event } from '../types';
-import { generatePracticalBlock, generateInlinePractical } from './practical-block';
-import { formatGreekDateOnly, formatGreekTime, formatPriceGreek, toSchemaOrg } from '../utils/i18n';
+import { generatePracticalBlock } from './practical-block';
+import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from '../templates/site-chrome';
+import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -223,15 +224,18 @@ function generateEventSchema(event: Event): string {
 }
 
 /**
- * Render the event detail HTML template
+ * Render the event detail HTML template (Phase 3 redesign)
+ *
+ * Structure: full-bleed hero with type-colored gradient, 800px content column,
+ * card-grid related events, mobile sticky CTA bar.
  */
-function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
+export function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
   const slug = generateEventSlug(event);
   const canonicalUrl = `${BASE_URL}/events/${slug}/`;
   const ogImage = getOgImage(event);
   const schemaJson = generateEventSchema(event);
   const practicalBlock = generatePracticalBlock(event, null);
-  const inlinePractical = practicalBlock ? '' : generateInlinePractical(event);
+  const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
 
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
@@ -241,9 +245,14 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
     ? formatExhibitionDateRange(event)
     : `${formatGreekDateOnly(event.startDate)} στις ${formatGreekTime(event.startDate)}`;
 
-  // Type badge
+  // Type styling
   const typeLabel = TYPE_TRANSLATIONS[event.type] || event.type;
   const categorySlug = TYPE_TO_CATEGORY[event.type] || '';
+  const typeColorVar = `var(--color-${event.type.replace('_', '-')})`;
+  const lightText = LIGHT_TEXT_BADGES.has(event.type);
+
+  // Price display
+  const priceDisplay = formatPriceGreek(event);
 
   // Description content — strip Info metadata table from enriched descriptions
   const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
@@ -257,20 +266,9 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
     descriptionHtml = `<p>${event.description}</p>`;
   }
 
-  // Related events (max 5, upcoming only)
-  const relatedHtml = relatedEvents.length > 0
-    ? `
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο ${event.venue.name}</h3>
-      <ul>
-        ${relatedEvents.map(e => {
-          const relSlug = generateEventSlug(e);
-          const relDate = e.type === 'exhibition' ? formatExhibitionDateRange(e) : formatGreekDateOnly(e.startDate);
-          return `<li><a href="/events/${relSlug}/">${e.title}</a> - ${relDate}</li>`;
-        }).join('\n        ')}
-      </ul>
-    </section>`
-    : '';
+  // Read-more for long descriptions
+  const descriptionText = hasFullDescription ? String(event.fullDescription) : event.description;
+  const needsReadMore = descriptionText.length > 400;
 
   // Internal navigation links
   const venueSlug = slugify(event.venue.name);
@@ -281,6 +279,46 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
     `<a href="/venues/${venueSlug}/">Περισσότερες εκδηλώσεις στο ${event.venue.name}</a>`,
     neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${event.venue.neighborhood}</a>` : ''
   ].filter(Boolean);
+
+  // CTA (ticket link)
+  const hasTicketUrl = Boolean(event.ticketUrl);
+  const ctaHtml = hasTicketUrl
+    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero${lightText ? ' edp-cta--light-text' : ''}" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>`
+    : '';
+
+  // Venue section — Google Maps link
+  const mapsUrl = event.venue.coordinates
+    ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
+    : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
+
+  // Source attribution
+  const sourceHtml = event.url
+    ? `<div class="edp-source">Πηγή: <a href="${event.url}" rel="noopener" target="_blank">${event.source}</a></div>`
+    : `<div class="edp-source">Πηγή: ${event.source}</div>`;
+
+  // Related events as cards
+  const relatedHtml = relatedEvents.length > 0
+    ? `
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο ${event.venue.name}</h3>
+        <div class="card-grid">
+          ${relatedEvents.map(e => renderRelatedEventCard(e)).join('\n')}
+        </div>
+      </section>`
+    : '';
+
+  // Mobile sticky CTA bar
+  const mobileBarHtml = hasTicketUrl
+    ? `<div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">${event.title}</div>
+        <div class="edp-mobile-bar-price">${priceDisplay}</div>
+      </div>
+      <a href="${event.ticketUrl}" class="edp-cta${lightText ? ' edp-cta--light-text' : ''}" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
+  </div>`
+    : '';
 
   return `<!DOCTYPE html>
 <html lang="el">
@@ -330,77 +368,150 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
   <script type="application/ld+json">
   ${schemaJson}
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-      ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
-      › ${event.venue.name}
-    </nav>
+  <article itemscope itemtype="https://schema.org/${schemaType}">
+    <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+          ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
+          › ${event.venue.name}
+        </nav>
+        <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
+        ${exhibitionIsOpen ? '<span class="edp-open-badge">Τώρα ανοιχτή</span>' : ''}
+        <header>
+          <h1 class="edp-title" itemprop="name">${event.title}</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time></span>
+            · <a href="/venues/${venueSlug}/">${event.venue.name}</a>
+            · ${priceDisplay}
+          </div>
+          ${ctaHtml}
+        </header>
+      </div>
+    </section>
 
-    <article class="event-detail" itemscope itemtype="https://schema.org/${event['@type'] || 'Event'}">
-      <header class="event-header">
-        <span class="type-badge${isExhibition ? ' exhibition' : ''}">${typeLabel}</span>
-        ${exhibitionIsOpen ? '<span class="open-now-badge">Τώρα ανοιχτή</span>' : ''}
-        <h1 itemprop="name">${event.title}</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time>
-          ${inlinePractical ? ` | ${formatPriceGreek(event)}` : ''}
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${event.venue.name}</span></span>
-        </p>
-      </header>
-
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}" itemprop="description">
         ${descriptionHtml}
-        ${hasFullDescription ? '<div class="enriched-badge">AI-enriched content</div>' : ''}
+        ${hasFullDescription ? '<div class="edp-enriched-badge">AI-enriched content</div>' : ''}
       </section>
+      ${needsReadMore ? '<button class="edp-read-more" type="button">Περισσότερα ▾</button>' : ''}
       ${hiddenMetadataHtml}
 
       ${practicalBlock}
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>${event.venue.name}</h3>
+        ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
+        ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${event.venue.neighborhood}</div>` : ''}
+        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      ${sourceHtml}
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         ${navLinks.join('\n        ')}
       </nav>
 
       ${relatedHtml}
-    </article>
-  </div>
+    </div>
+  </article>
+
+  ${mobileBarHtml}
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderEventDetailScript()}
 </body>
 </html>`;
+}
+
+/**
+ * Render a related event as a visual card (reuses browse-page card markup)
+ */
+export function renderRelatedEventCard(event: Event): string {
+  const isExhibition = event.type === 'exhibition';
+  const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
+
+  let dateStr: string;
+  if (isExhibition) {
+    dateStr = formatExhibitionDateRange(event);
+    if (exhibitionIsOpen) dateStr += ' · Ανοιχτή';
+  } else {
+    dateStr = formatGreekDateOnly(event.startDate);
+    const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
+    if (timeStr && timeStr !== '00:00') dateStr += ` στις ${timeStr}`;
+  }
+
+  let priceText: string;
+  if (event.price.type === 'open') {
+    priceText = 'Δωρεάν';
+  } else if (event.price.amount && event.price.amount > 0) {
+    priceText = `€${event.price.amount}`;
+  } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {
+    priceText = event.price.range;
+  } else {
+    priceText = 'Με εισιτήριο';
+  }
+
+  const slug = generateEventSlug(event);
+  const href = `/events/${slug}/`;
+  const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
+  const colorVar = `var(--color-${event.type.replace('_', '-')})`;
+  const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
+  const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
+  const venueText = event.venue.neighborhood
+    ? `${event.venue.name} · ${event.venue.neighborhood}`
+    : event.venue.name;
+
+  return `
+  <a href="${href}" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">${icon}</span>
+      <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
+      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">${event.title}</h3>
+      <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
+      <span class="card-venue">${venueText}</span>
+      <span class="card-price">${priceText}</span>
+    </div>
+  </a>`;
+}
+
+/**
+ * Inline script for read-more toggle and mobile bar IntersectionObserver
+ */
+export function renderEventDetailScript(): string {
+  return `<script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
+})();
+</script>`;
 }
 
 /**
@@ -431,12 +542,12 @@ export async function generateEventPages(events: Event[]): Promise<{
     const slug = generateEventSlug(event);
     slugMap.set(event.id, slug);
 
-    // Get related events at same venue (max 5, excluding current)
+    // Get related events at same venue (max 6, excluding current)
     const venueEvents = eventsByVenue.get(event.venue.name) || [];
     const relatedEvents = venueEvents
       .filter(e => e.id !== event.id)
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-      .slice(0, 5);
+      .slice(0, 6);
 
     // Generate page HTML
     const html = renderEventDetailPage(event, relatedEvents);

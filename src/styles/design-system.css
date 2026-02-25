@@ -499,3 +499,272 @@ a:hover {
   .site-footer { padding: 32px 16px 20px; margin-top: 64px; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
 }
+
+/* ── Event Detail Page (edp-*) ──────────────── */
+
+/* Hero */
+.edp-hero {
+  position: relative;
+  padding: 80px 40px 48px;
+  overflow: hidden;
+}
+.edp-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--edp-type-color, var(--accent-primary)) 0%, var(--bg-primary) 70%);
+  opacity: 0.15;
+  z-index: 0;
+}
+.edp-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.edp-breadcrumb {
+  font-size: var(--type-small);
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.edp-breadcrumb a { color: var(--text-secondary); }
+.edp-breadcrumb a:hover { color: var(--text-primary); }
+.edp-type-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #1a1a1a;
+  background: var(--edp-type-color, var(--accent-primary));
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.edp-type-badge--light-text { color: #f0f0f0; }
+.edp-open-badge {
+  display: inline-block;
+  background: var(--color-exhibition);
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-left: 8px;
+  line-height: 1;
+}
+.edp-title {
+  font-size: 56px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  margin: 8px 0 16px;
+  letter-spacing: -0.5px;
+}
+.edp-meta {
+  font-size: var(--type-body-lg);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.edp-meta-date {
+  color: var(--edp-type-color, var(--accent-primary));
+  font-weight: var(--font-weight-bold);
+}
+.edp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 14px 32px;
+  background: var(--edp-type-color, var(--accent-primary));
+  color: #1a1a1a;
+  font-size: var(--type-body);
+  font-weight: var(--font-weight-bold);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+.edp-cta--light-text { color: #f0f0f0; }
+.edp-cta:hover { opacity: 0.85; text-decoration: none; color: #1a1a1a; }
+.edp-cta--light-text:hover { color: #f0f0f0; }
+
+/* Content */
+.edp-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 40px 0;
+}
+
+/* Description with read-more */
+.edp-description {
+  margin-bottom: 32px;
+}
+.edp-description p {
+  font-size: var(--type-body-lg);
+  line-height: 1.8;
+  margin-bottom: 15px;
+}
+.edp-description.is-collapsed {
+  max-height: 7.2em;
+  overflow: hidden;
+  position: relative;
+}
+.edp-description.is-collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3em;
+  background: linear-gradient(transparent, var(--bg-primary));
+  pointer-events: none;
+}
+.edp-enriched-badge {
+  display: inline-block;
+  background: #7c3aed;
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+.edp-read-more {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-size: var(--type-body);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+}
+.edp-read-more:hover { color: var(--accent-hover); }
+
+/* Venue section */
+.edp-venue-section {
+  background: var(--bg-surface);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.edp-venue-section h3 {
+  font-size: var(--type-body-lg);
+  margin: 0 0 8px;
+}
+.edp-venue-address {
+  font-size: var(--type-body);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.edp-venue-neighborhood {
+  font-size: var(--type-small);
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.edp-venue-maps {
+  font-size: var(--type-small);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Source attribution */
+.edp-source {
+  font-size: var(--type-small);
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+}
+
+/* Connections nav */
+.edp-connections {
+  background: var(--bg-surface);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 32px;
+}
+.edp-connections h3 {
+  font-size: var(--type-body);
+  margin: 0 0 10px;
+}
+.edp-connections a {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Related events grid */
+.edp-related { margin-bottom: 32px; }
+.edp-related h3 {
+  font-size: var(--type-h3);
+  margin-bottom: 20px;
+}
+.edp-related .card-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Mobile sticky CTA bar */
+.edp-mobile-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-subtle);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + var(--safe-bottom));
+  transform: translateY(100%);
+  transition: transform var(--t-normal) var(--ease-out);
+}
+.edp-mobile-bar.is-visible {
+  transform: translateY(0);
+}
+.edp-mobile-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.edp-mobile-bar-info {
+  flex: 1;
+  min-width: 0;
+}
+.edp-mobile-bar-title {
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.edp-mobile-bar-price {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.edp-mobile-bar .edp-cta {
+  margin-top: 0;
+  padding: 10px 20px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── EDP Responsive ─────────────────────────── */
+
+@media (max-width: 1024px) {
+  .edp-hero { padding: 60px 24px 36px; }
+  .edp-title { font-size: 44px; }
+  .edp-content { padding: 32px 24px 0; }
+}
+
+@media (max-width: 767px) {
+  .edp-hero { padding: 40px 16px 28px; }
+  .edp-title { font-size: 36px; }
+  .edp-content { padding: 24px 16px 0; }
+  .edp-cta.edp-cta-hero { display: none; }
+  .edp-mobile-bar { display: block; }
+  .edp-related .card-grid { grid-template-columns: 1fr; }
+  body:has(.edp-mobile-bar) { padding-bottom: 80px; }
+}

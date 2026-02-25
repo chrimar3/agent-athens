@@ -81,32 +81,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -142,33 +116,38 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › ΟΑΚΑ
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › ΟΑΚΑ
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">EJEKT FESTIVAL 2026 | THE CURE</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-07-15T16:30:00+03:00">Τετάρτη 15 Ιουλίου στις 16:30</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">ΟΑΚΑ</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">EJEKT FESTIVAL 2026 | THE CURE</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-07-15T16:30:00+03:00">Τετάρτη 15 Ιουλίου στις 16:30</time></span>
+            · <a href="/venues//">ΟΑΚΑ</a>
+            · €90
+          </div>
+          <a href="https://www.more.com/gr-el/tickets/music/ejekt-festival-2026-the-cure/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The moment you pass security and enter the festival grounds on the second day, you're in a space where the architecture has already been established, where communities have already formed around stages and shared discoveries. EJEKT FESTIVAL continues into its final evening, and The Cure's appearance represents the kind of headliner that justifies the entire gathering. The energy carries the weight of everything that happened yesterday, but also the anticipation of closure.</p>
 <p>The Cure spent four decades proving that darkness and melody are inseparable, that vulnerability is strength when structured precisely, that a band can maintain artistic coherence while spanning entirely different sonic territories. Robert Smith's voice—immediately identifiable, capable of expressing entire emotional landscapes—paired with the band's ability to move from post-punk minimalism to gothic opulence makes them one of the most influential alternative rock bands ever assembled.</p>
 <p>The EJEKT crowd on day two has evolved from day one. People have made discoveries, formed temporary friendships, decided which acts matter most to them. The demographic skews older toward The Cure's set specifically—decades of fans who've wanted this moment to happen. There's a gratitude in the air: that this band still tours, still delivers, still matters. The crowd is completely committed; this is the final major event of the festival.</p>
 <p>The main stage at OAKA becomes ceremonial for this closing headliner. The Cure brings full production, sophisticated lighting design, and the kind of visual presentation that amplifies rather than distracts from the music. The crowd fills completely and holds; there's rarely movement during a The Cure set. Peak moments arrive systematically across the performance; the energy doesn't build to a single crescendo but instead maintains consistent intensity, concluding with the understanding that something significant just happened.</p>
 <p>If you skipped day one to preserve energy for this night, you understand the calculated choice. But if you want to experience The Cure within the full EJEKT context—surrounded by the discoveries of the previous days, part of a community that's already begun forming—the festival becomes not just a concert, but a gathering that affirms why music still matters.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       
 
       
@@ -212,23 +191,94 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>ΟΑΚΑ</h3>
+        <div class="edp-venue-address">Νερατζιωτίσσης 217, 15122</div>
+        
+        <a href="https://www.google.com/maps?q=37.9838,23.7276" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.more.com/gr-el/tickets/music/ejekt-festival-2026-the-cure/" rel="noopener" target="_blank">more.com</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues//">Περισσότερες εκδηλώσεις στο ΟΑΚΑ</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο ΟΑΚΑ</h3>
-      <ul>
-        <li><a href="/events/b5ede6b2--live/">Λόγος Τιμής live στην Αθήνα</a> - Σάββατο 4 Ιουλίου</li>
-        <li><a href="/events/3d86606d--ejekt-festival-2026/">EJEKT FESTIVAL 2026</a> - Τρίτη 14 Ιουλίου</li>
-        <li><a href="/events/4fb6b551--ejekt-festival-2026-florence-the-machine/">EJEKT FESTIVAL 2026 | FLORENCE + THE MACHINE</a> - Τρίτη 14 Ιουλίου</li>
-        <li><a href="/events/deep-pur--deep-purple-live/">DEEP PURPLE Live</a> - Τρίτη 13 Οκτωβρίου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο ΟΑΚΑ</h3>
+        <div class="card-grid">
+          
+  <a href="/events/b5ede6b2--live/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Λόγος Τιμής live στην Αθήνα</h3>
+      <span class="card-date"><time datetime="2026-07-04T20:00:00+03:00">Σάββατο 4 Ιουλίου στις 20:00</time></span>
+      <span class="card-venue">ΟΑΚΑ</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/3d86606d--ejekt-festival-2026/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">EJEKT FESTIVAL 2026</h3>
+      <span class="card-date"><time datetime="2026-07-14">Τρίτη 14 Ιουλίου</time></span>
+      <span class="card-venue">ΟΑΚΑ</span>
+      <span class="card-price">€75</span>
+    </div>
+  </a>
+
+  <a href="/events/4fb6b551--ejekt-festival-2026-florence-the-machine/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">EJEKT FESTIVAL 2026 | FLORENCE + THE MACHINE</h3>
+      <span class="card-date"><time datetime="2026-07-14T20:00:00+03:00">Τρίτη 14 Ιουλίου στις 20:00</time></span>
+      <span class="card-venue">ΟΑΚΑ</span>
+      <span class="card-price">€75</span>
+    </div>
+  </a>
+
+  <a href="/events/deep-pur--deep-purple-live/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">DEEP PURPLE Live</h3>
+      <span class="card-date"><time datetime="2026-10-13T20:00:00+03:00">Τρίτη 13 Οκτωβρίου στις 20:00</time></span>
+      <span class="card-venue">ΟΑΚΑ · Marousi</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">EJEKT FESTIVAL 2026 | THE CURE</div>
+        <div class="edp-mobile-bar-price">€90</div>
+      </div>
+      <a href="https://www.more.com/gr-el/tickets/music/ejekt-festival-2026-the-cure/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -305,6 +355,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

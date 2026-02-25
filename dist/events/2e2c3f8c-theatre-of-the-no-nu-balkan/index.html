@@ -81,32 +81,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -142,26 +116,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › Theatre Of The No
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › Theatre Of The No
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">Nu Balkan</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-12-04T21:00:00+03:00">Παρασκευή 4 Δεκεμβρίου στις 21:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Theatre Of The No</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">Nu Balkan</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-12-04T21:00:00+03:00">Παρασκευή 4 Δεκεμβρίου στις 21:00</time></span>
+            · <a href="/venues/theatre-of-the-no/">Theatre Of The No</a>
+            · €15
+          </div>
+          <a href="https://www.more.com/gr-el/theater/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The Theatre Of The No has the kind of space where sound travels weirdly—intimate even when full, slightly disorienting if you arrive unprepared. The lights shift. Someone plugs something in. Nu Balkan enters like they've played venues twice this size and chose to come here anyway.</p>
 <p>Nu Balkan is the collaboration that takes music you've heard all your life and asks it to say something it's never said before. Balkan traditional forms—rhythms that predate notation, vocals that follow emotion rather than melody—get pulled into contemporary electronic production. The result doesn't erase the source. It complicates it. Deepens it. Makes it new without forgetting what it was.</p>
 <p>This is serious cultural work wrapped in music that sounds like celebration. The band knows the tradition deeply enough to risk breaking it. That knowledge is audible.</p>
@@ -174,8 +152,9 @@
 | **Format** | Live band performance, contemporary production, ~70 minutes |
 | **Doors** | Walk-in friendly, standing room and limited seating |</p>
 <p>If you need straight club energy or familiar pop-folk forms, this will seem too conceptual. But if you want to witness traditional culture being renewed by artists who respect its depth—if you want to understand what Balkan music sounds like from the future—this is exactly what you're looking for.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Thursday, December 4, 2026 |
@@ -231,24 +210,122 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Theatre Of The No</h3>
+        <div class="edp-venue-address">Athens, Greece</div>
+        
+        <a href="https://www.google.com/maps?q=37.9838,23.7276" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.athinorama.gr/music/gig/nu_balkan_-10088300/" rel="noopener" target="_blank">athinorama.gr</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues/theatre-of-the-no/">Περισσότερες εκδηλώσεις στο Theatre Of The No</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο Theatre Of The No</h3>
-      <ul>
-        <li><a href="/events/8c1ca21c-theatre-of-the-no-/">Η τελευταία μαγνητοταινία του Κραπ</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/c7e9c8ae-theatre-of-the-no-yiannis-kassetas/">Yiannis Kassetas</a> - Παρασκευή 27 Φεβρουαρίου</li>
-        <li><a href="/events/bfbca193-theatre-of-the-no-/">Παντελής Αμπαζής</a> - Σάββατο 28 Φεβρουαρίου</li>
-        <li><a href="/events/7bd6736d-theatre-of-the-no-/">«ΖΗΤΩ ΤΑ ΛΑΪΚΑ ΚΟΡΙΤΣΙΑ»  ΠΑΝΤΕΛΗΣ ΑΜΠΑΖΗΣ & ΑΝΩΤΑΤΗ ΖΑΜΠΕΤΙΚΗ</a> - Σάββατο 28 Φεβρουαρίου</li>
-        <li><a href="/events/56b29678-theatre-of-the-no-alef/">ALEF</a> - Κυριακή 1 Μαρτίου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο Theatre Of The No</h3>
+        <div class="card-grid">
+          
+  <a href="/events/8c1ca21c-theatre-of-the-no-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Η τελευταία μαγνητοταινία του Κραπ</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€20</span>
+    </div>
+  </a>
+
+  <a href="/events/c7e9c8ae-theatre-of-the-no-yiannis-kassetas/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Yiannis Kassetas</h3>
+      <span class="card-date"><time datetime="2026-02-27">Παρασκευή 27 Φεβρουαρίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€10</span>
+    </div>
+  </a>
+
+  <a href="/events/bfbca193-theatre-of-the-no-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Παντελής Αμπαζής</h3>
+      <span class="card-date"><time datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/7bd6736d-theatre-of-the-no-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">«ΖΗΤΩ ΤΑ ΛΑΪΚΑ ΚΟΡΙΤΣΙΑ»  ΠΑΝΤΕΛΗΣ ΑΜΠΑΖΗΣ & ΑΝΩΤΑΤΗ ΖΑΜΠΕΤΙΚΗ</h3>
+      <span class="card-date"><time datetime="2026-02-28">Σάββατο 28 Φεβρουαρίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/56b29678-theatre-of-the-no-alef/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">ALEF</h3>
+      <span class="card-date"><time datetime="2026-03-01">Κυριακή 1 Μαρτίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€12</span>
+    </div>
+  </a>
+
+  <a href="/events/17594c21-theatre-of-the-no-superbacana/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Superbacana</h3>
+      <span class="card-date"><time datetime="2026-03-05">Πέμπτη 5 Μαρτίου</time></span>
+      <span class="card-venue">Theatre Of The No</span>
+      <span class="card-price">€10</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">Nu Balkan</div>
+        <div class="edp-mobile-bar-price">€15</div>
+      </div>
+      <a href="https://www.more.com/gr-el/theater/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -325,6 +402,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

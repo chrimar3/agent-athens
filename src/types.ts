@@ -29,6 +29,9 @@ export interface Event {
   openingHours?: Record<string, string>;  // Day-of-week → hours, e.g., {"mon": "closed", "tue": "10:00-18:00"}
   closedDays?: string;                     // "Monday" or "Monday, Tuesday"
   permanentCollection?: boolean;           // true for permanent exhibitions
+  // Image fields
+  imageUrl?: string;       // og:image URL from source page (hotlinked)
+  imageSource?: string;    // 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
   // Location verification status
   locationStatus?: LocationStatus;
 }

@@ -98,11 +98,11 @@ export function renderCategoryNav(
       ${navItems.join('\n      ')}
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid #eee; overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: #f5f5f5; border-radius: 20px; text-decoration: none; color: #333; font-size: 0.9rem; transition: all 0.2s ease; }
-      .category-nav-item:hover { background: #e5e5e5; text-decoration: none; }
-      .category-nav-item.active { background: #2980b9; color: white; }
+      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
+      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
+      .category-nav-item.active { background: var(--accent-primary); color: white; }
     </style>
   </nav>`;
 }

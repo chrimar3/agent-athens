@@ -81,32 +81,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -142,26 +116,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › Bios Ρομάντσο
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › Bios Ρομάντσο
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">WAVVES</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-03-05T20:00:00+03:00">Πέμπτη 5 Μαρτίου στις 20:00</time>
+        <header>
+          <h1 class="edp-title" itemprop="name">WAVVES</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-03-05T20:00:00+03:00">Πέμπτη 5 Μαρτίου στις 20:00</time></span>
+            · <a href="/venues/bios/">Bios Ρομάντσο</a>
+            · €8
+          </div>
           
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Bios Ρομάντσο</span></span>
-        </p>
-      </header>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The room at Bios Romantso has that specific charge that arrives when an international act is about to play. The sound check finished hours ago, but you can still feel where the bass tested the walls. WAVVES is about to remind Athens what California noise-pop sounds like at proper volume.</p>
 <p>Nathan Williams has spent fifteen years building WAVVES into a vehicle for surf-damaged guitar music. The sound pulls from punk, shoegaze, and the particular kind of distortion that emerges when you're not trying too hard to be clean. Live, the energy amplifies — the recordings are blueprints, the performances are the buildings. Tonight Williams brings the current lineup to Athens, and the room is ready.</p>
 <p>Indie rock touring acts find natural homes at Bios Romantso. The space accommodates the volume these performances require, the layout creates natural density near the stage. The room has hosted enough similar acts that it knows how to configure itself — where to stand for the best sound, where to retreat when the pit inevitably forms.</p>
@@ -169,8 +147,9 @@
 <p>WAVVES shows run loud and fast. The setlist will likely pull from across the catalog — the breakthrough material from "King of the Beach," newer songs, deep cuts that reward long-term listeners. The performance style favors energy over precision, the kind of playing that trusts the noise to cover the edges.</p>
 <p>If you need delicate acoustics or seated comfort, WAVVES at volume will overwhelm your preferences. This is standing-room chaos, hearing protection recommended, the kind of show you feel in your body for days afterward. But if you've been waiting for guitar music that reminds you why you cared about guitar music — this is the room.</p>
 <p>WAVVES in Athens — California noise-pop meeting Greek enthusiasm at maximum volume.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Thursday, March 5, 2026 |
@@ -221,25 +200,115 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Bios Ρομάντσο</h3>
+        <div class="edp-venue-address">Athens, Greece</div>
+        
+        <a href="https://www.google.com/maps?q=37.9838,23.7276" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.viva.gr/gr-el/tickets/music/wavves/" rel="noopener" target="_blank">more.com</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues/bios/">Περισσότερες εκδηλώσεις στο Bios Ρομάντσο</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο Bios Ρομάντσο</h3>
-      <ul>
-        <li><a href="/events/3581a368-bios-/">Διψάω</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/ad11c488-bios-lo/">Lo</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/d4f52c26-bios-/">Στο εσωτερικό</a> - Τετάρτη 25 Φεβρουαρίου</li>
-        <li><a href="/events/a8dae425-bios-wavves/">Wavves</a> - Πέμπτη 5 Μαρτίου</li>
-        <li><a href="/events/d1061a8e-bios-cannilab-3/">CanniLAB #3</a> - Σάββατο 14 Μαρτίου</li>
-      </ul>
-    </section>
-    </article>
-  </div>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο Bios Ρομάντσο</h3>
+        <div class="card-grid">
+          
+  <a href="/events/3581a368-bios-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Διψάω</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/ad11c488-bios-lo/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Lo</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€14</span>
+    </div>
+  </a>
+
+  <a href="/events/d4f52c26-bios-/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Στο εσωτερικό</h3>
+      <span class="card-date"><time datetime="2026-02-25">Τετάρτη 25 Φεβρουαρίου</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/a8dae425-bios-wavves/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Wavves</h3>
+      <span class="card-date"><time datetime="2026-03-05">Πέμπτη 5 Μαρτίου</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€25</span>
+    </div>
+  </a>
+
+  <a href="/events/d1061a8e-bios-cannilab-3/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">CanniLAB #3</h3>
+      <span class="card-date"><time datetime="2026-03-14T17:00:00">Σάββατο 14 Μαρτίου στις 17:00</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€12</span>
+    </div>
+  </a>
+
+  <a href="/events/bb35da04-bios-kaizen-klub-with-chloe-robinson-madam-x-bday-spesh-poor-j-da/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Kaizen Klub with Chloé Robinson, Madam X (Bday Spesh), Poor J'Darr & Runner</h3>
+      <span class="card-date"><time datetime="2026-03-21T23:00:00">Σάββατο 21 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Bios Ρομάντσο</span>
+      <span class="card-price">€5</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  
 
   <footer class="site-footer">
   <div class="site-footer-inner">
@@ -315,6 +384,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

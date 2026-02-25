@@ -2,7 +2,7 @@
 
 // Main site generator - generates all combinatorial pages
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from 'fs';
 import { join } from 'path';
 import { Database } from 'bun:sqlite';
 import type { Event, EventType, TimeRange, PriceFilter, Filters } from './types';
@@ -90,6 +90,13 @@ async function main() {
   if (!existsSync(DIST_DIR)) {
     mkdirSync(DIST_DIR, { recursive: true });
   }
+
+  // Copy design system CSS to dist
+  mkdirSync(join(DIST_DIR, 'styles'), { recursive: true });
+  copyFileSync(
+    join(import.meta.dir, 'styles/design-system.css'),
+    join(DIST_DIR, 'styles/design-system.css')
+  );
 
   // Load events from database
   console.log('📥 Loading events from database...');

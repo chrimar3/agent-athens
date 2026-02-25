@@ -210,12 +210,12 @@ function renderDL(fields: PracticalField[]): string {
       ${items}
     </dl>
     <style>
-      .event-practical { margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
-      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: #333; }
+      .event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
+      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
       .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 0; }
       .practical-item { display: flex; flex-direction: column; }
-      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: #666; margin-bottom: 4px; }
-      .practical-item dd { margin: 0; font-size: 1rem; color: #333; }
+      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
+      .practical-item dd { margin: 0; font-size: 1rem; }
       .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
     </style>
   </section>`;

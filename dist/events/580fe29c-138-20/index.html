@@ -77,32 +77,6 @@
   "image": "https://agentathens.netlify.app/images/og/exhibition-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -138,34 +112,39 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/exhibitions/">Έκθεση</a>
-      › Μουσείο Μπενάκη - Πειραιώς 138
-    </nav>
+  <article itemscope itemtype="https://schema.org/ExhibitionEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-exhibition)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/exhibitions/">Έκθεση</a>
+          › Μουσείο Μπενάκη - Πειραιώς 138
+        </nav>
+        <span class="edp-type-badge">Έκθεση</span>
+        <span class="edp-open-badge">Τώρα ανοιχτή</span>
+        <header>
+          <h1 class="edp-title" itemprop="name">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-02-25">25 Φεβ - 26 Απρ</time></span>
+            · <a href="/venues/138/">Μουσείο Μπενάκη - Πειραιώς 138</a>
+            · Επί πληρωμή
+          </div>
+          <a href="https://www.benaki.org" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-    <article class="event-detail" itemscope itemtype="https://schema.org/ExhibitionEvent">
-      <header class="event-header">
-        <span class="type-badge exhibition">Έκθεση</span>
-        <span class="open-now-badge">Τώρα ανοιχτή</span>
-        <h1 itemprop="name">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-02-25">25 Φεβ - 26 Απρ</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Μουσείο Μπενάκη - Πειραιώς 138</span></span>
-        </p>
-      </header>
-
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>You walk through the converted warehouse on Pireos Street and the scale of what MIET has collected becomes apparent. Room after room of Greek art spanning a century — canvases that trace the country's visual evolution from traditionalism through modernism and into contemporary expression. The walls hold more than paintings; they hold arguments about what Greek art should be.</p>
 <p>The Benaki Museum at Pireos houses MIET's permanent collection of 20th-century Greek art — an assembly that functions as both education and provocation. You'll find works by artists whose names anchor any serious conversation about Greek modernism, alongside pieces by figures who remain underappreciated beyond specialist circles. The chronological arrangement creates its own narrative, each room representing a different moment in the country's cultural self-definition.</p>
 <p>The visitors here move differently than typical museum crowds. These are people who pause at specific works, who return to earlier rooms after seeing what came later, who understand that collections tell stories through juxtaposition. Art students with notebooks share space with older visitors who remember when some of these works first appeared. The quiet is purposeful, the attention genuine.</p>
 <p>The Pireos branch of the Benaki provides the industrial shell this collection needs. High ceilings accommodate larger works without overwhelming them. Natural light from the converted warehouse spaces changes throughout the day, offering different perspectives on the same pieces. The building's former life as a working space adds layers to experiencing art made during periods when Greece was itself being rebuilt.</p>
 <p>If you want international celebrity names and blockbuster exhibitions, this collection will seem local and unfamiliar. The focus here is specifically Greek — the questions these artists asked about identity, tradition, and modernity emerged from a particular history. But if you're ready to understand what 20th-century Greek artists were wrestling with, how they positioned themselves between East and West, tradition and rupture — this collection rewards the investment.</p>
 <p>A century of Greek art arguing with itself about what Greek art should become.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Wednesday, February 25, 2026 |
@@ -211,20 +190,52 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Μουσείο Μπενάκη - Πειραιώς 138</h3>
+        <div class="edp-venue-address">Πειραιώς 138, Αθήνα</div>
+        <div class="edp-venue-neighborhood">Γκάζι</div>
+        <a href="https://www.google.com/maps/search/%CE%9C%CE%BF%CF%85%CF%83%CE%B5%CE%AF%CE%BF%20%CE%9C%CF%80%CE%B5%CE%BD%CE%AC%CE%BA%CE%B7%20-%20%CE%A0%CE%B5%CE%B9%CF%81%CE%B1%CE%B9%CF%8E%CF%82%20138%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.benaki.org" rel="noopener" target="_blank">benaki</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/exhibitions/">Όλες οι Έκθεση</a>
         <a href="/venues/138/">Περισσότερες εκδηλώσεις στο Μουσείο Μπενάκη - Πειραιώς 138</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο Μουσείο Μπενάκη - Πειραιώς 138</h3>
-      <ul>
-        <li><a href="/events/8787e304-138-20/">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</a> - 25 Φεβ - Συνεχίζεται</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο Μουσείο Μπενάκη - Πειραιώς 138</h3>
+        <div class="card-grid">
+          
+  <a href="/events/8787e304-138-20/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎨</span>
+      <span class="card-badge" style="background: var(--color-exhibition)">ΕΚΘΕΣΗ</span>
+      <span class="card-badge-open">ΑΝΟΙΧΤΗ</span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</h3>
+      <span class="card-date"><time datetime="2026-02-25T10:00:00">25 Φεβ - Συνεχίζεται · Ανοιχτή</time></span>
+      <span class="card-venue">Μουσείο Μπενάκη - Πειραιώς 138</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα</div>
+        <div class="edp-mobile-bar-price">Επί πληρωμή</div>
+      </div>
+      <a href="https://www.benaki.org" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -301,6 +312,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

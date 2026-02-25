@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/dj-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,26 +111,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/clubs/">DJ Set</a>
-      › Universe
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">DJ Set</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-dj-set)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/clubs/">DJ Set</a>
+          › Universe
+        </nav>
+        <span class="edp-type-badge">DJ Set</span>
         
-        <h1 itemprop="name">SOLACE: PRE-PARTY</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-03-06T23:00:00">Παρασκευή 6 Μαρτίου στις 23:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Universe</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">SOLACE: PRE-PARTY</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-03-06T23:00:00">Παρασκευή 6 Μαρτίου στις 23:00</time></span>
+            · <a href="/venues/universe/">Universe</a>
+            · €20
+          </div>
+          <a href="https://ra.co/events/2335052" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>The queue forms before the doors open. Universe Athens holds the particular charge that builds when a festival pre-party reaches capacity, bodies pressing toward the entrance with the urgency of devotees approaching ceremony. Solace begins tonight.</p>
 <p>The pre-party operates as threshold crossing. Tomorrow and beyond, Solace unfolds across the larger edition — multiple rooms, extended hours, the full ritual. Tonight concentrates the energy, the core community gathering before expansion. The DJs playing tonight understand their role: set the frequency that carries through the weekend.</p>
 <p>Universe Athens provides the acoustic architecture this night demands. The sound system has been calibrated for techno at volume — bass that exists as physical presence, kick drums that sync your heartbeat to the 4/4 grid. The room layout creates natural zones: the front for those surrendering fully, the periphery for those moving in and out of the density.</p>
@@ -164,8 +142,9 @@
 <p>Techno pre-parties operate on their own temporal logic. Arriving at doors means you're early — the room finds its optimal density hours later. The build is gradual by design, early hours establishing foundation for what follows. The best moments arrive when the night has deepened enough that clock-watching ceases, when the only relevant time is the music's measure.</p>
 <p>If you need early peaks or predictable structure, this night will frustrate your scheduling. The energy here rewards patience, the full experience requiring commitment to extended hours. But if you understand that Solace is more than a festival — if it's a practice, a community, a temporary autonomous zone for the techno devoted — the pre-party is where you begin.</p>
 <p>Solace Pre-Party — the festival begins before the festival, community gathering to establish the frequency.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Friday, March 6, 2026 |
@@ -212,24 +191,122 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Universe</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/Universe%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://ra.co/events/2335052" rel="noopener" target="_blank">residentadvisor</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/clubs/">Όλες οι DJ Set</a>
         <a href="/venues/universe/">Περισσότερες εκδηλώσεις στο Universe</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο Universe</h3>
-      <ul>
-        <li><a href="/events/af71e48b-universe-dimitri-vegas/">Dimitri Vegas</a> - Παρασκευή 6 Μαρτίου</li>
-        <li><a href="/events/55bcdd37-universe-dimitri-vegas-manolaco-lost-prince/">Dimitri Vegas + Manolaco + Lost Prince</a> - Παρασκευή 6 Μαρτίου</li>
-        <li><a href="/events/eb0ad026-universe-dimitri-vegas-in-athens/">Dimitri Vegas in Athens</a> - Παρασκευή 6 Μαρτίου</li>
-        <li><a href="/events/d1a79f3c-universe-dimitri-vegas-manolaco-lost-prince/">Dimitri Vegas + Manolaco + Lost Prince</a> - Παρασκευή 6 Μαρτίου</li>
-        <li><a href="/events/0ca00f0e-universe-rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissima/">Rejuv pres. Solace pre-party: DBBD + Amor Satyr + DJ Spit + Evissimax + DJ egoshooter1000 + MAXImum + Fiama + Troy Violens</a> - Σάββατο 7 Μαρτίου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο Universe</h3>
+        <div class="card-grid">
+          
+  <a href="/events/af71e48b-universe-dimitri-vegas/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Dimitri Vegas</h3>
+      <span class="card-date"><time datetime="2026-03-06">Παρασκευή 6 Μαρτίου</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+
+  <a href="/events/55bcdd37-universe-dimitri-vegas-manolaco-lost-prince/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Dimitri Vegas + Manolaco + Lost Prince</h3>
+      <span class="card-date"><time datetime="2026-03-06T23:00:00+03:00">Παρασκευή 6 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">Με εισιτήριο</span>
+    </div>
+  </a>
+
+  <a href="/events/eb0ad026-universe-dimitri-vegas-in-athens/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Dimitri Vegas in Athens</h3>
+      <span class="card-date"><time datetime="2026-03-06T23:00:00">Παρασκευή 6 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">€30</span>
+    </div>
+  </a>
+
+  <a href="/events/d1a79f3c-universe-dimitri-vegas-manolaco-lost-prince/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Dimitri Vegas + Manolaco + Lost Prince</h3>
+      <span class="card-date"><time datetime="2026-03-06T23:00:00">Παρασκευή 6 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">€30</span>
+    </div>
+  </a>
+
+  <a href="/events/0ca00f0e-universe-rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissima/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Rejuv pres. Solace pre-party: DBBD + Amor Satyr + DJ Spit + Evissimax + DJ egoshooter1000 + MAXImum + Fiama + Troy Violens</h3>
+      <span class="card-date"><time datetime="2026-03-07T23:00:00">Σάββατο 7 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">€20</span>
+    </div>
+  </a>
+
+  <a href="/events/56f54d11-universe-solace-pre-party/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">SOLACE: PRE-PARTY</h3>
+      <span class="card-date"><time datetime="2026-03-07T23:00:00">Σάββατο 7 Μαρτίου στις 23:00</time></span>
+      <span class="card-venue">Universe</span>
+      <span class="card-price">€20</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">SOLACE: PRE-PARTY</div>
+        <div class="edp-mobile-bar-price">€20</div>
+      </div>
+      <a href="https://ra.co/events/2335052" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -306,6 +383,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

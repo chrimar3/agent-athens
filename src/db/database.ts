@@ -75,6 +75,9 @@ export function eventToRow(event: Event): Record<string, any> {
     $created_at: event.createdAt || new Date().toISOString(),
     $updated_at: event.updatedAt || new Date().toISOString(),
     $scraped_at: new Date().toISOString(),
+    // Image fields
+    $image_url: event.imageUrl || null,
+    $image_source: event.imageSource || null,
     // Exhibition-specific fields
     $opening_hours: event.openingHours ? JSON.stringify(event.openingHours) : null,
     $closed_days: event.closedDays || null,
@@ -142,6 +145,9 @@ export function rowToEvent(row: any): Event {
     timeDoors: row.time_doors || undefined,
     timePeak: row.time_peak || undefined,
     timeSource: row.time_source || undefined,
+    // Image fields
+    imageUrl: row.image_url || undefined,
+    imageSource: row.image_source || undefined,
     // Exhibition-specific fields
     openingHours: row.opening_hours ? JSON.parse(row.opening_hours) : undefined,
     closedDays: row.closed_days || undefined,
@@ -178,6 +184,7 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
       price_type, price_amount, price_currency, price_range,
       url, source, ai_context, schema_json,
       created_at, updated_at, scraped_at,
+      image_url, image_source,
       opening_hours, closed_days, permanent_collection
     ) VALUES (
       $id, $title, $description, $full_description, $start_date, $end_date,
@@ -186,6 +193,7 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
       $price_type, $price_amount, $price_currency, $price_range,
       $url, $source, $ai_context, $schema_json,
       $created_at, $updated_at, $scraped_at,
+      $image_url, $image_source,
       $opening_hours, $closed_days, $permanent_collection
     )
     ON CONFLICT(id) DO UPDATE SET
@@ -207,6 +215,8 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
       url = excluded.url,
       updated_at = excluded.updated_at,
       scraped_at = excluded.scraped_at,
+      image_url = COALESCE(excluded.image_url, image_url),
+      image_source = COALESCE(excluded.image_source, image_source),
       opening_hours = excluded.opening_hours,
       closed_days = excluded.closed_days,
       permanent_collection = excluded.permanent_collection

@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,32 +111,37 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › OAKA - OLYMPIC TENNIS CENTER
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › OAKA - OLYMPIC TENNIS CENTER
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">FOREIGNER CELEBRATING 50 YEARS</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-06-27">Σάββατο 27 Ιουνίου στις 00:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">OAKA - OLYMPIC TENNIS CENTER</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">FOREIGNER CELEBRATING 50 YEARS</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-06-27">Σάββατο 27 Ιουνίου στις 00:00</time></span>
+            · <a href="/venues/oaka-olympic-tennis-center/">OAKA - OLYMPIC TENNIS CENTER</a>
+            · €24
+          </div>
+          <a href="https://www.ticketservices.gr/event/13502/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>Foreigner celebrates 50 years at OAKA Olympic Tennis Center in Athens on June 27, 2026. The legendary American-British rock band marks their golden anniversary with performance of classic hits.</p>
 <p>Foreigner's catalog includes some of rock's most enduring anthems, from "I Want to Know What Love Is" to "Juke Box Hero" and "Hot Blooded." Fifty years of these songs represent remarkable achievement.</p>
 <p>OAKA Olympic Tennis Center provides major venue scale for anniversary celebrations of this magnitude. The venue supports productions befitting Foreigner's legendary status.</p>
 <p>This concert offers legendary classic rock celebrating a major milestone at one of Athens' largest venues.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       
 
       
@@ -198,14 +177,33 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>OAKA - OLYMPIC TENNIS CENTER</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/OAKA%20-%20OLYMPIC%20TENNIS%20CENTER%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.ticketservices.gr/event/13502/" rel="noopener" target="_blank">ticketservices</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues/oaka-olympic-tennis-center/">Περισσότερες εκδηλώσεις στο OAKA - OLYMPIC TENNIS CENTER</a>
       </nav>
 
       
-    </article>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">FOREIGNER CELEBRATING 50 YEARS</div>
+        <div class="edp-mobile-bar-price">€24</div>
+      </div>
+      <a href="https://www.ticketservices.gr/event/13502/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -282,6 +280,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>

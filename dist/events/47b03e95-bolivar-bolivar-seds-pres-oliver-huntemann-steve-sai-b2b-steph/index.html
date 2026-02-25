@@ -76,32 +76,6 @@
   "image": "https://agentathens.netlify.app/images/og/concert-default.jpg"
 }
   </script>
-
-  <style>
-    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .event-header { margin-bottom: 30px; }
-    .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
-    .type-badge.exhibition { background: #10b981; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
-
-    .event-description { margin: 30px 0; }
-    .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
-    .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
-
-    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; margin-bottom: 8px; }
-
-    .related-events { margin: 30px 0; }
-    .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
-    .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -137,26 +111,30 @@
   </div>
 </nav>
 
-  <div class="event-page-content">
-    <nav class="breadcrumb">
-      <a href="/">agent-athens</a>
-       › <a href="/concerts/">Συναυλία</a>
-      › Bolivar
-    </nav>
-
-    <article class="event-detail" itemscope itemtype="https://schema.org/MusicEvent">
-      <header class="event-header">
-        <span class="type-badge">Συναυλία</span>
+  <article itemscope itemtype="https://schema.org/MusicEvent">
+    <section class="edp-hero" style="--edp-type-color: var(--color-concert)">
+      <div class="edp-hero-inner">
+        <nav class="edp-breadcrumb">
+          <a href="/">agent-athens</a>
+           › <a href="/concerts/">Συναυλία</a>
+          › Bolivar
+        </nav>
+        <span class="edp-type-badge">Συναυλία</span>
         
-        <h1 itemprop="name">Bolivar & Seds pres. Oliver Huntemann + Steve Sai b2b Steph</h1>
-        <p class="event-meta-inline">
-          <time itemprop="startDate" datetime="2026-04-24T21:00:00">Παρασκευή 24 Απριλίου στις 21:00</time>
-          
-          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">Bolivar</span></span>
-        </p>
-      </header>
+        <header>
+          <h1 class="edp-title" itemprop="name">Bolivar & Seds pres. Oliver Huntemann + Steve Sai b2b Steph</h1>
+          <div class="edp-meta">
+            <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-04-24T21:00:00">Παρασκευή 24 Απριλίου στις 21:00</time></span>
+            · <a href="/venues/bolivar/">Bolivar</a>
+            · €15
+          </div>
+          <a href="https://www.clubber.gr/events/bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
+        </header>
+      </div>
+    </section>
 
-      <section class="event-description" itemprop="description">
+    <div class="edp-content">
+      <section class="edp-description is-collapsed" itemprop="description">
         <p>Sand shifts under your feet as the bass begins its work. The sun finished setting an hour ago, but the warmth remains — in the air, in the bodies beginning to move, in the sound system pushing frequencies that travel through the beach. Bolivar holds one of its signature collaborations, and Oliver Huntemann has taken the booth.</p>
 <p>The German DJ brings decades of techno evolution to Athens' best-known beach venue. Huntemann's career spans eras — from early raw productions to the refined, driving techno that fills peak-time floors across continents. His sound operates in the space between minimal and maximal, grooves that build without cluttering, drops that earn their impact.</p>
 <p>Seds joins the billing, the collaborative nature of the night promising transitions and potential b2b moments that planned sets couldn't achieve. The chemistry between artists when they share decks creates unrepeatable moments — readings of the floor made together, decisions about direction negotiated in real time. Beach venue programming understands this magic.</p>
@@ -164,8 +142,9 @@
 <p>The setting matters as much as the lineup. Dancing on sand changes the body, removes the rigidity of concrete floors. The Mediterranean air adds organic warmth to electronic precision. When the system really hits, you feel it in your chest while the waves provide backbeat. Summer in Athens means beach clubs, and Bolivar represents the strand where techno traditions run deepest.</p>
 <p>If you need central location or metro access, Bolivar requires taxi commitment. The Alimos location serves its purpose but not your convenience. But if you've been waiting for techno on the beach, for sound systems under stars, for nights that last until the sun suggests you should stop — Bolivar holds what you're seeking.</p>
 <p>Oliver Huntemann at Bolivar — where techno meets the sea.</p>
-        <div class="enriched-badge">AI-enriched content</div>
+        <div class="edp-enriched-badge">AI-enriched content</div>
       </section>
+      <button class="edp-read-more" type="button">Περισσότερα ▾</button>
       <div class="sr-only" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">| Info | Details |
 |------|---------|
 | **Date** | Friday, April 24, 2026 |
@@ -214,24 +193,122 @@
     </style>
   </section>
 
-      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+      <section class="edp-venue-section">
+        <h3>Bolivar</h3>
+        
+        
+        <a href="https://www.google.com/maps/search/Bolivar%20Athens" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+      </section>
+
+      <div class="edp-source">Πηγή: <a href="https://www.clubber.gr/events/bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph/" rel="noopener" target="_blank">clubber.gr</a></div>
+
+      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
         <h3>Εξερευνήστε περισσότερα</h3>
         <a href="/concerts/">Όλες οι Συναυλία</a>
         <a href="/venues/bolivar/">Περισσότερες εκδηλώσεις στο Bolivar</a>
       </nav>
 
       
-    <section class="related-events">
-      <h3>Επόμενες εκδηλώσεις στο Bolivar</h3>
-      <ul>
-        <li><a href="/events/fc2a3144-bolivar-bolivar-opening-with-gioli-assia-i-sat-april-25/">Bolivar Opening with Gioli & Assia I Sat April 25</a> - Σάββατο 25 Απριλίου</li>
-        <li><a href="/events/322922a0-bolivar-bolivar-opening-gioli-assia-steph-b2b-rezo-powered-by-minota/">Bolivar Opening: Giolì & Assia + Steph b2b Rezo // powered by Minotaur Minotaur</a> - Σάββατο 25 Απριλίου</li>
-        <li><a href="/events/d1b3dcc8-bolivar-mind-against-i-fri-may-8/">Mind Against I Fri May 8</a> - Παρασκευή 8 Μαΐου</li>
-        <li><a href="/events/9c6778f2-bolivar-padre-guilherme-i-sat-may-9/">Padre Guilherme I Sat May 9</a> - Σάββατο 9 Μαΐου</li>
-        <li><a href="/events/7f216429-bolivar-mayans-with-guy-j-b2b-guy-mantzur-i-thu-21-may/">Mayans with Guy J b2b Guy Mantzur I Thu 21 May</a> - Πέμπτη 21 Μαΐου</li>
-      </ul>
-    </section>
-    </article>
+      <section class="edp-related">
+        <h3>Επόμενες εκδηλώσεις στο Bolivar</h3>
+        <div class="card-grid">
+          
+  <a href="/events/fc2a3144-bolivar-bolivar-opening-with-gioli-assia-i-sat-april-25/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Bolivar Opening with Gioli & Assia I Sat April 25</h3>
+      <span class="card-date"><time datetime="2026-04-25T21:00:00">Σάββατο 25 Απριλίου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/322922a0-bolivar-bolivar-opening-gioli-assia-steph-b2b-rezo-powered-by-minota/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Bolivar Opening: Giolì & Assia + Steph b2b Rezo // powered by Minotaur Minotaur</h3>
+      <span class="card-date"><time datetime="2026-04-25T21:00:00+03:00">Σάββατο 25 Απριλίου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/d1b3dcc8-bolivar-mind-against-i-fri-may-8/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Mind Against I Fri May 8</h3>
+      <span class="card-date"><time datetime="2026-05-08T21:00:00">Παρασκευή 8 Μαΐου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/9c6778f2-bolivar-padre-guilherme-i-sat-may-9/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Padre Guilherme I Sat May 9</h3>
+      <span class="card-date"><time datetime="2026-05-09T21:00:00">Σάββατο 9 Μαΐου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/7f216429-bolivar-mayans-with-guy-j-b2b-guy-mantzur-i-thu-21-may/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Mayans with Guy J b2b Guy Mantzur I Thu 21 May</h3>
+      <span class="card-date"><time datetime="2026-05-21T21:00:00">Πέμπτη 21 Μαΐου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+
+  <a href="/events/6b1d76d3-bolivar-mahmut-orhan-i-sat-may-30/" class="event-card">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
+      
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">Mahmut Orhan I Sat May 30</h3>
+      <span class="card-date"><time datetime="2026-05-30T21:00:00">Σάββατο 30 Μαΐου στις 21:00</time></span>
+      <span class="card-venue">Bolivar</span>
+      <span class="card-price">€15</span>
+    </div>
+  </a>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <div class="edp-mobile-bar">
+    <div class="edp-mobile-bar-inner">
+      <div class="edp-mobile-bar-info">
+        <div class="edp-mobile-bar-title">Bolivar & Seds pres. Oliver Huntemann + Steve Sai b2b Steph</div>
+        <div class="edp-mobile-bar-price">€15</div>
+      </div>
+      <a href="https://www.clubber.gr/events/bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -308,6 +385,28 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
   });
+})();
+</script>
+  <script>
+(function() {
+  var desc = document.querySelector('.edp-description.is-collapsed');
+  var btn = document.querySelector('.edp-read-more');
+  if (desc && btn) {
+    btn.addEventListener('click', function() {
+      var collapsed = desc.classList.toggle('is-collapsed');
+      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+    });
+  }
+
+  var heroCta = document.querySelector('.edp-cta-hero');
+  var bar = document.querySelector('.edp-mobile-bar');
+  if (heroCta && bar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        bar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(heroCta);
+  }
 })();
 </script>
 </body>
