@@ -14,9 +14,11 @@
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import Database from 'bun:sqlite';
 import { existsSync, unlinkSync, copyFileSync } from 'fs';
+import { join } from 'path';
 
-const TEST_DB_PATH = 'data/test-migrations.db';
-const PROD_DB_PATH = 'data/events.db';
+const PROJECT_ROOT = join(import.meta.dir, '../../..');
+const TEST_DB_PATH = join(PROJECT_ROOT, 'data/test-migrations.db');
+const PROD_DB_PATH = join(PROJECT_ROOT, 'data/events.db');
 
 describe('Database Migrations', () => {
   let db: Database;
@@ -24,7 +26,8 @@ describe('Database Migrations', () => {
   beforeAll(() => {
     // Use production database for schema verification
     // (Migration has already been applied)
-    db = new Database(PROD_DB_PATH, { readonly: true });
+    // Note: readonly:true fails when WAL mode is active and SHM doesn't exist
+    db = new Database(PROD_DB_PATH);
   });
 
   afterAll(() => {

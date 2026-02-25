@@ -290,6 +290,26 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
           const price = priceMatch ? parseInt(priceMatch[1]) : null;
           const priceRange = price ? `€${price}` : null;
 
+          // Extract time from ISO datetime patterns (e.g., "2026-02-10T21:00:00")
+          let eventTime = '';
+          const isoTimeMatch = eventHtml.match(new RegExp(futureDates[0] + 'T(\\d{2}):(\\d{2})'));
+          if (isoTimeMatch) {
+            const h = parseInt(isoTimeMatch[1]), m = parseInt(isoTimeMatch[2]);
+            if (h !== 0 || m !== 0) {
+              eventTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+          }
+          // Fallback: JSON-LD startDate
+          if (!eventTime) {
+            const jsonLdTime = eventHtml.match(/"startDate"\s*:\s*\[?"?\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})/);
+            if (jsonLdTime) {
+              const h = parseInt(jsonLdTime[1]), m = parseInt(jsonLdTime[2]);
+              if (h !== 0 || m !== 0) {
+                eventTime = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+              }
+            }
+          }
+
           // Create event for first future date
           const startDate = futureDates[0];
           events.push({
@@ -297,7 +317,7 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
             title,
             description: '',
             start_date: startDate,
-            time: '',
+            time: eventTime,
             type: category === 'music' ? 'concert' : category,
             genres: '',
             venue_name: venueName,
@@ -819,8 +839,8 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
             await new Promise(r => setTimeout(r, 2000));
           }
 
-          // Extract prices from the page (now visible after clicking)
-          const prices = await page.evaluate(() => {
+          // Extract prices AND time from the page
+          const pageData = await page.evaluate(() => {
             const priceValues: number[] = [];
             const text = document.body.innerText;
 
@@ -833,12 +853,28 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
               });
             }
 
-            return [...new Set(priceValues)]; // Remove duplicates
+            // Extract time from data-time attribute
+            const timeEl = document.querySelector('[data-time]');
+            const time = timeEl ? timeEl.getAttribute('data-time') : null;
+
+            return {
+              prices: [...new Set(priceValues)],
+              time: time && /^\d{2}:\d{2}$/.test(time) ? time : null
+            };
           });
 
-          if (prices.length > 0) {
-            const minPrice = Math.min(...prices);
-            const maxPrice = Math.max(...prices);
+          // Update time for all events with this title
+          if (pageData.time) {
+            for (const event of events) {
+              if (event.title === e.title && event.source === 'ticketservices' && !event.time) {
+                event.time = pageData.time;
+              }
+            }
+          }
+
+          if (pageData.prices.length > 0) {
+            const minPrice = Math.min(...pageData.prices);
+            const maxPrice = Math.max(...pageData.prices);
             const priceRange = minPrice === maxPrice ? `€${minPrice}` : `€${minPrice} - €${maxPrice}`;
 
             // Update all events with this title
