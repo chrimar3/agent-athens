@@ -360,6 +360,59 @@ async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<st
   return null;  // Graceful failure
 }
 
+/**
+ * Extract time from an Athinorama detail page HTML.
+ * Mirrors the 9 patterns from enrich-time.ts extractTimeAthinorama(),
+ * but inlined here to avoid a second HTTP fetch.
+ */
+function extractTimeFromAthinoramaPage(html: string): string | null {
+  // Pattern 1: startTime="21:00" (most reliable — theater/music structured data)
+  const startTimeMatch = html.match(/startTime="(\d{2}):(\d{2})"/);
+  if (startTimeMatch) {
+    const h = parseInt(startTimeMatch[1]), m = parseInt(startTimeMatch[2]);
+    if (h >= 0 && h <= 23) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Pattern 2: <time datetime="2026-02-10T21:00:00">
+  const timeElMatch = html.match(/<time\s+datetime="\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})(?::\d{2})?"/);
+  if (timeElMatch) {
+    const h = parseInt(timeElMatch[1]), m = parseInt(timeElMatch[2]);
+    if (h !== 0 || m !== 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Pattern 3: "Ώρα:" or "Ώρα έναρξης:" followed by time
+  const greekMatch = html.match(/[Ωώ]ρα(?:\s+[έε]ναρξης)?:?\s*(\d{1,2})[:\.](\d{2})/i);
+  if (greekMatch) {
+    const h = parseInt(greekMatch[1]), m = parseInt(greekMatch[2]);
+    if (h >= 0 && h <= 23 && m >= 0 && m <= 59) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Pattern 4: JSON-LD "startDate": "2026-02-10T21:00:00"
+  const jsonLdMatch = html.match(/"startDate"\s*:\s*"\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})(?::\d{2})?"/);
+  if (jsonLdMatch) {
+    const h = parseInt(jsonLdMatch[1]), m = parseInt(jsonLdMatch[2]);
+    if (h !== 0 || m !== 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Pattern 5: Greek PM — <span class="time">Τετ. 9.30 μ.μ.</span>
+  const pmMatch = html.match(/<span class="time">[^<]*?(\d{1,2})(?:\.(\d{2}))?\s*μ\.μ\./i);
+  if (pmMatch) {
+    let h = parseInt(pmMatch[1]);
+    const m = pmMatch[2] ? parseInt(pmMatch[2]) : 0;
+    if (h < 12) h += 12;
+    if (h >= 12 && h <= 23) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Pattern 6: Greek AM — <span class="time">11 π.μ.</span>
+  const amMatch = html.match(/<span class="time">[^<]*?(\d{1,2})(?:\.(\d{2}))?\s*π\.μ\./i);
+  if (amMatch) {
+    const h = parseInt(amMatch[1]), m = amMatch[2] ? parseInt(amMatch[2]) : 0;
+    if (h >= 0 && h <= 23) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  return null;
+}
+
 async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
   console.log('   Fetching athinorama.gr guides...');
 
@@ -507,9 +560,10 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
     }
   }
 
-  // Fetch prices from ALL event pages (removed limit)
-  console.log('   Fetching prices from event pages...');
+  // Fetch prices AND times from ALL event pages
+  console.log('   Fetching prices and times from event pages...');
   let pricesFound = 0;
+  let timesFound = 0;
   for (let i = 0; i < events.length; i++) {
     const event = events[i];
     try {
@@ -517,7 +571,16 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
       const eventHtml = await fetchWithRetryAthinorama(event.url, 2);
       if (!eventHtml) continue;
 
-      // Expanded price patterns for Greek text
+      // ---- TIME EXTRACTION (same patterns as enrich-time.ts) ----
+      if (!event.time) {
+        const extractedTime = extractTimeFromAthinoramaPage(eventHtml);
+        if (extractedTime) {
+          event.time = extractedTime;
+          timesFound++;
+        }
+      }
+
+      // ---- PRICE EXTRACTION ----
       let priceMatch = null;
 
       // Pattern 1: "Είσ.: € 15-11" or "Είσ.: € 15" (standard Athinorama)
@@ -567,13 +630,14 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
 
       // Progress indicator every 20 events
       if ((i + 1) % 20 === 0) {
-        console.log(`   ... ${i + 1}/${events.length} pages processed, ${pricesFound} with prices`);
+        console.log(`   ... ${i + 1}/${events.length} pages processed, ${pricesFound} prices, ${timesFound} times`);
       }
 
       await new Promise(r => setTimeout(r, 300)); // Rate limit
     } catch (err) { /* Skip on error */ }
   }
   console.log(`   Found prices for ${pricesFound}/${events.length} events`);
+  console.log(`   Found times for ${timesFound}/${events.length} events`);
 
   return events;
 }

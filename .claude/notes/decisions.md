@@ -211,6 +211,18 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 - Hook problems: delete `hooks` key from `.claude/settings.json`, keep permissions
 - settings.json breaks CC entirely: delete the file (clean slate)
 
+## Athinorama Time Extraction at Scrape Time (2026-02-25)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Extract time alongside prices in scrapeAthinorama() | Detail pages already fetched for prices — extracting time too avoids redundant HTTP requests in enrichment phase | 2026-02-25 |
+| Inline the 6 most common patterns (not import from enrich-time.ts) | Avoids cross-dependency between scripts; patterns are stable and simple | 2026-02-25 |
+| Keep enrich-time.ts as fallback | Still catches events from other sources and any athinorama events that slip through | 2026-02-25 |
+
+**Results:** Athinorama time coverage 27.8% → 95.0% (121 → 416 events). Overall 54.1% → 82.4%.
+
+**Remaining 5%:** Pages genuinely have no time data — no startTime attribute, no Greek time text, no JSON-LD.
+
 ## Pipeline Gap Fix (2026-02-25)
 
 | Decision | Why | Date |
