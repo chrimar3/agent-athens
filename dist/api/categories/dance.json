@@ -35,8 +35,10 @@
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-25T09:57:19.144Z",
+      "updatedAt": "2026-02-25 17:22:20",
       "language": "en",
+      "imageUrl": "https://www.megaron.gr/wp-content/uploads/2025/12/25-26-GrandsBalletsGeneve-17©FilipVanRoe_GTG_Ihsane-scaled.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -74,10 +76,12 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/dance/balletto-di-milano/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:03:39",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
+      "imageUrl": "https://www.more.com/getattachment/710daeae-d837-42b1-a312-f5b1e2051933/viva-tickets.png",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -115,10 +119,12 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/dance/marcos-ayala-tango-the-golden-years/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:03:30",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
+      "imageUrl": "https://www.more.com/getattachment/ec7a06de-9984-46d7-b1d2-6e66f8009570/viva-tickets.png",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -151,8 +157,10 @@
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:21:32",
       "language": "en",
+      "imageUrl": "https://www.megaron.gr/wp-content/uploads/2026/01/CARMEN-34_©-Stanislav-Levshin.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -185,15 +193,17 @@
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.970Z",
-      "updatedAt": "2026-02-25T09:57:19.145Z",
+      "updatedAt": "2026-02-25 17:21:32",
       "language": "en",
+      "imageUrl": "https://www.megaron.gr/wp-content/uploads/2026/01/CARMEN-34_©-Stanislav-Levshin.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2026-02-25T16:22:35.161Z",
+    "lastUpdate": "2026-02-25T17:47:38.240Z",
     "url": "https://agentathens.netlify.app/dance"
   }
 }

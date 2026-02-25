@@ -206,6 +206,11 @@ export function getTomorrowEvent(): Event {
   };
 }
 
+export const sampleConcertWithTicket: Event = {
+  ...sampleConcert,
+  ticketUrl: "https://www.viva.gr/tickets/jazz-night/",
+};
+
 // Collection of all sample events
 export const allSampleEvents: Event[] = [
   sampleConcert,

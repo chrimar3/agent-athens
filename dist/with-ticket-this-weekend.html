@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T16:22:34.860Z">
+  <meta name="last-modified" content="2026-02-25T17:47:37.274Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -4217,8 +4217,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T16:22:34.860Z",
-  "dateModified": "2026-02-25T16:22:34.860Z"
+  "datePublished": "2026-02-25T17:47:37.274Z",
+  "dateModified": "2026-02-25T17:47:37.274Z"
 }
   </script>
 
@@ -4236,7 +4236,7 @@
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
-<body>
+<body class="has-filter-bar">
   <header class="site-header">
   <div class="site-header-inner">
     <div class="site-header-left">
@@ -4277,44 +4277,80 @@
         <strong>148 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 06:22 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
       </p>
     </header>
 
-    
-  <nav class="category-nav" aria-label="Event categories">
-    <div class="category-nav-container">
-      <a href="/" class="category-nav-item active">Όλα</a>
-      <a href="/concerts" class="category-nav-item ">Συναυλίες στην Αθήνα</a>
-      <a href="/clubs" class="category-nav-item ">Clubs & Ηλεκτρονική Μουσική</a>
-      <a href="/rebetiko" class="category-nav-item ">Ρεμπέτικο & Λαϊκά</a>
-      <a href="/jazz" class="category-nav-item ">Jazz στην Αθήνα</a>
-      <a href="/dance" class="category-nav-item ">Χορός στην Αθήνα</a>
-      <a href="/theatre" class="category-nav-item ">Θέατρο στην Αθήνα</a>
-      <a href="/comedy" class="category-nav-item ">Κωμωδία & Shows</a>
-      <a href="/exhibitions" class="category-nav-item ">Εκθέσεις στην Αθήνα</a>
-      <a href="/cinema" class="category-nav-item ">Σινεμά στην Αθήνα</a>
-      <a href="/screenings" class="category-nav-item ">Θερινά Σινεμά & Προβολές</a>
-      <a href="/workshops" class="category-nav-item ">Εργαστήρια & Masterclasses</a>
-      <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
+    <div class="filter-bar">
+    <div class="filter-panel-anchor" data-filter="date">
+        <span class="filter-pill is-active">Σαββατοκύριακο<a href="/with-ticket" class="filter-pill-dismiss" aria-label="Remove date filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="type">
+        <button class="filter-pill" data-panel="type">Τύπος <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+        <div class="filter-panel" data-panel-for="type">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Τύπος</div>
+    <div class="filter-type-grid">
+      <a href="/with-ticket-concert-this-weekend" class="filter-type-tile" style="--tile-color: var(--color-concert)">
+      <span class="filter-type-dot" style="background: var(--color-concert)"></span>
+      <span class="filter-type-label">Συναυλίες</span>
+      <span class="filter-type-count">59</span>
+    </a>
+      <a href="/with-ticket-dj_set-this-weekend" class="filter-type-tile" style="--tile-color: var(--color-dj-set)">
+      <span class="filter-type-dot" style="background: var(--color-dj-set)"></span>
+      <span class="filter-type-label">DJ Sets</span>
+      <span class="filter-type-count">46</span>
+    </a>
+      <a href="/with-ticket-theater-this-weekend" class="filter-type-tile" style="--tile-color: var(--color-theater)">
+      <span class="filter-type-dot" style="background: var(--color-theater)"></span>
+      <span class="filter-type-label">Θέατρο</span>
+      <span class="filter-type-count">30</span>
+    </a>
+      <a href="/with-ticket-performance-this-weekend" class="filter-type-tile" style="--tile-color: var(--color-performance)">
+      <span class="filter-type-dot" style="background: var(--color-performance)"></span>
+      <span class="filter-type-label">Performance</span>
+      <span class="filter-type-count">1</span>
+    </a>
     </div>
-    <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
-      .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
-      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
-      .category-nav-item.active { background: var(--accent-primary); color: white; }
-    </style>
-  </nav>
+  </div>
+      </div>
+    <button class="filter-pill is-disabled" disabled>Περιοχή <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel-anchor" data-filter="price">
+        <span class="filter-pill is-active">Με εισιτήριο<a href="/this-weekend" class="filter-pill-dismiss" aria-label="Remove price filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="sort">
+    <button class="filter-pill" data-panel="sort">Ταξινόμηση <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel" data-panel-for="sort">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Ταξινόμηση</div>
+    <div class="filter-radio-list">
+      <a href="#" class="filter-radio-row is-selected" data-sort="date">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Ημερομηνία</span>
+      </a>
+      <a href="#" class="filter-radio-row" data-sort="price">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Τιμή</span>
+      </a>
+    </div>
+  </div>
+  </div>
+    <div class="filter-bar-meta">
+    <span class="filter-result-count">148 εκδηλώσεις</span>
+    <a href="/" class="filter-clear-all">Καθαρισμός</a>
+  </div>
+  </div>
+  <div class="filter-panel-backdrop"></div>
 
     <main>
       
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         <h2 class="date-group-header">Παρασκευή 27 Φεβρουαρίου</h2>
 
-  <a href="/events/6e87ee74-arroyo-theater-nina-simone-4/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/6e87ee74-arroyo-theater-nina-simone-4/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_57227_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -4328,9 +4364,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/33c32f6e--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/33c32f6e--amp/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60103_or_t8mnAfisa2 Fb E3WFYLLO Megaro Or8ogwnia Olympios Proiskos.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -4344,9 +4381,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4c6506d8--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4c6506d8--/" class="event-card" data-price="14" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59896_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -4360,9 +4398,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a8be9023-we-live-we/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a8be9023-we-live-we/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/9fbd85ab-543f-44b6-93a1-b9a8d4eb3d84/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4376,8 +4415,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cfb666d0-stage-7-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cfb666d0-stage-7-/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4392,8 +4432,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d3d3fe01-exa-angelika-dusk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d3d3fe01-exa-angelika-dusk/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4408,8 +4449,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d6980de0-caja-de-musica-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d6980de0-caja-de-musica-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4424,8 +4466,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b4cd5cce--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b4cd5cce--/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4440,8 +4483,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/69f35fef--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/69f35fef--amp/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4456,8 +4500,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/c7e9c8ae-theatre-of-the-no-yiannis-kassetas/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/c7e9c8ae-theatre-of-the-no-yiannis-kassetas/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -4472,8 +4517,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e4cede83--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e4cede83--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4488,8 +4534,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d406548e-fuzz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d406548e-fuzz-club-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4504,8 +4551,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5fcf54f2-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5fcf54f2-half-note-jazz-club-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4520,9 +4568,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9c0e533-171-187-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/d9c0e533-171-187-/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089247/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -4536,8 +4585,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/22d71034-death-disco-pop-girlies-night-vol-3/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/22d71034-death-disco-pop-girlies-night-vol-3/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4552,8 +4602,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a00afb8c-oddity-marika-rossa/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a00afb8c-oddity-marika-rossa/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4568,8 +4619,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b5f1d1ee--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b5f1d1ee--171-187/" class="event-card" data-price="14" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
@@ -4584,8 +4636,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f7af5f1f--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/f7af5f1f--/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -4600,8 +4653,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/629c869f--laura-agnusdei-amp-free-piece-of-tape/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/629c869f--laura-agnusdei-amp-free-piece-of-tape/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4616,8 +4670,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d46b3db6-arch-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d46b3db6-arch-club-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4632,8 +4687,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4235c7ce-off-studio-amaguk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4235c7ce-off-studio-amaguk/" class="event-card" data-price="7" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4648,8 +4704,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f9d31304-temple-skullcrush-fest/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f9d31304-temple-skullcrush-fest/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4664,8 +4721,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/bf071df4-plus-voidtech/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/bf071df4-plus-voidtech/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -4680,9 +4738,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d75dabf5--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/d75dabf5--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089257/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -4696,9 +4755,10 @@
     <meta itemprop="description" content="Εως 2026-04-05">
   </a>
 
-  <a href="/events/643bd62a--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/643bd62a--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089255/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -4712,9 +4772,10 @@
     <meta itemprop="description" content="Εως 2026-03-06">
   </a>
 
-  <a href="/events/abbac553-fuzz-club-live/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/abbac553-fuzz-club-live/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/c80a277e-3a3c-48ef-851d-b553b715a09f/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4728,9 +4789,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/17e25d7f--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/17e25d7f--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/0210ac14-e9fd-4c38-bf48-fa919632dcda/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -4744,9 +4806,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e15adc27--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/e15adc27--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/30962d53-581e-41a3-9a85-6ee63ddfe26a/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -4760,9 +4823,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/33d3c3e6--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/33d3c3e6--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2026/01/MichaelCosmopoulos-1250.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4776,8 +4840,9 @@
     <meta itemprop="description" content="Ομιλητής: Μιχάλης Κοσμόπουλος">
   </a>
 
-  <a href="/events/30837c7c-pharaoh-pharaoh-vinyl-selection/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/30837c7c-pharaoh-pharaoh-vinyl-selection/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4792,9 +4857,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/21e99b75--1821-1896/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/21e99b75--1821-1896/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-25_HLIOU_MEGARO_ATHINA_1-APO-THN-ANATOLH-STI-DYSI.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4808,9 +4874,10 @@
     <meta itemprop="description" content="Η Αθήνα από την Ανατολή στη Δύση 1821-1896 Πώς ήταν η Αθήνα, μια μικρή οθωμανική πόλη, στις αρχές του 20ού αιώνα; Πώς σε λιγότερο από έναν αιώνα μεταμορφώθηκε σ">
   </a>
 
-  <a href="/events/95b613a1--1821-1896/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/95b613a1--1821-1896/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-25_HLIOU_MEGARO_ATHINA_1-APO-THN-ANATOLH-STI-DYSI.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -4824,9 +4891,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5a6a5968--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5a6a5968--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2026/01/MichaelCosmopoulos-1250.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -4840,9 +4908,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a71cd6a7--1821-1896/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a71cd6a7--1821-1896/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-25_HLIOU_MEGARO_ATHINA_1-APO-THN-ANATOLH-STI-DYSI.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4856,9 +4925,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6a352d23--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6a352d23--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2026/01/MichaelCosmopoulos-1250.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4872,8 +4942,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f4351782-big-table-imprint-01-w-ulla-apu-nanu-manos-plitsis-raed-torn/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f4351782-big-table-imprint-01-w-ulla-apu-nanu-manos-plitsis-raed-torn/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4888,8 +4959,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6abdcdb7-b-side-athens-bonso-roussos/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6abdcdb7-b-side-athens-bonso-roussos/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4904,9 +4976,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4d9e2f9b-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4d9e2f9b-half-note-jazz-club-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/mirela-816x465-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4920,8 +4993,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1373094e-zelus-mimi-x-fy/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1373094e-zelus-mimi-x-fy/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4936,8 +5010,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/73d01fbb-astron-astron-club-night-with-greta-b2b-miss-trouli-koketamc-b2b-so/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/73d01fbb-astron-astron-club-night-with-greta-b2b-miss-trouli-koketamc-b2b-so/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4952,8 +5027,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9d2c62a7-astron-greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9d2c62a7-astron-greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4968,8 +5044,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cbc54bb0-aux-club-gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samant/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cbc54bb0-aux-club-gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samant/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -4984,8 +5061,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ecf67fd2-cantina-social-romphea/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ecf67fd2-cantina-social-romphea/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5000,8 +5078,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a05fe2d5-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a05fe2d5-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5016,8 +5095,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/7591f68d-astron-tendervore-with-greta-b2b-miss-trouli-koketamc-b2b-socrates-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7591f68d-astron-tendervore-with-greta-b2b-miss-trouli-koketamc-b2b-socrates-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5032,8 +5112,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/748b129e-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/748b129e-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5048,8 +5129,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3188e6d3-crust-dj-gus-liou/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3188e6d3-crust-dj-gus-liou/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5064,8 +5146,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8aea69aa-oddity-exilium-pres-marika-rossa/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8aea69aa-oddity-exilium-pres-marika-rossa/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5080,8 +5163,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/bb384531-it-athens-kits-and-rave-carnival-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/bb384531-it-athens-kits-and-rave-carnival-edition/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5097,9 +5181,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 28 Φεβρουαρίου</h2>
 
-  <a href="/events/f8c8641d-vox-live-vox/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f8c8641d-vox-live-vox/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/c199d424-ec58-43a2-97f2-3cf926b551c8/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5113,9 +5198,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/c1c0c9c9-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c1c0c9c9-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://www.more.com/getattachment/69c0a38e-8f4a-4ee6-9c9e-e83c1ed1e662/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -5129,8 +5215,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ae47c083-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ae47c083-half-note-jazz-club-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5145,8 +5232,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3ae9de55-caja-de-musica-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3ae9de55-caja-de-musica-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5161,8 +5249,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/00083371-rohas-athens-live-stage-1550/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/00083371-rohas-athens-live-stage-1550/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5177,8 +5266,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cb0416af-gazarte-disco-night-80s-90s-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cb0416af-gazarte-disco-night-80s-90s-party/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5193,8 +5283,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4423daf9--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4423daf9--171-187/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5209,8 +5300,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8c4fa9d9-temple-heavenly-amp-the-vaxtones/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8c4fa9d9-temple-heavenly-amp-the-vaxtones/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5225,8 +5317,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cf433cca-aux-club-ath-dub-unity-w-tr-tactics/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cf433cca-aux-club-ath-dub-unity-w-tr-tactics/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5241,8 +5334,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/13a5bc41-aux-club-aux-anagenisis-w-mari-ferrari/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/13a5bc41-aux-club-aux-anagenisis-w-mari-ferrari/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5257,8 +5351,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/34fc7512--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/34fc7512--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -5273,8 +5368,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e504d6ff--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e504d6ff--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5289,8 +5385,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/60748af9-concert-1-baumstrasse-the-greek-jazz-book-concert-1/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/60748af9-concert-1-baumstrasse-the-greek-jazz-book-concert-1/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5305,8 +5402,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0a9c2574-jazzet-cafe-human-touch/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0a9c2574-jazzet-cafe-human-touch/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5321,8 +5419,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/bc749a0c-cafe-bar-the-stroryville-ragtimers/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/bc749a0c-cafe-bar-the-stroryville-ragtimers/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5337,8 +5436,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/91554202-off-studio-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/91554202-off-studio-/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5353,8 +5453,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b3ed2d3e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b3ed2d3e--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5369,9 +5470,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/72c731e7--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/72c731e7--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089239/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5385,9 +5487,10 @@
     <meta itemprop="description" content="Εως 2026-04-25">
   </a>
 
-  <a href="/events/ad9ef805--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/ad9ef805--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089243/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5401,9 +5504,10 @@
     <meta itemprop="description" content="Εως 2026-03-29">
   </a>
 
-  <a href="/events/58b945f4-gustav-athens-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/58b945f4-gustav-athens-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60565_thumbGERMANOS 28.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5417,9 +5521,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5c8adcfe-kukaracha-theaterspace-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/5c8adcfe-kukaracha-theaterspace-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10076156/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5433,9 +5538,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/7690cef6--the-mr-and-mrs-bubble-show/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/7690cef6--the-mr-and-mrs-bubble-show/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089261/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5449,8 +5555,9 @@
     <meta itemprop="description" content="Εως 2026-03-28">
   </a>
 
-  <a href="/events/ae384aa0-metron-stage-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ae384aa0-metron-stage-/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5465,8 +5572,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/bfbca193-theatre-of-the-no-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/bfbca193-theatre-of-the-no-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -5481,9 +5589,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a72d5c49--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a72d5c49--/" class="event-card" data-price="17" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/bfc8756d-17f0-482b-8137-453a9a280383/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5497,9 +5606,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/560cdafb--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/560cdafb--/" class="event-card" data-price="14" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/1a73e0ee-7582-452b-b4bb-4ae4504f63f9/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5513,9 +5623,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/7bd6736d-theatre-of-the-no-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/7bd6736d-theatre-of-the-no-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/46222f7d-ad8a-4ab8-a0b5-0b62eae4888d/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5529,9 +5640,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/fdded01f--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/fdded01f--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/df5b29be-f828-40d8-8721-786cf477f0b7/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5545,9 +5657,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0a170dcf--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/0a170dcf--/" class="event-card" data-price="14" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/78e52b6b-634e-4a9d-a2c1-97c78ea5d84f/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5561,9 +5674,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6ac179a4-brecht-2510-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/6ac179a4-brecht-2510-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/e5a2a073-325f-42ca-a2a7-49593a1140b4/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5577,9 +5691,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9308c02a--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/9308c02a--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/f38b7c7a-6ab9-42a7-a53b-dfbd85cf1e82/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5593,8 +5708,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/acc2e97b-skull-bar-you-are-what-you-dance/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/acc2e97b-skull-bar-you-are-what-you-dance/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5609,8 +5725,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9e1b0a26-skullbar-afterhours-nikolas-gale-jay-jay-karanikas/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9e1b0a26-skullbar-afterhours-nikolas-gale-jay-jay-karanikas/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5625,9 +5742,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/66badb8a--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66badb8a--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/DRIVAS-HIGH-RES-site-scaled.jpeg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5641,8 +5759,9 @@
     <meta itemprop="description" content="Η προσωπογραφία ενός αλγόριθμου Ο Γιώργος Δρίβας παρουσιάζει μια περιπατητική δράση/έκθεση στο Μέγαρο, όπου ήχος, βίντεο, μουσική και περφόρμανς δημιουργούνται ">
   </a>
 
-  <a href="/events/20d61fc6-pharaoh-pharaoh-vinyl-selection/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/20d61fc6-pharaoh-pharaoh-vinyl-selection/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5657,9 +5776,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3052cb6d--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/3052cb6d--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -5673,9 +5793,10 @@
     <meta itemprop="description" content="28 Φεβ - 20 Μαρ Τα Ομώνυμα Έλκονται - Νικόλας Σμυρνάκης Πολλαπλοι χωροι">
   </a>
 
-  <a href="/events/cd32e2a4--1896-1922/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cd32e2a4--1896-1922/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-26-ILIOU-PastedGraphic-2.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5689,9 +5810,10 @@
     <meta itemprop="description" content="1896-1922 Aπό την Αθήνα της Μπελ Επόκ στη νέα Αθήνα της δεκαετίας του 1920: Πως ήταν η ζωή στην Αθήνα μετά τους πρώτους Ολυμπιακούς Αγώνες του 1896; Γιατί πήγαν">
   </a>
 
-  <a href="/events/bce237d2--1896-1922/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/bce237d2--1896-1922/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-26-ILIOU-PastedGraphic-2.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -5705,9 +5827,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4650121d--1896-1922/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4650121d--1896-1922/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-26-ILIOU-PastedGraphic-2.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5721,8 +5844,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/de4acc79-mona-athens-purim-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/de4acc79-mona-athens-purim-athens/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5737,8 +5861,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4f846a9c-piree-pantheon/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4f846a9c-piree-pantheon/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5753,9 +5878,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1bb09ff7-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1bb09ff7-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://www.more.com/getattachment/69c0a38e-8f4a-4ee6-9c9e-e83c1ed1e662/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -5769,8 +5895,9 @@
     <meta itemprop="description" content="PURE SHOW : HEAVENLY & THE VAXTONES + PARTY / TEMPLE ATHENS 21:30 LIVE ACTS - AFTER 23:30 PURE DJ SET">
   </a>
 
-  <a href="/events/e516754b-daddy-s-all-day-bar-marthe-at-daddy-s-all-day-bar/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e516754b-daddy-s-all-day-bar-marthe-at-daddy-s-all-day-bar/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5785,8 +5912,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/af507bd8-b-side-athens-techno-underdogs-free-entrance/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/af507bd8-b-side-athens-techno-underdogs-free-entrance/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5801,9 +5929,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8bc1dc30-half-note-jazz-club-you-only-live-once-yolo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8bc1dc30-half-note-jazz-club-you-only-live-once-yolo/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/ΗΡΩ-816x465jpg.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5817,8 +5946,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/af10a856-aux-club-ath-dnb-unity-presents-tr-tactics/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/af10a856-aux-club-ath-dnb-unity-presents-tr-tactics/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5833,8 +5963,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/66059100-dybbuk-cj-jeff-diogo-accioly-senor-j/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66059100-dybbuk-cj-jeff-diogo-accioly-senor-j/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5849,8 +5980,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9ba5b5a-astron-astron-club-night-with-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d9ba5b5a-astron-astron-club-night-with-impvlsiv-bolosis-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5865,8 +5997,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/da5c1828-zelus-nick-jojo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/da5c1828-zelus-nick-jojo/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5881,8 +6014,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3774fd58-cantina-social-mjw/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3774fd58-cantina-social-mjw/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5897,8 +6031,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/366932a5-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/366932a5-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5913,8 +6048,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/82fd3186-astron-astron-club-night-with-bolosis-impvlsiv-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/82fd3186-astron-astron-club-night-with-bolosis-impvlsiv-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5929,8 +6065,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6ac49a3f-zelus-nick-jojo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6ac49a3f-zelus-nick-jojo/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5945,8 +6082,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/248fcda9-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/248fcda9-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5961,8 +6099,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/165940b5-gazi-view-mikee-zarkon-aristo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/165940b5-gazi-view-mikee-zarkon-aristo/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5977,8 +6116,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0818ff80-crust-fragk-hutt-louie-dima/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0818ff80-crust-fragk-hutt-louie-dima/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -5993,8 +6133,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/632bfe16-smut-4-10438-greece-pornceptual-fka-m4a-vinvar-ivra/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/632bfe16-smut-4-10438-greece-pornceptual-fka-m4a-vinvar-ivra/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6009,8 +6150,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4213a255-smut-athens-prncptl-x-smut-x-fka-m4a-x-vinvar/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4213a255-smut-athens-prncptl-x-smut-x-fka-m4a-x-vinvar/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6025,8 +6167,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d3d9c6ef-it-athens-psy-vibes-session-vol-5/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d3d9c6ef-it-athens-psy-vibes-session-vol-5/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6041,8 +6184,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/33f7829f-oddity-oddity-sikoti-debut-in-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/33f7829f-oddity-oddity-sikoti-debut-in-athens/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6057,8 +6201,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ea1161f4-plus-street-fighter-honda/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ea1161f4-plus-street-fighter-honda/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6073,8 +6218,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2afae062-aux-club-aux-anagenesis-with-mari-ferrari/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2afae062-aux-club-aux-anagenesis-with-mari-ferrari/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6090,9 +6236,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 1 Μαρτίου</h2>
 
-  <a href="/events/7c51b591-parnassos-literary-society-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7c51b591-parnassos-literary-society-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_58113_or_BEMPO - GKREKA.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -6106,9 +6253,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/66e164e9-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66e164e9-myrtillo-cafe-alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59601_or_SLIM 2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6122,9 +6270,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/29495798--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/29495798--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.more.com/getattachment/4f5c9d74-985a-425b-802c-b4e7260c3852/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -6138,9 +6287,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6f3e3398--/" class="event-card" itemscope itemtype="https://schema.org/Event">
+  <a href="/events/6f3e3398--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/Event">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">📌</span>
+      <img class="card-image" src="https://www.more.com/getattachment/1d481816-8478-43b2-8c2c-1386b2a4237d/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">📌</span>
       <span class="card-badge" style="background: var(--color-sports)">ΑΛΛΟ</span>
       
     </div>
@@ -6154,8 +6304,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/42f11248--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/42f11248--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
@@ -6170,8 +6321,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/31a96632-half-note-jazz-club-ad-233-d-232-j-236/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/31a96632-half-note-jazz-club-ad-233-d-232-j-236/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6186,8 +6338,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0c2742b1--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/0c2742b1--/" class="event-card" data-price="11" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -6202,8 +6355,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5449a683--alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5449a683--alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6218,8 +6372,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/db29f36b-gazarte-panarmonia/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/db29f36b-gazarte-panarmonia/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6234,8 +6389,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2c59d08e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2c59d08e--/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6250,8 +6406,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/56b29678-theatre-of-the-no-alef/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/56b29678-theatre-of-the-no-alef/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -6266,8 +6423,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/be9c82e8--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/be9c82e8--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6282,8 +6440,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0c0696c9--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0c0696c9--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6298,8 +6457,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1a5aa5cd-171-187-camerata-junior/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1a5aa5cd-171-187-camerata-junior/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6314,9 +6474,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4fa575b8--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/4fa575b8--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089241/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6330,9 +6491,10 @@
     <meta itemprop="description" content="Εως 2026-04-05">
   </a>
 
-  <a href="/events/10ba1fb3--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/10ba1fb3--/" class="event-card" data-price="19" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089242/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6346,9 +6508,10 @@
     <meta itemprop="description" content="Εως 2026-05-10">
   </a>
 
-  <a href="/events/eaad803b--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/eaad803b--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10082608/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6362,8 +6525,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5cff359f-off-studio-0-thetis/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5cff359f-off-studio-0-thetis/" class="event-card" data-price="7" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6378,9 +6542,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/291885e4--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/291885e4--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10079251/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6394,9 +6559,10 @@
     <meta itemprop="description" content="Εως 2026-03-29">
   </a>
 
-  <a href="/events/1a8f24ed-lib-ro-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/1a8f24ed-lib-ro-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10086173/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6410,8 +6576,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a190abe9--idra-kayne-amp/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/a190abe9--idra-kayne-amp/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -6426,9 +6593,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1245011f--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/1245011f--/" class="event-card" data-price="16" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/a6630711-356b-4999-9547-3f7977bc8798/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -6442,8 +6610,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/16477642-tba-atharea-revolt-hosts-shuffle-with-paleman-uk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/16477642-tba-atharea-revolt-hosts-shuffle-with-paleman-uk/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6458,8 +6627,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/927f06b4-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/927f06b4-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6474,8 +6644,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0390b33c-burger-disco-club-house-on-the-beach/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0390b33c-burger-disco-club-house-on-the-beach/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6490,8 +6661,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6506,9 +6678,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9923d00--/" class="event-card" itemscope itemtype="https://schema.org/Event">
+  <a href="/events/d9923d00--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/Event">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎤</span>
+      <img class="card-image" src="https://www.more.com/getattachment/71da8c76-80c0-4070-a7b3-ae4b45be2b92/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎤</span>
       <span class="card-badge card-badge--light-text" style="background: var(--color-performance)">PERFORMANCE</span>
       
     </div>
@@ -6522,9 +6695,10 @@
     <meta itemprop="description" content="1 Μαρ - 26 Απρ Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ Πολλαπλοι χωροι">
   </a>
 
-  <a href="/events/8c8b263e--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8c8b263e--1922-1940/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/11/Η_ΑΘΗΝΑ_ΤΟΥ_ΜΕΣΟΠΟΛΕΜΟΥ-.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6538,9 +6712,10 @@
     <meta itemprop="description" content="1922-1940 Πώς ήταν η Αθήνα του Μεσοπολέμου; Ήταν μόνο μια πόλη σε διχασμό ανάμεσα σε βενιζελικούς και μοναρχικούς ή και άλλα πράγματα μαζί; Οι αφηγήσεις, οι φωτ">
   </a>
 
-  <a href="/events/dbfa5d97--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/dbfa5d97--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/BAEVA-KHOLODENKO-site.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -6554,9 +6729,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b8b4548b--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b8b4548b--1922-1940/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎻</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/11/Η_ΑΘΗΝΑ_ΤΟΥ_ΜΕΣΟΠΟΛΕΜΟΥ-.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎻</span>
       <span class="card-badge" style="background: var(--color-classical)">ΚΛΑΣΙΚΗ</span>
       
     </div>
@@ -6570,9 +6746,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/871383e5--8211/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/871383e5--8211/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/BAEVA-KHOLODENKO-site.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6586,9 +6763,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4bc47d98--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4bc47d98--1922-1940/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/11/Η_ΑΘΗΝΑ_ΤΟΥ_ΜΕΣΟΠΟΛΕΜΟΥ-.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6602,9 +6780,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8337bb1c--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8337bb1c--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/BAEVA-KHOLODENKO-site.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6618,8 +6797,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a961080e-cantina-social-ad-hoc/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a961080e-cantina-social-ad-hoc/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6634,8 +6814,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2a16cb2b-b-side-athens-petros-spatharos-datalogs/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2a16cb2b-b-side-athens-petros-spatharos-datalogs/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -6650,8 +6831,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/952dec4d-cantina-social-ad-hoc/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/952dec4d-cantina-social-ad-hoc/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6666,9 +6848,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/ADEDEJI-816Χ465.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6769,6 +6952,99 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
+  <script>
+(function() {
+  var pills = document.querySelectorAll('.filter-pill[data-panel]');
+  var panels = document.querySelectorAll('.filter-panel');
+  var backdrop = document.querySelector('.filter-panel-backdrop');
+  if (!pills.length) return;
+
+  var isMobile = window.matchMedia('(max-width: 767px)');
+
+  function lockScroll() {
+    if (isMobile.matches) document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.overflow = '';
+  }
+
+  function closeAll() {
+    pills.forEach(function(p) { p.classList.remove('is-open'); });
+    panels.forEach(function(p) { p.classList.remove('is-open'); });
+    if (backdrop) backdrop.classList.remove('is-open');
+    unlockScroll();
+  }
+
+  function openPanel(panelName) {
+    closeAll();
+    var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
+    var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
+    if (pill && panel) {
+      pill.classList.add('is-open');
+      panel.classList.add('is-open');
+      if (backdrop) backdrop.classList.add('is-open');
+      lockScroll();
+    }
+  }
+
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      var name = pill.getAttribute('data-panel');
+      if (pill.classList.contains('is-open')) {
+        closeAll();
+      } else {
+        openPanel(name);
+      }
+    });
+  });
+
+  if (backdrop) backdrop.addEventListener('click', closeAll);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  // Sort by price: reorder .event-card elements by data-price
+  var sortLinks = document.querySelectorAll('[data-sort]');
+  sortLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var sortBy = link.getAttribute('data-sort');
+      var panel = link.closest('.filter-panel');
+
+      // Update selected state
+      if (panel) {
+        panel.querySelectorAll('.filter-radio-row').forEach(function(r) {
+          r.classList.remove('is-selected');
+        });
+      }
+      link.classList.add('is-selected');
+      closeAll();
+
+      var grid = document.querySelector('.card-grid');
+      if (!grid) return;
+
+      var cards = Array.from(grid.querySelectorAll('.event-card'));
+      var headers = Array.from(grid.querySelectorAll('.date-group-header'));
+
+      if (sortBy === 'price') {
+        // Remove date headers, sort cards by price
+        headers.forEach(function(h) { h.remove(); });
+        cards.sort(function(a, b) {
+          var pa = parseFloat(a.getAttribute('data-price') || '9999');
+          var pb = parseFloat(b.getAttribute('data-price') || '9999');
+          return pa - pb;
+        });
+        cards.forEach(function(card) { grid.appendChild(card); });
+      } else {
+        // Restore date sort: reload the page (simplest for static site)
+        window.location.reload();
+      }
+    });
   });
 })();
 </script>

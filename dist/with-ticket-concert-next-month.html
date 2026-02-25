@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T16:22:34.894Z">
+  <meta name="last-modified" content="2026-02-25T17:47:37.336Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -4553,8 +4553,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T16:22:34.894Z",
-  "dateModified": "2026-02-25T16:22:34.894Z"
+  "datePublished": "2026-02-25T17:47:37.336Z",
+  "dateModified": "2026-02-25T17:47:37.336Z"
 }
   </script>
 
@@ -4572,7 +4572,7 @@
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
-<body>
+<body class="has-filter-bar">
   <header class="site-header">
   <div class="site-header-inner">
     <div class="site-header-left">
@@ -4613,44 +4613,54 @@
         <strong>160 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 06:22 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
       </p>
     </header>
 
-    
-  <nav class="category-nav" aria-label="Event categories">
-    <div class="category-nav-container">
-      <a href="/" class="category-nav-item active">Όλα</a>
-      <a href="/concerts" class="category-nav-item ">Συναυλίες στην Αθήνα</a>
-      <a href="/clubs" class="category-nav-item ">Clubs & Ηλεκτρονική Μουσική</a>
-      <a href="/rebetiko" class="category-nav-item ">Ρεμπέτικο & Λαϊκά</a>
-      <a href="/jazz" class="category-nav-item ">Jazz στην Αθήνα</a>
-      <a href="/dance" class="category-nav-item ">Χορός στην Αθήνα</a>
-      <a href="/theatre" class="category-nav-item ">Θέατρο στην Αθήνα</a>
-      <a href="/comedy" class="category-nav-item ">Κωμωδία & Shows</a>
-      <a href="/exhibitions" class="category-nav-item ">Εκθέσεις στην Αθήνα</a>
-      <a href="/cinema" class="category-nav-item ">Σινεμά στην Αθήνα</a>
-      <a href="/screenings" class="category-nav-item ">Θερινά Σινεμά & Προβολές</a>
-      <a href="/workshops" class="category-nav-item ">Εργαστήρια & Masterclasses</a>
-      <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
+    <div class="filter-bar">
+    <div class="filter-panel-anchor" data-filter="date">
+        <span class="filter-pill is-active">Επόμενο μήνα<a href="/with-ticket-concert" class="filter-pill-dismiss" aria-label="Remove date filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="type">
+        <span class="filter-pill is-active">Συναυλίες<a href="/with-ticket-next-month" class="filter-pill-dismiss" aria-label="Remove type filter">&times;</a></span>
+      </div>
+    <button class="filter-pill is-disabled" disabled>Περιοχή <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel-anchor" data-filter="price">
+        <span class="filter-pill is-active">Με εισιτήριο<a href="/concert-next-month" class="filter-pill-dismiss" aria-label="Remove price filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="sort">
+    <button class="filter-pill" data-panel="sort">Ταξινόμηση <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel" data-panel-for="sort">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Ταξινόμηση</div>
+    <div class="filter-radio-list">
+      <a href="#" class="filter-radio-row is-selected" data-sort="date">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Ημερομηνία</span>
+      </a>
+      <a href="#" class="filter-radio-row" data-sort="price">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Τιμή</span>
+      </a>
     </div>
-    <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
-      .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
-      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
-      .category-nav-item.active { background: var(--accent-primary); color: white; }
-    </style>
-  </nav>
+  </div>
+  </div>
+    <div class="filter-bar-meta">
+    <span class="filter-result-count">160 εκδηλώσεις</span>
+    <a href="/" class="filter-clear-all">Καθαρισμός</a>
+  </div>
+  </div>
+  <div class="filter-panel-backdrop"></div>
 
     <main>
       
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         <h2 class="date-group-header">Κυριακή 1 Μαρτίου</h2>
 
-  <a href="/events/66e164e9-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66e164e9-myrtillo-cafe-alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59601_or_SLIM 2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4664,8 +4674,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/31a96632-half-note-jazz-club-ad-233-d-232-j-236/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/31a96632-half-note-jazz-club-ad-233-d-232-j-236/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4680,8 +4691,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5449a683--alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5449a683--alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4696,8 +4708,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/db29f36b-gazarte-panarmonia/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/db29f36b-gazarte-panarmonia/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4712,8 +4725,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2c59d08e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2c59d08e--/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4728,8 +4742,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/be9c82e8--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/be9c82e8--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4744,8 +4759,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0c0696c9--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0c0696c9--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4760,8 +4776,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1a5aa5cd-171-187-camerata-junior/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1a5aa5cd-171-187-camerata-junior/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4776,8 +4793,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5cff359f-off-studio-0-thetis/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5cff359f-off-studio-0-thetis/" class="event-card" data-price="7" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4792,8 +4810,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/63e9da00-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4808,9 +4827,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8c8b263e--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8c8b263e--1922-1940/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/11/Η_ΑΘΗΝΑ_ΤΟΥ_ΜΕΣΟΠΟΛΕΜΟΥ-.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4824,9 +4844,10 @@
     <meta itemprop="description" content="1922-1940 Πώς ήταν η Αθήνα του Μεσοπολέμου; Ήταν μόνο μια πόλη σε διχασμό ανάμεσα σε βενιζελικούς και μοναρχικούς ή και άλλα πράγματα μαζί; Οι αφηγήσεις, οι φωτ">
   </a>
 
-  <a href="/events/871383e5--8211/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/871383e5--8211/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/BAEVA-KHOLODENKO-site.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4840,9 +4861,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4bc47d98--1922-1940/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4bc47d98--1922-1940/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/11/Η_ΑΘΗΝΑ_ΤΟΥ_ΜΕΣΟΠΟΛΕΜΟΥ-.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4856,9 +4878,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8337bb1c--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8337bb1c--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/BAEVA-KHOLODENKO-site.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4872,8 +4895,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/952dec4d-cantina-social-ad-hoc/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/952dec4d-cantina-social-ad-hoc/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4888,9 +4912,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f61493ff-half-note-jazz-club-adedeji-afrofunk-explosion/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/ADEDEJI-816Χ465.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -4905,8 +4930,9 @@
   </a>
 <h2 class="date-group-header">Δευτέρα 2 Μαρτίου</h2>
 
-  <a href="/events/d7f545bb--amp-kubara-project/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d7f545bb--amp-kubara-project/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4921,8 +4947,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/415eb4a0-half-note-jazz-club-blues-cargo-amp-michael-dotson/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/415eb4a0-half-note-jazz-club-blues-cargo-amp-michael-dotson/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4937,8 +4964,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/75e9f12f-vox-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/75e9f12f-vox-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4953,8 +4981,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/24f7e6cd--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/24f7e6cd--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4969,8 +4998,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ba2bedb9--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ba2bedb9--/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -4985,9 +5015,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/630dfe55-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/630dfe55-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5001,8 +5032,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/961a5c5d--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/961a5c5d--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5017,8 +5049,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e7a11193--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e7a11193--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5033,9 +5066,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a907ffdc-vox-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a907ffdc-vox-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/55a5ff65-cfbd-479e-9d6f-eab17354d0a2/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5049,9 +5083,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ebe64ca4--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ebe64ca4--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/03/16118_269p-2017.04.06_Documenta14_PressConf_Fotos©Akriviadis.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5065,9 +5100,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/66d57dc4-half-note-jazz-club-blues-cargo-special-guest-michael-dotson/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66d57dc4-half-note-jazz-club-blues-cargo-special-guest-michael-dotson/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/BLUES-CARGO-816χ465.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5082,9 +5118,10 @@
   </a>
 <h2 class="date-group-header">Τρίτη 3 Μαρτίου</h2>
 
-  <a href="/events/431979fa--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/431979fa--/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60175_Untitled-3.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5098,8 +5135,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b17333d0--h-228-xan-live-soundtrack/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b17333d0--h-228-xan-live-soundtrack/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5114,9 +5152,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/481fa33c-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/481fa33c-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5131,8 +5170,9 @@
   </a>
 <h2 class="date-group-header">Τετάρτη 4 Μαρτίου</h2>
 
-  <a href="/events/d2de2029-gazarte-leon-of-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d2de2029-gazarte-leon-of-athens/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5147,8 +5187,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/43a25215-half-note-jazz-club-5tet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/43a25215-half-note-jazz-club-5tet/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5163,8 +5204,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f1c82536--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f1c82536--/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5179,9 +5221,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/870952a1-half-note-jazz-club-for-women-5tet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/870952a1-half-note-jazz-club-for-women-5tet/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/MORE2-2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5196,9 +5239,10 @@
   </a>
 <h2 class="date-group-header">Πέμπτη 5 Μαρτίου</h2>
 
-  <a href="/events/12a636c2--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/12a636c2--/" class="event-card" data-price="17" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/8626d1ca-6aac-4237-b698-c80b2e5f0c63/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5212,8 +5256,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a6f291b6-caja-de-musica-amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a6f291b6-caja-de-musica-amp/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5228,8 +5273,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/73f9e09c-gazarte-stavroz/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/73f9e09c-gazarte-stavroz/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5244,8 +5290,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e4f11743-171-187-171-nelly-39-s-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e4f11743-171-187-171-nelly-39-s-187/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5260,8 +5307,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a8dae425-bios-wavves/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a8dae425-bios-wavves/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5276,8 +5324,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/026cd1d2-gazarte-eden-live-presents-stavroz/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/026cd1d2-gazarte-eden-live-presents-stavroz/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5292,9 +5341,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/556bbebc-bios-wavves/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/556bbebc-bios-wavves/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5308,9 +5358,10 @@
     <meta itemprop="description" content="5 Μαρτιου WAVVES Bios Ρομαντσο">
   </a>
 
-  <a href="/events/477e7970-gazarte-eden-live-presents-stavroz/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/477e7970-gazarte-eden-live-presents-stavroz/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5324,9 +5375,10 @@
     <meta itemprop="description" content="5 Μαρτιου EDEN LIVE presents STAVROZ Gazarte - Ground Stage">
   </a>
 
-  <a href="/events/22290993-half-note-jazz-club-spyros-manesis-trio/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/22290993-half-note-jazz-club-spyros-manesis-trio/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/manesis-816x465-2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5341,9 +5393,10 @@
   </a>
 <h2 class="date-group-header">Παρασκευή 6 Μαρτίου</h2>
 
-  <a href="/events/721cee52--echoes-of-romance-and-myth-duo-duende/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/721cee52--echoes-of-romance-and-myth-duo-duende/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_59362_thumb.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5357,9 +5410,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3e655628--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3e655628--/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60086_or_main.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5373,8 +5427,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/282ef93b--duo-duende/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/282ef93b--duo-duende/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5389,8 +5444,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/591d23b2-gazarte-conan/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/591d23b2-gazarte-conan/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5405,8 +5461,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cc92da2e-piraeus-club-academy-road-duck/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cc92da2e-piraeus-club-academy-road-duck/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5421,8 +5478,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f9959df8--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f9959df8--amp/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5437,8 +5495,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/50a80979-live-music-space-bad-nerves/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/50a80979-live-music-space-bad-nerves/" class="event-card" data-price="22" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5453,8 +5512,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/039c065f--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/039c065f--/" class="event-card" data-price="14" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5469,8 +5529,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e35cc975-underflow-unplugged/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e35cc975-underflow-unplugged/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5485,8 +5546,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/653b1dd8-doors-ft-jerome-kaluta/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/653b1dd8-doors-ft-jerome-kaluta/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5501,8 +5563,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/af71e48b-universe-dimitri-vegas/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/af71e48b-universe-dimitri-vegas/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5517,8 +5580,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2c278862-arch-club-mother-of-millions-we-own-the-sky-amp-sidus/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2c278862-arch-club-mother-of-millions-we-own-the-sky-amp-sidus/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5533,8 +5597,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e9c2d4b9-an-club-avi/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e9c2d4b9-an-club-avi/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5549,8 +5614,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1adc2cab--soledad-zarka-amp-loup-uberto/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1adc2cab--soledad-zarka-amp-loup-uberto/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5565,8 +5631,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/41fd6e73--171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/41fd6e73--171-187/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5581,8 +5648,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/28b37526-caja-de-musica-amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/28b37526-caja-de-musica-amp/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5597,9 +5665,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e844d276-gazarte-conan-live-in-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e844d276-gazarte-conan-live-in-athens/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/f99d3d1c-1648-4deb-b784-74b1375ccc11/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5613,9 +5682,10 @@
     <meta itemprop="description" content="6 Μαρτιου CONAN live in Athens Gazarte - Ground Stage">
   </a>
 
-  <a href="/events/610f008c-fuzz-club-nightfall/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/610f008c-fuzz-club-nightfall/" class="event-card" data-price="17" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/c4f0a51a-1519-4af2-9786-f695f497c5eb/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5629,9 +5699,10 @@
     <meta itemprop="description" content="6 Μαρτιου NIGHTFALL Fuzz Club">
   </a>
 
-  <a href="/events/74b2b7e2--mondrian-pollock/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/74b2b7e2--mondrian-pollock/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2026/01/Thanasis-Fokas_-5-.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5645,9 +5716,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f6992f07-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f6992f07-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5661,8 +5733,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/55bcdd37-universe-dimitri-vegas-manolaco-lost-prince/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/55bcdd37-universe-dimitri-vegas-manolaco-lost-prince/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5678,9 +5751,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 7 Μαρτίου</h2>
 
-  <a href="/events/d9f56fd7-concert-1-baumstrasse-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d9f56fd7-concert-1-baumstrasse-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60366_tumbmainlive_SGRS_VLASTOY 2026.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5694,9 +5768,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b8039d67-piraeus-club-academy-oathswan-the-heirloom-piraeus-club-academy/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b8039d67-piraeus-club-academy-oathswan-the-heirloom-piraeus-club-academy/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/c64b49bd-4d5d-48ee-8d85-a041fce80160/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5710,8 +5785,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4dbe721f-floyd-1000mods/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4dbe721f-floyd-1000mods/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5726,8 +5802,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a2453d51--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a2453d51--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5742,8 +5819,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/245fc8b6--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/245fc8b6--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5758,8 +5836,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6264057a-fuzz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6264057a-fuzz-club-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5774,8 +5853,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f6b14d85-stage-7-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f6b14d85-stage-7-/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5790,8 +5870,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6cdaae5e--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6cdaae5e--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5806,8 +5887,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f2d4d795-live-music-space-eddie-dark/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f2d4d795-live-music-space-eddie-dark/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5822,8 +5904,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b039fdf3--vera-danilina/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b039fdf3--vera-danilina/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5838,8 +5921,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/04063ea9-piraeus-club-academy-oathswan/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/04063ea9-piraeus-club-academy-oathswan/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5854,9 +5938,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8da54119-floyd-1000mods-2026/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8da54119-floyd-1000mods-2026/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/946b090b-e358-4e08-a66c-7f1768687fae/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5870,9 +5955,10 @@
     <meta itemprop="description" content="7 Μαρτιου 1000MODS 2026 Floyd">
   </a>
 
-  <a href="/events/73f95b1d--london-philharmonic-orchestra-8211-paavo-jarvi-8211-alexandr/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/73f95b1d--london-philharmonic-orchestra-8211-paavo-jarvi-8211-alexandr/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-26-LPO-LPO-RFH-061121-with-Principal-Conductor-Edward-Gardner-1076-c-Mark-Allan.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5886,9 +5972,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/53e004d3--london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/53e004d3--london-philharmonic-orchestra-paavo-jarvi-alexandre-kantorow/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/25-26-LPO-LPO-RFH-061121-with-Principal-Conductor-Edward-Gardner-1076-c-Mark-Allan.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5902,9 +5989,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/801551fb-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/801551fb-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5918,8 +6006,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/c0b6e774-n-a-o-s-kollektiv-raw-state-techno-takeover/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c0b6e774-n-a-o-s-kollektiv-raw-state-techno-takeover/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5934,8 +6023,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/63856bea-smut-coma-talismann-laure-croft-jerm/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/63856bea-smut-coma-talismann-laure-croft-jerm/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5951,9 +6041,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 8 Μαρτίου</h2>
 
-  <a href="/events/c208b81d-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c208b81d-myrtillo-cafe-alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59601_or_SLIM 2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5967,9 +6058,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4020dcb2-christmas-theater-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4020dcb2-christmas-theater-/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/e69436cb-850e-48c5-a36e-a04c2d583add/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -5983,8 +6075,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/212a2928-christmas-theater-171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/212a2928-christmas-theater-171-187/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -5999,8 +6092,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/12315fb7-171-187-4-women/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/12315fb7-171-187-4-women/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6015,8 +6109,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cbf8c060-an-club-lamp-of-murmuur/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cbf8c060-an-club-lamp-of-murmuur/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6031,8 +6126,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/69cad2c1--zoran-dukic/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/69cad2c1--zoran-dukic/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6047,8 +6143,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/be7b1176--saints-amp-sinners-the-whitesnake-tribute-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/be7b1176--saints-amp-sinners-the-whitesnake-tribute-band/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6063,8 +6160,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5c1b1187--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5c1b1187--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6079,8 +6177,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4831be1e-caja-de-musica-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4831be1e-caja-de-musica-/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6095,9 +6194,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/02451093-electra-palace-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/02451093-electra-palace-/" class="event-card" data-price="50" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60655_th8m.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6111,9 +6211,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/44be7705-an-club-lamp-of-murmuur-special-guest/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/44be7705-an-club-lamp-of-murmuur-special-guest/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6127,9 +6228,10 @@
     <meta itemprop="description" content="8 Μαρτιου Lamp of Murmuur | special guest: Θλίψις AN Club">
   </a>
 
-  <a href="/events/3259d4a3-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3259d4a3-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6144,9 +6246,10 @@
   </a>
 <h2 class="date-group-header">Δευτέρα 9 Μαρτίου</h2>
 
-  <a href="/events/c68c6e00--resonances-2/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c68c6e00--resonances-2/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60455_or_-resonances-synavlia-gia-2-piana-lydia-linardou-iro-menegou-dnenlarge.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6160,9 +6263,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b57e3064-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b57e3064-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6176,8 +6280,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8de0ded6--amp-kalogerkia-bros/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8de0ded6--amp-kalogerkia-bros/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6192,8 +6297,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/00737571--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/00737571--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6208,8 +6314,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/72e69bd4--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/72e69bd4--/" class="event-card" data-price="8" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6224,9 +6331,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b0f07f96-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b0f07f96-half-note-jazz-club-christie-dashiell-quartet/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6241,9 +6349,10 @@
   </a>
 <h2 class="date-group-header">Τρίτη 10 Μαρτίου</h2>
 
-  <a href="/events/36c78d21-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/36c78d21-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6257,8 +6366,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9ca02fc-171-187-171-187/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d9ca02fc-171-187-171-187/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6274,9 +6384,10 @@
   </a>
 <h2 class="date-group-header">Τετάρτη 11 Μαρτίου</h2>
 
-  <a href="/events/242e47fb--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/242e47fb--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60583_or_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6290,8 +6401,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/736d2932--amp/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/736d2932--amp/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6306,9 +6418,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/dae85c76--14/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/dae85c76--14/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/Σταυρακάκης_-Fedeneva_SITE.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6323,9 +6436,10 @@
   </a>
 <h2 class="date-group-header">Πέμπτη 12 Μαρτίου</h2>
 
-  <a href="/events/15da2955--live/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/15da2955--live/" class="event-card" data-price="16" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/170b8be3-c43b-44d5-b244-706f7200758a/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6339,9 +6453,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3be4e977-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3be4e977-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59935_or_UTH_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6355,9 +6470,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f14bae6f--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f14bae6f--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/11/25-26-DIAZOMA-KARTHEAΚαρθαία-2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6371,9 +6487,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9444d8b-half-note-jazz-club-dimitris-papadopoulos-quartet/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d9444d8b-half-note-jazz-club-dimitris-papadopoulos-quartet/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/816x465.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6388,9 +6505,10 @@
   </a>
 <h2 class="date-group-header">Παρασκευή 13 Μαρτίου</h2>
 
-  <a href="/events/c5c84489-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c5c84489-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59935_or_UTH_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6404,9 +6522,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1a56a706-gazarte-heretoir-live-in-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1a56a706-gazarte-heretoir-live-in-athens/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6420,9 +6539,10 @@
     <meta itemprop="description" content="13 Μαρτιου HERETOIR live in Athens Gazarte - Ground Stage">
   </a>
 
-  <a href="/events/4ad34c49--jazz-evi-mazi-manos-kitsikopoulos/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4ad34c49--jazz-evi-mazi-manos-kitsikopoulos/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6436,9 +6556,10 @@
     <meta itemprop="description" content="13 Μαρτιου Jazz στο Μουσείο: Evi Mazi & Manos Kitsikopoulos – «Η πνοή του χρόνου» Ιδρυμα Βασιλη και Ελιζας Γουλανδρη">
   </a>
 
-  <a href="/events/f6bc49f8--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f6bc49f8--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/12/Screenshot-2024-12-02-111451.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6452,9 +6573,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/198e78b0-half-note-jazz-club-voodoo-groove/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/198e78b0-half-note-jazz-club-voodoo-groove/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/816Χ465-2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6469,9 +6591,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 14 Μαρτίου</h2>
 
-  <a href="/events/7fd6eb02-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7fd6eb02-live-up-the-hammers-xx-2026-legacy-edition/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59935_or_UTH_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6485,9 +6608,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a5c4581b-st-paul-s-anglican-church-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a5c4581b-st-paul-s-anglican-church-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59642_or_Ticket_services_1020x408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6501,9 +6625,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6400dc6d-piraeus-club-academy-dreamlord-piraeus-club-academy/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6400dc6d-piraeus-club-academy-dreamlord-piraeus-club-academy/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6517,9 +6642,10 @@
     <meta itemprop="description" content="14 Μαρτιου Dreamlord @ Piraeus Club Academy Piraeus Club Academy">
   </a>
 
-  <a href="/events/27fe5ed0--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/27fe5ed0--/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/TO_ΤΡΑΥΜΑ_ΤΟΥ_ΠΟΛΕΜΟΥ.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6533,9 +6659,10 @@
     <meta itemprop="description" content="Το τραύμα του πολέμου και το θαύμα της αναγέννησης Το πρόγραμμα παρουσιάζει δύο αριστουργήματα του 20ού αιώνα: τις Μεταμορφώσεις του Ρίχαρντ Στράους, συλλογική ">
   </a>
 
-  <a href="/events/60c26eb4--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/60c26eb4--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/TO_ΤΡΑΥΜΑ_ΤΟΥ_ΠΟΛΕΜΟΥ.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6549,9 +6676,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0bace205-half-note-jazz-club-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0bace205-half-note-jazz-club-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/KORINA-816χ465.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6566,9 +6694,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 15 Μαρτίου</h2>
 
-  <a href="/events/a73c66b5-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a73c66b5-myrtillo-cafe-alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59601_or_SLIM 2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6582,9 +6711,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0e952537--up-the-hammers-xx-2026-legacy-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0e952537--up-the-hammers-xx-2026-legacy-edition/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59935_or_UTH_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6598,9 +6728,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/28514821-concert-1-baumstrasse-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/28514821-concert-1-baumstrasse-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60672_or_IMG_2093.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6615,9 +6746,10 @@
   </a>
 <h2 class="date-group-header">Δευτέρα 16 Μαρτίου</h2>
 
-  <a href="/events/075fb4ff-st-paul-s-anglican-church-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/075fb4ff-st-paul-s-anglican-church-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59642_or_Ticket_services_1020x408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6631,9 +6763,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0fdda852--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0fdda852--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60452_unnamed thum.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6647,9 +6780,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/5d5f6f99-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/5d5f6f99-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6663,9 +6797,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9c9ec1be-half-note-jazz-club-yannis-papadopoulos-group/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9c9ec1be-half-note-jazz-club-yannis-papadopoulos-group/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/816x465-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6680,9 +6815,10 @@
   </a>
 <h2 class="date-group-header">Τρίτη 17 Μαρτίου</h2>
 
-  <a href="/events/25090c87-radar-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/25090c87-radar-/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59959_or_1020X408.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6697,9 +6833,10 @@
   </a>
 <h2 class="date-group-header">Τετάρτη 18 Μαρτίου</h2>
 
-  <a href="/events/324e6223--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/324e6223--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60583_or_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6713,9 +6850,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1f26655c--chamber-orchestra-of-europe/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1f26655c--chamber-orchestra-of-europe/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/ChamberOrchestraOfEurope©JuliaWesely_highres-0641_SITE.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6729,9 +6867,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4de7f1a6-half-note-jazz-club-nassia-gofa-the-jazz-tales-ft-max-hacker/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4de7f1a6-half-note-jazz-club-nassia-gofa-the-jazz-tales-ft-max-hacker/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/nassia-816x465-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6746,9 +6885,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 21 Μαρτίου</h2>
 
-  <a href="/events/4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/2d7f5bd9-3fe4-4d09-8bdb-c85c275111bc/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6762,9 +6902,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/441535e0-piraeus-club-academy-deus-culpa-album-presentation-w-reversed-piraeus-club-academ/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/441535e0-piraeus-club-academy-deus-culpa-album-presentation-w-reversed-piraeus-club-academ/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6778,8 +6919,9 @@
     <meta itemprop="description" content="21 Μαρτιου Deus Culpa Album Presentation w/ Reversed @ Piraeus Club Academy Piraeus Club Academy">
   </a>
 
-  <a href="/events/339f4643-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/339f4643-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6794,8 +6936,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b79b7ecb-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b79b7ecb-universe-velocity-zero-dvs1-oscar-mulero-yanamaste-ate-x-salin-cirkle/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6811,9 +6954,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 22 Μαρτίου</h2>
 
-  <a href="/events/2afdd949--dream-requiem-rufus-wainwright/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2afdd949--dream-requiem-rufus-wainwright/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/Wainwright_Mastroianni-SITE-1920-x-1440-px.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6828,9 +6972,10 @@
   </a>
 <h2 class="date-group-header">Δευτέρα 23 Μαρτίου</h2>
 
-  <a href="/events/16013527-theseum-a-theatre-for-the-arts-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/16013527-theseum-a-theatre-for-the-arts-/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60437_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6844,9 +6989,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6255a699--20/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6255a699--20/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60585_or_stigmes-tou-20ou-aiona-asterios-pouftis-violontselo-maria-moschidou-piano-dnenlarge.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6861,9 +7007,10 @@
   </a>
 <h2 class="date-group-header">Τρίτη 24 Μαρτίου</h2>
 
-  <a href="/events/f227e6d1-theseum-a-theatre-for-the-arts-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f227e6d1-theseum-a-theatre-for-the-arts-/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60437_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6877,9 +7024,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cdf82709-piraeus-club-academy-calyces-live-at-piraeus-academy/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cdf82709-piraeus-club-academy-calyces-live-at-piraeus-academy/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/241ae0f3-33c6-4d72-8c51-0951e467c29c/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6893,8 +7041,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/312023bb-astron-tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/312023bb-astron-tropism-legowelt-live-jerky-t-dj-problems-b2b-kazteins/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
@@ -6910,9 +7059,10 @@
   </a>
 <h2 class="date-group-header">Πέμπτη 26 Μαρτίου</h2>
 
-  <a href="/events/e7d5460e--friends-what-are-we-gonna-do/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e7d5460e--friends-what-are-we-gonna-do/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_58791_or_1000013032.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6926,9 +7076,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/840e5877-half-note-jazz-club-thanasis-valsamis-quintet-deepest-load-line/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/840e5877-half-note-jazz-club-thanasis-valsamis-quintet-deepest-load-line/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/THANASIS-VALSAMIS-816x465-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6943,9 +7094,10 @@
   </a>
 <h2 class="date-group-header">Παρασκευή 27 Μαρτίου</h2>
 
-  <a href="/events/9098f810--thr3e/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9098f810--thr3e/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_56424_or_-2-piana-3-ermineftries-4-erga-omada-thr3e-k.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6959,9 +7111,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3205122c--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3205122c--/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60732_or_unnamed (2).jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6975,9 +7128,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4182b282--friends-what-are-we-gonna-do/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4182b282--friends-what-are-we-gonna-do/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_58791_or_1000013032.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -6991,9 +7145,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1ad51604-piraeus-club-academy-iotunn-piraeus-club-academy-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1ad51604-piraeus-club-academy-iotunn-piraeus-club-academy-athens/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7007,9 +7162,10 @@
     <meta itemprop="description" content="27 Μαρτιου IOTUNN - PIRAEUS CLUB ACADEMY ATHENS Piraeus Club Academy">
   </a>
 
-  <a href="/events/6eef81b1-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6eef81b1-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7024,9 +7180,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 28 Μαρτίου</h2>
 
-  <a href="/events/a4dca248--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a4dca248--/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59927_or_bann.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7040,9 +7197,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b1b58e00-floyd-inna-show/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b1b58e00-floyd-inna-show/" class="event-card" data-price="40" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/d41d5b0a-8780-473e-93ba-1b1d1546cd73/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7056,9 +7214,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/c67ce2df--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c67ce2df--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2025/12/MARAMIS_COVER.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7072,9 +7231,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9a9ef6d3-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9a9ef6d3-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7089,9 +7249,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 29 Μαρτίου</h2>
 
-  <a href="/events/7a871a06-myrtillo-cafe-alcedo-folk-band/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7a871a06-myrtillo-cafe-alcedo-folk-band/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59601_or_SLIM 2.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7105,9 +7266,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1e0a74b6-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1e0a74b6-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7122,9 +7284,10 @@
   </a>
 <h2 class="date-group-header">Δευτέρα 30 Μαρτίου</h2>
 
-  <a href="/events/7ff03bc6--wow-sounds-imany/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7ff03bc6--wow-sounds-imany/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_59822_or_imany.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7138,9 +7301,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3150b8cc--alexis-bove/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3150b8cc--alexis-bove/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_60457_or_treis-fones-tou-romantismou-klarineto-tselo-piano-angelos-politis-alexis-bove-lefki-karpodini-dnenlarge.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7154,9 +7318,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b2a9333e-theseum-a-theatre-for-the-arts-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/b2a9333e-theseum-a-theatre-for-the-arts-/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/main/main4_60437_1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7170,9 +7335,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/523def07--dire-straits-legacy-live-in-greece/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/523def07--dire-straits-legacy-live-in-greece/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/getattachment/bffc1e91-d8fe-480e-b455-0fe17d539bad/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7186,9 +7352,10 @@
     <meta itemprop="description" content="30 Μαρ - 3 Απρ DIRE STRAITS LEGACY live in Greece! Πολλαπλοι χωροι">
   </a>
 
-  <a href="/events/1e5812cd-an-club-catharsis-w-chronoboros-malignant-unmother/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1e5812cd-an-club-catharsis-w-chronoboros-malignant-unmother/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.more.com/site/images/opengraph.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7202,9 +7369,10 @@
     <meta itemprop="description" content="30 Μαρτιου Catharsis | w/ Chronoboros/Malignant/Unmother AN Club">
   </a>
 
-  <a href="/events/207351a3--/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/207351a3--/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.megaron.gr/wp-content/uploads/2024/02/denis-13.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7218,9 +7386,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/81d7e749-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/81d7e749-half-note-jazz-club-nls-peter-molvaer-group/" class="event-card" data-price="25" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎵</span>
+      <img class="card-image" src="https://www.halfnote.gr/wp-content/uploads/2026/02/more2-1.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎵</span>
       <span class="card-badge" style="background: var(--color-concert)">ΣΥΝΑΥΛΙΑ</span>
       
     </div>
@@ -7323,6 +7492,99 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
+  <script>
+(function() {
+  var pills = document.querySelectorAll('.filter-pill[data-panel]');
+  var panels = document.querySelectorAll('.filter-panel');
+  var backdrop = document.querySelector('.filter-panel-backdrop');
+  if (!pills.length) return;
+
+  var isMobile = window.matchMedia('(max-width: 767px)');
+
+  function lockScroll() {
+    if (isMobile.matches) document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.overflow = '';
+  }
+
+  function closeAll() {
+    pills.forEach(function(p) { p.classList.remove('is-open'); });
+    panels.forEach(function(p) { p.classList.remove('is-open'); });
+    if (backdrop) backdrop.classList.remove('is-open');
+    unlockScroll();
+  }
+
+  function openPanel(panelName) {
+    closeAll();
+    var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
+    var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
+    if (pill && panel) {
+      pill.classList.add('is-open');
+      panel.classList.add('is-open');
+      if (backdrop) backdrop.classList.add('is-open');
+      lockScroll();
+    }
+  }
+
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      var name = pill.getAttribute('data-panel');
+      if (pill.classList.contains('is-open')) {
+        closeAll();
+      } else {
+        openPanel(name);
+      }
+    });
+  });
+
+  if (backdrop) backdrop.addEventListener('click', closeAll);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  // Sort by price: reorder .event-card elements by data-price
+  var sortLinks = document.querySelectorAll('[data-sort]');
+  sortLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var sortBy = link.getAttribute('data-sort');
+      var panel = link.closest('.filter-panel');
+
+      // Update selected state
+      if (panel) {
+        panel.querySelectorAll('.filter-radio-row').forEach(function(r) {
+          r.classList.remove('is-selected');
+        });
+      }
+      link.classList.add('is-selected');
+      closeAll();
+
+      var grid = document.querySelector('.card-grid');
+      if (!grid) return;
+
+      var cards = Array.from(grid.querySelectorAll('.event-card'));
+      var headers = Array.from(grid.querySelectorAll('.date-group-header'));
+
+      if (sortBy === 'price') {
+        // Remove date headers, sort cards by price
+        headers.forEach(function(h) { h.remove(); });
+        cards.sort(function(a, b) {
+          var pa = parseFloat(a.getAttribute('data-price') || '9999');
+          var pb = parseFloat(b.getAttribute('data-price') || '9999');
+          return pa - pb;
+        });
+        cards.forEach(function(card) { grid.appendChild(card); });
+      } else {
+        // Restore date sort: reload the page (simplest for static site)
+        window.location.reload();
+      }
+    });
   });
 })();
 </script>

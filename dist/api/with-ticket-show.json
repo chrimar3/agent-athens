@@ -32,10 +32,12 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 10:05:23",
+      "updatedAt": "2026-02-25 17:15:13",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088694/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -66,10 +68,12 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 10:05:23",
+      "updatedAt": "2026-02-25 17:17:42",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10079266/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -107,8 +111,10 @@
       "ticketUrl": "https://www.more.com/theater/louis-c-k",
       "source": "athinorama.gr",
       "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:14:01",
       "language": "en",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088136/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -146,10 +152,12 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/music/geoff-tateoperation-mindcrime/",
       "source": "more.com",
       "createdAt": "2026-01-12T21:21:44.838Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:03:48",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
+      "imageUrl": "https://www.more.com/getattachment/7221a1cd-c9c0-461c-80aa-d58b29c82c74/viva-tickets.png",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -187,10 +195,12 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/happenings/festival/cat-festival-2026/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:03:26",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
+      "imageUrl": "https://www.more.com/getattachment/38375918-d599-4fd3-b220-e01aa7daa7fd/viva-tickets.png",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -228,15 +238,17 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/",
       "source": "athinorama.gr",
       "createdAt": "2025-12-04T16:32:23.858Z",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:11:20",
       "language": "en",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10082932/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 6,
-    "lastUpdate": "2026-02-25T16:22:34.957Z",
+    "lastUpdate": "2026-02-25T17:47:37.460Z",
     "url": "https://agentathens.netlify.app/with-ticket-show"
   }
 }

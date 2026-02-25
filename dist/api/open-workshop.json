@@ -34,16 +34,18 @@
       "url": "https://www.eventbrite.com/e/the-ai-thing-ai-essentials-to-advance-your-career-workshop-athens-tickets-1980913124480",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:22:39",
       "language": "en",
       "timeDoors": "10:00",
+      "imageUrl": "https://www.eventbrite.com/e/_next/image?url=https%3A%2F%2Fimg.evbuc.com%2Fhttps%253A%252F%252Fcdn.evbuc.com%252Fimages%252F1175152235%252F2591246006611%252F1%252Foriginal.20260118-002706%3Fw%3D480%26auto%3Dformat%252Ccompress%26q%3D75%26sharp%3D10%26s%3D1459b2cafb259cbe786d2578ba38bd3f&amp;w=940&amp;q=75",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T16:22:34.960Z",
+    "lastUpdate": "2026-02-25T17:47:37.463Z",
     "url": "https://agentathens.netlify.app/open-workshop"
   }
 }

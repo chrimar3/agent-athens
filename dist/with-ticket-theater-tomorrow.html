@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T16:22:34.934Z">
+  <meta name="last-modified" content="2026-02-25T17:47:37.410Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -353,8 +353,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T16:22:34.934Z",
-  "dateModified": "2026-02-25T16:22:34.934Z"
+  "datePublished": "2026-02-25T17:47:37.410Z",
+  "dateModified": "2026-02-25T17:47:37.410Z"
 }
   </script>
 
@@ -372,7 +372,7 @@
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
-<body>
+<body class="has-filter-bar">
   <header class="site-header">
   <div class="site-header-inner">
     <div class="site-header-left">
@@ -413,44 +413,54 @@
         <strong>10 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 06:22 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
       </p>
     </header>
 
-    
-  <nav class="category-nav" aria-label="Event categories">
-    <div class="category-nav-container">
-      <a href="/" class="category-nav-item active">Όλα</a>
-      <a href="/concerts" class="category-nav-item ">Συναυλίες στην Αθήνα</a>
-      <a href="/clubs" class="category-nav-item ">Clubs & Ηλεκτρονική Μουσική</a>
-      <a href="/rebetiko" class="category-nav-item ">Ρεμπέτικο & Λαϊκά</a>
-      <a href="/jazz" class="category-nav-item ">Jazz στην Αθήνα</a>
-      <a href="/dance" class="category-nav-item ">Χορός στην Αθήνα</a>
-      <a href="/theatre" class="category-nav-item ">Θέατρο στην Αθήνα</a>
-      <a href="/comedy" class="category-nav-item ">Κωμωδία & Shows</a>
-      <a href="/exhibitions" class="category-nav-item ">Εκθέσεις στην Αθήνα</a>
-      <a href="/cinema" class="category-nav-item ">Σινεμά στην Αθήνα</a>
-      <a href="/screenings" class="category-nav-item ">Θερινά Σινεμά & Προβολές</a>
-      <a href="/workshops" class="category-nav-item ">Εργαστήρια & Masterclasses</a>
-      <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
+    <div class="filter-bar">
+    <div class="filter-panel-anchor" data-filter="date">
+        <span class="filter-pill is-active">Αύριο<a href="/with-ticket-theater" class="filter-pill-dismiss" aria-label="Remove date filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="type">
+        <span class="filter-pill is-active">Θέατρο<a href="/with-ticket-tomorrow" class="filter-pill-dismiss" aria-label="Remove type filter">&times;</a></span>
+      </div>
+    <button class="filter-pill is-disabled" disabled>Περιοχή <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel-anchor" data-filter="price">
+        <span class="filter-pill is-active">Με εισιτήριο<a href="/theater-tomorrow" class="filter-pill-dismiss" aria-label="Remove price filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="sort">
+    <button class="filter-pill" data-panel="sort">Ταξινόμηση <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel" data-panel-for="sort">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Ταξινόμηση</div>
+    <div class="filter-radio-list">
+      <a href="#" class="filter-radio-row is-selected" data-sort="date">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Ημερομηνία</span>
+      </a>
+      <a href="#" class="filter-radio-row" data-sort="price">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Τιμή</span>
+      </a>
     </div>
-    <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
-      .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
-      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
-      .category-nav-item.active { background: var(--accent-primary); color: white; }
-    </style>
-  </nav>
+  </div>
+  </div>
+    <div class="filter-bar-meta">
+    <span class="filter-result-count">10 εκδηλώσεις</span>
+    <a href="/" class="filter-clear-all">Καθαρισμός</a>
+  </div>
+  </div>
+  <div class="filter-panel-backdrop"></div>
 
     <main>
       
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         <h2 class="date-group-header">Πέμπτη 26 Φεβρουαρίου</h2>
 
-  <a href="/events/bf03c503-plus-shadow-knight/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/bf03c503-plus-shadow-knight/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/3c5a46ed-d71b-4f05-9d5d-d340f6886c91/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -464,8 +474,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8297d866--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/8297d866--/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -480,8 +491,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/e2874bd3-plus-shadow-knight-phyrosun-amp-frs/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/e2874bd3-plus-shadow-knight-phyrosun-amp-frs/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
@@ -496,9 +508,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/42503c43--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/42503c43--/" class="event-card" data-price="41" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.athinorama.gr/lmnts/events/theatre/10089249/list.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -512,9 +525,10 @@
     <meta itemprop="description" content="Εως 2026-04-05">
   </a>
 
-  <a href="/events/177079c6--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/177079c6--/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/c2161fd4-7502-41a5-8ee4-5591df2d908a/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -528,9 +542,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9583f7ca--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/9583f7ca--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/ea7e295e-8a37-4c6f-85eb-71e05c56e058/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -544,9 +559,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/29bd95c0-coronet-theater-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/29bd95c0-coronet-theater-/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/862a67dc-4775-4f62-ae26-1782e029f592/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -560,9 +576,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/90b7606b--/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/90b7606b--/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/321f160a-39ec-4621-abb6-639938bc36ff/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -576,9 +593,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/b31f249a-embassy-theater-/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/b31f249a-embassy-theater-/" class="event-card" data-price="18" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/b9784e89-4ed4-4f4f-a563-279e39a70a39/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -592,9 +610,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/094904b3--12/" class="event-card" itemscope itemtype="https://schema.org/TheaterEvent">
+  <a href="/events/094904b3--12/" class="event-card" data-price="17" itemscope itemtype="https://schema.org/TheaterEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎭</span>
+      <img class="card-image" src="https://www.more.com/getattachment/43f70fe1-f8a8-4d25-8a91-60719ee7bf36/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎭</span>
       <span class="card-badge" style="background: var(--color-theater)">ΘΕΑΤΡΟ</span>
       
     </div>
@@ -697,6 +716,99 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
+  <script>
+(function() {
+  var pills = document.querySelectorAll('.filter-pill[data-panel]');
+  var panels = document.querySelectorAll('.filter-panel');
+  var backdrop = document.querySelector('.filter-panel-backdrop');
+  if (!pills.length) return;
+
+  var isMobile = window.matchMedia('(max-width: 767px)');
+
+  function lockScroll() {
+    if (isMobile.matches) document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.overflow = '';
+  }
+
+  function closeAll() {
+    pills.forEach(function(p) { p.classList.remove('is-open'); });
+    panels.forEach(function(p) { p.classList.remove('is-open'); });
+    if (backdrop) backdrop.classList.remove('is-open');
+    unlockScroll();
+  }
+
+  function openPanel(panelName) {
+    closeAll();
+    var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
+    var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
+    if (pill && panel) {
+      pill.classList.add('is-open');
+      panel.classList.add('is-open');
+      if (backdrop) backdrop.classList.add('is-open');
+      lockScroll();
+    }
+  }
+
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      var name = pill.getAttribute('data-panel');
+      if (pill.classList.contains('is-open')) {
+        closeAll();
+      } else {
+        openPanel(name);
+      }
+    });
+  });
+
+  if (backdrop) backdrop.addEventListener('click', closeAll);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  // Sort by price: reorder .event-card elements by data-price
+  var sortLinks = document.querySelectorAll('[data-sort]');
+  sortLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var sortBy = link.getAttribute('data-sort');
+      var panel = link.closest('.filter-panel');
+
+      // Update selected state
+      if (panel) {
+        panel.querySelectorAll('.filter-radio-row').forEach(function(r) {
+          r.classList.remove('is-selected');
+        });
+      }
+      link.classList.add('is-selected');
+      closeAll();
+
+      var grid = document.querySelector('.card-grid');
+      if (!grid) return;
+
+      var cards = Array.from(grid.querySelectorAll('.event-card'));
+      var headers = Array.from(grid.querySelectorAll('.date-group-header'));
+
+      if (sortBy === 'price') {
+        // Remove date headers, sort cards by price
+        headers.forEach(function(h) { h.remove(); });
+        cards.sort(function(a, b) {
+          var pa = parseFloat(a.getAttribute('data-price') || '9999');
+          var pb = parseFloat(b.getAttribute('data-price') || '9999');
+          return pa - pb;
+        });
+        cards.forEach(function(card) { grid.appendChild(card); });
+      } else {
+        // Restore date sort: reload the page (simplest for static site)
+        window.location.reload();
+      }
+    });
   });
 })();
 </script>

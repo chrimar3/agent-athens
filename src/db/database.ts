@@ -475,3 +475,40 @@ export function updateEventTiming(
     return false;
   }
 }
+
+/**
+ * Update event image URL
+ * Used by the image enrichment script to backfill og:image URLs
+ *
+ * @param eventId - The event ID to update
+ * @param imageUrl - The og:image URL (or null to mark as not_found)
+ * @param imageSource - Where the image came from: 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
+ */
+export function updateEventImage(
+  eventId: string,
+  imageUrl: string | null,
+  imageSource: string = 'backfill',
+  db?: Database
+): boolean {
+  const database = db || getDatabase();
+
+  const stmt = database.prepare(`
+    UPDATE events
+    SET image_url = $imageUrl,
+        image_source = $imageSource,
+        updated_at = datetime('now')
+    WHERE id = $id
+  `);
+
+  try {
+    const result = stmt.run({
+      $id: eventId,
+      $imageUrl: imageUrl,
+      $imageSource: imageSource
+    });
+    return result.changes > 0;
+  } catch (error) {
+    console.error(`Error updating image for ${eventId}:`, error);
+    return false;
+  }
+}

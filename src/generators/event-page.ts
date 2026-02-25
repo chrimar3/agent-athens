@@ -115,10 +115,10 @@ export function generateEventSlug(event: Event): string {
  * Fallback chain: event image → venue default → type default → site default
  */
 function getOgImage(event: Event): string {
-  // TODO: Check for event-specific image from scraping
-  // TODO: Check for venue-specific default image
+  // Use event-specific image if available (hotlinked from source)
+  if (event.imageUrl) return event.imageUrl;
 
-  // Use type-specific default
+  // Fall back to type-specific default
   return DEFAULT_OG_IMAGES[event.type] || DEFAULT_OG_IMAGES.default;
 }
 
@@ -217,7 +217,7 @@ function generateEventSchema(event: Event): string {
   // Add image if available
   const ogImage = getOgImage(event);
   if (ogImage) {
-    schema.image = `${BASE_URL}${ogImage}`;
+    schema.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
   }
 
   return JSON.stringify(schema, null, 2);
@@ -344,7 +344,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <meta property="og:description" content="${event.description.substring(0, 200)}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="event">
-  <meta property="og:image" content="${BASE_URL}${ogImage}">
+  <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="el_GR">
@@ -354,7 +354,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${event.title}">
   <meta name="twitter:description" content="${event.description.substring(0, 200)}">
-  <meta name="twitter:image" content="${BASE_URL}${ogImage}">
+  <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -473,7 +473,8 @@ export function renderRelatedEventCard(event: Event): string {
   return `
   <a href="${href}" class="event-card">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">${icon}</span>
+      ${event.imageUrl ? `<img class="card-image" src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

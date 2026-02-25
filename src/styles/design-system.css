@@ -172,6 +172,14 @@ a:hover {
   overflow: hidden;
 }
 
+.card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .card-placeholder-icon {
   position: absolute;
   top: 50%;
@@ -767,4 +775,356 @@ a:hover {
   .edp-mobile-bar { display: block; }
   .edp-related .card-grid { grid-template-columns: 1fr; }
   body:has(.edp-mobile-bar) { padding-bottom: 80px; }
+}
+
+/* ── Filter Bar ───────────────────────────────── */
+
+.filter-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 99;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+
+@media (max-width: 767px) {
+  .filter-bar { top: 56px; height: 52px; }
+}
+
+/* ── Filter Pills ─────────────────────────────── */
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: var(--font-weight-regular);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+  user-select: none;
+  flex-shrink: 0;
+}
+.filter-pill:hover {
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+.filter-pill .filter-pill-chevron {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  transition: transform var(--t-fast);
+}
+.filter-pill.is-open {
+  background: var(--bg-surface);
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+.filter-pill.is-open .filter-pill-chevron {
+  transform: rotate(180deg);
+}
+.filter-pill.is-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--bg-primary);
+  font-weight: var(--font-weight-bold);
+}
+.filter-pill.is-active:hover {
+  color: var(--bg-primary);
+}
+.filter-pill.is-disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.filter-pill-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  margin-right: -4px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--bg-primary);
+  cursor: pointer;
+  text-decoration: none;
+}
+.filter-pill-dismiss:hover {
+  opacity: 0.8;
+  text-decoration: none;
+  color: var(--bg-primary);
+}
+
+@media (max-width: 767px) {
+  .filter-pill { min-height: 44px; padding: 10px 16px; }
+}
+
+/* ── Filter Dropdown Panels ───────────────────── */
+
+.filter-panel-anchor {
+  position: relative;
+}
+
+.filter-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  z-index: 98;
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.filter-panel.is-open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  animation: filterPanelIn var(--t-fast) var(--ease-out);
+}
+
+@keyframes filterPanelIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-panel-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 97;
+  background: transparent;
+}
+.filter-panel-backdrop.is-open {
+  display: block;
+}
+
+/* ── Mobile Sheet Elements (hidden on desktop) ── */
+
+.filter-sheet-handle {
+  display: none;
+}
+.filter-sheet-title {
+  display: none;
+}
+
+/* ── Mobile Bottom Sheets ────────────────────── */
+
+@media (max-width: 767px) {
+  .filter-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    min-width: 0;
+    max-height: 70vh;
+    border-radius: 16px 16px 0 0;
+    padding: 16px 16px calc(24px + var(--safe-bottom));
+    z-index: 200;
+    border: none;
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.5);
+  }
+  .filter-panel.is-open {
+    animation: sheetSlideUp var(--t-normal) var(--ease-out);
+  }
+
+  .filter-panel-backdrop {
+    z-index: 199;
+  }
+  .filter-panel-backdrop.is-open {
+    background: var(--bg-overlay);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .filter-sheet-handle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--border-default);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+  .filter-sheet-title {
+    display: block;
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+}
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ── Type Panel ───────────────────────────────── */
+
+.filter-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.filter-type-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.filter-type-tile:hover {
+  border-color: var(--border-default);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+.filter-type-tile.is-selected {
+  border-color: var(--tile-color, var(--accent-primary));
+  background: color-mix(in srgb, var(--tile-color, var(--accent-primary)) 15%, transparent);
+}
+
+.filter-type-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.filter-type-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-type-count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+/* ── Price / Sort Panels (Radio List) ─────────── */
+
+.filter-radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-radio-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background var(--t-fast);
+}
+.filter-radio-row:hover {
+  background: var(--bg-surface);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.filter-radio-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-default);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--t-fast);
+}
+.filter-radio-row.is-selected .filter-radio-circle {
+  border-color: var(--accent-primary);
+}
+.filter-radio-row.is-selected .filter-radio-circle::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+.filter-radio-label { flex: 1; }
+.filter-radio-count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* ── Result Count + Clear All ─────────────────── */
+
+.filter-bar-meta {
+  margin-left: auto;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.filter-result-count {
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.filter-clear-all {
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  color: var(--text-tertiary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.filter-clear-all:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/* ── Date Group Header offset when filter bar present ── */
+
+.has-filter-bar .date-group-header {
+  top: 120px; /* 64px nav + 56px filter bar */
+}
+
+@media (max-width: 767px) {
+  .has-filter-bar .date-group-header {
+    top: 108px; /* 56px nav + 52px filter bar */
+  }
 }

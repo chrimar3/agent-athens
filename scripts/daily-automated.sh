@@ -274,6 +274,25 @@ run_time_enrichment() {
     fi
 }
 
+# Phase 3g: Image enrichment
+run_image_enrichment() {
+    log_phase "IMAGE ENRICHMENT"
+    log "Extracting og:image URLs from event source pages..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/enrich-images.ts --limit 50"
+        return 0
+    fi
+
+    if bun run scripts/enrich-images.ts --limit 50 >> "$LOG_FILE" 2>&1; then
+        log "Image enrichment completed"
+        return 0
+    else
+        log_error "Image enrichment failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # Phase 4: Generate site
 run_generate() {
     log_phase "SITE GENERATION"
@@ -392,6 +411,8 @@ print_summary() {
         "SELECT COUNT(*) FROM events WHERE schema_json IS NOT NULL;")
     local with_ticket_url=$(sqlite3 "$PROJECT_DIR/data/events.db" \
         "SELECT COUNT(*) FROM events WHERE ticket_url IS NOT NULL;")
+    local with_image=$(sqlite3 "$PROJECT_DIR/data/events.db" \
+        "SELECT COUNT(*) FROM events WHERE image_url IS NOT NULL;")
 
     log "Total events in database: $total_events"
     log "Verified Athens events: $verified_events"
@@ -400,6 +421,7 @@ print_summary() {
     log "Events with price: $with_price"
     log "Events with Schema.org: $with_schema"
     log "Events with ticket URL: $with_ticket_url"
+    log "Events with image: $with_image"
     log ""
     log "Pipeline completed at $(date '+%Y-%m-%d %H:%M:%S')"
 }
@@ -460,6 +482,9 @@ main() {
 
     # Time data enrichment (non-fatal)
     run_time_enrichment
+
+    # Image enrichment (non-fatal)
+    run_image_enrichment
 
     if [[ $failed -eq 0 ]]; then
         run_generate || failed=1

@@ -36,8 +36,9 @@
       "ticketUrl": "https://infraai.com/",
       "source": "manual",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:21:56",
       "language": "en",
+      "imageSource": "not_found",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -72,8 +73,9 @@
       "ticketUrl": "https://devoxx.gr/",
       "source": "devoxx.gr",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:21:34",
       "language": "en",
+      "imageSource": "not_found",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -108,8 +110,10 @@
       "ticketUrl": "https://productledhub.com/disrupt-ai-summit/",
       "source": "productledhub.com",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:21:13",
       "language": "en",
+      "imageUrl": "https://productledhub.com/wp-content/uploads/2024/09/Disrupt-AI-Summit-2025-e1725357423372.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -144,15 +148,16 @@
       "ticketUrl": "https://athensseo.com/",
       "source": "manual",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:21:10",
       "language": "en",
+      "imageSource": "not_found",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 4,
-    "lastUpdate": "2026-02-25T16:22:34.966Z",
+    "lastUpdate": "2026-02-25T17:47:37.475Z",
     "url": "https://agentathens.netlify.app/with-ticket-conference"
   }
 }

@@ -34,15 +34,17 @@
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-25T09:57:19.144Z",
+      "updatedAt": "2026-02-25 17:22:20",
       "language": "en",
+      "imageUrl": "https://www.megaron.gr/wp-content/uploads/2025/12/25-26-GrandsBalletsGeneve-17©FilipVanRoe_GTG_Ihsane-scaled.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T16:22:34.951Z",
+    "lastUpdate": "2026-02-25T17:47:37.443Z",
     "url": "https://agentathens.netlify.app/with-ticket-dance-next-month"
   }
 }

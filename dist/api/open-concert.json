@@ -33,15 +33,16 @@
       "url": "https://ra.co/events/2367365",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 17:05:49",
       "language": "en",
+      "imageSource": "not_found",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T16:22:34.884Z",
+    "lastUpdate": "2026-02-25T17:47:37.318Z",
     "url": "https://agentathens.netlify.app/open-concert"
   }
 }

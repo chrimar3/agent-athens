@@ -51,6 +51,10 @@ CREATE TABLE IF NOT EXISTS events (
   is_featured INTEGER DEFAULT 0,          -- Boolean: promoted event
   view_count INTEGER DEFAULT 0,           -- Track popularity
 
+  -- Image fields
+  image_url TEXT,                         -- og:image URL from source page (hotlinked)
+  image_source TEXT,                      -- 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
+
   -- Exhibition-specific fields
   opening_hours TEXT,                     -- JSON: {"mon": "closed", "tue": "10:00-18:00", ...}
   closed_days TEXT,                       -- "Monday" or "Monday, Tuesday"

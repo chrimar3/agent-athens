@@ -103,6 +103,19 @@ export interface PageMetadata {
   filters: Filters;
 }
 
+export interface FilterCountOption {
+  value: string;
+  label: string;
+  count: number;
+  url: string;
+}
+
+export interface FilterCounts {
+  types: FilterCountOption[];
+  prices: FilterCountOption[];
+  timeRanges: FilterCountOption[];
+}
+
 export interface RawEvent {
   title: string;
   date: string;

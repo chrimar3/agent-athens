@@ -6,14 +6,9 @@ import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
-import { renderCategoryNav, type CategoryConfig } from './category-page';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from './site-chrome';
-
-// Load categories for navigation
-const categoriesConfig = JSON.parse(
-  readFileSync(join(import.meta.dir, '../../config/categories.json'), 'utf-8')
-) as { categories: CategoryConfig[] };
+import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -69,11 +64,20 @@ export const TYPE_ICONS: Record<string, string> = {
   other: '📌',
 };
 
-export function renderPage(metadata: PageMetadata, events: Event[]): string {
+export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[]): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
   const schemaMarkup = generateSchemaMarkup(events, metadata);
   const eventListHTML = renderDateGroupedEvents(events);
+
+  // Filter bar: only render when allEvents is provided (hub pages, not category/detail pages)
+  let filterBarHTML = '';
+  let filterBarScriptHTML = '';
+  if (allEvents) {
+    const counts = computeFilterCounts(filters, allEvents);
+    filterBarHTML = renderFilterBar(filters, counts, eventCount);
+    filterBarScriptHTML = renderFilterBarScript();
+  }
 
   return `<!DOCTYPE html>
 <html lang="el">
@@ -145,7 +149,7 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
-<body>
+<body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
 
@@ -166,7 +170,7 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
       </p>
     </header>
 
-    ${renderCategoryNav(null, categoriesConfig.categories)}
+    ${filterBarHTML}
 
     <main>
       ${eventCount > 0 ? `
@@ -184,6 +188,7 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${filterBarScriptHTML}
 </body>
 </html>`;
 }
@@ -255,10 +260,14 @@ function renderEventCard(event: Event): string {
   // Short description for meta tag (truncate to 160 chars)
   const shortDesc = (event.description || '').substring(0, 160);
 
+  // Numeric price for data attribute (sort-by-price)
+  const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
+
   return `
-  <a href="${href}" class="event-card" itemscope itemtype="https://schema.org/${schemaType}">
+  <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">${icon}</span>
+      ${event.imageUrl ? `<img class="card-image" src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

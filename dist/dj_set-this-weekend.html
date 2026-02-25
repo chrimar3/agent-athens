@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T16:22:34.788Z">
+  <meta name="last-modified" content="2026-02-25T17:47:37.131Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -1361,8 +1361,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T16:22:34.788Z",
-  "dateModified": "2026-02-25T16:22:34.788Z"
+  "datePublished": "2026-02-25T17:47:37.131Z",
+  "dateModified": "2026-02-25T17:47:37.131Z"
 }
   </script>
 
@@ -1380,7 +1380,7 @@
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
-<body>
+<body class="has-filter-bar">
   <header class="site-header">
   <div class="site-header-inner">
     <div class="site-header-left">
@@ -1421,43 +1421,64 @@
         <strong>46 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 06:22 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
       </p>
     </header>
 
-    
-  <nav class="category-nav" aria-label="Event categories">
-    <div class="category-nav-container">
-      <a href="/" class="category-nav-item active">Όλα</a>
-      <a href="/concerts" class="category-nav-item ">Συναυλίες στην Αθήνα</a>
-      <a href="/clubs" class="category-nav-item ">Clubs & Ηλεκτρονική Μουσική</a>
-      <a href="/rebetiko" class="category-nav-item ">Ρεμπέτικο & Λαϊκά</a>
-      <a href="/jazz" class="category-nav-item ">Jazz στην Αθήνα</a>
-      <a href="/dance" class="category-nav-item ">Χορός στην Αθήνα</a>
-      <a href="/theatre" class="category-nav-item ">Θέατρο στην Αθήνα</a>
-      <a href="/comedy" class="category-nav-item ">Κωμωδία & Shows</a>
-      <a href="/exhibitions" class="category-nav-item ">Εκθέσεις στην Αθήνα</a>
-      <a href="/cinema" class="category-nav-item ">Σινεμά στην Αθήνα</a>
-      <a href="/screenings" class="category-nav-item ">Θερινά Σινεμά & Προβολές</a>
-      <a href="/workshops" class="category-nav-item ">Εργαστήρια & Masterclasses</a>
-      <a href="/tech" class="category-nav-item ">Tech & AI στην Αθήνα</a>
+    <div class="filter-bar">
+    <div class="filter-panel-anchor" data-filter="date">
+        <span class="filter-pill is-active">Σαββατοκύριακο<a href="/dj_set" class="filter-pill-dismiss" aria-label="Remove date filter">&times;</a></span>
+      </div>
+    <div class="filter-panel-anchor" data-filter="type">
+        <span class="filter-pill is-active">DJ Sets<a href="/this-weekend" class="filter-pill-dismiss" aria-label="Remove type filter">&times;</a></span>
+      </div>
+    <button class="filter-pill is-disabled" disabled>Περιοχή <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel-anchor" data-filter="price">
+        <button class="filter-pill" data-panel="price">Τιμή <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+        <div class="filter-panel" data-panel-for="price">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Τιμή</div>
+    <div class="filter-radio-list">
+      <a href="/with-ticket-dj_set-this-weekend" class="filter-radio-row">
+      <span class="filter-radio-circle"></span>
+      <span class="filter-radio-label">Με εισιτήριο</span>
+      <span class="filter-radio-count">46</span>
+    </a>
     </div>
-    <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
-      .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
-      .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
-      .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }
-      .category-nav-item.active { background: var(--accent-primary); color: white; }
-    </style>
-  </nav>
+  </div>
+      </div>
+    <div class="filter-panel-anchor" data-filter="sort">
+    <button class="filter-pill" data-panel="sort">Ταξινόμηση <svg class="filter-pill-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg></button>
+    <div class="filter-panel" data-panel-for="sort">
+    <div class="filter-sheet-handle"></div>
+    <div class="filter-sheet-title">Ταξινόμηση</div>
+    <div class="filter-radio-list">
+      <a href="#" class="filter-radio-row is-selected" data-sort="date">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Ημερομηνία</span>
+      </a>
+      <a href="#" class="filter-radio-row" data-sort="price">
+        <span class="filter-radio-circle"></span>
+        <span class="filter-radio-label">Τιμή</span>
+      </a>
+    </div>
+  </div>
+  </div>
+    <div class="filter-bar-meta">
+    <span class="filter-result-count">46 εκδηλώσεις</span>
+    <a href="/" class="filter-clear-all">Καθαρισμός</a>
+  </div>
+  </div>
+  <div class="filter-panel-backdrop"></div>
 
     <main>
       
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         <h2 class="date-group-header">Παρασκευή 27 Φεβρουαρίου</h2>
 
-  <a href="/events/a00afb8c-oddity-marika-rossa/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a00afb8c-oddity-marika-rossa/" class="event-card" data-price="13" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1472,8 +1493,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f9d31304-temple-skullcrush-fest/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f9d31304-temple-skullcrush-fest/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1488,8 +1510,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/30837c7c-pharaoh-pharaoh-vinyl-selection/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/30837c7c-pharaoh-pharaoh-vinyl-selection/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1504,8 +1527,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/f4351782-big-table-imprint-01-w-ulla-apu-nanu-manos-plitsis-raed-torn/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/f4351782-big-table-imprint-01-w-ulla-apu-nanu-manos-plitsis-raed-torn/" class="event-card" data-price="5" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1520,8 +1544,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/6abdcdb7-b-side-athens-bonso-roussos/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/6abdcdb7-b-side-athens-bonso-roussos/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1536,8 +1561,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1373094e-zelus-mimi-x-fy/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1373094e-zelus-mimi-x-fy/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1552,8 +1578,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/73d01fbb-astron-astron-club-night-with-greta-b2b-miss-trouli-koketamc-b2b-so/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/73d01fbb-astron-astron-club-night-with-greta-b2b-miss-trouli-koketamc-b2b-so/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1568,8 +1595,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9d2c62a7-astron-greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9d2c62a7-astron-greta-b2b-miss-trouli-koketamc-b2b-socrates-antypas/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1584,8 +1612,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cbc54bb0-aux-club-gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samant/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cbc54bb0-aux-club-gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samant/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1600,8 +1629,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ecf67fd2-cantina-social-romphea/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ecf67fd2-cantina-social-romphea/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1616,8 +1646,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a05fe2d5-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a05fe2d5-dybbuk-jonathan-kaspar-mironas-rezo/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1632,8 +1663,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/7591f68d-astron-tendervore-with-greta-b2b-miss-trouli-koketamc-b2b-socrates-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7591f68d-astron-tendervore-with-greta-b2b-miss-trouli-koketamc-b2b-socrates-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1648,8 +1680,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3188e6d3-crust-dj-gus-liou/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3188e6d3-crust-dj-gus-liou/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1664,8 +1697,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8aea69aa-oddity-exilium-pres-marika-rossa/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8aea69aa-oddity-exilium-pres-marika-rossa/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1680,8 +1714,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/bb384531-it-athens-kits-and-rave-carnival-edition/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/bb384531-it-athens-kits-and-rave-carnival-edition/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1697,9 +1732,10 @@
   </a>
 <h2 class="date-group-header">Σάββατο 28 Φεβρουαρίου</h2>
 
-  <a href="/events/c1c0c9c9-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/c1c0c9c9-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://www.more.com/getattachment/69c0a38e-8f4a-4ee6-9c9e-e83c1ed1e662/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -1713,8 +1749,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/cb0416af-gazarte-disco-night-80s-90s-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/cb0416af-gazarte-disco-night-80s-90s-party/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1729,8 +1766,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/8c4fa9d9-temple-heavenly-amp-the-vaxtones/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/8c4fa9d9-temple-heavenly-amp-the-vaxtones/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1745,8 +1783,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/acc2e97b-skull-bar-you-are-what-you-dance/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/acc2e97b-skull-bar-you-are-what-you-dance/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1761,8 +1800,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/9e1b0a26-skullbar-afterhours-nikolas-gale-jay-jay-karanikas/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/9e1b0a26-skullbar-afterhours-nikolas-gale-jay-jay-karanikas/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1777,8 +1817,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/20d61fc6-pharaoh-pharaoh-vinyl-selection/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/20d61fc6-pharaoh-pharaoh-vinyl-selection/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1793,8 +1834,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/de4acc79-mona-athens-purim-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/de4acc79-mona-athens-purim-athens/" class="event-card" data-price="20" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1809,8 +1851,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4f846a9c-piree-pantheon/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4f846a9c-piree-pantheon/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1825,9 +1868,10 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/1bb09ff7-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/1bb09ff7-temple-pure-show-heavenly-the-vaxtones-party/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://www.more.com/getattachment/69c0a38e-8f4a-4ee6-9c9e-e83c1ed1e662/viva-tickets.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -1841,8 +1885,9 @@
     <meta itemprop="description" content="PURE SHOW : HEAVENLY & THE VAXTONES + PARTY / TEMPLE ATHENS 21:30 LIVE ACTS - AFTER 23:30 PURE DJ SET">
   </a>
 
-  <a href="/events/e516754b-daddy-s-all-day-bar-marthe-at-daddy-s-all-day-bar/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/e516754b-daddy-s-all-day-bar-marthe-at-daddy-s-all-day-bar/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1857,8 +1902,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/af507bd8-b-side-athens-techno-underdogs-free-entrance/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/af507bd8-b-side-athens-techno-underdogs-free-entrance/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1873,8 +1919,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/af10a856-aux-club-ath-dnb-unity-presents-tr-tactics/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/af10a856-aux-club-ath-dnb-unity-presents-tr-tactics/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1889,8 +1936,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/66059100-dybbuk-cj-jeff-diogo-accioly-senor-j/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/66059100-dybbuk-cj-jeff-diogo-accioly-senor-j/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1905,8 +1953,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d9ba5b5a-astron-astron-club-night-with-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d9ba5b5a-astron-astron-club-night-with-impvlsiv-bolosis-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1921,8 +1970,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/da5c1828-zelus-nick-jojo/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/da5c1828-zelus-nick-jojo/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1937,8 +1987,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/3774fd58-cantina-social-mjw/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/3774fd58-cantina-social-mjw/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1953,8 +2004,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/366932a5-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/366932a5-astron-impvlsiv-bolosis-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1969,8 +2021,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/82fd3186-astron-astron-club-night-with-bolosis-impvlsiv-piece-of-kate/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/82fd3186-astron-astron-club-night-with-bolosis-impvlsiv-piece-of-kate/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -1985,8 +2038,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0818ff80-crust-fragk-hutt-louie-dima/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0818ff80-crust-fragk-hutt-louie-dima/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2001,8 +2055,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/632bfe16-smut-4-10438-greece-pornceptual-fka-m4a-vinvar-ivra/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/632bfe16-smut-4-10438-greece-pornceptual-fka-m4a-vinvar-ivra/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2017,8 +2072,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/4213a255-smut-athens-prncptl-x-smut-x-fka-m4a-x-vinvar/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/4213a255-smut-athens-prncptl-x-smut-x-fka-m4a-x-vinvar/" class="event-card" data-price="15" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2033,8 +2089,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/d3d9c6ef-it-athens-psy-vibes-session-vol-5/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/d3d9c6ef-it-athens-psy-vibes-session-vol-5/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2049,8 +2106,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/33f7829f-oddity-oddity-sikoti-debut-in-athens/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/33f7829f-oddity-oddity-sikoti-debut-in-athens/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2065,8 +2123,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/ea1161f4-plus-street-fighter-honda/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/ea1161f4-plus-street-fighter-honda/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2081,8 +2140,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2afae062-aux-club-aux-anagenesis-with-mari-ferrari/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2afae062-aux-club-aux-anagenesis-with-mari-ferrari/" class="event-card" data-price="10" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2098,9 +2158,10 @@
   </a>
 <h2 class="date-group-header">Κυριακή 1 Μαρτίου</h2>
 
-  <a href="/events/7c51b591-parnassos-literary-society-/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/7c51b591-parnassos-literary-society-/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
-      <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
+      <img class="card-image" src="https://stream.ticketservices.gr/www.ticketservices.gr/pictures/original/b_58113_or_BEMPO - GKREKA.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
     </div>
@@ -2114,8 +2175,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/16477642-tba-atharea-revolt-hosts-shuffle-with-paleman-uk/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/16477642-tba-atharea-revolt-hosts-shuffle-with-paleman-uk/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2130,8 +2192,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/927f06b4-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/927f06b4-burger-disco-club-house-on-the-beach-timmy-regisford-dj-thai/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2146,8 +2209,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/0390b33c-burger-disco-club-house-on-the-beach/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/0390b33c-burger-disco-club-house-on-the-beach/" class="event-card" data-price="12" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2162,8 +2226,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/a961080e-cantina-social-ad-hoc/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/a961080e-cantina-social-ad-hoc/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2178,8 +2243,9 @@
     <meta itemprop="description" content="">
   </a>
 
-  <a href="/events/2a16cb2b-b-side-athens-petros-spatharos-datalogs/" class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+  <a href="/events/2a16cb2b-b-side-athens-petros-spatharos-datalogs/" class="event-card" data-price="9999" itemscope itemtype="https://schema.org/MusicEvent">
     <div class="card-image-wrapper">
+      
       <span class="card-placeholder-icon" aria-hidden="true">🎧</span>
       <span class="card-badge" style="background: var(--color-dj-set)">DJ SET</span>
       
@@ -2283,6 +2349,99 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+})();
+</script>
+  <script>
+(function() {
+  var pills = document.querySelectorAll('.filter-pill[data-panel]');
+  var panels = document.querySelectorAll('.filter-panel');
+  var backdrop = document.querySelector('.filter-panel-backdrop');
+  if (!pills.length) return;
+
+  var isMobile = window.matchMedia('(max-width: 767px)');
+
+  function lockScroll() {
+    if (isMobile.matches) document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.overflow = '';
+  }
+
+  function closeAll() {
+    pills.forEach(function(p) { p.classList.remove('is-open'); });
+    panels.forEach(function(p) { p.classList.remove('is-open'); });
+    if (backdrop) backdrop.classList.remove('is-open');
+    unlockScroll();
+  }
+
+  function openPanel(panelName) {
+    closeAll();
+    var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
+    var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
+    if (pill && panel) {
+      pill.classList.add('is-open');
+      panel.classList.add('is-open');
+      if (backdrop) backdrop.classList.add('is-open');
+      lockScroll();
+    }
+  }
+
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      var name = pill.getAttribute('data-panel');
+      if (pill.classList.contains('is-open')) {
+        closeAll();
+      } else {
+        openPanel(name);
+      }
+    });
+  });
+
+  if (backdrop) backdrop.addEventListener('click', closeAll);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  // Sort by price: reorder .event-card elements by data-price
+  var sortLinks = document.querySelectorAll('[data-sort]');
+  sortLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var sortBy = link.getAttribute('data-sort');
+      var panel = link.closest('.filter-panel');
+
+      // Update selected state
+      if (panel) {
+        panel.querySelectorAll('.filter-radio-row').forEach(function(r) {
+          r.classList.remove('is-selected');
+        });
+      }
+      link.classList.add('is-selected');
+      closeAll();
+
+      var grid = document.querySelector('.card-grid');
+      if (!grid) return;
+
+      var cards = Array.from(grid.querySelectorAll('.event-card'));
+      var headers = Array.from(grid.querySelectorAll('.date-group-header'));
+
+      if (sortBy === 'price') {
+        // Remove date headers, sort cards by price
+        headers.forEach(function(h) { h.remove(); });
+        cards.sort(function(a, b) {
+          var pa = parseFloat(a.getAttribute('data-price') || '9999');
+          var pb = parseFloat(b.getAttribute('data-price') || '9999');
+          return pa - pb;
+        });
+        cards.forEach(function(card) { grid.appendChild(card); });
+      } else {
+        // Restore date sort: reload the page (simplest for static site)
+        window.location.reload();
+      }
+    });
   });
 })();
 </script>

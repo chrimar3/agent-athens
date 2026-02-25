@@ -32,10 +32,12 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 10:05:23",
+      "updatedAt": "2026-02-25 17:15:13",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088694/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -66,17 +68,19 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 10:05:23",
+      "updatedAt": "2026-02-25 17:17:42",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10079266/list.jpg",
+      "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
     "total": 2,
-    "lastUpdate": "2026-02-25T16:22:34.956Z",
+    "lastUpdate": "2026-02-25T17:47:37.456Z",
     "url": "https://agentathens.netlify.app/with-ticket-show-today"
   }
 }
