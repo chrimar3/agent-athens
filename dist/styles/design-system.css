@@ -106,6 +106,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body.scroll-locked,
+body.scroll-locked-menu { overflow: hidden; }
+
 a {
   color: var(--accent-primary);
   text-decoration: none;

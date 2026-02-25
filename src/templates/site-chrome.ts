@@ -101,7 +101,7 @@ export function renderHamburgerScript(): string {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('scroll-locked-menu');
   }
 
   function close() {
@@ -110,7 +110,7 @@ export function renderHamburgerScript(): string {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked-menu');
   }
 
   btn.addEventListener('click', function() {

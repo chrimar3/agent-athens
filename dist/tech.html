@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T17:47:38.245Z">
+  <meta name="last-modified" content="2026-02-25T17:50:15.668Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -353,8 +353,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T17:47:38.245Z",
-  "dateModified": "2026-02-25T17:47:38.245Z"
+  "datePublished": "2026-02-25T17:50:15.668Z",
+  "dateModified": "2026-02-25T17:50:15.668Z"
 }
   </script>
 
@@ -438,7 +438,7 @@
         <strong>10 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:50 μμ ώρα Αθήνας
       </p>
     </header>
 
@@ -698,7 +698,7 @@ Welcome to the">
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('scroll-locked-menu');
   }
 
   function close() {
@@ -707,7 +707,7 @@ Welcome to the">
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked-menu');
   }
 
   btn.addEventListener('click', function() {

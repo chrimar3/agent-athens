@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T17:47:38.175Z">
+  <meta name="last-modified" content="2026-02-25T17:50:15.592Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -72,8 +72,8 @@
     "numberOfItems": 0,
     "itemListElement": []
   },
-  "datePublished": "2026-02-25T17:47:38.175Z",
-  "dateModified": "2026-02-25T17:47:38.175Z"
+  "datePublished": "2026-02-25T17:50:15.592Z",
+  "dateModified": "2026-02-25T17:50:15.592Z"
 }
   </script>
 
@@ -132,7 +132,7 @@
         <strong>0 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:50 μμ ώρα Αθήνας
       </p>
     </header>
 
@@ -171,11 +171,6 @@
       <a href="/open-innovation-hackathon-next-month" class="filter-radio-row">
       <span class="filter-radio-circle"></span>
       <span class="filter-radio-label">Επόμενο μήνα</span>
-      <span class="filter-radio-count">0</span>
-    </a>
-      <a href="/open-innovation-hackathon" class="filter-radio-row is-selected">
-      <span class="filter-radio-circle"></span>
-      <span class="filter-radio-label">Όλες</span>
       <span class="filter-radio-count">0</span>
     </a>
     </div>
@@ -284,7 +279,7 @@
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('scroll-locked-menu');
   }
 
   function close() {
@@ -293,7 +288,7 @@
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked-menu');
   }
 
   btn.addEventListener('click', function() {
@@ -317,10 +312,10 @@
   var isMobile = window.matchMedia('(max-width: 767px)');
 
   function lockScroll() {
-    if (isMobile.matches) document.body.style.overflow = 'hidden';
+    if (isMobile.matches) document.body.classList.add('scroll-locked');
   }
   function unlockScroll() {
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked');
   }
 
   function closeAll() {

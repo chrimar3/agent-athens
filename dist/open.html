@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-25">
-  <meta name="last-modified" content="2026-02-25T17:47:37.239Z">
+  <meta name="last-modified" content="2026-02-25T17:50:14.568Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -241,8 +241,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-25T17:47:37.239Z",
-  "dateModified": "2026-02-25T17:47:37.239Z"
+  "datePublished": "2026-02-25T17:50:14.568Z",
+  "dateModified": "2026-02-25T17:50:14.568Z"
 }
   </script>
 
@@ -301,7 +301,7 @@
         <strong>6 εκδηλώσεις</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:47 μμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 25 Φεβρουαρίου 2026 στις 07:50 μμ ώρα Αθήνας
       </p>
     </header>
 
@@ -341,11 +341,6 @@
       <span class="filter-radio-circle"></span>
       <span class="filter-radio-label">Επόμενο μήνα</span>
       <span class="filter-radio-count">3</span>
-    </a>
-      <a href="/open" class="filter-radio-row is-selected">
-      <span class="filter-radio-circle"></span>
-      <span class="filter-radio-label">Όλες</span>
-      <span class="filter-radio-count">6</span>
     </a>
     </div>
   </div>
@@ -588,7 +583,7 @@ Welcome to the">
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('scroll-locked-menu');
   }
 
   function close() {
@@ -597,7 +592,7 @@ Welcome to the">
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked-menu');
   }
 
   btn.addEventListener('click', function() {
@@ -621,10 +616,10 @@ Welcome to the">
   var isMobile = window.matchMedia('(max-width: 767px)');
 
   function lockScroll() {
-    if (isMobile.matches) document.body.style.overflow = 'hidden';
+    if (isMobile.matches) document.body.classList.add('scroll-locked');
   }
   function unlockScroll() {
-    document.body.style.overflow = '';
+    document.body.classList.remove('scroll-locked');
   }
 
   function closeAll() {
