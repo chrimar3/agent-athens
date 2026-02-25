@@ -143,6 +143,11 @@ function renderVenuePage(venue: VenueData): string {
   <!-- Canonical URL -->
   <link rel="canonical" href="${canonicalUrl}">
 
+  <!-- Language alternates -->
+  <link rel="alternate" hreflang="el" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/${venue.slug}/">
+  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/${venue.slug}/">
+
   <!-- Open Graph -->
   <meta property="og:title" content="${venue.name} - Εκδηλώσεις">
   <meta property="og:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${venue.name}">
@@ -326,6 +331,11 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta name="description" content="Όλοι οι χώροι εκδηλώσεων στην Αθήνα με επερχόμενες συναυλίες, παραστάσεις, εκθέσεις και πολιτιστικά events.">
 
   <link rel="canonical" href="${BASE_URL}/venues/">
+
+  <!-- Language alternates -->
+  <link rel="alternate" hreflang="el" href="${BASE_URL}/venues/">
+  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/">
+  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }

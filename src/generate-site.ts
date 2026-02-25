@@ -241,12 +241,16 @@ async function main() {
   generatedUrls.push(...eventPageUrls);
   pagesGenerated += eventPageUrls.length;
 
+  // Initialize _redirects with /en/ redirect (must be first rule — Netlify processes top-to-bottom)
+  // 302 (temporary) because we'll remove this when bilingual content launches
+  const redirectsPath = join(DIST_DIR, '_redirects');
+  writeFileSync(redirectsPath, '/en/*  /:splat  302\n');
+
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
   const redirects = generateRedirects(currentSlugs, previousSlugHistory);
   if (redirects.length > 0) {
-    const redirectsPath = join(DIST_DIR, '_redirects');
-    const existingRedirects = existsSync(redirectsPath) ? readFileSync(redirectsPath, 'utf-8') : '';
+    const existingRedirects = readFileSync(redirectsPath, 'utf-8');
     writeFileSync(redirectsPath, existingRedirects + '\n' + redirects.join('\n'));
     console.log(`  ✓ Generated ${redirects.length} redirects for changed slugs`);
   }
@@ -415,14 +419,21 @@ Every HTML page has a JSON counterpart at \`/api/{slug}.json\`. Useful for progr
 }
 
 async function generateRobotsTxt() {
-  const content = `# agent-athens robots.txt
-# Welcome AI agents!
-
-User-agent: *
+  const content = `# Search engines
+User-agent: Googlebot
 Allow: /
 
-# Specific AI crawlers
+User-agent: Bingbot
+Allow: /
+
+# AI Search Crawlers — ALLOW (power AI citations)
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: ClaudeBot
@@ -431,15 +442,18 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
-
 User-agent: anthropic-ai
 Allow: /
 
-# Agent-specific resources
-# LLMs.txt: https://agentathens.netlify.app/llms.txt
-# Sitemap: https://agentathens.netlify.app/sitemap.xml
+# AI Training — BLOCK (prevents model training, preserves search)
+User-agent: Google-Extended
+Disallow: /
+
+# Default
+User-agent: *
+Allow: /
+
+Sitemap: https://agentathens.netlify.app/sitemap.xml
 `;
 
   writeFileSync(join(DIST_DIR, 'robots.txt'), content);

@@ -210,3 +210,22 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 ### Rollback Plan
 - Hook problems: delete `hooks` key from `.claude/settings.json`, keep permissions
 - settings.json breaks CC entirely: delete the file (clean slate)
+
+## Pipeline Gap Fix (2026-02-25)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Add filter-athens-only.ts to run_quality() in daily pipeline | Was only reporting counts, not actually filtering. New events from scrapers would stay unverified until manual run | 2026-02-25 |
+| Filter runs after scraping, before site generation | New events need filtering before generate-site.ts publishes them | 2026-02-25 |
+| Filter is non-fatal in pipeline | Same pattern as other enrichment phases — better to publish with some unverified than fail the whole build | 2026-02-25 |
+
+## Schema.org / Hreflang / robots.txt Infrastructure (2026-02-25)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Block Google-Extended, allow all other AI crawlers | Google-Extended is the AI *training* crawler (feeds Gemini). Blocking prevents content use in model training while still appearing in Google Search and AI search citations | 2026-02-25 |
+| Hreflang x-default → /en/ prefix (not Greek URL) | x-default tells search engines "international audience version." English is the correct signal for tourists/AI agents discovering Athens events | 2026-02-25 |
+| 302 (temporary) redirect for /en/* → /:splat | Will remove when bilingual content actually launches; 301 would cache permanently in browsers | 2026-02-25 |
+| EUR hardcoded in Schema.org offers | All Athens events use EUR; no multi-currency support needed. Avoids null/undefined in priceCurrency | 2026-02-25 |
+| isAccessibleForFree for ALL events (not just priced ones) | Google rich results require explicit true/false signal; missing field = no rich result card | 2026-02-25 |
+| SCHEMA_TYPE_MAP canonical source in quality-gates.ts | Three paths generate Schema.org (quality-gates, event-page, i18n); single canonical map prevents drift | 2026-02-25 |

@@ -183,24 +183,26 @@ function generateEventSchema(event: Event): string {
     };
   }
 
-  // Add pricing
-  if (event.price.type === 'open') {
+  // Add pricing — isAccessibleForFree + complete offers for ALL events
+  if (event.price.type === 'open' || event.price.type === 'donation') {
+    schema.isAccessibleForFree = true;
     schema.offers = {
       '@type': 'Offer',
       'price': '0',
       'priceCurrency': 'EUR',
-      'availability': 'https://schema.org/InStock'
+      'availability': 'https://schema.org/InStock',
+      'url': `${BASE_URL}/events/${eventSlug}/`
     };
-  } else if (event.price.amount) {
+  } else {
+    schema.isAccessibleForFree = false;
     schema.offers = {
       '@type': 'Offer',
-      'price': event.price.amount.toString(),
+      'price': event.price.amount ? event.price.amount.toString() : '',
       'priceCurrency': event.price.currency || 'EUR',
-      'availability': 'https://schema.org/InStock'
+      'availability': 'https://schema.org/InStock',
+      'url': event.ticketUrl || event.url || `${BASE_URL}/events/${eventSlug}/`,
+      'validFrom': event.createdAt || startDate
     };
-    if (event.url) {
-      schema.offers.url = event.url;
-    }
   }
 
   // Add image if available
@@ -286,7 +288,8 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
 
   <!-- Language alternates -->
   <link rel="alternate" hreflang="el" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/events/${slug}/">
+  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/events/${slug}/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="${event.title}">

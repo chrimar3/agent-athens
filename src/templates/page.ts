@@ -52,10 +52,10 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
   <!-- Canonical URL (English slug for international SEO) -->
   <link rel="canonical" href="https://agentathens.netlify.app/${url}">
 
-  <!-- Language Alternates (for future English version) -->
+  <!-- Language Alternates -->
   <link rel="alternate" hreflang="el" href="https://agentathens.netlify.app/${url}">
-  <link rel="alternate" hreflang="en" href="https://agentathens.netlify.app/${url}">
-  <link rel="alternate" hreflang="x-default" href="https://agentathens.netlify.app/${url}">
+  <link rel="alternate" hreflang="en" href="https://agentathens.netlify.app/en/${url}">
+  <link rel="alternate" hreflang="x-default" href="https://agentathens.netlify.app/en/${url}">
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="${new Date().toISOString().split('T')[0]}">
@@ -403,23 +403,26 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
     "position": index + 1,
     "item": {
       "@type": event['@type'],
-      "name": event.title,  // Keep title as-is (might be Greek)
-      "description": `${event.type} event in Athens`,  // English description
+      "name": event.title,
+      "description": `${event.type} event in Athens`,
       "startDate": event.startDate,
+      "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {
         "@type": "Place",
         "name": event.venue.name,
         "address": {
           "@type": "PostalAddress",
           "streetAddress": event.venue.address || "",
-          "addressLocality": "Athens",  // English
-          "addressRegion": "Attica",    // English
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
           "addressCountry": "GR"
         }
       },
       "offers": {
         "@type": "Offer",
-        "price": event.price.amount || 0,
+        "price": (event.price.type === 'open' || event.price.type === 'donation')
+          ? "0"
+          : (event.price.amount ? event.price.amount.toString() : ""),
         "priceCurrency": event.price.currency || "EUR",
         "availability": "https://schema.org/InStock"
       }

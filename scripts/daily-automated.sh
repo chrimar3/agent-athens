@@ -152,15 +152,22 @@ run_scrape() {
 # Phase 3: Quality gates
 run_quality() {
     log_phase "QUALITY GATES"
-    log "Running location filter and deduplication..."
+    log "Running Athens location filter..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        log "[DRY RUN] Would run quality checks"
+        log "[DRY RUN] Would run: bun run scripts/filter-athens-only.ts"
         return 0
     fi
 
-    # Quality gates are integrated into parse step
-    # This phase just validates the results
+    # Run location filter against whitelist/blacklist configs
+    # Uses exact matching (not fuzzy LIKE) — safe for same-name-different-city venues
+    if bun run scripts/filter-athens-only.ts >> "$LOG_FILE" 2>&1; then
+        log "Location filter completed"
+    else
+        log_error "Location filter failed (continuing...)"
+    fi
+
+    # Report results
     local verified_count=$(sqlite3 "$PROJECT_DIR/data/events.db" \
         "SELECT COUNT(*) FROM events WHERE location_status = 'verified_athens';")
     local unverified_count=$(sqlite3 "$PROJECT_DIR/data/events.db" \

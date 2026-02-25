@@ -395,8 +395,9 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
 
     expect(firstEvent.offers).toBeDefined();
     expect(firstEvent.offers["@type"]).toBe("Offer");
-    expect(firstEvent.offers.price).toBe(sampleConcert.price.amount);
+    expect(firstEvent.offers.price).toBe(sampleConcert.price.amount!.toString());
     expect(firstEvent.offers.priceCurrency).toBe("EUR");
+    expect(firstEvent.isAccessibleForFree).toBe(false);
   });
 
   test("should handle free events with price 0", () => {
@@ -407,7 +408,8 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
 
     const firstEvent = jsonLd.mainEntity.itemListElement[0].item;
 
-    expect(firstEvent.offers.price).toBe(0);
+    expect(firstEvent.offers.price).toBe("0");
+    expect(firstEvent.isAccessibleForFree).toBe(true);
   });
 
   test("should include publication dates", () => {

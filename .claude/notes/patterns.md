@@ -228,3 +228,32 @@ All queries that filter "current/upcoming" events must use:
 WHERE date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
 ```
 This pattern appears in `session-diagnostic.sh` and should be used everywhere.
+
+## Schema.org Generation (3 paths)
+
+Schema.org is generated in 3 places — each works with a different data shape but must produce consistent output:
+
+| File | Data Type | Used By |
+|------|-----------|---------|
+| `src/generators/event-page.ts` → `generateEventSchema()` | `Event` (types.ts) | Individual event pages |
+| `src/utils/i18n.ts` → `toSchemaOrg()` | `Event` (types.ts) | Listing pages via page.ts |
+| `src/enrichment/quality-gates.ts` → `generateSchemaOrg()` | `EventForEnrichment` | Enrichment pipeline |
+
+**SCHEMA_TYPE_MAP** canonical source: `quality-gates.ts`. Imported by `i18n.ts` and `event-page.ts`.
+
+**Pricing pattern** (must be consistent across all 3):
+- `isAccessibleForFree`: true for "open"/"donation", false for "with-ticket"
+- `offers.price`: "0" for free, amount.toString() for paid, "" if unknown
+- `offers.priceCurrency`: always "EUR"
+- `offers.availability`: always "https://schema.org/InStock"
+
+## Hreflang Pattern
+
+All page types must include 3 hreflang tags:
+```html
+<link rel="alternate" hreflang="el" href="[greek URL]">
+<link rel="alternate" hreflang="en" href="[/en/ prefixed URL]">
+<link rel="alternate" hreflang="x-default" href="[/en/ prefixed URL]">
+```
+
+Applied in: `page.ts` (filter pages), `event-page.ts` (event detail), `venue-page.ts` (individual + index).

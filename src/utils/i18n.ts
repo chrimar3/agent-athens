@@ -3,6 +3,7 @@
 
 import type { Event } from '../types';
 import { DateTime } from 'luxon';
+import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 
 const ATHENS_TIMEZONE = 'Europe/Athens';
 
@@ -99,25 +100,6 @@ export function formatPriceGreek(event: Event): string {
   return 'Επί πληρωμή';
 }
 
-// Complete Schema.org type mapping (must match quality-gates.ts)
-const SCHEMA_TYPE_MAP: Record<string, string> = {
-  concert: 'MusicEvent',
-  dj_set: 'MusicEvent',
-  classical: 'MusicEvent',
-  opera: 'MusicEvent',
-  theater: 'TheaterEvent',
-  dance: 'DanceEvent',
-  comedy: 'ComedyEvent',
-  exhibition: 'ExhibitionEvent',
-  screening: 'ScreeningEvent',
-  cinema: 'ScreeningEvent',
-  workshop: 'EducationEvent',
-  show: 'Event',
-  festival: 'Festival',
-  performance: 'Event',
-  other: 'Event',
-};
-
 /**
  * Get the correct Athens timezone offset, accounting for DST
  */
@@ -165,21 +147,23 @@ export function toSchemaOrg(event: Event): string {
     }
   };
 
-  // Add pricing if available
-  if (event.price.type === 'open') {
+  // Add pricing — isAccessibleForFree + complete offers for ALL events
+  schema['isAccessibleForFree'] = (event.price.type === 'open' || event.price.type === 'donation');
+
+  if (event.price.type === 'open' || event.price.type === 'donation') {
     schema['offers'] = {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "EUR",
       "availability": "https://schema.org/InStock"
     };
-  } else if (event.price.amount) {
+  } else {
     schema['offers'] = {
       "@type": "Offer",
-      "url": event.url || "",
-      "price": event.price.amount.toString(),
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock"
+      "price": event.price.amount ? event.price.amount.toString() : "",
+      "priceCurrency": event.price.currency || "EUR",
+      "availability": "https://schema.org/InStock",
+      "url": event.ticketUrl || event.url || ""
     };
   }
 

@@ -35,7 +35,7 @@ export interface QualityIssue {
 
 export interface SchemaOrgEvent {
   '@context': 'https://schema.org';
-  '@type': 'MusicEvent' | 'Event' | 'ExhibitionEvent' | 'TheaterEvent' | 'DanceEvent' | 'ComedyEvent' | 'ScreeningEvent' | 'EducationEvent' | 'Festival';
+  '@type': 'MusicEvent' | 'Event' | 'ExhibitionEvent' | 'TheaterEvent' | 'DanceEvent' | 'ComedyEvent' | 'ScreeningEvent' | 'EducationEvent' | 'Festival' | 'PerformingArtsEvent';
   name: string;
   description?: string;
   startDate: string;
@@ -43,6 +43,7 @@ export interface SchemaOrgEvent {
   endDate?: string;
   eventStatus?: string;
   eventAttendanceMode?: string;
+  isAccessibleForFree?: boolean;
   location: {
     '@type': 'MusicVenue' | 'Place';
     name: string;
@@ -71,6 +72,7 @@ export interface SchemaOrgEvent {
     priceCurrency: string;
     availability?: string;
     url?: string;
+    validFrom?: string;
   };
 }
 
@@ -724,6 +726,10 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   screening: 'ScreeningEvent',
   cinema: 'ScreeningEvent',
   workshop: 'EducationEvent',
+  conference: 'EducationEvent',
+  seminar: 'EducationEvent',
+  meetup: 'Event',
+  hackathon: 'Event',
   show: 'Event',
   festival: 'Festival',
   performance: 'Event',
@@ -817,12 +823,27 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
     };
   }
 
-  // Add price
-  const price = event.price_advance || event.price_door;
-  if (price) {
+  // Add pricing — isAccessibleForFree + complete offers for ALL events
+  const priceAdvance = event.price_advance;
+  const priceDoor = event.price_door;
+  const priceText = (event.price || '').toLowerCase();
+  const isFree = (!priceAdvance && !priceDoor &&
+    (priceText === '' || priceText === 'open' || priceText === 'free' || priceText === 'donation' || priceText === '0'));
+
+  schema.isAccessibleForFree = isFree;
+
+  if (isFree) {
     schema.offers = {
       '@type': 'Offer',
-      price: price,
+      price: '0',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+    };
+  } else {
+    const price = priceAdvance || priceDoor;
+    schema.offers = {
+      '@type': 'Offer',
+      price: price || '',
       priceCurrency: 'EUR',
       availability: 'https://schema.org/InStock',
     };
