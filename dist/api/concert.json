@@ -7,252 +7,6 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "60e541889d263c93",
-      "title": "Vaginahood",
-      "description": "",
-      "startDate": "2026-02-24",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Doors",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15 - €30"
-      },
-      "url": "https://www.ticketservices.gr/event/13330/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13330/",
-      "source": "ticketservices",
-      "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "21:15",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "0fc2ce17f13d5e1d",
-      "title": "Stelios Chatzikaleas Quartet",
-      "description": "",
-      "startDate": "2026-02-24",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12 - €18"
-      },
-      "url": "https://www.athinorama.gr/music/gig/stelios_chatzikaleas_quartet-10088384/",
-      "ticketUrl": "https://www.halfnote.gr/en/calendar/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "21:30",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "b3c570f40394bf77",
-      "title": "Η Ωραία Ελένη στην Κοιλάδα  των Νεκρών Ερώτων",
-      "description": "",
-      "startDate": "2026-02-24",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "ΘΕΑΤΡΟ RADAR",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 5,
-        "currency": "EUR",
-        "range": "€5 - €15"
-      },
-      "url": "https://www.ticketservices.gr/event/14054/",
-      "ticketUrl": "https://www.ticketservices.gr/event/14054/",
-      "source": "ticketservices",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "21:15",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "acfd5251dc5e1abb",
-      "title": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
-      "description": "Σε συνεργασία με το ΕΛΙΒΙΠ (Ελληνικό Ίδρυμα Βιβλίου & Πολιτισμού)",
-      "fullDescription": "The Megaron Mousikis opens its doors and you enter a space built for acoustic perfection. The Athens Concert Hall has hosted the world's finest orchestras; tonight it welcomes a name that carries weight differently.\n\nELIVIP arrives at the Megaron for a concert that promises something between classical formality and Greek musical instinct. The name itself suggests the territory — a bridge between worlds, sounds that know their European classical training but haven't forgotten where they come from.\n\nThe Athens Concert Hall provides the ideal vessel for this material. The acoustic has been calibrated by decades of world-class programming; every note arrives with the clarity the composer intended. When the ensemble reaches for dynamic range, the hall expands to contain it. The seats themselves become part of the experience — this is formal listening, the kind that asks for your attention and rewards it.\n\nThe audience self-selects with care. These are concertgoers who follow the Megaron calendar, who understand that tickets here represent investment in musical experience. Greeks who recognize what ELIVIP brings from local tradition sit alongside classical music enthusiasts who came for the hall itself. The pre-concert murmur carries anticipation that differs from casual entertainment.\n\nIf you want relaxed atmosphere, if you prefer music as background, the Megaron asks something different. This is foreground listening — you dress for it, you schedule around it, you bring your attention as offering. But if you've been ready for an evening where serious musical craft meets world-class acoustics, where the concert hall tradition extends to embrace Greek musical voice — tonight, the Megaron proves why it remains Athens' highest stage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Megaron Mousikis Athens |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Price** | Check Megaron website |\n| **Dress code** | Smart attire appropriate |\n\nThe Concert Hall where Athens meets the world. ELIVIP makes the introduction.",
-      "startDate": "2026-02-24T19:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "jazz"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€15-80"
-      },
-      "url": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
-      "ticketUrl": "https://www.megaron.gr/event/to-romaiko-theatro-tis-archaias-milou/",
-      "source": "megaron.gr",
-      "createdAt": "2026-01-30T04:02:12.432Z",
-      "updatedAt": "2026-02-18 06:09:07",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "7773db249ca94111",
-      "title": "Gregory Jusdanis &#8211; Βιογραφώντας τον Κ.Π.Καβάφη",
-      "description": "",
-      "startDate": "2026-02-24T20:30:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "classical"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
-        "neighborhood": "Kolonaki",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€15-80"
-      },
-      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "source": "megaron.gr",
-      "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "2efea9c11c0da7d8",
-      "title": "Gregory Jusdanis – Βιογραφώντας τον Κ.Π.Καβάφη",
-      "description": "",
-      "startDate": "2026-02-24T20:30:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "classical"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
-        "neighborhood": "Kolonaki",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€15-80"
-      },
-      "url": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "ticketUrl": "https://www.megaron.gr/event/gregory-jusdanis-viografontas-ton-k-p-kavafi/",
-      "source": "megaron.gr",
-      "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "2c137884ef2d83ae",
-      "title": "Stelios Chatzikaleas Quartet “The Sea Inside”",
-      "description": "",
-      "fullDescription": "The quartet counts off and suddenly you're somewhere vast and deep. Stelios Chatzikaleas titled his project \"The Sea Inside\" — and from the first phrases, you understand that geography is only the beginning.\n\nChatzikaleas has built his reputation at the intersection of Greek jazz and something harder to name. His quartet operates in that space where improvisation meets composition, where the players know their parts but also know when to abandon them. Tonight at Half Note, \"The Sea Inside\" receives the intimate presentation its themes demand.\n\nHalf Note Jazz Club provides the vessel for this voyage. Since 1979, this Mets institution has hosted jazz that matters — 250 concerts per season from October through May, each carefully selected. The room holds maybe 200 people, close enough to hear the breath before a solo, intimate enough that the music's emotional weight arrives unmediated by distance.\n\nThe crowd arrives with jazz sensibility. These are listeners who follow the Half Note calendar, who know Greek jazz musicians by name, who understand that Chatzikaleas brings something specific to this tradition. Local jazz heads sit with conservatory students; casual listeners sit with the devoted. By the second set, the room has achieved that particular quiet where everyone understands something is happening.\n\nIf you need your music obvious, if subtlety reads as absence, \"The Sea Inside\" asks different attention. The quartet works in shades and depths, finding the music between the notes as much as in them. But if you've been searching for jazz that rewards concentration, that treats the listener as partner rather than audience — Half Note tonight becomes the port for the voyage.\n\n| Info | Details |\n|------|---------|\n| **Date** | Tuesday, February 24, 2026 |\n| **Venue** | Half Note Jazz Club |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10-minute walk |\n| **Price** | Table: 15-20 euro, Bar: 10-15 euro |\n| **Reservations** | Essential - call ahead |\n| **Season** | October-May only |\n\nThe sea inside. Half Note listens.",
-      "startDate": "2026-02-24T21:30:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "jazz"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Half Note Jazz Club",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "από €12"
-      },
-      "url": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
-      "ticketUrl": "https://www.halfnote.gr/event/stelios-chatzikaleas-quartet-the-sea-inside/",
-      "source": "halfnote",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "21:30",
-      "timeSource": "scraped_listing",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
       "id": "408554c97fd06091",
       "title": "ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ «ΟΠΕΚΕΜΠΛΕ»",
       "description": "",
@@ -937,6 +691,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a8be9023f5ea0d46",
+      "title": "Σκιαδαρέσες live στο WE",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "WE Πολυχώρος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/skiadareses-1/",
+      "source": "more.com",
+      "createdAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "cfb666d0772257af",
       "title": "Πέτρος Γαϊτάνος",
@@ -1313,6 +1098,37 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/amaguk-10063838/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "abbac5538c6757b9",
+      "title": "ΕΙΣΒΟΛΕΑΣ LIVE",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Fuzz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/eisvoleas-live/",
+      "source": "more.com",
+      "createdAt": "2026-02-21 07:51:30",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -1990,6 +1806,68 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ae384aa05940e3a6",
+      "title": "Γιάννης Σαββιδάκης",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "MÉTRON Stage",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/giannis_sabbidakis-10065296/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a72d5c4949673ea0",
+      "title": "ΜΙΛΤΟΣ ΠΑΣΧΑΛΙΔΗΣ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρός του Νότου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/miltos-pasxalidis-stauros-tou-notou-3/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "66badb8aafa8c70c",
       "title": "Η προσωπογραφία ενός αλγόριθμου",
@@ -2216,6 +2094,43 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
+      "id": "165940b521a9dcba",
+      "title": "Mikee + Zarkon + Aristo",
+      "description": "",
+      "startDate": "2026-02-28T23:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazi View",
+        "address": "Gazi View, Ιάκχου 22, Γκάζι, Αθήνα, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": "with-ticket"
+      },
+      "url": "https://www.clubber.gr/events/mikee-zarkon-aristo/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-18T04:02:27.840Z",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
       "id": "66e164e9238ad8b5",
       "title": "ALCEDO FOLK BAND ΤΑ ΛΟΥΛΟΥΔΙΑ ΜΑΡΤΥΡΟΥΝ",
       "description": "",
@@ -2273,6 +2188,37 @@
       },
       "url": "https://www.athinorama.gr/music/gig/adedeji_-10076834/",
       "ticketUrl": "https://www.athinorama.gr/music/gig/adedeji_-10076834/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5449a68378ecbb72",
+      "title": "Alcedo folk band",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μύρτιλλο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/alcedo_folk_band-10083433/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
       "updatedAt": "2026-02-24 09:55:45",
@@ -2978,6 +2924,37 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/pantelis_mpenetatos-10044567/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a907ffdc2efbaedb",
+      "title": "ΜΙΝΩΣ ΜΑΤΣΑΣ «ΔΙΚΑ ΜΟΥ 'Η ΔΑΝΕΙΚΑ»",
+      "description": "",
+      "startDate": "2026-03-02",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "VOX",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/minos-matsas-dika-mou-i-daneika/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -3829,6 +3806,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4dbe721f19845733",
+      "title": "1000mods",
+      "description": "",
+      "startDate": "2026-03-07",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Floyd",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.athinorama.gr/music/gig/1000mods-10039954/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "8da54119c76f8617",
       "title": "1000MODS 2026",
@@ -4112,6 +4120,37 @@
       "source": "more.com",
       "createdAt": "2026-02-15 06:47:14",
       "updatedAt": "2026-02-23 15:21:15",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "212a2928334803e2",
+      "title": "&#171;Γυναίκες Είμαστε!&#187;",
+      "description": "",
+      "startDate": "2026-03-08",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Christmas Theater",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€25 - €55"
+      },
+      "url": "https://www.athinorama.gr/music/gig/gunaikes_eimaste!-10089273/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -5351,6 +5390,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "16013527dd22b8a5",
+      "title": "ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»",
+      "description": "",
+      "startDate": "2026-03-23",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theseum - A Theatre for the Arts",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.ticketservices.gr/event/14141/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "6255a6993d035391",
       "title": "Στιγμές του 20ου αιώνα",
@@ -5376,6 +5446,68 @@
       "ticketUrl": "https://www.ticketservices.gr/event/14166/",
       "source": "ticketservices",
       "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f227e6d1e8eb146f",
+      "title": "ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»",
+      "description": "",
+      "startDate": "2026-03-24",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theseum - A Theatre for the Arts",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.ticketservices.gr/event/14141/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "cdf827091a89cb26",
+      "title": "Calyces Live at Piraeus Academy",
+      "description": "",
+      "startDate": "2026-03-24",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Piraeus Club Academy",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/calyces-live-at-piraeus-academy/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 09:55:45",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -5422,6 +5554,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e7d5460e9fe0fe89",
+      "title": "Friends, what are we gonna do",
+      "description": "",
+      "startDate": "2026-03-26",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΠΛΥΦΑ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €15"
+      },
+      "url": "https://www.ticketservices.gr/event/13727/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "9098f810cf258631",
       "title": "ΟΜΑΔΑ Thr3e",
@@ -5452,6 +5615,68 @@
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3205122ce108d14c",
+      "title": "Εαρινό Πάθος με την Ηρώ Σαΐα",
+      "description": "",
+      "startDate": "2026-03-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Γερμανική Εκκλησία Αθηνών",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20 - €30"
+      },
+      "url": "https://www.ticketservices.gr/event/14151/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4182b282c0598ba5",
+      "title": "Friends, what are we gonna do",
+      "description": "",
+      "startDate": "2026-03-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΠΛΥΦΑ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €15"
+      },
+      "url": "https://www.ticketservices.gr/event/13727/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -5563,6 +5788,37 @@
       "language": "en",
       "timeDoors": "22:00",
       "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b1b58e00f8e993f1",
+      "title": "INNA Show",
+      "description": "",
+      "startDate": "2026-03-28",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Floyd",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 40,
+        "currency": "EUR",
+        "range": "€40"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/inna-show/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -5776,6 +6032,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b2a9333e9c9cfd8d",
+      "title": "ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»",
+      "description": "",
+      "startDate": "2026-03-30",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theseum - A Theatre for the Arts",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.ticketservices.gr/event/14141/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "523def0775a979d4",
       "title": "DIRE STRAITS LEGACY live in Greece!",
@@ -5922,6 +6209,37 @@
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3847bdb87661997e",
+      "title": "ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»",
+      "description": "",
+      "startDate": "2026-03-31",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theseum - A Theatre for the Arts",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 20,
+        "currency": "EUR",
+        "range": "€20"
+      },
+      "url": "https://www.ticketservices.gr/event/14141/",
+      "source": "ticketservices",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -7288,6 +7606,37 @@
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e50d43deda118b22",
+      "title": "MICHELLE GUREVICH",
+      "description": "",
+      "startDate": "2026-06-12",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Δημοτικό Κηποθέατρο Παπάγου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 22,
+        "currency": "EUR",
+        "range": "€22"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/michelle-gurevich-athens/",
+      "source": "more.com",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-23 15:21:15",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -9112,11 +9461,73 @@
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "088f24e8a470e2e2",
+      "title": "&#171;Carnival with the King&#187;",
+      "description": "",
+      "startDate": "2027-02-20",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Half Note Jazz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15 - €25"
+      },
+      "url": "https://www.athinorama.gr/music/gig/carnival_with_the_king-10089105/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-22 09:51:50",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c26050fb7ea81ab5",
+      "title": "Γιάννης Παπαγεωργίου",
+      "description": "",
+      "startDate": "2027-02-21",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καταφύ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/giannis_papageorgiou-10077007/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-22 09:51:51",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 256,
-    "lastUpdate": "2026-02-24T09:57:29.085Z",
+    "total": 270,
+    "lastUpdate": "2026-02-25T08:32:59.246Z",
     "url": "https://agentathens.netlify.app/concert"
   }
 }

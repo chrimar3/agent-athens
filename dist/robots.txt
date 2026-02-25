@@ -1,11 +1,18 @@
-# agent-athens robots.txt
-# Welcome AI agents!
-
-User-agent: *
+# Search engines
+User-agent: Googlebot
 Allow: /
 
-# Specific AI crawlers
+User-agent: Bingbot
+Allow: /
+
+# AI Search Crawlers — ALLOW (power AI citations)
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: ClaudeBot
@@ -14,12 +21,15 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
-
 User-agent: anthropic-ai
 Allow: /
 
-# Agent-specific resources
-# LLMs.txt: https://agentathens.netlify.app/llms.txt
-# Sitemap: https://agentathens.netlify.app/sitemap.xml
+# AI Training — BLOCK (prevents model training, preserves search)
+User-agent: Google-Extended
+Disallow: /
+
+# Default
+User-agent: *
+Allow: /
+
+Sitemap: https://agentathens.netlify.app/sitemap.xml

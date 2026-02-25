@@ -202,6 +202,68 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "17e25d7f23ff8cc6",
+      "title": "Μπουζούκια στην Πίστα",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Γυάλινο Μουσικό Θέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/mpouzoukia-stin-pista-gyalino-mousiko-theatro-2/",
+      "source": "more.com",
+      "createdAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e15adc27997408d1",
+      "title": "ΓΕΡΜΑ - Η ανεκπλήρωτη",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Τέχνης",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/germa-i-anekpliroti/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "34fc7512698b13ab",
       "title": "Βιβιλένα",
@@ -298,6 +360,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5c8adcfe52fa86b5",
+      "title": "Αγορομάνα",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Kukaracha Theaterspace",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/agoromana-10076156/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "7690cef6908b44e4",
       "title": "The Mr and Mrs Bubble Show",
@@ -323,6 +416,223 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/the_mr_and_mrs_bubble_show-10089261/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bfbca1938acff682",
+      "title": "Παντελής Αμπαζής",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theatre Of The No",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/pantelis_ampazis-10053071/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-22 09:51:50",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "560cdafb7aae4595",
+      "title": "Ροδάφ'νον",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Από Μηχανής Θέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 14,
+        "currency": "EUR",
+        "range": "€14"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/rodafnon/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7bd6736d3d1c8559",
+      "title": "«ΖΗΤΩ ΤΑ ΛΑΪΚΑ ΚΟΡΙΤΣΙΑ»  ΠΑΝΤΕΛΗΣ ΑΜΠΑΖΗΣ & ΑΝΩΤΑΤΗ ΖΑΜΠΕΤΙΚΗ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Theatre Of The No",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/zito-ta-laika-koritsia-pantelis-ampazis/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fdded01ffc0cb22a",
+      "title": "ΕΓΩ ΚΙ ΕΣΥ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ίδρυμα Μιχάλης Κακογιάννης",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/ego-ki-esy/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0a170dcfabd30329",
+      "title": "Ήλιος με δόντια",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Μπέλλος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 14,
+        "currency": "EUR",
+        "range": "€14"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/ilios-me-dontia/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "6ac179a46896de3a",
+      "title": "Η ΑΝΑΤΟΜΙΑ ΤΗΣ ΑΠΟΛΑΥΣΗΣ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Σκηνή BRECHT - 2510",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/i-anatomia-tis-apolausis/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9308c02a8ab86b65",
+      "title": "ΧΑΣΑΜΕ ΤΗ ΘΕΙΑ ΣΤΟΠ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Φιλίπ",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/xasame-ti-theia-stop/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -499,6 +809,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "eaad803b8069c677",
+      "title": "Η Μάσα και ο Αρκούδος, μια μεγάλη γιορτή",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Διάνα",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/i_masa_kai_o_arkoudos_mia_megali_giorti-10082608/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "291885e430f5d6ab",
       "title": "Ελευθερία κινήσεων",
@@ -528,11 +869,73 @@
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1a8f24ede73bf89e",
+      "title": "Ταξιδεύοντας στη Θράκη με το τρένο",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Lib'ro",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-20 07:51:03",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a190abe9554cac6c",
+      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 16,
-    "lastUpdate": "2026-02-24T09:57:29.241Z",
+    "total": 29,
+    "lastUpdate": "2026-02-25T08:32:59.431Z",
     "url": "https://agentathens.netlify.app/with-ticket-theater-this-weekend"
   }
 }

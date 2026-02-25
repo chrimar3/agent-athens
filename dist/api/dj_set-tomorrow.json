@@ -7,10 +7,10 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "a234d27047c5d50f",
-      "title": "Lockbird",
+      "id": "1ae8fc4ec471d76f",
+      "title": "Irini Karaoglou",
       "description": "",
-      "startDate": "2026-02-25T21:00:00",
+      "startDate": "2026-02-26T21:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -29,8 +29,8 @@
         "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/lockbird-26/",
-      "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
+      "url": "https://www.clubber.gr/events/irini-karaoglou-3/",
+      "ticketUrl": "https://www.clubber.gr/events/irini-karaoglou-3/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
       "updatedAt": "2026-02-24 09:55:45",
@@ -39,11 +39,83 @@
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6bb5965b47173e2e",
+      "title": "Sneaky club",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Zelus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/sneaky-club-12/",
+      "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d267eb676e666885",
+      "title": "Agent Greg + Stephanos",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Dybbuk",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-24T09:57:29.089Z",
+    "total": 3,
+    "lastUpdate": "2026-02-25T08:32:59.251Z",
     "url": "https://agentathens.netlify.app/dj_set-tomorrow"
   }
 }

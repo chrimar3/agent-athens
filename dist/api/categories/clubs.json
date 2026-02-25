@@ -466,6 +466,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7591f68d1d596e25",
+      "title": "Tendervore with Greta b2b Miss Trouli / KOKETAMC b2b Socrates Antypas",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367246",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "3188e6d3d0b29752",
       "title": "DJ Gus + Liou",
@@ -777,6 +812,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4f846a9cff7558cf",
+      "title": "PANTHEON",
+      "description": "",
+      "startDate": "2026-02-28T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Piree",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2376052",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "1bb09ff7dc81ddda",
       "title": "PURE SHOW  - HEAVENLY  + THE VAXTONES - PARTY",
@@ -808,6 +878,41 @@
       "updatedAt": "2026-02-12 11:12:20",
       "language": "en",
       "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e516754be6080f47",
+      "title": "Marthe at Daddy'S all day bar",
+      "description": "",
+      "startDate": "2026-02-28T21:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Daddy's All Day Bar",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Free"
+      },
+      "url": "https://ra.co/events/2378138",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "21:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1057,6 +1162,41 @@
       "ticketUrl": "https://www.clubber.gr/events/impvlsiv-bolosis-piece-of-kate/",
       "source": "clubber.gr",
       "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "82fd31865d022236",
+      "title": "Astron Club Night with Bolosis / IMPVLSIV / Piece of Kate",
+      "description": "",
+      "startDate": "2026-02-28T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2364445",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "23:00",
@@ -1636,6 +1776,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "68920064dbd4296e",
+      "title": "PIRATKA Riot",
+      "description": "",
+      "startDate": "2026-03-06T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Dunk Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Free"
+      },
+      "url": "https://ra.co/events/2376653",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "e3a19a7e32b1665a",
       "title": "Espectro Oculto with Cortical Systematics (RNXRX & Marianella), Non Punire, FRAGEDIS & Mint ",
@@ -1808,6 +1983,41 @@
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "22:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9ab8506daa46fa58",
+      "title": "Uplifting & GOA Trance Rooftop Party - Gaziview",
+      "description": "",
+      "startDate": "2026-03-07T22:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazi View",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2378062",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "22:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2200,6 +2410,41 @@
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "17:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "f98ce146ce44206f",
+      "title": "Techno Underdogs - Free Entrance",
+      "description": "",
+      "startDate": "2026-03-14T22:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "B side Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "€0"
+      },
+      "url": "https://ra.co/events/2377725",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "22:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -2990,6 +3235,111 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "88d6a4afc610ff71",
+      "title": "Tiger Weeds w/ The Exaltics (Live)",
+      "description": "",
+      "startDate": "2026-04-04T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://ra.co/events/2376118",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "138fb233251dfd62",
+      "title": "Tiger Weeds with The Exaltics (Live)",
+      "description": "",
+      "startDate": "2026-04-04T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://ra.co/events/2376118",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e6dba1f891ea5e9a",
+      "title": "PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace",
+      "description": "",
+      "startDate": "2026-04-04T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "SMUT Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2377756",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:59",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "b5751121a8f10275",
       "title": "BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin",
@@ -3270,6 +3620,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9c6778f2a5214c1e",
+      "title": "Padre Guilherme I Sat May 9",
+      "description": "",
+      "startDate": "2026-05-09T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Bolivar",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2378214",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "231d98330a514091",
       "title": "Blend x SEDS x VLCT pres. Teletech: Azyr + Fantasm + Ate b2b Salin",
@@ -3300,6 +3685,41 @@
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4daa340a5c409e56",
+      "title": "Demonyx ritual vol.1",
+      "description": "",
+      "startDate": "2026-05-09T23:59:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Temple",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://ra.co/events/2376508",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-22 09:51:51",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:59",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3517,6 +3937,41 @@
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "0e9e87c942a5747c",
+      "title": "JAFARI presents AMÉMÉ",
+      "description": "",
+      "startDate": "2026-06-07T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Island Athens Riviera",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2372116",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-17 12:08:52",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -3780,8 +4235,8 @@
     }
   ],
   "meta": {
-    "total": 106,
-    "lastUpdate": "2026-02-24T09:57:29.476Z",
+    "total": 119,
+    "lastUpdate": "2026-02-25T08:32:59.839Z",
     "url": "https://agentathens.netlify.app/clubs"
   }
 }

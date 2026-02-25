@@ -464,6 +464,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "7591f68d1d596e25",
+      "title": "Tendervore with Greta b2b Miss Trouli / KOKETAMC b2b Socrates Antypas",
+      "description": "",
+      "startDate": "2026-02-27T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2367246",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "3188e6d3d0b29752",
       "title": "DJ Gus + Liou",
@@ -775,6 +810,41 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "4f846a9cff7558cf",
+      "title": "PANTHEON",
+      "description": "",
+      "startDate": "2026-02-28T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Piree",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://ra.co/events/2376052",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "1bb09ff7dc81ddda",
       "title": "PURE SHOW  - HEAVENLY  + THE VAXTONES - PARTY",
@@ -806,6 +876,41 @@
       "updatedAt": "2026-02-12 11:12:20",
       "language": "en",
       "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "e516754be6080f47",
+      "title": "Marthe at Daddy'S all day bar",
+      "description": "",
+      "startDate": "2026-02-28T21:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Daddy's All Day Bar",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "free",
+        "amount": 0,
+        "currency": "EUR",
+        "range": "Free"
+      },
+      "url": "https://ra.co/events/2378138",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "21:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -1055,6 +1160,41 @@
       "ticketUrl": "https://www.clubber.gr/events/impvlsiv-bolosis-piece-of-kate/",
       "source": "clubber.gr",
       "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "82fd31865d022236",
+      "title": "Astron Club Night with Bolosis / IMPVLSIV / Piece of Kate",
+      "description": "",
+      "startDate": "2026-02-28T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Astron",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://ra.co/events/2364445",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-24 07:59:09",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "23:00",
@@ -1527,8 +1667,8 @@
     }
   ],
   "meta": {
-    "total": 43,
-    "lastUpdate": "2026-02-24T09:57:29.091Z",
+    "total": 47,
+    "lastUpdate": "2026-02-25T08:32:59.252Z",
     "url": "https://agentathens.netlify.app/dj_set-this-week"
   }
 }

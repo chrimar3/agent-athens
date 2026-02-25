@@ -134,6 +134,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "eaad803b8069c677",
+      "title": "Η Μάσα και ο Αρκούδος, μια μεγάλη γιορτή",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Διάνα",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/i_masa_kai_o_arkoudos_mia_megali_giorti-10082608/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "291885e430f5d6ab",
       "title": "Ελευθερία κινήσεων",
@@ -159,6 +190,68 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/eleutheria_kiniseon-10079251/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1a8f24ede73bf89e",
+      "title": "Ταξιδεύοντας στη Θράκη με το τρένο",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Lib'ro",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-20 07:51:03",
+      "updatedAt": "2026-02-20 07:51:03",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a190abe9554cac6c",
+      "title": "Idra Kayne &amp; Χρήστος Νικολάου",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.athinorama.gr/music/gig/idra_kayne_kai_xristos_nikolaou-10019959/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-23 15:21:15",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -289,6 +382,37 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/mikres_tapeinoseis-10089258/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "bf6af31b0720dc4c",
+      "title": "ΜΕΣΑ ΣΤΟ ΜΥΑΛΟ ΣΟΥ- Dr. Γιώργος Λάγιος- Part 2",
+      "description": "",
+      "startDate": "2026-03-02",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Αλίκη",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 16,
+        "currency": "EUR",
+        "range": "€16"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/mesa-sto-myalo-sou-part-2-erotas-kai-xaos/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -527,6 +651,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "b23f641de006ed78",
+      "title": "Σωσμένος",
+      "description": "",
+      "startDate": "2026-03-06",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Cartel Τεχνοχώρος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/sosmenos/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "1a7152010289ed60",
       "title": "Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2",
@@ -591,6 +746,37 @@
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "3fa6f596d010867a",
+      "title": "Ταξιδεύοντας στη Θράκη με το τρένο",
+      "description": "Εως 2026-04-01",
+      "startDate": "2026-03-11",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Θέατρο Lib'ro",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -1033,6 +1219,37 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "c1dee2762638554e",
+      "title": "33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus",
+      "description": "",
+      "startDate": "2026-03-27",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "ΙΛΙΟΝ Plus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/33-lovers-am-i-in-a-dream-at-ilion-plus/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "TheaterEvent",
       "id": "9c4c4c3cad8ddfb4",
       "title": "Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2",
@@ -1067,8 +1284,8 @@
     }
   ],
   "meta": {
-    "total": 31,
-    "lastUpdate": "2026-02-24T09:57:29.111Z",
+    "total": 38,
+    "lastUpdate": "2026-02-25T08:32:59.278Z",
     "url": "https://agentathens.netlify.app/theater-next-month"
   }
 }

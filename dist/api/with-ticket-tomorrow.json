@@ -6,89 +6,18 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "408554c97fd06091",
-      "title": "ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ «ΟΠΕΚΕΜΠΛΕ»",
+      "@type": "TheaterEvent",
+      "id": "bf03c503fbae62ad",
+      "title": "SHADOW KNIGHT",
       "description": "",
-      "fullDescription": "The bouzouki starts and history begins to argue with itself. Apostolis Barbagiannis takes the stage at Stavros tou Notou, and OPEKEMBLE announces that Greek folk tradition is neither museum piece nor comfortable memory.\n\nThe name sounds like nonsense until you hear what it contains — the collision of traditional Greek music with whatever it's absorbed over decades of change. Barbagiannis has built his reputation on refusal: refusing to preserve tradition unchanged, refusing to abandon it for novelty. The foustanella might appear, but the sounds around it carry jazz voicings, rock dynamics, electric possibilities.\n\nStavros tou Notou houses this creative explosion with understanding. The venue has carved its identity in the Athens live music landscape as the space where Greek music goes to evolve. The room is intimate enough that Barbagiannis's personality fills it, small enough that his band's energy reaches every corner. When the traditional rhythms start shifting under contemporary weight, you feel the tension productively.\n\nThe crowd knows what they came for. These are not tourists seeking \"authentic Greek experience\" — this is too alive for that category. Greek musicians come to see what Barbagiannis is doing with their inheritance. Folk enthusiasts arrive alongside those who just follow Stavros tou Notou's programming. By the second set, people are dancing — not traditional steps exactly, but not abandoning them either.\n\nIf you want your folk music preserved in amber, if tradition should remain unchanged, OPEKEMBLE arrives as provocation. Barbagiannis treats inheritance as material rather than monument. But if you've been waiting for Greek music that breathes with the present, that asks what tradition means when it's genuinely alive — tonight, Stavros tou Notou hosts the revolution.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Venue** | Stavros tou Notou |\n| **Entry** | 15 euro |\n| **Getting there** | Check venue for address |\n\nTradition isn't what you preserve. It's what you risk.",
-      "startDate": "2026-02-25",
+      "startDate": "2026-02-26",
       "endDate": null,
-      "type": "concert",
+      "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€15"
-      },
-      "url": "https://www.ticketservices.gr/event/13919/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13919/",
-      "source": "ticketservices",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "20:30",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "077377fb8fd9d2e2",
-      "title": "Συναυλία Μουσικής Δωματίου Παντελής Σταματέλος &amp; Γιάννης Μιχαηλίδης",
-      "description": "",
-      "fullDescription": "The musicians take their positions close enough to touch. Chamber music earns its name — this is music that belongs in rooms, that requires proximity, that loses something when distances grow too large.\n\nTonight at the Megaron's Lilian Voudouri Music Library, a concert of chamber music unfolds in the setting that makes such intimacy possible. The Library represents Greece's most significant musical archive, and its performance space inherits that seriousness. Every harmonic overlap, every traded phrase between instruments, every breathing pause arrives with the clarity that chamber music demands.\n\nThe ensemble format carries its own logic. Unlike orchestra, where masses of instruments blend, chamber music exposes each voice. The string quartet, the piano trio, whatever formation tonight brings — the players must listen as intently as they play. When the music works, the conversation between instruments becomes audible; you hear musicians responding to each other in real time.\n\nThe audience arrives with appropriate expectation. These are listeners who understand what chamber music offers: not the overwhelming force of orchestral sound, but the precision of intimate dialogue. Music students learning repertoire sit alongside subscribers who've followed the Megaron's chamber series for years. The silence between movements carries weight; applause, when it comes, acknowledges something earned rather than delivered.\n\nIf you need volume, if you want music that fills arena space, chamber music operates elsewhere. The scale is human — instruments speaking to instruments, players reading each other across mere feet of distance. But if you've been searching for the musical experience where nothing hides, where every note must justify itself, where the room size matches the music's truth — the Library tonight becomes exactly the chamber it was named for.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Venue** | Lilian Voudouri Music Library, Megaron Mousikis |\n| **Getting there** | Megaro Moussikis Metro (Blue line), adjacent to main hall |\n| **Price** | Check Megaron website |\n\nChamber music: the art of close listening. Tonight, the Library hosts the conversation.",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "classical",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12 - €15"
-      },
-      "url": "https://www.ticketservices.gr/event/14015/",
-      "ticketUrl": "https://www.ticketservices.gr/event/14015/",
-      "source": "ticketservices",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "timeDoors": "20:30",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "20b768080a3a5d03",
-      "title": "ΠΑΡΟΥΣΙΑΣΗ ΔΙΣΚΟΥ  ΠΕΡΙΚΛΗΣ ΧΕΙΛΑΣ «ΣΤΗΝ ΚΑΡΔΙΑ ΤΟΥ ΚΟΥΡΤΣ»",
-      "description": "",
-      "fullDescription": "The guitar cuts through the room before you find your seat. You're in Baumstrasse, one of Athens' more intimate live venues, and the sound already tells you this isn't going to be background music. The chairs are close enough that you can see the calluses on the performer's fingers.\n\nPeriklis Cheilas presents \"Stin Kardia tou Kurtz\" — a title that references Conrad's Heart of Darkness and immediately signals this won't be a comfortable evening of soft melodies. Cheilas has carved a specific niche in the Greek music scene: songs that wrestle with difficult territory, lyrics that don't offer easy resolutions. His approach to guitar work favors texture over technique, serving the words rather than showing off.\n\nThe Baumstrasse crowd tends toward those who actively seek out smaller rooms. You'll find people who've followed Cheilas through his previous work, who know the albums and came specifically for these songs. Conversations before the show touch on lyrics and meanings, the kind of audience that treats a concert as something worth preparing for. By the time the lights dim, the room has achieved that particular quiet that signals collective investment.\n\nThe venue itself operates on an intimate scale that rewards attention. No distant stage, no barriers between performer and audience. When Cheilas leans into a difficult verse, you're close enough to see it land on his face. The sound system handles acoustic guitar with the clarity this music demands — every picked string audible, every whispered word reaching the back row.\n\nIf you need spectacle and production, if you want music that makes easy promises, this evening will challenge you. Cheilas writes for listeners who are willing to sit with discomfort, who understand that art sometimes needs to darken before it illuminates. But if you've been searching for songwriting that treats you as an adult, that doesn't prettify the difficult parts of being human — you're in the right room.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 21:00 |\n| **Venue** | Baumstrasse, Athens |\n| **Price** | Check venue |\n| **Good to know** | Arrive early for better seating in this intimate space |\n\nThe heart of Kurtz isn't pretty. Cheilas doesn't pretend otherwise.",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Concert #1 Baumstrasse",
-        "address": null,
+        "name": "ΙΛΙΟΝ Plus",
+        "address": "Κοδριγκτώνος 17, Αθήνα 104 34",
         "neighborhood": null,
         "capacity": null
       },
@@ -98,100 +27,24 @@
         "currency": "EUR",
         "range": "€10"
       },
-      "url": "https://www.ticketservices.gr/event/13912/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13912/",
-      "source": "ticketservices",
-      "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-24 09:55:45",
+      "url": "https://www.more.com/gr-el/tickets/music/shadow-knight-phyrosun-frs-live-ilion-plus/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/music/shadow-knight-phyrosun-frs-live-ilion-plus/",
+      "source": "more.com",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-16 08:00:38",
       "language": "en",
-      "timeDoors": "21:00",
-      "timeSource": "scraped_detail",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "580fe29c88b0d8f1",
-      "title": "Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα",
-      "description": "More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.",
-      "fullDescription": "You walk through the converted warehouse on Pireos Street and the scale of what MIET has collected becomes apparent. Room after room of Greek art spanning a century — canvases that trace the country's visual evolution from traditionalism through modernism and into contemporary expression. The walls hold more than paintings; they hold arguments about what Greek art should be.\n\nThe Benaki Museum at Pireos houses MIET's permanent collection of 20th-century Greek art — an assembly that functions as both education and provocation. You'll find works by artists whose names anchor any serious conversation about Greek modernism, alongside pieces by figures who remain underappreciated beyond specialist circles. The chronological arrangement creates its own narrative, each room representing a different moment in the country's cultural self-definition.\n\nThe visitors here move differently than typical museum crowds. These are people who pause at specific works, who return to earlier rooms after seeing what came later, who understand that collections tell stories through juxtaposition. Art students with notebooks share space with older visitors who remember when some of these works first appeared. The quiet is purposeful, the attention genuine.\n\nThe Pireos branch of the Benaki provides the industrial shell this collection needs. High ceilings accommodate larger works without overwhelming them. Natural light from the converted warehouse spaces changes throughout the day, offering different perspectives on the same pieces. The building's former life as a working space adds layers to experiencing art made during periods when Greece was itself being rebuilt.\n\nIf you want international celebrity names and blockbuster exhibitions, this collection will seem local and unfamiliar. The focus here is specifically Greek — the questions these artists asked about identity, tradition, and modernity emerged from a particular history. But if you're ready to understand what 20th-century Greek artists were wrestling with, how they positioned themselves between East and West, tradition and rupture — this collection rewards the investment.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Hours** | 10:00-18:00 |\n| **Venue** | Benaki Museum Pireos, Pireos 138 |\n| **Getting there** | Kerameikos Metro (Blue line), 10 min walk |\n| **Admission** | Standard museum entry |\n\nA century of Greek art arguing with itself about what Greek art should become.",
-      "startDate": "2026-02-25",
-      "endDate": "2026-04-26",
-      "type": "exhibition",
-      "genres": [
-        "visual-arts"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μουσείο Μπενάκη - Πειραιώς 138",
-        "address": "Πειραιώς 138, Αθήνα",
-        "neighborhood": "Γκάζι",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.benaki.org",
-      "ticketUrl": "https://www.benaki.org",
-      "source": "benaki",
-      "createdAt": "2026-01-30T15:08:45.203Z",
-      "updatedAt": "2026-02-12 11:12:20",
-      "language": "en",
-      "openingHours": {
-        "mon": "closed",
-        "tue": "closed",
-        "wed": "10:00-18:00",
-        "thu": "10:00-22:00",
-        "fri": "10:00-18:00",
-        "sat": "10:00-18:00",
-        "sun": "10:00-16:00"
-      },
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "19787c80a91d2a5a",
-      "title": "Ταξιδεύοντας στη Θράκη με το τρένο",
-      "description": "Εως 2026-04-01",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Θέατρο Lib'ro",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/taksideuontas_sti_thraki_me_to_treno-10086173/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-12 11:12:20",
-      "language": "en",
+      "timeDoors": "20:30",
+      "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "8ca4d95f7cd9aaec",
-      "title": "Stathis Anninos Quartet",
+      "id": "c7ef21d36410eb42",
+      "title": "Miranda Verouli Quintet",
       "description": "",
-      "startDate": "2026-02-25",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "concert",
       "genres": [],
@@ -208,10 +61,10 @@
         "currency": "EUR",
         "range": "€12 - €18"
       },
-      "url": "https://www.athinorama.gr/music/gig/stathis_anninos_quartet_-10063282/",
-      "ticketUrl": "https://www.halfnote.gr/en/calendar/",
+      "url": "https://www.athinorama.gr/music/gig/miranda_verouli_quintet-10069976/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/miranda_verouli_quintet-10069976/",
       "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
+      "createdAt": "2026-02-18 06:09:06",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -220,10 +73,202 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "70de929e1d64249c",
-      "title": "Απόστολος Κίτσος",
+      "id": "944f6f629770adfd",
+      "title": "Three Times Three #5",
       "description": "",
-      "startDate": "2026-02-25",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Κέντρο Ελέγχου Τηλεοράσεων",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/three_times_three_5-10084877/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/three_times_three_5-10084877/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "8297d866e4f7e939",
+      "title": "Γιάννης Μάργαρης",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Καφεθέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "cead5028f1b91e7f",
+      "title": "&#171;Viva la mamma!&#187;",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "opera",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Εθνική Λυρική Σκηνή",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10 - €20"
+      },
+      "url": "https://www.athinorama.gr/music/gig/viva_la_mamma!-10089121/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/viva_la_mamma!-10089121/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "id": "e2874bd3230feee7",
+      "title": "Shadow Knight, Phyrosun &amp; FRS",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ίλιον Plus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "69b5e3bad5341b32",
+      "title": "Joanna Mattrey",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Underflow",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/joanna_mattrey-10089214/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/joanna_mattrey-10089214/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6ae26526b4ecd654",
+      "title": "Αλεξία Μουζά",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "classical",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10 - €25"
+      },
+      "url": "https://www.athinorama.gr/music/gig/aleksia_mouza-10076110/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/aleksia_mouza-10076110/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b921cecb62005587",
+      "title": "Στέλιος Κοτίδης &amp; Γιώργος Χουβαρδάς",
+      "description": "",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "concert",
       "genres": [],
@@ -236,78 +281,14 @@
       },
       "price": {
         "type": "paid",
-        "amount": 12,
+        "amount": 13,
         "currency": "EUR",
-        "range": "€12 - €14"
+        "range": "€13"
       },
-      "url": "https://www.athinorama.gr/music/gig/apostolos_kitsos-10071633/",
-      "ticketUrl": "https://www.more.com/gr-el/music/",
+      "url": "https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/",
+      "ticketUrl": "https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/",
       "source": "athinorama.gr",
-      "createdAt": "2026-02-10 14:59:00",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "ddd247b1cc1af514",
-      "title": "Παντελής Σταματέλος &amp; Γιάννης Μιχαηλίδης",
-      "description": "",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.athinorama.gr/music/gig/pantelis_stamatelos_kai_giannis_mixailidis-10089133/",
-      "ticketUrl": "https://www.ticketservices.gr/event/14015/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "e545b255a7115f5c",
-      "title": "Περικλής Χειλάς",
-      "description": "",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Concert #1 Baumstrasse",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "€10"
-      },
-      "url": "https://www.athinorama.gr/music/gig/periklis_xeilas-10089135/",
-      "ticketUrl": "https://www.ticketservices.gr/event/13912/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
+      "createdAt": "2026-02-19 08:49:27",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -316,16 +297,48 @@
     {
       "@context": "https://schema.org",
       "@type": "TheaterEvent",
-      "id": "5156ac5c7a7ef3f2",
-      "title": "Μήδεια Έξοδος ΙΙΙ",
-      "description": "Εως 2026-03-15",
-      "startDate": "2026-02-25",
+      "id": "42503c43d0d8e57e",
+      "title": "Ο βυσσινόκηπος",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Εθνική Γλυπτοθήκη",
+        "name": "Εθνικό Θέατρο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 41,
+        "currency": "EUR",
+        "range": "€41"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-20 07:51:02",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "177079c6050bc903",
+      "title": "Ο ΑΓΑΠΗΤΙΚΟΣ ΤΗΣ ΒΟΣΚΟΠΟΥΛΑΣ (ΓΙΑ ΠΕΡΙΟΡΙΣΜΕΝΟ ΑΡΙΘΜΟ ΠΑΡΑΣΤΑΣΕΩΝ)",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Ακροπόλ",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -336,156 +349,27 @@
         "currency": "EUR",
         "range": "€15"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/mideia_eksodos_iii-10089161/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-12 11:12:20",
-      "updatedAt": "2026-02-24 09:55:45",
+      "url": "https://www.more.com/gr-el/tickets/theater/oagapitikostisvoskopoulas/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "e36dbf1416f0bb91",
-      "title": "Αντιστοιχίες",
+      "@type": "Event",
+      "id": "9583f7ca5f306a2b",
+      "title": "ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ",
       "description": "",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 8,
-        "currency": "EUR",
-        "range": "€8"
-      },
-      "url": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
-      "ticketUrl": "https://www.athinorama.gr/music/gig/antistoixies-10088735/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-16 08:00:38",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "8bad79eee365a357",
-      "title": "Louis C.K. - Ridiculous",
-      "description": "Εως 2026-02-26",
-      "startDate": "2026-02-25",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Christmas Theater",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 35,
-        "currency": "EUR",
-        "range": "€35"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "f2e0c357cad1aabb",
-      "title": "Dolls",
-      "description": "Εως 2026-04-01",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Μορφές Έκφρασης",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "paid",
-        "amount": 12,
-        "currency": "EUR",
-        "range": "€12"
-      },
-      "url": "https://www.athinorama.gr/theatre/performance/dolls-10089237/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/dolls-10089237/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "fabf477dfb311940",
-      "title": "&#171;Καραβάκι του Αιγαίου και στη Μυτιλήνη τράβα!&#187;",
-      "description": "",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "concert",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Ωδείο Αθηνών",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "tba",
-        "amount": 25,
-        "currency": "EUR",
-        "range": "€20-50"
-      },
-      "url": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
-      "ticketUrl": "https://www.athinorama.gr/music/gig/karabaki_tou_aigaiou_kai_sti_mutilini_traba!-10089248/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 09:55:45",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "d5807be5622407f4",
-      "title": "Ο ναυτικός",
-      "description": "Εως 2026-04-29",
-      "startDate": "2026-02-25",
-      "endDate": null,
-      "type": "theater",
-      "genres": [],
-      "tags": [],
-      "venue": {
-        "name": "Βαφείο - Λάκης Καραλής",
+        "name": "Αργώ",
         "address": null,
         "neighborhood": null,
         "capacity": null
@@ -496,42 +380,40 @@
         "currency": "EUR",
         "range": "€18"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/o_nautikos-10089246/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_nautikos-10089246/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 09:55:45",
+      "url": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-23 15:21:16",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "7ff8b6211b6100ee",
-      "title": "Ό,τι πάρεις εκατό",
-      "description": "Εως 2026-04-04",
-      "startDate": "2026-02-25",
+      "@type": "Event",
+      "id": "29bd95c043d11893",
+      "title": "Η Πριγκίπισσα των Αγίων Σαράντα!",
+      "description": "",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "theater",
       "genres": [],
       "tags": [],
       "venue": {
-        "name": "Περοκέ",
+        "name": "Coronet Theater",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
         "type": "paid",
-        "amount": 20,
+        "amount": 15,
         "currency": "EUR",
-        "range": "€20"
+        "range": "€15"
       },
-      "url": "https://www.athinorama.gr/theatre/performance/oti_pareis_ekato-10089254/",
-      "ticketUrl": "https://www.athinorama.gr/theatre/performance/oti_pareis_ekato-10089254/",
-      "source": "athinorama.gr",
-      "createdAt": "2026-02-20 07:51:03",
+      "url": "https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -539,59 +421,114 @@
     },
     {
       "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "8787e304dbc782c4",
-      "title": "Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα",
-      "description": "More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.",
-      "startDate": "2026-02-25T10:00:00",
+      "@type": "Event",
+      "id": "90b7606bdd629df3",
+      "title": "ΤΑΡΤΟΥΦΟΣ του Μολιέρου",
+      "description": "",
+      "startDate": "2026-02-26",
       "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "Art",
-        "History",
-        "Culture"
-      ],
+      "type": "theater",
+      "genres": [],
       "tags": [],
       "venue": {
-        "name": "Μουσείο Μπενάκη - Πειραιώς 138",
+        "name": "Θέατρο Αλκυονίς",
         "address": null,
         "neighborhood": null,
         "capacity": null
       },
       "price": {
-        "type": "with-ticket",
-        "amount": null,
+        "type": "paid",
+        "amount": 18,
         "currency": "EUR",
-        "range": null
+        "range": "€18"
       },
-      "url": "https://www.benaki.org",
-      "ticketUrl": "https://www.benaki.org",
-      "source": "benaki",
-      "createdAt": "2026-02-18 06:09:06",
+      "url": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
-      "timeDoors": "10:00",
-      "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "TheaterEvent",
-      "id": "22cbbad268f11889",
-      "title": "Louis C.K.",
-      "description": "25 - 26 Φεβρουαριου Louis C.K. CHRISTMAS THEATER",
-      "fullDescription": "The lights go down and the Christmas Theater holds its breath. Two thousand seats, one microphone, and whatever Louis C.K. has decided to say tonight. No warm-up act. No production values beyond a man standing in a spotlight. This is stand-up stripped to its essentials.\n\nLouis C.K. returns to Athens carrying both his reputation and his history. The comedy that made him one of the most influential voices of his generation — the unflinching observations about marriage, parenting, aging, and the absurdities of human existence — now exists alongside everything that happened after. He's addressed it onstage, folded it into the work. The audiences who show up in 2026 know what they're getting: someone who turned his own implosion into material.\n\nThe Christmas Theater crowd for this show represents a particular slice of comedy appreciation. You'll find expats who followed Louis from his American club days, Greeks who discovered him through specials and podcasts, and curious observers who want to see what he does with an Athens audience. The laughter comes in waves — sometimes surprised, sometimes uncomfortable, always engaged with a performer who has never taken the easy path.\n\nThe venue provides the scale this show needs. Purpose-built for performance, the Christmas Theater offers sightlines that work from every seat and acoustics that carry a single voice to the back rows without effort. When Louis lands a punchline, you hear the reaction ripple through two thousand people simultaneously.\n\nIf you need comedy that stays in safe territory, that avoids the complicated parts of its performer's biography, this isn't your show. Louis C.K. has built his late-career sets around the premise that nothing is off-limits — including himself. But if you want to see one of the most influential stand-ups of his generation working without a net, testing material on an audience that came specifically to see what he'd do — you end up here.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 19:30 |\n| **Show** | 21:00 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | €40-80 depending on seating |\n| **Language** | English |\n\nNo safety net. No apologies. Just a comedian and whatever he's decided to say.",
-      "startDate": "2026-02-25T20:00:00+03:00",
+      "@type": "Event",
+      "id": "b31f249a8e0ab92b",
+      "title": "Η ΚΟΜΙΣΣΑ ΤΗΣ ΦΑΜΠΡΙΚΑΣ",
+      "description": "",
+      "startDate": "2026-02-26",
       "endDate": null,
       "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Embassy Theater",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/i-komissa-tis-famprikas-1/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-23 15:21:16",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "094904b3c1ece0c9",
+      "title": "ΟΙ 12 ΕΝΟΡΚΟΙ",
+      "description": "",
+      "startDate": "2026-02-26",
+      "endDate": null,
+      "type": "theater",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Αλκμήνη",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
+      "source": "more.com",
+      "createdAt": "2026-02-24 07:59:09",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "1e4add97884526f",
+      "title": "Louis C.K. - Ridiculous",
+      "description": "με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλληλη...",
+      "fullDescription": "The house lights dim and the Christmas Theater contracts around a single figure at center stage. Louis C.K. with a microphone and whatever accumulated observations he's decided to share tonight. No props. No projected visuals. No comfort blanket of production values. Just language delivered with precision.\n\n\"Ridiculous\" marks Louis C.K.'s second Athens date, continuing a European tour that's proven demand persists despite — or perhaps because of — everything that changed his career's trajectory. The comedy hasn't softened. If anything, the years since his public reckoning have sharpened the writing, adding layers of self-examination to material that was already unflinching. He's not asking for forgiveness; he's analyzing the condition.\n\nThe crowd that fills the Christmas Theater for night two has made a specific choice. They've processed the debates about separation between art and artist and decided to be present. The laughter arrives in complex waves — sometimes pure amusement, sometimes uncomfortable recognition, sometimes the particular sound of an audience not sure if they're allowed to find something funny. Louis has been working this tension for years now.\n\nThe Christmas Theater handles this show with technical competence — strong sightlines, acoustics calibrated for spoken word, seating that keeps even the distant rows connected to the stage. But the real work happens in the space between comedian and audience, that fragile transaction of trust and discomfort that defines live stand-up.\n\nIf you want comedy that provides escape, that leaves you lighter than you arrived, Louis C.K. in 2026 isn't designed for that. He's processing darkness publicly, finding humor in places most people don't want to look. But if you believe the best comedy emerges from genuine risk, from a performer willing to alienate portions of his audience in pursuit of something true — you understand why this room is full.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 26, 2026 |\n| **Doors** | 19:30 |\n| **Show** | 21:00 |\n| **Venue** | Christmas Theater, Athens |\n| **Price** | €40-80 depending on seating |\n| **Language** | English |\n\n\"Ridiculous\" isn't just the title. It's the operating principle.",
+      "startDate": "2026-02-26T19:30:00+03:00",
+      "endDate": null,
+      "type": "show",
       "genres": [
-        "theater"
+        "comedy"
       ],
       "tags": [],
       "venue": {
         "name": "Christmas Theater",
-        "address": "Λεωφ. Βεΐκου 137",
+        "address": "Athens, Greece",
         "neighborhood": null,
         "coordinates": {
           "lat": 37.9838,
@@ -603,15 +540,50 @@
         "type": "with-ticket",
         "amount": 35,
         "currency": "EUR",
-        "range": "από €35"
+        "range": "€35"
       },
-      "url": "https://www.more.com/gr-el/tickets/theater/louis-c-k/",
-      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/louis-c-k/",
-      "source": "more.com",
-      "createdAt": "2026-01-12T21:21:44.838Z",
-      "updatedAt": "2026-02-13 10:29:36",
+      "url": "https://www.athinorama.gr/theatre/performance/louis_ck___ridiculous-10088136/",
+      "ticketUrl": "https://www.more.com/theater/louis-c-k",
+      "source": "athinorama.gr",
+      "createdAt": "2026-01-12T21:21:44.966Z",
+      "updatedAt": "2026-02-12 11:12:20",
       "language": "en",
-      "timeDoors": "19:30",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "820b00ba76c84ed2",
+      "title": "Αλεξία Μουζά – Ραχμάνινοφ ΙV",
+      "description": "",
+      "startDate": "2026-02-26T20:30:00",
+      "endDate": null,
+      "type": "classical",
+      "genres": [
+        "Classical",
+        "Concert"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "20:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -619,10 +591,117 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "a234d27047c5d50f",
-      "title": "Lockbird",
+      "id": "4eeeba9927541cfa",
+      "title": "Με κέντρο τον Ραχμάνινοφ",
+      "description": "Με κέντρο τον Ραχμάνινοφ Η διεθνώς αναγνωρισμένη ελληνο-βενεζουελανή πιανίστρια παρουσιάζει στο Μέγαρο ένα απαιτητικό ρεσιτάλ με τρεις Σονάτες για πιάνο, έργα κορυφαίων ρώσων συνθετών. Ξεχωρίζει η Πρώ",
+      "fullDescription": "The Megaron Mousikis hall settles into focused silence as the orchestra takes position. The program tonight centers on Rachmaninoff — that particular Russian romantic sensibility, the piano writing that demands everything from a performer, the orchestral textures that feel like weather systems moving through the concert hall.\n\nCentering an evening on Rachmaninoff means committing to emotional architecture. His compositions don't do restraint. The piano concertos require virtuosity, but the real challenge is sustaining the emotional arc across movements that span vast territory. The Megaron's programming places his work in context, surrounded by complementary pieces that illuminate different facets of the repertoire.\n\nThe audience for classical music at Megaron brings particular expectations. These are listeners who've heard these pieces before — many times, many interpretations — and come specifically to experience this version, these performers, this evening. Scores sometimes appear on laps. Eyes close during familiar passages. The attention is intense in the way that only classical music audiences achieve.\n\nThe Megaron Mousikis provides the acoustic environment Rachmaninoff requires. Built for orchestral precision, the hall amplifies the quietest passages while handling the biggest climaxes without strain. When the piano cascades through a particularly demanding passage, the room contains the sound without collapsing it. When the orchestra swells to Rachmaninoff's characteristic peaks, the experience becomes physical.\n\nIf you want music that provides background atmosphere, that asks nothing of its listeners, this program will overwhelm you. Rachmaninoff wrote for active attention — the structures reveal themselves to those who follow them. But if you're ready to give yourself to an evening of Russian romantic piano music performed in one of Europe's finest concert halls — if you want to hear why Rachmaninoff still packs these rooms — you're in the right seats.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 26, 2026 |\n| **Doors** | 19:00 |\n| **Concert** | 20:00 |\n| **Venue** | Megaron Mousikis, Vasilissis Sofias & Kokkali |\n| **Getting there** | Megaro Moussikis Metro (Blue line), direct access |\n| **Price** | €15-50 depending on seating |\n\nAt the center of tonight's program: the composer who wrote for every emotion simultaneously.",
+      "startDate": "2026-02-26T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "jazz"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασ. Σοφίας και Κόκκαλη, 115 21 Αθήνα",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "source": "megaron.gr",
+      "createdAt": "2026-01-30T04:02:12.432Z",
+      "updatedAt": "2026-02-18 06:09:07",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "21fbbeae70952831",
+      "title": "Αλεξία Μουζά &#8211; Ραχμάνινοφ ΙV",
       "description": "",
-      "startDate": "2026-02-25T21:00:00",
+      "startDate": "2026-02-26T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:24.081Z",
+      "updatedAt": "2026-02-21 07:51:31",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "b30566d842782915",
+      "title": "Αλεξία Μουζά – Ραχμάνινοφ ΙV",
+      "description": "",
+      "startDate": "2026-02-26T20:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "classical"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Μέγαρο Μουσικής Αθηνών",
+        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
+        "neighborhood": "Kolonaki",
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 25,
+        "currency": "EUR",
+        "range": "€15-80"
+      },
+      "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
+      "source": "megaron.gr",
+      "createdAt": "2026-02-18T09:24:37.958Z",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "1ae8fc4ec471d76f",
+      "title": "Irini Karaoglou",
+      "description": "",
+      "startDate": "2026-02-26T21:00:00",
       "endDate": null,
       "type": "dj_set",
       "genres": [
@@ -641,8 +720,8 @@
         "currency": "EUR",
         "range": "Door price"
       },
-      "url": "https://www.clubber.gr/events/lockbird-26/",
-      "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
+      "url": "https://www.clubber.gr/events/irini-karaoglou-3/",
+      "ticketUrl": "https://www.clubber.gr/events/irini-karaoglou-3/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
       "updatedAt": "2026-02-24 09:55:45",
@@ -655,49 +734,11 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
-      "id": "de0baa80377df380",
-      "title": "Lockbird",
+      "id": "bae5bda67ab3adbb",
+      "title": "MIRANDA VEROULI QUINTET - GAL COSTA MUSA TROPICAL",
       "description": "",
-      "startDate": "2026-02-25T21:00:00+03:00",
-      "endDate": null,
-      "type": "concert",
-      "genres": [
-        "music"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Cantina Social",
-        "address": "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece",
-        "neighborhood": null,
-        "coordinates": {
-          "lat": 37.9838,
-          "lon": 23.7276
-        },
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": "with-ticket"
-      },
-      "url": "https://www.clubber.gr/events/lockbird-26/",
-      "ticketUrl": "https://www.clubber.gr/events/lockbird-26/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18T04:02:27.840Z",
-      "updatedAt": "2026-02-21 07:51:31",
-      "language": "en",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "77c23d075980afcd",
-      "title": "Stathis Anninos - UNSILENT PLACE",
-      "description": "",
-      "fullDescription": "You descend the stairs into Half Note and the room embraces you with its dimensions. Intimate isn't a marketing word here — it's physics. The tables cluster close to the small stage, the bar occupies one wall, and the acoustic treatment means every note reaches every seat with identical clarity. This is Athens' jazz institution operating at its most essential.\n\nStathis Anninos presents \"Unsilent Place\" — a title that captures his approach to composition. Anninos has built his reputation on music that refuses the easy paths, horn lines that interrogate rather than comfort. His work draws from the Greek musical heritage while pushing into territories that owe as much to contemporary European jazz as to Mediterranean tradition. The musicians he's assembled understand the assignment: controlled intensity, conversation between instruments.\n\nThe Half Note crowd on a night like this arrives with intention. These aren't casual observers who wandered in from dinner. You'll recognize them by how they listen — leaning forward, tracking the interplay between players, nodding at phrases that work. Conversations between sets touch on recordings and influences, the kind of informed appreciation that comes from years of following this music closely.\n\nSince 1979, Half Note has maintained its position as Athens' premier jazz room. The venue's intimacy creates accountability — every musical choice lands on an audience close enough to notice. When Anninos takes a solo, you're near enough to see the thought process, to watch ideas form and resolve. The sound system handles acoustic instruments with respect, amplification serving clarity rather than volume.\n\nIf you need jazz that swings predictably, that stays in comfortable harmonic territory, Anninos will challenge you. His compositions operate in zones that require attention, phrases that resolve in unexpected places. But if you've been waiting for Athens jazz that takes risks in a room built to reward them — if you want to hear where Greek jazz is pushing its boundaries — you end up here.\n\n| Info | Details |\n|------|---------|\n| **Date** | Wednesday, February 25, 2026 |\n| **Doors** | 20:00 |\n| **Music** | 21:30 |\n| **Venue** | Half Note Jazz Club, Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red line), 10 min walk |\n| **Price** | €15-20 table, €10-15 bar |\n| **Reservations** | Essential — book ahead, confirm same day |\n\nThe silence between notes is where this music lives. The title isn't ironic.",
-      "startDate": "2026-02-25T21:30:00",
+      "fullDescription": "You settle into a candlelit table as the first notes of a Brazilian guitar fill the room. The warmth of bossa nova wraps around you while the scent of wine mingles with the low hum of conversation. This is where Athens comes to remember that music can be both sophisticated and sensual.\n\nMiranda Verouli leads her quintet through a tribute to Gal Costa, the Brazilian singer whose voice defined tropicália and MPB for five decades. Costa's catalog—from the psychedelic experimentation of the late 1960s to the romantic ballads that made her a household name—gets reimagined for an intimate jazz club setting.\n\nThe crowd here knows their music. You'll find vinyl collectors who can debate the relative merits of Costa's Tropicália albums, couples who slow-danced to these songs in their youth, and younger listeners discovering this repertoire for the first time. Nobody's checking their phone.\n\n| Aspect | Details |\n|--------|---------|\n| **Setting** | Intimate jazz club, ~150 capacity, low ceilings amplify every note |\n| **Vibe** | Warm, romantic, conversational |\n| **Sound** | Listening room—every brush on the snare audible |\n| **Seating** | Tables with full service, bar stools for solo visitors |\n\nThe set builds from quiet acoustic arrangements through to the full-blooded samba that Costa made her own. Expect the quintet to find new angles on familiar melodies.\n\nIf you want loud or want to dance—this isn't it. But if you're the kind of person who listens to albums start to finish and appreciates musicians who've studied their craft for decades, pull up a chair.\n\n| Info | Details |\n|------|---------|\n| **Date** | Thursday, February 26, 2026 |\n| **Doors** | 21:00 |\n| **Music starts** | 21:30 |\n| **Duration** | ~2.5 hours |\n| **Price** | €15-20 table / €10-15 bar |\n| **Tickets** | halfnote.gr |\n| **Address** | Trivonianou 17, Mets |\n| **Getting there** | Akropoli Metro (Red Line), 10 min walk |\n| **Last metro** | 00:15 (show ends in time) |\n| **Payment** | Cards and cash |\n| **Good to know** | Book ahead and confirm same day—tables fill fast |\n\nHalf Note is where Athens' serious jazz listeners have gathered since 1979. For Brazilian jazz, there's nowhere else in the city with this combination of sound quality and atmosphere.\n\n**Tags:** Jazz, Intimate, Local-favorite, Mixed-ages, Metro-accessible, Reservation-required\n\n**Last verified:** February 2026",
+      "startDate": "2026-02-26T21:30:00",
       "endDate": null,
       "type": "concert",
       "genres": [
@@ -716,21 +757,169 @@
         "currency": "EUR",
         "range": "από €12"
       },
-      "url": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
-      "ticketUrl": "https://www.halfnote.gr/event/stathis-anninos-unsilent-place/",
+      "url": "https://www.halfnote.gr/event/miranda-verouli-quintet-gal-costa-musa-tropical/",
+      "ticketUrl": "https://www.halfnote.gr/event/miranda-verouli-quintet-gal-costa-musa-tropical/",
       "source": "halfnote",
-      "createdAt": "2026-01-26 13:11:15",
+      "createdAt": "2026-02-08 12:53:02",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "6bb5965b47173e2e",
+      "title": "Sneaky club",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Zelus",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": null,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/sneaky-club-12/",
+      "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-10 10:38:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d267eb676e666885",
+      "title": "Agent Greg + Stephanos",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Dybbuk",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "door",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "Door price"
+      },
+      "url": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "timeDoors": "23:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "cbd3864cb7bbeb99",
+      "title": "Agent Greg + Stephanos",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Dybbuk",
+        "address": "Dybbuk, Πατριάρχου Ιωακείμ 37, Κολωνάκι, Αθήνα, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10-15"
+      },
+      "url": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-10T04:01:24.900Z",
+      "updatedAt": "2026-02-18 06:09:07",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "20b23e9808fbafda",
+      "title": "Sneaky club",
+      "description": "",
+      "startDate": "2026-02-26T23:00:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Zelus",
+        "address": "Zelus, Πλουτάρχου 9, Κολωνάκι, Αθήνα, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": "with-ticket"
+      },
+      "url": "https://www.clubber.gr/events/sneaky-club-12/",
+      "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-10T04:01:24.900Z",
+      "updatedAt": "2026-02-18T04:02:27.840Z",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 21,
-    "lastUpdate": "2026-02-24T09:57:29.150Z",
+    "total": 27,
+    "lastUpdate": "2026-02-25T08:32:59.325Z",
     "url": "https://agentathens.netlify.app/with-ticket-tomorrow"
   }
 }

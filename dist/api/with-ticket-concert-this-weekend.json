@@ -7,6 +7,37 @@
   "events": [
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a8be9023f5ea0d46",
+      "title": "Σκιαδαρέσες live στο WE",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "WE Πολυχώρος",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/skiadareses-1/",
+      "source": "more.com",
+      "createdAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "cfb666d0772257af",
       "title": "Πέτρος Γαϊτάνος",
@@ -383,6 +414,37 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/amaguk-10063838/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "abbac5538c6757b9",
+      "title": "ΕΙΣΒΟΛΕΑΣ LIVE",
+      "description": "",
+      "startDate": "2026-02-27",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Fuzz Club",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 15,
+        "currency": "EUR",
+        "range": "€15"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/eisvoleas-live/",
+      "source": "more.com",
+      "createdAt": "2026-02-21 07:51:30",
       "updatedAt": "2026-02-24 09:55:45",
       "language": "en",
       "permanentCollection": false,
@@ -1060,6 +1122,68 @@
     },
     {
       "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "ae384aa05940e3a6",
+      "title": "Γιάννης Σαββιδάκης",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "MÉTRON Stage",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/music/gig/giannis_sabbidakis-10065296/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-21 07:51:30",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "a72d5c4949673ea0",
+      "title": "ΜΙΛΤΟΣ ΠΑΣΧΑΛΙΔΗΣ",
+      "description": "",
+      "startDate": "2026-02-28",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Σταυρός του Νότου",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://www.more.com/gr-el/tickets/music/miltos-pasxalidis-stauros-tou-notou-3/",
+      "source": "more.com",
+      "createdAt": "2026-02-23 15:21:15",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "MusicEvent",
       "id": "66badb8aafa8c70c",
       "title": "Η προσωπογραφία ενός αλγόριθμου",
@@ -1286,6 +1410,43 @@
     {
       "@context": "https://schema.org",
       "@type": "MusicEvent",
+      "id": "165940b521a9dcba",
+      "title": "Mikee + Zarkon + Aristo",
+      "description": "",
+      "startDate": "2026-02-28T23:30:00+03:00",
+      "endDate": null,
+      "type": "concert",
+      "genres": [
+        "music"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Gazi View",
+        "address": "Gazi View, Ιάκχου 22, Γκάζι, Αθήνα, Greece",
+        "neighborhood": null,
+        "coordinates": {
+          "lat": 37.9838,
+          "lon": 23.7276
+        },
+        "capacity": null
+      },
+      "price": {
+        "type": "with-ticket",
+        "amount": null,
+        "currency": "EUR",
+        "range": "with-ticket"
+      },
+      "url": "https://www.clubber.gr/events/mikee-zarkon-aristo/",
+      "source": "clubber.gr",
+      "createdAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-18T04:02:27.840Z",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
       "id": "66e164e9238ad8b5",
       "title": "ALCEDO FOLK BAND ΤΑ ΛΟΥΛΟΥΔΙΑ ΜΑΡΤΥΡΟΥΝ",
       "description": "",
@@ -1343,6 +1504,37 @@
       },
       "url": "https://www.athinorama.gr/music/gig/adedeji_-10076834/",
       "ticketUrl": "https://www.athinorama.gr/music/gig/adedeji_-10076834/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-18 06:09:06",
+      "updatedAt": "2026-02-24 09:55:45",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "5449a68378ecbb72",
+      "title": "Alcedo folk band",
+      "description": "",
+      "startDate": "2026-03-01",
+      "endDate": null,
+      "type": "concert",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Μύρτιλλο",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12 - €15"
+      },
+      "url": "https://www.athinorama.gr/music/gig/alcedo_folk_band-10083433/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
       "updatedAt": "2026-02-24 09:55:45",
@@ -1797,8 +1989,8 @@
     }
   ],
   "meta": {
-    "total": 53,
-    "lastUpdate": "2026-02-24T09:57:29.191Z",
+    "total": 59,
+    "lastUpdate": "2026-02-25T08:32:59.378Z",
     "url": "https://agentathens.netlify.app/with-ticket-concert-this-weekend"
   }
 }

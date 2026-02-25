@@ -7,6 +7,41 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "eac34e5f2b059ad8",
+      "title": "28th Fintech Talks goes Google - Smart AI Agents With Google Cloud",
+      "description": "Στο 28th Fintech Talks goes Google, υποδεχόμαστε τον Χρήστο Πολυδώρου, Customer Engineer - Infrastructure Modernization & AI, Google Cloud.",
+      "startDate": "2026-03-04T18:00:00",
+      "endDate": "2026-03-04",
+      "type": "seminar",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Ιωάννου Παπαρρηγοπούλου 1",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.eventbrite.fi/e/28th-fintech-talks-goes-google-smart-ai-agents-with-google-cloud-tickets-1982437064626",
+      "source": "eventbrite",
+      "createdAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-20 18:03:59",
+      "language": "en",
+      "timeDoors": "18:00",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "8956507ab9ee66b3",
       "title": "AI Hackathon Greece 2026",
       "description": "Greece's largest AI hackathon. 3rd year. Application-based. 8 challenge tracks.",
@@ -38,11 +73,46 @@
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "24ca7ac187977df1",
+      "title": "The AI Thing - AI Essentials to Advance Your Career Workshop Athens",
+      "description": "AI transforms lives, boosts efficiency, and expands human potential. Join the AI revolution at our visionary-led workshop!",
+      "startDate": "2026-03-10T10:00:00",
+      "endDate": "2026-03-10",
+      "type": "workshop",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Leof. Mesogeion 15",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.eventbrite.com/e/the-ai-thing-ai-essentials-to-advance-your-career-workshop-athens-tickets-1980913124480",
+      "source": "eventbrite",
+      "createdAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-20 18:03:59",
+      "language": "en",
+      "timeDoors": "10:00",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 1,
-    "lastUpdate": "2026-02-24T09:57:29.135Z",
+    "total": 3,
+    "lastUpdate": "2026-02-25T08:32:59.308Z",
     "url": "https://agentathens.netlify.app/open-next-month"
   }
 }
