@@ -1,6 +1,7 @@
 // URL building and metadata generation
 
 import type { Filters, PageMetadata } from '../types';
+import { generateHubMetaDescription } from './meta-descriptions';
 
 export function buildURL(filters: Filters): string {
   const parts: string[] = [];
@@ -54,34 +55,7 @@ export function buildPageTitle(filters: Filters): string {
 }
 
 export function buildDescription(filters: Filters, eventCount: number): string {
-  let desc = `Βρείτε ${eventCount} `;
-
-  if (filters.price === 'open') desc += 'δωρεάν ';
-  if (filters.genre) desc += `${filters.genre.toLowerCase()} `;
-
-  if (filters.type) {
-    const typeTranslations: Record<string, string> = {
-      'concert': 'συναυλίες',
-      'theater': 'θέατρο',
-      'exhibition': 'εκθέσεις',
-      'cinema': 'κινηματογράφος',
-      'performance': 'παραστάσεις',
-      'workshop': 'εργαστήρια'
-    };
-    desc += `${typeTranslations[filters.type] || filters.type} `;
-  } else {
-    desc += 'εκδηλώσεις ';
-  }
-
-  desc += 'στην Αθήνα';
-
-  if (filters.time && filters.time !== 'all-events') {
-    desc += ` ${formatTimeRange(filters.time).toLowerCase()}`;
-  }
-
-  desc += '. Ενημερώνεται καθημερινά με επιμελημένες εκδηλώσεις από 10+ χώρους.';
-
-  return desc;
+  return generateHubMetaDescription(filters, eventCount);
 }
 
 export function buildKeywords(filters: Filters): string {
