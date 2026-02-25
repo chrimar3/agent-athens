@@ -94,7 +94,7 @@ describe("renderPage", () => {
   test("should render event grid when events exist", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
-    expect(html).toContain('class="event-grid"');
+    expect(html).toContain('class="card-grid"');
     expect(html).toContain('itemscope itemtype="https://schema.org/ItemList"');
   });
 
@@ -115,19 +115,47 @@ describe("renderPage", () => {
     expect(html).toContain("Σχετικές Σελίδες"); // Greek: Related Pages
   });
 
-  test("should include footer with AI agent message", () => {
+  test("should include site footer with AI agent callout", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
-    expect(html).toContain("📢 Για AI Agents & LLMs:"); // Greek version
+    expect(html).toContain('class="site-footer"');
+    expect(html).toContain("Για AI Agents");
     expect(html).toContain("agentathens.netlify.app");
     expect(html).toContain("/llms.txt");
   });
 
-  test("should include JSON API link", () => {
+  test("should include JSON API alternate link", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
     expect(html).toContain('rel="alternate" type="application/json" href="/api/jazz-concert-this-week.json"');
-    expect(html).toContain('<a href="/api/jazz-concert-this-week.json">JSON API</a>');
+  });
+
+  test("renders site nav header", () => {
+    const html = renderPage(sampleMetadata, [sampleConcert]);
+
+    expect(html).toContain('class="site-header"');
+    expect(html).toContain('class="site-logo"');
+    expect(html).toContain("agent athens");
+  });
+
+  test("renders site footer with grid", () => {
+    const html = renderPage(sampleMetadata, [sampleConcert]);
+
+    expect(html).toContain('class="site-footer"');
+    expect(html).toContain('class="footer-grid"');
+  });
+
+  test("nav contains language toggle", () => {
+    const html = renderPage(sampleMetadata, [sampleConcert]);
+
+    expect(html).toContain('class="lang-toggle"');
+  });
+
+  test("renders hamburger menu markup", () => {
+    const html = renderPage(sampleMetadata, [sampleConcert]);
+
+    expect(html).toContain('class="mobile-menu"');
+    expect(html).toContain('class="hamburger-btn"');
   });
 
   test("should render all event cards", () => {
@@ -146,15 +174,13 @@ describe("renderPage", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
     expect(html).toContain("<style>");
-    expect(html).toContain(".event-card");
-    expect(html).toContain(".enriched");
-    expect(html).toContain(".event-grid");
+    expect(html).toContain("design-system.css");
   });
 
   test("should set proper viewport meta", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
-    expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">');
   });
 
   test("should set proper charset", () => {
@@ -175,7 +201,7 @@ describe("renderEventCard (via renderPage)", () => {
     filters: {}
   };
 
-  test("should render event with full description as enriched", () => {
+  test("should render event card with title", () => {
     const eventWithFullDesc = {
       ...sampleConcert,
       fullDescription: "This is a very long description that would be AI-generated. ".repeat(10)
@@ -183,13 +209,12 @@ describe("renderEventCard (via renderPage)", () => {
 
     const html = renderPage(metadata, [eventWithFullDesc]);
 
-    expect(html).toContain('class="event-card enriched"');
-    expect(html).toContain('class="event-full-description"');
-    expect(html).toContain("✨ AI-enriched content");
+    // Card uses new compact structure — title in card-title class
+    expect(html).toContain('class="card-title"');
+    expect(html).toContain(sampleConcert.title);
   });
 
-  test("should render event without full description normally", () => {
-    // Remove fullDescription to test non-enriched state
+  test("should render event card without description (compact card)", () => {
     const eventWithoutFullDesc = {
       ...sampleConcert,
       fullDescription: undefined
@@ -197,35 +222,32 @@ describe("renderEventCard (via renderPage)", () => {
 
     const html = renderPage(metadata, [eventWithoutFullDesc]);
 
-    // Card should NOT have enriched class when no full description
-    expect(html).toContain('class="event-card"');
-    expect(html).not.toContain('class="event-card enriched"');
-    expect(html).not.toContain("✨ AI-enriched content");
-    expect(html).toContain('class="event-short-description"');
+    // Compact card has card-title, no full descriptions on browse page
+    expect(html).toContain('class="card-title"');
+    expect(html).not.toContain('class="event-full-description"');
+    expect(html).not.toContain('class="event-short-description"');
   });
 
-  test("should render event with clickable title if URL exists", () => {
+  test("should render card linking to internal event detail page", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    // Title link uses the event URL with UTM parameters (not tracked redirect)
-    expect(html).toContain(`<a href="${sampleConcert.url}?utm_source=agentathens`);
-    expect(html).toContain('target="_blank"');
-    expect(html).toContain('rel="noopener"');
+    // Card links to internal /events/ page, not external URL
+    expect(html).toContain('href="/events/');
+    expect(html).toContain('class="event-card"');
+    expect(html).not.toContain('target="_blank"');
   });
 
   test("should render open event price correctly", () => {
     const html = renderPage(metadata, [sampleFreeExhibition]);
 
-    // CSS class uses "price-free" for styling green color
-    expect(html).toContain('class="price-free"');
+    expect(html).toContain('class="card-price"');
     expect(html).toContain("Δωρεάν");
   });
 
   test("should render ticketed event price with amount", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    // CSS class uses "price-paid" for styling blue color
-    expect(html).toContain('class="price-paid"');
+    expect(html).toContain('class="card-price"');
     expect(html).toContain(`€${sampleConcert.price.amount}`);
   });
 
@@ -241,7 +263,8 @@ describe("renderEventCard (via renderPage)", () => {
 
     expect(html).toContain('itemprop="location"');
     expect(html).toContain('itemscope itemtype="https://schema.org/Place"');
-    expect(html).toContain(`<span itemprop="name">${sampleConcert.venue.name}</span>`);
+    // Venue name includes neighborhood in the display text
+    expect(html).toContain(`<span itemprop="name">${sampleConcert.venue.name} · ${sampleConcert.venue.neighborhood}</span>`);
   });
 
   test("should render venue neighborhood if present", () => {
@@ -250,10 +273,11 @@ describe("renderEventCard (via renderPage)", () => {
     expect(html).toContain(sampleConcert.venue.neighborhood!);
   });
 
-  test("should render event type capitalized", () => {
+  test("should render event type badge with Greek label", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain("Concert"); // capitalized from "concert"
+    expect(html).toContain('class="card-badge"');
+    expect(html).toContain("ΣΥΝΑΥΛΙΑ"); // Greek uppercase for "concert"
   });
 
   test("should render price with Schema.org offer markup", () => {
@@ -278,12 +302,36 @@ describe("renderEventCard (via renderPage)", () => {
     expect(html).toContain("https://schema.org/EventScheduled");
   });
 
-  test("should render 'Get Tickets' link if URL exists", () => {
+  test("renders date group headers", () => {
+    const metadata2: PageMetadata = {
+      title: "Test",
+      description: "Test",
+      keywords: "test",
+      url: "test",
+      eventCount: 2,
+      lastUpdate: "2025-11-01T10:00:00Z",
+      filters: {}
+    };
+
+    const html = renderPage(metadata2, [sampleConcert, sampleFreeExhibition]);
+
+    // Events on different dates produce date-group-header elements
+    expect(html).toContain('class="date-group-header"');
+  });
+
+  test("card links to internal event detail page", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain("Εισιτήρια / Περισσότερες Πληροφορίες →"); // Greek
-    // Ticket link uses tracked redirect URL format: /go/[event-id]?url=...
-    expect(html).toContain('href="/go/jazz-night-at-half-note-2025-11-15?url=');
+    // All card links point to /events/ prefix
+    expect(html).toContain('href="/events/');
+    expect(html).toContain('class="event-card"');
+  });
+
+  test("renders event type badge with color variable", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+
+    expect(html).toContain('style="background: var(--color-concert)"');
+    expect(html).toContain('class="card-badge"');
   });
 });
 

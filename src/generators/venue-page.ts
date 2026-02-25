@@ -16,6 +16,8 @@ import { slugify, generateEventSlug } from './event-page';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
+import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from '../templates/site-chrome';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -141,10 +143,12 @@ function renderVenuePage(venue: VenueData): string {
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${venue.name} - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="Επερχόμενες εκδηλώσεις στο ${venue.name}${venue.neighborhood ? `, ${venue.neighborhood}` : ''}, Αθήνα. ${venue.eventCount} εκδηλώσεις.">
+  <meta name="description" content="${generateVenueMetaDescription({ name: venue.name, neighborhood: venue.neighborhood, events: venue.events.slice(0, 1).map(e => ({ title: e.title, startDate: e.startDate })), eventCount: venue.eventCount })}">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="${canonicalUrl}">
@@ -175,64 +179,56 @@ function renderVenuePage(venue: VenueData): string {
   ` : ''}
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .venue-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    .breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #2980b9; text-decoration: none; }
+    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
 
-    .venue-header { margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+    .venue-header { margin-bottom: 30px; border-bottom: 2px solid var(--border-default); padding-bottom: 20px; }
     .venue-header h1 { font-size: 2rem; margin-bottom: 10px; }
-    .venue-meta { color: #666; font-size: 1rem; }
+    .venue-meta { color: var(--text-secondary); font-size: 1rem; }
     .venue-meta p { margin: 5px 0; }
 
     .venue-events { margin: 30px 0; }
     .venue-events h2 { font-size: 1.3rem; margin-bottom: 20px; }
     .venue-events ul { list-style: none; }
-    .venue-event-item { padding: 15px 0; border-bottom: 1px solid #eee; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
-    .venue-event-item a { color: #2980b9; text-decoration: none; font-weight: 500; grid-column: 1; }
-    .venue-event-item a:hover { text-decoration: underline; }
-    .venue-event-item .event-date { color: #666; font-size: 0.9rem; }
-    .venue-event-item .event-type { display: inline-block; background: #f0f0f0; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: #666; }
+    .venue-event-item { padding: 15px 0; border-bottom: 1px solid var(--border-subtle); display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+    .venue-event-item a { font-weight: 500; grid-column: 1; }
+    .venue-event-item .event-date { color: var(--text-secondary); font-size: 0.9rem; }
+    .venue-event-item .event-type { display: inline-block; background: var(--bg-surface); font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: var(--text-secondary); }
     .venue-event-item.exhibition { border-left: 3px solid #10b981; padding-left: 12px; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.7rem; padding: 1px 6px; border-radius: 8px; margin-left: 5px; vertical-align: middle; }
-    .more-events { color: #666; font-style: italic; margin-top: 20px; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; text-decoration: none; }
+    .more-events { color: var(--text-secondary); font-style: italic; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <nav class="breadcrumb">
-    <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${venue.name}
-  </nav>
+  ${renderSiteNav()}
+  ${renderHamburgerMenu()}
 
-  <header class="venue-header" itemscope itemtype="https://schema.org/Place">
-    <h1 itemprop="name">${venue.name}</h1>
-    <div class="venue-meta">
-      ${venue.neighborhood ? `<p>Περιοχή: <strong>${venue.neighborhood}</strong></p>` : ''}
-      ${venue.address ? `<p itemprop="address">${venue.address}</p>` : ''}
-      <p>${venue.eventCount} επερχόμενες εκδηλώσεις ${typeSummary ? `(${typeSummary})` : ''}</p>
-    </div>
-  </header>
+  <div class="venue-page-content">
+    <nav class="breadcrumb">
+      <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${venue.name}
+    </nav>
 
-  <section class="venue-events">
-    <h2>Επερχόμενες Εκδηλώσεις</h2>
-    <ul>
-      ${eventsHtml}
-    </ul>
-    ${moreEventsNote}
-  </section>
+    <header class="venue-header" itemscope itemtype="https://schema.org/Place">
+      <h1 itemprop="name">${venue.name}</h1>
+      <div class="venue-meta">
+        ${venue.neighborhood ? `<p>Περιοχή: <strong>${venue.neighborhood}</strong></p>` : ''}
+        ${venue.address ? `<p itemprop="address">${venue.address}</p>` : ''}
+        <p>${venue.eventCount} επερχόμενες εκδηλώσεις ${typeSummary ? `(${typeSummary})` : ''}</p>
+      </div>
+    </header>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας
-    </p>
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/llms.txt">Για AI Agents</a>
-    </p>
-  </footer>
+    <section class="venue-events">
+      <h2>Επερχόμενες Εκδηλώσεις</h2>
+      <ul>
+        ${eventsHtml}
+      </ul>
+      ${moreEventsNote}
+    </section>
+  </div>
+
+  ${renderSiteFooter()}
+  ${renderHamburgerScript()}
 </body>
 </html>`;
 }
@@ -332,10 +328,12 @@ function generateVenueIndex(venues: VenueData[]): void {
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
-  <meta name="description" content="Όλοι οι χώροι εκδηλώσεων στην Αθήνα με επερχόμενες συναυλίες, παραστάσεις, εκθέσεις και πολιτιστικά events.">
+  <meta name="description" content="${generateVenueIndexMetaDescription(venues.length)}">
 
   <link rel="canonical" href="${BASE_URL}/venues/">
 
@@ -346,37 +344,36 @@ function generateVenueIndex(venues: VenueData[]): void {
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .venue-index-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    header { margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
-    header h1 { font-size: 2rem; margin-bottom: 10px; }
-    .summary { color: #666; }
+    .venue-index-header { margin-bottom: 30px; border-bottom: 2px solid var(--border-default); padding-bottom: 20px; }
+    .venue-index-header h1 { font-size: 2rem; margin-bottom: 10px; }
+    .summary { color: var(--text-secondary); }
 
     .venue-list { list-style: none; }
-    .venue-list li { padding: 15px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
-    .venue-list a { color: #2980b9; text-decoration: none; font-weight: 500; }
-    .venue-list a:hover { text-decoration: underline; }
-    .event-count { color: #666; font-size: 0.9rem; }
-    .neighborhood { display: inline-block; background: #f0f0f0; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: #666; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; }
+    .venue-list li { padding: 15px 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
+    .venue-list a { font-weight: 500; }
+    .event-count { color: var(--text-secondary); font-size: 0.9rem; }
+    .neighborhood { display: inline-block; background: var(--bg-surface); font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: var(--text-secondary); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Χώροι Εκδηλώσεων</h1>
-    <p class="summary">${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα</p>
-  </header>
+  ${renderSiteNav()}
+  ${renderHamburgerMenu()}
 
-  <ul class="venue-list">
-    ${venueListHtml}
-  </ul>
+  <div class="venue-index-content">
+    <header class="venue-index-header">
+      <h1>Χώροι Εκδηλώσεων</h1>
+      <p class="summary">${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα</p>
+    </header>
 
-  <footer>
-    <p><a href="/">← Όλες οι Εκδηλώσεις</a></p>
-  </footer>
+    <ul class="venue-list">
+      ${venueListHtml}
+    </ul>
+  </div>
+
+  ${renderSiteFooter()}
+  ${renderHamburgerScript()}
 </body>
 </html>`;
 

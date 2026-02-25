@@ -16,6 +16,8 @@ import { formatGreekDateOnly, formatGreekTime, formatPriceGreek, toSchemaOrg } f
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
+import { generateEventMetaDescription } from '../utils/meta-descriptions';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from '../templates/site-chrome';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -284,10 +286,12 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>
-  <meta name="description" content="${event.description.substring(0, 160)}">
+  <meta name="description" content="${generateEventMetaDescription(event)}">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="${canonicalUrl}">
@@ -328,17 +332,14 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
   </script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .event-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
 
-    .breadcrumb { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #2980b9; text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
 
     .event-header { margin-bottom: 30px; }
     .event-header h1 { font-size: 2rem; margin-bottom: 10px; line-height: 1.3; }
-    .event-meta-inline { color: #666; font-size: 1.1rem; margin-bottom: 15px; }
-    .type-badge { display: inline-block; background: #2980b9; color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
+    .event-meta-inline { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 15px; }
+    .type-badge { display: inline-block; background: var(--accent-primary); color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 15px; margin-right: 10px; }
     .type-badge.exhibition { background: #10b981; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; }
 
@@ -346,68 +347,58 @@ function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
     .event-description p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px; }
     .enriched-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; }
 
-    .event-connections { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .event-connections { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .event-connections h3 { font-size: 1rem; margin-bottom: 10px; }
-    .event-connections a { display: block; color: #2980b9; text-decoration: none; margin-bottom: 8px; }
-    .event-connections a:hover { text-decoration: underline; }
+    .event-connections a { display: block; margin-bottom: 8px; }
 
     .related-events { margin: 30px 0; }
     .related-events h3 { font-size: 1.1rem; margin-bottom: 15px; }
     .related-events ul { list-style: none; }
-    .related-events li { padding: 8px 0; border-bottom: 1px solid #eee; }
-    .related-events a { color: #2980b9; text-decoration: none; }
-    .related-events a:hover { text-decoration: underline; }
-
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    footer a { color: #2980b9; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    .related-events li { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
   </style>
 </head>
 <body>
-  <nav class="breadcrumb">
-    <a href="/">agent-athens</a>
-    ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
-    › ${event.venue.name}
-  </nav>
+  ${renderSiteNav()}
+  ${renderHamburgerMenu()}
 
-  <article class="event-detail" itemscope itemtype="https://schema.org/${event['@type'] || 'Event'}">
-    <header class="event-header">
-      <span class="type-badge${isExhibition ? ' exhibition' : ''}">${typeLabel}</span>
-      ${exhibitionIsOpen ? '<span class="open-now-badge">Τώρα ανοιχτή</span>' : ''}
-      <h1 itemprop="name">${event.title}</h1>
-      <p class="event-meta-inline">
-        <time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time>
-        ${inlinePractical ? ` | ${formatPriceGreek(event)}` : ''}
-        | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${event.venue.name}</span></span>
-      </p>
-    </header>
-
-    <section class="event-description" itemprop="description">
-      ${descriptionHtml}
-      ${hasFullDescription ? '<div class="enriched-badge">AI-enriched content</div>' : ''}
-    </section>
-    ${hiddenMetadataHtml}
-
-    ${practicalBlock}
-
-    <nav class="event-connections" aria-label="Σχετικές σελίδες">
-      <h3>Εξερευνήστε περισσότερα</h3>
-      ${navLinks.join('\n      ')}
+  <div class="event-page-content">
+    <nav class="breadcrumb">
+      <a href="/">agent-athens</a>
+      ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
+      › ${event.venue.name}
     </nav>
 
-    ${relatedHtml}
-  </article>
+    <article class="event-detail" itemscope itemtype="https://schema.org/${event['@type'] || 'Event'}">
+      <header class="event-header">
+        <span class="type-badge${isExhibition ? ' exhibition' : ''}">${typeLabel}</span>
+        ${exhibitionIsOpen ? '<span class="open-now-badge">Τώρα ανοιχτή</span>' : ''}
+        <h1 itemprop="name">${event.title}</h1>
+        <p class="event-meta-inline">
+          <time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time>
+          ${inlinePractical ? ` | ${formatPriceGreek(event)}` : ''}
+          | <span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${event.venue.name}</span></span>
+        </p>
+      </header>
 
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+      <section class="event-description" itemprop="description">
+        ${descriptionHtml}
+        ${hasFullDescription ? '<div class="enriched-badge">AI-enriched content</div>' : ''}
+      </section>
+      ${hiddenMetadataHtml}
+
+      ${practicalBlock}
+
+      <nav class="event-connections" aria-label="Σχετικές σελίδες">
+        <h3>Εξερευνήστε περισσότερα</h3>
+        ${navLinks.join('\n        ')}
+      </nav>
+
+      ${relatedHtml}
+    </article>
+  </div>
+
+  ${renderSiteFooter()}
+  ${renderHamburgerScript()}
 </body>
 </html>`;
 }

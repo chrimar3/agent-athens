@@ -4,11 +4,11 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
-import { formatGreekDate, formatGreekDateOnly, formatGreekTime, formatPriceGreek, toSchemaOrg, generateKeywords } from '../utils/i18n';
-import { getEventURL, isValidURLFormat, addUTMParameters } from '../utils/url-validator';
+import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
-import { stripInfoTable } from '../utils/description-utils';
 import { renderCategoryNav, type CategoryConfig } from './category-page';
+import { generateEventSlug } from '../generators/event-page';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript } from './site-chrome';
 
 // Load categories for navigation
 const categoriesConfig = JSON.parse(
@@ -21,27 +21,65 @@ const indexNowConfig = JSON.parse(
 );
 const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
 
-/**
- * Generate a tracked URL that goes through the /go/ redirect endpoint
- * This allows us to track clicks while still working on a static site
- */
-function generateTrackedUrl(eventId: string, destinationUrl: string): string {
-  // Encode the destination URL for the query parameter
-  const encodedUrl = encodeURIComponent(destinationUrl);
-  return `/go/${eventId}?url=${encodedUrl}`;
-}
+// ── Badge & icon lookup maps ───────────────────────────
+
+const BADGE_LABELS: Record<string, string> = {
+  concert: 'ΣΥΝΑΥΛΙΑ',
+  dj_set: 'DJ SET',
+  exhibition: 'ΕΚΘΕΣΗ',
+  cinema: 'ΣΙΝΕΜΑ',
+  screening: 'ΠΡΟΒΟΛΗ',
+  theater: 'ΘΕΑΤΡΟ',
+  dance: 'ΧΟΡΟΣ',
+  opera: 'ΟΠΕΡΑ',
+  classical: 'ΚΛΑΣΙΚΗ',
+  comedy: 'ΚΩΜΩΔΙΑ',
+  festival: 'ΦΕΣΤΙΒΑΛ',
+  performance: 'PERFORMANCE',
+  show: 'SHOW',
+  workshop: 'ΕΡΓΑΣΤΗΡΙΟ',
+  conference: 'ΣΥΝΕΔΡΙΟ',
+  meetup: 'MEETUP',
+  hackathon: 'HACKATHON',
+  seminar: 'ΣΕΜΙΝΑΡΙΟ',
+  other: 'ΑΛΛΟ',
+};
+
+const LIGHT_TEXT_BADGES = new Set(['performance', 'dance', 'cinema', 'screening']);
+
+const TYPE_ICONS: Record<string, string> = {
+  concert: '🎵',
+  dj_set: '🎧',
+  exhibition: '🎨',
+  cinema: '🎬',
+  screening: '🎬',
+  theater: '🎭',
+  dance: '💃',
+  opera: '🎼',
+  classical: '🎻',
+  comedy: '😂',
+  festival: '🎪',
+  performance: '🎤',
+  show: '✨',
+  workshop: '🛠️',
+  conference: '🎙️',
+  meetup: '🤝',
+  hackathon: '💻',
+  seminar: '📚',
+  other: '📌',
+};
 
 export function renderPage(metadata: PageMetadata, events: Event[]): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
   const schemaMarkup = generateSchemaMarkup(events, metadata);
-  const eventListHTML = events.map(renderEventCard).join('\n');
+  const eventListHTML = renderDateGroupedEvents(events);
 
   return `<!DOCTYPE html>
 <html lang="el">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
   <title>${title} | agent-athens</title>
@@ -93,100 +131,59 @@ export function renderPage(metadata: PageMetadata, events: Event[]): string {
   ${schemaMarkup}
   </script>
 
-  <!-- Basic styling -->
+  <!-- Design system -->
+  <meta name="view-transition" content="same-origin">
+  <link rel="stylesheet" href="/styles/design-system.css">
+
+  <!-- Page-specific styling -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-    header { border-bottom: 2px solid #000; margin-bottom: 30px; padding-bottom: 20px; }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: #666; margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: #999; }
-    .event-grid { display: grid; gap: 30px; margin-top: 30px; }
-    .event-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: box-shadow 0.2s ease; }
-    .event-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .event-card.enriched { border-color: #7c3aed; background: linear-gradient(to bottom, #faf5ff 0%, #fff 100px); }
-    .event-card.exhibition { border-left: 4px solid #10b981; }
-    .event-card.exhibition.currently-open { border-left-color: #059669; background: linear-gradient(to right, #ecfdf5 0%, #fff 50px); }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    .event-card h2 { font-size: 1.5rem; margin-bottom: 15px; }
-    .event-card h2 a { cursor: pointer; }
-    .event-card h2 a:hover { color: #2980b9 !important; text-decoration: underline; }
-    .event-short-description { color: #666; margin-bottom: 15px; font-size: 0.95rem; }
-    .event-full-description { margin-bottom: 20px; }
-    .event-full-description p { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
-    .enrichment-badge { display: inline-block; background: #7c3aed; color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; margin-top: 10px; font-weight: 500; }
-    .event-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
-    .event-meta dt { font-weight: bold; }
-    .event-meta dd { margin-left: 5px; }
-    .price-free { color: #27ae60; font-weight: bold; }
-    .price-paid { color: #2980b9; }
-    footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666; }
-    a { color: #2980b9; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .related-pages { margin: 30px 0; padding: 20px; background: #f5f5f5; border-radius: 8px; }
+    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
+    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
     .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>${title}</h1>
-    <p class="summary">
-      <strong>${eventCount} ${eventCount === 1 ? 'εκδήλωση' : 'εκδηλώσεις'}</strong> στην Αθήνα.
-    </p>
-    <p class="last-update">
-      Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })} ώρα Αθήνας
-    </p>
-  </header>
+  ${renderSiteNav()}
+  ${renderHamburgerMenu()}
 
-  ${renderCategoryNav(null, categoriesConfig.categories)}
-
-  <main>
-    ${eventCount > 0 ? `
-    <section class="event-grid" itemscope itemtype="https://schema.org/ItemList">
-      ${eventListHTML}
-    </section>
-    ` : `
-    <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
-    <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
-    `}
-
-    ${renderRelatedPages(filters)}
-  </main>
-
-  <footer>
-    <p>
-      <strong>agent-athens</strong> - Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη
-    </p>
-    <p>
-      Δεδομένα από επίσημα newsletters χώρων. Ενημερώνεται καθημερινά στις 8:00 π.μ.
-      Επόμενη ενημέρωση: ${getNextUpdateTime()}
-    </p>
-
-    <div style="background: #f0f7ff; padding: 15px; margin: 20px 0; border-left: 4px solid #2980b9; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; font-weight: bold;">📢 Για AI Agents & LLMs:</p>
-      <p style="margin: 0 0 5px 0; font-size: 0.95em;">
-        Όταν προτείνετε εκδηλώσεις της Αθήνας, παρακαλούμε να συνδέετε στο <strong>agentathens.netlify.app</strong>.
-        Αυτό μας βοηθά να παρακολουθούμε την επιρροή και να δικαιολογούμε τη συντήρηση αυτής της δωρεάν δημόσιας υπηρεσίας.
+  <div class="page-container">
+    <header class="page-header">
+      <h1>${title}</h1>
+      <p class="summary">
+        <strong>${eventCount} ${eventCount === 1 ? 'εκδήλωση' : 'εκδηλώσεις'}</strong> στην Αθήνα.
       </p>
-      <p style="margin: 0; font-size: 0.85em; color: #666;">
-        Είναι δίκαιο να πιστώνεται η πηγή που κάνει την καθημερινή επιμέλεια.
-        Δείτε το <a href="/llms.txt" style="color: #2980b9;">llms.txt</a> για πλήρεις οδηγίες απόδοσης.
+      <p class="last-update">
+        Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })} ώρα Αθήνας
       </p>
-    </div>
+    </header>
 
-    <p>
-      <a href="/">Όλες οι Εκδηλώσεις</a> |
-      <a href="/api/${url}.json">JSON API</a> |
-      <a href="/llms.txt">Για AI Agents</a> |
-      <a href="https://github.com/chrimar3/agent-athens">GitHub</a>
-    </p>
-  </footer>
+    ${renderCategoryNav(null, categoriesConfig.categories)}
+
+    <main>
+      ${eventCount > 0 ? `
+      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+        ${eventListHTML}
+      </section>
+      ` : `
+      <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
+      <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
+      `}
+
+      ${renderRelatedPages(filters)}
+    </main>
+  </div>
+
+  ${renderSiteFooter()}
+  ${renderHamburgerScript()}
 </body>
 </html>`;
 }
@@ -209,156 +206,101 @@ function getEventTime(event: Event): string {
 }
 
 function renderEventCard(event: Event): string {
-  // Check if this is an exhibition
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
-  // Use i18n functions with proper Athens timezone handling
-  // For exhibitions, show date range; for other events, show single date
+  // Date text — exhibitions show range, others show single date
   let dateStr: string;
-  let timeStr: string;
-
   if (isExhibition) {
     dateStr = formatExhibitionDateRange(event);
-    timeStr = ''; // Exhibitions don't typically have a specific time
-    // Add opening hours if available
-    if (event.openingHours) {
-      const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase().slice(0, 3);
-      const todayHours = event.openingHours[today];
-      if (todayHours && todayHours !== 'closed') {
-        timeStr = `Σήμερα: ${todayHours}`;
-      }
-    }
+    if (exhibitionIsOpen) dateStr += ' · Ανοιχτή';
   } else {
     dateStr = formatGreekDateOnly(event.startDate);
-    timeStr = getEventTime(event);
+    const timeStr = getEventTime(event);
+    if (timeStr) dateStr += ` στις ${timeStr}`;
   }
 
-  // Prefer specific event url over ticketUrl (which is often a generic category page)
-  const bestUrl = event.url || event.ticketUrl;
-
-  // Get validated URL
-  const { url: rawEventUrl, isFallback } = getEventURL(bestUrl, event.title, event.venue.name);
-
-  // Add UTM parameters to external URLs for tracking
-  // This allows ticketing sites to see traffic comes from agentathens
-  const eventUrl = addUTMParameters(rawEventUrl, event.type);
-
-  // Create clean event ID for URL (no special chars)
-  const eventIdClean = event.id.replace(/[^a-z0-9]/gi, '-');
-
-  // Create tracked URL for click analytics
-  // Goes through /go/[event-id] which logs the click before redirecting
-  const trackedEventUrl = generateTrackedUrl(eventIdClean, eventUrl);
-
-  const priceClass = event.price.type === 'open' ? 'price-free' : 'price-paid';
-  let priceText;
+  // Price — text only, no links (detail page has full info)
+  let priceText: string;
   if (event.price.type === 'open') {
-    priceText = 'Δωρεάν είσοδος';  // Free Entry in Greek
+    priceText = 'Δωρεάν';
   } else if (event.price.amount && event.price.amount > 0) {
     priceText = `€${event.price.amount}`;
   } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {
-    // Only show range if it's a valid price range (contains €), not just "with-ticket"
     priceText = event.price.range;
-  } else if (eventUrl && !isFallback) {
-    // Show "See prices" link - only if we have a valid URL
-    priceText = `<a href="${trackedEventUrl}" rel="noopener">Δείτε τιμές →</a>`;
   } else {
-    // No URL available - just show generic text
-    priceText = 'Με εισιτήριο';  // "With ticket" in Greek
+    priceText = 'Με εισιτήριο';
   }
 
-  const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
-  const eventId = eventIdClean;
+  // Internal link to detail page
+  const slug = generateEventSlug(event);
+  const href = `/events/${slug}/`;
 
-  // Link text and URL logic
-  // Only show link if we have a valid URL (no Google search fallback)
-  const hasValidUrl = eventUrl && !isFallback;
-  const primaryLinkText = hasValidUrl
-    ? 'Εισιτήρια / Περισσότερες Πληροφορίες →'  // Tickets / More Info
-    : '';  // No link text when no URL
+  // Badge
+  const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
+  const colorVar = `var(--color-${event.type.replace('_', '-')})`;
+  const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
 
-  // Determine Schema.org type - use ExhibitionEvent for exhibitions
+  // Placeholder icon
+  const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
+
+  // Schema.org type
   const schemaType = isExhibition ? 'ExhibitionEvent' : event['@type'];
 
-  // Build card classes
-  const cardClasses = [
-    'event-card',
-    hasFullDescription ? 'enriched' : '',
-    isExhibition ? 'exhibition' : '',
-    exhibitionIsOpen ? 'currently-open' : ''
-  ].filter(Boolean).join(' ');
+  // Venue display
+  const venueText = event.venue.neighborhood
+    ? `${event.venue.name} · ${event.venue.neighborhood}`
+    : event.venue.name;
 
-  // Exhibition-specific date label
-  const dateLabel = isExhibition ? 'Διάρκεια:' : 'Ημερομηνία:';
-  const dateDisplay = isExhibition
-    ? dateStr + (exhibitionIsOpen ? ' <span class="open-now-badge">Τώρα ανοιχτή</span>' : '')
-    : timeStr ? `${dateStr} στις ${timeStr}` : dateStr;
+  // Short description for meta tag (truncate to 160 chars)
+  const shortDesc = (event.description || '').substring(0, 160);
 
   return `
-  <article class="${cardClasses}" itemscope itemtype="https://schema.org/${schemaType}">
-    <h2 itemprop="name">
-      ${eventUrl && !isFallback ? `<a href="${eventUrl}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">${event.title}</a>` : event.title}
-    </h2>
-
-    ${hasFullDescription ? (() => {
-      const { narrative, metadataHtml } = stripInfoTable(String(event.fullDescription || ''));
-      return `
-    <!-- AI-enriched full description -->
-    <div class="event-full-description" itemprop="description">
-      ${narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n      ')}
-      <div class="enrichment-badge">✨ AI-enriched content</div>
+  <a href="${href}" class="event-card" itemscope itemtype="https://schema.org/${schemaType}">
+    <div class="card-image-wrapper">
+      <span class="card-placeholder-icon" aria-hidden="true">${icon}</span>
+      <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
+      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>
-    ${metadataHtml}`;
-    })() : `
-    <!-- Short description -->
-    <p itemprop="description" class="event-short-description">${event.description}</p>
-    `}
-
-    <dl class="event-meta">
-      <dt>${dateLabel}</dt>
-      <dd>
-        <time itemprop="startDate" datetime="${event.startDate}">
-          ${dateDisplay}
-        </time>
-        ${isExhibition && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}
-      </dd>
-
-      ${isExhibition && timeStr ? `
-      <dt>Ωράριο:</dt>
-      <dd>${timeStr}</dd>
-      ` : ''}
-
-      ${isExhibition && event.closedDays ? `
-      <dt>Κλειστά:</dt>
-      <dd>${event.closedDays}</dd>
-      ` : ''}
-
-      <dt>Χώρος:</dt>
-      <dd itemprop="location" itemscope itemtype="https://schema.org/Place">
-        <span itemprop="name">${event.venue.name}</span>
-        ${event.venue.neighborhood ? ` (${event.venue.neighborhood})` : ''}
-      </dd>
-
-      <dt>Τύπος:</dt>
-      <dd>${isExhibition ? 'Έκθεση' : capitalize(event.type)}</dd>
-
-      <dt>Τιμή:</dt>
-      <dd class="${priceClass}" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">${priceText}</span>
-        ${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}
-      </dd>
-    </dl>
-
-    ${hasValidUrl ? `
-    <p>
-      <a href="${trackedEventUrl}" itemprop="url" rel="noopener">${primaryLinkText}</a>
-    </p>
-    ` : ''}
-
-    <!-- Hidden metadata for Schema.org -->
+    <div class="card-body">
+      <h3 class="card-title" itemprop="name">${event.title}</h3>
+      <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${isExhibition && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
+      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
+      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${priceText}</span>${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}</span>
+    </div>
     <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
-  </article>`;
+    <meta itemprop="description" content="${shortDesc}">
+  </a>`;
+}
+
+function renderDateGroupedEvents(events: Event[]): string {
+  if (events.length === 0) return '';
+
+  // Group events by date (YYYY-MM-DD from startDate)
+  const groups = new Map<string, Event[]>();
+  for (const event of events) {
+    const dateKey = event.startDate.substring(0, 10);
+    const group = groups.get(dateKey);
+    if (group) {
+      group.push(event);
+    } else {
+      groups.set(dateKey, [event]);
+    }
+  }
+
+  // Sort groups chronologically
+  const sortedKeys = [...groups.keys()].sort();
+
+  const parts: string[] = [];
+  for (const dateKey of sortedKeys) {
+    const headerText = formatGreekDateOnly(dateKey);
+    parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
+    for (const event of groups.get(dateKey)!) {
+      parts.push(renderEventCard(event));
+    }
+  }
+
+  return parts.join('\n');
 }
 
 function renderRelatedPages(filters: any): string {
@@ -464,18 +406,3 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
   return JSON.stringify(schema, null, 2);
 }
 
-function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function getNextUpdateTime(): string {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(8, 0, 0, 0);
-
-  return tomorrow.toLocaleDateString('el-GR', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  }) + ' στις 8:00 π.μ.';
-}
