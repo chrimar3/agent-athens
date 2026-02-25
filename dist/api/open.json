@@ -6,7 +6,7 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "eac34e5f2b059ad8",
       "title": "28th Fintech Talks goes Google - Smart AI Agents With Google Cloud",
       "description": "Στο 28th Fintech Talks goes Google, υποδεχόμαστε τον Χρήστο Πολυδώρου, Customer Engineer - Infrastructure Modernization & AI, Google Cloud.",
@@ -33,7 +33,7 @@
       "url": "https://www.eventbrite.fi/e/28th-fintech-talks-goes-google-smart-ai-agents-with-google-cloud-tickets-1982437064626",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "18:00",
       "permanentCollection": false,
@@ -69,14 +69,14 @@
       "url": "https://hackathongreece.ai/",
       "source": "hackathongreece.ai",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "24ca7ac187977df1",
       "title": "The AI Thing - AI Essentials to Advance Your Career Workshop Athens",
       "description": "AI transforms lives, boosts efficiency, and expands human potential. Join the AI revolution at our visionary-led workshop!",
@@ -103,7 +103,7 @@
       "url": "https://www.eventbrite.com/e/the-ai-thing-ai-essentials-to-advance-your-career-workshop-athens-tickets-1980913124480",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "10:00",
       "permanentCollection": false,
@@ -139,7 +139,7 @@
       "url": "https://www.eventbrite.co.uk/e/mindstone-athens-april-ai-meetup-tickets-1980368772308",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "18:30",
       "permanentCollection": false,
@@ -147,7 +147,7 @@
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "4acf6b9d4beda2c9",
       "title": "Greeks in AI 2026",
       "description": "The flagship Greek AI diaspora symposium. Research + industry + networking. Greek AI researchers from MIT, Stanford, and top European institutions meet the local ecosystem.",
@@ -175,7 +175,7 @@
       "url": "https://www.greeksin.ai/",
       "source": "greeksin.ai",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -208,7 +208,7 @@
       "url": "https://ra.co/events/2367365",
       "source": "residentadvisor",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -216,7 +216,7 @@
   ],
   "meta": {
     "total": 6,
-    "lastUpdate": "2026-02-25T08:52:23.251Z",
+    "lastUpdate": "2026-02-25T08:58:45.525Z",
     "url": "https://agentathens.netlify.app/open"
   }
 }

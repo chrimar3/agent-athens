@@ -32,7 +32,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/miranda_verouli_quintet-10069976/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -64,7 +64,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/three_times_three_5-10084877/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -96,7 +96,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/joanna_mattrey-10089214/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -128,7 +128,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -167,7 +167,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-01-30T04:02:12.432Z",
-      "updatedAt": "2026-02-18 06:09:07",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -201,7 +201,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -227,15 +227,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
-        "range": null
+        "range": "€15-80"
       },
       "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-25T08:47:31.777Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -270,7 +270,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/miranda-verouli-quintet-gal-costa-musa-tropical/",
       "source": "halfnote",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -310,7 +310,7 @@
       "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18 06:09:07",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -348,7 +348,7 @@
       "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -356,7 +356,7 @@
   ],
   "meta": {
     "total": 10,
-    "lastUpdate": "2026-02-25T08:52:23.307Z",
+    "lastUpdate": "2026-02-25T08:58:45.610Z",
     "url": "https://agentathens.netlify.app/with-ticket-concert-tomorrow"
   }
 }

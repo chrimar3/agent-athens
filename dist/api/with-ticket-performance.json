@@ -39,7 +39,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/sports/oloi-mazi-mporoume-agones-gia-to-periballon/",
       "source": "more.com",
       "createdAt": "2026-01-19T15:20:14.340Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -80,7 +80,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/happenings/jordan-peterson/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -121,7 +121,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/workshop/diabasi-se-synergasia-me-to-idryma-eygenidou/",
       "source": "more.com",
       "createdAt": "2025-11-13T09:14:04.321Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -162,7 +162,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/workshop/dimiourgontas-anaglyfes-istories-me-pilo/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-13 10:29:36",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -172,7 +172,7 @@
   ],
   "meta": {
     "total": 4,
-    "lastUpdate": "2026-02-25T08:52:23.356Z",
+    "lastUpdate": "2026-02-25T08:58:45.696Z",
     "url": "https://agentathens.netlify.app/with-ticket-performance"
   }
 }

@@ -118,7 +118,7 @@
       "titleEn": "Tech & AI in Athens",
       "description": "Συνέδρια, meetups και hackathons τεχνολογίας και AI στην Αθήνα",
       "filter": {
-        "types": ["conference", "meetup", "hackathon", "seminar"]
+        "types": ["conference", "meetup", "hackathon", "seminar", "workshop"]
       },
       "icon": "cpu"
     }

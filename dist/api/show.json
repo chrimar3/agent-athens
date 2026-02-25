@@ -7,6 +7,72 @@
     {
       "@context": "https://schema.org",
       "@type": "Event",
+      "id": "64336df6b74db57f",
+      "title": "Δεν θα πεθάνουμε κιόλας",
+      "description": "Εως 2026-03-06",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "show",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Red Jasper Cabaret Theatre",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 08:58:31",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "484df1bd27d4bed8",
+      "title": "Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ",
+      "description": "Εως 2026-02-26",
+      "startDate": "2026-02-25",
+      "endDate": null,
+      "type": "show",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Red Jasper Cabaret Theatre",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 08:57:36",
+      "language": "en",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
       "id": "1e4add97884526f",
       "title": "Louis C.K. - Ridiculous",
       "description": "με τον Louis C.K.. O βραβευμένος με Emmy Αμερικανός Louis C.K., γνωστός για το ωμό και αμφιλεγόμενο στυλ του επί σκηνής παρουσιάζει τη νέα του παράσταση, κατάλληλη...",
@@ -38,7 +104,7 @@
       "ticketUrl": "https://www.more.com/theater/louis-c-k",
       "source": "athinorama.gr",
       "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -77,7 +143,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/music/geoff-tateoperation-mindcrime/",
       "source": "more.com",
       "createdAt": "2026-01-12T21:21:44.838Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -118,7 +184,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/happenings/festival/cat-festival-2026/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-14 09:59:49",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "10:00",
       "timeSource": "scraped_listing",
@@ -159,15 +225,15 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/",
       "source": "athinorama.gr",
       "createdAt": "2025-12-04T16:32:23.858Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2026-02-25T08:52:23.241Z",
+    "total": 6,
+    "lastUpdate": "2026-02-25T08:58:45.514Z",
     "url": "https://agentathens.netlify.app/show"
   }
 }

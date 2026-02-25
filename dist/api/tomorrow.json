@@ -30,7 +30,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/music/shadow-knight-phyrosun-frs-live-ilion-plus/",
       "source": "more.com",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
@@ -64,7 +64,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/miranda_verouli_quintet-10069976/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -96,7 +96,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/three_times_three_5-10084877/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -128,7 +128,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -160,7 +160,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/viva_la_mamma!-10089121/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -192,7 +192,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -224,7 +224,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/joanna_mattrey-10089214/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -256,7 +256,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/aleksia_mouza-10076110/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -288,7 +288,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -320,14 +320,14 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "177079c6050bc903",
       "title": "Ο ΑΓΑΠΗΤΙΚΟΣ ΤΗΣ ΒΟΣΚΟΠΟΥΛΑΣ (ΓΙΑ ΠΕΡΙΟΡΙΣΜΕΝΟ ΑΡΙΘΜΟ ΠΑΡΑΣΤΑΣΕΩΝ)",
       "description": "",
@@ -349,16 +349,17 @@
         "range": "€15"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/oagapitikostisvoskopoulas/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/oagapitikostisvoskopoulas/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "9583f7ca5f306a2b",
       "title": "ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ",
       "description": "",
@@ -380,16 +381,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "29bd95c043d11893",
       "title": "Η Πριγκίπισσα των Αγίων Σαράντα!",
       "description": "",
@@ -411,16 +413,17 @@
         "range": "€15"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "90b7606bdd629df3",
       "title": "ΤΑΡΤΟΥΦΟΣ του Μολιέρου",
       "description": "",
@@ -442,16 +445,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "b31f249a8e0ab92b",
       "title": "Η ΚΟΜΙΣΣΑ ΤΗΣ ΦΑΜΠΡΙΚΑΣ",
       "description": "",
@@ -473,16 +477,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/i-komissa-tis-famprikas-1/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/i-komissa-tis-famprikas-1/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "094904b3c1ece0c9",
       "title": "ΟΙ 12 ΕΝΟΡΚΟΙ",
       "description": "",
@@ -504,9 +509,10 @@
         "range": "€17"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
       "source": "more.com",
       "createdAt": "2026-02-24 07:59:09",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -545,7 +551,7 @@
       "ticketUrl": "https://www.more.com/theater/louis-c-k",
       "source": "athinorama.gr",
       "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -580,7 +586,43 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-19 08:49:27",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
+      "language": "en",
+      "timeDoors": "20:30",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "008fd413d592ab71",
+      "title": "PHARAOH Vinyl Selection",
+      "description": "",
+      "startDate": "2026-02-26T20:30:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Pharaoh",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2378584",
+      "ticketUrl": "https://ra.co/events/2378584",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
@@ -621,7 +663,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-01-30T04:02:12.432Z",
-      "updatedAt": "2026-02-18 06:09:07",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -655,7 +697,7 @@
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.081Z",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -681,15 +723,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
-        "range": null
+        "range": "€15-80"
       },
       "url": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "ticketUrl": "https://www.megaron.gr/event/alexia-mouza-rachmaninof-iv/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.958Z",
-      "updatedAt": "2026-02-25T08:47:31.777Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -723,7 +765,43 @@
       "ticketUrl": "https://www.clubber.gr/events/irini-karaoglou-3/",
       "source": "clubber.gr",
       "createdAt": "2026-02-13 10:29:36",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "3820a5a5e35e049d",
+      "title": "Mama Athens with Lencasea / K.Perrakis",
+      "description": "",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [
+        "electronic"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "B side Athens",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "tba",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://ra.co/events/2379022",
+      "ticketUrl": "https://ra.co/events/2379022",
+      "source": "residentadvisor",
+      "createdAt": "2026-02-25 08:57:36",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -760,7 +838,7 @@
       "ticketUrl": "https://www.halfnote.gr/event/miranda-verouli-quintet-gal-costa-musa-tropical/",
       "source": "halfnote",
       "createdAt": "2026-02-08 12:53:02",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -796,7 +874,7 @@
       "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -832,7 +910,7 @@
       "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
       "source": "clubber.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "23:00",
       "timeSource": "scraped_listing",
@@ -872,7 +950,7 @@
       "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18 06:09:07",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -910,15 +988,15 @@
       "ticketUrl": "https://www.clubber.gr/events/sneaky-club-12/",
       "source": "clubber.gr",
       "createdAt": "2026-02-10T04:01:24.900Z",
-      "updatedAt": "2026-02-18T04:02:27.840Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 27,
-    "lastUpdate": "2026-02-25T08:52:23.145Z",
+    "total": 29,
+    "lastUpdate": "2026-02-25T08:58:45.351Z",
     "url": "https://agentathens.netlify.app/tomorrow"
   }
 }

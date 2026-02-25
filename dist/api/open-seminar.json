@@ -7,7 +7,7 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "eac34e5f2b059ad8",
       "title": "28th Fintech Talks goes Google - Smart AI Agents With Google Cloud",
       "description": "Στο 28th Fintech Talks goes Google, υποδεχόμαστε τον Χρήστο Πολυδώρου, Customer Engineer - Infrastructure Modernization & AI, Google Cloud.",
@@ -34,7 +34,7 @@
       "url": "https://www.eventbrite.fi/e/28th-fintech-talks-goes-google-smart-ai-agents-with-google-cloud-tickets-1982437064626",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "18:00",
       "permanentCollection": false,
@@ -43,7 +43,7 @@
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T08:52:23.371Z",
+    "lastUpdate": "2026-02-25T08:58:45.715Z",
     "url": "https://agentathens.netlify.app/open-seminar"
   }
 }

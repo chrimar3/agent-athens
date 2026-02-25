@@ -7,7 +7,7 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "8bc94f9219a05cf6",
       "title": "InfraAI Global Summit 2026",
       "description": "Premium AI infrastructure summit. C-suite, investors. 200+ attendees.",
@@ -36,7 +36,7 @@
       "ticketUrl": "https://infraai.com/",
       "source": "manual",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -44,7 +44,7 @@
   ],
   "meta": {
     "total": 1,
-    "lastUpdate": "2026-02-25T08:52:23.364Z",
+    "lastUpdate": "2026-02-25T08:58:45.705Z",
     "url": "https://agentathens.netlify.app/with-ticket-conference-next-month"
   }
 }

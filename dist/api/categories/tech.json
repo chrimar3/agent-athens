@@ -8,7 +8,7 @@
   "events": [
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "eac34e5f2b059ad8",
       "title": "28th Fintech Talks goes Google - Smart AI Agents With Google Cloud",
       "description": "Στο 28th Fintech Talks goes Google, υποδεχόμαστε τον Χρήστο Πολυδώρου, Customer Engineer - Infrastructure Modernization & AI, Google Cloud.",
@@ -35,7 +35,7 @@
       "url": "https://www.eventbrite.fi/e/28th-fintech-talks-goes-google-smart-ai-agents-with-google-cloud-tickets-1982437064626",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "18:00",
       "permanentCollection": false,
@@ -71,14 +71,49 @@
       "url": "https://hackathongreece.ai/",
       "source": "hackathongreece.ai",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
+      "id": "24ca7ac187977df1",
+      "title": "The AI Thing - AI Essentials to Advance Your Career Workshop Athens",
+      "description": "AI transforms lives, boosts efficiency, and expands human potential. Join the AI revolution at our visionary-led workshop!",
+      "startDate": "2026-03-10T10:00:00",
+      "endDate": "2026-03-10",
+      "type": "workshop",
+      "genres": [
+        "AI",
+        "Tech"
+      ],
+      "tags": [],
+      "venue": {
+        "name": "Leof. Mesogeion 15",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "open",
+        "amount": null,
+        "currency": "EUR",
+        "range": null
+      },
+      "url": "https://www.eventbrite.com/e/the-ai-thing-ai-essentials-to-advance-your-career-workshop-athens-tickets-1980913124480",
+      "source": "eventbrite",
+      "createdAt": "2026-02-20 18:03:59",
+      "updatedAt": "2026-02-25 08:57:36",
+      "language": "en",
+      "timeDoors": "10:00",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationEvent",
       "id": "8bc94f9219a05cf6",
       "title": "InfraAI Global Summit 2026",
       "description": "Premium AI infrastructure summit. C-suite, investors. 200+ attendees.",
@@ -107,7 +142,7 @@
       "ticketUrl": "https://infraai.com/",
       "source": "manual",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -142,7 +177,7 @@
       "url": "https://www.eventbrite.co.uk/e/mindstone-athens-april-ai-meetup-tickets-1980368772308",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "18:30",
       "permanentCollection": false,
@@ -150,7 +185,7 @@
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "e0abea86b2c50b69",
       "title": "Devoxx Greece 2026",
       "description": "3-day developer conference. Part of global Devoxx family. Covers Java, Cloud, AI/ML, Security, Architecture. Community-driven.",
@@ -179,7 +214,7 @@
       "ticketUrl": "https://devoxx.gr/",
       "source": "devoxx.gr",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -215,7 +250,7 @@
       "ticketUrl": "https://www.eventbrite.com/e/engineering-the-world-2026-tickets-1981954401969",
       "source": "eventbrite",
       "createdAt": "2026-02-20 18:03:59",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "17:00",
       "permanentCollection": false,
@@ -223,7 +258,7 @@
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "b8dfa50fba055eff",
       "title": "Disrupt AI Summit 2026",
       "description": "Corporate/practitioner AI summit. 500+ attendees. Includes GenAI Bootcamp.",
@@ -252,14 +287,14 @@
       "ticketUrl": "https://productledhub.com/disrupt-ai-summit/",
       "source": "productledhub.com",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "751e22533893151e",
       "title": "Athens SEO 2026",
       "description": "Technical SEO + AI in search. Europe-facing.",
@@ -288,14 +323,14 @@
       "ticketUrl": "https://athensseo.com/",
       "source": "manual",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "EducationEvent",
       "id": "4acf6b9d4beda2c9",
       "title": "Greeks in AI 2026",
       "description": "The flagship Greek AI diaspora symposium. Research + industry + networking. Greek AI researchers from MIT, Stanford, and top European institutions meet the local ecosystem.",
@@ -323,15 +358,15 @@
       "url": "https://www.greeksin.ai/",
       "source": "greeksin.ai",
       "createdAt": "2026-02-20 16:12:10",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 9,
-    "lastUpdate": "2026-02-25T08:52:23.559Z",
+    "total": 10,
+    "lastUpdate": "2026-02-25T08:58:45.925Z",
     "url": "https://agentathens.netlify.app/tech"
   }
 }

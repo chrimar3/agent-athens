@@ -31,7 +31,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/music/shadow-knight-phyrosun-frs-live-ilion-plus/",
       "source": "more.com",
       "createdAt": "2026-02-10 10:38:06",
-      "updatedAt": "2026-02-16 08:00:38",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
@@ -65,7 +65,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/giannis_margaris-10088899/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -97,7 +97,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/shadow_knight_phyrosun_kai_frs-10089212/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -129,14 +129,14 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_bussinokipos-10089249/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "177079c6050bc903",
       "title": "Ο ΑΓΑΠΗΤΙΚΟΣ ΤΗΣ ΒΟΣΚΟΠΟΥΛΑΣ (ΓΙΑ ΠΕΡΙΟΡΙΣΜΕΝΟ ΑΡΙΘΜΟ ΠΑΡΑΣΤΑΣΕΩΝ)",
       "description": "",
@@ -158,16 +158,17 @@
         "range": "€15"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/oagapitikostisvoskopoulas/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/oagapitikostisvoskopoulas/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "9583f7ca5f306a2b",
       "title": "ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ",
       "description": "",
@@ -189,16 +190,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "29bd95c043d11893",
       "title": "Η Πριγκίπισσα των Αγίων Σαράντα!",
       "description": "",
@@ -220,16 +222,17 @@
         "range": "€15"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "90b7606bdd629df3",
       "title": "ΤΑΡΤΟΥΦΟΣ του Μολιέρου",
       "description": "",
@@ -251,16 +254,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/tartoufos-tou-molierou-2/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "b31f249a8e0ab92b",
       "title": "Η ΚΟΜΙΣΣΑ ΤΗΣ ΦΑΜΠΡΙΚΑΣ",
       "description": "",
@@ -282,16 +286,17 @@
         "range": "€18"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/i-komissa-tis-famprikas-1/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/i-komissa-tis-famprikas-1/",
       "source": "more.com",
       "createdAt": "2026-02-23 15:21:15",
-      "updatedAt": "2026-02-23 15:21:16",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
     {
       "@context": "https://schema.org",
-      "@type": "Event",
+      "@type": "TheaterEvent",
       "id": "094904b3c1ece0c9",
       "title": "ΟΙ 12 ΕΝΟΡΚΟΙ",
       "description": "",
@@ -313,9 +318,10 @@
         "range": "€17"
       },
       "url": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
+      "ticketUrl": "https://www.more.com/gr-el/tickets/theater/oi-12-enorkoi-11/",
       "source": "more.com",
       "createdAt": "2026-02-24 07:59:09",
-      "updatedAt": "2026-02-24 09:55:45",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -323,7 +329,7 @@
   ],
   "meta": {
     "total": 10,
-    "lastUpdate": "2026-02-25T08:52:23.231Z",
+    "lastUpdate": "2026-02-25T08:58:45.486Z",
     "url": "https://agentathens.netlify.app/theater-tomorrow"
   }
 }

@@ -25,15 +25,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
-        "range": null
+        "range": "€15-80"
       },
       "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-25T08:47:31.783Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -72,7 +72,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/dance/balletto-di-milano/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -113,7 +113,7 @@
       "ticketUrl": "https://www.more.com/gr-el/tickets/dance/marcos-ayala-tango-the-golden-years/",
       "source": "more.com",
       "createdAt": "2025-10-31T12:22:35.864Z",
-      "updatedAt": "2026-02-12 11:12:20",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "timeDoors": "20:00",
       "timeSource": "extracted_from_start_date",
@@ -149,7 +149,7 @@
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.087Z",
-      "updatedAt": "2026-02-21 07:51:31",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -175,15 +175,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
-        "range": null
+        "range": "€15-80"
       },
       "url": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:37.970Z",
-      "updatedAt": "2026-02-25T08:47:31.785Z",
+      "updatedAt": "2026-02-25 08:57:36",
       "language": "en",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
@@ -191,7 +191,7 @@
   ],
   "meta": {
     "total": 5,
-    "lastUpdate": "2026-02-25T08:52:23.238Z",
+    "lastUpdate": "2026-02-25T08:58:45.510Z",
     "url": "https://agentathens.netlify.app/dance"
   }
 }
