@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Concert #1 Baumstrasse - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="6 upcoming events at Concert #1 Baumstrasse. Next: The Greek Jazz Book Concert #1 on Feb 28, 2026.">
+  <meta name="description" content="8 upcoming events at Concert #1 Baumstrasse. Next: The Greek Jazz Book Concert #1 on Feb 28, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/concert-1-baumstrasse/">
@@ -22,7 +22,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Concert #1 Baumstrasse - Εκδηλώσεις">
-  <meta property="og:description" content="6 επερχόμενες εκδηλώσεις στο Concert #1 Baumstrasse">
+  <meta property="og:description" content="8 επερχόμενες εκδηλώσεις στο Concert #1 Baumstrasse">
   <meta property="og:url" content="https://agentathens.netlify.app/venues/concert-1-baumstrasse/">
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
@@ -32,7 +32,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Concert #1 Baumstrasse - Εκδηλώσεις">
-  <meta name="twitter:description" content="6 επερχόμενες εκδηλώσεις στο Concert #1 Baumstrasse">
+  <meta name="twitter:description" content="8 επερχόμενες εκδηλώσεις στο Concert #1 Baumstrasse">
   <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
@@ -109,7 +109,7 @@
       <div class="venue-meta">
         
         
-        <p>6 επερχόμενες εκδηλώσεις (3 concert, 1 theater, 2 classical)</p>
+        <p>8 επερχόμενες εκδηλώσεις (4 concert, 1 theater, 3 classical)</p>
       </div>
     </header>
 
@@ -139,9 +139,23 @@
       </li>
 
       <li class="venue-event-item ">
+        <a href="/events/1d2a9ccb-concert-1-baumstrasse-quartet/">Σωκράτης Σινόπουλος Quartet</a>
+        
+        <span class="event-date">Παρασκευή 6 Μαρτίου στις 21:00</span>
+        <span class="event-type">classical</span>
+      </li>
+
+      <li class="venue-event-item ">
         <a href="/events/d9f56fd7-concert-1-baumstrasse-/">Συναυλία με τον Δημήτρη Σγουρό</a>
         
         <span class="event-date">Σάββατο 7 Μαρτίου στις 00:00</span>
+        <span class="event-type">concert</span>
+      </li>
+
+      <li class="venue-event-item ">
+        <a href="/events/40725f22-concert-1-baumstrasse-/">Δημήτρης Σγουρός</a>
+        
+        <span class="event-date">Σάββατο 7 Μαρτίου στις 21:00</span>
         <span class="event-type">concert</span>
       </li>
 
@@ -240,8 +254,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

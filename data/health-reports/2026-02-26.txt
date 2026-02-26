@@ -5,27 +5,25 @@ SCRAPING
 --------------------------------------------------
   v athinorama          421 events (+13)
   v benaki                4 events (same)
-  ! clubber               0 events (-35)
+  v clubber              34 events (-1)
   v halfnote             23 events (+1)
   v megaron              27 events (same)
-  v more                 55 events (-1)
+  v more                 56 events (same)
   v onassis               3 events (same)
   v ra                   87 events (+5)
   v ticketservices      121 events (same)
 
 DATABASE
 --------------------------------------------------
-  Total: 834 | Visible: 803 | Hidden: 31
+  Total: 835 | Visible: 804 | Hidden: 31
   New unverified venues: 1
 
 BUILD
 --------------------------------------------------
-  v 4.4s | 2303 pages | Schema valid: 812/803
+  v 3.8s | 2303 pages | Schema valid: 813/804
 
 ENRICHMENT
 --------------------------------------------------
-  162/803 (20.2%) enriched
+  162/804 (20.1%) enriched
 
-ALERTS
---------------------------------------------------
-  ! clubber returned 0 events
+  All systems healthy

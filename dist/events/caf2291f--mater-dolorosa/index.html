@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Mater Dolorosa  Η Μητέρα των Αναστεναγμών | Μέγαρο Μουσικής Αθηνών | agent-athens</title>
-  <meta name="description" content="Live Mater Dolorosa  Η Μητέρα των Αναστεναγμών — Μέγαρο Μουσικής Αθηνών — Apr 6, 2026 — From €25">
+  <meta name="description" content="Live Mater Dolorosa  Η Μητέρα των Αναστεναγμών — Μέγαρο Μουσικής Αθηνών — Apr 6, 2026 — From €12">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/caf2291f--mater-dolorosa/">
@@ -70,7 +70,7 @@
   "isAccessibleForFree": false,
   "offers": {
     "@type": "Offer",
-    "price": "25",
+    "price": "12",
     "priceCurrency": "EUR",
     "availability": "https://schema.org/InStock",
     "url": "https://www.ticketservices.gr/event/14177/",
@@ -130,7 +130,7 @@
           <div class="edp-meta">
             <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-04-06">Δευτέρα 6 Απριλίου στις 00:00</time></span>
             · <a href="/venues//">Μέγαρο Μουσικής Αθηνών</a>
-            · €25
+            · €12
           </div>
           <a href="https://www.ticketservices.gr/event/14177/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
         </header>
@@ -156,7 +156,7 @@
       </div>
       <div class="practical-item">
         <dt>Τιμή</dt>
-        <dd>€25</dd>
+        <dd>€12</dd>
       </div>
       <div class="practical-item">
         <dt>Εισιτήρια</dt>
@@ -296,7 +296,7 @@
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">Mater Dolorosa  Η Μητέρα των Αναστεναγμών</div>
-        <div class="edp-mobile-bar-price">€25</div>
+        <div class="edp-mobile-bar-price">€12</div>
       </div>
       <a href="https://www.ticketservices.gr/event/14177/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
     </div>
@@ -379,8 +379,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

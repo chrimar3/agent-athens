@@ -38,7 +38,7 @@
       "ticketUrl": "https://www.more.com/theater/louis-c-k",
       "source": "athinorama.gr",
       "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "19:30",
       "timeSource": "scraped_detail",
@@ -74,7 +74,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-26 07:40:47",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -110,7 +110,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-26 07:40:47",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -122,7 +122,7 @@
   ],
   "meta": {
     "total": 3,
-    "lastUpdate": "2026-02-26T07:52:32.680Z",
+    "lastUpdate": "2026-02-26T08:27:02.277Z",
     "url": "https://agentathens.netlify.app/show-this-month"
   }
 }

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ | Μέγαρο Μουσικής Αθηνών | agent-athens</title>
-  <meta name="description" content="Live Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ — Μέγαρο Μουσικής Αθηνών — Mar 16, 2026 — From €15">
+  <meta name="description" content="Live Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ — Μέγαρο Μουσικής Αθηνών — Mar 16, 2026 — From €12">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/46fa81f7--/">
@@ -70,7 +70,7 @@
   "isAccessibleForFree": false,
   "offers": {
     "@type": "Offer",
-    "price": "15",
+    "price": "12",
     "priceCurrency": "EUR",
     "availability": "https://schema.org/InStock",
     "url": "https://www.ticketservices.gr/event/14175/",
@@ -130,7 +130,7 @@
           <div class="edp-meta">
             <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-03-16">Δευτέρα 16 Μαρτίου στις 00:00</time></span>
             · <a href="/venues//">Μέγαρο Μουσικής Αθηνών</a>
-            · €15
+            · €12
           </div>
           <a href="https://www.ticketservices.gr/event/14175/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
         </header>
@@ -156,7 +156,7 @@
       </div>
       <div class="practical-item">
         <dt>Τιμή</dt>
-        <dd>€15</dd>
+        <dd>€12</dd>
       </div>
       <div class="practical-item">
         <dt>Εισιτήρια</dt>
@@ -296,7 +296,7 @@
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ</div>
-        <div class="edp-mobile-bar-price">€15</div>
+        <div class="edp-mobile-bar-price">€12</div>
       </div>
       <a href="https://www.ticketservices.gr/event/14175/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
     </div>
@@ -379,8 +379,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

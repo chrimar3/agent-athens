@@ -303,8 +303,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

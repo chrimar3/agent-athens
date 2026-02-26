@@ -26,7 +26,7 @@
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="2026-02-26">
-  <meta name="last-modified" content="2026-02-26T07:52:32.946Z">
+  <meta name="last-modified" content="2026-02-26T08:27:02.533Z">
 
   <!-- GEO: Author/source -->
   <meta name="author" content="agent-athens">
@@ -108,8 +108,8 @@
       }
     ]
   },
-  "datePublished": "2026-02-26T07:52:32.946Z",
-  "dateModified": "2026-02-26T07:52:32.946Z"
+  "datePublished": "2026-02-26T08:27:02.533Z",
+  "dateModified": "2026-02-26T08:27:02.533Z"
 }
   </script>
 
@@ -172,7 +172,7 @@
         <strong>1 εκδήλωση</strong> στην Αθήνα.
       </p>
       <p class="last-update">
-        Τελευταία ενημέρωση: 26 Φεβρουαρίου 2026 στις 09:52 πμ ώρα Αθήνας
+        Τελευταία ενημέρωση: 26 Φεβρουαρίου 2026 στις 10:27 πμ ώρα Αθήνας
       </p>
     </header>
 
@@ -363,8 +363,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

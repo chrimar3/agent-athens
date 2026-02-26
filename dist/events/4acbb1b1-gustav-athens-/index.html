@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Γιάννης Νικολάου «Καινούργια Ρούχα» | Gustav Athens | agent-athens</title>
-  <meta name="description" content="Live Γιάννης Νικολάου «Καινούργια Ρούχα» — Gustav Athens — Mar 14, 2026 — Tickets available">
+  <meta name="description" content="Live Γιάννης Νικολάου «Καινούργια Ρούχα» — Gustav Athens — Mar 14, 2026 — From €10">
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="https://agentathens.netlify.app/events/4acbb1b1-gustav-athens-/">
@@ -70,7 +70,7 @@
   "isAccessibleForFree": false,
   "offers": {
     "@type": "Offer",
-    "price": "",
+    "price": "10",
     "priceCurrency": "EUR",
     "availability": "https://schema.org/InStock",
     "url": "https://www.ticketservices.gr/event/14184/",
@@ -130,7 +130,7 @@
           <div class="edp-meta">
             <span class="edp-meta-date"><time itemprop="startDate" datetime="2026-03-14">Σάββατο 14 Μαρτίου στις 00:00</time></span>
             · <a href="/venues/gustav-athens/">Gustav Athens</a>
-            · Επί πληρωμή
+            · €10
           </div>
           <a href="https://www.ticketservices.gr/event/14184/" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>
         </header>
@@ -156,7 +156,7 @@
       </div>
       <div class="practical-item">
         <dt>Τιμή</dt>
-        <dd>Επί πληρωμή</dd>
+        <dd>€10</dd>
       </div>
       <div class="practical-item">
         <dt>Εισιτήρια</dt>
@@ -221,7 +221,7 @@
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">Γιάννης Νικολάου «Καινούργια Ρούχα»</div>
-        <div class="edp-mobile-bar-price">Επί πληρωμή</div>
+        <div class="edp-mobile-bar-price">€10</div>
       </div>
       <a href="https://www.ticketservices.gr/event/14184/" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
     </div>
@@ -304,8 +304,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

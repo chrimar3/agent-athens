@@ -32,7 +32,7 @@
       "ticketUrl": "https://www.ticketservices.gr/event/13581/",
       "source": "ticketservices",
       "createdAt": "2026-01-26 13:11:15",
-      "updatedAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "21:15",
       "timeSource": "scraped_listing",
@@ -68,7 +68,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/yiannis_kassetas-10052168/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "21:30",
       "timeSource": "scraped_listing",
@@ -103,7 +103,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/loukis_laras-10089247/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
@@ -139,7 +139,7 @@
       "ticketUrl": "https://www.athinorama.gr/music/gig/xruspa-10089213/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "22:30",
       "timeSource": "scraped_listing",
@@ -174,7 +174,7 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/o_kos_zul-10089257/",
       "source": "athinorama.gr",
       "createdAt": "2026-02-20 07:51:02",
-      "updatedAt": "2026-02-26 07:40:48",
+      "updatedAt": "2026-02-26 08:26:57",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
@@ -220,7 +220,7 @@
   ],
   "meta": {
     "total": 6,
-    "lastUpdate": "2026-02-26T07:52:32.651Z",
+    "lastUpdate": "2026-02-26T08:27:02.249Z",
     "url": "https://agentathens.netlify.app/theater-tomorrow"
   }
 }

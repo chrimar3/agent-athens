@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
-  <meta name="description" content="74 event venues in Athens with upcoming concerts, exhibitions, performances. Updated daily.">
+  <meta name="description" content="73 event venues in Athens with upcoming concerts, exhibitions, performances. Updated daily.">
 
   <link rel="canonical" href="https://agentathens.netlify.app/venues/">
 
@@ -22,7 +22,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Χώροι Εκδηλώσεων Αθήνας">
-  <meta property="og:description" content="74 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
+  <meta property="og:description" content="73 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
   <meta property="og:url" content="https://agentathens.netlify.app/venues/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="el_GR">
@@ -32,7 +32,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Χώροι Εκδηλώσεων Αθήνας">
-  <meta name="twitter:description" content="74 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
+  <meta name="twitter:description" content="73 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
   <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <style>
@@ -87,14 +87,14 @@
   <div class="venue-index-content">
     <header class="venue-index-header">
       <h1>Χώροι Εκδηλώσεων</h1>
-      <p class="summary">74 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα</p>
+      <p class="summary">73 χώροι με επερχόμενες εκδηλώσεις στην Αθήνα</p>
     </header>
 
     <ul class="venue-list">
       
     <li>
       <a href="/venues//">Κέντρο Ελέγχου Τηλεοράσεων</a>
-      <span class="event-count">389 εκδηλώσεις</span>
+      <span class="event-count">390 εκδηλώσεις</span>
       <span class="neighborhood">Kolonaki</span>
     </li>
   
@@ -184,6 +184,13 @@
   
 
     <li>
+      <a href="/venues/concert-1-baumstrasse/">Concert #1 Baumstrasse</a>
+      <span class="event-count">8 εκδηλώσεις</span>
+      
+    </li>
+  
+
+    <li>
       <a href="/venues/floyd/">Floyd</a>
       <span class="event-count">8 εκδηλώσεις</span>
       
@@ -248,13 +255,6 @@
 
     <li>
       <a href="/venues/171-187/">Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;</a>
-      <span class="event-count">6 εκδηλώσεις</span>
-      
-    </li>
-  
-
-    <li>
-      <a href="/venues/concert-1-baumstrasse/">Concert #1 Baumstrasse</a>
       <span class="event-count">6 εκδηλώσεις</span>
       
     </li>
@@ -569,13 +569,6 @@
   
 
     <li>
-      <a href="/venues/baumstrasse/">Baumstrasse</a>
-      <span class="event-count">2 εκδηλώσεις</span>
-      
-    </li>
-  
-
-    <li>
       <a href="/venues/sunel-arena/">Sunel Arena</a>
       <span class="event-count">2 εκδηλώσεις</span>
       
@@ -689,8 +682,13 @@
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
-    if (img.complete) img.classList.add('is-loaded');
-    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+    img.classList.add('will-fade');
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function() { this.classList.add('is-loaded'); });
+      img.addEventListener('error', function() { this.classList.remove('will-fade'); });
+    }
   });
 })();
 </script>

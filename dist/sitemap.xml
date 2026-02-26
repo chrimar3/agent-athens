@@ -9169,6 +9169,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agentathens.netlify.app/events/19b47a2c--addams</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agentathens.netlify.app/events/008fd413-pharaoh-pharaoh-vinyl-selection</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>daily</changefreq>
@@ -11377,10 +11383,10 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://agentathens.netlify.app/events/1d2a9ccb-baumstrasse-quartet</loc>
+    <loc>https://agentathens.netlify.app/events/1d2a9ccb-concert-1-baumstrasse-quartet</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://agentathens.netlify.app/events/f2d4c90e-temple-rette-n-the-band</loc>
@@ -11581,10 +11587,10 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://agentathens.netlify.app/events/40725f22-baumstrasse-</loc>
+    <loc>https://agentathens.netlify.app/events/40725f22-concert-1-baumstrasse-</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://agentathens.netlify.app/events/52bde444-2ten-gl57-by-zair</loc>
@@ -13739,12 +13745,6 @@
     <lastmod>2026-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://agentathens.netlify.app/venues/baumstrasse</loc>
-    <lastmod>2026-02-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://agentathens.netlify.app/venues/universe</loc>

@@ -196,11 +196,13 @@ a:hover {
 }
 
 /* ── Image Lazy-Load Fade ──────────────────────────── */
+/* Images visible by default; JS adds .will-fade before load,
+   then .is-loaded on complete — so images never get stuck invisible. */
 
-.card-image,
-.feature-image-wrapper img,
-.list-image-wrapper img,
-.carousel-card-image {
+.card-image.will-fade,
+.feature-image-wrapper img.will-fade,
+.list-image-wrapper img.will-fade,
+.carousel-card-image.will-fade {
   opacity: 0;
   transition: opacity var(--t-normal) var(--ease-out);
 }
