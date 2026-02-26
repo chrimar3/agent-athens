@@ -294,6 +294,49 @@ Generic venue placeholders come in variants. When adding one to `config/rejected
 - "TBA" (already covered)
 - Watch for: "Live Music Hall", "Concert Venue", "Event Space", etc.
 
+## Subagent Enrichment Pattern
+
+### Brief Generation
+```bash
+bun scripts/generate-enrichment-brief.ts --count=5
+# → temp-briefs/batch-N.md
+```
+
+### Spawning a Subagent
+The parent reads the brief file and passes its contents as the Task tool prompt. Key elements:
+1. Set working directory explicitly: "Your working directory is: /Users/chrism/Project with Claude/AgentAthens/agent-athens"
+2. Tell subagent to read exemplars and anti-patterns FIRST
+3. Provide execution instructions with exact CLI commands
+4. Request a batch-review.md summary at the end
+
+### Token Budget
+- Brief itself: ~300-600 words (~250-500 tokens)
+- Subagent total usage: ~35K tokens per event (research + writing + gate checks)
+- 2-event batch: ~71K tokens, ~4 min
+- 5-event batch: estimate ~150-180K tokens, ~10-12 min
+
+### What the Parent Receives Back
+A text summary only — not individual tool calls. The summary includes:
+- Research findings
+- Gate scores
+- Files created
+- Decisions made
+- An agentId for resuming
+
+### Calibration Workflow
+```
+HUMAN: "Enrich next batch"
+PARENT: bun scripts/generate-enrichment-brief.ts --count=5
+PARENT: Task tool → general-purpose subagent with brief
+  → subagent: WebSearch, write descriptions, gate check
+  → ALL output → temp-descriptions/ (no auto-save)
+PARENT: receives summary
+HUMAN: reviews descriptions in temp-descriptions/
+  → edits if needed
+  → updates calibration-log.md
+  → bun scripts/save-batch.ts --batch=N for approved descriptions
+```
+
 ## Enrichment v4 Infrastructure Pattern
 
 ### SQLite ALTER TABLE Idempotency

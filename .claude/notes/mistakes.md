@@ -69,6 +69,14 @@ Pitfalls encountered and how to avoid them.
 | TicketServices scraper hangs | Scraper stuck at 10/82 events during price fetching | Add timeout per event (30s) and continue on timeout; don't let one stuck request block all |
 | Full scrape-all.ts too slow | Takes 10+ minutes, can hang entirely | Run scrapers in parallel where possible; add global timeout; monitor with `--dry-run` first |
 
+## Subagent Enrichment Issues (2026-02-26)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| DB readonly flag in Bun 1.3.0 | `new Database(path, { readonly: true })` causes "unable to open database file" on prepare() | Use `new Database(path)` without readonly — matches existing scripts |
+| entity_knowledge column name | Used `genres` (plural) but table has `genre` (singular) | Check PRAGMA table_info() before writing queries against unfamiliar tables |
+| Gate word count vs brief word count | Gate max is 450 for premium, but enrichment brief targets 400-600 | Known tension — gate TOO_LONG warning is acceptable during calibration. Consider adjusting gate threshold to 600 |
+
 ## Enrichment v4 Issues (2026-02-26)
 
 | Mistake | What Happened | Correct Approach |

@@ -275,6 +275,56 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 | save-entity.ts | Entity knowledge UPSERT |
 | rollback-batch.ts | Rollback by event or batch |
 
+## Subagent Enrichment Architecture (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Task tool subagents for enrichment | PoC confirmed WebSearch + file write + Bash all work. Parent orchestrates, subagent does research + writing. ~71K tokens per 2-event batch, ~4 min | 2026-02-26 |
+| Self-contained briefs with file references (not embedded text) | Subagents start fresh each time — all context must be in the prompt. File references keep briefs under 600 words (~450 tokens) vs 3000+ if embedded | 2026-02-26 |
+| Calibration-first gate architecture | All descriptions go to temp-descriptions/ for human review. No auto-save until 3+ consecutive batches prove quality (>= 80% approved without major rewrite) | 2026-02-26 |
+| Round-robin type selection, max 2 per type | Prevents batches dominated by theater (304 events) at expense of dj_set (91), classical (37) | 2026-02-26 |
+| Exemplar files in `exemplars/` (not DB or config) | Subagents read files directly. YAML frontmatter captures what makes each exemplar good. 5 exemplars covering theater, concert, classical (gap: dj_set, exhibition) | 2026-02-26 |
+| DB open without readonly flag | Bun:sqlite readonly flag causes "unable to open" on prepare() in this Bun version (1.3.0). Other scripts also use non-readonly. Query-only scripts are still safe | 2026-02-26 |
+| Entity knowledge column is `genre` not `genres` | Table schema uses singular. Initial code used plural, caught during first run | 2026-02-26 |
+
+### Subagent Performance (Batch 0)
+
+| Metric | Value |
+|--------|-------|
+| Events enriched | 2 (theater, concert) |
+| Total tokens | ~71K |
+| Tool uses | 44 |
+| Duration | ~4 min |
+| Gate scores | 90/100, 90/100 |
+| Anti-patterns detected | 0 |
+| Factual errors | 0 (correctly identified Shadow Knight as hip-hop, not metal) |
+
+## Self-Hosted Image Pipeline (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Three-phase pipeline: enrich → download → cleanup | Decoupled phases are independently retryable. Enrichment extracts og:image URLs, download converts to .webp, cleanup removes stale files | 2026-02-26 |
+| Pipeline order in daily-automated.sh: enrich(3g) → download(3h) → generate(4) → deploy(5) → cleanup(3i) | Cleanup runs AFTER deploy so images are served before removal. Generate uses latest images | 2026-02-26 |
+| Cleanup: orphan + 7-day-expired two-pass | Pass 1 deletes images for events removed from DB. Pass 2 deletes images for expired events (exhibition-aware: uses end_date for exhibitions). 7-day buffer prevents deleting images for recently ended events | 2026-02-26 |
+| All image phases non-fatal in pipeline | Better to serve stale images than fail the entire build. Same Article VII pattern as other enrichment phases | 2026-02-26 |
+
+### Image Coverage Ceiling (74%)
+
+| Source | Displayed | Hosted | Pct | Gap Reason |
+|--------|-----------|--------|-----|------------|
+| more.com | 122 | 122 | 100% | — |
+| ticketservices | 72 | 72 | 100% | — |
+| megaron.gr | 28 | 28 | 100% | — |
+| halfnote | 23 | 23 | 100% | — |
+| residentadvisor | 82 | 69 | 84.1% | 13 events lack FLYERFRONT in GraphQL API |
+| athinorama.gr | 426 | 279 | 65.5% | 147 pages lack body poster image |
+| clubber.gr | 36 | 0 | 0% | No og:image in HTML (WordPress, no meta tag) |
+| onassis | 4 | 0 | 0% | React SPA — no og:image in static HTML |
+| eventbrite | 4 | 1 | 25% | _next/image proxy returns 500 for external requests |
+| benaki | 1 | 0 | 0% | Scraper doesn't extract images |
+
+**Improving beyond ~74% requires Puppeteer-based image extraction** (separate effort). clubber.gr and onassis need JS rendering to access images.
+
 ## Filter Bar Polish — Phase 4C (2026-02-25)
 
 | Decision | Why | Date |
