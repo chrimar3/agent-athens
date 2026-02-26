@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>104 - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="3 upcoming events at 104. Next: Ο αρχιτέκτων on Feb 25, 2026.">
+  <meta name="description" content="3 upcoming events at 104. Next: Χίλιοι λόγοι για να τσακωθείς on Feb 26, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/104/">
@@ -24,6 +27,13 @@
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="104 - Εκδηλώσεις">
+  <meta name="twitter:description" content="3 επερχόμενες εκδηλώσεις στο 104">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -80,6 +90,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -107,23 +118,23 @@
       <ul>
         
       <li class="venue-event-item ">
-        <a href="/events/007ef05b-104-/">Ο αρχιτέκτων</a>
+        <a href="/events/65e27fdf-104-/">Χίλιοι λόγοι για να τσακωθείς</a>
         
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
+        <span class="event-date">Πέμπτη 26 Φεβρουαρίου στις 11:00</span>
         <span class="event-type">theater</span>
       </li>
 
       <li class="venue-event-item ">
-        <a href="/events/fc2e5eb5-104-smalltown-boy/">Smalltown boy</a>
+        <a href="/events/d7eaf865-104-/">Ο αρχιτέκτων</a>
         
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
+        <span class="event-date">Πέμπτη 26 Φεβρουαρίου στις 18:00</span>
         <span class="event-type">theater</span>
       </li>
 
       <li class="venue-event-item ">
-        <a href="/events/1a8c66e0-104-/">Χίλιοι λόγοι για να τσακωθείς</a>
+        <a href="/events/01fc25c1-104-smalltown-boy/">Smalltown boy</a>
         
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
+        <span class="event-date">Πέμπτη 26 Φεβρουαρίου στις 21:00</span>
         <span class="event-type">theater</span>
       </li>
       </ul>
@@ -148,6 +159,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -204,6 +216,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

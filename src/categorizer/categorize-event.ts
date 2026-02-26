@@ -351,8 +351,15 @@ export function categorizeEvent(event: EventInput): CategorizationResult {
   const sourceResult = categorizeBySource(event);
   if (sourceResult) return sourceResult;
 
+  // Check if this is a mixed venue — don't trust currentType from scraper
+  const config = loadVenueConfig();
+  const isMixedVenue = event.venue && config.mixed_venues.some(mv =>
+    normalizeVenueName(mv).toLowerCase() === normalizeVenueName(event.venue || '').toLowerCase()
+  );
+
   // Fallback: use current type or default to 'concert'
-  if (event.currentType && event.currentType !== 'other') {
+  // For mixed venues, scraper type is unreliable — default to 'concert'
+  if (!isMixedVenue && event.currentType && event.currentType !== 'other') {
     return {
       type: event.currentType,
       confidence: 'low',
@@ -363,7 +370,9 @@ export function categorizeEvent(event: EventInput): CategorizationResult {
   return {
     type: 'concert',
     confidence: 'low',
-    reason: 'No matching rules, defaulted to concert'
+    reason: isMixedVenue
+      ? `Mixed venue "${event.venue}" — defaulted to concert`
+      : 'No matching rules, defaulted to concert'
   };
 }
 

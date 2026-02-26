@@ -26,15 +26,15 @@
       },
       "price": {
         "type": "with-ticket",
-        "amount": null,
+        "amount": 25,
         "currency": "EUR",
-        "range": null
+        "range": "€15-80"
       },
       "url": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "ticketUrl": "https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/",
       "source": "megaron.gr",
       "createdAt": "2026-02-18T09:24:24.085Z",
-      "updatedAt": "2026-02-25 17:22:20",
+      "updatedAt": "2026-02-26 07:40:48",
       "language": "en",
       "imageUrl": "https://www.megaron.gr/wp-content/uploads/2025/12/25-26-GrandsBalletsGeneve-17©FilipVanRoe_GTG_Ihsane-scaled.jpg",
       "imageSource": "backfill",
@@ -162,47 +162,11 @@
       "imageSource": "backfill",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "DanceEvent",
-      "id": "76812621a28658a5",
-      "title": "CARMEN by Antonio Gades & Carlos Saura – Με την Compañía Antonio Gades",
-      "description": "",
-      "startDate": "2026-04-24T20:30:00+03:00",
-      "endDate": null,
-      "type": "dance",
-      "genres": [
-        "classical"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Μέγαρο Μουσικής Αθηνών",
-        "address": "Βασιλίσσης Σοφίας & Κόκκαλη",
-        "neighborhood": "Kolonaki",
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": null,
-        "currency": "EUR",
-        "range": null
-      },
-      "url": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
-      "ticketUrl": "https://www.megaron.gr/event/carmen-by-antonio-gades-carlos-saura-me-tin-compania-antonio-gades/",
-      "source": "megaron.gr",
-      "createdAt": "2026-02-18T09:24:37.970Z",
-      "updatedAt": "2026-02-25 17:21:32",
-      "language": "en",
-      "imageUrl": "https://www.megaron.gr/wp-content/uploads/2026/01/CARMEN-34_©-Stanislav-Levshin.jpg",
-      "imageSource": "backfill",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 5,
-    "lastUpdate": "2026-02-25T22:53:20.030Z",
+    "total": 4,
+    "lastUpdate": "2026-02-26T07:52:32.916Z",
     "url": "https://agentathens.netlify.app/with-ticket-dance"
   }
 }

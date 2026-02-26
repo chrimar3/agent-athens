@@ -34,11 +34,12 @@
       "ticketUrl": "https://ra.co/events/2378584",
       "source": "residentadvisor",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:16:14",
+      "updatedAt": "2026-02-26 07:40:47",
       "language": "en",
       "timeDoors": "20:30",
       "timeSource": "scraped_listing",
-      "imageSource": "not_found",
+      "imageUrl": "https://images.ra.co/f30e772585cd7bba680dcfd485e08de6a515ac47.jpg",
+      "imageSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -108,11 +109,120 @@
       "ticketUrl": "https://ra.co/events/2379022",
       "source": "residentadvisor",
       "createdAt": "2026-02-25 08:57:36",
-      "updatedAt": "2026-02-25 17:16:06",
+      "updatedAt": "2026-02-26 07:40:47",
       "language": "en",
       "timeDoors": "21:00",
       "timeSource": "scraped_listing",
-      "imageSource": "not_found",
+      "imageUrl": "https://images.ra.co/f53d19c5237240ef974bda6c1fcba77ae5d40ae3.jpg",
+      "imageSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "7694bbf5b0fe150a",
+      "title": "Αλιγάτορες",
+      "description": "Εως 2026-03-10",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "AUDITORIUM",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/aligatores-10081818/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/aligatores-10081818/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 07:40:48",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10081818/list.jpg",
+      "imageSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "53631308cb28d5da",
+      "title": "Ευρυδίκη",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Rabbithole",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 18,
+        "currency": "EUR",
+        "range": "€18"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/eurudiki-10088821/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/eurudiki-10088821/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 07:40:48",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088821/list.jpg",
+      "imageSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "id": "d24355b67e6ed258",
+      "title": "Η κατάρρευση",
+      "description": "Εως 2026-04-05",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "dj_set",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Rabbithole",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 17,
+        "currency": "EUR",
+        "range": "€17"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/i_katarreusi-10089076/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/i_katarreusi-10089076/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 07:40:48",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10089076/list.jpg",
+      "imageSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -152,48 +262,11 @@
       "imageSource": "not_found",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "MusicEvent",
-      "id": "d267eb676e666885",
-      "title": "Agent Greg + Stephanos",
-      "description": "",
-      "startDate": "2026-02-26T23:00:00",
-      "endDate": null,
-      "type": "dj_set",
-      "genres": [
-        "electronic"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Dybbuk",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "door",
-        "amount": 10,
-        "currency": "EUR",
-        "range": "Door price"
-      },
-      "url": "https://www.clubber.gr/events/agent-greg-stephanos/",
-      "ticketUrl": "https://www.clubber.gr/events/agent-greg-stephanos/",
-      "source": "clubber.gr",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-25 17:41:51",
-      "language": "en",
-      "timeDoors": "23:00",
-      "timeSource": "scraped_listing",
-      "imageSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 5,
-    "lastUpdate": "2026-02-25T22:53:19.973Z",
+    "total": 7,
+    "lastUpdate": "2026-02-26T07:52:32.834Z",
     "url": "https://agentathens.netlify.app/with-ticket-dj_set-today"
   }
 }

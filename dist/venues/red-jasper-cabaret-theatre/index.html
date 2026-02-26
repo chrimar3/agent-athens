@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Red Jasper Cabaret Theatre - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="2 upcoming events at Red Jasper Cabaret Theatre. Next: Δεν θα πεθάνουμε κιόλας on Feb 25, 2026.">
+  <meta name="description" content="2 upcoming events at Red Jasper Cabaret Theatre. Next: Δεν θα πεθάνουμε κιόλας on Feb 26, 2026.">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://agentathens.netlify.app/venues/red-jasper-cabaret-theatre/">
@@ -24,6 +27,13 @@
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
+  <meta property="og:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Red Jasper Cabaret Theatre - Εκδηλώσεις">
+  <meta name="twitter:description" content="2 επερχόμενες εκδηλώσεις στο Red Jasper Cabaret Theatre">
+  <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -80,6 +90,7 @@
   <ul class="mobile-menu-items">
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
   <div class="mobile-menu-lang">
@@ -107,16 +118,16 @@
       <ul>
         
       <li class="venue-event-item ">
-        <a href="/events/64336df6-red-jasper-cabaret-theatre-/">Δεν θα πεθάνουμε κιόλας</a>
+        <a href="/events/9f5cdf59-red-jasper-cabaret-theatre-/">Δεν θα πεθάνουμε κιόλας</a>
         
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
+        <span class="event-date">Πέμπτη 26 Φεβρουαρίου στις 21:00</span>
         <span class="event-type">show</span>
       </li>
 
       <li class="venue-event-item ">
-        <a href="/events/484df1bd-red-jasper-cabaret-theatre-/">Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ</a>
+        <a href="/events/fe6ceb36-red-jasper-cabaret-theatre-/">Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ</a>
         
-        <span class="event-date">Τετάρτη 25 Φεβρουαρίου στις 00:00</span>
+        <span class="event-date">Πέμπτη 26 Φεβρουαρίου στις 21:00</span>
         <span class="event-type">show</span>
       </li>
       </ul>
@@ -141,6 +152,7 @@
       <div class="footer-col">
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
+          <li><a href="/about/">Σχετικά</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
@@ -197,6 +209,11 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && menu.classList.contains('open')) close();
+  });
+
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+    if (img.complete) img.classList.add('is-loaded');
+    else img.addEventListener('load', function() { this.classList.add('is-loaded'); });
   });
 })();
 </script>

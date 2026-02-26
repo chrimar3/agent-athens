@@ -134,44 +134,6 @@
     {
       "@context": "https://schema.org",
       "@type": "ExhibitionEvent",
-      "id": "2b3e9206ffe9f074",
-      "title": "By Heart | Tiago Rodrigues",
-      "description": "Θέατρο",
-      "startDate": "2026-05-12T11:00:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "Art",
-        "Contemporary"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Stegi",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€10-35"
-      },
-      "url": "https://www.onassis.org/el/whats-on/heart",
-      "ticketUrl": "https://www.onassis.org/el/whats-on/heart",
-      "source": "onassis",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-25 17:45:54",
-      "language": "en",
-      "timeDoors": "11:00",
-      "timeSource": "scraped_listing",
-      "imageSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
       "id": "299d3c7b29579f17",
       "title": "Yorgos Lanthimos: Photographs",
       "description": "Έκθεση",
@@ -213,87 +175,11 @@
       },
       "permanentCollection": false,
       "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "ba1cb764c001ee17",
-      "title": "Yorgos Lanthimos: Photographs",
-      "description": "Έκθεση",
-      "startDate": "2026-05-17T11:00:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "Art",
-        "Contemporary"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Stegi",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€10-35"
-      },
-      "url": "https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs",
-      "ticketUrl": "https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs",
-      "source": "onassis",
-      "createdAt": "2026-02-18 06:09:06",
-      "updatedAt": "2026-02-25 17:45:53",
-      "language": "en",
-      "timeDoors": "11:00",
-      "timeSource": "scraped_listing",
-      "imageSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ExhibitionEvent",
-      "id": "13c8a305c6f66494",
-      "title": "Ongoing | Tilda Swinton",
-      "description": "Έκθεση",
-      "startDate": "2026-06-28T11:00:00",
-      "endDate": null,
-      "type": "exhibition",
-      "genres": [
-        "Art",
-        "Contemporary"
-      ],
-      "tags": [],
-      "venue": {
-        "name": "Onassis Stegi",
-        "address": null,
-        "neighborhood": null,
-        "capacity": null
-      },
-      "price": {
-        "type": "with-ticket",
-        "amount": 15,
-        "currency": "EUR",
-        "range": "€10-35"
-      },
-      "url": "https://www.onassis.org/el/whats-on/ongoing-tilda-swinton",
-      "ticketUrl": "https://www.onassis.org/el/whats-on/ongoing-tilda-swinton",
-      "source": "onassis",
-      "createdAt": "2026-02-15 06:47:14",
-      "updatedAt": "2026-02-25 17:45:52",
-      "language": "en",
-      "timeDoors": "11:00",
-      "timeSource": "scraped_listing",
-      "imageSource": "not_found",
-      "permanentCollection": false,
-      "locationStatus": "verified_athens"
     }
   ],
   "meta": {
-    "total": 7,
-    "lastUpdate": "2026-02-25T22:53:19.819Z",
+    "total": 4,
+    "lastUpdate": "2026-02-26T07:52:32.631Z",
     "url": "https://agentathens.netlify.app/exhibition"
   }
 }

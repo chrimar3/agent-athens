@@ -39,10 +39,84 @@
       "ticketUrl": "https://www.more.com/theater/louis-c-k",
       "source": "athinorama.gr",
       "createdAt": "2026-01-12T21:21:44.966Z",
-      "updatedAt": "2026-02-25 17:14:01",
+      "updatedAt": "2026-02-26 07:40:48",
       "language": "en",
+      "timeDoors": "19:30",
+      "timeSource": "scraped_detail",
       "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088136/list.jpg",
       "imageSource": "backfill",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "9f5cdf5907a10043",
+      "title": "Δεν θα πεθάνουμε κιόλας",
+      "description": "Εως 2026-03-06",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Red Jasper Cabaret Theatre",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 12,
+        "currency": "EUR",
+        "range": "€12"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 07:40:48",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10088694/list.jpg",
+      "imageSource": "scraped_listing",
+      "permanentCollection": false,
+      "locationStatus": "verified_athens"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "id": "fe6ceb368626babe",
+      "title": "Ρίζες ή πώς να στολίσεις τη στάμνα σου με γκλίτερ",
+      "description": "Εως 2026-02-26",
+      "startDate": "2026-02-26T21:00:00",
+      "endDate": null,
+      "type": "show",
+      "genres": [],
+      "tags": [],
+      "venue": {
+        "name": "Red Jasper Cabaret Theatre",
+        "address": null,
+        "neighborhood": null,
+        "capacity": null
+      },
+      "price": {
+        "type": "paid",
+        "amount": 10,
+        "currency": "EUR",
+        "range": "€10"
+      },
+      "url": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
+      "ticketUrl": "https://www.athinorama.gr/theatre/performance/rizes_i_pos_na_stoliseis_ti_stamna_sou_me_gkliter-10079266/",
+      "source": "athinorama.gr",
+      "createdAt": "2026-02-26 07:40:47",
+      "updatedAt": "2026-02-26 07:40:48",
+      "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_listing",
+      "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10079266/list.jpg",
+      "imageSource": "scraped_listing",
       "permanentCollection": false,
       "locationStatus": "verified_athens"
     },
@@ -166,8 +240,10 @@
       "ticketUrl": "https://www.athinorama.gr/theatre/performance/enas_katapliktikos_katathliptikos-10082932/",
       "source": "athinorama.gr",
       "createdAt": "2025-12-04T16:32:23.858Z",
-      "updatedAt": "2026-02-25 17:11:20",
+      "updatedAt": "2026-02-26 07:41:36",
       "language": "en",
+      "timeDoors": "21:00",
+      "timeSource": "scraped_detail",
       "imageUrl": "https://www.athinorama.gr/lmnts/events/theatre/10082932/list.jpg",
       "imageSource": "backfill",
       "permanentCollection": false,
@@ -175,8 +251,8 @@
     }
   ],
   "meta": {
-    "total": 4,
-    "lastUpdate": "2026-02-25T22:53:20.042Z",
+    "total": 6,
+    "lastUpdate": "2026-02-26T07:52:32.932Z",
     "url": "https://agentathens.netlify.app/with-ticket-show"
   }
 }

@@ -89,11 +89,8 @@
     "Θέατρο Αμαλία": "theater",
     "Θέατρο Χώρος": "theater",
     "Σύγχρονο Θέατρο": "theater",
-    "ΙΛΙΟΝ Plus": "theater",
-    "Ίλιον Plus": "theater",
     "Δημοτικό Θέατρο Πειραιά": "theater",
     "Δημοτικό Θέατρο Λυκαβηττού": "theater",
-    "Γυάλινο Μουσικό Θέατρο": "theater",
     "Coronet Theater": "theater",
     "CORONET THEATER": "theater",
     "Embassy Theater": "theater",
@@ -173,7 +170,12 @@
     "AUX",
     "Eightball Club",
     "Eightball",
-    "Ίδρυμα Μιχάλης Κακογιάννης"
+    "Ίδρυμα Μιχάλης Κακογιάννης",
+    "ΙΛΙΟΝ Plus",
+    "Ίλιον Plus",
+    "Ίλιον plus",
+    "Γυάλινο Μουσικό Θέατρο",
+    "Γυάλινο"
   ],
 
   "source_type_hints": {

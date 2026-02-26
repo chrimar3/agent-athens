@@ -35,6 +35,7 @@ import { shouldExcludeEvent } from '../src/validators/scope-filter';
 import { validateSeasonalEvent } from '../src/validators/seasonal-filter';
 import { categorizeEventSimple } from '../src/categorizer';
 import { normalizeTheaterSpelling } from '../src/validators/event-categorizer';
+import { extractOgImage } from '../src/utils/image-extractor';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -58,6 +59,7 @@ interface ScrapedEvent {
   price_range: string | null;
   source: string;
   location_status?: string;
+  image_url?: string | null;
 }
 
 interface ScrapeResult {
@@ -436,6 +438,12 @@ function extractTimeFromAthinoramaPage(html: string): string | null {
 async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
   console.log('   Fetching athinorama.gr guides...');
 
+  // Load mixed venues so we don't hardcode type for venues that host multiple event types
+  const fs = require('fs');
+  const venueConfigPath = join(import.meta.dir, '../config/venue-categories.json');
+  const mixedVenues: string[] = JSON.parse(fs.readFileSync(venueConfigPath, 'utf-8')).mixed_venues || [];
+  const mixedVenuesLower = mixedVenues.map((v: string) => v.toLowerCase().trim());
+
   // Early connectivity test before processing
   const testPage = await fetchWithRetryAthinorama('https://www.athinorama.gr/music/guide');
   if (!testPage) {
@@ -556,13 +564,17 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
           if (startDate < today) continue;
         }
 
+        // For mixed venues scraped from theater guide, use 'other' so categorizer decides
+        const isMixedVenue = mixedVenuesLower.includes(venue.toLowerCase().trim());
+        const effectiveType = (guide.type === 'theater' && isMixedVenue) ? 'other' : guide.type;
+
         events.push({
           id: generateEventId(title, startDate!, venue),
           title,
           description: endDate ? `Εως ${endDate}` : '',
           start_date: startDate!,
           time: '',
-          type: guide.type,
+          type: effectiveType,
           genres: '',
           venue_name: venue,
           url: `https://www.athinorama.gr${eventUrl}`,
@@ -590,6 +602,14 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
       // Use retry helper for individual event pages (fewer retries, faster timeout)
       const eventHtml = await fetchWithRetryAthinorama(event.url, 2);
       if (!eventHtml) continue;
+
+      // ---- IMAGE EXTRACTION ----
+      if (!event.image_url) {
+        const imageResult = extractOgImage(eventHtml, event.url);
+        if (imageResult) {
+          event.image_url = imageResult.imageUrl;
+        }
+      }
 
       // ---- TIME EXTRACTION (same patterns as enrich-time.ts) ----
       if (!event.time) {
@@ -1012,6 +1032,7 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
           venue { name id }
           contentUrl
           cost
+          images { filename type }
         }
       }
       totalResults
@@ -1080,7 +1101,8 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
         price_type: priceType,
         price_amount: price,
         price_range: priceRange,
-        source: 'residentadvisor'
+        source: 'residentadvisor',
+        image_url: e.images?.find((img: any) => img.type === 'FLYERFRONT')?.filename || null
       });
     }
 
@@ -1280,11 +1302,11 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
     INSERT INTO events (
       id, title, description, start_date, time_doors, time_source, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,
-      location_status, needs_enrichment, created_at, updated_at
+      location_status, image_url, image_source, needs_enrichment, created_at, updated_at
     ) VALUES (
       $id, $title, $description, $start_date, $time_doors, $time_source, $type, $genres,
       $venue_name, $url, $price_type, $price_amount, $price_range, $source,
-      $location_status, 1, datetime('now'), datetime('now')
+      $location_status, $image_url, $image_source, 1, datetime('now'), datetime('now')
     )
     ON CONFLICT(id) DO UPDATE SET
       title = $title,
@@ -1295,6 +1317,8 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
       price_range = COALESCE($price_range, price_range),
       time_doors = COALESCE($time_doors, time_doors),
       time_source = COALESCE($time_source, time_source),
+      image_url = COALESCE($image_url, image_url),
+      image_source = COALESCE($image_source, image_source),
       updated_at = datetime('now')
   `);
 
@@ -1354,7 +1378,9 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         $price_amount: e.price_amount,
         $price_range: e.price_range,
         $source: e.source,
-        $location_status: e.location_status || 'unverified'
+        $location_status: e.location_status || 'unverified',
+        $image_url: e.image_url || null,
+        $image_source: e.image_url ? 'scraped_listing' : null
       });
       saved++;
     } catch (err) {
