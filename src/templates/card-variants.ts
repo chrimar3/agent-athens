@@ -10,7 +10,7 @@ import { prepareCardData, TYPE_ICONS } from './page';
  */
 export function renderEventCardList(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event);
-  const imgSrc = event.imageLocal || event.imageUrl;
+  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
   <a href="${href}" class="event-card-list">
@@ -34,7 +34,7 @@ export function renderEventCardList(event: Event): string {
  */
 export function renderFeatureCard(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc } = prepareCardData(event);
-  const imgSrc = event.imageLocal || event.imageUrl;
+  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
   <a href="${href}" class="event-card-feature">
@@ -65,7 +65,7 @@ export function renderFeaturedCarousel(events: Event[]): string {
     const { dateStr, href, venueText } = prepareCardData(event);
     const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
 
-    const imgSrc = event.imageLocal || event.imageUrl;
+    const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
     return `
     <a href="${href}" class="carousel-card">

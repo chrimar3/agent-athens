@@ -294,7 +294,7 @@ export function prepareCardData(event: Event): CardData {
 function renderEventCard(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
 
-  const imgSrc = event.imageLocal || event.imageUrl;
+  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
   <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">

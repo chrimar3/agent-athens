@@ -102,9 +102,10 @@ function generateVenueSchema(venue: VenueData): string | null {
 /**
  * Render venue page HTML
  */
-function renderVenuePage(venue: VenueData): string {
+function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>): string {
   const canonicalUrl = `${BASE_URL}/venues/${venue.slug}/`;
   const schemaJson = generateVenueSchema(venue);
+  const ogImage = venueImageMap?.get(venue.name) || `${BASE_URL}/images/og/agentathens-default.png`;
 
   // Group events by type for summary
   const eventsByType = new Map<string, number>();
@@ -166,13 +167,13 @@ function renderVenuePage(venue: VenueData): string {
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
-  <meta property="og:image" content="${BASE_URL}/images/og/agentathens-default.png">
+  <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${venue.name} - Εκδηλώσεις">
   <meta name="twitter:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${venue.name}">
-  <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">
+  <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -245,7 +246,7 @@ function renderVenuePage(venue: VenueData): string {
  * Generate all venue pages
  * Returns list of generated URLs for sitemap
  */
-export async function generateVenuePages(events: Event[]): Promise<string[]> {
+export async function generateVenuePages(events: Event[], venueImageMap?: Map<string, string>): Promise<string[]> {
   const venuesDir = join(DIST_DIR, 'venues');
   if (!existsSync(venuesDir)) {
     mkdirSync(venuesDir, { recursive: true });
@@ -298,7 +299,7 @@ export async function generateVenuePages(events: Event[]): Promise<string[]> {
     }
 
     // Generate page HTML
-    const html = renderVenuePage(venue);
+    const html = renderVenuePage(venue, venueImageMap);
 
     // Create directory and write file
     const pageDir = join(venuesDir, venue.slug);

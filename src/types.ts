@@ -33,6 +33,8 @@ export interface Event {
   imageUrl?: string;       // og:image URL from source page (hotlinked)
   imageSource?: string;    // 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
   imageLocal?: string;     // Self-hosted path, e.g. "/images/events/{id}.webp"
+  // Venue fallback image (computed at build time from venue_context.image_path)
+  venueImage?: string;
   // Location verification status
   locationStatus?: LocationStatus;
 }

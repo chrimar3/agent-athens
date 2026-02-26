@@ -123,6 +123,9 @@ function getOgImage(event: Event): string {
   if (event.imageLocal) return event.imageLocal;
   if (event.imageUrl) return event.imageUrl;
 
+  // Fall back to venue image if available
+  if (event.venueImage) return event.venueImage;
+
   // Fall back to type-specific default
   return DEFAULT_OG_IMAGES[event.type] || DEFAULT_OG_IMAGES.default;
 }
@@ -476,7 +479,7 @@ export function renderRelatedEventCard(event: Event): string {
     ? `${event.venue.name} · ${event.venue.neighborhood}`
     : event.venue.name;
 
-  const imgSrc = event.imageLocal || event.imageUrl;
+  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
   <a href="${href}" class="event-card">

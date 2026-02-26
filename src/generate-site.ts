@@ -112,6 +112,20 @@ async function main() {
     console.log(`📸 Copied ${imageFiles.length} event images to dist/`);
   }
 
+  // Copy venue fallback images to dist
+  const venueImgSrc = join(import.meta.dir, '../data/venue-images');
+  const venueImgDest = join(DIST_DIR, 'images/venues');
+  if (existsSync(venueImgSrc)) {
+    mkdirSync(venueImgDest, { recursive: true });
+    const venueImageFiles = readdirSync(venueImgSrc).filter(f => f.endsWith('.webp'));
+    for (const file of venueImageFiles) {
+      copyFileSync(join(venueImgSrc, file), join(venueImgDest, file));
+    }
+    if (venueImageFiles.length > 0) {
+      console.log(`📸 Copied ${venueImageFiles.length} venue images to dist/`);
+    }
+  }
+
   // Generate OG images and favicons
   console.log('🖼️  Generating OG images and favicons...');
   await generateOgImages();
@@ -158,9 +172,33 @@ async function main() {
     return startDate >= today;
   });
 
+  // Preload venue fallback images from venue_context
+  const venueImageMap = new Map<string, string>();
+  try {
+    const db = new Database(DB_PATH);
+    const venueImages = db.prepare(
+      "SELECT venue_name, image_path FROM venue_context WHERE image_path IS NOT NULL"
+    ).all() as { venue_name: string; image_path: string }[];
+    for (const v of venueImages) venueImageMap.set(v.venue_name, v.image_path);
+    db.close();
+  } catch (err) {
+    console.log(`⚠️ Could not load venue images: ${err}`);
+  }
+
+  // Attach venue fallback image to each event (computed at load time)
+  for (const event of events) {
+    const venueImg = venueImageMap.get(event.venue.name);
+    if (venueImg) event.venueImage = venueImg;
+  }
+
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
   console.log(`📍 ${locationFiltered.length} events with verified Athens location`);
-  console.log(`📅 Publishing ${events.length} current/upcoming events\n`);
+  console.log(`📅 Publishing ${events.length} current/upcoming events`);
+  if (venueImageMap.size > 0) {
+    const venueImgCount = events.filter(e => !e.imageLocal && !e.imageUrl && e.venueImage).length;
+    console.log(`🏛️ ${venueImageMap.size} venue images loaded, ${venueImgCount} events get venue fallback`);
+  }
+  console.log();
 
   // Save normalized events
   const normalizedPath = join(DIST_DIR, 'data');
@@ -285,7 +323,7 @@ async function main() {
 
   // Generate venue pages (Phase C.5)
   console.log('\n🏛️ Generating venue pages...');
-  const venuePageUrls = await generateVenuePages(events);
+  const venuePageUrls = await generateVenuePages(events, venueImageMap);
   generatedUrls.push(...venuePageUrls);
   pagesGenerated += venuePageUrls.length;
 
