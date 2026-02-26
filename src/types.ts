@@ -32,6 +32,7 @@ export interface Event {
   // Image fields
   imageUrl?: string;       // og:image URL from source page (hotlinked)
   imageSource?: string;    // 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
+  imageLocal?: string;     // Self-hosted path, e.g. "/images/events/{id}.webp"
   // Location verification status
   locationStatus?: LocationStatus;
 }

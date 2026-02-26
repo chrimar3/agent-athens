@@ -41,7 +41,7 @@
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin</string>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
         <key>TZ</key>
         <string>Europe/Athens</string>
     </dict>

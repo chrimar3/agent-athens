@@ -21,7 +21,7 @@ set -e  # Exit on error
 # PATH Setup (for launchd which doesn't inherit user's PATH)
 # ============================================================================
 
-export PATH="/Users/chrism/.bun/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+export PATH="/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 # ============================================================================
 # Configuration
@@ -331,6 +331,44 @@ run_image_enrichment() {
     fi
 }
 
+# Phase 3h: Download and optimize event images
+run_image_download() {
+    log_phase "IMAGE DOWNLOAD"
+    log "Downloading and optimizing event images..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/download-images.ts"
+        return 0
+    fi
+
+    if bun run scripts/download-images.ts >> "$LOG_FILE" 2>&1; then
+        log "Image download completed"
+        return 0
+    else
+        log_error "Image download failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
+# Phase 3i: Clean up orphaned images
+run_image_cleanup() {
+    log_phase "IMAGE CLEANUP"
+    log "Cleaning up orphaned event images..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/cleanup-old-images.ts"
+        return 0
+    fi
+
+    if bun run scripts/cleanup-old-images.ts >> "$LOG_FILE" 2>&1; then
+        log "Image cleanup completed"
+        return 0
+    else
+        log_error "Image cleanup failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # Phase 4: Generate site
 run_generate() {
     log_phase "SITE GENERATION"
@@ -381,28 +419,33 @@ run_health_check() {
 # Phase 5: Deploy
 run_deploy() {
     log_phase "DEPLOYMENT"
-    log "Deploying to Netlify..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
         log "[DRY RUN] Would deploy to Netlify"
         return 0
     fi
 
-    # Check if git has changes
-    if git diff --quiet && git diff --cached --quiet; then
-        log "No changes to deploy"
-        return 0
+    # Step 1: Commit and push source code (dist/ is gitignored)
+    log "Checking for source code changes..."
+    if ! git diff --quiet || ! git diff --cached --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+        git add -A
+        git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
+        if git push origin main >> "$LOG_FILE" 2>&1; then
+            log "Source code pushed to git"
+        else
+            log_error "Git push failed (non-fatal, continuing to deploy)"
+        fi
+    else
+        log "No source code changes to commit"
     fi
 
-    # Commit and push
-    git add -A
-    git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
-
-    if git push origin main >> "$LOG_FILE" 2>&1; then
-        log "Deployment completed (pushed to main, Netlify will auto-deploy)"
+    # Step 2: Deploy dist/ via Netlify CLI
+    log "Deploying dist/ to Netlify via CLI..."
+    if netlify deploy --prod --dir=dist --message "Daily deploy $(date +%Y-%m-%d)" >> "$LOG_FILE" 2>&1; then
+        log "Netlify CLI deploy completed"
         return 0
     else
-        log_error "Deployment failed"
+        log_error "Netlify CLI deploy failed"
         return 1
     fi
 }
@@ -451,6 +494,8 @@ print_summary() {
         "SELECT COUNT(*) FROM events WHERE ticket_url IS NOT NULL;")
     local with_image=$(sqlite3 "$PROJECT_DIR/data/events.db" \
         "SELECT COUNT(*) FROM events WHERE image_url IS NOT NULL;")
+    local with_local_image=$(sqlite3 "$PROJECT_DIR/data/events.db" \
+        "SELECT COUNT(*) FROM events WHERE image_local IS NOT NULL;" 2>/dev/null || echo "0")
 
     log "Total events in database: $total_events"
     log "Verified Athens events: $verified_events"
@@ -460,6 +505,7 @@ print_summary() {
     log "Events with Schema.org: $with_schema"
     log "Events with ticket URL: $with_ticket_url"
     log "Events with image: $with_image"
+    log "Events with local image: $with_local_image"
     log ""
     log "Pipeline completed at $(date '+%Y-%m-%d %H:%M:%S')"
 }
@@ -530,6 +576,9 @@ main() {
     # Image enrichment (non-fatal)
     run_image_enrichment
 
+    # Image download and optimization (non-fatal)
+    run_image_download
+
     if [[ $failed -eq 0 ]]; then
         run_generate || failed=1
     fi
@@ -540,6 +589,9 @@ main() {
     if [[ $failed -eq 0 ]]; then
         run_deploy || failed=1
     fi
+
+    # Image cleanup (non-fatal, after deploy)
+    run_image_cleanup
 
     # IndexNow ping (only after successful deploy)
     if [[ $failed -eq 0 ]]; then

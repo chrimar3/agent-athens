@@ -1,9 +1,9 @@
 # Netlify configuration for agent-athens
 
 [build]
-  # No build step needed - static HTML files
+  # Builds disabled — site deployed via Netlify CLI
   publish = "dist"
-  command = "echo 'Static site - no build needed'"
+  command = "echo 'Deploy via CLI - no build needed'"
 
 # Enable Netlify Functions
 [functions]
@@ -50,6 +50,12 @@
 # OG images - refresh daily (regenerated each build)
 [[headers]]
   for = "/images/og/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Self-hosted event images - cache for 1 day
+[[headers]]
+  for = "/images/events/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
 

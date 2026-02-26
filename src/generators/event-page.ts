@@ -119,7 +119,8 @@ export function generateEventSlug(event: Event): string {
  * Fallback chain: event image → venue default → type default → site default
  */
 function getOgImage(event: Event): string {
-  // Use event-specific image if available (hotlinked from source)
+  // Prefer self-hosted image, then hotlinked source image
+  if (event.imageLocal) return event.imageLocal;
   if (event.imageUrl) return event.imageUrl;
 
   // Fall back to type-specific default
@@ -475,11 +476,13 @@ export function renderRelatedEventCard(event: Event): string {
     ? `${event.venue.name} · ${event.venue.neighborhood}`
     : event.venue.name;
 
+  const imgSrc = event.imageLocal || event.imageUrl;
+
   return `
   <a href="${href}" class="event-card">
     <div class="card-image-wrapper">
-      ${event.imageUrl ? `<img class="card-image" src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
-      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
+      ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

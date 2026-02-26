@@ -78,6 +78,7 @@ export function eventToRow(event: Event): Record<string, any> {
     // Image fields
     $image_url: event.imageUrl || null,
     $image_source: event.imageSource || null,
+    $image_local: event.imageLocal || null,
     // Exhibition-specific fields
     $opening_hours: event.openingHours ? JSON.stringify(event.openingHours) : null,
     $closed_days: event.closedDays || null,
@@ -148,6 +149,7 @@ export function rowToEvent(row: any): Event {
     // Image fields
     imageUrl: row.image_url || undefined,
     imageSource: row.image_source || undefined,
+    imageLocal: row.image_local || undefined,
     // Exhibition-specific fields
     openingHours: row.opening_hours ? JSON.parse(row.opening_hours) : undefined,
     closedDays: row.closed_days || undefined,

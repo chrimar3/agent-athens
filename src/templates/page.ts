@@ -294,11 +294,13 @@ export function prepareCardData(event: Event): CardData {
 function renderEventCard(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
 
+  const imgSrc = event.imageLocal || event.imageUrl;
+
   return `
   <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
     <div class="card-image-wrapper">
-      ${event.imageUrl ? `<img class="card-image" src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
-      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
+      ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

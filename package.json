@@ -56,6 +56,7 @@
     "node-ical": "^0.21.0",
     "puppeteer": "^24.36.1",
     "puppeteer-core": "^24.36.0",
-    "satori": "^0.19.2"
+    "satori": "^0.19.2",
+    "sharp": "^0.34.5"
   }
 }

@@ -10,12 +10,13 @@ import { prepareCardData, TYPE_ICONS } from './page';
  */
 export function renderEventCardList(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event);
+  const imgSrc = event.imageLocal || event.imageUrl;
 
   return `
   <a href="${href}" class="event-card-list">
     <div class="list-image-wrapper">
-      ${event.imageUrl ? `<img src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
-      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
+      ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="list-content">
@@ -33,12 +34,13 @@ export function renderEventCardList(event: Event): string {
  */
 export function renderFeatureCard(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc } = prepareCardData(event);
+  const imgSrc = event.imageLocal || event.imageUrl;
 
   return `
   <a href="${href}" class="event-card-feature">
     <div class="feature-image-wrapper">
-      ${event.imageUrl ? `<img src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
-      <span class="card-placeholder-icon" aria-hidden="true"${event.imageUrl ? ' style="display:none"' : ''}>${icon}</span>
+      ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="feature-body">
@@ -63,10 +65,12 @@ export function renderFeaturedCarousel(events: Event[]): string {
     const { dateStr, href, venueText } = prepareCardData(event);
     const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
 
+    const imgSrc = event.imageLocal || event.imageUrl;
+
     return `
     <a href="${href}" class="carousel-card">
-      ${event.imageUrl
-        ? `<img class="carousel-card-image" src="${event.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">`
+      ${imgSrc
+        ? `<img class="carousel-card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
         : `<div class="carousel-card-image" style="display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.12">${icon}</div>`
       }
       <h3 class="card-title">${event.title}</h3>

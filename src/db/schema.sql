@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS events (
   -- Image fields
   image_url TEXT,                         -- og:image URL from source page (hotlinked)
   image_source TEXT,                      -- 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'
+  image_local TEXT,                       -- Self-hosted path: /images/events/{id}.webp
 
   -- Exhibition-specific fields
   opening_hours TEXT,                     -- JSON: {"mon": "closed", "tue": "10:00-18:00", ...}

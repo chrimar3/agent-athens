@@ -383,6 +383,20 @@ async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<st
 }
 
 /**
+ * Extract the main poster image from an athinorama event page body.
+ * Athinorama's og:image (/lmnts/events/) returns HTTP 502, but
+ * /Content/ImagesDatabase/p/{250x300|300x380}/ URLs work.
+ */
+function extractAthinoramaBodyImage(html: string): string | null {
+  const pattern = /https?:\/\/www\.athinorama\.gr\/Content\/ImagesDatabase\/p\/(?:250x300|300x380)\/crop\/both\/[a-f0-9\/]+\.jpg[^"'\s]*/i;
+  const match = html.match(pattern);
+  if (!match) return null;
+  let url = match[0].split('"')[0].split("'")[0];
+  url = url.replace(/&amp;/g, '&');
+  return url;
+}
+
+/**
  * Extract time from an Athinorama detail page HTML.
  * Mirrors the 9 patterns from enrich-time.ts extractTimeAthinorama(),
  * but inlined here to avoid a second HTTP fetch.
@@ -605,9 +619,15 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
 
       // ---- IMAGE EXTRACTION ----
       if (!event.image_url) {
-        const imageResult = extractOgImage(eventHtml, event.url);
-        if (imageResult) {
-          event.image_url = imageResult.imageUrl;
+        // Athinorama og:image returns HTTP 502 — use body image instead
+        const bodyImage = extractAthinoramaBodyImage(eventHtml);
+        if (bodyImage) {
+          event.image_url = bodyImage;
+        } else {
+          const imageResult = extractOgImage(eventHtml, event.url);
+          if (imageResult) {
+            event.image_url = imageResult.imageUrl;
+          }
         }
       }
 

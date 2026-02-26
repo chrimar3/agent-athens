@@ -2,7 +2,7 @@
 
 // Main site generator - generates all combinatorial pages
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { Database } from 'bun:sqlite';
 import type { Event, EventType, TimeRange, PriceFilter, Filters } from './types';
@@ -99,6 +99,18 @@ async function main() {
     join(import.meta.dir, 'styles/design-system.css'),
     join(DIST_DIR, 'styles/design-system.css')
   );
+
+  // Copy self-hosted event images to dist
+  const eventImgSrc = join(import.meta.dir, '../data/images');
+  const eventImgDest = join(DIST_DIR, 'images/events');
+  if (existsSync(eventImgSrc)) {
+    mkdirSync(eventImgDest, { recursive: true });
+    const imageFiles = readdirSync(eventImgSrc).filter(f => f.endsWith('.webp'));
+    for (const file of imageFiles) {
+      copyFileSync(join(eventImgSrc, file), join(eventImgDest, file));
+    }
+    console.log(`📸 Copied ${imageFiles.length} event images to dist/`);
+  }
 
   // Generate OG images and favicons
   console.log('🖼️  Generating OG images and favicons...');
