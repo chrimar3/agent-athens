@@ -14,8 +14,8 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Build artifacts (keep dist/ for Netlify)
-# dist/ is committed for static hosting
+# Build artifacts (deployed via Netlify CLI, not git)
+dist/
 
 # IDE
 .vscode/
@@ -30,6 +30,9 @@ tmp/
 # Enrichment working directories
 temp-descriptions/
 temp-research/
+
+# Downloaded event images (cached locally, served from dist/)
+data/images/
 
 # Local Netlify folder
 .netlify
