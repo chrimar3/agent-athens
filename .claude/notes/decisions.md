@@ -287,17 +287,73 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 | DB open without readonly flag | Bun:sqlite readonly flag causes "unable to open" on prepare() in this Bun version (1.3.0). Other scripts also use non-readonly. Query-only scripts are still safe | 2026-02-26 |
 | Entity knowledge column is `genre` not `genres` | Table schema uses singular. Initial code used plural, caught during first run | 2026-02-26 |
 
-### Subagent Performance (Batch 0)
+### Subagent Performance
 
-| Metric | Value |
-|--------|-------|
-| Events enriched | 2 (theater, concert) |
-| Total tokens | ~71K |
-| Tool uses | 44 |
-| Duration | ~4 min |
-| Gate scores | 90/100, 90/100 |
-| Anti-patterns detected | 0 |
-| Factual errors | 0 (correctly identified Shadow Knight as hip-hop, not metal) |
+| Batch | Events | Tokens | Tool Uses | Duration | Gate Scores | Notes |
+|-------|--------|--------|-----------|----------|-------------|-------|
+| 0 | 2 (theater, concert) | ~71K | 44 | ~4 min | 90, 90 | Shadow Knight correctly identified as hip-hop |
+| 1 | 5 (theater, concert, dj_set, classical, sports) | ~103K | 78 | ~7.8 min | 90, 90, 85, 90, 90 | ~20K/event, efficient |
+| 2 | 5 (theater, concert, dj_set, classical, dance) | ~128K | 88 | ~10 min | 89, 90, 89, 89, 90 | Rules 15-16 first test. ~25.6K/event (dance event heavier research) |
+| 3 | 5 (theater, concert, dj_set, classical, exhibition) | ~117K | 74 | ~7.8 min | 88, 89, 89, 88, 89 | First exhibition. ~23.4K/event |
+
+### Calibration Batch 1 Decisions (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| PHARAOH promoted to dj_set exemplar | Filled type gap (91 dj_set events in queue, no exemplar). Venue-as-concept framing, verified sensory details, tribe split pattern all novel | 2026-02-26 |
+| Brief rules 13-14 (venue openings + credentials) | Batch 0 fabrication: subagent invented kitchen smoke, retsina, Universal debut. Rules require web verification for venue atmosphere and credentials | 2026-02-26 |
+| Brief rules 15-16 (opening + closer diversity) | Batch 1 showed 3/5 sound-first openings, 2/5 "combination" closers. At scale this becomes monotonous | 2026-02-26 |
+| Auto-save remains locked | 7 events across 2 batches — too early. Need 3+ consecutive batches at >= 80% approved without major rewrite | 2026-02-26 |
+| Sensory extrapolation boundary established | Wood-fire smoke from Michelin-verified kitchen = acceptable inference. Invented venue details = fabrication. Documented in exemplars/README.md Pattern Watch | 2026-02-26 |
+
+### Two-Batch Session Decisions (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Gate threshold fix: premium max 450→600 | Brief targets 400-600 words; 450 max created spurious TOO_LONG warnings. 994 tests still pass | 2026-02-26 |
+| Rules 15-16 confirmed effective | Batch 2: 2 visual, 1 sound, 2 action. Batch 3: 2 action, 1 visual, 1 sound, 1 space. Cross-batch: 4 action, 3 visual, 2 sound, 1 space (10 events). Sound-first dropped from 60%→20% | 2026-02-26 |
+| Auto-save unlocked (3/3) | Batches 1, 2, 3 all clean (100% approved without major rewrite). System proven across 15 events, 3 consecutive batches | 2026-02-26 |
+| Two-batch sessions are viable | No quality degradation between batch 2 and batch 3. Subagent gets fresh context each time. Parent review quality maintained | 2026-02-26 |
+| Non-standard tags lower gate scores but don't affect description quality | Batch 3 scored 83-84 at subagent gate check due to tags like "Greek-Theater", "Exhibition". Save-batch.ts re-scored at 88-89. Tag taxonomy may need expansion | 2026-02-26 |
+| Exhibition end_date must be researched and saved | Lanthimos exhibition had no end_date in DB. Subagent discovered May 17, 2026. Updated via direct DB UPDATE after save | 2026-02-26 |
+
+### Soft Auto-Save Session (2026-02-26, session 2)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Soft auto-save works at scale | 3 batches (15 descriptions), all auto-saved with zero rewrites. Spot-checks took ~2 min per batch vs ~10 min full review. Total session ~25 min of parent work vs ~50 min in calibration mode | 2026-02-26 |
+| Three-batch sessions are viable | No quality degradation across batches 5-7. Gate scores consistent (88.8-89.4 avg). Context health check before batch 7 confirmed spot-checking still discriminating | 2026-02-26 |
+| Lanthimos promoted to exhibition exemplar | First exhibition exemplar. Gate score 89. Demonstrates space-first opening, two-audience tribe split, Format/Access table rows. Closes the exhibition gap in type coverage | 2026-02-26 |
+| Scraper type mismatches are common (5/15 this session) | Theater events frequently scraped as concert, dj_set, or classical. Descriptions written correctly regardless. May warrant scraper-level fix for athinorama.gr type detection | 2026-02-26 |
+| Cross-batch opening diversity is awareness-only | Eurydice (batch 6) echoed Ego ki Esy (batch 5) — "two chairs on bare stage." Rule 15 applies within-batch only. Cross-batch patterns are noted but not enforced | 2026-02-26 |
+
+## Tag Taxonomy & Categorizer Fix (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Expanded TAG_TAXONOMY by ~20 tags across 6 categories | 11 non-standard tags in DB; subagents wrote valid-per-template tags rejected by code. Zero gate score impact (tags in .tags.json never penalized), but removes write-tags.ts warnings | 2026-02-26 |
+| Moved Megaron/Rabbithole/GNO from venue_type_map to mixed_venues | Venue-lock (Pass 1) forced ALL events to one type. Megaron has 33 classical + 14 concert + 2 dance + 1 theater. Rabbithole had 2 theater events locked as dj_set. Mixed_venues lets keyword Pass 2 run | 2026-02-26 |
+| Christmas Theater also in mixed_venues (not venue_type_map) | Initially mapped as sports (Fight for Glory boxing), but hosts concerts, theater, dance too. Hard-locking as sports caused 11 false positives | 2026-02-26 |
+| Sports keywords must be very specific | Generic words "fight", "πάλη" (struggle), "round", "ring" matched 100+ non-sports events. Changed to multi-word phrases: "fight night", "boxing match", "combat sports" | 2026-02-26 |
+| Sports priority: just before concert (last specific type) | Having sports high in priority caused massive over-matching. At bottom of specific types, it only catches events that don't match anything else first | 2026-02-26 |
+| Added `sports` EventType + SportsEvent schema | Fight for Glory boxing events at Christmas Theater. Added to types.ts, enrichment/types.ts, generate-site.ts, quality-gates.ts, categorization-keywords.json | 2026-02-26 |
+| Recategorizer applied 127 high/medium confidence changes | 32 concert→classical (Megaron), 20 concert→dj_set, 8 concert→theater, 5 concert→festival. 21 low-confidence skipped. 2 Rabbithole theater events still stuck as dj_set (titles lack keywords) | 2026-02-26 |
+
+### Post-Categorizer Fixes (2026-02-26)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Switched `matchesGenre()` to exact match | Bidirectional `includes()` caused "Tech" to match "Tech House", "Rock" to match "Classic Rock". Exact match is predictable; missing genre variants added explicitly to config | 2026-02-26 |
+| Added "techno", "aria" to `whole_word_only` | "techno" matched "technology" (15+ tech meetups→dj_set), "aria" matched "Maria"/"Zacharias" (theater→opera). Word-boundary regex prevents substring false positives | 2026-02-26 |
+| Added explicit genre variants to config | "Classic Rock" (concert), "Contemporary" (exhibition), "Visual-Arts" (exhibition) — compensates for removing substring genre matching | 2026-02-26 |
+| Mixed venues checked before venue_type_map | `findVenueMatch` contains-match found "IT" (dj_set club) inside "Rabbithole" → HIGH confidence dj_set. Moving mixed_venues check first prevents substring false positives from venue names | 2026-02-26 |
+| Manual SQL fix for Rabbithole theater events | Ευρυδίκη and Η κατάρρευση have no theater keywords in title/description — recategorizer can't auto-fix. Manual `UPDATE` to `theater` is the correct fix | 2026-02-26 |
+| Recategorizer applied 5 medium-confidence fixes | 3 dj_set→workshop (tech meetups), 1 dj_set→festival (Engineering the World), 1 theater→concert (Ευρυδίκη — manually reverted since "live music" in description was incidental) | 2026-02-26 |
+
+### Remaining Issues
+- ~~Rabbithole theater events still classified as dj_set~~ FIXED: manual SQL + venue ordering fix
+- ~~Tech meetup regression~~ FIXED: exact genre matching + "techno" in whole_word_only
+- Theater description keywords are all Greek, but enriched descriptions are English — "theater" in full_description doesn't trigger theater category. Low priority (manually fixable case-by-case)
 
 ## Self-Hosted Image Pipeline (2026-02-26)
 

@@ -68,32 +68,39 @@ export const TAG_TAXONOMY = {
     'Progressive', 'Darkwave', 'EBM', 'Industrial', 'Rebetiko', 'Laiko',
     'Entechno', 'Greek-singer-songwriter', 'Rock', 'Metal', 'Punk', 'Hip-hop',
     'Indie', 'Experimental', 'Classical', 'World', 'Greek-Traditional',
-    'Mediterranean-Fusion', 'DJ-set', 'Live-band', 'Live-act'
+    'Mediterranean-Fusion', 'DJ-set', 'Live-band', 'Live-act',
+    'Comedy', 'Opera', 'Theater', 'Dance', 'Shadow-Theater',
+    'Photography', 'Contemporary-Art'
   ],
   neighborhood: [
     'Gazi', 'Exarchia', 'Psiri', 'Koukaki', 'Monastiraki', 'Metaxourgeio',
     'Kolonaki', 'Piraeus', 'Neos-Kosmos', 'Mets', 'Petralona', 'Kypseli',
-    'Tavros', 'Athens-Riviera', 'Pagrati', 'Ampelokipoi', 'Kallithea'
+    'Tavros', 'Athens-Riviera', 'Pagrati', 'Ampelokipoi', 'Kallithea',
+    'Ellinikon', 'Galatsi', 'Marousi'
   ],
   atmosphere: [
     'Industrial-chic', 'Intimate', 'Underground', 'Mainstream', 'Tourist-friendly',
     'Local-favorite', 'Warehouse', 'Rooftop', 'Basement', 'Garden', 'Raw',
-    'Polished', 'Inclusive', 'Selective-door', 'Historic', 'Listening-room'
+    'Polished', 'Inclusive', 'Selective-door', 'Historic', 'Listening-room',
+    'Family-friendly', 'Academic', 'Site-specific'
   ],
   crowd: [
     '20s-30s', '30s-40s', 'Mixed-ages', 'Students', 'Young-professionals',
     'Expats', 'Greek-locals', 'Mixed-international', 'Music-heads', 'Industry-people',
-    'LGBTQ-friendly', 'Queer', 'Date-night', 'Groups', 'Solo-friendly'
+    'LGBTQ-friendly', 'Queer', 'Date-night', 'Groups', 'Solo-friendly',
+    'Children', 'Families', 'All-ages'
   ],
   experience: [
     'Standing-room', 'Seated', 'Dance-floor', 'Listening-room', 'Late-night',
-    'Early-evening', 'All-night', 'Afterhours', 'Fills-after-2am', 'Concert-format'
+    'Early-evening', 'All-night', 'Afterhours', 'Fills-after-2am', 'Concert-format',
+    'Daytime-event', 'Interactive', 'Workshop-format'
   ],
   practical: [
     'Metro-accessible', 'Taxi-recommended', 'Taxi-required', 'Cash-only',
     'Card-accepted', 'Cash-preferred', 'Reservation-required', 'Walk-in-friendly',
     'Smoking-area', 'Outdoor', 'Heated', 'Air-conditioned', 'Funktion-One',
-    'RA-tickets', 'Door-selection'
+    'RA-tickets', 'Door-selection',
+    'English-language', 'Bilingual-GR-EN'
   ]
 } as const;
 

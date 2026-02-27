@@ -35,7 +35,7 @@ export interface QualityIssue {
 
 export interface SchemaOrgEvent {
   '@context': 'https://schema.org';
-  '@type': 'MusicEvent' | 'Event' | 'ExhibitionEvent' | 'TheaterEvent' | 'DanceEvent' | 'ComedyEvent' | 'ScreeningEvent' | 'EducationEvent' | 'Festival' | 'PerformingArtsEvent';
+  '@type': 'MusicEvent' | 'Event' | 'ExhibitionEvent' | 'TheaterEvent' | 'DanceEvent' | 'ComedyEvent' | 'ScreeningEvent' | 'EducationEvent' | 'Festival' | 'PerformingArtsEvent' | 'SportsEvent';
   name: string;
   description?: string;
   startDate: string;
@@ -84,7 +84,7 @@ export interface SchemaOrgEvent {
 const WORD_COUNT_REQUIREMENTS = {
   stub: { min: 50, max: 150 },
   standard: { min: 150, max: 300 },
-  premium: { min: 250, max: 450 },
+  premium: { min: 250, max: 600 },
 };
 
 /** Required sections in premium descriptions */
@@ -733,6 +733,7 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   show: 'Event',
   festival: 'Festival',
   performance: 'Event',
+  sports: 'SportsEvent',
   other: 'Event',
 };
 

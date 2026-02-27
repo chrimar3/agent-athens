@@ -59,7 +59,8 @@ export type EventType =
   | 'conference'
   | 'meetup'
   | 'hackathon'
-  | 'seminar';
+  | 'seminar'
+  | 'sports';
 
 export interface EnrichmentStats {
   total_events: number;

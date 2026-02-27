@@ -189,9 +189,7 @@ function matchesGenre(eventGenres: string[], categoryGenres: string[]): boolean 
   const categoryGenresLower = categoryGenres.map(g => g.toLowerCase());
 
   return eventGenresLower.some(eg =>
-    categoryGenresLower.some(cg =>
-      eg.includes(cg) || cg.includes(eg)
-    )
+    categoryGenresLower.some(cg => eg === cg)
   );
 }
 
@@ -202,6 +200,18 @@ function categorizeByVenue(event: EventInput): CategorizationResult | null {
   if (!event.venue) return null;
 
   const config = loadVenueConfig();
+
+  // Check mixed venues FIRST — these need keyword analysis, not venue-lock
+  // Must happen before venue_type_map to prevent substring false positives
+  // (e.g. "Rabbithole" contains "IT" which is a dj_set venue)
+  const isMixed = config.mixed_venues.some(mv =>
+    normalizeVenueName(mv).toLowerCase() === normalizeVenueName(event.venue || '').toLowerCase()
+  );
+
+  if (isMixed) {
+    return null; // Let keyword matching handle it
+  }
+
   const venueType = findVenueMatch(event.venue, config.venue_type_map);
 
   if (venueType) {
@@ -212,15 +222,6 @@ function categorizeByVenue(event: EventInput): CategorizationResult | null {
       reason: `Venue "${event.venue}" always hosts ${venueType} events`,
       genreHint
     };
-  }
-
-  // Check if it's a mixed venue (needs keyword analysis)
-  const isMixed = config.mixed_venues.some(mv =>
-    normalizeVenueName(mv).toLowerCase() === normalizeVenueName(event.venue || '').toLowerCase()
-  );
-
-  if (isMixed) {
-    return null; // Let keyword matching handle it
   }
 
   return null;

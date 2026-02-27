@@ -60,6 +60,7 @@ export type EventType =
   | 'meetup'       // Community meetups, tech gatherings
   | 'hackathon'    // Coding hackathons, innovation events
   | 'seminar'      // Academic seminars, research talks
+  | 'sports'       // Boxing, MMA, combat sports events
   | 'other';
 
 export interface Venue {

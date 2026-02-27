@@ -29,9 +29,6 @@
     "EL CHAPO": "dj_set",
     "2ten": "dj_set",
     "2TEN": "dj_set",
-    "Rabbithole": "dj_set",
-    "RABBITHOLE": "dj_set",
-    "Rabbit Hole": "dj_set",
     "Temple": "dj_set",
     "Temple Athens": "dj_set",
     "TEMPLE": "dj_set",
@@ -43,14 +40,6 @@
     "HalfNote": "concert",
     "Jazzet Cafe": "concert",
     "Jazzet": "concert",
-
-    "Μέγαρο Μουσικής Αθηνών": "classical",
-    "Μέγαρο Μουσικής": "classical",
-    "Megaro Mousikis": "classical",
-    "Athens Concert Hall": "classical",
-    "Μέγαρο Μουσικής - αίθουσα «Δημήτρης Μητρόπουλος»": "classical",
-    "Μέγαρο Μουσικής Αίθουσα Μητρόπουλος": "classical",
-    "ΜΟΥΣΙΚΗ ΒΙΒΛΙΟΘΗΚΗ ΣΤΟ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ": "classical",
 
     "Θέατρο Παλλάς": "theater",
     "ΘΕΑΤΡΟ ΠΑΛΛΑΣ": "theater",
@@ -114,11 +103,7 @@
     "Μουσείο Μπενάκη - Πειραιώς 138": "exhibition",
     "Μουσείο Μπενάκη - Πινακοθήκη Γουλανδρή": "exhibition",
     "Μουσείο Μαρία Κάλλας": "exhibition",
-    "Ίδρυμα Εικαστικών Τεχνών & Μουσικής Β. & Μ. Θεοχαράκη": "exhibition",
-
-    "Εθνική Λυρική Σκηνή": "opera",
-    "GREEK NATIONAL OPERA - SNFCC": "opera",
-    "GNO": "opera"
+    "Ίδρυμα Εικαστικών Τεχνών & Μουσικής Β. & Μ. Θεοχαράκη": "exhibition"
   },
 
   "venue_genre_override": {
@@ -130,6 +115,21 @@
   },
 
   "mixed_venues": [
+    "Μέγαρο Μουσικής Αθηνών",
+    "Μέγαρο Μουσικής",
+    "Megaro Mousikis",
+    "Athens Concert Hall",
+    "Μέγαρο Μουσικής - αίθουσα «Δημήτρης Μητρόπουλος»",
+    "Μέγαρο Μουσικής Αίθουσα Μητρόπουλος",
+    "ΜΟΥΣΙΚΗ ΒΙΒΛΙΟΘΗΚΗ ΣΤΟ ΜΕΓΑΡΟ ΜΟΥΣΙΚΗΣ",
+    "Rabbithole",
+    "RABBITHOLE",
+    "Rabbit Hole",
+    "Εθνική Λυρική Σκηνή",
+    "GREEK NATIONAL OPERA - SNFCC",
+    "GNO",
+    "Christmas Theater",
+    "CHRISTMAS THEATER",
     "Gazarte",
     "GAZARTE",
     "Γκαζάρτε",

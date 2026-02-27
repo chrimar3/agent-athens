@@ -16,6 +16,7 @@
     "screening",
     "show",
     "festival",
+    "sports",
     "concert"
   ],
 
@@ -65,6 +66,30 @@
       ]
     },
 
+    "sports": {
+      "title_keywords": [
+        "boxing",
+        "πυγμαχία",
+        "fight night",
+        "fight for glory",
+        "MMA",
+        "kickboxing",
+        "muay thai",
+        "wrestling event"
+      ],
+      "description_keywords": [
+        "boxing match",
+        "knockout",
+        "αγώνας πυγμαχίας",
+        "combat sports"
+      ],
+      "genres": [
+        "Boxing",
+        "MMA",
+        "Combat Sports"
+      ]
+    },
+
     "theater": {
       "title_keywords": [
         "παράσταση",
@@ -79,7 +104,14 @@
         "play",
         "drama",
         "τραγωδία",
-        "tragedy"
+        "tragedy",
+        "κωμωδία",
+        "μονόπρακτο",
+        "διασκευή",
+        "μεταφορά",
+        "ερμηνεία",
+        "παιδική παράσταση",
+        "για παιδιά"
       ],
       "description_keywords": [
         "σκηνοθεσία",
@@ -90,7 +122,11 @@
         "σκηνικά",
         "κοστούμια",
         "θεατρική παραγωγή",
-        "πρεμιέρα θεατρικ"
+        "πρεμιέρα θεατρικ",
+        "υπόθεση",
+        "ρόλος",
+        "πράξη",
+        "δραματουργ"
       ],
       "genres": [
         "Theater",
@@ -182,7 +218,10 @@
         "φιλαρμονική",
         "philharmonic",
         "σονάτα",
-        "sonata"
+        "sonata",
+        "μουσική δωματίου",
+        "σολίστ",
+        "πιανίστ"
       ],
       "description_keywords": [
         "κλασική μουσική",
@@ -271,10 +310,12 @@
       "genres": [
         "Art",
         "Photography",
+        "Contemporary",
         "Contemporary Art",
         "Sculpture",
         "Installation",
-        "Visual Art"
+        "Visual Art",
+        "Visual-Arts"
       ]
     },
 
@@ -359,6 +400,7 @@
       ],
       "genres": [
         "Rock",
+        "Classic Rock",
         "Jazz",
         "Pop",
         "Blues",
@@ -382,7 +424,9 @@
     "class",
     "cine",
     "live",
-    "DJ"
+    "DJ",
+    "techno",
+    "aria"
   ],
 
   "concert_override_keywords": [
@@ -413,6 +457,7 @@
     "exhibition": "ExhibitionEvent",
     "show": "Event",
     "screening": "ScreeningEvent",
-    "festival": "Festival"
+    "festival": "Festival",
+    "sports": "SportsEvent"
   }
 }

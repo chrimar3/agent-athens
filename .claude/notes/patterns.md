@@ -310,10 +310,10 @@ The parent reads the brief file and passes its contents as the Task tool prompt.
 4. Request a batch-review.md summary at the end
 
 ### Token Budget
-- Brief itself: ~300-600 words (~250-500 tokens)
-- Subagent total usage: ~35K tokens per event (research + writing + gate checks)
+- Brief itself: ~300-700 words (~250-535 tokens)
+- Subagent total usage: ~20K tokens per event (research + writing + gate checks)
 - 2-event batch: ~71K tokens, ~4 min
-- 5-event batch: estimate ~150-180K tokens, ~10-12 min
+- 5-event batch: ~103K tokens, ~7.8 min (lower than estimate — efficient web search caching)
 
 ### What the Parent Receives Back
 A text summary only — not individual tool calls. The summary includes:
@@ -336,6 +336,70 @@ HUMAN: reviews descriptions in temp-descriptions/
   → updates calibration-log.md
   → bun scripts/save-batch.ts --batch=N for approved descriptions
 ```
+
+### Steady-State (Soft Auto-Save) Workflow
+```
+PARENT: archive temp-descriptions/*.md → archive/
+PARENT: bun scripts/generate-enrichment-brief.ts --count=5
+PARENT: quick pre-flight (≥3 types? exhibition? token budget?)
+PARENT: Task tool → general-purpose subagent with brief
+  → subagent: WebSearch, write descriptions, gate check, write tags
+  → if all scores ≥85: subagent runs save-batch.ts (AUTO-SAVE)
+  → creates batch-N-review.md with "AUTO-SAVED" or "LEFT FOR REVIEW"
+PARENT: receives summary
+PARENT: spot-check (read openings, check one credentials, note diversity)
+  → ~2 min vs ~10 min full review
+```
+
+### Throughput Data (Sessions 1-2)
+- Calibration (session 1): 2 batches, 10 events, ~245K tokens, ~18 min subagent time
+- Steady-state (session 2): 3 batches, 15 events, ~301K tokens, ~24 min subagent time
+- Per-event average: ~20K tokens, ~5 min (includes research + writing + gate check + tags)
+- Parent overhead: ~5 min per batch (generate brief + spot-check)
+- Three-batch session total: ~40 min (parallel subagent + parent work)
+
+### Sensory Extrapolation vs Fabrication Boundary
+The line between acceptable and fabricated venue details:
+- **Acceptable**: Inferring "smoke note" from a Michelin-documented wood-fire kitchen. The fact is verified; the sensory experience is a reasonable deduction.
+- **Fabrication**: Inventing "kitchen smoke and retsina from barrels" when no source confirms the venue has a kitchen or serves retsina.
+- **Rule**: Extrapolate from verified facts → OK. Invent from nothing → violation.
+- **When in doubt**: Open with the event's sound, performer's first action, or audience energy.
+
+### Structural Repetition — Solved by Rules 15-16
+Rules 15-16 eliminated structural repetition across 10 descriptions (batches 2-3):
+- Sound-first openings: 60% (batch 1) → 20% (batches 2-3)
+- "Combination" closers: 40% (batch 1) → 0% (batches 2-3)
+- Cross-batch distribution (10 events): 4 action, 3 visual, 2 sound, 1 space
+- All 10 closers use distinct structural devices
+
+### Two-Batch Session Pattern
+Running two consecutive 5-event batches in one session works without quality degradation:
+- Each subagent gets fresh context (no cross-contamination)
+- Parent review quality maintained across both batches
+- Archive → generate → spawn → review → save cycle takes ~15 min per batch
+- Token cost: ~120K per 5-event batch (~24K/event average)
+- Total session: ~245K tokens for 10 events
+
+### Exhibition Enrichment Requires Extra Steps
+When a batch includes exhibitions:
+1. Research end_date (exhibitions run weeks/months)
+2. Use Format/Access rows in details table (not Sound/Door)
+3. After save-batch.ts, manually UPDATE events SET end_date = 'YYYY-MM-DD' if not already in DB
+4. Verify exhibition-safe date queries still work
+
+## Venue Categorization Pattern
+
+`venue_type_map` for single-type venues (all events get the same type). `mixed_venues` for multi-type venues (events analyzed by keywords).
+
+**When to use venue_type_map**: Only when a venue hosts exactly ONE event type. All DJ clubs (Astron, Dybbuk, SMUT), all theaters (Θέατρο Παλλάς, Θέατρο Νους), museums (Μουσείο Μπενάκη).
+
+**When to use mixed_venues**: Any venue that hosts 2+ event types. Megaron (classical + concert + dance + theater), Rabbithole (dj_set + theater), GNO (opera + dance), Christmas Theater (concerts + theater + sports), all multi-purpose cultural centers.
+
+**Sports keyword specificity**: Generic words like "fight", "πάλη", "round", "ring" match hundreds of non-sports events in Greek cultural context. Use multi-word phrases ("fight night", "boxing match", "combat sports") and place sports low in priority order.
+
+## Tag Taxonomy Sync Pattern
+
+Code `TAG_TAXONOMY` in `description-generator.ts` is the runtime validation source. Template doc `MASTER-ENRICHMENT-TEMPLATE.md` is the subagent guidance source. Both must stay in sync. When subagents write tags that generate warnings in `write-tags.ts`, expand the code taxonomy — don't narrow the template.
 
 ## Enrichment v4 Infrastructure Pattern
 

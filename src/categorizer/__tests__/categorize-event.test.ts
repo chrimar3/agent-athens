@@ -51,13 +51,13 @@ describe('Event Categorizer', () => {
       expect(result.genreHint).toBe('jazz');
     });
 
-    it('should categorize Megaron events as classical', () => {
+    it('should categorize Megaron events via keywords (mixed venue)', () => {
       const result = categorizeEvent({
         title: 'Athens Philharmonic Orchestra',
         venue: 'Μέγαρο Μουσικής Αθηνών'
       });
       expect(result.type).toBe('classical');
-      expect(result.confidence).toBe('high');
+      expect(result.confidence).toBe('medium');
     });
 
     it('should categorize theater venue events as theater', () => {
@@ -337,9 +337,9 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('concert');
     });
 
-    it('should handle HTML entities in venue names', () => {
+    it('should handle HTML entities in venue names (mixed venue falls to keywords)', () => {
       const result = categorizeEvent({
-        title: 'Event',
+        title: 'Ρεσιτάλ Πιάνου',
         venue: 'Μέγαρο Μουσικής - αίθουσα &#171;Δημήτρης Μητρόπουλος&#187;'
       });
       expect(result.type).toBe('classical');

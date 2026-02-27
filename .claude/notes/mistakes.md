@@ -69,13 +69,30 @@ Pitfalls encountered and how to avoid them.
 | TicketServices scraper hangs | Scraper stuck at 10/82 events during price fetching | Add timeout per event (30s) and continue on timeout; don't let one stuck request block all |
 | Full scrape-all.ts too slow | Takes 10+ minutes, can hang entirely | Run scrapers in parallel where possible; add global timeout; monitor with `--dry-run` first |
 
+## Categorizer Issues (2026-02-26)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Megaron in venue_type_map | ALL Megaron events forced to `classical`, including children's theater, dance, concerts (33% of enrichment batches misclassified) | Move to `mixed_venues` — most events ARE classical, but keyword Pass 2 catches the exceptions |
+| Rabbithole in venue_type_map | Theater events (Ευρυδίκη, Η κατάρρευση) forced to `dj_set` | Move to `mixed_venues` — but titles still lack theater keywords, so some events remain misclassified |
+| Christmas Theater as sports venue | 11 non-sports events forced to `sports` because Fight for Glory boxing was there | Move to `mixed_venues` — it's a general purpose venue |
+| Generic sports keywords | "fight", "πάλη", "round", "ring" matched 100+ Greek cultural events. πάλη means "struggle" in Greek, extremely common metaphorically | Use multi-word phrases only: "fight night", "boxing match", "combat sports" |
+| Sports high in priority order | Sports checked before theater/classical meant any keyword match won over more appropriate types | Place sports just before concert (last specific type before fallback) |
+| Genre matching bidirectional includes | `matchesGenre()` used `eg.includes(cg) \|\| cg.includes(eg)` — so event genre "Tech" matched dj_set genre "Tech House" because `"tech house".includes("tech")`. 15+ tech meetups miscategorized as dj_set | Use exact match only (`eg === cg`). Add missing genre variants explicitly to config (e.g. "Classic Rock", "Contemporary", "Visual-Arts") |
+| "techno" keyword matching "technology" | `"technology".includes("techno")` is true; single-word keywords use `includes()` unless in `whole_word_only` list. Tech meetups matched dj_set description keyword "techno" | Add "techno" to `whole_word_only` in categorization-keywords.json for word-boundary matching |
+| "aria" keyword matching "Maria"/"Zacharias" | `"maria".includes("aria")` is true — opera description keyword "aria" matched common Greek names in enriched descriptions, causing theater→opera false positives | Add "aria" to `whole_word_only` for word-boundary matching |
+| Mixed venue check after venue_type_map lookup | `categorizeByVenue()` checked venue_type_map THEN mixed_venues. But `findVenueMatch` contains-match found "it" (club IT→dj_set) inside "rabbithole", claiming HIGH confidence before mixed_venues could exclude it | Check mixed_venues FIRST, before venue_type_map lookup |
+
 ## Subagent Enrichment Issues (2026-02-26)
 
 | Mistake | What Happened | Correct Approach |
 |---------|---------------|------------------|
 | DB readonly flag in Bun 1.3.0 | `new Database(path, { readonly: true })` causes "unable to open database file" on prepare() | Use `new Database(path)` without readonly — matches existing scripts |
 | entity_knowledge column name | Used `genres` (plural) but table has `genre` (singular) | Check PRAGMA table_info() before writing queries against unfamiliar tables |
-| Gate word count vs brief word count | Gate max is 450 for premium, but enrichment brief targets 400-600 | Known tension — gate TOO_LONG warning is acceptable during calibration. Consider adjusting gate threshold to 600 |
+| Gate word count vs brief word count | Gate max was 450 for premium, but enrichment brief targets 400-600 | Fixed: premium max updated to 600 in quality-gates.ts. All 994 tests pass |
+| Subagent fabricated venue details | Margaris description claimed kitchen smoke, retsina from barrel, Universal debut single — none verified | Always fact-check sensory details and biographical claims. Subagents fill gaps with plausible fabrications |
+| Gate checks YAML frontmatter | Exemplar files with `what_makes_it_good: "unique..."` triggered FILLER_PHRASES error | Keep frontmatter language clean — gate reads entire file including YAML |
+| Tribe sections default to segment lists | Subagent and initial exemplars listed audience types ("regulars who..., fans who...") | Show behavior: what people do, look at, talk about. Best example: Three Times Three |
 
 ## Enrichment v4 Issues (2026-02-26)
 
