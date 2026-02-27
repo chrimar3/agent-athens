@@ -26,7 +26,7 @@ const SATORI_FONTS = [
 
 // Design tokens (matching design-system.css)
 const COLORS = {
-  bg: '#0d0d0d',
+  bg: '#111114',
   text: '#f0f0f0',
   textSecondary: '#a0a0a0',
   textTertiary: '#707070',
@@ -292,7 +292,7 @@ export async function generateOgImages(): Promise<void> {
 export async function generateFavicons(): Promise<void> {
   // SVG favicon — "a" letterform on rounded rect
   const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0d0d0d"/>
+  <rect width="32" height="32" rx="6" fill="#111114"/>
   <text x="16" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#5ba4e6" text-anchor="middle">a</text>
 </svg>`;
   writeFileSync(join(DIST_DIR, 'favicon.svg'), faviconSvg);

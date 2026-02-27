@@ -295,9 +295,10 @@ function renderEventCard(event: Event): string {
 
   return `
   <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
-    <div class="card-image-wrapper">
+    <div class="card-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
+      ${!imgSrc ? `<span class="card-fallback-title">${event.title}</span>` : ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

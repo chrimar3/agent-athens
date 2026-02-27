@@ -14,7 +14,7 @@ export function renderEventCardList(event: Event): string {
 
   return `
   <a href="${href}" class="event-card-list">
-    <div class="list-image-wrapper">
+    <div class="list-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
@@ -38,9 +38,10 @@ export function renderFeatureCard(event: Event): string {
 
   return `
   <a href="${href}" class="event-card-feature">
-    <div class="feature-image-wrapper">
+    <div class="feature-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
+      ${!imgSrc ? `<span class="card-fallback-title">${event.title}</span>` : ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="feature-body">
@@ -71,7 +72,7 @@ export function renderFeaturedCarousel(events: Event[]): string {
     <a href="${href}" class="carousel-card">
       ${imgSrc
         ? `<img class="carousel-card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
-        : `<div class="carousel-card-image" style="display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0.12">${icon}</div>`
+        : `<div class="carousel-card-image carousel-card-fallback" data-type="${event.type}"><span class="carousel-fallback-icon">${icon}</span></div>`
       }
       <h3 class="card-title">${event.title}</h3>
       <span class="card-date">${dateStr}</span>

@@ -10,20 +10,20 @@
 
 :root {
   /* Colors — Dark theme */
-  --bg-primary: #0d0d0d;
-  --bg-surface: #1a1a1a;
-  --bg-elevated: #242424;
+  --bg-primary: #111114;
+  --bg-surface: #1a1a1e;
+  --bg-elevated: #24242a;
   --bg-overlay: rgba(0, 0, 0, 0.7);
 
   --text-primary: #f0f0f0;
-  --text-secondary: #a0a0a0;
+  --text-secondary: #b4b4af;
   --text-tertiary: #707070;
   --text-muted: #505050;
 
   --accent-primary: #5ba4e6;
   --accent-hover: #7db8ef;
 
-  --border-subtle: #2a2a2a;
+  --border-subtle: #222228;
   --border-default: #3a3a3a;
   --border-active: #5ba4e6;
 
@@ -187,11 +187,28 @@ a:hover {
 
 .card-image-wrapper {
   position: relative;
-  padding-top: 133.33%; /* 3:4 aspect ratio */
+  padding-top: 66.67%; /* 3:2 aspect ratio */
   border-radius: 8px;
   background: var(--bg-elevated);
   overflow: hidden;
 }
+
+/* ── Per-type fallback gradients ─────────────────── */
+
+.card-image-wrapper[data-type="concert"] { background: linear-gradient(135deg, #2a2400, #1a1800); }
+.card-image-wrapper[data-type="dj_set"] { background: linear-gradient(135deg, #1a0a2a, #120818); }
+.card-image-wrapper[data-type="exhibition"] { background: linear-gradient(135deg, #0a2a1a, #081812); }
+.card-image-wrapper[data-type="theater"] { background: linear-gradient(135deg, #2a1a00, #1a1200); }
+.card-image-wrapper[data-type="cinema"] { background: linear-gradient(135deg, #2a0a0a, #1a0808); }
+.card-image-wrapper[data-type="screening"] { background: linear-gradient(135deg, #2a0a0a, #1a0808); }
+.card-image-wrapper[data-type="dance"] { background: linear-gradient(135deg, #2a0a1a, #1a0812); }
+.card-image-wrapper[data-type="performance"] { background: linear-gradient(135deg, #1a0a2a, #120818); }
+.card-image-wrapper[data-type="show"] { background: linear-gradient(135deg, #2a1a00, #1a1200); }
+.card-image-wrapper[data-type="workshop"] { background: linear-gradient(135deg, #0a1a2a, #081218); }
+.card-image-wrapper[data-type="conference"] { background: linear-gradient(135deg, #0a2a1a, #081812); }
+.card-image-wrapper[data-type="comedy"] { background: linear-gradient(135deg, #2a2400, #1a1800); }
+.card-image-wrapper[data-type="festival"] { background: linear-gradient(135deg, #2a2400, #1a1800); }
+.card-image-wrapper[data-type="meetup"] { background: linear-gradient(135deg, #0a2a1a, #081812); }
 
 .card-image {
   position: absolute;
@@ -221,11 +238,27 @@ a:hover {
 
 .card-placeholder-icon {
   position: absolute;
-  top: 50%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 4rem;
-  opacity: 0.12;
+  font-size: 48px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.card-fallback-title {
+  position: absolute;
+  bottom: 36px;
+  left: 12px;
+  right: 12px;
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: rgba(240, 240, 240, 0.85);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -1312,6 +1345,25 @@ a:hover {
   object-fit: cover;
   background: var(--bg-elevated);
 }
+
+.carousel-card-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-fallback-icon {
+  font-size: 36px;
+  opacity: 0.5;
+}
+
+/* Carousel per-type gradients */
+.carousel-card-fallback[data-type="concert"] { background: linear-gradient(135deg, #2a2400, #1a1800); }
+.carousel-card-fallback[data-type="dj_set"] { background: linear-gradient(135deg, #1a0a2a, #120818); }
+.carousel-card-fallback[data-type="exhibition"] { background: linear-gradient(135deg, #0a2a1a, #081812); }
+.carousel-card-fallback[data-type="theater"] { background: linear-gradient(135deg, #2a1a00, #1a1200); }
+.carousel-card-fallback[data-type="cinema"],
+.carousel-card-fallback[data-type="screening"] { background: linear-gradient(135deg, #2a0a0a, #1a0808); }
 
 .carousel-card .card-title {
   font-size: 14px;
