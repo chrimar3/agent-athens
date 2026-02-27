@@ -13,6 +13,11 @@ export function renderSiteNav(): string {
       <a href="/" class="site-logo">agent athens</a>
     </div>
     <div class="site-header-right">
+      <button class="nav-search-btn" aria-label="Αναζήτηση" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+      </button>
       <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
         <span class="hamburger-icon"></span>
       </button>

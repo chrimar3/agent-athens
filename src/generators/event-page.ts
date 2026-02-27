@@ -17,7 +17,9 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
+import { normalizeGreek } from '../utils/normalize-greek';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
+import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -94,10 +96,7 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
  * Generate a URL-safe slug from text
  */
 export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')  // Remove diacritics
+  return normalizeGreek(text)
     .replace(/[^a-z0-9]+/g, '-')       // Replace non-alphanumeric with dashes
     .replace(/^-+|-+$/g, '')           // Remove leading/trailing dashes
     .substring(0, 60);                 // Cap length
@@ -384,6 +383,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <article itemscope itemtype="https://schema.org/${schemaType}">
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
@@ -439,6 +439,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
   ${renderEventDetailScript()}
 </body>
 </html>`;

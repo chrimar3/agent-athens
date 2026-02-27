@@ -16,12 +16,14 @@ import {
 } from './templates/category-page';
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
+import { generateSearchIndex } from './generators/search-index';
 import { generateOgImages, generateFavicons } from './generators/og-image';
 import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './templates/site-chrome';
+import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -212,6 +214,17 @@ async function main() {
   writeFileSync(
     join(normalizedPath, 'events.json'),
     JSON.stringify(events, null, 2)
+  );
+
+  // Generate search index
+  generateSearchIndex(events);
+  console.log('🔍 Search index generated');
+
+  // Copy Fuse.js ESM to dist/scripts/
+  mkdirSync(join(DIST_DIR, 'scripts'), { recursive: true });
+  copyFileSync(
+    join(import.meta.dir, '../node_modules/fuse.js/dist/fuse.mjs'),
+    join(DIST_DIR, 'scripts/fuse.mjs')
   );
 
   let pagesGenerated = 0;
@@ -719,6 +732,7 @@ function generate404Page(): void {
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <div class="error-page">
     <div class="error-code">404</div>
@@ -729,6 +743,7 @@ function generate404Page(): void {
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
 </body>
 </html>`;
 

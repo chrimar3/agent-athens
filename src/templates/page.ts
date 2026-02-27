@@ -8,6 +8,7 @@ import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './site-chrome';
+import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 
 // Load IndexNow config for Bing WMT verification
@@ -157,6 +158,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <div class="page-container">
     <header class="page-header">
@@ -195,6 +197,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
   ${filterBarScriptHTML}
 </body>
 </html>`;

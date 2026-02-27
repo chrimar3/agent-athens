@@ -19,6 +19,7 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
+import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -234,6 +235,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <div class="venue-page-content">
     <nav class="breadcrumb">
@@ -277,6 +279,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
 </body>
 </html>`;
 }
@@ -428,6 +431,7 @@ function generateVenueIndex(venues: VenueData[]): void {
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <div class="venue-index-content">
     <header class="venue-index-header">
@@ -442,6 +446,7 @@ function generateVenueIndex(venues: VenueData[]): void {
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
 </body>
 </html>`;
 

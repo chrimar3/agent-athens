@@ -2,6 +2,7 @@
 // Uses site chrome (nav, footer, hamburger) but no filter bar, cards, or hero.
 
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './site-chrome';
+import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
 /**
  * Renders a static content page with clean URL: dist/{slug}/index.html
@@ -35,6 +36,7 @@ export function renderContentPage(slug: string, title: string, bodyHtml: string)
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
+  ${renderSearchOverlay()}
 
   <div class="content-page-body">
     ${bodyHtml}
@@ -42,6 +44,7 @@ export function renderContentPage(slug: string, title: string, bodyHtml: string)
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
+  ${renderSearchScript()}
 </body>
 </html>`;
 }
