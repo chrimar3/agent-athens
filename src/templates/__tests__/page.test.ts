@@ -145,10 +145,10 @@ describe("renderPage", () => {
     expect(html).toContain('class="footer-grid"');
   });
 
-  test("nav contains language toggle", () => {
+  test("nav does not contain removed language toggle", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
-    expect(html).toContain('class="lang-toggle"');
+    expect(html).not.toContain('class="lang-toggle"');
   });
 
   test("renders hamburger menu markup", () => {

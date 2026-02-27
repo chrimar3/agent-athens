@@ -159,17 +159,17 @@ describe("Event Detail Page — Venue section", () => {
     expect(html).toContain(sampleConcert.venue.neighborhood!);
   });
 
-  test("Open in Maps link uses coordinates when available", () => {
+  test("Maps link uses coordinates when available", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain("Open in Maps");
+    expect(html).toContain("Άνοιγμα στον Χάρτη");
     expect(html).toContain(
       `https://www.google.com/maps?q=${sampleConcert.venue.coordinates!.lat},${sampleConcert.venue.coordinates!.lon}`
     );
   });
 
-  test("Open in Maps falls back to name search when no coordinates", () => {
+  test("Maps link falls back to name search when no coordinates", () => {
     const html = renderEventDetailPage(eventNoCoords, []);
-    expect(html).toContain("Open in Maps");
+    expect(html).toContain("Άνοιγμα στον Χάρτη");
     expect(html).toContain("google.com/maps/search/");
   });
 });

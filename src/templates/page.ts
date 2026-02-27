@@ -91,9 +91,6 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- Primary Description: Greek -->
   <meta name="description" content="${description}">
 
-  <!-- Secondary Description: English for International Discovery -->
-  <meta name="description" lang="en" content="${eventCount} cultural events in Athens, Greece. Concerts, exhibitions, theater, performances.">
-
   <!-- Bilingual Keywords -->
   <meta name="keywords" content="${keywords}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
 

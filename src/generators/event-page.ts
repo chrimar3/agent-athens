@@ -248,10 +248,13 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
-  // Date display
+  // Date display — time extraction with fallback (matches listing card logic in page.ts)
+  const timeStr = event.startDate.includes('T')
+    ? formatGreekTime(event.startDate)
+    : (event.timeDoors || '');
   const dateDisplay = isExhibition
     ? formatExhibitionDateRange(event)
-    : `${formatGreekDateOnly(event.startDate)} στις ${formatGreekTime(event.startDate)}`;
+    : `${formatGreekDateOnly(event.startDate)}${timeStr ? ` στις ${timeStr}` : ''}`;
 
   // Type styling
   const typeLabel = TYPE_TRANSLATIONS[event.type] || event.type;
@@ -418,7 +421,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         <h3>${event.venue.name}</h3>
         ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${event.venue.neighborhood}</div>` : ''}
-        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">Open in Maps →</a>
+        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">Άνοιγμα στον Χάρτη →</a>
       </section>
 
       ${sourceHtml}

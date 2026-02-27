@@ -13,13 +13,6 @@ export function renderSiteNav(): string {
       <a href="/" class="site-logo">agent athens</a>
     </div>
     <div class="site-header-right">
-      <button class="nav-search-btn" aria-label="Search" type="button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-      <div class="lang-toggle">
-        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
-        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
-      </div>
       <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
         <span class="hamburger-icon"></span>
       </button>
@@ -38,10 +31,6 @@ export function renderHamburgerMenu(): string {
     <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
-  <div class="mobile-menu-lang">
-    <a href="#" class="lang-toggle-item active">EL</a>
-    <a href="#" class="lang-toggle-item">EN</a>
-  </div>
 </nav>`;
 }
 
@@ -79,10 +68,6 @@ export function renderSiteFooter(): string {
 
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2026 agent athens</span>
-      <div class="lang-toggle">
-        <a href="#" class="lang-toggle-item active" data-lang="el">EL</a>
-        <a href="#" class="lang-toggle-item" data-lang="en">EN</a>
-      </div>
     </div>
   </div>
 </footer>`;

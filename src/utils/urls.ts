@@ -44,6 +44,11 @@ export function buildPageTitle(filters: Filters): string {
     parts.push(typeTranslations[filters.type] || capitalize(filters.type));
   }
 
+  // Default noun when no type/genre filter is active (homepage)
+  if (!filters.type && !filters.genre) {
+    parts.push('Εκδηλώσεις');
+  }
+
   parts.push('στην Αθήνα');
 
   // Time range (now in Greek from formatTimeRange)

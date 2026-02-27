@@ -31,12 +31,12 @@ const HUB_TYPE_TRANSLATIONS: Record<string, string> = {
 };
 
 const HUB_TIME_TRANSLATIONS: Record<string, string> = {
-  'today': 'today',
-  'tomorrow': 'tomorrow',
-  'this-week': 'this week',
-  'this-weekend': 'this weekend',
-  'this-month': 'this month',
-  'next-month': 'next month',
+  'today': 'σήμερα',
+  'tomorrow': 'αύριο',
+  'this-week': 'αυτή την εβδομάδα',
+  'this-weekend': 'αυτό το Σαββατοκύριακο',
+  'this-month': 'αυτόν τον μήνα',
+  'next-month': 'τον επόμενο μήνα',
 };
 
 // --- Internal helpers ---
@@ -160,9 +160,9 @@ export function generateHubMetaDescription(filters: Filters, eventCount: number)
     ? ` ${HUB_TIME_TRANSLATIONS[filters.time]}`
     : '';
 
-  const firstSentence = `${eventCount} ${priceQualifier}${genreQualifier}${typeLabel} in Athens${timeRange}.`;
-  const secondSentence = 'Curated daily from 10+ venues.';
-  const thirdSentence = 'Open events highlighted.';
+  const firstSentence = `${eventCount} ${priceQualifier}${genreQualifier}${typeLabel} στην Αθήνα${timeRange}.`;
+  const secondSentence = 'Ενημέρωση κάθε μέρα από 10+ χώρους.';
+  const thirdSentence = 'Συναυλίες, θέατρο, εκθέσεις, DJ sets.';
 
   let result = `${firstSentence} ${secondSentence} ${thirdSentence}`;
   if (result.length <= META_CHAR_LIMIT) return result;

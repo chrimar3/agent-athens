@@ -353,33 +353,6 @@ a:hover {
 .site-header-left { display: flex; align-items: center; gap: 16px; }
 .site-header-right { display: flex; align-items: center; gap: 12px; }
 
-/* Language toggle */
-.lang-toggle { display: flex; gap: 8px; }
-.lang-toggle-item {
-  font-size: 11px;
-  font-weight: var(--font-weight-regular);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-tertiary);
-  text-decoration: none;
-  padding: 4px 0;
-}
-.lang-toggle-item:hover { color: var(--text-primary); text-decoration: none; }
-.lang-toggle-item.active {
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--accent-primary);
-}
-
-/* Search button */
-.nav-search-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px;
-  background: none; border: none; cursor: pointer;
-  color: var(--text-secondary);
-  transition: color var(--t-fast);
-}
-.nav-search-btn:hover { color: var(--text-primary); }
-.nav-search-btn svg { width: 20px; height: 20px; }
 
 /* Hamburger */
 .hamburger-btn {
@@ -818,17 +791,24 @@ a:hover {
   z-index: 99;
   height: 56px;
   display: flex;
-  align-items: center;
-  gap: 8px;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
   padding: 0;
 }
-.filter-bar::-webkit-scrollbar { display: none; }
+
+/* Inner scroll container — keeps overflow-x scrolling off .filter-bar
+   so absolutely-positioned panels aren't clipped (CSS overflow coercion) */
+.filter-bar-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+}
+.filter-bar-scroll::-webkit-scrollbar { display: none; }
 
 @media (max-width: 767px) {
   .filter-bar { top: 56px; height: 52px; }
@@ -931,7 +911,7 @@ a:hover {
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   padding: 16px;
-  z-index: 98;
+  z-index: 200;
   opacity: 0;
   transform: translateY(-4px);
 }
@@ -951,7 +931,7 @@ a:hover {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 97;
+  z-index: 199;
   background: transparent;
 }
 .filter-panel-backdrop.is-open {

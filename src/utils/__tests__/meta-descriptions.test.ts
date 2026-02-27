@@ -152,10 +152,10 @@ describe('generateEventMetaDescription', () => {
 // generateHubMetaDescription
 // ============================================================
 describe('generateHubMetaDescription', () => {
-  test('no filters shows count and Athens', () => {
+  test('no filters shows count and Αθήνα', () => {
     const result = generateHubMetaDescription({}, 42);
     expect(result).toContain('42');
-    expect(result).toContain('Athens');
+    expect(result).toContain('Αθήνα');
   });
 
   test('type=concert uses Greek translation', () => {
@@ -174,9 +174,9 @@ describe('generateHubMetaDescription', () => {
     expect(lower.includes('\u03B4\u03C9\u03C1\u03B5\u03AC\u03BD') || lower.includes('free')).toBe(true); // δωρεάν
   });
 
-  test('always contains "Curated daily from 10+ venues"', () => {
+  test('always contains Greek daily update sentence', () => {
     const result = generateHubMetaDescription({}, 50);
-    expect(result).toContain('Curated daily from 10+ venues');
+    expect(result).toContain('Ενημέρωση κάθε μέρα από 10+ χώρους');
   });
 
   test('never exceeds 155 chars', () => {

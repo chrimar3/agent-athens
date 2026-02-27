@@ -190,12 +190,14 @@ export function renderFilterBar(
   </div>`;
 
   return `<div class="filter-bar">
-    ${datePill}
-    ${typePill}
-    ${areaPill}
-    ${pricePill}
-    ${sortPill}
-    ${meta}
+    <div class="filter-bar-scroll">
+      ${datePill}
+      ${typePill}
+      ${areaPill}
+      ${pricePill}
+      ${sortPill}
+      ${meta}
+    </div>
   </div>
   <div class="filter-panel-backdrop"></div>`;
 }
