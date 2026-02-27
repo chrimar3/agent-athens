@@ -17,7 +17,9 @@ import {
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
 import { generateOgImages, generateFavicons } from './generators/og-image';
-import { renderFeaturedCarousel } from './templates/card-variants';
+import { renderHeroSection } from './templates/card-variants';
+import type { HeroMode } from './templates/card-variants';
+import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './templates/site-chrome';
 
@@ -223,10 +225,25 @@ async function main() {
     pagesGenerated++;
   }
 
-  // Generate homepage (all events) with today's featured carousel
+  // Generate homepage with hero section — smart mode based on day and availability
+  const athensNow = DateTime.now().setZone('Europe/Athens');
+  const dayOfWeek = athensNow.weekday; // 1=Mon..7=Sun
   const todayEvents = filterEvents(events, { time: 'today' as TimeRange });
-  const carouselHtml = renderFeaturedCarousel(todayEvents);
-  const homeUrl = await generatePage({}, events, carouselHtml);
+
+  let heroHtml = '';
+  if (todayEvents.length >= 3) {
+    heroHtml = renderHeroSection(todayEvents, 'today');
+  } else if (dayOfWeek >= 5) {
+    const weekendEvents = filterEvents(events, { time: 'this-weekend' as TimeRange });
+    heroHtml = renderHeroSection(weekendEvents, 'weekend');
+  } else if (todayEvents.length > 0) {
+    heroHtml = renderHeroSection(todayEvents, 'today');
+  } else {
+    const weekEvents = filterEvents(events, { time: 'this-week' as TimeRange });
+    heroHtml = renderHeroSection(weekEvents, 'coming-days');
+  }
+
+  const homeUrl = await generatePage({}, events, heroHtml);
   generatedUrls.push(homeUrl);
   pagesGenerated++;
 

@@ -211,6 +211,7 @@ function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filter
   });
 
   return `<div class="filter-panel" data-panel-for="date">
+    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
     <div class="filter-sheet-handle"></div>
     <div class="filter-sheet-title">Ημερομηνία</div>
     <div class="filter-radio-list">
@@ -231,6 +232,7 @@ function renderTypePanel(types: FilterCountOption[], currentFilters: Filters): s
   });
 
   return `<div class="filter-panel" data-panel-for="type">
+    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
     <div class="filter-sheet-handle"></div>
     <div class="filter-sheet-title">Τύπος</div>
     <div class="filter-type-grid">
@@ -250,6 +252,7 @@ function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters):
   });
 
   return `<div class="filter-panel" data-panel-for="price">
+    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
     <div class="filter-sheet-handle"></div>
     <div class="filter-sheet-title">Τιμή</div>
     <div class="filter-radio-list">
@@ -260,6 +263,7 @@ function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters):
 
 function renderSortPanel(): string {
   return `<div class="filter-panel" data-panel-for="sort">
+    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
     <div class="filter-sheet-handle"></div>
     <div class="filter-sheet-title">Ταξινόμηση</div>
     <div class="filter-radio-list">
@@ -330,6 +334,10 @@ export function renderFilterBarScript(): string {
   });
 
   if (backdrop) backdrop.addEventListener('click', closeAll);
+
+  document.querySelectorAll('.filter-panel-close').forEach(function(btn) {
+    btn.addEventListener('click', function(e) { e.preventDefault(); closeAll(); });
+  });
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeAll();

@@ -34,6 +34,7 @@ interface VenueData {
   slug: string;
   address?: string;
   neighborhood?: string;
+  coordinates?: { lat: number; lon: number };
   events: Event[];
   eventCount: number;
 }
@@ -79,6 +80,20 @@ function generateVenueSchema(venue: VenueData): string | null {
     },
     'url': `${BASE_URL}/venues/${venue.slug}/`
   };
+
+  // Add geo coordinates if real (not the generic Athens center fallback)
+  if (venue.coordinates) {
+    const isGenericCoord =
+      Math.abs(venue.coordinates.lat - 37.9838) < 0.0001 &&
+      Math.abs(venue.coordinates.lon - 23.7276) < 0.0001;
+    if (!isGenericCoord) {
+      schema.geo = {
+        '@type': 'GeoCoordinates',
+        'latitude': venue.coordinates.lat,
+        'longitude': venue.coordinates.lon
+      };
+    }
+  }
 
   // Add upcoming events as part of schema
   if (venue.events.length > 0) {
@@ -208,6 +223,12 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
     .venue-event-item.exhibition { border-left: 3px solid #10b981; padding-left: 12px; }
     .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.7rem; padding: 1px 6px; border-radius: 8px; margin-left: 5px; vertical-align: middle; }
     .more-events { color: var(--text-secondary); font-style: italic; margin-top: 20px; }
+
+    .venue-map { margin-bottom: 30px; }
+    .venue-map h2 { font-size: 1.3rem; margin-bottom: 12px; }
+    .venue-map iframe { display: block; }
+    .venue-map-attribution { display: block; margin-top: 6px; font-size: 0.75rem; color: var(--text-tertiary); }
+    .venue-map-attribution a { color: var(--text-tertiary); }
   </style>
 </head>
 <body>
@@ -227,6 +248,23 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
         <p>${venue.eventCount} επερχόμενες εκδηλώσεις ${typeSummary ? `(${typeSummary})` : ''}</p>
       </div>
     </header>
+
+    ${(() => {
+      if (!venue.coordinates) return '';
+      const isGenericCoord =
+        Math.abs(venue.coordinates.lat - 37.9838) < 0.0001 &&
+        Math.abs(venue.coordinates.lon - 23.7276) < 0.0001;
+      if (isGenericCoord) return '';
+      const c = venue.coordinates;
+      return `<section class="venue-map">
+        <h2>Χάρτης</h2>
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${c.lon - 0.005},${c.lat - 0.005},${c.lon + 0.005},${c.lat + 0.005}&marker=${c.lat},${c.lon}"
+          width="100%" height="300" loading="lazy"
+          style="border:1px solid var(--border-subtle);border-radius:8px"
+          title="Χάρτης — ${venue.name}"></iframe>
+        <small class="venue-map-attribution">&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></small>
+      </section>`;
+    })()}
 
     <section class="venue-events">
       <h2>Επερχόμενες Εκδηλώσεις</h2>
@@ -266,6 +304,7 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
         slug,
         address: event.venue.address,
         neighborhood: event.venue.neighborhood,
+        coordinates: event.venue.coordinates,
         events: [],
         eventCount: 0
       };
@@ -278,6 +317,9 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
     }
     if (!venueData.neighborhood && event.venue.neighborhood) {
       venueData.neighborhood = event.venue.neighborhood;
+    }
+    if (!venueData.coordinates && event.venue.coordinates) {
+      venueData.coordinates = event.venue.coordinates;
     }
 
     venueData.events.push(event);
