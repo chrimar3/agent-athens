@@ -17,6 +17,7 @@ export function renderSiteNav(): string {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
+        <kbd class="search-kbd">\u2318K</kbd>
       </button>
       <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
         <span class="hamburger-icon"></span>
@@ -31,6 +32,7 @@ export function renderHamburgerMenu(): string {
 <nav class="mobile-menu" aria-hidden="true">
   <button class="mobile-menu-close" aria-label="Close menu">\u00d7</button>
   <ul class="mobile-menu-items">
+    <li><button class="mobile-menu-search" type="button">Αναζήτηση</button></li>
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
     <li><a href="/about/">Σχετικά</a></li>

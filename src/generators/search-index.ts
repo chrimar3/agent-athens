@@ -49,10 +49,19 @@ interface CategoryRecord {
   count: number;
 }
 
+interface PopularRecord {
+  title: string;
+  slug: string;
+  venue: string;
+  date: string;
+  type: string;
+}
+
 interface SearchIndex {
   events: EventRecord[];
   venues: VenueRecord[];
   categories: CategoryRecord[];
+  popular: PopularRecord[];
   generated: string;
 }
 
@@ -112,10 +121,32 @@ export function generateSearchIndex(events: Event[]): void {
     };
   });
 
+  // Build popular records (5 soonest upcoming events)
+  const now = new Date().toISOString().slice(0, 10);
+  const popular: PopularRecord[] = [...events]
+    .filter(e => {
+      const effectiveDate = (e.type === 'exhibition' && e.endDate) ? e.endDate.slice(0, 10) : e.startDate.slice(0, 10);
+      return effectiveDate >= now;
+    })
+    .sort((a, b) => {
+      const aDate = a.startDate.slice(0, 10);
+      const bDate = b.startDate.slice(0, 10);
+      return aDate.localeCompare(bDate);
+    })
+    .slice(0, 5)
+    .map(e => ({
+      title: e.title,
+      slug: generateEventSlug(e),
+      venue: e.venue.name,
+      date: e.startDate.substring(0, 10),
+      type: e.type,
+    }));
+
   const index: SearchIndex = {
     events: eventRecords,
     venues: venueRecords,
     categories: categoryRecords,
+    popular,
     generated: new Date().toISOString(),
   };
 
