@@ -171,6 +171,12 @@ a:hover {
   text-decoration: none;
   color: inherit;
   outline: none;
+  transition: transform var(--t-normal) var(--ease-out), box-shadow var(--t-normal) var(--ease-out);
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .event-card:focus-visible {
@@ -308,6 +314,31 @@ a:hover {
   margin: 0;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ── Date Group Wrapper ───────────────────────────── */
+
+.date-group {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 1024px) {
+  .date-group { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .date-group { grid-template-columns: 1fr; }
+}
+
+.date-group[data-count="1"] .event-card {
+  max-width: 66%;
+}
+
+@media (max-width: 1024px) {
+  .date-group[data-count="1"] .event-card { max-width: 100%; }
 }
 
 /* ── Mobile overrides ───────────────────────────────── */

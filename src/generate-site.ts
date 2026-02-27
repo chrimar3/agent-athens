@@ -19,6 +19,7 @@ import { generateVenuePages } from './generators/venue-page';
 import { generateOgImages, generateFavicons } from './generators/og-image';
 import { renderFeaturedCarousel } from './templates/card-variants';
 import { renderContentPage } from './templates/content-page';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './templates/site-chrome';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -397,6 +398,9 @@ async function main() {
     console.log(`  ✓ /${page.slug}/`);
   }
 
+  // Generate 404 page
+  generate404Page();
+
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');
   await generateLLMsTxt();
@@ -641,6 +645,78 @@ async function generateIndexNowKeyFile() {
   } catch (err) {
     console.log(`  ⚠️ IndexNow key file skipped: ${err}`);
   }
+}
+
+function generate404Page(): void {
+  const html = `<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="view-transition" content="same-origin">
+  ${renderFaviconLinks()}
+  <link rel="stylesheet" href="/styles/design-system.css">
+  <title>Η σελίδα δεν βρέθηκε | agent-athens</title>
+  <meta name="robots" content="noindex">
+  <style>
+    .error-page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .error-code {
+      font-size: 96px;
+      font-weight: var(--font-weight-bold);
+      color: var(--text-muted);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .error-page h1 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .error-page p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .error-home-link {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      font-weight: var(--font-weight-bold);
+      border-radius: 999px;
+      text-decoration: none;
+      transition: opacity var(--t-fast);
+    }
+    .error-home-link:hover {
+      opacity: 0.85;
+      text-decoration: none;
+      color: var(--bg-primary);
+    }
+  </style>
+</head>
+<body>
+  ${renderSiteNav()}
+  ${renderHamburgerMenu()}
+
+  <div class="error-page">
+    <div class="error-code">404</div>
+    <h1>Η σελίδα δεν βρέθηκε</h1>
+    <p>Η σελίδα που ψάχνετε δεν υπάρχει ή έχει μετακινηθεί. Το ημερολόγιο ενημερώνεται καθημερινά — ίσως η εκδήλωση έχει παρέλθει.</p>
+    <a href="/" class="error-home-link">Αρχική σελίδα</a>
+  </div>
+
+  ${renderSiteFooter()}
+  ${renderHamburgerScript()}
+</body>
+</html>`;
+
+  writeFileSync(join(DIST_DIR, '404.html'), html);
+  console.log('  ✓ 404.html');
 }
 
 // Run generator

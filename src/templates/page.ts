@@ -332,11 +332,14 @@ function renderDateGroupedEvents(events: Event[]): string {
 
   const parts: string[] = [];
   for (const dateKey of sortedKeys) {
+    const dateEvents = groups.get(dateKey)!;
     const headerText = formatGreekDateOnly(dateKey);
     parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
-    for (const event of groups.get(dateKey)!) {
+    parts.push(`<div class="date-group" data-count="${dateEvents.length}">`);
+    for (const event of dateEvents) {
       parts.push(renderEventCard(event));
     }
+    parts.push(`</div>`);
   }
 
   return parts.join('\n');

@@ -14,6 +14,7 @@ import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
+import { BADGE_LABELS } from '../templates/page';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
@@ -132,7 +133,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
         <a href="/events/${eventSlug}/">${event.title}</a>
         ${openNow ? '<span class="open-now-badge">Τώρα</span>' : ''}
         <span class="event-date">${dateDisplay}</span>
-        <span class="event-type">${event.type}</span>
+        <span class="event-type">${BADGE_LABELS[event.type] || event.type}</span>
       </li>`;
   }).join('\n');
 

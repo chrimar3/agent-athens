@@ -157,9 +157,6 @@ export function renderFilterBar(
         ${renderTypePanel(counts.types, currentFilters)}
       </div>`;
 
-  // ── Area pill (disabled — insufficient neighborhood data) ──
-  const areaPill = `<button class="filter-pill is-disabled" disabled>Περιοχή ${CHEVRON_SVG}</button>`;
-
   // ── Price pill ──
   const priceActive = currentFilters.price && currentFilters.price !== 'all'
     ? currentFilters.price
@@ -193,7 +190,6 @@ export function renderFilterBar(
     <div class="filter-bar-scroll">
       ${datePill}
       ${typePill}
-      ${areaPill}
       ${pricePill}
       ${sortPill}
       ${meta}
