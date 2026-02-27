@@ -207,17 +207,36 @@ const STOPWORDS = new Set([
   // Music-specific stopwords
   'live', 'with', 'feat', 'featuring', 'pres', 'presents', 'b2b',
   'vol', 'part', 'dj', 'mc',
+  // Day names (noise in titles like "Deep Dish I Fri June 12")
+  'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun',
+  'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+  // Month names
+  'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec',
+  'january', 'february', 'march', 'april', 'june', 'july', 'august',
+  'september', 'october', 'november', 'december',
 ]);
 
 const MIN_TOKEN_LENGTH = 3;
+
+/**
+ * Strip diacritics from Latin characters (NFD decomposition).
+ * Leaves Greek accents intact since they're meaningful in Greek text.
+ * Examples: "Giolì" → "Gioli", "PLISSKËN" → "PLISSKEN", "café" → "cafe"
+ */
+function stripLatinDiacritics(text: string): string {
+  // NFD decomposes accented chars into base + combining mark.
+  // Remove only combining marks (U+0300..U+036F) that follow Latin chars.
+  return text.normalize('NFD').replace(/(?<=[a-zA-Z])[\u0300-\u036f]/g, '');
+}
 
 export function extractSignificantTokens(title: string): string[] {
   if (!title) return [];
 
   const decoded = decodeHtmlEntities(title);
+  const stripped = stripLatinDiacritics(decoded);
 
   // Split on non-alphanumeric (keep Greek letters)
-  const tokens = decoded
+  const tokens = stripped
     .toLowerCase()
     .split(/[^a-zA-Zα-ωά-ώϊϋΐΰ0-9]+/)
     .filter(Boolean);

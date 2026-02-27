@@ -150,14 +150,16 @@ function comparePairs(
       const a = group[i];
       const b = group[j];
 
-      // Skip same-source pairs
-      if (a.source === b.source) continue;
-
       // Skip if either already matched (prevents triple-match issues)
       if (matched.has(a.id) || matched.has(b.id)) continue;
 
       const match = matchTitle(a, b, canonicals);
       if (match) {
+        // Same-source pairs require higher confidence (exact canonical or containment only)
+        // to avoid false positives from legitimately different events at same venue.
+        // This catches athinorama's dual-category listings (e.g., music + theater).
+        if (a.source === b.source && match.confidence < 0.9) continue;
+
         pairs.push(match);
         matched.add(a.id);
         matched.add(b.id);
@@ -181,7 +183,6 @@ function comparePairsExhibition(
       const a = group[i];
       const b = group[j];
 
-      if (a.source === b.source) continue;
       if (matched.has(a.id) || matched.has(b.id)) continue;
 
       // Check date range overlap
@@ -189,6 +190,9 @@ function comparePairsExhibition(
 
       const match = matchTitle(a, b, canonicals);
       if (match) {
+        // Same-source: require higher confidence (see comparePairs)
+        if (a.source === b.source && match.confidence < 0.9) continue;
+
         pairs.push(match);
         matched.add(a.id);
         matched.add(b.id);
@@ -222,17 +226,24 @@ function matchTitle(
 
   // Layer 2: Containment
   // The shorter canonical title must be contained in the longer one.
-  // Safety: shorter must have ≥ 2 significant tokens AND be ≥ 40% of longer
+  // Safety: shorter must have ≥ 2 significant tokens AND be ≥ 40% of longer.
+  // Exception: single-token titles ≥ 5 chars are allowed (e.g., "autechre").
   const [shorter, longer] =
     ca.title.length <= cb.title.length
       ? [ca, cb]
       : [cb, ca];
 
   const shorterTokens = shorter.tokens;
+  const isSingleDistinctiveToken =
+    shorterTokens.length === 1 && shorterTokens[0].length >= 5;
+  const hasEnoughTokens = shorterTokens.length >= 2 || isSingleDistinctiveToken;
+  // Single distinctive tokens (e.g., "autechre") need lower ratio since the
+  // word itself is highly specific. Multi-token titles use stricter 40%.
+  const minLengthRatio = isSingleDistinctiveToken ? 0.25 : 0.4;
   if (
-    shorterTokens.length >= 2 &&
+    hasEnoughTokens &&
     shorter.title.length >= 5 &&
-    shorter.title.length >= longer.title.length * 0.4 &&
+    shorter.title.length >= longer.title.length * minLengthRatio &&
     longer.title.includes(shorter.title)
   ) {
     return {

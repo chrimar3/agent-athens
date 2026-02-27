@@ -204,11 +204,11 @@ run_dedup_merge() {
     log "Merging cross-source duplicate events..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75"
+        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75 (lowered from 0.9 to catch token-overlap pairs)"
         return 0
     fi
 
-    if bun run scripts/merge-duplicates.ts --execute --min-confidence 0.9 >> "$LOG_FILE" 2>&1; then
+    if bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75 >> "$LOG_FILE" 2>&1; then
         log "Cross-source merge completed"
         return 0
     else

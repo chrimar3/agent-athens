@@ -351,12 +351,27 @@ PARENT: spot-check (read openings, check one credentials, note diversity)
   → ~2 min vs ~10 min full review
 ```
 
-### Throughput Data (Sessions 1-2)
+### Throughput Data (Sessions 1-3)
 - Calibration (session 1): 2 batches, 10 events, ~245K tokens, ~18 min subagent time
 - Steady-state (session 2): 3 batches, 15 events, ~301K tokens, ~24 min subagent time
+- Post-fix validation (session 3): 3 batches, 15 events, ~310K tokens, ~24 min subagent time
 - Per-event average: ~20K tokens, ~5 min (includes research + writing + gate check + tags)
 - Parent overhead: ~5 min per batch (generate brief + spot-check)
 - Three-batch session total: ~40 min (parallel subagent + parent work)
+
+### Post-Fix Gate Score Analysis (Session 3)
+- Average post-save score: 89.5/100 (batches 8-10)
+- Pre-save scores: 84-85 (infrastructure false positives: schema, tags, last_verified, practical block)
+- Post-save scores: 89-90 (save-batch.ts populates infrastructure fields, eliminating deductions)
+- Tag taxonomy expansion had minimal direct scoring impact (~0.1-0.5 point improvement)
+- The 89-90 ceiling appears structural: gate checker deducts for timeliness hooks even when present (keyword pattern matching doesn't always detect contextual timeliness)
+
+### Type Mismatch Pattern (Persistent)
+Despite categorizer fixes, type mismatches remain at ~33% (5/15 in session 3):
+- **Venue-lock mismatches**: Kafetheatro→theater (for pop concerts), Temple→dj_set (for metal fests), Concert #1→classical (for world/jazz)
+- **Fallback-preserved scraper types**: Viva la mamma! scraped as sports, By Heart scraped as exhibition
+- **Missing keyword categories**: meetup, conference not in categorization-keywords.json despite existing as EventType
+- Fix path: Add meetup/conference keyword rules; move more venues to mixed_venues when evidence of multi-type usage emerges
 
 ### Sensory Extrapolation vs Fabrication Boundary
 The line between acceptable and fabricated venue details:

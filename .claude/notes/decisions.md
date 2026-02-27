@@ -355,6 +355,16 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 - ~~Tech meetup regression~~ FIXED: exact genre matching + "techno" in whole_word_only
 - Theater description keywords are all Greek, but enriched descriptions are English — "theater" in full_description doesn't trigger theater category. Low priority (manually fixable case-by-case)
 
+### Post-Fix Validation (2026-02-27, Session 3)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Type mismatches remain at ~33% — venue-lock is the main cause | Kafetheatro, Temple, Concert #1 Baumstrasse all venue-locked to single types but host diverse events. Previous fix (mixed_venues for Megaron/Rabbithole) helped those venues but same pattern repeats elsewhere | 2026-02-27 |
+| Accept 84 pre-save scores as passing | Gate scores of 84 pre-save consistently become 89-90 post-save. Infrastructure deductions (schema, tags, last_verified, practical block) are false positives at pre-save time. Manual review for fabrication/credentials is the real quality check | 2026-02-27 |
+| Location filter caught Thessaloniki event | Skiadareses at WE Polychoros (Thessaloniki) passed through as verified_athens. Enrichment subagent caught it via web search. Rejected post-discovery. Location filter needs improvement for venue-similar-name cases | 2026-02-27 |
+| Kafetheatro, Temple, Red Jasper Cabaret should remain venue-locked | Most events at these venues match their locked type. Moving to mixed_venues would require keyword Pass 2 for ALL events, which may introduce more errors than it fixes. Case-by-case DB fix is lower-risk | 2026-02-27 |
+| meetup/conference keyword rules needed | Types exist in EventType but categorization-keywords.json has no rules. 6 meetup/conference events stuck as dj_set. Low priority (all are problematic status or already enriched) but should be added to prevent future occurrences | 2026-02-27 |
+
 ## Self-Hosted Image Pipeline (2026-02-26)
 
 | Decision | Why | Date |

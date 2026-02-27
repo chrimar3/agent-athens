@@ -147,6 +147,29 @@ describe('Layer 1 — Exact Canonical', () => {
     expect(match!.layer).toBe('exact_canonical');
   });
 
+  test('same-source duplicate: athinorama dual-category listing', () => {
+    // Real bug: athinorama lists Nekyia under both /music/ and /theatre/
+    const events = [
+      makeDbRow({
+        id: 'nekyia-music',
+        title: '«Νέκυια»',
+        venue_name: 'Μέγαρο Μουσικής Αθηνών',
+        source: 'athinorama.gr',
+      }),
+      makeDbRow({
+        id: 'nekyia-theater',
+        title: '«Νέκυια»',
+        venue_name: 'Μέγαρο Μουσικής Αθηνών',
+        source: 'athinorama.gr', // same source, different category
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    const match = findPair(pairs, 'nekyia-music', 'nekyia-theater');
+    expect(match).toBeDefined();
+    expect(match!.confidence).toBe(1.0);
+    expect(match!.layer).toBe('exact_canonical');
+  });
+
   test('case-only difference: Oathswan = OATHSWAN', () => {
     const events = [
       makeDbRow({
@@ -295,7 +318,8 @@ describe('Layer 3 — Token Overlap', () => {
 // ============================================================================
 
 describe('Guard Tests — must NOT match', () => {
-  test('same source, same title, same date → NEVER (handled by upsert)', () => {
+  test('same source, exact canonical match → DETECTED (dual-category listing)', () => {
+    // Catches e.g. athinorama events listed under both /music/ and /theatre/
     const events = [
       makeDbRow({
         id: 'dup-1',
@@ -312,6 +336,30 @@ describe('Guard Tests — must NOT match', () => {
     ];
     const pairs = findDuplicates(events, testVenueConfig);
     const match = findPair(pairs, 'dup-1', 'dup-2');
+    // Same-source with exact canonical match (1.0) passes the 0.9 threshold
+    expect(match).toBeDefined();
+    expect(match!.confidence).toBeGreaterThanOrEqual(0.9);
+  });
+
+  test('same source, moderate token overlap → NEVER match (below 0.9 threshold)', () => {
+    // Token overlap (0.75 confidence) is below the same-source threshold of 0.9
+    const events = [
+      makeDbRow({
+        id: 'ss-1',
+        title: 'Alex Rossi Band Live Concert',
+        venue_name: 'Half Note Jazz Club',
+        source: 'more.com',
+      }),
+      makeDbRow({
+        id: 'ss-2',
+        title: 'Alex Rossi Band Special Night',
+        venue_name: 'Half Note Jazz Club',
+        source: 'more.com', // same source
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    const match = findPair(pairs, 'ss-1', 'ss-2');
+    // Token overlap would give 0.75 confidence, below same-source threshold
     expect(match).toBeUndefined();
   });
 

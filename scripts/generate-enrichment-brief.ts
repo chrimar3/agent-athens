@@ -89,8 +89,33 @@ function parseArgs(): { count: number; batch: number } {
  * Round-robin across types, max MAX_PER_TYPE per type, soonest first within type.
  * Exhibition-safe: uses end_date for exhibitions (TIER 1 rule).
  */
+// Multi-hall venues that legitimately host different events on the same day.
+// These are excluded from the enriched-sibling filter to avoid over-filtering.
+const MULTI_HALL_VENUES = new Set([
+  'μέγαρο μουσικής αθηνών',
+  'megaron athens concert hall',
+  'megaron mousikis',
+  'τεχνόπολη δήμου αθηναίων',
+  'technopolis city of athens',
+  'onassis stegi',
+  'στέγη ιδρύματος ωνάση',
+]);
+
 export function selectDiverseBatch(db: Database, count: number): EventRecord[] {
   if (count <= 0) return [];
+
+  // Build a set of already-enriched (venue, date) combos to skip cross-source duplicates.
+  // If venue+date already has an enriched event, skip the unenriched sibling.
+  const enrichedCombos = new Set<string>();
+  const enrichedRows = db.prepare(`
+    SELECT LOWER(TRIM(venue_name)) as venue, SUBSTR(start_date,1,10) as date
+    FROM events
+    WHERE full_description IS NOT NULL AND full_description <> ''
+      AND location_status IN ('verified_athens', 'pass_through')
+  `).all() as { venue: string; date: string }[];
+  for (const r of enrichedRows) {
+    enrichedCombos.add(`${r.venue}|${r.date}`);
+  }
 
   // Query all eligible events grouped by type, soonest first
   const rows = db.prepare(`
@@ -109,9 +134,20 @@ export function selectDiverseBatch(db: Database, count: number): EventRecord[] {
 
   if (rows.length === 0) return [];
 
+  // Filter out events that already have an enriched sibling at same venue+date.
+  // Skips multi-hall venues where different events legitimately share a date.
+  const filtered = rows.filter(row => {
+    const venue = (row.venue_name || '').toLowerCase().trim();
+    if (MULTI_HALL_VENUES.has(venue)) return true;
+    const key = `${venue}|${row.start_date.slice(0, 10)}`;
+    return !enrichedCombos.has(key);
+  });
+
+  if (filtered.length === 0) return [];
+
   // Group by type
   const byType = new Map<string, EventRecord[]>();
-  for (const row of rows) {
+  for (const row of filtered) {
     const existing = byType.get(row.type) || [];
     existing.push(row);
     byType.set(row.type, existing);
