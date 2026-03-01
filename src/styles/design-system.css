@@ -19,7 +19,6 @@
   --text-muted: #444444;
 
   --accent-primary: #f5e642;
-  --accent-hover: #f7ed72;
   --accent-secondary: #ef2c46;
 
   --border-subtle: #222222;
@@ -61,32 +60,44 @@
   --font-weight-bold: 700;
 
   /* Type scale */
-  --type-hero: 2.5rem;
-  --type-h1: 2rem;
-  --type-h2: 1.5rem;
-  --type-h3: 1.3rem;
+  --type-hero: 4rem;
+  --type-h1: 2.5rem;
+  --type-h2: 1.75rem;
+  --type-h3: 1.25rem;
   --type-body: 1rem;
-  --type-body-lg: 1.1rem;
-  --type-small: 0.9rem;
-  --type-caption: 0.75rem;
+  --type-body-lg: 1.125rem;
+  --type-small: 0.875rem;
+  --type-caption: 0.6875rem;
+  --type-ui: 0.75rem;
+
+  /* Line heights */
+  --leading-tight: 1.05;
+  --leading-snug: 1.15;
+  --leading-card: 1.2;
+  --leading-normal: 1.55;
+  --leading-ui: 1.0;
 
   /* Spacing */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-sm-md: 12px;
   --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 40px;
-  --space-2xl: 64px;
+  --space-md-lg: 24px;
+  --space-lg: 32px;
+  --space-xl: 64px;
+  --space-2xl: 96px;
 
   /* Motion */
-  --t-instant: 100ms;
-  --t-fast: 200ms;
-  --t-normal: 300ms;
-  /* --t-deliberate: 500ms; — unused */
-  /* --t-slow: 800ms; — unused */
-  --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
-  /* --ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1); — unused */
+  --t-instant: 0ms;
+  --t-micro: 80ms;
+  --t-fast: 120ms;
+  --t-base: 150ms;
+  --t-moderate: 200ms;
+  --t-slow: 300ms;
+  --t-deliberate: 500ms;
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-hard: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 
   /* Safe areas */
   --safe-top: env(safe-area-inset-top, 0px);
@@ -94,6 +105,22 @@
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 }
+
+/* ── Mobile type overrides ──────────────────────────── */
+@media (max-width: 767px) {
+  :root {
+    --type-hero: 2.5rem;
+    --type-h1: 2rem;
+    --type-h2: 1.5rem;
+    --type-h3: 1.125rem;
+    --type-small: 0.8125rem;
+  }
+}
+
+/* ── Letter spacing ─────────────────────────────────── */
+.edp-title, .hero-heading { letter-spacing: -0.5px; }
+.card-badge { letter-spacing: 0.8px; }
+.edp-cta { letter-spacing: 1.92px; }
 
 /* ── Global Reset ────────────────────────────────────── */
 
@@ -123,7 +150,8 @@ a {
 }
 
 a:hover {
-  color: var(--accent-hover);
+  color: var(--accent-primary);
+  filter: brightness(1.15);
   text-decoration: underline;
 }
 
@@ -131,10 +159,10 @@ a:hover {
 
 @view-transition { navigation: auto; }
 ::view-transition-old(root) {
-  animation: var(--t-fast) var(--ease-out) both vt-fade-out;
+  animation: var(--t-moderate) var(--ease-out) both vt-fade-out;
 }
 ::view-transition-new(root) {
-  animation: var(--t-fast) var(--ease-out) both vt-fade-in;
+  animation: var(--t-moderate) var(--ease-out) both vt-fade-in;
 }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
@@ -170,7 +198,7 @@ a:hover {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-md-lg);
 }
 
 @media (max-width: 1024px) {
@@ -190,7 +218,7 @@ a:hover {
   text-decoration: none;
   color: inherit;
   outline: none;
-  transition: transform var(--t-normal) var(--ease-out), box-shadow var(--t-normal) var(--ease-out);
+  transition: transform var(--t-moderate) var(--ease-out), box-shadow var(--t-moderate) var(--ease-out);
 }
 
 .event-card:hover {
@@ -288,7 +316,7 @@ a:hover {
 .list-image-wrapper img.will-fade,
 .carousel-card-image.will-fade {
   opacity: 0;
-  transition: opacity var(--t-normal) var(--ease-out);
+  transition: opacity var(--t-slow) var(--ease-out);
 }
 .card-image.is-loaded,
 .feature-image-wrapper img.is-loaded,
@@ -416,7 +444,7 @@ a:hover {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-md-lg);
 }
 
 @media (max-width: 1024px) {
@@ -485,7 +513,7 @@ a:hover {
   width: 44px; height: 44px;
   background: none; border: none; cursor: pointer;
   color: var(--text-secondary);
-  transition: color var(--t-fast);
+  transition: color var(--t-base);
 }
 .nav-search-btn:hover { color: var(--text-primary); }
 
@@ -536,7 +564,7 @@ a:hover {
 }
 .mobile-overlay.open {
   display: block;
-  animation: fadeIn var(--t-fast) var(--ease-out);
+  animation: fadeIn var(--t-moderate) var(--ease-out);
 }
 
 .mobile-menu {
@@ -545,7 +573,7 @@ a:hover {
   background: var(--bg-elevated);
   z-index: 201;
   transform: translateX(100%);
-  transition: transform 250ms var(--ease-out);
+  transition: transform var(--t-slow) var(--ease-out);
   padding: 72px 24px 24px;
 }
 .mobile-menu.open { transform: translateX(0); }
@@ -810,7 +838,7 @@ a:hover {
   padding: 8px 0;
   margin-bottom: 24px;
 }
-.edp-read-more:hover { color: var(--accent-hover); }
+.edp-read-more:hover { color: var(--accent-primary); filter: brightness(1.15); }
 
 /* Venue section */
 .edp-venue-section {
@@ -884,7 +912,7 @@ a:hover {
   padding: 12px 16px;
   padding-bottom: calc(12px + var(--safe-bottom));
   transform: translateY(100%);
-  transition: transform var(--t-normal) var(--ease-out);
+  transition: transform var(--t-moderate) var(--ease-out);
 }
 .edp-mobile-bar.is-visible {
   transform: translateY(0);
@@ -948,8 +976,8 @@ a:hover {
   padding: 0;
 }
 
-/* Inner scroll container — keeps overflow-x scrolling off .filter-bar
-   so absolutely-positioned panels aren't clipped (CSS overflow coercion) */
+/* Inner scroll container — horizontal pill scrolling.
+   overflow-x clips panels; lifted via .has-open-panel on .filter-bar */
 .filter-bar-scroll {
   display: flex;
   align-items: center;
@@ -978,11 +1006,11 @@ a:hover {
   background: transparent;
   color: var(--text-secondary);
   font-family: var(--font-primary);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: var(--font-weight-regular);
   white-space: nowrap;
   cursor: pointer;
-  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+  transition: border-color var(--t-instant), color var(--t-instant), background var(--t-instant);
   user-select: none;
   flex-shrink: 0;
 }
@@ -1017,6 +1045,24 @@ a:hover {
   opacity: 0.5;
   cursor: default;
   pointer-events: none;
+}
+
+/* Suppress browser focus ring on mouse click; show only on keyboard */
+.filter-pill:focus {
+  outline: none;
+}
+.filter-pill:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* When a panel is open, lift filter-bar above backdrop (z:199)
+   and disable scroll clipping so panels can overflow visually */
+.filter-bar.has-open-panel {
+  z-index: 200;
+}
+.filter-bar.has-open-panel .filter-bar-scroll {
+  overflow: visible;
 }
 
 .filter-pill-dismiss {
@@ -1059,9 +1105,9 @@ a:hover {
   max-height: 400px;
   overflow-y: auto;
   background: var(--bg-elevated);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 16px;
   z-index: 200;
   opacity: 0;
@@ -1117,7 +1163,7 @@ a:hover {
     box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.5);
   }
   .filter-panel.is-open {
-    animation: sheetSlideUp var(--t-normal) var(--ease-out);
+    animation: sheetSlideUp var(--t-deliberate) var(--ease-out);
   }
 
   .filter-panel-backdrop {
@@ -1208,6 +1254,33 @@ a:hover {
 /* Type panel wider for 3-column grid */
 .filter-panel[data-panel-for="type"] { min-width: 420px; }
 
+/* ── Filter Panel Footer ─────────────────────── */
+
+.filter-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.filter-reset {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+.filter-reset:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.filter-panel-footer-count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 /* ── Price / Sort Panels (Radio List) ─────────── */
 
 .filter-radio-list {
@@ -1268,22 +1341,23 @@ a:hover {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   align-items: center;
   justify-content: center;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 50%;
-  color: var(--text-secondary);
-  font-size: 16px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 14px;
   line-height: 1;
   cursor: pointer;
-  transition: color var(--t-fast), border-color var(--t-fast);
+  border-radius: 4px;
+  padding: 0;
+  transition: color var(--t-fast), background var(--t-fast);
 }
 .filter-panel-close:hover {
   color: var(--text-primary);
-  border-color: var(--border-default);
+  background: var(--bg-surface);
 }
 
 @media (min-width: 768px) {
@@ -1413,7 +1487,7 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 150ms var(--ease-out);
+  transition: transform var(--t-base) var(--ease-out);
 }
 
 .event-card-feature:hover .feature-image-wrapper img {
@@ -1444,8 +1518,8 @@ a:hover {
 
 .hero-section {
   border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-md-lg);
+  padding-bottom: var(--space-md-lg);
 }
 
 .hero-header {
@@ -1468,14 +1542,15 @@ a:hover {
   white-space: nowrap;
 }
 .hero-see-all:hover {
-  color: var(--accent-hover);
+  color: var(--accent-primary);
+  filter: brightness(1.15);
   text-decoration: underline;
 }
 
 .hero-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: var(--space-lg);
+  gap: var(--space-md-lg);
 }
 
 /* ── Hero Featured Card ─────────────────────────── */
@@ -1501,7 +1576,7 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--t-fast) var(--ease-out);
+  transition: transform var(--t-base) var(--ease-out);
 }
 .hero-card--featured:hover .hero-card-image {
   transform: scale(1.03);
@@ -1668,7 +1743,8 @@ a:hover {
 }
 
 .content-page-body a:hover {
-  color: var(--accent-hover);
+  color: var(--accent-primary);
+  filter: brightness(1.15);
 }
 
 @media (max-width: 1024px) {
