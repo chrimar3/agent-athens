@@ -7,7 +7,8 @@
  */
 
 export function renderSiteNav(): string {
-  return `<header class="site-header">
+  return `<a href="#main-content" class="skip-link">Μετάβαση στο περιεχόμενο</a>
+<header class="site-header">
   <div class="site-header-inner">
     <div class="site-header-left">
       <a href="/" class="site-logo">agent athens</a>
@@ -19,7 +20,7 @@ export function renderSiteNav(): string {
         </svg>
         <kbd class="search-kbd">\u2318K</kbd>
       </button>
-      <button class="hamburger-btn" aria-label="Menu" aria-expanded="false" type="button">
+      <button class="hamburger-btn" aria-label="Μενού" aria-expanded="false" type="button">
         <span class="hamburger-icon"></span>
       </button>
     </div>
@@ -30,7 +31,7 @@ export function renderSiteNav(): string {
 export function renderHamburgerMenu(): string {
   return `<div class="mobile-overlay" aria-hidden="true"></div>
 <nav class="mobile-menu" aria-hidden="true">
-  <button class="mobile-menu-close" aria-label="Close menu">\u00d7</button>
+  <button class="mobile-menu-close" aria-label="Κλείσιμο μενού">\u00d7</button>
   <ul class="mobile-menu-items">
     <li><button class="mobile-menu-search" type="button">Αναζήτηση</button></li>
     <li><a href="/">Εκδηλώσεις</a></li>
@@ -78,6 +79,12 @@ export function renderSiteFooter(): string {
     </div>
   </div>
 </footer>`;
+}
+
+export function renderFontLinks(): string {
+  return `<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&subset=greek,latin&display=swap">`;
 }
 
 export function renderFaviconLinks(): string {

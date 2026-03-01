@@ -1,20 +1,22 @@
 #!/usr/bin/env bun
 /**
- * Save Batch — Enrichment v4
+ * Save Batch — Enrichment v4 (Manifest-Driven)
  *
- * Reads description files from temp-descriptions/, saves to DB with full
- * enrichment logging (before/after tracking, batch metadata, quality scores).
+ * Reads description files from temp-descriptions/ for event IDs listed in a
+ * manifest file, saves to DB with full enrichment logging. Extracts opening
+ * sentences for cross-batch dedup, and optionally cleans up batch files.
  *
  * Usage:
- *   bun run scripts/save-batch.ts [--session=<name>] [--batch=<number>] [--dry-run]
- *   bun run scripts/save-batch.ts --session=feb-2026 --batch=3
+ *   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-35.manifest.json --session=batch-35 --batch=35
+ *   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-35.manifest.json --batch=35 --clean
+ *   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-35.manifest.json --dry-run
  *
  * Expects files like:
  *   temp-descriptions/<event-id>.md          — description content
  *   temp-descriptions/<event-id>.tags.json   — optional tags array
  */
 
-import { readdirSync, readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
 import { validateQualityGates } from '../src/enrichment/quality-gates';
@@ -23,8 +25,14 @@ import type { EventForEnrichment } from '../src/enrichment/description-generator
 
 const DB_PATH = 'data/events.db';
 const DESCRIPTIONS_DIR = 'temp-descriptions';
+const RECENT_OPENINGS_PATH = join(DESCRIPTIONS_DIR, 'recent-openings.json');
+const MAX_RECENT_OPENINGS = 30;
 
-interface SaveResult {
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface SaveResult {
   eventId: string;
   success: boolean;
   wordCount: number;
@@ -33,11 +41,33 @@ interface SaveResult {
   error?: string;
 }
 
-function parseArgs(): { session: string; batch: number; dryRun: boolean } {
+export interface BatchManifest {
+  batch_id: number;
+  generated_at: string;
+  event_ids: string[];
+}
+
+export interface RecentOpening {
+  event_id: string;
+  opening_sentence: string;
+  saved_at: string;
+}
+
+// ============================================================================
+// CLI
+// ============================================================================
+
+export function parseArgs(): { session: string; batch: number; dryRun: boolean; manifestPath: string; clean: boolean } {
   const args = process.argv.slice(2);
   const sessionArg = args.find(a => a.startsWith('--session='));
   const batchArg = args.find(a => a.startsWith('--batch='));
+  const manifestArg = args.find(a => a.startsWith('--manifest='));
   const dryRun = args.includes('--dry-run');
+  const clean = args.includes('--clean');
+
+  if (!manifestArg) {
+    throw new Error('--manifest=<path> is required. Usage: bun run scripts/save-batch.ts --manifest=temp-briefs/batch-N.manifest.json');
+  }
 
   // Default session name: month-year
   const now = new Date();
@@ -47,10 +77,65 @@ function parseArgs(): { session: string; batch: number; dryRun: boolean } {
     session: sessionArg?.split('=')[1] || defaultSession,
     batch: parseInt(batchArg?.split('=')[1] || '1', 10),
     dryRun,
+    manifestPath: manifestArg.split('=')[1],
+    clean,
   };
 }
 
-function loadEventContext(db: Database, eventId: string): EventForEnrichment | null {
+// ============================================================================
+// Manifest & Openings
+// ============================================================================
+
+export function loadManifest(path: string): BatchManifest {
+  if (!existsSync(path)) {
+    throw new Error(`Manifest not found: ${path}`);
+  }
+  try {
+    return JSON.parse(readFileSync(path, 'utf-8'));
+  } catch (e) {
+    throw new Error(`Invalid manifest JSON: ${path}`);
+  }
+}
+
+export function extractOpeningSentence(description: string): string {
+  const match = description.match(/^(.+?[.!?])(?:\s|$)/);
+  return match ? match[1].trim() : description.substring(0, 120).trim();
+}
+
+export function appendRecentOpenings(newOpenings: RecentOpening[]): void {
+  let existing: RecentOpening[] = [];
+  if (existsSync(RECENT_OPENINGS_PATH)) {
+    try {
+      existing = JSON.parse(readFileSync(RECENT_OPENINGS_PATH, 'utf-8'));
+    } catch {
+      existing = [];
+    }
+  }
+  const combined = [...existing, ...newOpenings].slice(-MAX_RECENT_OPENINGS);
+  writeFileSync(RECENT_OPENINGS_PATH, JSON.stringify(combined, null, 2), 'utf-8');
+}
+
+export function cleanupBatchFiles(eventIds: string[]): void {
+  let cleaned = 0;
+  for (const id of eventIds) {
+    const mdPath = join(DESCRIPTIONS_DIR, `${id}.md`);
+    const tagsPath = join(DESCRIPTIONS_DIR, `${id}.tags.json`);
+    if (existsSync(mdPath)) {
+      unlinkSync(mdPath);
+      cleaned++;
+    }
+    if (existsSync(tagsPath)) {
+      unlinkSync(tagsPath);
+    }
+  }
+  console.log(`Cleaned up ${cleaned} description file(s)`);
+}
+
+// ============================================================================
+// Core Logic
+// ============================================================================
+
+export function loadEventContext(db: Database, eventId: string): EventForEnrichment | null {
   const row = db.prepare(`
     SELECT id, title, start_date, venue_name, type, genres, price_type
     FROM events WHERE id = ?
@@ -70,42 +155,55 @@ function loadEventContext(db: Database, eventId: string): EventForEnrichment | n
   };
 }
 
-function main(): void {
-  const { session, batch, dryRun } = parseArgs();
+export function ensureV4Columns(db: Database): void {
+  const columns = db.prepare("PRAGMA table_info(enrichment_log)").all() as { name: string }[];
+  const existingCols = new Set(columns.map(c => c.name));
 
-  console.log(`\n=== Save Batch ${dryRun ? '(DRY RUN)' : ''} ===`);
-  console.log(`Session: ${session} | Batch: ${batch}\n`);
+  const needed = [
+    { name: 'description_before', type: 'TEXT' },
+    { name: 'description_after', type: 'TEXT' },
+    { name: 'batch_number', type: 'INTEGER' },
+    { name: 'session_id', type: 'TEXT' },
+    { name: 'quality_score', type: 'INTEGER' },
+    { name: 'quality_issues', type: 'TEXT' },
+    { name: 'tags_applied', type: 'TEXT' },
+  ];
 
-  if (!existsSync(DESCRIPTIONS_DIR)) {
-    console.error(`No ${DESCRIPTIONS_DIR}/ directory found.`);
-    process.exit(1);
+  for (const col of needed) {
+    if (!existingCols.has(col.name)) {
+      db.run(`ALTER TABLE enrichment_log ADD COLUMN ${col.name} ${col.type}`);
+    }
   }
+}
 
-  // Find all .md files in temp-descriptions/
-  const files = readdirSync(DESCRIPTIONS_DIR)
-    .filter(f => f.endsWith('.md'))
-    .sort();
-
-  if (files.length === 0) {
-    console.log('No description files found in temp-descriptions/');
-    process.exit(0);
-  }
-
-  console.log(`Found ${files.length} description file(s)\n`);
-
-  const db = new Database(DB_PATH);
-  db.run('PRAGMA journal_mode = WAL;');
-  db.run('PRAGMA foreign_keys = ON;');
-
-  // Ensure enrichment_log has v4 columns
+export function saveBatch(
+  db: Database,
+  eventIds: string[],
+  session: string,
+  batch: number,
+  dryRun: boolean,
+): { results: SaveResult[]; openings: RecentOpening[] } {
   ensureV4Columns(db);
 
   const results: SaveResult[] = [];
+  const openings: RecentOpening[] = [];
 
-  for (const file of files) {
-    const eventId = file.replace('.md', '');
-    const descPath = join(DESCRIPTIONS_DIR, file);
+  for (const eventId of eventIds) {
+    const descPath = join(DESCRIPTIONS_DIR, `${eventId}.md`);
     const tagsPath = join(DESCRIPTIONS_DIR, `${eventId}.tags.json`);
+
+    if (!existsSync(descPath)) {
+      results.push({
+        eventId,
+        success: false,
+        wordCount: 0,
+        qualityScore: 0,
+        hadPreviousDescription: false,
+        error: `Description file not found: ${descPath}`,
+      });
+      console.log(`  x ${eventId} — description file missing`);
+      continue;
+    }
 
     const description = readFileSync(descPath, 'utf-8');
     const wordResult = countWords(description);
@@ -173,6 +271,13 @@ function main(): void {
       );
     }
 
+    // Extract opening sentence
+    openings.push({
+      event_id: eventId,
+      opening_sentence: extractOpeningSentence(description),
+      saved_at: new Date().toISOString(),
+    });
+
     const status = gateResult.passed ? 'OK' : 'WARN';
     console.log(`  ${gateResult.passed ? '+' : '!'} ${eventId.substring(0, 12)}... | ${wordResult.count}w | score:${gateResult.score} | ${status}${tags ? ` | ${tags.length} tags` : ''}`);
 
@@ -185,11 +290,40 @@ function main(): void {
     });
   }
 
+  return { results, openings };
+}
+
+// ============================================================================
+// Main
+// ============================================================================
+
+function main(): void {
+  const { session, batch, dryRun, manifestPath, clean } = parseArgs();
+
+  console.log(`\n=== Save Batch ${dryRun ? '(DRY RUN)' : ''} ===`);
+  console.log(`Session: ${session} | Batch: ${batch} | Manifest: ${manifestPath}\n`);
+
+  const manifest = loadManifest(manifestPath);
+  console.log(`Manifest: ${manifest.event_ids.length} event(s) from batch ${manifest.batch_id}\n`);
+
+  const db = new Database(DB_PATH);
+  db.run('PRAGMA journal_mode = WAL;');
+  db.run('PRAGMA foreign_keys = ON;');
+
+  const { results, openings } = saveBatch(db, manifest.event_ids, session, batch, dryRun);
+
   db.close();
+
+  // Append opening sentences
+  if (!dryRun && openings.length > 0) {
+    appendRecentOpenings(openings);
+    console.log(`\nAppended ${openings.length} opening(s) to recent-openings.json`);
+  }
 
   // Summary
   const succeeded = results.filter(r => r.success);
   const failed = results.filter(r => !r.success);
+  const anyFailed = failed.length > 0;
   const avgScore = succeeded.length > 0
     ? Math.round(succeeded.reduce((sum, r) => sum + r.qualityScore, 0) / succeeded.length)
     : 0;
@@ -200,30 +334,24 @@ function main(): void {
   console.log(`First enrichments: ${succeeded.filter(r => !r.hadPreviousDescription).length}`);
   console.log(`Re-enrichments: ${succeeded.filter(r => r.hadPreviousDescription).length}`);
   if (failed.length > 0) {
-    console.log(`Failed: ${failed.map(r => r.eventId).join(', ')}`);
+    console.log(`Failed: ${failed.map(r => `${r.eventId} (${r.error})`).join(', ')}`);
   }
+
+  // Cleanup
+  if (clean && !dryRun) {
+    if (anyFailed) {
+      console.log(`\nSkipping cleanup: ${failed.length} event(s) failed — preserving files for retry`);
+    } else {
+      console.log('');
+      cleanupBatchFiles(manifest.event_ids);
+    }
+  }
+
   console.log('');
 }
 
-function ensureV4Columns(db: Database): void {
-  const columns = db.prepare("PRAGMA table_info(enrichment_log)").all() as { name: string }[];
-  const existingCols = new Set(columns.map(c => c.name));
-
-  const needed = [
-    { name: 'description_before', type: 'TEXT' },
-    { name: 'description_after', type: 'TEXT' },
-    { name: 'batch_number', type: 'INTEGER' },
-    { name: 'session_id', type: 'TEXT' },
-    { name: 'quality_score', type: 'INTEGER' },
-    { name: 'quality_issues', type: 'TEXT' },
-    { name: 'tags_applied', type: 'TEXT' },
-  ];
-
-  for (const col of needed) {
-    if (!existingCols.has(col.name)) {
-      db.run(`ALTER TABLE enrichment_log ADD COLUMN ${col.name} ${col.type}`);
-    }
-  }
+// Only run main() when executed directly, not when imported for testing
+const isDirectRun = import.meta.path === Bun.main;
+if (isDirectRun) {
+  main();
 }
-
-main();

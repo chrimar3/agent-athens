@@ -22,7 +22,7 @@ import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
@@ -685,49 +685,10 @@ function generate404Page(): void {
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
   <title>Η σελίδα δεν βρέθηκε | agent-athens</title>
   <meta name="robots" content="noindex">
-  <style>
-    .error-page {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 80px 20px;
-      text-align: center;
-    }
-    .error-code {
-      font-size: 96px;
-      font-weight: var(--font-weight-bold);
-      color: var(--text-muted);
-      line-height: 1;
-      margin-bottom: 16px;
-    }
-    .error-page h1 {
-      font-size: 28px;
-      margin-bottom: 16px;
-    }
-    .error-page p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 32px;
-    }
-    .error-home-link {
-      display: inline-block;
-      padding: 14px 32px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      font-weight: var(--font-weight-bold);
-      border-radius: 999px;
-      text-decoration: none;
-      transition: opacity var(--t-fast);
-    }
-    .error-home-link:hover {
-      opacity: 0.85;
-      text-decoration: none;
-      color: var(--bg-primary);
-    }
-  </style>
 </head>
 <body>
   ${renderSiteNav()}

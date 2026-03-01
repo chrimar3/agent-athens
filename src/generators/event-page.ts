@@ -18,7 +18,7 @@ import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates'
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 
@@ -337,6 +337,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>
@@ -347,8 +348,6 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 
   <!-- Language alternates -->
   <link rel="alternate" hreflang="el" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/events/${slug}/">
-  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/events/${slug}/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="${event.title}">
@@ -385,7 +384,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <article itemscope itemtype="https://schema.org/${schemaType}">
+  <article id="main-content" itemscope itemtype="https://schema.org/${schemaType}">
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
       <div class="edp-hero-inner">
         <nav class="edp-breadcrumb">

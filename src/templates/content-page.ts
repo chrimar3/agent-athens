@@ -1,7 +1,7 @@
 // Content page template — static pages (about, editorial, corrections)
 // Uses site chrome (nav, footer, hamburger) but no filter bar, cards, or hero.
 
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
 /**
@@ -31,6 +31,7 @@ export function renderContentPage(slug: string, title: string, bodyHtml: string)
   <meta name="twitter:image" content="https://agentathens.netlify.app/images/og/agentathens-default.png">
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 </head>
 <body>
@@ -38,7 +39,7 @@ export function renderContentPage(slug: string, title: string, bodyHtml: string)
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="content-page-body">
+  <div class="content-page-body" id="main-content">
     ${bodyHtml}
   </div>
 

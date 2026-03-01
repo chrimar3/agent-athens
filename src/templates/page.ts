@@ -7,7 +7,7 @@ import type { Event, PageMetadata } from '../types';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { generateEventSlug } from '../generators/event-page';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from './site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 
@@ -100,8 +100,6 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- Language Alternates -->
   <link rel="alternate" hreflang="el" href="https://agentathens.netlify.app/${url}">
-  <link rel="alternate" hreflang="en" href="https://agentathens.netlify.app/en/${url}">
-  <link rel="alternate" hreflang="x-default" href="https://agentathens.netlify.app/en/${url}">
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="${new Date().toISOString().split('T')[0]}">
@@ -143,17 +141,9 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- Design system -->
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
-  <!-- Page-specific styling -->
-  <style>
-    .page-header { border-bottom: 2px solid var(--border-default); margin-bottom: 30px; padding-bottom: 20px; }
-    .page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    .summary { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 10px; }
-    .last-update { font-size: 0.9rem; color: var(--text-tertiary); }
-    .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-    .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
-  </style>
 </head>
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav()}
@@ -181,7 +171,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
     ${preContentHtml || ''}
 
-    <main>
+    <main id="main-content">
       ${eventCount > 0 ? `
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         ${eventListHTML}

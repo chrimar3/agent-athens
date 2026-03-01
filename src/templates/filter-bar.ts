@@ -135,7 +135,7 @@ export function renderFilterBar(
   const timeDismissUrl = timeActive ? buildDismissUrl(currentFilters, 'time') : '';
   const datePill = timeActive
     ? `<div class="filter-panel-anchor" data-filter="date">
-        <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="Remove date filter">&times;</a></span>
+        <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου ημερομηνίας">&times;</a></span>
       </div>`
     : `<div class="filter-panel-anchor" data-filter="date">
         <button class="filter-pill" data-panel="date">${timeLabel} ${CHEVRON_SVG}</button>
@@ -150,7 +150,7 @@ export function renderFilterBar(
   const typeDismissUrl = typeActive ? buildDismissUrl(currentFilters, 'type') : '';
   const typePill = typeActive
     ? `<div class="filter-panel-anchor" data-filter="type">
-        <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="Remove type filter">&times;</a></span>
+        <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τύπου">&times;</a></span>
       </div>`
     : `<div class="filter-panel-anchor" data-filter="type">
         <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
@@ -167,7 +167,7 @@ export function renderFilterBar(
   const priceDismissUrl = priceActive ? buildDismissUrl(currentFilters, 'price') : '';
   const pricePill = priceActive
     ? `<div class="filter-panel-anchor" data-filter="price">
-        <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="Remove price filter">&times;</a></span>
+        <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τιμής">&times;</a></span>
       </div>`
     : `<div class="filter-panel-anchor" data-filter="price">
         <button class="filter-pill" data-panel="price">${priceLabel} ${CHEVRON_SVG}</button>

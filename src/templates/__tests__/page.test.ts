@@ -173,7 +173,6 @@ describe("renderPage", () => {
   test("should include CSS styling", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
-    expect(html).toContain("<style>");
     expect(html).toContain("design-system.css");
   });
 

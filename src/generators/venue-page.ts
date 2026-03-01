@@ -18,7 +18,7 @@ import { BADGE_LABELS } from '../templates/page';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -164,6 +164,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>${venue.name} - Εκδηλώσεις | agent-athens</title>
@@ -174,8 +175,6 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
 
   <!-- Language alternates -->
   <link rel="alternate" hreflang="el" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/${venue.slug}/">
-  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/${venue.slug}/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="${venue.name} - Εκδηλώσεις">
@@ -204,40 +203,13 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   </script>
   ` : ''}
 
-  <style>
-    .venue-page-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .breadcrumb { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
-
-    .venue-header { margin-bottom: 30px; border-bottom: 2px solid var(--border-default); padding-bottom: 20px; }
-    .venue-header h1 { font-size: 2rem; margin-bottom: 10px; }
-    .venue-meta { color: var(--text-secondary); font-size: 1rem; }
-    .venue-meta p { margin: 5px 0; }
-
-    .venue-events { margin: 30px 0; }
-    .venue-events h2 { font-size: 1.3rem; margin-bottom: 20px; }
-    .venue-events ul { list-style: none; }
-    .venue-event-item { padding: 15px 0; border-bottom: 1px solid var(--border-subtle); display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
-    .venue-event-item a { font-weight: 500; grid-column: 1; }
-    .venue-event-item .event-date { color: var(--text-secondary); font-size: 0.9rem; }
-    .venue-event-item .event-type { display: inline-block; background: var(--bg-surface); font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: var(--text-secondary); }
-    .venue-event-item.exhibition { border-left: 3px solid #10b981; padding-left: 12px; }
-    .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.7rem; padding: 1px 6px; border-radius: 8px; margin-left: 5px; vertical-align: middle; }
-    .more-events { color: var(--text-secondary); font-style: italic; margin-top: 20px; }
-
-    .venue-map { margin-bottom: 30px; }
-    .venue-map h2 { font-size: 1.3rem; margin-bottom: 12px; }
-    .venue-map iframe { display: block; }
-    .venue-map-attribution { display: block; margin-top: 6px; font-size: 0.75rem; color: var(--text-tertiary); }
-    .venue-map-attribution a { color: var(--text-tertiary); }
-  </style>
 </head>
 <body>
   ${renderSiteNav()}
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="venue-page-content">
+  <div class="venue-page-content" id="main-content">
     <nav class="breadcrumb">
       <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${venue.name}
     </nav>
@@ -262,7 +234,6 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
         <h2>Χάρτης</h2>
         <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${c.lon - 0.005},${c.lat - 0.005},${c.lon + 0.005},${c.lat + 0.005}&marker=${c.lat},${c.lon}"
           width="100%" height="300" loading="lazy"
-          style="border:1px solid var(--border-subtle);border-radius:8px"
           title="Χάρτης — ${venue.name}"></iframe>
         <small class="venue-map-attribution">&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></small>
       </section>`;
@@ -386,6 +357,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
+  ${renderFontLinks()}
   <link rel="stylesheet" href="/styles/design-system.css">
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
@@ -395,8 +367,6 @@ function generateVenueIndex(venues: VenueData[]): void {
 
   <!-- Language alternates -->
   <link rel="alternate" hreflang="el" href="${BASE_URL}/venues/">
-  <link rel="alternate" hreflang="en" href="${BASE_URL}/en/venues/">
-  <link rel="alternate" hreflang="x-default" href="${BASE_URL}/en/venues/">
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <!-- Open Graph -->
@@ -414,19 +384,6 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta name="twitter:description" content="${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
   <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">
 
-  <style>
-    .venue-index-content { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-    .venue-index-header { margin-bottom: 30px; border-bottom: 2px solid var(--border-default); padding-bottom: 20px; }
-    .venue-index-header h1 { font-size: 2rem; margin-bottom: 10px; }
-    .summary { color: var(--text-secondary); }
-
-    .venue-list { list-style: none; }
-    .venue-list li { padding: 15px 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
-    .venue-list a { font-weight: 500; }
-    .event-count { color: var(--text-secondary); font-size: 0.9rem; }
-    .neighborhood { display: inline-block; background: var(--bg-surface); font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; color: var(--text-secondary); }
-  </style>
 </head>
 <body>
   ${renderSiteNav()}
