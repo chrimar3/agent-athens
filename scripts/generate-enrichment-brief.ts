@@ -8,9 +8,11 @@
  * Usage:
  *   bun run scripts/generate-enrichment-brief.ts --count=5
  *   bun run scripts/generate-enrichment-brief.ts --count=5 --batch=3
+ *   bun run scripts/generate-enrichment-brief.ts --count=5 --batches=3
  *
  * Output:
- *   temp-briefs/batch-NNN.md  (the brief for the subagent)
+ *   temp-briefs/batch-NNN.md              (the brief for the subagent)
+ *   temp-briefs/batch-NNN.manifest.json   (manifest of event IDs for save-batch)
  *   stdout: summary of what was selected
  */
 
@@ -26,7 +28,7 @@ const TEMPLATE_PATH = 'docs/MASTER-ENRICHMENT-TEMPLATE.md';
 const BRIEFS_DIR = 'temp-briefs';
 const MAX_VENUE_INTEL_WORDS = 200;
 const MAX_TOKENS = 4000;
-const MAX_PER_TYPE = 2;
+const DEFAULT_MAX_PER_TYPE = 2;
 
 // ============================================================================
 // Types
@@ -54,30 +56,73 @@ interface EntityKnowledge {
 }
 
 // ============================================================================
+// Manifest & Recent Openings
+// ============================================================================
+
+export interface BatchManifest {
+  batch_id: number;
+  generated_at: string;
+  event_ids: string[];
+}
+
+export function writeManifest(batchNumber: number, eventIds: string[]): string {
+  const manifest: BatchManifest = {
+    batch_id: batchNumber,
+    generated_at: new Date().toISOString(),
+    event_ids: eventIds,
+  };
+  if (!existsSync(BRIEFS_DIR)) {
+    mkdirSync(BRIEFS_DIR, { recursive: true });
+  }
+  const manifestPath = join(BRIEFS_DIR, `batch-${batchNumber}.manifest.json`);
+  writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
+  return manifestPath;
+}
+
+const RECENT_OPENINGS_PATH = 'temp-descriptions/recent-openings.json';
+
+export interface RecentOpening {
+  event_id: string;
+  opening_sentence: string;
+  saved_at: string;
+}
+
+export function loadRecentOpenings(): RecentOpening[] {
+  if (!existsSync(RECENT_OPENINGS_PATH)) return [];
+  try {
+    return JSON.parse(readFileSync(RECENT_OPENINGS_PATH, 'utf-8'));
+  } catch {
+    return [];
+  }
+}
+
+// ============================================================================
 // CLI
 // ============================================================================
 
-function parseArgs(): { count: number; batch: number } {
+export function parseArgs(): { count: number; batches: number; startBatch: number } {
   const args = process.argv.slice(2);
   const countArg = args.find(a => a.startsWith('--count='));
   const batchArg = args.find(a => a.startsWith('--batch='));
+  const batchesArg = args.find(a => a.startsWith('--batches='));
 
   const count = parseInt(countArg?.split('=')[1] || '5', 10);
+  const batches = parseInt(batchesArg?.split('=')[1] || '1', 10);
 
   // Auto-increment batch number from existing briefs
-  let batch = 1;
+  let startBatch = 1;
   if (batchArg) {
-    batch = parseInt(batchArg.split('=')[1], 10);
+    startBatch = parseInt(batchArg.split('=')[1], 10);
   } else if (existsSync(BRIEFS_DIR)) {
     const existing = readdirSync(BRIEFS_DIR)
       .filter(f => f.match(/^batch-\d+\.md$/))
       .map(f => parseInt(f.match(/batch-(\d+)/)?.[1] || '0', 10));
     if (existing.length > 0) {
-      batch = Math.max(...existing) + 1;
+      startBatch = Math.max(...existing) + 1;
     }
   }
 
-  return { count, batch };
+  return { count, batches, startBatch };
 }
 
 // ============================================================================
@@ -101,7 +146,7 @@ const MULTI_HALL_VENUES = new Set([
   'στέγη ιδρύματος ωνάση',
 ]);
 
-export function selectDiverseBatch(db: Database, count: number): EventRecord[] {
+export function selectDiverseBatch(db: Database, count: number, maxPerType: number = DEFAULT_MAX_PER_TYPE): EventRecord[] {
   if (count <= 0) return [];
 
   // Build a set of already-enriched (venue, date) combos to skip cross-source duplicates.
@@ -176,7 +221,7 @@ export function selectDiverseBatch(db: Database, count: number): EventRecord[] {
       if (selected.length >= count) break;
 
       const typeCount = typeCounts.get(type) || 0;
-      if (typeCount >= MAX_PER_TYPE) continue;
+      if (typeCount >= maxPerType) continue;
 
       const events = byType.get(type) || [];
       const pointer = typePointers.get(type) || 0;
@@ -324,6 +369,7 @@ export function buildBrief(
   entityKnowledge: Map<string, EntityKnowledge[]>,
   exemplarPaths: string[],
   batchNumber: number,
+  recentOpenings?: RecentOpening[],
 ): string {
   const lines: string[] = [];
 
@@ -367,6 +413,19 @@ export function buildBrief(
   lines.push('');
   lines.push(`Read \`${ANTI_PATTERNS_PATH}\` for 10 confirmed mistakes to avoid.`);
   lines.push('');
+
+  // Recent openings dedup section
+  if (recentOpenings && recentOpenings.length > 0) {
+    const recent = recentOpenings.slice(-15);
+    lines.push('## Recent Openings (DO NOT REUSE)');
+    lines.push('');
+    lines.push('These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:');
+    lines.push('');
+    for (const o of recent) {
+      lines.push(`- "${o.opening_sentence}"`);
+    }
+    lines.push('');
+  }
 
   // Events
   lines.push('---');
@@ -433,7 +492,7 @@ export function buildBrief(
   lines.push('5. **Save decision** (after completing ALL events in this batch):');
   lines.push('   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:');
   lines.push('   ```bash');
-  lines.push(`   bun run scripts/save-batch.ts --session=batch-${batchNumber} --batch=${batchNumber}`);
+  lines.push(`   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${batchNumber}.manifest.json --session=batch-${batchNumber} --batch=${batchNumber} --clean`);
   lines.push('   ```');
   lines.push(`   Note "AUTO-SAVED" at the top of batch-${batchNumber}-review.md.`);
   lines.push('   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.');
@@ -469,33 +528,35 @@ function getExemplarAnnotation(filename: string): string {
 // ============================================================================
 
 function main(): void {
-  const { count, batch } = parseArgs();
+  const { count, batches, startBatch } = parseArgs();
 
   console.log(`\n=== Generate Enrichment Brief ===`);
-  console.log(`Batch: ${batch} | Requested: ${count} events\n`);
+  console.log(`Start batch: ${startBatch} | Batches: ${batches} | Events per batch: ${count}\n`);
 
   const db = new Database(DB_PATH);
 
-  // 1. Select diverse batch
-  const events = selectDiverseBatch(db, count);
-  if (events.length === 0) {
+  // 1. Select all events for all batches at once
+  //    Scale MAX_PER_TYPE by batch count so each batch can maintain diversity
+  const totalNeeded = count * batches;
+  const scaledMaxPerType = DEFAULT_MAX_PER_TYPE * batches;
+  const allEvents = selectDiverseBatch(db, totalNeeded, scaledMaxPerType);
+  if (allEvents.length === 0) {
     console.log('No eligible events found for enrichment.');
     db.close();
     process.exit(0);
   }
 
-  console.log(`Selected ${events.length} events:`);
+  console.log(`Selected ${allEvents.length} events total:`);
   const typeCounts = new Map<string, number>();
-  for (const e of events) {
+  for (const e of allEvents) {
     const c = typeCounts.get(e.type) || 0;
     typeCounts.set(e.type, c + 1);
-    console.log(`  ${e.type.padEnd(12)} ${e.title.substring(0, 50)}${e.title.length > 50 ? '...' : ''}`);
   }
   console.log(`Type distribution: ${[...typeCounts.entries()].map(([t, c]) => `${t}:${c}`).join(', ')}`);
 
-  // 2. Look up venue intel
+  // 2. Look up venue intel for all events
   const venueIntel = new Map<string, string | null>();
-  for (const event of events) {
+  for (const event of allEvents) {
     if (event.venue_name && !venueIntel.has(event.venue_name)) {
       venueIntel.set(event.venue_name, lookupVenueIntel(event.venue_name));
     }
@@ -503,45 +564,71 @@ function main(): void {
   const foundVenues = [...venueIntel.values()].filter(v => v !== null).length;
   console.log(`Venue intel: ${foundVenues}/${venueIntel.size} venues found in database`);
 
-  // 3. Look up entity knowledge
+  // 3. Look up entity knowledge for all events
   const entityKnowledge = new Map<string, EntityKnowledge[]>();
-  for (const event of events) {
+  for (const event of allEvents) {
     entityKnowledge.set(event.id, lookupEntityKnowledge(db, event.title));
   }
   const foundEntities = [...entityKnowledge.values()].filter(v => v.length > 0).length;
-  console.log(`Entity knowledge: ${foundEntities}/${events.length} events have matching entities`);
+  console.log(`Entity knowledge: ${foundEntities}/${allEvents.length} events have matching entities`);
 
   db.close();
 
-  // 4. Select exemplars
-  const batchTypes = events.map(e => e.type);
-  const exemplarPaths = selectExemplars(batchTypes);
-  console.log(`Exemplars: ${exemplarPaths.length} selected`);
-
-  // 5. Build brief
-  const brief = buildBrief(events, venueIntel, entityKnowledge, exemplarPaths, batch);
-
-  // 6. Estimate tokens
-  const { tokens, overBudget } = estimateTokens(brief);
-  console.log(`\nBrief: ${brief.split(/\s+/).length} words, ~${tokens} tokens${overBudget ? ' ⚠ OVER BUDGET' : ''}`);
-
-  if (overBudget) {
-    console.log('WARNING: Brief exceeds token budget. Consider reducing event count or venue intel.');
+  // 4. Load recent openings for dedup
+  const recentOpenings = loadRecentOpenings();
+  if (recentOpenings.length > 0) {
+    console.log(`Recent openings loaded: ${recentOpenings.length} (for dedup reference)`);
   }
 
-  // 7. Write brief
+  // 5. Split into batches and generate each
   if (!existsSync(BRIEFS_DIR)) {
     mkdirSync(BRIEFS_DIR, { recursive: true });
   }
 
-  const briefPath = join(BRIEFS_DIR, `batch-${batch}.md`);
-  writeFileSync(briefPath, brief, 'utf-8');
-  console.log(`\nWritten: ${briefPath}`);
+  const actualBatches = Math.ceil(allEvents.length / count);
+  for (let i = 0; i < actualBatches; i++) {
+    const batchNumber = startBatch + i;
+    const slice = allEvents.slice(i * count, (i + 1) * count);
+
+    // Select exemplars for this slice's types
+    const batchTypes = slice.map(e => e.type);
+    const exemplarPaths = selectExemplars(batchTypes);
+
+    // Build and write brief
+    const brief = buildBrief(slice, venueIntel, entityKnowledge, exemplarPaths, batchNumber, recentOpenings);
+
+    const briefPath = join(BRIEFS_DIR, `batch-${batchNumber}.md`);
+    writeFileSync(briefPath, brief, 'utf-8');
+
+    // Write manifest
+    const manifestPath = writeManifest(batchNumber, slice.map(e => e.id));
+
+    // Token estimate
+    const { tokens, overBudget } = estimateTokens(brief);
+    console.log(`\nBatch ${batchNumber}: ${slice.length} events, ~${tokens} tokens${overBudget ? ' ⚠ OVER BUDGET' : ''}`);
+    for (const e of slice) {
+      console.log(`  ${e.type.padEnd(12)} ${e.title.substring(0, 50)}${e.title.length > 50 ? '...' : ''}`);
+    }
+    console.log(`  Written: ${briefPath}`);
+    console.log(`  Manifest: ${manifestPath}`);
+  }
+
+  console.log(`\n=== Generated ${actualBatches} batch(es) ===`);
   console.log(`\nTo run enrichment:`);
-  console.log(`  1. Review the brief: cat ${briefPath}`);
-  console.log(`  2. Spawn subagent with brief contents`);
-  console.log(`  3. Review output in temp-descriptions/`);
-  console.log(`  4. Save: bun run scripts/save-batch.ts --batch=${batch}\n`);
+  for (let i = 0; i < actualBatches; i++) {
+    const bn = startBatch + i;
+    console.log(`  Batch ${bn}: spawn subagent with temp-briefs/batch-${bn}.md`);
+  }
+  console.log(`\nTo save:`);
+  for (let i = 0; i < actualBatches; i++) {
+    const bn = startBatch + i;
+    console.log(`  bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${bn}.manifest.json --session=batch-${bn} --batch=${bn} --clean`);
+  }
+  console.log('');
 }
 
-main();
+// Only run main() when executed directly, not when imported for testing
+const isDirectRun = import.meta.path === Bun.main;
+if (isDirectRun) {
+  main();
+}
