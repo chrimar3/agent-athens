@@ -69,6 +69,15 @@ Pitfalls encountered and how to avoid them.
 | TicketServices scraper hangs | Scraper stuck at 10/82 events during price fetching | Add timeout per event (30s) and continue on timeout; don't let one stuck request block all |
 | Full scrape-all.ts too slow | Takes 10+ minutes, can hang entirely | Run scrapers in parallel where possible; add global timeout; monitor with `--dry-run` first |
 
+## Type Classification Issues (2026-03)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Ticketservices blanket dj_set | All Parnassos Literary Society events classified as dj_set (piano recitals, spoken word, chamber music) | Scraper defaults to `concert`, categorizer handles the rest. Root cause was stale venue mapping, now fixed |
+| Too many non-standard types | 14+ types accumulated (classical, opera, dance, comedy, conference, meetup, hackathon, seminar, sports) causing Schema.org markup errors | Consolidated to 12 canonical types (incl. `other`). Use transaction + `AND type = 'old_type'` safety guard for remaps |
+| Sports events in cultural DB | "Αθλητισμός για Όλους", boxing events imported | Delete non-cultural types at ingestion; categorizer now has no `sports` type |
+| Type consolidation without updating tests | Changed types in src/types.ts and categorizers but left test files with old expectations. 11 tests broke | Type changes are shotgun surgery — update types.ts → config JSONs → categorizers → tests in ONE commit |
+
 ## Categorizer Issues (2026-02-26)
 
 | Mistake | What Happened | Correct Approach |

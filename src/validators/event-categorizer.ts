@@ -79,6 +79,10 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
     ],
     venueHints: ['megaron', 'oteacademy', 'eugenides', 'ellinikon', 'epignosis', 'found.ation', 'impact hub']
   },
+  festival: {
+    keywords: ['festival', 'φεστιβάλ'],
+    genres: ['Festival']
+  },
   other: { keywords: [] }
 };
 
@@ -158,6 +162,7 @@ export function categorizeEvent(event: {
     'workshop',    // Specific format
     'exhibition',  // Art exhibitions
     'cinema',      // Film screenings in cinemas
+    'festival',    // Multi-day festivals
     'concert',     // Live music (general)
     'theater',     // Theater productions
     'tech',        // Conferences, meetups, hackathons

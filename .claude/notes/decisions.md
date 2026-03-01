@@ -391,6 +391,26 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 
 **Improving beyond ~74% requires Puppeteer-based image extraction** (separate effort). clubber.gr and onassis need JS rendering to access images.
 
+## Type Consolidation (2026-03-01)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Consolidated 14+ types to 12 canonical types (incl. other) | Non-standard types (classical, opera, dance, comedy, conference, meetup, hackathon, seminar, sports) caused Schema.org markup errors and fragmented category pages | 2026-03 |
+| Canonical types: concert, dj_set, exhibition, cinema, screening, theater, performance, show, workshop, festival, tech, other | Covers all cultural + tech events. `performance` absorbs ballet/dance/spoken word. `tech` absorbs conference/meetup/hackathon | 2026-03 |
+| Transaction + `AND type = 'old_type'` safety guard | Prevents double-remap if event already fixed by previous session. Idempotent SQL | 2026-03 |
+| Before/after snapshot workflow | `SELECT type, COUNT(*) GROUP BY type` before and after. Deltas must sum to zero (minus deletions). No type drops to zero unexpectedly | 2026-03 |
+| Ticketservices Parnassos issue resolved | Scraper defaults to `concert`, not `dj_set`. Root cause was stale categorizer config (old types), not scraper code. Fixed by updating `categorization-keywords.json` | 2026-03 |
+| Type change = shotgun surgery checklist | When changing types: types.ts → config JSONs (categorization-keywords, categories) → both categorizers → tests → CLAUDE.md. All in ONE commit to avoid broken tests | 2026-03 |
+| Two categorizers coexist | `src/validators/event-categorizer.ts` (inline rules) and `src/categorizer/categorize-event.ts` (config-driven). Both must agree on type names | 2026-03 |
+
+### Parallel Enrichment (2026-03-01)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| MAX_PER_TYPE scales with batch count | `selectDiverseBatch()` had `MAX_PER_TYPE=2` hardcoded. With 4 available types, this caps at 8 events — not enough for 3 batches of 5. Fix: `DEFAULT_MAX_PER_TYPE * batches` | 2026-03 |
+| 3 parallel subagents for enrichment | First production run: 15 events in ~9 min wall clock vs ~27 min sequential. Gate scores 88-90. Cross-batch opening echo rate: 1/15 | 2026-03 |
+| Cross-batch opening dedup is awareness-only | Parallel subagents can't see each other's openings mid-run. The `recent-openings.json` file prevents echoes across sessions but not within parallel batches. Acceptable for now | 2026-03 |
+
 ## Filter Bar Polish — Phase 4C (2026-02-25)
 
 | Decision | Why | Date |

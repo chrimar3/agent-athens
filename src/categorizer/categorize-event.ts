@@ -257,7 +257,7 @@ function categorizeByKeywords(event: EventInput): CategorizationResult | null {
     }
 
     // Special handling: "κωμωδία" in theater context should stay theater
-    if (categoryType === 'comedy' && text.includes('κωμωδία') && text.includes('θεατρ')) {
+    if (categoryType === 'show' && text.includes('κωμωδία') && text.includes('θεατρ')) {
       continue;
     }
 

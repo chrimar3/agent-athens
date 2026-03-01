@@ -1,22 +1,19 @@
 {
   "_description": "Keyword rules for event categorization (Pass 2)",
-  "_version": "1.0",
-  "_last_updated": "2025-02-10",
-  "_notes": "Priority order matters - first match wins. Check dj_set before concert, dance before theater, etc.",
+  "_version": "2.0",
+  "_last_updated": "2026-03-01",
+  "_notes": "Priority order matters - first match wins. Check dj_set before concert, performance before theater, etc. Types consolidated to 11 canonical types.",
 
   "priority_order": [
     "dj_set",
     "theater",
-    "dance",
-    "opera",
-    "classical",
-    "comedy",
+    "performance",
     "workshop",
     "exhibition",
     "screening",
     "show",
     "festival",
-    "sports",
+    "tech",
     "concert"
   ],
 
@@ -66,30 +63,6 @@
       ]
     },
 
-    "sports": {
-      "title_keywords": [
-        "boxing",
-        "πυγμαχία",
-        "fight night",
-        "fight for glory",
-        "MMA",
-        "kickboxing",
-        "muay thai",
-        "wrestling event"
-      ],
-      "description_keywords": [
-        "boxing match",
-        "knockout",
-        "αγώνας πυγμαχίας",
-        "combat sports"
-      ],
-      "genres": [
-        "Boxing",
-        "MMA",
-        "Combat Sports"
-      ]
-    },
-
     "theater": {
       "title_keywords": [
         "παράσταση",
@@ -135,7 +108,7 @@
       ]
     },
 
-    "dance": {
+    "performance": {
       "title_keywords": [
         "χορός",
         "χορευτικ",
@@ -150,7 +123,13 @@
         "flamenco",
         "φλαμένκο",
         "milonga",
-        "μιλόνγκα"
+        "μιλόνγκα",
+        "performance art",
+        "experimental",
+        "πειραματικό",
+        "multimedia",
+        "site-specific",
+        "spoken word"
       ],
       "description_keywords": [
         "χορογραφία",
@@ -166,7 +145,8 @@
         "Contemporary",
         "Tango",
         "Modern Dance",
-        "Flamenco"
+        "Flamenco",
+        "Experimental"
       ],
       "negative_keywords": [
         "αποκριάτικος χορός",
@@ -174,95 +154,6 @@
         "χοροεσπερίδα",
         "πάρτυ"
       ]
-    },
-
-    "opera": {
-      "title_keywords": [
-        "όπερα",
-        "opera",
-        "οπερέτα",
-        "operetta",
-        "λυρική"
-      ],
-      "description_keywords": [
-        "λυρικός",
-        "λυρική σκηνή",
-        "operatic",
-        "soprano",
-        "tenor",
-        "baritone",
-        "μετζοσοπράνο",
-        "mezzo",
-        "aria"
-      ],
-      "genres": [
-        "Opera",
-        "Operetta",
-        "Lyric"
-      ]
-    },
-
-    "classical": {
-      "title_keywords": [
-        "ορχήστρα",
-        "orchestra",
-        "κουαρτέτο",
-        "quartet",
-        "ρεσιτάλ",
-        "recital",
-        "συμφωνικ",
-        "symphonic",
-        "symphony",
-        "κονσέρτο",
-        "concerto",
-        "φιλαρμονική",
-        "philharmonic",
-        "σονάτα",
-        "sonata",
-        "μουσική δωματίου",
-        "σολίστ",
-        "πιανίστ"
-      ],
-      "description_keywords": [
-        "κλασική μουσική",
-        "classical music",
-        "μαέστρος",
-        "conductor",
-        "μουσική δωματίου",
-        "chamber music"
-      ],
-      "genres": [
-        "Classical",
-        "Orchestral",
-        "Chamber",
-        "Symphonic"
-      ]
-    },
-
-    "comedy": {
-      "title_keywords": [
-        "stand-up",
-        "stand up",
-        "standup",
-        "comedy night",
-        "comedy show",
-        "κωμικ",
-        "one man show",
-        "one woman show",
-        "comedy club"
-      ],
-      "description_keywords": [
-        "stand-up comedy",
-        "κωμωδός",
-        "comedian",
-        "laugh",
-        "γέλιο"
-      ],
-      "genres": [
-        "Comedy",
-        "Stand-up"
-      ],
-      "notes": "Watch out for 'κωμωδία' in theater context - that should stay as theater"
     },
 
     "workshop": {
@@ -310,7 +201,6 @@
       "genres": [
         "Art",
         "Photography",
-        "Contemporary",
         "Contemporary Art",
         "Sculpture",
         "Installation",
@@ -353,19 +243,35 @@
         "circus",
         "burlesque",
         "drag show",
-        "magic show"
+        "magic show",
+        "stand-up",
+        "stand up",
+        "standup",
+        "comedy night",
+        "comedy show",
+        "κωμικ",
+        "one man show",
+        "one woman show",
+        "comedy club"
       ],
       "description_keywords": [
         "variety show",
         "cabaret night",
-        "performance art"
+        "stand-up comedy",
+        "κωμωδός",
+        "comedian",
+        "laugh",
+        "γέλιο"
       ],
       "genres": [
         "Cabaret",
         "Variety",
         "Burlesque",
-        "Circus"
-      ]
+        "Circus",
+        "Comedy",
+        "Stand-up"
+      ],
+      "notes": "Watch out for 'κωμωδία' in theater context - that should stay as theater"
     },
 
     "festival": {
@@ -383,6 +289,43 @@
       ]
     },
 
+    "tech": {
+      "title_keywords": [
+        "conference",
+        "summit",
+        "symposium",
+        "congress",
+        "συνέδριο",
+        "meetup",
+        "meet-up",
+        "hackathon",
+        "hack-a-thon",
+        "coding challenge",
+        "seminar",
+        "research talk",
+        "lecture series",
+        "networking event",
+        "tech talk",
+        "devfest",
+        "startup",
+        "AI meetup"
+      ],
+      "description_keywords": [
+        "tech community",
+        "developers",
+        "engineering",
+        "software",
+        "artificial intelligence",
+        "machine learning"
+      ],
+      "genres": [
+        "Tech",
+        "Conference",
+        "Meetup",
+        "Hackathon"
+      ]
+    },
+
     "concert": {
       "title_keywords": [
         "συναυλία",
@@ -390,13 +333,49 @@
         "live",
         "in concert",
         "gig",
-        "unplugged"
+        "unplugged",
+        "όπερα",
+        "opera",
+        "οπερέτα",
+        "operetta",
+        "λυρική",
+        "ορχήστρα",
+        "orchestra",
+        "κουαρτέτο",
+        "quartet",
+        "ρεσιτάλ",
+        "recital",
+        "συμφωνικ",
+        "symphonic",
+        "symphony",
+        "κονσέρτο",
+        "concerto",
+        "φιλαρμονική",
+        "philharmonic",
+        "σονάτα",
+        "sonata",
+        "μουσική δωματίου",
+        "σολίστ",
+        "πιανίστ"
       ],
       "description_keywords": [
         "live performance",
         "live music",
         "μουσική σκηνή",
-        "στη σκηνή"
+        "στη σκηνή",
+        "λυρικός",
+        "λυρική σκηνή",
+        "operatic",
+        "soprano",
+        "tenor",
+        "baritone",
+        "μετζοσοπράνο",
+        "mezzo",
+        "κλασική μουσική",
+        "classical music",
+        "μαέστρος",
+        "conductor",
+        "chamber music"
       ],
       "genres": [
         "Rock",
@@ -414,9 +393,16 @@
         "Greek",
         "Latin",
         "Folk",
-        "World"
+        "World",
+        "Classical",
+        "Orchestral",
+        "Chamber",
+        "Symphonic",
+        "Opera",
+        "Operetta",
+        "Lyric"
       ],
-      "notes": "This is the catch-all for music events - check LAST after more specific categories"
+      "notes": "This is the catch-all for music events - check LAST after more specific categories. Includes classical, opera, and orchestral."
     }
   },
 
@@ -449,15 +435,13 @@
     "concert": "MusicEvent",
     "dj_set": "MusicEvent",
     "theater": "TheaterEvent",
-    "dance": "DanceEvent",
-    "opera": "MusicEvent",
-    "classical": "MusicEvent",
-    "comedy": "ComedyEvent",
+    "performance": "DanceEvent",
     "workshop": "EducationEvent",
     "exhibition": "ExhibitionEvent",
     "show": "Event",
     "screening": "ScreeningEvent",
+    "cinema": "ScreeningEvent",
     "festival": "Festival",
-    "sports": "SportsEvent"
+    "tech": "EducationEvent"
   }
 }

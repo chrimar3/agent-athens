@@ -71,8 +71,8 @@ describe('generateEventMetaDescription', () => {
     expect(result).toContain('From \u20AC15');
   });
 
-  // LivePrefix for all 7 types
-  const livePrefixTypes = ['concert', 'dj_set', 'classical', 'performance', 'opera', 'dance', 'show'] as const;
+  // LivePrefix for live-event types
+  const livePrefixTypes = ['concert', 'dj_set', 'performance', 'show'] as const;
   for (const type of livePrefixTypes) {
     test(`has "Live " prefix for type: ${type}`, () => {
       const event = makeEvent({ type });
@@ -81,7 +81,7 @@ describe('generateEventMetaDescription', () => {
   }
 
   // No LivePrefix for these types
-  const noLivePrefixTypes = ['exhibition', 'cinema', 'theater', 'workshop', 'comedy', 'festival', 'screening', 'conference', 'meetup', 'hackathon', 'seminar', 'other'] as const;
+  const noLivePrefixTypes = ['exhibition', 'cinema', 'theater', 'workshop', 'festival', 'screening', 'tech', 'other'] as const;
   for (const type of noLivePrefixTypes) {
     test(`no "Live " prefix for type: ${type}`, () => {
       const event = makeEvent({ type });

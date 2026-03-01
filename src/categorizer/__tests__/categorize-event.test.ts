@@ -56,7 +56,7 @@ describe('Event Categorizer', () => {
         title: 'Athens Philharmonic Orchestra',
         venue: 'Μέγαρο Μουσικής Αθηνών'
       });
-      expect(result.type).toBe('classical');
+      expect(result.type).toBe('concert');
       expect(result.confidence).toBe('medium');
     });
 
@@ -105,44 +105,44 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('theater');
     });
 
-    it('should categorize dance performances correctly', () => {
+    it('should categorize dance performances as performance', () => {
       const result = categorizeEvent({
         title: 'Contemporary Dance Performance',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('dance');
+      expect(result.type).toBe('performance');
     });
 
-    it('should categorize tango as dance', () => {
+    it('should categorize tango as performance', () => {
       const result = categorizeEvent({
         title: 'Tango Night',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('dance');
+      expect(result.type).toBe('performance');
     });
 
-    it('should categorize opera correctly', () => {
+    it('should categorize opera as concert', () => {
       const result = categorizeEvent({
         title: 'Carmen - Opera',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('opera');
+      expect(result.type).toBe('concert');
     });
 
-    it('should categorize classical concerts correctly', () => {
+    it('should categorize classical concerts as concert', () => {
       const result = categorizeEvent({
         title: 'Symphony Orchestra Concert',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('classical');
+      expect(result.type).toBe('concert');
     });
 
-    it('should categorize comedy shows correctly', () => {
+    it('should categorize comedy shows as show', () => {
       const result = categorizeEvent({
         title: 'Stand-Up Comedy Night',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('comedy');
+      expect(result.type).toBe('show');
     });
 
     it('should categorize workshops correctly', () => {
@@ -185,12 +185,12 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('concert');
     });
 
-    it('should skip dance for social events', () => {
+    it('should skip performance for social dance events', () => {
       const result = categorizeEvent({
         title: 'Αποκριάτικος χορός',
         venue: 'Some Venue'
       });
-      expect(result.type).not.toBe('dance');
+      expect(result.type).not.toBe('performance');
     });
 
     it('should keep κωμωδία as theater when in theater context', () => {
@@ -272,13 +272,13 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('dj_set');
     });
 
-    it('should use genre for classical detection', () => {
+    it('should use genre for classical detection (now concert)', () => {
       const result = categorizeEvent({
         title: 'Concert by Artist',
         venue: 'Unknown Venue',
         genres: ['Classical', 'Orchestral']
       });
-      expect(result.type).toBe('classical');
+      expect(result.type).toBe('concert');
     });
   });
 
@@ -302,13 +302,13 @@ describe('Event Categorizer', () => {
         title: 'Orchestra Performance',
         venue: 'SNFCC'
       });
-      expect(classicalResult.type).toBe('classical');
+      expect(classicalResult.type).toBe('concert');
 
       const danceResult = categorizeEvent({
         title: 'Contemporary Dance',
         venue: 'SNFCC'
       });
-      expect(danceResult.type).toBe('dance');
+      expect(danceResult.type).toBe('performance');
     });
   });
 
@@ -342,7 +342,7 @@ describe('Event Categorizer', () => {
         title: 'Ρεσιτάλ Πιάνου',
         venue: 'Μέγαρο Μουσικής - αίθουσα &#171;Δημήτρης Μητρόπουλος&#187;'
       });
-      expect(result.type).toBe('classical');
+      expect(result.type).toBe('concert');
     });
   });
 
@@ -365,8 +365,8 @@ describe('Event Categorizer', () => {
       expect(getSchemaOrgType('theater')).toBe('TheaterEvent');
     });
 
-    it('should return DanceEvent for dance', () => {
-      expect(getSchemaOrgType('dance')).toBe('DanceEvent');
+    it('should return DanceEvent for performance', () => {
+      expect(getSchemaOrgType('performance')).toBe('DanceEvent');
     });
 
     it('should return Event for unknown types', () => {

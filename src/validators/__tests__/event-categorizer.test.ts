@@ -2,29 +2,29 @@ import { describe, test, expect } from 'bun:test';
 import { categorizeEvent, recategorizeIfNeeded, normalizeTheaterSpelling } from '../event-categorizer';
 
 describe('categorizeEvent', () => {
-  describe('dance events', () => {
-    test('should categorize tango as dance', () => {
-      expect(categorizeEvent({ title: 'Tango night at Megaron' })).toBe('dance');
+  describe('performance events (dance/ballet/tango)', () => {
+    test('should categorize tango as performance', () => {
+      expect(categorizeEvent({ title: 'Tango night at Megaron' })).toBe('performance');
     });
 
-    test('should categorize Greek tango as dance', () => {
-      expect(categorizeEvent({ title: 'Βραδιά ταγκό στην Αθήνα' })).toBe('dance');
+    test('should categorize Greek tango as performance', () => {
+      expect(categorizeEvent({ title: 'Βραδιά ταγκό στην Αθήνα' })).toBe('performance');
     });
 
-    test('should categorize ballet as dance', () => {
-      expect(categorizeEvent({ title: 'Swan Lake ballet performance' })).toBe('dance');
+    test('should categorize ballet as performance', () => {
+      expect(categorizeEvent({ title: 'Swan Lake ballet performance' })).toBe('performance');
     });
 
-    test('should categorize contemporary dance as dance', () => {
-      expect(categorizeEvent({ title: 'Contemporary dance workshop' })).toBe('dance');
+    test('should categorize contemporary dance as performance', () => {
+      expect(categorizeEvent({ title: 'Contemporary dance workshop' })).toBe('performance');
     });
 
-    test('should categorize flamenco as dance', () => {
-      expect(categorizeEvent({ title: 'Flamenco show' })).toBe('dance');
+    test('should categorize flamenco as performance', () => {
+      expect(categorizeEvent({ title: 'Flamenco show' })).toBe('performance');
     });
 
-    test('should categorize milonga as dance', () => {
-      expect(categorizeEvent({ title: 'Milonga at Gazi' })).toBe('dance');
+    test('should categorize milonga as performance', () => {
+      expect(categorizeEvent({ title: 'Milonga at Gazi' })).toBe('performance');
     });
   });
 
@@ -86,7 +86,7 @@ describe('categorizeEvent', () => {
     });
 
     test('should categorize drama as theater', () => {
-      expect(categorizeEvent({ title: 'Drama performance' })).toBe('theater');
+      expect(categorizeEvent({ title: 'Greek drama at Epidaurus' })).toBe('theater');
     });
   });
 
@@ -186,12 +186,12 @@ describe('categorizeEvent', () => {
 });
 
 describe('recategorizeIfNeeded', () => {
-  test('should change theater to dance for tango events', () => {
+  test('should change theater to performance for tango events', () => {
     const result = recategorizeIfNeeded({
       title: 'Tango show',
       type: 'theater'
     });
-    expect(result).toBe('dance');
+    expect(result).toBe('performance');
   });
 
   test('should change concert to dj_set for DJ events', () => {
