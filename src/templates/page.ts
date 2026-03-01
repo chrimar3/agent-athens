@@ -138,19 +138,16 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <div class="page-container">
     <header class="page-header">
-      <h1>${title}</h1>
-      <p class="summary">
-        <strong>${eventCount} ${eventCount === 1 ? 'εκδήλωση' : 'εκδηλώσεις'}</strong> στην Αθήνα.
-      </p>
-      <p class="last-update">
-        Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
+      <div class="page-header-row">
+        <h1>${title}</h1>
+        <span class="last-update">Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
           month: 'long',
           day: 'numeric',
           year: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
-        })} ώρα Αθήνας
-      </p>
+        })} ώρα Αθήνας</span>
+      </div>
     </header>
 
     ${filterBarHTML}
