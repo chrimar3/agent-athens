@@ -18,6 +18,7 @@ import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates'
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
+import { displayNeighborhood } from '../utils/neighborhoods';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
@@ -300,7 +301,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${TYPE_DISCOVERY_LABELS[event.type] || `Όλες οι ${typeLabel}`}</a>` : '',
     `<a href="/venues/${venueSlug}/">Περισσότερες εκδηλώσεις στο ${event.venue.name}</a>`,
-    neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${event.venue.neighborhood}</a>` : ''
+    neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
   ].filter(Boolean);
 
   // CTA (ticket link)
@@ -432,7 +433,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
       <section class="edp-venue-section">
         <h3>${event.venue.name}</h3>
         ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
-        ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${event.venue.neighborhood}</div>` : ''}
+        ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
         <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">Άνοιγμα στον Χάρτη →</a>
       </section>
 
@@ -492,7 +493,7 @@ export function renderRelatedEventCard(event: Event): string {
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
   const venueText = event.venue.neighborhood
-    ? `${event.venue.name} · ${event.venue.neighborhood}`
+    ? `${event.venue.name} · ${displayNeighborhood(event.venue.neighborhood)}`
     : event.venue.name;
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;

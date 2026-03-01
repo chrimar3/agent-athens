@@ -6,6 +6,7 @@ import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -37,18 +38,18 @@ export const BADGE_LABELS: Record<string, string> = {
 export const LIGHT_TEXT_BADGES = new Set(['performance', 'cinema', 'screening']);
 
 export const TYPE_ICONS: Record<string, string> = {
-  concert: '🎵',
-  dj_set: '🎧',
-  exhibition: '🎨',
-  cinema: '🎬',
-  screening: '🎬',
-  theater: '🎭',
-  festival: '🎪',
-  performance: '🎤',
-  show: '✨',
-  workshop: '🛠️',
-  tech: '💻',
-  other: '📌',
+  concert: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 6v24.4A7 7 0 1 0 22 37V18h12v-4H22V6h-4zM15 41a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
+  dj_set: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4C15 4 8 8 8 14v4c0 2.2 1.8 4 4 4v8c0 2.2 1.8 4 4 4h2v-8h4v8h4v-8h4v8h2c2.2 0 4-1.8 4-4v-8c2.2 0 4-1.8 4-4v-4c0-6-7-10-16-10zm-8 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm16 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
+  exhibition: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 6h36v36H6V6zm4 4v28h28V10H10zm4 4h20v20H14V14zm4 4v12h12V18H18z"/></svg>',
+  cinema: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 8h32v32H8V8zm4 4v6h6v-6H12zm18 0v6h6v-6H30zM16 16h16v16H16V16zM12 34v-6h6v6H12zm18 0v-6h6v6H30z"/></svg>',
+  screening: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 8h32v32H8V8zm4 4v6h6v-6H12zm18 0v6h6v-6H30zM16 16h16v16H16V16zM12 34v-6h6v6H12zm18 0v-6h6v6H30z"/></svg>',
+  theater: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8c-4 0-8 4-8 10s4 12 8 12c2 0 4-1 5-3-1-2-1-4-1-5 0-6 4-10 4-14 0-2-3.6 0-8 0zm20 0c-4.4 0-8 2-8 0 0 4 4 8 4 14 0 1 0 3-1 5 1 2 3 3 5 3 4 0 8-6 8-12s-4-10-8-10zM12 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm24 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM10 24c1 2 2 3 4 3s2-1 2-1-1 1-2 1-2-2-4-3zm24 0c-2 1-3 3-4 3s-2-1-2-1 1 1 2 1 3-1 4-3zM24 26c-4 0-7 4-7 8 0 5 3 8 7 8s7-3 7-8c0-4-3-8-7-8zm-2 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm4 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-2 4c1 0 2 1 2 1s-1 1-2 1-2-1-2-1 1-1 2-1z"/></svg>',
+  festival: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4L8 20v4h4v16h8V30h8v10h8V24h4v-4L24 4zm0 6l12 12H12L24 10z"/></svg>',
+  performance: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4a4 4 0 0 0-4 4v2l-8 14h4l4-7v23a2 2 0 0 0 4 0V30h0v10a2 2 0 0 0 4 0V17l4 7h4L28 10V8a4 4 0 0 0-4-4z"/></svg>',
+  show: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.5 13.2L44 18.8l-10 9.2 2.8 14L24 35.2 11.2 42 14 28l-10-9.2 14.5-1.6z"/></svg>',
+  workshop: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M30.4 7.6a8 8 0 0 0-11.3 0L7.6 19.1a8 8 0 0 0 0 11.3L19.1 42a8 8 0 0 0 11.3 0L42 30.4a8 8 0 0 0 0-11.3L30.4 7.6zM24 18a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>',
+  tech: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 16l-8 8 8 8 3-3-5-5 5-5-3-3zm20 0l-3 3 5 5-5 5 3 3 8-8-8-8zM20 36l4-24h4l-4 24h-4z"/></svg>',
+  other: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24c1.1 0 2 .9 2 2v32c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm2 6v4h20v-4H14zm0 8v2h20v-2H14zm0 6v2h14v-2H14z"/></svg>',
 };
 
 export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string): string {
@@ -252,7 +253,7 @@ export function prepareCardData(event: Event): CardData {
 
   // Venue display
   const venueText = event.venue.neighborhood
-    ? `${event.venue.name} · ${event.venue.neighborhood}`
+    ? `${event.venue.name} · ${displayNeighborhood(event.venue.neighborhood)}`
     : event.venue.name;
 
   // Short description for meta tag (truncate to 160 chars)
@@ -274,7 +275,6 @@ function renderEventCard(event: Event): string {
     <div class="card-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
-      ${!imgSrc ? `<span class="card-fallback-title">${event.title}</span>` : ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>

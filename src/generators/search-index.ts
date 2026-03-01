@@ -13,8 +13,19 @@ import { writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event } from '../types';
 import { normalizeGreek } from '../utils/normalize-greek';
+import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug, slugify } from './event-page';
 import { filterEventsByCategory, type CategoryConfig } from '../templates/category-page';
+
+const GREEK_MONTHS_SHORT = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιούν', 'Ιούλ', 'Αύγ', 'Σεπ', 'Οκτ', 'Νοέ', 'Δεκ'];
+
+function formatShortGreekDate(isoDate: string): string {
+  const m = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return isoDate.substring(0, 10);
+  const day = parseInt(m[3], 10);
+  const monthIdx = parseInt(m[2], 10) - 1;
+  return `${day} ${GREEK_MONTHS_SHORT[monthIdx]}`;
+}
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 
@@ -77,9 +88,9 @@ export function generateSearchIndex(events: Event[]): void {
     type: event.type,
     venue: event.venue.name,
     venueN: normalizeGreek(event.venue.name),
-    neighborhood: event.venue.neighborhood || '',
+    neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
     neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
-    date: event.startDate.substring(0, 10),
+    date: formatShortGreekDate(event.startDate),
     slug: generateEventSlug(event),
     thumb: event.imageLocal || event.imageUrl || event.venueImage || '',
     price: event.price.type === 'open' ? 'open' : 'with-ticket',
@@ -138,7 +149,7 @@ export function generateSearchIndex(events: Event[]): void {
       title: e.title,
       slug: generateEventSlug(e),
       venue: e.venue.name,
-      date: e.startDate.substring(0, 10),
+      date: formatShortGreekDate(e.startDate),
       type: e.type,
     }));
 

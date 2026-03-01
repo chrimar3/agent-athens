@@ -18,6 +18,7 @@ import { BADGE_LABELS } from '../templates/page';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
+import { displayNeighborhood } from '../utils/neighborhoods';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -217,7 +218,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
     <header class="venue-header" itemscope itemtype="https://schema.org/Place">
       <h1 itemprop="name">${venue.name}</h1>
       <div class="venue-meta">
-        ${venue.neighborhood ? `<p>Περιοχή: <strong>${venue.neighborhood}</strong></p>` : ''}
+        ${venue.neighborhood ? `<p>Περιοχή: <strong>${displayNeighborhood(venue.neighborhood)}</strong></p>` : ''}
         ${venue.address ? `<p itemprop="address">${venue.address}</p>` : ''}
         <p>${venue.eventCount} επερχόμενες εκδηλώσεις ${typeSummary ? `(${typeSummary})` : ''}</p>
       </div>
@@ -346,7 +347,7 @@ function generateVenueIndex(venues: VenueData[]): void {
     <li>
       <a href="/venues/${venue.slug}/">${venue.name}</a>
       <span class="event-count">${venue.eventCount} εκδηλώσεις</span>
-      ${venue.neighborhood ? `<span class="neighborhood">${venue.neighborhood}</span>` : ''}
+      ${venue.neighborhood ? `<span class="neighborhood">${displayNeighborhood(venue.neighborhood)}</span>` : ''}
     </li>
   `).join('\n');
 

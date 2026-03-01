@@ -224,6 +224,7 @@ a:hover {
 .event-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
 }
 
 .event-card:focus-visible {
@@ -327,28 +328,19 @@ a:hover {
 
 .card-placeholder-icon {
   position: absolute;
-  top: 35%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 48px;
-  opacity: 0.5;
+  width: 48px;
+  height: 48px;
+  color: rgba(240, 240, 240, 0.08);
   pointer-events: none;
 }
 
-.card-fallback-title {
-  position: absolute;
-  bottom: 36px;
-  left: 12px;
-  right: 12px;
-  font-size: 15px;
-  font-weight: var(--font-weight-bold);
-  color: rgba(240, 240, 240, 0.85);
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  pointer-events: none;
+.card-placeholder-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 
 .card-badge {
@@ -1442,6 +1434,10 @@ a:hover {
   gap: 4px;
 }
 
+.event-card-list:hover {
+  text-decoration: none;
+}
+
 .event-card-list:hover .card-title {
   color: var(--color-concert);
 }
@@ -1483,6 +1479,10 @@ a:hover {
   height: 100%;
   object-fit: cover;
   transition: transform var(--t-base) var(--ease-out);
+}
+
+.event-card-feature:hover {
+  text-decoration: none;
 }
 
 .event-card-feature:hover .feature-image-wrapper img {

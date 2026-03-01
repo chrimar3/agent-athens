@@ -41,7 +41,6 @@ export function renderFeatureCard(event: Event): string {
     <div class="feature-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
-      ${!imgSrc ? `<span class="card-fallback-title">${event.title}</span>` : ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="feature-body">
