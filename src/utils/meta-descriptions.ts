@@ -13,7 +13,7 @@ export interface VenueMetaInput {
 const META_CHAR_LIMIT = 155;
 
 const LIVE_PREFIX_TYPES: Set<EventType> = new Set([
-  'concert', 'dj_set', 'classical', 'performance', 'opera', 'dance', 'show',
+  'concert', 'dj_set', 'performance', 'show',
 ]);
 
 const ENGLISH_MONTHS = [

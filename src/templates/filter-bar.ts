@@ -32,14 +32,11 @@ const TYPE_OPTIONS: Array<{ type: EventType; label: string }> = [
   { type: 'theater', label: 'Θέατρο' },
   { type: 'cinema', label: 'Σινεμά' },
   { type: 'screening', label: 'Προβολές' },
-  { type: 'dance', label: 'Χορός' },
   { type: 'performance', label: 'Performance' },
   { type: 'show', label: 'Show' },
-  { type: 'comedy', label: 'Κωμωδία' },
   { type: 'festival', label: 'Φεστιβάλ' },
   { type: 'workshop', label: 'Εργαστήρια' },
-  { type: 'conference', label: 'Συνέδρια' },
-  { type: 'meetup', label: 'Meetups' },
+  { type: 'tech', label: 'Tech' },
 ];
 
 const PRICE_OPTIONS: Array<{ price: PriceFilter; label: string }> = [
@@ -291,6 +288,7 @@ export function renderFilterBarScript(): string {
   var pills = document.querySelectorAll('.filter-pill[data-panel]');
   var panels = document.querySelectorAll('.filter-panel');
   var backdrop = document.querySelector('.filter-panel-backdrop');
+  var bar = document.querySelector('.filter-bar');
   if (!pills.length) return;
 
   var isMobile = window.matchMedia('(max-width: 767px)');
@@ -306,11 +304,13 @@ export function renderFilterBarScript(): string {
     pills.forEach(function(p) { p.classList.remove('is-open'); });
     panels.forEach(function(p) { p.classList.remove('is-open'); });
     if (backdrop) backdrop.classList.remove('is-open');
+    if (bar) bar.classList.remove('has-open-panel');
     unlockScroll();
   }
 
   function openPanel(panelName) {
     closeAll();
+    if (bar) bar.classList.add('has-open-panel');
     var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
     var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
     if (pill && panel) {

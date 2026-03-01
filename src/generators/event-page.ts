@@ -77,18 +77,15 @@ const TYPE_TRANSLATIONS: Record<string, string> = {
 const TYPE_TO_CATEGORY: Record<string, string> = {
   concert: 'concerts',
   dj_set: 'clubs',
-  classical: 'concerts',
-  opera: 'concerts',
   theater: 'theatre',
-  dance: 'dance',
-  comedy: 'comedy',
   exhibition: 'exhibitions',
   screening: 'screenings',
   cinema: 'cinema',
   workshop: 'workshops',
   show: 'comedy',
   festival: 'concerts',
-  performance: 'theatre',
+  performance: 'performances',
+  tech: 'tech',
   other: ''
 };
 

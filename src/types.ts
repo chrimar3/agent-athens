@@ -42,25 +42,17 @@ export interface Event {
 export type LocationStatus = 'verified_athens' | 'pass_through' | 'unverified' | 'rejected_non_athens' | 'problematic';
 
 export type EventType =
-  | 'concert'      // Live music performances
+  | 'concert'      // Live music (incl. classical, jazz, opera, recitals)
   | 'dj_set'       // DJ performances, electronic music nights
-  | 'exhibition'   // Art exhibitions, museum shows
+  | 'exhibition'   // Art exhibitions, museum shows, photography
   | 'cinema'       // Film screenings
   | 'screening'    // Alternative venue screenings, outdoor cinema
   | 'theater'      // Theater productions (standardized spelling)
-  | 'dance'        // Dance performances, ballet, contemporary
-  | 'opera'        // Opera performances
-  | 'classical'    // Classical/orchestral music
-  | 'comedy'       // Stand-up, comedy shows
   | 'festival'     // Multi-day/multi-act festivals
-  | 'performance'  // Hybrid/experimental performances
-  | 'show'         // Cabaret, variety shows
+  | 'performance'  // Ballet, dance, experimental, spoken word
+  | 'show'         // Cabaret, variety shows, stand-up comedy
   | 'workshop'     // Interactive workshops, masterclasses
-  | 'conference'   // Tech/AI conferences, summits
-  | 'meetup'       // Community meetups, tech gatherings
-  | 'hackathon'    // Coding hackathons, innovation events
-  | 'seminar'      // Academic seminars, research talks
-  | 'sports'       // Boxing, MMA, combat sports events
+  | 'tech'         // Conferences, meetups, hackathons
   | 'other';
 
 export interface Venue {

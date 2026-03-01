@@ -59,8 +59,7 @@ function recordGenerationStats(
 
 const EVENT_TYPES: EventType[] = [
   'concert', 'dj_set', 'exhibition', 'cinema', 'screening',
-  'theater', 'dance', 'performance', 'show', 'workshop',
-  'conference', 'meetup', 'hackathon', 'seminar', 'sports'
+  'theater', 'performance', 'show', 'workshop', 'festival', 'tech'
 ];
 const TIME_RANGES: TimeRange[] = ['today', 'tomorrow', 'this-week', 'this-weekend', 'this-month', 'next-month', 'all-events'];
 const PRICE_FILTERS: PriceFilter[] = ['open', 'with-ticket', 'all'];
@@ -73,16 +72,11 @@ const GENRES: Record<EventType, string[]> = {
   cinema: ['Film premiere', 'Documentary'],
   screening: ['Outdoor cinema', 'Film festival'],
   theater: ['Drama', 'Comedy', 'Tragedy'],
-  dance: ['Ballet', 'Contemporary', 'Tango', 'Flamenco', 'Modern'],
-  performance: ['Experimental', 'Multimedia'],
+  performance: ['Experimental', 'Multimedia', 'Ballet', 'Contemporary Dance', 'Tango'],
   show: ['Cabaret', 'Stand-up', 'Variety'],
   workshop: ['Masterclass', 'Educational'],
-  conference: ['AI', 'Machine Learning', 'Data Science', 'Cloud', 'DevOps'],
-  meetup: ['AI', 'Tech', 'Startup', 'Developer', 'Data Science'],
-  hackathon: ['AI', 'Innovation', 'Coding', 'Startup'],
-  seminar: ['AI Research', 'Machine Learning', 'Academic'],
-  sports: ['Boxing', 'MMA', 'Combat Sports'],
-  other: []
+  festival: ['Multi-day', 'Multi-act'],
+  tech: ['AI', 'Machine Learning', 'Data Science', 'Cloud', 'DevOps', 'Startup']
 };
 
 // Load category configuration

@@ -25,16 +25,16 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
     genres: ['Electronic', 'Techno', 'House', 'Trance', 'Drum and Bass', 'Dubstep', 'Ambient'],
     venueHints: ['club', 'dybbuk', 'romantso', 'six dogs', 'bios', 'void', 'astron', 'smut']
   },
-  dance: {
+  performance: {
     keywords: [
       'χορός', 'χορευτικ', 'ballet', 'μπαλέτο', 'contemporary dance', 'σύγχρονος χορός',
       'tango', 'ταγκό', 'flamenco', 'φλαμένκο', 'modern dance', 'dance performance',
       'χορευτική παράσταση', 'μιλόνγκα', 'milonga', 'salsa',
-      // Note: "swing" removed - conflicts with jazz terminology ("jazz that swings")
-      // Use more specific keywords instead:
-      'swing dance', 'swing dancing', 'lindy hop', 'jive'
+      'swing dance', 'swing dancing', 'lindy hop', 'jive',
+      'performance', 'experimental', 'πειραματικό', 'multimedia', 'site-specific',
+      'spoken word'
     ],
-    genres: ['Dance', 'Ballet', 'Contemporary', 'Tango', 'Modern Dance'],
+    genres: ['Dance', 'Ballet', 'Contemporary', 'Tango', 'Modern Dance', 'Experimental'],
     venueHints: ['dance', 'στέγη', 'megaron', 'onassis']
   },
   screening: {
@@ -71,24 +71,13 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
     keywords: ['workshop', 'εργαστήριο', 'σεμινάριο', 'masterclass', 'class', 'μάθημα', 'course'],
     genres: ['Workshop', 'Educational', 'Masterclass']
   },
-  performance: {
-    keywords: ['performance', 'experimental', 'πειραματικό', 'multimedia', 'installation', 'site-specific']
-  },
-  conference: {
-    keywords: ['conference', 'summit', 'symposium', 'congress', 'συνέδριο'],
-    venueHints: ['megaron', 'oteacademy', 'eugenides', 'ellinikon']
-  },
-  meetup: {
-    keywords: ['meetup', 'meet-up', 'community event', 'networking'],
-    venueHints: ['epignosis', 'found.ation', 'impact hub']
-  },
-  hackathon: {
-    keywords: ['hackathon', 'hack-a-thon', 'coding challenge', 'codeathon'],
-    venueHints: ['ace aueb']
-  },
-  seminar: {
-    keywords: ['seminar', 'research talk', 'lecture series', 'academic talk'],
-    venueHints: ['archimedes', 'athena rc']
+  tech: {
+    keywords: [
+      'conference', 'summit', 'symposium', 'congress', 'συνέδριο',
+      'meetup', 'meet-up', 'hackathon', 'hack-a-thon', 'coding challenge',
+      'seminar', 'research talk', 'lecture series', 'networking event'
+    ],
+    venueHints: ['megaron', 'oteacademy', 'eugenides', 'ellinikon', 'epignosis', 'found.ation', 'impact hub']
   },
   other: { keywords: [] }
 };
@@ -163,7 +152,7 @@ export function categorizeEvent(event: {
   // Priority order for categorization (more specific first)
   const categoryOrder: EventType[] = [
     'dj_set',      // Check DJ before concert (subset of music)
-    'dance',       // Check dance before theater (tango fix)
+    'performance', // Check performance before theater (ballet/tango/dance fix)
     'screening',   // Check screening before cinema
     'show',        // Check show before theater (comedy/cabaret)
     'workshop',    // Specific format
@@ -171,19 +160,15 @@ export function categorizeEvent(event: {
     'cinema',      // Film screenings in cinemas
     'concert',     // Live music (general)
     'theater',     // Theater productions
-    'conference',  // Tech/AI conferences
-    'meetup',      // Community meetups
-    'hackathon',   // Coding hackathons
-    'seminar',     // Research seminars
-    'performance'  // Experimental/hybrid (last resort before other)
+    'tech',        // Conferences, meetups, hackathons
   ];
 
   // Check each category in priority order
   for (const type of categoryOrder) {
     const rules = CATEGORIZATION_MAP[type];
 
-    // Skip dance categorization for social events
-    if (type === 'dance' && isDanceFalsePositive) {
+    // Skip performance categorization for social dance events
+    if (type === 'performance' && isDanceFalsePositive) {
       continue;
     }
 
@@ -241,9 +226,9 @@ export function recategorizeIfNeeded(event: {
   // Always re-check for dance events (tango fix)
   const text = `${event.title} ${event.description || ''}`.toLowerCase();
 
-  // Tango should always be dance, not theater
+  // Tango should always be performance, not theater
   if (text.includes('tango') || text.includes('ταγκό') || text.includes('milonga') || text.includes('μιλόνγκα')) {
-    return 'dance';
+    return 'performance';
   }
 
   // DJ events should be dj_set, not concert

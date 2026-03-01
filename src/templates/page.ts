@@ -26,22 +26,15 @@ export const BADGE_LABELS: Record<string, string> = {
   cinema: 'ΣΙΝΕΜΑ',
   screening: 'ΠΡΟΒΟΛΗ',
   theater: 'ΘΕΑΤΡΟ',
-  dance: 'ΧΟΡΟΣ',
-  opera: 'ΟΠΕΡΑ',
-  classical: 'ΚΛΑΣΙΚΗ',
-  comedy: 'ΚΩΜΩΔΙΑ',
   festival: 'ΦΕΣΤΙΒΑΛ',
   performance: 'PERFORMANCE',
   show: 'SHOW',
   workshop: 'ΕΡΓΑΣΤΗΡΙΟ',
-  conference: 'ΣΥΝΕΔΡΙΟ',
-  meetup: 'MEETUP',
-  hackathon: 'HACKATHON',
-  seminar: 'ΣΕΜΙΝΑΡΙΟ',
+  tech: 'TECH',
   other: 'ΑΛΛΟ',
 };
 
-export const LIGHT_TEXT_BADGES = new Set(['performance', 'dance', 'cinema', 'screening']);
+export const LIGHT_TEXT_BADGES = new Set(['performance', 'cinema', 'screening']);
 
 export const TYPE_ICONS: Record<string, string> = {
   concert: '🎵',
@@ -50,18 +43,11 @@ export const TYPE_ICONS: Record<string, string> = {
   cinema: '🎬',
   screening: '🎬',
   theater: '🎭',
-  dance: '💃',
-  opera: '🎼',
-  classical: '🎻',
-  comedy: '😂',
   festival: '🎪',
   performance: '🎤',
   show: '✨',
   workshop: '🛠️',
-  conference: '🎙️',
-  meetup: '🤝',
-  hackathon: '💻',
-  seminar: '📚',
+  tech: '💻',
   other: '📌',
 };
 

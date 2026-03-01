@@ -43,12 +43,12 @@
       "icon": "saxophone"
     },
     {
-      "slug": "dance",
-      "title": "Χορός στην Αθήνα",
-      "titleEn": "Dance in Athens",
-      "description": "Μπαλέτο, σύγχρονος χορός, tango και χορευτικές παραστάσεις",
+      "slug": "performances",
+      "title": "Παραστάσεις στην Αθήνα",
+      "titleEn": "Performances in Athens",
+      "description": "Μπαλέτο, σύγχρονος χορός, tango και πειραματικές παραστάσεις",
       "filter": {
-        "type": "dance"
+        "type": "performance"
       },
       "icon": "dance"
     },
@@ -118,7 +118,7 @@
       "titleEn": "Tech & AI in Athens",
       "description": "Συνέδρια, meetups και hackathons τεχνολογίας και AI στην Αθήνα",
       "filter": {
-        "types": ["conference", "meetup", "hackathon", "seminar", "workshop"]
+        "type": "tech"
       },
       "icon": "cpu"
     }

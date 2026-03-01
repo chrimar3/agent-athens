@@ -51,16 +51,16 @@ export interface EnrichedEvent {
 
 export type EventType =
   | 'concert'
+  | 'dj_set'
   | 'exhibition'
   | 'cinema'
+  | 'screening'
   | 'theater'
+  | 'festival'
   | 'performance'
+  | 'show'
   | 'workshop'
-  | 'conference'
-  | 'meetup'
-  | 'hackathon'
-  | 'seminar'
-  | 'sports';
+  | 'tech';
 
 export interface EnrichmentStats {
   total_events: number;
