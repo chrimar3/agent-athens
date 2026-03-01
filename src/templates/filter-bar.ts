@@ -151,7 +151,7 @@ export function renderFilterBar(
       </div>`
     : `<div class="filter-panel-anchor" data-filter="type">
         <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
-        ${renderTypePanel(counts.types, currentFilters)}
+        ${renderTypePanel(counts.types, currentFilters, totalCount)}
       </div>`;
 
   // ── Price pill ──
@@ -217,7 +217,7 @@ function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filter
   </div>`;
 }
 
-function renderTypePanel(types: FilterCountOption[], currentFilters: Filters): string {
+function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number): string {
   const tiles = types.map(opt => {
     const isSelected = currentFilters.type === opt.value;
     const colorVar = typeColorVar(opt.value as EventType);
@@ -228,12 +228,18 @@ function renderTypePanel(types: FilterCountOption[], currentFilters: Filters): s
     </a>`;
   });
 
+  const resetUrl = buildDismissUrl(currentFilters, 'type');
+
   return `<div class="filter-panel" data-panel-for="type">
     <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
     <div class="filter-sheet-handle"></div>
     <div class="filter-sheet-title">Τύπος</div>
     <div class="filter-type-grid">
       ${tiles.join('\n      ')}
+    </div>
+    <div class="filter-panel-footer">
+      <a href="${resetUrl}" class="filter-reset">Επαναφορά</a>
+      <span class="filter-panel-footer-count">${totalCount} εκδηλώσεις</span>
     </div>
   </div>`;
 }
