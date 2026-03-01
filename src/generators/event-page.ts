@@ -73,6 +73,22 @@ const TYPE_TRANSLATIONS: Record<string, string> = {
   other: 'Εκδήλωση'
 };
 
+// Pre-composed article + plural for discovery links (Greek grammar)
+const TYPE_DISCOVERY_LABELS: Record<string, string> = {
+  concert: 'Όλες οι Συναυλίες',
+  dj_set: 'Όλα τα DJ Sets',
+  theater: 'Όλες οι Θεατρικές Παραστάσεις',
+  exhibition: 'Όλες οι Εκθέσεις',
+  screening: 'Όλες οι Προβολές',
+  cinema: 'Όλες οι Ταινίες',
+  workshop: 'Όλα τα Εργαστήρια',
+  show: 'Όλα τα Shows',
+  festival: 'Όλα τα Φεστιβάλ',
+  performance: 'Όλες οι Παραστάσεις',
+  tech: 'Όλα τα Tech Events',
+  other: 'Όλες οι Εκδηλώσεις',
+};
+
 // Type to category slug mapping for internal links
 const TYPE_TO_CATEGORY: Record<string, string> = {
   concert: 'concerts',
@@ -282,7 +298,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const neighborhoodSlug = event.venue.neighborhood ? slugify(event.venue.neighborhood) : '';
 
   const navLinks = [
-    categorySlug ? `<a href="/${categorySlug}/">Όλες οι ${typeLabel}</a>` : '',
+    categorySlug ? `<a href="/${categorySlug}/">${TYPE_DISCOVERY_LABELS[event.type] || `Όλες οι ${typeLabel}`}</a>` : '',
     `<a href="/venues/${venueSlug}/">Περισσότερες εκδηλώσεις στο ${event.venue.name}</a>`,
     neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${event.venue.neighborhood}</a>` : ''
   ].filter(Boolean);
