@@ -471,11 +471,45 @@ claude -p "$(cat "$BRIEF")" \
   --allowedTools "Bash Read Write WebSearch Glob Grep WebFetch"
 ```
 
+### Full 5-Event Batch Test (2026-03-02)
+
+| Event | Title | Gate Score | Words | Opening Strategy |
+|-------|-------|------------|-------|-----------------|
+| a7ab6c10dbc13ed9 | To kleidi tis eftychias | 89 | 454 | Sound/visual (child + melody) |
+| 24f7e6cd14175a0c | Skiadareses | 90 | 537 | Action (sisters redirecting) |
+| 08a20128cb26b3ac | Groovepulse x Hardvision | 89 | 508 | Contrast (two philosophies) |
+| 39c7a1629ce6b77e | Echeis pente lepta | 89 | 473 | Physical (athletes breathing) |
+| ba2bedb98a68fdcf | Iro Saia — Rembetisses | 89 | 593 | Conceptual (eight women, argument) |
+
+- **Average score**: 89.3/100 (range: 89-90)
+- **All saved to DB**: `enriched_at = 2026-03-02`, `needs_enrichment = 0`
+- **Opening diversity**: 5 distinct strategies, zero duplicates
+- **Closer diversity**: 5 distinct devices (seasonal window, growth trajectory, spatial contrast, mission statement, scarcity)
+- **Fabrication flags**: 0 — CLI instance correctly excluded unverifiable Iro Saia album claim, noted RA 403 for Groovepulse
+- **Venue intel used**: Oddity data from database (address, capacity, metro, entry price)
+- **Template v2.3 compliant**: Citation anchor openings, prose bridges (no markdown tables)
+
+**Verdict**: Full batch confirms single-event finding. CLI automation is production-ready.
+
 ### Next Steps for Full Automation
-- [ ] Test with full 5-event batch (single event confirmed; need to verify multi-event consistency)
+- [x] Test with single event — PASSED (89/100)
+- [x] Test with full 5-event batch — PASSED (89.3 avg)
 - [ ] Test `--output-format json` for structured result parsing
-- [ ] Integrate into `daily-automated.sh` as optional enrichment step
+- [x] Integrate into `daily-automated.sh` as auto-enrichment phase
 - [ ] Add `--max-turns` flag if available, to cap runaway sessions
+- [x] Test with 3 parallel CLI instances — BLOCKED (nest detection)
+
+### Pipeline Integration (2026-03-02)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| `scripts/auto-enrich.sh` — new standalone enrichment script | Self-contained: checks queue, cleans old briefs, generates batches, runs `claude -p` sequentially. Can be called from pipeline or manually | 2026-03 |
+| Sequential execution (not parallel) | Parallel test blocked by CLAUDECODE nest detection from inside CC. Sequential avoids SQLite WAL locking. Upgrade to parallel after raw-terminal validation | 2026-03 |
+| Phase 3e-auto in daily-automated.sh | Runs after enrichment_sync, before time_enrichment. Non-fatal — pipeline continues if enrichment fails (Article VII) | 2026-03 |
+| MAX_BATCHES=3, EVENTS_PER_BATCH=5 | Caps at 15 events/day. Prevents Claude Max rate limit issues. ~25 min sequential wall clock | 2026-03 |
+| MIN_QUEUE=5 threshold | Skip enrichment if fewer than 5 events in queue. Avoids wasteful single-event runs | 2026-03 |
+| Clean temp-briefs/ before generating | Prevents stale briefs from being re-processed. Auto-increment batch numbering reads existing files | 2026-03 |
+| daily-enrichment-check.sh now auto-enrich aware | Queries enrichment_log for today's count. Different notification: Glass (informational) if auto-enrich ran, Basso (warning) if it didn't | 2026-03 |
 
 ### Image Coverage Audit (2026-03-02)
 

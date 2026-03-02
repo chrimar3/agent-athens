@@ -63,7 +63,24 @@ ENRICHED=$(sqlite3 "$DB_PATH" "
   AND start_date >= '$TODAY';
 ")
 
-log "Stats: $UNENRICHED unenriched, $ENRICHED enriched, $TOTAL_VISIBLE total visible"
+# Count events auto-enriched today (via enrichment_log timestamps)
+AUTO_ENRICHED_TODAY=0
+HAS_ENRICHMENT_LOG=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='enrichment_log';")
+if [ "$HAS_ENRICHMENT_LOG" -gt 0 ]; then
+  AUTO_ENRICHED_TODAY=$(sqlite3 "$DB_PATH" "
+    SELECT COUNT(*) FROM enrichment_log
+    WHERE date(created_at) = date('now');
+  ")
+fi
+
+# Check if auto-enrich log exists for today
+AUTO_ENRICH_RAN="false"
+AUTO_ENRICH_LOG="$LOG_DIR/auto-enrich-$TODAY.log"
+if [ -f "$AUTO_ENRICH_LOG" ]; then
+  AUTO_ENRICH_RAN="true"
+fi
+
+log "Stats: $UNENRICHED unenriched, $ENRICHED enriched, $TOTAL_VISIBLE total visible, $AUTO_ENRICHED_TODAY auto-enriched today"
 
 # Generate report file
 REPORT_DATE=$(date '+%Y%m%d')
@@ -77,9 +94,10 @@ Generated: $(date '+%Y-%m-%d %H:%M:%S')
 
 SUMMARY
 -------
-Unenriched events: $UNENRICHED
-Enriched events:   $ENRICHED
-Total visible:     $TOTAL_VISIBLE
+Unenriched events:      $UNENRICHED
+Enriched events:        $ENRICHED
+Auto-enriched today:    $AUTO_ENRICHED_TODAY
+Total visible:          $TOTAL_VISIBLE
 
 EOF
 
@@ -104,26 +122,26 @@ if [ "$UNENRICHED" -gt 0 ]; then
 
   echo "" >> "$REPORT_FILE"
 
-  # Calculate batches
-  BATCHES=$(( (UNENRICHED + 9) / 10 ))
-  EST_TIME=$(( BATCHES * 5 ))
+  # Calculate batches (5 events per batch, ~8 min each)
+  BATCHES=$(( (UNENRICHED + 4) / 5 ))
+  EST_TIME=$(( BATCHES * 8 ))
 
   cat >> "$REPORT_FILE" << EOF
 
 ENRICHMENT ESTIMATE
 -------------------
 Events to enrich: $UNENRICHED
-Batches of 10:    $BATCHES
+Batches of 5:     $BATCHES
 Est. time:        ~$EST_TIME minutes
 
-HOW TO ENRICH
--------------
-1. Open Claude Code in the agent-athens project
-2. Say: "Enrich 10 events"
-3. Wait ~5 minutes
-4. Repeat as needed
+HOW TO ENRICH (AUTOMATED)
+--------------------------
+Auto-enrichment runs daily as part of the pipeline.
+Today: $AUTO_ENRICHED_TODAY events auto-enriched, $UNENRICHED remaining.
 
-Or run: bun run scripts/run-enrichment-pipeline.ts
+Manual fallback:
+  cd ~/Project\ with\ Claude/AgentAthens/agent-athens
+  ./scripts/auto-enrich.sh
 EOF
 fi
 
@@ -132,12 +150,20 @@ echo "===============================================" >> "$REPORT_FILE"
 
 log "Report saved to: $REPORT_FILE"
 
-# Send notification if threshold met
-if [ "$UNENRICHED" -ge "$THRESHOLD" ]; then
-  log "Sending notification ($UNENRICHED >= $THRESHOLD threshold)"
-
-  osascript -e "display notification \"$UNENRICHED events need enrichment. Check Desktop report.\" with title \"Agent Athens\" subtitle \"Enrichment Reminder\" sound name \"Glass\""
-
+# Send notification based on auto-enrichment status
+if [ "$AUTO_ENRICH_RAN" == "true" ]; then
+  # Informational: auto-enrichment ran
+  if [ "$AUTO_ENRICHED_TODAY" -gt 0 ]; then
+    osascript -e "display notification \"Auto-enriched $AUTO_ENRICHED_TODAY today. $UNENRICHED still pending.\" with title \"Agent Athens\" subtitle \"Enrichment Report\" sound name \"Glass\""
+    log "Notification: auto-enriched $AUTO_ENRICHED_TODAY, $UNENRICHED pending"
+  elif [ "$UNENRICHED" -ge "$THRESHOLD" ]; then
+    osascript -e "display notification \"Auto-enrich ran but 0 enriched. $UNENRICHED pending. Check logs.\" with title \"Agent Athens\" subtitle \"Enrichment Warning\" sound name \"Basso\""
+    log "Warning: auto-enrich ran but enriched 0 events"
+  fi
+elif [ "$UNENRICHED" -ge "$THRESHOLD" ]; then
+  # Warning: auto-enrichment may not have run
+  osascript -e "display notification \"$UNENRICHED events need enrichment. Auto-enrich may not have run.\" with title \"Agent Athens\" subtitle \"Enrichment Warning\" sound name \"Basso\""
+  log "Warning: auto-enrich log not found, $UNENRICHED pending"
 else
   log "Below threshold ($UNENRICHED < $THRESHOLD), no notification"
 fi

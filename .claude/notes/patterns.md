@@ -533,3 +533,22 @@ CLI-produced descriptions match interactive quality:
 - Gate score: 84 pre-save → 89 post-save (same as subagent enrichment)
 - All 8 sections present, no fabrication, proper credentials verification
 - The 84→89 gap is infrastructure metadata (Schema.org, tags, last_verified) populated by save-batch.ts
+
+### Auto-Enrich Pipeline Pattern
+```bash
+# Standalone
+./scripts/auto-enrich.sh           # Runs enrichment (3 batches of 5)
+./scripts/auto-enrich.sh --dry-run # Shows what would run
+
+# In daily pipeline (daily-automated.sh)
+# Phase 3e-auto: runs after enrichment_sync, before time_enrichment
+# Non-fatal: returns 0 even on failure (Article VII)
+```
+
+Flow: check queue ≥ 5 → clean old briefs → sync queue → generate briefs → run claude -p per batch (sequential) → report results.
+
+Key constraints:
+- Absolute path for claude binary (launchd has minimal PATH)
+- Sequential execution (avoids SQLite WAL locking)
+- Clean temp-briefs/ before generating (prevents stale re-processing)
+- MAX_BATCHES=3 cap (15 events/day, rate limit safety)

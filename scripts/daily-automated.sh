@@ -6,7 +6,7 @@
 # Runs via launchd at 8:00 AM Athens time.
 # Full pipeline: email → parse → quality → generate → deploy
 #
-# NOTE: AI enrichment is NOT included (requires Claude Code session).
+# NOTE: AI enrichment runs automatically via claude -p (see auto-enrich.sh).
 #
 # Usage:
 #   ./scripts/daily-automated.sh           # Run full pipeline
@@ -293,6 +293,25 @@ run_enrichment_sync() {
     fi
 }
 
+# Phase 3e-auto: Automated AI enrichment (via Claude Code CLI)
+run_auto_enrichment() {
+    log_phase "AI ENRICHMENT (AUTOMATED)"
+    log "Running automated enrichment via Claude Code CLI..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: ./scripts/auto-enrich.sh"
+        return 0
+    fi
+
+    if ./scripts/auto-enrich.sh >> "$LOG_FILE" 2>&1; then
+        log "Auto-enrichment completed"
+        return 0
+    else
+        log_error "Auto-enrichment failed (non-fatal, continuing...)"
+        return 0  # Non-fatal per Article VII
+    fi
+}
+
 # Phase 3f: Time data enrichment
 run_time_enrichment() {
     log_phase "TIME DATA ENRICHMENT"
@@ -569,6 +588,9 @@ main() {
 
     # Enrichment queue sync (non-fatal)
     run_enrichment_sync
+
+    # Automated AI enrichment (non-fatal)
+    run_auto_enrichment
 
     # Time data enrichment (non-fatal)
     run_time_enrichment
