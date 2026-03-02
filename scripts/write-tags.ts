@@ -10,19 +10,36 @@
  *   bun run scripts/write-tags.ts abc123 Jazz Intimate Local-favorite Metro-accessible
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { TAG_TAXONOMY } from '../src/enrichment/description-generator';
 
-const OUTPUT_DIR = 'temp-descriptions';
+const DEFAULT_OUTPUT_DIR = 'temp-descriptions';
 
 function main(): void {
   const args = process.argv.slice(2);
-  const eventId = args[0];
-  const tags = args.slice(1);
+  const batchDirArg = args.find(a => a.startsWith('--batch-dir='));
+
+  // Warn if --batch-dir omitted but active batch manifests exist
+  if (!batchDirArg) {
+    const manifests = existsSync('temp-briefs')
+      ? readdirSync('temp-briefs').filter(f => f.endsWith('.manifest.json'))
+      : [];
+    if (manifests.length > 0) {
+      console.error('⚠️  WARNING: --batch-dir= not specified but active batches exist.');
+      console.error('   Writing to flat temp-descriptions/ risks cross-batch contamination.');
+      console.error('   Specify: --batch-dir=temp-descriptions/batch-NNN');
+    }
+  }
+
+  const outputDir = batchDirArg?.split('=')[1] || DEFAULT_OUTPUT_DIR;
+  const positionalArgs = args.filter(a => !a.startsWith('--'));
+  const eventId = positionalArgs[0];
+  const tags = positionalArgs.slice(1);
 
   if (!eventId || tags.length === 0) {
     console.error('Usage: bun run scripts/write-tags.ts <event-id> <tag1> <tag2> ...');
+    console.error('       bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-121 <tag1> <tag2> ...');
     console.error('');
     console.error('Valid tag categories:');
     for (const [category, values] of Object.entries(TAG_TAXONOMY)) {
@@ -41,11 +58,11 @@ function main(): void {
   }
 
   // Ensure output directory exists
-  if (!existsSync(OUTPUT_DIR)) {
-    mkdirSync(OUTPUT_DIR, { recursive: true });
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true });
   }
 
-  const filePath = join(OUTPUT_DIR, `${eventId}.tags.json`);
+  const filePath = join(outputDir, `${eventId}.tags.json`);
   writeFileSync(filePath, JSON.stringify(tags, null, 2), 'utf-8');
 
   console.log(`Written: ${filePath} (${tags.length} tags)`);

@@ -64,16 +64,23 @@ export interface BatchManifest {
   batch_id: number;
   generated_at: string;
   event_ids: string[];
+  output_dir: string;
 }
 
 export function writeManifest(batchNumber: number, eventIds: string[]): string {
+  const outputDir = `temp-descriptions/batch-${batchNumber}`;
   const manifest: BatchManifest = {
     batch_id: batchNumber,
     generated_at: new Date().toISOString(),
     event_ids: eventIds,
+    output_dir: outputDir,
   };
   if (!existsSync(BRIEFS_DIR)) {
     mkdirSync(BRIEFS_DIR, { recursive: true });
+  }
+  // Create batch-scoped output directory for subagent isolation
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true });
   }
   const manifestPath = join(BRIEFS_DIR, `batch-${batchNumber}.manifest.json`);
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
@@ -373,9 +380,20 @@ export function buildBrief(
   recentOpenings?: RecentOpening[],
 ): string {
   const lines: string[] = [];
+  const batchDir = `temp-descriptions/batch-${batchNumber}`;
 
   lines.push(`# Enrichment Brief — Batch ${batchNumber}`);
   lines.push('');
+
+  // Verification checklist for subagent isolation
+  lines.push('## VERIFICATION CHECKLIST');
+  lines.push(`- This is Batch ${batchNumber}`);
+  lines.push(`- Event IDs: ${events.map(e => e.id).join(', ')}`);
+  lines.push(`- Write descriptions to: ${batchDir}/`);
+  lines.push('- BEFORE writing any file, verify the event ID appears in this list');
+  lines.push(`- ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.`);
+  lines.push('');
+
   lines.push('You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.');
   lines.push('');
 
@@ -486,18 +504,20 @@ export function buildBrief(
   lines.push('For EACH event:');
   lines.push('');
   lines.push('1. **Research**: WebSearch the event URL for details. Search for artist/performer background. Also search the venue if writing sensory opening details about the physical space — unverified atmosphere (invented food smells, assumed decor) is a fabrication violation even if it sounds plausible.');
-  lines.push('2. **Write description**: Save to file:');
+  lines.push(`2. **Write description**: Save to batch directory (${batchDir}/):`);
   lines.push('   ```bash');
-  lines.push('   bun run scripts/write-description.ts <event-id> "<description text>"');
+  lines.push(`   bun run scripts/write-description.ts <event-id> --batch-dir=${batchDir} "<description text>"`);
   lines.push('   ```');
-  lines.push('3. **Gate check**: Validate quality (use the tier shown for each event):');
+  lines.push('3. **Gate check**: Validate quality with metadata flags (no DB needed):');
   lines.push('   ```bash');
-  lines.push('   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=<tier> --event-id=<event-id>');
+  lines.push(`   bun run scripts/auto-gate-check.ts ${batchDir}/<event-id>.md --tier=<tier> --event-id=<event-id> \\`);
+  lines.push('     --event-type=<type> --event-venue="<venue>" --event-title="<title>" \\');
+  lines.push('     --event-date=<date> --event-price=<price>');
   lines.push('   ```');
   lines.push('   Tier mapping: three-part-block=stub, hybrid=standard, full-8-section=premium');
   lines.push('4. **Write tags** (from taxonomy in docs/MASTER-ENRICHMENT-TEMPLATE.md):');
   lines.push('   ```bash');
-  lines.push('   bun run scripts/write-tags.ts <event-id> Tag1 Tag2 Tag3...');
+  lines.push(`   bun run scripts/write-tags.ts <event-id> --batch-dir=${batchDir} Tag1 Tag2 Tag3...`);
   lines.push('   ```');
   lines.push('5. **Save decision** (after completing ALL events in this batch):');
   lines.push('   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:');
@@ -508,7 +528,26 @@ export function buildBrief(
   lines.push('   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.');
   lines.push(`     Note "LEFT FOR REVIEW" at the top of batch-${batchNumber}-review.md with reasons.`);
   lines.push('');
-  lines.push('After all events, create `temp-descriptions/batch-' + batchNumber + '-review.md` with:');
+
+  // Per-event gate check commands with full metadata flags
+  lines.push('### Per-Event Gate Check Commands');
+  lines.push('');
+  lines.push('Copy-paste these with the correct tier for each event:');
+  lines.push('');
+  for (const event of events) {
+    const target = getWordTarget({ type: event.type, venue_name: event.venue_name, title: event.title });
+    const tier = structureToTier(target.structure);
+    lines.push('```bash');
+    lines.push(`bun run scripts/auto-gate-check.ts ${batchDir}/${event.id}.md \\`);
+    lines.push(`  --tier=${tier} --event-id=${event.id} \\`);
+    lines.push(`  --event-type=${event.type} --event-venue="${event.venue_name || 'TBA'}" \\`);
+    lines.push(`  --event-title="${event.title.replace(/"/g, '\\"')}" \\`);
+    lines.push(`  --event-date=${event.start_date.slice(0, 10)} --event-price=${event.price_type || 'tba'}`);
+    lines.push('```');
+    lines.push('');
+  }
+
+  lines.push(`After all events, create \`${batchDir}/batch-${batchNumber}-review.md\` with:`);
   lines.push('');
   lines.push('| Event ID | Title | Gate Score | Issues | Confidence |');
   lines.push('|----------|-------|------------|--------|------------|');

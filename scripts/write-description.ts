@@ -13,23 +13,39 @@
  *   echo "Description text" | bun run scripts/write-description.ts abc123 --stdin
  */
 
-import { writeFileSync, readFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 
-const OUTPUT_DIR = 'temp-descriptions';
+const DEFAULT_OUTPUT_DIR = 'temp-descriptions';
 
 function main(): void {
   const args = process.argv.slice(2);
-  const eventId = args[0];
+  const eventId = args.find(a => !a.startsWith('--'));
   const useStdin = args.includes('--stdin');
+  const batchDirArg = args.find(a => a.startsWith('--batch-dir='));
+
+  // Warn if --batch-dir omitted but active batch manifests exist
+  if (!batchDirArg) {
+    const manifests = existsSync('temp-briefs')
+      ? readdirSync('temp-briefs').filter(f => f.endsWith('.manifest.json'))
+      : [];
+    if (manifests.length > 0) {
+      console.error('⚠️  WARNING: --batch-dir= not specified but active batches exist.');
+      console.error('   Writing to flat temp-descriptions/ risks cross-batch contamination.');
+      console.error('   Specify: --batch-dir=temp-descriptions/batch-NNN');
+    }
+  }
+
+  const outputDir = batchDirArg?.split('=')[1] || DEFAULT_OUTPUT_DIR;
 
   if (!eventId) {
     console.error('Usage: bun run scripts/write-description.ts <event-id> <content>');
+    console.error('       bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-121 <content>');
     console.error('       bun run scripts/write-description.ts <event-id> --stdin');
     process.exit(1);
   }
 
-  // Get content from args or stdin
+  // Get content from args or stdin (filter out flags)
   let content: string;
   if (useStdin) {
     // Read from stdin (piped input)
@@ -37,13 +53,13 @@ function main(): void {
     const stdin = Bun.stdin.stream();
     const reader = stdin.getReader();
     // For simplicity in CLI, read synchronously from file if redirected
-    content = args.filter(a => a !== eventId && a !== '--stdin').join(' ');
+    content = args.filter(a => a !== eventId && a !== '--stdin' && !a.startsWith('--batch-dir=')).join(' ');
     if (!content) {
       console.error('No content provided. Pass content as argument or use --stdin with piped input.');
       process.exit(1);
     }
   } else {
-    content = args.slice(1).join(' ');
+    content = args.filter(a => a !== eventId && !a.startsWith('--')).join(' ');
   }
 
   if (!content) {
@@ -52,11 +68,11 @@ function main(): void {
   }
 
   // Ensure output directory exists
-  if (!existsSync(OUTPUT_DIR)) {
-    mkdirSync(OUTPUT_DIR, { recursive: true });
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true });
   }
 
-  const filePath = join(OUTPUT_DIR, `${eventId}.md`);
+  const filePath = join(outputDir, `${eventId}.md`);
 
   // Write with explicit UTF-8 encoding
   writeFileSync(filePath, content, 'utf-8');

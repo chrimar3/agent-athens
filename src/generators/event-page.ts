@@ -20,6 +20,8 @@ import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus } from '../utils/schema-geo';
+import { classifyEventLifecycle } from '../utils/event-lifecycle';
+import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
@@ -32,6 +34,11 @@ const indexNowConfig = JSON.parse(
   readFileSync(join(import.meta.dir, '../../config/indexnow.json'), 'utf-8')
 );
 const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
+
+// Load source attribution display names
+const sourceAttributionMap: Record<string, string> = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../config/source-attribution.json'), 'utf-8')
+);
 
 // Default OG images by event type
 const DEFAULT_OG_IMAGES: Record<string, string> = {
@@ -178,6 +185,7 @@ function generateEventSchema(event: Event): string {
     'startDate': startDate,
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+    'inLanguage': 'el',
     'url': `${BASE_URL}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
@@ -268,6 +276,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
+  // Lifecycle: past events get banner, noindex, hidden CTAs
+  const lifecycle = classifyEventLifecycle(event);
+  const isPast = lifecycle !== 'upcoming';
+
   // Date display — time extraction with fallback (matches listing card logic in page.ts)
   const timeStr = event.startDate.includes('T')
     ? formatGreekTime(event.startDate)
@@ -311,9 +323,9 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
     neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
   ].filter(Boolean);
 
-  // CTA (ticket link)
-  const hasTicketUrl = Boolean(event.ticketUrl);
-  const ctaHtml = hasTicketUrl
+  // CTA (ticket link) — hidden for past events (ticket URL likely dead)
+  const showCta = Boolean(event.ticketUrl) && !isPast;
+  const ctaHtml = showCta
     ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero${lightText ? ' edp-cta--light-text' : ''}" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>`
     : '';
 
@@ -322,10 +334,11 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
     ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
     : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
 
-  // Source attribution
+  // Source attribution — use display name from mapping, fall back to raw ID
+  const sourceDisplayName = sourceAttributionMap[event.source] || event.source;
   const sourceHtml = event.url
-    ? `<div class="edp-source">Πηγή: <a href="${event.url}" rel="noopener" target="_blank">${event.source}</a></div>`
-    : `<div class="edp-source">Πηγή: ${event.source}</div>`;
+    ? `<div class="edp-source">Πηγή: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
+    : `<div class="edp-source">Πηγή: ${sourceDisplayName}</div>`;
 
   // Related events as cards
   const relatedHtml = relatedEvents.length > 0
@@ -338,8 +351,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
       </section>`
     : '';
 
-  // Mobile sticky CTA bar
-  const mobileBarHtml = hasTicketUrl
+  // Mobile sticky CTA bar — hidden for past events
+  const mobileBarHtml = showCta
     ? `<div class="edp-mobile-bar">
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
@@ -363,6 +376,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>
   <meta name="description" content="${generateEventMetaDescription(event)}">
+  ${isPast ? '<meta name="robots" content="noindex">' : ''}
 
   <!-- Canonical URL (single source of truth) -->
   <link rel="canonical" href="${canonicalUrl}">
@@ -427,6 +441,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         </header>
       </div>
     </section>
+
+    ${isPast ? `<div class="event-passed-banner" role="status">
+      <p>Αυτή η εκδήλωση έχει ολοκληρωθεί.</p>
+    </div>` : ''}
 
     <div class="edp-content">
       <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}" itemprop="description">
@@ -558,6 +576,7 @@ export function renderEventDetailScript(): string {
 export async function generateEventPages(events: Event[]): Promise<{
   urls: string[];
   slugMap: Map<string, string>;  // eventId -> current slug
+  pastEventUrls: Set<string>;    // URLs of past-active events (for sitemap priority)
 }> {
   const eventsDir = join(DIST_DIR, 'events');
   if (!existsSync(eventsDir)) {
@@ -566,6 +585,7 @@ export async function generateEventPages(events: Event[]): Promise<{
 
   const urls: string[] = [];
   const slugMap = new Map<string, string>();
+  const pastEventUrls = new Set<string>();
 
   // Group events by venue for related events lookup
   const eventsByVenue = new Map<string, Event[]>();
@@ -575,9 +595,18 @@ export async function generateEventPages(events: Event[]): Promise<{
     eventsByVenue.set(event.venue.name, venueEvents);
   }
 
+  const schemaValidationResults: SchemaValidationResult[] = [];
+
   for (const event of events) {
     const slug = generateEventSlug(event);
     slugMap.set(event.id, slug);
+
+    // Track past-active events for sitemap priority override
+    const lifecycle = classifyEventLifecycle(event);
+    const urlPath = `events/${slug}`;
+    if (lifecycle !== 'upcoming') {
+      pastEventUrls.add(urlPath);
+    }
 
     // Get related events at same venue (max 6, excluding current)
     const venueEvents = eventsByVenue.get(event.venue.name) || [];
@@ -589,6 +618,10 @@ export async function generateEventPages(events: Event[]): Promise<{
     // Generate page HTML
     const html = renderEventDetailPage(event, relatedEvents);
 
+    // Validate schema JSON-LD
+    const schemaJson = generateEventSchema(event);
+    schemaValidationResults.push(validateEventSchema(schemaJson, urlPath));
+
     // Create directory and write file
     const pageDir = join(eventsDir, slug);
     if (!existsSync(pageDir)) {
@@ -596,11 +629,13 @@ export async function generateEventPages(events: Event[]): Promise<{
     }
     writeFileSync(join(pageDir, 'index.html'), html);
 
-    urls.push(`events/${slug}`);
+    urls.push(urlPath);
   }
 
-  console.log(`  ✓ Generated ${urls.length} event pages`);
-  return { urls, slugMap };
+  const pastCount = pastEventUrls.size;
+  console.log(`  ✓ Generated ${urls.length} event pages (${pastCount} past-active with banner)`);
+  logValidationSummary(schemaValidationResults);
+  return { urls, slugMap, pastEventUrls };
 }
 
 /**
