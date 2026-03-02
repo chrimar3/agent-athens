@@ -400,6 +400,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 
   <article id="main-content" itemscope itemtype="https://schema.org/${schemaType}">
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
+      <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
       <div class="edp-hero-inner">
         <nav class="edp-breadcrumb">
           <a href="/">agent-athens</a>

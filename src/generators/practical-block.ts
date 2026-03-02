@@ -172,7 +172,7 @@ export function generatePracticalBlock(
     return '';  // Don't render sparse blocks
   }
 
-  return renderDL(fields);
+  return renderTable(fields);
 }
 
 /**
@@ -191,33 +191,26 @@ function formatDoorPolicy(policy: string): string {
 }
 
 /**
- * Render a definition list from fields
+ * Render a table from fields
  */
-function renderDL(fields: PracticalField[]): string {
-  const items = fields.map(field => {
+function renderTable(fields: PracticalField[]): string {
+  const rows = fields.map(field => {
     const valueContent = field.isHtml ? field.value : escapeHtml(field.value);
     return `
-      <div class="practical-item">
-        <dt>${escapeHtml(field.label)}</dt>
-        <dd>${valueContent}</dd>
-      </div>`;
+        <tr>
+          <th scope="row">${escapeHtml(field.label)}</th>
+          <td>${valueContent}</td>
+        </tr>`;
   }).join('');
 
   return `
   <section class="event-practical" aria-label="Πρακτικές πληροφορίες">
     <h3>Πρακτικές Πληροφορίες</h3>
-    <dl class="practical-grid">
-      ${items}
-    </dl>
-    <style>
-      .event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
-      .event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
-      .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 0; }
-      .practical-item { display: flex; flex-direction: column; }
-      .practical-item dt { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
-      .practical-item dd { margin: 0; font-size: 1rem; }
-      .open-now-badge { display: inline-block; background: #10b981; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
-    </style>
+    <table class="practical-table">
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
   </section>`;
 }
 

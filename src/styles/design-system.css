@@ -9,8 +9,8 @@
 :root {
   /* Colors — Dark theme */
   --bg-primary: #0d0d0d;
-  --bg-surface: #1a1a1a;
-  --bg-elevated: #242424;
+  --bg-surface: #242424;
+  --bg-elevated: #1a1a1a;
   --bg-overlay: rgba(13,13,13,0.92);
 
   --text-primary: #f0f0f0;
@@ -21,27 +21,30 @@
   --accent-primary: #f5e642;
   --accent-secondary: #ef2c46;
 
-  --border-subtle: #222222;
-  --border-default: #3a3a3a;
-  --border-active: #f5e642;
+  --border-subtle: rgba(240, 240, 240, 0.10);
+  --border-default: rgba(240, 240, 240, 0.40);
+  --border-active: rgba(240, 240, 240, 0.80);
 
   /* Semantic colors */
   --color-enriched: #7c3aed;
   --focus-ring: #58A6FF;
   --text-on-bright: #0d0d0d;
   --status-error: #FF4458;
+  --status-error-subtle: rgba(239, 68, 68, 0.15);
   --status-success: #34D399;
+  --status-success-subtle: rgba(16, 185, 129, 0.15);
   --status-warning: #FBBF24;
+  --focus-ring-invert: 0 0 0 2px var(--bg-surface), 0 0 0 4px #ffffff;
 
   /* Event type colors */
   --color-concert: #f5e642;
   --color-dj-set: #e040fb;
-  --color-exhibition: #10b981;
-  --color-cinema: #ef5350;
-  --color-theater: #ff7043;
+  --color-exhibition: #7eb8f7;
+  --color-cinema: #b87ef7;
+  --color-theater: #ef2c46;
   --color-dance: #ec407a;
-  --color-performance: #ab47bc;
-  --color-workshop: #29b6f6;
+  --color-performance: #f5a742;
+  --color-workshop: #7ef7b8;
   --color-conference: #66bb6a;
   --color-show: #ffa726;
   --color-screening: #ef5350;   /* same as cinema */
@@ -235,7 +238,7 @@ a:hover {
 
 .card-image-wrapper {
   position: relative;
-  padding-top: 66.67%; /* 3:2 aspect ratio */
+  padding-top: 133.33%; /* 3:4 portrait aspect ratio */
   border-radius: 8px;
   background: var(--bg-elevated);
   overflow: hidden;
@@ -348,7 +351,7 @@ a:hover {
   bottom: 8px;
   left: 8px;
   font-size: 11px;
-  font-weight: var(--font-weight-bold);
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 4px 8px;
@@ -396,12 +399,12 @@ a:hover {
 }
 
 .event-card:hover .card-title {
-  color: var(--color-concert);
+  color: var(--accent-primary);
 }
 
 .card-date {
   font-size: 14px;
-  color: var(--color-concert);
+  color: var(--accent-primary);
 }
 
 .card-venue {
@@ -689,12 +692,13 @@ a:hover {
   padding: 80px 40px 48px;
   overflow: hidden;
 }
-.edp-hero::before {
-  content: '';
+.edp-hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--edp-type-color, var(--accent-primary)) 0%, var(--bg-primary) 70%);
-  opacity: 0.15;
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px) saturate(1.8);
+  opacity: 0.4;
   z-index: 0;
 }
 .edp-hero-inner {
@@ -886,6 +890,28 @@ a:hover {
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* Practical info table */
+.event-practical { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
+.event-practical h3 { margin: 0 0 15px 0; font-size: 1.1rem; }
+.practical-table { width: 100%; border-collapse: collapse; }
+.practical-table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 6px 12px 6px 0;
+  white-space: nowrap;
+  vertical-align: top;
+}
+.practical-table td {
+  font-size: 1rem;
+  padding: 6px 0;
+  vertical-align: top;
+}
+.practical-table a { color: var(--accent-primary); }
+.practical-table a:hover { text-decoration: underline; }
+.open-now-badge { display: inline-block; background: var(--status-success); color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 500; vertical-align: middle; }
+
 /* Mobile sticky CTA bar */
 .edp-mobile-bar {
   display: none;
@@ -960,7 +986,7 @@ a:hover {
   display: flex;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 0;
+  padding: 40px 0;
 }
 
 /* Inner scroll container — horizontal pill scrolling.
@@ -978,7 +1004,7 @@ a:hover {
 .filter-bar-scroll::-webkit-scrollbar { display: none; }
 
 @media (max-width: 767px) {
-  .filter-bar { top: 56px; height: 52px; }
+  .filter-bar { top: 56px; height: 52px; padding: 16px 0; }
 }
 
 /* ── Filter Pills ─────────────────────────────── */
@@ -1439,7 +1465,7 @@ a:hover {
 }
 
 .event-card-list:hover .card-title {
-  color: var(--color-concert);
+  color: var(--accent-primary);
 }
 
 @media (max-width: 767px) {
@@ -1592,7 +1618,7 @@ a:hover {
   transition: color var(--t-instant);
 }
 .hero-card--featured:hover .hero-card-title {
-  color: var(--color-concert);
+  color: var(--accent-primary);
 }
 
 .hero-card-desc {
@@ -1657,7 +1683,7 @@ a:hover {
   transition: color var(--t-instant);
 }
 .hero-card--pick:hover .hero-pick-title {
-  color: var(--color-concert);
+  color: var(--accent-primary);
 }
 
 .hero-card--pick .card-date {
