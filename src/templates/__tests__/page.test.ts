@@ -81,14 +81,16 @@ describe("renderPage", () => {
   test("should render event count correctly", () => {
     const html = renderPage(sampleMetadata, [sampleConcert, sampleFreeExhibition]);
 
-    expect(html).toContain("<strong>2 εκδηλώσεις</strong>");
+    // Event count appears in og:description
+    expect(html).toContain('content="2 εκδηλώσεις στην Αθήνα"');
   });
 
   test("should render singular event count", () => {
     const singleEventMetadata = { ...sampleMetadata, eventCount: 1 };
     const html = renderPage(singleEventMetadata, [sampleConcert]);
 
-    expect(html).toContain("<strong>1 εκδήλωση</strong>");
+    // Event count appears in og:description
+    expect(html).toContain('content="1 εκδηλώσεις στην Αθήνα"');
   });
 
   test("should render event grid when events exist", () => {
@@ -262,8 +264,8 @@ describe("renderEventCard (via renderPage)", () => {
 
     expect(html).toContain('itemprop="location"');
     expect(html).toContain('itemscope itemtype="https://schema.org/Place"');
-    // Venue name includes neighborhood in the display text
-    expect(html).toContain(`<span itemprop="name">${sampleConcert.venue.name} · ${sampleConcert.venue.neighborhood}</span>`);
+    // Venue name includes Greek neighborhood via displayNeighborhood()
+    expect(html).toContain(`<span itemprop="name">${sampleConcert.venue.name} · Μετς</span>`);
   });
 
   test("should render venue neighborhood if present", () => {
@@ -426,7 +428,8 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const firstEvent = jsonLd.mainEntity.itemListElement[0].item;
 
     expect(firstEvent.location).toBeDefined();
-    expect(firstEvent.location["@type"]).toBe("Place");
+    // Venue type is derived from VENUE_TYPE_MAP (e.g. MusicEvent → MusicVenue)
+    expect(firstEvent.location["@type"]).toBe("MusicVenue");
     expect(firstEvent.location.name).toBe(sampleConcert.venue.name);
     // Address is now a PostalAddress object
     expect(firstEvent.location.address["@type"]).toBe("PostalAddress");

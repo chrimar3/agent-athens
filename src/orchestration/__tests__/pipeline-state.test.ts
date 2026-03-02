@@ -183,7 +183,8 @@ describe('Pipeline State', () => {
       resetPipelineState(TEST_STATE_FILE);
 
       const state = getPipelineState(TEST_STATE_FILE);
-      const today = new Date().toISOString().split('T')[0];
+      // Use Athens timezone to match getTodayDate() in pipeline-state.ts
+      const today = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Athens' })).toISOString().split('T')[0];
 
       expect(state.date).toBe(today);
       expect(state.phases.ingest).toBeUndefined();

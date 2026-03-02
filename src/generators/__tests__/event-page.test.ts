@@ -9,9 +9,13 @@ import {
 } from "../../../tests/fixtures/events";
 import type { Event } from "../../types";
 
+// Future date for tests that need upcoming events
+const futureStartDate = new Date(Date.now() + 86400000 * 14).toISOString();
+
 // Short description event (no read-more)
 const shortDescEvent: Event = {
   ...sampleConcert,
+  startDate: futureStartDate,
   fullDescription: undefined,
   description: "A short event description.",
 };
@@ -85,8 +89,9 @@ describe("Event Detail Page — Hero section", () => {
     expect(html).toContain('class="edp-type-badge"');
   });
 
-  test("CTA renders when ticketUrl exists", () => {
-    const html = renderEventDetailPage(sampleConcertWithTicket, []);
+  test("CTA renders when ticketUrl exists (upcoming event)", () => {
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-cta edp-cta-hero");
     expect(html).toContain(sampleConcertWithTicket.ticketUrl!);
     expect(html).toContain("Αγοράστε εισιτήρια");
@@ -191,8 +196,9 @@ describe("Event Detail Page — Source", () => {
 });
 
 describe("Event Detail Page — Mobile bar", () => {
-  test("renders when ticketUrl exists", () => {
-    const html = renderEventDetailPage(sampleConcertWithTicket, []);
+  test("renders when ticketUrl exists (upcoming event)", () => {
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-mobile-bar");
   });
 
@@ -201,8 +207,9 @@ describe("Event Detail Page — Mobile bar", () => {
     expect(html).not.toContain('class="edp-mobile-bar"');
   });
 
-  test("contains title and price text", () => {
-    const html = renderEventDetailPage(sampleConcertWithTicket, []);
+  test("contains title and price text (upcoming event)", () => {
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-mobile-bar-title");
     expect(html).toContain(sampleConcertWithTicket.title);
     expect(html).toContain("edp-mobile-bar-price");
@@ -277,7 +284,7 @@ describe("renderRelatedEventCard", () => {
 
   test("shows venue with neighborhood", () => {
     const card = renderRelatedEventCard(sampleConcert);
-    expect(card).toContain(`${sampleConcert.venue.name} · ${sampleConcert.venue.neighborhood}`);
+    expect(card).toContain(`${sampleConcert.venue.name} · Μετς`);
   });
 });
 
@@ -292,6 +299,57 @@ describe("renderEventDetailScript", () => {
     const script = renderEventDetailScript();
     expect(script).toContain("IntersectionObserver");
     expect(script).toContain("edp-mobile-bar");
+  });
+});
+
+describe("Event Detail Page — Past event lifecycle", () => {
+  test('Past event shows "event passed" banner', () => {
+    const pastEvent: Event = { ...sampleConcert, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).toContain('event-passed-banner');
+    expect(html).toContain('Αυτή η εκδήλωση έχει ολοκληρωθεί');
+  });
+
+  test('Upcoming event does NOT show banner', () => {
+    const futureDate = new Date(Date.now() + 86400000 * 7).toISOString();
+    const futureEvent: Event = { ...sampleConcert, startDate: futureDate };
+    const html = renderEventDetailPage(futureEvent, []);
+    expect(html).not.toContain('event-passed-banner');
+  });
+
+  test('Running exhibition does NOT show banner', () => {
+    const runningExhibition: Event = {
+      ...sampleFreeExhibition,
+      startDate: new Date(Date.now() - 86400000 * 7).toISOString(),
+      endDate: new Date(Date.now() + 86400000 * 30).toISOString(),
+    };
+    const html = renderEventDetailPage(runningExhibition, []);
+    expect(html).not.toContain('event-passed-banner');
+  });
+
+  test('Past event has noindex meta', () => {
+    const pastEvent: Event = { ...sampleConcert, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).toContain('<meta name="robots" content="noindex">');
+  });
+
+  test('Upcoming event has no noindex meta', () => {
+    const futureDate = new Date(Date.now() + 86400000 * 7).toISOString();
+    const futureEvent: Event = { ...sampleConcert, startDate: futureDate };
+    const html = renderEventDetailPage(futureEvent, []);
+    expect(html).not.toContain('name="robots" content="noindex"');
+  });
+
+  test('Past event hides ticket CTA', () => {
+    const pastEvent: Event = { ...sampleConcertWithTicket, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).not.toContain('class="edp-cta edp-cta-hero');
+  });
+
+  test('Past event hides mobile sticky bar', () => {
+    const pastEvent: Event = { ...sampleConcertWithTicket, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).not.toContain('class="edp-mobile-bar"');
   });
 });
 
