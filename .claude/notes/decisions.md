@@ -664,3 +664,291 @@ Fact-checker caught that Omonoia metro was listed as "Red/Blue" in venue-intelli
 | Remove `all-events` from TIME_OPTIONS | On the homepage it rendered as "Όλες 891" linking to `/` — a dead link. Dismiss `×` on active date pills already clears time filter, so explicit "show all" is redundant | 2026-02-25 |
 | Keep Area pill disabled (not removed) | Insufficient neighborhood data to make it useful; visible-but-disabled signals future intent without confusing users | 2026-02-25 |
 | Defer mobile close animation | Slide-down on close requires replacing `display: none` toggling with a visibility/opacity approach — more complex, and instant-close matches hamburger menu pattern | 2026-02-25 |
+
+---
+
+## Sprint 3: Schema, E-E-A-T, Hub Pages (2026-03)
+
+### Current State Inventory (Session 26 diagnostic)
+
+| Area | Status | Details |
+|------|--------|---------|
+| 12 category pages | Done | `config/categories.json` → `generateCategoryPages()` in generate-site.ts:323-327 |
+| /about, /editorial, /corrections | Done | `src/templates/content-page.ts`, generated inline in generate-site.ts:356-423 |
+| eventStatus, eventAttendanceMode, isAccessibleForFree | Done | Sprint 2 — event-page.ts:178-179, 222-223 |
+| Full offers object in schema | Done | event-page.ts:224-241 |
+| Organization schema | Missing | site-chrome.ts has no JSON-LD |
+| containedInPlace hierarchy | Missing | Neighborhood field exists (15/932 events) but not emitted in schema |
+| FAQPage schema | Missing | No implementation |
+| Event lifecycle (cancelled/postponed) | Partial | is_cancelled in DB, but eventStatus hardcoded to EventScheduled |
+| Venue neighborhood data | Sparse | 5 unique neighborhoods, 15 events total (Kolonaki:11, rest:1 each) |
+
+### Dependency Map
+
+```
+Independent (can ship in any order):
+  [A] containedInPlace schema chain
+  [B] Schema additions verification — ALREADY DONE (eventStatus/attendance/free)
+  [C] E-E-A-T pages enhancement — pages exist, need Organization schema
+  [D] Event lifecycle (cancelled → EventCancelled schema)
+
+Coupled (must ship together):
+  [E] Hub page scaffold + [F] FAQPage schema
+
+Separate pipeline:
+  [G] Enrichment templates per type — DONE via matrix enforcement (Session 25)
+```
+
+### Sprint 3a — Quick Wins (1 session)
+
+**Goal:** Ship 3 independent schema improvements. No new templates needed.
+
+**Task 1: containedInPlace chain**
+
+Add neighborhood → city → country hierarchy to event and venue schema.
+
+File: `src/generators/event-page.ts`, function `generateEventSchema()` (line 172-250)
+
+Current location block (lines 181-191):
+```typescript
+'location': {
+  '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
+  'name': event.venue.name,
+  'address': { '@type': 'PostalAddress', ... }
+}
+```
+
+Add after address block:
+```typescript
+'containedInPlace': {
+  '@type': 'City',
+  'name': 'Athens',
+  '@id': 'https://www.wikidata.org/wiki/Q1524',
+  'containedInPlace': {
+    '@type': 'AdministrativeArea',
+    'name': 'Attica',
+    '@id': 'https://www.wikidata.org/wiki/Q758'
+  }
+}
+```
+
+If `event.venue.neighborhood` exists, nest it:
+```typescript
+'containedInPlace': {
+  '@type': 'Neighborhood',
+  'name': displayNeighborhood(event.venue.neighborhood),
+  '@id': NEIGHBORHOOD_QIDS[event.venue.neighborhood] || undefined,
+  'containedInPlace': {
+    '@type': 'City',
+    'name': 'Athens',
+    '@id': 'https://www.wikidata.org/wiki/Q1524'
+  }
+}
+```
+
+Also add to venue-page.ts `generateVenueSchema()` (line 72-118).
+
+Create `config/neighborhoods-wikidata.json` with QIDs for known neighborhoods:
+- Kolonaki → Q1762087
+- Koukaki → Q6433944
+- Gazi → Q5528407
+- Mets → Q6822773
+- Marousi → Q991801
+- Psyrri → Q7256449
+- Exarcheia → Q1383098
+- Monastiraki → Q1946170
+- Plaka → Q1155216
+- Pangrati → Q7130261
+- Syntagma → (part of city center, no dedicated QID)
+- Metaxourgeio → Q6822282
+- Petralona → Q7172072
+
+**Task 2: Verify #18 is complete**
+
+Already confirmed: eventStatus (line 178), eventAttendanceMode (line 179), isAccessibleForFree (lines 222-223) all present. Mark done.
+
+**Task 3: Organization schema on site root**
+
+File: `src/templates/site-chrome.ts`
+
+Add new exported function:
+```typescript
+export function renderOrganizationSchema(): string {
+  return `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "agent athens",
+  "url": "https://agentathens.netlify.app",
+  "description": "AI-curated cultural events calendar for Athens, Greece",
+  "logo": "https://agentathens.netlify.app/favicon.svg",
+  "sameAs": ["https://github.com/chrimar3/agent-athens"],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Athens",
+    "addressCountry": "GR"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Athens",
+    "@id": "https://www.wikidata.org/wiki/Q1524"
+  }
+}
+</script>`;
+}
+```
+
+Inject in `src/templates/page.ts` on the homepage only (or in the `<head>` of all pages via site chrome).
+
+**Task 4: Event lifecycle — conditional eventStatus**
+
+File: `src/generators/event-page.ts` line 178
+
+Replace hardcoded:
+```typescript
+'eventStatus': 'https://schema.org/EventScheduled',
+```
+
+With conditional:
+```typescript
+'eventStatus': event.isCancelled
+  ? 'https://schema.org/EventCancelled'
+  : 'https://schema.org/EventScheduled',
+```
+
+This uses the existing `is_cancelled` DB field. Postponed events are deferred (no DB field yet).
+
+**Verification:**
+- `bun test` passes
+- Schema validator on a sample event page shows containedInPlace chain
+- Organization schema visible on homepage source
+- EventCancelled emitted for any is_cancelled=1 events
+
+---
+
+### Sprint 3b — E-E-A-T Enhancement (1 session)
+
+**Goal:** Strengthen authority signals for AI answer engine citation.
+
+**Task 1: Organization schema integration** (if not done in 3a)
+
+Already covered in 3a Task 3.
+
+**Task 2: Editorial methodology content**
+
+The /editorial/ page exists but could be strengthened. Current content describes data sources and update schedule. Enhancement:
+
+Add to the editorial page content (in `generate-site.ts` inline HTML, lines ~380-400):
+- Data verification methodology (how events are validated)
+- Source reliability hierarchy (which sources are primary vs secondary)
+- Correction response SLA (currently on /corrections/ — cross-link)
+- Last-verified freshness commitment
+
+**Task 3: Source attribution footer audit**
+
+Check if event pages show which source the event was scraped from. Currently:
+- `event.source` is stored in DB
+- Event detail page (event-page.ts) — check if source is displayed
+
+If not displayed, add a subtle footer line: "Πηγή: [source name]" with link to original URL.
+
+This strengthens E-E-A-T by showing provenance.
+
+**Task 4: Author/publisher schema on content pages**
+
+Add `author` and `publisher` to content page schema:
+```json
+{
+  "author": {
+    "@type": "Organization",
+    "name": "agent athens",
+    "@id": "https://agentathens.netlify.app/#organization"
+  }
+}
+```
+
+Use `@id` references to connect Organization schema across pages.
+
+**Verification:**
+- /editorial/ shows methodology details
+- Event pages show source attribution
+- Schema validator shows author/publisher on content pages
+- `bun test` passes
+
+---
+
+### Sprint 3c — Hub Template Architecture (1-2 sessions)
+
+**Goal:** Create hub page framework with FAQPage schema. Ship 2-3 hubs.
+
+**Architecture decisions to make:**
+1. Hub page generator: new file `src/generators/hub-page.ts`
+2. Hub config: new `config/hubs.json` defining hub pages
+3. Hub template: new `src/templates/hub-page.ts`
+
+**5-part hub structure:**
+1. Answer capsule — 2-3 sentence summary answering the hub's implied question
+2. Comparison table — card grid comparing options (reuse existing card component)
+3. Event blocks — filtered event cards (reuse from category page)
+4. FAQ section — 3-5 questions with FAQPage schema
+5. Seasonal narrative — 2-3 sentences about what's happening now
+
+**Initial hubs (highest traffic potential):**
+- `/today/` — already exists as time-filtered page, needs hub treatment
+- `/concerts/` — already exists as category page, needs FAQ + answer capsule
+- `/open/` — new: all events with price="open"
+
+**FAQPage schema template:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "...",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "..."
+      }
+    }
+  ]
+}
+```
+
+**Key files:**
+- New: `src/generators/hub-page.ts`
+- New: `src/templates/hub-page.ts`
+- New: `src/templates/faq-section.ts`
+- New: `config/hubs.json`
+- Modified: `src/generate-site.ts` (add hub generation step)
+
+**This is the largest Sprint 3 effort.** Estimate 1-2 sessions depending on whether we extend existing category pages or create a new generator.
+
+---
+
+### Sprint 3d — Hub Content Expansion (ongoing)
+
+**Goal:** Author FAQ content, seasonal narratives for remaining hubs.
+
+- FAQ authoring for: /clubs/, /theatre/, /exhibitions/, /jazz/, /rebetiko/
+- Seasonal narratives per hub (rotate monthly or per-season)
+- Tier 2 hubs: /this-weekend/, /workshops/, neighborhood hubs (when data improves)
+
+**Content authoring needs identified:**
+- 5-7 FAQ items per hub (35-50 total across initial hubs)
+- Seasonal narrative per category (12 categories × 4 seasons = 48 narratives, but start with 3)
+- Answer capsule per hub (1 paragraph each)
+
+---
+
+### Key Files for Sprint 3 Implementation
+
+| Area | Files |
+|------|-------|
+| containedInPlace | `src/generators/event-page.ts` (line 181-191), `src/generators/venue-page.ts` (line 72-84), new `config/neighborhoods-wikidata.json` |
+| Organization schema | `src/templates/site-chrome.ts`, `src/templates/page.ts` |
+| Event lifecycle | `src/generators/event-page.ts` (line 178) |
+| E-E-A-T | `src/generate-site.ts` (editorial content), `src/generators/event-page.ts` (source attribution) |
+| Hub pages | New `src/generators/hub-page.ts`, new `src/templates/hub-page.ts`, new `config/hubs.json` |
+| FAQPage | New `src/templates/faq-section.ts`, integrated into hub template |
