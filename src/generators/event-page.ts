@@ -503,7 +503,7 @@ export function renderRelatedEventCard(event: Event): string {
 
   let priceText: string;
   if (event.price.type === 'open') {
-    priceText = 'Δωρεάν';
+    priceText = 'Ελεύθερη είσοδος';
   } else if (event.price.amount && event.price.amount > 0) {
     priceText = `€${event.price.amount}`;
   } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {
@@ -526,7 +526,7 @@ export function renderRelatedEventCard(event: Event): string {
 
   return `
   <a href="${href}" class="event-card">
-    <div class="card-image-wrapper">
+    <div class="card-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>

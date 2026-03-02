@@ -269,13 +269,13 @@ a:hover {
 .event-card:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 4px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .card-image-wrapper {
   position: relative;
   padding-top: 133.33%; /* 3:4 portrait aspect ratio */
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--bg-elevated);
   overflow: hidden;
 }
@@ -384,14 +384,13 @@ a:hover {
 
 .card-badge {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
+  bottom: var(--space-sm);
+  left: var(--space-sm);
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
   color: var(--text-on-bright);
   line-height: 1;
 }
@@ -402,14 +401,14 @@ a:hover {
 
 .card-badge-open {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
   font-size: 11px;
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
   background: var(--color-exhibition);
   color: var(--text-on-bright);
   line-height: 1;
@@ -418,12 +417,12 @@ a:hover {
 .card-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 0 0 0;
+  gap: var(--space-xs);
+  padding: var(--space-sm-md) 0 0 0;
 }
 
 .card-title {
-  font-size: 20px;
+  font-size: var(--type-h3);
   font-weight: var(--font-weight-bold);
   line-height: 1.2;
   color: var(--text-primary);
@@ -439,17 +438,17 @@ a:hover {
 }
 
 .card-date {
-  font-size: 14px;
+  font-size: var(--type-small);
   color: var(--accent-primary);
 }
 
 .card-venue {
-  font-size: 14px;
+  font-size: var(--type-small);
   color: var(--text-secondary);
 }
 
 .card-price {
-  font-size: 14px;
+  font-size: var(--type-small);
   color: var(--text-tertiary);
 }
 
@@ -498,7 +497,6 @@ a:hover {
 
 @media (max-width: 767px) {
   .card-image-wrapper { max-height: 280px; }
-  .card-title { font-size: 18px; }
   .date-group-header { font-size: 18px; top: 56px; }
 }
 
@@ -1999,6 +1997,53 @@ a:hover {
 @keyframes skeleton-sweep {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* Card skeleton — grid card shape */
+.card-skeleton { display: block; }
+.skeleton-image {
+  padding-top: 133.33%;
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 400% 100%;
+  animation: skeleton-sweep 1.4s ease infinite;
+}
+.skeleton-title {
+  height: 20px; width: 80%;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-sm-md);
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 400% 100%;
+  animation: skeleton-sweep 1.4s ease infinite;
+}
+.skeleton-meta {
+  height: 14px; width: 60%;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-xs);
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 400% 100%;
+  animation: skeleton-sweep 1.4s ease infinite;
+}
+.skeleton-meta.short { width: 40%; }
+
+/* Sold-out state — activates when template emits data-sold-out */
+.event-card[data-sold-out] .card-image-wrapper {
+  filter: grayscale(0.6);
+  opacity: 0.7;
+}
+.event-card[data-sold-out] .card-body { opacity: 0.6; }
+.card-badge-sold-out {
+  position: absolute;
+  top: var(--space-sm); right: var(--space-sm);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--status-error);
+  color: var(--text-primary);
+  line-height: 1;
 }
 
 /* Active item highlight (keyboard nav) */

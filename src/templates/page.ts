@@ -232,7 +232,7 @@ export function prepareCardData(event: Event): CardData {
   // Price — text only, no links (detail page has full info)
   let priceText: string;
   if (event.price.type === 'open') {
-    priceText = 'Δωρεάν';
+    priceText = 'Ελεύθερη είσοδος';
   } else if (event.price.amount && event.price.amount > 0) {
     priceText = `€${event.price.amount}`;
   } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {

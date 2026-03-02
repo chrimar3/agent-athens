@@ -242,7 +242,7 @@ describe("renderEventCard (via renderPage)", () => {
     const html = renderPage(metadata, [sampleFreeExhibition]);
 
     expect(html).toContain('class="card-price"');
-    expect(html).toContain("Δωρεάν");
+    expect(html).toContain("Ελεύθερη είσοδος");
   });
 
   test("should render ticketed event price with amount", () => {
