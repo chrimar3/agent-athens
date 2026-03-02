@@ -1,4 +1,4 @@
-# Enrichment Brief — Batch 3
+# Enrichment Brief — Batch 5
 
 You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.
 
@@ -35,95 +35,80 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
 ## Events to Enrich
 
-### Διψάω
-- **ID**: 924366d4ff9ba61b
-- **Type**: concert
-- **Venue**: Bios Ρομάντσο
-- **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/dipsao-10081092/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words**: 80-120
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
-
-### VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste
-- **ID**: 4668c24970537fec
+### Reaktiv
+- **ID**: fbdd2a6f7ea937ad
 - **Type**: dj_set
-- **Venue**: Universe
-- **Price**: paid
-- **Date**: 2026-03-21
-- **Time**: 23:59
-- **URL**: https://www.more.com/gr-el/tickets/music/vlctzero002/
-- **Source**: more.com
+- **Venue**: Cantina Social
+- **Price**: door
+- **Date**: 2026-03-15T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.clubber.gr/events/reaktiv-3/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Universe Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Cantina Social Athens" for context.
 
-### Οι περιπέτειες της Πέππα
-- **ID**: a7618df11e158e91
+### Το μαύρο ψαράκι
+- **ID**: b09702837509a079
 - **Type**: theater
-- **Venue**: Θέατρο Βέμπο
-- **Price**: paid
+- **Venue**: Μικρός Κεραμεικός
+- **Price**: tba
 - **Date**: 2026-03-02T11:30:00
 - **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/oi_peripeteies_tis_peppa-10086835/
+- **URL**: https://www.athinorama.gr/theatre/performance/to_mauro_psaraki-10087731/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words**: 120-180
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Βέμπο Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Μικρός Κεραμεικός Athens" for context.
 
-### Ευρυδίκη
-- **ID**: 33035e927edadc85
+### Νέκυια
+- **ID**: 1274634ab97e39bd
 - **Type**: concert
-- **Venue**: Rabbithole
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/eurudiki-10088821/
+- **Date**: 2026-03-02T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/theatre/performance/nekuia-10089255/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words**: 80-120
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Rabbithole Athens" for context.
+- **Category**: premium_showcase
+- **Target words**: 400-600
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: Description MUST be 400-600 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Alex Kósh + Aphrodite
-- **ID**: 435044c6a914e1a9
+### Chris Child + D. Tzere
+- **ID**: 93d806deb516ab48
 - **Type**: dj_set
 - **Venue**: Wild Poppies
 - **Price**: door
-- **Date**: 2026-03-21T21:00:00
+- **Date**: 2026-03-20T21:00:00
 - **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/alex-kosh-aphrodite/
+- **URL**: https://www.clubber.gr/events/chris-child-d-tzere/
 - **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
 - **Venue intel**: Not in database. WebSearch "Wild Poppies Athens" for context.
+
+### Το όνειρο του Πινόκιο
+- **ID**: fca978dadaba1ada
+- **Type**: theater
+- **Venue**: Calderone Art Space
+- **Price**: paid
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_oneiro_tou_pinokio-10089238/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Calderone Art Space Athens" for context.
 
 ---
 
@@ -148,18 +133,18 @@ For EACH event:
 5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
-   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-5.manifest.json --session=batch-5 --batch=5 --clean
    ```
-   Note "AUTO-SAVED" at the top of batch-3-review.md.
+   Note "AUTO-SAVED" at the top of batch-5-review.md.
    - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
-     Note "LEFT FOR REVIEW" at the top of batch-3-review.md with reasons.
+     Note "LEFT FOR REVIEW" at the top of batch-5-review.md with reasons.
 
-After all events, create `temp-descriptions/batch-3-review.md` with:
+After all events, create `temp-descriptions/batch-5-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 924366d4ff9ba61b | Διψάω | /100 | | |
-| 4668c24970537fec | VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste | /100 | | |
-| a7618df11e158e91 | Οι περιπέτειες της Πέππα | /100 | | |
-| 33035e927edadc85 | Ευρυδίκη | /100 | | |
-| 435044c6a914e1a9 | Alex Kósh + Aphrodite | /100 | | |
+| fbdd2a6f7ea937ad | Reaktiv | /100 | | |
+| b09702837509a079 | Το μαύρο ψαράκι | /100 | | |
+| 1274634ab97e39bd | Νέκυια | /100 | | |
+| 93d806deb516ab48 | Chris Child + D. Tzere | /100 | | |
+| fca978dadaba1ada | Το όνειρο του Πινόκιο | /100 | | |

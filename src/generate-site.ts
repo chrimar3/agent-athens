@@ -24,6 +24,7 @@ import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
+import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');

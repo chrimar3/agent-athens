@@ -6,7 +6,7 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 1. **8-section structure**: Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer
 2. **Voice**: Second person ("you"), present tense, sensory-first. Transport before inform.
-3. **Word count**: 400-600 words of pure narrative per event
+3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.
 4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)
 5. **Filter section**: Always include "If you [don't want X]... But if you [want Y]..."
 6. **Show don't tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)
@@ -31,112 +31,84 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
-## Recent Openings (DO NOT REUSE)
-
-These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
-
-- "Pos Milaei i Mousiki gia ton Eafto tis is a four-session music lecture series at the Educational Programs Hall of Megaron Mousikis in Athens, running Mondays in March 2026."
-- "Mikres Tapeinoseis is a musical-theater composition at Baumstrasse in Botanikos, running Mondays and Tuesdays in March 2026."
-- "Love is a DJ-set night at Cantina Social in Psyrri, Athens, on Sunday March 8, 2026."
-- "Mazi gia tin Zoi is a charity concert at the Olympia Municipal Music Theatre on Akademias Street in central Athens, on March 3, 2026."
-- "Mesa sto Myalo Sou Part 2 is an interactive psychology performance at Theatro Aliki on Amerikis Street in central Athens, running Mondays through the 2025-2026 season."
-- "Jazz Standards is a butoh dance-theater performance at Skini Brecht-2510 on 3is Septemvriou, near Omonia."
-- "All Night Long MATEA x Alisa Murphy is a DJ set at 2ten in the basement of Nomads on Ermou 135, central Athens."
-- "Andronikos and Katerina Terzopoulou play a live set at Caja de Musica on Sinopis 27 in Ampelokipoi."
-- "Little Eyolf by Henrik Ibsen plays at PLYFA in the converted factory buildings of Votanikos, directed by Dinos Psychogios."
-- "CanniLAB #3 is a day-into-night electronic music event at Romantso on Anaxagora 3-5, near Omonia."
-- "Toxic Rave x Oddity with NOAH (BR) is a techno night at Oddity in Thissio on Friday, March 13."
-- "For Women by Angeliki Toubanaki 5tet is a concert at Half Note Jazz Club in Mets on Wednesday, March 4."
-- "I Dynami tis Synithias vol."
-- "Salvi K is a DJ set at Cantina Social in Psyri on Thursday, March 13, starting at 23:00."
-- "Giannis Charoulis at Stavros tou Notou is a four-night concert residency in Neos Kosmos, running every Thursday in March — his first appearance on this stage in thirteen years."
-
 ---
 
 ## Events to Enrich
 
-### Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου
-- **ID**: 3ec53d23190ff5e7
-- **Type**: concert
-- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
-- **Price**: tba
-- **Date**: 2026-03-02T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/ntenekedoupoli_ksana!_to_megalo_taksidi_tou_meleniou-10083469/
-- **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
-
-### CLUB NIGHT with Saber Rider • Baggymilziade • Jim Captain • Mat|toni
-- **ID**: a05f6b121f350c98
+### Reaktiv
+- **ID**: fbdd2a6f7ea937ad
 - **Type**: dj_set
-- **Venue**: Bios Ρομάντσο
-- **Price**: paid
-- **Date**: 2026-03-07T23:00:00
-- **Time**: 23:00
-- **URL**: https://ra.co/events/2382751
-- **Source**: residentadvisor
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
+- **Venue**: Cantina Social
+- **Price**: door
+- **Date**: 2026-03-15T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.clubber.gr/events/reaktiv-3/
+- **Source**: clubber.gr
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Cantina Social Athens" for context.
 
-### Ο Λούτσιο και το ταξίδι στον πλανήτη Κιαροσκούρο
-- **ID**: 1303ea5379d084b6
+### Το μαύρο ψαράκι
+- **ID**: b09702837509a079
 - **Type**: theater
-- **Venue**: Θέατρο Μαβίλη
-- **Price**: paid
-- **Date**: 2026-03-02T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/o_loutsio_kai_to_taksidi_ston_planiti_kiaroskouro-10088872/
+- **Venue**: Μικρός Κεραμεικός
+- **Price**: tba
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_mauro_psaraki-10087731/
 - **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Θέατρο Μαβίλη Athens" for context.
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Μικρός Κεραμεικός Athens" for context.
 
-### Η βασίλισσα των πάντων
-- **ID**: ad6781f1f795896b
+### Νέκυια
+- **ID**: 1274634ab97e39bd
 - **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-02T12:30:00
-- **Time**: 12:30
-- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
+- **Date**: 2026-03-02T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/theatre/performance/nekuia-10089255/
 - **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words**: 400-600
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: Description MUST be 400-600 words.
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### GroovePulse x Hardvision: Alisa Murphy + Emperør + Mechanist + Naamaa + Saniter b2b Ther3min + Sl/Sh b2b Mvru
-- **ID**: 9661284773b610c9
+### Chris Child + D. Tzere
+- **ID**: 93d806deb516ab48
 - **Type**: dj_set
-- **Venue**: Oddity
-- **Price**: paid
-- **Date**: 2026-03-07T23:45:00
-- **Time**: 23:45
-- **URL**: https://www.clubber.gr/events/groovepulse-x-hardvision-alisa-murphy-emperor-mechanist-naamaa-saniter-b2b-ther3min-sl-sh-b2b-mvru/
+- **Venue**: Wild Poppies
+- **Price**: door
+- **Date**: 2026-03-20T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.clubber.gr/events/chris-child-d-tzere/
 - **Source**: clubber.gr
-- **Venue intel** (from database):
-  ```
-  ### Oddity
-  | Field | Data |
-  |-------|------|
-  | **Address** | Irakleidon 61 |
-  | **Metro** | Thissio (Green) |
-  | **Capacity** | ~200 |
-  | **Entry** | €8-15 |
-  | **Regular nights** | Blend collective (progressive/melodic) |
-  | **Character** | Counterpoint to harder Gazi sounds |
-  
-  ---
-  ```
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Wild Poppies Athens" for context.
+
+### Το όνειρο του Πινόκιο
+- **ID**: fca978dadaba1ada
+- **Type**: theater
+- **Venue**: Calderone Art Space
+- **Price**: paid
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_oneiro_tou_pinokio-10089238/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Calderone Art Space Athens" for context.
 
 ---
 
@@ -149,10 +121,11 @@ For EACH event:
    ```bash
    bun run scripts/write-description.ts <event-id> "<description text>"
    ```
-3. **Gate check**: Validate quality:
+3. **Gate check**: Validate quality (use the tier shown for each event):
    ```bash
-   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=premium --event-id=<event-id>
+   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=<tier> --event-id=<event-id>
    ```
+   Tier mapping: three-part-block=stub, hybrid=standard, full-8-section=premium
 4. **Write tags** (from taxonomy in docs/MASTER-ENRICHMENT-TEMPLATE.md):
    ```bash
    bun run scripts/write-tags.ts <event-id> Tag1 Tag2 Tag3...
@@ -170,8 +143,8 @@ After all events, create `temp-descriptions/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 3ec53d23190ff5e7 | Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου | /100 | | |
-| a05f6b121f350c98 | CLUB NIGHT with Saber Rider • Baggymilziade • Jim Captain • Mat|toni | /100 | | |
-| 1303ea5379d084b6 | Ο Λούτσιο και το ταξίδι στον πλανήτη Κιαροσκούρο | /100 | | |
-| ad6781f1f795896b | Η βασίλισσα των πάντων | /100 | | |
-| 9661284773b610c9 | GroovePulse x Hardvision: Alisa Murphy + Emperør + Mechanist + Naamaa + Saniter b2b Ther3min + Sl/Sh b2b Mvru | /100 | | |
+| fbdd2a6f7ea937ad | Reaktiv | /100 | | |
+| b09702837509a079 | Το μαύρο ψαράκι | /100 | | |
+| 1274634ab97e39bd | Νέκυια | /100 | | |
+| 93d806deb516ab48 | Chris Child + D. Tzere | /100 | | |
+| fca978dadaba1ada | Το όνειρο του Πινόκιο | /100 | | |

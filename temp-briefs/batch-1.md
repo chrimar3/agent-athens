@@ -6,7 +6,7 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 1. **8-section structure**: Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer
 2. **Voice**: Second person ("you"), present tense, sensory-first. Transport before inform.
-3. **Word count**: 400-600 words of pure narrative per event
+3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.
 4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)
 5. **Filter section**: Always include "If you [don't want X]... But if you [want Y]..."
 6. **Show don't tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)
@@ -31,84 +31,84 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
-## Recent Openings (DO NOT REUSE)
-
-These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
-
-- "Pos Milaei i Mousiki gia ton Eafto tis is a four-session music lecture series at the Educational Programs Hall of Megaron Mousikis in Athens, running Mondays in March 2026."
-- "Mikres Tapeinoseis is a musical-theater composition at Baumstrasse in Botanikos, running Mondays and Tuesdays in March 2026."
-- "Love is a DJ-set night at Cantina Social in Psyrri, Athens, on Sunday March 8, 2026."
-- "Mazi gia tin Zoi is a charity concert at the Olympia Municipal Music Theatre on Akademias Street in central Athens, on March 3, 2026."
-- "Mesa sto Myalo Sou Part 2 is an interactive psychology performance at Theatro Aliki on Amerikis Street in central Athens, running Mondays through the 2025-2026 season."
-- "Jazz Standards is a butoh dance-theater performance at Skini Brecht-2510 on 3is Septemvriou, near Omonia."
-- "All Night Long MATEA x Alisa Murphy is a DJ set at 2ten in the basement of Nomads on Ermou 135, central Athens."
-- "Andronikos and Katerina Terzopoulou play a live set at Caja de Musica on Sinopis 27 in Ampelokipoi."
-- "Little Eyolf by Henrik Ibsen plays at PLYFA in the converted factory buildings of Votanikos, directed by Dinos Psychogios."
-- "CanniLAB #3 is a day-into-night electronic music event at Romantso on Anaxagora 3-5, near Omonia."
-- "Toxic Rave x Oddity with NOAH (BR) is a techno night at Oddity in Thissio on Friday, March 13."
-- "For Women by Angeliki Toubanaki 5tet is a concert at Half Note Jazz Club in Mets on Wednesday, March 4."
-- "I Dynami tis Synithias vol."
-- "Salvi K is a DJ set at Cantina Social in Psyri on Thursday, March 13, starting at 23:00."
-- "Giannis Charoulis at Stavros tou Notou is a four-night concert residency in Neos Kosmos, running every Thursday in March — his first appearance on this stage in thirteen years."
-
 ---
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 32bb1f38f00daf2a
+### Κούκου, μια βόλτα στο δάσος
+- **ID**: fef7e513929aa8f8
 - **Type**: theater
-- **Venue**: Olvio
+- **Venue**: Μορφές Έκφρασης
 - **Price**: paid
-- **Date**: 2026-03-02T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/koukou_mia_bolta_sto_dasos-10051151/
 - **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Μορφές Έκφρασης Athens" for context.
 
-### Το μαγικό εισιτήριο
-- **ID**: ee5cf6286dd54252
+### Καραγκιοζοπαίχτης νυν και αεί
+- **ID**: 655db2e2cc39cca6
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
 - **Price**: paid
-- **Date**: 2026-03-02T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
+- **Date**: 2026-03-02T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.athinorama.gr/theatre/performance/karagkiozopaixtis_nun_kai_aei-10088892/
 - **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
 
-### Αλιγάτορες
-- **ID**: 269648c1d06ca1c3
+### CLUB BOTTOM
+- **ID**: 4419e83d5ccfb8a2
 - **Type**: dj_set
-- **Venue**: AUDITORIUM
+- **Venue**: Don't be a Dick
 - **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
-- **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Date**: 2026-03-15T20:00:00
+- **Time**: 20:00
+- **URL**: https://ra.co/events/2364676
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Don't be a Dick Athens" for context.
 
-### Δεν θα πεθάνουμε κιόλας
-- **ID**: 979c7af064c14b9c
-- **Type**: show
-- **Venue**: Red Jasper Cabaret Theatre
-- **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/
-- **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
-
-### In motion: Ένα άγαλμα που το ’σκασε
-- **ID**: 88f61c7ebf498494
+### Ο κουρέας της Σεβίλλης
+- **ID**: 4eaa98f21a596514
 - **Type**: theater
-- **Venue**: Δημοτικό Θέατρο Πειραιά
-- **Price**: tba
-- **Date**: 2026-03-02T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
+- **Venue**: Πορεία at Victoria
+- **Price**: paid
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_koureas_tis_sebillis-10087640/
 - **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Πορεία at Victoria Athens" for context.
+
+### Ο Γιάννης το βούδι
+- **ID**: 2b7bc03a56e1effc
+- **Type**: concert
+- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
+- **Price**: paid
+- **Date**: 2026-03-02T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_giannis_to_boudi-10084390/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
 
 ---
 
@@ -121,10 +121,11 @@ For EACH event:
    ```bash
    bun run scripts/write-description.ts <event-id> "<description text>"
    ```
-3. **Gate check**: Validate quality:
+3. **Gate check**: Validate quality (use the tier shown for each event):
    ```bash
-   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=premium --event-id=<event-id>
+   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=<tier> --event-id=<event-id>
    ```
+   Tier mapping: three-part-block=stub, hybrid=standard, full-8-section=premium
 4. **Write tags** (from taxonomy in docs/MASTER-ENRICHMENT-TEMPLATE.md):
    ```bash
    bun run scripts/write-tags.ts <event-id> Tag1 Tag2 Tag3...
@@ -142,8 +143,8 @@ After all events, create `temp-descriptions/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 32bb1f38f00daf2a | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| ee5cf6286dd54252 | Το μαγικό εισιτήριο | /100 | | |
-| 269648c1d06ca1c3 | Αλιγάτορες | /100 | | |
-| 979c7af064c14b9c | Δεν θα πεθάνουμε κιόλας | /100 | | |
-| 88f61c7ebf498494 | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
+| fef7e513929aa8f8 | Κούκου, μια βόλτα στο δάσος | /100 | | |
+| 655db2e2cc39cca6 | Καραγκιοζοπαίχτης νυν και αεί | /100 | | |
+| 4419e83d5ccfb8a2 | CLUB BOTTOM | /100 | | |
+| 4eaa98f21a596514 | Ο κουρέας της Σεβίλλης | /100 | | |
+| 2b7bc03a56e1effc | Ο Γιάννης το βούδι | /100 | | |

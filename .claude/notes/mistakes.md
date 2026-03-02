@@ -117,6 +117,14 @@ Pitfalls encountered and how to avoid them.
 | Using db execute method in new scripts | Security hook blocked file writes, thinking SQLite's execute was Node's child_process execute | Use `db.run()` for all DDL statements (CREATE TABLE, ALTER TABLE, PRAGMA) — functionally identical but avoids hook false positive |
 | No callToolAgent() module | Plan referenced non-existent AI API module | Scripts output data for interactive Claude Code sessions. Never import an AI API module |
 
+## Parallel Subagent Manifest Contamination (2026-03-02)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Parallel agents overwriting manifest files | 3 agents launched for batches 4/5/6 — agent "batch 4" processed batch 6's events, agent "batch 5" processed batch 4's events, agent "batch 6" also processed batch 4's events. Batch 5 events (including premium Nekyia) required a 4th agent re-run | Agents must verify manifest event IDs match the event IDs in their brief before processing. Add manifest validation to subagent prompts |
+| Agents couldn't find batch-N.md files | Despite files existing, agents reported "file not found" and fell back to other briefs | May be a timing issue with file creation vs agent start. Consider adding a verification step that the brief file exists before launching agents |
+| `save-batch --clean` deletes other batches' temp files | When agents saved wrong manifests, `--clean` removed description files belonging to other batches | Only use `--clean` on the final save, or ensure manifest event IDs are correct before any `--clean` operation |
+
 ## Automation Issues (2026-02-12)
 
 | Mistake | What Happened | Correct Approach |

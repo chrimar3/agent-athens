@@ -1,4 +1,4 @@
-# Enrichment Brief — Batch 3
+# Enrichment Brief — Batch 6
 
 You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.
 
@@ -35,95 +35,80 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
 ## Events to Enrich
 
-### Διψάω
-- **ID**: 924366d4ff9ba61b
-- **Type**: concert
-- **Venue**: Bios Ρομάντσο
-- **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/dipsao-10081092/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words**: 80-120
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
-
-### VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste
-- **ID**: 4668c24970537fec
-- **Type**: dj_set
-- **Venue**: Universe
-- **Price**: paid
-- **Date**: 2026-03-21
-- **Time**: 23:59
-- **URL**: https://www.more.com/gr-el/tickets/music/vlctzero002/
-- **Source**: more.com
-- **Category**: concert_local
-- **Target words**: 80-120
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Universe Athens" for context.
-
-### Οι περιπέτειες της Πέππα
-- **ID**: a7618df11e158e91
+### Κούκου, μια βόλτα στο δάσος
+- **ID**: fef7e513929aa8f8
 - **Type**: theater
-- **Venue**: Θέατρο Βέμπο
+- **Venue**: Μορφές Έκφρασης
 - **Price**: paid
 - **Date**: 2026-03-02T11:30:00
 - **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/oi_peripeteies_tis_peppa-10086835/
+- **URL**: https://www.athinorama.gr/theatre/performance/koukou_mia_bolta_sto_dasos-10051151/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words**: 120-180
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Βέμπο Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Μορφές Έκφρασης Athens" for context.
 
-### Ευρυδίκη
-- **ID**: 33035e927edadc85
+### Καραγκιοζοπαίχτης νυν και αεί
+- **ID**: 655db2e2cc39cca6
 - **Type**: concert
-- **Venue**: Rabbithole
+- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
 - **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/eurudiki-10088821/
+- **Date**: 2026-03-02T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.athinorama.gr/theatre/performance/karagkiozopaixtis_nun_kai_aei-10088892/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Rabbithole Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
 
-### Alex Kósh + Aphrodite
-- **ID**: 435044c6a914e1a9
+### CLUB BOTTOM
+- **ID**: 4419e83d5ccfb8a2
 - **Type**: dj_set
-- **Venue**: Wild Poppies
-- **Price**: door
-- **Date**: 2026-03-21T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/alex-kosh-aphrodite/
-- **Source**: clubber.gr
+- **Venue**: Don't be a Dick
+- **Price**: paid
+- **Date**: 2026-03-15T20:00:00
+- **Time**: 20:00
+- **URL**: https://ra.co/events/2364676
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Wild Poppies Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Don't be a Dick Athens" for context.
+
+### Ο κουρέας της Σεβίλλης
+- **ID**: 4eaa98f21a596514
+- **Type**: theater
+- **Venue**: Πορεία at Victoria
+- **Price**: paid
+- **Date**: 2026-03-02T11:30:00
+- **Time**: 11:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_koureas_tis_sebillis-10087640/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Πορεία at Victoria Athens" for context.
+
+### Ο Γιάννης το βούδι
+- **ID**: 2b7bc03a56e1effc
+- **Type**: concert
+- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
+- **Price**: paid
+- **Date**: 2026-03-02T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_giannis_to_boudi-10084390/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
 
 ---
 
@@ -148,18 +133,18 @@ For EACH event:
 5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
-   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-6.manifest.json --session=batch-6 --batch=6 --clean
    ```
-   Note "AUTO-SAVED" at the top of batch-3-review.md.
+   Note "AUTO-SAVED" at the top of batch-6-review.md.
    - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
-     Note "LEFT FOR REVIEW" at the top of batch-3-review.md with reasons.
+     Note "LEFT FOR REVIEW" at the top of batch-6-review.md with reasons.
 
-After all events, create `temp-descriptions/batch-3-review.md` with:
+After all events, create `temp-descriptions/batch-6-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 924366d4ff9ba61b | Διψάω | /100 | | |
-| 4668c24970537fec | VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste | /100 | | |
-| a7618df11e158e91 | Οι περιπέτειες της Πέππα | /100 | | |
-| 33035e927edadc85 | Ευρυδίκη | /100 | | |
-| 435044c6a914e1a9 | Alex Kósh + Aphrodite | /100 | | |
+| fef7e513929aa8f8 | Κούκου, μια βόλτα στο δάσος | /100 | | |
+| 655db2e2cc39cca6 | Καραγκιοζοπαίχτης νυν και αεί | /100 | | |
+| 4419e83d5ccfb8a2 | CLUB BOTTOM | /100 | | |
+| 4eaa98f21a596514 | Ο κουρέας της Σεβίλλης | /100 | | |
+| 2b7bc03a56e1effc | Ο Γιάννης το βούδι | /100 | | |
