@@ -112,6 +112,27 @@ export interface FilterCounts {
   timeRanges: FilterCountOption[];
 }
 
+export interface HubFaq {
+  questionEl: string;
+  answerEl: string;
+}
+
+export type HubFilter =
+  | { type: 'date'; value: string }
+  | { type: 'event_type'; value: string }
+  | { type: 'event_types'; values: string[] }
+  | { type: 'tag'; values: string[] }
+  | { type: 'price_type'; value: string };
+
+export interface HubConfig {
+  slug: string;
+  titleEl: string;
+  titleEn: string;
+  filter: HubFilter;
+  answerCapsuleEl: string;
+  faqs: HubFaq[];
+}
+
 export interface RawEvent {
   title: string;
   date: string;

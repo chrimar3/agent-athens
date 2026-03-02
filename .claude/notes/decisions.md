@@ -716,6 +716,33 @@ All gate scores were 78-84/100 (below 85 auto-save threshold) due to `bun:sqlite
 | Investigate gate checker sandbox DB access | False-positive score depression blocks auto-save; need to either pass DB context via args or relax sandbox restrictions | 2026-03-02 |
 | Add manifest file validation to subagent prompts | Agents must verify manifest event IDs match brief event IDs before processing; prevents cross-batch contamination | 2026-03-02 |
 
+## Infrastructure Fixes — Manifest Contamination + Gate Checker (2026-03-02)
+
+### Fix 1: Batch-Scoped Temp Directories
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Each batch gets its own `temp-descriptions/batch-N/` subdir | File-system-level isolation prevents parallel subagents from overwriting each other's work; no locks needed | 2026-03-02 |
+| Add `output_dir` field to manifest JSON | `save-batch.ts` reads descriptions from manifest-specified dir instead of hardcoded `temp-descriptions/` | 2026-03-02 |
+| Add verification checklist to top of each brief | Subagents verify event IDs and output dir before writing; prevents wrong-batch processing | 2026-03-02 |
+| Add `--batch-dir` flag to `write-description.ts` and `write-tags.ts` | Backward compatible — defaults to `temp-descriptions/` when flag not provided | 2026-03-02 |
+
+### Fix 2: Gate Checker CLI Metadata Flags
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Add `--event-type`, `--event-venue`, `--event-title`, `--event-date`, `--event-price`, `--event-genre` flags to `auto-gate-check.ts` | CLI flags bypass DB entirely; works in sandboxed environments where `bun:sqlite` fails with `SQLITE_CANTOPEN` | 2026-03-02 |
+| Priority chain: CLI flags > DB lookup > filename fallback | CLI flags always win (sandbox-safe); DB used only when no flags and DB accessible; filename is last resort | 2026-03-02 |
+| Generate per-event gate-check commands in brief | Brief now includes copy-paste-ready gate-check commands with all metadata flags pre-filled from DB data | 2026-03-02 |
+
+### Files Modified
+
+- `scripts/generate-enrichment-brief.ts` — `output_dir` in manifest, verification checklist, batch subdirs, per-event gate-check commands
+- `scripts/save-batch.ts` — reads `output_dir` from manifest, batch subdir cleanup
+- `scripts/write-description.ts` — `--batch-dir` flag
+- `scripts/write-tags.ts` — `--batch-dir` flag
+- `scripts/auto-gate-check.ts` — CLI metadata flags, `buildEventContext()` priority chain
+
 ## Filter Bar Polish — Phase 4C (2026-02-25)
 
 | Decision | Why | Date |
@@ -793,54 +820,26 @@ Separate pipeline:
 
 ---
 
-### Sprint 3b — E-E-A-T Enhancement (1 session)
+### Sprint 3b — E-E-A-T Infrastructure ✅ COMPLETE (Session 28, 2026-03-02)
 
 **Goal:** Strengthen authority signals for AI answer engine citation.
 
-**Task 1: Organization schema integration** (if not done in 3a)
+**Completed:**
+1. **Content page template** — Extended `renderContentPage()` with optional `schemaJson` and `metaDescription` params (backward compatible)
+2. **Expanded content pages** — About (~350 words), Editorial (~400 words), Corrections (~300 words) with substantive Greek prose
+3. **Schema.org on content pages** — AboutPage on /about/, WebPage on /editorial/ and /corrections/, all with publisher reference to ORGANIZATION_SCHEMA
+4. **Custom meta descriptions** — Per-page meta descriptions replacing the generic template
+5. **Source attribution display names** — Created `config/source-attribution.json` (16 sources), event pages now show "Half Note Jazz Club" instead of "halfnote"
+6. **Footer navigation** — Added /editorial/ and /corrections/ to the Σχετικά column
+7. **llms.txt About section** — Added links to all 3 authority pages
 
-Already covered in 3a Task 3.
-
-**Task 2: Editorial methodology content**
-
-The /editorial/ page exists but could be strengthened. Current content describes data sources and update schedule. Enhancement:
-
-Add to the editorial page content (in `generate-site.ts` inline HTML, lines ~380-400):
-- Data verification methodology (how events are validated)
-- Source reliability hierarchy (which sources are primary vs secondary)
-- Correction response SLA (currently on /corrections/ — cross-link)
-- Last-verified freshness commitment
-
-**Task 3: Source attribution footer audit**
-
-Check if event pages show which source the event was scraped from. Currently:
-- `event.source` is stored in DB
-- Event detail page (event-page.ts) — check if source is displayed
-
-If not displayed, add a subtle footer line: "Πηγή: [source name]" with link to original URL.
-
-This strengthens E-E-A-T by showing provenance.
-
-**Task 4: Author/publisher schema on content pages**
-
-Add `author` and `publisher` to content page schema:
-```json
-{
-  "author": {
-    "@type": "Organization",
-    "name": "agent athens",
-    "@id": "https://agentathens.netlify.app/#organization"
-  }
-}
-```
-
-Use `@id` references to connect Organization schema across pages.
-
-**Verification:**
-- /editorial/ shows methodology details
-- Event pages show source attribution
-- Schema validator shows author/publisher on content pages
-- `bun test` passes
+**Key files:**
+- `src/templates/content-page.ts` — Schema + meta options
+- `src/generate-site.ts` — Expanded content + schema definitions
+- `config/source-attribution.json` — Source ID → display name mapping
+- `src/generators/event-page.ts` — Display name in source attribution
+- `src/templates/site-chrome.ts` — Footer links
+- `tests/eeat-pages.test.ts` — 18 tests covering all changes
 
 ---
 
@@ -919,3 +918,6 @@ Use `@id` references to connect Organization schema across pages.
 | E-E-A-T | `src/generate-site.ts` (editorial content), `src/generators/event-page.ts` (source attribution) |
 | Hub pages | New `src/generators/hub-page.ts`, new `src/templates/hub-page.ts`, new `config/hubs.json` |
 | FAQPage | New `src/templates/faq-section.ts`, integrated into hub template |
+| Hub filter extension (9 hubs) | Added `event_types`, `tag`, `price_type` filters via discriminated union `HubFilter` in `types.ts`. 6 new hubs: /theater, /nightlife, /festivals, /kids, /exhibitions (auto-skip), /open | 2026-03 |
+| Hub metadata override | Hub pages override `<title>`, `<meta description>`, `<meta keywords>` to avoid generic "δωρεάν"/"free" from `buildPageMetadata()`. Uses hub's own `titleEl` and `answerCapsuleEl` | 2026-03 |
+| /live-music dropped | Overlaps with /concerts; dropped permanently to avoid cannibalization | 2026-03 |
