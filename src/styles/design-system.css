@@ -983,7 +983,7 @@ a:hover {
   display: flex;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 40px 0;
+  padding: 0;
 }
 
 /* Inner scroll container — horizontal pill scrolling.
