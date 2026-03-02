@@ -8,6 +8,7 @@ import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
+import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -125,6 +126,9 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <script type="application/ld+json">
   ${schemaMarkup}
   </script>
+  ${url === 'index' ? `<script type="application/ld+json">
+  ${JSON.stringify(ORGANIZATION_SCHEMA, null, 2)}
+  </script>` : ''}
 
   <!-- Design system -->
   <meta name="view-transition" content="same-origin">
@@ -285,7 +289,7 @@ function renderEventCard(event: Event): string {
       <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
       <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${priceText}</span>${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}</span>
     </div>
-    <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+    <meta itemprop="eventStatus" content="${resolveEventStatus(event.startDate, event.endDate, event.type)}">
     <meta itemprop="description" content="${shortDesc}">
   </a>`;
 }
@@ -375,6 +379,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
       "name": event.title,
       "description": `${event.type} event in Athens`,
       "startDate": event.startDate,
+      "eventStatus": resolveEventStatus(event.startDate, event.endDate, event.type),
       "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {
         "@type": VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
@@ -385,7 +390,8 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
           "addressLocality": "Athens",
           "addressRegion": "Attica",
           "addressCountry": "GR"
-        }
+        },
+        "containedInPlace": buildContainedInPlace(event.venue.neighborhood)
       },
       "offers": {
         "@type": "Offer",

@@ -19,6 +19,7 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
+import { buildContainedInPlace } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -80,7 +81,8 @@ function generateVenueSchema(venue: VenueData): string | null {
       'addressRegion': venue.neighborhood || 'Attica',
       'addressCountry': 'GR'
     },
-    'url': `${BASE_URL}/venues/${venue.slug}/`
+    'url': `${BASE_URL}/venues/${venue.slug}/`,
+    'containedInPlace': buildContainedInPlace(venue.neighborhood)
   };
 
   // Add geo coordinates if real (not the generic Athens center fallback)

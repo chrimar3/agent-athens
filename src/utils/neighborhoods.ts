@@ -52,6 +52,8 @@ const NEIGHBORHOOD_GREEK: Record<string, string> = {
   'Zografou': 'Ζωγράφου',
 };
 
+export { NEIGHBORHOOD_GREEK };
+
 export function displayNeighborhood(name: string): string {
   return NEIGHBORHOOD_GREEK[name] || name;
 }

@@ -1,0 +1,20 @@
+{
+  "municipality": {
+    "name": "Municipality of Athens",
+    "qid": "Q1524",
+    "lat": 37.9838,
+    "lng": 23.7275
+  },
+  "region": {
+    "name": "Attica",
+    "qid": "Q178517",
+    "lat": 37.9908,
+    "lng": 23.7033
+  },
+  "country": {
+    "name": "Greece",
+    "qid": "Q41",
+    "lat": 39.0742,
+    "lng": 21.8243
+  }
+}

@@ -298,7 +298,8 @@ describe("renderEventCard (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     expect(html).toContain('itemprop="eventStatus"');
-    expect(html).toContain("https://schema.org/EventScheduled");
+    // sampleConcert is in the past, so status is dynamic
+    expect(html).toMatch(/https:\/\/schema\.org\/Event(Scheduled|Completed)/);
   });
 
   test("renders date group headers", () => {

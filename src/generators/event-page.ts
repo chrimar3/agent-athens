@@ -19,6 +19,7 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
+import { buildContainedInPlace, resolveEventStatus } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
@@ -175,7 +176,7 @@ function generateEventSchema(event: Event): string {
     'name': event.title,
     'description': event.fullDescription || event.description,
     'startDate': startDate,
-    'eventStatus': 'https://schema.org/EventScheduled',
+    'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'url': `${BASE_URL}/events/${eventSlug}/`,
     'location': {
@@ -187,7 +188,8 @@ function generateEventSchema(event: Event): string {
         'addressLocality': 'Athens',
         'addressRegion': 'Attica',
         'addressCountry': 'GR'
-      }
+      },
+      'containedInPlace': buildContainedInPlace(event.venue.neighborhood)
     }
   };
 

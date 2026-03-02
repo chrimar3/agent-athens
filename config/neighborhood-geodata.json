@@ -1,0 +1,80 @@
+{
+  "Kolonaki": {
+    "name": "Kolonaki",
+    "qid": "Q6427208",
+    "lat": 37.9778,
+    "lng": 23.7425
+  },
+  "Mets": {
+    "name": "Mets",
+    "qid": "Q6823368",
+    "lat": 37.9639,
+    "lng": 23.7383
+  },
+  "Gazi": {
+    "name": "Gazi",
+    "qid": "Q5528361",
+    "lat": 37.9785,
+    "lng": 23.7145
+  },
+  "Koukaki": {
+    "name": "Koukaki",
+    "qid": "Q6433832",
+    "lat": 37.9621,
+    "lng": 23.7262
+  },
+  "Marousi": {
+    "name": "Marousi",
+    "qid": "Q648092",
+    "lat": 38.0502,
+    "lng": 23.8063
+  },
+  "Exarchia": {
+    "name": "Exarchia",
+    "qid": "Q1384288",
+    "lat": 37.9862,
+    "lng": 23.7340
+  },
+  "Pangrati": {
+    "name": "Pangrati",
+    "qid": "Q7130447",
+    "lat": 37.9681,
+    "lng": 23.7480
+  },
+  "Psyri": {
+    "name": "Psyri",
+    "qid": "Q7256286",
+    "lat": 37.9792,
+    "lng": 23.7237
+  },
+  "Monastiraki": {
+    "name": "Monastiraki",
+    "qid": "Q1952011",
+    "lat": 37.9763,
+    "lng": 23.7256
+  },
+  "Plaka": {
+    "name": "Plaka",
+    "qid": "Q1061405",
+    "lat": 37.9727,
+    "lng": 23.7300
+  },
+  "Metaxourgeio": {
+    "name": "Metaxourgeio",
+    "qid": "Q6822710",
+    "lat": 37.9862,
+    "lng": 23.7200
+  },
+  "Thiseio": {
+    "name": "Thiseio",
+    "qid": "Q7784882",
+    "lat": 37.9757,
+    "lng": 23.7198
+  },
+  "Kerameikos": {
+    "name": "Kerameikos",
+    "qid": "Q464266",
+    "lat": 37.9782,
+    "lng": 23.7178
+  }
+}
