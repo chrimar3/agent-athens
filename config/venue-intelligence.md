@@ -74,7 +74,7 @@
 | Field | Data |
 |-------|------|
 | **Address** | Anaxagora 3-5, Omonoia |
-| **Metro** | Omonoia (Red/Blue) |
+| **Metro** | Omonoia (Green/Red) |
 | **Capacity** | ~400 |
 | **Entry** | Free - €9 (often free, €5-6 before 22:00) |
 | **Door Policy** | Extremely relaxed |
@@ -307,7 +307,7 @@
 | Field | Data |
 |-------|------|
 | **Address** | Sofokleous 19, above Central Meat Market |
-| **Metro** | Omonoia (Red/Blue) |
+| **Metro** | Omonoia (Green/Red) |
 | **Status** | Operational (verified January 2026) |
 | **When operating** | Fri/Sat 22:30-early morning, Sun matinee 13:00-19:30 |
 | **Entry** | ~€8 (drinking only), wine from €22/bottle, table d'hôte ~€18 |
@@ -808,7 +808,7 @@ Key numbers that inform event descriptions:
 ## Metro Lines
 | Line | Color | Key Stops |
 |------|-------|-----------|
-| M1 | Green | Piraeus, Thissio, Monastiraki, Victoria |
+| M1 | Green | Piraeus, Thissio, Monastiraki, Omonoia, Victoria |
 | M2 | Red | Akropoli, Syngrou-Fix, Neos Kosmos, Omonoia |
 | M3 | Blue | Monastiraki, Syntagma, Kerameikos, Airport |
 

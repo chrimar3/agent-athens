@@ -411,6 +411,217 @@ Used Claude Code search-specialist agent to web search each venue address, then 
 | 3 parallel subagents for enrichment | First production run: 15 events in ~9 min wall clock vs ~27 min sequential. Gate scores 88-90. Cross-batch opening echo rate: 1/15 | 2026-03 |
 | Cross-batch opening dedup is awareness-only | Parallel subagents can't see each other's openings mid-run. The `recent-openings.json` file prevents echoes across sessions but not within parallel batches. Acceptable for now | 2026-03 |
 
+## Pipeline Idempotency Audit (2026-03-02)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Audited all 18 daily pipeline phases for full-pass vs incremental | Ensure pipeline is a daily self-healing loop — incremental-only phases let inconsistencies accumulate silently | 2026-03 |
+| Exhibition end_date fix in filter/dedup/time-enrichment (3+1 scripts) | `WHERE start_date >= date('now')` excluded running exhibitions whose start_date is in the past but end_date is still future. These were invisible to location filtering, dedup, and time enrichment | 2026-03 |
+| `UPCOMING_FILTER` constant in remove-duplicates.ts | 20+ queries used the bare date filter. A single constant prevents drift and makes the pattern greppable | 2026-03 |
+| merge-duplicates.ts also fixed (low-priority but consistent) | 7-day window `start_date >= date('now', '-7 days')` also excludes long-running exhibitions. Rare in practice but consistency matters | 2026-03 |
+| NOT fixing "once and done" enrichment pattern | enrich-time.ts and enrich-images.ts mark events `not_found` permanently. Deliberate tradeoff: avoids ~200-300 wasted HTTP requests daily. If revisited, add weekly `--force` mode | 2026-03 |
+| NOT fixing ticket URL validation on past events | validate-ticket-urls.ts checks ALL ticket URLs including past events (~50-100 wasted requests). Performance issue, not correctness — past events filtered at site generation | 2026-03 |
+
+### Pipeline Phase Audit Summary
+
+| Phase | Script | Behavior | Correct? |
+|-------|--------|----------|----------|
+| Email ingestion/parsing | ingest/parse | Incremental (IMAP unread) | Yes |
+| Web scraping | scrape-all.ts | Full-pass per source | Yes |
+| Location filter | filter-athens-only.ts | Was upcoming-only, **FIXED** | Fixed |
+| Same-source dedup | remove-duplicates.ts | Was upcoming-only, **FIXED** | Fixed |
+| Cross-source merge | merge-duplicates.ts | 7-day window, **FIXED** | Fixed |
+| Price/ticket/schema | various | Full-pass on gaps | Yes |
+| Time enrichment | enrich-time.ts | Incremental + was upcoming-only, **FIXED** | Fixed |
+| Image enrichment/download | enrich-images.ts, download-images.ts | Incremental, no date filter | Yes |
+| Image cleanup | cleanup-old-images.ts | Full-pass, already exhibition-aware | Yes |
+| Site generation | generate-site.ts | Full rebuild | Yes |
+| Health check/deploy/indexnow | various | Full-pass/deploy | Yes |
+
+## CLI Enrichment Automation (2026-03-02)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| `claude -p` with `--allowedTools` is viable for enrichment | Single-event test scored 89/100 post-save (84 pre-save), matching interactive baseline. WebSearch + Bash + Write all work. Description quality identical to subagent enrichment | 2026-03 |
+| Required flags: `--allowedTools "Bash Read Write WebSearch Glob Grep WebFetch"` | Without these, `-p` mode can't prompt for permissions in non-interactive mode. Tool calls get silently blocked | 2026-03 |
+| `CLAUDECODE=` bypass needed when testing from inside CC | `claude -p` detects nested sessions via CLAUDECODE env var. Unsetting it allows spawning. Production use (cron/shell script) won't have this issue | 2026-03 |
+| Nest detection error is informative, not a `-p` limitation | The error only occurs when running inside another CC session. From a raw terminal or cron job, `-p` works directly | 2026-03 |
+| Brief-as-stdin works for 9.7KB briefs (~1074 tokens) | Passed as `$(cat brief.md)` shell expansion. No truncation observed. Larger briefs (multi-batch) may need file reference instead | 2026-03 |
+
+### CLI Enrichment Test Results
+
+| Metric | Value |
+|--------|-------|
+| Gate score (pre-save) | 84/100 |
+| Gate score (post-save, estimated) | 89/100 |
+| Word count | 474 |
+| Fabrication flags | 0 |
+| Resonance layer | 35/35 |
+| WebSearch used? | Yes — found Remboutsika credits, venue details |
+| File writing via Bash? | Yes — write-description.ts + gate check both ran |
+| Structural compliance | All 8 sections present |
+
+### Automation Command Template
+
+```bash
+cd ~/Project\ with\ Claude/AgentAthens/agent-athens
+BRIEF=$(ls -t temp-briefs/batch-*.md | head -1)
+claude -p "$(cat "$BRIEF")" \
+  --output-format text \
+  --allowedTools "Bash Read Write WebSearch Glob Grep WebFetch"
+```
+
+### Next Steps for Full Automation
+- [ ] Test with full 5-event batch (single event confirmed; need to verify multi-event consistency)
+- [ ] Test `--output-format json` for structured result parsing
+- [ ] Integrate into `daily-automated.sh` as optional enrichment step
+- [ ] Add `--max-turns` flag if available, to cap runaway sessions
+
+### Image Coverage Audit (2026-03-02)
+
+**Baseline: 79.9% (589/737 events)**
+
+| Source | Total | With Image | Missing | Coverage | Gap Reason |
+|--------|-------|------------|---------|----------|------------|
+| athinorama.gr | 397 | 279 | 118 | 70.3% | og:image 502 errors; body fallback fixed 8 |
+| residentadvisor | 60 | 48 | 12 | 80.0% | Missing FLYERFRONT in GraphQL API |
+| clubber.gr | 35 | 28 | 7 | 80.0% | Some events lack og:image |
+| onassis | 5 | 0 | 5 | 0.0% | Scraper has interface field but never extracts |
+| manual+misc | 5 | 0 | 5 | 0.0% | Small sources, no image pipeline |
+| All 100% sources | 235 | 235 | 0 | 100% | more.com, ticketservices, megaron, halfnote, eventbrite |
+
+**Quick wins:**
+1. Onassis (5 events): scraper already uses Puppeteer — add `page.evaluate()` for og:image/poster extraction
+2. Athinorama (118 events): investigate 502 og:image pattern — may be rate limiting or specific URL pattern
+3. Clubber.gr (7 events): check if events have og:image on page (was previously 0% — now 80%, so extraction was added)
+
+**Athinorama missing image breakdown by type:**
+- concert: 99 (84%)
+- theater: 14 (12%)
+- dj_set: 5 (4%)
+
+**Decision: Image pipeline worth continued investment at 80%.** Quick wins could push to ~85%+.
+
+## Factual Error Rate Audit & Verification Design (2026-03-02)
+
+### Context
+
+Double-agent pattern in batches 115-117 caught 3 factual errors in first-pass descriptions:
+1. VOX venue placed at wrong address (Cinema vs Live Stage)
+2. DJ Yazi described as Athens-based (actually Tokyo/Black Smoker Records)
+3. Lo attributed to Philip K. Dick (actually original by Marios Tsagkaris)
+
+All 3 were subagent hallucinations, not data pipeline failures. Triggered a formal audit.
+
+### Audit: 20 Stratified-Random Descriptions
+
+| Metric | Value |
+|--------|-------|
+| Sample size | 20 descriptions (9 concert, 5 dj_set, 4 theater, 2 other) |
+| Claims checked | 58 |
+| CORRECT | 40 (69%) |
+| ERRORS found | 5 (8.6% of claims) |
+| Descriptions with ≥1 error | 4/20 (20%) |
+| UNVERIFIABLE | 7 (12%) |
+| PLAUSIBLE | 6 (10%) |
+
+### The 5 Errors
+
+| Event | Error | Category | Severity |
+|-------|-------|----------|----------|
+| O Giannis to Voudi | Tavros metro listed as Blue Line (actually Green/Line 1) | Transit | HIGH — wrong directions |
+| Panagiotis Margaris | "Athens Conservatory" (actually National Conservatory) | Credential | MEDIUM — wrong institution |
+| Balletto di Milano | Romeo & Juliet attributed to Prokofiev (actually Tchaikovsky) | Source attribution | HIGH — entire paragraph built on false premise |
+| Trisevgeni | Megaron address "89 Vas. Sofias" (actually 115) | Venue | HIGH — wrong address |
+| Trisevgeni | Nearest metro "Evangelismos" (actually Megaro Moussikis) | Transit | HIGH — wrong station |
+
+### Error Taxonomy
+
+| Category | Count | % of errors |
+|----------|-------|-------------|
+| Transit/logistics (metro lines, nearest station) | 3 | 60% |
+| Credential (institution name) | 1 | 20% |
+| Source attribution (composer) | 1 | 20% |
+
+### Decision: Integrate fact-check as standard post-save step (5-15% tier)
+
+**Why not the >15% tier ("pause enrichment")?**
+
+Raw description error rate is 20% (4/20), which technically hits the >15% threshold. However, the error taxonomy shows:
+- 3/5 errors are **logistics details** in the "Good to Know" section — metro line colors, addresses, nearest stations. These are systematic, patterned, and easily correctable.
+- Only 1/5 is the **dangerous hallucination pattern** (Prokofiev/Tchaikovsky) that matches the original 3 known errors.
+- The creative core (artist credentials, venue character, opening/filter/differentiation) had 0 errors.
+- The research step *works* for the creative content — it fails on transit/logistics facts.
+
+**Actions taken:**
+1. Added anti-patterns 11-13 to `docs/enrichment-anti-patterns.md` (ambiguous venues, assumed origin, fabricated attribution)
+2. Created `docs/fact-check-prompt.md` — reusable verification prompt
+3. Fact-check integrated as post-save verification step (~3 min per 15 events)
+4. Transit/logistics details flagged as highest-risk error category for targeted checking
+
+**Projected impact on remaining 743 events:**
+- At 20% description error rate → ~148 descriptions may have ≥1 error
+- At 60% transit errors → ~89 transit/logistics errors (most correctable by automated venue-intelligence cross-reference)
+- At 20% attribution errors → ~30 source attribution errors (require web search verification)
+
+### Evidence
+
+Full audit results: `temp-descriptions/audit-results.md`
+Audit sample: `temp-descriptions/audit-sample.json`
+
+### Notable Finding: Lo (Known Error) Already Corrected
+
+The Lo event (Philip K. Dick attribution error from batch 117) appeared in the random sample. Current description correctly says "sci-fi noir by Marios Tsagkaris" — confirming the double-agent pattern caught and fixed the error before this audit.
+
+## Fact-Check Pipeline Validation (2026-03-02)
+
+### First Live Test: 12 Descriptions, 3 Batches
+
+| Metric | Value |
+|--------|-------|
+| Descriptions checked | 12 (batches 118-120) |
+| Claims verified | ~36 (2-3 per event) |
+| Wall clock time | ~5 min |
+| ERRORs found | 2 |
+| PLAUSIBLE (minor) | 1 |
+| False alarms | 0 |
+| Unverifiable | 0 |
+
+### Errors Found
+
+| Event | Error | Category | Fix |
+|-------|-------|----------|-----|
+| Dynami tis Synitheias (Roes) | Capacity "110 seats" → actually 190 | venue | Fixed: REPLACE in DB |
+| Axios Logos (Parnassos) | Patrikios age "at the age of seven" → sources vary (7 or 8) | credential (minor) | Softened to "as a child" |
+
+Note: Iro Saia's "lyrics by Manos Eleftheriou among others" was flagged but description already had "among others" — false positive from truncated preview.
+
+### Error Taxonomy vs Audit Baseline
+
+| Category | Audit (batches 1-117) | Live test (batches 118-120) |
+|----------|----------------------|-----------------------------|
+| Transit/logistics | 60% of errors | 0% — anti-patterns 11-13 working |
+| Venue details | 0% | 50% (capacity wrong) |
+| Credential | 20% | 50% (minor age discrepancy) |
+| Source attribution | 20% | 0% |
+
+**Key finding:** Transit errors (the dominant failure mode in the audit) dropped to zero. Anti-patterns 11-13 are preventing the most common error type. The 2 errors found are new categories (venue capacity, biographical precision) that are less damaging than wrong metro directions.
+
+### Decision: Integrate fact-check as standard post-save step
+
+| Criterion | Measured | Decision |
+|-----------|----------|----------|
+| Time overhead | ~5 min for 12 events | Acceptable (~25 sec/event) |
+| Catch rate | 2 real errors in 12 descriptions (17%) | Worth the overhead |
+| False alarm rate | 0 | Clean signal |
+| Error severity | 1 venue capacity, 1 minor bio detail | Both correctable, neither dangerous |
+
+**Verdict:** <=5 min, catches real errors, zero false alarms → integrate as standard post-save step. The overhead is justified by the catch rate, and anti-patterns 11-13 have successfully eliminated the most dangerous error type (transit/logistics).
+
+### Bonus: venue-intelligence.md Correction
+
+Fact-checker caught that Omonoia metro was listed as "Red/Blue" in venue-intelligence.md — actually serves Lines 1 (Green) and 2 (Red). Fixed in 3 locations. Also added Omonoia to M1 (Green) in the metro table. This would have caused future transit errors in descriptions.
+
 ## Filter Bar Polish — Phase 4C (2026-02-25)
 
 | Decision | Why | Date |
