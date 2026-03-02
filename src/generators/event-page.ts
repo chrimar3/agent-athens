@@ -14,7 +14,7 @@ import type { Event } from '../types';
 import { generatePracticalBlock } from './practical-block';
 import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
-import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { getAthensTimezone, formatSchemaDate, SCHEMA_TYPE_MAP, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
@@ -179,7 +179,7 @@ function generateEventSchema(event: Event): string {
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'url': `${BASE_URL}/events/${eventSlug}/`,
     'location': {
-      '@type': schemaType === 'MusicEvent' ? 'MusicVenue' : 'Place',
+      '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
       'name': event.venue.name,
       'address': {
         '@type': 'PostalAddress',
@@ -202,6 +202,11 @@ function generateEventSchema(event: Event): string {
       }
     }
     schema.endDate = endDate;
+  }
+
+  // Add door time if available
+  if (event.timeDoors) {
+    schema.doorTime = formatSchemaDate(event.startDate.split('T')[0], event.timeDoors);
   }
 
   // Add coordinates if available

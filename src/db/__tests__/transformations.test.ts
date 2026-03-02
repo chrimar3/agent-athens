@@ -568,7 +568,7 @@ describe("rowToEvent", () => {
     expect(event.semanticTags).toBeUndefined();
   });
 
-  test("should extract @type from schema_json", () => {
+  test("should derive @type from SCHEMA_TYPE_MAP using row.type", () => {
     const row = {
       id: "test",
       title: "Test",
@@ -590,7 +590,7 @@ describe("rowToEvent", () => {
       url: null,
       source: "test",
       ai_context: null,
-      schema_json: JSON.stringify({ "@type": "TheaterEvent" }),
+      schema_json: JSON.stringify({ "@type": "SomeOldType" }),
       created_at: "2025-10-01T12:00:00Z",
       updated_at: "2025-10-01T12:00:00Z",
       end_date: null,
@@ -599,16 +599,66 @@ describe("rowToEvent", () => {
 
     const event = rowToEvent(row);
 
+    // @type comes from SCHEMA_TYPE_MAP, NOT from schema_json
     expect(event["@type"]).toBe("TheaterEvent");
   });
 
-  test("should fallback to 'Event' @type when schema_json missing", () => {
+  test("should map all known types via SCHEMA_TYPE_MAP", () => {
+    const typeMap: Record<string, string> = {
+      concert: "MusicEvent",
+      dj_set: "MusicEvent",
+      theater: "TheaterEvent",
+      exhibition: "ExhibitionEvent",
+      screening: "ScreeningEvent",
+      cinema: "ScreeningEvent",
+      workshop: "EducationEvent",
+      tech: "EducationEvent",
+      show: "Event",
+      festival: "Festival",
+      performance: "DanceEvent",
+    };
+
+    for (const [type, expectedSchemaType] of Object.entries(typeMap)) {
+      const row = {
+        id: "test",
+        title: "Test",
+        description: "",
+        start_date: "2025-11-15T20:00:00+03:00",
+        type,
+        genres: JSON.stringify([]),
+        tags: JSON.stringify([]),
+        venue_name: "Venue",
+        venue_address: "Address",
+        venue_neighborhood: null,
+        venue_lat: null,
+        venue_lng: null,
+        venue_capacity: null,
+        price_type: "open",
+        price_amount: null,
+        price_currency: "EUR",
+        price_range: null,
+        url: null,
+        source: "test",
+        ai_context: null,
+        schema_json: null,
+        created_at: "2025-10-01T12:00:00Z",
+        updated_at: "2025-10-01T12:00:00Z",
+        end_date: null,
+        full_description: null
+      };
+
+      const event = rowToEvent(row);
+      expect(event["@type"]).toBe(expectedSchemaType);
+    }
+  });
+
+  test("should fallback to 'Event' @type for unknown type", () => {
     const row = {
       id: "test",
       title: "Test",
       description: "",
       start_date: "2025-11-15T20:00:00+03:00",
-      type: "concert",
+      type: "unknown_type",
       genres: JSON.stringify([]),
       tags: JSON.stringify([]),
       venue_name: "Venue",

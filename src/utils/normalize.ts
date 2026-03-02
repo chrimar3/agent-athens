@@ -1,6 +1,7 @@
 // Normalize raw sample events to Schema.org format
 
 import type { RawEvent, Event, EventType, Venue, Price } from '../types';
+import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 
 const VENUE_COORDINATES: Record<string, { lat: number; lon: number; neighborhood?: string }> = {
   'Athens Concert Hall (Megaron)': { lat: 37.9813, lon: 23.7584, neighborhood: 'Kolonaki' },
@@ -34,7 +35,7 @@ export function normalizeEvents(rawEvents: { events: RawEvent[] }): Event[] {
 
     return {
       "@context": "https://schema.org",
-      "@type": getSchemaType(type),
+      "@type": SCHEMA_TYPE_MAP[type] || 'Event',
       id,
       title: raw.title,
       description: raw.description,
@@ -227,19 +228,6 @@ function normalizeDate(date: string, time?: string): string {
   // Combine date and time into ISO 8601 format
   const timeString = time || '20:00';
   return `${date}T${timeString}:00+03:00`; // Athens timezone (UTC+3 in summer)
-}
-
-function getSchemaType(type: EventType): string {
-  const schemaMap: Record<EventType, string> = {
-    'concert': 'MusicEvent',
-    'exhibition': 'ExhibitionEvent',
-    'cinema': 'ScreeningEvent',
-    'theater': 'TheaterEvent',
-    'performance': 'PerformanceEvent',
-    'workshop': 'EducationEvent',
-    'other': 'Event'
-  };
-  return schemaMap[type] || 'Event';
 }
 
 function generateTags(price: Price, type: EventType): string[] {

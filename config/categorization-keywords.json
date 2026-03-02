@@ -442,6 +442,8 @@
     "screening": "ScreeningEvent",
     "cinema": "ScreeningEvent",
     "festival": "Festival",
-    "tech": "EducationEvent"
+    "tech": "EducationEvent",
+    "sports": "SportsEvent",
+    "other": "Event"
   }
 }

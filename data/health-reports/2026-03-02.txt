@@ -1,0 +1,28 @@
+AGENT ATHENS HEALTH REPORT - 2026-03-02
+==================================================
+
+SCRAPING
+--------------------------------------------------
+  v athinorama          369 events (-16)
+  v benaki                4 events (same)
+  v clubber              50 events (-4)
+  v halfnote             22 events (-1)
+  v megaron              23 events (-2)
+  v more                 39 events (-16)
+  v onassis               4 events (same)
+  v ra                   93 events (-4)
+  v ticketservices      119 events (-2)
+
+DATABASE
+--------------------------------------------------
+  Total: 997 | Visible: 709 | Hidden: 288
+
+BUILD
+--------------------------------------------------
+  v 4.8s | 1874 pages | Schema valid: 972/709
+
+ENRICHMENT
+--------------------------------------------------
+  268/709 (37.8%) enriched
+
+  All systems healthy

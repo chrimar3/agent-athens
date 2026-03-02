@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
+import { VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
@@ -376,7 +377,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
       "startDate": event.startDate,
       "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {
-        "@type": "Place",
+        "@type": VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
         "name": event.venue.name,
         "address": {
           "@type": "PostalAddress",

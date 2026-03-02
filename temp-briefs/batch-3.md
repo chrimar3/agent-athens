@@ -23,70 +23,91 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/theater-cherry-orchard.md` — Historical depth, accessibility info
-- `exemplars/concert-three-times-three.md` — Format explanation, cross-community appeal
-- `exemplars/classical-magic-ticket.md` — Audience-specific framing, practical pricing
+- `exemplars/theater-tartuffe.md` — structural reference
+- `exemplars/classical-lpo-jarvi.md` — structural reference
+- `exemplars/exhibition-swinton.md` — structural reference
 
 ## Anti-patterns
 
 Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "Pos Milaei i Mousiki gia ton Eafto tis is a four-session music lecture series at the Educational Programs Hall of Megaron Mousikis in Athens, running Mondays in March 2026."
+- "Mikres Tapeinoseis is a musical-theater composition at Baumstrasse in Botanikos, running Mondays and Tuesdays in March 2026."
+- "Love is a DJ-set night at Cantina Social in Psyrri, Athens, on Sunday March 8, 2026."
+- "Mazi gia tin Zoi is a charity concert at the Olympia Municipal Music Theatre on Akademias Street in central Athens, on March 3, 2026."
+- "Mesa sto Myalo Sou Part 2 is an interactive psychology performance at Theatro Aliki on Amerikis Street in central Athens, running Mondays through the 2025-2026 season."
+- "Jazz Standards is a butoh dance-theater performance at Skini Brecht-2510 on 3is Septemvriou, near Omonia."
+- "All Night Long MATEA x Alisa Murphy is a DJ set at 2ten in the basement of Nomads on Ermou 135, central Athens."
+- "Andronikos and Katerina Terzopoulou play a live set at Caja de Musica on Sinopis 27 in Ampelokipoi."
+- "Little Eyolf by Henrik Ibsen plays at PLYFA in the converted factory buildings of Votanikos, directed by Dinos Psychogios."
+- "CanniLAB #3 is a day-into-night electronic music event at Romantso on Anaxagora 3-5, near Omonia."
+- "Toxic Rave x Oddity with NOAH (BR) is a techno night at Oddity in Thissio on Friday, March 13."
+- "For Women by Angeliki Toubanaki 5tet is a concert at Half Note Jazz Club in Mets on Wednesday, March 4."
+- "I Dynami tis Synithias vol."
+- "Salvi K is a DJ set at Cantina Social in Psyri on Thursday, March 13, starting at 23:00."
+- "Giannis Charoulis at Stavros tou Notou is a four-night concert residency in Neos Kosmos, running every Thursday in March — his first appearance on this stage in thirteen years."
+
 ---
 
 ## Events to Enrich
 
-### ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ
-- **ID**: 9583f7ca5f306a2b
+### Όταν ο Μίκης ήταν παιδί
+- **ID**: c5a1ae509445cea0
 - **Type**: theater
-- **Venue**: Αργώ
+- **Venue**: Ακροπόλ
 - **Price**: paid
-- **Date**: 2026-02-26
-- **URL**: https://www.more.com/gr-el/tickets/theater/ekeinos-ekeinos/
-- **Source**: more.com
-- **Venue intel**: Not in database. WebSearch "Αργώ Athens" for context.
-
-### Στέλιος Κοτίδης &amp; Γιώργος Χουβαρδάς
-- **ID**: b921cecb62005587
-- **Type**: concert
-- **Venue**: Σταυρός του Νότου
-- **Price**: paid
-- **Date**: 2026-02-26
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/stelios_kotidis_kai_giorgos_xoubardas-10087824/
+- **Date**: 2026-03-02T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/otan_o_mikis_itan_paidi-10087894/
 - **Source**: athinorama.gr
-- **Venue intel**: Not in database. WebSearch "Σταυρός του Νότου Athens" for context.
-- **artist intel**: Γιώργος Κουμεντάκης — Greek composer born in Rethymno, 1959. Composed music for 2004 Athens Olympic ceremonies. Works span symphonic, chamber, theater, dance, opera, and installation. Eros Demon (1991) for counter-tenor and two pianos on Sappho's poetry is a key work.
+- **Venue intel**: Not in database. WebSearch "Ακροπόλ Athens" for context.
 
-### Irini Karaoglou
-- **ID**: 1ae8fc4ec471d76f
-- **Type**: dj_set
-- **Venue**: Cantina Social
-- **Price**: door
-- **Date**: 2026-02-26T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/irini-karaoglou-3/
-- **Source**: clubber.gr
-- **Venue intel**: Not in database. WebSearch "Cantina Social Athens" for context.
-
-### Η βασίλισσα των πάντων
-- **ID**: fc9d2311e71031ac
-- **Type**: classical
+### Ο Καπετάν Σαματάς
+- **ID**: 82cce27b60d87c7d
+- **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-02-26T12:30:00
+- **Date**: 2026-03-02T12:30:00
 - **Time**: 12:30
-- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
+- **URL**: https://www.athinorama.gr/theatre/performance/o_kapetan_samatas-10087293/
 - **Source**: athinorama.gr
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Ballet du Grand Théâtre de Genève + Eastman – Ihsane του Sidi Larbi Cherkaoui
-- **ID**: 202f5af00be76332
-- **Type**: dance
+### Techno Underdogs - Free Entrance
+- **ID**: f98ce146ce44206f
+- **Type**: dj_set
+- **Venue**: B side Athens
+- **Price**: paid
+- **Date**: 2026-03-14T22:30:00
+- **Time**: 22:30
+- **URL**: https://ra.co/events/2377725
+- **Source**: residentadvisor
+- **Venue intel**: Not in database. WebSearch "B side Athens Athens" for context.
+
+### Συννεφάκι άκι-άκι
+- **ID**: 9569a1414b538db1
+- **Type**: theater
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-02T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/sunnefaki_aki_aki-10079044/
+- **Source**: athinorama.gr
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+
+### Το δέντρο που αγαπούσε... σε νέες περιπέτειες
+- **ID**: 53e949d6be64b1d7
+- **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: with-ticket
-- **Date**: 2026-03-17T20:30:00+03:00
-- **URL**: https://www.megaron.gr/event/ballet-du-grand-theatre-de-geneve-eastman-2/
-- **Source**: megaron.gr
+- **Price**: paid
+- **Date**: 2026-03-02T15:00:00
+- **Time**: 15:00
+- **URL**: https://www.athinorama.gr/theatre/performance/to_dentro_pou_agapouse_se_nees_peripeteies-10083041/
+- **Source**: athinorama.gr
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ---
@@ -108,13 +129,21 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> Tag1 Tag2 Tag3...
    ```
+5. **Save decision** (after completing ALL events in this batch):
+   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
+   ```bash
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
+   ```
+   Note "AUTO-SAVED" at the top of batch-3-review.md.
+   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
+     Note "LEFT FOR REVIEW" at the top of batch-3-review.md with reasons.
 
 After all events, create `temp-descriptions/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 9583f7ca5f306a2b | ΕΚΕΙΝΟΣ & ΕΚΕΙΝΟΣ | /100 | | |
-| b921cecb62005587 | Στέλιος Κοτίδης &amp; Γιώργος Χουβαρδάς | /100 | | |
-| 1ae8fc4ec471d76f | Irini Karaoglou | /100 | | |
-| fc9d2311e71031ac | Η βασίλισσα των πάντων | /100 | | |
-| 202f5af00be76332 | Ballet du Grand Théâtre de Genève + Eastman – Ihsane του Sidi Larbi Cherkaoui | /100 | | |
+| c5a1ae509445cea0 | Όταν ο Μίκης ήταν παιδί | /100 | | |
+| 82cce27b60d87c7d | Ο Καπετάν Σαματάς | /100 | | |
+| f98ce146ce44206f | Techno Underdogs - Free Entrance | /100 | | |
+| 9569a1414b538db1 | Συννεφάκι άκι-άκι | /100 | | |
+| 53e949d6be64b1d7 | Το δέντρο που αγαπούσε... σε νέες περιπέτειες | /100 | | |

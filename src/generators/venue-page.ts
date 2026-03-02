@@ -16,7 +16,7 @@ import { slugify, generateEventSlug } from './event-page';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { BADGE_LABELS } from '../templates/page';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
-import { getAthensTimezone } from '../enrichment/quality-gates';
+import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
@@ -106,7 +106,7 @@ function generateVenueSchema(venue: VenueData): string | null {
       }
 
       return {
-        '@type': 'Event',
+        '@type': SCHEMA_TYPE_MAP[event.type] || 'Event',
         'name': event.title,
         'startDate': startDate,
         'url': `${BASE_URL}/events/${generateEventSlug(event)}/`

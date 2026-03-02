@@ -3,7 +3,6 @@
 
 import type { Event } from '../types';
 import { DateTime } from 'luxon';
-import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 
 const ATHENS_TIMEZONE = 'Europe/Athens';
 
@@ -98,76 +97,6 @@ export function formatPriceGreek(event: Event): string {
   }
 
   return 'Επί πληρωμή';
-}
-
-/**
- * Get the correct Athens timezone offset, accounting for DST
- */
-function getAthensTimezoneOffset(date: Date): string {
-  const year = date.getFullYear();
-  // Last Sunday of March
-  const marchLast = new Date(year, 3, 0);
-  marchLast.setDate(marchLast.getDate() - marchLast.getDay());
-  marchLast.setHours(3, 0, 0, 0);
-  // Last Sunday of October
-  const octoberLast = new Date(year, 10, 0);
-  octoberLast.setDate(octoberLast.getDate() - octoberLast.getDay());
-  octoberLast.setHours(3, 0, 0, 0);
-  return (date >= marchLast && date < octoberLast) ? '+03:00' : '+02:00';
-}
-
-/**
- * Generate Schema.org JSON-LD (always in English for AI parsing)
- * This is critical: Schema.org should ALWAYS be English regardless of content language
- */
-export function toSchemaOrg(event: Event): string {
-  // Map event type to Schema.org type using complete mapping
-  const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": schemaType,
-    "name": event.title,
-    "description": `${event.type} event in Athens featuring ${event.title}`,
-    "startDate": event.startDate,
-    "endDate": event.endDate || event.startDate,
-    "eventStatus": "https://schema.org/EventScheduled",
-    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-    "location": {
-      "@type": "Place",
-      "name": event.venue.name,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": event.venue.address || "",
-        "addressLocality": "Athens",
-        "addressRegion": "Attica",
-        "postalCode": "",
-        "addressCountry": "GR"
-      }
-    }
-  };
-
-  // Add pricing — isAccessibleForFree + complete offers for ALL events
-  schema['isAccessibleForFree'] = (event.price.type === 'open' || event.price.type === 'donation');
-
-  if (event.price.type === 'open' || event.price.type === 'donation') {
-    schema['offers'] = {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock"
-    };
-  } else {
-    schema['offers'] = {
-      "@type": "Offer",
-      "price": event.price.amount ? event.price.amount.toString() : "",
-      "priceCurrency": event.price.currency || "EUR",
-      "availability": "https://schema.org/InStock",
-      "url": event.ticketUrl || event.url || ""
-    };
-  }
-
-  return JSON.stringify(schema, null, 2);
 }
 
 /**

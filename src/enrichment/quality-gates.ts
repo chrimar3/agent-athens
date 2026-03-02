@@ -725,9 +725,18 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   tech: 'EducationEvent',
   show: 'Event',
   festival: 'Festival',
-  performance: 'Event',
+  performance: 'DanceEvent',
   sports: 'SportsEvent',
   other: 'Event',
+};
+
+// Venue location type mapping based on Schema.org event type
+export const VENUE_TYPE_MAP: Record<string, string> = {
+  MusicEvent: 'MusicVenue',
+  TheaterEvent: 'PerformingArtsTheater',
+  DanceEvent: 'PerformingArtsTheater',
+  ScreeningEvent: 'MovieTheater',
+  ExhibitionEvent: 'ExhibitionCenter',
 };
 
 /**
@@ -797,7 +806,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
-      '@type': event.type === 'concert' ? 'MusicVenue' : 'Place',
+      '@type': VENUE_TYPE_MAP[eventType] || 'EventVenue',
       name: event.venue || 'TBA',
     },
   };

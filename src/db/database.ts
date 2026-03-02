@@ -5,6 +5,7 @@ import { Database } from "bun:sqlite";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { isAthensEvent } from "../utils/athens-filter";
+import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -110,7 +111,7 @@ export function rowToEvent(row: any): Event {
 
   return {
     "@context": "https://schema.org",
-    "@type": row.type === 'exhibition' ? "ExhibitionEvent" : (row.schema_json ? JSON.parse(row.schema_json)["@type"] : "Event"),
+    "@type": SCHEMA_TYPE_MAP[row.type] || 'Event',
     id: row.id,
     title: row.title,
     description: row.description || "",
