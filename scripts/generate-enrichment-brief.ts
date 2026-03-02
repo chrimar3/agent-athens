@@ -19,6 +19,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
+import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
 
 const DB_PATH = 'data/events.db';
 const VENUE_INTEL_PATH = 'config/venue-intelligence.md';
@@ -383,7 +384,7 @@ export function buildBrief(
   lines.push('');
   lines.push('1. **8-section structure**: Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer');
   lines.push('2. **Voice**: Second person ("you"), present tense, sensory-first. Transport before inform.');
-  lines.push('3. **Word count**: 400-600 words of pure narrative per event');
+  lines.push('3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.');
   lines.push('4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)');
   lines.push('5. **Filter section**: Always include "If you [don\'t want X]... But if you [want Y]..."');
   lines.push('6. **Show don\'t tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)');
@@ -444,6 +445,14 @@ export function buildBrief(
     if (event.url) lines.push(`- **URL**: ${event.url}`);
     lines.push(`- **Source**: ${event.source || 'unknown'}`);
 
+    // Per-event enrichment matrix targets
+    const category = classifyEvent({ type: event.type, venue_name: event.venue_name, title: event.title });
+    const target = getWordTarget({ type: event.type, venue_name: event.venue_name, title: event.title });
+    lines.push(`- **Category**: ${category}`);
+    lines.push(`- **Target words**: ${target.min}-${target.max}`);
+    lines.push(`- **Structure**: ${target.structure}`);
+    lines.push(`- **HARD CONSTRAINT**: Description MUST be ${target.min}-${target.max} words.`);
+
     // Venue intel
     const intel = venueIntel.get(event.venue_name || '');
     if (intel) {
@@ -481,10 +490,11 @@ export function buildBrief(
   lines.push('   ```bash');
   lines.push('   bun run scripts/write-description.ts <event-id> "<description text>"');
   lines.push('   ```');
-  lines.push('3. **Gate check**: Validate quality:');
+  lines.push('3. **Gate check**: Validate quality (use the tier shown for each event):');
   lines.push('   ```bash');
-  lines.push('   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=premium --event-id=<event-id>');
+  lines.push('   bun run scripts/auto-gate-check.ts temp-descriptions/<event-id>.md --tier=<tier> --event-id=<event-id>');
   lines.push('   ```');
+  lines.push('   Tier mapping: three-part-block=stub, hybrid=standard, full-8-section=premium');
   lines.push('4. **Write tags** (from taxonomy in docs/MASTER-ENRICHMENT-TEMPLATE.md):');
   lines.push('   ```bash');
   lines.push('   bun run scripts/write-tags.ts <event-id> Tag1 Tag2 Tag3...');

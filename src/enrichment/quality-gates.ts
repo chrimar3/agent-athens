@@ -10,6 +10,7 @@
  */
 
 import { TAG_TAXONOMY, FILLER_PHRASES, type EventForEnrichment } from './description-generator';
+import { getWordTarget, classifyEvent } from './enrichment-matrix';
 
 // ============================================================================
 // Types
@@ -80,11 +81,13 @@ export interface SchemaOrgEvent {
 // Constants
 // ============================================================================
 
-/** Minimum word counts by tier */
+/** Legacy tier-based limits (used when event type not available).
+ *  Widened to avoid rejecting descriptions within their matrix range.
+ *  Real enforcement comes from matrix-based validation below. */
 const WORD_COUNT_REQUIREMENTS = {
-  stub: { min: 50, max: 150 },
-  standard: { min: 150, max: 300 },
-  premium: { min: 250, max: 600 },
+  stub: { min: 50, max: 200 },
+  standard: { min: 100, max: 300 },
+  premium: { min: 200, max: 600 },
 };
 
 /** Required sections in premium descriptions */
@@ -152,6 +155,29 @@ export function validateQualityGates(
   // Technical validation
   const technicalIssues = validateTechnical(description, tier);
   issues.push(...technicalIssues);
+
+  // Matrix-based word count validation (per-event-type ranges)
+  if (event.type) {
+    const matrixTarget = getWordTarget({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    const wordCount = countWords(description);
+    const category = classifyEvent({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    if (wordCount > matrixTarget.max * 1.1) {
+      issues.push(createIssue('technical', 'warning', 'OVER_MATRIX_MAX',
+        `${wordCount} words exceeds ${matrixTarget.max}w matrix max for ${category}`));
+    }
+    if (wordCount < matrixTarget.min * 0.9) {
+      issues.push(createIssue('technical', 'warning', 'UNDER_MATRIX_MIN',
+        `${wordCount} words below ${matrixTarget.min}w matrix min for ${category}`));
+    }
+  }
 
   // Calculate scores
   const schemaScore = calculateLayerScore(schemaIssues, 25);

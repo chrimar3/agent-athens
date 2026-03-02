@@ -72,6 +72,7 @@ export function countWords(text: string): WordCountResult {
 /**
  * Validate word count against 150-300 word requirement
  *
+ * @deprecated Use validateWordCountForType() with per-event matrix ranges instead.
  * @param text - Text to validate
  * @returns Validation result with count and reason if invalid
  */
@@ -101,7 +102,46 @@ export function validateWordCount(text: string): WordCountResult {
 }
 
 /**
+ * Validate word count against per-event-type matrix ranges.
+ *
+ * @param text - Text to validate
+ * @param min - Minimum word count from enrichment matrix
+ * @param max - Maximum word count from enrichment matrix
+ * @returns Validation result with count and reason if invalid
+ */
+export function validateWordCountForType(
+  text: string,
+  min: number,
+  max: number,
+): WordCountResult {
+  const result = countWords(text);
+
+  if (result.count < min) {
+    return {
+      ...result,
+      valid: false,
+      reason: `Too short: ${result.count} words (minimum ${min})`,
+    };
+  }
+
+  if (result.count > max) {
+    return {
+      ...result,
+      valid: false,
+      reason: `Too long: ${result.count} words (maximum ${max})`,
+    };
+  }
+
+  return {
+    ...result,
+    valid: true,
+  };
+}
+
+/**
  * Get word count limits
+ *
+ * @deprecated Use getWordTarget() from enrichment-matrix.ts for per-event ranges.
  */
 export function getWordLimits(): { min: number; max: number } {
   return { min: MIN_WORDS, max: MAX_WORDS };

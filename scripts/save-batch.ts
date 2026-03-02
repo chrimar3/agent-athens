@@ -22,6 +22,7 @@ import Database from 'bun:sqlite';
 import { validateQualityGates } from '../src/enrichment/quality-gates';
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
+import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
 
 const DB_PATH = 'data/events.db';
 const DESCRIPTIONS_DIR = 'temp-descriptions';
@@ -238,8 +239,13 @@ export function saveBatch(
       .get(eventId) as { full_description: string | null; tags: string | null } | null;
     const descriptionBefore = current?.full_description || null;
 
-    // Run quality gates
-    const tier = wordResult.count >= 250 ? 'premium' : wordResult.count >= 150 ? 'standard' : 'stub';
+    // Determine tier from event type (via enrichment matrix), not word count
+    const target = getWordTarget({
+      type: event.type || 'other',
+      venue_name: event.venue,
+      title: event.title,
+    });
+    const tier = structureToTier(target.structure);
     const gateResult = validateQualityGates(event, description, tier);
 
     const tagsJson = tags ? JSON.stringify(tags) : current?.tags || null;

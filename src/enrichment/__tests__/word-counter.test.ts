@@ -12,6 +12,7 @@ import { describe, test, expect } from 'bun:test';
 import {
   countWords,
   validateWordCount,
+  validateWordCountForType,
   type WordCountResult,
 } from '../word-counter';
 
@@ -225,6 +226,67 @@ describe('Word Counter', () => {
       // Emojis are treated as words: Great, concert, 🎵, at, Gazarte, 🎸 = 6
       const result = countWords('Great concert 🎵 at Gazarte 🎸');
       expect(result.count).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  // ==========================================================================
+  // Type-Aware Validation Tests (Variable Enrichment Matrix)
+  // ==========================================================================
+
+  describe('Type-Aware Word Count Validation (validateWordCountForType)', () => {
+    test('DJ set at 100 words within (80, 120) range is valid', () => {
+      const words = Array(100).fill('word').join(' ');
+      const result = validateWordCountForType(words, 80, 120);
+      expect(result.valid).toBe(true);
+      expect(result.count).toBe(100);
+    });
+
+    test('DJ set at 300 words with (80, 120) range is invalid (too long)', () => {
+      const words = Array(300).fill('word').join(' ');
+      const result = validateWordCountForType(words, 80, 120);
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('Too long');
+      expect(result.reason).toContain('maximum 120');
+    });
+
+    test('DJ set at 50 words with (80, 120) range is invalid (too short)', () => {
+      const words = Array(50).fill('word').join(' ');
+      const result = validateWordCountForType(words, 80, 120);
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('Too short');
+      expect(result.reason).toContain('minimum 80');
+    });
+
+    test('exhibition at 250 words within (200, 300) range is valid', () => {
+      const words = Array(250).fill('word').join(' ');
+      const result = validateWordCountForType(words, 200, 300);
+      expect(result.valid).toBe(true);
+      expect(result.count).toBe(250);
+    });
+
+    test('premium at 450 words within (400, 600) range is valid', () => {
+      const words = Array(450).fill('word').join(' ');
+      const result = validateWordCountForType(words, 400, 600);
+      expect(result.valid).toBe(true);
+      expect(result.count).toBe(450);
+    });
+
+    test('theater at exactly min boundary (120) is valid', () => {
+      const words = Array(120).fill('word').join(' ');
+      const result = validateWordCountForType(words, 120, 180);
+      expect(result.valid).toBe(true);
+    });
+
+    test('theater at exactly max boundary (180) is valid', () => {
+      const words = Array(180).fill('word').join(' ');
+      const result = validateWordCountForType(words, 120, 180);
+      expect(result.valid).toBe(true);
+    });
+
+    test('empty text is invalid for any range', () => {
+      const result = validateWordCountForType('', 80, 120);
+      expect(result.valid).toBe(false);
+      expect(result.count).toBe(0);
     });
   });
 
