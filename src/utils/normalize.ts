@@ -1,27 +1,24 @@
 // Normalize raw sample events to Schema.org format
 
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import type { RawEvent, Event, EventType, Venue, Price } from '../types';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 
-const VENUE_COORDINATES: Record<string, { lat: number; lon: number; neighborhood?: string }> = {
-  'Athens Concert Hall (Megaron)': { lat: 37.9813, lon: 23.7584, neighborhood: 'Kolonaki' },
-  'Panathenaic Stadium': { lat: 37.9682, lon: 23.7408, neighborhood: 'Pangrati' },
-  'Gagosian Athens': { lat: 37.9749, lon: 23.7341, neighborhood: 'Kolonaki' },
-  'Megaron Athens Concert Hall': { lat: 37.9813, lon: 23.7584, neighborhood: 'Kolonaki' },
-  'Technopolis City of Athens': { lat: 37.9785, lon: 23.7152, neighborhood: 'Gazi' },
-  'Andie Art Gallery': { lat: 37.9838, lon: 23.7275, neighborhood: 'Psyrri' },
-  'Floyd Live Music Venue': { lat: 37.9838, lon: 23.7275, neighborhood: 'Athens' },
-  'Onassis Stegi': { lat: 37.9540, lon: 23.7404, neighborhood: 'Neos Kosmos' },
-  'Arch Club': { lat: 37.9838, lon: 23.7275, neighborhood: 'Athens' },
-  'Gazarte Ground Stage': { lat: 37.9791, lon: 23.7164, neighborhood: 'Gazi' },
-  'Gazarte Roof Stage': { lat: 37.9791, lon: 23.7164, neighborhood: 'Gazi' },
-  'Gazarte Main Stage': { lat: 37.9791, lon: 23.7164, neighborhood: 'Gazi' },
-  'Fuzz Club': { lat: 37.9815, lon: 23.7220, neighborhood: 'Exarcheia' },
-  'Half Note Jazz Club': { lat: 37.9648, lon: 23.7432, neighborhood: 'Mets' },
-  'Gagarin 205': { lat: 38.0067, lon: 23.7282, neighborhood: 'Athens' },
-  'Parnassos Literary Society': { lat: 37.9794, lon: 23.7268, neighborhood: 'Syntagma' },
-  'Onassis Ready': { lat: 37.9540, lon: 23.7404, neighborhood: 'Athens' }
-};
+// Load venue coordinates from canonical source (venues-master.json)
+// This replaces the old 18-entry hardcoded map with all 80+ master venues
+const masterVenuesRaw: Record<string, { lat: number; lng: number; neighborhood: string; name_en?: string }> = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../data/venues-master.json'), 'utf-8')
+);
+const VENUE_COORDINATES: Record<string, { lat: number; lon: number; neighborhood?: string }> = {};
+for (const [key, venue] of Object.entries(masterVenuesRaw)) {
+  const coords = { lat: venue.lat, lon: venue.lng, neighborhood: venue.neighborhood };
+  VENUE_COORDINATES[key] = coords;
+  // Also index by English name for scrapers that use English venue names
+  if (venue.name_en && venue.name_en !== key) {
+    VENUE_COORDINATES[venue.name_en] = coords;
+  }
+}
 
 export function normalizeEvents(rawEvents: { events: RawEvent[] }): Event[] {
   const now = new Date().toISOString();

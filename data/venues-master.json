@@ -548,5 +548,278 @@
     "type": "concert_hall",
     "description": "Main concert hall within Technopolis cultural park, named after the historic Citroen building. Hosts major concerts and cultural events",
     "metro": "Kerameikos"
+  },
+
+  "Μέγαρο Μουσικής Αθηνών": {
+    "name_en": "Athens Concert Hall (Megaron)",
+    "neighborhood": "Ilisia",
+    "address": "Vassilissis Sofias Avenue & Kokkali 1, Athens 115 21",
+    "lat": 37.9750,
+    "lng": 23.7570,
+    "type": "concert_hall"
+  },
+  "Αλκμήνη": {
+    "name_en": "Alkmini Theatre",
+    "neighborhood": "Petralona",
+    "address": "Alkminis 8-12, Athens 118 54",
+    "lat": 37.9754,
+    "lng": 23.7122,
+    "type": "theater"
+  },
+  "Universe": {
+    "name_en": "Universe Multivenue",
+    "neighborhood": "Egaleo",
+    "address": "Leoforos Kifisou 87, Athens 122 41",
+    "lat": 37.9708,
+    "lng": 23.6733,
+    "type": "live_music_venue"
+  },
+  "Studio Μαυρομιχάλη": {
+    "name_en": "Studio Mavromichali",
+    "neighborhood": "Exarchia",
+    "address": "Mavromichali 134, Athens 114 72",
+    "lat": 37.9936,
+    "lng": 23.7395,
+    "type": "theater"
+  },
+  "Cantina Social": {
+    "name_en": "Cantina Social",
+    "neighborhood": "Psyrri",
+    "address": "Leokoriou 6-8, Athens 105 54",
+    "lat": 37.9782,
+    "lng": 23.7255,
+    "type": "bar_venue"
+  },
+  "Bolivar": {
+    "name_en": "Bolivar Beach Bar",
+    "neighborhood": "Alimos",
+    "address": "Leoforos Poseidonos, Alimos 174 55",
+    "lat": 37.9082,
+    "lng": 23.7146,
+    "type": "beach_bar"
+  },
+  "Μικρός Κεραμεικός": {
+    "name_en": "Mikros Kerameikos",
+    "neighborhood": "Kerameikos",
+    "address": "Eumolpidon 13, Athens 118 54",
+    "lat": 37.9784,
+    "lng": 23.7156,
+    "type": "theater"
+  },
+  "ROES THEATER": {
+    "name_en": "Roes Theatre",
+    "neighborhood": "Gazi",
+    "address": "Iakchou 16, Athens 118 54",
+    "lat": 37.9770,
+    "lng": 23.7135,
+    "type": "theater"
+  },
+  "ΠΛΥΦΑ": {
+    "name_en": "PLYFA Factory",
+    "neighborhood": "Votanikos",
+    "address": "Korytsas 39, Athens 104 47",
+    "lat": 37.9773,
+    "lng": 23.7013,
+    "type": "cultural_center"
+  },
+  "Θέατρο Nous": {
+    "name_en": "Theatre Nous Creative Space",
+    "neighborhood": "Kypseli",
+    "address": "Trias 34, Athens 112 55",
+    "lat": 37.9965,
+    "lng": 23.7320,
+    "type": "theater"
+  },
+  "Ωδείο Αθηνών": {
+    "name_en": "Athens Conservatoire",
+    "neighborhood": "Ilisia",
+    "address": "Rigillis & Vasileos Georgiou B' 17-19, Athens 106 75",
+    "lat": 37.9750,
+    "lng": 23.7530,
+    "type": "conservatory"
+  },
+  "Θέατρο Φούρνος": {
+    "name_en": "Theatro Fournos",
+    "neighborhood": "Kypseli / Patission",
+    "address": "Mavromichali 168, Athens 114 72",
+    "lat": 37.9965,
+    "lng": 23.7395,
+    "type": "theater"
+  },
+  "Aux Club": {
+    "name_en": "Aux Club",
+    "neighborhood": "Votanikos",
+    "address": "Agiou Orous 15, Athens 104 47",
+    "lat": 37.9746,
+    "lng": 23.7028,
+    "type": "live_music_venue"
+  },
+  "Φιλίπ": {
+    "name_en": "Filipp Theatre",
+    "neighborhood": "Vyronas",
+    "address": "Thasou 11, Athens 162 31",
+    "lat": 37.9620,
+    "lng": 23.7560,
+    "type": "theater"
+  },
+  "Σκηνή BRECHT - 2510": {
+    "name_en": "Brecht Stage 2510",
+    "neighborhood": "Omonia",
+    "address": "3is Septemvriou 38, Athens 104 31",
+    "lat": 37.9895,
+    "lng": 23.7270,
+    "type": "theater"
+  },
+  "Ίδρυμα Μιχάλης Κακογιάννης": {
+    "name_en": "Michael Cacoyannis Foundation",
+    "neighborhood": "Tavros",
+    "address": "Pireos 206, Athens 177 78",
+    "lat": 37.9676,
+    "lng": 23.6964,
+    "type": "cultural_center"
+  },
+  "Parnassos Literary Society": {
+    "name_en": "Parnassos Literary Society",
+    "neighborhood": "Syntagma",
+    "address": "Agiou Georgiou Karitsi 8, Athens 105 61",
+    "lat": 37.9774,
+    "lng": 23.7314,
+    "type": "concert_hall"
+  },
+  "Olvio": {
+    "name_en": "Theatro Olvio",
+    "neighborhood": "Gazi / Keramikos",
+    "address": "Iera Odos 67, Athens 104 35",
+    "lat": 37.9775,
+    "lng": 23.7145,
+    "type": "theater"
+  },
+  "Oddity": {
+    "name_en": "Oddity Club",
+    "neighborhood": "Petralona / Thissio",
+    "address": "Iraklidon 61, Athens 118 54",
+    "lat": 37.9711,
+    "lng": 23.7101,
+    "type": "nightclub"
+  },
+  "Astron": {
+    "name_en": "Astron Club",
+    "neighborhood": "Kerameikos",
+    "address": "Konstantinoupoleos 121, Athens 104 47",
+    "lat": 37.9780,
+    "lng": 23.7090,
+    "type": "nightclub"
+  },
+  "Μικρό Γκλόρια": {
+    "name_en": "Mikro Gloria",
+    "neighborhood": "Exarchia",
+    "address": "Ippokratous 7, Athens 106 80",
+    "lat": 37.9849,
+    "lng": 23.7343,
+    "type": "theater"
+  },
+  "ΙΛΙΟΝ Plus": {
+    "name_en": "ILION Plus",
+    "neighborhood": "Victoria / Neapoli",
+    "address": "Kodrigktonos 17, Athens 104 34",
+    "lat": 37.9944,
+    "lng": 23.7369,
+    "type": "live_music_venue"
+  },
+  "Θέατρο Δρόμος": {
+    "name_en": "Theatre Dromos",
+    "neighborhood": "Kypseli",
+    "address": "Agiou Meletiou 25 & Kykladon, Athens 113 61",
+    "lat": 38.0016,
+    "lng": 23.7380,
+    "type": "theater"
+  },
+  "Βαφείο - Λάκης Καραλής": {
+    "name_en": "Vafeio - Lakis Karalis Theatre",
+    "neighborhood": "Votanikos",
+    "address": "Agiou Orous 16 & Konstantinoupoleos 115, Athens 118 54",
+    "lat": 37.9741,
+    "lng": 23.7063,
+    "type": "theater"
+  },
+  "ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ": {
+    "name_en": "Filippos Nakas Concert Hall",
+    "neighborhood": "Exarchia",
+    "address": "Ippokratous 41, Athens 106 80",
+    "lat": 37.9858,
+    "lng": 23.7357,
+    "type": "concert_hall"
+  },
+  "Onassis Stegi": {
+    "name_en": "Onassis Stegi",
+    "neighborhood": "Neos Kosmos",
+    "address": "Leof. Andrea Siggrou 107-109, Athens 117 45",
+    "lat": 37.9540,
+    "lng": 23.7404,
+    "type": "cultural_center"
+  },
+  "Θέατρο του Νέου Κόσμου": {
+    "name_en": "Theatre of Neos Kosmos",
+    "neighborhood": "Neos Kosmos",
+    "address": "Antisthenous 7, Athens 117 45",
+    "lat": 37.9590,
+    "lng": 23.7310,
+    "type": "theater"
+  },
+  "Ολύμπια - Δημοτικό Μουσικό Θέατρο «Μαρία Κάλλας»": {
+    "name_en": "Olympia Maria Callas Municipal Music Theatre",
+    "neighborhood": "Omonia",
+    "address": "Akadimias 59, Athens 106 79",
+    "lat": 37.9824,
+    "lng": 23.7333,
+    "type": "music_theater"
+  },
+  "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;": {
+    "name_en": "Olympia Maria Callas Municipal Music Theatre",
+    "neighborhood": "Omonia",
+    "address": "Akadimias 59, Athens 106 79",
+    "lat": 37.9824,
+    "lng": 23.7333,
+    "type": "music_theater"
+  },
+  "Θέατρο Ολύμπια": {
+    "name_en": "Olympia Theatre",
+    "neighborhood": "Omonia",
+    "address": "Akadimias 59, Athens 106 79",
+    "lat": 37.9824,
+    "lng": 23.7333,
+    "type": "music_theater"
+  },
+  "Δημοτικό Θέατρο Πειραιά": {
+    "name_en": "Piraeus Municipal Theatre",
+    "neighborhood": "Piraeus",
+    "address": "Iroon Polytechniou 32, Piraeus 185 35",
+    "lat": 37.9429,
+    "lng": 23.6470,
+    "type": "theater"
+  },
+  "SMUT Athens": {
+    "name_en": "SMUT Athens",
+    "neighborhood": "Psyrri",
+    "address": "Vatsaxi 4, Athens 104 38",
+    "lat": 37.9841,
+    "lng": 23.7284,
+    "type": "nightclub"
+  },
+  "Calderone Art Space": {
+    "name_en": "Calderone Art Space",
+    "neighborhood": "Gazi",
+    "address": "Tripolimou 8, Athens 118 54",
+    "lat": 37.9790,
+    "lng": 23.7125,
+    "type": "art_space"
+  },
+  "Rabbithole": {
+    "name_en": "Rabbithole",
+    "neighborhood": "Syntagma",
+    "address": "Lekka 12, Athens 105 62",
+    "lat": 37.9775,
+    "lng": 23.7349,
+    "type": "bar_venue"
   }
 }
