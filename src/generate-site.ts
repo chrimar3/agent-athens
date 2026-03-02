@@ -336,7 +336,7 @@ async function main() {
   // Initialize _redirects with /en/ redirect (must be first rule — Netlify processes top-to-bottom)
   // 302 (temporary) because we'll remove this when bilingual content launches
   const redirectsPath = join(DIST_DIR, '_redirects');
-  writeFileSync(redirectsPath, '/en/*  /:splat  302\n');
+  writeFileSync(redirectsPath, '/en/*  /:splat  302\n/sitemap.xml  /sitemap-index.xml  301\n');
 
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
@@ -425,11 +425,61 @@ async function main() {
   // Generate 404 page
   generate404Page();
 
+  // Content-hash pass: compute hashes for all generated pages
+  console.log('\n🔐 Computing content hashes...');
+  const { loadManifest, hashContent, resolveLastModified, saveManifest } = await import('./sitemap/content-hasher');
+  const { generateSplitSitemaps } = await import('./sitemap/generate-sitemaps');
+  const previousManifest = loadManifest();
+  const newManifest = { version: 1 as const, generatedAt: '', entries: {} as Record<string, { hash: string; lastModified: string }> };
+
+  let unchangedCount = 0;
+  let changedCount = 0;
+
+  const uniqueUrls = [...new Set(generatedUrls)];
+
+  for (const url of uniqueUrls) {
+    // Map URL to file on disk
+    let filePath: string;
+    if (url === 'index') {
+      filePath = join(DIST_DIR, 'index.html');
+    } else if (url.endsWith('/')) {
+      // Content pages: about/, editorial/, corrections/
+      filePath = join(DIST_DIR, url, 'index.html');
+    } else if (url.startsWith('events/') || url.startsWith('venues/')) {
+      // Event/venue pages: events/slug/index.html, venues/slug/index.html
+      filePath = join(DIST_DIR, url, 'index.html');
+    } else {
+      // Filter pages: slug.html
+      filePath = join(DIST_DIR, `${url}.html`);
+    }
+
+    if (!existsSync(filePath)) continue;
+
+    const html = readFileSync(filePath, 'utf-8');
+    const hash = hashContent(html);
+    const lastModified = resolveLastModified(url, hash, previousManifest);
+
+    if (previousManifest.entries[url]?.hash === hash) {
+      unchangedCount++;
+    } else {
+      changedCount++;
+    }
+
+    newManifest.entries[url] = { hash, lastModified };
+  }
+
+  saveManifest(newManifest);
+  console.log(`  ✓ ${Object.keys(newManifest.entries).length} pages hashed (${unchangedCount} unchanged, ${changedCount} changed/new)`);
+
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');
-  await generateLLMsTxt();
+  await generateLLMsTxt({
+    events,
+    venuePageUrls,
+    categoryConfigs: CATEGORIES_CONFIG.categories,
+  });
   await generateRobotsTxt();
-  await generateSitemap(generatedUrls);
+  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest);
   await generateIndexNowKeyFile();
 
   const buildDurationMs = Date.now() - buildStartTime;
@@ -442,6 +492,8 @@ async function main() {
   console.log(`   - ${eventPageUrls.length} event pages`);
   console.log(`   - ${venuePageUrls.length} venue pages`);
   console.log(`   - ${categoryUrls.length} category pages`);
+  console.log(`🗺️  Sitemaps: ${sitemapUrlCount} URLs across 3 split sitemaps`);
+  console.log(`🔐 Content hashes: ${unchangedCount} preserved, ${changedCount} updated`);
   console.log(`⏱️  Build time: ${(buildDurationMs / 1000).toFixed(1)}s`);
   console.log(`📁 Output directory: ${DIST_DIR}`);
 }
@@ -537,41 +589,65 @@ async function generateCategoryPages(events: Event[]): Promise<string[]> {
   return generatedUrls;
 }
 
-async function generateLLMsTxt() {
+async function generateLLMsTxt(params: {
+  events: Event[];
+  venuePageUrls: string[];
+  categoryConfigs: CategoryConfig[];
+}) {
+  const { events, venuePageUrls, categoryConfigs } = params;
   const base = 'https://agentathens.netlify.app';
+
+  const eventCount = events.length;
+  const venueCount = venuePageUrls.length;
+  const uniqueTypes = [...new Set(events.map(e => e.type))].sort().join(', ');
+  const sourceCount = new Set(events.map(e => e.source)).size;
+
+  const categoryLines = categoryConfigs
+    .map(c => `- [${c.titleEn}](${base}/${c.slug}): ${c.description}`)
+    .join('\n');
+
+  const venueExamples = venuePageUrls
+    .slice()
+    .sort()
+    .slice(0, 5)
+    .map(url => `- ${base}/${url}`)
+    .join('\n');
+
   const content = `# Agent Athens
 
-> AI-curated cultural events calendar for Athens, Greece. Updated daily at 08:00 from 10+ verified venues. Data licensed CC BY 4.0.
+> AI-curated cultural events calendar for Athens, Greece.
+> ${eventCount} events across ${venueCount} venues. Updated daily at 08:00 Athens time. Data licensed CC BY 4.0.
 
-## Browse Events
+## Browse by Category
 
-- [All Events Today](${base}/today): Everything happening in Athens today
-- [Tomorrow](${base}/tomorrow): Events happening tomorrow
-- [This Weekend](${base}/this-weekend): All weekend events
-- [This Week](${base}/this-week): Full week overview
-- [Concerts This Weekend](${base}/concert-this-weekend): Live music this weekend
-- [Open Events Today](${base}/open-today): Free admission events today
-- [Exhibitions](${base}/exhibition): Current exhibitions in Athens
-- [Theater This Week](${base}/theater-this-week): Theater performances this week
-- [Electronic Music](${base}/electronic-concert): Electronic concerts and DJ sets
+${categoryLines}
+
+## Browse by Time
+
+- [Today](${base}/today), [Tomorrow](${base}/tomorrow), [This Weekend](${base}/this-weekend)
+- [This Week](${base}/this-week), [This Month](${base}/this-month)
+- [Free Events Today](${base}/open-today)
+
+## Venues
+
+${venueCount} venue pages. Examples:
+${venueExamples}
 
 ## JSON API
 
-Every HTML page has a JSON counterpart at \`/api/{slug}.json\`. Useful for programmatic access.
+Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 
-- [All Today](${base}/api/today.json): All events today as JSON
-- [Concerts This Week](${base}/api/concert-this-week.json): Concerts this week
-- [Open Today](${base}/api/open-today.json): Free events today
-- [Exhibitions](${base}/api/exhibition.json): All current exhibitions
-- [Full Index](${base}/api/index.json): Complete event index
+- [All Events](${base}/api/index.json)
+- [Today](${base}/api/today.json)
+- [Category example](${base}/api/categories/concerts.json)
 
 ## Coverage
 
 - Geographic: Athens, Greece (Attica region)
-- Types: concerts, exhibitions, cinema, theater, dance, performances, DJ sets, workshops
-- Sources: 10+ verified venues and listing sites, scraped daily
-- Freshness: Updated every morning at 08:00 Europe/Athens
-- Structured data: Schema.org Event markup on all event pages
+- Types: ${uniqueTypes}
+- Sources: ${sourceCount} verified venues and listing sites
+- Freshness: Updated daily at 08:00 Europe/Athens
+- Structured data: Schema.org Event markup on all pages
 
 ## Contact
 
@@ -610,6 +686,15 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+User-agent: AppleBot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
 # AI Training — BLOCK (prevents model training, preserves search)
 User-agent: Google-Extended
 Disallow: /
@@ -618,39 +703,11 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://agentathens.netlify.app/sitemap.xml
+Sitemap: https://agentathens.netlify.app/sitemap-index.xml
 `;
 
   writeFileSync(join(DIST_DIR, 'robots.txt'), content);
   console.log('  ✓ robots.txt');
-}
-
-async function generateSitemap(generatedUrls: string[]) {
-  const baseUrl = 'https://agentathens.netlify.app';
-  const today = new Date().toISOString().split('T')[0];
-
-  // Build sitemap entries with priority based on URL depth
-  const entries = generatedUrls.map(url => {
-    const fullUrl = url === 'index' ? baseUrl : `${baseUrl}/${url}`;
-    // Higher priority for simpler URLs (more general pages)
-    const depth = url === 'index' ? 0 : url.split('-').length;
-    const priority = Math.max(0.5, 1.0 - (depth * 0.1)).toFixed(1);
-
-    return `  <url>
-    <loc>${fullUrl}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>${priority}</priority>
-  </url>`;
-  });
-
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.join('\n')}
-</urlset>`;
-
-  writeFileSync(join(DIST_DIR, 'sitemap.xml'), sitemap);
-  console.log(`  ✓ sitemap.xml (${generatedUrls.length} URLs)`);
 }
 
 async function generateIndexNowKeyFile() {
