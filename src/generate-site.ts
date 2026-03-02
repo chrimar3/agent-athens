@@ -17,7 +17,7 @@ import {
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
-import { generateOgImages, generateFavicons } from './generators/og-image';
+import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
 import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
@@ -333,6 +333,22 @@ async function main() {
   const { urls: eventPageUrls, slugMap: currentSlugs } = await generateEventPages(events);
   generatedUrls.push(...eventPageUrls);
   pagesGenerated += eventPageUrls.length;
+
+  // Generate per-event OG images (only for events without self-hosted images)
+  console.log('\n🖼️  Generating per-event OG images...');
+  await generateEventOgImages(events);
+
+  // Generate per-hub OG images
+  console.log('🖼️  Generating per-hub OG images...');
+  const hubPagesConfig: { hubs: import('./types').HubConfig[] } = JSON.parse(
+    readFileSync(join(import.meta.dir, '../config/hub-pages.json'), 'utf-8')
+  );
+  const { getHubEvents } = await import('./generators/hub-page');
+  const hubEventCounts = new Map<string, number>();
+  for (const hub of hubPagesConfig.hubs) {
+    hubEventCounts.set(hub.slug, getHubEvents(hub, events).length);
+  }
+  await generateHubOgImages(hubPagesConfig.hubs, hubEventCounts);
 
   // Initialize _redirects with /en/ redirect (must be first rule — Netlify processes top-to-bottom)
   // 302 (temporary) because we'll remove this when bilingual content launches

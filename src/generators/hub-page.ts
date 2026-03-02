@@ -222,6 +222,12 @@ export function renderHubPage(
     /<meta name="keywords" content="[^"]*">/,
     `<meta name="keywords" content="${hubKeywords}">`
   );
+  // Override OG image with per-hub branded image
+  const BASE_URL = 'https://agentathens.netlify.app';
+  html = html.replace(
+    /<meta property="og:image" content="[^"]*">/,
+    `<meta property="og:image" content="${BASE_URL}/images/og/hubs/${config.slug}.png">`
+  );
 
   // Part 1: Answer Capsule (inject after </header>)
   const capsuleHtml = `<section class="hub-answer-capsule">

@@ -137,7 +137,11 @@ export function generateEventSlug(event: Event): string {
 
 /**
  * Get the OG image URL for an event
- * Fallback chain: event image → venue default → type default → site default
+ * Fallback chain: event image → venue default → per-event OG → type default → site default
+ *
+ * Events without any photo get a branded per-event OG image (title/venue/date)
+ * instead of the generic type default. Per-event OG images are generated
+ * by generateEventOgImages() in og-image.ts during the build.
  */
 function getOgImage(event: Event): string {
   // Prefer self-hosted image, then hotlinked source image
@@ -147,8 +151,8 @@ function getOgImage(event: Event): string {
   // Fall back to venue image if available
   if (event.venueImage) return event.venueImage;
 
-  // Fall back to type-specific default
-  return DEFAULT_OG_IMAGES[event.type] || DEFAULT_OG_IMAGES.default;
+  // Per-event branded OG image (generated for imageless events)
+  return `/images/og/events/${generateEventSlug(event)}.png`;
 }
 
 /**

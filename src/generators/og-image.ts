@@ -1,16 +1,23 @@
 /**
  * OG Image & Favicon Generator
  *
- * Generates ~16 OG images (1 site default + 15 type defaults)
- * and a favicon set using satori + @resvg/resvg-js.
+ * Generates OG images in three tiers:
+ * 1. Site default (1 image)
+ * 2. Type defaults (15 images, one per event type)
+ * 3. Per-event images (for events without photos — title/venue/date branded cards)
+ * 4. Per-hub images (hub title + event count)
  *
- * All output goes to dist/images/og/ and dist/ (favicons).
+ * All output goes to dist/images/og/ and subdirectories.
+ * Uses satori for flexbox-to-SVG rendering, then resvg for PNG output.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import type { Event, HubConfig } from '../types';
+import { generateEventSlug } from './event-page';
+import { formatGreekDateOnly } from '../utils/i18n';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const FONTS_DIR = join(import.meta.dir, '../assets/fonts');
@@ -34,7 +41,7 @@ const COLORS = {
 };
 
 // Type colors from CSS custom properties
-const TYPE_COLORS: Record<string, string> = {
+export const TYPE_COLORS: Record<string, string> = {
   concert: '#f5e642',
   dj_set: '#e040fb',
   exhibition: '#10b981',
@@ -281,6 +288,359 @@ export async function generateOgImages(): Promise<void> {
   }
 
   console.log(`  ✓ Generated ${types.length + 1} OG images`);
+}
+
+/**
+ * Escape XML-special characters for safe rendering in satori.
+ * Satori renders text as SVG, so &, <, ", ' can break the output.
+ */
+function escapeForSatori(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/**
+ * Generate a branded OG image for a single event (1200×630)
+ *
+ * Layout: dark background, left-edge type color stripe, event title (2 lines max),
+ * venue name, formatted date in accent yellow, and wordmark.
+ */
+export async function generateEventOgImage(event: Event): Promise<Buffer> {
+  const typeColor = TYPE_COLORS[event.type] || COLORS.accent;
+  const title = escapeForSatori(event.title);
+  const venue = escapeForSatori(event.venue.name);
+  const dateStr = formatGreekDateOnly(event.startDate);
+
+  const svg = await satori(
+    {
+      type: 'div',
+      props: {
+        style: {
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          backgroundColor: COLORS.bg,
+          fontFamily: 'Manrope',
+          position: 'relative',
+        },
+        children: [
+          // Left color stripe
+          {
+            type: 'div',
+            props: {
+              style: {
+                width: 6,
+                height: '100%',
+                backgroundColor: typeColor,
+                flexShrink: 0,
+              },
+            },
+          },
+          // Content area
+          {
+            type: 'div',
+            props: {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: '60px 60px 60px 54px',
+                flex: 1,
+                overflow: 'hidden',
+              },
+              children: [
+                // Title — max 2 lines via height limit
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 42,
+                      fontWeight: 700,
+                      color: COLORS.text,
+                      lineHeight: 1.2,
+                      maxHeight: 101, // ~2 lines: 2 × (42 × 1.2) ≈ 100.8
+                      overflow: 'hidden',
+                    },
+                    children: title,
+                  },
+                },
+                // Venue
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 24,
+                      fontWeight: 400,
+                      color: COLORS.textSecondary,
+                      marginTop: 20,
+                      overflow: 'hidden',
+                      maxHeight: 32,
+                    },
+                    children: venue,
+                  },
+                },
+                // Date
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 22,
+                      fontWeight: 700,
+                      color: '#f5e642',
+                      marginTop: 12,
+                    },
+                    children: dateStr,
+                  },
+                },
+              ],
+            },
+          },
+          // Wordmark bottom-right
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'absolute',
+                bottom: 24,
+                right: 32,
+                fontSize: 14,
+                fontWeight: 400,
+                color: COLORS.textTertiary,
+              },
+              children: 'agent athens',
+            },
+          },
+        ],
+      },
+    },
+    {
+      width: 1200,
+      height: 630,
+      fonts: SATORI_FONTS,
+    }
+  );
+
+  return svgToPng(svg, 1200);
+}
+
+/**
+ * Build a content hash for an event's OG-relevant fields.
+ * If the hash matches the cached version, the image doesn't need regeneration.
+ */
+function eventOgHash(event: Event): string {
+  const key = `${event.title}|${event.venue.name}|${event.startDate}|${event.type}`;
+  return Bun.hash(key).toString(36);
+}
+
+/**
+ * Load the OG image content-hash cache.
+ * Maps slug → hash of the fields used to render the OG image.
+ */
+function loadOgCache(): Record<string, string> {
+  const cachePath = join(DIST_DIR, '.og-cache.json');
+  if (!existsSync(cachePath)) return {};
+  try {
+    return JSON.parse(readFileSync(cachePath, 'utf-8'));
+  } catch {
+    return {};
+  }
+}
+
+function saveOgCache(cache: Record<string, string>): void {
+  writeFileSync(join(DIST_DIR, '.og-cache.json'), JSON.stringify(cache));
+}
+
+/**
+ * Generate per-event OG images for all events that lack photos.
+ * Only targets events where imageLocal, imageUrl, and venueImage are all missing.
+ * Uses content-hash caching: skips events whose title/venue/date/type haven't changed.
+ */
+export async function generateEventOgImages(events: Event[]): Promise<number> {
+  const eventsDir = join(DIST_DIR, 'images', 'og', 'events');
+  if (!existsSync(eventsDir)) {
+    mkdirSync(eventsDir, { recursive: true });
+  }
+
+  const imagelessEvents = events.filter(
+    e => !e.imageLocal && !e.imageUrl && !e.venueImage
+  );
+
+  const previousCache = loadOgCache();
+  const newCache: Record<string, string> = {};
+  let skipped = 0;
+
+  for (const event of imagelessEvents) {
+    const slug = generateEventSlug(event);
+    const hash = eventOgHash(event);
+    newCache[slug] = hash;
+
+    // Skip if the image already exists and content hasn't changed
+    const imagePath = join(eventsDir, `${slug}.png`);
+    if (previousCache[slug] === hash && existsSync(imagePath)) {
+      skipped++;
+      continue;
+    }
+
+    const png = await generateEventOgImage(event);
+    writeFileSync(imagePath, png);
+  }
+
+  saveOgCache(newCache);
+  const rendered = imagelessEvents.length - skipped;
+  console.log(`  ✓ Generated ${rendered} per-event OG images (${skipped} cached, ${imagelessEvents.length} total)`);
+  return imagelessEvents.length;
+}
+
+/**
+ * Generate a branded OG image for a hub page (1200×630)
+ *
+ * Layout: dark background, left-edge color stripe, hub title,
+ * event count subtitle, and wordmark.
+ */
+export async function generateHubOgImage(
+  title: string,
+  eventCount: number,
+  accentColor: string
+): Promise<Buffer> {
+  const safeTitle = escapeForSatori(title);
+
+  const svg = await satori(
+    {
+      type: 'div',
+      props: {
+        style: {
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          backgroundColor: COLORS.bg,
+          fontFamily: 'Manrope',
+          position: 'relative',
+        },
+        children: [
+          // Left color stripe
+          {
+            type: 'div',
+            props: {
+              style: {
+                width: 6,
+                height: '100%',
+                backgroundColor: accentColor,
+                flexShrink: 0,
+              },
+            },
+          },
+          // Content area
+          {
+            type: 'div',
+            props: {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: '60px 60px 60px 54px',
+                flex: 1,
+              },
+              children: [
+                // Hub title
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 44,
+                      fontWeight: 700,
+                      color: COLORS.text,
+                      lineHeight: 1.2,
+                    },
+                    children: safeTitle,
+                  },
+                },
+                // Event count subtitle
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 24,
+                      fontWeight: 400,
+                      color: COLORS.textSecondary,
+                      marginTop: 20,
+                    },
+                    children: `${eventCount} εκδηλώσεις`,
+                  },
+                },
+              ],
+            },
+          },
+          // Wordmark bottom-right
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'absolute',
+                bottom: 24,
+                right: 32,
+                fontSize: 14,
+                fontWeight: 400,
+                color: COLORS.textTertiary,
+              },
+              children: 'agent athens',
+            },
+          },
+        ],
+      },
+    },
+    {
+      width: 1200,
+      height: 630,
+      fonts: SATORI_FONTS,
+    }
+  );
+
+  return svgToPng(svg, 1200);
+}
+
+/**
+ * Resolve accent color for a hub based on its filter type.
+ * Event-type hubs use that type's color; others get the default accent blue.
+ */
+function getHubAccentColor(config: HubConfig): string {
+  if (config.filter.type === 'event_type') {
+    return TYPE_COLORS[config.filter.value] || COLORS.accent;
+  }
+  if (config.filter.type === 'event_types') {
+    return TYPE_COLORS[config.filter.values[0]] || COLORS.accent;
+  }
+  return COLORS.accent;
+}
+
+/**
+ * Generate per-hub OG images for all hub configs.
+ * Takes hub configs and a map of slug → event count (computed by the caller).
+ */
+export async function generateHubOgImages(
+  hubConfigs: HubConfig[],
+  hubEventCounts: Map<string, number>
+): Promise<number> {
+  const hubsDir = join(DIST_DIR, 'images', 'og', 'hubs');
+  if (!existsSync(hubsDir)) {
+    mkdirSync(hubsDir, { recursive: true });
+  }
+
+  let count = 0;
+  for (const config of hubConfigs) {
+    const eventCount = hubEventCounts.get(config.slug) || 0;
+    if (eventCount < 3) continue; // Skip hubs that won't be generated
+
+    const accentColor = getHubAccentColor(config);
+    const png = await generateHubOgImage(config.titleEl, eventCount, accentColor);
+    writeFileSync(join(hubsDir, `${config.slug}.png`), png);
+    count++;
+  }
+
+  console.log(`  ✓ Generated ${count} per-hub OG images`);
+  return count;
 }
 
 /**

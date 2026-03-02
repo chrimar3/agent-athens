@@ -921,3 +921,14 @@ Separate pipeline:
 | Hub filter extension (9 hubs) | Added `event_types`, `tag`, `price_type` filters via discriminated union `HubFilter` in `types.ts`. 6 new hubs: /theater, /nightlife, /festivals, /kids, /exhibitions (auto-skip), /open | 2026-03 |
 | Hub metadata override | Hub pages override `<title>`, `<meta description>`, `<meta keywords>` to avoid generic "δωρεάν"/"free" from `buildPageMetadata()`. Uses hub's own `titleEl` and `answerCapsuleEl` | 2026-03 |
 | /live-music dropped | Overlaps with /concerts; dropped permanently to avoid cannibalization | 2026-03 |
+
+## OG Images
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Per-event OG images for imageless events only | 137 of 844 events lack photos — only they need branded OG cards; events with photos use the real image | 2026-03 |
+| Per-hub OG images for all active hubs | Hub pages were using generic type defaults; branded cards with title+count improve social sharing CTR | 2026-03 |
+| Content-hash cache for OG regeneration | satori+resvg costs ~148ms/image; without caching, 137 images add ~20s to build; with caching, subsequent builds skip unchanged events (5.5s total) | 2026-03 |
+| Title truncation via satori flexbox maxHeight | Greek characters have highly variable widths; manual char-counting would be inaccurate. maxHeight clips to ~2 lines naturally | 2026-03 |
+| XML escape for satori input | Satori renders to SVG internally; event titles with `&`, `<`, `"` would break SVG XML without explicit escaping | 2026-03 |
+| OG image fallback chain: imageLocal → imageUrl → venueImage → per-event OG | Removed type-default fallback from event pages; per-event OG with actual title/venue/date is always better than generic type card | 2026-03 |
