@@ -255,7 +255,7 @@ export function renderHubPage(
   </div>
 </section>`;
 
-  html = html.replace('<main id="main-content">', `<main id="main-content">\n${tableHtml}`);
+  html = html.replace(/<main id="main-content"[^>]*>/, (match) => `${match}\n${tableHtml}`);
 
   // Part 3: Event Blocks (inject after card grid </section>)
   const enrichedEvents = sortedEvents
