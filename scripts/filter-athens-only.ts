@@ -54,7 +54,7 @@ const events = db.prepare(`
     id, title, description, venue_name, venue_address,
     venue_neighborhood, start_date, source, location_status
   FROM events
-  WHERE start_date >= date('now')
+  WHERE COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')
 `).all() as DBEvent[];
 
 console.log(`   Loaded ${events.length} upcoming events\n`);
@@ -259,7 +259,7 @@ const finalStats = db.prepare(`
     SUM(CASE WHEN location_status = 'unverified' THEN 1 ELSE 0 END) as unverified,
     SUM(CASE WHEN location_status = 'problematic' THEN 1 ELSE 0 END) as problematic
   FROM events
-  WHERE start_date >= date('now')
+  WHERE COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')
 `).get() as {
   total: number;
   verified: number;

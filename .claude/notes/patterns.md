@@ -225,9 +225,22 @@ The slash commands enforce reading `mistakes.md` and `patterns.md` before starti
 
 All queries that filter "current/upcoming" events must use:
 ```sql
-WHERE date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
+WHERE COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')
 ```
-This pattern appears in `session-diagnostic.sh` and should be used everywhere.
+This pattern appears in `session-diagnostic.sh`, `cleanup-old-images.ts`, and all pipeline scripts.
+
+### UPCOMING_FILTER Constant Pattern
+
+For scripts with many date-filtered queries (like `remove-duplicates.ts` with 20+ queries), define a constant:
+
+```typescript
+const UPCOMING_FILTER = `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`;
+
+// Then use in template literals:
+const events = db.prepare(`SELECT * FROM events WHERE ${UPCOMING_FILTER}`).all();
+```
+
+This prevents drift — one definition, many usages. Easy to grep for consistency checks.
 
 ## Schema.org Generation (3 paths)
 
@@ -486,3 +499,37 @@ bun run scripts/rollback-batch.ts --batch=1 --session=feb-2026
 ### db.run() for DDL Statements
 
 Use `db.run()` instead of the database execute method for SQL DDL statements. The project security hook falsely flags the SQLite execute method (confusing it with child_process). Both work identically for DDL, but `db.run()` avoids hook warnings.
+
+## CLI Enrichment via `claude -p` Pattern
+
+### Basic Command
+```bash
+cd ~/Project\ with\ Claude/AgentAthens/agent-athens
+BRIEF=$(ls -t temp-briefs/batch-*.md | head -1)
+claude -p "$(cat "$BRIEF")" \
+  --output-format text \
+  --allowedTools "Bash Read Write WebSearch Glob Grep WebFetch"
+```
+
+### Key Behaviors
+- `-p` / `--print` runs non-interactively with full tool access
+- **`--allowedTools` is mandatory** — without it, tool calls are silently blocked (no human to approve)
+- Output goes to stdout; file writing happens via Bash tool calls (bun scripts)
+- From inside Claude Code: set `CLAUDECODE=` to bypass nested session detection
+- From cron/shell scripts: no bypass needed (no parent CC session to detect)
+- Brief size: tested up to 9.7KB (~1074 tokens) without truncation
+
+### Permission Model
+In `-p` mode, tools must be pre-approved via `--allowedTools`. The enrichment workflow needs:
+- `Bash` — runs bun scripts (write-description, gate-check, save-batch)
+- `Read` — reads exemplars, anti-patterns, venue intel
+- `Write` — creates description files in temp-descriptions/
+- `WebSearch` — researches events, artists, venues
+- `Glob`, `Grep` — finds files in codebase
+- `WebFetch` — fetches event page content
+
+### Quality Validation
+CLI-produced descriptions match interactive quality:
+- Gate score: 84 pre-save → 89 post-save (same as subagent enrichment)
+- All 8 sections present, no fabrication, proper credentials verification
+- The 84→89 gap is infrastructure metadata (Schema.org, tags, last_verified) populated by save-batch.ts

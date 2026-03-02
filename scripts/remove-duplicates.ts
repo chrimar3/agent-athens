@@ -30,6 +30,9 @@ const db = new Database('data/events.db');
 const DRY_RUN = process.argv.includes('--dry-run');
 const REMOVAL_THRESHOLD = 0.20; // Alert if >20% would be removed
 
+// Exhibition-safe date filter: running exhibitions (start_date in past, end_date in future) must not be excluded
+const UPCOMING_FILTER = `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`;
+
 if (DRY_RUN) {
   console.log('🔍 DRY RUN MODE - No changes will be made\n');
 }
@@ -68,7 +71,7 @@ const NON_EVENT_PATTERNS = [
 const nonEventProducts = db.prepare(`
   SELECT id, title, venue_name, date(start_date) as date, source
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (
       ${NON_EVENT_PATTERNS.map(p => `title LIKE '${p}'`).join(' OR ')}
     )
@@ -89,7 +92,7 @@ if (nonEventProducts.length > 0) {
   if (!DRY_RUN) {
     const deleteStmt = db.prepare(`
       DELETE FROM events
-      WHERE start_date >= date('now')
+      WHERE ${UPCOMING_FILTER}
         AND (
           ${NON_EVENT_PATTERNS.map(p => `title LIKE '${p}'`).join(' OR ')}
         )
@@ -137,7 +140,7 @@ const theaterRuns = db.prepare(`
          MIN(date(start_date)) as first_show,
          MAX(date(start_date)) as last_show
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND type IN ('theater', 'performance', 'cinema')
   GROUP BY title, venue_name
   HAVING COUNT(*) >= 3
@@ -167,7 +170,7 @@ if (theaterRuns.length > 0) {
 const exhibitionRuns = db.prepare(`
   SELECT title, venue_name, COUNT(*) as instances
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND type = 'exhibition'
   GROUP BY title, venue_name
   HAVING COUNT(*) >= 5
@@ -199,7 +202,7 @@ const weeklyEvents = db.prepare(`
          COUNT(*) as occurrences,
          GROUP_CONCAT(DISTINCT strftime('%w', start_date)) as weekdays
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
   GROUP BY title, venue_name
   HAVING COUNT(*) >= 4
     AND LENGTH(weekdays) <= 1
@@ -228,7 +231,7 @@ if (weeklyEvents.length > 0) {
 const festivalEvents = db.prepare(`
   SELECT title, venue_name, COUNT(*) as shows
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (title LIKE '%Festival%' OR title LIKE '%Φεστιβάλ%')
   GROUP BY title, venue_name
   HAVING COUNT(*) >= 3
@@ -266,7 +269,7 @@ const urlDuplicates = db.prepare(`
   SELECT url, COUNT(*) as count, GROUP_CONCAT(id) as ids,
          GROUP_CONCAT(title, ' | ') as titles
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND url IS NOT NULL
     AND url != ''
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
@@ -298,7 +301,7 @@ if (urlDuplicates.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND url IS NOT NULL
           AND url != ''
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
@@ -336,7 +339,7 @@ const exactDuplicates = db.prepare(`
          time(start_date) as time,
          COUNT(*) as count, GROUP_CONCAT(id) as ids
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
   GROUP BY title, venue_name, date(start_date), time(start_date)
   HAVING COUNT(*) > 1
@@ -365,7 +368,7 @@ if (exactDuplicates.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
       )
       WHERE rn > 1
@@ -402,7 +405,7 @@ const crossSourceDuplicates = db.prepare(`
          MAX(date(start_date)) as latest_date,
          GROUP_CONCAT(DISTINCT source) as sources
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
   GROUP BY LOWER(TRIM(title)), venue_name,
     CAST(julianday(start_date) AS INTEGER)
@@ -442,7 +445,7 @@ if (crossSourceDuplicates.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
       )
       WHERE rn > 1
@@ -479,7 +482,7 @@ const fuzzyDuplicates = db.prepare(`
          COUNT(*) as count,
          GROUP_CONCAT(title, ' | ') as original_titles
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
     AND LENGTH(title) >= 5
   GROUP BY LOWER(TRIM(title)), venue_name, date(start_date)
@@ -515,7 +518,7 @@ if (fuzzyDuplicates.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
           AND LENGTH(title) >= 5
       )
@@ -553,7 +556,7 @@ const venueNormalizedDuplicates = db.prepare(`
          COUNT(*) as count,
          GROUP_CONCAT(venue_name, ' | ') as original_venues
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
   GROUP BY title,
            LOWER(REPLACE(REPLACE(REPLACE(venue_name, '!', ''), '-', ''), '.', '')),
@@ -591,7 +594,7 @@ if (venueNormalizedDuplicates.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
       )
       WHERE rn > 1
@@ -627,7 +630,7 @@ const suspiciousTimestamps = db.prepare(`
          GROUP_CONCAT(time(start_date), ' | ') as times,
          GROUP_CONCAT(id, ',') as ids
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
   GROUP BY title, venue_name, date(start_date)
   HAVING COUNT(*) > 1
@@ -668,7 +671,7 @@ if (suspiciousTimestamps.length > 0) {
               id
           ) as rn
         FROM events
-        WHERE start_date >= date('now')
+        WHERE ${UPCOMING_FILTER}
           AND (dedup_protected = 0 OR dedup_protected IS NULL)
       )
       WHERE rn > 1
@@ -782,7 +785,7 @@ const allEvents = db.prepare(`
   SELECT id, title, venue_name, date(start_date) as date, source,
          LENGTH(COALESCE(description, '')) as desc_len
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
   ORDER BY date, title
 `).all() as Array<{
@@ -907,7 +910,7 @@ const festivalCandidates = db.prepare(`
          LENGTH(title) as title_len,
          LENGTH(COALESCE(description, '')) as desc_len
   FROM events
-  WHERE start_date >= date('now')
+  WHERE ${UPCOMING_FILTER}
     AND (dedup_protected = 0 OR dedup_protected IS NULL)
     AND (
       title LIKE 'Release Athens%' OR
@@ -1047,7 +1050,7 @@ const finalStats = db.prepare(`
     COUNT(DISTINCT url) as unique_urls,
     COUNT(DISTINCT title || venue_name || date(start_date)) as unique_events
   FROM events
-  WHERE start_date >= date('now');
+  WHERE ${UPCOMING_FILTER};
 `).get() as { total: number; protected: number; unique_urls: number; unique_events: number };
 
 const initialCount = finalStats.total + totalRemoved;

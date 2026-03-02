@@ -518,7 +518,7 @@ function getEventsToEnrich(db: Database, sources: string[], limit: number): Even
         OR time_doors IS NULL
       )
       AND time_source IS NULL
-      AND start_date >= date('now')
+      AND COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')
     ORDER BY start_date ASC
     LIMIT ?
   `;

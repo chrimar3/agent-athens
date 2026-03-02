@@ -60,6 +60,13 @@ Pitfalls encountered and how to avoid them.
 | more.com scraper extracts time but doesn't save it | Time data extracted to `startTime` but not stored in DB | Update scrape-more-enhanced.ts UPDATE query to include `time_doors = $startTime` |
 | Testing on sample without checking source distribution | Dry run showed issues but didn't identify source-specific failures | Always check success rate per source: `--dry-run` output shows source breakdown |
 
+## Pipeline Idempotency Issues (2026-03)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Exhibition end_date not applied in 3 pipeline scripts | `filter-athens-only.ts`, `remove-duplicates.ts`, `enrich-time.ts` all used `WHERE start_date >= date('now')` — silently excluded running exhibitions whose start_date was in the past but end_date still future. These events skipped location filtering, dedup, and time enrichment | Use `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')` everywhere. Pattern was already correct in `cleanup-old-images.ts` and documented in CLAUDE.md Tier 1 rules |
+| merge-duplicates.ts also missed | 7-day window `start_date >= date('now', '-7 days')` excluded long-running exhibitions (start_date 2+ months ago) | Same COALESCE pattern applied. Low impact (cross-source exhibition duplicates are rare) but fixed for consistency |
+
 ## Pipeline Issues (2026-02)
 
 | Mistake | What Happened | Correct Approach |
