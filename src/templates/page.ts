@@ -160,7 +160,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
     ${preContentHtml || ''}
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       ${eventCount > 0 ? `
       <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
         ${eventListHTML}

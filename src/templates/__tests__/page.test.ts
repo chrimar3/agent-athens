@@ -557,3 +557,67 @@ describe("Related pages rendering (via renderPage)", () => {
     expect(html).toContain('href="/">Όλες οι εκδηλώσεις</a>');
   });
 });
+
+describe("Site chrome accessibility (via renderPage)", () => {
+  const metadata: PageMetadata = {
+    title: "Test",
+    description: "Test",
+    keywords: "test",
+    url: "test",
+    eventCount: 1,
+    lastUpdate: "2025-11-01T10:00:00Z",
+    filters: {}
+  };
+
+  test("skip-link is present", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('class="skip-link"');
+  });
+
+  test("skip-link targets main-content", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('href="#main-content"');
+  });
+
+  test("skip-link has Greek text", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain("Μετάβαση στο περιεχόμενο");
+  });
+
+  test("main content has id", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('id="main-content"');
+  });
+
+  test("main content has tabindex for skip-link focus", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('tabindex="-1"');
+  });
+
+  test("header has role=banner", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('role="banner"');
+  });
+
+  test("footer has role=contentinfo", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('role="contentinfo"');
+  });
+
+  test("footer has E-E-A-T links", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('href="/about/"');
+    expect(html).toContain('href="/editorial/"');
+    expect(html).toContain('href="/corrections/"');
+  });
+
+  test("search button has aria-label", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('aria-label="Αναζήτηση"');
+  });
+
+  test("hamburger has aria-expanded", () => {
+    const html = renderPage(metadata, [sampleConcert]);
+    expect(html).toContain('aria-expanded="false"');
+  });
+});

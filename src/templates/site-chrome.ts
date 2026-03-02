@@ -8,7 +8,7 @@
 
 export function renderSiteNav(): string {
   return `<a href="#main-content" class="skip-link">Μετάβαση στο περιεχόμενο</a>
-<header class="site-header">
+<header class="site-header" role="banner">
   <div class="site-header-inner">
     <div class="site-header-left">
       <a href="/" class="site-logo">agent athens</a>
@@ -43,7 +43,7 @@ export function renderHamburgerMenu(): string {
 }
 
 export function renderSiteFooter(): string {
-  return `<footer class="site-footer">
+  return `<footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
@@ -61,6 +61,8 @@ export function renderSiteFooter(): string {
         <h3 class="footer-heading">Σχετικά</h3>
         <ul class="footer-links">
           <li><a href="/about/">Σχετικά</a></li>
+          <li><a href="/editorial/">Σύνταξη</a></li>
+          <li><a href="/corrections/">Διορθώσεις</a></li>
           <li><a href="/llms.txt">Για AI Agents</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>

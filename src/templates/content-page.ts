@@ -48,7 +48,7 @@ export function renderContentPage(
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="content-page-body" id="main-content">
+  <div class="content-page-body" id="main-content" tabindex="-1">
     ${bodyHtml}
   </div>
 
