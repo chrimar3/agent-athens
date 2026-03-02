@@ -9,6 +9,7 @@
 
 import type { Event } from '../types';
 import { renderPage } from './page';
+import { generateHubMetaDescription } from '../utils/meta-descriptions';
 
 export interface CategoryConfig {
   slug: string;
@@ -60,7 +61,10 @@ export function renderCategoryPage(
 
   const metadata = {
     title: category.title,
-    description: category.description,
+    description: generateHubMetaDescription(
+      { type: category.filter.type as any },
+      filteredEvents.length
+    ),
     keywords: `${category.titleEn}, Athens events, ${category.slug}, Αθήνα`,
     url: category.slug,
     eventCount: filteredEvents.length,

@@ -122,7 +122,7 @@
 
 /* ── Letter spacing ─────────────────────────────────── */
 .edp-title, .hero-heading { letter-spacing: -0.5px; }
-.card-badge { letter-spacing: 0.8px; }
+.card-badge { letter-spacing: 1.2px; }
 .edp-cta { letter-spacing: 1.92px; }
 
 /* ── Global Reset ────────────────────────────────────── */
@@ -201,7 +201,7 @@ a:hover {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md-lg);
+  gap: var(--space-lg);
 }
 
 @media (max-width: 1024px) {
@@ -211,7 +211,7 @@ a:hover {
 
 @media (max-width: 767px) {
   .page-container { padding: 0 16px; }
-  .card-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; gap: var(--space-md); }
 }
 
 /* ── Event Cards ────────────────────────────────────── */
@@ -221,12 +221,9 @@ a:hover {
   text-decoration: none;
   color: inherit;
   outline: none;
-  transition: transform var(--t-moderate) var(--ease-out), box-shadow var(--t-moderate) var(--ease-out);
 }
 
 .event-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   text-decoration: none;
 }
 
@@ -353,7 +350,7 @@ a:hover {
   font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 1.2px;
   padding: 4px 8px;
   border-radius: 4px;
   color: var(--text-on-bright);
@@ -1176,7 +1173,7 @@ a:hover {
     box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.5);
   }
   .filter-panel.is-open {
-    animation: sheetSlideUp var(--t-deliberate) var(--ease-out);
+    animation: sheetSlideUp var(--t-moderate) var(--ease-out);
   }
 
   .filter-panel-backdrop {
@@ -1926,20 +1923,22 @@ a:hover {
 .skeleton-thumb {
   width: 48px; height: 32px;
   border-radius: 4px;
-  background: var(--bg-surface);
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 400% 100%;
+  animation: skeleton-sweep 1.4s ease infinite;
 }
 .skeleton-lines { flex: 1; }
 .skeleton-line {
   height: 12px; border-radius: 4px;
-  background: var(--bg-surface);
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+  background-size: 400% 100%;
+  animation: skeleton-sweep 1.4s ease infinite;
   margin-bottom: 6px;
 }
 .skeleton-line.short { width: 60%; }
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+@keyframes skeleton-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 /* Active item highlight (keyboard nav) */

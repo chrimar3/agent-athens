@@ -191,11 +191,11 @@ Extra tokens (not in spec, practical additions): `--space-sm-md: 12px` :83, `--s
 | Desktop columns | 3 | `repeat(3, 1fr)` | 200 | ✅ |
 | Tablet columns | 2 | `repeat(2, 1fr)` | 206 | ✅ |
 | Mobile columns | 1 | `1fr` | 211 | ✅ |
-| Desktop gutter | 32px | `var(--space-md-lg)` = 24px | 201 | ⚠️ 24px, not 32px |
-| Mobile gutter | 16px | inherits 24px | 201 | ⚠️ 24px, not 16px |
+| Desktop gutter | 32px | `var(--space-lg)` = 32px | 201 | ✅ Fixed S21 |
+| Mobile gutter | 16px | `var(--space-md)` = 16px | 214 | ✅ Fixed S21 |
 | List rows 1-column | Always 1 col | `.event-card-list` is flexbox, 1-col | 1398 | ✅ |
 
-**P2 — Grid gutter is 24px (--space-md-lg) instead of 32px desktop / 16px mobile.** Should use `--space-lg` (32px) on desktop with a mobile override to `--space-md` (16px).
+~~P2 — Grid gutter 24px→32px desktop, 16px mobile~~ → **Fixed S21**
 
 ---
 
@@ -220,20 +220,20 @@ Extra tokens (not in spec, practical additions): `--space-sm-md: 12px` :83, `--s
 | Card container | No border/radius/bg | `.event-card { display: block }` | 216 | ✅ |
 | Badge position | abs bottom:8 left:8 | Correct | 347-349 | ✅ |
 | Badge font-weight | 400 (spec) | `400` | 351 | ✅ Fixed S20 |
-| Badge letter-spacing | +1.2px | `0.05em` ≈ 0.55px | 353 | ⚠️ Low |
+| Badge letter-spacing | +1.2px | `1.2px` | 353 | ✅ Fixed S21 |
 | Title clamp | 2 lines | `-webkit-line-clamp: 2` | 392 | ✅ |
 | Title size | 20px/700/lh1.2 | Correct | 387-389 | ✅ |
 | Title hover | → --accent-primary, 0ms | `color: var(--accent-primary)` | 399 | ✅ Fixed S20 |
 | Date color | --accent-primary | `var(--accent-primary)` | 404 | ✅ Fixed S20 |
 | Venue | 14px/--text-secondary | Correct | 408-410 | ✅ |
 | Focus ring | 2px --accent-primary, 2px offset | `var(--focus-ring)` (blue), 4px offset | 231 | ⚠️ Blue not yellow; 4px not 2px |
-| Hover effect | Title color only | Also `translateY(-2px) + box-shadow` | 225-228 | ⚠️ Extra card lift not in spec |
+| Hover effect | Title color only | Title color only (no lift) | 227 | ✅ Fixed S21 |
 
 ~~P0 — Image ratio 66.67%→133.33%~~ → **Fixed S20**
 
 ~~P1 — Badge font-weight 700→400~~ → **Fixed S20**
 
-**P2 — Card hover adds translateY(-2px) + box-shadow.** Spec says "title color → accent, instant. No image scale, no overlay." The lift animation is not in spec.
+~~P2 — Card hover lift~~ → **Fixed S21** (removed translateY + box-shadow, title-only hover remains)
 
 ### 3. List Row Card ✅
 
@@ -458,27 +458,27 @@ Global reset at lines 172-177. All animations/transitions set to 0.01ms.
 
 | Element | Spec Duration | CSS Duration | Spec Easing | CSS Easing | Line | Status |
 |---------|-------------|-------------|------------|------------|------|--------|
-| Card hover (lift) | N/A (not in spec) | `--t-moderate` (200ms) | ease-out | ease-out | 221 | ⚠️ Extra |
+| ~~Card hover (lift)~~ | N/A (not in spec) | Removed | — | — | — | ✅ Fixed S21 |
 | Card title hover | 0ms instant | `--t-instant` | — | — | 395 | ✅ |
 | Mobile overlay fade | `--t-moderate` | `--t-moderate` | ease-out | ease-out | 554 | ✅ |
 | Mobile menu slide | `--t-moderate` (200ms) | `--t-slow` (300ms) | ease-out | ease-out | 563 | ⚠️ 100ms too long |
 | Filter panel open | `--t-base` (150ms) | `--t-fast` (120ms) | ease-out | ease-out | 1107 | ⚠️ 30ms too fast |
-| Filter sheet slide | `--t-moderate` (200ms) | `--t-deliberate` (500ms) | ease-out | ease-out | 1153 | ❌ **2.5× too slow** |
+| Filter sheet slide | `--t-moderate` (200ms) | `--t-moderate` (200ms) | ease-out | ease-out | 1179 | ✅ Fixed S21 |
 | Feature image hover | `--t-base` | `--t-base` | ease-out | ease-out | 1481 | ✅ |
 | Image lazy-load | `--t-slow` (300ms) | `--t-slow` (300ms) | ease-out | ease-out | 320 | ✅ |
 | View transition | `--t-moderate` | `--t-moderate` | ease-out | ease-out | 162-165 | ✅ |
 
-**P2 — Mobile filter sheet uses 500ms (deliberate) instead of 200ms (moderate).** Feels sluggish.
+~~P2 — Mobile filter sheet 500ms→200ms~~ → **Fixed S21**
 
 ### Skeleton Loading ⚠️
 
 | Item | Spec | CSS | Status |
 |------|------|-----|--------|
-| Pattern | Horizontal gradient sweep (`skeleton-sweep`) | Opacity pulse (`skeleton-pulse`) | ⚠️ Different pattern |
-| Duration | 1.4s | 1.5s | ⚠️ Close enough |
-| Location | Lines 1914-1917 | `0%,100%: opacity 0.4; 50%: opacity 0.8` | ⚠️ |
+| Pattern | Horizontal gradient sweep (`skeleton-sweep`) | `skeleton-sweep` gradient shimmer | ✅ Fixed S21 |
+| Duration | 1.4s | 1.4s | ✅ Fixed S21 |
+| Location | Lines 1930-1943 | `background-position: -200% → 200%` | ✅ Fixed S21 |
 
-**P3 — Skeleton uses pulse (fade) instead of sweep (shimmer).** Both work; spec prefers the shimmer pattern.
+~~P2 — Skeleton pulse→sweep~~ → **Fixed S21**
 
 ### Image Lazy Load ✅
 
@@ -580,13 +580,13 @@ Lines 311-327. Classes: `.will-fade` → opacity 0; `.is-loaded` → opacity 1. 
 
 | # | Issue | File:Line | Notes |
 |---|-------|-----------|-------|
-| 11 | Grid gutter 24px, not 32px desktop | design-system.css:201 | `--space-md-lg` vs `--space-lg` |
-| 12 | Card hover lift not in spec | design-system.css:225-228 | Extra translateY(-2px) + box-shadow |
-| 13 | Mobile filter sheet 500ms, not 200ms | design-system.css:1153 | `--t-deliberate` vs `--t-moderate` |
+| 11 | ~~Grid gutter 24px, not 32px desktop~~ | design-system.css:201 | ✅ Fixed S21 |
+| 12 | ~~Card hover lift not in spec~~ | design-system.css:219-227 | ✅ Fixed S21 |
+| 13 | ~~Mobile filter sheet 500ms, not 200ms~~ | design-system.css:1179 | ✅ Fixed S21 |
 | 14 | ~~Filter bar no padding~~ | design-system.css:963 | ✅ Fixed S20 |
 | 15 | ~~Practical block CSS inline, not in stylesheet~~ | practical-block.ts → design-system.css | ✅ Fixed S20 |
 | 16 | Filter result count + clear-all unstyled | — | Missing CSS classes |
-| 17 | Skeleton pulse, not sweep | design-system.css:1914-1917 | Different animation pattern |
+| 17 | ~~Skeleton pulse, not sweep~~ | design-system.css:1930-1943 | ✅ Fixed S21 |
 | 18 | Hub page template not implemented | — | Spec feature, no generator |
 | 19 | FAQ section not implemented | — | No `<details>/<summary>` blocks |
 
@@ -600,7 +600,7 @@ Lines 311-327. Classes: `.will-fade` → opacity 0; `.is-loaded` → opacity 1. 
 | 23 | Pagination bar | Not implemented |
 | 24 | Venue page: no photo/description sections | Template incomplete |
 | 25 | 404 page template | CSS exists, need to verify generator |
-| 26 | Badge letter-spacing 0.55px vs 1.2px | design-system.css:353 |
+| 26 | ~~Badge letter-spacing 0.55px vs 1.2px~~ | ✅ Fixed S21 |
 
 ---
 
