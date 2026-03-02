@@ -1,6 +1,6 @@
 # Enrichment Anti-Patterns
 
-10 confirmed patterns from Batch 1 and calibration review. Reference this file in enrichment briefs.
+13 confirmed patterns from enrichment batches 1-117. Reference this file in enrichment briefs.
 
 ---
 
@@ -53,3 +53,18 @@
 **Wrong:** "The lighting catches the smoke from the kitchen and the condensation on the retsina" (when no source confirms the venue has a kitchen or serves retsina from barrels).
 **Right:** If you can't verify what the space looks, smells, or sounds like, use the event's sonic or performative texture instead of the venue's physical atmosphere. "The first note hits the back wall and returns before it fades" works without knowing the decor.
 **Why it matters:** Plausible-sounding venue details are still fabrications. They pass gate checks but fail fact-checks, and erode reader trust when someone who has been to the venue notices the description doesn't match reality.
+
+### Anti-Pattern 11: Ambiguous venue names
+**Wrong:** Assuming the first web search result for "VOX Athens" is the correct venue. (Batch 115: VOX placed at Themistokleous 82 — that's VOX Cinema, not VOX Live Stage at Iera Odos 16.)
+**Right:** When a venue name is common or generic, cross-reference the venue address from the event source URL before writing about location. If the event listing doesn't include an address, check venue-intelligence.md or search "[venue name] + [event type] Athens" to disambiguate.
+**Why it matters:** Athens has multiple venues with identical or similar names in different neighborhoods. Getting the wrong one puts the reader at the wrong address.
+
+### Anti-Pattern 12: Assumed artist origin
+**Wrong:** "DJ Yazi is an Athens circuit fixture" (inferred from the event being at an Athens venue, not verified). Actual: DJ Yazi is Tokyo-based (Black Smoker Records).
+**Right:** Verify artist origin/base city from their Resident Advisor profile, official bio, or label page. If unverifiable, omit the origin claim entirely. Never infer origin from the city where they're performing.
+**Why it matters:** Performing in Athens doesn't make someone Athens-based. Origin claims are easily fact-checked by readers and fans, making errors visible and trust-damaging.
+
+### Anti-Pattern 13: Fabricated source attribution
+**Wrong:** Attributing a theatrical work to a published author/work based on thematic resemblance. (Batch 117: Lo attributed to Philip K. Dick — actually original by Marios Tsagkaris.)
+**Right:** Verify playwright/author from the event listing URL before any attribution. If the event page doesn't name a source work, describe the premise without attribution. Never guess authorship from genre or theme.
+**Why it matters:** Source attribution errors are the most damaging factual error type — they misrepresent creative authorship and are immediately obvious to anyone familiar with the work.

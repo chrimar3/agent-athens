@@ -124,8 +124,12 @@ type Price = "open" | "with-ticket";
 | Code changes | `.claude/notes/patterns.md` |
 | Architecture decisions | `.claude/notes/decisions.md` |
 | DB schema / full architecture | `docs/SYSTEM-REFERENCE.md` |
-| Writing descriptions | `docs/MASTER-ENRICHMENT-TEMPLATE.md` |
-| Venue context for enrichment | `config/venue-intelligence.md` |
+| Writing descriptions | `docs/MASTER-ENRICHMENT-TEMPLATE.md` (v2.3) |
+| Enrichment knowledge (venues, artists, collectives) | `config/enrichment-knowledge.md` |
+| Entity research & deduplication | `docs/entity-resolution-workflow.md` |
+| Enrichment anti-patterns | `docs/enrichment-anti-patterns.md` |
+| Enrichment quality exemplars | `exemplars/README.md` |
+| Fact-checking post-save | `docs/fact-check-prompt.md` |
 | Venue whitelist | `config/athens-venues.json` |
 
 ---
