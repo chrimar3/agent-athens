@@ -500,6 +500,46 @@ bun run scripts/rollback-batch.ts --batch=1 --session=feb-2026
 
 Use `db.run()` instead of the database execute method for SQL DDL statements. The project security hook falsely flags the SQLite execute method (confusing it with child_process). Both work identically for DDL, but `db.run()` avoids hook warnings.
 
+## Event Detail Page Pattern
+
+The event detail page (`event-page.ts`) generates static HTML for `/events/[slug]/`.
+
+### GEO Source Order
+Content follows **facts-first** order for AI crawler citability:
+```
+<article>
+  Hero (blurred background + title + date)
+  ├── Practical block (structured facts table)
+  ├── Description (narrative, truncated with read-more)
+  ├── Inline CTA (tickets or "Ελεύθερη είσοδος")
+  ├── Venue section
+  ├── Source attribution
+  ├── Connections (genres/neighborhood)
+  └── Related events
+  Mobile bottom bar (fixed CTA, <768px only)
+</article>
+```
+
+### CTA Rendering Rules
+- **Paid + ticket URL**: Link button → "Αγοράστε εισιτήρια →"
+- **Open entry**: Informational text → "Ελεύθερη είσοδος" (never "Δωρεάν")
+- **Past events**: No CTA at all (inline hidden, mobile bar hidden)
+- Color: `var(--accent-primary)` — no per-type color
+
+### Past-Event Treatment (CSS-only via `data-past`)
+```html
+<article data-past="true">
+```
+CSS selectors handle everything — no JS needed:
+- `[data-past="true"] .edp-hero-bg` → dimmed + grayscale
+- `[data-past="true"] .edp-inline-cta` → hidden
+- `[data-past="true"] .edp-mobile-bar` → hidden
+
+### Mobile Bottom Bar
+- z-index: `var(--z-bottom-bar)` (150) — above content, below modals
+- Visibility: IntersectionObserver on hero CTA triggers show/hide
+- Hidden for past events via `[data-past="true"]`
+
 ## CLI Enrichment via `claude -p` Pattern
 
 ### Basic Command
@@ -552,3 +592,19 @@ Key constraints:
 - Sequential execution (avoids SQLite WAL locking)
 - Clean temp-briefs/ before generating (prevents stale re-processing)
 - MAX_BATCHES=3 cap (15 events/day, rate limit safety)
+
+## Hub Page 5-Part Structure
+
+Hub pages (`src/generators/hub-page.ts`) inject 5 sections into base page HTML:
+
+1. **Answer Capsule** — 40-60 word direct answer, `hub-answer-capsule` class, accent-primary left border (context 5/5), bg-surface background
+2. **Comparison Table** — Max 20 rows, `hub-comparison-table` class, all `<th>` have `scope="col"` (WCAG), horizontal scroll wrapper for mobile
+3. **Event Blocks** — Max 8 enriched events with 2-sentence excerpts, `hub-event-block` class
+4. **FAQ Accordion** — Native `<details>/<summary>`, chevron rotation via CSS borders, FAQPage JSON-LD schema, `hub-faq` class
+5. **Seasonal Narrative** — Placeholder, hidden when empty
+
+Config: `config/hub-pages.json` (16 hubs). Type: `HubConfig` in `src/types.ts`.
+
+### FAQ Accordion ARIA Pattern
+
+Uses native `<details>/<summary>` — no manual `aria-expanded` needed (browser handles it). CSS chevron via `::after` pseudo-element with border-right + border-bottom rotated 45deg (closed) / -135deg (open). Reduced-motion fallback disables transition.

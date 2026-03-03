@@ -932,3 +932,22 @@ Separate pipeline:
 | Title truncation via satori flexbox maxHeight | Greek characters have highly variable widths; manual char-counting would be inaccurate. maxHeight clips to ~2 lines naturally | 2026-03 |
 | XML escape for satori input | Satori renders to SVG internally; event titles with `&`, `<`, `"` would break SVG XML without explicit escaping | 2026-03 |
 | OG image fallback chain: imageLocal → imageUrl → venueImage → per-event OG | Removed type-default fallback from event pages; per-event OG with actual title/venue/date is always better than generic type card | 2026-03 |
+
+## Event Detail Page — Design System Migration (D5, 2026-03)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| GEO source order: facts → description → CTA → venue → related | AI crawlers read HTML top-to-bottom. Structured facts (practical block) before prose description enables direct citation of date/venue/price | 2026-03 |
+| CTA uses `--accent-primary` (not `--edp-type-color`) | Spec limits accent-primary to 5 contexts; CTA is context 1. Yellow is universally the "action" color on this site | 2026-03 |
+| Removed `edp-cta--light-text` modifier | With accent-primary (always yellow), text is always `--text-on-bright` (dark). No need for per-type light/dark text logic | 2026-03 |
+| Mobile bar z-index `var(--z-bottom-bar)` (150) not hardcoded 50 | Tokens over magic numbers. z-index 150 sits between content (0-100) and overlay (200) per spec | 2026-03 |
+| `data-past="true"` attribute on article | CSS-only past-event treatment (dimmed hero, hidden inline CTA, hidden mobile bar) via attribute selector. No JS needed | 2026-03 |
+| Inline CTA in body content (duplicate of hero CTA) | Hero CTA hidden on mobile (bottom bar replaces it). Body CTA ensures GEO source order has CTA between description and venue | 2026-03 |
+| Open-entry events: `edp-open-entry` span, not link | "Ελεύθερη είσοδος" is informational text (no ticket to buy). Never "Δωρεάν" per spec | 2026-03 |
+| Normalize scraped "Δωρεάν" in formatPriceGreek | Some events have `price_range: "Δωρεάν"` from scrapers. Display layer normalizes to "Ελεύθερη είσοδος" | 2026-03 |
+| Past hero treatment: brightness(0.4) + grayscale(0.5) | More aggressive than normal (normal: blur+saturate only). Visual signal that event has passed, paired with banner text | 2026-03 |
+| Hub answer capsule: accent-primary left border (context 5/5) | Uses the 5th and final allowed context for accent-primary. Combined with bg-surface background for visual weight on the AI-citable answer | 2026-03 |
+| Hub comparison table: sticky headers + hover rows | Headers stick when scrolling long tables. Row hover (rgba 4% white) gives subtle feedback. Link color changed from accent-primary to text-primary to reduce accent overuse | 2026-03 |
+| Hub FAQ: CSS chevron rotation instead of +/- | Chevron (border trick) is more polished than text characters. Native `<details>` handles ARIA automatically. 44px min-height ensures touch target compliance | 2026-03 |
+| Cornerstone hub designation: metadata-only flag | `cornerstone: true` on today, this-weekend, open, this-month. Currently metadata for content pipeline guidance (more FAQs, more investment). No rendering change yet | 2026-03 |
+| Hub page token migration approach | Mapped session spec generic tokens to project-specific tokens (e.g., --surface-secondary → --bg-surface, --text-md → --type-body-lg). Preserves project consistency over spec literalism | 2026-03 |

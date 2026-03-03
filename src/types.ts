@@ -131,6 +131,7 @@ export interface HubConfig {
   filter: HubFilter;
   answerCapsuleEl: string;
   faqs: HubFaq[];
+  cornerstone?: boolean;
 }
 
 export interface RawEvent {

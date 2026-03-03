@@ -31,6 +31,7 @@ Pitfalls encountered and how to avoid them.
 | Mistake | What Happened | Correct Approach |
 |---------|---------------|------------------|
 | Using "free" for events | Project uses "open" terminology | Always use `price: "open"` not `price: "free"` |
+| "Δωρεάν" in scraped price_range | Events with `price_type: 'with-ticket'` and `price_amount: 0` had `price_range: 'Δωρεάν'` from scrapers. `formatPriceGreek()` only checked `price.type === 'open'` so these fell through to the raw `price.range` display | Normalize at the formatting layer: `if (event.price.range === 'Δωρεάν') return 'Ελεύθερη είσοδος'`. Also guard `price.amount > 0` to avoid displaying "€0" |
 
 ## Enrichment
 

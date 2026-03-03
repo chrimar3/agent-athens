@@ -2,6 +2,7 @@
   "hubs": [
     {
       "slug": "today",
+      "cornerstone": true,
       "titleEl": "Εκδηλώσεις Σήμερα στην Αθήνα",
       "titleEn": "Events in Athens Today",
       "filter": { "type": "date", "value": "today" },
@@ -27,6 +28,7 @@
     },
     {
       "slug": "this-weekend",
+      "cornerstone": true,
       "titleEl": "Εκδηλώσεις Σαββατοκύριακο στην Αθήνα",
       "titleEn": "Weekend Events in Athens",
       "filter": { "type": "date", "value": "this-weekend" },
@@ -202,6 +204,7 @@
     },
     {
       "slug": "open",
+      "cornerstone": true,
       "titleEl": "Εκδηλώσεις με Ελεύθερη Είσοδο στην Αθήνα",
       "titleEn": "Open Entry Events in Athens",
       "filter": { "type": "price_type", "value": "open" },
@@ -302,6 +305,7 @@
     },
     {
       "slug": "this-month",
+      "cornerstone": true,
       "titleEl": "Εκδηλώσεις Αυτόν τον Μήνα στην Αθήνα",
       "titleEn": "Events This Month in Athens",
       "filter": { "type": "date", "value": "this-month" },
