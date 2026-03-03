@@ -1,4 +1,4 @@
-# Enrichment Brief — Batch 3
+# Enrichment Brief — Batch 122
 
 You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.
 
@@ -35,95 +35,107 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
 ## Events to Enrich
 
-### Διψάω
-- **ID**: 924366d4ff9ba61b
-- **Type**: concert
-- **Venue**: Bios Ρομάντσο
+### 4 Years Exilium with Eli Brown
+- **ID**: 7f0deecd13b36bcc
+- **Type**: dj_set
+- **Venue**: Oddity
 - **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/dipsao-10081092/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-21T23:59:00
+- **Time**: 23:59
+- **URL**: https://ra.co/events/2371932
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
 - **Venue intel** (from database):
   ```
-  ### Bios
+  ### Oddity
   | Field | Data |
   |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
+  | **Address** | Irakleidon 61 |
+  | **Metro** | Thissio (Green) |
+  | **Capacity** | ~200 |
+  | **Entry** | €8-15 |
+  | **Regular nights** | Blend collective (progressive/melodic) |
+  | **Character** | Counterpoint to harder Gazi sounds |
   
   ---
   ```
 
-### VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste
-- **ID**: 4668c24970537fec
-- **Type**: dj_set
-- **Venue**: Universe
-- **Price**: paid
-- **Date**: 2026-03-21
-- **Time**: 23:59
-- **URL**: https://www.more.com/gr-el/tickets/music/vlctzero002/
-- **Source**: more.com
-- **Category**: concert_local
-- **Target words**: 80-120
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Universe Athens" for context.
-
-### Οι περιπέτειες της Πέππα
-- **ID**: a7618df11e158e91
+### Τα γενέθλια της Ριρίκας
+- **ID**: 7eb8271f492ae24a
 - **Type**: theater
-- **Venue**: Θέατρο Βέμπο
+- **Venue**: Θέατρο Μεταξουργείο
 - **Price**: paid
-- **Date**: 2026-03-02T11:30:00
-- **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/oi_peripeteies_tis_peppa-10086835/
+- **Date**: 2026-03-02T12:00:00
+- **Time**: 12:00
+- **URL**: https://www.athinorama.gr/theatre/performance/ta_genethlia_tis_ririkas-10080106/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words**: 120-180
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Βέμπο Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Μεταξουργείο Athens" for context.
 
-### Ευρυδίκη
-- **ID**: 33035e927edadc85
+### &#171;Με το βλέμμα της Nelly&#39;s&#187;
+- **ID**: e4f11743f767ee4c
 - **Type**: concert
-- **Venue**: Rabbithole
+- **Venue**: Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;
 - **Price**: paid
-- **Date**: 2026-03-02T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/eurudiki-10088821/
+- **Date**: 2026-03-05
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/music/gig/me_to_blemma_tis_nellys-10089274/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Rabbithole Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; Athens" for context.
 
-### Alex Kósh + Aphrodite
-- **ID**: 435044c6a914e1a9
+### Underdogs Techno
+- **ID**: 85e63b22b7fbb752
 - **Type**: dj_set
-- **Venue**: Wild Poppies
-- **Price**: door
-- **Date**: 2026-03-21T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/alex-kosh-aphrodite/
-- **Source**: clubber.gr
+- **Venue**: IT Athens
+- **Price**: tba
+- **Date**: 2026-03-21T23:59:00
+- **Time**: 23:59
+- **URL**: https://ra.co/events/2375082
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Wild Poppies Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### IT Athens
+  | Field | Data |
+  |-------|------|
+  | **Address** | Solomou 30, Exarchia |
+  | **Metro** | Omonoia or Panepistimio (12-min walk) |
+  | **Capacity** | ~250 |
+  | **Entry** | €8-15 |
+  | **Door Policy** | Relaxed |
+  | **Regular nights** | Pulse Tribe Kollektiv |
+  | **Character** | Exarchia's electronic contribution, alternative ethos |
+  
+  ---
+  ```
+
+### Η ιστορία του γάτου που έμαθε σ’ ένα γλάρο να πετάει
+- **ID**: e92bbad3ee1f92c3
+- **Type**: theater
+- **Venue**: Θέατρο Κάτω Από Τη Γέφυρα
+- **Price**: paid
+- **Date**: 2026-03-02T12:00:00
+- **Time**: 12:00
+- **URL**: https://www.athinorama.gr/theatre/performance/i_istoria_tou_gatou_pou_emathe_s%e2%80%99_ena_glaro_na_petaei_-10009205/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words**: 120-180
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Κάτω Από Τη Γέφυρα Athens" for context.
 
 ---
 
@@ -148,18 +160,18 @@ For EACH event:
 5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
-   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-122.manifest.json --session=batch-122 --batch=122 --clean
    ```
-   Note "AUTO-SAVED" at the top of batch-3-review.md.
+   Note "AUTO-SAVED" at the top of batch-122-review.md.
    - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
-     Note "LEFT FOR REVIEW" at the top of batch-3-review.md with reasons.
+     Note "LEFT FOR REVIEW" at the top of batch-122-review.md with reasons.
 
-After all events, create `temp-descriptions/batch-3-review.md` with:
+After all events, create `temp-descriptions/batch-122-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 924366d4ff9ba61b | Διψάω | /100 | | |
-| 4668c24970537fec | VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste | /100 | | |
-| a7618df11e158e91 | Οι περιπέτειες της Πέππα | /100 | | |
-| 33035e927edadc85 | Ευρυδίκη | /100 | | |
-| 435044c6a914e1a9 | Alex Kósh + Aphrodite | /100 | | |
+| 7f0deecd13b36bcc | 4 Years Exilium with Eli Brown | /100 | | |
+| 7eb8271f492ae24a | Τα γενέθλια της Ριρίκας | /100 | | |
+| e4f11743f767ee4c | &#171;Με το βλέμμα της Nelly&#39;s&#187; | /100 | | |
+| 85e63b22b7fbb752 | Underdogs Techno | /100 | | |
+| e92bbad3ee1f92c3 | Η ιστορία του γάτου που έμαθε σ’ ένα γλάρο να πετάει | /100 | | |

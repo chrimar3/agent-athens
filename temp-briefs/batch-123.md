@@ -1,4 +1,4 @@
-# Enrichment Brief — Batch 5
+# Enrichment Brief — Batch 123
 
 You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.
 
@@ -35,59 +35,29 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
 ## Events to Enrich
 
-### Reaktiv
-- **ID**: fbdd2a6f7ea937ad
-- **Type**: dj_set
-- **Venue**: Cantina Social
-- **Price**: door
-- **Date**: 2026-03-15T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/reaktiv-3/
-- **Source**: clubber.gr
+### Dirty Granny Tales
+- **ID**: 8f71937abe1b747a
+- **Type**: concert
+- **Venue**: ARCH Club
+- **Price**: paid
+- **Date**: 2026-03-05T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/music/gig/dirty_granny_tales-10063805/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Cantina Social Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ARCH Club Athens" for context.
 
-### Το μαύρο ψαράκι
-- **ID**: b09702837509a079
-- **Type**: theater
-- **Venue**: Μικρός Κεραμεικός
-- **Price**: tba
-- **Date**: 2026-03-02T11:30:00
-- **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_mauro_psaraki-10087731/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words**: 120-180
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Μικρός Κεραμεικός Athens" for context.
-
-### Νέκυια
-- **ID**: 1274634ab97e39bd
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-02T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.athinorama.gr/theatre/performance/nekuia-10089255/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words**: 400-600
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: Description MUST be 400-600 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### Chris Child + D. Tzere
-- **ID**: 93d806deb516ab48
+### Constantinos Dontas
+- **ID**: f8034b368d4af85c
 - **Type**: dj_set
 - **Venue**: Wild Poppies
 - **Price**: door
-- **Date**: 2026-03-20T21:00:00
+- **Date**: 2026-03-22T21:00:00
 - **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/chris-child-d-tzere/
+- **URL**: https://www.clubber.gr/events/constantinos-dontas-3/
 - **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words**: 80-120
@@ -95,20 +65,65 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
 - **Venue intel**: Not in database. WebSearch "Wild Poppies Athens" for context.
 
-### Το όνειρο του Πινόκιο
-- **ID**: fca978dadaba1ada
+### Οι καλοί και οι κακοί πειρατές
+- **ID**: 26bf511dd74dfdd4
 - **Type**: theater
-- **Venue**: Calderone Art Space
-- **Price**: paid
-- **Date**: 2026-03-02T11:30:00
-- **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_oneiro_tou_pinokio-10089238/
+- **Venue**: Αλκμήνη
+- **Price**: tba
+- **Date**: 2026-03-02T12:00:00
+- **Time**: 12:00
+- **URL**: https://www.athinorama.gr/theatre/performance/oi_kaloi_kai_oi_kakoi_peirates-10083344/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words**: 120-180
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Calderone Art Space Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Αλκμήνη Athens" for context.
+
+### Nora: The Hell’s House
+- **ID**: 4e8d11ab97ff9e17
+- **Type**: concert
+- **Venue**: Bios Ρομάντσο
+- **Price**: paid
+- **Date**: 2026-03-05T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/nora_the_hell%e2%80%99s_house-10089341/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
+
+### MUZIK SAVEZ pres. Valeron at COZMO - 22 MARCH
+- **ID**: b9490b9abf36074d
+- **Type**: dj_set
+- **Venue**: Cozmo Athens
+- **Price**: paid
+- **Date**: 2026-03-22T22:00:00
+- **Time**: 22:00
+- **URL**: https://ra.co/events/2379491
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words**: 80-120
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "Cozmo Athens Athens" for context.
 
 ---
 
@@ -133,18 +148,18 @@ For EACH event:
 5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
-   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-5.manifest.json --session=batch-5 --batch=5 --clean
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-123.manifest.json --session=batch-123 --batch=123 --clean
    ```
-   Note "AUTO-SAVED" at the top of batch-5-review.md.
+   Note "AUTO-SAVED" at the top of batch-123-review.md.
    - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
-     Note "LEFT FOR REVIEW" at the top of batch-5-review.md with reasons.
+     Note "LEFT FOR REVIEW" at the top of batch-123-review.md with reasons.
 
-After all events, create `temp-descriptions/batch-5-review.md` with:
+After all events, create `temp-descriptions/batch-123-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| fbdd2a6f7ea937ad | Reaktiv | /100 | | |
-| b09702837509a079 | Το μαύρο ψαράκι | /100 | | |
-| 1274634ab97e39bd | Νέκυια | /100 | | |
-| 93d806deb516ab48 | Chris Child + D. Tzere | /100 | | |
-| fca978dadaba1ada | Το όνειρο του Πινόκιο | /100 | | |
+| 8f71937abe1b747a | Dirty Granny Tales | /100 | | |
+| f8034b368d4af85c | Constantinos Dontas | /100 | | |
+| 26bf511dd74dfdd4 | Οι καλοί και οι κακοί πειρατές | /100 | | |
+| 4e8d11ab97ff9e17 | Nora: The Hell’s House | /100 | | |
+| b9490b9abf36074d | MUZIK SAVEZ pres. Valeron at COZMO - 22 MARCH | /100 | | |

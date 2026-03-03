@@ -1,4 +1,4 @@
-# Enrichment Brief — Batch 1
+# Enrichment Brief — Batch 121
 
 You are writing premium event descriptions for Agent Athens, an AI-curated cultural events calendar for Athens, Greece.
 
@@ -35,74 +35,104 @@ Read `docs/enrichment-anti-patterns.md` for 10 confirmed mistakes to avoid.
 
 ## Events to Enrich
 
-### Κούκου, μια βόλτα στο δάσος
-- **ID**: fef7e513929aa8f8
+### Ο τρομερός εχθρός και ο αλυσοδεμένος ελέφαντας
+- **ID**: c1cf579a32ab1ec8
 - **Type**: theater
-- **Venue**: Μορφές Έκφρασης
+- **Venue**: Studio Μαυρομιχάλη
 - **Price**: paid
 - **Date**: 2026-03-02T11:30:00
 - **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/koukou_mia_bolta_sto_dasos-10051151/
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tromeros_exthros_kai_o_alusodemenos_elefantas-10053307/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words**: 120-180
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Μορφές Έκφρασης Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Studio Μαυρομιχάλη Athens" for context.
 
-### Καραγκιοζοπαίχτης νυν και αεί
-- **ID**: 655db2e2cc39cca6
+### Lo
+- **ID**: 9e364860d2d3bd3f
 - **Type**: concert
-- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
+- **Venue**: Bios Ρομάντσο
 - **Price**: paid
-- **Date**: 2026-03-02T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.athinorama.gr/theatre/performance/karagkiozopaixtis_nun_kai_aei-10088892/
+- **Date**: 2026-03-02T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/lo-10088966/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
 
-### CLUB BOTTOM
-- **ID**: 4419e83d5ccfb8a2
+### Kaizen Klub with Chloé Robinson, Madam X (Bday Spesh), Poor J'Darr & Runner
+- **ID**: bb35da04f5b13a73
 - **Type**: dj_set
-- **Venue**: Don't be a Dick
+- **Venue**: Bios Ρομάντσο
 - **Price**: paid
-- **Date**: 2026-03-15T20:00:00
-- **Time**: 20:00
-- **URL**: https://ra.co/events/2364676
+- **Date**: 2026-03-21T23:00:00
+- **Time**: 23:00
+- **URL**: https://ra.co/events/2378438
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words**: 80-120
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: Description MUST be 80-120 words.
-- **Venue intel**: Not in database. WebSearch "Don't be a Dick Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
 
-### Ο κουρέας της Σεβίλλης
-- **ID**: 4eaa98f21a596514
+### Η φάρμα των ζώων – Η παράσταση αρχίζει!
+- **ID**: 5a822c497d340dc7
 - **Type**: theater
-- **Venue**: Πορεία at Victoria
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
 - **Date**: 2026-03-02T11:30:00
 - **Time**: 11:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_koureas_tis_sebillis-10087640/
+- **URL**: https://www.athinorama.gr/theatre/performance/i_farma_ton_zoon_%e2%80%93_i_parastasi_arxizei!-10079278/
 - **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words**: 120-180
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: Description MUST be 120-180 words.
-- **Venue intel**: Not in database. WebSearch "Πορεία at Victoria Athens" for context.
+- **Category**: premium_showcase
+- **Target words**: 400-600
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: Description MUST be 400-600 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Ο Γιάννης το βούδι
-- **ID**: 2b7bc03a56e1effc
+### (κρότος)
+- **ID**: 7c2d68da8e52c38e
 - **Type**: concert
 - **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
 - **Price**: paid
-- **Date**: 2026-03-02T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_giannis_to_boudi-10084390/
+- **Date**: 2026-03-02T21:30:00
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/theatre/performance/krotos-10088778/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words**: 80-120
@@ -133,18 +163,18 @@ For EACH event:
 5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
-   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean
+   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-121.manifest.json --session=batch-121 --batch=121 --clean
    ```
-   Note "AUTO-SAVED" at the top of batch-1-review.md.
+   Note "AUTO-SAVED" at the top of batch-121-review.md.
    - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
-     Note "LEFT FOR REVIEW" at the top of batch-1-review.md with reasons.
+     Note "LEFT FOR REVIEW" at the top of batch-121-review.md with reasons.
 
-After all events, create `temp-descriptions/batch-1-review.md` with:
+After all events, create `temp-descriptions/batch-121-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| fef7e513929aa8f8 | Κούκου, μια βόλτα στο δάσος | /100 | | |
-| 655db2e2cc39cca6 | Καραγκιοζοπαίχτης νυν και αεί | /100 | | |
-| 4419e83d5ccfb8a2 | CLUB BOTTOM | /100 | | |
-| 4eaa98f21a596514 | Ο κουρέας της Σεβίλλης | /100 | | |
-| 2b7bc03a56e1effc | Ο Γιάννης το βούδι | /100 | | |
+| c1cf579a32ab1ec8 | Ο τρομερός εχθρός και ο αλυσοδεμένος ελέφαντας | /100 | | |
+| 9e364860d2d3bd3f | Lo | /100 | | |
+| bb35da04f5b13a73 | Kaizen Klub with Chloé Robinson, Madam X (Bday Spesh), Poor J'Darr & Runner | /100 | | |
+| 5a822c497d340dc7 | Η φάρμα των ζώων – Η παράσταση αρχίζει! | /100 | | |
+| 7c2d68da8e52c38e | (κρότος) | /100 | | |
