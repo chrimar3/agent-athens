@@ -39,6 +39,12 @@ function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
       const today = new Date(now);
       const tomorrow = new Date(now);
       tomorrow.setDate(tomorrow.getDate() + 1);
+      // Exhibition Tier 1: running exhibitions (started in past, still open) match today
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate <= tomorrow && endDate >= today;
+      }
       return eventDate >= today && eventDate < tomorrow;
 
     case 'tomorrow':
@@ -51,6 +57,11 @@ function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
     case 'this-week':
       const weekEnd = new Date(now);
       weekEnd.setDate(weekEnd.getDate() + 7);
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate < weekEnd && endDate >= now;
+      }
       return eventDate >= now && eventDate < weekEnd;
 
     case 'this-weekend':
@@ -61,10 +72,20 @@ function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
       friday.setDate(friday.getDate() + daysUntilFriday);
       const monday = new Date(friday);
       monday.setDate(monday.getDate() + 3);
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate < monday && endDate >= friday;
+      }
       return eventDate >= friday && eventDate < monday;
 
     case 'this-month':
       const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate <= monthEnd && endDate >= now;
+      }
       return eventDate >= now && eventDate <= monthEnd;
 
     case 'next-month':

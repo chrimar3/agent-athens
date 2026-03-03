@@ -81,18 +81,20 @@ export function formatGreekTime(isoDate: string): string {
  */
 export function formatPriceGreek(event: Event): string {
   if (event.price.type === 'open') {
-    return 'Δωρεάν είσοδος';
+    return 'Ελεύθερη είσοδος';
   }
 
   if (event.price.type === 'donation') {
     return 'Ελεύθερη συνεισφορά';
   }
 
-  if (event.price.amount) {
+  if (event.price.amount && event.price.amount > 0) {
     return `€${event.price.amount}`;
   }
 
   if (event.price.range) {
+    // Normalize scraped "Δωρεάν" → "Ελεύθερη είσοδος" (spec: never "Δωρεάν")
+    if (event.price.range === 'Δωρεάν') return 'Ελεύθερη είσοδος';
     return event.price.range;
   }
 

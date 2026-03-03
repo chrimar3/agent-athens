@@ -87,6 +87,29 @@ describe('renderSearchOverlay', () => {
     const html = renderSearchOverlay();
     expect(html).toContain('role="dialog"');
   });
+
+  test('input has combobox ARIA pattern', () => {
+    const html = renderSearchOverlay();
+    expect(html).toContain('role="combobox"');
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-controls="search-results-list"');
+    expect(html).toContain('aria-activedescendant=""');
+    expect(html).toContain('aria-haspopup="listbox"');
+  });
+
+  test('results container has listbox role', () => {
+    const html = renderSearchOverlay();
+    expect(html).toContain('id="search-results-list"');
+    expect(html).toContain('role="listbox"');
+    expect(html).toContain('aria-label="Αποτελέσματα αναζήτησης"');
+  });
+
+  test('search groups have ARIA group roles', () => {
+    const html = renderSearchOverlay();
+    expect(html).toContain('role="group" aria-label="Εκδηλώσεις"');
+    expect(html).toContain('role="group" aria-label="Χώροι"');
+    expect(html).toContain('role="group" aria-label="Κατηγορίες"');
+  });
 });
 
 describe('renderSearchScript', () => {
@@ -198,5 +221,27 @@ describe('renderSearchScript', () => {
     const script = renderSearchScript();
     expect(script).toContain('search-see-all');
     expect(script).toContain('addSeeAllLink');
+  });
+
+  test('manages aria-expanded on results show/hide', () => {
+    const script = renderSearchScript();
+    expect(script).toContain("aria-expanded");
+  });
+
+  test('manages aria-activedescendant on keyboard nav', () => {
+    const script = renderSearchScript();
+    expect(script).toContain('aria-activedescendant');
+  });
+
+  test('assigns role="option" and aria-selected to result items', () => {
+    const script = renderSearchScript();
+    expect(script).toContain("'role', 'option'");
+    expect(script).toContain("'aria-selected'");
+  });
+
+  test('generates unique IDs for result items', () => {
+    const script = renderSearchScript();
+    expect(script).toContain('resultIdCounter');
+    expect(script).toContain("'sr-'");
   });
 });

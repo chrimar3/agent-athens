@@ -40,7 +40,7 @@ const TYPE_OPTIONS: Array<{ type: EventType; label: string }> = [
 ];
 
 const PRICE_OPTIONS: Array<{ price: PriceFilter; label: string }> = [
-  { price: 'open', label: 'Δωρεάν' },
+  { price: 'open', label: 'Ελεύθερη είσοδος' },
   { price: 'with-ticket', label: 'Με εισιτήριο' },
 ];
 

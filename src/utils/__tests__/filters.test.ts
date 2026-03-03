@@ -187,6 +187,149 @@ describe("filterEvents", () => {
   });
 });
 
+describe("Exhibition Tier 1: running exhibitions in time filters", () => {
+  function makeExhibition(overrides: Partial<Event>): Event {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      id: "test-exhibition-" + Math.random().toString(36).substring(7),
+      title: "Running Exhibition",
+      description: "An exhibition currently running",
+      startDate: "2026-02-15T10:00:00+03:00",
+      endDate: "2026-04-30T18:00:00+03:00",
+      type: "exhibition",
+      genres: ["contemporary-art"],
+      tags: [],
+      venue: { name: "Test Gallery", address: "Athens" },
+      price: { type: "open" },
+      source: "test",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      language: "el",
+      ...overrides,
+    };
+  }
+
+  test("today filter includes running exhibitions (started weeks ago, still open)", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "today" });
+    expect(filtered.length).toBe(1);
+  });
+
+  test("today filter excludes ended exhibitions", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 60);
+    const pastEnd = new Date(now);
+    pastEnd.setDate(pastEnd.getDate() - 2);
+
+    const endedExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: pastEnd.toISOString(),
+    });
+    const filtered = filterEvents([endedExhibition], { time: "today" });
+    expect(filtered.length).toBe(0);
+  });
+
+  test("today filter excludes future exhibitions (not yet started)", () => {
+    const now = new Date();
+    const futureStart = new Date(now);
+    futureStart.setDate(futureStart.getDate() + 10);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 40);
+
+    const futureExhibition = makeExhibition({
+      startDate: futureStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([futureExhibition], { time: "today" });
+    expect(filtered.length).toBe(0);
+  });
+
+  test("this-weekend filter includes running exhibitions that span the weekend", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "this-weekend" });
+    expect(filtered.length).toBe(1);
+  });
+
+  test("this-week filter includes running exhibitions", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "this-week" });
+    expect(filtered.length).toBe(1);
+  });
+
+  test("this-month filter includes running exhibitions", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 60);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "this-month" });
+    expect(filtered.length).toBe(1);
+  });
+
+  test("non-exhibition events with endDate are NOT affected by exhibition logic", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    const pastConcert: Event = {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      id: "old-concert",
+      title: "Old Concert",
+      description: "A concert from the past",
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+      type: "concert",
+      genres: [],
+      tags: [],
+      venue: { name: "Test Venue", address: "Athens" },
+      price: { type: "open" },
+      source: "test",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      language: "el",
+    };
+    const filtered = filterEvents([pastConcert], { time: "today" });
+    expect(filtered.length).toBe(0);
+  });
+});
+
 describe("getFilteredEventCount", () => {
   let testEvents: Event[];
 

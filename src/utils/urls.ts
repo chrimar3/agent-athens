@@ -20,7 +20,7 @@ export function buildPageTitle(filters: Filters): string {
   // Price filter in Greek
   if (filters.price && filters.price !== 'all') {
     if (filters.price === 'open') {
-      parts.push('Δωρεάν');
+      parts.push('Ελεύθερη είσοδος');
     } else {
       parts.push('Με Εισιτήριο');
     }

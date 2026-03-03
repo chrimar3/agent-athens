@@ -20,7 +20,7 @@ export function renderSearchOverlay(): string {
       <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
       </svg>
-      <input class="search-input" type="search" placeholder="Αναζήτηση εκδηλώσεων…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <input class="search-input" type="search" placeholder="Αναζήτηση εκδηλώσεων…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results-list" aria-activedescendant="" aria-haspopup="listbox">
       <button class="search-clear-btn" aria-label="Καθαρισμός" type="button" style="display:none">&times;</button>
     </div>
     <div class="search-skeleton" style="display:none">
@@ -36,16 +36,16 @@ export function renderSearchOverlay(): string {
       <h3 class="search-group-title">Πρόσφατες αναζητήσεις</h3>
       <div class="search-recent-items"></div>
     </div>
-    <div class="search-results">
-      <div class="search-group" data-group="events">
+    <div class="search-results" id="search-results-list" role="listbox" aria-label="Αποτελέσματα αναζήτησης">
+      <div class="search-group" data-group="events" role="group" aria-label="Εκδηλώσεις">
         <h3 class="search-group-title">Εκδηλώσεις</h3>
         <div class="search-group-items"></div>
       </div>
-      <div class="search-group" data-group="venues">
+      <div class="search-group" data-group="venues" role="group" aria-label="Χώροι">
         <h3 class="search-group-title">Χώροι</h3>
         <div class="search-group-items"></div>
       </div>
-      <div class="search-group" data-group="categories">
+      <div class="search-group" data-group="categories" role="group" aria-label="Κατηγορίες">
         <h3 class="search-group-title">Κατηγορίες</h3>
         <div class="search-group-items"></div>
       </div>
@@ -87,6 +87,7 @@ export function renderSearchScript(): string {
   var returnFocus = null;
   var activeIndex = -1;
   var allItems = [];
+  var resultIdCounter = 0;
 
   // Recent searches (sessionStorage)
   var RECENT_KEY = 'aa_recent_searches';
@@ -112,18 +113,27 @@ export function renderSearchScript(): string {
   }
 
   function setActive(idx) {
-    if (allItems[activeIndex]) allItems[activeIndex].classList.remove('is-active');
+    if (allItems[activeIndex]) {
+      allItems[activeIndex].classList.remove('is-active');
+      allItems[activeIndex].setAttribute('aria-selected', 'false');
+    }
     activeIndex = idx;
     if (allItems[activeIndex]) {
       allItems[activeIndex].classList.add('is-active');
+      allItems[activeIndex].setAttribute('aria-selected', 'true');
       allItems[activeIndex].scrollIntoView({ block: 'nearest' });
+      input.setAttribute('aria-activedescendant', allItems[activeIndex].id || '');
     }
   }
 
   function clearActive() {
-    if (allItems[activeIndex]) allItems[activeIndex].classList.remove('is-active');
+    if (allItems[activeIndex]) {
+      allItems[activeIndex].classList.remove('is-active');
+      allItems[activeIndex].setAttribute('aria-selected', 'false');
+    }
     activeIndex = -1;
     allItems = [];
+    input.setAttribute('aria-activedescendant', '');
   }
 
   function showSkeleton() { if (skeletonEl) skeletonEl.style.display = ''; }
@@ -177,6 +187,7 @@ export function renderSearchScript(): string {
   function showEmptyState() {
     resultsEl.style.display = 'none';
     emptyEl.style.display = 'none';
+    input.setAttribute('aria-expanded', 'false');
     if (popularEl) popularEl.style.display = (indexData && indexData.popular && indexData.popular.length > 0) ? '' : 'none';
     if (recentEl) {
       renderRecentItems();
@@ -186,6 +197,7 @@ export function renderSearchScript(): string {
 
   function hideEmptyState() {
     resultsEl.style.display = '';
+    input.setAttribute('aria-expanded', 'true');
     if (popularEl) popularEl.style.display = 'none';
     if (recentEl) recentEl.style.display = 'none';
   }
@@ -225,6 +237,7 @@ export function renderSearchScript(): string {
     var sections = resultsEl.querySelectorAll('.search-group');
     for (var i = 0; i < sections.length; i++) sections[i].style.display = 'none';
     emptyEl.style.display = 'none';
+    resultIdCounter = 0;
     clearActive();
   }
 
@@ -277,6 +290,9 @@ export function renderSearchScript(): string {
   function renderEventResult(e) {
     var el = makeEl('a', 'search-result-item');
     el.href = '/events/' + e.slug + '/';
+    el.id = 'sr-' + (++resultIdCounter);
+    el.setAttribute('role', 'option');
+    el.setAttribute('aria-selected', 'false');
     if (e.thumb) {
       var img = makeEl('img', 'search-result-thumb');
       img.src = e.thumb;
@@ -302,6 +318,9 @@ export function renderSearchScript(): string {
   function renderVenueResult(v) {
     var el = makeEl('a', 'search-result-item');
     el.href = '/venues/' + v.slug + '/';
+    el.id = 'sr-' + (++resultIdCounter);
+    el.setAttribute('role', 'option');
+    el.setAttribute('aria-selected', 'false');
     var text = makeEl('div', 'search-result-text');
     var title = makeEl('div', 'search-result-title');
     title.textContent = v.name;
@@ -317,6 +336,9 @@ export function renderSearchScript(): string {
   function renderCategoryResult(c) {
     var el = makeEl('a', 'search-result-item');
     el.href = '/' + c.slug + '/';
+    el.id = 'sr-' + (++resultIdCounter);
+    el.setAttribute('role', 'option');
+    el.setAttribute('aria-selected', 'false');
     var text = makeEl('div', 'search-result-text');
     var title = makeEl('div', 'search-result-title');
     title.textContent = c.title;

@@ -5,12 +5,19 @@
  * Validates a description file against quality gates. Wraps the existing
  * quality-gates.ts validation system for standalone CLI use.
  *
+ * Event context priority: CLI flags > DB lookup > filename fallback.
+ * CLI flags allow this to work in sandboxed environments without DB access.
+ *
  * Usage:
  *   bun run scripts/auto-gate-check.ts <file-path> [--tier=premium] [--event-id=<id>]
  *   bun run scripts/auto-gate-check.ts temp-descriptions/half-note-jazz.md --tier=premium
  *   bun run scripts/auto-gate-check.ts temp-descriptions/half-note-jazz.md --event-id=abc123
  *
- * Reads event context from DB when --event-id is provided.
+ * With CLI metadata flags (no DB needed):
+ *   bun run scripts/auto-gate-check.ts temp-descriptions/batch-121/abc123.md \
+ *     --tier=standard --event-id=abc123 --event-type=concert \
+ *     --event-venue="Half Note" --event-title="Jazz Night" \
+ *     --event-date=2026-03-02 --event-price=with-ticket
  */
 
 import { readFileSync } from 'fs';
@@ -25,6 +32,12 @@ interface CliArgs {
   filePath: string;
   tier: 'stub' | 'standard' | 'premium';
   eventId: string | null;
+  eventType: string | null;
+  eventVenue: string | null;
+  eventTitle: string | null;
+  eventDate: string | null;
+  eventPrice: string | null;
+  eventGenre: string | null;
 }
 
 function parseArgs(): CliArgs {
@@ -32,9 +45,17 @@ function parseArgs(): CliArgs {
   const filePath = args.find(a => !a.startsWith('--'));
   const tierArg = args.find(a => a.startsWith('--tier='));
   const eventIdArg = args.find(a => a.startsWith('--event-id='));
+  const eventTypeArg = args.find(a => a.startsWith('--event-type='));
+  const eventVenueArg = args.find(a => a.startsWith('--event-venue='));
+  const eventTitleArg = args.find(a => a.startsWith('--event-title='));
+  const eventDateArg = args.find(a => a.startsWith('--event-date='));
+  const eventPriceArg = args.find(a => a.startsWith('--event-price='));
+  const eventGenreArg = args.find(a => a.startsWith('--event-genre='));
 
   if (!filePath) {
     console.error('Usage: bun run scripts/auto-gate-check.ts <file-path> [--tier=premium] [--event-id=<id>]');
+    console.error('       [--event-type=concert] [--event-venue="Half Note"] [--event-title="Jazz Night"]');
+    console.error('       [--event-date=2026-03-02] [--event-price=with-ticket] [--event-genre=jazz]');
     process.exit(1);
   }
 
@@ -48,6 +69,12 @@ function parseArgs(): CliArgs {
     filePath,
     tier,
     eventId: eventIdArg?.split('=')[1] || null,
+    eventType: eventTypeArg?.split('=')[1] || null,
+    eventVenue: eventVenueArg?.split('=')[1] || null,
+    eventTitle: eventTitleArg?.split('=')[1] || null,
+    eventDate: eventDateArg?.split('=')[1] || null,
+    eventPrice: eventPriceArg?.split('=')[1] || null,
+    eventGenre: eventGenreArg?.split('=')[1] || null,
   };
 }
 
@@ -73,8 +100,55 @@ function loadEventFromDB(eventId: string): EventForEnrichment | null {
       price: row.price_type,
     };
   } catch {
+    // DB unavailable (sandbox, missing file, etc.) — caller will use CLI flags
     return null;
   }
+}
+
+/**
+ * Build event context from CLI flags, DB lookup, or filename fallback.
+ * Priority: CLI flags > DB lookup > filename extraction.
+ */
+function buildEventContext(args: CliArgs): EventForEnrichment {
+  const basename = args.filePath.replace(/.*\//, '').replace('.md', '');
+
+  // Priority 1: CLI flags (always available, even in sandbox)
+  if (args.eventType || args.eventVenue || args.eventTitle) {
+    const event: EventForEnrichment = {
+      id: args.eventId || basename,
+      title: args.eventTitle || basename.replace(/-/g, ' '),
+      date: args.eventDate || '2026-01-01',
+      time: null,
+      venue: args.eventVenue || null,
+      type: args.eventType || null,
+      genre: args.eventGenre || null,
+      price: args.eventPrice || null,
+    };
+    console.log(`Event (from CLI flags): ${event.title} @ ${event.venue}`);
+    return event;
+  }
+
+  // Priority 2: DB lookup (works outside sandbox)
+  if (args.eventId) {
+    const dbEvent = loadEventFromDB(args.eventId);
+    if (dbEvent) {
+      console.log(`Event (from DB): ${dbEvent.title} @ ${dbEvent.venue}`);
+      return dbEvent;
+    }
+    console.log(`Event ${args.eventId} not found in DB, using filename as context`);
+  }
+
+  // Priority 3: Filename fallback
+  return {
+    id: args.eventId || basename,
+    title: basename.replace(/-/g, ' '),
+    date: '2026-01-01',
+    time: null,
+    venue: null,
+    type: null,
+    genre: null,
+    price: null,
+  };
 }
 
 function runV4Checks(description: string): Array<{ severity: string; message: string }> {
@@ -164,40 +238,8 @@ function main(): void {
   console.log(`\nChecking: ${args.filePath}`);
   console.log(`Tier: ${args.tier} | Words: ${wordResult.count}`);
 
-  // Build event context
-  let event: EventForEnrichment;
-  if (args.eventId) {
-    const dbEvent = loadEventFromDB(args.eventId);
-    if (dbEvent) {
-      event = dbEvent;
-      console.log(`Event: ${event.title} @ ${event.venue}`);
-    } else {
-      console.log(`Event ${args.eventId} not found in DB, using filename as context`);
-      event = {
-        id: args.eventId,
-        title: args.filePath.replace(/.*\//, '').replace('.md', ''),
-        date: '2026-01-01',
-        time: null,
-        venue: null,
-        type: null,
-        genre: null,
-        price: null,
-      };
-    }
-  } else {
-    // Extract context from filename
-    const basename = args.filePath.replace(/.*\//, '').replace('.md', '');
-    event = {
-      id: basename,
-      title: basename.replace(/-/g, ' '),
-      date: '2026-01-01',
-      time: null,
-      venue: null,
-      type: null,
-      genre: null,
-      price: null,
-    };
-  }
+  // Build event context (CLI flags > DB > filename fallback)
+  const event = buildEventContext(args);
 
   // Run quality gates
   const result = validateQualityGates(event, description, args.tier);

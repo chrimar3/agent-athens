@@ -13,9 +13,7 @@ import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
-import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
-import { BADGE_LABELS } from '../templates/page';
-import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { renderEventCardList } from '../templates/card-variants';
 import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
@@ -138,22 +136,9 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
     .map(([type, count]) => `${count} ${type}`)
     .join(', ');
 
-  // Render event list
+  // Render event list using list card variant
   const eventsHtml = venue.events.slice(0, 20).map(event => {
-    const eventSlug = generateEventSlug(event);
-    const isExhibition = event.type === 'exhibition';
-    const dateDisplay = isExhibition
-      ? formatExhibitionDateRange(event)
-      : `${formatGreekDateOnly(event.startDate)} στις ${formatGreekTime(event.startDate)}`;
-    const openNow = isExhibition && isCurrentlyOpen(event);
-
-    return `
-      <li class="venue-event-item ${isExhibition ? 'exhibition' : ''}">
-        <a href="/events/${eventSlug}/">${event.title}</a>
-        ${openNow ? '<span class="open-now-badge">Τώρα</span>' : ''}
-        <span class="event-date">${dateDisplay}</span>
-        <span class="event-type">${BADGE_LABELS[event.type] || event.type}</span>
-      </li>`;
+    return renderEventCardList(event);
   }).join('\n');
 
   const moreEventsNote = venue.events.length > 20
@@ -244,9 +229,9 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
 
     <section class="venue-events">
       <h2>Επερχόμενες Εκδηλώσεις</h2>
-      <ul>
+      <div class="venue-event-list">
         ${eventsHtml}
-      </ul>
+      </div>
       ${moreEventsNote}
     </section>
   </div>

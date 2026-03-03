@@ -42,22 +42,23 @@ function getPriority(urlPath: string): string {
   return Math.max(0.5, 1.0 - (depth * 0.1)).toFixed(1);
 }
 
-function buildUrlEntry(urlPath: string, manifest: ContentHashManifest): string {
+function buildUrlEntry(urlPath: string, manifest: ContentHashManifest, priorityOverrides?: Map<string, string>): string {
   const fullUrl = urlPath === 'index' ? BASE_URL : `${BASE_URL}/${urlPath}`;
   const bucket = classifyUrl(urlPath);
   const entry = manifest.entries[urlPath];
   const lastmod = entry?.lastModified ?? new Date().toISOString().split('T')[0];
+  const priority = priorityOverrides?.get(urlPath) ?? getPriority(urlPath);
 
   return `  <url>
     <loc>${fullUrl}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${getChangeFreq(urlPath, bucket)}</changefreq>
-    <priority>${getPriority(urlPath)}</priority>
+    <priority>${priority}</priority>
   </url>`;
 }
 
-function buildSitemapXml(urls: string[], manifest: ContentHashManifest): string {
-  const entries = urls.map(url => buildUrlEntry(url, manifest));
+function buildSitemapXml(urls: string[], manifest: ContentHashManifest, priorityOverrides?: Map<string, string>): string {
+  const entries = urls.map(url => buildUrlEntry(url, manifest, priorityOverrides));
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.join('\n')}
@@ -81,7 +82,8 @@ ${entries.join('\n')}
  */
 export function generateSplitSitemaps(
   generatedUrls: string[],
-  manifest: ContentHashManifest
+  manifest: ContentHashManifest,
+  priorityOverrides?: Map<string, string>
 ): number {
   const buckets: Record<SitemapBucket, string[]> = {
     events: [],
@@ -104,7 +106,7 @@ export function generateSplitSitemaps(
     { name: 'sitemap-editorial.xml', count: buckets.editorial.length },
   ];
 
-  writeFileSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest));
+  writeFileSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest, priorityOverrides));
   writeFileSync(join(DIST_DIR, 'sitemap-venues.xml'), buildSitemapXml(buckets.venues, manifest));
   writeFileSync(join(DIST_DIR, 'sitemap-editorial.xml'), buildSitemapXml(buckets.editorial, manifest));
 

@@ -46,6 +46,7 @@ export interface BatchManifest {
   batch_id: number;
   generated_at: string;
   event_ids: string[];
+  output_dir?: string;
 }
 
 export interface RecentOpening {
@@ -116,11 +117,12 @@ export function appendRecentOpenings(newOpenings: RecentOpening[]): void {
   writeFileSync(RECENT_OPENINGS_PATH, JSON.stringify(combined, null, 2), 'utf-8');
 }
 
-export function cleanupBatchFiles(eventIds: string[]): void {
+export function cleanupBatchFiles(eventIds: string[], outputDir?: string): void {
+  const descDir = outputDir || DESCRIPTIONS_DIR;
   let cleaned = 0;
   for (const id of eventIds) {
-    const mdPath = join(DESCRIPTIONS_DIR, `${id}.md`);
-    const tagsPath = join(DESCRIPTIONS_DIR, `${id}.tags.json`);
+    const mdPath = join(descDir, `${id}.md`);
+    const tagsPath = join(descDir, `${id}.tags.json`);
     if (existsSync(mdPath)) {
       unlinkSync(mdPath);
       cleaned++;
@@ -129,7 +131,21 @@ export function cleanupBatchFiles(eventIds: string[]): void {
       unlinkSync(tagsPath);
     }
   }
-  console.log(`Cleaned up ${cleaned} description file(s)`);
+  // If using a batch subdir, remove the review file and the dir itself if empty
+  if (outputDir && existsSync(outputDir)) {
+    const reviewPath = join(outputDir, `batch-${outputDir.split('batch-').pop()}-review.md`);
+    if (existsSync(reviewPath)) unlinkSync(reviewPath);
+    try {
+      const { rmdirSync } = require('fs');
+      rmdirSync(outputDir);
+      console.log(`Cleaned up ${cleaned} description file(s) and removed ${outputDir}/`);
+    } catch {
+      // Dir not empty — that's fine, don't force-remove
+      console.log(`Cleaned up ${cleaned} description file(s) from ${outputDir}/`);
+    }
+  } else {
+    console.log(`Cleaned up ${cleaned} description file(s)`);
+  }
 }
 
 // ============================================================================
@@ -183,15 +199,19 @@ export function saveBatch(
   session: string,
   batch: number,
   dryRun: boolean,
+  outputDir?: string,
 ): { results: SaveResult[]; openings: RecentOpening[] } {
   ensureV4Columns(db);
+
+  // Use batch-scoped dir if provided, fall back to flat temp-descriptions/
+  const descDir = outputDir || DESCRIPTIONS_DIR;
 
   const results: SaveResult[] = [];
   const openings: RecentOpening[] = [];
 
   for (const eventId of eventIds) {
-    const descPath = join(DESCRIPTIONS_DIR, `${eventId}.md`);
-    const tagsPath = join(DESCRIPTIONS_DIR, `${eventId}.tags.json`);
+    const descPath = join(descDir, `${eventId}.md`);
+    const tagsPath = join(descDir, `${eventId}.tags.json`);
 
     if (!existsSync(descPath)) {
       results.push({
@@ -316,7 +336,7 @@ function main(): void {
   db.run('PRAGMA journal_mode = WAL;');
   db.run('PRAGMA foreign_keys = ON;');
 
-  const { results, openings } = saveBatch(db, manifest.event_ids, session, batch, dryRun);
+  const { results, openings } = saveBatch(db, manifest.event_ids, session, batch, dryRun, manifest.output_dir);
 
   db.close();
 
@@ -349,7 +369,7 @@ function main(): void {
       console.log(`\nSkipping cleanup: ${failed.length} event(s) failed — preserving files for retry`);
     } else {
       console.log('');
-      cleanupBatchFiles(manifest.event_ids);
+      cleanupBatchFiles(manifest.event_ids, manifest.output_dir);
     }
   }
 

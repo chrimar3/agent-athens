@@ -343,7 +343,7 @@ function renderRelatedPages(filters: any): string {
   if (filters.type) {
     const greekType = typeTranslations[filters.type] || filters.type;
     links.push(`<a href="/${filters.type}">Όλες οι ${greekType}</a>`);
-    links.push(`<a href="/open-${filters.type}">Δωρεάν ${greekType}</a>`);
+    links.push(`<a href="/open-${filters.type}">Ελεύθερη είσοδος ${greekType}</a>`);
   }
 
   if (filters.time !== 'this-week') {
@@ -351,7 +351,7 @@ function renderRelatedPages(filters: any): string {
   }
 
   if (filters.price !== 'open') {
-    links.push(`<a href="/open">Δωρεάν εκδηλώσεις</a>`);
+    links.push(`<a href="/open">Ελεύθερη είσοδος εκδηλώσεις</a>`);
   }
 
   links.push(`<a href="/">Όλες οι εκδηλώσεις</a>`);

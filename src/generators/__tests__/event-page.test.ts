@@ -353,6 +353,66 @@ describe("Event Detail Page — Past event lifecycle", () => {
   });
 });
 
+describe("Event Detail Page — GEO source order", () => {
+  test("practical block appears before description in HTML", () => {
+    const html = renderEventDetailPage(longDescEvent, []);
+    const practicalPos = html.indexOf('event-practical');
+    const descriptionPos = html.indexOf('edp-description');
+    expect(practicalPos).toBeGreaterThan(-1);
+    expect(descriptionPos).toBeGreaterThan(-1);
+    expect(practicalPos).toBeLessThan(descriptionPos);
+  });
+
+  test("description appears before venue section", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    const descPos = html.indexOf('edp-description');
+    const venuePos = html.indexOf('edp-venue-section');
+    expect(descPos).toBeLessThan(venuePos);
+  });
+});
+
+describe("Event Detail Page — Inline CTA", () => {
+  test("inline CTA rendered for upcoming event with ticket URL", () => {
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const html = renderEventDetailPage(upcomingWithTicket, []);
+    expect(html).toContain('edp-inline-cta');
+  });
+
+  test("inline CTA hidden for past events", () => {
+    const pastEvent: Event = { ...sampleConcertWithTicket, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).not.toContain('edp-inline-cta');
+  });
+
+  test("open-entry events show 'Ελεύθερη είσοδος' text (not link)", () => {
+    const html = renderEventDetailPage(openExhibition, []);
+    expect(html).toContain('edp-open-entry');
+    expect(html).toContain('Ελεύθερη είσοδος');
+  });
+});
+
+describe("Event Detail Page — data-past attribute", () => {
+  test("past event has data-past='true' on article", () => {
+    const pastEvent: Event = { ...sampleConcert, startDate: '2025-01-01T20:00:00+03:00' };
+    const html = renderEventDetailPage(pastEvent, []);
+    expect(html).toContain('data-past="true"');
+  });
+
+  test("upcoming event has no data-past attribute", () => {
+    const futureEvent: Event = { ...sampleConcert, startDate: futureStartDate };
+    const html = renderEventDetailPage(futureEvent, []);
+    expect(html).not.toContain('data-past=');
+  });
+});
+
+describe("Event Detail Page — CTA uses accent-primary (not type color)", () => {
+  test("hero CTA has no light-text modifier", () => {
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const html = renderEventDetailPage(upcomingWithTicket, []);
+    expect(html).not.toContain('edp-cta--light-text');
+  });
+});
+
 describe("Event Detail Page — No inline styles", () => {
   test("no <style> block in the page (all CSS in design-system.css)", () => {
     const html = renderEventDetailPage(sampleConcert, []);

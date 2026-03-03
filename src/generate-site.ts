@@ -17,6 +17,7 @@ import {
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
+import { generateHubPages } from './generators/hub-page';
 import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
 import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
@@ -25,6 +26,7 @@ import { renderContentPage } from './templates/content-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
+import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -134,15 +136,12 @@ async function main() {
 
   // Load events from database
   console.log('📥 Loading events from database...');
-  const { getAllEvents, cleanupOldEvents, getDatabase } = await import('./db/database');
+  const { getAllEvents, getDatabase } = await import('./db/database');
 
-  // Clean up events that ended more than 1 day ago (keep recent history)
-  const cleaned = cleanupOldEvents(1);
-  if (cleaned > 0) {
-    console.log(`🗑️  Cleaned up ${cleaned} past events\n`);
-  }
+  // DB retention: events persist indefinitely for dedup history.
+  // Lifecycle (upcoming vs past) is handled at the generation layer.
 
-  // Load all upcoming and recent events
+  // Load all events from database
   const allEvents = getAllEvents();
 
   // Filter by location_status: only verified_athens and pass_through events
@@ -156,10 +155,12 @@ async function main() {
     return PUBLISHABLE_STATUSES.includes(status);
   });
 
-  // Filter to only current/future events for public site
+  // Split events into two arrays:
+  // 1. upcomingEvents — for listings, hubs, search index, counts (current/future only)
+  // 2. pageableEvents — for event page generation (upcoming + past-active ≤45d)
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const events = locationFiltered.filter(event => {
+  const upcomingEvents = locationFiltered.filter(event => {
     const startDate = new Date(event.startDate);
 
     // For exhibitions: show if currently running (end_date >= today) or starting soon
@@ -172,6 +173,16 @@ async function main() {
     // For other events: show if starting today or in the future
     return startDate >= today;
   });
+
+  // pageableEvents: upcoming + past events within 45-day retention window
+  const { classifyEventLifecycle } = await import('./utils/event-lifecycle');
+  const pageableEvents = locationFiltered.filter(event => {
+    const lifecycle = classifyEventLifecycle(event);
+    return lifecycle !== 'past-expired';
+  });
+
+  // Alias for backward compat — listing pages, hubs, etc. use `events`
+  const events = upcomingEvents;
 
   // Preload venue fallback images from venue_context
   const venueImageMap = new Map<string, string>();
@@ -187,16 +198,18 @@ async function main() {
   }
 
   // Attach venue fallback image to each event (computed at load time)
-  for (const event of events) {
+  // Use pageableEvents since past-active events also need images for their pages
+  for (const event of pageableEvents) {
     const venueImg = venueImageMap.get(event.venue.name);
     if (venueImg) event.venueImage = venueImg;
   }
 
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
   console.log(`📍 ${locationFiltered.length} events with verified Athens location`);
-  console.log(`📅 Publishing ${events.length} current/upcoming events`);
+  console.log(`📅 Publishing ${upcomingEvents.length} current/upcoming events`);
+  console.log(`📄 ${pageableEvents.length} pageable events (includes ${pageableEvents.length - upcomingEvents.length} past-active)`);
   if (venueImageMap.size > 0) {
-    const venueImgCount = events.filter(e => !e.imageLocal && !e.imageUrl && e.venueImage).length;
+    const venueImgCount = pageableEvents.filter(e => !e.imageLocal && !e.imageUrl && e.venueImage).length;
     console.log(`🏛️ ${venueImageMap.size} venue images loaded, ${venueImgCount} events get venue fallback`);
   }
   console.log();
@@ -327,16 +340,22 @@ async function main() {
   generatedUrls.push(...categoryUrls);
   pagesGenerated += categoryUrls.length;
 
+  // Generate hub pages (enhanced versions of existing listing pages)
+  console.log('\n📄 Generating hub pages...');
+  const hubSlugs = generateHubPages(events);
+  console.log(`  ✓ ${hubSlugs.length} hub pages enhanced`);
+
   // Generate individual event pages (Phase C.3)
+  // Uses pageableEvents: upcoming + past-active events (≤45 days) get pages
   console.log('\n📄 Generating individual event pages...');
   const previousSlugHistory = loadSlugHistory();
-  const { urls: eventPageUrls, slugMap: currentSlugs } = await generateEventPages(events);
+  const { urls: eventPageUrls, slugMap: currentSlugs, pastEventUrls } = await generateEventPages(pageableEvents);
   generatedUrls.push(...eventPageUrls);
   pagesGenerated += eventPageUrls.length;
 
   // Generate per-event OG images (only for events without self-hosted images)
   console.log('\n🖼️  Generating per-event OG images...');
-  await generateEventOgImages(events);
+  await generateEventOgImages(pageableEvents);
 
   // Generate per-hub OG images
   console.log('🖼️  Generating per-hub OG images...');
@@ -372,63 +391,157 @@ async function main() {
 
   // Generate content pages (about, editorial, corrections)
   console.log('\n📄 Generating content pages...');
+  const BASE_URL = 'https://agentathens.netlify.app';
+  const todayIso = DateTime.now().setZone('Europe/Athens').toISODate();
+  const publisher = {
+    '@type': 'Organization',
+    'name': ORGANIZATION_SCHEMA.name,
+    'url': ORGANIZATION_SCHEMA.url
+  };
+
   const contentPages = [
     {
       slug: 'about',
       title: 'Σχετικά',
+      metaDescription: 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
+      schemaJson: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        'name': 'Σχετικά με το agent athens',
+        'url': `${BASE_URL}/about/`,
+        'description': 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
+        'inLanguage': 'el',
+        publisher,
+        'datePublished': '2026-03-02',
+        'dateModified': todayIso
+      }, null, 2),
       bodyHtml: `
         <h1>Σχετικά με το agent athens</h1>
-        <p>Το agent athens είναι ένα ημερολόγιο πολιτιστικών εκδηλώσεων για την Αθήνα, που ενημερώνεται καθημερινά με τεχνητή νοημοσύνη.</p>
+        <p>Το agent athens είναι ένα ημερήσιο πολιτιστικό ημερολόγιο για την Αθήνα. Συγκεντρώνουμε, επαληθεύουμε και εμπλουτίζουμε εκδηλώσεις από δεκάδες πηγές, χρησιμοποιώντας τεχνητή νοημοσύνη και ανθρώπινη επίβλεψη.</p>
 
         <h2>Τι κάνουμε</h2>
-        <p>Συγκεντρώνουμε εκδηλώσεις από πάνω από 10 επαληθευμένους χώρους και πηγές στην Αθήνα. Συναυλίες, εκθέσεις, θέατρο, σινεμά, παραστάσεις, εργαστήρια — όλα σε ένα μέρος.</p>
-        <p>Τα δεδομένα ενημερώνονται κάθε πρωί στις 08:00 ώρα Αθήνας.</p>
+        <p>Κάθε μέρα, αυτοματοποιημένοι scrapers συλλέγουν εκδηλώσεις από πάνω από 15 επαληθευμένους χώρους και πλατφόρμες εισιτηρίων στην Αθήνα. Καλύπτουμε συναυλίες, εκθέσεις, θέατρο, κλασική μουσική, DJ sets, σινεμά, παραστάσεις χορού, εργαστήρια, φεστιβάλ, και events τεχνολογίας.</p>
+        <p>Κάθε εκδήλωση περνάει από αυτόματο φιλτράρισμα τοποθεσίας — εμφανίζονται μόνο εκδηλώσεις σε επαληθευμένους χώρους της Αττικής. Οι περιγραφές εμπλουτίζονται με πληροφορίες πρόσβασης, ιστορικό χώρου και πρακτικές λεπτομέρειες.</p>
 
         <h2>Πώς λειτουργεί</h2>
-        <p>Χρησιμοποιούμε αυτοματοποιημένη συλλογή δεδομένων και τεχνητή νοημοσύνη για να επιβεβαιώσουμε τις πληροφορίες, να εμπλουτίσουμε τις περιγραφές, και να διασφαλίσουμε ότι κάθε εκδήλωση αφορά πραγματικά την Αθήνα.</p>
+        <p>Η πλατφόρμα βασίζεται σε ανοικτό κώδικα (Bun, TypeScript, SQLite). Κάθε πρωί στις 08:00 ώρα Αθήνας εκτελείται η πλήρης αλυσίδα: συλλογή δεδομένων, επαλήθευση χώρων, εμπλουτισμός περιγραφών, δημιουργία σελίδων. Το site αναπτύσσεται ως στατικό HTML στο Netlify για μέγιστη ταχύτητα φόρτωσης.</p>
+        <p>Η τεχνητή νοημοσύνη χρησιμοποιείται αποκλειστικά για τον εμπλουτισμό περιγραφών — δεν κατασκευάζει πληροφορίες. Κάθε εμπλουτισμένη περιγραφή βασίζεται σε πραγματικά δεδομένα από τις πρωτογενείς πηγές.</p>
+
+        <h2>Γεωγραφική κάλυψη</h2>
+        <p>Καλύπτουμε εκδηλώσεις σε χώρους σε ολόκληρη την Αττική, με έμφαση στο κέντρο της Αθήνας. Οι γειτονιές που καλύπτονται περιλαμβάνουν Κολωνάκι, Μετς, Εξάρχεια, Πλάκα, Γκάζι, Κεραμεικό, Κουκάκι, Παγκράτι, Πετράλωνα, Μαρούσι, και πολλές ακόμα.</p>
+
+        <h2>Συχνότητα ενημέρωσης</h2>
+        <p>Το ημερολόγιο ενημερώνεται καθημερινά. Νέες εκδηλώσεις εμφανίζονται αυτόματα, ενώ παρελθούσες εκδηλώσεις αφαιρούνται. Κάθε σελίδα εκδήλωσης περιέχει δομημένα δεδομένα Schema.org για αναζητήσεις και AI agents.</p>
 
         <h2>Επικοινωνία</h2>
-        <p>Για ερωτήσεις ή προτάσεις, επικοινωνήστε μαζί μας μέσω <a href="https://github.com/chrimar3/agent-athens/issues">GitHub Issues</a>.</p>
+        <p>Για ερωτήσεις, προτάσεις ή αναφορά σφαλμάτων, επικοινωνήστε μαζί μας μέσω <a href="https://github.com/chrimar3/agent-athens/issues">GitHub Issues</a> ή email στο cmarag8@gmail.com.</p>
       `
     },
     {
       slug: 'editorial',
       title: 'Σύνταξη',
+      metaDescription: 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
+      schemaJson: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        'name': 'Συντακτική πολιτική — agent athens',
+        'url': `${BASE_URL}/editorial/`,
+        'description': 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
+        'inLanguage': 'el',
+        publisher,
+        'datePublished': '2026-03-02',
+        'dateModified': todayIso
+      }, null, 2),
       bodyHtml: `
         <h1>Συντακτική πολιτική</h1>
-        <p>Η συντακτική μας ομάδα αποτελείται από συνδυασμό αυτοματοποιημένων εργαλείων και ανθρώπινης επίβλεψης.</p>
+        <p>Το agent athens συνδυάζει αυτοματοποιημένη συλλογή δεδομένων, εμπλουτισμό με τεχνητή νοημοσύνη, και ανθρώπινη επίβλεψη για να παρέχει αξιόπιστες πληροφορίες πολιτιστικών εκδηλώσεων.</p>
 
         <h2>Πηγές δεδομένων</h2>
-        <p>Συλλέγουμε εκδηλώσεις από επαληθευμένες πηγές, συμπεριλαμβανομένων ιστοσελίδων χώρων, πλατφορμών εισιτηρίων, και πολιτιστικών ημερολογίων.</p>
+        <p>Συλλέγουμε εκδηλώσεις από πάνω από 15 επαληθευμένες πηγές, συμπεριλαμβανομένων:</p>
+        <ul>
+          <li>Ιστοσελίδες χώρων (Half Note, Μέγαρο Μουσικής, Στέγη Ωνάση, Μουσείο Μπενάκη κ.ά.)</li>
+          <li>Πλατφόρμες εισιτηρίων (Ticket Services, More.com, Eventbrite)</li>
+          <li>Πολιτιστικά ημερολόγια (Athinorama, Resident Advisor)</li>
+        </ul>
+        <p>Κάθε πηγή αναφέρεται ρητά στη σελίδα της εκδήλωσης, με σύνδεσμο στην πρωτογενή καταχώρηση.</p>
 
-        <h2>Επαλήθευση</h2>
-        <p>Κάθε εκδήλωση ελέγχεται αυτόματα για την τοποθεσία της (μόνο Αθήνα) και τα βασικά στοιχεία της. Οι εμπλουτισμένες περιγραφές βασίζονται αποκλειστικά σε πραγματικές πληροφορίες.</p>
+        <h2>Μεθοδολογία εμπλουτισμού AI</h2>
+        <p>Οι εμπλουτισμένες περιγραφές δημιουργούνται μέσω αυστηρής διαδικασίας:</p>
+        <ul>
+          <li>Η τεχνητή νοημοσύνη λαμβάνει μόνο πραγματικά δεδομένα από τις πηγές — δεν κατασκευάζει πληροφορίες</li>
+          <li>Κάθε περιγραφή ακολουθεί τυποποιημένη δομή 8 ενοτήτων με ελάχιστα και μέγιστα μήκη</li>
+          <li>Το σύστημα ελέγχει αυτόματα για γεωγραφική ακρίβεια, χρονική συνέπεια, και εγκυρότητα τιμών</li>
+          <li>Πληροφορίες πρόσβασης (μετρό, λεωφορεία, parking) βασίζονται σε επαληθευμένη βάση γνώσης χώρων</li>
+        </ul>
+
+        <h2>Ποιοτικός έλεγχος</h2>
+        <p>Κάθε εκδήλωση περνάει από πολλαπλά επίπεδα ελέγχου:</p>
+        <ul>
+          <li><strong>Φίλτρο τοποθεσίας:</strong> Μόνο χώροι στην Αττική, επαληθευμένοι μέσω whitelist χώρων</li>
+          <li><strong>Έλεγχος δεδομένων:</strong> Αυτόματη επικύρωση ημερομηνιών, τιμών και βασικών πεδίων</li>
+          <li><strong>Πύλες ποιότητας:</strong> Οι εμπλουτισμένες περιγραφές ελέγχονται για factual accuracy — καμία πληροφορία δεν κατασκευάζεται</li>
+          <li><strong>Ανθρώπινη εποπτεία:</strong> Τακτικός έλεγχος δειγμάτων και αναθεώρηση κανόνων ποιότητας</li>
+        </ul>
+
+        <h2>Πολιτική μη κατασκευής πληροφοριών</h2>
+        <p>Δεσμευόμαστε ότι καμία πληροφορία στις περιγραφές μας δεν είναι κατασκευασμένη. Αν κάτι δεν μπορεί να επαληθευτεί από τις πρωτογενείς πηγές, δεν συμπεριλαμβάνεται. Αυτό ισχύει ιδιαίτερα για τιμές εισιτηρίων, ώρες έναρξης, και χώρους διεξαγωγής.</p>
 
         <h2>Ενημερώσεις</h2>
-        <p>Το ημερολόγιο ενημερώνεται καθημερινά. Οι παρελθούσες εκδηλώσεις αφαιρούνται αυτόματα.</p>
+        <p>Το ημερολόγιο ενημερώνεται καθημερινά στις 08:00 ώρα Αθήνας. Παρελθούσες εκδηλώσεις αφαιρούνται αυτόματα, ενώ τρέχουσες εκθέσεις παραμένουν μέχρι τη λήξη τους.</p>
       `
     },
     {
       slug: 'corrections',
       title: 'Διορθώσεις',
+      metaDescription: 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
+      schemaJson: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        'name': 'Πολιτική διορθώσεων — agent athens',
+        'url': `${BASE_URL}/corrections/`,
+        'description': 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
+        'inLanguage': 'el',
+        publisher,
+        'datePublished': '2026-03-02',
+        'dateModified': todayIso
+      }, null, 2),
       bodyHtml: `
         <h1>Πολιτική διορθώσεων</h1>
-        <p>Δεσμευόμαστε για ακρίβεια. Αν εντοπίσετε κάποιο σφάλμα, ενημερώστε μας.</p>
+        <p>Δεσμευόμαστε για ακρίβεια σε κάθε εκδήλωση που δημοσιεύουμε. Αν εντοπίσετε κάποιο σφάλμα, θέλουμε να το μάθουμε.</p>
 
-        <h2>Αναφορά σφάλματος</h2>
-        <p>Αν βρείτε λανθασμένη πληροφορία (λάθος ημερομηνία, τιμή, χώρος), δημιουργήστε ένα issue στο <a href="https://github.com/chrimar3/agent-athens/issues">GitHub</a> ή στείλτε email στο cmarag8@gmail.com.</p>
+        <h2>Πώς να αναφέρετε σφάλμα</h2>
+        <p>Μπορείτε να αναφέρετε σφάλματα με δύο τρόπους:</p>
+        <ul>
+          <li><strong>GitHub:</strong> Δημιουργήστε ένα issue στο <a href="https://github.com/chrimar3/agent-athens/issues">github.com/chrimar3/agent-athens</a> — ιδανικό για λεπτομερείς αναφορές</li>
+          <li><strong>Email:</strong> Στείλτε στο cmarag8@gmail.com με θέμα «Διόρθωση: [όνομα εκδήλωσης]»</li>
+        </ul>
+        <p>Στην αναφορά σας, παρακαλούμε συμπεριλάβετε τον σύνδεσμο της σελίδας εκδήλωσης και περιγραφή του σφάλματος.</p>
+
+        <h2>Τι μπορεί να αναφερθεί</h2>
+        <ul>
+          <li>Λανθασμένες ημερομηνίες ή ώρες έναρξης</li>
+          <li>Εσφαλμένες τιμές εισιτηρίων</li>
+          <li>Λάθος χώρος διεξαγωγής ή διεύθυνση</li>
+          <li>Εκδηλώσεις που δεν αφορούν την Αθήνα</li>
+          <li>Ελλιπείς ή παραπλανητικές περιγραφές</li>
+          <li>Ακυρωμένες εκδηλώσεις που εξακολουθούν να εμφανίζονται</li>
+          <li>Σπασμένοι σύνδεσμοι προς πηγές ή εισιτήρια</li>
+        </ul>
 
         <h2>Χρόνος απόκρισης</h2>
-        <p>Οι διορθώσεις εφαρμόζονται εντός 24 ωρών και αντικατοπτρίζονται στο επόμενο καθημερινό build.</p>
+        <p>Οι διορθώσεις εφαρμόζονται εντός 24 ωρών. Κρίσιμα σφάλματα (λάθος τιμή, λάθος ημερομηνία) αντιμετωπίζονται άμεσα και αντικατοπτρίζονται στο επόμενο build. Για μη κρίσιμα ζητήματα (βελτίωση περιγραφής, ορθογραφικά), η διόρθωση γίνεται εντός της επόμενης ημέρας.</p>
 
-        <h3>Τι μπορεί να αναφερθεί</h3>
-        <p>Λάθος ημερομηνίες ή ώρες, εσφαλμένες τιμές εισιτηρίων, λανθασμένοι χώροι, εκδηλώσεις που δεν αφορούν την Αθήνα, ελλιπείς ή παραπλανητικές περιγραφές.</p>
+        <h2>Διαφάνεια</h2>
+        <p>Κάθε σελίδα εκδήλωσης αναφέρει την πηγή των δεδομένων. Ο κώδικας είναι ανοικτός στο <a href="https://github.com/chrimar3/agent-athens">GitHub</a> και οι κανόνες ποιότητας είναι δημόσια διαθέσιμοι. Πιστεύουμε ότι η διαφάνεια είναι θεμελιώδης για την αξιοπιστία.</p>
       `
     },
   ];
 
   for (const page of contentPages) {
-    const html = renderContentPage(page.slug, page.title, page.bodyHtml);
+    const html = renderContentPage(page.slug, page.title, page.bodyHtml, {
+      metaDescription: page.metaDescription,
+      schemaJson: page.schemaJson,
+    });
     const pageDir = join(DIST_DIR, page.slug);
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
@@ -496,7 +609,12 @@ async function main() {
     categoryConfigs: CATEGORIES_CONFIG.categories,
   });
   await generateRobotsTxt();
-  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest);
+  // Build priority overrides for past-active event pages (lower sitemap priority)
+  const priorityOverrides = new Map<string, string>();
+  for (const url of pastEventUrls) {
+    priorityOverrides.set(url, '0.3');
+  }
+  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest, priorityOverrides);
   await generateIndexNowKeyFile();
 
   const buildDurationMs = Date.now() - buildStartTime;
@@ -513,6 +631,10 @@ async function main() {
   console.log(`🔐 Content hashes: ${unchangedCount} preserved, ${changedCount} updated`);
   console.log(`⏱️  Build time: ${(buildDurationMs / 1000).toFixed(1)}s`);
   console.log(`📁 Output directory: ${DIST_DIR}`);
+
+  // Schema completeness validation (warning-only, never blocks build)
+  const schemaResults = validateAllPages(DIST_DIR);
+  printSchemaSummary(schemaResults);
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
@@ -665,6 +787,12 @@ Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 - Sources: ${sourceCount} verified venues and listing sites
 - Freshness: Updated daily at 08:00 Europe/Athens
 - Structured data: Schema.org Event markup on all pages
+
+## About
+
+- [About Agent Athens](${base}/about/): What we do, how we work
+- [Editorial Policy](${base}/editorial/): Data sources, AI enrichment methodology, quality standards
+- [Corrections](${base}/corrections/): Report errors, correction policy
 
 ## Contact
 

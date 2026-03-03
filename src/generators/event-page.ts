@@ -330,8 +330,18 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   // CTA (ticket link) — hidden for past events (ticket URL likely dead)
   const showCta = Boolean(event.ticketUrl) && !isPast;
   const ctaHtml = showCta
-    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero${lightText ? ' edp-cta--light-text' : ''}" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>`
+    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>`
     : '';
+
+  // Inline CTA for body content (GEO source order: after description, before venue)
+  // For open-entry events, show informational text (no link). Never "Δωρεάν".
+  const inlineCtaHtml = isPast
+    ? ''
+    : showCta
+      ? `<div class="edp-inline-cta"><a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a></div>`
+      : event.price.type === 'open'
+        ? '<div class="edp-inline-cta"><span class="edp-open-entry">Ελεύθερη είσοδος</span></div>'
+        : '';
 
   // Venue section — Google Maps link
   const mapsUrl = event.venue.coordinates
@@ -363,7 +373,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         <div class="edp-mobile-bar-title">${event.title}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
-      <a href="${event.ticketUrl}" class="edp-cta${lightText ? ' edp-cta--light-text' : ''}" rel="noopener" target="_blank">Εισιτήρια</a>
+      <a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
     </div>
   </div>`
     : '';
@@ -423,7 +433,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <article id="main-content" tabindex="-1" itemscope itemtype="https://schema.org/${schemaType}">
+  <article id="main-content" tabindex="-1" itemscope itemtype="https://schema.org/${schemaType}"${isPast ? ' data-past="true"' : ''}>
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
       <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
       <div class="edp-hero-inner">
@@ -451,6 +461,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
     </div>` : ''}
 
     <div class="edp-content">
+      ${practicalBlock}
+
       <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}" itemprop="description">
         ${descriptionHtml}
         ${hasFullDescription ? '<div class="edp-enriched-badge">AI-enriched content</div>' : ''}
@@ -458,7 +470,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
       ${needsReadMore ? '<button class="edp-read-more" type="button">Περισσότερα ▾</button>' : ''}
       ${hiddenMetadataHtml}
 
-      ${practicalBlock}
+      ${inlineCtaHtml}
 
       <section class="edp-venue-section">
         <h3>${event.venue.name}</h3>
