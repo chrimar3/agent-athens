@@ -952,7 +952,7 @@ const TRANSLATED_TERM_VIOLATIONS: Record<string, string> = {
  * Checks:
  * 1. Language detection — flags if too much Greek text remains
  * 2. Entity Locking — flags if cultural terms were translated instead of preserved
- * 3. Word count — uses en_min/en_max from enrichment matrix
+ * 3. Word count — uses min/max from enrichment matrix (English is primary)
  * 4. Filler phrases and lazy adjectives (same as Greek)
  */
 export function validateEnglishDescription(
@@ -987,7 +987,7 @@ export function validateEnglishDescription(
     }
   }
 
-  // 3. Word count using English targets from matrix
+  // 3. Word count using primary targets from matrix (English is primary)
   if (event.type) {
     const matrixTarget = getWordTarget({
       type: event.type,
@@ -1000,13 +1000,13 @@ export function validateEnglishDescription(
       venue_name: event.venue,
       title: event.title,
     });
-    if (wordCount > matrixTarget.en_max * 1.1) {
+    if (wordCount > matrixTarget.max * 1.1) {
       issues.push(createIssue('technical', 'warning', 'EN_OVER_MATRIX_MAX',
-        `${wordCount} words exceeds ${matrixTarget.en_max}w English max for ${category}`));
+        `${wordCount} words exceeds ${matrixTarget.max}w English max for ${category}`));
     }
-    if (wordCount < matrixTarget.en_min * 0.9) {
+    if (wordCount < matrixTarget.min * 0.9) {
       issues.push(createIssue('technical', 'warning', 'EN_UNDER_MATRIX_MIN',
-        `${wordCount} words below ${matrixTarget.en_min}w English min for ${category}`));
+        `${wordCount} words below ${matrixTarget.min}w English min for ${category}`));
     }
   }
 
@@ -1044,6 +1044,98 @@ export function validateEnglishDescription(
     issues,
     layer_scores: {
       schema: 25, // English doesn't get separate schema validation
+      five_question: 40 - (warningCount * 3),
+      resonance: Math.max(0, 35 - penalty + (errorCount * 15)),
+    },
+  };
+}
+
+// ============================================================================
+// Greek Description Validation
+// ============================================================================
+
+/**
+ * Validate a Greek description against Greek-specific quality gates.
+ *
+ * Checks:
+ * 1. Language detection — >50% Greek characters required
+ * 2. Word count — uses gr_min/gr_max from enrichment matrix
+ * 3. "δωρεάν" prohibition — should use "ελεύθερη είσοδος" instead
+ * 4. Filler detection and basic quality checks
+ */
+export function validateGreekDescription(
+  event: EventForEnrichment,
+  description: string,
+  tier: 'stub' | 'standard' | 'premium',
+): QualityGateResult {
+  const issues: QualityIssue[] = [];
+  const lowerDesc = description.toLowerCase();
+
+  // 1. Language detection: require >50% Greek characters
+  const greekChars = (description.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+  const latinChars = (description.match(/[a-zA-Z]/g) || []).length;
+  const totalAlpha = greekChars + latinChars;
+
+  if (totalAlpha > 0) {
+    const greekRatio = greekChars / totalAlpha;
+    if (greekRatio < 0.5) {
+      issues.push(createIssue('technical', 'error', 'GR_NOT_ENOUGH_GREEK',
+        `Greek description is only ${Math.round(greekRatio * 100)}% Greek characters — likely not written in Greek`));
+    }
+  } else {
+    issues.push(createIssue('technical', 'error', 'GR_NO_TEXT',
+      'Greek description contains no alphabetic characters'));
+  }
+
+  // 2. "δωρεάν" prohibition — use "ελεύθερη είσοδος" instead
+  if (lowerDesc.includes('δωρεάν')) {
+    issues.push(createIssue('technical', 'error', 'GR_DOREAN_VIOLATION',
+      '"δωρεάν" should be "ελεύθερη είσοδος" (Entity Locking rule)'));
+  }
+
+  // 3. Word count using Greek targets from matrix
+  if (event.type) {
+    const matrixTarget = getWordTarget({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    const wordCount = countWords(description);
+    const category = classifyEvent({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    if (wordCount > matrixTarget.gr_max * 1.1) {
+      issues.push(createIssue('technical', 'warning', 'GR_OVER_MATRIX_MAX',
+        `${wordCount} words exceeds ${matrixTarget.gr_max}w Greek max for ${category}`));
+    }
+    if (wordCount < matrixTarget.gr_min * 0.9) {
+      issues.push(createIssue('technical', 'warning', 'GR_UNDER_MATRIX_MIN',
+        `${wordCount} words below ${matrixTarget.gr_min}w Greek min for ${category}`));
+    }
+  }
+
+  // 4. Filler phrases (Greek equivalents + shared English fillers)
+  const greekFillers = ['είναι ένα μοναδικό', 'μια αξέχαστη εμπειρία', 'δεν πρέπει να χάσετε'];
+  const foundFillers = [...FILLER_PHRASES, ...greekFillers].filter(p => lowerDesc.includes(p));
+  if (foundFillers.length > 0) {
+    issues.push(createIssue('resonance', 'error', 'FILLER_PHRASES',
+      `Remove filler phrases: ${foundFillers.join(', ')}`));
+  }
+
+  // Calculate score
+  const errorCount = issues.filter(i => i.severity === 'error').length;
+  const warningCount = issues.filter(i => i.severity === 'warning').length;
+  const penalty = errorCount * 15 + warningCount * 5;
+  const score = Math.max(0, 100 - penalty);
+
+  return {
+    passed: errorCount === 0 && score >= 60,
+    score: Math.round(score),
+    issues,
+    layer_scores: {
+      schema: 25,
       five_question: 40 - (warningCount * 3),
       resonance: Math.max(0, 35 - penalty + (errorCount * 15)),
     },

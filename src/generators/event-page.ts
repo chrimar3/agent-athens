@@ -189,7 +189,7 @@ function generateEventSchema(event: Event): string {
     'startDate': startDate,
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-    'inLanguage': 'el',
+    'inLanguage': 'en',
     'url': `${BASE_URL}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',

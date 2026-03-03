@@ -25,6 +25,17 @@ A single description field following the Master Enrichment Template. Word count 
 
 **Critical:** Your output is ONLY the narrative description. No tags, no timestamps, no JSON, no metadata â€” unless specifically asked for those.
 
+### Minimum Schema Description (Round 7)
+
+Before full enrichment, every event must have at minimum a 1-sentence declarative description in its Schema.org JSON-LD `description` field. An empty description field carries an 18-point citation penalty versus having no schema at all.
+
+**Minimum template:**
+```
+[Event name] is a [event type] at [venue name] in [neighborhood], Athens[, running from [start date] to [end date] | on [date]]. [Admission is open / Tickets required (from €X).]
+```
+
+When you write the full enrichment, it replaces this minimum description entirely. But no event should ever ship with an empty `description` field.
+
 ## When Context Is Thin
 
 If you have minimal information about an artist or event:
@@ -45,7 +56,7 @@ If you have minimal information about an artist or event:
 
 Run through these before every description:
 
-1. First sentence is a declarative citation anchor? (event name + venue + neighborhood)
+1. First sentence is a declarative citation anchor? (event name + **event type keyword** + venue + neighborhood + **"Athens"** + **date**) (Round 7)
 2. Sensory transport follows the anchor? (present tense, second person, 2+ sensory details)
 3. Uses "you" / present tense throughout?
 4. Tribe is character-based? (not demographics)
@@ -65,6 +76,9 @@ Run through these before every description:
 18. Good to Know follows chronological flow? (getting there â†' arriving â†' being there, no backtracking)
 19. No metro line colors? (station name only — "Thissio metro" not "Thissio metro on the Green line")
 20. Closer varied from other descriptions in batch? (cannot swap with another description and have both still work)
+21. Opening anchor includes "Athens" explicitly? (Round 7: machine grounding queries require city name)
+22. Opening anchor includes event type keyword? (Round 7: "concert," "exhibition," "theater," etc.)
+23. Opening anchor includes date or temporal reference? (Round 7: matches entity + date + category retrieval pattern)
 
 ---
 
@@ -207,7 +221,7 @@ This section compounds over time. Expand it as you write more events.
 - **Rooftop:** Operates 20:00-23:30 before club nights
 - **Sound:** Future beats, footwork, bass, disco
 - **Character:** Budget entry point, converted printing house, experimental
-- **Transport:** Omonoia metro (Green/Red line — Lines 1+2)
+- **Transport:** Omonoia metro (Red/Blue line)
 
 ### Bios
 - **Location:** Pireos 84, Gazi
@@ -286,7 +300,7 @@ This section compounds over time. Expand it as you write more events.
 - **Timing:** Doors 19:00-20:00, headliner 21:30-22:00
 - **Genre focus:** Metal dominates (Dark Funeral, Leprous, Eluveitie, Chelsea Wolfe)
 - **Sound:** State-of-the-art, Greece's most modern venue
-- **Transport:** Attiki metro (Green/Red line — Lines 1+2)
+- **Transport:** Attiki metro (Red/Blue line)
 - **Note:** Neighborhood not pretty â€” taxi out after show
 
 ### Fuzz Live Music Club
@@ -296,7 +310,7 @@ This section compounds over time. Expand it as you write more events.
 - **Neighborhood:** Tavros (not Gazi â€” common mistake)
 - **Tickets:** â‚¬25-45 typical, via more.com
 - **Notable:** Home of Death Disco Indoor Festival (Nov-Dec): â‚¬35-40 daily, â‚¬65-70 weekend, early bird -15-20%
-- **Transport:** Tavros metro (Green line / Line 1)
+- **Transport:** Tavros metro (Blue line)
 
 ### Floyd Live Music Venue
 - **Location:** Pireos 117, Gazi
@@ -378,7 +392,7 @@ This section compounds over time. Expand it as you write more events.
 - **Crowd:** Almost entirely Greek â€” foreigners rarely attend
 - **Character:** Pinnacle of rebetiko authenticity, inside Central Meat Market
 - **Related:** Sister venue Rembetiki Istoria PERMANENTLY CLOSED early 2024
-- **Transport:** Omonoia metro (Green/Red line — Lines 1+2)
+- **Transport:** Omonoia metro (Red/Blue line)
 
 ### Klimataria â€” RECOMMENDED FOR VISITORS
 - **Location:** Plateia Theatrou 2

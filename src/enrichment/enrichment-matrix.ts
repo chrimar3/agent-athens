@@ -28,10 +28,10 @@ export type EventCategory =
   | 'default';
 
 export interface MatrixEntry {
-  min: number;
+  min: number;      // English primary target (proven across 274 descriptions)
   max: number;
-  en_min: number;  // English target (typically ~15% shorter than Greek)
-  en_max: number;
+  gr_min: number;   // Greek secondary target (typically ~85% of English)
+  gr_max: number;
   structure: 'three-part-block' | 'hybrid' | 'full-8-section';
 }
 
@@ -40,16 +40,16 @@ export interface MatrixEntry {
 // ============================================================================
 
 export const ENRICHMENT_MATRIX: Record<EventCategory, MatrixEntry> = {
-  exhibition:           { min: 200, max: 300, en_min: 170, en_max: 260, structure: 'hybrid' },
-  concert_major:        { min: 120, max: 200, en_min: 100, en_max: 170, structure: 'hybrid' },
-  concert_local:        { min: 80,  max: 120, en_min: 70,  en_max: 100, structure: 'three-part-block' },
-  kids_family:          { min: 120, max: 180, en_min: 100, en_max: 155, structure: 'hybrid' },
-  festival_parent:      { min: 250, max: 400, en_min: 215, en_max: 340, structure: 'full-8-section' },
-  festival_sub:         { min: 80,  max: 150, en_min: 70,  en_max: 130, structure: 'three-part-block' },
-  theater_ancient:      { min: 180, max: 250, en_min: 155, en_max: 215, structure: 'hybrid' },
-  theater_contemporary: { min: 120, max: 180, en_min: 100, en_max: 155, structure: 'hybrid' },
-  premium_showcase:     { min: 400, max: 600, en_min: 340, en_max: 510, structure: 'full-8-section' },
-  default:              { min: 120, max: 200, en_min: 100, en_max: 170, structure: 'hybrid' },
+  exhibition:           { min: 200, max: 300, gr_min: 170, gr_max: 260, structure: 'hybrid' },
+  concert_major:        { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
+  concert_local:        { min: 80,  max: 120, gr_min: 70,  gr_max: 100, structure: 'three-part-block' },
+  kids_family:          { min: 120, max: 180, gr_min: 100, gr_max: 155, structure: 'hybrid' },
+  festival_parent:      { min: 250, max: 400, gr_min: 215, gr_max: 340, structure: 'full-8-section' },
+  festival_sub:         { min: 80,  max: 150, gr_min: 70,  gr_max: 130, structure: 'three-part-block' },
+  theater_ancient:      { min: 180, max: 250, gr_min: 155, gr_max: 215, structure: 'hybrid' },
+  theater_contemporary: { min: 120, max: 180, gr_min: 100, gr_max: 155, structure: 'hybrid' },
+  premium_showcase:     { min: 400, max: 600, gr_min: 340, gr_max: 510, structure: 'full-8-section' },
+  default:              { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
 };
 
 // ============================================================================

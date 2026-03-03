@@ -23,6 +23,8 @@ function main(): void {
   const eventId = args.find(a => !a.startsWith('--'));
   const useStdin = args.includes('--stdin');
   const batchDirArg = args.find(a => a.startsWith('--batch-dir='));
+  const langArg = args.find(a => a.startsWith('--lang='));
+  const lang = langArg?.split('=')[1] || 'en';
 
   // Warn if --batch-dir omitted but active batch manifests exist
   if (!batchDirArg) {
@@ -53,7 +55,7 @@ function main(): void {
     const stdin = Bun.stdin.stream();
     const reader = stdin.getReader();
     // For simplicity in CLI, read synchronously from file if redirected
-    content = args.filter(a => a !== eventId && a !== '--stdin' && !a.startsWith('--batch-dir=')).join(' ');
+    content = args.filter(a => a !== eventId && a !== '--stdin' && !a.startsWith('--batch-dir=') && !a.startsWith('--lang=')).join(' ');
     if (!content) {
       console.error('No content provided. Pass content as argument or use --stdin with piped input.');
       process.exit(1);
@@ -72,7 +74,9 @@ function main(): void {
     mkdirSync(outputDir, { recursive: true });
   }
 
-  const filePath = join(outputDir, `${eventId}.md`);
+  // Default .md for English (primary), .gr.md for Greek (secondary)
+  const filename = lang === 'gr' ? `${eventId}.gr.md` : `${eventId}.md`;
+  const filePath = join(outputDir, filename);
 
   // Write with explicit UTF-8 encoding
   writeFileSync(filePath, content, 'utf-8');

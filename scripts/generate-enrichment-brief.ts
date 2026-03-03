@@ -519,10 +519,10 @@ export function buildBrief(
     const category = classifyEvent({ type: event.type, venue_name: event.venue_name, title: event.title });
     const target = getWordTarget({ type: event.type, venue_name: event.venue_name, title: event.title });
     lines.push(`- **Category**: ${category}`);
-    lines.push(`- **Target words (Greek)**: ${target.min}-${target.max}`);
-    lines.push(`- **Target words (English)**: ${target.en_min}-${target.en_max}`);
+    lines.push(`- **Target words (English)**: ${target.min}-${target.max}`);
+    lines.push(`- **Target words (Greek)**: ${target.gr_min}-${target.gr_max}`);
     lines.push(`- **Structure**: ${target.structure}`);
-    lines.push(`- **HARD CONSTRAINT**: Greek description MUST be ${target.min}-${target.max} words. English MUST be ${target.en_min}-${target.en_max} words.`);
+    lines.push(`- **HARD CONSTRAINT**: English description MUST be ${target.min}-${target.max} words. Greek MUST be ${target.gr_min}-${target.gr_max} words.`);
 
     // Venue intel
     const intel = venueIntel.get(event.venue_name || '');
@@ -572,19 +572,17 @@ export function buildBrief(
   lines.push('   ```bash');
   lines.push(`   bun run scripts/write-tags.ts <event-id> --batch-dir=${batchDir} Tag1 Tag2 Tag3...`);
   lines.push('   ```');
-  lines.push('5. **Write English description**: Write a parallel English version of the description.');
-  lines.push(`   Save to \`${batchDir}/<event-id>.en.md\`. English word target shown per event above.`);
+  lines.push('5. **Write Greek description** (optional secondary): Write a condensed Greek version.');
+  lines.push(`   Save to \`${batchDir}/<event-id>.gr.md\`. Greek word target shown per event above.`);
   lines.push('   ```bash');
-  lines.push(`   bun run scripts/write-description.ts <event-id> --batch-dir=${batchDir} --lang=en "<english description>"`);
+  lines.push(`   bun run scripts/write-description.ts <event-id> --batch-dir=${batchDir} --lang=gr "<greek description>"`);
   lines.push('   ```');
-  lines.push('   **Entity Locking rules** (terms that MUST stay untranslated — see below):');
-  lines.push('   - Greek music genres: rebetiko, laiko, entechno, etc. (never "urban folk" or "art song")');
-  lines.push('   - Venue names: use Latin transliteration or established English brand name');
-  lines.push('   - Neighborhoods: Koukaki, Exarchia, Psyrri (never translate)');
-  lines.push('   - Cultural concepts: kefi, meraki, parea, glendi (never translate)');
-  lines.push('   - Dates: DD Month YYYY format. Times: 24h format. Currency: EUR.');
-  lines.push('   - The English version is NOT a translation. Write it fresh for an international audience.');
-  lines.push('   - Same 8-section structure, same factual content, but natural English voice.');
+  lines.push('   **Greek description rules**:');
+  lines.push('   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)');
+  lines.push('   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events');
+  lines.push('   - Venue names in Greek script where available');
+  lines.push('   - Same 8-section structure, same factual content, but natural Greek voice');
+  lines.push('   - The Greek version is NOT a translation. Write it fresh for a local audience.');
   lines.push('6. **Save decision** (after completing ALL events in this batch):');
   lines.push('   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:');
   lines.push('   ```bash');

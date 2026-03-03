@@ -19,7 +19,7 @@
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
-import { validateQualityGates, validateEnglishDescription } from '../src/enrichment/quality-gates';
+import { validateQualityGates, validateEnglishDescription, validateGreekDescription } from '../src/enrichment/quality-gates';
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
 import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
@@ -216,7 +216,7 @@ export function saveBatch(
 
   for (const eventId of eventIds) {
     const descPath = join(descDir, `${eventId}.md`);
-    const enDescPath = join(descDir, `${eventId}.en.md`);
+    const grDescPath = join(descDir, `${eventId}.gr.md`);
     const tagsPath = join(descDir, `${eventId}.tags.json`);
 
     if (!existsSync(descPath)) {
@@ -235,10 +235,10 @@ export function saveBatch(
     const description = readFileSync(descPath, 'utf-8');
     const wordResult = countWords(description);
 
-    // Load optional English description
-    const hasEnglish = existsSync(enDescPath);
-    const enDescription = hasEnglish ? readFileSync(enDescPath, 'utf-8') : null;
-    const enWordCount = enDescription ? countWords(enDescription) : null;
+    // Load optional Greek description (secondary language)
+    const hasGreek = existsSync(grDescPath);
+    const grDescription = hasGreek ? readFileSync(grDescPath, 'utf-8') : null;
+    const grWordCount = grDescription ? countWords(grDescription) : null;
 
     // Load optional tags
     let tags: string[] | null = null;
@@ -279,27 +279,27 @@ export function saveBatch(
     const tier = structureToTier(target.structure);
     const gateResult = validateQualityGates(event, description, tier);
 
-    // Validate English description if present
-    let enGateResult = null;
-    if (enDescription) {
-      enGateResult = validateEnglishDescription(event, enDescription, tier);
+    // Validate Greek description if present (secondary language)
+    let grGateResult = null;
+    if (grDescription) {
+      grGateResult = validateGreekDescription(event, grDescription, tier);
     }
 
     const tagsJson = tags ? JSON.stringify(tags) : current?.tags || null;
 
     if (!dryRun) {
-      // Update event — write to dual-language columns + legacy column
+      // Update event — English .md is primary (display + EN column), Greek .gr.md is secondary
       db.prepare(`
         UPDATE events SET
           full_description = ?,
-          full_description_gr = ?,
           full_description_en = ?,
+          full_description_gr = ?,
           tags = ?,
           needs_enrichment = 0,
           enriched_at = datetime('now'),
           updated_at = datetime('now')
         WHERE id = ?
-      `).run(description, description, enDescription, tagsJson, eventId);
+      `).run(description, description, grDescription, tagsJson, eventId);
 
       // Log to enrichment_log with full before/after
       db.prepare(`
@@ -323,10 +323,10 @@ export function saveBatch(
       saved_at: new Date().toISOString(),
     });
 
-    const enTag = enDescription ? ` | EN:${enWordCount?.count ?? 0}w` : '';
-    const enStatus = enGateResult ? (enGateResult.passed ? '/EN:OK' : '/EN:WARN') : '';
+    const grTag = grDescription ? ` | GR:${grWordCount?.count ?? 0}w` : '';
+    const grStatus = grGateResult ? (grGateResult.passed ? '/GR:OK' : '/GR:WARN') : '';
     const status = gateResult.passed ? 'OK' : 'WARN';
-    console.log(`  ${gateResult.passed ? '+' : '!'} ${eventId.substring(0, 12)}... | ${wordResult.count}w${enTag} | score:${gateResult.score}${enGateResult ? `/${enGateResult.score}` : ''} | ${status}${enStatus}${tags ? ` | ${tags.length} tags` : ''}`);
+    console.log(`  ${gateResult.passed ? '+' : '!'} ${eventId.substring(0, 12)}... | ${wordResult.count}w${grTag} | score:${gateResult.score}${grGateResult ? `/${grGateResult.score}` : ''} | ${status}${grStatus}${tags ? ` | ${tags.length} tags` : ''}`);
 
     results.push({
       eventId,

@@ -124,7 +124,7 @@ type Price = "open" | "with-ticket";
 | Code changes | `.claude/notes/patterns.md` |
 | Architecture decisions | `.claude/notes/decisions.md` |
 | DB schema / full architecture | `docs/SYSTEM-REFERENCE.md` |
-| Writing descriptions | `docs/MASTER-ENRICHMENT-TEMPLATE.md` (v2.3) |
+| Writing descriptions | `docs/MASTER-ENRICHMENT-TEMPLATE.md` (v2.4) |
 | Enrichment knowledge (venues, artists, collectives) | `config/enrichment-knowledge.md` |
 | Entity research & deduplication | `docs/entity-resolution-workflow.md` |
 | Enrichment anti-patterns | `docs/enrichment-anti-patterns.md` |

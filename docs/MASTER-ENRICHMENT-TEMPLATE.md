@@ -1,7 +1,7 @@
 # agent-athens: Master Enrichment Template
 ## Premium Event Descriptions for AI Answer Engines
 
-*Version 2.3 â€” March 2026*
+*Version 2.4 — March 2026 (Round 7 Strategic Update)*
 
 ---
 
@@ -20,6 +20,50 @@ Every enriched event has **two distinct content layers**:
 - The site template renders all infrastructure automatically from DB fields
 
 ---
+
+
+---
+
+# PART 0: MINIMUM SCHEMA DESCRIPTION (ALL EVENTS)
+
+## The Rule (Round 7)
+
+No event may deploy with an empty `description` field in its Schema.org JSON-LD. Every event gets at minimum a 1-sentence declarative description, even if it hasn't been fully enriched yet.
+
+## Why
+
+Empty-schema penalty is real and measurable. Attribute-rich schema earns a 54.2% citation rate. No schema at all earns ~36%. But minimal/empty schema — an Event block with a blank `description` — scores only 31.8%, **worse than having no schema**. A single factual sentence eliminates this penalty entirely.
+
+## Template
+
+```
+[Event name] is a [event type] at [venue name] in [neighborhood], Athens[, running from [start date] to [end date] | on [date]]. [Admission is open / Tickets required (from €X).]
+```
+
+## Examples
+
+**Exhibition:**
+> Documenta Revisited is an exhibition at the National Museum of Contemporary Art (EMST) in Neos Kosmos, Athens, running from February 15 to May 30, 2026. Tickets required (from €8).
+
+**Concert:**
+> DJ Nikos Live is a concert at six d.o.g.s. in Monastiraki, Athens, on March 15, 2026. Tickets required (from €12).
+
+**Theater:**
+> Antigone by Sophocles is a theater performance at Herodion in Makrygianni, Athens, on July 12, 2026. Tickets required (from €15).
+
+**Open event:**
+> Athens Art Walk is an open cultural event across galleries in Metaxourgeio, Athens, on March 22, 2026. Admission is open.
+
+**Kids:**
+> Puppet Theater: The Magic Forest is a kids event at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, on March 8, 2026. Admission is open.
+
+## Notes
+
+- This is a **schema description**, not editorial enrichment — it populates the JSON-LD `description` field
+- When full enrichment is written, it **replaces** this minimum description entirely
+- Always use the declarative "is a" pattern — AI engines extract this pattern reliably
+- Always include: event name, event type, venue name, neighborhood, city ("Athens"), date(s), pricing status
+- Use project terminology: "open" not "free", "with-ticket" not "paid"
 
 # PART 1: WHAT GOES IN THE DESCRIPTION FIELD
 
@@ -75,10 +119,12 @@ Every enrichment opens with a **declarative anchor sentence** followed by the **
 **Sentence 1 — The Citation Anchor:**
 A declarative "is" statement naming the event, type, venue, and neighborhood. This is the single highest-leverage sentence on the page — it populates the `<meta name="description">` tag and is the first thing AI engines extract.
 
-**Pattern:**
+**Pattern (Round 7 refined):**
 ```
-[Event Name] is a [type] at [Venue], [Neighborhood], [on Date / running from X to Y].
+[Event Name] is a [type] at [Venue] in [Neighborhood], Athens, [on Date / running from X to Y].
 ```
+
+The anchor sentence must include all six entities: **event name**, **event type keyword**, **venue name**, **neighborhood**, **"Athens"**, and **date or temporal reference**. These match the entity + date + category pattern of machine-generated grounding queries that AI engines decompose user questions into.
 
 **Sentences 2-3 — The Sensory Transport:**
 Now put the reader in the room. Present tense. Second person. At least 2 sensory details.
@@ -98,7 +144,7 @@ when Thivaios shifts his weight on the stool, you hear the wood creak.
 The declarative "is" rule applies only to the **first sentence of the enrichment**. Within later paragraphs, AI seeks the sentence with the highest **information gain** — the most entity-rich, factually additive sentence — regardless of position. 53% of paragraph-level citations come from the **middle** of a paragraph. So: nail the opening anchor, then write naturally, prioritizing information density over rigid structure.
 
 **Rules:**
-- First sentence: declarative "is" statement with event name, venue, neighborhood
+- First sentence: declarative "is" statement with event name, **event type keyword**, venue, neighborhood, **"Athens"**, and **date** (Round 7)
 - Second/third sentences: sensory, present tense, second person ("you")
 - At least 2 sensory details in the transport sentences
 - The citation anchor is factual; the transport is experiential — keep them distinct
@@ -450,6 +496,10 @@ Before publishing, verify every description passes these gates:
 | **Good to Know flow** | Chronological: getting there → arriving → being there | No backtracking between transport and venue tips |
 | **No metro line colors** | Station name only | No "on the Blue/Green/Red line" |
 | **Closer variety** | Different strategy from adjacent descriptions in batch | Cannot swap closer with another description |
+| **Opening includes "Athens"** | City name explicit in first sentence | Ctrl+F first sentence for "Athens" (Round 7) |
+| **Opening includes event type keyword** | Genre/type word in first sentence | "concert," "exhibition," "theater," etc. present (Round 7) |
+| **Opening includes date** | Temporal reference in first sentence | Date or date range in anchor sentence (Round 7) |
+| **No empty schema description** | Every event has at minimum 1-sentence declarative description | See PART 0 minimum template (Round 7) |
 
 ## The Citability Test
 
@@ -459,6 +509,36 @@ An AI answer engine should be able to extract **at least 2 standalone sentences*
 3. Cannot work if you substitute a different artist/venue name
 
 ---
+
+
+---
+
+# PART 4B: CORNERSTONE PAGE REQUIREMENTS (Round 7)
+
+## Comparison Tables on Hub Pages
+
+The 5 highest-priority cornerstone pages (hub pages) need **comparison tables** in their editorial content. Pages with original data tables earn **4.1× more citations** than those without.
+
+When writing editorial content for hub pages, include structured comparison data. Example for a "This Weekend" cornerstone:
+
+| Event | Venue | Neighborhood | Category | Price | Editor's Pick |
+|-------|-------|-------------|----------|-------|--------------|
+| Documenta Revisited | EMST | Neos Kosmos | Exhibition | €8 | ⭐ |
+| Dimitris Kalantzis Quartet | Half Note | Mets | Jazz | €15 | |
+| Athens Art Walk | Various | Metaxourgeio | Open | Open | ⭐ |
+| The Little Prince | SNFCC | Kallithea | Kids | Open | |
+
+**Note:** Comparison tables belong on **cornerstone hub pages only** — not in individual event descriptions. Individual event descriptions use prose bridges, not tables (see Part 1, Section D).
+
+## Cornerstone Page Specs
+
+| Element | Requirement |
+|---------|-------------|
+| Editorial length | 3,000+ words |
+| Comparison tables | At least 1, ideally per major category |
+| Statistics | 20+ throughout |
+| FAQ entries | 8+ |
+| Refresh cadence | Monthly |
 
 # PART 5: VOICE PRINCIPLES
 
@@ -830,3 +910,38 @@ If more than 2 of the 8 sections need changes, the description probably needs a 
 ## Marking Staleness
 
 If a description references a specific timeliness hook (e.g., "premiering eight new works") that is no longer current, remove or replace the hook. A description with an outdated timeliness claim is worse than one with no timeliness claim at all.
+
+---
+
+# PART 8: ROUND 7 QUICK REFERENCE
+
+## The New Minimum Bar
+
+```
+EVERY EVENT (before enrichment):
+→ 1-sentence declarative description in schema
+→ Pattern: "[Name] is a [type] at [venue] in [neighborhood], Athens, on/from [date]. [Price status]."
+→ NO event deploys with empty description field
+
+ENRICHED EVENTS (unchanged matrix):
+→ Exhibition: 200-300 words
+→ Concert (major): 120-200 words
+→ Concert (local/DJ): 80-120 words  
+→ Kids: 120-180 words + 10+ structured fields
+→ Festival (parent): 250-400 words
+→ Festival (sub-event): 80-150 words
+→ Theater (ancient): 180-250 words
+→ Theater (contemporary): 120-180 words
+
+OPENING SENTENCE (Round 7 refined):
+→ Must include: event name, event type keyword, venue, neighborhood, "Athens", date
+→ Declarative "is" pattern
+→ Satisfies both human readers and machine grounding queries
+
+CORNERSTONE PAGES (5 priority hubs):
+→ 3,000+ words editorial
+→ Include comparison tables (4.1× citation boost)
+→ 20+ statistics
+→ 8+ FAQ entries
+→ Monthly refresh
+```

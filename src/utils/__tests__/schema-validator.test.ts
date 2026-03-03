@@ -10,7 +10,7 @@ const COMPLETE_SCHEMA = {
   'endDate': '2026-03-15T23:30:00+02:00',
   'eventStatus': 'https://schema.org/EventScheduled',
   'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-  'inLanguage': 'el',
+  'inLanguage': 'en',
   'url': 'https://agentathens.netlify.app/events/test/',
   'location': {
     '@type': 'EventVenue',

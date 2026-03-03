@@ -89,5 +89,18 @@
     "Πειραιάς": "Piraeus",
     "Μαρούσι": "Marousi",
     "Καλλιθέα": "Kallithea"
+  },
+
+  "greek_enforcement": {
+    "_comment": "Rules for Greek (.gr.md) descriptions — the secondary language",
+    "venue_names_in_greek": true,
+    "prohibited_terms": {
+      "δωρεάν": "ελεύθερη είσοδος"
+    },
+    "formatting": {
+      "dates": "DD Μηνός YYYY (e.g., '15 Μαρτίου 2026')",
+      "times": "24ωρη μορφή (e.g., '21:00')",
+      "currency": "EUR (e.g., '15 EUR')"
+    }
   }
 }

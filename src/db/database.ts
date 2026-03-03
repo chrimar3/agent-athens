@@ -89,7 +89,7 @@ export function eventToRow(event: Event): Record<string, any> {
 
 /**
  * Convert database row to Event object
- * Priority: Greek description > English description > legacy full_description
+ * Priority: English description > Greek description > legacy full_description
  */
 export function rowToEvent(row: any): Event {
   // Helper to convert Blob/Buffer to string if needed
@@ -102,12 +102,12 @@ export function rowToEvent(row: any): Event {
     return undefined;
   };
 
-  // Priority: Greek first (local audience), then English (international), then legacy
-  const fullDescGr = bufferToString(row.full_description_gr);
+  // Priority: English first (primary/proven), then Greek, then legacy
   const fullDescEn = bufferToString(row.full_description_en);
+  const fullDescGr = bufferToString(row.full_description_gr);
   const fullDescLegacy = bufferToString(row.full_description);
 
-  const fullDescription = fullDescGr || fullDescEn || fullDescLegacy || undefined;
+  const fullDescription = fullDescEn || fullDescGr || fullDescLegacy || undefined;
 
   return {
     "@context": "https://schema.org",
@@ -142,7 +142,7 @@ export function rowToEvent(row: any): Event {
     source: row.source,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    language: fullDescGr ? "gr" : "en",
+    language: fullDescEn ? "en" : "gr",
     // Time enrichment fields
     timeDoors: row.time_doors || undefined,
     timePeak: row.time_peak || undefined,

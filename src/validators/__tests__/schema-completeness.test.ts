@@ -18,7 +18,7 @@ function makeValidSchema(overrides: Record<string, unknown> = {}): Record<string
     'startDate': '2026-03-15T21:00:00+02:00',
     'eventStatus': 'https://schema.org/EventScheduled',
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-    'inLanguage': 'el',
+    'inLanguage': 'en',
     'url': 'https://agentathens.com/events/abc123-half-note-jazz/',
     'isAccessibleForFree': false,
     'offers': {
