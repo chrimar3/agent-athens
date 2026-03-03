@@ -116,9 +116,9 @@ describe('Hub template structure', () => {
     expect(html!).toContain('<summary>');
   });
 
-  test('Hub HTML contains seasonal narrative placeholder', () => {
+  test('Greek hub has no seasonal narrative section (English-only feature)', () => {
     const html = renderHubPage(todayHubConfig, events, allEvents);
-    expect(html!).toContain('class="hub-seasonal-narrative"');
+    expect(html!).not.toContain('hub-seasonal-narrative');
   });
 
   test('Hub HTML contains event blocks when enriched events exist', () => {

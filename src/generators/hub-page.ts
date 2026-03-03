@@ -7,7 +7,7 @@
  * 2. Comparison table (max 20 events, all types)
  * 3. Event blocks (enriched description excerpts, max 8)
  * 4. FAQ section (FAQPage schema, 4 questions per hub)
- * 5. Seasonal narrative (placeholder for Sprint 3d)
+ * 5. Seasonal narrative (English-only, quarterly-swapped)
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
@@ -20,6 +20,8 @@ import { renderCategoryNav, type CategoryConfig } from '../templates/category-pa
 import { buildPageMetadata } from '../utils/urls';
 import { formatGreekDateOnly } from '../utils/i18n';
 import { generateEventSlug } from './event-page';
+import { STRINGS, type Locale } from '../i18n/strings';
+import { formatDateOnly } from '../utils/i18n-date';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -99,37 +101,43 @@ export function extractExcerpt(fullDescription: string): string {
 /**
  * Format price for comparison table
  */
-function formatTablePrice(event: Event): string {
-  if (event.price.type === 'open') return 'Ελ. είσοδος';
+function formatTablePrice(event: Event, locale: Locale = 'el'): string {
+  const t = STRINGS[locale];
+  if (event.price.type === 'open') return t.hubFreeEntry;
   if (event.price.amount && event.price.amount > 0) return `€${event.price.amount}`;
-  return 'Εισιτήριο';
+  return t.hubTicketed;
 }
 
 /**
  * Render a single comparison table row
  */
-export function renderComparisonRow(event: Event): string {
+export function renderComparisonRow(event: Event, locale: Locale = 'el'): string {
   const slug = generateEventSlug(event);
-  const dateStr = formatGreekDateOnly(event.startDate);
-  const price = formatTablePrice(event);
+  const dateStr = formatDateOnly(event.startDate, locale);
+  const price = formatTablePrice(event, locale);
   const title = event.title.length > 60
     ? event.title.substring(0, 57) + '...'
     : event.title;
+  const linkPrefix = locale === 'en' ? '/en/events' : '/events';
 
-  return `<tr><td><a href="/events/${slug}/">${title}</a></td><td>${event.venue.name}</td><td>${dateStr}</td><td>${price}</td></tr>`;
+  return `<tr><td><a href="${linkPrefix}/${slug}/">${title}</a></td><td>${event.venue.name}</td><td>${dateStr}</td><td>${price}</td></tr>`;
 }
 
 /**
  * Render a single event block with excerpt
  */
-export function renderEventBlock(event: Event): string {
+export function renderEventBlock(event: Event, locale: Locale = 'el'): string {
   const slug = generateEventSlug(event);
-  const dateStr = formatGreekDateOnly(event.startDate);
-  const price = formatTablePrice(event);
-  const excerpt = extractExcerpt(event.fullDescription || '');
+  const dateStr = formatDateOnly(event.startDate, locale);
+  const price = formatTablePrice(event, locale);
+  const descriptionSource = locale === 'en' && event.fullDescriptionEn
+    ? event.fullDescriptionEn
+    : (event.fullDescription || '');
+  const excerpt = extractExcerpt(descriptionSource);
+  const linkPrefix = locale === 'en' ? '/en/events' : '/events';
 
   return `<article class="hub-event-block">
-    <h3><a href="/events/${slug}/">${event.title}</a></h3>
+    <h3><a href="${linkPrefix}/${slug}/">${event.title}</a></h3>
     <p class="hub-event-meta">${event.venue.name} · ${dateStr} · ${price}</p>
     <p class="hub-event-excerpt">${excerpt}</p>
   </article>`;
@@ -138,13 +146,20 @@ export function renderEventBlock(event: Event): string {
 /**
  * Render FAQ HTML section
  */
-export function renderFaqSection(faqs: HubFaq[]): string {
-  const items = faqs.map(faq =>
-    `<details><summary>${faq.questionEl}</summary><div class="faq-answer"><p>${faq.answerEl}</p></div></details>`
-  ).join('\n    ');
+export function renderFaqSection(faqs: HubFaq[], locale: Locale = 'el'): string {
+  const t = STRINGS[locale];
+  const localeFaqs = locale === 'en'
+    ? faqs.filter(faq => faq.questionEn && faq.answerEn)
+    : faqs;
+
+  const items = localeFaqs.map(faq => {
+    const question = locale === 'en' ? faq.questionEn! : faq.questionEl;
+    const answer = locale === 'en' ? faq.answerEn! : faq.answerEl;
+    return `<details><summary>${question}</summary><div class="faq-answer"><p>${answer}</p></div></details>`;
+  }).join('\n    ');
 
   return `<section class="hub-faq">
-    <h2>Συχνές Ερωτήσεις</h2>
+    <h2>${t.hubFaq}</h2>
     ${items}
   </section>`;
 }
@@ -152,16 +167,20 @@ export function renderFaqSection(faqs: HubFaq[]): string {
 /**
  * Render FAQPage JSON-LD schema
  */
-export function renderFaqSchema(faqs: HubFaq[]): string {
+export function renderFaqSchema(faqs: HubFaq[], locale: Locale = 'el'): string {
+  const localeFaqs = locale === 'en'
+    ? faqs.filter(faq => faq.questionEn && faq.answerEn)
+    : faqs;
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    'mainEntity': faqs.map(faq => ({
+    'mainEntity': localeFaqs.map(faq => ({
       '@type': 'Question',
-      'name': faq.questionEl,
+      'name': locale === 'en' ? faq.questionEn! : faq.questionEl,
       'acceptedAnswer': {
         '@type': 'Answer',
-        'text': faq.answerEl
+        'text': locale === 'en' ? faq.answerEn! : faq.answerEl
       }
     }))
   };
@@ -177,9 +196,18 @@ export function renderHubPage(
   config: HubConfig,
   filteredEvents: Event[],
   allEvents: Event[],
-  categoryNav?: string
+  categoryNav?: string,
+  locale: Locale = 'el'
 ): string | null {
   if (filteredEvents.length < MIN_EVENTS_THRESHOLD) {
+    return null;
+  }
+
+  const t = STRINGS[locale];
+  const BASE_URL = 'https://agentathens.netlify.app';
+
+  // For English locale, require answerCapsuleEn
+  if (locale === 'en' && !config.answerCapsuleEn) {
     return null;
   }
 
@@ -204,14 +232,24 @@ export function renderHubPage(
       break;
   }
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
-  const baseHtml = renderPage(metadata, filteredEvents, allEvents);
+  const baseHtml = renderPage(metadata, filteredEvents, allEvents, undefined, locale);
 
   let html = baseHtml;
 
+  // Set HTML lang attribute
+  html = html.replace(/<html lang="[^"]*">/, `<html lang="${t.lang}">`);
+
+  // Set og:locale
+  html = html.replace(
+    /<meta property="og:locale" content="[^"]*">/,
+    `<meta property="og:locale" content="${t.ogLocale}">`
+  );
+
   // Override page title and description with hub-specific values
-  // This prevents the generic metadata generator from using terms like "δωρεάν"
-  const hubTitle = `${config.titleEl} | agent-athens`;
-  const hubDescription = `${config.answerCapsuleEl.substring(0, 155)}`;
+  const hubTitleText = locale === 'en' ? config.titleEn : config.titleEl;
+  const answerCapsule = locale === 'en' ? config.answerCapsuleEn! : config.answerCapsuleEl;
+  const hubTitle = `${hubTitleText} | agent-athens`;
+  const hubDescription = `${answerCapsule.substring(0, 155)}`;
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${hubTitle}</title>`);
   html = html.replace(
     /<meta name="description" content="[^"]*">/,
@@ -224,16 +262,32 @@ export function renderHubPage(
     `<meta name="keywords" content="${hubKeywords}">`
   );
   // Override OG image with per-hub branded image
-  const BASE_URL = 'https://agentathens.netlify.app';
   html = html.replace(
     /<meta property="og:image" content="[^"]*">/,
     `<meta property="og:image" content="${BASE_URL}/images/og/hubs/${config.slug}.png">`
   );
 
+  // Canonical URL
+  const canonicalPath = locale === 'en' ? `en/${config.slug}` : config.slug;
+  html = html.replace(
+    /<link rel="canonical" href="[^"]*">/,
+    `<link rel="canonical" href="${BASE_URL}/${canonicalPath}">`
+  );
+
+  // hreflang tags — bilingual hubs get el + en + x-default
+  if (config.answerCapsuleEn) {
+    const elUrl = `${BASE_URL}/${config.slug}`;
+    const enUrl = `${BASE_URL}/en/${config.slug}`;
+    const hreflangHtml = `<link rel="alternate" hreflang="el" href="${elUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${enUrl}">`;
+    html = html.replace('</head>', `  ${hreflangHtml}\n</head>`);
+  }
+
   // Part 1: Answer Capsule (inject after </header>)
   const capsuleHtml = `<section class="hub-answer-capsule">
-  <p class="answer-capsule-text">${config.answerCapsuleEl}</p>
-  <p class="hub-stats">${filteredEvents.length} εκδηλώσεις</p>
+  <p class="answer-capsule-text">${answerCapsule}</p>
+  <p class="hub-stats">${filteredEvents.length} ${t.hubEventCount}</p>
 </section>`;
 
   // If there's a category nav, inject it then the capsule
@@ -248,13 +302,13 @@ export function renderHubPage(
     new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
   );
   const tableEvents = sortedEvents.slice(0, MAX_TABLE_ROWS);
-  const tableRows = tableEvents.map(e => renderComparisonRow(e)).join('\n        ');
+  const tableRows = tableEvents.map(e => renderComparisonRow(e, locale)).join('\n        ');
 
   const tableHtml = `<section class="hub-comparison-table-section">
-  <h2>Επισκόπηση</h2>
+  <h2>${t.hubOverview}</h2>
   <div class="table-scroll-wrapper">
     <table class="hub-comparison-table">
-      <thead><tr><th scope="col">Εκδήλωση</th><th scope="col">Χώρος</th><th scope="col">Ημερομηνία</th><th scope="col">Είσοδος</th></tr></thead>
+      <thead><tr><th scope="col">${t.hubColEvent}</th><th scope="col">${t.hubColVenue}</th><th scope="col">${t.hubColDate}</th><th scope="col">${t.hubColEntry}</th></tr></thead>
       <tbody>
         ${tableRows}
       </tbody>
@@ -266,23 +320,31 @@ export function renderHubPage(
 
   // Part 3: Event Blocks (inject after card grid </section>)
   const enrichedEvents = sortedEvents
-    .filter(e => e.fullDescription && e.fullDescription.length > 0)
+    .filter(e => locale === 'en'
+      ? (e.fullDescriptionEn && e.fullDescriptionEn.length > 0) || (e.fullDescription && e.fullDescription.length > 0)
+      : e.fullDescription && e.fullDescription.length > 0)
     .slice(0, MAX_EVENT_BLOCKS);
 
   let eventBlocksHtml = '';
   if (enrichedEvents.length > 0) {
-    const blocks = enrichedEvents.map(e => renderEventBlock(e)).join('\n  ');
+    const blocks = enrichedEvents.map(e => renderEventBlock(e, locale)).join('\n  ');
     eventBlocksHtml = `<section class="hub-event-blocks">
-  <h2>Αναλυτικά</h2>
+  <h2>${t.hubDetailed}</h2>
   ${blocks}
 </section>`;
   }
 
   // Part 4: FAQ Section
-  const faqHtml = renderFaqSection(config.faqs);
+  const faqHtml = renderFaqSection(config.faqs, locale);
 
-  // Part 5: Seasonal Narrative (placeholder)
-  const seasonalHtml = `<section class="hub-seasonal-narrative"></section>`;
+  // Part 5: Seasonal Narrative (English-only, when available)
+  let seasonalHtml = '';
+  if (locale === 'en' && config.seasonalNarrativeEn) {
+    seasonalHtml = `<section class="hub-seasonal-narrative">
+  <h2>What to Expect</h2>
+  <div class="seasonal-text">${config.seasonalNarrativeEn}</div>
+</section>`;
+  }
 
   // Inject parts 3-5 after the card grid's closing </section>
   // Find the card-grid section and inject after it
@@ -303,7 +365,7 @@ export function renderHubPage(
   }
 
   // FAQPage Schema (inject before </head>)
-  const faqSchemaBlock = renderFaqSchema(config.faqs);
+  const faqSchemaBlock = renderFaqSchema(config.faqs, locale);
   html = html.replace('</head>', `${faqSchemaBlock}\n</head>`);
 
   return html;

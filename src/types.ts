@@ -6,7 +6,10 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  fullDescription?: string;  // Rich 400-word description
+  fullDescription?: string;  // Rich 400-word description (resolved: EN→GR→legacy)
+  fullDescriptionEn?: string; // English description (from full_description_en column)
+  fullDescriptionGr?: string; // Greek description (from full_description_gr or legacy)
+  hasNativeGreek: boolean;    // true when full_description_gr column is populated
   startDate: string;  // ISO 8601
   endDate?: string;
   type: EventType;
@@ -115,6 +118,8 @@ export interface FilterCounts {
 export interface HubFaq {
   questionEl: string;
   answerEl: string;
+  questionEn?: string;
+  answerEn?: string;
 }
 
 export type HubFilter =
@@ -130,8 +135,10 @@ export interface HubConfig {
   titleEn: string;
   filter: HubFilter;
   answerCapsuleEl: string;
+  answerCapsuleEn?: string;
   faqs: HubFaq[];
   cornerstone?: boolean;
+  seasonalNarrativeEn?: string;
 }
 
 export interface RawEvent {

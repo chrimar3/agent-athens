@@ -14,6 +14,8 @@ import type { Event } from '../types';
 import { generatePracticalBlock } from './practical-block';
 import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { formatDateOnly, formatPrice } from '../utils/i18n-date';
+import { STRINGS, type Locale } from '../i18n/strings';
 import { getAthensTimezone, formatSchemaDate, SCHEMA_TYPE_MAP, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
@@ -63,40 +65,10 @@ const DEFAULT_OG_IMAGES: Record<string, string> = {
   default: '/images/og/agentathens-default.png'
 };
 
-// Type translations for Greek display
-const TYPE_TRANSLATIONS: Record<string, string> = {
-  concert: 'Συναυλία',
-  dj_set: 'DJ Set',
-  classical: 'Κλασική Μουσική',
-  opera: 'Όπερα',
-  theater: 'Θέατρο',
-  dance: 'Χορός',
-  comedy: 'Κωμωδία',
-  exhibition: 'Έκθεση',
-  screening: 'Προβολή',
-  cinema: 'Κινηματογράφος',
-  workshop: 'Εργαστήριο',
-  show: 'Show',
-  festival: 'Φεστιβάλ',
-  performance: 'Παράσταση',
-  other: 'Εκδήλωση'
-};
-
-// Pre-composed article + plural for discovery links (Greek grammar)
-const TYPE_DISCOVERY_LABELS: Record<string, string> = {
-  concert: 'Όλες οι Συναυλίες',
-  dj_set: 'Όλα τα DJ Sets',
-  theater: 'Όλες οι Θεατρικές Παραστάσεις',
-  exhibition: 'Όλες οι Εκθέσεις',
-  screening: 'Όλες οι Προβολές',
-  cinema: 'Όλες οι Ταινίες',
-  workshop: 'Όλα τα Εργαστήρια',
-  show: 'Όλα τα Shows',
-  festival: 'Όλα τα Φεστιβάλ',
-  performance: 'Όλες οι Παραστάσεις',
-  tech: 'Όλα τα Tech Events',
-  other: 'Όλες οι Εκδηλώσεις',
-};
+// Type translations — now sourced from i18n/strings.ts
+// Kept as module-level aliases for backward compat (other modules may import)
+const TYPE_TRANSLATIONS = STRINGS.el.typeLabels;
+const TYPE_DISCOVERY_LABELS = STRINGS.el.typeDiscoveryLabels;
 
 // Type to category slug mapping for internal links
 const TYPE_TO_CATEGORY: Record<string, string> = {
@@ -158,9 +130,10 @@ function getOgImage(event: Event): string {
 /**
  * Generate Schema.org JSON-LD for an individual event page
  */
-function generateEventSchema(event: Event): string {
+function generateEventSchema(event: Event, locale: Locale = 'el'): string {
   const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
   const eventSlug = generateEventSlug(event);
+  const urlPrefix = locale === 'en' ? 'en/' : '';
 
   // Parse date for timezone
   const dateMatch = event.startDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -189,8 +162,8 @@ function generateEventSchema(event: Event): string {
     'startDate': startDate,
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-    'inLanguage': 'en',
-    'url': `${BASE_URL}/events/${eventSlug}/`,
+    'inLanguage': locale === 'en' ? 'en' : 'el',
+    'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
       'name': event.venue.name,
@@ -240,7 +213,7 @@ function generateEventSchema(event: Event): string {
       'price': '0',
       'priceCurrency': 'EUR',
       'availability': 'https://schema.org/InStock',
-      'url': `${BASE_URL}/events/${eventSlug}/`
+      'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`
     };
   } else {
     schema.isAccessibleForFree = false;
@@ -249,7 +222,7 @@ function generateEventSchema(event: Event): string {
       'price': event.price.amount ? event.price.amount.toString() : '',
       'priceCurrency': event.price.currency || 'EUR',
       'availability': 'https://schema.org/InStock',
-      'url': event.ticketUrl || event.url || `${BASE_URL}/events/${eventSlug}/`,
+      'url': event.ticketUrl || event.url || `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
       'validFrom': event.createdAt || startDate
     };
   }
@@ -269,12 +242,14 @@ function generateEventSchema(event: Event): string {
  * Structure: full-bleed hero with type-colored gradient, 800px content column,
  * card-grid related events, mobile sticky CTA bar.
  */
-export function renderEventDetailPage(event: Event, relatedEvents: Event[]): string {
+export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el'): string {
+  const t = STRINGS[locale];
   const slug = generateEventSlug(event);
-  const canonicalUrl = `${BASE_URL}/events/${slug}/`;
+  const urlPrefix = locale === 'en' ? 'en/' : '';
+  const canonicalUrl = `${BASE_URL}/${urlPrefix}events/${slug}/`;
   const ogImage = getOgImage(event);
-  const schemaJson = generateEventSchema(event);
-  const practicalBlock = generatePracticalBlock(event, null);
+  const schemaJson = generateEventSchema(event, locale);
+  const practicalBlock = generatePracticalBlock(event, null, locale);
   const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
 
   const isExhibition = event.type === 'exhibition';
@@ -284,37 +259,45 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const lifecycle = classifyEventLifecycle(event);
   const isPast = lifecycle !== 'upcoming';
 
-  // Date display — time extraction with fallback (matches listing card logic in page.ts)
+  // Date display — locale-aware
   const timeStr = event.startDate.includes('T')
     ? formatGreekTime(event.startDate)
     : (event.timeDoors || '');
+  const exhibitionLocale = locale === 'en' ? 'en-US' : 'el-GR';
   const dateDisplay = isExhibition
-    ? formatExhibitionDateRange(event)
-    : `${formatGreekDateOnly(event.startDate)}${timeStr ? ` στις ${timeStr}` : ''}`;
+    ? formatExhibitionDateRange(event, exhibitionLocale)
+    : `${formatDateOnly(event.startDate, locale)}${timeStr ? ` ${t.atTime} ${timeStr}` : ''}`;
 
   // Type styling
-  const typeLabel = TYPE_TRANSLATIONS[event.type] || event.type;
+  const typeLabel = t.typeLabels[event.type] || event.type;
   const categorySlug = TYPE_TO_CATEGORY[event.type] || '';
   const typeColorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type);
 
   // Price display
-  const priceDisplay = formatPriceGreek(event);
+  const priceDisplay = formatPrice(event, locale);
 
-  // Description content — strip Info metadata table from enriched descriptions
-  const hasFullDescription = event.fullDescription && event.fullDescription.length > 100;
+  // Description content — locale-aware selection
+  // English pages use fullDescriptionEn, Greek pages use fullDescriptionGr (fallback to fullDescription)
+  const descriptionSource = locale === 'en'
+    ? event.fullDescriptionEn
+    : (event.fullDescriptionGr || event.fullDescription);
+  const hasFullDescription = descriptionSource && descriptionSource.length > 100;
+  // Detect English fallback on Greek pages: Greek page, no native Greek column, English exists
+  const isEnglishFallback = locale === 'el' && !event.hasNativeGreek && Boolean(event.fullDescriptionEn);
   let descriptionHtml: string;
   let hiddenMetadataHtml = '';
   if (hasFullDescription) {
-    const { narrative, metadataHtml } = stripInfoTable(String(event.fullDescription));
-    descriptionHtml = narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n');
+    const { narrative, metadataHtml } = stripInfoTable(String(descriptionSource));
+    const fallbackLabel = isEnglishFallback ? '<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>\n' : '';
+    descriptionHtml = fallbackLabel + narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n');
     hiddenMetadataHtml = metadataHtml;
   } else {
     descriptionHtml = `<p>${event.description}</p>`;
   }
 
   // Read-more for long descriptions
-  const descriptionText = hasFullDescription ? String(event.fullDescription) : event.description;
+  const descriptionText = hasFullDescription ? String(descriptionSource) : event.description;
   const needsReadMore = descriptionText.length > 400;
 
   // Internal navigation links
@@ -322,25 +305,24 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   const neighborhoodSlug = event.venue.neighborhood ? slugify(event.venue.neighborhood) : '';
 
   const navLinks = [
-    categorySlug ? `<a href="/${categorySlug}/">${TYPE_DISCOVERY_LABELS[event.type] || `Όλες οι ${typeLabel}`}</a>` : '',
-    `<a href="/venues/${venueSlug}/">Περισσότερες εκδηλώσεις στο ${event.venue.name}</a>`,
-    neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">Εκδηλώσεις στην περιοχή ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
+    categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
+    `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>`,
+    neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">${t.eventsInArea} ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
   ].filter(Boolean);
 
   // CTA (ticket link) — hidden for past events (ticket URL likely dead)
   const showCta = Boolean(event.ticketUrl) && !isPast;
   const ctaHtml = showCta
-    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a>`
+    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${t.buyTicketsArrow}</a>`
     : '';
 
   // Inline CTA for body content (GEO source order: after description, before venue)
-  // For open-entry events, show informational text (no link). Never "Δωρεάν".
   const inlineCtaHtml = isPast
     ? ''
     : showCta
-      ? `<div class="edp-inline-cta"><a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">Αγοράστε εισιτήρια →</a></div>`
+      ? `<div class="edp-inline-cta"><a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">${t.buyTicketsArrow}</a></div>`
       : event.price.type === 'open'
-        ? '<div class="edp-inline-cta"><span class="edp-open-entry">Ελεύθερη είσοδος</span></div>'
+        ? `<div class="edp-inline-cta"><span class="edp-open-entry">${t.openEntry}</span></div>`
         : '';
 
   // Venue section — Google Maps link
@@ -351,16 +333,16 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   // Source attribution — use display name from mapping, fall back to raw ID
   const sourceDisplayName = sourceAttributionMap[event.source] || event.source;
   const sourceHtml = event.url
-    ? `<div class="edp-source">Πηγή: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
-    : `<div class="edp-source">Πηγή: ${sourceDisplayName}</div>`;
+    ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
+    : `<div class="edp-source">${t.source}: ${sourceDisplayName}</div>`;
 
   // Related events as cards
   const relatedHtml = relatedEvents.length > 0
     ? `
       <section class="edp-related">
-        <h3>Επόμενες εκδηλώσεις στο ${event.venue.name}</h3>
+        <h3>${t.upcomingEventsAt} ${event.venue.name}</h3>
         <div class="card-grid">
-          ${relatedEvents.map(e => renderRelatedEventCard(e)).join('\n')}
+          ${relatedEvents.map(e => renderRelatedEventCard(e, locale)).join('\n')}
         </div>
       </section>`
     : '';
@@ -373,13 +355,23 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         <div class="edp-mobile-bar-title">${event.title}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
-      <a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">Εισιτήρια</a>
+      <a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">${t.ticketsShort}</a>
     </div>
   </div>`
     : '';
 
+  // hreflang block: bidirectional only when English description exists
+  const greekUrl = `${BASE_URL}/events/${slug}/`;
+  const englishUrl = `${BASE_URL}/en/events/${slug}/`;
+  const hasBilingual = Boolean(event.fullDescriptionEn);
+  const hreflangHtml = hasBilingual
+    ? `<link rel="alternate" hreflang="el" href="${greekUrl}">
+  <link rel="alternate" hreflang="en" href="${englishUrl}">
+  <link rel="alternate" hreflang="x-default" href="${englishUrl}">`
+    : `<link rel="alternate" hreflang="el" href="${greekUrl}">`;
+
   return `<!DOCTYPE html>
-<html lang="el">
+<html lang="${t.lang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -396,7 +388,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <link rel="canonical" href="${canonicalUrl}">
 
   <!-- Language alternates -->
-  <link rel="alternate" hreflang="el" href="${canonicalUrl}">
+  ${hreflangHtml}
 
   <!-- Open Graph -->
   <meta property="og:title" content="${event.title}">
@@ -406,7 +398,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
   <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="el_GR">
+  <meta property="og:locale" content="${t.ogLocale}">
   <meta property="og:site_name" content="agent-athens">
 
   <!-- Twitter Card -->
@@ -443,7 +435,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
           › ${event.venue.name}
         </nav>
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
-        ${exhibitionIsOpen ? '<span class="edp-open-badge">Τώρα ανοιχτή</span>' : ''}
+        ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
         <header>
           <h1 class="edp-title" itemprop="name">${event.title}</h1>
           <div class="edp-meta">
@@ -457,7 +449,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
     </section>
 
     ${isPast ? `<div class="event-passed-banner" role="status">
-      <p>Αυτή η εκδήλωση έχει ολοκληρωθεί.</p>
+      <p>${t.eventEnded}</p>
     </div>` : ''}
 
     <div class="edp-content">
@@ -467,7 +459,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         ${descriptionHtml}
         ${hasFullDescription ? '<div class="edp-enriched-badge">AI-enriched content</div>' : ''}
       </section>
-      ${needsReadMore ? '<button class="edp-read-more" type="button">Περισσότερα ▾</button>' : ''}
+      ${needsReadMore ? `<button class="edp-read-more" type="button" data-more="${t.readMore}" data-less="${t.readLess}">${t.readMore}</button>` : ''}
       ${hiddenMetadataHtml}
 
       ${inlineCtaHtml}
@@ -476,13 +468,13 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
         <h3>${event.venue.name}</h3>
         ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
-        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">Άνοιγμα στον Χάρτη →</a>
+        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
       </section>
 
       ${sourceHtml}
 
-      <nav class="edp-connections" aria-label="Σχετικές σελίδες">
-        <h3>Εξερευνήστε περισσότερα</h3>
+      <nav class="edp-connections" aria-label="${locale === 'en' ? 'Related pages' : 'Σχετικές σελίδες'}">
+        <h3>${t.exploreMore}</h3>
         ${navLinks.join('\n        ')}
       </nav>
 
@@ -503,30 +495,23 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[]): str
 /**
  * Render a related event as a visual card (reuses browse-page card markup)
  */
-export function renderRelatedEventCard(event: Event): string {
+export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): string {
+  const t = STRINGS[locale];
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
   let dateStr: string;
   if (isExhibition) {
-    dateStr = formatExhibitionDateRange(event);
-    if (exhibitionIsOpen) dateStr += ' · Ανοιχτή';
+    const exhibitionLocale = locale === 'en' ? 'en-US' : 'el-GR';
+    dateStr = formatExhibitionDateRange(event, exhibitionLocale);
+    if (exhibitionIsOpen) dateStr += ` · ${t.exhibitionOpenRelated}`;
   } else {
-    dateStr = formatGreekDateOnly(event.startDate);
+    dateStr = formatDateOnly(event.startDate, locale);
     const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
-    if (timeStr && timeStr !== '00:00') dateStr += ` στις ${timeStr}`;
+    if (timeStr && timeStr !== '00:00') dateStr += ` ${t.atTime} ${timeStr}`;
   }
 
-  let priceText: string;
-  if (event.price.type === 'open') {
-    priceText = 'Ελεύθερη είσοδος';
-  } else if (event.price.amount && event.price.amount > 0) {
-    priceText = `€${event.price.amount}`;
-  } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {
-    priceText = event.price.range;
-  } else {
-    priceText = 'Με εισιτήριο';
-  }
+  const priceText = formatPrice(event, locale);
 
   const slug = generateEventSlug(event);
   const href = `/events/${slug}/`;
@@ -546,7 +531,7 @@ export function renderRelatedEventCard(event: Event): string {
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
-      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
+      ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
     </div>
     <div class="card-body">
       <h3 class="card-title">${event.title}</h3>
@@ -568,7 +553,7 @@ export function renderEventDetailScript(): string {
   if (desc && btn) {
     btn.addEventListener('click', function() {
       var collapsed = desc.classList.toggle('is-collapsed');
-      btn.textContent = collapsed ? 'Περισσότερα ▾' : 'Λιγότερα ▴';
+      btn.textContent = collapsed ? (btn.dataset.more || 'Read more ▾') : (btn.dataset.less || 'Read less ▴');
     });
   }
 
@@ -716,5 +701,5 @@ export function generateRedirects(
   return redirects;
 }
 
-// Export for use in i18n.ts
-export { getAthensTimezone };
+// Exports for other modules
+export { getAthensTimezone, generateEventSchema };

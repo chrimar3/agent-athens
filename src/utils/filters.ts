@@ -169,7 +169,8 @@ export function formatExhibitionDateRange(event: Event, locale: string = 'el-GR'
   });
 
   if (!event.endDate) {
-    return `${startStr} - Συνεχίζεται`; // "Continuing" in Greek
+    const ongoingLabel = locale === 'en-US' ? 'Ongoing' : 'Συνεχίζεται';
+    return `${startStr} - ${ongoingLabel}`;
   }
 
   const end = new Date(event.endDate);

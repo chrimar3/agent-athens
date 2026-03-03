@@ -12,7 +12,7 @@ type SitemapBucket = 'events' | 'venues' | 'editorial';
  * Simple prefix check — reliable because URL structure is controlled by our generator.
  */
 export function classifyUrl(urlPath: string): SitemapBucket {
-  if (urlPath.startsWith('events/')) return 'events';
+  if (urlPath.startsWith('events/') || urlPath.startsWith('en/events/')) return 'events';
   if (urlPath.startsWith('venues/')) return 'venues';
   return 'editorial';
 }
@@ -42,25 +42,75 @@ function getPriority(urlPath: string): string {
   return Math.max(0.5, 1.0 - (depth * 0.1)).toFixed(1);
 }
 
-function buildUrlEntry(urlPath: string, manifest: ContentHashManifest, priorityOverrides?: Map<string, string>): string {
+/**
+ * Extract the slug from an event URL path.
+ * "events/abc-venue-title" → "abc-venue-title"
+ * "en/events/abc-venue-title" → "abc-venue-title"
+ */
+function extractEventSlug(urlPath: string): string | null {
+  const match = urlPath.match(/^(?:en\/)?events\/(.+)$/);
+  return match ? match[1] : null;
+}
+
+function buildUrlEntry(
+  urlPath: string,
+  manifest: ContentHashManifest,
+  priorityOverrides?: Map<string, string>,
+  bilingualSlugs?: Set<string>,
+  bilingualHubSlugs?: Set<string>
+): string {
   const fullUrl = urlPath === 'index' ? BASE_URL : `${BASE_URL}/${urlPath}`;
   const bucket = classifyUrl(urlPath);
   const entry = manifest.entries[urlPath];
   const lastmod = entry?.lastModified ?? new Date().toISOString().split('T')[0];
   const priority = priorityOverrides?.get(urlPath) ?? getPriority(urlPath);
 
+  let hreflangXml = '';
+  if (bilingualSlugs) {
+    const slug = extractEventSlug(urlPath);
+    if (slug && bilingualSlugs.has(slug)) {
+      const elUrl = `${BASE_URL}/events/${slug}/`;
+      const enUrl = `${BASE_URL}/en/events/${slug}/`;
+      hreflangXml = `
+    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
+    }
+  }
+  // Hub hreflang: match both Greek (e.g. "today") and English (e.g. "en/today") hub URLs
+  if (bilingualHubSlugs && !hreflangXml) {
+    const enHubMatch = urlPath.match(/^en\/(.+)$/);
+    const hubSlug = enHubMatch ? enHubMatch[1] : urlPath;
+    if (bilingualHubSlugs.has(hubSlug)) {
+      const elUrl = `${BASE_URL}/${hubSlug}`;
+      const enUrl = `${BASE_URL}/en/${hubSlug}`;
+      hreflangXml = `
+    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
+    }
+  }
+
   return `  <url>
     <loc>${fullUrl}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${getChangeFreq(urlPath, bucket)}</changefreq>
-    <priority>${priority}</priority>
+    <priority>${priority}</priority>${hreflangXml}
   </url>`;
 }
 
-function buildSitemapXml(urls: string[], manifest: ContentHashManifest, priorityOverrides?: Map<string, string>): string {
-  const entries = urls.map(url => buildUrlEntry(url, manifest, priorityOverrides));
+function buildSitemapXml(
+  urls: string[],
+  manifest: ContentHashManifest,
+  priorityOverrides?: Map<string, string>,
+  bilingualSlugs?: Set<string>,
+  bilingualHubSlugs?: Set<string>
+): string {
+  const entries = urls.map(url => buildUrlEntry(url, manifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs));
+  const hasHreflang = (bilingualSlugs && bilingualSlugs.size > 0) || (bilingualHubSlugs && bilingualHubSlugs.size > 0);
+  const xmlnsXhtml = hasHreflang ? ' xmlns:xhtml="http://www.w3.org/1999/xhtml"' : '';
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${xmlnsXhtml}>
 ${entries.join('\n')}
 </urlset>`;
 }
@@ -83,7 +133,9 @@ ${entries.join('\n')}
 export function generateSplitSitemaps(
   generatedUrls: string[],
   manifest: ContentHashManifest,
-  priorityOverrides?: Map<string, string>
+  priorityOverrides?: Map<string, string>,
+  bilingualSlugs?: Set<string>,
+  bilingualHubSlugs?: Set<string>
 ): number {
   const buckets: Record<SitemapBucket, string[]> = {
     events: [],
@@ -106,9 +158,9 @@ export function generateSplitSitemaps(
     { name: 'sitemap-editorial.xml', count: buckets.editorial.length },
   ];
 
-  writeFileSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest, priorityOverrides));
+  writeFileSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest, priorityOverrides, bilingualSlugs));
   writeFileSync(join(DIST_DIR, 'sitemap-venues.xml'), buildSitemapXml(buckets.venues, manifest));
-  writeFileSync(join(DIST_DIR, 'sitemap-editorial.xml'), buildSitemapXml(buckets.editorial, manifest));
+  writeFileSync(join(DIST_DIR, 'sitemap-editorial.xml'), buildSitemapXml(buckets.editorial, manifest, undefined, undefined, bilingualHubSlugs));
 
   // Write sitemap index
   writeFileSync(

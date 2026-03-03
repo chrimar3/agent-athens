@@ -10,6 +10,8 @@
 import type { Event } from '../types';
 import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { formatDateOnly, formatPrice } from '../utils/i18n-date';
+import { STRINGS, type Locale } from '../i18n/strings';
 
 export interface VenueInfo {
   address?: string;
@@ -22,7 +24,7 @@ export interface VenueInfo {
 
 interface PracticalField {
   label: string;
-  labelEn: string;  // For Schema.org
+  labelEn: string;  // Stable key into STRINGS[locale].practicalLabels
   value: string;
   isHtml?: boolean;  // If true, value contains HTML
 }
@@ -33,30 +35,34 @@ interface PracticalField {
  *
  * @param event - The event data
  * @param venueInfo - Optional venue-specific information
+ * @param locale - Display locale (defaults to 'el')
  * @returns Semantic HTML section or empty string
  */
 export function generatePracticalBlock(
   event: Event,
-  venueInfo?: VenueInfo | null
+  venueInfo?: VenueInfo | null,
+  locale: Locale = 'el'
 ): string {
+  const t = STRINGS[locale];
   const fields: PracticalField[] = [];
   const isExhibition = event.type === 'exhibition';
 
   // Date - always present (required by Constitution)
   if (isExhibition) {
-    const dateRange = formatExhibitionDateRange(event);
+    const exhibitionLocale = locale === 'en' ? 'en-US' : 'el-GR';
+    const dateRange = formatExhibitionDateRange(event, exhibitionLocale);
     const openNow = isCurrentlyOpen(event);
     fields.push({
       label: 'Διάρκεια',
       labelEn: 'Duration',
-      value: openNow ? `${dateRange} <span class="open-now-badge">Τώρα ανοιχτή</span>` : dateRange,
+      value: openNow ? `${dateRange} <span class="open-now-badge">${t.currentlyOpen}</span>` : dateRange,
       isHtml: true
     });
   } else {
     fields.push({
       label: 'Ημερομηνία',
       labelEn: 'Date',
-      value: formatGreekDateOnly(event.startDate)
+      value: formatDateOnly(event.startDate, locale)
     });
 
     // Time - only if available
@@ -102,7 +108,7 @@ export function generatePracticalBlock(
   }
 
   // Price - always present (required by Constitution)
-  const priceText = formatPriceGreek(event);
+  const priceText = formatPrice(event, locale);
   fields.push({
     label: 'Τιμή',
     labelEn: 'Price',
@@ -120,7 +126,7 @@ export function generatePracticalBlock(
         fields.push({
           label: 'Εισιτήρια',
           labelEn: 'Tickets',
-          value: `<a href="${bestUrl}" rel="noopener" target="_blank">Αγοράστε εισιτήρια</a>`,
+          value: `<a href="${bestUrl}" rel="noopener" target="_blank">${t.buyTickets}</a>`,
           isHtml: true
         });
       }
@@ -163,7 +169,7 @@ export function generatePracticalBlock(
     fields.push({
       label: 'Είσοδος',
       labelEn: 'Door policy',
-      value: formatDoorPolicy(venueInfo.doorPolicy)
+      value: t.doorPolicies[venueInfo.doorPolicy] || venueInfo.doorPolicy
     });
   }
 
@@ -172,40 +178,30 @@ export function generatePracticalBlock(
     return '';  // Don't render sparse blocks
   }
 
-  return renderTable(fields);
+  return renderTable(fields, locale);
 }
 
 /**
- * Format door policy for display
+ * Render a table from fields, using locale-aware labels
  */
-function formatDoorPolicy(policy: string): string {
-  const policies: Record<string, string> = {
-    'strict': 'Αυστηρός έλεγχος ηλικίας',
-    'moderate': 'Έλεγχος ταυτότητας',
-    'relaxed': 'Χαλαρή είσοδος',
-    'members': 'Μόνο μέλη',
-    'guestlist': 'Guest list απαιτείται',
-    'dress_code': 'Dress code'
-  };
-  return policies[policy] || policy;
-}
+function renderTable(fields: PracticalField[], locale: Locale): string {
+  const t = STRINGS[locale];
 
-/**
- * Render a table from fields
- */
-function renderTable(fields: PracticalField[]): string {
   const rows = fields.map(field => {
+    const displayLabel = t.practicalLabels[field.labelEn] || field.labelEn;
     const valueContent = field.isHtml ? field.value : escapeHtml(field.value);
     return `
         <tr>
-          <th scope="row">${escapeHtml(field.label)}</th>
+          <th scope="row">${escapeHtml(displayLabel)}</th>
           <td>${valueContent}</td>
         </tr>`;
   }).join('');
 
+  const ariaLabel = locale === 'en' ? 'Practical information' : 'Πρακτικές πληροφορίες';
+
   return `
-  <section class="event-practical" aria-label="Πρακτικές πληροφορίες">
-    <h3>Πρακτικές Πληροφορίες</h3>
+  <section class="event-practical" aria-label="${ariaLabel}">
+    <h3>${t.practicalInfo}</h3>
     <table class="practical-table">
       <tbody>
         ${rows}

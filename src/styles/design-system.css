@@ -904,6 +904,12 @@ div#main-content {
   background: linear-gradient(transparent, var(--bg-primary));
   pointer-events: none;
 }
+.edp-lang-notice {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 8px;
+}
 .edp-enriched-badge {
   display: inline-block;
   background: var(--color-enriched);

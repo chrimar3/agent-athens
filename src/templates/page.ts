@@ -4,6 +4,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
+import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
@@ -54,10 +55,10 @@ export const TYPE_ICONS: Record<string, string> = {
   other: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24c1.1 0 2 .9 2 2v32c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm2 6v4h20v-4H14zm0 8v2h20v-2H14zm0 6v2h14v-2H14z"/></svg>',
 };
 
-export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string): string {
+export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el'): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
-  const schemaMarkup = generateSchemaMarkup(events, metadata);
+  const schemaMarkup = generateSchemaMarkup(events, metadata, locale);
   const eventListHTML = renderDateGroupedEvents(events);
 
   // Filter bar: only render when allEvents is provided (hub pages, not category/detail pages)
@@ -367,7 +368,7 @@ function renderRelatedPages(filters: any): string {
   </aside>`;
 }
 
-function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
+function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: Locale = 'el'): string {
   // CRITICAL: Schema.org must ALWAYS be in English for AI agent parsing
   // Even though content is Greek, Schema.org is the universal standard
 
@@ -410,7 +411,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata): string {
     "name": `${metadata.title} | Cultural Events in Athens`,  // Add English context
     "description": `${events.length} cultural events in Athens, Greece`,  // English
     "url": `https://agentathens.netlify.app/${metadata.url}`,
-    "inLanguage": "el",  // Changed to Greek since content is Greek
+    "inLanguage": locale === 'en' ? 'en' : 'el',
     "about": {
       "@type": "Place",
       "name": "Athens",

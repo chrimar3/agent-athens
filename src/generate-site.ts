@@ -346,6 +346,27 @@ async function main() {
   const hubSlugs = generateHubPages(events);
   console.log(`  ✓ ${hubSlugs.length} hub pages enhanced`);
 
+  // Generate English hub pages for hubs with answerCapsuleEn
+  console.log('\n🇬🇧 Generating English hub pages...');
+  const { renderHubPage, getHubEvents } = await import('./generators/hub-page');
+  const hubPagesConfig: { hubs: import('./types').HubConfig[] } = JSON.parse(
+    readFileSync(join(import.meta.dir, '../config/hub-pages.json'), 'utf-8')
+  );
+  const bilingualHubSlugs = new Set<string>();
+  for (const config of hubPagesConfig.hubs) {
+    if (!config.answerCapsuleEn) continue;
+    const filteredEvents = getHubEvents(config, events);
+    if (filteredEvents.length < 3) continue;
+    const html = renderHubPage(config, filteredEvents, events, undefined, 'en');
+    if (!html) continue;
+    mkdirSync(join(DIST_DIR, 'en', config.slug), { recursive: true });
+    writeFileSync(join(DIST_DIR, 'en', config.slug, 'index.html'), html);
+    generatedUrls.push(`en/${config.slug}`);
+    bilingualHubSlugs.add(config.slug);
+    pagesGenerated++;
+  }
+  console.log(`  ✓ ${bilingualHubSlugs.size} English hub pages generated`);
+
   // Generate individual event pages (Phase C.3)
   // Uses pageableEvents: upcoming + past-active events (≤45 days) get pages
   console.log('\n📄 Generating individual event pages...');
@@ -354,26 +375,61 @@ async function main() {
   generatedUrls.push(...eventPageUrls);
   pagesGenerated += eventPageUrls.length;
 
+  // Generate English event pages for events with fullDescriptionEn
+  console.log('\n🇬🇧 Generating English event pages...');
+  const { renderEventDetailPage, generateEventSlug } = await import('./generators/event-page');
+  const englishEvents = pageableEvents.filter(e => e.fullDescriptionEn);
+  const bilingualSlugs = new Set<string>();
+  const enEventsDir = join(DIST_DIR, 'en/events');
+  if (englishEvents.length > 0) {
+    mkdirSync(enEventsDir, { recursive: true });
+  }
+
+  // Reuse venue grouping for related events
+  const eventsByVenueEn = new Map<string, Event[]>();
+  for (const event of pageableEvents) {
+    const venueEvents = eventsByVenueEn.get(event.venue.name) || [];
+    venueEvents.push(event);
+    eventsByVenueEn.set(event.venue.name, venueEvents);
+  }
+
+  for (const event of englishEvents) {
+    const slug = generateEventSlug(event);
+    bilingualSlugs.add(slug);
+
+    // Related events at same venue (max 6)
+    const venueEvents = eventsByVenueEn.get(event.venue.name) || [];
+    const relatedEvents = venueEvents
+      .filter(e => e.id !== event.id)
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+      .slice(0, 6);
+
+    const html = renderEventDetailPage(event, relatedEvents, 'en');
+    const pageDir = join(enEventsDir, slug);
+    if (!existsSync(pageDir)) {
+      mkdirSync(pageDir, { recursive: true });
+    }
+    writeFileSync(join(pageDir, 'index.html'), html);
+    generatedUrls.push(`en/events/${slug}`);
+  }
+  pagesGenerated += englishEvents.length;
+  console.log(`  ✓ Generated ${englishEvents.length} English event pages`);
+
   // Generate per-event OG images (only for events without self-hosted images)
   console.log('\n🖼️  Generating per-event OG images...');
   await generateEventOgImages(pageableEvents);
 
   // Generate per-hub OG images
   console.log('🖼️  Generating per-hub OG images...');
-  const hubPagesConfig: { hubs: import('./types').HubConfig[] } = JSON.parse(
-    readFileSync(join(import.meta.dir, '../config/hub-pages.json'), 'utf-8')
-  );
-  const { getHubEvents } = await import('./generators/hub-page');
   const hubEventCounts = new Map<string, number>();
   for (const hub of hubPagesConfig.hubs) {
     hubEventCounts.set(hub.slug, getHubEvents(hub, events).length);
   }
   await generateHubOgImages(hubPagesConfig.hubs, hubEventCounts);
 
-  // Initialize _redirects with /en/ redirect (must be first rule — Netlify processes top-to-bottom)
-  // 302 (temporary) because we'll remove this when bilingual content launches
+  // Initialize _redirects (sitemap redirect only — /en/* redirect removed for bilingual pages)
   const redirectsPath = join(DIST_DIR, '_redirects');
-  writeFileSync(redirectsPath, '/en/*  /:splat  302\n/sitemap.xml  /sitemap-index.xml  301\n');
+  writeFileSync(redirectsPath, '/sitemap.xml  /sitemap-index.xml  301\n');
 
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
@@ -576,8 +632,8 @@ async function main() {
     } else if (url.endsWith('/')) {
       // Content pages: about/, editorial/, corrections/
       filePath = join(DIST_DIR, url, 'index.html');
-    } else if (url.startsWith('events/') || url.startsWith('venues/')) {
-      // Event/venue pages: events/slug/index.html, venues/slug/index.html
+    } else if (url.startsWith('events/') || url.startsWith('venues/') || url.startsWith('en/events/') || url.startsWith('en/')) {
+      // Event/venue/hub pages: events/slug/index.html, venues/slug/index.html, en/events/slug/index.html, en/slug/index.html
       filePath = join(DIST_DIR, url, 'index.html');
     } else {
       // Filter pages: slug.html
@@ -608,6 +664,8 @@ async function main() {
     events,
     venuePageUrls,
     categoryConfigs: CATEGORIES_CONFIG.categories,
+    englishEventCount: englishEvents.length,
+    englishHubCount: bilingualHubSlugs.size,
   });
   await generateRobotsTxt();
   // Build priority overrides for past-active event pages (lower sitemap priority)
@@ -615,7 +673,7 @@ async function main() {
   for (const url of pastEventUrls) {
     priorityOverrides.set(url, '0.3');
   }
-  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest, priorityOverrides);
+  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs);
   await generateIndexNowKeyFile();
 
   const buildDurationMs = Date.now() - buildStartTime;
@@ -625,7 +683,8 @@ async function main() {
 
   console.log(`\n✅ Site generation complete!`);
   console.log(`📊 Total pages generated: ${pagesGenerated}`);
-  console.log(`   - ${eventPageUrls.length} event pages`);
+  console.log(`   - ${eventPageUrls.length} event pages (${englishEvents.length} English)`);
+  console.log(`   - ${hubSlugs.length} hub pages (${bilingualHubSlugs.size} English)`);
   console.log(`   - ${venuePageUrls.length} venue pages`);
   console.log(`   - ${categoryUrls.length} category pages`);
   console.log(`🗺️  Sitemaps: ${sitemapUrlCount} URLs across 3 split sitemaps`);
@@ -733,8 +792,10 @@ async function generateLLMsTxt(params: {
   events: Event[];
   venuePageUrls: string[];
   categoryConfigs: CategoryConfig[];
+  englishEventCount?: number;
+  englishHubCount?: number;
 }) {
-  const { events, venuePageUrls, categoryConfigs } = params;
+  const { events, venuePageUrls, categoryConfigs, englishEventCount = 0, englishHubCount = 0 } = params;
   const base = 'https://agentathens.netlify.app';
 
   const eventCount = events.length;
@@ -773,7 +834,17 @@ ${categoryLines}
 ${venueCount} venue pages. Examples:
 ${venueExamples}
 
-## JSON API
+${englishEventCount > 0 ? `## English Event Pages
+
+${englishEventCount} events have full English descriptions at \`/en/events/{slug}/\`.
+Each English page has bidirectional hreflang tags linking to the Greek version.
+
+` : ''}${englishHubCount > 0 ? `## English Hub Pages
+
+${englishHubCount} hub pages have English versions at \`/en/{slug}/\`.
+Hub pages include answer capsules, comparison tables, FAQ sections and hreflang tags.
+
+` : ''}## JSON API
 
 Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 

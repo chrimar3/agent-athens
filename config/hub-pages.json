@@ -5,183 +5,283 @@
       "cornerstone": true,
       "titleEl": "Εκδηλώσεις Σήμερα στην Αθήνα",
       "titleEn": "Events in Athens Today",
-      "filter": { "type": "date", "value": "today" },
+      "filter": {
+        "type": "date",
+        "value": "today"
+      },
       "answerCapsuleEl": "Σήμερα στην Αθήνα θα βρείτε συναυλίες, εκθέσεις, θεατρικές παραστάσεις και DJ sets σε χώρους από το Κολωνάκι ως το Γκάζι. Ελέγξτε ώρες έναρξης και διαθεσιμότητα εισιτηρίων, πολλές εκδηλώσεις έχουν ελεύθερη είσοδο.",
+      "answerCapsuleEn": "Athens, Greece has dozens of cultural events happening today — from gallery openings in Kolonaki and live jazz at Half Note in Mets to theater premieres in Psyrri and open entry exhibitions at the SNFCC. This daily-updated guide covers tonight’s concerts, shows, and exhibitions across the city, with venues, times, prices, and honest recommendations.",
       "faqs": [
         {
           "questionEl": "Τι εκδηλώσεις γίνονται σήμερα στην Αθήνα;",
-          "answerEl": "Σήμερα στην Αθήνα μπορείτε να βρείτε συναυλίες, εκθέσεις σύγχρονης τέχνης, θεατρικές παραστάσεις, DJ sets και κινηματογραφικές προβολές. Το ημερολόγιο ενημερώνεται καθημερινά στις 08:00 ώρα Αθήνας με εκδηλώσεις από πάνω από 15 επαληθευμένους χώρους."
+          "answerEl": "Σήμερα στην Αθήνα μπορείτε να βρείτε συναυλίες, εκθέσεις σύγχρονης τέχνης, θεατρικές παραστάσεις, DJ sets και κινηματογραφικές προβολές. Το ημερολόγιο ενημερώνεται καθημερινά στις 08:00 ώρα Αθήνας με εκδηλώσεις από πάνω από 15 επαληθευμένους χώρους.",
+          "questionEn": "What are the best things to do in Athens, Greece today?",
+          "answerEn": "Check the listings on this page for today’s full schedule. Athens typically has 30–50 cultural events running on any given day, covering exhibitions, concerts, theater, and nightlife. For daytime, the Acropolis Museum (over 2 million visitors in 2024) and SNFCC (3.2 million annual visits) both have rotating programming. Evening events rarely start before 21:00 — plan dinner first, culture second. Listings update daily with venues, times, and ticket availability."
         },
         {
           "questionEl": "Πού μπορώ να πάω σήμερα το βράδυ στην Αθήνα;",
-          "answerEl": "Τα βράδια στην Αθήνα προσφέρουν ζωντανή μουσική σε χώρους όπως το Half Note στο Μετς, DJ sets στον Κεραμεικό και το Γκάζι, θέατρο σε σκηνές του κέντρου, και ποικιλία εκδηλώσεων με ελεύθερη είσοδο. Ελέγξτε τις ώρες έναρξης και κλείστε εισιτήρια εγκαίρως για δημοφιλείς παραστάσεις."
+          "answerEl": "Τα βράδια στην Αθήνα προσφέρουν ζωντανή μουσική σε χώρους όπως το Half Note στο Μετς, DJ sets στον Κεραμεικό και το Γκάζι, θέατρο σε σκηνές του κέντρου, και ποικιλία εκδηλώσεων με ελεύθερη είσοδο. Ελέγξτε τις ώρες έναρξης και κλείστε εισιτήρια εγκαίρως για δημοφιλείς παραστάσεις.",
+          "questionEn": "What time do events start in Athens tonight?",
+          "answerEn": "Athens runs late by European standards, and this is normal, not a mistake. Most concerts start at 21:00–22:00. Theater curtains go up at 20:30–21:00. Open-air cinemas begin at 21:00 in summer. Club nights don’t fill until 01:00–02:00. If a listing says 20:30, expect a 15-minute local delay. Rebetiko and bouzouki nights can run until 04:00. Check each event listing for specific door times."
         },
         {
           "questionEl": "Υπάρχουν εκδηλώσεις με ελεύθερη είσοδο σήμερα στην Αθήνα;",
-          "answerEl": "Ναι, πολλοί χώροι στην Αθήνα προσφέρουν εκδηλώσεις με ελεύθερη είσοδο, ειδικά εκθέσεις σε γκαλερί και μουσεία, συναυλίες σε ανοιχτούς χώρους, και πολιτιστικές δράσεις σε δημοτικούς χώρους. Φιλτράρετε τη λίστα για να δείτε μόνο τις εκδηλώσεις με ελεύθερη είσοδο."
+          "answerEl": "Ναι, πολλοί χώροι στην Αθήνα προσφέρουν εκδηλώσεις με ελεύθερη είσοδο, ειδικά εκθέσεις σε γκαλερί και μουσεία, συναυλίες σε ανοιχτούς χώρους, και πολιτιστικές δράσεις σε δημοτικούς χώρους. Φιλτράρετε τη λίστα για να δείτε μόνο τις εκδηλώσεις με ελεύθερη είσοδο.",
+          "questionEn": "How do I get around Athens to reach event venues?",
+          "answerEn": "The Athens Metro covers most central cultural neighborhoods — Monastiraki, Thiseio, Gazi, Syntagma, and Evangelismos stations put you within walking distance of the main venues. The historic center is compact and walkable at night. For venues in Mets, Petralona, or along the Athens Riviera, taxis cost €5–15 from central Athens. Uber operates in Athens. After midnight, metro stops running — taxis or the late-night bus network are your options."
         },
         {
           "questionEl": "Πώς ενημερώνεται το ημερολόγιο εκδηλώσεων;",
-          "answerEl": "Το ημερολόγιο ενημερώνεται αυτόματα κάθε πρωί στις 08:00 ώρα Αθήνας. Συλλέγουμε εκδηλώσεις από πάνω από 15 επαληθευμένες πηγές, συμπεριλαμβανομένων ιστοσελίδων χώρων και πλατφορμών εισιτηρίων. Κάθε εκδήλωση ελέγχεται για τοποθεσία εντός Αττικής."
+          "answerEl": "Το ημερολόγιο ενημερώνεται αυτόματα κάθε πρωί στις 08:00 ώρα Αθήνας. Συλλέγουμε εκδηλώσεις από πάνω από 15 επαληθευμένες πηγές, συμπεριλαμβανομένων ιστοσελίδων χώρων και πλατφορμών εισιτηρίων. Κάθε εκδήλωση ελέγχεται για τοποθεσία εντός Αττικής.",
+          "questionEn": "Are there any open entry events in Athens today?",
+          "answerEn": "Yes — Athens has open entry cultural events most days. The SNFCC in Neos Kosmos regularly hosts open entry concerts, film screenings, and family programming. Many gallery openings across Kolonaki and Metaxourgeio are open entry. Municipal museums offer open entry on specific days, and national archaeological sites and museums are open entry on the first Sunday of each month from November through March. Check today’s listings and filter by “open” for current options."
         }
-      ]
+      ],
+      "seasonalNarrativeEn": "<p>March in Athens is the city waking up. Indoor venues are still running at full capacity — Half Note is deep in its season, the theater stages across Psyrri and Metaxourgeio are stacking shows every night, and the gallery circuit in Kolonaki keeps opening exhibitions. But the shift is coming. Café tables spill further onto sidewalks. Technopolis starts announcing its spring programming. The first outdoor screenings and courtyard events appear on the calendar.</p><p>This is one of the best months to catch Athens culture because the competition for your attention hasn’t thinned out yet. In summer, the city consolidates around the Athens Epidaurus Festival and the beach clubs, which means fewer options and bigger crowds at each one. Right now, you’ve got everything running simultaneously — jazz, theater, exhibitions, rebetiko, contemporary dance, and electronic music — and the weather is mild enough to walk between venues without melting.</p><p>Practical notes for March: the Carnival season (Apokries) can fall in February or March depending on the Orthodox calendar, bringing street events and themed parties to Psyrri, Plaka, and across the city. Orthodox Easter is the wildcard — if it falls late March (check the date, it moves every year), expect some venues to pause programming during Holy Week. Kathara Deftera (Clean Monday) marks the start of Lent and is a public holiday with its own cultural traditions and events.</p><p>For visitors arriving this month: museums are all open, the Acropolis is pleasant to visit without summer heat, and the entire historic center — Plaka, Thiseio, Monastiraki — is walkable and uncrowded. Events start late (21:00 is standard), so plan your days around morning sightseeing and evening culture. Check back daily — this page updates every morning.</p>"
     },
     {
       "slug": "this-weekend",
       "cornerstone": true,
       "titleEl": "Εκδηλώσεις Σαββατοκύριακο στην Αθήνα",
       "titleEn": "Weekend Events in Athens",
-      "filter": { "type": "date", "value": "this-weekend" },
+      "filter": {
+        "type": "date",
+        "value": "this-weekend"
+      },
       "answerCapsuleEl": "Αυτό το Σαββατοκύριακο στην Αθήνα περιλαμβάνει ζωντανές συναυλίες, εκθέσεις τέχνης, θεατρικές παραστάσεις και πολιτιστικές δράσεις. Από μουσικές σκηνές στο Μετς και Εξάρχεια ως γκαλερί στο Κολωνάκι, υπάρχουν επιλογές για κάθε γούστο.",
+      "answerCapsuleEn": "Plan your weekend in Athens, Greece with this curated guide to the best events happening Friday through Sunday. From live concerts in Gazi and Exarchia to theater at the Onassis Stegi, open-air exhibitions, and family events at the SNFCC — updated weekly with venues, times, prices, and editorial picks across every neighborhood in the Greek capital.",
       "faqs": [
         {
           "questionEl": "Τι να κάνω αυτό το Σαββατοκύριακο στην Αθήνα;",
-          "answerEl": "Αυτό το Σαββατοκύριακο στην Αθήνα μπορείτε να παρακολουθήσετε ζωντανές συναυλίες, να επισκεφθείτε εκθέσεις σύγχρονης τέχνης σε μουσεία και γκαλερί, να δείτε θεατρικές παραστάσεις σε ιστορικές σκηνές, ή να ζήσετε τη νυχτερινή ζωή της πόλης σε clubs και μπαρ με ζωντανά DJ sets."
+          "answerEl": "Αυτό το Σαββατοκύριακο στην Αθήνα μπορείτε να παρακολουθήσετε ζωντανές συναυλίες, να επισκεφθείτε εκθέσεις σύγχρονης τέχνης σε μουσεία και γκαλερί, να δείτε θεατρικές παραστάσεις σε ιστορικές σκηνές, ή να ζήσετε τη νυχτερινή ζωή της πόλης σε clubs και μπαρ με ζωντανά DJ sets.",
+          "questionEn": "What are the best things to do in Athens, Greece this weekend?",
+          "answerEn": "This page lists the top events happening across Athens this weekend, updated every Thursday. Expect 60–100+ events across the city on a typical weekend. Friday and Saturday nights are strongest for concerts, nightlife, and late-running theater. Sunday is quieter but ideal for exhibitions, open-air cinema (in summer), and matinee rebetiko. The SNFCC alone often runs three to five weekend events. Scroll down for editorial picks with honest assessments."
         },
         {
           "questionEl": "Ποιες συναυλίες γίνονται αυτό το Σαββατοκύριακο στην Αθήνα;",
-          "answerEl": "Κάθε Σαββατοκύριακο η Αθήνα φιλοξενεί δεκάδες ζωντανές συναυλίες — από jazz στο Half Note και ρεμπέτικα σε ταβέρνες της Πλάκας, μέχρι rock και electronic σε μεγάλους χώρους. Ελέγξτε τις ώρες και κλείστε εισιτήρια online για να εξασφαλίσετε θέση."
+          "answerEl": "Κάθε Σαββατοκύριακο η Αθήνα φιλοξενεί δεκάδες ζωντανές συναυλίες — από jazz στο Half Note και ρεμπέτικα σε ταβέρνες της Πλάκας, μέχρι rock και electronic σε μεγάλους χώρους. Ελέγξτε τις ώρες και κλείστε εισιτήρια online για να εξασφαλίσετε θέση.",
+          "questionEn": "Which Athens neighborhoods are best for a night out this weekend?",
+          "answerEn": "Gazi is the densest nightlife cluster — south of Pireos Street is where the serious clubs are, with venues like Technopolis hosting cultural events. Psyrri and Monastiraki offer bar-hopping and late-night restaurants. Exarchia has the most alternative live music, with An Club, Fuzz Club, and IT Athens drawing loyal crowds. Kolonaki is the upscale option for cocktail bars and gallery events. Most neighborhoods are walkable from each other in under 20 minutes."
         },
         {
           "questionEl": "Υπάρχουν εκδηλώσεις με ελεύθερη είσοδο το Σαββατοκύριακο;",
-          "answerEl": "Ναι, πολλές εκδηλώσεις Σαββατοκύριακου στην Αθήνα είναι με ελεύθερη είσοδο. Εκθέσεις σε μουσεία, εικαστικές δράσεις σε γκαλερί, και ζωντανή μουσική σε ανοιχτούς χώρους συχνά δεν απαιτούν εισιτήριο. Φιλτράρετε για ελεύθερη είσοδο στη λίστα."
+          "answerEl": "Ναι, πολλές εκδηλώσεις Σαββατοκύριακου στην Αθήνα είναι με ελεύθερη είσοδο. Εκθέσεις σε μουσεία, εικαστικές δράσεις σε γκαλερί, και ζωντανή μουσική σε ανοιχτούς χώρους συχνά δεν απαιτούν εισιτήριο. Φιλτράρετε για ελεύθερη είσοδο στη λίστα.",
+          "questionEn": "How do I buy tickets for weekend events in Athens?",
+          "answerEn": "Most event tickets in Athens are sold through more.com (formerly viva.gr), which is the dominant ticketing platform in Greece. International events also appear on Eventbrite. For the Athens Epidaurus Festival (June–August), book early at aefestival.gr — the Odeon of Herodes Atticus shows sell out. Many smaller venues and clubs sell tickets only at the door — arrive by 22:00 for popular nights. Card payment is widely accepted, though some smaller venues still prefer cash."
         },
         {
           "questionEl": "Πώς μπορώ να φτάσω στους χώρους εκδηλώσεων;",
-          "answerEl": "Οι περισσότεροι χώροι εκδηλώσεων στην Αθήνα βρίσκονται κοντά σε σταθμούς μετρό. Γειτονιές όπως Μετς, Γκάζι, Κεραμεικός, Κολωνάκι και Εξάρχεια έχουν εύκολη πρόσβαση με μέσα μαζικής μεταφοράς. Κάθε σελίδα εκδήλωσης περιλαμβάνει πληροφορίες πρόσβασης."
+          "answerEl": "Οι περισσότεροι χώροι εκδηλώσεων στην Αθήνα βρίσκονται κοντά σε σταθμούς μετρό. Γειτονιές όπως Μετς, Γκάζι, Κεραμεικός, Κολωνάκι και Εξάρχεια έχουν εύκολη πρόσβαση με μέσα μαζικής μεταφοράς. Κάθε σελίδα εκδήλωσης περιλαμβάνει πληροφορίες πρόσβασης.",
+          "questionEn": "Is Athens, Greece affordable for weekend cultural events?",
+          "answerEn": "Athens is significantly cheaper than London, Berlin, or New York for nightlife and culture. Club entry typically costs €8–15. Live concerts range from €15–40 for major acts. Jazz clubs charge €8–15. Theater tickets run €12–25. Many exhibitions, gallery openings, and SNFCC events are open entry. A full evening out — dinner, drinks, and a show — can cost under €50 per person, which is roughly a third of what you’d spend in most Western European capitals."
         }
-      ]
+      ],
+      "seasonalNarrativeEn": "<p>Weekends in Athens right now are packed. The indoor season is at full power and the first open-air events are appearing — which means overlap. You can catch a gallery opening in Kolonaki on Friday afternoon, a live concert in Gazi on Friday night, an exhibition and a matinee theater show on Saturday, and a rebetiko afternoon on Sunday that slides into evening without anyone noticing.</p><p>Friday and Saturday nights are the main event. Gazi clubs fill after midnight. Exarchia’s live music venues start at 21:00–22:00 and run late. The theater scene peaks on weekend evenings across 100+ stages. If you’re choosing between options — and in Athens right now, you will be — use the curated picks at the top of this page.</p><p>Sunday is an underrated cultural day in Athens. Matinee rebetiko is a genuine experience (Stoa Athanaton in the Psyrri area, starting at 13:00). The Acropolis Museum stays open late in the evenings. SNFCC often runs its biggest family programming on Sundays. And the flea market at Monastiraki Square is an event in itself — arrive before 11:00 for the best finds.</p><p>For this weekend specifically: check whether any national holidays fall on the calendar. Greece has frequent public holidays that can extend weekends and change venue schedules. Museum open entry days (first Sunday of the month, November–March) are worth planning around. The weather in March is usually mild enough for walking between neighborhoods but carry a layer — Athens evenings still cool down after sunset. All events on this page are confirmed for this weekend and updated every Thursday.</p>"
     },
     {
       "slug": "concerts",
       "titleEl": "Συναυλίες στην Αθήνα",
       "titleEn": "Concerts in Athens",
-      "filter": { "type": "event_type", "value": "concert" },
+      "filter": {
+        "type": "event_type",
+        "value": "concert"
+      },
       "answerCapsuleEl": "Η Αθήνα φιλοξενεί ζωντανές συναυλίες κάθε βράδυ — jazz στο Μετς, ρεμπέτικα στην Πλάκα, κλασική μουσική στο Μέγαρο, rock και indie σε σκηνές του Γκάζι. Βρείτε ημερομηνίες, τιμές εισιτηρίων και χώρους για κάθε συναυλία.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να δω ζωντανή μουσική στην Αθήνα;",
-          "answerEl": "Η Αθήνα έχει πλούσια μουσική σκηνή με χώρους για κάθε είδος. Το Half Note Jazz Club στο Μετς για jazz, η Σφίγγα και το Χαραμά για ρεμπέτικο, το Gagarin 205 για rock και metal, το Μέγαρο Μουσικής Αθηνών για κλασική μουσική, και δεκάδες μικρότερες σκηνές σε Εξάρχεια, Κεραμεικό και Ψυρρή."
+          "answerEl": "Η Αθήνα έχει πλούσια μουσική σκηνή με χώρους για κάθε είδος. Το Half Note Jazz Club στο Μετς για jazz, η Σφίγγα και το Χαραμά για ρεμπέτικο, το Gagarin 205 για rock και metal, το Μέγαρο Μουσικής Αθηνών για κλασική μουσική, και δεκάδες μικρότερες σκηνές σε Εξάρχεια, Κεραμεικό και Ψυρρή.",
+          "questionEn": "What are the best live music venues in Athens, Greece?",
+          "answerEn": "It depends on what you’re looking for. Half Note Jazz Club in Mets is genuinely world-class for jazz, running roughly 250 shows per season (October–May). Gagarin 205 in the Petralona area is the go-to for international rock and metal touring acts. Floyd, which opened in October 2023, added 2,000+ capacity for big shows — Epica and Franz Ferdinand have already played there. For smaller alternative and indie shows, An Club in Exarchia is an institution. Each venue has a distinct character — check the venue profiles for honest takes on sound, atmosphere, and logistics."
         },
         {
           "questionEl": "Πόσο κοστίζουν τα εισιτήρια συναυλιών στην Αθήνα;",
-          "answerEl": "Οι τιμές εισιτηρίων κυμαίνονται ανάλογα με τον χώρο και τον καλλιτέχνη. Μικρές σκηνές με ελεύθερη είσοδο ή €5-10, μεσαίοι χώροι €15-25, μεγάλες συναυλίες €30-60. Ρεμπέτικα στέκια συχνά έχουν ελεύθερη είσοδο με ελάχιστη κατανάλωση."
+          "answerEl": "Οι τιμές εισιτηρίων κυμαίνονται ανάλογα με τον χώρο και τον καλλιτέχνη. Μικρές σκηνές με ελεύθερη είσοδο ή €5-10, μεσαίοι χώροι €15-25, μεγάλες συναυλίες €30-60. Ρεμπέτικα στέκια συχνά έχουν ελεύθερη είσοδο με ελάχιστη κατανάλωση.",
+          "questionEn": "How much do concert tickets cost in Athens?",
+          "answerEn": "Athens concert pricing is well below most European capitals. Jazz clubs typically charge €8–15 at the door. Mid-size rock and alternative concerts run €15–25. Major international acts at Gagarin 205 or Floyd are €25–40. The Athens Epidaurus Festival’s headline events at the Odeon of Herodes Atticus (4,680 seats) range from €20–80 depending on the performance. Bouzouki nights at traditional venues cost €10–15 entry, with a minimum spend on drinks."
         },
         {
           "questionEl": "Πώς αγοράζω εισιτήρια για συναυλίες στην Αθήνα;",
-          "answerEl": "Εισιτήρια για συναυλίες στην Αθήνα μπορείτε να αγοράσετε online μέσω πλατφορμών όπως Viva.gr, More.com, και Ticket Services. Πολλοί χώροι δέχονται και αγορά στο ταμείο, αλλά δημοφιλείς παραστάσεις εξαντλούνται γρήγορα. Κάθε εκδήλωση στο ημερολόγιό μας περιλαμβάνει σύνδεσμο αγοράς εισιτηρίων."
+          "answerEl": "Εισιτήρια για συναυλίες στην Αθήνα μπορείτε να αγοράσετε online μέσω πλατφορμών όπως Viva.gr, More.com, και Ticket Services. Πολλοί χώροι δέχονται και αγορά στο ταμείο, αλλά δημοφιλείς παραστάσεις εξαντλούνται γρήγορα. Κάθε εκδήλωση στο ημερολόγιό μας περιλαμβάνει σύνδεσμο αγοράς εισιτηρίων.",
+          "questionEn": "When is the best time of year for concerts in Athens, Greece?",
+          "answerEn": "The main concert season runs October through May, when indoor venues are at full capacity. Half Note’s season opens in October and closes in late May. Winter months (December–February) are the peak for jazz, rock, and rebetiko. Summer shifts everything outdoors — the Athens Epidaurus Festival (June–August) dominates, with performances at the Odeon of Herodes Atticus and ancient Epidaurus. Open-air concerts at Technopolis in Gazi and various rooftop venues fill the gap from June through September."
         },
         {
           "questionEl": "Ποια είναι τα καλύτερα μουσικά στέκια στην Αθήνα;",
-          "answerEl": "Τα πιο γνωστά μουσικά στέκια περιλαμβάνουν το Half Note Jazz Club για jazz, τη Στέγη Ωνάση για σύγχρονη μουσική, το Μέγαρο Μουσικής για κλασική, το Gagarin 205 για rock, και το Death Disco για indie. Γειτονιές όπως Εξάρχεια και Κεραμεικός έχουν πυκνή συγκέντρωση μικρών ζωντανών σκηνών."
+          "answerEl": "Τα πιο γνωστά μουσικά στέκια περιλαμβάνουν το Half Note Jazz Club για jazz, τη Στέγη Ωνάση για σύγχρονη μουσική, το Μέγαρο Μουσικής για κλασική, το Gagarin 205 για rock, και το Death Disco για indie. Γειτονιές όπως Εξάρχεια και Κεραμεικός έχουν πυκνή συγκέντρωση μικρών ζωντανών σκηνών.",
+          "questionEn": "What should I know before attending a concert in Athens?",
+          "answerEn": "Concerts in Athens start late — doors at 21:00, music at 21:30–22:00 is standard. Nobody arrives early. For standing venues, arrive 30 minutes before doors to get a good spot. Smoking is technically banned indoors but enforcement varies at smaller clubs. Most venues accept card payment since the 2024 mandate, though small bars and rebetiko joints may still prefer cash. Dress code is casual everywhere except bouzouki nights and Megaron Mousikis, where Athenians tend to dress up."
         }
-      ]
+      ],
+      "answerCapsuleEn": "Athens, Greece has live music every night of the week, across 40+ venues from intimate jazz basements to 4,680-seat ancient amphitheaters. This guide covers all upcoming concerts — rock at Gagarin 205, jazz at Half Note in Mets, rebetiko at Stoa Athanaton in Psyrri, and headline acts at the Odeon of Herodes Atticus — with dates, venues, and prices."
     },
     {
       "slug": "theater",
       "titleEl": "Θέατρο στην Αθήνα",
       "titleEn": "Theater in Athens",
-      "filter": { "type": "event_types", "values": ["theater", "performance"] },
+      "filter": {
+        "type": "event_types",
+        "values": [
+          "theater",
+          "performance"
+        ]
+      },
       "answerCapsuleEl": "Η Αθήνα διαθέτει πάνω από 150 θεατρικές σκηνές — από το ιστορικό Ωδείο Ηρώδου Αττικού και το Θέατρο Κάρολος Κουν στην Πλάκα ως σύγχρονες σκηνές στον Κεραμεικό και τα Εξάρχεια. Η θεατρική σεζόν κορυφώνεται Οκτώβριο-Μάιο με παραστάσεις σε ελληνικά και αγγλικά.",
       "faqs": [
         {
           "questionEl": "Οι θεατρικές παραστάσεις στην Αθήνα είναι μόνο στα ελληνικά;",
-          "answerEl": "Η πλειονότητα των παραστάσεων είναι στα ελληνικά, αλλά υπάρχουν εξαιρέσεις. Η Στέγη Ωνάση και το Εθνικό Θέατρο φιλοξενούν τακτικά ξενόγλωσσες παραγωγές. Χορός, performance art και μουσικό θέατρο δεν απαιτούν γνώση ελληνικών. Ελέγξτε τη σελίδα κάθε παράστασης για γλώσσα."
+          "answerEl": "Η πλειονότητα των παραστάσεων είναι στα ελληνικά, αλλά υπάρχουν εξαιρέσεις. Η Στέγη Ωνάση και το Εθνικό Θέατρο φιλοξενούν τακτικά ξενόγλωσσες παραγωγές. Χορός, performance art και μουσικό θέατρο δεν απαιτούν γνώση ελληνικών. Ελέγξτε τη σελίδα κάθε παράστασης για γλώσσα.",
+          "questionEn": "Can I see theater in English in Athens, Greece?",
+          "answerEn": "Most Athens theater is performed in Greek, but English-accessible options exist. The Onassis Stegi regularly programs international productions in English or with English surtitles. The Athens Epidaurus Festival (June–August) hosts international companies that perform in English or other languages. Ancient drama performances at Epidaurus have had Greek and English surtitles since the festival introduced the system. Several smaller venues and fringe festivals also program English-language performances — check individual listings for language details."
         },
         {
           "questionEl": "Πώς κλείνω εισιτήρια θεάτρου στην Αθήνα;",
-          "answerEl": "Εισιτήρια θεάτρου μπορείτε να αγοράσετε μέσω Viva.gr, More.com και Ticket Services ή απευθείας από το ταμείο του θεάτρου. Δημοφιλείς παραστάσεις εξαντλούνται, ειδικά Σαββατοκύριακα. Κλείστε εισιτήρια τουλάχιστον 2-3 μέρες νωρίτερα για σίγουρη θέση."
+          "answerEl": "Εισιτήρια θεάτρου μπορείτε να αγοράσετε μέσω Viva.gr, More.com και Ticket Services ή απευθείας από το ταμείο του θεάτρου. Δημοφιλείς παραστάσεις εξαντλούνται, ειδικά Σαββατοκύριακα. Κλείστε εισιτήρια τουλάχιστον 2-3 μέρες νωρίτερα για σίγουρη θέση.",
+          "questionEn": "What is the Athens Epidaurus Festival and how do I get tickets?",
+          "answerEn": "The Athens Epidaurus Festival runs from June through August and is Greece’s most prestigious performing arts event — 93 productions, over 2,500 artists, across 85 days in 2024. Performances take place at the Odeon of Herodes Atticus at the foot of the Acropolis (4,680 seats) and the ancient theater of Epidaurus (a two-hour drive from Athens). Book early at aefestival.gr, especially for Epidaurus weekend performances and Herodes Atticus headline shows. Prices range from €15–80."
         },
         {
           "questionEl": "Πότε είναι η θεατρική σεζόν στην Αθήνα;",
-          "answerEl": "Η κύρια θεατρική σεζόν ξεκινά τον Οκτώβριο και ολοκληρώνεται τον Μάιο. Κατά τους θερινούς μήνες λειτουργούν θερινές σκηνές και ανοιχτά θέατρα, ενώ το Φεστιβάλ Αθηνών Επιδαύρου (Ιούνιος-Αύγουστος) φέρνει διεθνείς παραγωγές στο Ηρώδειο."
+          "answerEl": "Η κύρια θεατρική σεζόν ξεκινά τον Οκτώβριο και ολοκληρώνεται τον Μάιο. Κατά τους θερινούς μήνες λειτουργούν θερινές σκηνές και ανοιχτά θέατρα, ενώ το Φεστιβάλ Αθηνών Επιδαύρου (Ιούνιος-Αύγουστος) φέρνει διεθνείς παραγωγές στο Ηρώδειο.",
+          "questionEn": "What makes Athens a distinctive city for theater?",
+          "answerEn": "Athens invented Western theater. When you see Sophocles performed at Epidaurus — the same theater where his plays premiered 2,400 years ago — the connection to the original material is direct and physical in a way no other city can offer. Beyond the ancient connection, the modern Athens theater scene runs 300+ productions per season across 100+ stages, making it one of the most theater-dense cities in Europe per capita. Independent companies in Metaxourgeio, Psyrri, and Exarchia produce experimental work alongside the national companies."
         },
         {
           "questionEl": "Τι να φορέσω στο θέατρο στην Αθήνα;",
-          "answerEl": "Ο κώδικας ενδυμασίας εξαρτάται από τον χώρο. Στο Μέγαρο Μουσικής και το Ηρώδειο επιλέξτε smart casual ή επίσημο ντύσιμο. Σε μικρές σκηνές στα Εξάρχεια ή τον Κεραμεικό αρκεί casual ντύσιμο. Για ανοιχτά θέατρα το καλοκαίρι, πάρτε ένα ελαφρύ μπουφάν."
+          "answerEl": "Ο κώδικας ενδυμασίας εξαρτάται από τον χώρο. Στο Μέγαρο Μουσικής και το Ηρώδειο επιλέξτε smart casual ή επίσημο ντύσιμο. Σε μικρές σκηνές στα Εξάρχεια ή τον Κεραμεικό αρκεί casual ντύσιμο. Για ανοιχτά θέατρα το καλοκαίρι, πάρτε ένα ελαφρύ μπουφάν.",
+          "questionEn": "What time do theater performances start in Athens, and how do I get there?",
+          "answerEn": "Evening performances typically start at 20:30–21:00. The Onassis Stegi in Neos Kosmos is accessible via the Syngrou-Fix metro station. The National Theatre near Omonoia Square is served by the Omonoia metro stop. For Epidaurus, organized buses depart from central Athens (usually arranged through the festival or travel agencies). Arriving 20–30 minutes early is enough for most venues. Theater dress code in Athens is smart-casual — Athenians dress up for Megaron Mousikis and the Odeon of Herodes Atticus, but smaller venues are relaxed."
         }
-      ]
+      ],
+      "answerCapsuleEn": "Athens, Greece has one of Europe’s most active theater scenes, with over 100 stages running year-round — from contemporary Greek drama in Psyrri to ancient tragedy at the Odeon of Herodes Atticus. This guide covers current theater shows across the city, with dates, venues, prices, and notes on language accessibility for English speakers."
     },
     {
       "slug": "nightlife",
       "titleEl": "Νυχτερινή Ζωή στην Αθήνα",
       "titleEn": "Nightlife in Athens",
-      "filter": { "type": "event_types", "values": ["dj_set"] },
+      "filter": {
+        "type": "event_types",
+        "values": [
+          "dj_set"
+        ]
+      },
       "answerCapsuleEl": "Η νυχτερινή ζωή της Αθήνας εκτείνεται από το Γκάζι και τον Κεραμεικό ως τα Εξάρχεια και το Κολωνάκι. DJ sets, ηλεκτρονική μουσική και club nights σε χώρους που ανοίγουν μετά τα μεσάνυχτα. Βρείτε βραδινές εκδηλώσεις, cover charges και ώρες λειτουργίας.",
       "faqs": [
         {
           "questionEl": "Ποιες είναι οι καλύτερες γειτονιές για νυχτερινή ζωή στην Αθήνα;",
-          "answerEl": "Το Γκάζι και ο Κεραμεικός συγκεντρώνουν τα περισσότερα clubs με ηλεκτρονική μουσική και DJ sets. Τα Εξάρχεια προσφέρουν underground μπαρ και εναλλακτικές βραδιές. Το Κολωνάκι έχει πιο upscale επιλογές, ενώ η Ψυρρή και ο Κεραμεικός συνδυάζουν μπαρ και μικρά clubs."
+          "answerEl": "Το Γκάζι και ο Κεραμεικός συγκεντρώνουν τα περισσότερα clubs με ηλεκτρονική μουσική και DJ sets. Τα Εξάρχεια προσφέρουν underground μπαρ και εναλλακτικές βραδιές. Το Κολωνάκι έχει πιο upscale επιλογές, ενώ η Ψυρρή και ο Κεραμεικός συνδυάζουν μπαρ και μικρά clubs.",
+          "questionEn": "What are the best neighborhoods for nightlife in Athens, Greece?",
+          "answerEn": "Gazi is the nightlife center of gravity — the densest concentration of clubs in Athens sits south of Pireos Street near the Technopolis complex. Psyrri and Monastiraki have bars and late-night spots packed into narrow streets. Exarchia offers the alternative scene, with live music and underground clubs drawing a younger, politically conscious crowd. Kolonaki is upscale cocktails and wine bars. In summer, the nightlife axis shifts to the Athens Riviera coast — Alimos through Vouliagmeni — where beach clubs operate June through September."
         },
         {
           "questionEl": "Τι ώρα ανοίγουν τα clubs στην Αθήνα;",
-          "answerEl": "Τα περισσότερα clubs στην Αθήνα ανοίγουν μετά τα μεσάνυχτα και κορυφώνονται μεταξύ 01:00-03:00. Πολλά μπαρ με DJ sets ξεκινούν νωρίτερα, γύρω στις 22:00-23:00. Τα Σαββατοκύριακα τα clubs παραμένουν ανοιχτά μέχρι τις πρωινές ώρες."
+          "answerEl": "Τα περισσότερα clubs στην Αθήνα ανοίγουν μετά τα μεσάνυχτα και κορυφώνονται μεταξύ 01:00-03:00. Πολλά μπαρ με DJ sets ξεκινούν νωρίτερα, γύρω στις 22:00-23:00. Τα Σαββατοκύριακα τα clubs παραμένουν ανοιχτά μέχρι τις πρωινές ώρες.",
+          "questionEn": "What time does nightlife start in Athens?",
+          "answerEn": "Later than you think. Bars fill around 23:00. Clubs don’t get going until 01:00–02:00, and many peak at 03:00–04:00. This is standard, not exceptional — don’t arrive at a club before midnight or you’ll be alone. Pre-going-out drinks at a bar from 22:00–00:00 is normal. Bouzouki and rebetiko nights start earlier (around 22:00–23:00) and can run until 04:00–05:00. Sunday afternoon rebetiko matinees at traditional venues start at 13:00."
         },
         {
           "questionEl": "Υπάρχει κώδικας ενδυμασίας στα clubs της Αθήνας;",
-          "answerEl": "Η Αθήνα είναι γενικά χαλαρή σε dress code σε σχέση με άλλες ευρωπαϊκές πρωτεύουσες. Τα περισσότερα clubs δεν έχουν αυστηρό κώδικα ενδυμασίας, αλλά αποφύγετε αθλητικά παπούτσια και βερμούδες στα πιο upscale μαγαζιά του Κολωνακίου."
+          "answerEl": "Η Αθήνα είναι γενικά χαλαρή σε dress code σε σχέση με άλλες ευρωπαϊκές πρωτεύουσες. Τα περισσότερα clubs δεν έχουν αυστηρό κώδικα ενδυμασίας, αλλά αποφύγετε αθλητικά παπούτσια και βερμούδες στα πιο upscale μαγαζιά του Κολωνακίου.",
+          "questionEn": "How much does a night out cost in Athens?",
+          "answerEn": "Athens nightlife is significantly cheaper than Western European capitals. Club entry runs €8–15, sometimes including a drink. Cocktails at mid-range bars cost €8–12. Beer at most bars is €5–7. Bouzouki venues charge €10–15 entry with a minimum drink spend. A full night out — dinner, several bars, and a club — typically costs €40–60 per person. The Riviera beach clubs in summer are the expensive exception, with reserved table minimums that can reach €100+."
         },
         {
           "questionEl": "Ποια DJ events γίνονται στην Αθήνα;",
-          "answerEl": "Η Αθήνα φιλοξενεί τακτικά DJ sets και ηλεκτρονική μουσική σε χώρους όπως το Romantso στα Εξάρχεια, clubs στον Κεραμεικό και εποχιακά open-air events. Resident Advisor και Clubber.gr είναι οι καλύτερες πηγές για πρόγραμμα DJ nights."
+          "answerEl": "Η Αθήνα φιλοξενεί τακτικά DJ sets και ηλεκτρονική μουσική σε χώρους όπως το Romantso στα Εξάρχεια, clubs στον Κεραμεικό και εποχιακά open-air events. Resident Advisor και Clubber.gr είναι οι καλύτερες πηγές για πρόγραμμα DJ nights.",
+          "questionEn": "Is Athens safe for nightlife?",
+          "answerEn": "Central Athens is generally safe for nightlife. The main nightlife neighborhoods — Gazi, Psyrri, Monastiraki, Kolonaki — are busy and well-lit until the early hours. Exarchia has a rougher reputation but is safe for nightlife visitors; just be aware of the political character of the neighborhood. Standard big-city precautions apply: watch your belongings in crowded areas, use licensed taxis or ride apps, and stick to populated streets when walking home. The LGBTQ+ nightlife scene centers on Gazi, with Sodade2 (open since 2000) as the longest-running venue."
         }
-      ]
+      ],
+      "answerCapsuleEn": "Athens nightlife runs until sunrise, every night of the week. From underground techno clubs in Gazi and rooftop cocktail bars in Kolonaki to live rebetiko in Psyrri and bouzouki nights on the coast — this guide covers the clubs, bars, and late-night venues across Athens, Greece, with honest recommendations, door policies, and the timing you actually need."
     },
     {
       "slug": "festivals",
       "titleEl": "Φεστιβάλ στην Αθήνα",
       "titleEn": "Festivals in Athens",
-      "filter": { "type": "event_type", "value": "festival" },
+      "filter": {
+        "type": "event_type",
+        "value": "festival"
+      },
       "answerCapsuleEl": "Η Αθήνα φιλοξενεί φεστιβάλ καθ' όλη τη διάρκεια του χρόνου — από το Φεστιβάλ Αθηνών Επιδαύρου κάθε καλοκαίρι ως φεστιβάλ μουσικής, τέχνης και γαστρονομίας σε χώρους σε όλη την Αττική. Βρείτε ημερομηνίες, τοποθεσίες και πληροφορίες εισιτηρίων.",
       "faqs": [
         {
           "questionEl": "Ποια είναι τα κύρια φεστιβάλ της Αθήνας;",
-          "answerEl": "Το Φεστιβάλ Αθηνών Επιδαύρου (Ιούνιος-Αύγουστος) είναι το μεγαλύτερο, με παραστάσεις στο Ηρώδειο και την Πειραιώς 260. Ακολουθούν το Athens Technopolis Jazz Festival, τα Release Athens και Ejekt Festival για μουσική, και εκθέσεις σύγχρονης τέχνης στη Στέγη Ωνάση."
+          "answerEl": "Το Φεστιβάλ Αθηνών Επιδαύρου (Ιούνιος-Αύγουστος) είναι το μεγαλύτερο, με παραστάσεις στο Ηρώδειο και την Πειραιώς 260. Ακολουθούν το Athens Technopolis Jazz Festival, τα Release Athens και Ejekt Festival για μουσική, και εκθέσεις σύγχρονης τέχνης στη Στέγη Ωνάση.",
+          "questionEn": "What are the biggest cultural festivals in Athens, Greece?",
+          "answerEn": "The Athens Epidaurus Festival (June–August) is the flagship — 93 productions, over 2,500 artists, 85 days of theater, music, and dance at the Odeon of Herodes Atticus and the ancient theater of Epidaurus. Other major events include the Athens Rebetiko Festival (October), This Is Athens City Festival (May, 250+ events citywide), Death Disco Indoor Festival at Fuzz (November–December), and the Technopolis Jazz Festival in Gazi. The city also hosts international film festivals, photography festivals, and independent art events throughout the year."
         },
         {
           "questionEl": "Γίνονται φεστιβάλ σε ανοιχτούς χώρους στην Αθήνα;",
-          "answerEl": "Ναι, πολλά φεστιβάλ γίνονται σε ανοιχτούς χώρους, ιδιαίτερα τους καλοκαιρινούς μήνες. Η Τεχνόπολη στο Γκάζι, το Ηρώδειο, η Πλατεία Κοτζιά και πάρκα σε όλη την Αθήνα φιλοξενούν φεστιβάλ μουσικής, τέχνης και γαστρονομίας από Μάιο ως Οκτώβριο."
+          "answerEl": "Ναι, πολλά φεστιβάλ γίνονται σε ανοιχτούς χώρους, ιδιαίτερα τους καλοκαιρινούς μήνες. Η Τεχνόπολη στο Γκάζι, το Ηρώδειο, η Πλατεία Κοτζιά και πάρκα σε όλη την Αθήνα φιλοξενούν φεστιβάλ μουσικής, τέχνης και γαστρονομίας από Μάιο ως Οκτώβριο.",
+          "questionEn": "When should I visit Athens for festivals?",
+          "answerEn": "The highest concentration of festivals falls between May and August. May brings the This Is Athens City Festival with over 250 events, many of them open entry. June through August is the Athens Epidaurus Festival season, which dominates the cultural calendar. October is strong for music festivals, including the Athens Rebetiko Festival. November and December bring indoor music festivals as the winter season opens. There is no dead month for festivals in Athens — even January has gallery events and film screenings."
         },
         {
           "questionEl": "Πρέπει να κλείσω εισιτήρια εκ των προτέρων για φεστιβάλ;",
-          "answerEl": "Ναι, ιδιαίτερα για μεγάλα φεστιβάλ όπως το Φεστιβάλ Αθηνών Επιδαύρου και τα Release Athens. Τα εισιτήρια κυκλοφορούν μήνες πριν και εξαντλούνται γρήγορα. Μικρότερα φεστιβάλ τέχνης και γαστρονομίας συχνά έχουν ελεύθερη είσοδο ή εισιτήρια στην πόρτα."
+          "answerEl": "Ναι, ιδιαίτερα για μεγάλα φεστιβάλ όπως το Φεστιβάλ Αθηνών Επιδαύρου και τα Release Athens. Τα εισιτήρια κυκλοφορούν μήνες πριν και εξαντλούνται γρήγορα. Μικρότερα φεστιβάλ τέχνης και γαστρονομίας συχνά έχουν ελεύθερη είσοδο ή εισιτήρια στην πόρτα.",
+          "questionEn": "How do I get tickets for festivals in Athens, Greece?",
+          "answerEn": "Each festival has its own ticketing system. The Athens Epidaurus Festival sells through aefestival.gr — book Epidaurus weekend shows and Herodes Atticus headliners early, as they sell out weeks in advance. Most other festival tickets are available on more.com (formerly viva.gr). The This Is Athens City Festival in May is largely open entry. For electronic music events, Resident Advisor handles international-facing lineups. Check individual festival listings for booking links and pricing."
         },
         {
           "questionEl": "Πώς φτάνω στους χώρους φεστιβάλ;",
-          "answerEl": "Οι κύριοι χώροι φεστιβάλ είναι προσβάσιμοι με μέσα μαζικής μεταφοράς. Η Τεχνόπολη είναι δίπλα στο μετρό Κεραμεικού, το Ηρώδειο στο σταθμό Ακρόπολη, και η Πειραιώς 260 κοντά στον σταθμό Ταύρο. Για φεστιβάλ εκτός κέντρου ελέγξτε αν υπάρχουν shuttle buses."
+          "answerEl": "Οι κύριοι χώροι φεστιβάλ είναι προσβάσιμοι με μέσα μαζικής μεταφοράς. Η Τεχνόπολη είναι δίπλα στο μετρό Κεραμεικού, το Ηρώδειο στο σταθμό Ακρόπολη, και η Πειραιώς 260 κοντά στον σταθμό Ταύρο. Για φεστιβάλ εκτός κέντρου ελέγξτε αν υπάρχουν shuttle buses.",
+          "questionEn": "Are Athens festivals suitable for tourists who don’t speak Greek?",
+          "answerEn": "Yes. Most major festivals program international content or provide accessibility for non-Greek speakers. The Athens Epidaurus Festival has featured English surtitles for ancient drama performances at Epidaurus. Music festivals need no translation. The This Is Athens City Festival deliberately programs English-accessible events across the city. Film festivals screen in original language with Greek subtitles. Festival websites increasingly publish English-language programs and schedules. The language barrier for festival attendance in Athens is minimal."
         }
-      ]
+      ],
+      "answerCapsuleEn": "Athens, Greece hosts major cultural festivals year-round — from the Athens Epidaurus Festival at the Odeon of Herodes Atticus every summer to the Athens Rebetiko Festival in October and electronic music events at Technopolis in Gazi. This guide covers every festival in the Greek capital with dates, lineups, venues, and practical booking advice."
     },
     {
       "slug": "kids",
       "titleEl": "Εκδηλώσεις για Παιδιά στην Αθήνα",
       "titleEn": "Kids Events in Athens",
-      "filter": { "type": "tag", "values": ["Child-friendly", "Children", "Families", "Family-friendly", "Baby-friendly"] },
+      "filter": {
+        "type": "tag",
+        "values": [
+          "Child-friendly",
+          "Children",
+          "Families",
+          "Family-friendly",
+          "Baby-friendly"
+        ]
+      },
       "answerCapsuleEl": "Η Αθήνα προσφέρει εκδηλώσεις για παιδιά και οικογένειες — κουκλοθέατρο, εργαστήρια σε μουσεία, παιδικές παραστάσεις σε θέατρα του κέντρου και δραστηριότητες σε ανοιχτούς χώρους. Βρείτε ηλικιακές συστάσεις, ώρες και πληροφορίες πρόσβασης.",
       "faqs": [
         {
           "questionEl": "Τι εκδηλώσεις υπάρχουν για παιδιά στην Αθήνα;",
-          "answerEl": "Η Αθήνα προσφέρει κουκλοθέατρο, παιδικές θεατρικές παραστάσεις, εκπαιδευτικά εργαστήρια σε μουσεία, δημιουργικά workshops τέχνης και δραστηριότητες σε ανοιχτούς χώρους. Το Μουσείο Ακρόπολης, το ΕΜΣΤ και η Στέγη Ωνάση έχουν τακτικά παιδικά προγράμματα."
+          "answerEl": "Η Αθήνα προσφέρει κουκλοθέατρο, παιδικές θεατρικές παραστάσεις, εκπαιδευτικά εργαστήρια σε μουσεία, δημιουργικά workshops τέχνης και δραστηριότητες σε ανοιχτούς χώρους. Το Μουσείο Ακρόπολης, το ΕΜΣΤ και η Στέγη Ωνάση έχουν τακτικά παιδικά προγράμματα.",
+          "questionEn": "What are the best things to do with kids in Athens, Greece?",
+          "answerEn": "The SNFCC (Stavros Niarchos Foundation Cultural Center) in Neos Kosmos is the standout for families — 3.2 million annual visits, extensive open entry programming, outdoor play areas, and a canal for activities. The Acropolis Museum offers family backpacks with activities for children, and entry is open for EU children under 25 and non-EU children under 18. Technopolis in Gazi hosts family workshops. Children’s theater runs across multiple venues from October through May. Check our listings for today’s family events with age suitability filters."
         },
         {
           "questionEl": "Για ποιες ηλικίες είναι κατάλληλες οι παιδικές εκδηλώσεις;",
-          "answerEl": "Οι εκδηλώσεις καλύπτουν ηλικίες από 2 ετών και πάνω. Κουκλοθέατρο και μουσικά παραμύθια για 2-6 ετών, εκπαιδευτικά εργαστήρια για 6-12, και θεατρικές παραστάσεις για μεγαλύτερα παιδιά. Κάθε εκδήλωση αναφέρει τη συνιστώμενη ηλικία στη σελίδα της."
+          "answerEl": "Οι εκδηλώσεις καλύπτουν ηλικίες από 2 ετών και πάνω. Κουκλοθέατρο και μουσικά παραμύθια για 2-6 ετών, εκπαιδευτικά εργαστήρια για 6-12, και θεατρικές παραστάσεις για μεγαλύτερα παιδιά. Κάθε εκδήλωση αναφέρει τη συνιστώμενη ηλικία στη σελίδα της.",
+          "questionEn": "Can I take a stroller to the Acropolis and Acropolis Museum?",
+          "answerEn": "The Acropolis Museum is fully stroller-accessible and even provides strollers to borrow at no charge — ask at the entrance. The Acropolis Hill itself is a different story: paths are steep, uneven marble, and not practical for strollers. If you’re visiting the Hill with very young children, a baby carrier works better. The pedestrian zone around the Acropolis — through Thiseio and Plaka — is flat and stroller-friendly, with cafés and rest stops along the way."
         },
         {
           "questionEl": "Ποιες γειτονιές είναι φιλικές για οικογένειες στην Αθήνα;",
-          "answerEl": "Η Πλάκα, το Θησείο και ο Εθνικός Κήπος είναι ιδανικά για οικογένειες, με πεζοδρόμους και παιδικές χαρές. Το Κολωνάκι και η Κηφισιά έχουν πολλούς χώρους με παιδικές εκδηλώσεις. Η περιοχή γύρω από το Μουσείο Ακρόπολης προσφέρει εκπαιδευτικές δραστηριότητες."
+          "answerEl": "Η Πλάκα, το Θησείο και ο Εθνικός Κήπος είναι ιδανικά για οικογένειες, με πεζοδρόμους και παιδικές χαρές. Το Κολωνάκι και η Κηφισιά έχουν πολλούς χώρους με παιδικές εκδηλώσεις. Η περιοχή γύρω από το Μουσείο Ακρόπολης προσφέρει εκπαιδευτικές δραστηριότητες.",
+          "questionEn": "Are Athens museums and archaeological sites open entry for children?",
+          "answerEn": "Yes, with important details. EU citizens and residents under 25 get open entry to all national museums and archaeological sites, including the Acropolis. Non-EU children under 18 also get open entry. The combined Acropolis ticket (valid 5 days, covering 7+ sites) is the best value for adults visiting with older children. National museums are open entry for everyone on the first Sunday of each month from November through March, and on select national holidays. Always carry ID or passport for age verification."
         },
         {
           "questionEl": "Υπάρχουν παιδικές εκδηλώσεις με ελεύθερη είσοδο;",
-          "answerEl": "Ναι, αρκετοί χώροι προσφέρουν παιδικές δραστηριότητες με ελεύθερη είσοδο. Δημοτικές βιβλιοθήκες, ο Εθνικός Κήπος και πολιτιστικοί χώροι φιλοξενούν εκδηλώσεις χωρίς εισιτήριο. Φιλτράρετε τη λίστα για ελεύθερη είσοδο ώστε να βρείτε τις διαθέσιμες επιλογές."
+          "answerEl": "Ναι, αρκετοί χώροι προσφέρουν παιδικές δραστηριότητες με ελεύθερη είσοδο. Δημοτικές βιβλιοθήκες, ο Εθνικός Κήπος και πολιτιστικοί χώροι φιλοξενούν εκδηλώσεις χωρίς εισιτήριο. Φιλτράρετε τη λίστα για ελεύθερη είσοδο ώστε να βρείτε τις διαθέσιμες επιλογές.",
+          "questionEn": "What should families know about event timing and logistics in Athens?",
+          "answerEn": "Family events in Athens generally run at child-friendly hours — matinee theater at 11:00 or 17:00, museum workshops in the morning, SNFCC programming from 10:00 onward. For the Athens Epidaurus Festival at Epidaurus, note that children under 5 are not permitted in the ancient theater. Central Athens is walkable with children — Plaka, Thiseio, and the Acropolis area are largely pedestrianized. The metro is stroller-accessible with elevators at most stations. Pack sun protection in summer — Athens heat from June through August (regularly above 35°C) demands shade breaks and hydration."
         }
-      ]
+      ],
+      "answerCapsuleEn": "Athens, Greece has family-friendly cultural events every week — from interactive exhibitions at the Acropolis Museum and open entry programming at the SNFCC in Neos Kosmos to children’s theater across the city and outdoor events in Thiseio and Plaka. This guide covers kid-friendly events in Athens with age recommendations, stroller access, pricing, and practical tips for parents."
     },
     {
       "slug": "exhibitions",
       "titleEl": "Εκθέσεις στην Αθήνα",
       "titleEn": "Exhibitions in Athens",
-      "filter": { "type": "event_type", "value": "exhibition" },
+      "filter": {
+        "type": "event_type",
+        "value": "exhibition"
+      },
       "answerCapsuleEl": "Η Αθήνα φιλοξενεί εκθέσεις σύγχρονης τέχνης, φωτογραφίας και εικαστικών σε μουσεία και γκαλερί — από το Μουσείο Μπενάκη και το ΕΜΣΤ ως γκαλερί στο Κολωνάκι και τα Εξάρχεια. Βρείτε τρέχουσες εκθέσεις, ωράρια και πληροφορίες εισόδου.",
       "faqs": [
         {
@@ -207,32 +307,51 @@
       "cornerstone": true,
       "titleEl": "Εκδηλώσεις με Ελεύθερη Είσοδο στην Αθήνα",
       "titleEn": "Open Entry Events in Athens",
-      "filter": { "type": "price_type", "value": "open" },
+      "filter": {
+        "type": "price_type",
+        "value": "open"
+      },
       "answerCapsuleEl": "Η Αθήνα προσφέρει πλήθος εκδηλώσεων με ελεύθερη είσοδο — εκθέσεις σε μουσεία και γκαλερί, συναυλίες σε ανοιχτούς χώρους, θεατρικές παραστάσεις σε δημοτικές σκηνές και πολιτιστικές δράσεις χωρίς εισιτήριο σε όλη την πόλη.",
+      "answerCapsuleEn": "Athens, Greece has open entry cultural events every day — from exhibitions at the SNFCC and gallery openings in Kolonaki to outdoor concerts at Technopolis in Gazi and open entry museum days at national archaeological sites. This guide covers all open entry events across Athens with venues, dates, and what to expect, updated daily.",
       "faqs": [
         {
           "questionEl": "Ποιες εκδηλώσεις έχουν ελεύθερη είσοδο στην Αθήνα;",
-          "answerEl": "Πολλές κατηγορίες εκδηλώσεων προσφέρουν ελεύθερη είσοδο στην Αθήνα. Εκθέσεις σε γκαλερί, συναυλίες σε ανοιχτούς χώρους, πολιτιστικές δράσεις σε δημοτικούς χώρους, workshops σε βιβλιοθήκες και μουσεία με ελεύθερη είσοδο κάθε πρώτη Κυριακή. Φιλτράρετε τη λίστα μας για να τις βρείτε."
+          "answerEl": "Πολλές κατηγορίες εκδηλώσεων προσφέρουν ελεύθερη είσοδο στην Αθήνα. Εκθέσεις σε γκαλερί, συναυλίες σε ανοιχτούς χώρους, πολιτιστικές δράσεις σε δημοτικούς χώρους, workshops σε βιβλιοθήκες και μουσεία με ελεύθερη είσοδο κάθε πρώτη Κυριακή. Φιλτράρετε τη λίστα μας για να τις βρείτε.",
+          "questionEn": "What open entry cultural events are available in Athens, Greece?",
+          "answerEn": "Athens has a strong open entry cultural scene. The SNFCC (3.2 million annual visits) runs open entry concerts, screenings, and family events regularly. Gallery openings across Kolonaki, Metaxourgeio, and Psyrri are open entry. Technopolis in Gazi hosts open entry events, especially during festivals. The This Is Athens City Festival in May delivers 250+ events, most of them open entry. Archaeological sites and national museums are open entry on the first Sunday of every month from November through March, and on national holidays including March 25, October 28, and the first Sunday of each month in that period."
         },
         {
           "questionEl": "Πότε τα μουσεία έχουν ελεύθερη είσοδο;",
-          "answerEl": "Τα κρατικά μουσεία προσφέρουν ελεύθερη είσοδο την πρώτη Κυριακή κάθε μήνα από Νοέμβριο ως Μάρτιο, στις 18 Μαΐου (Διεθνής Ημέρα Μουσείων) και σε εθνικές εορτές. Πολλές ιδιωτικές γκαλερί και πολιτιστικοί χώροι έχουν πάντα ελεύθερη είσοδο."
+          "answerEl": "Τα κρατικά μουσεία προσφέρουν ελεύθερη είσοδο την πρώτη Κυριακή κάθε μήνα από Νοέμβριο ως Μάρτιο, στις 18 Μαΐου (Διεθνής Ημέρα Μουσείων) και σε εθνικές εορτές. Πολλές ιδιωτικές γκαλερί και πολιτιστικοί χώροι έχουν πάντα ελεύθερη είσοδο.",
+          "questionEn": "When are Athens museums and the Acropolis open entry?",
+          "answerEn": "National museums and archaeological sites — including the Acropolis, National Archaeological Museum, and Ancient Agora — offer open entry on specific days: the first Sunday of each month from November through March, plus national holidays (March 25, October 28, March 6). EU citizens under 25 and non-EU visitors under 18 always have open entry. The Acropolis Museum is open entry on March 25, October 28, and the first Sunday from November through March. The combined Acropolis ticket (valid 5 days, 7+ sites) is the best deal for adults when standard entry applies."
         },
         {
           "questionEl": "Υπάρχουν συναυλίες με ελεύθερη είσοδο στην Αθήνα;",
-          "answerEl": "Ναι, μικρές μουσικές σκηνές και μπαρ σε Εξάρχεια, Κεραμεικό και Ψυρρή προσφέρουν τακτικά ζωντανή μουσική με ελεύθερη είσοδο. Ρεμπέτικα στέκια συχνά έχουν ελεύθερη είσοδο με ελάχιστη κατανάλωση. Καλοκαιρινά φεστιβάλ σε πλατείες είναι επίσης χωρίς εισιτήριο."
+          "answerEl": "Ναι, μικρές μουσικές σκηνές και μπαρ σε Εξάρχεια, Κεραμεικό και Ψυρρή προσφέρουν τακτικά ζωντανή μουσική με ελεύθερη είσοδο. Ρεμπέτικα στέκια συχνά έχουν ελεύθερη είσοδο με ελάχιστη κατανάλωση. Καλοκαιρινά φεστιβάλ σε πλατείες είναι επίσης χωρίς εισιτήριο.",
+          "questionEn": "Where can I find open entry concerts and performances in Athens?",
+          "answerEn": "The SNFCC in Neos Kosmos is the most consistent source of open entry performances, from classical and jazz to film screenings and dance. Technopolis in Gazi hosts open entry concerts during its festival programs. Many bars and small venues in Exarchia and Psyrri have open entry live music nights — the door charge is replaced by a drink minimum. In summer, open-air cultural events in pedestrian zones, squares, and parks multiply across the city. Church concerts and municipal cultural events are typically open entry year-round."
         },
         {
           "questionEl": "Ποιες πολιτιστικές δράσεις γίνονται χωρίς εισιτήριο;",
-          "answerEl": "Πολιτιστικές δράσεις χωρίς εισιτήριο περιλαμβάνουν εγκαίνια εκθέσεων σε γκαλερί, υπαίθρια σινεμά σε πλατείες κατά τη θερινή περίοδο, εκδηλώσεις του Δήμου Αθηναίων, δράσεις σε πολιτιστικά κέντρα και θεατρικά δρώμενα σε δημόσιους χώρους."
+          "answerEl": "Πολιτιστικές δράσεις χωρίς εισιτήριο περιλαμβάνουν εγκαίνια εκθέσεων σε γκαλερί, υπαίθρια σινεμά σε πλατείες κατά τη θερινή περίοδο, εκδηλώσεις του Δήμου Αθηναίων, δράσεις σε πολιτιστικά κέντρα και θεατρικά δρώμενα σε δημόσιους χώρους.",
+          "questionEn": "Is it possible to experience Athens, Greece on a tight budget?",
+          "answerEn": "Absolutely. Athens is one of Europe’s most affordable capital cities for culture. Beyond open entry museum days and SNFCC programming, the city offers open entry archaeological sites (the Ancient Agora and Kerameikos site have open entry days), pedestrian-zone strolling through Plaka and Thiseio with Acropolis views, gallery-hopping in Kolonaki and Metaxourgeio, and open-air cinema tickets from €6–8 in summer. Even paid events are affordable — concert tickets from €10, theater from €12, club entry from €8. A full cultural day in Athens can cost under €20."
         }
-      ]
+      ],
+      "seasonalNarrativeEn": "<p>Spring is one of the best seasons for open entry culture in Athens. The overlap of indoor and outdoor programming means more open entry options than any other time of year — galleries that have been running exhibitions all winter are joined by the first outdoor concerts, park events, and public space programming.</p><p>The SNFCC leads the open entry scene year-round, but its spring calendar expands significantly: outdoor concerts on the esplanade, family programming in the park, film screenings as the evenings warm up. Technopolis in Gazi starts hosting open entry events more frequently as the weather allows outdoor use of its industrial courtyards.</p><p>March through May also brings the first Sunday open entry days at national museums and archaeological sites (November–March schedule). If you’re visiting Athens in March, plan a first-Sunday visit to the Acropolis, the National Archaeological Museum, or the Ancient Agora — without the entry fee and without the summer crowds. The combined effect is significant: you can spend an entire day moving between world-class archaeological sites and museums without paying a euro in admission.</p><p>May is the open entry peak: the This Is Athens City Festival delivers 250+ events across the entire city, the vast majority open entry. Concerts in squares, gallery walks, theater in unexpected spaces, food events, and cultural programming in neighborhoods you might not otherwise visit. It’s the single best month for budget-conscious cultural visitors.</p><p>Check this page daily — open entry events are added as venues confirm their schedules, and many spring events are announced only days in advance.</p>"
     },
     {
       "slug": "cinema",
       "titleEl": "Κινηματογράφος στην Αθήνα",
       "titleEn": "Cinema in Athens",
-      "filter": { "type": "event_types", "values": ["cinema", "screening"] },
+      "filter": {
+        "type": "event_types",
+        "values": [
+          "cinema",
+          "screening"
+        ]
+      },
       "answerCapsuleEl": "Η Αθήνα προσφέρει κινηματογραφικές προβολές σε κλειστές και θερινές αίθουσες — πρεμιέρες, ντοκιμαντέρ, αφιερώματα και κινηματογραφικά φεστιβάλ σε χώρους σε όλη την πόλη. Βρείτε πρόγραμμα, ώρες προβολής και πληροφορίες εισιτηρίων.",
       "faqs": [
         {
@@ -257,7 +376,16 @@
       "slug": "dance",
       "titleEl": "Χορός στην Αθήνα",
       "titleEn": "Dance in Athens",
-      "filter": { "type": "tag", "values": ["Dance", "Contemporary dance", "Ballet", "Tango", "Flamenco"] },
+      "filter": {
+        "type": "tag",
+        "values": [
+          "Dance",
+          "Contemporary dance",
+          "Ballet",
+          "Tango",
+          "Flamenco"
+        ]
+      },
       "answerCapsuleEl": "Η Αθήνα φιλοξενεί παραστάσεις χορού από σύγχρονο χορό και μπαλέτο ως tango και flamenco. Σκηνές όπως η Στέγη Ωνάση, το Μέγαρο Μουσικής και ανεξάρτητοι χώροι παρουσιάζουν ελληνικές και διεθνείς παραγωγές.",
       "faqs": [
         {
@@ -282,7 +410,16 @@
       "slug": "classical-music",
       "titleEl": "Κλασική Μουσική στην Αθήνα",
       "titleEn": "Classical Music in Athens",
-      "filter": { "type": "tag", "values": ["Classical", "Classical music", "Orchestra", "Chamber music", "Opera"] },
+      "filter": {
+        "type": "tag",
+        "values": [
+          "Classical",
+          "Classical music",
+          "Orchestra",
+          "Chamber music",
+          "Opera"
+        ]
+      },
       "answerCapsuleEl": "Η Αθήνα προσφέρει πλούσιο πρόγραμμα κλασικής μουσικής — ορχηστρικές συναυλίες στο Μέγαρο Μουσικής, ρεσιτάλ σε ιστορικά κτίρια, μουσική δωματίου σε γκαλερί και όπερα στην Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ.",
       "faqs": [
         {
@@ -308,24 +445,36 @@
       "cornerstone": true,
       "titleEl": "Εκδηλώσεις Αυτόν τον Μήνα στην Αθήνα",
       "titleEn": "Events This Month in Athens",
-      "filter": { "type": "date", "value": "this-month" },
+      "filter": {
+        "type": "date",
+        "value": "this-month"
+      },
       "answerCapsuleEl": "Δείτε όλες τις εκδηλώσεις που γίνονται αυτόν τον μήνα στην Αθήνα — συναυλίες, εκθέσεις, θέατρο, φεστιβάλ, σινεμά και πολιτιστικές δράσεις. Σχεδιάστε τον μήνα σας με πλήρες πρόγραμμα εκδηλώσεων.",
+      "answerCapsuleEn": "See all events happening this month in Athens — concerts, exhibitions, theater, festivals, cinema and cultural activities. Plan your month with a complete events schedule.",
       "faqs": [
         {
           "questionEl": "Τι εκδηλώσεις γίνονται αυτόν τον μήνα στην Αθήνα;",
-          "answerEl": "Αυτόν τον μήνα στην Αθήνα θα βρείτε δεκάδες εκδηλώσεις — ζωντανές συναυλίες, θεατρικές παραστάσεις, εκθέσεις σύγχρονης τέχνης, DJ nights, κινηματογραφικές προβολές και εργαστήρια. Το πρόγραμμα ενημερώνεται καθημερινά με νέες εκδηλώσεις καθώς ανακοινώνονται."
+          "answerEl": "Αυτόν τον μήνα στην Αθήνα θα βρείτε δεκάδες εκδηλώσεις — ζωντανές συναυλίες, θεατρικές παραστάσεις, εκθέσεις σύγχρονης τέχνης, DJ nights, κινηματογραφικές προβολές και εργαστήρια. Το πρόγραμμα ενημερώνεται καθημερινά με νέες εκδηλώσεις καθώς ανακοινώνονται.",
+          "questionEn": "What events are happening this month in Athens?",
+          "answerEn": "This month in Athens you'll find dozens of events — live concerts, theater performances, contemporary art exhibitions, DJ nights, film screenings and workshops. The schedule is updated daily as new events are announced."
         },
         {
           "questionEl": "Πώς μπορώ να σχεδιάσω τις βραδιές μου για τον μήνα;",
-          "answerEl": "Χρησιμοποιήστε τη μηνιαία λίστα εκδηλώσεων για να δείτε τι γίνεται κάθε ημέρα. Φιλτράρετε κατά κατηγορία (συναυλίες, θέατρο, εκθέσεις) ή τιμή (ελεύθερη είσοδο ή με εισιτήριο) για να βρείτε τι σας ταιριάζει. Κλείστε εισιτήρια νωρίς για δημοφιλείς παραστάσεις."
+          "answerEl": "Χρησιμοποιήστε τη μηνιαία λίστα εκδηλώσεων για να δείτε τι γίνεται κάθε ημέρα. Φιλτράρετε κατά κατηγορία (συναυλίες, θέατρο, εκθέσεις) ή τιμή (ελεύθερη είσοδο ή με εισιτήριο) για να βρείτε τι σας ταιριάζει. Κλείστε εισιτήρια νωρίς για δημοφιλείς παραστάσεις.",
+          "questionEn": "How can I plan my evenings for the month?",
+          "answerEn": "Use the monthly events list to see what's on each day. Filter by category (concerts, theater, exhibitions) or price (open entry or ticketed) to find what suits you. Book tickets early for popular shows."
         },
         {
           "questionEl": "Ποιες εκθέσεις τρέχουν αυτόν τον μήνα;",
-          "answerEl": "Οι εκθέσεις στην Αθήνα τρέχουν συνήθως για εβδομάδες ή μήνες. Στη μηνιαία λίστα θα βρείτε τρέχουσες εκθέσεις σε μουσεία όπως το Μπενάκη, το ΕΜΣΤ και τη Στέγη Ωνάση, καθώς και σε γκαλερί σε Κολωνάκι, Εξάρχεια και Μεταξουργείο."
+          "answerEl": "Οι εκθέσεις στην Αθήνα τρέχουν συνήθως για εβδομάδες ή μήνες. Στη μηνιαία λίστα θα βρείτε τρέχουσες εκθέσεις σε μουσεία όπως το Μπενάκη, το ΕΜΣΤ και τη Στέγη Ωνάση, καθώς και σε γκαλερί σε Κολωνάκι, Εξάρχεια και Μεταξουργείο.",
+          "questionEn": "What exhibitions are running this month?",
+          "answerEn": "Exhibitions in Athens typically run for weeks or months. In the monthly list you'll find current exhibitions at museums like Benaki, EMST and Onassis Stegi, as well as galleries in Kolonaki, Exarchia and Metaxourgio."
         },
         {
           "questionEl": "Γίνονται φεστιβάλ αυτόν τον μήνα στην Αθήνα;",
-          "answerEl": "Η Αθήνα φιλοξενεί πολιτιστικά φεστιβάλ καθ' όλη τη διάρκεια του χρόνου. Ελέγξτε τη μηνιαία λίστα για τρέχοντα φεστιβάλ μουσικής, τέχνης, κινηματογράφου και γαστρονομίας. Τα μεγάλα φεστιβάλ ανακοινώνουν πρόγραμμα εβδομάδες νωρίτερα."
+          "answerEl": "Η Αθήνα φιλοξενεί πολιτιστικά φεστιβάλ καθ' όλη τη διάρκεια του χρόνου. Ελέγξτε τη μηνιαία λίστα για τρέχοντα φεστιβάλ μουσικής, τέχνης, κινηματογράφου και γαστρονομίας. Τα μεγάλα φεστιβάλ ανακοινώνουν πρόγραμμα εβδομάδες νωρίτερα.",
+          "questionEn": "Are there festivals this month in Athens?",
+          "answerEn": "Athens hosts cultural festivals throughout the year. Check the monthly list for current music, art, film and food festivals. Major festivals announce their programs weeks in advance."
         }
       ]
     },
@@ -333,7 +482,10 @@
       "slug": "with-ticket",
       "titleEl": "Εκδηλώσεις με Εισιτήριο στην Αθήνα",
       "titleEn": "Ticketed Events in Athens",
-      "filter": { "type": "price_type", "value": "with-ticket" },
+      "filter": {
+        "type": "price_type",
+        "value": "with-ticket"
+      },
       "answerCapsuleEl": "Βρείτε εκδηλώσεις με εισιτήριο στην Αθήνα — συναυλίες, θεατρικές παραστάσεις, φεστιβάλ, κλασική μουσική και παραστάσεις χορού. Τιμές εισιτηρίων, σύνδεσμοι αγοράς και πληροφορίες χώρων σε ένα μέρος.",
       "faqs": [
         {
@@ -358,7 +510,15 @@
       "slug": "comedy",
       "titleEl": "Κωμωδία και Stand-up στην Αθήνα",
       "titleEn": "Comedy and Stand-up in Athens",
-      "filter": { "type": "tag", "values": ["Comedy", "Stand-up", "Standup", "Stand up"] },
+      "filter": {
+        "type": "tag",
+        "values": [
+          "Comedy",
+          "Stand-up",
+          "Standup",
+          "Stand up"
+        ]
+      },
       "answerCapsuleEl": "Η αθηναϊκή σκηνή κωμωδίας περιλαμβάνει stand-up comedy, θεατρική κωμωδία και improv σε σκηνές από τα Εξάρχεια ως τον Κεραμεικό. Βρείτε παραστάσεις, ώρες, χώρους και τιμές εισιτηρίων.",
       "faqs": [
         {
@@ -383,7 +543,18 @@
       "slug": "greek-music",
       "titleEl": "Ελληνική Μουσική στην Αθήνα",
       "titleEn": "Greek Music in Athens",
-      "filter": { "type": "tag", "values": ["Rebetiko", "Greek music", "Laiko", "Entechno", "Rembetiko", "Greek folk", "Dimotika"] },
+      "filter": {
+        "type": "tag",
+        "values": [
+          "Rebetiko",
+          "Greek music",
+          "Laiko",
+          "Entechno",
+          "Rembetiko",
+          "Greek folk",
+          "Dimotika"
+        ]
+      },
       "answerCapsuleEl": "Ζήστε την ελληνική μουσική παράδοση στην Αθήνα — ρεμπέτικα στέκια στην Πλάκα και τα Εξάρχεια, λαϊκά και έντεχνα σε μουσικές σκηνές, δημοτική μουσική σε ταβέρνες. Βρείτε χώρους, ημερομηνίες και πληροφορίες εισιτηρίων.",
       "faqs": [
         {

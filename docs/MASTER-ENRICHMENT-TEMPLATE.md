@@ -1,7 +1,7 @@
 # agent-athens: Master Enrichment Template
 ## Premium Event Descriptions for AI Answer Engines
 
-*Version 2.4 — March 2026 (Round 7 Strategic Update)*
+*Version 2.5 — March 2026 (Round 7 + Greek Enrichment Addendum)*
 
 ---
 
@@ -945,3 +945,11 @@ CORNERSTONE PAGES (5 priority hubs):
 → 8+ FAQ entries
 → Monthly refresh
 ```
+
+---
+
+# PART 9: GREEK-LANGUAGE ENRICHMENTS
+
+Greek enrichments are not translations — they are standalone editorial content populating the `full_description_gr` database field. When writing Greek descriptions, load the **Greek Enrichment Addendum** (`greek-enrichment-addendum.md`) alongside this template. The addendum provides: Greek citation anchor pattern, Greek word count matrix (×0.85 of English ceilings), Greek banned words list, εσύ/εσείς register rules by event type, venue name script-matching conventions, Greek minimum schema template, Greek show-don't-tell reference table, Greek quality gate checklist, and Greek exemplars by event type.
+
+All voice principles, structural patterns, and citability requirements from this template apply equally to Greek enrichments. The addendum documents what changes between languages — not what stays the same.
