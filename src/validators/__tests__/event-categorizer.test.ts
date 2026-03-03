@@ -108,17 +108,17 @@ describe('categorizeEvent', () => {
     });
   });
 
-  describe('screening events', () => {
-    test('should categorize outdoor cinema as screening', () => {
-      expect(categorizeEvent({ title: 'Outdoor cinema screening' })).toBe('screening');
+  describe('screening events (now categorized as cinema)', () => {
+    test('should categorize outdoor cinema as cinema', () => {
+      expect(categorizeEvent({ title: 'Outdoor cinema screening' })).toBe('cinema');
     });
 
-    test('should categorize Greek screening as screening', () => {
-      expect(categorizeEvent({ title: 'Προβολή ταινίας' })).toBe('screening');
+    test('should categorize Greek screening as cinema', () => {
+      expect(categorizeEvent({ title: 'Προβολή ταινίας' })).toBe('cinema');
     });
 
-    test('should categorize summer cinema as screening', () => {
-      expect(categorizeEvent({ title: 'Θερινό σινεμά Athens' })).toBe('screening');
+    test('should categorize summer cinema as cinema', () => {
+      expect(categorizeEvent({ title: 'Θερινό σινεμά Athens' })).toBe('cinema');
     });
   });
 

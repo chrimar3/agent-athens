@@ -81,7 +81,7 @@ describe('generateEventMetaDescription', () => {
   }
 
   // No LivePrefix for these types
-  const noLivePrefixTypes = ['exhibition', 'cinema', 'theater', 'workshop', 'festival', 'screening', 'tech', 'other'] as const;
+  const noLivePrefixTypes = ['exhibition', 'cinema', 'theater', 'workshop', 'festival', 'tech', 'other'] as const;
   for (const type of noLivePrefixTypes) {
     test(`no "Live " prefix for type: ${type}`, () => {
       const event = makeEvent({ type });

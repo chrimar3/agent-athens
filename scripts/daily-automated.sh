@@ -388,6 +388,25 @@ run_image_cleanup() {
     fi
 }
 
+# Phase 3j: Geocode new venues
+run_geocode() {
+    log_phase "VENUE GEOCODING"
+    log "Geocoding new venues without coordinates..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/geocode-missing-venues.ts --confidence=high"
+        return 0
+    fi
+
+    if bun run scripts/geocode-missing-venues.ts --confidence=high >> "$LOG_FILE" 2>&1; then
+        log "Venue geocoding completed"
+        return 0
+    else
+        log_error "Venue geocoding failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # Phase 4: Generate site
 run_generate() {
     log_phase "SITE GENERATION"
@@ -600,6 +619,9 @@ main() {
 
     # Image download and optimization (non-fatal)
     run_image_download
+
+    # Geocode new venues (non-fatal, high-confidence only)
+    run_geocode
 
     if [[ $failed -eq 0 ]]; then
         run_generate || failed=1

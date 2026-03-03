@@ -106,9 +106,9 @@ function loadKeywordConfig(): KeywordConfig {
       } as Record<EventType, CategoryRules>,
       whole_word_only: [],
       concert_override_keywords: [],
-      schema_org_mapping: {}
+      schema_org_mapping: {} as Record<EventType, string>
     };
-    return keywordConfig;
+    return keywordConfig!;
   }
 }
 
@@ -251,8 +251,8 @@ function categorizeByKeywords(event: EventInput): CategorizationResult | null {
       continue;
     }
 
-    // Special handling: skip exhibition/screening if concert signals present
-    if ((categoryType === 'exhibition' || categoryType === 'screening') && hasConcertSignal) {
+    // Special handling: skip exhibition/cinema if concert signals present
+    if ((categoryType === 'exhibition' || categoryType === 'cinema') && hasConcertSignal) {
       continue;
     }
 

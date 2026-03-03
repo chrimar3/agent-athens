@@ -40,6 +40,15 @@ Pitfalls encountered and how to avoid them.
 | Using external API calls | Cost money unnecessarily | Use `callToolAgent()` which uses Claude Max subscription |
 | No rate limiting | Hit API limits | Always add 2 second delay between AI calls |
 
+## Transit/Logistics (2026-03-03)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| "Gazi-Votanikos" used as station name | Not a real metro station — appeared in 5+ descriptions for Gazi venues | Nearest station is Kerameikos (Line 3). Verify station names against Athens Metro map |
+| Wrong metro line colors in knowledge base | Tavros listed as Blue (actually Green/Line 1), Attiki as Red/Blue (actually Green+Red/Lines 1+2), Omonia as Red/Blue (actually Green+Red/Lines 1+2) | Always verify line-station assignments. See `temp-descriptions/transit-audit-results.md` for correct mappings |
+| Line colors in descriptions violate rule #19 | 82 descriptions contained line color references despite rule #19 ("station name only") | Enforce at knowledge base level. Descriptions should say "Kerameikos metro" not "Kerameikos metro (Blue line)" |
+| Evangelismos used for wrong venues | Megaron nearest is Megaro Moussikis; Half Note nearest is Syngrou-Fix | Don't assume Evangelismos for all central Athens venues — check actual proximity |
+
 ## Venue Matching
 
 | Mistake | What Happened | Correct Approach |
@@ -140,3 +149,5 @@ Pitfalls encountered and how to avoid them.
 | Too broad LIKE queries | `WHERE venue LIKE '%Σωκράτης%'` deleted Athens AND Amfissa venues | Use exact match or verify manually; same venue name can exist in different cities |
 | Same venue name, different cities | "Καφενείο Ο Σωκράτης" exists in both Athens (Χίου 42) AND Amfissa | Always verify addresses; add distinguishing notes in rejected-locations.json |
 | Assuming API module exists | Script imported non-existent `callToolAgent()` from `tool-agent` | Claude Code operates interactively - design scripts to output data, not call APIs |
+| Two separate EventType definitions | `src/types.ts` and `src/enrichment/types.ts` define separate EventType unions. Changes to one don't propagate. | Keep both in sync. Also check `config/categorization-keywords.json` and `config/venue-categories.json` for type references |
+| Non-canonical type names in Record<EventType> | `genre-keywords.ts` used `conference`, `meetup`, etc. as keys — these aren't in EventType union | Always use canonical EventType values. Tech subtypes go under `tech` key |

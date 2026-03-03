@@ -126,6 +126,16 @@ describe('Enrichment Matrix', () => {
       }
     });
 
+    test('all categories have valid en_min < en_max', () => {
+      for (const [category, entry] of Object.entries(ENRICHMENT_MATRIX)) {
+        expect(entry.en_min).toBeLessThan(entry.en_max);
+        expect(entry.en_min).toBeGreaterThan(0);
+        // English targets should be smaller than Greek (more compact language)
+        expect(entry.en_min).toBeLessThanOrEqual(entry.min);
+        expect(entry.en_max).toBeLessThanOrEqual(entry.max);
+      }
+    });
+
     test('all categories have a valid structure', () => {
       const validStructures = ['three-part-block', 'hybrid', 'full-8-section'];
       for (const entry of Object.values(ENRICHMENT_MATRIX)) {

@@ -23,6 +23,7 @@ import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment
 
 const DB_PATH = 'data/events.db';
 const VENUE_INTEL_PATH = 'config/venue-intelligence.md';
+const ENTITY_LOCKING_PATH = 'config/entity-locking.json';
 const EXEMPLARS_DIR = 'exemplars';
 const ANTI_PATTERNS_PATH = 'docs/enrichment-anti-patterns.md';
 const TEMPLATE_PATH = 'docs/MASTER-ENRICHMENT-TEMPLATE.md';
@@ -255,6 +256,32 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
  * Parses ### VenueName headers to find matching sections.
  * Returns null if venue not found, truncated to MAX_VENUE_INTEL_WORDS.
  */
+/**
+ * Load Entity Locking config for English description rules.
+ */
+export function loadEntityLocking(): EntityLockingConfig | null {
+  if (!existsSync(ENTITY_LOCKING_PATH)) return null;
+  try {
+    return JSON.parse(readFileSync(ENTITY_LOCKING_PATH, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+interface EntityLockingConfig {
+  cultural_terms: {
+    music_genres?: string[];
+    instruments?: string[];
+    venue_types?: string[];
+    cultural_concepts?: string[];
+  };
+  formatting_rules?: {
+    dates: string;
+    times: string;
+    currency: string;
+  };
+}
+
 export function lookupVenueIntel(venueName: string | null): string | null {
   if (!venueName) return null;
   if (!existsSync(VENUE_INTEL_PATH)) return null;
@@ -433,6 +460,31 @@ export function buildBrief(
   lines.push(`Read \`${ANTI_PATTERNS_PATH}\` for 10 confirmed mistakes to avoid.`);
   lines.push('');
 
+  // Entity Locking terms for English descriptions
+  lines.push('## Entity Locking (English Descriptions)');
+  lines.push('');
+  lines.push('These terms MUST remain untranslated in English descriptions:');
+  lines.push('');
+  const entityLocking = loadEntityLocking();
+  if (entityLocking) {
+    const ct = entityLocking.cultural_terms;
+    if (ct.music_genres) lines.push(`- **Music genres**: ${ct.music_genres.join(', ')}`);
+    if (ct.instruments) lines.push(`- **Instruments**: ${ct.instruments.join(', ')}`);
+    if (ct.venue_types) lines.push(`- **Venue types**: ${ct.venue_types.join(', ')}`);
+    if (ct.cultural_concepts) lines.push(`- **Cultural concepts**: ${ct.cultural_concepts.join(', ')}`);
+    lines.push('- **Venue names**: Inherit from DB (use Latin transliteration or established English name)');
+    lines.push('- **Neighborhoods**: Inherit from DB (use established transliterations)');
+    if (entityLocking.formatting_rules) {
+      const fr = entityLocking.formatting_rules;
+      lines.push(`- **Date format**: ${fr.dates}`);
+      lines.push(`- **Time format**: ${fr.times}`);
+      lines.push(`- **Currency**: ${fr.currency}`);
+    }
+  } else {
+    lines.push('- Config not found at `config/entity-locking.json` — use common sense for cultural terms');
+  }
+  lines.push('');
+
   // Recent openings dedup section
   if (recentOpenings && recentOpenings.length > 0) {
     const recent = recentOpenings.slice(-15);
@@ -467,9 +519,10 @@ export function buildBrief(
     const category = classifyEvent({ type: event.type, venue_name: event.venue_name, title: event.title });
     const target = getWordTarget({ type: event.type, venue_name: event.venue_name, title: event.title });
     lines.push(`- **Category**: ${category}`);
-    lines.push(`- **Target words**: ${target.min}-${target.max}`);
+    lines.push(`- **Target words (Greek)**: ${target.min}-${target.max}`);
+    lines.push(`- **Target words (English)**: ${target.en_min}-${target.en_max}`);
     lines.push(`- **Structure**: ${target.structure}`);
-    lines.push(`- **HARD CONSTRAINT**: Description MUST be ${target.min}-${target.max} words.`);
+    lines.push(`- **HARD CONSTRAINT**: Greek description MUST be ${target.min}-${target.max} words. English MUST be ${target.en_min}-${target.en_max} words.`);
 
     // Venue intel
     const intel = venueIntel.get(event.venue_name || '');
@@ -519,7 +572,20 @@ export function buildBrief(
   lines.push('   ```bash');
   lines.push(`   bun run scripts/write-tags.ts <event-id> --batch-dir=${batchDir} Tag1 Tag2 Tag3...`);
   lines.push('   ```');
-  lines.push('5. **Save decision** (after completing ALL events in this batch):');
+  lines.push('5. **Write English description**: Write a parallel English version of the description.');
+  lines.push(`   Save to \`${batchDir}/<event-id>.en.md\`. English word target shown per event above.`);
+  lines.push('   ```bash');
+  lines.push(`   bun run scripts/write-description.ts <event-id> --batch-dir=${batchDir} --lang=en "<english description>"`);
+  lines.push('   ```');
+  lines.push('   **Entity Locking rules** (terms that MUST stay untranslated — see below):');
+  lines.push('   - Greek music genres: rebetiko, laiko, entechno, etc. (never "urban folk" or "art song")');
+  lines.push('   - Venue names: use Latin transliteration or established English brand name');
+  lines.push('   - Neighborhoods: Koukaki, Exarchia, Psyrri (never translate)');
+  lines.push('   - Cultural concepts: kefi, meraki, parea, glendi (never translate)');
+  lines.push('   - Dates: DD Month YYYY format. Times: 24h format. Currency: EUR.');
+  lines.push('   - The English version is NOT a translation. Write it fresh for an international audience.');
+  lines.push('   - Same 8-section structure, same factual content, but natural English voice.');
+  lines.push('6. **Save decision** (after completing ALL events in this batch):');
   lines.push('   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:');
   lines.push('   ```bash');
   lines.push(`   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${batchNumber}.manifest.json --session=batch-${batchNumber} --batch=${batchNumber} --clean`);

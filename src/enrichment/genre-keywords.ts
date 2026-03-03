@@ -176,32 +176,38 @@ export const EVENT_TYPE_CONTEXT: Record<EventType, string> = {
   concert:
     'A live musical performance where audiences experience musicians performing in real-time. Concerts offer the energy and spontaneity of live music, often with opportunities to hear new interpretations of known works or premiere performances.',
 
+  dj_set:
+    'A DJ performance or electronic music night featuring curated mixes and live mixing. DJ sets create immersive sonic environments where rhythm and atmosphere build over extended sessions.',
+
   exhibition:
     'A curated display of visual art in a gallery or museum setting. Exhibitions allow viewers to engage with artworks in person, observing details, scale, and spatial relationships that reproductions cannot convey.',
-
-  workshop:
-    'A participatory educational experience where attendees learn through hands-on practice. Workshops emphasize skill development and creative exploration in a supportive group environment, with guidance from experienced facilitators.',
-
-  theater:
-    'A live theatrical performance featuring actors, staging, and dramatic narrative. Theater offers the immediacy of live storytelling, where performers and audiences share the same space and moment, creating a unique communal experience.',
-
-  performance:
-    'A live artistic presentation that may combine elements of theater, dance, music, or multimedia. Performances often explore experimental or interdisciplinary approaches to live art, pushing boundaries of traditional formats.',
 
   cinema:
     'A film screening featuring independent, international, classic, or art house cinema in a dedicated theater environment. Cinema screenings provide communal viewing experiences with professional projection and sound design.',
 
-  conference:
-    'A multi-day professional gathering with keynotes, panels, and networking. Conferences bring together practitioners, researchers, and industry leaders around shared technology or business domains.',
+  theater:
+    'A live theatrical performance featuring actors, staging, and dramatic narrative. Theater offers the immediacy of live storytelling, where performers and audiences share the same space and moment, creating a unique communal experience.',
 
-  meetup:
-    'A community gathering where practitioners share knowledge and connect. Meetups offer talks, demos, and informal networking in a relaxed setting, building local tech community bonds.',
+  festival:
+    'A multi-day or multi-act cultural celebration bringing together diverse performances and activities. Festivals create concentrated cultural experiences with a curated programme spanning multiple venues or stages.',
 
-  hackathon:
-    'An intensive coding event where teams build projects under time pressure. Hackathons combine competition, collaboration, and creativity, often yielding surprisingly functional prototypes.',
+  performance:
+    'A live artistic presentation that may combine elements of theater, dance, music, or multimedia. Performances often explore experimental or interdisciplinary approaches to live art, pushing boundaries of traditional formats.',
 
-  seminar:
-    'An academic or research presentation where experts share cutting-edge findings. Seminars offer deep dives into specific topics with Q&A, bridging the gap between research and practice.',
+  show:
+    'A staged entertainment production such as cabaret, variety, or stand-up comedy. Shows emphasize audience engagement and entertainment, from intimate comedy sets to elaborate variety productions.',
+
+  workshop:
+    'A participatory educational experience where attendees learn through hands-on practice. Workshops emphasize skill development and creative exploration in a supportive group environment, with guidance from experienced facilitators.',
+
+  tech:
+    'A technology-focused event such as a conference, meetup, hackathon, or seminar. Tech events bring together practitioners, researchers, and community members around shared technology interests.',
+
+  dance:
+    'A dance event featuring social dancing, performances, or dance workshops. Dance events range from tango milongas and swing nights to contemporary dance showcases.',
+
+  other:
+    'A cultural event in Athens that does not fit into standard categories.',
 };
 
 /**
@@ -230,6 +236,12 @@ function getEventTypeKeywords(type: EventType): string[] {
       'musical performance',
       'Athens music scene',
     ],
+    dj_set: [
+      'DJ set',
+      'electronic music',
+      'club night',
+      'Athens nightlife',
+    ],
     exhibition: [
       'art exhibition',
       'visual arts',
@@ -247,40 +259,40 @@ function getEventTypeKeywords(type: EventType): string[] {
       'theater production',
       'Athens theater',
     ],
+    festival: [
+      'festival',
+      'multi-day event',
+      'Athens festival',
+    ],
     performance: [
       'live performance',
       'performing arts',
       'Athens cultural scene',
+    ],
+    show: [
+      'cabaret',
+      'variety show',
+      'stand-up comedy',
+      'Athens entertainment',
     ],
     workshop: [
       'educational workshop',
       'creative learning',
       'Athens workshops',
     ],
-    conference: [
+    tech: [
       'tech conference',
-      'AI summit',
-      'developer conference',
+      'developer meetup',
+      'hackathon',
       'Athens tech scene',
     ],
-    meetup: [
-      'tech meetup',
-      'community gathering',
-      'developer community',
-      'Athens tech community',
+    dance: [
+      'dance event',
+      'tango',
+      'social dance',
+      'Athens dance scene',
     ],
-    hackathon: [
-      'coding hackathon',
-      'AI hackathon',
-      'innovation challenge',
-      'Athens hackathon',
-    ],
-    seminar: [
-      'research seminar',
-      'academic talk',
-      'AI research',
-      'Athens research community',
-    ],
+    other: [],
   };
 
   return typeKeywordMap[type] || [];

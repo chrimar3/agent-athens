@@ -19,7 +19,7 @@
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
-import { validateQualityGates } from '../src/enrichment/quality-gates';
+import { validateQualityGates, validateEnglishDescription } from '../src/enrichment/quality-gates';
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
 import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
@@ -113,7 +113,12 @@ export function appendRecentOpenings(newOpenings: RecentOpening[]): void {
       existing = [];
     }
   }
-  const combined = [...existing, ...newOpenings].slice(-MAX_RECENT_OPENINGS);
+  // Deduplicate by event_id, keeping the latest entry for each
+  const byId = new Map<string, RecentOpening>();
+  for (const entry of [...existing, ...newOpenings]) {
+    byId.set(entry.event_id, entry);
+  }
+  const combined = [...byId.values()].slice(-MAX_RECENT_OPENINGS);
   writeFileSync(RECENT_OPENINGS_PATH, JSON.stringify(combined, null, 2), 'utf-8');
 }
 
@@ -211,6 +216,7 @@ export function saveBatch(
 
   for (const eventId of eventIds) {
     const descPath = join(descDir, `${eventId}.md`);
+    const enDescPath = join(descDir, `${eventId}.en.md`);
     const tagsPath = join(descDir, `${eventId}.tags.json`);
 
     if (!existsSync(descPath)) {
@@ -228,6 +234,11 @@ export function saveBatch(
 
     const description = readFileSync(descPath, 'utf-8');
     const wordResult = countWords(description);
+
+    // Load optional English description
+    const hasEnglish = existsSync(enDescPath);
+    const enDescription = hasEnglish ? readFileSync(enDescPath, 'utf-8') : null;
+    const enWordCount = enDescription ? countWords(enDescription) : null;
 
     // Load optional tags
     let tags: string[] | null = null;
@@ -268,23 +279,31 @@ export function saveBatch(
     const tier = structureToTier(target.structure);
     const gateResult = validateQualityGates(event, description, tier);
 
+    // Validate English description if present
+    let enGateResult = null;
+    if (enDescription) {
+      enGateResult = validateEnglishDescription(event, enDescription, tier);
+    }
+
     const tagsJson = tags ? JSON.stringify(tags) : current?.tags || null;
 
     if (!dryRun) {
-      // Update event
+      // Update event — write to dual-language columns + legacy column
       db.prepare(`
         UPDATE events SET
           full_description = ?,
+          full_description_gr = ?,
+          full_description_en = ?,
           tags = ?,
           needs_enrichment = 0,
           enriched_at = datetime('now'),
           updated_at = datetime('now')
         WHERE id = ?
-      `).run(description, tagsJson, eventId);
+      `).run(description, description, enDescription, tagsJson, eventId);
 
       // Log to enrichment_log with full before/after
       db.prepare(`
-        INSERT INTO enrichment_log (
+        INSERT OR REPLACE INTO enrichment_log (
           event_id, enrichment_version, description_before, description_after,
           batch_number, session_id, quality_score, quality_issues,
           tags_applied, word_count_en
@@ -304,8 +323,10 @@ export function saveBatch(
       saved_at: new Date().toISOString(),
     });
 
+    const enTag = enDescription ? ` | EN:${enWordCount?.count ?? 0}w` : '';
+    const enStatus = enGateResult ? (enGateResult.passed ? '/EN:OK' : '/EN:WARN') : '';
     const status = gateResult.passed ? 'OK' : 'WARN';
-    console.log(`  ${gateResult.passed ? '+' : '!'} ${eventId.substring(0, 12)}... | ${wordResult.count}w | score:${gateResult.score} | ${status}${tags ? ` | ${tags.length} tags` : ''}`);
+    console.log(`  ${gateResult.passed ? '+' : '!'} ${eventId.substring(0, 12)}... | ${wordResult.count}w${enTag} | score:${gateResult.score}${enGateResult ? `/${enGateResult.score}` : ''} | ${status}${enStatus}${tags ? ` | ${tags.length} tags` : ''}`);
 
     results.push({
       eventId,

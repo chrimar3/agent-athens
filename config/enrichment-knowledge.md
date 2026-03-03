@@ -207,7 +207,7 @@ This section compounds over time. Expand it as you write more events.
 - **Rooftop:** Operates 20:00-23:30 before club nights
 - **Sound:** Future beats, footwork, bass, disco
 - **Character:** Budget entry point, converted printing house, experimental
-- **Transport:** Omonoia metro (Red/Blue line)
+- **Transport:** Omonoia metro (Green/Red line — Lines 1+2)
 
 ### Bios
 - **Location:** Pireos 84, Gazi
@@ -286,7 +286,7 @@ This section compounds over time. Expand it as you write more events.
 - **Timing:** Doors 19:00-20:00, headliner 21:30-22:00
 - **Genre focus:** Metal dominates (Dark Funeral, Leprous, Eluveitie, Chelsea Wolfe)
 - **Sound:** State-of-the-art, Greece's most modern venue
-- **Transport:** Attiki metro (Red/Blue line)
+- **Transport:** Attiki metro (Green/Red line — Lines 1+2)
 - **Note:** Neighborhood not pretty â€” taxi out after show
 
 ### Fuzz Live Music Club
@@ -296,7 +296,7 @@ This section compounds over time. Expand it as you write more events.
 - **Neighborhood:** Tavros (not Gazi â€” common mistake)
 - **Tickets:** â‚¬25-45 typical, via more.com
 - **Notable:** Home of Death Disco Indoor Festival (Nov-Dec): â‚¬35-40 daily, â‚¬65-70 weekend, early bird -15-20%
-- **Transport:** Tavros metro (Blue line)
+- **Transport:** Tavros metro (Green line / Line 1)
 
 ### Floyd Live Music Venue
 - **Location:** Pireos 117, Gazi
@@ -378,7 +378,7 @@ This section compounds over time. Expand it as you write more events.
 - **Crowd:** Almost entirely Greek â€” foreigners rarely attend
 - **Character:** Pinnacle of rebetiko authenticity, inside Central Meat Market
 - **Related:** Sister venue Rembetiki Istoria PERMANENTLY CLOSED early 2024
-- **Transport:** Omonoia metro (Red/Blue line)
+- **Transport:** Omonoia metro (Green/Red line — Lines 1+2)
 
 ### Klimataria â€” RECOMMENDED FOR VISITORS
 - **Location:** Plateia Theatrou 2

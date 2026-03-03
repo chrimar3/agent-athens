@@ -117,7 +117,7 @@ describe("normalizeEvents", () => {
 
     assertValidISO8601(event.startDate);
     expect(event.startDate).toContain(sampleRawConcert.date);
-    expect(event.startDate).toContain(sampleRawConcert.time);
+    expect(event.startDate).toContain(sampleRawConcert.time!);
   });
 
   test("should use default time when no time specified", () => {

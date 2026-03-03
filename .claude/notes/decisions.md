@@ -951,3 +951,70 @@ Separate pipeline:
 | Hub FAQ: CSS chevron rotation instead of +/- | Chevron (border trick) is more polished than text characters. Native `<details>` handles ARIA automatically. 44px min-height ensures touch target compliance | 2026-03 |
 | Cornerstone hub designation: metadata-only flag | `cornerstone: true` on today, this-weekend, open, this-month. Currently metadata for content pipeline guidance (more FAQs, more investment). No rendering change yet | 2026-03 |
 | Hub page token migration approach | Mapped session spec generic tokens to project-specific tokens (e.g., --surface-secondary → --bg-surface, --text-md → --type-body-lg). Preserves project consistency over spec literalism | 2026-03 |
+
+## Venue Geo Backfill Round 2 (2026-03-03)
+
+Coverage: 57.1% → 81.8% (690/844 events with real geo coordinates).
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Venues in master | 84 | 148 |
+| Events with real geo | 482 | 690 |
+| Coverage | 57.1% | 81.8% |
+| Unmatched 3+ events | 53 | 1 (Πολλαπλοί Χώροι — skipped) |
+| Remaining unmatched | 164 | 99 (all 1-2 events each) |
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Add alias keys for Greek-script mismatches (Ροές, Παρνασσός, Μουσείο Γουλανδρή) | DB uses different script/name than master key; alias triggers Layer 1 direct match — simplest fix | 2026-03-03 |
+| Skip `Πολλαπλοί Χώροι` / `2" Πολλαπλοι χωροι` | Multi-venue designations with no single physical location | 2026-03-03 |
+| Include Piraeus venues (Θέατρο Κάτω Από Τη Γέφυρα, Αυλαία Πολυχώρος) | Already location_status=verified_athens; events show on site; adding real geo improves map accuracy | 2026-03-03 |
+| Include outer-Athens venues (ΟΑΚΑ in Marousi, Sunel Arena in Ano Liosia) | Part of Greater Athens metro area; already verified_athens; real coordinates better than null | 2026-03-03 |
+| Research sources: stigmap.gr, athinorama.gr, vrisko.gr, elculture.gr, mapcarta.com | Cross-reference 2-3 Greek directory sources per venue; embedded map data on stigmap provides lat/lng directly | 2026-03-03 |
+
+## Dual-Language Enrichment
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Entity Locking config at `config/entity-locking.json` | Cultural terms (rebetiko, kefi, bouzouki) must never be translated to English equivalents; config-driven for extensibility | 2026-03-03 |
+| English word counts ~15% shorter than Greek (`en_min`/`en_max` in MatrixEntry) | English is more compact than Greek; enforcing same word counts would pad English descriptions | 2026-03-03 |
+| Write to `full_description_gr` + `full_description_en` + legacy `full_description` | Backwards compat: legacy column = Greek; new columns enable language-specific queries; `rowToEvent()` already reads both | 2026-03-03 |
+| English file convention: `<event-id>.en.md` alongside `<event-id>.md` | Minimal pipeline change; save-batch auto-detects `.en.md` presence; no English file = Greek-only save | 2026-03-03 |
+| `validateEnglishDescription()` separate from main quality gates | English has different checks (language detection, Entity Locking, en_min/en_max); avoids complicating Greek validation | 2026-03-03 |
+| English descriptions are NOT translations — written fresh for international audience | Machine-translated Greek reads unnaturally; same facts/structure but natural English voice | 2026-03-03 |
+
+## Automated Geocoding (2026-03-03)
+
+Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venues via Nominatim.
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Venues in master | 148 | 185 |
+| Events with geo | 687/844 | 986/1117 |
+| Coverage | 81.4% | 88.3% |
+| Remaining ungeocoded | 98 venues | 65 venues |
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Nominatim over Google Geocoding API | Free, no API key, good Greek coverage. Google reserved as future fallback if accuracy proves poor | 2026-03-03 |
+| Config-driven bounding box (GeocodeConfig) | Multi-city ready. Athens box: 37.85-38.10, 23.55-23.85. Any city can be added by providing its own config | 2026-03-03 |
+| 3-tier confidence: high (POI), medium (street), low (city) | Low confidence = city centroid = useless. Only high+medium written to master. Pipeline uses --confidence=high for automated runs | 2026-03-03 |
+| Rate limit 1.1s between requests | Nominatim TOS requires max 1 req/sec. 1.1s provides safety margin | 2026-03-03 |
+| Fallback query chain: "Venue, Athens, Greece" → "Venue, Αθήνα" → bare name | Some POIs indexed with English city name, others with Greek. Bare name uses countrycodes filter as fallback | 2026-03-03 |
+| Pipeline integration: high-confidence only | Automated daily runs should not introduce medium-confidence (street-level) results without review. Manual runs allow medium | 2026-03-03 |
+| Geocoded venues get `geocoded_source: "nominatim"` metadata | Distinguishes manually-researched venues from auto-geocoded ones. Enables future quality audit | 2026-03-03 |
+| Failed venues (~65) are mostly small bars/studios not in OSM | Long-tail venues with 1-2 events each. Manual research has diminishing returns. Coverage plateau expected ~90% | 2026-03-03 |
+
+## Code Quality Cleanup (2026-03-03)
+
+### EventType Union Consolidation
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Remove `screening` from EventType, merge into `cinema` | 0 events in DB had type `screening`. The `screening` keywords (προβολή, outdoor cinema, etc.) now route to `cinema` type | 2026-03-03 |
+| Add `dance` to EventType union | 10 events in DB already had `dance` type from scrapers, but the TS union was missing it. Added to src/types.ts and src/enrichment/types.ts | 2026-03-03 |
+| Two EventType sources: `src/types.ts` (canonical) and `src/enrichment/types.ts` (local) | Must be kept in sync. Both needed `dance`+`other` added, `screening` removed | 2026-03-03 |
+| Two categorizer systems: config-driven (`src/categorizer/`) and inline (`src/validators/`) | Both had `screening` entries that needed merging into `cinema`. Config file: `config/categorization-keywords.json` | 2026-03-03 |
+| `tsconfig.json` rootDir changed from `./src` to `.` | Tests in `src/` imported fixtures from `tests/` directory. Widened rootDir and include to cover both | 2026-03-03 |
+| UNIQUE index on enrichment_log(event_id, session_id, batch_number) | Prevents same-batch duplicate entries. Cross-batch re-enrichments preserved for rollback history | 2026-03-03 |
+| `appendRecentOpenings` deduplicates by event_id | Map-based dedup keeps latest entry per event, prevents file bloat from re-enrichments | 2026-03-03 |

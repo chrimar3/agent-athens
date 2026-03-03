@@ -7,7 +7,7 @@
  * Key improvements:
  * - Tango events correctly categorized as 'dance' (not 'theater')
  * - DJ events separated from concerts as 'dj_set'
- * - Outdoor cinema screenings categorized as 'screening'
+ * - Outdoor cinema screenings categorized as 'cinema'
  * - Comedy/cabaret events categorized as 'show'
  */
 
@@ -37,10 +37,6 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
     genres: ['Dance', 'Ballet', 'Contemporary', 'Tango', 'Modern Dance', 'Experimental'],
     venueHints: ['dance', 'στέγη', 'megaron', 'onassis']
   },
-  screening: {
-    keywords: ['προβολή', 'screening', 'outdoor cinema', 'θερινό σινεμά', 'cine', 'open air cinema'],
-    venueHints: ['open air', 'rooftop', 'θερινός']
-  },
   show: {
     keywords: [
       'cabaret', 'καμπαρέ', 'variety', 'comedy', 'κωμωδία', 'stand-up', 'stand up',
@@ -64,8 +60,10 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
     genres: ['Art', 'Photography', 'Contemporary Art', 'Sculpture', 'Installation']
   },
   cinema: {
-    keywords: ['cinema', 'σινεμά', 'ταινία', 'film', 'movie', 'premiere', 'πρεμιέρα'],
-    genres: ['Film', 'Documentary', 'Short Film']
+    keywords: ['cinema', 'σινεμά', 'ταινία', 'film', 'movie', 'premiere', 'πρεμιέρα',
+      'προβολή', 'screening', 'outdoor cinema', 'θερινό σινεμά', 'cine', 'open air cinema'],
+    genres: ['Film', 'Documentary', 'Short Film'],
+    venueHints: ['open air', 'rooftop', 'θερινός']
   },
   workshop: {
     keywords: ['workshop', 'εργαστήριο', 'σεμινάριο', 'masterclass', 'class', 'μάθημα', 'course'],
@@ -82,6 +80,13 @@ const CATEGORIZATION_MAP: Record<EventType, CategorizationRules> = {
   festival: {
     keywords: ['festival', 'φεστιβάλ'],
     genres: ['Festival']
+  },
+  dance: {
+    keywords: [
+      'tango', 'ταγκό', 'milonga', 'μιλόνγκα', 'salsa', 'swing dance',
+      'lindy hop', 'social dance'
+    ],
+    genres: ['Dance', 'Tango', 'Latin Dance', 'Swing']
   },
   other: { keywords: [] }
 };
@@ -157,7 +162,6 @@ export function categorizeEvent(event: {
   const categoryOrder: EventType[] = [
     'dj_set',      // Check DJ before concert (subset of music)
     'performance', // Check performance before theater (ballet/tango/dance fix)
-    'screening',   // Check screening before cinema
     'show',        // Check show before theater (comedy/cabaret)
     'workshop',    // Specific format
     'exhibition',  // Art exhibitions
@@ -179,7 +183,7 @@ export function categorizeEvent(event: {
 
     // Skip exhibition/screening/cinema if strong concert signals present
     // Prevents "Jazz at Museum" → exhibition, "screening room" metaphor → screening
-    if ((type === 'exhibition' || type === 'screening' || type === 'cinema') && hasConcertSignal) {
+    if ((type === 'exhibition' || type === 'cinema') && hasConcertSignal) {
       continue;
     }
 

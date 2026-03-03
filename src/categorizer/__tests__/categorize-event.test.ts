@@ -161,12 +161,12 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('exhibition');
     });
 
-    it('should categorize screenings correctly', () => {
+    it('should categorize screenings as cinema', () => {
       const result = categorizeEvent({
         title: 'Documentary Screening',
         venue: 'Some Venue'
       });
-      expect(result.type).toBe('screening');
+      expect(result.type).toBe('cinema');
     });
 
     it('should categorize festivals correctly', () => {

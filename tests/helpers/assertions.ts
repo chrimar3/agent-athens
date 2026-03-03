@@ -108,7 +108,8 @@ export function assertAthensEvent(event: Event | RawEvent): void {
                    lowerLocation.includes("αθηνα") ||
                    lowerLocation.includes("αθήνα");
 
-  expect(hasAthens || event.venue?.coordinates?.lat).toBeTruthy();
+  const venueCoords = typeof event.venue === 'object' ? event.venue?.coordinates?.lat : undefined;
+  expect(hasAthens || venueCoords).toBeTruthy();
 }
 
 /**

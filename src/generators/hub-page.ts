@@ -33,24 +33,25 @@ const MAX_EVENT_BLOCKS = 8;
  * Get hub-filtered events based on config
  */
 export function getHubEvents(config: HubConfig, allEvents: Event[]): Event[] {
-  if (config.filter.type === 'date') {
-    return filterEvents(allEvents, { time: config.filter.value as TimeRange });
+  const filter = config.filter;
+  if (filter.type === 'date') {
+    return filterEvents(allEvents, { time: filter.value as TimeRange });
   }
-  if (config.filter.type === 'event_type') {
-    return allEvents.filter(e => e.type === config.filter.value);
+  if (filter.type === 'event_type') {
+    return allEvents.filter(e => e.type === filter.value);
   }
-  if (config.filter.type === 'event_types') {
-    const types = new Set(config.filter.values);
+  if (filter.type === 'event_types') {
+    const types = new Set(filter.values);
     return allEvents.filter(e => types.has(e.type));
   }
-  if (config.filter.type === 'tag') {
-    const targetTags = config.filter.values.map(t => t.toLowerCase());
+  if (filter.type === 'tag') {
+    const targetTags = filter.values.map(t => t.toLowerCase());
     return allEvents.filter(e =>
       e.tags?.some(tag => targetTags.includes(tag.toLowerCase()))
     );
   }
-  if (config.filter.type === 'price_type') {
-    return allEvents.filter(e => e.price.type === config.filter.value);
+  if (filter.type === 'price_type') {
+    return allEvents.filter(e => e.price.type === filter.value);
   }
   return [];
 }

@@ -45,14 +45,14 @@ export type EventType =
   | 'concert'      // Live music (incl. classical, jazz, opera, recitals)
   | 'dj_set'       // DJ performances, electronic music nights
   | 'exhibition'   // Art exhibitions, museum shows, photography
-  | 'cinema'       // Film screenings
-  | 'screening'    // Alternative venue screenings, outdoor cinema
+  | 'cinema'       // Film screenings, outdoor cinema
   | 'theater'      // Theater productions (standardized spelling)
   | 'festival'     // Multi-day/multi-act festivals
   | 'performance'  // Ballet, dance, experimental, spoken word
   | 'show'         // Cabaret, variety shows, stand-up comedy
   | 'workshop'     // Interactive workshops, masterclasses
   | 'tech'         // Conferences, meetups, hackathons
+  | 'dance'        // Dance events, tango nights
   | 'other';
 
 export interface Venue {

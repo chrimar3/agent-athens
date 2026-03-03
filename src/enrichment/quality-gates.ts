@@ -344,7 +344,7 @@ function validateFiveQuestionLayer(
   // Q4: What do I need to know? (practical details)
   const practicalRequired = ['date', 'time', 'venue', 'price'];
   const missingPractical = practicalRequired.filter(field => {
-    const value = (event as Record<string, unknown>)[field];
+    const value = (event as unknown as Record<string, unknown>)[field];
     return !value;
   });
   if (missingPractical.length > 0) {
@@ -822,7 +822,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
   const eventType: SchemaOrgEvent['@type'] = SCHEMA_TYPE_MAP[event.type || ''] || 'Event';
 
   // Format start date with correct timezone (DST aware)
-  const startDate = formatSchemaDate(event.date, event.time);
+  const startDate = formatSchemaDate(event.date, event.time ?? undefined);
 
   const schema: SchemaOrgEvent = {
     '@context': 'https://schema.org',
@@ -832,7 +832,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
-      '@type': VENUE_TYPE_MAP[eventType] || 'EventVenue',
+      '@type': (VENUE_TYPE_MAP[eventType] || 'Place') as 'MusicVenue' | 'Place',
       name: event.venue || 'TBA',
     },
   };
@@ -923,5 +923,129 @@ export function quickValidate(
   return {
     valid: errors.length === 0,
     errors,
+  };
+}
+
+// ============================================================================
+// English Description Validation
+// ============================================================================
+
+/** Forbidden English translations of locked cultural terms */
+const TRANSLATED_TERM_VIOLATIONS: Record<string, string> = {
+  'urban folk': 'rebetiko',
+  'art song': 'entechno',
+  'popular music': 'laiko',
+  'folk music': 'dimotika',
+  'long-necked lute': 'bouzouki',
+  'party spirit': 'kefi',
+  'craftsmanship': 'meraki',
+  'honor': 'filotimo',
+  'group of friends': 'parea',
+  'celebration': 'glendi',
+  'village festival': 'panigiri',
+  'music hall': 'bouzoukia',
+};
+
+/**
+ * Validate an English description against English-specific quality gates.
+ *
+ * Checks:
+ * 1. Language detection — flags if too much Greek text remains
+ * 2. Entity Locking — flags if cultural terms were translated instead of preserved
+ * 3. Word count — uses en_min/en_max from enrichment matrix
+ * 4. Filler phrases and lazy adjectives (same as Greek)
+ */
+export function validateEnglishDescription(
+  event: EventForEnrichment,
+  description: string,
+  tier: 'stub' | 'standard' | 'premium',
+): QualityGateResult {
+  const issues: QualityIssue[] = [];
+  const lowerDesc = description.toLowerCase();
+
+  // 1. Language detection: count Greek vs Latin characters
+  const greekChars = (description.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+  const latinChars = (description.match(/[a-zA-Z]/g) || []).length;
+  const totalAlpha = greekChars + latinChars;
+
+  if (totalAlpha > 0) {
+    const greekRatio = greekChars / totalAlpha;
+    if (greekRatio > 0.3) {
+      issues.push(createIssue('technical', 'error', 'EN_TOO_MUCH_GREEK',
+        `English description is ${Math.round(greekRatio * 100)}% Greek characters — likely not translated`));
+    } else if (greekRatio > 0.1) {
+      issues.push(createIssue('technical', 'warning', 'EN_SOME_GREEK',
+        `English description contains ${greekChars} Greek characters — check for untranslated passages`));
+    }
+  }
+
+  // 2. Entity Locking: check for forbidden translations
+  for (const [translated, correct] of Object.entries(TRANSLATED_TERM_VIOLATIONS)) {
+    if (lowerDesc.includes(translated)) {
+      issues.push(createIssue('technical', 'error', 'EN_ENTITY_LOCK_VIOLATION',
+        `"${translated}" should stay as "${correct}" (Entity Locking rule)`));
+    }
+  }
+
+  // 3. Word count using English targets from matrix
+  if (event.type) {
+    const matrixTarget = getWordTarget({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    const wordCount = countWords(description);
+    const category = classifyEvent({
+      type: event.type,
+      venue_name: event.venue,
+      title: event.title,
+    });
+    if (wordCount > matrixTarget.en_max * 1.1) {
+      issues.push(createIssue('technical', 'warning', 'EN_OVER_MATRIX_MAX',
+        `${wordCount} words exceeds ${matrixTarget.en_max}w English max for ${category}`));
+    }
+    if (wordCount < matrixTarget.en_min * 0.9) {
+      issues.push(createIssue('technical', 'warning', 'EN_UNDER_MATRIX_MIN',
+        `${wordCount} words below ${matrixTarget.en_min}w English min for ${category}`));
+    }
+  }
+
+  // 4. Filler phrases (same rules apply to English)
+  const foundFillers = FILLER_PHRASES.filter(p => lowerDesc.includes(p));
+  if (foundFillers.length > 0) {
+    issues.push(createIssue('resonance', 'error', 'FILLER_PHRASES',
+      `Remove filler phrases: ${foundFillers.join(', ')}`));
+  }
+
+  // 5. Lazy adjectives
+  const foundLazy = LAZY_ADJECTIVES.filter(adj =>
+    new RegExp(`\\b${adj}\\b`, 'i').test(description)
+  );
+  if (foundLazy.length > 0) {
+    issues.push(createIssue('resonance', tier === 'premium' ? 'error' : 'warning',
+      'LAZY_ADJECTIVES', `Remove lazy adjectives: ${foundLazy.join(', ')}`));
+  }
+
+  // 6. Second-person "you" check (English descriptions should also be immersive)
+  if (tier !== 'stub' && !lowerDesc.includes('you')) {
+    issues.push(createIssue('resonance', 'warning', 'EN_NO_SECOND_PERSON',
+      'English description should use "you" — same immersive voice as Greek'));
+  }
+
+  // Calculate score
+  const errorCount = issues.filter(i => i.severity === 'error').length;
+  const warningCount = issues.filter(i => i.severity === 'warning').length;
+  const penalty = errorCount * 15 + warningCount * 5;
+  const score = Math.max(0, 100 - penalty);
+
+  return {
+    passed: errorCount === 0 && score >= 60,
+    score: Math.round(score),
+    issues,
+    layer_scores: {
+      schema: 25, // English doesn't get separate schema validation
+      five_question: 40 - (warningCount * 3),
+      resonance: Math.max(0, 35 - penalty + (errorCount * 15)),
+    },
   };
 }

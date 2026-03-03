@@ -54,13 +54,14 @@ export type EventType =
   | 'dj_set'
   | 'exhibition'
   | 'cinema'
-  | 'screening'
   | 'theater'
   | 'festival'
   | 'performance'
   | 'show'
   | 'workshop'
-  | 'tech';
+  | 'tech'
+  | 'dance'
+  | 'other';
 
 export interface EnrichmentStats {
   total_events: number;

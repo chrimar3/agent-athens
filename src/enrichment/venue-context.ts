@@ -267,11 +267,11 @@ export function seedKnownVenues(): void {
 
     stmt.run(
       venue.venue_name,
-      venue.neighborhood || null,
-      venue.description,
-      venue.venue_type,
-      venue.capacity || null,
-      venue.established_year || null
+      venue.neighborhood ?? null,
+      venue.description ?? null,
+      venue.venue_type ?? null,
+      venue.capacity ?? null,
+      venue.established_year ?? null
     );
   }
 

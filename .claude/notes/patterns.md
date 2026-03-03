@@ -587,6 +587,41 @@ CLI-produced descriptions match interactive quality:
 
 Flow: check queue ≥ 5 → clean old briefs → sync queue → generate briefs → run claude -p per batch (sequential) → report results.
 
+## Geocoding Utility Pattern
+
+### Architecture
+`src/utils/geocode.ts` — Nominatim-based, config-driven for multi-city support.
+
+```typescript
+import { geocodeVenue, ATHENS_CONFIG } from '../src/utils/geocode';
+
+const result = await geocodeVenue('Μέγαρο Μουσικής Αθηνών', ATHENS_CONFIG);
+// → { lat: 37.976, lon: 23.749, confidence: 'high', source: 'nominatim' }
+```
+
+### Key Design Decisions
+- **Bounding box validation** — GeocodeConfig contains minLat/maxLat/minLon/maxLon. Results outside box are rejected.
+- **Confidence tiers** — high (POI: amenity/tourism/building), medium (street/neighborhood), low (city-level, always rejected).
+- **Rate limiting** — 1.1s between requests (Nominatim TOS). State is module-level, reset via `_resetRateLimit()` for tests.
+- **Fallback queries** — "Venue, Athens, Greece" → "Venue, Αθήνα" → bare name with countrycodes filter.
+- **Skip patterns** — "Πολλαπλοί Χώροι", "TBA", "Online", "Livestream" bypassed.
+
+### Batch Script
+```bash
+bun run scripts/geocode-missing-venues.ts --dry-run         # Preview
+bun run scripts/geocode-missing-venues.ts                    # Live + backfill
+bun run scripts/geocode-missing-venues.ts --confidence=high  # Strict mode
+bun run scripts/geocode-missing-venues.ts --limit=20         # Cap count
+```
+
+### Pipeline Integration
+In `daily-automated.sh`, Phase 3j (after image download, before site generation):
+- Uses `--confidence=high` for automated runs (no manual review)
+- Non-fatal: pipeline continues if geocoding fails
+
+### Backfill GROUP BY Caveat
+The `backfill-venue-geo.ts` script groups by venue_name to check if geo update is needed, but SQLite returns an arbitrary row's venue_lat for the group. If *some* events for a venue have geo and others don't, the backfill may skip the group. Workaround: run a direct SQL propagation after backfill to copy geo from events that have it to same-venue events that don't.
+
 Key constraints:
 - Absolute path for claude binary (launchd has minimal PATH)
 - Sequential execution (avoids SQLite WAL locking)
@@ -608,3 +643,65 @@ Config: `config/hub-pages.json` (16 hubs). Type: `HubConfig` in `src/types.ts`.
 ### FAQ Accordion ARIA Pattern
 
 Uses native `<details>/<summary>` — no manual `aria-expanded` needed (browser handles it). CSS chevron via `::after` pseudo-element with border-right + border-bottom rotated 45deg (closed) / -135deg (open). Reduced-motion fallback disables transition.
+
+## Venue Geo Research Workflow
+
+When adding new venues to `data/venues-master.json`:
+
+1. **Find candidates**: `bun run scripts/backfill-venue-geo.ts --report` → shows unmatched venues by event count
+2. **Research priority**: Highest event count first (7→6→5→4→3→2→1)
+3. **Best sources for Athens venue coordinates** (in order of reliability):
+   - `stigmap.gr` — embed map pages contain `lat=X; lng=Y;` in source code
+   - `athinorama.gr` — theater/venue pages often embed coordinates in map widgets
+   - `elculture.gr` — venue pages contain lat/lng data attributes
+   - `mapcarta.com` — OpenStreetMap-based, good for well-known venues
+   - `vrisko.gr` / `xo.gr` — Greek Yellow Pages, confirm addresses
+4. **Validation**: lat 37.9-38.1, lng 23.6-23.8 (Athens metro range)
+5. **JSON format**: field is `lng` (not `lon`). Neighborhood is free-form string.
+6. **Name mismatches**: When DB uses different Greek script than master key, add alias entry with same geo data
+7. **Skip list**: Multi-venue designations (`Πολλαπλοί Χώροι`), unverifiable venues
+8. **After adding**: Validate JSON → dry run → apply → verify coverage → build
+
+## Transit Audit Pattern
+
+When auditing enriched descriptions for transit/logistics errors:
+
+1. **Extract all transit claims** via SQL keyword search (`metro`, `station`, `walk`, `bus`, `tram`, `line`)
+2. **Group by venue** — most errors are venue-level (wrong metro → all descriptions for that venue wrong)
+3. **Verify facts** against official sources (Athens Metro map, Google Maps walking times)
+4. **Fix via SQL REPLACE** for station name corrections (fast, surgical)
+5. **Use Python regex** for complex pattern removal (e.g., line color references across varied formats)
+6. **Update knowledge base** (`config/enrichment-knowledge.md`) to prevent recurrence
+7. **Multiple regex passes** needed — line colors appear in many formats: `(Blue line)`, `(Line 3, Blue)`, `on the Blue line`, `on Line 3`, prose mentions
+
+Key Athens Metro facts (verified 2026-03-03):
+- Line 1 (Green/ISAP): Piraeus↔Kifissia
+- Line 2 (Red): Anthoupoli↔Elliniko
+- Line 3 (Blue): Nikaia↔Airport
+- Omonia: Lines 1+2 only (NO Line 3)
+- Monastiraki: Lines 1+3 (NOT Red)
+- Kerameikos: Line 3 only (nearest for all Gazi venues)
+- Megaro Moussikis: Line 3 (nearest for Megaron concert hall, NOT Evangelismos)
+
+## Dual-Language Enrichment Pattern
+
+File convention for dual-language enrichment output:
+```
+temp-descriptions/batch-N/
+  <event-id>.md          ← Greek description (primary)
+  <event-id>.en.md       ← English description (optional)
+  <event-id>.tags.json   ← Tags (shared)
+```
+
+Pipeline flow:
+1. Brief generator (`generate-enrichment-brief.ts`) includes English word targets + Entity Locking terms
+2. Enrichment subagent writes both `.md` (Greek) and `.en.md` (English) per event
+3. Save-batch auto-detects `.en.md`, runs `validateEnglishDescription()`, writes to `full_description_gr` + `full_description_en` + legacy `full_description`
+4. If no `.en.md` exists, saves Greek only (backwards compatible)
+
+Key files:
+- `config/entity-locking.json` — terms that stay untranslated in English
+- `src/enrichment/enrichment-matrix.ts` — `en_min`/`en_max` per category
+- `src/enrichment/quality-gates.ts` — `validateEnglishDescription()` function
+- `scripts/save-batch.ts` — dual-column UPDATE + English quality gate
+- `scripts/generate-enrichment-brief.ts` — Entity Locking section + English instructions in brief

@@ -251,10 +251,10 @@ export function seedKnownArtists(): void {
 
     stmt.run(
       artist.name,
-      artist.bio,
-      artist.genre || null,
+      artist.bio ?? null,
+      artist.genre ?? null,
       artist.notable_works ? JSON.stringify(artist.notable_works) : null,
-      artist.career_highlights || null
+      artist.career_highlights ?? null
     );
   }
 

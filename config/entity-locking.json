@@ -1,0 +1,93 @@
+{
+  "_comment": "Entity Locking Config — terms that MUST remain untranslated in English descriptions",
+  "_version": "1.0",
+
+  "cultural_terms": {
+    "_comment": "Greek musical/cultural traditions — use the English transliteration, never translate",
+    "music_genres": [
+      "rebetiko",
+      "rembetika",
+      "laiko",
+      "laika",
+      "entechno",
+      "nisiotika",
+      "dimotika",
+      "amanedhes",
+      "zeibekiko",
+      "tsifteteli",
+      "hasapiko",
+      "syrtos",
+      "kalamatianos",
+      "mandinades"
+    ],
+    "instruments": [
+      "bouzouki",
+      "baglamas",
+      "tzouras",
+      "oud",
+      "kanun",
+      "lyra",
+      "santouri",
+      "laouto"
+    ],
+    "venue_types": [
+      "bouzoukia",
+      "steki",
+      "ouzeri",
+      "mezedopoleio",
+      "kafeneio",
+      "taverna",
+      "psistaria"
+    ],
+    "cultural_concepts": [
+      "kefi",
+      "meraki",
+      "filotimo",
+      "parea",
+      "glendi",
+      "panigiri",
+      "kouventa"
+    ]
+  },
+
+  "inherit_from": {
+    "_comment": "These categories auto-lock: venue names and neighborhoods from the DB are never translated",
+    "venue_names": true,
+    "venue_neighborhoods": true
+  },
+
+  "formatting_rules": {
+    "_comment": "English description formatting conventions",
+    "dates": "DD Month YYYY (e.g., '15 March 2026', never '15/3/2026' or 'March 15, 2026')",
+    "times": "24h format with colon (e.g., '21:00', never '9 PM')",
+    "currency": "EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')",
+    "venue_names": "Use Latin transliteration of Greek venue names (e.g., 'Stegi Idrimatos Onasi' not 'Onassis Foundation Stoa'). If venue has an established English brand name (e.g., 'Half Note Jazz Club', 'Megaron Athens Concert Hall'), use that.",
+    "neighborhoods": "Use established Latin transliterations (e.g., 'Koukaki', 'Exarchia', 'Psyrri', never translate to English equivalents)",
+    "metro_stations": "Station name only, no line colors (e.g., 'Thissio metro', never 'Thissio metro on the Green Line')",
+    "artist_names": "Latin transliteration of Greek names (e.g., 'Giorgos Dalaras' not 'George Dalaras'). Respect artist's preferred English spelling if known."
+  },
+
+  "transliteration_map": {
+    "_comment": "Common venue/neighborhood transliterations for consistency",
+    "Θησείο": "Thissio",
+    "Κουκάκι": "Koukaki",
+    "Εξάρχεια": "Exarchia",
+    "Ψυρρή": "Psyrri",
+    "Γκάζι": "Gazi",
+    "Πλάκα": "Plaka",
+    "Μοναστηράκι": "Monastiraki",
+    "Κεραμεικός": "Keramikos",
+    "Μεταξουργείο": "Metaxourgeio",
+    "Κολωνάκι": "Kolonaki",
+    "Παγκράτι": "Pangrati",
+    "Πετράλωνα": "Petralona",
+    "Κυψέλη": "Kypseli",
+    "Σύνταγμα": "Syntagma",
+    "Ομόνοια": "Omonia",
+    "Βοτανικός": "Votanikos",
+    "Νέος Κόσμος": "Neos Kosmos",
+    "Πειραιάς": "Piraeus",
+    "Μαρούσι": "Marousi",
+    "Καλλιθέα": "Kallithea"
+  }
+}

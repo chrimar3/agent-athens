@@ -122,7 +122,7 @@ describe('Organization schema', () => {
       url: 'index',  // homepage
       eventCount: 1,
       lastUpdate: '2026-03-02T10:00:00Z',
-      filters: { type: '', time: '', price: '', neighborhood: '' }
+      filters: {}
     };
     const html = renderPage(metadata, [sampleConcert]);
     expect(html).toContain('"@type": "Organization"');
@@ -136,7 +136,7 @@ describe('Organization schema', () => {
       url: 'concerts',
       eventCount: 1,
       lastUpdate: '2026-03-02T10:00:00Z',
-      filters: { type: 'concert', time: '', price: '', neighborhood: '' }
+      filters: { type: 'concert' }
     };
     const html = renderPage(metadata, [sampleConcert]);
     expect(html).not.toContain('"@type": "Organization"');
@@ -154,7 +154,7 @@ describe('containedInPlace in rendered schema', () => {
       url: '',
       eventCount: 2,
       lastUpdate: '2026-03-02T10:00:00Z',
-      filters: { type: '', time: '', price: '', neighborhood: '' }
+      filters: {}
     };
     const html = renderPage(metadata, [sampleConcert, sampleWorkshop]);
     expect(html).toContain('containedInPlace');
@@ -169,7 +169,7 @@ describe('containedInPlace in rendered schema', () => {
       url: '',
       eventCount: 1,
       lastUpdate: '2026-03-02T10:00:00Z',
-      filters: { type: '', time: '', price: '', neighborhood: '' }
+      filters: {}
     };
     // sampleConcert has startDate in 2025 — should be EventCompleted
     const html = renderPage(metadata, [sampleConcert]);

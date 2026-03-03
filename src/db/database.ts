@@ -167,7 +167,7 @@ export function rowToEvent(row: any): Event {
  */
 export function upsertEvent(event: Event, db?: Database): { success: boolean; isNew: boolean } {
   // Filter out non-Athens events
-  if (!isAthensEvent(event)) {
+  if (!isAthensEvent({ venue_name: event.venue.name, venue_address: event.venue.address, title: event.title })) {
     console.log(`⚠️  Skipping non-Athens event: ${event.title}`);
     return { success: false, isNew: false };
   }

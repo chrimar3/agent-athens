@@ -8,7 +8,9 @@
  * @see src/db/processed-emails.ts
  */
 
+// @ts-expect-error -- no type declarations available for imap-simple
 import imaps from 'imap-simple';
+// @ts-expect-error -- no type declarations available for mailparser
 import { simpleParser } from 'mailparser';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
@@ -413,7 +415,7 @@ export async function fetchEmails(): Promise<IngestionResult> {
     },
   };
 
-  let connection;
+  let connection: any;
   const db = getDatabase();
 
   const result: IngestionResult = {

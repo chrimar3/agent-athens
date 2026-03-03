@@ -31,7 +31,6 @@ const TYPE_OPTIONS: Array<{ type: EventType; label: string }> = [
   { type: 'exhibition', label: 'Εκθέσεις' },
   { type: 'theater', label: 'Θέατρο' },
   { type: 'cinema', label: 'Σινεμά' },
-  { type: 'screening', label: 'Προβολές' },
   { type: 'performance', label: 'Performance' },
   { type: 'show', label: 'Show' },
   { type: 'festival', label: 'Φεστιβάλ' },

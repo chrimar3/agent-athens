@@ -46,6 +46,8 @@ function createSaveBatchTestDB(): Database {
       genres TEXT,
       description TEXT,
       full_description TEXT,
+      full_description_gr TEXT,
+      full_description_en TEXT,
       tags TEXT,
       source TEXT,
       needs_enrichment INTEGER DEFAULT 1,
@@ -458,6 +460,141 @@ describe('loadManifest', () => {
     mkdirSync('temp-briefs', { recursive: true });
     writeFileSync(testManifestPath, '{ not valid json !!!', 'utf-8');
     expect(() => loadManifest(testManifestPath)).toThrow('Invalid manifest JSON');
+  });
+});
+
+// ============================================================================
+// Tests: Dual-language save
+// ============================================================================
+
+const SAMPLE_EN_DESCRIPTION = `The first thing you hear when you descend into Half Note Jazz Club's basement is the upright bass. Not amplified — the wood resonates against stone walls, and you feel the low notes in your ribs before your ears register them.
+
+Joanna Mattrey arrives without fanfare. She positions her violin at an angle suggesting classical training, then draws a sound that belongs to no conservatory. Her bow technique alternates between feathery harmonics and aggressive sul ponticello scraping.
+
+| Aspect | Details |
+|--------|---------|
+| Setting | Intimate basement venue, 120 capacity, exposed brick |
+| Vibe | Focused listening room — conversations stop when the bow touches string |
+| Sound | Unprocessed acoustic violin, contact microphones on occasion |
+| Door | First come first served, arrive 30 minutes early |
+
+The crowd splits between contemporary classical devotees who know Mattrey from Zs and improvised music regulars who follow Half Note programming by instinct. You will see leather jackets next to wool blazers.
+
+If you need music that follows chord progressions and resolves neatly, this is not your evening. But if you want to hear a musician who treats silence as a compositional element, there is nowhere else in Athens offering this tonight.
+
+Nearest metro is Akropoli, a seven-minute walk south through Mets. Tickets available at the door — arrive by 20:30 for the best seats.
+
+One violinist, one room, one night.
+
+tags: \`live-music\`, \`experimental\`, \`intimate-venue\`
+Last verified: 2027-06-01`;
+
+describe('save-batch dual-language', () => {
+  let db: Database;
+  const testEventIds = ['test-dual-001'];
+
+  beforeEach(() => {
+    db = createSaveBatchTestDB();
+    for (const id of testEventIds) {
+      insertTestEvent(db, id);
+      writeTestDescription(id, SAMPLE_DESCRIPTION);
+      // Also write English description
+      if (!existsSync(TEST_DESCRIPTIONS_DIR)) {
+        mkdirSync(TEST_DESCRIPTIONS_DIR, { recursive: true });
+      }
+      writeFileSync(join(TEST_DESCRIPTIONS_DIR, `${id}.en.md`), SAMPLE_EN_DESCRIPTION, 'utf-8');
+    }
+  });
+
+  afterEach(() => {
+    db.close();
+    cleanupTestFiles(testEventIds);
+    // Also clean up .en.md files
+    for (const id of testEventIds) {
+      try { rmSync(join(TEST_DESCRIPTIONS_DIR, `${id}.en.md`)); } catch {}
+    }
+  });
+
+  test('saves Greek to full_description_gr and English to full_description_en', () => {
+    const { results } = saveBatch(db, testEventIds, 'test-dual', 1, false);
+    expect(results.every(r => r.success)).toBe(true);
+
+    const row = db.prepare(
+      'SELECT full_description, full_description_gr, full_description_en FROM events WHERE id = ?'
+    ).get('test-dual-001') as any;
+
+    expect(row.full_description).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_gr).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_en).toBe(SAMPLE_EN_DESCRIPTION);
+  });
+
+  test('legacy full_description equals Greek description for backwards compat', () => {
+    saveBatch(db, testEventIds, 'test-dual', 1, false);
+
+    const row = db.prepare(
+      'SELECT full_description, full_description_gr FROM events WHERE id = ?'
+    ).get('test-dual-001') as any;
+
+    expect(row.full_description).toBe(row.full_description_gr);
+  });
+
+  test('saves without English when .en.md file is missing', () => {
+    // Remove the English file
+    try { rmSync(join(TEST_DESCRIPTIONS_DIR, 'test-dual-001.en.md')); } catch {}
+
+    const { results } = saveBatch(db, testEventIds, 'test-dual', 1, false);
+    expect(results.every(r => r.success)).toBe(true);
+
+    const row = db.prepare(
+      'SELECT full_description, full_description_gr, full_description_en FROM events WHERE id = ?'
+    ).get('test-dual-001') as any;
+
+    expect(row.full_description).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_gr).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_en).toBeNull();
+  });
+});
+
+// ============================================================================
+// Tests: English quality gates
+// ============================================================================
+
+describe('validateEnglishDescription', () => {
+  // Import inline to keep the test file self-contained
+  const { validateEnglishDescription } = require('../src/enrichment/quality-gates');
+
+  const mockEvent = {
+    title: 'Test Concert',
+    type: 'concert',
+    venue: 'Half Note Jazz Club',
+    date: '2027-06-15',
+  };
+
+  test('passes valid English description', () => {
+    const result = validateEnglishDescription(mockEvent, SAMPLE_EN_DESCRIPTION, 'standard');
+    expect(result.passed).toBe(true);
+    expect(result.score).toBeGreaterThanOrEqual(60);
+  });
+
+  test('flags descriptions with too much Greek text', () => {
+    const greekText = 'Η πρώτη νότα που ακούτε είναι το μπάσο. Δεν είναι ενισχυμένο — το ξύλο αντηχεί στους τοίχους. You feel the bass in your ribs as you settle into the darkened room.';
+    const result = validateEnglishDescription(mockEvent, greekText, 'standard');
+    const greekIssue = result.issues.find((i: { code: string }) => i.code === 'EN_TOO_MUCH_GREEK' || i.code === 'EN_SOME_GREEK');
+    expect(greekIssue).toBeTruthy();
+  });
+
+  test('flags Entity Locking violations', () => {
+    const badTranslation = 'This concert features urban folk music with long-necked lute and you can feel the party spirit in the room.';
+    const result = validateEnglishDescription(mockEvent, badTranslation, 'standard');
+    const violations = result.issues.filter((i: { code: string }) => i.code === 'EN_ENTITY_LOCK_VIOLATION');
+    expect(violations.length).toBeGreaterThanOrEqual(1);
+  });
+
+  test('flags lazy adjectives', () => {
+    const lazyDesc = 'This amazing concert at Half Note is an incredible experience. You hear the fantastic sounds and the stunning atmosphere fills the room with energy.';
+    const result = validateEnglishDescription(mockEvent, lazyDesc, 'standard');
+    const lazyIssue = result.issues.find((i: { code: string }) => i.code === 'LAZY_ADJECTIVES');
+    expect(lazyIssue).toBeTruthy();
   });
 });
 

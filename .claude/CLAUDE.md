@@ -109,7 +109,7 @@ Site shows: `verified_athens` + `pass_through` only.
 ## Data Model
 
 ```typescript
-type EventType = "concert" | "dj_set" | "exhibition" | "cinema" | "screening" | "theater" | "festival" | "performance" | "show" | "workshop" | "tech" | "other";
+type EventType = "concert" | "dj_set" | "exhibition" | "cinema" | "theater" | "festival" | "performance" | "show" | "workshop" | "tech" | "dance" | "other";
 type LocationStatus = "verified_athens" | "pass_through" | "unverified" | "rejected_non_athens" | "problematic";
 type Price = "open" | "with-ticket";
 ```

@@ -1,0 +1,12 @@
+{
+  "batch_id": 3,
+  "generated_at": "2026-03-03T09:54:12.381Z",
+  "event_ids": [
+    "7a3375a33dfdd28d",
+    "c635bf723dbf1529",
+    "47aa1c5ccd3f4371",
+    "a69995ce11705178",
+    "5eb0304ea7b10136"
+  ],
+  "output_dir": "temp-descriptions/batch-3"
+}

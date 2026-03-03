@@ -61,8 +61,8 @@ function recordGenerationStats(
 }
 
 const EVENT_TYPES: EventType[] = [
-  'concert', 'dj_set', 'exhibition', 'cinema', 'screening',
-  'theater', 'performance', 'show', 'workshop', 'festival', 'tech'
+  'concert', 'dj_set', 'exhibition', 'cinema',
+  'theater', 'performance', 'show', 'workshop', 'festival', 'tech', 'dance', 'other'
 ];
 const TIME_RANGES: TimeRange[] = ['today', 'tomorrow', 'this-week', 'this-weekend', 'this-month', 'next-month', 'all-events'];
 const PRICE_FILTERS: PriceFilter[] = ['open', 'with-ticket', 'all'];
@@ -72,14 +72,15 @@ const GENRES: Record<EventType, string[]> = {
   concert: ['Pop', 'Post-rock', 'Jazz', 'Indie', 'Synth-pop', 'Dub', 'Acid jazz', 'Classical', 'World music', 'Soul', 'Rock', 'Rebetiko'],
   dj_set: ['Electronic', 'Techno', 'House', 'Trance', 'Drum and Bass', 'Ambient'],
   exhibition: ['Contemporary art', 'Photography', 'Sculpture', 'Installation'],
-  cinema: ['Film premiere', 'Documentary'],
-  screening: ['Outdoor cinema', 'Film festival'],
+  cinema: ['Film premiere', 'Documentary', 'Outdoor cinema', 'Film festival'],
   theater: ['Drama', 'Comedy', 'Tragedy'],
   performance: ['Experimental', 'Multimedia', 'Ballet', 'Contemporary Dance', 'Tango'],
   show: ['Cabaret', 'Stand-up', 'Variety'],
   workshop: ['Masterclass', 'Educational'],
   festival: ['Multi-day', 'Multi-act'],
-  tech: ['AI', 'Machine Learning', 'Data Science', 'Cloud', 'DevOps', 'Startup']
+  tech: ['AI', 'Machine Learning', 'Data Science', 'Cloud', 'DevOps', 'Startup'],
+  dance: ['Tango', 'Swing', 'Latin', 'Contemporary Dance'],
+  other: []
 };
 
 // Load category configuration

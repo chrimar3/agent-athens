@@ -2,7 +2,7 @@
 import { describe, test, expect } from "bun:test";
 import { eventToRow, rowToEvent } from "../database";
 import { sampleConcert, sampleFreeExhibition, sampleWorkshop } from "../../../tests/fixtures/events";
-import type { Event } from "../../types";
+import type { Event, SemanticTags } from "../../types";
 
 describe("eventToRow", () => {
   test("should convert Event to database row format", () => {
@@ -130,14 +130,15 @@ describe("eventToRow", () => {
   });
 
   test("should handle semanticTags when present", () => {
+    const tags: SemanticTags = { mood: ["jazz"], audience: ["adults"], vibe: ["weekend"] };
     const eventWithTags: Event = {
       ...sampleConcert,
-      semanticTags: ["jazz", "live-music", "weekend"]
+      semanticTags: tags
     };
 
     const row = eventToRow(eventWithTags);
 
-    expect(row.$ai_context).toBe(JSON.stringify(["jazz", "live-music", "weekend"]));
+    expect(row.$ai_context).toBe(JSON.stringify(tags));
   });
 
   test("should set ai_context to null when semanticTags missing", () => {
@@ -492,12 +493,10 @@ describe("rowToEvent", () => {
 
     const event = rowToEvent(row);
 
-    expect(event.price).toEqual({
-      type: "open",
-      amount: null,
-      currency: "EUR",
-      range: null
-    });
+    expect(event.price.type).toBe("open");
+    expect(event.price.amount).toBeNull();
+    expect(event.price.currency).toBe("EUR");
+    expect(event.price.range).toBeNull();
   });
 
   test("should parse semanticTags from ai_context", () => {
@@ -531,7 +530,8 @@ describe("rowToEvent", () => {
 
     const event = rowToEvent(row);
 
-    expect(event.semanticTags).toEqual({ keywords: ["jazz", "live"] });
+    expect(event.semanticTags).toBeDefined();
+    expect(event.semanticTags).toHaveProperty('keywords', ["jazz", "live"]);
   });
 
   test("should handle null ai_context", () => {

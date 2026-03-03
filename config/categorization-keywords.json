@@ -10,7 +10,7 @@
     "performance",
     "workshop",
     "exhibition",
-    "screening",
+    "cinema",
     "show",
     "festival",
     "tech",
@@ -209,7 +209,7 @@
       ]
     },
 
-    "screening": {
+    "cinema": {
       "title_keywords": [
         "προβολή",
         "screening",
@@ -218,7 +218,11 @@
         "ντοκιμαντέρ",
         "documentary",
         "movie night",
-        "cinema night"
+        "cinema night",
+        "σινεμά",
+        "cinema",
+        "premiere",
+        "πρεμιέρα"
       ],
       "description_keywords": [
         "projection",
@@ -439,7 +443,6 @@
     "workshop": "EducationEvent",
     "exhibition": "ExhibitionEvent",
     "show": "Event",
-    "screening": "ScreeningEvent",
     "cinema": "ScreeningEvent",
     "festival": "Festival",
     "tech": "EducationEvent",

@@ -11,7 +11,7 @@ import { join } from 'path';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 
 // Valid @type values from our canonical type map
-const VALID_SCHEMA_TYPES = new Set(Object.values(SCHEMA_TYPE_MAP));
+const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
 
 const PLACEHOLDER_VALUES = ['tba', 'unknown', 'n/a', 'tbd', 'none'];
 
