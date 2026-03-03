@@ -142,7 +142,7 @@ export function rowToEvent(row: any): Event {
     source: row.source,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    language: fullDescEn ? "en" : "gr",
+    language: (fullDescGr && !fullDescEn) ? "gr" : "en",
     // Time enrichment fields
     timeDoors: row.time_doors || undefined,
     timePeak: row.time_peak || undefined,

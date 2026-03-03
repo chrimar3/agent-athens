@@ -493,29 +493,33 @@ describe('save-batch dual-language', () => {
   let db: Database;
   const testEventIds = ['test-dual-001'];
 
+  // SAMPLE_DESCRIPTION is English (primary .md file)
+  // SAMPLE_EN_DESCRIPTION is repurposed here as a Greek stand-in for testing column assignment
+  const SAMPLE_GR_DESCRIPTION = SAMPLE_EN_DESCRIPTION; // reuse for structural testing
+
   beforeEach(() => {
     db = createSaveBatchTestDB();
     for (const id of testEventIds) {
       insertTestEvent(db, id);
       writeTestDescription(id, SAMPLE_DESCRIPTION);
-      // Also write English description
+      // Also write Greek description (.gr.md)
       if (!existsSync(TEST_DESCRIPTIONS_DIR)) {
         mkdirSync(TEST_DESCRIPTIONS_DIR, { recursive: true });
       }
-      writeFileSync(join(TEST_DESCRIPTIONS_DIR, `${id}.en.md`), SAMPLE_EN_DESCRIPTION, 'utf-8');
+      writeFileSync(join(TEST_DESCRIPTIONS_DIR, `${id}.gr.md`), SAMPLE_GR_DESCRIPTION, 'utf-8');
     }
   });
 
   afterEach(() => {
     db.close();
     cleanupTestFiles(testEventIds);
-    // Also clean up .en.md files
+    // Also clean up .gr.md files
     for (const id of testEventIds) {
-      try { rmSync(join(TEST_DESCRIPTIONS_DIR, `${id}.en.md`)); } catch {}
+      try { rmSync(join(TEST_DESCRIPTIONS_DIR, `${id}.gr.md`)); } catch {}
     }
   });
 
-  test('saves Greek to full_description_gr and English to full_description_en', () => {
+  test('saves English to full_description_en and Greek to full_description_gr', () => {
     const { results } = saveBatch(db, testEventIds, 'test-dual', 1, false);
     expect(results.every(r => r.success)).toBe(true);
 
@@ -524,23 +528,23 @@ describe('save-batch dual-language', () => {
     ).get('test-dual-001') as any;
 
     expect(row.full_description).toBe(SAMPLE_DESCRIPTION);
-    expect(row.full_description_gr).toBe(SAMPLE_DESCRIPTION);
-    expect(row.full_description_en).toBe(SAMPLE_EN_DESCRIPTION);
+    expect(row.full_description_en).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_gr).toBe(SAMPLE_GR_DESCRIPTION);
   });
 
-  test('legacy full_description equals Greek description for backwards compat', () => {
+  test('legacy full_description equals English description for backwards compat', () => {
     saveBatch(db, testEventIds, 'test-dual', 1, false);
 
     const row = db.prepare(
-      'SELECT full_description, full_description_gr FROM events WHERE id = ?'
+      'SELECT full_description, full_description_en FROM events WHERE id = ?'
     ).get('test-dual-001') as any;
 
-    expect(row.full_description).toBe(row.full_description_gr);
+    expect(row.full_description).toBe(row.full_description_en);
   });
 
-  test('saves without English when .en.md file is missing', () => {
-    // Remove the English file
-    try { rmSync(join(TEST_DESCRIPTIONS_DIR, 'test-dual-001.en.md')); } catch {}
+  test('saves without Greek when .gr.md file is missing', () => {
+    // Remove the Greek file
+    try { rmSync(join(TEST_DESCRIPTIONS_DIR, 'test-dual-001.gr.md')); } catch {}
 
     const { results } = saveBatch(db, testEventIds, 'test-dual', 1, false);
     expect(results.every(r => r.success)).toBe(true);
@@ -550,8 +554,8 @@ describe('save-batch dual-language', () => {
     ).get('test-dual-001') as any;
 
     expect(row.full_description).toBe(SAMPLE_DESCRIPTION);
-    expect(row.full_description_gr).toBe(SAMPLE_DESCRIPTION);
-    expect(row.full_description_en).toBeNull();
+    expect(row.full_description_en).toBe(SAMPLE_DESCRIPTION);
+    expect(row.full_description_gr).toBeNull();
   });
 });
 

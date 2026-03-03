@@ -9,9 +9,10 @@
  * CLI flags allow this to work in sandboxed environments without DB access.
  *
  * Usage:
- *   bun run scripts/auto-gate-check.ts <file-path> [--tier=premium] [--event-id=<id>]
+ *   bun run scripts/auto-gate-check.ts <file-path> [--tier=premium] [--event-id=<id>] [--lang=gr]
  *   bun run scripts/auto-gate-check.ts temp-descriptions/half-note-jazz.md --tier=premium
  *   bun run scripts/auto-gate-check.ts temp-descriptions/half-note-jazz.md --event-id=abc123
+ *   bun run scripts/auto-gate-check.ts temp-descriptions/abc123.gr.md --lang=gr --event-id=abc123
  *
  * With CLI metadata flags (no DB needed):
  *   bun run scripts/auto-gate-check.ts temp-descriptions/batch-121/abc123.md \
@@ -22,7 +23,7 @@
 
 import { readFileSync } from 'fs';
 import Database from 'bun:sqlite';
-import { validateQualityGates, quickValidate, type QualityGateResult } from '../src/enrichment/quality-gates';
+import { validateQualityGates, validateGreekDescription, quickValidate, type QualityGateResult } from '../src/enrichment/quality-gates';
 import { LAZY_ADJECTIVES, TAG_TAXONOMY, type EventForEnrichment } from '../src/enrichment/description-generator';
 import { countWords } from '../src/enrichment/word-counter';
 
@@ -31,6 +32,7 @@ const DB_PATH = 'data/events.db';
 interface CliArgs {
   filePath: string;
   tier: 'stub' | 'standard' | 'premium';
+  lang: 'en' | 'gr';
   eventId: string | null;
   eventType: string | null;
   eventVenue: string | null;
@@ -51,11 +53,13 @@ function parseArgs(): CliArgs {
   const eventDateArg = args.find(a => a.startsWith('--event-date='));
   const eventPriceArg = args.find(a => a.startsWith('--event-price='));
   const eventGenreArg = args.find(a => a.startsWith('--event-genre='));
+  const langArg = args.find(a => a.startsWith('--lang='));
 
   if (!filePath) {
     console.error('Usage: bun run scripts/auto-gate-check.ts <file-path> [--tier=premium] [--event-id=<id>]');
     console.error('       [--event-type=concert] [--event-venue="Half Note"] [--event-title="Jazz Night"]');
     console.error('       [--event-date=2026-03-02] [--event-price=with-ticket] [--event-genre=jazz]');
+    console.error('       [--lang=gr]  (validate Greek description instead of English)');
     process.exit(1);
   }
 
@@ -65,9 +69,16 @@ function parseArgs(): CliArgs {
     process.exit(1);
   }
 
+  const lang = (langArg?.split('=')[1] || 'en') as CliArgs['lang'];
+  if (!['en', 'gr'].includes(lang)) {
+    console.error(`Invalid lang: ${lang}. Must be en or gr.`);
+    process.exit(1);
+  }
+
   return {
     filePath,
     tier,
+    lang,
     eventId: eventIdArg?.split('=')[1] || null,
     eventType: eventTypeArg?.split('=')[1] || null,
     eventVenue: eventVenueArg?.split('=')[1] || null,
@@ -236,13 +247,15 @@ function main(): void {
 
   const wordResult = countWords(description);
   console.log(`\nChecking: ${args.filePath}`);
-  console.log(`Tier: ${args.tier} | Words: ${wordResult.count}`);
+  console.log(`Tier: ${args.tier} | Lang: ${args.lang} | Words: ${wordResult.count}`);
 
   // Build event context (CLI flags > DB > filename fallback)
   const event = buildEventContext(args);
 
-  // Run quality gates
-  const result = validateQualityGates(event, description, args.tier);
+  // Run quality gates — Greek uses validateGreekDescription(), English uses validateQualityGates()
+  const result = args.lang === 'gr'
+    ? validateGreekDescription(event, description, args.tier)
+    : validateQualityGates(event, description, args.tier);
 
   // Run additional v4 checks
   const v4Issues = runV4Checks(description);

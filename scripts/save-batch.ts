@@ -127,10 +127,14 @@ export function cleanupBatchFiles(eventIds: string[], outputDir?: string): void 
   let cleaned = 0;
   for (const id of eventIds) {
     const mdPath = join(descDir, `${id}.md`);
+    const grMdPath = join(descDir, `${id}.gr.md`);
     const tagsPath = join(descDir, `${id}.tags.json`);
     if (existsSync(mdPath)) {
       unlinkSync(mdPath);
       cleaned++;
+    }
+    if (existsSync(grMdPath)) {
+      unlinkSync(grMdPath);
     }
     if (existsSync(tagsPath)) {
       unlinkSync(tagsPath);
