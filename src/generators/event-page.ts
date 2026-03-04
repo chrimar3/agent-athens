@@ -225,14 +225,18 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     };
   } else {
     schema.isAccessibleForFree = false;
-    schema.offers = {
+    const offerObj: Record<string, any> = {
       '@type': 'Offer',
-      'price': event.price.amount ? event.price.amount.toString() : '',
       'priceCurrency': event.price.currency || 'EUR',
       'availability': 'https://schema.org/InStock',
       'url': event.ticketUrl || event.url || `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
       'validFrom': event.createdAt || startDate
     };
+    const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
+    if (priceStr !== '') {
+      offerObj.price = priceStr;
+    }
+    schema.offers = offerObj;
   }
 
   // Add image if available
