@@ -954,7 +954,7 @@ export function quickValidate(
 // English Description Validation
 // ============================================================================
 
-/** Forbidden English translations of locked cultural terms */
+/** Forbidden English translations of locked cultural terms (multi-word = specific enough) */
 const TRANSLATED_TERM_VIOLATIONS: Record<string, string> = {
   'urban folk': 'rebetiko',
   'art song': 'entechno',
@@ -963,12 +963,29 @@ const TRANSLATED_TERM_VIOLATIONS: Record<string, string> = {
   'long-necked lute': 'bouzouki',
   'party spirit': 'kefi',
   'craftsmanship': 'meraki',
-  'honor': 'filotimo',
   'group of friends': 'parea',
-  'celebration': 'glendi',
   'village festival': 'panigiri',
   'music hall': 'bouzoukia',
 };
+
+/**
+ * Context-aware entity locking for generic single words.
+ * These are too common in plain English for simple substring matching.
+ * Each entry has exception patterns that indicate normal English usage.
+ */
+interface ContextAwareViolation {
+  translated: string;
+  correct: string;
+  /** If ANY exception pattern matches, skip the violation */
+  exceptionPatterns: RegExp[];
+}
+
+// "honor" and "celebration" removed from entity locking entirely.
+// These are too generic in English — every flagged instance was standard English
+// ("in honor of", "honorary members", "sounds like celebration", "darkness becomes celebration").
+// Genuine filotimo/glendi references use the Greek terms directly.
+// Real entity locking value is in specific terms: music genres, instruments, compound phrases.
+const CONTEXT_AWARE_VIOLATIONS: ContextAwareViolation[] = [];
 
 /**
  * Validate an English description against English-specific quality gates.
@@ -1004,10 +1021,21 @@ export function validateEnglishDescription(
   }
 
   // 2. Entity Locking: check for forbidden translations
+  // 2a. Multi-word terms — specific enough for simple substring matching
   for (const [translated, correct] of Object.entries(TRANSLATED_TERM_VIOLATIONS)) {
     if (lowerDesc.includes(translated)) {
       issues.push(createIssue('technical', 'error', 'EN_ENTITY_LOCK_VIOLATION',
         `"${translated}" should stay as "${correct}" (Entity Locking rule)`));
+    }
+  }
+  // 2b. Generic single words — context-aware matching (skip common English usage)
+  for (const { translated, correct, exceptionPatterns } of CONTEXT_AWARE_VIOLATIONS) {
+    if (lowerDesc.includes(translated)) {
+      const hasException = exceptionPatterns.some(p => p.test(description));
+      if (!hasException) {
+        issues.push(createIssue('technical', 'error', 'EN_ENTITY_LOCK_VIOLATION',
+          `"${translated}" should stay as "${correct}" (Entity Locking rule)`));
+      }
     }
   }
 

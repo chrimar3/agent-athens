@@ -98,9 +98,15 @@ function main(): void {
         tier
       );
 
-      const allIssues = [...enResult.issues, ...genericIssues];
-      const errors = allIssues.filter(i => i.severity === 'error');
-      const warnings = allIssues.filter(i => i.severity === 'warning');
+      // Deduplicate issues by code (LAZY_ADJECTIVES is checked in both validators)
+      const mergedIssues = [...enResult.issues];
+      for (const gi of genericIssues) {
+        if (!mergedIssues.some(i => i.code === gi.code)) {
+          mergedIssues.push(gi);
+        }
+      }
+      const errors = mergedIssues.filter(i => i.severity === 'error');
+      const warnings = mergedIssues.filter(i => i.severity === 'warning');
 
       let status: SweepResult['status'] = 'PASS';
       if (errors.length > 0) status = 'FAIL';

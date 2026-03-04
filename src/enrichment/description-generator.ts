@@ -120,8 +120,18 @@ export const LAZY_ADJECTIVES: string[] = [
   'extraordinary', 'exceptional', 'remarkable', 'phenomenal',
 ];
 
-// Backward compatibility
-export const FILLER_PHRASES = LAZY_ADJECTIVES;
+/**
+ * Filler phrases that are ALWAYS errors regardless of tier.
+ * These are generic padding that adds zero information — distinct from lazy adjectives
+ * which are tier-sensitive (warning at standard, error at premium).
+ */
+export const FILLER_PHRASES: string[] = [
+  'world-class', 'state-of-the-art', 'one-of-a-kind', 'must-see',
+  'must-see event', 'not to be missed', "don't miss", 'unforgettable',
+  'unparalleled', 'once in a lifetime', 'truly unique',
+  'absolutely amazing', 'incredible opportunity',
+  'spectacular event', 'breathtaking performance',
+];
 
 // ============================================================================
 // Prompt Building - Standard (backward compatible)

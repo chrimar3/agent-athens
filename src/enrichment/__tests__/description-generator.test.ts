@@ -17,6 +17,7 @@ import {
   buildPrompt,
   validateDescription,
   FILLER_PHRASES,
+  LAZY_ADJECTIVES,
   type EventForEnrichment,
   type DescriptionValidationResult,
 } from '../description-generator';
@@ -365,10 +366,18 @@ describe('Description Generator', () => {
   // ==========================================================================
 
   describe('FILLER_PHRASES', () => {
-    test('contains common filler phrases', () => {
+    test('contains genuinely filler phrases', () => {
       expect(FILLER_PHRASES).toContain('unforgettable');
       expect(FILLER_PHRASES).toContain('must-see');
       expect(FILLER_PHRASES).toContain("don't miss");
+      expect(FILLER_PHRASES).toContain('world-class');
+      expect(FILLER_PHRASES).toContain('not to be missed');
+    });
+
+    test('is separate from LAZY_ADJECTIVES (not an alias)', () => {
+      expect(FILLER_PHRASES).not.toBe(LAZY_ADJECTIVES);
+      // FILLER_PHRASES should be shorter than LAZY_ADJECTIVES
+      expect(FILLER_PHRASES.length).toBeLessThan(LAZY_ADJECTIVES.length);
     });
 
     test('is a non-empty array', () => {
@@ -380,6 +389,13 @@ describe('Description Generator', () => {
       for (const phrase of FILLER_PHRASES) {
         expect(phrase).toBe(phrase.toLowerCase());
       }
+    });
+
+    test('does not contain tier-sensitive adjectives like legendary or vibrant', () => {
+      expect(FILLER_PHRASES).not.toContain('legendary');
+      expect(FILLER_PHRASES).not.toContain('vibrant');
+      expect(FILLER_PHRASES).not.toContain('immersive');
+      expect(FILLER_PHRASES).not.toContain('iconic');
     });
   });
 });

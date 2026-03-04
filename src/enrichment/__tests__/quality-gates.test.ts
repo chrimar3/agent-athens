@@ -317,3 +317,57 @@ describe('Greek: δωρεάν prohibition and clean pass', () => {
     expect(doreanIssue).toBeUndefined();
   });
 });
+
+// ============================================================================
+// Entity Locking — Context-Aware Matching
+// ============================================================================
+
+describe('English: Context-aware entity locking', () => {
+  test('"in honor of the composer" does NOT trigger entity lock', () => {
+    const desc = cleanDescription().replace('Doors open at nine', 'This concert is in honor of the composer. Doors open at nine');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('honor'));
+    expect(lockIssue).toBeUndefined();
+  });
+
+  test('"honoring the anniversary" does NOT trigger entity lock', () => {
+    const desc = cleanDescription().replace('Doors open at nine', 'Honoring the anniversary of the venue. Doors open at nine');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('honor'));
+    expect(lockIssue).toBeUndefined();
+  });
+
+  test('"a celebration of jazz" does NOT trigger entity lock', () => {
+    const desc = cleanDescription().replace('Doors open at nine', 'A celebration of jazz and improvisation. Doors open at nine');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('celebration'));
+    expect(lockIssue).toBeUndefined();
+  });
+
+  test('"celebrating the release" does NOT trigger entity lock', () => {
+    const desc = cleanDescription().replace('Doors open at nine', 'Celebrating the release of the new album. Doors open at nine');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('celebration'));
+    expect(lockIssue).toBeUndefined();
+  });
+
+  test('"urban folk" still triggers entity lock (multi-word, specific)', () => {
+    const desc = cleanDescription().replace('distinctive sound', 'urban folk sound');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('urban folk'));
+    expect(lockIssue).toBeDefined();
+  });
+
+  test('"party spirit" still triggers entity lock (multi-word, specific)', () => {
+    const desc = cleanDescription().replace('distinctive sound', 'party spirit of the night');
+    const result = validateEnglishDescription(baseEvent, desc, 'standard');
+    const lockIssue = result.issues.find(i =>
+      i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('party spirit'));
+    expect(lockIssue).toBeDefined();
+  });
+});
