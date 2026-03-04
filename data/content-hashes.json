@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generatedAt": "2026-03-04T10:40:27.560+02:00",
+  "generatedAt": "2026-03-04T11:05:12.940+02:00",
   "entries": {
     "today": {
-      "hash": "dabebbb11493b3b6",
+      "hash": "1803d9189b55c769",
       "lastModified": "2026-03-04"
     },
     "tomorrow": {
@@ -15,11 +15,11 @@
       "lastModified": "2026-03-04"
     },
     "this-weekend": {
-      "hash": "149b7dafbb243f4b",
+      "hash": "3cab72a4cfcfd2e7",
       "lastModified": "2026-03-04"
     },
     "this-month": {
-      "hash": "8f3f4bb29f888498",
+      "hash": "da7118e678a507f2",
       "lastModified": "2026-03-04"
     },
     "next-month": {
@@ -143,7 +143,7 @@
       "lastModified": "2026-03-03"
     },
     "theater": {
-      "hash": "c42c5326d3cd6488",
+      "hash": "4ff4206c9fdd600d",
       "lastModified": "2026-03-04"
     },
     "theater-today": {
@@ -367,7 +367,7 @@
       "lastModified": "2026-03-03"
     },
     "open": {
-      "hash": "d7cda38548244cc3",
+      "hash": "4ecc5556b605b5e4",
       "lastModified": "2026-03-04"
     },
     "open-today": {
@@ -395,7 +395,7 @@
       "lastModified": "2026-03-04"
     },
     "with-ticket": {
-      "hash": "cdc32b7c99586957",
+      "hash": "ebe942e217f644fc",
       "lastModified": "2026-03-04"
     },
     "with-ticket-today": {
@@ -4623,7 +4623,7 @@
       "lastModified": "2026-03-03"
     },
     "concerts": {
-      "hash": "c4eaae3cf41772cc",
+      "hash": "cbaef704cab8aca4",
       "lastModified": "2026-03-04"
     },
     "clubs": {
@@ -4663,47 +4663,47 @@
       "lastModified": "2026-03-04"
     },
     "en/today": {
-      "hash": "642eea3fe2d4e8c5",
+      "hash": "7c52eb9c48668a92",
       "lastModified": "2026-03-04"
     },
     "en/this-weekend": {
-      "hash": "bdce9f1d4909a54d",
+      "hash": "966bbdae7608260e",
       "lastModified": "2026-03-04"
     },
     "en/concerts": {
-      "hash": "cd2fb9900452403f",
+      "hash": "4c4872c2bc03dafa",
       "lastModified": "2026-03-04"
     },
     "en/theater": {
-      "hash": "f64ce2985921a27f",
+      "hash": "39028792bf01e879",
       "lastModified": "2026-03-04"
     },
     "en/nightlife": {
-      "hash": "f114a3dea23a63a9",
+      "hash": "da4d037e2f2a8fee",
       "lastModified": "2026-03-04"
     },
     "en/festivals": {
-      "hash": "748a44740cb7d213",
+      "hash": "9290a7569934da4b",
       "lastModified": "2026-03-04"
     },
     "en/kids": {
-      "hash": "2c5a6dff5ea0ac90",
+      "hash": "a384d4e30016b7ad",
       "lastModified": "2026-03-04"
     },
     "en/open": {
-      "hash": "d7aa1ebcfd79a774",
+      "hash": "e70dcfc9a4f326fe",
       "lastModified": "2026-03-04"
     },
     "en/classical-music": {
-      "hash": "0f9edfa79d319487",
+      "hash": "f61209c4b4d146e9",
       "lastModified": "2026-03-04"
     },
     "en/this-month": {
-      "hash": "ac1a0fd4f7b3f635",
+      "hash": "eea36906b0675459",
       "lastModified": "2026-03-04"
     },
     "en/with-ticket": {
-      "hash": "ada07cac010d6416",
+      "hash": "12004791b06e49dc",
       "lastModified": "2026-03-04"
     },
     "events/15bdbd01-138-n-i-m-a-mentis-antonopoulos-threadworks": {

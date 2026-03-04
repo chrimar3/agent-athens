@@ -273,6 +273,24 @@ export function renderHubPage(
     /<meta name="keywords" content="[^"]*">/,
     `<meta name="keywords" content="${hubKeywords}">`
   );
+  // Override OG + Twitter meta with hub-specific English/Greek values
+  const hubEventStats = `${filteredEvents.length} ${t.hubEventCount}`;
+  html = html.replace(
+    /<meta property="og:title" content="[^"]*">/,
+    `<meta property="og:title" content="${hubTitle}">`
+  );
+  html = html.replace(
+    /<meta property="og:description" content="[^"]*">/,
+    `<meta property="og:description" content="${hubDescription}">`
+  );
+  html = html.replace(
+    /<meta name="twitter:title" content="[^"]*">/,
+    `<meta name="twitter:title" content="${hubTitle}">`
+  );
+  html = html.replace(
+    /<meta name="twitter:description" content="[^"]*">/,
+    `<meta name="twitter:description" content="${hubDescription}">`
+  );
   // Override OG image with per-hub branded image
   html = html.replace(
     /<meta property="og:image" content="[^"]*">/,
