@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: e9e756e1f5fd10fa, 2012d81847fd0626, e464a2babdc39482, 059c8ef1a00cf635, d5b05736cd7d12f2
+- Event IDs: 071a4e10185f0b75, 282ef93b3f829ac6, 79414abc6088feb4, ec374fb369c6d2d8, f6a40f4ff749fa82
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -56,52 +56,82 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### In motion: Ένα άγαλμα που το ’σκασε
-- **ID**: e9e756e1f5fd10fa
-- **Type**: theater
-- **Venue**: Δημοτικό Θέατρο Πειραιά
-- **Price**: tba
-- **Date**: 2026-03-03T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (Greek)**: 120-180
-- **Target words (English)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: Greek description MUST be 120-180 words. English MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
+### Rave Ritual
+- **ID**: 071a4e10185f0b75
+- **Type**: dj_set
+- **Venue**: Temple
+- **Price**: paid
+- **Date**: 2026-03-27T23:59:00
+- **Time**: 23:59
+- **URL**: https://ra.co/events/2367186
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### Temple Athens
+  | Field | Data |
+  |-------|------|
+  | **Address** | Iakhou 17, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~600 |
+  | **Entry** | €15-25 |
+  | **Door Policy** | Some selection on big nights |
+  | **Sound** | Funktion-One, serious laser rig |
+  | **Character** | Big-room techno, two floors, basement is the peak experience |
+  
+  ---
+  ```
 
-### Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου
-- **ID**: 2012d81847fd0626
+### Duo Duende
+- **ID**: 282ef93b3f829ac6
 - **Type**: concert
-- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
-- **Price**: tba
-- **Date**: 2026-03-03T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/ntenekedoupoli_ksana!_to_megalo_taksidi_tou_meleniou-10083469/
+- **Venue**: Ωδείο Αθηνών
+- **Price**: paid
+- **Date**: 2026-03-06
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/music/gig/duo_duende-10089251/
 - **Source**: athinorama.gr
 - **Category**: concert_local
-- **Target words (Greek)**: 80-120
-- **Target words (English)**: 70-100
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
-- **HARD CONSTRAINT**: Greek description MUST be 80-120 words. English MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Ωδείο Αθηνών Athens" for context.
 
-### FERMA Label Night
-- **ID**: e464a2babdc39482
+### ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος
+- **ID**: 79414abc6088feb4
+- **Type**: theater
+- **Venue**: Θέατρο Χορν
+- **Price**: paid
+- **Date**: 2026-03-04T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/martyras-katigorias/
+- **Source**: more.com
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Χορν Athens" for context.
+
+### SOCIETY 3000 invites Ben Pest (Live)
+- **ID**: ec374fb369c6d2d8
 - **Type**: dj_set
 - **Venue**: Astron
 - **Price**: paid
-- **Date**: 2026-03-13T23:00:00
+- **Date**: 2026-03-28T23:00:00
 - **Time**: 23:00
-- **URL**: https://ra.co/events/2383517
+- **URL**: https://ra.co/events/2370430
 - **Source**: residentadvisor
 - **Category**: concert_local
-- **Target words (Greek)**: 80-120
-- **Target words (English)**: 70-100
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
-- **HARD CONSTRAINT**: Greek description MUST be 80-120 words. English MUST be 70-100 words.
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
   ### Astron Club
@@ -120,37 +150,21 @@ These terms MUST remain untranslated in English descriptions:
   ---
   ```
 
-### Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ
-- **ID**: 059c8ef1a00cf635
-- **Type**: sports
-- **Venue**: Σημείο
+### Divas Drive Trio
+- **ID**: f6a40f4ff749fa82
+- **Type**: concert
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-29T10:00:00
-- **Time**: 10:00
-- **URL**: https://www.more.com/gr-el/tickets/sports/oloi-mazi-mporoume-agones-gia-to-periballon/
-- **Source**: more.com
-- **Category**: default
-- **Target words (Greek)**: 120-200
-- **Target words (English)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: Greek description MUST be 120-200 words. English MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Σημείο Athens" for context.
-
-### Ο Λούτσιο και το ταξίδι στον πλανήτη Κιαροσκούρο
-- **ID**: d5b05736cd7d12f2
-- **Type**: theater
-- **Venue**: Θέατρο Μαβίλη
-- **Price**: paid
-- **Date**: 2026-03-03T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/o_loutsio_kai_to_taksidi_ston_planiti_kiaroskouro-10088872/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (Greek)**: 120-180
-- **Target words (English)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: Greek description MUST be 120-180 words. English MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Μαβίλη Athens" for context.
+- **Date**: 2026-03-06
+- **Time**: 20:00
+- **URL**: https://www.ticketservices.gr/event/14174/
+- **Source**: ticketservices
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ---
 
@@ -174,19 +188,17 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-2 Tag1 Tag2 Tag3...
    ```
-5. **Write English description**: Write a parallel English version of the description.
-   Save to `temp-descriptions/batch-2/<event-id>.en.md`. English word target shown per event above.
+5. **Write Greek description** (optional secondary): Write a condensed Greek version.
+   Save to `temp-descriptions/batch-2/<event-id>.gr.md`. Greek word target shown per event above.
    ```bash
-   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-2 --lang=en "<english description>"
+   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-2 --lang=gr "<greek description>"
    ```
-   **Entity Locking rules** (terms that MUST stay untranslated — see below):
-   - Greek music genres: rebetiko, laiko, entechno, etc. (never "urban folk" or "art song")
-   - Venue names: use Latin transliteration or established English brand name
-   - Neighborhoods: Koukaki, Exarchia, Psyrri (never translate)
-   - Cultural concepts: kefi, meraki, parea, glendi (never translate)
-   - Dates: DD Month YYYY format. Times: 24h format. Currency: EUR.
-   - The English version is NOT a translation. Write it fresh for an international audience.
-   - Same 8-section structure, same factual content, but natural English voice.
+   **Greek description rules**:
+   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
+   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
+   - Venue names in Greek script where available
+   - Same 8-section structure, same factual content, but natural Greek voice
+   - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
@@ -201,51 +213,51 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e9e756e1f5fd10fa.md \
-  --tier=standard --event-id=e9e756e1f5fd10fa \
-  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
-  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
-  --event-date=2026-03-03 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/071a4e10185f0b75.md \
+  --tier=stub --event-id=071a4e10185f0b75 \
+  --event-type=dj_set --event-venue="Temple" \
+  --event-title="Rave Ritual" \
+  --event-date=2026-03-27 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/2012d81847fd0626.md \
-  --tier=stub --event-id=2012d81847fd0626 \
-  --event-type=concert --event-venue="Ίδρυμα Μιχάλης Κακογιάννης" \
-  --event-title="Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου" \
-  --event-date=2026-03-03 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/282ef93b3f829ac6.md \
+  --tier=stub --event-id=282ef93b3f829ac6 \
+  --event-type=concert --event-venue="Ωδείο Αθηνών" \
+  --event-title="Duo Duende" \
+  --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e464a2babdc39482.md \
-  --tier=stub --event-id=e464a2babdc39482 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/79414abc6088feb4.md \
+  --tier=standard --event-id=79414abc6088feb4 \
+  --event-type=theater --event-venue="Θέατρο Χορν" \
+  --event-title="ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος" \
+  --event-date=2026-03-04 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/ec374fb369c6d2d8.md \
+  --tier=stub --event-id=ec374fb369c6d2d8 \
   --event-type=dj_set --event-venue="Astron" \
-  --event-title="FERMA Label Night" \
-  --event-date=2026-03-13 --event-price=paid
+  --event-title="SOCIETY 3000 invites Ben Pest (Live)" \
+  --event-date=2026-03-28 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/059c8ef1a00cf635.md \
-  --tier=standard --event-id=059c8ef1a00cf635 \
-  --event-type=sports --event-venue="Σημείο" \
-  --event-title="Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ" \
-  --event-date=2026-03-29 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d5b05736cd7d12f2.md \
-  --tier=standard --event-id=d5b05736cd7d12f2 \
-  --event-type=theater --event-venue="Θέατρο Μαβίλη" \
-  --event-title="Ο Λούτσιο και το ταξίδι στον πλανήτη Κιαροσκούρο" \
-  --event-date=2026-03-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f6a40f4ff749fa82.md \
+  --tier=premium --event-id=f6a40f4ff749fa82 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Divas Drive Trio" \
+  --event-date=2026-03-06 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| e9e756e1f5fd10fa | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
-| 2012d81847fd0626 | Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου | /100 | | |
-| e464a2babdc39482 | FERMA Label Night | /100 | | |
-| 059c8ef1a00cf635 | Όλοι Μαζί Μπορούμε - ΑΓΩΝΕΣ ΓΙΑ ΤΟ ΠΕΡΙΒΑΛΛΟΝ | /100 | | |
-| d5b05736cd7d12f2 | Ο Λούτσιο και το ταξίδι στον πλανήτη Κιαροσκούρο | /100 | | |
+| 071a4e10185f0b75 | Rave Ritual | /100 | | |
+| 282ef93b3f829ac6 | Duo Duende | /100 | | |
+| 79414abc6088feb4 | ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος | /100 | | |
+| ec374fb369c6d2d8 | SOCIETY 3000 invites Ben Pest (Live) | /100 | | |
+| f6a40f4ff749fa82 | Divas Drive Trio | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 7a3375a33dfdd28d, c635bf723dbf1529, 47aa1c5ccd3f4371, a69995ce11705178, 5eb0304ea7b10136
+- Event IDs: 89ce6ef9417c2fbf, b2299a9aea4e9a5b, cc92da2e3594def6, 149c42be18bd5127, 29137258c4025ddb
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -56,84 +56,97 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Η βασίλισσα των πάντων
-- **ID**: 7a3375a33dfdd28d
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-03T12:30:00
-- **Time**: 12:30
-- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (Greek)**: 400-600
-- **Target words (English)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: Greek description MUST be 400-600 words. English MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### ΚΟΛΟΣΣΟΣ H HOTELS - ΕΙΣΙΤΗΡΙΑ ΑΓΩΝΩΝ 2025-2026
-- **ID**: c635bf723dbf1529
-- **Type**: dj_set
-- **Venue**: Κλειστό Καλλιθέας
-- **Price**: paid
-- **Date**: 2026-03-15
-- **Time**: 12:45
-- **URL**: https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-eisitiria-agonon-2025-2026/
-- **Source**: more.com
-- **Category**: concert_local
-- **Target words (Greek)**: 80-120
-- **Target words (English)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: Greek description MUST be 80-120 words. English MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Κλειστό Καλλιθέας Athens" for context.
-
-### Όταν ο Μίκης ήταν παιδί
-- **ID**: 47aa1c5ccd3f4371
+### ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ
+- **ID**: 89ce6ef9417c2fbf
 - **Type**: theater
-- **Venue**: Ακροπόλ
+- **Venue**: Θέατρο Βασιλάκου
 - **Price**: paid
-- **Date**: 2026-03-03T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/otan_o_mikis_itan_paidi-10087894/
-- **Source**: athinorama.gr
-- **Category**: kids_family
-- **Target words (Greek)**: 120-180
-- **Target words (English)**: 100-155
+- **Date**: 2026-03-04T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/ekeinos-pou-eklepse-ti-mera-plirose-ti-nyxta/
+- **Source**: more.com
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
 - **Structure**: hybrid
-- **HARD CONSTRAINT**: Greek description MUST be 120-180 words. English MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Ακροπόλ Athens" for context.
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Βασιλάκου Athens" for context.
 
-### Ο Καπετάν Σαματάς
-- **ID**: a69995ce11705178
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
+### ZONA MUTANTE III w/ Blame The Mono 
+- **ID**: b2299a9aea4e9a5b
+- **Type**: dj_set
+- **Venue**: Oddity
 - **Price**: paid
-- **Date**: 2026-03-03T12:30:00
-- **Time**: 12:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_kapetan_samatas-10087293/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (Greek)**: 400-600
-- **Target words (English)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: Greek description MUST be 400-600 words. English MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+- **Date**: 2026-03-28T23:30:00
+- **Time**: 23:30
+- **URL**: https://ra.co/events/2374710
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### Oddity
+  | Field | Data |
+  |-------|------|
+  | **Address** | Irakleidon 61 |
+  | **Metro** | Thissio (Green) |
+  | **Capacity** | ~200 |
+  | **Entry** | €8-15 |
+  | **Regular nights** | Blend collective (progressive/melodic) |
+  | **Character** | Counterpoint to harder Gazi sounds |
+  
+  ---
+  ```
 
-### Ρεσιτάλ Πιάνου Μαρία Ευστρατιάδη
-- **ID**: 5eb0304ea7b10136
+### Road Duck
+- **ID**: cc92da2e3594def6
+- **Type**: concert
+- **Venue**: Piraeus Club Academy
+- **Price**: paid
+- **Date**: 2026-03-06
+- **Time**: 20:00
+- **URL**: https://www.athinorama.gr/music/gig/road_duck-10079915/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Piraeus Club Academy Athens" for context.
+
+### Εχθρός του λαού
+- **ID**: 149c42be18bd5127
+- **Type**: theater
+- **Venue**: Θέατρο Κνωσός
+- **Price**: paid
+- **Date**: 2026-03-04T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/exthros-tou-laou/
+- **Source**: more.com
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Κνωσός Athens" for context.
+
+### Μαθητική Συναυλία του Ωδείου CGS
+- **ID**: 29137258c4025ddb
 - **Type**: dj_set
 - **Venue**: Parnassos Literary Society
 - **Price**: paid
-- **Date**: 2026-03-24T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14199/
+- **Date**: 2026-03-29
+- **Time**: 16:00
+- **URL**: https://www.ticketservices.gr/event/14183/
 - **Source**: ticketservices
 - **Category**: concert_local
-- **Target words (Greek)**: 80-120
-- **Target words (English)**: 70-100
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
-- **HARD CONSTRAINT**: Greek description MUST be 80-120 words. English MUST be 70-100 words.
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel**: Not in database. WebSearch "Parnassos Literary Society Athens" for context.
 
 ---
@@ -158,19 +171,17 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-3 Tag1 Tag2 Tag3...
    ```
-5. **Write English description**: Write a parallel English version of the description.
-   Save to `temp-descriptions/batch-3/<event-id>.en.md`. English word target shown per event above.
+5. **Write Greek description** (optional secondary): Write a condensed Greek version.
+   Save to `temp-descriptions/batch-3/<event-id>.gr.md`. Greek word target shown per event above.
    ```bash
-   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-3 --lang=en "<english description>"
+   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-3 --lang=gr "<greek description>"
    ```
-   **Entity Locking rules** (terms that MUST stay untranslated — see below):
-   - Greek music genres: rebetiko, laiko, entechno, etc. (never "urban folk" or "art song")
-   - Venue names: use Latin transliteration or established English brand name
-   - Neighborhoods: Koukaki, Exarchia, Psyrri (never translate)
-   - Cultural concepts: kefi, meraki, parea, glendi (never translate)
-   - Dates: DD Month YYYY format. Times: 24h format. Currency: EUR.
-   - The English version is NOT a translation. Write it fresh for an international audience.
-   - Same 8-section structure, same factual content, but natural English voice.
+   **Greek description rules**:
+   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
+   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
+   - Venue names in Greek script where available
+   - Same 8-section structure, same factual content, but natural Greek voice
+   - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
    ```bash
@@ -185,51 +196,51 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/7a3375a33dfdd28d.md \
-  --tier=premium --event-id=7a3375a33dfdd28d \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Η βασίλισσα των πάντων" \
-  --event-date=2026-03-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/89ce6ef9417c2fbf.md \
+  --tier=standard --event-id=89ce6ef9417c2fbf \
+  --event-type=theater --event-venue="Θέατρο Βασιλάκου" \
+  --event-title="ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ" \
+  --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/c635bf723dbf1529.md \
-  --tier=stub --event-id=c635bf723dbf1529 \
-  --event-type=dj_set --event-venue="Κλειστό Καλλιθέας" \
-  --event-title="ΚΟΛΟΣΣΟΣ H HOTELS - ΕΙΣΙΤΗΡΙΑ ΑΓΩΝΩΝ 2025-2026" \
-  --event-date=2026-03-15 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b2299a9aea4e9a5b.md \
+  --tier=stub --event-id=b2299a9aea4e9a5b \
+  --event-type=dj_set --event-venue="Oddity" \
+  --event-title="ZONA MUTANTE III w/ Blame The Mono " \
+  --event-date=2026-03-28 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/47aa1c5ccd3f4371.md \
-  --tier=standard --event-id=47aa1c5ccd3f4371 \
-  --event-type=theater --event-venue="Ακροπόλ" \
-  --event-title="Όταν ο Μίκης ήταν παιδί" \
-  --event-date=2026-03-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cc92da2e3594def6.md \
+  --tier=stub --event-id=cc92da2e3594def6 \
+  --event-type=concert --event-venue="Piraeus Club Academy" \
+  --event-title="Road Duck" \
+  --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a69995ce11705178.md \
-  --tier=premium --event-id=a69995ce11705178 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Ο Καπετάν Σαματάς" \
-  --event-date=2026-03-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/149c42be18bd5127.md \
+  --tier=standard --event-id=149c42be18bd5127 \
+  --event-type=theater --event-venue="Θέατρο Κνωσός" \
+  --event-title="Εχθρός του λαού" \
+  --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5eb0304ea7b10136.md \
-  --tier=stub --event-id=5eb0304ea7b10136 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/29137258c4025ddb.md \
+  --tier=stub --event-id=29137258c4025ddb \
   --event-type=dj_set --event-venue="Parnassos Literary Society" \
-  --event-title="Ρεσιτάλ Πιάνου Μαρία Ευστρατιάδη" \
-  --event-date=2026-03-24 --event-price=paid
+  --event-title="Μαθητική Συναυλία του Ωδείου CGS" \
+  --event-date=2026-03-29 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 7a3375a33dfdd28d | Η βασίλισσα των πάντων | /100 | | |
-| c635bf723dbf1529 | ΚΟΛΟΣΣΟΣ H HOTELS - ΕΙΣΙΤΗΡΙΑ ΑΓΩΝΩΝ 2025-2026 | /100 | | |
-| 47aa1c5ccd3f4371 | Όταν ο Μίκης ήταν παιδί | /100 | | |
-| a69995ce11705178 | Ο Καπετάν Σαματάς | /100 | | |
-| 5eb0304ea7b10136 | Ρεσιτάλ Πιάνου Μαρία Ευστρατιάδη | /100 | | |
+| 89ce6ef9417c2fbf | ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ | /100 | | |
+| b2299a9aea4e9a5b | ZONA MUTANTE III w/ Blame The Mono  | /100 | | |
+| cc92da2e3594def6 | Road Duck | /100 | | |
+| 149c42be18bd5127 | Εχθρός του λαού | /100 | | |
+| 29137258c4025ddb | Μαθητική Συναυλία του Ωδείου CGS | /100 | | |

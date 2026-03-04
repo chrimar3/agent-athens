@@ -193,6 +193,20 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     details.push(validateSchemaCompleteness(html, slug));
   }
 
+  // Also scan English pages (dist/en/events/)
+  const enEventsDir = join(distDir, 'en/events');
+  if (existsSync(enEventsDir)) {
+    const enSlugDirs = readdirSync(enEventsDir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name);
+    for (const slug of enSlugDirs) {
+      const htmlPath = join(enEventsDir, slug, 'index.html');
+      if (!existsSync(htmlPath)) continue;
+      const html = readFileSync(htmlPath, 'utf-8');
+      details.push(validateSchemaCompleteness(html, `en/${slug}`));
+    }
+  }
+
   let passCount = 0;
   let warnCount = 0;
   let failCount = 0;

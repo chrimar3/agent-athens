@@ -159,7 +159,9 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     '@context': 'https://schema.org',
     '@type': schemaType,
     'name': event.title,
-    'description': event.fullDescription || event.description,
+    'description': locale === 'en'
+      ? (event.fullDescriptionEn || event.description || event.title)
+      : (event.fullDescriptionGr || event.fullDescription || event.description || event.title),
     'startDate': startDate,
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
@@ -190,6 +192,11 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
       }
     }
     schema.endDate = endDate;
+  }
+
+  // For single-day events without endDate, use startDate (Schema.org convention)
+  if (!schema.endDate) {
+    schema.endDate = startDate;
   }
 
   // Add door time if available

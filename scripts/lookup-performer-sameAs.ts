@@ -49,6 +49,12 @@ interface WikidataResult {
 function extractArtist(title: string): string | null {
   let cleaned = title;
 
+  // Remove location suffixes (e.g. "in Athens", "in Greece", "(US)")
+  cleaned = cleaned
+    .replace(/\s+in\s+(Athens|Greece)\s*!?\s*$/gi, '')
+    .replace(/\s*\([A-Z]{2}\)\s*/g, ' ')
+    .replace(/\s*@\s+.+$/, '');
+
   const noisePatterns = [
     /\bpresents?\b/gi,
     /\blive\b/gi,
@@ -58,6 +64,18 @@ function extractArtist(title: string): string | null {
   ];
   for (const pattern of noisePatterns) {
     cleaned = cleaned.replace(pattern, '');
+  }
+
+  // For festival lineups ("Release Athens 2026 / Artist"), extract headliner
+  const slashParts = cleaned.split(' / ').map(p => p.trim()).filter(Boolean);
+  if (slashParts.length >= 2) {
+    const firstLower = slashParts[0].toLowerCase();
+    const isFestival = /release|ejekt|festival|athens/i.test(firstLower);
+    if (isFestival) {
+      cleaned = slashParts[1];
+    } else {
+      cleaned = slashParts[0];
+    }
   }
 
   const separators = [':', '–', '—', ' - ', ' | '];
@@ -237,6 +255,7 @@ async function main(): Promise<void> {
         found++;
         console.log(`  + ${name} → ${entry.type}, ${entry.sameAs.length} links`);
       } else {
+        cache.performers[name] = null as any; // Mark as looked-up, no match
         notFound++;
         console.log(`  - ${name} → not found`);
       }

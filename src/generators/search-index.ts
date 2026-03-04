@@ -107,7 +107,7 @@ export function generateSearchIndex(events: Event[]): void {
       venueMap.set(slug, {
         name: event.venue.name,
         nameN: normalizeGreek(event.venue.name),
-        neighborhood: event.venue.neighborhood || '',
+        neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
         neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
         slug,
         eventCount: 1,

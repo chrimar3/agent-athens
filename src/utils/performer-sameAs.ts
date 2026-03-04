@@ -41,10 +41,12 @@ try {
   performerCache = { _meta: { description: '', updated: '' }, performers: {} };
 }
 
-// Build a lowercase lookup index for fuzzy matching
+// Build a lowercase lookup index for fuzzy matching (skip null entries)
 const lowercaseIndex = new Map<string, { name: string; entry: PerformerEntry }>();
 for (const [name, entry] of Object.entries(performerCache.performers)) {
-  lowercaseIndex.set(name.toLowerCase(), { name, entry });
+  if (entry !== null) {
+    lowercaseIndex.set(name.toLowerCase(), { name, entry });
+  }
 }
 
 /**
@@ -115,8 +117,9 @@ function extractArtist(title: string): string | null {
  * Tries exact match first, then case-insensitive.
  */
 function findPerformer(name: string): { canonicalName: string; entry: PerformerEntry } | null {
-  // Exact match
+  // Exact match (null means known not-found)
   const exact = performerCache.performers[name];
+  if (exact === null) return null;
   if (exact) return { canonicalName: name, entry: exact };
 
   // Case-insensitive match

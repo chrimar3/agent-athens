@@ -1,39 +1,729 @@
 {
   "_meta": {
     "description": "Performer → sameAs links cache. Maps performer names to Schema.org performer blocks with Wikidata, Wikipedia, and MusicBrainz sameAs URIs.",
-    "updated": "2026-03-03",
+    "updated": "2026-03-04",
     "generated_by": "scripts/lookup-performer-sameAs.ts"
   },
   "performers": {
-    "Αλκίνοος Ιωαννίδης": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q379849", "https://en.wikipedia.org/wiki/Alkinoos_Ioannidis"]},
-    "Villagers of Ioannina City": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q20649047", "https://en.wikipedia.org/wiki/Villagers_of_Ioannina_City"]},
-    "Rotting Christ": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q685757", "https://en.wikipedia.org/wiki/Rotting_Christ", "https://musicbrainz.org/artist/82032aac-1edd-41ff-a38c-1f63a2af5a85"]},
-    "Catharsis": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q1964023", "https://en.wikipedia.org/wiki/Catharsis_(Russian_band)", "https://musicbrainz.org/artist/a8b82d8f-a73f-443d-a610-c023db1df684"]},
-    "Imminence": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q20164937", "https://en.wikipedia.org/wiki/Imminence_(band)", "https://musicbrainz.org/artist/431ed486-4606-485a-b11d-f05feb860257"]},
-    "The Aristocrats": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q7714239", "https://en.wikipedia.org/wiki/The_Aristocrats_(band)", "https://musicbrainz.org/artist/e4db2dca-7f9b-452d-a20a-fc20d69ed998"]},
-    "Godspeed You! Black Emperor": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q181341", "https://en.wikipedia.org/wiki/Godspeed_You!_Black_Emperor", "https://musicbrainz.org/artist/3648db01-b29d-4ab9-835c-83f6a5068fe4"]},
-    "Florence + the Machine": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q505765", "https://en.wikipedia.org/wiki/Florence_and_the_Machine", "https://musicbrainz.org/artist/5fee3020-513b-48c2-b1f7-4571b399c964"]},
-    "The Cure": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q34032", "https://en.wikipedia.org/wiki/The_Cure", "https://musicbrainz.org/artist/69ee3571-b249-47a8-be44-d6d6a8f4d2f9"]},
-    "David Byrne": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q192063", "https://en.wikipedia.org/wiki/David_Byrne", "https://musicbrainz.org/artist/2437980f-513a-44fc-80f1-b90d9b7fcf8f"]},
-    "Gorillaz": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q43534", "https://en.wikipedia.org/wiki/Gorillaz", "https://musicbrainz.org/artist/e21857d5-3256-4547-afb3-4b6ded592596"]},
-    "Moby": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q309631", "https://en.wikipedia.org/wiki/Moby", "https://musicbrainz.org/artist/8970d868-0723-483b-a75b-51088913d3d4"]},
-    "Nick Cave & The Bad Seeds": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q633574", "https://en.wikipedia.org/wiki/Nick_Cave_and_the_Bad_Seeds", "https://musicbrainz.org/artist/172e1f1a-504d-4488-b053-6344ba63e6d0"]},
-    "Nick Cave": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q192465", "https://en.wikipedia.org/wiki/Nick_Cave", "https://musicbrainz.org/artist/c880f8a2-5cb2-4cc2-9729-f7c21aeadb5d"]},
-    "Limp Bizkit": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q48526", "https://en.wikipedia.org/wiki/Limp_Bizkit", "https://musicbrainz.org/artist/1fc56cff-f0a0-4ce2-ab1f-ac49cf3b073f"]},
-    "Sabaton": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q467763", "https://en.wikipedia.org/wiki/Sabaton_(band)", "https://musicbrainz.org/artist/00546acd-c604-4f42-87f1-d0ddca498910"]},
-    "The Offspring": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q188802", "https://en.wikipedia.org/wiki/The_Offspring", "https://musicbrainz.org/artist/0f04a4a4-b1ab-4e73-8d0c-4a6f1aecb11c"]},
-    "Bad Religion": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q483508", "https://en.wikipedia.org/wiki/Bad_Religion", "https://musicbrainz.org/artist/149e6720-4e4a-41a4-afca-6d29083fc091"]},
-    "Three Days Grace": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q327600", "https://en.wikipedia.org/wiki/Three_Days_Grace", "https://musicbrainz.org/artist/3bdbcf1c-c893-482b-b497-3d71ecda21d3"]},
-    "Helloween": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q160763", "https://en.wikipedia.org/wiki/Helloween", "https://musicbrainz.org/artist/0e7ee3a2-a080-4b0a-847a-24a21b5e36e3"]},
-    "Saxon": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q527961", "https://en.wikipedia.org/wiki/Saxon_(band)", "https://musicbrainz.org/artist/1d5c4974-e658-4966-98d7-b839cdb5c672"]},
-    "Freddie Gibbs": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q5499883", "https://en.wikipedia.org/wiki/Freddie_Gibbs", "https://musicbrainz.org/artist/1f96b193-a4fe-45f6-a141-48872ff1cd7d"]},
-    "Δημήτρης Σγουρός": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q1228694", "https://en.wikipedia.org/wiki/Dimitris_Sgouros"]},
-    "Μυρτώ Βασιλείου": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q16329476", "https://en.wikipedia.org/wiki/Myrto_Vassiliou"]},
-    "Claudio PRC": {"type": "Person", "sameAs": ["https://www.wikidata.org/wiki/Q29029236"]},
-    "Polar Inertia": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q65088389"]},
-    "1000mods": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q14876263", "https://en.wikipedia.org/wiki/1000mods", "https://musicbrainz.org/artist/60c6703e-fbb4-42d2-9a60-9ae26e1d5c96"]},
-    "Tinariwen": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q575954", "https://en.wikipedia.org/wiki/Tinariwen", "https://musicbrainz.org/artist/d0b6b82b-34de-4be4-82a2-23de9ac80c55"]},
-    "Autechre": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q388102", "https://en.wikipedia.org/wiki/Autechre", "https://musicbrainz.org/artist/410c9baf-5469-44f6-9852-826524b80c61"]},
-    "WAVVES": {"type": "MusicGroup", "sameAs": ["https://www.wikidata.org/wiki/Q1755543", "https://en.wikipedia.org/wiki/Wavves", "https://musicbrainz.org/artist/b8aecef2-b88a-4aec-8f9e-e3b9c8da0428"]}
+    "Αλκίνοος Ιωαννίδης": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q379849",
+        "https://en.wikipedia.org/wiki/Alkinoos_Ioannidis"
+      ]
+    },
+    "Villagers of Ioannina City": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q20649047",
+        "https://en.wikipedia.org/wiki/Villagers_of_Ioannina_City"
+      ]
+    },
+    "Rotting Christ": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q685757",
+        "https://en.wikipedia.org/wiki/Rotting_Christ",
+        "https://musicbrainz.org/artist/82032aac-1edd-41ff-a38c-1f63a2af5a85"
+      ]
+    },
+    "Catharsis": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q1964023",
+        "https://en.wikipedia.org/wiki/Catharsis_(Russian_band)",
+        "https://musicbrainz.org/artist/a8b82d8f-a73f-443d-a610-c023db1df684"
+      ]
+    },
+    "Imminence": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q20164937",
+        "https://en.wikipedia.org/wiki/Imminence_(band)",
+        "https://musicbrainz.org/artist/431ed486-4606-485a-b11d-f05feb860257"
+      ]
+    },
+    "The Aristocrats": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q7714239",
+        "https://en.wikipedia.org/wiki/The_Aristocrats_(band)",
+        "https://musicbrainz.org/artist/e4db2dca-7f9b-452d-a20a-fc20d69ed998"
+      ]
+    },
+    "Godspeed You! Black Emperor": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q181341",
+        "https://en.wikipedia.org/wiki/Godspeed_You!_Black_Emperor",
+        "https://musicbrainz.org/artist/3648db01-b29d-4ab9-835c-83f6a5068fe4"
+      ]
+    },
+    "Florence + the Machine": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q505765",
+        "https://en.wikipedia.org/wiki/Florence_and_the_Machine",
+        "https://musicbrainz.org/artist/5fee3020-513b-48c2-b1f7-4571b399c964"
+      ]
+    },
+    "The Cure": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q34032",
+        "https://en.wikipedia.org/wiki/The_Cure",
+        "https://musicbrainz.org/artist/69ee3571-b249-47a8-be44-d6d6a8f4d2f9"
+      ]
+    },
+    "David Byrne": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q192063",
+        "https://en.wikipedia.org/wiki/David_Byrne",
+        "https://musicbrainz.org/artist/2437980f-513a-44fc-80f1-b90d9b7fcf8f"
+      ]
+    },
+    "Gorillaz": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q43534",
+        "https://en.wikipedia.org/wiki/Gorillaz",
+        "https://musicbrainz.org/artist/e21857d5-3256-4547-afb3-4b6ded592596"
+      ]
+    },
+    "Moby": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q309631",
+        "https://en.wikipedia.org/wiki/Moby",
+        "https://musicbrainz.org/artist/8970d868-0723-483b-a75b-51088913d3d4"
+      ]
+    },
+    "Nick Cave & The Bad Seeds": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q633574",
+        "https://en.wikipedia.org/wiki/Nick_Cave_and_the_Bad_Seeds",
+        "https://musicbrainz.org/artist/172e1f1a-504d-4488-b053-6344ba63e6d0"
+      ]
+    },
+    "Nick Cave": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q192465",
+        "https://en.wikipedia.org/wiki/Nick_Cave",
+        "https://musicbrainz.org/artist/c880f8a2-5cb2-4cc2-9729-f7c21aeadb5d"
+      ]
+    },
+    "Limp Bizkit": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q48526",
+        "https://en.wikipedia.org/wiki/Limp_Bizkit",
+        "https://musicbrainz.org/artist/1fc56cff-f0a0-4ce2-ab1f-ac49cf3b073f"
+      ]
+    },
+    "Sabaton": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q467763",
+        "https://en.wikipedia.org/wiki/Sabaton_(band)",
+        "https://musicbrainz.org/artist/00546acd-c604-4f42-87f1-d0ddca498910"
+      ]
+    },
+    "The Offspring": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q188802",
+        "https://en.wikipedia.org/wiki/The_Offspring",
+        "https://musicbrainz.org/artist/0f04a4a4-b1ab-4e73-8d0c-4a6f1aecb11c"
+      ]
+    },
+    "Bad Religion": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q483508",
+        "https://en.wikipedia.org/wiki/Bad_Religion",
+        "https://musicbrainz.org/artist/149e6720-4e4a-41a4-afca-6d29083fc091"
+      ]
+    },
+    "Three Days Grace": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q327600",
+        "https://en.wikipedia.org/wiki/Three_Days_Grace",
+        "https://musicbrainz.org/artist/3bdbcf1c-c893-482b-b497-3d71ecda21d3"
+      ]
+    },
+    "Helloween": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q160763",
+        "https://en.wikipedia.org/wiki/Helloween",
+        "https://musicbrainz.org/artist/0e7ee3a2-a080-4b0a-847a-24a21b5e36e3"
+      ]
+    },
+    "Saxon": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q527961",
+        "https://en.wikipedia.org/wiki/Saxon_(band)",
+        "https://musicbrainz.org/artist/1d5c4974-e658-4966-98d7-b839cdb5c672"
+      ]
+    },
+    "Freddie Gibbs": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q5499883",
+        "https://en.wikipedia.org/wiki/Freddie_Gibbs",
+        "https://musicbrainz.org/artist/1f96b193-a4fe-45f6-a141-48872ff1cd7d"
+      ]
+    },
+    "Δημήτρης Σγουρός": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q1228694",
+        "https://en.wikipedia.org/wiki/Dimitris_Sgouros"
+      ]
+    },
+    "Μυρτώ Βασιλείου": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q16329476",
+        "https://en.wikipedia.org/wiki/Myrto_Vassiliou"
+      ]
+    },
+    "Claudio PRC": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q29029236"
+      ]
+    },
+    "Polar Inertia": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q65088389"
+      ]
+    },
+    "1000mods": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q14876263",
+        "https://en.wikipedia.org/wiki/1000mods",
+        "https://musicbrainz.org/artist/60c6703e-fbb4-42d2-9a60-9ae26e1d5c96"
+      ]
+    },
+    "Tinariwen": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q575954",
+        "https://en.wikipedia.org/wiki/Tinariwen",
+        "https://musicbrainz.org/artist/d0b6b82b-34de-4be4-82a2-23de9ac80c55"
+      ]
+    },
+    "Autechre": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q388102",
+        "https://en.wikipedia.org/wiki/Autechre",
+        "https://musicbrainz.org/artist/410c9baf-5469-44f6-9852-826524b80c61"
+      ]
+    },
+    "WAVVES": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q1755543",
+        "https://en.wikipedia.org/wiki/Wavves",
+        "https://musicbrainz.org/artist/b8aecef2-b88a-4aec-8f9e-e3b9c8da0428"
+      ]
+    },
+    "DIRE STRAITS LEGACY": null,
+    "The Gathering": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q687651",
+        "https://en.wikipedia.org/wiki/The_Gathering_(band)",
+        "https://musicbrainz.org/artist/004e5eed-e267-46ea-b504-54526f1f377d"
+      ]
+    },
+    "FANN Παρουσίαση Album Lilith Tape 2": null,
+    "RELEASE ATHENS": null,
+    "RELEASE ATHENS 2026 X SNF NOSTOS": null,
+    "EJEKT FESTIVAL 2026": null,
+    "Ρωμαίος και Ιουλιέτα": null,
+    "MARCOS AYALA TANGO": null,
+    "Dr. Jordan B. Peterson": null,
+    "Cat Festival": null,
+    "Ένας καταπληκτικός καταθλιπτικός": null,
+    "Στο σώμα": null,
+    "Geoff Tate@Operation Mindcrime": null,
+    "Jazz στο Μουσείο": null,
+    "TELETECH ATHENS 2026": null,
+    "TELENOVA": null,
+    "Λόγος Τιμής στην Αθήνα": null,
+    "Δημήτρης Κόψης": null,
+    "Γιαγκίνηδες": null,
+    "The Hotsteppaz": null,
+    "CONAN": null,
+    "Τρισεύγενη": null,
+    "EDEN STAVROZ": null,
+    "NIGHTFALL": null,
+    "Lamp of Murmuur | special guest": null,
+    "HERETOIR": null,
+    "Dreamlord": null,
+    "Deus Culpa Album Presentation w/ Reversed": null,
+    "IOTUNN": null,
+    "Death Disco Indoor Festival": null,
+    "A PLACE TO BURY STRANGERS": null,
+    "CLUTCH": null,
+    "Helloween, Saxon & more": null,
+    "DORO PESCH": null,
+    "Μεγάλες Κυρίες τραγουδούν…": null,
+    "Καλογεράκια": null,
+    "Ορέστης Ντάντος": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q131375146",
+        "https://musicbrainz.org/artist/1cc92e49-2fa2-4158-a5e1-f97210709ff9"
+      ]
+    },
+    "Dimitria Kalantzis Quartet": null,
+    "Jerome Kaluta": null,
+    "Flamecore": null,
+    "Απόστολος Ρίζος": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q99471944",
+        "https://musicbrainz.org/artist/a1d80bf7-9030-4622-92fd-94ada5e27c79"
+      ]
+    },
+    "Vaginahood": null,
+    "Kollektiv": null,
+    "DEEP PURPLE": null,
+    "THE 69 EYES": null,
+    "DJ KOCO aka SHIMOKITA FIRST TIME IN ATHENS! SPECIAL GUESTS TIME FLIES": null,
+    "Σπύρος & Μάκης Καραβιώτης": null,
+    "Bolivar & Seds pres. Oliver Huntemann + Steve Sai b2b Steph": null,
+    "ΑΠΟΣΤΟΛΗΣ ΜΠΑΡΜΠΑΓΙΑΝΝΗΣ Τσολιάς εν δε Τσόλια Μπαντ ΟΠΕΚΕΜΠΛΕ": null,
+    "ALCEDO FOLK BAND ΤΑ ΛΟΥΛΟΥΔΙΑ ΜΑΡΤΥΡΟΥΝ": null,
+    "Echoes of Romance and Myth Duo Duende": null,
+    "UP THE HAMMERS XX 2026 LEGACY EDITION": null,
+    "Hermaphrodite&apos;s Child Επιστροφή στα 60s": null,
+    "ΣΤΑΘΗΣ ΔΡΟΓΩΣΗΣ Πριν Σβήσουν τα Φώτα": null,
+    "Δύο ρεσιτάλ πιάνου του Nikolai Lugansky": null,
+    "ΟΜΑΔΑ Thr3e": null,
+    "Requiem του Vakhtang Kakhidze": null,
+    "ROY KHAN (Norway) The Black Halo And Beyond +SEVEN SPIRES (USA)": null,
+    "Joep Beving LIMINAL Tour": null,
+    "GRAVE DIGGER Tunes Of War 30 Years Anniversary Set +BRAINSTORM +BLAZON STONE": null,
+    "THE NECKS Athens Residency": null,
+    "Crippled Symmetries Motifs in Contemporary Music": null,
+    "The Two Sides of the Atlantic Poetry and Colour in Music": null,
+    "FOREIGNER CELEBRATING 50 YEARS": null,
+    "BETH HART": null,
+    "JOSE JAMES": null,
+    "SOLACE": null,
+    "SMUT x Fadi Mohem x Philippa Pacho x Onur": null,
+    "SMUT x MARRØN x Ogazón x Decoder": null,
+    "Bolivar Opening with Gioli & Assia I Sat April 25": null,
+    "Deerislnd": null,
+    "Vincent Peirani": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q15451381",
+        "https://en.wikipedia.org/wiki/Vincent_Peirani",
+        "https://musicbrainz.org/artist/c07eb23a-f2a2-401b-bcd4-424bf9b25cd4"
+      ]
+    },
+    "WOW Sounds": null,
+    "DEATH TO ALL Symbolic Healing + BLOODBATH": null,
+    "COMA x SMUT x Talismann x Laure Croft x JERM": null,
+    "GL57 by γλετzair": null,
+    "Purple Night 10 YEAR ANNIVERSARY x SMUT": null,
+    "TROPISM w/ Legowelt ()": null,
+    "YOU ARE WHAT YOU DANCE": null,
+    "Deep Dish I Fri June 12": null,
+    "Sina Bathaie White Lotus World Tour": null,
+    "Η Ωραία Ελένη στην Κοιλάδα των Νεκρών Ερώτων": null,
+    "Αφιέρωμα στον Οδυσσέα Δημητριάδη": null,
+    "Ανδριάνα Δημητρίου": null,
+    "TRIUMPHER": null,
+    "CanniLAB #3": null,
+    "aux": null,
+    "Royksopp Dj Set I Fri June 5": null,
+    "ΠΑΣΧΑΛΗΣ ΤΟΝΙΟΣ ΑΞΙΟΣ ΛΟΓΟΣ ΚΩΣΤΗΣ ΠΑΛΑΜΑΣ": null,
+    "ΣΥΛΛΟΓΟΣ ΚΕΦΙ ΜΑΖΙ ΓΙΑ ΤΗΝ ΖΩΗ": null,
+    "Σονάτες για βιολί και πιάνο": null,
+    "BLUES CARGO Special Guest Michael Dotson": null,
+    "SPYROS MANESIS TRIO": null,
+    "CLUB BOTTOM": null,
+    "10 χρόνια Κοινοί Θνητοί": null,
+    "MORAD": null,
+    "&#171;LONE&#187;": null,
+    "ΑΝΗΜΕΡΑ": null,
+    "Rave Ritual": null,
+    "Indira Paganotto I Sat June 13": null,
+    "SONIC SISTERS FESTIVAL": null,
+    "Τραγούδια ανείπωτα... Νεζερίτης": null,
+    "Dimitri Vegas": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q12308641",
+        "https://musicbrainz.org/artist/087dbc4b-eebb-44d3-b22f-1328e44c0abd"
+      ]
+    },
+    "ADEDEJI": null,
+    "FOR WOMEN": null,
+    "CHRISTIE DASHIELL QUARTET": null,
+    "Nassia Gofa & The Jazz Tales ft. Max Hacker": null,
+    "NLS PETER MOLVAER GROUP": null,
+    "All Night Long MATEA x Alisa Murphy": null,
+    "EERSTE COMMUNIE 10YRS x SMUT": null,
+    "Mahmut Orhan I Sat May 30": null,
+    "Η Ιουλία Καραπατάκη & οι ΑΤΑΡ ΤΟΥ ΤΑΡ στο Κύτταρο": null,
+    "ΓΙΑΝΝΗΣ ΧΑΡΟΥΛΗΣ": null,
+    "Ανδρέας Πολυζωγόπουλος Trio": null,
+    "STEGI.RADIO TAKEOVER": null,
+    "Μεγάλη Φυγή & Mira": null,
+    "Γυναίκες Είμαστε!": null,
+    "Rejuv pres. Solace pre-party": null,
+    "Blend x SEDS x VLCT pres. Teletech": null,
+    "Συναυλία με τον Δημήτρη Σγουρό": null,
+    "Ongoing": null,
+    "Soft Crush w/. DJ Yazi // Outermost // Katra": null,
+    "MICHELLE GUREVICH": null,
+    "OATHSWAN": null,
+    "Η Νεφέλη Φασούλη στο Κύτταρο": null,
+    "VLCT Zero w/ DVS1, Oscar Mulero & Yanamaste": null,
+    "ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ": null,
+    "Resonances-Συναυλία για 2 πιάνα Λυδία Λινάρδου": null,
+    "Αντίγνωμος + Friends": null,
+    "Enlight Frequencies with BYORN": null,
+    "Dj Guest List & The Muffin Man": null,
+    "JAFARI AMÉMÉ": null,
+    "Ad Hoc": null,
+    "Dimitri Vegas + Manolaco + Lost Prince": null,
+    "Coma": null,
+    "Leon of Athens": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q11916529"
+      ]
+    },
+    "Μάρθα Φριντζήλα & Kubara Project": null,
+    "Μίνως Μάτσας": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q30085577",
+        "https://musicbrainz.org/artist/a32c5b36-8c14-4423-a52f-ec9d0be416f5"
+      ]
+    },
+    "Σκιαδαρέσες": null,
+    "Σταύρος Τσαντές": null,
+    "Ηρώ Σαΐα": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q38119205",
+        "https://musicbrainz.org/artist/caf83868-6a76-475d-8fcd-2fa4f60fd382"
+      ]
+    },
+    "“H&#228;xan” soundtrack": null,
+    "195 χρόνια χωρίς...": null,
+    "Εαρινό Πάθος με την Ηρώ Σαΐα": null,
+    "The 7th Gate by Lory aka Archaic": null,
+    "Mind Against I Fri May 8": null,
+    "Mayans with Guy J b2b Guy Mantzur I Thu 21 May": null,
+    "Το τραύμα του πολέμου και το θαύμα της αναγέννησης": null,
+    "Ballet du Grand Théâtre de Genève + Eastman": null,
+    "Chamber Orchestra of Europe": null,
+    "Dream Requiem του Rufus Wainwright": null,
+    "Ανοιχτή πρόβα": null,
+    "Τα Κοντσέρτα του Ραχμάνινοφ": null,
+    "Sir John Eliot Gardiner": null,
+    "Διαδραστική συναυλία": null,
+    "ΤΖΑΜΑΛ": null,
+    "&#171;Άξιος Λόγος&#187;": null,
+    "KOJAM ORCHESTRA": null,
+    "Polis Ensemble Παρουσίαση άλμπουμ Polis Ensemble ΙΙ": null,
+    "ΔΗΜΗΤΡΗΣ ΓΙΩΤΗΣ Τα τραγούδια της ζωής μου": null,
+    "4 Years Exilium with Eli Brown": null,
+    "SOCIETY 3000 invites Ben Pest ()": null,
+    "ZONA MUTANTE III w/ Blame The Mono": null,
+    "Πώς μιλάει η μουσική για τον εαυτό της;": null,
+    "Από την αρχαία ελληνική σκέψη στους Mondrian και Pollock": null,
+    "Η 14η του Σοστακόβιτς": null,
+    "Φωνές και Μνήμες": null,
+    "Δημήτρης Μαραμής Τετραλογία": null,
+    "Σε 7/8": null,
+    "Ταξίδι στον κόσμο των ήχων και των συναισθημάτων": null,
+    "Το φως, ο ήχος και τα τέσσερα στοιχεία": null,
+    "Αναζητώντας τον ήχο": null,
+    "Παντελής Μπενετάτος": null,
+    "Duo Duende": null,
+    "Στιγμές του 20ου αιώνα": null,
+    "Underdogs Techno": null,
+    "AI Hackathon Greece": null,
+    "InfraAI Global Summit": null,
+    "Athens SEO": null,
+    "Greeks in AI": null,
+    "28th Fintech Talks goes Google": null,
+    "Engineering the World": null,
+    "&#171;Carnival with the King&#187;": null,
+    "Divas Drive Trio": null,
+    "ΣΩΚΡΑΤΗΣ ΣΙΝΟΠΟΥΛΟΣ QUARTET Metamodal": null,
+    "Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ": null,
+    "Friends, what are we gonna do": null,
+    "Yorgos Lanthimos": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q975410",
+        "https://en.wikipedia.org/wiki/Yorgos_Lanthimos",
+        "https://musicbrainz.org/artist/9d0bf992-562c-4cc3-9d41-4bae927687cf"
+      ]
+    },
+    "Γιάννης Παπαγεωργίου": null,
+    "Demonyx ritual vol.1": null,
+    "PIRATKA Riot": null,
+    "33 Lovers": null,
+    "ΜΙΝΩΣ ΜΑΤΣΑΣ ΔΙΚΑ ΜΟΥ Η ΔΑΝΕΙΚΑ": null,
+    "INNA Show": null,
+    "Techno Underdogs": null,
+    "Tiger Weeds with The Exaltics ()": null,
+    "PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace": null,
+    "Calyces at Piraeus Academy": null,
+    "Ρεσιτάλ Φλάουτου": null,
+    "ΚΟΡΙΝΑ ΛΕΓΑΚΗ “ΛΑΪΚΟ ΜΠΕΛΚΑΝΤΟ”": null,
+    "Uplifting & GOA Trance Rooftop Party": null,
+    "Padre Guilherme I Sat May 9": null,
+    "Κίτρινα Ποδήλατα": null,
+    "Βασίλης Γισδάκης": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q111031092",
+        "https://musicbrainz.org/artist/026be92d-d429-4242-9f7a-b5d4d673988d"
+      ]
+    },
+    "Κανών": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q53677492",
+        "https://musicbrainz.org/artist/6ecd59c2-db2b-4225-9478-b94d858321cd"
+      ]
+    },
+    "Μάρθα Φριντζήλα & Kalogerkia Bros": null,
+    "Πέτρος Μάλαμας & Φώτης Σιώτας": null,
+    "Ανδρόνικος & Κατερίνα Τερζοπούλου": null,
+    "Εθνική Συμφωνική Ορχήστρα ΕΡΤ": null,
+    "Dury Dava": null,
+    "Σταύρος Σιόλας": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q133871329",
+        "https://musicbrainz.org/artist/316bb8c9-d638-4938-b0a5-6c831a47b789"
+      ]
+    },
+    "Road Duck": null,
+    "Λάκης Παπαδόπουλος, Γιάννης Γιοκαρίνης, Βασίλης Καζούλης & Νίκος Ζιώγαλας": null,
+    "Γιώργος Κωστογιώργης & Κατερίνα Σισίννι": null,
+    "Βαρυπενθούσα unplugged": null,
+    "Κατερίνα Παπουτσάκη ft. Jerome Kaluta": null,
+    "&#171;Με το βλέμμα της Nelly&#39;s&#187;": null,
+    "4 Women": null,
+    "&#171;Γυναίκα&#187;": null,
+    "Vera Danilina": null,
+    "Zoran Dukic": null,
+    "Saints & sinners": null,
+    "Mother of Millions, we.own.the.sky & Sidus": null,
+    "Avi": null,
+    "Πάλκο": null,
+    "Σοφία Κουρή": null,
+    "Αντώνης Καλογιάννης": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q12873783",
+        "https://en.wikipedia.org/wiki/Antonis_Kalogiannis",
+        "https://musicbrainz.org/artist/38f84288-1683-4d4a-8147-5812e2c3c3a2"
+      ]
+    },
+    "Soledad Zarka & Loup Uberto": null,
+    "Χρίστος Θεσσαλονικεύς": null,
+    "&#171;Τα Μι του πενταγράμμου&#187;": null,
+    "Λάκης Τζορντανέλλι & Γιώργος Πολυχρονιάδης": null,
+    "Γιορτή της Γυναίκας": null,
+    "ΠΝΟΕΣ ΚΑΙ ΠΛΗΚΤΡΑ": null,
+    "Μαθητική Συναυλία του Ωδείου CGS": null,
+    "Dimitris Papadopoulos Quartet": null,
+    "VOODOO GROOVE": null,
+    "YANNIS PAPADOPOULOS GROUP": null,
+    "THANASIS VALSAMIS QUINTET “Deepest Load Line”": null,
+    "Petros Spatharos": null,
+    "REVOLT 13 YEARS ANNIVERSARY with DMX Krew": null,
+    "Kaizen Klub with Chloé Robinson, Madam X (Bday Spesh), Poor JDarr & Runner": null,
+    "&#171;Φάλσταφ&#187;": null,
+    "MUZIK SAVEZ pres. Manolaco": null,
+    "MUZIK SAVEZ WOMANS DAY at COZMO": null,
+    "Toxic Rave x Oddity with NOAH": null,
+    "MUZIK SAVEZ pres. Valeron at COZMO": null,
+    "Astron Club Night with Claudio PRC": null,
+    "Stolen Mic -": null,
+    "VLCT Arena w/ CLOUDY-KUKO-JOHANNES SCHUSTER": null,
+    "DEVISER": null,
+    "Banda Valeu": null,
+    "Dirty Granny Tales": null,
+    "Σωκράτης Σινόπουλος Quartet": null,
+    "Billie Kark & ody icons": null,
+    "&#171;Αναμνήσεις με τους στίχους του Γιώργου Σουρή&#187;": null,
+    "&#171;Resonances&#187;": null,
+    "Compania Latina": null,
+    "Rette ‘N’ The Band": null,
+    "Candlelight": null,
+    "Τζόνι Μπι Full Band": null,
+    "Νέοι Σολίστ συμπράττουν με την Camerata Junior": null,
+    "Montezuma, The Smoking Hiccup Machine & Routes Of Neptune": null,
+    "&#171;Ήλιος της Κύπρου, Φως του Κόσμου&#187;": null,
+    "Γιάννης Νικολάου Καινούργια Ρούχα": null,
+    "Mater Dolorosa Η Μητέρα των Αναστεναγμών": null,
+    "ΤΑ ΠΑΘΗ": null,
+    "Haig Yazdjian": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q2622788",
+        "https://en.wikipedia.org/wiki/Haig_Yazdjian",
+        "https://musicbrainz.org/artist/ac1e60e1-ff65-4139-902c-adb4065e489c"
+      ]
+    },
+    "DENA DEROSE TRIO": null,
+    "Joanna Mattrey": null,
+    "Γιου γιαϊ γιάκο": null,
+    "Ρεσιτάλ Πιάνου Ανδρέα Μερτζέλου": null,
+    "Ρεσιτάλ Πιάνου Μαρία Ευστρατιάδη": null,
+    "D. Wissels": null,
+    "UNITECHNO W/ OGUZ": null,
+    "Ζωρζ Πιλαλί": null,
+    "Angelika Dusk": null,
+    "Κατερίνα Ντίνου": null,
+    "Μωρά στη φωτιά": null,
+    "Θάνος Ολύμπιος & Σωτήρης Προίσκος": null,
+    "Χατζηγφραγκέτα": null,
+    "Amaguk": null,
+    "Εισβολέας": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q16331073",
+        "https://musicbrainz.org/artist/950ca1a7-1aef-46bd-afca-d50ca4328637"
+      ]
+    },
+    "Μιρέλα Πάχου": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q109579112"
+      ]
+    },
+    "Λουκής Λάρας": null,
+    "Pop Girlies Night Vol.3": null,
+    "Marika Rossa": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q100151777"
+      ]
+    },
+    "Laura Agnusdei & Free Piece of Tape": null,
+    "Skullcrush Fest": null,
+    "VoidTech": null,
+    "Lockbird": null,
+    "Devoufloba": null,
+    "Loo": null,
+    "Fenimore + Cirkle + Até": null,
+    "Chevy": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q18243566",
+        "https://musicbrainz.org/artist/febda65d-6127-4e9b-9e64-7ccf2220f394"
+      ]
+    },
+    "Love": null,
+    "Nikos Thanos": null,
+    "Salvi K": null,
+    "MJW": null,
+    "Blend x SEDS pres. Lessss": null,
+    "Reaktiv": null,
+    "Soundnow pres. DJ Guestlist + The Muffin Man + Chex + Nivk Jane b2b VSSLS": null,
+    "BCCO x Velocity": null,
+    "Bolivar & Blend pres. RIVO + Dino MFU": null,
+    "St Paul&apos;s Sessions 8 ALVA NOTO HYBR": null,
+    "Ταξίδι στη Μεσόγειο": null,
+    "JEEPERS CREEPERS JAZZ BAND": null,
+    "WAVMAP": null,
+    "ΗΜΕΡΑ ΦΡΟΝΤΙΣΤΗ 2026 – Ποιότητα ζωής στην άνοια": null,
+    "ΜΑΖΙ στη Ζωή, Μαζί στη Σκηνή": null,
+    "London Philharmonic Orchestra": {
+      "type": "MusicGroup",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q863397",
+        "https://en.wikipedia.org/wiki/London_Philharmonic_Orchestra",
+        "https://musicbrainz.org/artist/fa37018e-3557-4cb7-973f-555003c30174"
+      ]
+    },
+    "CARMEN by Antonio Gades & Carlos Saura": null,
+    "Πέτρος Γαϊτάνος": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q6102198",
+        "https://en.wikipedia.org/wiki/Petros_Gaitanos",
+        "https://musicbrainz.org/artist/c7864e08-d135-40bc-8d8a-f95b4a6649a7"
+      ]
+    },
+    "Νέκυια": null,
+    "Gegen Athens": null,
+    "Yiorgos Pantazopoulos Trio": null,
+    "Ο ΠΑΝΟΣ ΒΛΑΧΟΣ ΣΤΟ VOX": null,
+    "Μπουζούκια στην Πίστα": null,
+    "Αλιγάτορες": null,
+    "Δεν θα πεθάνουμε κιόλας": null,
+    "Διψάω": null,
+    "Ευρυδίκη": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q158124",
+        "https://en.wikipedia.org/wiki/Evridiki",
+        "https://musicbrainz.org/artist/02c7c085-b08f-4340-86d6-9f1cb65fd1b0"
+      ]
+    },
+    "Η κατάρρευση": null,
+    "(κρότος)": null,
+    "Her.s + Belsis + Alegam + Mareen": null,
+    "Simos Danalis + Mo-tion + S.ant": null,
+    "Chris Child + D. Tzere": null,
+    "Alex Kósh + Aphrodite": null,
+    "Constantinos Dontas": null,
+    "ΒΑΓΓΕΛΗΣ ΓΕΡΜΑΝΟΣ": null,
+    "422M ATHENS": null,
+    "Rivo I Sat May 16": null,
+    "ΕΓΩ ΚΙ ΕΣΥ": null,
+    "Alcedo folk band": null,
+    "&#171;Viva la mamma!&#187;": null,
+    "Ο Γιάννης το βούδι": null,
+    "Εγώ κι εσύ": null,
+    "Καραγκιοζοπαίχτης νυν και αεί": null,
+    "Η βασίλισσα των πάντων": null,
+    "Το δέντρο που αγαπούσε... σε νέες περιπέτειες": null,
+    "Ο θησαυρός του Μίκη": null,
+    "Ο Καπετάν Σαματάς": null,
+    "Καρα-Cartoon": null,
+    "Το μαγικό εισιτήριο": null,
+    "Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου": null,
+    "GroovePulse x Hardvision": null,
+    "CLUB NIGHT with Saber Rider • Baggymilziade • Jim Captain • Mat|toni": null,
+    "JAMIE DUFFY": null,
+    "Οι Usurum στο Κύτταρο": null,
+    "Michael Dotson": null,
+    "Δημήτρης Μητσοτάκης": null,
+    "Bragolin": null,
+    "Yoel Soto and Friends": null,
+    "OPERA GALA": null,
+    "Pantelis Thalassinos & Panos Dimitrakopoulos With guitar and kanun": null,
+    "Vangelis Germanos Silence Session": null,
+    "Δαυίδ Ναχμίας ΔΑΝΑΗ": null,
+    "FERMA Label Night": null
   }
 }
