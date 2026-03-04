@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateAllPages, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -230,6 +230,111 @@ describe('validateSchemaCompleteness', () => {
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.errors[0]).toContain('parse');
     });
+  });
+});
+
+// Helper: wrap multiple JSON-LD blocks in HTML
+function wrapMultiJsonLd(...schemas: Record<string, unknown>[]): string {
+  const blocks = schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
+  return `<!DOCTYPE html><html><head>${blocks}</head><body></body></html>`;
+}
+
+function makeValidCollectionPage(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': 'Concerts in Athens',
+    'inLanguage': 'el',
+    'mainEntity': {
+      '@type': 'ItemList',
+      'numberOfItems': 5,
+      'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'item': { '@type': 'MusicEvent', 'name': 'Test' } }
+      ]
+    }
+  };
+}
+
+function makeValidFAQPage(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'Where can I see live music in Athens?',
+        'acceptedAnswer': { '@type': 'Answer', 'text': 'Athens has many venues...' }
+      }
+    ]
+  };
+}
+
+describe('validateHubSchema', () => {
+  test('valid hub page with CollectionPage + FAQPage passes', () => {
+    const html = wrapMultiJsonLd(makeValidCollectionPage(), makeValidFAQPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors).toHaveLength(0);
+    expect(result.warnings).toHaveLength(0);
+    expect(result.slug).toBe('hub:concerts');
+  });
+
+  test('missing CollectionPage block → ERROR', () => {
+    const html = wrapMultiJsonLd(makeValidFAQPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('CollectionPage'))).toBe(true);
+  });
+
+  test('missing FAQPage block → WARNING', () => {
+    const html = wrapMultiJsonLd(makeValidCollectionPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors).toHaveLength(0);
+    expect(result.warnings.some(w => w.includes('FAQPage'))).toBe(true);
+  });
+
+  test('CollectionPage missing name → ERROR', () => {
+    const cp = makeValidCollectionPage();
+    delete cp.name;
+    const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('name'))).toBe(true);
+  });
+
+  test('CollectionPage missing mainEntity → ERROR', () => {
+    const cp = makeValidCollectionPage();
+    delete cp.mainEntity;
+    const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('mainEntity'))).toBe(true);
+  });
+
+  test('FAQPage with empty mainEntity → ERROR', () => {
+    const faq = makeValidFAQPage();
+    faq.mainEntity = [];
+    const html = wrapMultiJsonLd(makeValidCollectionPage(), faq);
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('Question array'))).toBe(true);
+  });
+
+  test('FAQPage question missing acceptedAnswer → ERROR', () => {
+    const faq = makeValidFAQPage();
+    (faq.mainEntity as any[])[0] = { '@type': 'Question', 'name': 'Test?' };
+    const html = wrapMultiJsonLd(makeValidCollectionPage(), faq);
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('acceptedAnswer'))).toBe(true);
+  });
+
+  test('no JSON-LD at all → ERROR', () => {
+    const html = '<!DOCTYPE html><html><head></head><body></body></html>';
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.errors.some(e => e.includes('JSON-LD'))).toBe(true);
+  });
+
+  test('CollectionPage missing inLanguage → WARNING', () => {
+    const cp = makeValidCollectionPage();
+    delete cp.inLanguage;
+    const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+    const result = validateHubSchema(html, 'concerts');
+    expect(result.warnings.some(w => w.includes('inLanguage'))).toBe(true);
   });
 });
 

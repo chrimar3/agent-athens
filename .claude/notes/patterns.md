@@ -256,9 +256,13 @@ Schema.org is generated in 3 places — each works with a different data shape b
 
 **Pricing pattern** (must be consistent across all 3):
 - `isAccessibleForFree`: true for "open"/"donation", false for "with-ticket"
-- `offers.price`: "0" for free, amount.toString() for paid, "" if unknown
+- `offers.price`: "0" for free, amount.toString() for paid, **omitted** if unknown (never empty string — invalid per Schema.org)
 - `offers.priceCurrency`: always "EUR"
 - `offers.availability`: always "https://schema.org/InStock"
+
+**Timezone discipline**: Any code path that emits Schema.org `startDate` must normalize to include timezone offset (`+02:00`/`+03:00`). Use `getAthensTimezone()` from `quality-gates.ts`. Known paths: `event-page.ts`, `page.ts` (hub schemas), `venue-page.ts`. When adding a new page type that emits dates, add timezone normalization at creation time — don't rely on the post-build validator to catch it later.
+
+**Multi-block JSON-LD extraction**: Use `extractAllJsonLd()` in `schema-completeness.ts` for pages with multiple JSON-LD blocks (hub pages: CollectionPage + FAQPage; event pages may gain performer + event blocks). Single-block `extractJsonLd()` still exists but only for legacy event validation.
 
 ## Hreflang Pattern
 
@@ -705,3 +709,32 @@ Key files:
 - `src/enrichment/quality-gates.ts` — `validateEnglishDescription()` function
 - `scripts/save-batch.ts` — dual-column UPDATE + English quality gate
 - `scripts/generate-enrichment-brief.ts` — Entity Locking section + English instructions in brief
+
+## Utility Adoption Sweep Pattern
+
+When a formatting utility is added (e.g., `displayNeighborhood()`), grep for **all call sites** that handle similar data, not just the one being fixed. Example: `displayNeighborhood()` was applied to event records but missed venue records in `search-index.ts`. Checklist:
+- `grep -rn "venue.neighborhood\|neighborhood" src/` — find every neighborhood reference
+- Check each: does it display raw DB value or pass through the utility?
+- Common miss sites: search indexes, JSON API endpoints, sitemap generators, schema markup
+
+## Scraper Venue ≠ Source Venue Pattern
+
+When a source (e.g., Athinorama) lists a different venue than the DB record, the description should use the **source venue** (it's authoritative). The DB venue came from the scraper's initial pass, which sometimes infers incorrectly — especially at multi-hall complexes like the Nakas building (Ωδείο Αθηνών vs Ωδείο Φίλιππος Νάκας at Ippokratous 41).
+
+**When this happens:**
+1. Write the description using the source-verified venue
+2. Flag the mismatch in the batch review
+3. DB venue needs manual correction (UPDATE events SET venue_name = ... WHERE id = ...)
+4. May also need `config/athens-venues.json` update if the correct venue isn't in the whitelist
+
+**Known instances (2026-03-04):**
+- Duo Duende (282ef93b): DB says "Ωδείο Αθηνών", source says "Ωδείο Φίλιππος Νάκας"
+
+## QA Finding Reproduction Rule
+
+QA findings need reproduction steps before spending time diagnosing. If a bug report lacks an exact URL + screenshot, the fix may already be in place. Ask for:
+1. Exact URL where the issue was observed
+2. Screenshot or copy of the incorrect output
+3. Timestamp (to check against deploy history)
+
+Without these, you risk diagnosing a ghost — the fix was already shipped but the QA reviewer saw a cached/stale version.

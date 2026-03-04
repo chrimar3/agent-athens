@@ -135,6 +135,12 @@ Pitfalls encountered and how to avoid them.
 | Agents couldn't find batch-N.md files | Despite files existing, agents reported "file not found" and fell back to other briefs | May be a timing issue with file creation vs agent start. Consider adding a verification step that the brief file exists before launching agents |
 | `save-batch --clean` deletes other batches' temp files | When agents saved wrong manifests, `--clean` removed description files belonging to other batches | Only use `--clean` on the final save, or ensure manifest event IDs are correct before any `--clean` operation |
 
+## Auto-Enrich Runtime (2026-03-04)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Unattended auto-enrich too slow | Batch 1 took 41 min (100+ tool calls, 110K tokens). Batches 2-3 never started before job timeout | Cap unattended batch size to 3 events, or add `--max-tool-calls` limit to `claude -p`. Interactive agents average ~15 min per 5-event batch — unattended research depth is uncapped |
+
 ## Automation Issues (2026-02-12)
 
 | Mistake | What Happened | Correct Approach |

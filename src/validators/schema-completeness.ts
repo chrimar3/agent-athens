@@ -129,6 +129,11 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
     }
   }
 
+  // Empty price string is invalid — should be numeric or omitted entirely
+  if (schema.offers && schema.offers.price === '') {
+    warnings.push('offers.price is empty (should be numeric or omitted)');
+  }
+
   // ── Data quality checks (WARNING if missing) ─────────────────────
 
   if (!isNonEmpty(schema.description)) {
@@ -171,6 +176,119 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
 }
 
 /**
+ * Extract all JSON-LD blocks from an HTML string.
+ */
+function extractAllJsonLd(html: string): Record<string, any>[] {
+  const regex = /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g;
+  const results: Record<string, any>[] = [];
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    try {
+      results.push(JSON.parse(match[1]));
+    } catch {
+      // skip unparseable blocks
+    }
+  }
+  return results;
+}
+
+/**
+ * Validate a hub page's JSON-LD schema (CollectionPage + FAQPage).
+ */
+export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  const blocks = extractAllJsonLd(htmlContent);
+  if (blocks.length === 0) {
+    return { slug: `hub:${hubSlug}`, errors: ['No JSON-LD script tag found'], warnings: [] };
+  }
+
+  const collectionPage = blocks.find(b => b['@type'] === 'CollectionPage');
+  const faqPage = blocks.find(b => b['@type'] === 'FAQPage');
+
+  // ── CollectionPage validation ──
+  if (!collectionPage) {
+    errors.push('CollectionPage JSON-LD block missing');
+  } else {
+    if (collectionPage['@context'] !== 'https://schema.org') {
+      errors.push('CollectionPage: @context must be "https://schema.org"');
+    }
+    if (!isNonEmpty(collectionPage.name)) {
+      errors.push('CollectionPage: name is missing');
+    }
+    if (!collectionPage.mainEntity) {
+      errors.push('CollectionPage: mainEntity (ItemList) is missing');
+    } else if (collectionPage.mainEntity['@type'] !== 'ItemList') {
+      errors.push(`CollectionPage: mainEntity @type is "${collectionPage.mainEntity['@type']}", expected ItemList`);
+    } else if (!Array.isArray(collectionPage.mainEntity.itemListElement) || collectionPage.mainEntity.itemListElement.length === 0) {
+      warnings.push('CollectionPage: itemListElement is empty');
+    }
+    if (!isNonEmpty(collectionPage.inLanguage)) {
+      warnings.push('CollectionPage: inLanguage is missing');
+    }
+  }
+
+  // ── FAQPage validation ──
+  if (!faqPage) {
+    warnings.push('FAQPage JSON-LD block missing');
+  } else {
+    if (faqPage['@context'] !== 'https://schema.org') {
+      errors.push('FAQPage: @context must be "https://schema.org"');
+    }
+    if (!Array.isArray(faqPage.mainEntity) || faqPage.mainEntity.length === 0) {
+      errors.push('FAQPage: mainEntity (Question array) is missing or empty');
+    } else {
+      for (let i = 0; i < faqPage.mainEntity.length; i++) {
+        const q = faqPage.mainEntity[i];
+        if (q['@type'] !== 'Question') {
+          errors.push(`FAQPage: mainEntity[${i}] @type is "${q['@type']}", expected Question`);
+        }
+        if (!isNonEmpty(q.name)) {
+          errors.push(`FAQPage: mainEntity[${i}].name (question text) is missing`);
+        }
+        if (!q.acceptedAnswer || q.acceptedAnswer['@type'] !== 'Answer') {
+          errors.push(`FAQPage: mainEntity[${i}].acceptedAnswer is missing or wrong type`);
+        } else if (!isNonEmpty(q.acceptedAnswer.text)) {
+          errors.push(`FAQPage: mainEntity[${i}].acceptedAnswer.text is missing`);
+        }
+      }
+    }
+  }
+
+  return { slug: `hub:${hubSlug}`, errors, warnings };
+}
+
+/**
+ * Validate a venue page's JSON-LD schema (LocalBusiness).
+ */
+export function validateVenueSchema(htmlContent: string, venueSlug: string): SchemaValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  const match = htmlContent.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  if (!match) return { slug: `venue:${venueSlug}`, errors: [], warnings: [] };
+
+  let schema: Record<string, any>;
+  try {
+    schema = JSON.parse(match[1]);
+  } catch {
+    return { slug: `venue:${venueSlug}`, errors: ['Failed to parse JSON-LD'], warnings: [] };
+  }
+
+  // Mandatory for LocalBusiness
+  if (schema['@type'] !== 'LocalBusiness') errors.push(`@type is "${schema['@type']}", expected LocalBusiness`);
+  if (!isNonEmpty(schema.name)) errors.push('name is missing');
+  if (!schema.address) errors.push('address is missing');
+
+  // Recommended
+  if (!schema.geo) warnings.push('geo coordinates missing');
+  if (!isNonEmpty(schema.url)) warnings.push('url is missing');
+
+  return { slug: `venue:${venueSlug}`, errors, warnings };
+}
+
+/**
  * Validate all generated event pages in a dist directory.
  */
 export function validateAllPages(distDir: string): SchemaValidationSummary {
@@ -207,6 +325,46 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     }
   }
 
+  // Scan hub pages (dist/*.html for known hub slugs + dist/en/*/index.html)
+  const HUB_SLUGS = [
+    'today', 'this-weekend', 'this-month', 'concerts', 'theater',
+    'nightlife', 'festivals', 'kids', 'exhibitions', 'open',
+    'cinema', 'dance', 'classical-music', 'with-ticket', 'comedy', 'greek-music'
+  ];
+  for (const slug of HUB_SLUGS) {
+    const htmlPath = join(distDir, `${slug}.html`);
+    if (!existsSync(htmlPath)) continue;
+    const html = readFileSync(htmlPath, 'utf-8');
+    details.push(validateHubSchema(html, slug));
+  }
+  // English hub pages (dist/en/{slug}/index.html)
+  const enDir = join(distDir, 'en');
+  if (existsSync(enDir)) {
+    const enSubdirs = readdirSync(enDir, { withFileTypes: true })
+      .filter(d => d.isDirectory() && d.name !== 'events')
+      .map(d => d.name);
+    for (const slug of enSubdirs) {
+      const htmlPath = join(enDir, slug, 'index.html');
+      if (!existsSync(htmlPath)) continue;
+      const html = readFileSync(htmlPath, 'utf-8');
+      details.push(validateHubSchema(html, `en/${slug}`));
+    }
+  }
+
+  // Scan venue pages (dist/venues/)
+  const venuesDir = join(distDir, 'venues');
+  if (existsSync(venuesDir)) {
+    const venueSlugs = readdirSync(venuesDir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name);
+    for (const slug of venueSlugs) {
+      const htmlPath = join(venuesDir, slug, 'index.html');
+      if (!existsSync(htmlPath)) continue;
+      const html = readFileSync(htmlPath, 'utf-8');
+      details.push(validateVenueSchema(html, slug));
+    }
+  }
+
   let passCount = 0;
   let warnCount = 0;
   let failCount = 0;
@@ -230,12 +388,18 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
 export function printSchemaSummary(summary: SchemaValidationSummary): void {
   const { total, passCount, warnCount, failCount, details } = summary;
   if (total === 0) {
-    console.log('\n📋 Schema validation: no event pages found');
+    console.log('\n📋 Schema validation: no pages found');
     return;
   }
 
+  // Count by page type
+  const eventCount = details.filter(d => !d.slug.startsWith('hub:') && !d.slug.startsWith('venue:')).length;
+  const hubCount = details.filter(d => d.slug.startsWith('hub:')).length;
+  const venueCount = details.filter(d => d.slug.startsWith('venue:')).length;
+
   const passRate = Math.round((passCount / total) * 100);
-  console.log(`\n📋 Schema completeness: ${passCount}/${total} events fully valid (${passRate}%)`);
+  console.log(`\n📋 Schema completeness: ${passCount}/${total} pages fully valid (${passRate}%)`);
+  console.log(`   📊 ${eventCount} event + ${hubCount} hub + ${venueCount} venue pages`);
   console.log(`   ✅ ${passCount} pass  ⚠️  ${warnCount} warnings  ❌ ${failCount} errors`);
 
   // Show errors grouped by type
