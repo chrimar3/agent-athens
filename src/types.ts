@@ -138,7 +138,10 @@ export interface HubConfig {
   answerCapsuleEn?: string;
   faqs: HubFaq[];
   cornerstone?: boolean;
+  metaDescriptionEl?: string;
+  metaDescriptionEn?: string;
   seasonalNarrativeEn?: string;
+  seasonalNarrativeEl?: string;
 }
 
 export interface RawEvent {

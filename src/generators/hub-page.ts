@@ -22,6 +22,7 @@ import { formatGreekDateOnly } from '../utils/i18n';
 import { generateEventSlug } from './event-page';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { formatDateOnly } from '../utils/i18n-date';
+import { renderHubCrossLinks } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -261,7 +262,9 @@ export function renderHubPage(
 
   const answerCapsule = resolveTokens(rawCapsule);
   const hubTitle = `${hubTitleText} | agent-athens`;
-  const hubDescription = `${answerCapsule.substring(0, 155)}`;
+  const hubDescription = locale === 'en'
+    ? (config.metaDescriptionEn ? resolveTokens(config.metaDescriptionEn).substring(0, 155) : answerCapsule.substring(0, 155))
+    : (config.metaDescriptionEl ? resolveTokens(config.metaDescriptionEl).substring(0, 155) : rawCapsule.substring(0, 155));
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${hubTitle}</title>`);
   html = html.replace(
     /<meta name="description" content="[^"]*">/,
@@ -374,16 +377,27 @@ export function renderHubPage(
   }));
   const faqHtml = renderFaqSection(resolvedFaqs, locale);
 
-  // Part 5: Seasonal Narrative (English-only, when available)
+  // Part 5: Seasonal Narrative (bilingual, when available)
   let seasonalHtml = '';
   if (locale === 'en' && config.seasonalNarrativeEn) {
     seasonalHtml = `<section class="hub-seasonal-narrative">
   <h2>What to Expect</h2>
   <div class="seasonal-text">${config.seasonalNarrativeEn}</div>
 </section>`;
+  } else if (locale === 'el' && config.seasonalNarrativeEl) {
+    seasonalHtml = `<section class="hub-seasonal-narrative">
+  <h2>Τι να Περιμένετε</h2>
+  <div class="seasonal-text">${config.seasonalNarrativeEl}</div>
+</section>`;
   }
 
-  // Inject parts 3-5 after the card grid's closing </section>
+  // Part 6: Cross-links (non-cornerstone hubs only → link to cornerstone hubs)
+  let crossLinksHtml = '';
+  if (!config.cornerstone) {
+    crossLinksHtml = renderHubCrossLinks(locale);
+  }
+
+  // Inject parts 3-6 after the card grid's closing </section>
   // Find the card-grid section and inject after it
   const cardGridEndPattern = '</section>\n\n      ';
   const cardGridEndIndex = html.indexOf('class="card-grid"');
@@ -392,12 +406,12 @@ export function renderHubPage(
     const afterCardGrid = html.indexOf('</section>', cardGridEndIndex);
     if (afterCardGrid !== -1) {
       const insertPoint = afterCardGrid + '</section>'.length;
-      const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}`;
+      const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
       html = html.substring(0, insertPoint) + injection + html.substring(insertPoint);
     }
   } else {
     // No card grid (0 events case) — inject before </main>
-    const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}`;
+    const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
     html = html.replace('</main>', `${injection}\n</main>`);
   }
 

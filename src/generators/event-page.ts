@@ -28,6 +28,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
+import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -494,6 +495,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
       <nav class="edp-connections" aria-label="${locale === 'en' ? 'Related pages' : 'Σχετικές σελίδες'}">
         <h3>${t.exploreMore}</h3>
         ${navLinks.join('\n        ')}
+        ${renderCornerstoneLinksHtml(locale)}
       </nav>
 
       ${relatedHtml}
