@@ -730,6 +730,14 @@ When a source (e.g., Athinorama) lists a different venue than the DB record, the
 **Known instances (2026-03-04):**
 - Duo Duende (282ef93b): DB says "Ωδείο Αθηνών", source says "Ωδείο Φίλιππος Νάκας"
 
+## Build-Time Token Substitution Pattern
+
+`resolveTokens()` in `hub-page.ts` is a locale-aware closure inside `renderHubPage()`. It replaces `{{MONTH_YEAR}}` → "March 2026" and `{{MONTH}}` → "March" (en) / "Μαρτίου" (el) at build time.
+
+**Extend this pattern** for any future build-time text substitution — season names, year references, city names for multi-city expansion. Don't add new substitution mechanisms; add new token patterns to `resolveTokens()`.
+
+Applied to: `answerCapsuleEn`, `answerCapsuleEl`, and all FAQ question/answer text (via `resolvedFaqs` mapping before `renderFaqSection` and `renderFaqSchema`).
+
 ## QA Finding Reproduction Rule
 
 QA findings need reproduction steps before spending time diagnosing. If a bug report lacks an exact URL + screenshot, the fix may already be in place. Ask for:

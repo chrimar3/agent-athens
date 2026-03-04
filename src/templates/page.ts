@@ -6,7 +6,7 @@ import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
 import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
-import { VENUE_TYPE_MAP } from '../enrichment/quality-gates';
+import { VENUE_TYPE_MAP, getAthensTimezone } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
@@ -368,6 +368,15 @@ function renderRelatedPages(filters: any): string {
   </aside>`;
 }
 
+function normalizeStartDate(isoDate: string): string {
+  if (isoDate.includes('+') || isoDate.includes('Z')) return isoDate;
+  const dateMatch = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const tz = dateMatch
+    ? getAthensTimezone(new Date(parseInt(dateMatch[1]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[3])))
+    : '+02:00';
+  return isoDate.includes('T') ? `${isoDate}${tz}` : `${isoDate}T00:00:00${tz}`;
+}
+
 function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: Locale = 'el'): string {
   // CRITICAL: Schema.org must ALWAYS be in English for AI agent parsing
   // Even though content is Greek, Schema.org is the universal standard
@@ -379,7 +388,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
       "@type": event['@type'],
       "name": event.title,
       "description": `${event.type} event in Athens`,
-      "startDate": event.startDate,
+      "startDate": normalizeStartDate(event.startDate),
       "eventStatus": resolveEventStatus(event.startDate, event.endDate, event.type),
       "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {
@@ -396,9 +405,9 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
       },
       "offers": {
         "@type": "Offer",
-        "price": (event.price.type === 'open' || event.price.type === 'donation')
-          ? "0"
-          : (event.price.amount ? event.price.amount.toString() : ""),
+        ...((event.price.type === 'open' || event.price.type === 'donation')
+          ? { "price": "0" }
+          : (event.price.amount ? { "price": event.price.amount.toString() } : {})),
         "priceCurrency": event.price.currency || "EUR",
         "availability": "https://schema.org/InStock"
       }
