@@ -122,8 +122,8 @@ if [ "$UNENRICHED" -gt 0 ]; then
 
   echo "" >> "$REPORT_FILE"
 
-  # Calculate batches (5 events per batch, ~8 min each)
-  BATCHES=$(( (UNENRICHED + 4) / 5 ))
+  # Calculate batches (3 events per batch, ~8 min each)
+  BATCHES=$(( (UNENRICHED + 2) / 3 ))
   EST_TIME=$(( BATCHES * 8 ))
 
   cat >> "$REPORT_FILE" << EOF
@@ -131,7 +131,7 @@ if [ "$UNENRICHED" -gt 0 ]; then
 ENRICHMENT ESTIMATE
 -------------------
 Events to enrich: $UNENRICHED
-Batches of 5:     $BATCHES
+Batches of 3:     $BATCHES
 Est. time:        ~$EST_TIME minutes
 
 HOW TO ENRICH (AUTOMATED)

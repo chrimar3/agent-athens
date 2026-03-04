@@ -29,8 +29,8 @@ LOG_DIR="$PROJECT_DIR/logs"
 CLAUDE_BIN="/Users/chrism/.npm-global/bin/claude"
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
-EVENTS_PER_BATCH=5
-MIN_QUEUE=5
+EVENTS_PER_BATCH=3
+MIN_QUEUE=3
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
