@@ -4,7 +4,7 @@
  * IndexNow Ping Script
  *
  * Notifies Bing/Yandex about updated URLs after deployment.
- * Reads sitemap.xml to discover all URLs, filters to high-value pages,
+ * Reads all sitemaps to discover URLs, filters to high-value pages,
  * and submits them via the IndexNow API.
  *
  * Usage:
@@ -39,22 +39,22 @@ async function main() {
     process.exit(0);
   }
 
-  // 2. Parse sitemap.xml
-  const sitemapPath = join(DIST_DIR, 'sitemap.xml');
-  let sitemapXml: string;
-  try {
-    sitemapXml = readFileSync(sitemapPath, 'utf-8');
-  } catch (err) {
-    console.error('❌ Failed to read dist/sitemap.xml:', err);
-    process.exit(0); // Non-fatal
-  }
-
-  // Extract all <loc> URLs
+  // 2. Parse all sitemaps
+  const sitemapFiles = ['sitemap-events.xml', 'sitemap-editorial.xml', 'sitemap-venues.xml'];
   const allUrls: string[] = [];
   const locRegex = /<loc>([^<]+)<\/loc>/g;
-  let match;
-  while ((match = locRegex.exec(sitemapXml)) !== null) {
-    allUrls.push(match[1]);
+
+  for (const filename of sitemapFiles) {
+    const sitemapPath = join(DIST_DIR, filename);
+    try {
+      const sitemapXml = readFileSync(sitemapPath, 'utf-8');
+      let match;
+      while ((match = locRegex.exec(sitemapXml)) !== null) {
+        allUrls.push(match[1]);
+      }
+    } catch {
+      console.log(`⚠️  Skipping ${filename} (not found)`);
+    }
   }
 
   console.log(`📊 Total URLs in sitemap: ${allUrls.length}`);
@@ -83,27 +83,30 @@ async function main() {
       continue;
     }
 
+    // Normalize: strip /en/ prefix for matching (English pages mirror Greek structure)
+    const normalizedPath = path.replace(/^\/en\//, '/');
+
     // Core time pages
     const coreTimePages = ['/today', '/tomorrow', '/this-week', '/this-weekend', '/this-month', '/next-month', '/all-events'];
-    if (coreTimePages.includes(path)) {
+    if (coreTimePages.includes(normalizedPath)) {
       highValueUrls.add(url);
       continue;
     }
 
     // Category pages
-    if (categorySlugs.some(slug => path === `/${slug}`)) {
+    if (categorySlugs.some(slug => normalizedPath === `/${slug}`)) {
       highValueUrls.add(url);
       continue;
     }
 
-    // Individual event pages (/events/*)
-    if (path.startsWith('/events/')) {
+    // Individual event pages (/events/* or /en/events/*)
+    if (normalizedPath.startsWith('/events/')) {
       highValueUrls.add(url);
       continue;
     }
 
-    // Venue pages (/venues/*)
-    if (path.startsWith('/venues/')) {
+    // Venue pages (/venues/* or /en/venues/*)
+    if (normalizedPath.startsWith('/venues/')) {
       highValueUrls.add(url);
       continue;
     }

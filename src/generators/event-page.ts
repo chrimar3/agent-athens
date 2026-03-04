@@ -27,6 +27,7 @@ import { validateEventSchema, logValidationSummary, type SchemaValidationResult 
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
+import { getPerformerSameAs } from '../utils/performer-sameAs';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -231,6 +232,12 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
   const ogImage = getOgImage(event);
   if (ogImage) {
     schema.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
+  }
+
+  // Add performer sameAs if available (concerts, dj_sets, festivals, performances, shows, dance)
+  const performer = getPerformerSameAs(event.title, event.type);
+  if (performer) {
+    schema.performer = performer;
   }
 
   return JSON.stringify(schema, null, 2);
