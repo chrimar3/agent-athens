@@ -247,7 +247,19 @@ export function renderHubPage(
 
   // Override page title and description with hub-specific values
   const hubTitleText = locale === 'en' ? config.titleEn : config.titleEl;
-  const answerCapsule = locale === 'en' ? config.answerCapsuleEn! : config.answerCapsuleEl;
+  const rawCapsule = locale === 'en' ? config.answerCapsuleEn! : config.answerCapsuleEl;
+
+  // Dynamic month/year substitution for time-based hubs (e.g. this-month)
+  const now = new Date();
+  const monthNameEn = now.toLocaleString('en-US', { month: 'long' });
+  const monthNameEl = now.toLocaleString('el-GR', { month: 'long' });
+  const year = now.getFullYear();
+  const resolveTokens = (text: string): string =>
+    text
+      .replace(/\{\{MONTH_YEAR\}\}/g, `${monthNameEn} ${year}`)
+      .replace(/\{\{MONTH\}\}/g, locale === 'en' ? monthNameEn : monthNameEl);
+
+  const answerCapsule = resolveTokens(rawCapsule);
   const hubTitle = `${hubTitleText} | agent-athens`;
   const hubDescription = `${answerCapsule.substring(0, 155)}`;
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${hubTitle}</title>`);
@@ -334,8 +346,15 @@ export function renderHubPage(
 </section>`;
   }
 
-  // Part 4: FAQ Section
-  const faqHtml = renderFaqSection(config.faqs, locale);
+  // Part 4: FAQ Section (resolve any {{MONTH}}/{{MONTH_YEAR}} tokens in FAQ text)
+  const resolvedFaqs = config.faqs.map(faq => ({
+    ...faq,
+    questionEl: resolveTokens(faq.questionEl),
+    answerEl: resolveTokens(faq.answerEl),
+    questionEn: faq.questionEn ? resolveTokens(faq.questionEn) : undefined,
+    answerEn: faq.answerEn ? resolveTokens(faq.answerEn) : undefined,
+  }));
+  const faqHtml = renderFaqSection(resolvedFaqs, locale);
 
   // Part 5: Seasonal Narrative (English-only, when available)
   let seasonalHtml = '';
@@ -365,7 +384,7 @@ export function renderHubPage(
   }
 
   // FAQPage Schema (inject before </head>)
-  const faqSchemaBlock = renderFaqSchema(config.faqs, locale);
+  const faqSchemaBlock = renderFaqSchema(resolvedFaqs, locale);
   html = html.replace('</head>', `${faqSchemaBlock}\n</head>`);
 
   return html;

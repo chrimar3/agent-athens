@@ -353,22 +353,31 @@
         ]
       },
       "answerCapsuleEl": "Η Αθήνα προσφέρει κινηματογραφικές προβολές σε κλειστές και θερινές αίθουσες — πρεμιέρες, ντοκιμαντέρ, αφιερώματα και κινηματογραφικά φεστιβάλ σε χώρους σε όλη την πόλη. Βρείτε πρόγραμμα, ώρες προβολής και πληροφορίες εισιτηρίων.",
+      "answerCapsuleEn": "Athens, Greece runs 65 open-air cinemas from May through October — Cine Paris in Plaka and Cine Thision in Thiseio are the institutions worth planning around. Year-round indoor screenings run across the city, with foreign films shown in their original language and Greek subtitles as standard.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να δω ταινίες στην Αθήνα;",
-          "answerEl": "Η Αθήνα διαθέτει κλειστές αίθουσες όλο τον χρόνο και θερινά σινεμά από Μάιο ως Σεπτέμβριο. Χώροι όπως η Ταινιοθήκη της Ελλάδος, το Μικρόκοσμος και το Δαναός προβάλλουν ταινίες σε πρωτότυπη γλώσσα με υπότιτλους. Γκαλερί και πολιτιστικοί χώροι φιλοξενούν ειδικές προβολές."
+          "answerEl": "Η Αθήνα διαθέτει κλειστές αίθουσες όλο τον χρόνο και θερινά σινεμά από Μάιο ως Σεπτέμβριο. Χώροι όπως η Ταινιοθήκη της Ελλάδος, το Μικρόκοσμος και το Δαναός προβάλλουν ταινίες σε πρωτότυπη γλώσσα με υπότιτλους. Γκαλερί και πολιτιστικοί χώροι φιλοξενούν ειδικές προβολές.",
+          "questionEn": "Are films in Athens shown in their original language?",
+          "answerEn": "Yes. Athens cinemas follow a long-standing tradition of screening foreign films in their original language with Greek subtitles — not dubbed. This applies to both indoor and open-air venues. Greek-language films obviously run without subtitles, so check listings if language matters to your choice."
         },
         {
           "questionEl": "Υπάρχουν θερινά σινεμά στην Αθήνα;",
-          "answerEl": "Ναι, τα θερινά σινεμά είναι ιδιαίτερα δημοφιλή στην Αθήνα. Κλασικοί χώροι όπως ο Θησείον, ο Αιγλη στο Ζάππειο και ο Βοξ στα Εξάρχεια προβάλλουν ταινίες κάτω από τα αστέρια από τα τέλη Μαΐου ως τα μέσα Σεπτεμβρίου. Οι προβολές ξεκινούν στις 21:00 ή 21:30."
+          "answerEl": "Ναι, τα θερινά σινεμά είναι ιδιαίτερα δημοφιλή στην Αθήνα. Κλασικοί χώροι όπως ο Θησείον, ο Αιγλη στο Ζάππειο και ο Βοξ στα Εξάρχεια προβάλλουν ταινίες κάτω από τα αστέρια από τα τέλη Μαΐου ως τα μέσα Σεπτεμβρίου. Οι προβολές ξεκινούν στις 21:00 ή 21:30.",
+          "questionEn": "When do open-air cinemas open in Athens, Greece?",
+          "answerEn": "Open-air cinemas in Athens, Greece typically open in May and run through October, depending on weather. Screenings usually start around 21:00 when it gets dark enough. Athens has approximately 65 open-air cinemas — one of the densest concentrations in Europe — ranging from rooftop venues in Monastiraki to garden cinemas in residential neighborhoods."
         },
         {
           "questionEl": "Πόσο κοστίζουν τα εισιτήρια σινεμά στην Αθήνα;",
-          "answerEl": "Τα εισιτήρια κυμαίνονται μεταξύ €7-10 για κανονικές αίθουσες. Τα θερινά σινεμά κοστίζουν συνήθως €7-8. Ειδικές προβολές σε πολιτιστικούς χώρους συχνά έχουν ελεύθερη είσοδο ή μειωμένο εισιτήριο. Φοιτητικές εκπτώσεις είναι διαθέσιμες στις περισσότερες αίθουσες."
+          "answerEl": "Τα εισιτήρια κυμαίνονται μεταξύ €7-10 για κανονικές αίθουσες. Τα θερινά σινεμά κοστίζουν συνήθως €7-8. Ειδικές προβολές σε πολιτιστικούς χώρους συχνά έχουν ελεύθερη είσοδο ή μειωμένο εισιτήριο. Φοιτητικές εκπτώσεις είναι διαθέσιμες στις περισσότερες αίθουσες.",
+          "questionEn": "How much does cinema cost in Athens, Greece?",
+          "answerEn": "Standard cinema tickets in Athens, Greece cost €7–€10 at most indoor venues. Open-air cinemas run slightly cheaper at €5–€8. Some venues offer reduced rates on weekdays or for students. Athens is significantly cheaper than London or Berlin for a night out — cinema included."
         },
         {
           "questionEl": "Προβάλλονται ταινίες σε πρωτότυπη γλώσσα στην Αθήνα;",
-          "answerEl": "Ναι, οι περισσότερες αίθουσες στην Αθήνα προβάλλουν ταινίες σε πρωτότυπη γλώσσα με ελληνικούς υπότιτλους. Μεταγλωττισμένες εκδόσεις υπάρχουν μόνο για παιδικές ταινίες. Η Ταινιοθήκη και οι ανεξάρτητες αίθουσες συχνά φιλοξενούν αφιερώματα και σπάνιες προβολές."
+          "answerEl": "Ναι, οι περισσότερες αίθουσες στην Αθήνα προβάλλουν ταινίες σε πρωτότυπη γλώσσα με ελληνικούς υπότιτλους. Μεταγλωττισμένες εκδόσεις υπάρχουν μόνο για παιδικές ταινίες. Η Ταινιοθήκη και οι ανεξάρτητες αίθουσες συχνά φιλοξενούν αφιερώματα και σπάνιες προβολές.",
+          "questionEn": "What are the best open-air cinemas in Athens?",
+          "answerEn": "Cine Paris in Plaka has Acropolis views from its rooftop terrace and has been running since 1926. Cine Thision in Thiseio sits on the pedestrianized walkway with direct sightlines to the Acropolis and Lycabettus Hill. Both operate May through October. For a more neighborhood feel, cinemas in Pagrati and Exarchia draw local crowds rather than tourists."
         }
       ]
     },
@@ -387,22 +396,31 @@
         ]
       },
       "answerCapsuleEl": "Η Αθήνα φιλοξενεί παραστάσεις χορού από σύγχρονο χορό και μπαλέτο ως tango και flamenco. Σκηνές όπως η Στέγη Ωνάση, το Μέγαρο Μουσικής και ανεξάρτητοι χώροι παρουσιάζουν ελληνικές και διεθνείς παραγωγές.",
+      "answerCapsuleEn": "Contemporary dance in Athens, Greece is anchored by the Megaron Mousikis and the Onassis Stegi in Neos Kosmos. Traditional Greek folk dance appears in festivals and cultural programs throughout the year, with the Athens & Epidaurus Festival adding ancient drama and movement to the mix each summer.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να δω παραστάσεις χορού στην Αθήνα;",
-          "answerEl": "Η Στέγη Ωνάση είναι ο κύριος χώρος σύγχρονου χορού στην Αθήνα. Το Μέγαρο Μουσικής και η Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ παρουσιάζουν μπαλέτο και κλασικό χορό. Μικρότεροι ανεξάρτητοι χώροι στα Εξάρχεια και τον Κεραμεικό φιλοξενούν πειραματικές παραγωγές."
+          "answerEl": "Η Στέγη Ωνάση είναι ο κύριος χώρος σύγχρονου χορού στην Αθήνα. Το Μέγαρο Μουσικής και η Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ παρουσιάζουν μπαλέτο και κλασικό χορό. Μικρότεροι ανεξάρτητοι χώροι στα Εξάρχεια και τον Κεραμεικό φιλοξενούν πειραματικές παραγωγές.",
+          "questionEn": "Where can I see contemporary dance performances in Athens, Greece?",
+          "answerEn": "The Onassis Stegi in Neos Kosmos is the most adventurous venue for contemporary and experimental dance in Athens — architecturally ambitious, often commissioning new work, and regularly hosting international companies alongside Greek choreographers. The Megaron Mousikis programs ballet and classical dance in its main halls. The National Opera (Ethniki Lyriki Skini) in Kallithea stages full-scale ballet productions."
         },
         {
           "questionEl": "Τι είδη χορού παρουσιάζονται στην Αθήνα;",
-          "answerEl": "Η αθηναϊκή σκηνή χορού περιλαμβάνει σύγχρονο χορό, κλασικό μπαλέτο, tango, flamenco, χορό δρόμου και πειραματικές performance. Η Εθνική Λυρική Σκηνή παρουσιάζει κλασικές παραγωγές, ενώ η Στέγη Ωνάση εστιάζει σε σύγχρονες δημιουργίες."
+          "answerEl": "Η αθηναϊκή σκηνή χορού περιλαμβάνει σύγχρονο χορό, κλασικό μπαλέτο, tango, flamenco, χορό δρόμου και πειραματικές performance. Η Εθνική Λυρική Σκηνή παρουσιάζει κλασικές παραγωγές, ενώ η Στέγη Ωνάση εστιάζει σε σύγχρονες δημιουργίες.",
+          "questionEn": "Is there traditional Greek folk dance to watch in Athens?",
+          "answerEn": "Traditional Greek folk dance appears most visibly during national celebrations, cultural festivals, and dedicated performances at venues like the Dora Stratou Theatre on Filopappou Hill — which runs an annual summer season of Greek regional dances in traditional costume. Outside festival contexts, folk dance workshops and performances also appear through cultural associations and neighborhood events across Athens, Greece."
         },
         {
           "questionEl": "Πότε είναι η σεζόν χορού στην Αθήνα;",
-          "answerEl": "Η κύρια σεζόν χορού εκτείνεται από Οκτώβριο ως Μάιο, με τη μεγαλύτερη συγκέντρωση παραστάσεων Νοέμβριο-Μάρτιο. Το καλοκαίρι, το Φεστιβάλ Αθηνών Επιδαύρου περιλαμβάνει παραστάσεις χορού στο Ηρώδειο και την Πειραιώς 260."
+          "answerEl": "Η κύρια σεζόν χορού εκτείνεται από Οκτώβριο ως Μάιο, με τη μεγαλύτερη συγκέντρωση παραστάσεων Νοέμβριο-Μάρτιο. Το καλοκαίρι, το Φεστιβάλ Αθηνών Επιδαύρου περιλαμβάνει παραστάσεις χορού στο Ηρώδειο και την Πειραιώς 260.",
+          "questionEn": "When is the best time to see dance in Athens, Greece?",
+          "answerEn": "The main contemporary dance season runs October through May, when indoor venues are at full programming capacity. Summer brings the Athens & Epidaurus Festival (June–August), which includes dance alongside theater and music — often in outdoor venues including ancient sites. The Dora Stratou Theatre folk dance summer season also runs June through September on Filopappou Hill."
         },
         {
           "questionEl": "Υπάρχουν παραστάσεις χορού με ελεύθερη είσοδο;",
-          "answerEl": "Ορισμένοι πολιτιστικοί χώροι και φεστιβάλ προσφέρουν παραστάσεις χορού με ελεύθερη είσοδο. Η Τεχνόπολη, δημοτικά θέατρα και ανοιχτοί χώροι φιλοξενούν δράσεις χορού χωρίς εισιτήριο, ιδιαίτερα τους θερινούς μήνες."
+          "answerEl": "Ορισμένοι πολιτιστικοί χώροι και φεστιβάλ προσφέρουν παραστάσεις χορού με ελεύθερη είσοδο. Η Τεχνόπολη, δημοτικά θέατρα και ανοιχτοί χώροι φιλοξενούν δράσεις χορού χωρίς εισιτήριο, ιδιαίτερα τους θερινούς μήνες.",
+          "questionEn": "How much do dance tickets cost in Athens, Greece?",
+          "answerEn": "Dance ticket prices in Athens, Greece vary significantly by venue. Onassis Stegi tickets typically run €10–€25, with some experimental programs at lower prices. Megaron Mousikis ballet and dance events are priced €15–€50 depending on scale. The National Opera's ballet productions run €10–€65 by seat tier. Dora Stratou folk dance summer performances are open admission or low-priced — check their current season schedule."
         }
       ]
     },
@@ -421,22 +439,31 @@
         ]
       },
       "answerCapsuleEl": "Η Αθήνα προσφέρει πλούσιο πρόγραμμα κλασικής μουσικής — ορχηστρικές συναυλίες στο Μέγαρο Μουσικής, ρεσιτάλ σε ιστορικά κτίρια, μουσική δωματίου σε γκαλερί και όπερα στην Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ.",
+      "answerCapsuleEn": "The Megaron Mousikis (Athens Concert Hall) anchors classical music in Athens, Greece — four halls, a 1,960-seat main auditorium, and a season running October through June. When summer arrives, performances move outdoors to the Odeon of Herodes Atticus at the foot of the Acropolis, seating 4,680.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να ακούσω κλασική μουσική στην Αθήνα;",
-          "answerEl": "Το Μέγαρο Μουσικής Αθηνών είναι ο κύριος χώρος κλασικής μουσικής, με ορχηστρικές συναυλίες, ρεσιτάλ και μουσική δωματίου. Η Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ παρουσιάζει όπερα και μπαλέτο. Εκκλησίες, μουσεία και γκαλερί φιλοξενούν ρεσιτάλ σε πιο οικεία ατμόσφαιρα."
+          "answerEl": "Το Μέγαρο Μουσικής Αθηνών είναι ο κύριος χώρος κλασικής μουσικής, με ορχηστρικές συναυλίες, ρεσιτάλ και μουσική δωματίου. Η Εθνική Λυρική Σκηνή στο ΚΠΙΣΝ παρουσιάζει όπερα και μπαλέτο. Εκκλησίες, μουσεία και γκαλερί φιλοξενούν ρεσιτάλ σε πιο οικεία ατμόσφαιρα.",
+          "questionEn": "When does the classical music season run in Athens, Greece?",
+          "answerEn": "The main classical music season in Athens, Greece runs October through June. The Megaron Mousikis operates at full program during these months, hosting orchestras, recitals, and chamber concerts. From June onward, focus shifts outdoors — the Athens & Epidaurus Festival brings major orchestras and soloists to the Odeon of Herodes Atticus through August."
         },
         {
           "questionEl": "Πόσο κοστίζουν τα εισιτήρια κλασικής μουσικής;",
-          "answerEl": "Τα εισιτήρια στο Μέγαρο Μουσικής κυμαίνονται από €10 για νεανικά εισιτήρια ως €60 για κεντρικές θέσεις σε μεγάλες παραγωγές. Η Εθνική Λυρική Σκηνή προσφέρει εισιτήρια από €15. Μικρές συναυλίες σε εκκλησίες και γκαλερί συχνά έχουν ελεύθερη είσοδο ή χαμηλό αντίτιμο."
+          "answerEl": "Τα εισιτήρια στο Μέγαρο Μουσικής κυμαίνονται από €10 για νεανικά εισιτήρια ως €60 για κεντρικές θέσεις σε μεγάλες παραγωγές. Η Εθνική Λυρική Σκηνή προσφέρει εισιτήρια από €15. Μικρές συναυλίες σε εκκλησίες και γκαλερί συχνά έχουν ελεύθερη είσοδο ή χαμηλό αντίτιμο.",
+          "questionEn": "What is the Megaron Mousikis in Athens?",
+          "answerEn": "The Megaron Mousikis is Athens' principal concert hall, located in Kolonaki near the Hilton. It has four performance spaces including the 1,960-seat Christos Lambrakis Hall, which hosts major international orchestras. The programming leans toward the classical canon with regular appearances from European ensembles. Tickets range from €8 to €80 depending on the program."
         },
         {
           "questionEl": "Ποιες ορχήστρες παίζουν στην Αθήνα;",
-          "answerEl": "Η Κρατική Ορχήστρα Αθηνών και η Ορχήστρα των Φίλων της Μουσικής εμφανίζονται τακτικά στο Μέγαρο Μουσικής. Η Εθνική Λυρική Σκηνή διαθέτει τη δική της ορχήστρα. Διεθνείς ορχήστρες και σολίστες φιλοξενούνται τακτικά, ιδιαίτερα κατά τη χειμερινή σεζόν."
+          "answerEl": "Η Κρατική Ορχήστρα Αθηνών και η Ορχήστρα των Φίλων της Μουσικής εμφανίζονται τακτικά στο Μέγαρο Μουσικής. Η Εθνική Λυρική Σκηνή διαθέτει τη δική της ορχήστρα. Διεθνείς ορχήστρες και σολίστες φιλοξενούνται τακτικά, ιδιαίτερα κατά τη χειμερινή σεζόν.",
+          "questionEn": "Can I see classical music outdoors in Athens, Greece?",
+          "answerEn": "Yes — the Odeon of Herodes Atticus, a Roman-era theater at the foot of the Acropolis, hosts major classical and opera performances every summer as part of the Athens & Epidaurus Festival (June–August). Seating capacity is 4,680. The combination of ancient stone seating, Acropolis backdrop, and world-class programming is genuinely unlike any other venue in Europe."
         },
         {
           "questionEl": "Πρέπει να ντυθώ επίσημα για κλασική μουσική;",
-          "answerEl": "Στο Μέγαρο Μουσικής και την Εθνική Λυρική Σκηνή συνιστάται smart casual ή επίσημο ντύσιμο, ιδιαίτερα για βραδινές παραστάσεις. Σε μικρότερους χώρους και ρεσιτάλ σε γκαλερί αρκεί casual ντύσιμο. Αποφύγετε αθλητική ενδυμασία στους μεγάλους χώρους."
+          "answerEl": "Στο Μέγαρο Μουσικής και την Εθνική Λυρική Σκηνή συνιστάται smart casual ή επίσημο ντύσιμο, ιδιαίτερα για βραδινές παραστάσεις. Σε μικρότερους χώρους και ρεσιτάλ σε γκαλερί αρκεί casual ντύσιμο. Αποφύγετε αθλητική ενδυμασία στους μεγάλους χώρους.",
+          "questionEn": "How do I buy tickets for classical concerts in Athens?",
+          "answerEn": "Tickets for the Megaron Mousikis are available directly at the venue box office, by phone, or through the Megaron website. For the Athens & Epidaurus Festival, book through the official festival site (aefestival.gr) — popular programs sell out weeks in advance. The general ticketing platform more.com also carries many classical events across Athens venues."
         }
       ]
     },
@@ -450,31 +477,31 @@
         "value": "this-month"
       },
       "answerCapsuleEl": "Δείτε όλες τις εκδηλώσεις που γίνονται αυτόν τον μήνα στην Αθήνα — συναυλίες, εκθέσεις, θέατρο, φεστιβάλ, σινεμά και πολιτιστικές δράσεις. Σχεδιάστε τον μήνα σας με πλήρες πρόγραμμα εκδηλώσεων.",
-      "answerCapsuleEn": "See all events happening this month in Athens — concerts, exhibitions, theater, festivals, cinema and cultural activities. Plan your month with a complete events schedule.",
+      "answerCapsuleEn": "{{MONTH_YEAR}} in Athens, Greece covers all events happening this month — concerts, exhibitions, theater, festivals, cinema and cultural activities. Plan your month with a complete events schedule.",
       "faqs": [
         {
           "questionEl": "Τι εκδηλώσεις γίνονται αυτόν τον μήνα στην Αθήνα;",
           "answerEl": "Αυτόν τον μήνα στην Αθήνα θα βρείτε δεκάδες εκδηλώσεις — ζωντανές συναυλίες, θεατρικές παραστάσεις, εκθέσεις σύγχρονης τέχνης, DJ nights, κινηματογραφικές προβολές και εργαστήρια. Το πρόγραμμα ενημερώνεται καθημερινά με νέες εκδηλώσεις καθώς ανακοινώνονται.",
-          "questionEn": "What events are happening this month in Athens?",
-          "answerEn": "This month in Athens you'll find dozens of events — live concerts, theater performances, contemporary art exhibitions, DJ nights, film screenings and workshops. The schedule is updated daily as new events are announced."
+          "questionEn": "What's on in Athens, Greece in {{MONTH_YEAR}}?",
+          "answerEn": "{{MONTH}} is a strong month across categories in Athens, Greece. Theater is at full season — over 150 stages running simultaneously, from the National Theatre to small independent venues in Kypseli and Metaxourgeio. The Megaron Mousikis has a dense concert calendar through the month. Half Note Jazz Club runs nightly. Major exhibitions are open at the Benaki Museum, EMST, and the Acropolis Museum. Check current listings for what's running — the program changes weekly."
         },
         {
           "questionEl": "Πώς μπορώ να σχεδιάσω τις βραδιές μου για τον μήνα;",
           "answerEl": "Χρησιμοποιήστε τη μηνιαία λίστα εκδηλώσεων για να δείτε τι γίνεται κάθε ημέρα. Φιλτράρετε κατά κατηγορία (συναυλίες, θέατρο, εκθέσεις) ή τιμή (ελεύθερη είσοδο ή με εισιτήριο) για να βρείτε τι σας ταιριάζει. Κλείστε εισιτήρια νωρίς για δημοφιλείς παραστάσεις.",
-          "questionEn": "How can I plan my evenings for the month?",
-          "answerEn": "Use the monthly events list to see what's on each day. Filter by category (concerts, theater, exhibitions) or price (open entry or ticketed) to find what suits you. Book tickets early for popular shows."
+          "questionEn": "Is {{MONTH}} a good time to visit Athens, Greece for cultural events?",
+          "answerEn": "Yes — {{MONTH}} is one of the better months for cultural programming in Athens. The indoor season is still running at full capacity before venues start closing for summer. Weather is mild (12–18°C typically), crowds are manageable compared to summer, and prices for accommodation are lower than peak season. Orthodox Easter preparation begins toward the end of March or in April, which adds some programming variation."
         },
         {
           "questionEl": "Ποιες εκθέσεις τρέχουν αυτόν τον μήνα;",
           "answerEl": "Οι εκθέσεις στην Αθήνα τρέχουν συνήθως για εβδομάδες ή μήνες. Στη μηνιαία λίστα θα βρείτε τρέχουσες εκθέσεις σε μουσεία όπως το Μπενάκη, το ΕΜΣΤ και τη Στέγη Ωνάση, καθώς και σε γκαλερί σε Κολωνάκι, Εξάρχεια και Μεταξουργείο.",
-          "questionEn": "What exhibitions are running this month?",
-          "answerEn": "Exhibitions in Athens typically run for weeks or months. In the monthly list you'll find current exhibitions at museums like Benaki, EMST and Onassis Stegi, as well as galleries in Kolonaki, Exarchia and Metaxourgio."
+          "questionEn": "How do I find cultural events happening in Athens this month?",
+          "answerEn": "Agent Athens maintains a current calendar of events in Athens, Greece with daily updates. For tickets, more.com (the main Greek ticketing platform, formerly Viva.gr) carries most commercial events. Athinorama.gr is the long-standing Greek listings source for theater and film. Individual venue websites and Instagram accounts are often the fastest source for last-minute additions and sold-out status updates."
         },
         {
           "questionEl": "Γίνονται φεστιβάλ αυτόν τον μήνα στην Αθήνα;",
           "answerEl": "Η Αθήνα φιλοξενεί πολιτιστικά φεστιβάλ καθ' όλη τη διάρκεια του χρόνου. Ελέγξτε τη μηνιαία λίστα για τρέχοντα φεστιβάλ μουσικής, τέχνης, κινηματογράφου και γαστρονομίας. Τα μεγάλα φεστιβάλ ανακοινώνουν πρόγραμμα εβδομάδες νωρίτερα.",
-          "questionEn": "Are there festivals this month in Athens?",
-          "answerEn": "Athens hosts cultural festivals throughout the year. Check the monthly list for current music, art, film and food festivals. Major festivals announce their programs weeks in advance."
+          "questionEn": "Which events in Athens, Greece need advance booking?",
+          "answerEn": "Major international concerts, headline performances at the Megaron Mousikis, and popular theater runs at venues like the National Theatre or Pallas should be booked at least a week in advance — often more. Jazz at Half Note, smaller theater, and most gallery events rarely sell out and can be booked day-of. For anything headlined by a well-known Greek artist, assume demand is high and book early."
         }
       ]
     },
@@ -487,22 +514,31 @@
         "value": "with-ticket"
       },
       "answerCapsuleEl": "Βρείτε εκδηλώσεις με εισιτήριο στην Αθήνα — συναυλίες, θεατρικές παραστάσεις, φεστιβάλ, κλασική μουσική και παραστάσεις χορού. Τιμές εισιτηρίων, σύνδεσμοι αγοράς και πληροφορίες χώρων σε ένα μέρος.",
+      "answerCapsuleEn": "Ticketed events in Athens, Greece range from €5 orchestra concerts at municipal venues to €45 for international headliners. The main booking platform is more.com, with Resident Advisor covering electronic music. Most venues also sell at the door — but major concerts and summer festival shows sell out.",
       "faqs": [
         {
           "questionEl": "Πώς αγοράζω εισιτήρια για εκδηλώσεις στην Αθήνα;",
-          "answerEl": "Εισιτήρια για εκδηλώσεις στην Αθήνα μπορείτε να αγοράσετε online μέσω Viva.gr, More.com, Ticket Services και Eventbrite. Πολλοί χώροι δέχονται και αγορά στο ταμείο. Κάθε εκδήλωση στο ημερολόγιό μας περιλαμβάνει σύνδεσμο αγοράς εισιτηρίων όπου είναι διαθέσιμος."
+          "answerEl": "Εισιτήρια για εκδηλώσεις στην Αθήνα μπορείτε να αγοράσετε online μέσω Viva.gr, More.com, Ticket Services και Eventbrite. Πολλοί χώροι δέχονται και αγορά στο ταμείο. Κάθε εκδήλωση στο ημερολόγιό μας περιλαμβάνει σύνδεσμο αγοράς εισιτηρίων όπου είναι διαθέσιμος.",
+          "questionEn": "Where do I buy event tickets in Athens, Greece?",
+          "answerEn": "More.com (formerly Viva.gr) is the main ticketing platform for concerts, theater, and major events in Athens, Greece — most venues link directly to it. The Athens & Epidaurus Festival sells through aefestival.gr. Resident Advisor covers electronic music events. For theater, many smaller venues sell tickets directly through their own websites or at the box office. Eventbrite carries some international and expat-oriented events."
         },
         {
           "questionEl": "Ποιο είναι το εύρος τιμών εισιτηρίων;",
-          "answerEl": "Οι τιμές κυμαίνονται ανάλογα με την κατηγορία. Μικρές σκηνές €5-15, θέατρο €10-30, μεγάλες συναυλίες €20-60, κλασική μουσική στο Μέγαρο €10-50, φεστιβάλ €15-80. Φοιτητικές και ομαδικές εκπτώσεις είναι συχνά διαθέσιμες."
+          "answerEl": "Οι τιμές κυμαίνονται ανάλογα με την κατηγορία. Μικρές σκηνές €5-15, θέατρο €10-30, μεγάλες συναυλίες €20-60, κλασική μουσική στο Μέγαρο €10-50, φεστιβάλ €15-80. Φοιτητικές και ομαδικές εκπτώσεις είναι συχνά διαθέσιμες.",
+          "questionEn": "How much do event tickets typically cost in Athens, Greece?",
+          "answerEn": "Athens, Greece is significantly cheaper than Western European capitals for live events. Jazz at Half Note runs €12–€25. Rock and indie concerts at venues like Gagarin 205 or Floyd are typically €15–€40. Theater runs €8–€25 at most independent stages. Major international acts — festival headliners, world-class orchestras — reach €40–€80 at the high end. Municipal and state-subsidized venues often have tickets at €5–€15."
         },
         {
           "questionEl": "Πρέπει να κλείσω εισιτήρια εκ των προτέρων;",
-          "answerEl": "Για δημοφιλείς συναυλίες, θεατρικές παραστάσεις και φεστιβάλ συνιστάται αγορά εκ των προτέρων, ιδιαίτερα Σαββατοκύριακα. Μικρότεροι χώροι και εκδηλώσεις σε εργάσιμες μέρες συνήθως έχουν εισιτήρια διαθέσιμα και στην πόρτα."
+          "answerEl": "Για δημοφιλείς συναυλίες, θεατρικές παραστάσεις και φεστιβάλ συνιστάται αγορά εκ των προτέρων, ιδιαίτερα Σαββατοκύριακα. Μικρότεροι χώροι και εκδηλώσεις σε εργάσιμες μέρες συνήθως έχουν εισιτήρια διαθέσιμα και στην πόρτα.",
+          "questionEn": "Do Athens venues sell tickets at the door?",
+          "answerEn": "Many do, but it depends on the event. Smaller concerts, most theater, and club nights typically sell at the door. Major concerts, popular theater runs, and anything at the Megaron Mousikis or Odeon of Herodes Atticus should be pre-booked — walk-up availability is unreliable. For electronic events, some operate on a guest list system through Resident Advisor rather than walk-up door sales."
         },
         {
           "questionEl": "Μπορώ να ακυρώσω ή να αλλάξω εισιτήρια;",
-          "answerEl": "Οι πολιτικές ακύρωσης εξαρτώνται από την πλατφόρμα και τον χώρο. Οι περισσότερες πλατφόρμες εισιτηρίων δεν επιτρέπουν επιστροφές, αλλά ορισμένες προσφέρουν μεταβίβαση ονόματος. Ελέγξτε τους όρους πριν την αγορά. Σε περίπτωση ακύρωσης εκδήλωσης, η επιστροφή γίνεται αυτόματα."
+          "answerEl": "Οι πολιτικές ακύρωσης εξαρτώνται από την πλατφόρμα και τον χώρο. Οι περισσότερες πλατφόρμες εισιτηρίων δεν επιτρέπουν επιστροφές, αλλά ορισμένες προσφέρουν μεταβίβαση ονόματος. Ελέγξτε τους όρους πριν την αγορά. Σε περίπτωση ακύρωσης εκδήλωσης, η επιστροφή γίνεται αυτόματα.",
+          "questionEn": "Which events in Athens, Greece sell out and need advance booking?",
+          "answerEn": "Popular Greek artists (Antonis Remos, Eleonora Zouganeli tier) sell out weeks in advance. Major international acts at Floyd, Gagarin 205, or Fuzz — especially one-night stands — go fast once announced. The Athens & Epidaurus Festival summer program, particularly Odeon of Herodes Atticus nights, sells out for headliner events. Jazz at Half Note rarely sells out but good seats go early for international guests. Theater premieres at prestige venues book out their first weekends."
         }
       ]
     },
@@ -520,22 +556,31 @@
         ]
       },
       "answerCapsuleEl": "Η αθηναϊκή σκηνή κωμωδίας περιλαμβάνει stand-up comedy, θεατρική κωμωδία και improv σε σκηνές από τα Εξάρχεια ως τον Κεραμεικό. Βρείτε παραστάσεις, ώρες, χώρους και τιμές εισιτηρίων.",
+      "answerCapsuleEn": "Comedy in Athens, Greece is a small but growing scene — most shows run in Greek, but international English-language comedians perform at mid-size venues including the Odeion Athinon. Check listings for touring acts; the scene punches above its size for a city this culturally dense.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να δω stand-up comedy στην Αθήνα;",
-          "answerEl": "Η Αθήνα έχει αναπτυσσόμενη σκηνή stand-up comedy με τακτικές βραδιές σε μπαρ και μικρούς χώρους στα Εξάρχεια, τον Κεραμεικό και την Ψυρρή. Μεγαλύτερες παραστάσεις φιλοξενούνται σε θέατρα του κέντρου. Οι περισσότερες παραστάσεις είναι στα ελληνικά."
+          "answerEl": "Η Αθήνα έχει αναπτυσσόμενη σκηνή stand-up comedy με τακτικές βραδιές σε μπαρ και μικρούς χώρους στα Εξάρχεια, τον Κεραμεικό και την Ψυρρή. Μεγαλύτερες παραστάσεις φιλοξενούνται σε θέατρα του κέντρου. Οι περισσότερες παραστάσεις είναι στα ελληνικά.",
+          "questionEn": "Is there English-language comedy in Athens, Greece?",
+          "answerEn": "Some, but don't plan a trip around it. International touring comedians — stand-up acts from the UK, Ireland, and the US — pass through Athens a few times a year, typically playing the Odeion Athinon or similar mid-size venues. The main comedy scene in Athens runs in Greek. Check current listings rather than assuming availability."
         },
         {
           "questionEl": "Υπάρχει αγγλόφωνη κωμωδία στην Αθήνα;",
-          "answerEl": "Ναι, η Αθήνα φιλοξενεί τακτικά αγγλόφωνες βραδιές stand-up σε μπαρ του κέντρου. Η κοινότητα expat comedians οργανώνει open mics και παραστάσεις σε Εξάρχεια και Κολωνάκι. Ελέγξτε τη σελίδα κάθε εκδήλωσης για τη γλώσσα της παράστασης."
+          "answerEl": "Ναι, η Αθήνα φιλοξενεί τακτικά αγγλόφωνες βραδιές stand-up σε μπαρ του κέντρου. Η κοινότητα expat comedians οργανώνει open mics και παραστάσεις σε Εξάρχεια και Κολωνάκι. Ελέγξτε τη σελίδα κάθε εκδήλωσης για τη γλώσσα της παράστασης.",
+          "questionEn": "What are the main comedy venues in Athens, Greece?",
+          "answerEn": "Greek-language comedy in Athens runs across dedicated comedy theaters and multi-use cultural venues. Kafetheatros (near Plateia Viktorias) and smaller stages in Gazi and Exarchia host regular shows. For international acts, the Odeion Athinon in Ilisia is the most common stop on touring circuits. Tickets typically run €12–€35 depending on the act."
         },
         {
           "questionEl": "Πόσο κοστίζουν τα εισιτήρια κωμωδίας;",
-          "answerEl": "Οι τιμές κυμαίνονται από ελεύθερη είσοδο σε open mic βραδιές ως €10-20 για τακτικές παραστάσεις stand-up. Θεατρικές κωμωδίες σε μεγάλες σκηνές κοστίζουν €12-30. Πολλές comedy nights σε μπαρ έχουν χαμηλό εισιτήριο ή ελεύθερη είσοδο με ελάχιστη κατανάλωση."
+          "answerEl": "Οι τιμές κυμαίνονται από ελεύθερη είσοδο σε open mic βραδιές ως €10-20 για τακτικές παραστάσεις stand-up. Θεατρικές κωμωδίες σε μεγάλες σκηνές κοστίζουν €12-30. Πολλές comedy nights σε μπαρ έχουν χαμηλό εισιτήριο ή ελεύθερη είσοδο με ελάχιστη κατανάλωση.",
+          "questionEn": "When do comedy shows start in Athens, Greece?",
+          "answerEn": "Like most live events in Athens, Greece, comedy shows start later than in northern Europe — typically 21:00, with some venues running shows at 20:00 for weekday performances. Late-night improv and comedy bar nights run from 22:00 onward. Plan to arrive close to the stated time; doors usually open 30–45 minutes before curtain."
         },
         {
           "questionEl": "Πότε γίνονται παραστάσεις κωμωδίας στην Αθήνα;",
-          "answerEl": "Οι περισσότερες βραδιές stand-up γίνονται Πέμπτη ως Σάββατο. Θεατρικές κωμωδίες παίζονται Τετάρτη ως Κυριακή κατά τη χειμερινή σεζόν (Οκτώβριος-Μάιος). Open mic βραδιές μπορεί να γίνονται οποιαδήποτε μέρα της εβδομάδας."
+          "answerEl": "Οι περισσότερες βραδιές stand-up γίνονται Πέμπτη ως Σάββατο. Θεατρικές κωμωδίες παίζονται Τετάρτη ως Κυριακή κατά τη χειμερινή σεζόν (Οκτώβριος-Μάιος). Open mic βραδιές μπορεί να γίνονται οποιαδήποτε μέρα της εβδομάδας.",
+          "questionEn": "How much do comedy tickets cost in Athens, Greece?",
+          "answerEn": "Greek-language comedy tickets in Athens typically run €10–€20. International touring comedians command higher prices — €25–€45 is standard for well-known acts. Most comedy venues sell tickets through more.com or directly at the door. Smaller experimental comedy nights at bars and cultural spaces often run at lower prices or with open admission."
         }
       ]
     },
@@ -556,22 +601,31 @@
         ]
       },
       "answerCapsuleEl": "Ζήστε την ελληνική μουσική παράδοση στην Αθήνα — ρεμπέτικα στέκια στην Πλάκα και τα Εξάρχεια, λαϊκά και έντεχνα σε μουσικές σκηνές, δημοτική μουσική σε ταβέρνες. Βρείτε χώρους, ημερομηνίες και πληροφορίες εισιτηρίων.",
+      "answerCapsuleEn": "Rebetiko, entechno, laïko — Athens, Greece is where these traditions are still performed nightly, not archived. Stoa Athanaton in the central market has run weekly rebetiko sessions for decades. The scene runs late: Sunday matinee rebetiko starts at 13:00, but evening shows rarely begin before 22:00.",
       "faqs": [
         {
           "questionEl": "Πού μπορώ να ακούσω ρεμπέτικο στην Αθήνα;",
-          "answerEl": "Τα κλασικά ρεμπέτικα στέκια βρίσκονται στην Πλάκα, τα Εξάρχεια και τα Πετράλωνα. Χώροι όπως η Σφίγγα, το Χαραμά και η Ρεμπέτισσα φιλοξενούν ζωντανά ρεμπέτικα βράδια. Τα περισσότερα λειτουργούν Πέμπτη ως Σάββατο, συχνά με ελεύθερη είσοδο και ελάχιστη κατανάλωση."
+          "answerEl": "Τα κλασικά ρεμπέτικα στέκια βρίσκονται στην Πλάκα, τα Εξάρχεια και τα Πετράλωνα. Χώροι όπως η Σφίγγα, το Χαραμά και η Ρεμπέτισσα φιλοξενούν ζωντανά ρεμπέτικα βράδια. Τα περισσότερα λειτουργούν Πέμπτη ως Σάββατο, συχνά με ελεύθερη είσοδο και ελάχιστη κατανάλωση.",
+          "questionEn": "What is rebetiko and where can I hear it in Athens, Greece?",
+          "answerEn": "Rebetiko is an urban Greek musical tradition that emerged in port cities in the early 20th century — raw, blues-adjacent, built around bouzouki and songs of hardship, love, and displacement. UNESCO added it to the Intangible Cultural Heritage list in 2017. In Athens, Greece, Stoa Athanaton in the central market (Varvakios) hosts authentic weekly sessions. Klimataria in Monastiraki is another long-running venue. Sunday afternoon shows start around 13:00."
         },
         {
           "questionEl": "Ποιοι χώροι έχουν ζωντανή ελληνική μουσική;",
-          "answerEl": "Η Αθήνα διαθέτει δεκάδες χώρους με ζωντανή ελληνική μουσική. Από παραδοσιακά ρεμπέτικα στέκια και ταβέρνες με ζωντανή μουσική ως μεγάλες μουσικές σκηνές για έντεχνο και λαϊκό. Γειτονιές όπως Πλάκα, Εξάρχεια, Μεταξουργείο και Ψυρρή έχουν πυκνή συγκέντρωση μουσικών χώρων."
+          "answerEl": "Η Αθήνα διαθέτει δεκάδες χώρους με ζωντανή ελληνική μουσική. Από παραδοσιακά ρεμπέτικα στέκια και ταβέρνες με ζωντανή μουσική ως μεγάλες μουσικές σκηνές για έντεχνο και λαϊκό. Γειτονιές όπως Πλάκα, Εξάρχεια, Μεταξουργείο και Ψυρρή έχουν πυκνή συγκέντρωση μουσικών χώρων.",
+          "questionEn": "What's the difference between rebetiko, entechno, and laïko?",
+          "answerEn": "Rebetiko is the older urban tradition — raw and marginal in origin. Entechno (literally 'artistic music') developed in the 1960s through composers like Mikis Theodorakis and Manos Hadjidakis, fusing folk elements with classical structure and literary lyrics. Laïko ('popular music') is the mainstream commercial descendant — bigger stages, more bouzoukia, the soundtrack to celebrations. All three are alive in Athens and worth encountering on their own terms."
         },
         {
           "questionEl": "Τι είδη ελληνικής μουσικής μπορώ να ακούσω;",
-          "answerEl": "Η Αθήνα προσφέρει όλο το φάσμα της ελληνικής μουσικής: ρεμπέτικο σε παραδοσιακά στέκια, λαϊκά σε μουσικές σκηνές, έντεχνο σε θέατρα και συναυλιακούς χώρους, δημοτική μουσική σε ταβέρνες, και σύγχρονες ελληνικές δημιουργίες σε ανεξάρτητες σκηνές."
+          "answerEl": "Η Αθήνα προσφέρει όλο το φάσμα της ελληνικής μουσικής: ρεμπέτικο σε παραδοσιακά στέκια, λαϊκά σε μουσικές σκηνές, έντεχνο σε θέατρα και συναυλιακούς χώρους, δημοτική μουσική σε ταβέρνες, και σύγχρονες ελληνικές δημιουργίες σε ανεξάρτητες σκηνές.",
+          "questionEn": "Where is the best place to hear live Greek music in Athens?",
+          "answerEn": "For rebetiko, Stoa Athanaton (inside the central meat market) is the institution — weekday lunches and weekend afternoons, open since 1930. For entechno and laïko, Stavros tou Notou in Neos Kosmos books the most respected Greek artists in an intimate setting. For the full bouzoukia experience — large venues, flowers thrown, later nights — look at venues along Poseidonos Avenue, though these lean more toward mainstream laïko."
         },
         {
           "questionEl": "Χρειάζομαι κράτηση για ρεμπέτικα στέκια;",
-          "answerEl": "Για δημοφιλή ρεμπέτικα στέκια, ιδιαίτερα Παρασκευή και Σάββατο, συνιστάται κράτηση τηλεφωνικά ή μέσω social media. Μικρότεροι χώροι σε εργάσιμες μέρες συνήθως δέχονται χωρίς κράτηση. Τα περισσότερα στέκια ξεκινούν μετά τις 22:00."
+          "answerEl": "Για δημοφιλή ρεμπέτικα στέκια, ιδιαίτερα Παρασκευή και Σάββατο, συνιστάται κράτηση τηλεφωνικά ή μέσω social media. Μικρότεροι χώροι σε εργάσιμες μέρες συνήθως δέχονται χωρίς κράτηση. Τα περισσότερα στέκια ξεκινούν μετά τις 22:00.",
+          "questionEn": "Do I need to book in advance for rebetiko venues in Athens, Greece?",
+          "answerEn": "For established rebetiko venues like Stoa Athanaton, a reservation is strongly recommended — especially for Sunday afternoon sessions, which fill with locals. Call ahead or ask your accommodation to book. For smaller neighborhood venues and newer rebetiko nights, walk-ins are usually fine on weekdays. Weekends at popular spots fill by late evening regardless of reservation."
         }
       ]
     }
