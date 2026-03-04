@@ -664,12 +664,12 @@ last verified`;
     expect(youIssue).toBeDefined();
   });
 
-  test('detects missing details table (premium)', () => {
+  test('premium description without table does NOT trigger NO_TABLE (prose bridges preferred)', () => {
     const fillerWords = Array(100).fill('music experience sound bass').join(' ');
     const noTableDesc = `You walk into the room and hear the music. Half Note Jazz Club hosts you tonight. The sound fills the space as you take your seat. ${fillerWords} practical block tags last verified`;
     const result = validateQualityGates(makeEvent(), noTableDesc, 'premium');
     const tableIssue = result.issues.find(i => i.code === 'NO_TABLE');
-    expect(tableIssue).toBeDefined();
+    expect(tableIssue).toBeUndefined();
   });
 
   test('detects missing "If you" filter section (premium)', () => {

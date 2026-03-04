@@ -432,17 +432,18 @@ export function buildBrief(
   lines.push('3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.');
   lines.push('4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)');
   lines.push('5. **Filter section**: Always include "If you [don\'t want X]... But if you [want Y]..."');
-  lines.push('6. **Show don\'t tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)');
-  lines.push('7. **Tribe**: Describe crowd by character/behavior, not demographics');
-  lines.push('8. **Logistics**: Metro station, walking distance, ticket prices, practical tips');
-  lines.push('9. **Closer**: One tight sentence — scarcity, uniqueness, or urgency');
-  lines.push('10. **CRITICAL: Do not fabricate information.** If you can\'t find a fact, omit it.');
-  lines.push('11. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.');
-  lines.push('12. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.');
-  lines.push('13. **VENUE OPENINGS**: If you write sensory details about a venue\'s physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event\'s sound, the performer\'s first action, or the audience\'s energy instead.');
-  lines.push('14. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.');
-  lines.push('15. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.');
-  lines.push('16. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.');
+  lines.push('6. **Show don\'t tell**: No lazy adjectives — legendary, immersive, iconic, captivating, mesmerizing, breathtaking, enchanting, amazing, incredible, fantastic, wonderful, stunning, vibrant, extraordinary, exceptional, world-class, phenomenal, remarkable');
+  lines.push('7. **No speculation**: Never write "likely", "perhaps", "probably", "promises to", "the show will". State only verified facts. If you don\'t know something, omit it — don\'t guess.');
+  lines.push('8. **Tribe**: Describe crowd by character/behavior, not demographics');
+  lines.push('9. **Logistics**: Say "accessible by metro" or "X-minute walk from [station name]". Do NOT include metro LINE NUMBERS or LINE COLORS — these change and have a 20% historical error rate. Ticket prices, practical tips.');
+  lines.push('10. **Closer**: One tight sentence — scarcity, uniqueness, or urgency');
+  lines.push('11. **CRITICAL: Do not fabricate information.** If you can\'t find a fact, omit it.');
+  lines.push('12. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.');
+  lines.push('13. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.');
+  lines.push('14. **VENUE OPENINGS**: If you write sensory details about a venue\'s physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event\'s sound, the performer\'s first action, or the audience\'s energy instead.');
+  lines.push('15. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.');
+  lines.push('16. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.');
+  lines.push('17. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.');
   lines.push('');
 
   // Exemplar references
@@ -580,7 +581,7 @@ export function buildBrief(
   lines.push('   **Greek description rules**:');
   lines.push('   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)');
   lines.push('   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events');
-  lines.push('   - Venue names in Greek script where available');
+  lines.push('   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)');
   lines.push('   - Same 8-section structure, same factual content, but natural Greek voice');
   lines.push('   - The Greek version is NOT a translation. Write it fresh for a local audience.');
   lines.push('6. **Save decision** (after completing ALL events in this batch):');

@@ -109,9 +109,31 @@ const SENSORY_WORDS = [
 
 /** Lazy adjectives that indicate generic content */
 const LAZY_ADJECTIVES = [
+  // Original 14
   'amazing', 'incredible', 'fantastic', 'wonderful', 'great', 'excellent',
   'perfect', 'unforgettable', 'world-class', 'stunning', 'spectacular',
   'extraordinary', 'exceptional', 'vibrant',
+  // 7 confirmed by audit
+  'legendary', 'immersive', 'iconic', 'captivating', 'mesmerizing',
+  'breathtaking', 'enchanting',
+  // 6 likely at scale
+  'remarkable', 'phenomenal', 'unparalleled', 'transcendent',
+  'awe-inspiring', 'spellbinding',
+];
+
+/** Speculation/fabrication patterns — verified facts only */
+const SPECULATION_PATTERNS: RegExp[] = [
+  /\blikely\b/i,
+  /\bperhaps\b/i,
+  /\bprobably\b/i,
+  /\bpromises?\s+to\b/i,
+  /\bwill\s+likely\b/i,
+  /\bthe\s+show\s+will\b/i,
+  /\bmight\s+(?:be|have|include|feature)\b/i,
+  /\bcould\s+(?:be|include|feature)\b/i,
+  /\bexpect(?:ed)?\s+to\b/i,
+  /\bappears?\s+to\b/i,
+  /\bseems?\s+to\b/i,
 ];
 
 // ============================================================================
@@ -565,7 +587,22 @@ export function detectGenericContent(
     });
   }
 
-  // 4. Sensory language check (Premium only)
+  // 4. Speculation / fabrication detection
+  const foundSpeculation = SPECULATION_PATTERNS.filter(p => p.test(description));
+  if (foundSpeculation.length > 0) {
+    const matches = foundSpeculation.map(p => {
+      const m = description.match(p);
+      return m ? m[0] : '';
+    }).filter(Boolean);
+    issues.push({
+      layer: 'resonance',
+      severity: foundSpeculation.length >= 2 ? 'error' : 'warning',
+      code: 'SPECULATION',
+      message: `Speculative language detected: "${matches.join('", "')}" — state verified facts only`
+    });
+  }
+
+  // 5. Sensory language check (Premium only)
   if (tier === 'premium') {
     const sensoryMarkers = ['you ', 'your ', 'sound', 'hear', 'feel',
       'smell', 'taste', 'see', 'watch', 'light', 'dark', 'warm',
@@ -582,7 +619,7 @@ export function detectGenericContent(
     }
   }
 
-  // 5. Second-person "you" check (Standard+)
+  // 6. Second-person "you" check (Standard+)
   if (tier !== 'stub' && !lower.includes('you')) {
     issues.push({
       layer: 'resonance',
@@ -648,30 +685,17 @@ function validateTechnical(
       }
     }
 
-    // Check for practical table
-    if (!description.includes('|')) {
-      issues.push(
-        createIssue(
-          'technical',
-          'warning',
-          'NO_TABLE',
-          'Premium description should include practical details table'
-        )
-      );
-    }
   }
 
-  // Check for multiple markdown tables (Info table should not be in descriptions)
-  const tableHeaderCount = (description.match(/^\|[^|]+\|[^|]+\|$/gm) || [])
-    .filter(line => /^\|\s*\w/.test(line)).length;
+  // Check for markdown tables (prose bridges preferred)
   const tableSeparatorCount = (description.match(/^\|[-| ]+\|$/gm) || []).length;
-  if (tableSeparatorCount > 1) {
+  if (tableSeparatorCount > 0) {
     issues.push(
       createIssue(
         'technical',
         'warning',
-        'MULTIPLE_TABLES',
-        `Description contains ${tableSeparatorCount} markdown tables — only the Aspect/Details table should be in the narrative. Info/practical metadata belongs in DB fields.`
+        'HAS_MARKDOWN_TABLE',
+        `Description contains ${tableSeparatorCount} markdown table(s) — use prose bridges instead`
       )
     );
   }
@@ -1116,7 +1140,35 @@ export function validateGreekDescription(
     }
   }
 
-  // 4. Filler phrases (Greek equivalents + shared English fillers)
+  // 4. Greek lazy adjectives (stem matching for declension)
+  const GREEK_LAZY_ADJECTIVE_STEMS = [
+    'φανταστικ', 'εκπληκτικ', 'μοναδικ', 'απίστευτ', 'υπέροχ',
+    'ανεπανάληπτ', 'καταπληκτικ', 'εκθαμβωτικ', 'μαγευτικ',
+    'αξέχαστ', 'εντυπωσιακ',
+  ];
+  const foundGreekLazy = GREEK_LAZY_ADJECTIVE_STEMS.filter(stem =>
+    lowerDesc.includes(stem)
+  );
+  if (foundGreekLazy.length > 0) {
+    issues.push(createIssue('resonance', 'warning', 'GR_LAZY_ADJECTIVES',
+      `Greek lazy adjectives: ${foundGreekLazy.join(', ')} — show don't tell`));
+  }
+
+  // 5. Greek venue script check — key venues that must use Greek script
+  const GREEK_VENUE_FORMS: [string, string][] = [
+    ['Megaron', 'Μέγαρο Μουσικής'],
+    ['Onassis Stegi', 'Στέγη Ωνάση'],
+    ['National Theatre', 'Εθνικό Θέατρο'],
+    ['Technopolis', 'Τεχνόπολη'],
+  ];
+  for (const [english, greek] of GREEK_VENUE_FORMS) {
+    if (description.includes(english) && !description.includes(greek)) {
+      issues.push(createIssue('technical', 'warning', 'GR_VENUE_SCRIPT',
+        `"${english}" should be "${greek}" in Greek text`));
+    }
+  }
+
+  // 6. Filler phrases (Greek equivalents + shared English fillers)
   const greekFillers = ['είναι ένα μοναδικό', 'μια αξέχαστη εμπειρία', 'δεν πρέπει να χάσετε'];
   const foundFillers = [...FILLER_PHRASES, ...greekFillers].filter(p => lowerDesc.includes(p));
   if (foundFillers.length > 0) {
