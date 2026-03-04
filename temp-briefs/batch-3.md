@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 89ce6ef9417c2fbf, b2299a9aea4e9a5b, cc92da2e3594def6, 149c42be18bd5127, 29137258c4025ddb
+- Event IDs: e35cc9753dd65354, d3fc63f01028519a, b5751121a8f10275
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -56,31 +56,15 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ
-- **ID**: 89ce6ef9417c2fbf
-- **Type**: theater
-- **Venue**: Θέατρο Βασιλάκου
+### Βαρυπενθούσα unplugged
+- **ID**: e35cc9753dd65354
+- **Type**: concert
+- **Venue**: Underflow
 - **Price**: paid
-- **Date**: 2026-03-04T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/ekeinos-pou-eklepse-ti-mera-plirose-ti-nyxta/
-- **Source**: more.com
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Βασιλάκου Athens" for context.
-
-### ZONA MUTANTE III w/ Blame The Mono 
-- **ID**: b2299a9aea4e9a5b
-- **Type**: dj_set
-- **Venue**: Oddity
-- **Price**: paid
-- **Date**: 2026-03-28T23:30:00
-- **Time**: 23:30
-- **URL**: https://ra.co/events/2374710
-- **Source**: residentadvisor
+- **Date**: 2026-03-06
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/music/gig/barupenthousa_unplugged-10089113/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
@@ -88,66 +72,66 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
-  ### Oddity
+  ### Underflow Records & Art Gallery
   | Field | Data |
   |-------|------|
-  | **Address** | Irakleidon 61 |
-  | **Metro** | Thissio (Green) |
-  | **Capacity** | ~200 |
+  | **Address** | Koukaki |
+  | **Metro** | Syngrou-Fix (Red) |
+  | **Capacity** | ~80 |
   | **Entry** | €8-15 |
-  | **Regular nights** | Blend collective (progressive/melodic) |
-  | **Character** | Counterpoint to harder Gazi sounds |
+  | **Schedule** | Most Friday nights |
+  | **Genre** | Experimental, gypsy, avant-garde jazz |
+  | **Character** | Record store + gallery + acoustically-treated basement venue, own label |
   
   ---
   ```
 
-### Road Duck
-- **ID**: cc92da2e3594def6
-- **Type**: concert
-- **Venue**: Piraeus Club Academy
-- **Price**: paid
-- **Date**: 2026-03-06
-- **Time**: 20:00
-- **URL**: https://www.athinorama.gr/music/gig/road_duck-10079915/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Piraeus Club Academy Athens" for context.
-
-### Εχθρός του λαού
-- **ID**: 149c42be18bd5127
+### 1984
+- **ID**: d3fc63f01028519a
 - **Type**: theater
-- **Venue**: Θέατρο Κνωσός
+- **Venue**: Μικρό Γκλόρια
 - **Price**: paid
-- **Date**: 2026-03-04T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/exthros-tou-laou/
-- **Source**: more.com
+- **Date**: 2026-03-04T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/1984-10089348/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Κνωσός Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Μικρό Γκλόρια Athens" for context.
 
-### Μαθητική Συναυλία του Ωδείου CGS
-- **ID**: 29137258c4025ddb
+### BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin
+- **ID**: b5751121a8f10275
 - **Type**: dj_set
-- **Venue**: Parnassos Literary Society
-- **Price**: paid
-- **Date**: 2026-03-29
-- **Time**: 16:00
-- **URL**: https://www.ticketservices.gr/event/14183/
-- **Source**: ticketservices
+- **Venue**: Aux Club
+- **Price**: door
+- **Date**: 2026-04-11T23:45:00
+- **Time**: 23:45
+- **URL**: https://www.clubber.gr/events/bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Parnassos Literary Society Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### AUX Club
+  | Field | Data |
+  |-------|------|
+  | **Address** | Agiou Orous 15, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~200 |
+  | **Entry** | €8-12 (varies by event) |
+  | **Door Policy** | Inclusive — "come as you are" stated ethos |
+  | **Regular nights** | Velocity, Pulse Tribe |
+  | **Rising artists** | Home to Até & Salin (EXHALE Records, Tomorrowland 2025) |
+  | **Character** | New wave, explicitly welcoming, quality without gatekeeping |
+  
+  ---
+  ```
 
 ---
 
@@ -196,51 +180,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/89ce6ef9417c2fbf.md \
-  --tier=standard --event-id=89ce6ef9417c2fbf \
-  --event-type=theater --event-venue="Θέατρο Βασιλάκου" \
-  --event-title="ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ" \
-  --event-date=2026-03-04 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b2299a9aea4e9a5b.md \
-  --tier=stub --event-id=b2299a9aea4e9a5b \
-  --event-type=dj_set --event-venue="Oddity" \
-  --event-title="ZONA MUTANTE III w/ Blame The Mono " \
-  --event-date=2026-03-28 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cc92da2e3594def6.md \
-  --tier=stub --event-id=cc92da2e3594def6 \
-  --event-type=concert --event-venue="Piraeus Club Academy" \
-  --event-title="Road Duck" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/e35cc9753dd65354.md \
+  --tier=stub --event-id=e35cc9753dd65354 \
+  --event-type=concert --event-venue="Underflow" \
+  --event-title="Βαρυπενθούσα unplugged" \
   --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/149c42be18bd5127.md \
-  --tier=standard --event-id=149c42be18bd5127 \
-  --event-type=theater --event-venue="Θέατρο Κνωσός" \
-  --event-title="Εχθρός του λαού" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d3fc63f01028519a.md \
+  --tier=standard --event-id=d3fc63f01028519a \
+  --event-type=theater --event-venue="Μικρό Γκλόρια" \
+  --event-title="1984" \
   --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/29137258c4025ddb.md \
-  --tier=stub --event-id=29137258c4025ddb \
-  --event-type=dj_set --event-venue="Parnassos Literary Society" \
-  --event-title="Μαθητική Συναυλία του Ωδείου CGS" \
-  --event-date=2026-03-29 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b5751121a8f10275.md \
+  --tier=stub --event-id=b5751121a8f10275 \
+  --event-type=dj_set --event-venue="Aux Club" \
+  --event-title="BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin" \
+  --event-date=2026-04-11 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 89ce6ef9417c2fbf | ΕΚΕΙΝΟΣ ΠΟΥ ΕΚΛΕΨΕ ΤΗ ΜΕΡΑ & ΠΛΗΡΩΣΕ ΤΗ ΝΥΧΤΑ | /100 | | |
-| b2299a9aea4e9a5b | ZONA MUTANTE III w/ Blame The Mono  | /100 | | |
-| cc92da2e3594def6 | Road Duck | /100 | | |
-| 149c42be18bd5127 | Εχθρός του λαού | /100 | | |
-| 29137258c4025ddb | Μαθητική Συναυλία του Ωδείου CGS | /100 | | |
+| e35cc9753dd65354 | Βαρυπενθούσα unplugged | /100 | | |
+| d3fc63f01028519a | 1984 | /100 | | |
+| b5751121a8f10275 | BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin | /100 | | |

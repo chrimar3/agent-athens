@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-03-04T11:05:12.940+02:00",
+  "generatedAt": "2026-03-04T11:23:03.353+02:00",
   "entries": {
     "today": {
       "hash": "1803d9189b55c769",
@@ -7351,11 +7351,11 @@
       "lastModified": "2026-03-04"
     },
     "events/9fe5c1b5--": {
-      "hash": "fc3352835890f87e",
+      "hash": "9957671e3d12ae03",
       "lastModified": "2026-03-04"
     },
     "events/d3fc63f0--1984": {
-      "hash": "078d239674ed58ed",
+      "hash": "3997156d8739ef32",
       "lastModified": "2026-03-04"
     },
     "events/e346b31b-cantina-social-lockbird": {
@@ -7499,11 +7499,11 @@
       "lastModified": "2026-03-04"
     },
     "events/039c065f--": {
-      "hash": "61385f74c13620ff",
+      "hash": "86ae67445f31cceb",
       "lastModified": "2026-03-04"
     },
     "events/e35cc975-underflow-unplugged": {
-      "hash": "bc8c0318ba18e9a0",
+      "hash": "bde5dbf01b2f4c4a",
       "lastModified": "2026-03-04"
     },
     "events/653b1dd8-doors-ft-jerome-kaluta": {
@@ -8575,7 +8575,7 @@
       "lastModified": "2026-03-04"
     },
     "events/e6dba1f8-smut-athens-primal-instinct-x-smut-with-chlar-x-hadone-x-vera-grace": {
-      "hash": "eb08a8e879d2b5dc",
+      "hash": "ea6ecb707bd45977",
       "lastModified": "2026-03-04"
     },
     "events/9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026": {
@@ -8599,7 +8599,7 @@
       "lastModified": "2026-03-04"
     },
     "events/b5751121-aux-club-bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin": {
-      "hash": "f18382309e49709c",
+      "hash": "fa64129b636d60a2",
       "lastModified": "2026-03-04"
     },
     "events/2503eb4a-aux-club-aux-bcco-x-vlct": {
@@ -9558,6 +9558,14 @@
       "hash": "edc1ef40cb821995",
       "lastModified": "2026-03-04"
     },
+    "en/events/9fe5c1b5--": {
+      "hash": "01ed6bdbbdb8379d",
+      "lastModified": "2026-03-04"
+    },
+    "en/events/d3fc63f0--1984": {
+      "hash": "76724d16906b0a7d",
+      "lastModified": "2026-03-04"
+    },
     "en/events/e346b31b-cantina-social-lockbird": {
       "hash": "fa2ed37c5510c996",
       "lastModified": "2026-03-04"
@@ -9644,6 +9652,14 @@
     },
     "en/events/f9959df8--amp": {
       "hash": "fa86becb6668a218",
+      "lastModified": "2026-03-04"
+    },
+    "en/events/039c065f--": {
+      "hash": "da60756ba33bebef",
+      "lastModified": "2026-03-04"
+    },
+    "en/events/e35cc975-underflow-unplugged": {
+      "hash": "b1ac1ffbcee79b8b",
       "lastModified": "2026-03-04"
     },
     "en/events/f7e6dde4-bios-wavmap-panel-discussion-club-night": {
@@ -10118,12 +10134,20 @@
       "hash": "4eb98244705243c0",
       "lastModified": "2026-03-04"
     },
+    "en/events/e6dba1f8-smut-athens-primal-instinct-x-smut-with-chlar-x-hadone-x-vera-grace": {
+      "hash": "cdfe880c2b8da236",
+      "lastModified": "2026-03-04"
+    },
     "en/events/9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026": {
       "hash": "a0e797c7ddfff8d3",
       "lastModified": "2026-03-04"
     },
     "en/events/84a3a33d--requiem-vakhtang-kakhidze": {
       "hash": "29c1f423474223e4",
+      "lastModified": "2026-03-04"
+    },
+    "en/events/b5751121-aux-club-bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin": {
+      "hash": "b587426277aa024b",
       "lastModified": "2026-03-04"
     },
     "en/events/af299bbd-floyd-godspeed-you-black-emperor-2026": {

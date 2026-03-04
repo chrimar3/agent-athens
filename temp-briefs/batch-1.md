@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 3e65562861d055d8, 7d51551b5587c7b2, fccd78640d1f30af, 4c121d5eb2629a64, 26a73d78e5c66f40
+- Event IDs: f9959df8d6890440, 9fa79a8699d5a5b6, 138fb233251dfd62
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -56,47 +56,47 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Αφιέρωμα στον Οδυσσέα Δημητριάδη
-- **ID**: 3e65562861d055d8
+### Λάκης Παπαδόπουλος, Γιάννης Γιοκαρίνης, Βασίλης Καζούλης &amp; Νίκος Ζιώγαλας
+- **ID**: f9959df8d6890440
 - **Type**: concert
-- **Venue**: Ωδείο Αθηνών
+- **Venue**: Κύτταρο
 - **Price**: paid
 - **Date**: 2026-03-06
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14072/
-- **Source**: ticketservices
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/music/gig/lakis_papadopoulos_giannis_giokarinis_basilis_kazoulis_kai_nikos_ziogalas-10082410/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ωδείο Αθηνών Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Κύτταρο Athens" for context.
 
-### Οικογένεια Addams
-- **ID**: 7d51551b5587c7b2
+### Μέχρι να σβήσουν τ’ άστρα
+- **ID**: 9fa79a8699d5a5b6
 - **Type**: theater
-- **Venue**: Θέατρο Βέμπο
+- **Venue**: Χώρα
 - **Price**: paid
-- **Date**: 2026-03-04T19:00:00
-- **Time**: 19:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/oikogeneia-addams/
+- **Date**: 2026-03-04T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/mexri-na-svisoun-t-astra/
 - **Source**: more.com
-- **Category**: kids_family
+- **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Βέμπο Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Χώρα Athens" for context.
 
-### Gegen Athens: Bill Sanders + IVRA + Luigi Di Venere + Mar/us + Samantha Togni
-- **ID**: fccd78640d1f30af
+### Tiger Weeds with The Exaltics (Live)
+- **ID**: 138fb233251dfd62
 - **Type**: dj_set
-- **Venue**: Aux Club
-- **Price**: door
-- **Date**: 2026-03-27T23:00:00
+- **Venue**: Astron
+- **Price**: paid
+- **Date**: 2026-04-04T23:00:00
 - **Time**: 23:00
-- **URL**: https://www.clubber.gr/events/gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samantha-togni/
-- **Source**: clubber.gr
+- **URL**: https://ra.co/events/2376118
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
@@ -104,52 +104,21 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
-  ### AUX Club
+  ### Astron Club
   | Field | Data |
   |-------|------|
-  | **Address** | Agiou Orous 15, Gazi |
+  | **Address** | Leoforos Konstantinoupoleos 121, Gazi |
   | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~200 |
-  | **Entry** | €8-12 (varies by event) |
-  | **Door Policy** | Inclusive — "come as you are" stated ethos |
-  | **Regular nights** | Velocity, Pulse Tribe |
-  | **Rising artists** | Home to Até & Salin (EXHALE Records, Tomorrowland 2025) |
-  | **Character** | New wave, explicitly welcoming, quality without gatekeeping |
+  | **Capacity** | ~150 ("the box") |
+  | **Entry** | €10-15 |
+  | **Door Policy** | Berlin-lite selection — singles > groups, couples sometimes rejected, "look like you dance" |
+  | **Drinks** | Alfa beer ONLY, €5 |
+  | **Finding it** | NO SIGN — look for shaking windows |
+  | **Acts** | Helena Hauff, DJ Bone caliber |
+  | **Note** | Relocated to Gazi summer 2024 |
   
   ---
   ```
-
-### ΑΝΗΜΕΡΑ - Billie Kark x ody icons
-- **ID**: 4c121d5eb2629a64
-- **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: paid
-- **Date**: 2026-03-06
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14092/
-- **Source**: ticketservices
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
-
-### ΠΟΙΟΣ ΦΟΒΑΤΑΙ ΤΗΝ ΒΙΡΤΖΙΝΙΑ ΓΟΥΛΦ
-- **ID**: 26a73d78e5c66f40
-- **Type**: theater
-- **Venue**: Θέατρο Ζίνα
-- **Price**: paid
-- **Date**: 2026-03-04T19:30:00
-- **Time**: 19:30
-- **URL**: https://www.more.com/gr-el/tickets/theater/poios-fobatai-tin-birtzinia-goulf-1/
-- **Source**: more.com
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Ζίνα Athens" for context.
 
 ---
 
@@ -198,51 +167,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3e65562861d055d8.md \
-  --tier=stub --event-id=3e65562861d055d8 \
-  --event-type=concert --event-venue="Ωδείο Αθηνών" \
-  --event-title="Αφιέρωμα στον Οδυσσέα Δημητριάδη" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f9959df8d6890440.md \
+  --tier=stub --event-id=f9959df8d6890440 \
+  --event-type=concert --event-venue="Κύτταρο" \
+  --event-title="Λάκης Παπαδόπουλος, Γιάννης Γιοκαρίνης, Βασίλης Καζούλης &amp; Νίκος Ζιώγαλας" \
   --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/7d51551b5587c7b2.md \
-  --tier=standard --event-id=7d51551b5587c7b2 \
-  --event-type=theater --event-venue="Θέατρο Βέμπο" \
-  --event-title="Οικογένεια Addams" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/9fa79a8699d5a5b6.md \
+  --tier=standard --event-id=9fa79a8699d5a5b6 \
+  --event-type=theater --event-venue="Χώρα" \
+  --event-title="Μέχρι να σβήσουν τ’ άστρα" \
   --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/fccd78640d1f30af.md \
-  --tier=stub --event-id=fccd78640d1f30af \
-  --event-type=dj_set --event-venue="Aux Club" \
-  --event-title="Gegen Athens: Bill Sanders + IVRA + Luigi Di Venere + Mar/us + Samantha Togni" \
-  --event-date=2026-03-27 --event-price=door
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4c121d5eb2629a64.md \
-  --tier=stub --event-id=4c121d5eb2629a64 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="ΑΝΗΜΕΡΑ - Billie Kark x ody icons" \
-  --event-date=2026-03-06 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/26a73d78e5c66f40.md \
-  --tier=standard --event-id=26a73d78e5c66f40 \
-  --event-type=theater --event-venue="Θέατρο Ζίνα" \
-  --event-title="ΠΟΙΟΣ ΦΟΒΑΤΑΙ ΤΗΝ ΒΙΡΤΖΙΝΙΑ ΓΟΥΛΦ" \
-  --event-date=2026-03-04 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/138fb233251dfd62.md \
+  --tier=stub --event-id=138fb233251dfd62 \
+  --event-type=dj_set --event-venue="Astron" \
+  --event-title="Tiger Weeds with The Exaltics (Live)" \
+  --event-date=2026-04-04 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 3e65562861d055d8 | Αφιέρωμα στον Οδυσσέα Δημητριάδη | /100 | | |
-| 7d51551b5587c7b2 | Οικογένεια Addams | /100 | | |
-| fccd78640d1f30af | Gegen Athens: Bill Sanders + IVRA + Luigi Di Venere + Mar/us + Samantha Togni | /100 | | |
-| 4c121d5eb2629a64 | ΑΝΗΜΕΡΑ - Billie Kark x ody icons | /100 | | |
-| 26a73d78e5c66f40 | ΠΟΙΟΣ ΦΟΒΑΤΑΙ ΤΗΝ ΒΙΡΤΖΙΝΙΑ ΓΟΥΛΦ | /100 | | |
+| f9959df8d6890440 | Λάκης Παπαδόπουλος, Γιάννης Γιοκαρίνης, Βασίλης Καζούλης &amp; Νίκος Ζιώγαλας | /100 | | |
+| 9fa79a8699d5a5b6 | Μέχρι να σβήσουν τ’ άστρα | /100 | | |
+| 138fb233251dfd62 | Tiger Weeds with The Exaltics (Live) | /100 | | |

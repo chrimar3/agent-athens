@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 071a4e10185f0b75, 282ef93b3f829ac6, 79414abc6088feb4, ec374fb369c6d2d8, f6a40f4ff749fa82
+- Event IDs: 039c065f65e9e68c, 9fe5c1b520ebef17, e6dba1f891ea5e9a
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -56,76 +56,46 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Rave Ritual
-- **ID**: 071a4e10185f0b75
-- **Type**: dj_set
-- **Venue**: Temple
-- **Price**: paid
-- **Date**: 2026-03-27T23:59:00
-- **Time**: 23:59
-- **URL**: https://ra.co/events/2367186
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Temple Athens
-  | Field | Data |
-  |-------|------|
-  | **Address** | Iakhou 17, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~600 |
-  | **Entry** | €15-25 |
-  | **Door Policy** | Some selection on big nights |
-  | **Sound** | Funktion-One, serious laser rig |
-  | **Character** | Big-room techno, two floors, basement is the peak experience |
-  
-  ---
-  ```
-
-### Duo Duende
-- **ID**: 282ef93b3f829ac6
+### Μυρτώ Βασιλείου
+- **ID**: 039c065f65e9e68c
 - **Type**: concert
-- **Venue**: Ωδείο Αθηνών
+- **Venue**: Σταυρός του Νότου
 - **Price**: paid
 - **Date**: 2026-03-06
-- **Time**: 20:30
-- **URL**: https://www.athinorama.gr/music/gig/duo_duende-10089251/
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/music/gig/murto_basileiou-10085504/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ωδείο Αθηνών Athens" for context.
+- **Category**: concert_major
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Σταυρός του Νότου Athens" for context.
 
-### ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος
-- **ID**: 79414abc6088feb4
+### ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ
+- **ID**: 9fe5c1b520ebef17
 - **Type**: theater
-- **Venue**: Θέατρο Χορν
+- **Venue**: Άνεσις
 - **Price**: paid
 - **Date**: 2026-03-04T20:00:00
 - **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/martyras-katigorias/
+- **URL**: https://www.more.com/gr-el/tickets/theater/teleftaiaexodos/
 - **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Χορν Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Άνεσις Athens" for context.
 
-### SOCIETY 3000 invites Ben Pest (Live)
-- **ID**: ec374fb369c6d2d8
+### PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace
+- **ID**: e6dba1f891ea5e9a
 - **Type**: dj_set
-- **Venue**: Astron
-- **Price**: paid
-- **Date**: 2026-03-28T23:00:00
-- **Time**: 23:00
-- **URL**: https://ra.co/events/2370430
+- **Venue**: SMUT Athens
+- **Price**: tba
+- **Date**: 2026-04-04T23:59:00
+- **Time**: 23:59
+- **URL**: https://ra.co/events/2377756
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -134,37 +104,21 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
-  ### Astron Club
+  ### SMUT Athens
   | Field | Data |
   |-------|------|
-  | **Address** | Leoforos Konstantinoupoleos 121, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~150 ("the box") |
-  | **Entry** | €10-15 |
-  | **Door Policy** | Berlin-lite selection — singles > groups, couples sometimes rejected, "look like you dance" |
-  | **Drinks** | Alfa beer ONLY, €5 |
-  | **Finding it** | NO SIGN — look for shaking windows |
-  | **Acts** | Helena Hauff, DJ Bone caliber |
-  | **Note** | Relocated to Gazi summer 2024 |
+  | **Address** | Vatsaxi 4 |
+  | **Metro** | Varies by location |
+  | **Capacity** | ~300 |
+  | **Entry** | €15-20 via Resident Advisor |
+  | **Door Policy** | STRICT — creative/fetish attire required for many events |
+  | **Tickets** | RA tickets = priority, not guaranteed entry |
+  | **Schedule** | Saturday nights (weekly institution) |
+  | **Character** | Queer techno, identity-driven, serious community |
+  | **Crowd** | Queer community and allies who understand dress codes |
   
   ---
   ```
-
-### Divas Drive Trio
-- **ID**: f6a40f4ff749fa82
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-06
-- **Time**: 20:00
-- **URL**: https://www.ticketservices.gr/event/14174/
-- **Source**: ticketservices
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ---
 
@@ -213,51 +167,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/071a4e10185f0b75.md \
-  --tier=stub --event-id=071a4e10185f0b75 \
-  --event-type=dj_set --event-venue="Temple" \
-  --event-title="Rave Ritual" \
-  --event-date=2026-03-27 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/282ef93b3f829ac6.md \
-  --tier=stub --event-id=282ef93b3f829ac6 \
-  --event-type=concert --event-venue="Ωδείο Αθηνών" \
-  --event-title="Duo Duende" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/039c065f65e9e68c.md \
+  --tier=standard --event-id=039c065f65e9e68c \
+  --event-type=concert --event-venue="Σταυρός του Νότου" \
+  --event-title="Μυρτώ Βασιλείου" \
   --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/79414abc6088feb4.md \
-  --tier=standard --event-id=79414abc6088feb4 \
-  --event-type=theater --event-venue="Θέατρο Χορν" \
-  --event-title="ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9fe5c1b520ebef17.md \
+  --tier=standard --event-id=9fe5c1b520ebef17 \
+  --event-type=theater --event-venue="Άνεσις" \
+  --event-title="ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ" \
   --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/ec374fb369c6d2d8.md \
-  --tier=stub --event-id=ec374fb369c6d2d8 \
-  --event-type=dj_set --event-venue="Astron" \
-  --event-title="SOCIETY 3000 invites Ben Pest (Live)" \
-  --event-date=2026-03-28 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f6a40f4ff749fa82.md \
-  --tier=premium --event-id=f6a40f4ff749fa82 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Divas Drive Trio" \
-  --event-date=2026-03-06 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e6dba1f891ea5e9a.md \
+  --tier=stub --event-id=e6dba1f891ea5e9a \
+  --event-type=dj_set --event-venue="SMUT Athens" \
+  --event-title="PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace" \
+  --event-date=2026-04-04 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 071a4e10185f0b75 | Rave Ritual | /100 | | |
-| 282ef93b3f829ac6 | Duo Duende | /100 | | |
-| 79414abc6088feb4 | ΜΑΡΤΥΡΑΣ ΚΑΤΗΓΟΡΙΑΣ 3ος Χρόνος | /100 | | |
-| ec374fb369c6d2d8 | SOCIETY 3000 invites Ben Pest (Live) | /100 | | |
-| f6a40f4ff749fa82 | Divas Drive Trio | /100 | | |
+| 039c065f65e9e68c | Μυρτώ Βασιλείου | /100 | | |
+| 9fe5c1b520ebef17 | ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ | /100 | | |
+| e6dba1f891ea5e9a | PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace | /100 | | |
