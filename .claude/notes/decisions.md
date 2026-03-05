@@ -1018,3 +1018,13 @@ Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venue
 | `tsconfig.json` rootDir changed from `./src` to `.` | Tests in `src/` imported fixtures from `tests/` directory. Widened rootDir and include to cover both | 2026-03-03 |
 | UNIQUE index on enrichment_log(event_id, session_id, batch_number) | Prevents same-batch duplicate entries. Cross-batch re-enrichments preserved for rollback history | 2026-03-03 |
 | `appendRecentOpenings` deduplicates by event_id | Map-based dedup keeps latest entry per event, prevents file bloat from re-enrichments | 2026-03-03 |
+
+## View Transitions
+
+| Decision | Why | Date |
+|----------|-----|------|
+| MPA cross-document View Transitions (CSS-only, no JS) | Progressive enhancement — zero impact on unsupported browsers. `@view-transition { navigation: auto }` + named elements | 2026-03-05 |
+| Named transitions: site-header (none), site-footer (none), main-content (cross-fade) | Header/footer stay static for app-like feel; main content cross-fades for perceived navigation speed | 2026-03-05 |
+| Skip card-to-detail morph transitions | Homepage has 469 cards — 469 unique `view-transition-name` values risks compositor performance. Content cross-fade alone is sufficient UX win | 2026-03-05 |
+| Asymmetric fade timing: exit 120ms, enter 200ms | Fast exit = perceived speed; slower entrance = smooth appearance. Uses existing design tokens `--t-fast` / `--t-moderate` | 2026-03-05 |
+| Explicit `@view-transition { navigation: none }` in reduced-motion | Blanket `animation-duration: 0.01ms` already kills animations, but disabling the API prevents compositor from creating snapshot layers entirely | 2026-03-05 |

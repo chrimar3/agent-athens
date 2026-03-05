@@ -746,3 +746,14 @@ QA findings need reproduction steps before spending time diagnosing. If a bug re
 3. Timestamp (to check against deploy history)
 
 Without these, you risk diagnosing a ghost — the fix was already shipped but the QA reviewer saw a cached/stale version.
+
+## View Transitions Pattern (MPA)
+
+Cross-document View Transitions are CSS-only progressive enhancement. The pattern:
+
+1. `@view-transition { navigation: auto; }` — enables the API
+2. Named elements via CSS: `.site-header { view-transition-name: site-header; }` — NOT inline styles
+3. Persistent chrome (`animation: none`) vs content (`cross-fade`)
+4. `@view-transition { navigation: none; }` inside `@media (prefers-reduced-motion: reduce)`
+
+**Do NOT** add inline `style="view-transition-name: event-{slug}"` on cards if a page can have >50 cards — each name creates a compositor snapshot layer. Use class-based names for structural elements only.

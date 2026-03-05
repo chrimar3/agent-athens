@@ -188,21 +188,50 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ── View Transitions API ───────────────────────────── */
+/* ── View Transitions API (MPA cross-document) ─────── */
 
 @view-transition { navigation: auto; }
+
+/* Named transition targets — persistent across pages */
+.site-header { view-transition-name: site-header; }
+.site-footer { view-transition-name: site-footer; }
+#main-content { view-transition-name: main-content; }
+
+/* Header & footer stay put — no animation */
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-old(site-footer),
+::view-transition-new(site-footer) {
+  animation: none;
+}
+
+/* Main content cross-fades */
+::view-transition-old(main-content) {
+  animation: var(--t-fast) var(--ease-out) both vt-fade-out;
+}
+::view-transition-new(main-content) {
+  animation: var(--t-moderate) var(--ease-out) both vt-fade-in;
+}
+
+/* Root fallback — catches anything not named */
 ::view-transition-old(root) {
   animation: var(--t-moderate) var(--ease-out) both vt-fade-out;
 }
 ::view-transition-new(root) {
   animation: var(--t-moderate) var(--ease-out) both vt-fade-in;
 }
+
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
 
 /* ── Reduced Motion ──────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
