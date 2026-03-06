@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 41fd6e7372fbe39d, 677d657f8bf1ad1c, 9c6778f2a5214c1e
+- Event IDs: e35cc9753dd65354, d3fc63f01028519a, b5751121a8f10275
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -16,18 +16,17 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.
 4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)
 5. **Filter section**: Always include "If you [don't want X]... But if you [want Y]..."
-6. **Show don't tell**: No lazy adjectives — legendary, immersive, iconic, captivating, mesmerizing, breathtaking, enchanting, amazing, incredible, fantastic, wonderful, stunning, vibrant, extraordinary, exceptional, world-class, phenomenal, remarkable
-7. **No speculation**: Never write "likely", "perhaps", "probably", "promises to", "the show will". State only verified facts. If you don't know something, omit it — don't guess.
-8. **Tribe**: Describe crowd by character/behavior, not demographics
-9. **Logistics**: Say "accessible by metro" or "X-minute walk from [station name]". Do NOT include metro LINE NUMBERS or LINE COLORS — these change and have a 20% historical error rate. Ticket prices, practical tips.
-10. **Closer**: One tight sentence — scarcity, uniqueness, or urgency
-11. **CRITICAL: Do not fabricate information.** If you can't find a fact, omit it.
-12. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.
-13. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.
-14. **VENUE OPENINGS**: If you write sensory details about a venue's physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event's sound, the performer's first action, or the audience's energy instead.
-15. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.
-16. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.
-17. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.
+6. **Show don't tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)
+7. **Tribe**: Describe crowd by character/behavior, not demographics
+8. **Logistics**: Metro station, walking distance, ticket prices, practical tips
+9. **Closer**: One tight sentence — scarcity, uniqueness, or urgency
+10. **CRITICAL: Do not fabricate information.** If you can't find a fact, omit it.
+11. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.
+12. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.
+13. **VENUE OPENINGS**: If you write sensory details about a venue's physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event's sound, the performer's first action, or the audience's energy instead.
+14. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.
+15. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.
+16. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.
 
 ## Exemplars (read for structural guidance)
 
@@ -57,47 +56,15 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### &#171;Τα Μι του πενταγράμμου&#187;
-- **ID**: 41fd6e7372fbe39d
+### Βαρυπενθούσα unplugged
+- **ID**: e35cc9753dd65354
 - **Type**: concert
-- **Venue**: Πολυχώρος Διέλευσις
+- **Venue**: Underflow
 - **Price**: paid
 - **Date**: 2026-03-06
 - **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/ta_mi_tou_pentagrammou-10089302/
+- **URL**: https://www.athinorama.gr/music/gig/barupenthousa_unplugged-10089113/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Πολυχώρος Διέλευσις Athens" for context.
-
-### Η Πριγκίπισσα των Αγίων Σαράντα!
-- **ID**: 677d657f8bf1ad1c
-- **Type**: theater
-- **Venue**: Coronet Theater
-- **Price**: paid
-- **Date**: 2026-03-05T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/
-- **Source**: more.com
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
-
-### Padre Guilherme I Sat May 9
-- **ID**: 9c6778f2a5214c1e
-- **Type**: dj_set
-- **Venue**: Bolivar
-- **Price**: tba
-- **Date**: 2026-05-09T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2378214
-- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
@@ -105,15 +72,63 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
-  ### Bolivar Beach Bar - BUDGET OPTION
+  ### Underflow Records & Art Gallery
   | Field | Data |
   |-------|------|
-  | **Location** | Alimos |
-  | **Access** | Taxi required (no metro) |
-  | **Entry** | €6-8 local events, higher for internationals |
-  | **Sunbeds** | €2+ |
-  | **Anniversary** | 21st in 2025 |
-  | **Headliners 2025** | Tale Of Us, Boris Brejcha, Maceo Plex, Sven Väth |
+  | **Address** | Koukaki |
+  | **Metro** | Syngrou-Fix (Red) |
+  | **Capacity** | ~80 |
+  | **Entry** | €8-15 |
+  | **Schedule** | Most Friday nights |
+  | **Genre** | Experimental, gypsy, avant-garde jazz |
+  | **Character** | Record store + gallery + acoustically-treated basement venue, own label |
+  
+  ---
+  ```
+
+### 1984
+- **ID**: d3fc63f01028519a
+- **Type**: theater
+- **Venue**: Μικρό Γκλόρια
+- **Price**: paid
+- **Date**: 2026-03-04T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/1984-10089348/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Μικρό Γκλόρια Athens" for context.
+
+### BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin
+- **ID**: b5751121a8f10275
+- **Type**: dj_set
+- **Venue**: Aux Club
+- **Price**: door
+- **Date**: 2026-04-11T23:45:00
+- **Time**: 23:45
+- **URL**: https://www.clubber.gr/events/bcco-x-velocity-aerea-ate-cirkle-mac-declos-salin/
+- **Source**: clubber.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### AUX Club
+  | Field | Data |
+  |-------|------|
+  | **Address** | Agiou Orous 15, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~200 |
+  | **Entry** | €8-12 (varies by event) |
+  | **Door Policy** | Inclusive — "come as you are" stated ethos |
+  | **Regular nights** | Velocity, Pulse Tribe |
+  | **Rising artists** | Home to Até & Salin (EXHALE Records, Tomorrowland 2025) |
+  | **Character** | New wave, explicitly welcoming, quality without gatekeeping |
   
   ---
   ```
@@ -148,7 +163,7 @@ For EACH event:
    **Greek description rules**:
    - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
    - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
-   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)
+   - Venue names in Greek script where available
    - Same 8-section structure, same factual content, but natural Greek voice
    - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
@@ -165,33 +180,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/41fd6e7372fbe39d.md \
-  --tier=stub --event-id=41fd6e7372fbe39d \
-  --event-type=concert --event-venue="Πολυχώρος Διέλευσις" \
-  --event-title="&#171;Τα Μι του πενταγράμμου&#187;" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/e35cc9753dd65354.md \
+  --tier=stub --event-id=e35cc9753dd65354 \
+  --event-type=concert --event-venue="Underflow" \
+  --event-title="Βαρυπενθούσα unplugged" \
   --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/677d657f8bf1ad1c.md \
-  --tier=standard --event-id=677d657f8bf1ad1c \
-  --event-type=theater --event-venue="Coronet Theater" \
-  --event-title="Η Πριγκίπισσα των Αγίων Σαράντα!" \
-  --event-date=2026-03-05 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d3fc63f01028519a.md \
+  --tier=standard --event-id=d3fc63f01028519a \
+  --event-type=theater --event-venue="Μικρό Γκλόρια" \
+  --event-title="1984" \
+  --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9c6778f2a5214c1e.md \
-  --tier=stub --event-id=9c6778f2a5214c1e \
-  --event-type=dj_set --event-venue="Bolivar" \
-  --event-title="Padre Guilherme I Sat May 9" \
-  --event-date=2026-05-09 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b5751121a8f10275.md \
+  --tier=stub --event-id=b5751121a8f10275 \
+  --event-type=dj_set --event-venue="Aux Club" \
+  --event-title="BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin" \
+  --event-date=2026-04-11 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 41fd6e7372fbe39d | &#171;Τα Μι του πενταγράμμου&#187; | /100 | | |
-| 677d657f8bf1ad1c | Η Πριγκίπισσα των Αγίων Σαράντα! | /100 | | |
-| 9c6778f2a5214c1e | Padre Guilherme I Sat May 9 | /100 | | |
+| e35cc9753dd65354 | Βαρυπενθούσα unplugged | /100 | | |
+| d3fc63f01028519a | 1984 | /100 | | |
+| b5751121a8f10275 | BCCO x Velocity: Aerea + Até + Cirkle + Mac Declos + Salin | /100 | | |

@@ -16,6 +16,9 @@
 
 set -euo pipefail
 
+# Fix #1: Prevent "nested session" error when launchd inherits CLAUDECODE env var
+unset CLAUDECODE 2>/dev/null || true
+
 # ============================================================================
 # Configuration
 # ============================================================================
@@ -31,6 +34,7 @@ ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
 EVENTS_PER_BATCH=3
 MIN_QUEUE=3
+BATCH_TIMEOUT=600  # 10 minutes max per batch
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -77,6 +81,13 @@ fi
 if [[ ! -f "$DB_PATH" ]]; then
     log_error "Database not found at $DB_PATH"
     exit 1
+fi
+
+# Fix #3: Network pre-check — fail fast with clear message
+# exit 0 (not 1) because "network down" is expected when machine just woke up
+if ! curl -sf --max-time 10 https://api.anthropic.com -o /dev/null; then
+    log "Network unavailable — skipping auto-enrich"
+    exit 0
 fi
 
 # 2. Check queue size
@@ -154,7 +165,10 @@ for brief in "${BATCH_FILES[@]}"; do
     BRIEF_CONTENT=$(cat "$brief")
     START_TIME=$(date +%s)
 
-    if "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
+    # Fix #2: timeout prevents 105-min hangs on network failures
+    # macOS lacks coreutils `timeout`, so use perl wrapper
+    if perl -e "alarm $BATCH_TIMEOUT; exec @ARGV" -- \
+        "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format text \
         --allowedTools "$ALLOWED_TOOLS" \
         >> "$LOG_FILE" 2>&1; then

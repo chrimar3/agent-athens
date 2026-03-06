@@ -1,0 +1,12 @@
+{
+  "batch_id": 3,
+  "generated_at": "2026-03-04T09:43:07.603Z",
+  "event_ids": [
+    "2c666d43169ce1f6",
+    "324e622322bf5d02",
+    "35cad09fa2e3a921",
+    "431979faf50c0518",
+    "441535e02d19594d"
+  ],
+  "output_dir": "temp-descriptions/rewrite-3"
+}

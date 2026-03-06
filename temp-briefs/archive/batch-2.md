@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 1adc2cab96179f7c, 9b13a5967ccf89c3, d1b3dcc816ce1036
+- Event IDs: 039c065f65e9e68c, 9fe5c1b520ebef17, e6dba1f891ea5e9a
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -16,18 +16,17 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.
 4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)
 5. **Filter section**: Always include "If you [don't want X]... But if you [want Y]..."
-6. **Show don't tell**: No lazy adjectives — legendary, immersive, iconic, captivating, mesmerizing, breathtaking, enchanting, amazing, incredible, fantastic, wonderful, stunning, vibrant, extraordinary, exceptional, world-class, phenomenal, remarkable
-7. **No speculation**: Never write "likely", "perhaps", "probably", "promises to", "the show will". State only verified facts. If you don't know something, omit it — don't guess.
-8. **Tribe**: Describe crowd by character/behavior, not demographics
-9. **Logistics**: Say "accessible by metro" or "X-minute walk from [station name]". Do NOT include metro LINE NUMBERS or LINE COLORS — these change and have a 20% historical error rate. Ticket prices, practical tips.
-10. **Closer**: One tight sentence — scarcity, uniqueness, or urgency
-11. **CRITICAL: Do not fabricate information.** If you can't find a fact, omit it.
-12. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.
-13. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.
-14. **VENUE OPENINGS**: If you write sensory details about a venue's physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event's sound, the performer's first action, or the audience's energy instead.
-15. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.
-16. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.
-17. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.
+6. **Show don't tell**: No lazy adjectives (amazing, incredible, fantastic, wonderful, stunning, vibrant)
+7. **Tribe**: Describe crowd by character/behavior, not demographics
+8. **Logistics**: Metro station, walking distance, ticket prices, practical tips
+9. **Closer**: One tight sentence — scarcity, uniqueness, or urgency
+10. **CRITICAL: Do not fabricate information.** If you can't find a fact, omit it.
+11. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.
+12. **Description only**: No tags, no "Last verified", no info tables beyond Aspect/Details.
+13. **VENUE OPENINGS**: If you write sensory details about a venue's physical space (smells, decor, lighting, food/drink), you MUST have found these through WebSearch or venue intel provided. Do not invent plausible atmosphere. If no venue details are available, open with the event's sound, the performer's first action, or the audience's energy instead.
+14. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.
+15. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.
+16. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.
 
 ## Exemplars (read for structural guidance)
 
@@ -57,46 +56,46 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Soledad Zarka &amp; Loup Uberto
-- **ID**: 1adc2cab96179f7c
+### Μυρτώ Βασιλείου
+- **ID**: 039c065f65e9e68c
 - **Type**: concert
-- **Venue**: Κέντρο Ελέγχου Τηλεοράσεων
+- **Venue**: Σταυρός του Νότου
 - **Price**: paid
 - **Date**: 2026-03-06
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/soledad_zarka_kai_loup_uberto-10089299/
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/music/gig/murto_basileiou-10085504/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Κέντρο Ελέγχου Τηλεοράσεων Athens" for context.
+- **Category**: concert_major
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Σταυρός του Νότου Athens" for context.
 
-### Με δύναμη από την Κηφισιά
-- **ID**: 9b13a5967ccf89c3
+### ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ
+- **ID**: 9fe5c1b520ebef17
 - **Type**: theater
-- **Venue**: Βρετάνια
+- **Venue**: Άνεσις
 - **Price**: paid
-- **Date**: 2026-03-05T20:00:00
+- **Date**: 2026-03-04T20:00:00
 - **Time**: 20:00
-- **URL**: https://www.athinorama.gr/theatre/performance/me_dunami_apo_tin_kifisia-10089328/
-- **Source**: athinorama.gr
+- **URL**: https://www.more.com/gr-el/tickets/theater/teleftaiaexodos/
+- **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Βρετάνια Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Άνεσις Athens" for context.
 
-### Mind Against I Fri May 8
-- **ID**: d1b3dcc816ce1036
+### PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace
+- **ID**: e6dba1f891ea5e9a
 - **Type**: dj_set
-- **Venue**: Bolivar
+- **Venue**: SMUT Athens
 - **Price**: tba
-- **Date**: 2026-05-08T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2373841
+- **Date**: 2026-04-04T23:59:00
+- **Time**: 23:59
+- **URL**: https://ra.co/events/2377756
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -105,15 +104,18 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel** (from database):
   ```
-  ### Bolivar Beach Bar - BUDGET OPTION
+  ### SMUT Athens
   | Field | Data |
   |-------|------|
-  | **Location** | Alimos |
-  | **Access** | Taxi required (no metro) |
-  | **Entry** | €6-8 local events, higher for internationals |
-  | **Sunbeds** | €2+ |
-  | **Anniversary** | 21st in 2025 |
-  | **Headliners 2025** | Tale Of Us, Boris Brejcha, Maceo Plex, Sven Väth |
+  | **Address** | Vatsaxi 4 |
+  | **Metro** | Varies by location |
+  | **Capacity** | ~300 |
+  | **Entry** | €15-20 via Resident Advisor |
+  | **Door Policy** | STRICT — creative/fetish attire required for many events |
+  | **Tickets** | RA tickets = priority, not guaranteed entry |
+  | **Schedule** | Saturday nights (weekly institution) |
+  | **Character** | Queer techno, identity-driven, serious community |
+  | **Crowd** | Queer community and allies who understand dress codes |
   
   ---
   ```
@@ -148,7 +150,7 @@ For EACH event:
    **Greek description rules**:
    - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
    - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
-   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)
+   - Venue names in Greek script where available
    - Same 8-section structure, same factual content, but natural Greek voice
    - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
@@ -165,33 +167,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/1adc2cab96179f7c.md \
-  --tier=stub --event-id=1adc2cab96179f7c \
-  --event-type=concert --event-venue="Κέντρο Ελέγχου Τηλεοράσεων" \
-  --event-title="Soledad Zarka &amp; Loup Uberto" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/039c065f65e9e68c.md \
+  --tier=standard --event-id=039c065f65e9e68c \
+  --event-type=concert --event-venue="Σταυρός του Νότου" \
+  --event-title="Μυρτώ Βασιλείου" \
   --event-date=2026-03-06 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9b13a5967ccf89c3.md \
-  --tier=standard --event-id=9b13a5967ccf89c3 \
-  --event-type=theater --event-venue="Βρετάνια" \
-  --event-title="Με δύναμη από την Κηφισιά" \
-  --event-date=2026-03-05 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9fe5c1b520ebef17.md \
+  --tier=standard --event-id=9fe5c1b520ebef17 \
+  --event-type=theater --event-venue="Άνεσις" \
+  --event-title="ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ" \
+  --event-date=2026-03-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d1b3dcc816ce1036.md \
-  --tier=stub --event-id=d1b3dcc816ce1036 \
-  --event-type=dj_set --event-venue="Bolivar" \
-  --event-title="Mind Against I Fri May 8" \
-  --event-date=2026-05-08 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e6dba1f891ea5e9a.md \
+  --tier=stub --event-id=e6dba1f891ea5e9a \
+  --event-type=dj_set --event-venue="SMUT Athens" \
+  --event-title="PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace" \
+  --event-date=2026-04-04 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 1adc2cab96179f7c | Soledad Zarka &amp; Loup Uberto | /100 | | |
-| 9b13a5967ccf89c3 | Με δύναμη από την Κηφισιά | /100 | | |
-| d1b3dcc816ce1036 | Mind Against I Fri May 8 | /100 | | |
+| 039c065f65e9e68c | Μυρτώ Βασιλείου | /100 | | |
+| 9fe5c1b520ebef17 | ΤΕΛΕΥΤΑΙΑ ΕΞΟΔΟΣ - ΡΙΤΑ ΧΕΙΓΟΥΟΡΘ | /100 | | |
+| e6dba1f891ea5e9a | PRIMAL INSTINCT x SMUT with Chlär x Hadone x Vera Grace | /100 | | |

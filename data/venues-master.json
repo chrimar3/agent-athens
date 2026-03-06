@@ -31,6 +31,17 @@
     "lng": 23.7329,
     "type": "theater"
   },
+  "Αλεξάνδρεια - Πολυχώρος Τέχνης": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Πολυχώρος Τέχνης «Αλεξάνδρεια», 14",
+    "lat": 38.003003,
+    "lng": 23.732552,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-06"
+  },
   "Αλίκη": {
     "name_en": "Aliki Theatre",
     "neighborhood": "Syntagma",
@@ -283,6 +294,17 @@
     "lng": 23.7162,
     "type": "theater"
   },
+  "Θεατράλε": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Θεατράλε, 30",
+    "lat": 37.957978,
+    "lng": 23.725375,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-06"
+  },
   "Θέατρο Άβατον": {
     "name_en": "",
     "neighborhood": "",
@@ -458,6 +480,17 @@
     "lat": 37.9727,
     "lng": 23.7204,
     "type": "cinema"
+  },
+  "Ίδρυμα Β. & Μ. Θεοχαράκη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ίδρυμα Εικαστικών Τεχνών και Μουσικής Β&Μ Θεοχαράκη, 9",
+    "lat": 37.976254,
+    "lng": 23.738362,
+    "type": "tourism",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-06"
   },
   "Ιδρυμα Βασιλη και Ελιζας Γουλανδρη": {
     "name_en": "Basil & Elise Goulandris Foundation Museum",
@@ -1193,6 +1226,17 @@
     "lng": 23.7305,
     "type": "live_music_venue"
   },
+  "Crust": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Crust, Πρωτογένους",
+    "lat": 37.97803,
+    "lng": 23.725459,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-06"
+  },
   "Death Disco": {
     "name_en": "Death Disco",
     "neighborhood": "Psyrri",
@@ -1627,6 +1671,17 @@
     "type": "concert_hall",
     "description": "Main concert hall within Technopolis cultural park, named after the historic Citroen building. Hosts major concerts and cultural events",
     "metro": "Kerameikos"
+  },
+  "Temple": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Temple, Ιάκχου",
+    "lat": 37.979013,
+    "lng": 23.713044,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-06"
   },
   "Temple Athens": {
     "name_en": "Temple Athens",
