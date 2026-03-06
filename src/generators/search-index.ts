@@ -16,15 +16,11 @@ import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug, slugify } from './event-page';
 import { filterEventsByCategory, type CategoryConfig } from '../templates/category-page';
-
-const GREEK_MONTHS_SHORT = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιούν', 'Ιούλ', 'Αύγ', 'Σεπ', 'Οκτ', 'Νοέ', 'Δεκ'];
+import { GREEK_MONTHS_SHORT, parseISODate } from '../utils/format-date';
 
 function formatShortGreekDate(isoDate: string): string {
-  const m = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!m) return isoDate.substring(0, 10);
-  const day = parseInt(m[3], 10);
-  const monthIdx = parseInt(m[2], 10) - 1;
-  return `${day} ${GREEK_MONTHS_SHORT[monthIdx]}`;
+  const p = parseISODate(isoDate);
+  return p ? `${p.day} ${GREEK_MONTHS_SHORT[p.month - 1]}` : isoDate.substring(0, 10);
 }
 
 const DIST_DIR = join(import.meta.dir, '../../dist');

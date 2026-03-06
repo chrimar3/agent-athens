@@ -11,14 +11,7 @@ import { STRINGS } from '../i18n/strings';
 import type { Event } from '../types';
 import { formatGreekDateOnly, formatPriceGreek } from './i18n';
 import { DateTime } from 'luxon';
-
-const ATHENS_TIMEZONE = 'Europe/Athens';
-
-const ENGLISH_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const ENGLISH_MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
+import { ATHENS_TZ, ENGLISH_DAYS, ENGLISH_MONTHS, parseISODate, toAthensDateTime, weekdayIndex } from './format-date';
 
 /**
  * Format a date for display in the given locale.
@@ -27,22 +20,15 @@ const ENGLISH_MONTHS = [
 export function formatDateOnly(isoDate: string, locale: Locale): string {
   if (locale === 'el') return formatGreekDateOnly(isoDate);
 
-  // Parse date directly from ISO string (same approach as Greek formatter)
-  const dateMatch = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (dateMatch) {
-    const [, year, month, day] = dateMatch;
-    const dt = DateTime.fromObject(
-      { year: parseInt(year), month: parseInt(month), day: parseInt(day) },
-      { zone: ATHENS_TIMEZONE }
-    );
-    const dayIndex = dt.weekday === 7 ? 0 : dt.weekday;
-    return `${ENGLISH_DAYS[dayIndex]} ${dt.day} ${ENGLISH_MONTHS[dt.month - 1]}`;
+  const parts = parseISODate(isoDate);
+  if (parts) {
+    const dt = toAthensDateTime(parts);
+    return `${ENGLISH_DAYS[weekdayIndex(dt.weekday)]} ${dt.day} ${ENGLISH_MONTHS[dt.month - 1]}`;
   }
 
   // Fallback
-  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TIMEZONE);
-  const dayIndex = dt.weekday === 7 ? 0 : dt.weekday;
-  return `${ENGLISH_DAYS[dayIndex]} ${dt.day} ${ENGLISH_MONTHS[dt.month - 1]}`;
+  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TZ);
+  return `${ENGLISH_DAYS[weekdayIndex(dt.weekday)]} ${dt.day} ${ENGLISH_MONTHS[dt.month - 1]}`;
 }
 
 /**

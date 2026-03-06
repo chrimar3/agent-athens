@@ -546,7 +546,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
-  <a href="${href}" class="event-card">
+  <article class="event-card">
     <div class="card-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
@@ -554,12 +554,12 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
     </div>
     <div class="card-body">
-      <h3 class="card-title">${event.title}</h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
       <span class="card-venue">${venueText}</span>
       <span class="card-price">${priceText}</span>
     </div>
-  </a>`;
+  </article>`;
 }
 
 /**

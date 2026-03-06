@@ -747,6 +747,28 @@ QA findings need reproduction steps before spending time diagnosing. If a bug re
 
 Without these, you risk diagnosing a ghost — the fix was already shipped but the QA reviewer saw a cached/stale version.
 
+## Card Link Accessibility Pattern (::before click target)
+
+Cards use `<article>` wrapper with heading-only `<a class="card-link">` + `::before` pseudo-element for full-card click area:
+
+```html
+<article class="event-card">
+  <div class="card-image-wrapper">...</div>
+  <div class="card-body">
+    <h3 class="card-title"><a href="/events/..." class="card-link">Title</a></h3>
+    ...
+  </div>
+</article>
+```
+
+CSS requirements:
+- `.event-card { position: relative; isolation: isolate; }` — creates stacking context
+- `.card-link::before { content: ''; position: absolute; inset: 0; z-index: 1; }` — click target
+- `.card-badge { position: relative; z-index: 2; }` — sits above the overlay
+- Focus via `:has(.card-link:focus-visible)` with `@supports not selector(:has(*))` fallback
+
+Applies to: `renderEventCard()` (page.ts), `renderRelatedEventCard()` (event-page.ts), `renderEventCardList()` + `renderFeatureCard()` (card-variants.ts). Hero cards still use `<a>` wrapper (different structure, not in scope).
+
 ## View Transitions Pattern (MPA)
 
 Cross-document View Transitions are CSS-only progressive enhancement. The pattern:

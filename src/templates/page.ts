@@ -271,13 +271,13 @@ export function prepareCardData(event: Event): CardData {
   return { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType };
 }
 
-function renderEventCard(event: Event): string {
+export function renderEventCard(event: Event): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
-  <a href="${href}" class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
+  <article class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
     <div class="card-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
@@ -285,14 +285,14 @@ function renderEventCard(event: Event): string {
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
     </div>
     <div class="card-body">
-      <h3 class="card-title" itemprop="name">${event.title}</h3>
+      <h3 class="card-title" itemprop="name"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${event.type === 'exhibition' && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
       <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
       <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${priceText}</span>${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}</span>
     </div>
     <meta itemprop="eventStatus" content="${resolveEventStatus(event.startDate, event.endDate, event.type)}">
     <meta itemprop="description" content="${shortDesc}">
-  </a>`;
+  </article>`;
 }
 
 function renderDateGroupedEvents(events: Event[]): string {

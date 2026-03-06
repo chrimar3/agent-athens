@@ -305,19 +305,31 @@ div#main-content {
 
 .event-card {
   display: block;
-  text-decoration: none;
-  color: inherit;
-  outline: none;
+  position: relative;
+  isolation: isolate;
 }
 
-.event-card:hover {
-  text-decoration: none;
-}
+/* Card-link: heading-only <a> with ::before covering the full card */
+.card-link { color: inherit; text-decoration: none; }
+.card-link::before { content: ''; position: absolute; inset: 0; z-index: 1; }
 
-.event-card:focus-visible {
+/* Badges/actions sit above the ::before overlay */
+.card-badge, .card-badge-open { position: relative; z-index: 2; }
+
+/* Focus: outline on card boundary via :has(), with fallback */
+.card-link:focus-visible { outline: none; }
+.event-card:has(.card-link:focus-visible) {
   outline: 2px solid var(--focus-ring);
-  outline-offset: 4px;
+  outline-offset: 2px;
   border-radius: var(--radius-md);
+}
+/* Fallback for browsers without :has() */
+@supports not selector(:has(*)) {
+  .card-link:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
 }
 
 .card-image-wrapper {
@@ -1582,11 +1594,11 @@ div#main-content {
   gap: var(--space-md);
   padding: var(--space-md) 0;
   border-top: 1px solid var(--border-subtle);
-  text-decoration: none;
-  color: inherit;
+  position: relative;
+  isolation: isolate;
 }
 
-.event-card-list:focus-visible {
+.event-card-list:has(.card-link:focus-visible) {
   outline: 2px solid var(--focus-ring);
   outline-offset: var(--space-xs);
   border-radius: var(--radius-md);
@@ -1616,10 +1628,6 @@ div#main-content {
   gap: var(--space-xs);
 }
 
-.event-card-list:hover {
-  text-decoration: none;
-}
-
 .event-card-list:hover .card-title {
   color: var(--accent-primary);
 }
@@ -1636,11 +1644,11 @@ div#main-content {
 .event-card-feature {
   display: block;
   width: 100%;
-  text-decoration: none;
-  color: inherit;
+  position: relative;
+  isolation: isolate;
 }
 
-.event-card-feature:focus-visible {
+.event-card-feature:has(.card-link:focus-visible) {
   outline: 2px solid var(--focus-ring);
   outline-offset: var(--space-xs);
   border-radius: var(--radius-md);
@@ -1661,10 +1669,6 @@ div#main-content {
   height: 100%;
   object-fit: cover;
   transition: transform var(--t-base) var(--ease-out);
-}
-
-.event-card-feature:hover {
-  text-decoration: none;
 }
 
 .event-card-feature:hover .feature-image-wrapper img {
@@ -2122,33 +2126,6 @@ div#main-content {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-
-/* Card skeleton — grid card shape */
-.card-skeleton { display: block; }
-.skeleton-image {
-  padding-top: 133.33%;
-  border-radius: var(--radius-md);
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
-  background-size: 400% 100%;
-  animation: skeleton-sweep 1.4s ease infinite;
-}
-.skeleton-title {
-  height: 20px; width: 80%;
-  border-radius: var(--radius-sm);
-  margin-top: var(--space-sm-md);
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
-  background-size: 400% 100%;
-  animation: skeleton-sweep 1.4s ease infinite;
-}
-.skeleton-meta {
-  height: 14px; width: 60%;
-  border-radius: var(--radius-sm);
-  margin-top: var(--space-xs);
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
-  background-size: 400% 100%;
-  animation: skeleton-sweep 1.4s ease infinite;
-}
-.skeleton-meta.short { width: 40%; }
 
 /* Sold-out state — activates when template emits data-sold-out */
 .event-card[data-sold-out] .card-image-wrapper {

@@ -1028,3 +1028,12 @@ Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venue
 | Skip card-to-detail morph transitions | Homepage has 469 cards — 469 unique `view-transition-name` values risks compositor performance. Content cross-fade alone is sufficient UX win | 2026-03-05 |
 | Asymmetric fade timing: exit 120ms, enter 200ms | Fast exit = perceived speed; slower entrance = smooth appearance. Uses existing design tokens `--t-fast` / `--t-moderate` | 2026-03-05 |
 | Explicit `@view-transition { navigation: none }` in reduced-motion | Blanket `animation-duration: 0.01ms` already kills animations, but disabling the API prevents compositor from creating snapshot layers entirely | 2026-03-05 |
+
+## Card Accessibility
+
+| Decision | Why | Date |
+|----------|-----|------|
+| `<article>` wrapper with heading-only `<a>` + `::before` | Old full-card `<a>` made screen readers read entire card as one link. Heading-only link announces just the title; `::before` preserves mouse/touch click area | 2026-03-07 |
+| `isolation: isolate` on card elements | `::before` z-index scoped to card only — prevents z-index conflicts with other page elements | 2026-03-07 |
+| `:has(.card-link:focus-visible)` with `@supports not` fallback | Outline on `<article>` boundary (not inside `<h3>`) looks better; fallback for Safari <15.4 puts outline on `<a>` itself | 2026-03-07 |
+| Hero cards kept as `<a>` wrapper | Different structure (1 featured + picks), lower volume (4 per page), separate styling. Migrating adds risk for minimal gain | 2026-03-07 |

@@ -2,6 +2,7 @@
 // Pure functions, no side effects — optimized for Google SERP (155-char limit)
 
 import type { Event, EventType, Filters } from '../types';
+import { ENGLISH_MONTHS_SHORT, parseISODate } from './format-date';
 
 export interface VenueMetaInput {
   name: string;
@@ -15,11 +16,6 @@ const META_CHAR_LIMIT = 155;
 const LIVE_PREFIX_TYPES: Set<EventType> = new Set([
   'concert', 'dj_set', 'performance', 'show',
 ]);
-
-const ENGLISH_MONTHS = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-];
 
 const HUB_TYPE_TRANSLATIONS: Record<string, string> = {
   'concert': 'συναυλίες',
@@ -43,13 +39,9 @@ const HUB_TIME_TRANSLATIONS: Record<string, string> = {
 
 /** Parse ISO date string and format as "Mar 15, 2026" */
 export function formatDateShort(isoDate: string): string {
-  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!match) return '';
-  const [, yearStr, monthStr, dayStr] = match;
-  const month = parseInt(monthStr, 10);
-  const day = parseInt(dayStr, 10);
-  if (month < 1 || month > 12) return '';
-  return `${ENGLISH_MONTHS[month - 1]} ${day}, ${yearStr}`;
+  const p = parseISODate(isoDate);
+  if (!p || p.month < 1 || p.month > 12) return '';
+  return `${ENGLISH_MONTHS_SHORT[p.month - 1]} ${p.day}, ${p.year}`;
 }
 
 /** Find last sentence boundary (. ! ?) before maxLen */

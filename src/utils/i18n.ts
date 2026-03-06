@@ -3,31 +3,19 @@
 
 import type { Event } from '../types';
 import { DateTime } from 'luxon';
-
-const ATHENS_TIMEZONE = 'Europe/Athens';
-
-const GREEK_DAYS = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'];
-const GREEK_MONTHS = [
-  'Ιανουαρίου', 'Φεβρουαρίου', 'Μαρτίου', 'Απριλίου', 'Μαΐου', 'Ιουνίου',
-  'Ιουλίου', 'Αυγούστου', 'Σεπτεμβρίου', 'Οκτωβρίου', 'Νοεμβρίου', 'Δεκεμβρίου'
-];
+import { ATHENS_TZ, GREEK_DAYS, GREEK_MONTHS, parseISODate, toAthensDateTime, weekdayIndex } from './format-date';
 
 /**
  * Format date in Greek with proper Athens timezone
  * Example: "Τρίτη, 18 Νοεμβρίου 2025, 21:00"
  */
 export function formatGreekDate(isoDate: string): string {
-  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TIMEZONE);
-
-  // luxon: 1=Mon, 2=Tue, ..., 7=Sun. Array: 0=Sun, 1=Mon, ..., 6=Sat
-  const dayIndex = dt.weekday === 7 ? 0 : dt.weekday;
-  const dayName = GREEK_DAYS[dayIndex];
-  const day = dt.day;
+  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TZ);
+  const dayName = GREEK_DAYS[weekdayIndex(dt.weekday)];
   const month = GREEK_MONTHS[dt.month - 1];
-  const year = dt.year;
   const time = dt.toFormat('HH:mm');
 
-  return `${dayName}, ${day} ${month} ${year}, ${time}`;
+  return `${dayName}, ${dt.day} ${month} ${dt.year}, ${time}`;
 }
 
 /**
@@ -36,27 +24,16 @@ export function formatGreekDate(isoDate: string): string {
  * incorrect timezone offsets. The local date portion is correct.
  */
 export function formatGreekDateOnly(isoDate: string): string {
-  // Parse date directly from ISO string to avoid timezone conversion issues
-  const dateMatch = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (dateMatch) {
-    const [, year, month, day] = dateMatch;
-    // Create a DateTime from the extracted date parts (treats as local)
-    const dt = DateTime.fromObject(
-      { year: parseInt(year), month: parseInt(month), day: parseInt(day) },
-      { zone: ATHENS_TIMEZONE }
-    );
-    const dayIndex = dt.weekday === 7 ? 0 : dt.weekday;
-    const dayName = GREEK_DAYS[dayIndex];
-    const monthName = GREEK_MONTHS[dt.month - 1];
-    return `${dayName} ${dt.day} ${monthName}`;
+  const parts = parseISODate(isoDate);
+  if (parts) {
+    const dt = toAthensDateTime(parts);
+    const dayName = GREEK_DAYS[weekdayIndex(dt.weekday)];
+    return `${dayName} ${dt.day} ${GREEK_MONTHS[dt.month - 1]}`;
   }
   // Fallback
-  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TIMEZONE);
-  const dayIndex = dt.weekday === 7 ? 0 : dt.weekday;
-  const dayName = GREEK_DAYS[dayIndex];
-  const day = dt.day;
-  const month = GREEK_MONTHS[dt.month - 1];
-  return `${dayName} ${day} ${month}`;
+  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TZ);
+  const dayName = GREEK_DAYS[weekdayIndex(dt.weekday)];
+  return `${dayName} ${dt.day} ${GREEK_MONTHS[dt.month - 1]}`;
 }
 
 /**
@@ -72,7 +49,7 @@ export function formatGreekTime(isoDate: string): string {
     return timeMatch[1];
   }
   // Fallback to luxon parsing if no match
-  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TIMEZONE);
+  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TZ);
   return dt.toFormat('HH:mm');
 }
 

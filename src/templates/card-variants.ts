@@ -13,19 +13,19 @@ export function renderEventCardList(event: Event): string {
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
-  <a href="${href}" class="event-card-list">
+  <article class="event-card-list">
     <div class="list-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="list-content">
-      <h3 class="card-title">${event.title}</h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date">${dateStr}</span>
       <span class="card-venue">${venueText}</span>
       <span class="card-price">${priceText}</span>
     </div>
-  </a>`;
+  </article>`;
 }
 
 /**
@@ -37,20 +37,20 @@ export function renderFeatureCard(event: Event): string {
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
-  <a href="${href}" class="event-card-feature">
+  <article class="event-card-feature">
     <div class="feature-image-wrapper" data-type="${event.type}">
       ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
     <div class="feature-body">
-      <h3 class="card-title">${event.title}</h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date">${dateStr}</span>
       <span class="card-venue">${venueText}</span>
       ${shortDesc ? `<p class="feature-description">${shortDesc}</p>` : ''}
       <span class="card-price">${priceText}</span>
     </div>
-  </a>`;
+  </article>`;
 }
 
 /**
