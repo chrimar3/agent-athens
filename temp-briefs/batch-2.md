@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 1adc2cab96179f7c, 9b13a5967ccf89c3, d1b3dcc816ce1036
+- Event IDs: ae864b2bcc508643, 4de9329e1c5e97f0, d9f56fd79ee55f18
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,66 +57,67 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Soledad Zarka &amp; Loup Uberto
-- **ID**: 1adc2cab96179f7c
-- **Type**: concert
-- **Venue**: Κέντρο Ελέγχου Τηλεοράσεων
+### Δεν θα πεθάνουμε κιόλας
+- **ID**: ae864b2bcc508643
+- **Type**: show
+- **Venue**: Red Jasper Cabaret Theatre
 - **Price**: paid
-- **Date**: 2026-03-06
+- **Date**: 2026-03-07T21:00:00
 - **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/soledad_zarka_kai_loup_uberto-10089299/
+- **URL**: https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Κέντρο Ελέγχου Τηλεοράσεων Athens" for context.
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
 
-### Με δύναμη από την Κηφισιά
-- **ID**: 9b13a5967ccf89c3
+### Gilad Atzmon Quartet
+- **ID**: 4de9329e1c5e97f0
 - **Type**: theater
-- **Venue**: Βρετάνια
+- **Venue**: Theatre Of The No
 - **Price**: paid
-- **Date**: 2026-03-05T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.athinorama.gr/theatre/performance/me_dunami_apo_tin_kifisia-10089328/
+- **Date**: 2026-03-07
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/music/gig/gilad_atzmon_quartet-10086121/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Βρετάνια Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Theatre of the No
+  | Field | Data |
+  |-------|------|
+  | **Address** | Konstantinou Palaiologou 3 (opposite City Hall) |
+  | **Metro** | Syntagma |
+  | **Capacity** | ~100 |
+  | **Entry** | €10 (musicians free with drink) |
+  | **Schedule** | Jazz Jam Wednesdays, 22:00 |
+  | **House band** | Serafeim Bellos (drums), Phoebe Pehlivanidi (piano), George Pantazopoulos (bass) |
+  | **Note** | Athens' first English-speaking theater — accessible for visitors |
+  
+  ---
+  ```
 
-### Mind Against I Fri May 8
-- **ID**: d1b3dcc816ce1036
-- **Type**: dj_set
-- **Venue**: Bolivar
-- **Price**: tba
-- **Date**: 2026-05-08T21:00:00
+### Συναυλία με τον Δημήτρη Σγουρό
+- **ID**: d9f56fd79ee55f18
+- **Type**: concert
+- **Venue**: Concert #1 Baumstrasse
+- **Price**: paid
+- **Date**: 2026-03-07
 - **Time**: 21:00
-- **URL**: https://ra.co/events/2373841
-- **Source**: residentadvisor
+- **URL**: https://www.ticketservices.gr/event/14130/
+- **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Bolivar Beach Bar - BUDGET OPTION
-  | Field | Data |
-  |-------|------|
-  | **Location** | Alimos |
-  | **Access** | Taxi required (no metro) |
-  | **Entry** | €6-8 local events, higher for internationals |
-  | **Sunbeds** | €2+ |
-  | **Anniversary** | 21st in 2025 |
-  | **Headliners 2025** | Tale Of Us, Boris Brejcha, Maceo Plex, Sven Väth |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Concert #1 Baumstrasse Athens" for context.
 
 ---
 
@@ -165,33 +166,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/1adc2cab96179f7c.md \
-  --tier=stub --event-id=1adc2cab96179f7c \
-  --event-type=concert --event-venue="Κέντρο Ελέγχου Τηλεοράσεων" \
-  --event-title="Soledad Zarka &amp; Loup Uberto" \
-  --event-date=2026-03-06 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/ae864b2bcc508643.md \
+  --tier=standard --event-id=ae864b2bcc508643 \
+  --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
+  --event-title="Δεν θα πεθάνουμε κιόλας" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9b13a5967ccf89c3.md \
-  --tier=standard --event-id=9b13a5967ccf89c3 \
-  --event-type=theater --event-venue="Βρετάνια" \
-  --event-title="Με δύναμη από την Κηφισιά" \
-  --event-date=2026-03-05 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4de9329e1c5e97f0.md \
+  --tier=standard --event-id=4de9329e1c5e97f0 \
+  --event-type=theater --event-venue="Theatre Of The No" \
+  --event-title="Gilad Atzmon Quartet" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d1b3dcc816ce1036.md \
-  --tier=stub --event-id=d1b3dcc816ce1036 \
-  --event-type=dj_set --event-venue="Bolivar" \
-  --event-title="Mind Against I Fri May 8" \
-  --event-date=2026-05-08 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d9f56fd79ee55f18.md \
+  --tier=stub --event-id=d9f56fd79ee55f18 \
+  --event-type=concert --event-venue="Concert #1 Baumstrasse" \
+  --event-title="Συναυλία με τον Δημήτρη Σγουρό" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 1adc2cab96179f7c | Soledad Zarka &amp; Loup Uberto | /100 | | |
-| 9b13a5967ccf89c3 | Με δύναμη από την Κηφισιά | /100 | | |
-| d1b3dcc816ce1036 | Mind Against I Fri May 8 | /100 | | |
+| ae864b2bcc508643 | Δεν θα πεθάνουμε κιόλας | /100 | | |
+| 4de9329e1c5e97f0 | Gilad Atzmon Quartet | /100 | | |
+| d9f56fd79ee55f18 | Συναυλία με τον Δημήτρη Σγουρό | /100 | | |

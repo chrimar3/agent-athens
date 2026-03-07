@@ -1104,6 +1104,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "B-Side": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Μπη Σάιντ, Μαυροκορδάτου",
+    "lat": 37.983779,
+    "lng": 23.731955,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-07"
+  },
   "Bios": {
     "name_en": "Bios Pireos 84",
     "neighborhood": "Keramikos / Gazi",
@@ -1122,6 +1133,17 @@
     "lat": 37.9082,
     "lng": 23.7146,
     "type": "beach_bar"
+  },
+  "Boo!": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Boo!, Λεπενιώτου",
+    "lat": 37.97842,
+    "lng": 23.722542,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-07"
   },
   "Caja De Musica": {
     "name_en": "Caja De Musica",

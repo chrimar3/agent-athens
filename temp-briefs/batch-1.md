@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: e9c2d4b9150365a2, 71efe5f40b108d1a, ba40f4aa50b08ad6
+- Event IDs: 8880d74d5dda8f26, 79903b7661368b64, f6c467088de6c25a
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,67 +57,67 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Avi
-- **ID**: e9c2d4b9150365a2
-- **Type**: concert
-- **Venue**: AN Club
-- **Price**: paid
-- **Date**: 2026-03-06
-- **Time**: 20:00
-- **URL**: https://www.athinorama.gr/music/gig/avi_-10089289/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### AN Club
-  | Field | Data |
-  |-------|------|
-  | **Address** | Exarchia |
-  | **Metro** | Omonoia or Panepistimio (walk) |
-  | **Capacity** | ~400 |
-  | **Tickets** | €15-25 typical, €25-35 international acts |
-  | **Timing** | LATE STARTS — bands often after 22:00 |
-  | **History** | 30+ years, Athens' oldest rock venue |
-  | **Genre** | Hardcore rock/punk/metal |
-  
-  ---
-  ```
-
-### Ready Freddie Show
-- **ID**: 71efe5f40b108d1a
+### Encardia
+- **ID**: 8880d74d5dda8f26
 - **Type**: theater
-- **Venue**: Καφεθέατρο
+- **Venue**: Theatre Of The No
 - **Price**: paid
-- **Date**: 2026-03-05
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/ready_freddie_show-10089114/
+- **Date**: 2026-03-07
+- **Time**: 18:00
+- **URL**: https://www.athinorama.gr/music/gig/encardia-10018022/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Καφεθέατρο Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Theatre of the No
+  | Field | Data |
+  |-------|------|
+  | **Address** | Konstantinou Palaiologou 3 (opposite City Hall) |
+  | **Metro** | Syntagma |
+  | **Capacity** | ~100 |
+  | **Entry** | €10 (musicians free with drink) |
+  | **Schedule** | Jazz Jam Wednesdays, 22:00 |
+  | **House band** | Serafeim Bellos (drums), Phoebe Pehlivanidi (piano), George Pantazopoulos (bass) |
+  | **Note** | Athens' first English-speaking theater — accessible for visitors |
+  
+  ---
+  ```
 
-### Δαυίδ Ναχμίας ΔΑΝΑΗ
-- **ID**: ba40f4aa50b08ad6
-- **Type**: dj_set
-- **Venue**: Parnassos Literary Society
+### Σονάτες για βιολί και πιάνο
+- **ID**: 79903b7661368b64
+- **Type**: concert
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-04-26T18:30:00
-- **Time**: 18:30
-- **URL**: https://www.ticketservices.gr/event/14214/
+- **Date**: 2026-03-07
+- **Time**: 20:00
+- **URL**: https://www.ticketservices.gr/event/14088/
 - **Source**: ticketservices
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
+### Afterhours with Jonn & Always Late at Skullbar
+- **ID**: f6c467088de6c25a
+- **Type**: dj_set
+- **Venue**: Skull Bar
+- **Price**: paid
+- **Date**: 2026-03-07T05:00:00
+- **Time**: 05:00
+- **URL**: https://ra.co/events/2386623
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Parnassos Literary Society Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Skull Bar Athens" for context.
 
 ---
 
@@ -166,33 +166,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/e9c2d4b9150365a2.md \
-  --tier=stub --event-id=e9c2d4b9150365a2 \
-  --event-type=concert --event-venue="AN Club" \
-  --event-title="Avi" \
-  --event-date=2026-03-06 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8880d74d5dda8f26.md \
+  --tier=standard --event-id=8880d74d5dda8f26 \
+  --event-type=theater --event-venue="Theatre Of The No" \
+  --event-title="Encardia" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/71efe5f40b108d1a.md \
-  --tier=standard --event-id=71efe5f40b108d1a \
-  --event-type=theater --event-venue="Καφεθέατρο" \
-  --event-title="Ready Freddie Show" \
-  --event-date=2026-03-05 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/79903b7661368b64.md \
+  --tier=premium --event-id=79903b7661368b64 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Σονάτες για βιολί και πιάνο" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ba40f4aa50b08ad6.md \
-  --tier=stub --event-id=ba40f4aa50b08ad6 \
-  --event-type=dj_set --event-venue="Parnassos Literary Society" \
-  --event-title="Δαυίδ Ναχμίας ΔΑΝΑΗ" \
-  --event-date=2026-04-26 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f6c467088de6c25a.md \
+  --tier=stub --event-id=f6c467088de6c25a \
+  --event-type=dj_set --event-venue="Skull Bar" \
+  --event-title="Afterhours with Jonn & Always Late at Skullbar" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| e9c2d4b9150365a2 | Avi | /100 | | |
-| 71efe5f40b108d1a | Ready Freddie Show | /100 | | |
-| ba40f4aa50b08ad6 | Δαυίδ Ναχμίας ΔΑΝΑΗ | /100 | | |
+| 8880d74d5dda8f26 | Encardia | /100 | | |
+| 79903b7661368b64 | Σονάτες για βιολί και πιάνο | /100 | | |
+| f6c467088de6c25a | Afterhours with Jonn & Always Late at Skullbar | /100 | | |

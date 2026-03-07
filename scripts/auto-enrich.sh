@@ -34,7 +34,7 @@ ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
 EVENTS_PER_BATCH=3
 MIN_QUEUE=3
-BATCH_TIMEOUT=600  # 10 minutes max per batch
+BATCH_TIMEOUT=900  # 15 minutes max per batch (batches avg 7-9 min)
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -85,8 +85,10 @@ fi
 
 # Fix #3: Network pre-check — fail fast with clear message
 # exit 0 (not 1) because "network down" is expected when machine just woke up
-if ! curl -sf --max-time 10 https://api.anthropic.com -o /dev/null; then
-    log "Network unavailable — skipping auto-enrich"
+# Note: api.anthropic.com returns 404 on root, so check for any HTTP response (not -f)
+HTTP_CODE=$(curl -s --max-time 10 -o /dev/null -w "%{http_code}" https://api.anthropic.com 2>/dev/null || echo "000")
+if [[ "$HTTP_CODE" == "000" ]]; then
+    log "Network unavailable (no response from api.anthropic.com) — skipping auto-enrich"
     exit 0
 fi
 

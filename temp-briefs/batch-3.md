@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 41fd6e7372fbe39d, 677d657f8bf1ad1c, 9c6778f2a5214c1e
+- Event IDs: bd2ccdf843cfb25b, f07aa4e06b5bd065, f3b36baf39d52394
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,66 +57,53 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### &#171;Τα Μι του πενταγράμμου&#187;
-- **ID**: 41fd6e7372fbe39d
-- **Type**: concert
-- **Venue**: Πολυχώρος Διέλευσις
-- **Price**: paid
-- **Date**: 2026-03-06
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/ta_mi_tou_pentagrammou-10089302/
-- **Source**: athinorama.gr
+### Afterhours: Man With The Speaker + Jay Jay + Nicola Boh + Vrede
+- **ID**: bd2ccdf843cfb25b
+- **Type**: dj_set
+- **Venue**: Skullbar
+- **Price**: door
+- **Date**: 2026-03-07T05:00:00
+- **Time**: 05:00
+- **URL**: https://www.clubber.gr/events/afterhours-man-with-the-speaker-jay-jay-nicola-boh-vrede/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Πολυχώρος Διέλευσις Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Skullbar Athens" for context.
 
-### Η Πριγκίπισσα των Αγίων Σαράντα!
-- **ID**: 677d657f8bf1ad1c
-- **Type**: theater
-- **Venue**: Coronet Theater
+### Her story in heels
+- **ID**: f07aa4e06b5bd065
+- **Type**: show
+- **Venue**: Red Jasper Cabaret Theatre
 - **Price**: paid
-- **Date**: 2026-03-05T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/i-prigkipissa-ton-agion-saranta/
-- **Source**: more.com
+- **Date**: 2026-03-07T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/her_story_in_heels-10088262/
+- **Source**: athinorama.gr
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
+
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: f3b36baf39d52394
+- **Type**: theater
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-07T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
-
-### Padre Guilherme I Sat May 9
-- **ID**: 9c6778f2a5214c1e
-- **Type**: dj_set
-- **Venue**: Bolivar
-- **Price**: tba
-- **Date**: 2026-05-09T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2378214
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Bolivar Beach Bar - BUDGET OPTION
-  | Field | Data |
-  |-------|------|
-  | **Location** | Alimos |
-  | **Access** | Taxi required (no metro) |
-  | **Entry** | €6-8 local events, higher for internationals |
-  | **Sunbeds** | €2+ |
-  | **Anniversary** | 21st in 2025 |
-  | **Headliners 2025** | Tale Of Us, Boris Brejcha, Maceo Plex, Sven Väth |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
 ---
 
@@ -165,33 +152,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/41fd6e7372fbe39d.md \
-  --tier=stub --event-id=41fd6e7372fbe39d \
-  --event-type=concert --event-venue="Πολυχώρος Διέλευσις" \
-  --event-title="&#171;Τα Μι του πενταγράμμου&#187;" \
-  --event-date=2026-03-06 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/bd2ccdf843cfb25b.md \
+  --tier=stub --event-id=bd2ccdf843cfb25b \
+  --event-type=dj_set --event-venue="Skullbar" \
+  --event-title="Afterhours: Man With The Speaker + Jay Jay + Nicola Boh + Vrede" \
+  --event-date=2026-03-07 --event-price=door
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/677d657f8bf1ad1c.md \
-  --tier=standard --event-id=677d657f8bf1ad1c \
-  --event-type=theater --event-venue="Coronet Theater" \
-  --event-title="Η Πριγκίπισσα των Αγίων Σαράντα!" \
-  --event-date=2026-03-05 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f07aa4e06b5bd065.md \
+  --tier=standard --event-id=f07aa4e06b5bd065 \
+  --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
+  --event-title="Her story in heels" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9c6778f2a5214c1e.md \
-  --tier=stub --event-id=9c6778f2a5214c1e \
-  --event-type=dj_set --event-venue="Bolivar" \
-  --event-title="Padre Guilherme I Sat May 9" \
-  --event-date=2026-05-09 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f3b36baf39d52394.md \
+  --tier=standard --event-id=f3b36baf39d52394 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-07 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 41fd6e7372fbe39d | &#171;Τα Μι του πενταγράμμου&#187; | /100 | | |
-| 677d657f8bf1ad1c | Η Πριγκίπισσα των Αγίων Σαράντα! | /100 | | |
-| 9c6778f2a5214c1e | Padre Guilherme I Sat May 9 | /100 | | |
+| bd2ccdf843cfb25b | Afterhours: Man With The Speaker + Jay Jay + Nicola Boh + Vrede | /100 | | |
+| f07aa4e06b5bd065 | Her story in heels | /100 | | |
+| f3b36baf39d52394 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
