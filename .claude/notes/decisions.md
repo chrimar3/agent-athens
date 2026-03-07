@@ -1037,3 +1037,12 @@ Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venue
 | `isolation: isolate` on card elements | `::before` z-index scoped to card only — prevents z-index conflicts with other page elements | 2026-03-07 |
 | `:has(.card-link:focus-visible)` with `@supports not` fallback | Outline on `<article>` boundary (not inside `<h3>`) looks better; fallback for Safari <15.4 puts outline on `<a>` itself | 2026-03-07 |
 | Hero cards kept as `<a>` wrapper | Different structure (1 featured + picks), lower volume (4 per page), separate styling. Migrating adds risk for minimal gain | 2026-03-07 |
+
+## English E-E-A-T Authority Pages
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Locale support via `options.locale` on `renderContentPage` | Backward-compatible — Greek pages unchanged, English pages opt-in via `locale: 'en'`. Single template for both | 2026-03-07 |
+| `contentPagePairs` structure in generate-site.ts | Groups el/en pages together so hreflang alternateSlug is always correct. Iterates both locales in one loop | 2026-03-07 |
+| Detect `hasHreflang` by checking XML output for `xhtml:link` | Previous approach checked parameter sets — missed content page hreflang. Output-based detection works for all hreflang sources | 2026-03-07 |
+| x-default → English for content pages | English is the international default; Greek is primary but visitors without locale preference should see English | 2026-03-07 |

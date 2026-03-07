@@ -456,23 +456,26 @@ async function main() {
     'url': ORGANIZATION_SCHEMA.url
   };
 
-  const contentPages = [
+  // Bilingual content page pairs: { baseSlug, el: {...}, en: {...} }
+  const contentPagePairs = [
     {
-      slug: 'about',
-      title: 'Σχετικά',
-      metaDescription: 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
-      schemaJson: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'AboutPage',
-        'name': 'Σχετικά με το agent athens',
-        'url': `${BASE_URL}/about/`,
-        'description': 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
-        'inLanguage': 'el',
-        publisher,
-        'datePublished': '2026-03-02',
-        'dateModified': todayIso
-      }, null, 2),
-      bodyHtml: `
+      baseSlug: 'about',
+      el: {
+        slug: 'about',
+        title: 'Σχετικά',
+        metaDescription: 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          'name': 'Σχετικά με το agent athens',
+          'url': `${BASE_URL}/about/`,
+          'description': 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
+          'inLanguage': 'el',
+          publisher,
+          'datePublished': '2026-03-02',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
         <h1>Σχετικά με το agent athens</h1>
         <p>Το agent athens είναι ένα ημερήσιο πολιτιστικό ημερολόγιο για την Αθήνα. Συγκεντρώνουμε, επαληθεύουμε και εμπλουτίζουμε εκδηλώσεις από δεκάδες πηγές, χρησιμοποιώντας τεχνητή νοημοσύνη και ανθρώπινη επίβλεψη.</p>
 
@@ -493,23 +496,63 @@ async function main() {
         <h2>Επικοινωνία</h2>
         <p>Για ερωτήσεις, προτάσεις ή αναφορά σφαλμάτων, επικοινωνήστε μαζί μας μέσω <a href="https://github.com/chrimar3/agent-athens/issues">GitHub Issues</a> ή email στο cmarag8@gmail.com.</p>
       `
+      },
+      en: {
+        slug: 'en/about',
+        title: 'About',
+        metaDescription: 'Agent Athens — Daily AI-curated cultural events calendar for Athens. Who we are, how we work, what we cover.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          'name': 'About agent athens',
+          'url': `${BASE_URL}/en/about/`,
+          'description': 'Agent Athens — Daily AI-curated cultural events calendar for Athens. Who we are, how we work, what we cover.',
+          'inLanguage': 'en',
+          publisher,
+          'datePublished': '2026-03-07',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
+        <h1>About agent athens</h1>
+        <p>Agent athens is a daily cultural events calendar for Athens. We aggregate, verify and enrich events from dozens of sources, combining AI enrichment with human oversight.</p>
+
+        <h2>What we do</h2>
+        <p>Every day, automated scrapers collect events from more than 15 verified venues and ticketing platforms across Athens. We cover concerts, exhibitions, theatre, classical music, DJ sets, cinema, dance performances, workshops, festivals and tech events.</p>
+        <p>Every event passes through automated location filtering — only events at verified Attica venues are shown. Descriptions are enriched with access information, venue history and practical details.</p>
+
+        <h2>How it works</h2>
+        <p>The platform is built on open-source technology (Bun, TypeScript, SQLite). Every morning at 08:00 Athens time the full pipeline runs: data collection, venue verification, description enrichment, page generation. The site is deployed as static HTML on Netlify for maximum load speed.</p>
+        <p>AI is used exclusively for description enrichment — it does not fabricate information. Every enriched description is grounded in real data from primary sources.</p>
+
+        <h2>Geographic coverage</h2>
+        <p>We cover events at venues across the Attica region, with emphasis on central Athens. Covered neighbourhoods include Kolonaki, Mets, Exarchia, Plaka, Gazi, Kerameikos, Koukaki, Pangrati, Petralona, Marousi and many more.</p>
+
+        <h2>Update frequency</h2>
+        <p>The calendar is updated daily. New events appear automatically, while past events are removed. Every event page includes Schema.org structured data for search engines and AI agents.</p>
+
+        <h2>Contact</h2>
+        <p>For questions, suggestions or error reports, reach us via <a href="https://github.com/chrimar3/agent-athens/issues">GitHub Issues</a> or email at cmarag8@gmail.com.</p>
+      `
+      },
     },
     {
-      slug: 'editorial',
-      title: 'Σύνταξη',
-      metaDescription: 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
-      schemaJson: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        'name': 'Συντακτική πολιτική — agent athens',
-        'url': `${BASE_URL}/editorial/`,
-        'description': 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
-        'inLanguage': 'el',
-        publisher,
-        'datePublished': '2026-03-02',
-        'dateModified': todayIso
-      }, null, 2),
-      bodyHtml: `
+      baseSlug: 'editorial',
+      el: {
+        slug: 'editorial',
+        title: 'Σύνταξη',
+        metaDescription: 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          'name': 'Συντακτική πολιτική — agent athens',
+          'url': `${BASE_URL}/editorial/`,
+          'description': 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
+          'inLanguage': 'el',
+          publisher,
+          'datePublished': '2026-03-02',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
         <h1>Συντακτική πολιτική</h1>
         <p>Το agent athens συνδυάζει αυτοματοποιημένη συλλογή δεδομένων, εμπλουτισμό με τεχνητή νοημοσύνη, και ανθρώπινη επίβλεψη για να παρέχει αξιόπιστες πληροφορίες πολιτιστικών εκδηλώσεων.</p>
 
@@ -546,23 +589,79 @@ async function main() {
         <h2>Ενημερώσεις</h2>
         <p>Το ημερολόγιο ενημερώνεται καθημερινά στις 08:00 ώρα Αθήνας. Παρελθούσες εκδηλώσεις αφαιρούνται αυτόματα, ενώ τρέχουσες εκθέσεις παραμένουν μέχρι τη λήξη τους.</p>
       `
+      },
+      en: {
+        slug: 'en/editorial',
+        title: 'Editorial Policy',
+        metaDescription: 'How we create event descriptions — data sources, AI enrichment methodology, quality control. Agent Athens.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          'name': 'Editorial policy — agent athens',
+          'url': `${BASE_URL}/en/editorial/`,
+          'description': 'How we create event descriptions — data sources, AI enrichment methodology, quality control. Agent Athens.',
+          'inLanguage': 'en',
+          publisher,
+          'datePublished': '2026-03-07',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
+        <h1>Editorial policy</h1>
+        <p>Agent athens combines automated data collection, AI enrichment and human oversight to provide reliable cultural event information.</p>
+
+        <h2>Data sources</h2>
+        <p>We collect events from more than 15 verified sources, including:</p>
+        <ul>
+          <li>Venue websites (Half Note, Megaron Moussikis, Onassis Stegi, Benaki Museum and others)</li>
+          <li>Ticketing platforms (Ticket Services, More.com, Eventbrite)</li>
+          <li>Cultural listings (Athinorama, Resident Advisor)</li>
+        </ul>
+        <p>Each source is cited explicitly on the event page, with a link to the original listing.</p>
+
+        <h2>AI enrichment methodology</h2>
+        <p>Enriched descriptions are produced through a strict process:</p>
+        <ul>
+          <li>AI receives only real data from sources — it does not fabricate information</li>
+          <li>Each description follows a standardised 8-section structure with minimum and maximum lengths</li>
+          <li>The system automatically checks for geographic accuracy, temporal consistency and price validity</li>
+          <li>Access information (metro, buses, parking) is drawn from a verified venue knowledge base</li>
+        </ul>
+
+        <h2>Quality control</h2>
+        <p>Every event passes through multiple levels of verification:</p>
+        <ul>
+          <li><strong>Location filter:</strong> Only Attica venues, verified via a venue whitelist</li>
+          <li><strong>Data validation:</strong> Automated verification of dates, prices and core fields</li>
+          <li><strong>Quality gates:</strong> Enriched descriptions are checked for factual accuracy — no information is fabricated</li>
+          <li><strong>Human oversight:</strong> Regular sample reviews and quality-rule audits</li>
+        </ul>
+
+        <h2>No-fabrication policy</h2>
+        <p>We are committed to ensuring that no information in our descriptions is fabricated. If something cannot be verified from primary sources, it is not included. This applies especially to ticket prices, start times and venues.</p>
+
+        <h2>Updates</h2>
+        <p>The calendar is updated daily at 08:00 Athens time. Past events are removed automatically, while running exhibitions remain until their end date.</p>
+      `
+      },
     },
     {
-      slug: 'corrections',
-      title: 'Διορθώσεις',
-      metaDescription: 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
-      schemaJson: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        'name': 'Πολιτική διορθώσεων — agent athens',
-        'url': `${BASE_URL}/corrections/`,
-        'description': 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
-        'inLanguage': 'el',
-        publisher,
-        'datePublished': '2026-03-02',
-        'dateModified': todayIso
-      }, null, 2),
-      bodyHtml: `
+      baseSlug: 'corrections',
+      el: {
+        slug: 'corrections',
+        title: 'Διορθώσεις',
+        metaDescription: 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          'name': 'Πολιτική διορθώσεων — agent athens',
+          'url': `${BASE_URL}/corrections/`,
+          'description': 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
+          'inLanguage': 'el',
+          publisher,
+          'datePublished': '2026-03-02',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
         <h1>Πολιτική διορθώσεων</h1>
         <p>Δεσμευόμαστε για ακρίβεια σε κάθε εκδήλωση που δημοσιεύουμε. Αν εντοπίσετε κάποιο σφάλμα, θέλουμε να το μάθουμε.</p>
 
@@ -591,22 +690,75 @@ async function main() {
         <h2>Διαφάνεια</h2>
         <p>Κάθε σελίδα εκδήλωσης αναφέρει την πηγή των δεδομένων. Ο κώδικας είναι ανοικτός στο <a href="https://github.com/chrimar3/agent-athens">GitHub</a> και οι κανόνες ποιότητας είναι δημόσια διαθέσιμοι. Πιστεύουμε ότι η διαφάνεια είναι θεμελιώδης για την αξιοπιστία.</p>
       `
+      },
+      en: {
+        slug: 'en/corrections',
+        title: 'Corrections',
+        metaDescription: 'Report errors and correction policy — Agent Athens cultural events Athens.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          'name': 'Correction policy — agent athens',
+          'url': `${BASE_URL}/en/corrections/`,
+          'description': 'Report errors and correction policy — Agent Athens cultural events Athens.',
+          'inLanguage': 'en',
+          publisher,
+          'datePublished': '2026-03-07',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: `
+        <h1>Correction policy</h1>
+        <p>We are committed to accuracy in every event we publish. If you spot an error, we want to know.</p>
+
+        <h2>How to report an error</h2>
+        <p>You can report errors in two ways:</p>
+        <ul>
+          <li><strong>GitHub:</strong> Open an issue at <a href="https://github.com/chrimar3/agent-athens/issues">github.com/chrimar3/agent-athens</a> — ideal for detailed reports</li>
+          <li><strong>Email:</strong> Send to cmarag8@gmail.com with subject "Correction: [event name]"</li>
+        </ul>
+        <p>In your report, please include the event page link and a description of the error.</p>
+
+        <h2>What can be reported</h2>
+        <ul>
+          <li>Wrong dates or start times</li>
+          <li>Incorrect ticket prices</li>
+          <li>Wrong venue or address</li>
+          <li>Events not related to Athens</li>
+          <li>Incomplete or misleading descriptions</li>
+          <li>Cancelled events that still appear</li>
+          <li>Broken links to sources or tickets</li>
+        </ul>
+
+        <h2>Response time</h2>
+        <p>Corrections are applied within 24 hours. Critical errors (wrong price, wrong date) are addressed immediately and reflected in the next build. For non-critical issues (description improvement, typos), the correction is made within the following day.</p>
+
+        <h2>Transparency</h2>
+        <p>Every event page cites its data source. The code is open on <a href="https://github.com/chrimar3/agent-athens">GitHub</a> and quality rules are publicly available. We believe transparency is fundamental to trust.</p>
+      `
+      },
     },
   ];
 
-  for (const page of contentPages) {
-    const html = renderContentPage(page.slug, page.title, page.bodyHtml, {
-      metaDescription: page.metaDescription,
-      schemaJson: page.schemaJson,
-    });
-    const pageDir = join(DIST_DIR, page.slug);
-    if (!existsSync(pageDir)) {
-      mkdirSync(pageDir, { recursive: true });
+  // Generate both Greek and English content pages
+  for (const pair of contentPagePairs) {
+    for (const locale of ['el', 'en'] as const) {
+      const page = pair[locale];
+      const altSlug = locale === 'el' ? pair.en.slug : pair.el.slug;
+      const html = renderContentPage(page.slug, page.title, page.bodyHtml, {
+        metaDescription: page.metaDescription,
+        schemaJson: page.schemaJson,
+        locale,
+        alternateSlug: altSlug,
+      });
+      const pageDir = join(DIST_DIR, page.slug);
+      if (!existsSync(pageDir)) {
+        mkdirSync(pageDir, { recursive: true });
+      }
+      writeFileSync(join(pageDir, 'index.html'), html);
+      generatedUrls.push(`${page.slug}/`);
+      pagesGenerated++;
+      console.log(`  ✓ /${page.slug}/`);
     }
-    writeFileSync(join(pageDir, 'index.html'), html);
-    generatedUrls.push(`${page.slug}/`);
-    pagesGenerated++;
-    console.log(`  ✓ /${page.slug}/`);
   }
 
   // Generate 404 page
@@ -630,7 +782,7 @@ async function main() {
     if (url === 'index') {
       filePath = join(DIST_DIR, 'index.html');
     } else if (url.endsWith('/')) {
-      // Content pages: about/, editorial/, corrections/
+      // Content pages: about/, editorial/, corrections/, en/about/, en/editorial/, en/corrections/
       filePath = join(DIST_DIR, url, 'index.html');
     } else if (url.startsWith('events/') || url.startsWith('venues/') || url.startsWith('en/events/') || url.startsWith('en/')) {
       // Event/venue/hub pages: events/slug/index.html, venues/slug/index.html, en/events/slug/index.html, en/slug/index.html
@@ -865,6 +1017,12 @@ Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 - [About Agent Athens](${base}/about/): What we do, how we work
 - [Editorial Policy](${base}/editorial/): Data sources, AI enrichment methodology, quality standards
 - [Corrections](${base}/corrections/): Report errors, correction policy
+
+### English E-E-A-T Pages
+
+- [About (English)](${base}/en/about/): Who we are, how we work
+- [Editorial Policy (English)](${base}/en/editorial/): Data sources, AI methodology, quality control
+- [Corrections (English)](${base}/en/corrections/): Report errors, correction policy
 
 ## Contact
 

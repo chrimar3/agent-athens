@@ -90,6 +90,20 @@ function buildUrlEntry(
     <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
     }
   }
+  // Content page hreflang: about/ ↔ en/about/, editorial/ ↔ en/editorial/, corrections/ ↔ en/corrections/
+  const BILINGUAL_CONTENT_SLUGS = ['about/', 'editorial/', 'corrections/'];
+  if (!hreflangXml) {
+    const enContentMatch = urlPath.match(/^en\/(.+)$/);
+    const baseSlug = enContentMatch ? enContentMatch[1] : urlPath;
+    if (BILINGUAL_CONTENT_SLUGS.includes(baseSlug)) {
+      const elUrl = `${BASE_URL}/${baseSlug}`;
+      const enUrl = `${BASE_URL}/en/${baseSlug}`;
+      hreflangXml = `
+    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
+    }
+  }
 
   return `  <url>
     <loc>${fullUrl}</loc>
@@ -107,7 +121,7 @@ function buildSitemapXml(
   bilingualHubSlugs?: Set<string>
 ): string {
   const entries = urls.map(url => buildUrlEntry(url, manifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs));
-  const hasHreflang = (bilingualSlugs && bilingualSlugs.size > 0) || (bilingualHubSlugs && bilingualHubSlugs.size > 0);
+  const hasHreflang = entries.some(e => e.includes('xhtml:link'));
   const xmlnsXhtml = hasHreflang ? ' xmlns:xhtml="http://www.w3.org/1999/xhtml"' : '';
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${xmlnsXhtml}>
