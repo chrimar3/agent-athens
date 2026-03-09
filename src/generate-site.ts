@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { Database } from 'bun:sqlite';
-import type { Event, EventType, TimeRange, PriceFilter, Filters } from './types';
+import type { Event, EventType, TimeRange, PriceFilter, Filters, HubConfig } from './types';
 import { normalizeEvents } from './utils/normalize';
 import { filterEvents } from './utils/filters';
 import { buildURL, buildPageMetadata } from './utils/urls';
@@ -17,7 +17,7 @@ import {
 import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { generateVenuePages } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
-import { generateHubPages } from './generators/hub-page';
+import { generateHubPages, getHubEvents } from './generators/hub-page';
 import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
 import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
@@ -27,6 +27,8 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
+import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
+import type { CapsuleStats, HubNavItem } from './templates/homepage';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -247,16 +249,17 @@ async function main() {
     pagesGenerated++;
   }
 
-  // Generate homepage with hero section — smart mode based on day and availability
+  // Generate homepage — truncated entry point with hub navigation
   const athensNow = DateTime.now().setZone('Europe/Athens');
   const dayOfWeek = athensNow.weekday; // 1=Mon..7=Sun
   const todayEvents = filterEvents(events, { time: 'today' as TimeRange });
+
+  const weekendEvents = filterEvents(events, { time: 'this-weekend' as TimeRange });
 
   let heroHtml = '';
   if (todayEvents.length >= 3) {
     heroHtml = renderHeroSection(todayEvents, 'today');
   } else if (dayOfWeek >= 5) {
-    const weekendEvents = filterEvents(events, { time: 'this-weekend' as TimeRange });
     heroHtml = renderHeroSection(weekendEvents, 'weekend');
   } else if (todayEvents.length > 0) {
     heroHtml = renderHeroSection(todayEvents, 'today');
@@ -265,8 +268,74 @@ async function main() {
     heroHtml = renderHeroSection(weekEvents, 'coming-days');
   }
 
-  const homeUrl = await generatePage({}, events, heroHtml);
-  generatedUrls.push(homeUrl);
+  // Load hub config for homepage navigation
+  const hubPagesConfig: { hubs: HubConfig[] } = JSON.parse(
+    readFileSync(join(import.meta.dir, '../config/hub-pages.json'), 'utf-8')
+  );
+
+  // Truncate homepage to 24 events
+  const HOMEPAGE_EVENT_LIMIT = 24;
+  const homepageEvents = events.slice(0, HOMEPAGE_EVENT_LIMIT);
+
+  // Compute hub data for homepage navigation grid
+  const hubNavData: HubNavItem[] = hubPagesConfig.hubs
+    .map(hub => ({
+      slug: hub.slug,
+      titleEl: hub.titleEl,
+      titleEn: hub.titleEn,
+      path: `/${hub.slug}/`,
+      eventCount: getHubEvents(hub, events).length,
+      type: hub.filter.type === 'event_type' ? hub.filter.value
+          : hub.filter.type === 'price_type' ? hub.filter.value
+          : hub.slug,
+    }))
+    .filter(h => h.eventCount > 0);
+
+  // Compute capsule stats from ALL events (not truncated)
+  const capsuleStats: CapsuleStats = {
+    total: events.length,
+    today: todayEvents.length,
+    weekend: weekendEvents.length,
+    concerts: events.filter(e => e.type === 'concert').length,
+    theater: events.filter(e => e.type === 'theater').length,
+    open: events.filter(e => e.price.type === 'open').length,
+    typeCount: new Set(events.map(e => e.type)).size,
+  };
+
+  // Build homepage pre-content: hero + answer capsule + hub nav
+  const homepagePreContent = heroHtml
+    + renderHomepageCapsule(capsuleStats)
+    + renderHubNavGrid(hubNavData);
+
+  // Build terminal CTA (injected after card grid)
+  const homepagePostContent = renderTerminalCta(hubNavData);
+
+  // Bypass generatePage — render directly without filter bar (no allEvents)
+  const homeMetadata = buildPageMetadata({}, homepageEvents.length);
+  const homeHtml = renderPage(homeMetadata, homepageEvents, undefined, homepagePreContent, 'el', homepagePostContent);
+  const homeFilepath = join(DIST_DIR, 'index.html');
+  writeFileSync(homeFilepath, homeHtml);
+
+  // Write homepage JSON API
+  const homeApiDir = join(DIST_DIR, 'api');
+  if (!existsSync(homeApiDir)) {
+    mkdirSync(homeApiDir, { recursive: true });
+  }
+  writeFileSync(
+    join(homeApiDir, 'index.json'),
+    JSON.stringify({
+      filters: {},
+      events: homepageEvents,
+      meta: {
+        total: homepageEvents.length,
+        totalAll: events.length,
+        lastUpdate: new Date().toISOString(),
+        url: 'https://agentathens.netlify.app/'
+      }
+    }, null, 2)
+  );
+
+  generatedUrls.push('index');
   pagesGenerated++;
 
   // Generate type pages
@@ -348,10 +417,7 @@ async function main() {
 
   // Generate English hub pages for hubs with answerCapsuleEn
   console.log('\n🇬🇧 Generating English hub pages...');
-  const { renderHubPage, getHubEvents } = await import('./generators/hub-page');
-  const hubPagesConfig: { hubs: import('./types').HubConfig[] } = JSON.parse(
-    readFileSync(join(import.meta.dir, '../config/hub-pages.json'), 'utf-8')
-  );
+  const { renderHubPage } = await import('./generators/hub-page');
   const bilingualHubSlugs = new Set<string>();
   for (const config of hubPagesConfig.hubs) {
     if (!config.answerCapsuleEn) continue;
@@ -366,6 +432,33 @@ async function main() {
     pagesGenerated++;
   }
   console.log(`  ✓ ${bilingualHubSlugs.size} English hub pages generated`);
+
+  // Generate overflow /all/ pages for hubs exceeding HUB_EVENT_LIMIT
+  const { HUB_EVENT_LIMIT, renderOverflowPage } = await import('./generators/hub-page');
+  console.log('\n📄 Generating hub overflow pages...');
+  let overflowCount = 0;
+  for (const config of hubPagesConfig.hubs) {
+    const filteredEvents = getHubEvents(config, events);
+    if (filteredEvents.length <= HUB_EVENT_LIMIT) continue;
+
+    // Greek overflow page
+    const overflowHtml = renderOverflowPage(config, filteredEvents, events, 'el');
+    const overflowDir = join(DIST_DIR, config.slug, 'all');
+    mkdirSync(overflowDir, { recursive: true });
+    writeFileSync(join(overflowDir, 'index.html'), overflowHtml);
+    // NOT added to generatedUrls — noindex pages excluded from sitemap
+    overflowCount++;
+
+    // English overflow page (if bilingual hub)
+    if (config.answerCapsuleEn && filteredEvents.length >= 3) {
+      const enHtml = renderOverflowPage(config, filteredEvents, events, 'en');
+      const enDir = join(DIST_DIR, 'en', config.slug, 'all');
+      mkdirSync(enDir, { recursive: true });
+      writeFileSync(join(enDir, 'index.html'), enHtml);
+      overflowCount++;
+    }
+  }
+  console.log(`  ✓ ${overflowCount} overflow pages generated`);
 
   // Generate individual event pages (Phase C.3)
   // Uses pageableEvents: upcoming + past-active events (≤45 days) get pages
@@ -836,7 +929,7 @@ async function main() {
   console.log(`\n✅ Site generation complete!`);
   console.log(`📊 Total pages generated: ${pagesGenerated}`);
   console.log(`   - ${eventPageUrls.length} event pages (${englishEvents.length} English)`);
-  console.log(`   - ${hubSlugs.length} hub pages (${bilingualHubSlugs.size} English)`);
+  console.log(`   - ${hubSlugs.length} hub pages (${bilingualHubSlugs.size} English, ${overflowCount} overflow)`);
   console.log(`   - ${venuePageUrls.length} venue pages`);
   console.log(`   - ${categoryUrls.length} category pages`);
   console.log(`🗺️  Sitemaps: ${sitemapUrlCount} URLs across 3 split sitemaps`);
