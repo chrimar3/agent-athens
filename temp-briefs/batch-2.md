@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: ae864b2bcc508643, 4de9329e1c5e97f0, d9f56fd79ee55f18
+- Event IDs: 5718a86ab953dc5d, 5d4bd00f00834f0a, 26fdf80f2ac4a00a
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -58,11 +58,11 @@ These terms MUST remain untranslated in English descriptions:
 ## Events to Enrich
 
 ### Δεν θα πεθάνουμε κιόλας
-- **ID**: ae864b2bcc508643
+- **ID**: 5718a86ab953dc5d
 - **Type**: show
 - **Venue**: Red Jasper Cabaret Theatre
 - **Price**: paid
-- **Date**: 2026-03-07T21:00:00
+- **Date**: 2026-03-08T21:00:00
 - **Time**: 21:00
 - **URL**: https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/
 - **Source**: athinorama.gr
@@ -73,51 +73,36 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
 
-### Gilad Atzmon Quartet
-- **ID**: 4de9329e1c5e97f0
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 5d4bd00f00834f0a
 - **Type**: theater
-- **Venue**: Theatre Of The No
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-07
-- **Time**: 21:30
-- **URL**: https://www.athinorama.gr/music/gig/gilad_atzmon_quartet-10086121/
+- **Date**: 2026-03-08T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel** (from database):
-  ```
-  ### Theatre of the No
-  | Field | Data |
-  |-------|------|
-  | **Address** | Konstantinou Palaiologou 3 (opposite City Hall) |
-  | **Metro** | Syntagma |
-  | **Capacity** | ~100 |
-  | **Entry** | €10 (musicians free with drink) |
-  | **Schedule** | Jazz Jam Wednesdays, 22:00 |
-  | **House band** | Serafeim Bellos (drums), Phoebe Pehlivanidi (piano), George Pantazopoulos (bass) |
-  | **Note** | Athens' first English-speaking theater — accessible for visitors |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Συναυλία με τον Δημήτρη Σγουρό
-- **ID**: d9f56fd79ee55f18
+### Dury Dava
+- **ID**: 26fdf80f2ac4a00a
 - **Type**: concert
-- **Venue**: Concert #1 Baumstrasse
-- **Price**: paid
-- **Date**: 2026-03-07
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/14130/
-- **Source**: ticketservices
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-03-08
+- **URL**: https://www.athinorama.gr/music/gig/dury_dava-10064866/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Concert #1 Baumstrasse Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
 ---
 
@@ -166,33 +151,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/ae864b2bcc508643.md \
-  --tier=standard --event-id=ae864b2bcc508643 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/5718a86ab953dc5d.md \
+  --tier=standard --event-id=5718a86ab953dc5d \
   --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
   --event-title="Δεν θα πεθάνουμε κιόλας" \
-  --event-date=2026-03-07 --event-price=paid
+  --event-date=2026-03-08 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4de9329e1c5e97f0.md \
-  --tier=standard --event-id=4de9329e1c5e97f0 \
-  --event-type=theater --event-venue="Theatre Of The No" \
-  --event-title="Gilad Atzmon Quartet" \
-  --event-date=2026-03-07 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/5d4bd00f00834f0a.md \
+  --tier=standard --event-id=5d4bd00f00834f0a \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-08 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d9f56fd79ee55f18.md \
-  --tier=stub --event-id=d9f56fd79ee55f18 \
-  --event-type=concert --event-venue="Concert #1 Baumstrasse" \
-  --event-title="Συναυλία με τον Δημήτρη Σγουρό" \
-  --event-date=2026-03-07 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/26fdf80f2ac4a00a.md \
+  --tier=stub --event-id=26fdf80f2ac4a00a \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="Dury Dava" \
+  --event-date=2026-03-08 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| ae864b2bcc508643 | Δεν θα πεθάνουμε κιόλας | /100 | | |
-| 4de9329e1c5e97f0 | Gilad Atzmon Quartet | /100 | | |
-| d9f56fd79ee55f18 | Συναυλία με τον Δημήτρη Σγουρό | /100 | | |
+| 5718a86ab953dc5d | Δεν θα πεθάνουμε κιόλας | /100 | | |
+| 5d4bd00f00834f0a | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 26fdf80f2ac4a00a | Dury Dava | /100 | | |

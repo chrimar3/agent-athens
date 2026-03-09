@@ -294,6 +294,17 @@
     "lng": 23.7162,
     "type": "theater"
   },
+  "Εσωθέατρο": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Εσωθέατρο, 3",
+    "lat": 37.976842,
+    "lng": 23.71758,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-09"
+  },
   "Θεατράλε": {
     "name_en": "",
     "neighborhood": "",

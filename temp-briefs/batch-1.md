@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 8880d74d5dda8f26, 79903b7661368b64, f6c467088de6c25a
+- Event IDs: d8c24738b8292f90, 4020dcb2b77b5406, c16943fad6b97ae6
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,67 +57,53 @@ These terms MUST remain untranslated in English descriptions:
 
 ## Events to Enrich
 
-### Encardia
-- **ID**: 8880d74d5dda8f26
+### Νίκος Μερτζάνος
+- **ID**: d8c24738b8292f90
 - **Type**: theater
-- **Venue**: Theatre Of The No
+- **Venue**: Καφεθέατρο
 - **Price**: paid
-- **Date**: 2026-03-07
-- **Time**: 18:00
-- **URL**: https://www.athinorama.gr/music/gig/encardia-10018022/
+- **Date**: 2026-03-08
+- **Time**: 21:30
+- **URL**: https://www.athinorama.gr/music/gig/nikos_mertzanos-10085358/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel** (from database):
-  ```
-  ### Theatre of the No
-  | Field | Data |
-  |-------|------|
-  | **Address** | Konstantinou Palaiologou 3 (opposite City Hall) |
-  | **Metro** | Syntagma |
-  | **Capacity** | ~100 |
-  | **Entry** | €10 (musicians free with drink) |
-  | **Schedule** | Jazz Jam Wednesdays, 22:00 |
-  | **House band** | Serafeim Bellos (drums), Phoebe Pehlivanidi (piano), George Pantazopoulos (bass) |
-  | **Note** | Athens' first English-speaking theater — accessible for visitors |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Καφεθέατρο Athens" for context.
 
-### Σονάτες για βιολί και πιάνο
-- **ID**: 79903b7661368b64
+### Γυναίκες Είμαστε!
+- **ID**: 4020dcb2b77b5406
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Venue**: Christmas Theater
 - **Price**: paid
-- **Date**: 2026-03-07
-- **Time**: 20:00
-- **URL**: https://www.ticketservices.gr/event/14088/
-- **Source**: ticketservices
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### Afterhours with Jonn & Always Late at Skullbar
-- **ID**: f6c467088de6c25a
-- **Type**: dj_set
-- **Venue**: Skull Bar
-- **Price**: paid
-- **Date**: 2026-03-07T05:00:00
-- **Time**: 05:00
-- **URL**: https://ra.co/events/2386623
-- **Source**: residentadvisor
+- **Date**: 2026-03-08
+- **Time**: 19:30
+- **URL**: https://www.more.com/gr-el/tickets/music/gynaikes-eimaste/
+- **Source**: more.com
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Skull Bar Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Christmas Theater Athens" for context.
+
+### Afterhours: Roko + Tomahs + Plus. T + Stoz
+- **ID**: c16943fad6b97ae6
+- **Type**: dj_set
+- **Venue**: Skullbar
+- **Price**: door
+- **Date**: 2026-03-08T05:00:00
+- **Time**: 05:00
+- **URL**: https://www.clubber.gr/events/afterhours-roko-tomahs-plus-t-stoz/
+- **Source**: clubber.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Skullbar Athens" for context.
 
 ---
 
@@ -166,33 +152,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8880d74d5dda8f26.md \
-  --tier=standard --event-id=8880d74d5dda8f26 \
-  --event-type=theater --event-venue="Theatre Of The No" \
-  --event-title="Encardia" \
-  --event-date=2026-03-07 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d8c24738b8292f90.md \
+  --tier=standard --event-id=d8c24738b8292f90 \
+  --event-type=theater --event-venue="Καφεθέατρο" \
+  --event-title="Νίκος Μερτζάνος" \
+  --event-date=2026-03-08 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/79903b7661368b64.md \
-  --tier=premium --event-id=79903b7661368b64 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Σονάτες για βιολί και πιάνο" \
-  --event-date=2026-03-07 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4020dcb2b77b5406.md \
+  --tier=stub --event-id=4020dcb2b77b5406 \
+  --event-type=concert --event-venue="Christmas Theater" \
+  --event-title="Γυναίκες Είμαστε!" \
+  --event-date=2026-03-08 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f6c467088de6c25a.md \
-  --tier=stub --event-id=f6c467088de6c25a \
-  --event-type=dj_set --event-venue="Skull Bar" \
-  --event-title="Afterhours with Jonn & Always Late at Skullbar" \
-  --event-date=2026-03-07 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c16943fad6b97ae6.md \
+  --tier=stub --event-id=c16943fad6b97ae6 \
+  --event-type=dj_set --event-venue="Skullbar" \
+  --event-title="Afterhours: Roko + Tomahs + Plus. T + Stoz" \
+  --event-date=2026-03-08 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 8880d74d5dda8f26 | Encardia | /100 | | |
-| 79903b7661368b64 | Σονάτες για βιολί και πιάνο | /100 | | |
-| f6c467088de6c25a | Afterhours with Jonn & Always Late at Skullbar | /100 | | |
+| d8c24738b8292f90 | Νίκος Μερτζάνος | /100 | | |
+| 4020dcb2b77b5406 | Γυναίκες Είμαστε! | /100 | | |
+| c16943fad6b97ae6 | Afterhours: Roko + Tomahs + Plus. T + Stoz | /100 | | |
