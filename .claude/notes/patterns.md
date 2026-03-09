@@ -644,6 +644,21 @@ Hub pages (`src/generators/hub-page.ts`) inject 5 sections into base page HTML:
 
 Config: `config/hub-pages.json` (16 hubs). Type: `HubConfig` in `src/types.ts`.
 
+### Hub Truncation + Overflow Pages (S67)
+- `HUB_EVENT_LIMIT = 30` — caps card-grid + ItemList schema at 30
+- Editorial sections (capsule, table, blocks) use full `filteredEvents` (own caps)
+- Hubs > 30 events get a "See all N events →" link → `/slug/all/`
+- Overflow pages: noindex, no filter bar, back-link navigation
+- NOT in sitemap (no `generatedUrls.push()`)
+
+## Isolation:isolate Checklist
+
+When adding a new component with `z-index`, add `isolation: isolate` to create a scoped stacking context. Current components (S68):
+- `.event-card`, `.feature-card`, `.related-event-card` (cards)
+- `.site-header`, `.filter-bar`, `.search-overlay` (chrome)
+- `.mobile-overlay`, `.mobile-menu` (mobile nav)
+- `.edp-hero` (event detail page)
+
 ### FAQ Accordion ARIA Pattern
 
 Uses native `<details>/<summary>` — no manual `aria-expanded` needed (browser handles it). CSS chevron via `::after` pseudo-element with border-right + border-bottom rotated 45deg (closed) / -135deg (open). Reduced-motion fallback disables transition.

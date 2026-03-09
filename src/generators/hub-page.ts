@@ -31,6 +31,7 @@ const CATEGORIES_CONFIG_PATH = join(import.meta.dir, '../../config/categories.js
 const MIN_EVENTS_THRESHOLD = 3;
 const MAX_TABLE_ROWS = 20;
 const MAX_EVENT_BLOCKS = 8;
+export const HUB_EVENT_LIMIT = 30;
 
 /**
  * Get hub-filtered events based on config
@@ -233,7 +234,9 @@ export function renderHubPage(
       break;
   }
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
-  const baseHtml = renderPage(metadata, filteredEvents, allEvents, undefined, locale);
+  const displayEvents = filteredEvents.slice(0, HUB_EVENT_LIMIT);
+  const hasOverflow = filteredEvents.length > HUB_EVENT_LIMIT;
+  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale);
 
   let html = baseHtml;
 
@@ -397,21 +400,29 @@ export function renderHubPage(
     crossLinksHtml = renderHubCrossLinks(locale);
   }
 
-  // Inject parts 3-6 after the card grid's closing </section>
-  // Find the card-grid section and inject after it
-  const cardGridEndPattern = '</section>\n\n      ';
+  // "See all" link for overflow hubs
+  let seeAllHtml = '';
+  if (hasOverflow) {
+    const allHref = locale === 'en' ? `/en/${config.slug}/all/` : `/${config.slug}/all/`;
+    const seeAllText = locale === 'en'
+      ? `See all ${filteredEvents.length} events →`
+      : `Δείτε και τις ${filteredEvents.length} εκδηλώσεις →`;
+    seeAllHtml = `\n<div class="hub-see-all-wrapper"><a href="${allHref}" class="hub-see-all">${seeAllText}</a></div>`;
+  }
+
+  // Inject "see all" + parts 3-6 after the card grid's closing </section>
   const cardGridEndIndex = html.indexOf('class="card-grid"');
   if (cardGridEndIndex !== -1) {
     // Find the </section> that closes the card-grid
     const afterCardGrid = html.indexOf('</section>', cardGridEndIndex);
     if (afterCardGrid !== -1) {
       const insertPoint = afterCardGrid + '</section>'.length;
-      const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
+      const injection = `${seeAllHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
       html = html.substring(0, insertPoint) + injection + html.substring(insertPoint);
     }
   } else {
     // No card grid (0 events case) — inject before </main>
-    const injection = `\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
+    const injection = `${seeAllHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
     html = html.replace('</main>', `${injection}\n</main>`);
   }
 
@@ -498,4 +509,63 @@ export function generateHubPages(allEvents: Event[]): string[] {
   }
 
   return generatedSlugs;
+}
+
+/**
+ * Render a lightweight /all/ overflow page for hubs exceeding HUB_EVENT_LIMIT.
+ * Shows ALL events (no cap), adds noindex, and links back to the main hub.
+ */
+export function renderOverflowPage(
+  config: HubConfig,
+  filteredEvents: Event[],
+  allEvents: Event[],
+  locale: Locale = 'el'
+): string {
+  const t = STRINGS[locale];
+  const titleText = locale === 'en' ? config.titleEn : config.titleEl;
+
+  // Build metadata — same filter mapping as renderHubPage
+  let metadataFilters: import('../types').Filters;
+  switch (config.filter.type) {
+    case 'date':
+      metadataFilters = { time: config.filter.value as TimeRange };
+      break;
+    case 'event_type':
+      metadataFilters = { type: config.filter.value as any };
+      break;
+    case 'event_types':
+      metadataFilters = { type: config.filter.values[0] as any };
+      break;
+    case 'tag':
+      metadataFilters = {};
+      break;
+    case 'price_type':
+      metadataFilters = { price: config.filter.value as any };
+      break;
+  }
+  const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
+
+  // Render with ALL events (no cap) — omit allEvents to skip filter bar
+  const baseHtml = renderPage(metadata, filteredEvents, undefined, undefined, locale);
+
+  let html = baseHtml;
+
+  // Override title
+  const pageTitle = locale === 'en'
+    ? `All ${titleText} | agent-athens`
+    : `Όλες οι εκδηλώσεις: ${titleText} | agent-athens`;
+  html = html.replace(/<title>[^<]*<\/title>/, `<title>${pageTitle}</title>`);
+
+  // Add noindex
+  html = html.replace('</head>', '  <meta name="robots" content="noindex, follow">\n</head>');
+
+  // Set HTML lang attribute
+  html = html.replace(/<html lang="[^"]*">/, `<html lang="${t.lang}">`);
+
+  // Add back link after <header>
+  const backHref = locale === 'en' ? `/en/${config.slug}/` : `/${config.slug}`;
+  const backText = locale === 'en' ? `← ${config.titleEn}` : `← ${config.titleEl}`;
+  html = html.replace('</header>', `</header>\n<nav class="overflow-back"><a href="${backHref}">${backText}</a></nav>`);
+
+  return html;
 }

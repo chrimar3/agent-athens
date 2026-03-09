@@ -574,6 +574,7 @@ div#main-content {
   position: sticky;
   top: 0;
   z-index: var(--z-nav);
+  isolation: isolate;
   height: 64px;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-subtle);
@@ -663,6 +664,7 @@ div#main-content {
 .mobile-overlay {
   display: none;
   position: fixed; inset: 0; z-index: var(--z-overlay);
+  isolation: isolate;
   background: var(--bg-overlay);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -677,6 +679,7 @@ div#main-content {
   width: 100%; max-width: 320px; height: 100dvh;
   background: var(--bg-elevated);
   z-index: 201;
+  isolation: isolate;
   transform: translateX(100%);
   transition: transform var(--t-slow) var(--ease-out);
   padding: 72px 24px 24px;
@@ -811,6 +814,7 @@ div#main-content {
   position: relative;
   padding: 80px 40px 48px;
   overflow: hidden;
+  isolation: isolate;
 }
 .edp-hero-bg {
   position: absolute;
@@ -1150,6 +1154,7 @@ div#main-content {
   position: sticky;
   top: 64px;
   z-index: var(--z-filter-bar);
+  isolation: isolate;
   height: 56px;
   display: flex;
   background: var(--bg-primary);
@@ -1975,6 +1980,7 @@ div#main-content {
 .search-overlay {
   display: none;
   position: fixed; inset: 0; z-index: var(--z-modal);
+  isolation: isolate;
   align-items: flex-start; justify-content: center;
   padding-top: 15vh;
 }
