@@ -6,8 +6,9 @@
  * Injected by all page templates for consistent site framing.
  */
 
-export function renderSiteNav(): string {
-  return `<a href="#main-content" class="skip-link">Μετάβαση στο περιεχόμενο</a>
+export function renderSiteNav(locale: 'el' | 'en' = 'el'): string {
+  const skipText = locale === 'en' ? 'Skip to content' : 'Μετάβαση στο περιεχόμενο';
+  return `<a href="#main-content" class="skip-link">${skipText}</a>
 <header class="site-header" role="banner">
   <div class="site-header-inner">
     <div class="site-header-left">

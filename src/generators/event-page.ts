@@ -148,7 +148,10 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
 
   // Format start date with correct timezone
   let startDate = event.startDate;
-  if (!startDate.includes('+') && !startDate.includes('Z')) {
+  if (!startDate.includes('T') && (event.timeDoors || event.timePeak)) {
+    // Use known event time instead of midnight
+    startDate = formatSchemaDate(startDate, event.timeDoors || event.timePeak);
+  } else if (!startDate.includes('+') && !startDate.includes('Z')) {
     if (!startDate.includes('T')) {
       startDate = `${startDate}T00:00:00${tz}`;
     } else {
@@ -359,7 +362,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const relatedHtml = relatedEvents.length > 0
     ? `
       <section class="edp-related">
-        <h3>${t.upcomingEventsAt} ${event.venue.name}</h3>
+        <h2>${t.upcomingEventsAt} ${event.venue.name}</h2>
         <div class="card-grid">
           ${relatedEvents.map(e => renderRelatedEventCard(e, locale)).join('\n')}
         </div>
@@ -411,7 +414,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   <!-- Open Graph -->
   <meta property="og:title" content="${event.title}">
-  <meta property="og:description" content="${event.description.substring(0, 200)}">
+  <meta property="og:description" content="${generateEventMetaDescription(event)}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="event">
   <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
@@ -423,7 +426,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${event.title}">
-  <meta name="twitter:description" content="${event.description.substring(0, 200)}">
+  <meta name="twitter:description" content="${generateEventMetaDescription(event)}">
   <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
 
   <!-- GEO: Location metadata -->
@@ -440,7 +443,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   </script>
 </head>
 <body>
-  ${renderSiteNav()}
+  ${renderSiteNav(locale)}
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
@@ -484,7 +487,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
       ${inlineCtaHtml}
 
       <section class="edp-venue-section">
-        <h3>${event.venue.name}</h3>
+        <h2>${event.venue.name}</h2>
         ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
         <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
@@ -493,7 +496,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
       ${sourceHtml}
 
       <nav class="edp-connections" aria-label="${locale === 'en' ? 'Related pages' : 'Σχετικές σελίδες'}">
-        <h3>${t.exploreMore}</h3>
+        <h2>${t.exploreMore}</h2>
         ${navLinks.join('\n        ')}
         ${renderCornerstoneLinksHtml(locale)}
       </nav>

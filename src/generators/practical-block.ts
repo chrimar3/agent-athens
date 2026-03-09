@@ -201,7 +201,7 @@ function renderTable(fields: PracticalField[], locale: Locale): string {
 
   return `
   <section class="event-practical" aria-label="${ariaLabel}">
-    <h3>${t.practicalInfo}</h3>
+    <h2>${t.practicalInfo}</h2>
     <table class="practical-table">
       <tbody>
         ${rows}
