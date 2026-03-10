@@ -506,10 +506,20 @@ claude -p "$(cat "$BRIEF")" \
 | `scripts/auto-enrich.sh` — new standalone enrichment script | Self-contained: checks queue, cleans old briefs, generates batches, runs `claude -p` sequentially. Can be called from pipeline or manually | 2026-03 |
 | Sequential execution (not parallel) | Parallel test blocked by CLAUDECODE nest detection from inside CC. Sequential avoids SQLite WAL locking. Upgrade to parallel after raw-terminal validation | 2026-03 |
 | Phase 3e-auto in daily-automated.sh | Runs after enrichment_sync, before time_enrichment. Non-fatal — pipeline continues if enrichment fails (Article VII) | 2026-03 |
-| MAX_BATCHES=3, EVENTS_PER_BATCH=5 | Caps at 15 events/day. Prevents Claude Max rate limit issues. ~25 min sequential wall clock | 2026-03 |
-| MIN_QUEUE=5 threshold | Skip enrichment if fewer than 5 events in queue. Avoids wasteful single-event runs | 2026-03 |
+| MAX_BATCHES=3, EVENTS_PER_BATCH=3 | Caps at 9 events/day. Batches of 3 keep durations under 20 min. Reduced from 5 after Mar 4 slowness | 2026-03 |
+| MIN_QUEUE=3 threshold | Skip enrichment if fewer than 3 events in queue. Avoids wasteful single-event runs | 2026-03 |
 | Clean temp-briefs/ before generating | Prevents stale briefs from being re-processed. Auto-increment batch numbering reads existing files | 2026-03 |
 | daily-enrichment-check.sh now auto-enrich aware | Queries enrichment_log for today's count. Different notification: Glass (informational) if auto-enrich ran, Basso (warning) if it didn't | 2026-03 |
+
+### Timeout & Reliability Fix (2026-03-09) — S69
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Replace `perl -e "alarm; exec"` with bash background+kill | `exec` replaces the process image — perl's alarm handler is lost. Claude ran for 9.6/10.1 hours on Mar 8. Bash watchdog (background `sleep N && kill PID`) is POSIX-portable and actually works | 2026-03-09 |
+| BATCH_TIMEOUT raised from 900 to 1800 | With timeout now actually enforced, healthy batches (700-1050s) would be killed at 900s. 1800s (30 min) provides headroom while catching real hangs | 2026-03-09 |
+| Kill stale `claude` processes on startup | 3 zombie processes found running 7-12 days. Cleanup on startup prevents accumulation. Excludes Claude.app and current session | 2026-03-09 |
+| PID-based lock file with stale detection | Prevents overlapping runs (Mar 4 had 3 runs in 2.5 hours). `kill -0` detects dead PIDs. `trap EXIT` ensures cleanup | 2026-03-09 |
+| All 4 fixes necessary (none redundant) | Fix 3 (timeout) is root cause fix. Fixes 1+2 are defense-in-depth (zombie cleanup + overlap prevention). Fix 4 prevents false kills now that timeout works | 2026-03-09 |
 
 ### Image Coverage Audit (2026-03-02)
 

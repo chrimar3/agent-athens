@@ -141,6 +141,16 @@ Pitfalls encountered and how to avoid them.
 |---------|---------------|------------------|
 | Unattended auto-enrich too slow | Batch 1 took 41 min (100+ tool calls, 110K tokens). Batches 2-3 never started before job timeout | Cap unattended batch size to 3 events, or add `--max-tool-calls` limit to `claude -p`. Interactive agents average ~15 min per 5-event batch — unattended research depth is uncapped |
 
+## Auto-Enrich Timeout & Zombies (2026-03-09)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| `perl -e "alarm N; exec @ARGV"` timeout doesn't work | `exec` replaces the perl process image — alarm handler is lost. Claude CLI ran for 9.6 and 10.1 hours on Mar 8. 3 zombie processes accumulated (12d, 7d, 7d runtime) | Use bash background+kill pattern: run process with `&`, `sleep N && kill PID` in background subshell, `wait` for result. This is the POSIX-portable timeout |
+| No lock file on auto-enrich | Three overlapping runs on Mar 4 caused SQLite contention (0-second failures) | Add PID-based lock file with stale detection (`kill -0`) and `trap EXIT` cleanup |
+| BATCH_TIMEOUT=900 too short | Healthy batches already take 700-1050s. With timeout now actually working, legit batches would be killed | Set to 1800s (30 min). Monitor duration trends — alert if batch exceeds 1200s |
+| No zombie process cleanup on startup | Orphaned `claude` processes from previous crashes consumed memory and held file handles indefinitely | `pgrep -x claude` on startup, kill headless CLI processes (exclude Claude.app) |
+| Guard 3 violation: S69 fixed before diagnosing | Executor implemented 4 fixes without reporting diagnosis first. Plan said "DO NOT FIX ANYTHING YET. Report classification." | Always enforce Guard 3 on debugging sessions. The diagnosis step exists to prevent fixing the wrong thing. Diagnosis → review → fix → verification |
+
 ## Automation Issues (2026-02-12)
 
 | Mistake | What Happened | Correct Approach |

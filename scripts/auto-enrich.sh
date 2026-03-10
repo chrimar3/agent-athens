@@ -34,7 +34,7 @@ ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
 EVENTS_PER_BATCH=3
 MIN_QUEUE=3
-BATCH_TIMEOUT=900  # 15 minutes max per batch (batches avg 7-9 min)
+BATCH_TIMEOUT=1800  # 30 minutes max per batch (batches avg 15-20 min)
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -54,6 +54,43 @@ log() {
 log_error() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1" | tee -a "$LOG_FILE" >&2
 }
+
+# ============================================================================
+# Kill orphaned claude CLI processes from previous auto-enrich runs
+# ============================================================================
+
+STALE_PIDS=$(pgrep -x claude 2>/dev/null || true)
+if [[ -n "$STALE_PIDS" ]]; then
+    echo "$STALE_PIDS" | while read pid; do
+        # Skip if it's the current session parent
+        if [[ "$pid" != "$$" ]]; then
+            PROC_CMD=$(ps -p "$pid" -o args= 2>/dev/null || true)
+            # Only kill headless CLI processes, not Claude desktop app
+            if [[ "$PROC_CMD" == "claude" || "$PROC_CMD" == "claude "* ]] && [[ "$PROC_CMD" != *"Claude.app"* ]]; then
+                log "Killing orphaned claude process $pid"
+                kill "$pid" 2>/dev/null || true
+            fi
+        fi
+    done
+fi
+
+# ============================================================================
+# Lock file — prevent overlapping runs
+# ============================================================================
+
+LOCK_FILE="$PROJECT_DIR/.auto-enrich.lock"
+if [[ -f "$LOCK_FILE" ]]; then
+    LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+    if kill -0 "$LOCK_PID" 2>/dev/null; then
+        log "Another enrichment already running (PID $LOCK_PID). Skipping."
+        exit 0
+    else
+        log "Stale lock file found (PID $LOCK_PID dead). Removing."
+        rm -f "$LOCK_FILE"
+    fi
+fi
+echo $$ > "$LOCK_FILE"
+trap 'rm -f "$LOCK_FILE"' EXIT
 
 # ============================================================================
 # Parse Arguments
@@ -167,21 +204,32 @@ for brief in "${BATCH_FILES[@]}"; do
     BRIEF_CONTENT=$(cat "$brief")
     START_TIME=$(date +%s)
 
-    # Fix #2: timeout prevents 105-min hangs on network failures
-    # macOS lacks coreutils `timeout`, so use perl wrapper
-    if perl -e "alarm $BATCH_TIMEOUT; exec @ARGV" -- \
-        "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
+    # Run claude in background with watchdog timer (replaces broken perl alarm)
+    "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format text \
         --allowedTools "$ALLOWED_TOOLS" \
-        >> "$LOG_FILE" 2>&1; then
-        END_TIME=$(date +%s)
-        ELAPSED=$((END_TIME - START_TIME))
+        >> "$LOG_FILE" 2>&1 &
+    CLAUDE_PID=$!
+
+    # Start watchdog timer in background
+    ( sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
+    TIMER_PID=$!
+
+    # Wait for claude to finish (or be killed by watchdog)
+    wait "$CLAUDE_PID" && EXIT_CODE=0 || EXIT_CODE=$?
+
+    # Cancel the timer if claude finished before timeout
+    kill "$TIMER_PID" 2>/dev/null || true
+    wait "$TIMER_PID" 2>/dev/null || true
+
+    END_TIME=$(date +%s)
+    ELAPSED=$((END_TIME - START_TIME))
+
+    if [[ "$EXIT_CODE" -eq 0 ]]; then
         log "$BATCH_NAME completed in ${ELAPSED}s"
         SUCCEEDED=$((SUCCEEDED + 1))
     else
-        END_TIME=$(date +%s)
-        ELAPSED=$((END_TIME - START_TIME))
-        log_error "$BATCH_NAME failed after ${ELAPSED}s"
+        log_error "$BATCH_NAME failed (exit $EXIT_CODE) after ${ELAPSED}s"
         FAILED=$((FAILED + 1))
     fi
 done

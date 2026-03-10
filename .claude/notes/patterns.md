@@ -581,7 +581,7 @@ CLI-produced descriptions match interactive quality:
 ### Auto-Enrich Pipeline Pattern
 ```bash
 # Standalone
-./scripts/auto-enrich.sh           # Runs enrichment (3 batches of 5)
+./scripts/auto-enrich.sh           # Runs enrichment (3 batches of 3)
 ./scripts/auto-enrich.sh --dry-run # Shows what would run
 
 # In daily pipeline (daily-automated.sh)
@@ -589,7 +589,61 @@ CLI-produced descriptions match interactive quality:
 # Non-fatal: returns 0 even on failure (Article VII)
 ```
 
-Flow: check queue ≥ 5 → clean old briefs → sync queue → generate briefs → run claude -p per batch (sequential) → report results.
+Flow: kill stale processes → acquire lock → check queue >= 3 → clean old briefs → sync queue → generate briefs → run claude -p per batch (sequential with watchdog timeout) → report results → release lock.
+
+### POSIX-Portable Timeout Pattern (macOS-safe)
+
+macOS lacks `timeout` / `gtimeout`. Never use `perl -e "alarm N; exec @ARGV"` — `exec` replaces the process image and the alarm handler is lost. Instead:
+
+```bash
+# Run command in background
+"$CMD" "$ARGS" &
+CMD_PID=$!
+
+# Watchdog: kill after N seconds
+( sleep "$TIMEOUT" && kill "$CMD_PID" 2>/dev/null ) &
+TIMER_PID=$!
+
+# Wait for command (or its death by watchdog)
+wait "$CMD_PID" && EXIT_CODE=0 || EXIT_CODE=$?
+
+# Cancel watchdog if command finished first
+kill "$TIMER_PID" 2>/dev/null || true
+wait "$TIMER_PID" 2>/dev/null || true
+```
+
+Under `set -euo pipefail`, guard all `kill`/`wait` with `|| true` — the PID may already be dead.
+
+### Lock File Pattern (PID-based)
+
+```bash
+LOCK_FILE="$PROJECT_DIR/.auto-enrich.lock"
+if [[ -f "$LOCK_FILE" ]]; then
+    LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+    if kill -0 "$LOCK_PID" 2>/dev/null; then
+        echo "Already running (PID $LOCK_PID). Skipping."
+        exit 0
+    else
+        rm -f "$LOCK_FILE"  # Stale lock, owner dead
+    fi
+fi
+echo $$ > "$LOCK_FILE"
+trap 'rm -f "$LOCK_FILE"' EXIT
+```
+
+`kill -0` checks if a PID exists without sending a signal — handles crashes where trap didn't fire.
+
+### Auto-Enrich Reliability Layers
+
+Defense-in-depth for unattended enrichment:
+
+1. **Lock file** — prevents overlapping runs
+2. **Stale process cleanup** — recovers from previous crashes
+3. **Watchdog timeout** — prevents infinite hangs
+4. **Adequate timeout value** — doesn't kill healthy runs
+5. **daily-enrichment-check.sh** — alerts on failure (human escalation)
+
+**Escalation rule:** If enrichment warning fires 2+ consecutive days → treat as critical, investigate same day.
 
 ## Geocoding Utility Pattern
 
