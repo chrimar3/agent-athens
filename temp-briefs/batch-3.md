@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: a46e7453bab40ec6, 7ca439eb22cd2011, 53307433533b5ba0
+- Event IDs: 756b01d232f3d489, cf90dac47dc9a006, 9fb3f05ad69928cb
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,48 +53,56 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
+- "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
+- "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
+
 ---
 
 ## Events to Enrich
 
-### Afterhours with Roko / Tomahs / Plus. T / STOZ
-- **ID**: a46e7453bab40ec6
-- **Type**: dj_set
-- **Venue**: Skull Bar
+### Το μαγικό εισιτήριο
+- **ID**: 756b01d232f3d489
+- **Type**: concert
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-08T05:00:00
-- **Time**: 05:00
-- **URL**: https://ra.co/events/2387621
-- **Source**: residentadvisor
+- **Date**: 2026-03-10T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
+- **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
+### D'Al Senio
+- **ID**: cf90dac47dc9a006
+- **Type**: dj_set
+- **Venue**: Boo!
+- **Price**: door
+- **Date**: 2026-03-13T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.clubber.gr/events/dal-senio-5/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Skull Bar Athens" for context.
-
-### Her story in heels
-- **ID**: 7ca439eb22cd2011
-- **Type**: show
-- **Venue**: Red Jasper Cabaret Theatre
-- **Price**: paid
-- **Date**: 2026-03-08T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/her_story_in_heels-10088262/
-- **Source**: athinorama.gr
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Boo! Athens" for context.
 
 ### Ζεστή σοκολάτα με τον Πικάσο
-- **ID**: 53307433533b5ba0
+- **ID**: 9fb3f05ad69928cb
 - **Type**: theater
 - **Venue**: Μουσείο Γουλανδρή
 - **Price**: tba
-- **Date**: 2026-03-08T11:00:00
+- **Date**: 2026-03-10T11:00:00
 - **Time**: 11:00
 - **URL**: https://www.athinorama.gr/theatre/performance/zesti_sokolata_me_ton_pikaso-10085220/
 - **Source**: athinorama.gr
@@ -152,33 +160,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a46e7453bab40ec6.md \
-  --tier=stub --event-id=a46e7453bab40ec6 \
-  --event-type=dj_set --event-venue="Skull Bar" \
-  --event-title="Afterhours with Roko / Tomahs / Plus. T / STOZ" \
-  --event-date=2026-03-08 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/756b01d232f3d489.md \
+  --tier=premium --event-id=756b01d232f3d489 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Το μαγικό εισιτήριο" \
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/7ca439eb22cd2011.md \
-  --tier=standard --event-id=7ca439eb22cd2011 \
-  --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
-  --event-title="Her story in heels" \
-  --event-date=2026-03-08 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cf90dac47dc9a006.md \
+  --tier=stub --event-id=cf90dac47dc9a006 \
+  --event-type=dj_set --event-venue="Boo!" \
+  --event-title="D'Al Senio" \
+  --event-date=2026-03-13 --event-price=door
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/53307433533b5ba0.md \
-  --tier=standard --event-id=53307433533b5ba0 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9fb3f05ad69928cb.md \
+  --tier=standard --event-id=9fb3f05ad69928cb \
   --event-type=theater --event-venue="Μουσείο Γουλανδρή" \
   --event-title="Ζεστή σοκολάτα με τον Πικάσο" \
-  --event-date=2026-03-08 --event-price=tba
+  --event-date=2026-03-10 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| a46e7453bab40ec6 | Afterhours with Roko / Tomahs / Plus. T / STOZ | /100 | | |
-| 7ca439eb22cd2011 | Her story in heels | /100 | | |
-| 53307433533b5ba0 | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
+| 756b01d232f3d489 | Το μαγικό εισιτήριο | /100 | | |
+| cf90dac47dc9a006 | D'Al Senio | /100 | | |
+| 9fb3f05ad69928cb | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |

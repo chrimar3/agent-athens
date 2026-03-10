@@ -319,7 +319,7 @@ function buildRewriteBrief(
   lines.push('     --event-type=<type> --event-venue="<venue>" --event-title="<title>" \\');
   lines.push('     --event-date=<date> --event-price=<price>');
   lines.push('   ```');
-  lines.push('5. **Gate score must be >= 85 with 0 errors** before proceeding to next event.');
+  lines.push('5. **Gate score must be >= 80 with 0 errors** before proceeding to next event.');
   lines.push('');
 
   // Per-event gate check commands

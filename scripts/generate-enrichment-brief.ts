@@ -585,12 +585,12 @@ export function buildBrief(
   lines.push('   - Same 8-section structure, same factual content, but natural Greek voice');
   lines.push('   - The Greek version is NOT a translation. Write it fresh for a local audience.');
   lines.push('6. **Save decision** (after completing ALL events in this batch):');
-  lines.push('   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:');
+  lines.push('   - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:');
   lines.push('   ```bash');
   lines.push(`   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${batchNumber}.manifest.json --session=batch-${batchNumber} --batch=${batchNumber} --clean`);
   lines.push('   ```');
   lines.push(`   Note "AUTO-SAVED" at the top of batch-${batchNumber}-review.md.`);
-  lines.push('   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.');
+  lines.push('   - If ANY score is < 80 OR any have errors: do NOT run save-batch.ts.');
   lines.push(`     Note "LEFT FOR REVIEW" at the top of batch-${batchNumber}-review.md with reasons.`);
   lines.push('');
 

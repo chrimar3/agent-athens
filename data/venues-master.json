@@ -609,6 +609,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "ΚΠΙΣΝ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364",
+    "lat": 37.941042,
+    "lng": 23.693306,
+    "type": "leisure",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-10"
+  },
   "Κυτταρο Live": {
     "name_en": "Kyttaro Live",
     "neighborhood": "Metaxourgeio / Viktoria",

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 5718a86ab953dc5d, 5d4bd00f00834f0a, 26fdf80f2ac4a00a
+- Event IDs: 9be4c4d3c96e9831, 4f646860da96f6c7, b17ab55bd78f5f16
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,16 +53,24 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
+- "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
+- "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
+
 ---
 
 ## Events to Enrich
 
 ### Δεν θα πεθάνουμε κιόλας
-- **ID**: 5718a86ab953dc5d
+- **ID**: 9be4c4d3c96e9831
 - **Type**: show
 - **Venue**: Red Jasper Cabaret Theatre
 - **Price**: paid
-- **Date**: 2026-03-08T21:00:00
+- **Date**: 2026-03-10T21:00:00
 - **Time**: 21:00
 - **URL**: https://www.athinorama.gr/theatre/performance/den_tha_pethanoume_kiolas-10088694/
 - **Source**: athinorama.gr
@@ -73,12 +81,28 @@ These terms MUST remain untranslated in English descriptions:
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
 
+### Αθλητισμός για Όλους
+- **ID**: 4f646860da96f6c7
+- **Type**: sports
+- **Venue**: ΚΠΙΣΝ
+- **Price**: tba
+- **Date**: 2026-03-15T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
+- **Source**: more.com
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
+
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 5d4bd00f00834f0a
+- **ID**: b17ab55bd78f5f16
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-08T10:30:00
+- **Date**: 2026-03-10T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -88,21 +112,6 @@ These terms MUST remain untranslated in English descriptions:
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
-
-### Dury Dava
-- **ID**: 26fdf80f2ac4a00a
-- **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: tba
-- **Date**: 2026-03-08
-- **URL**: https://www.athinorama.gr/music/gig/dury_dava-10064866/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
 ---
 
@@ -151,33 +160,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/5718a86ab953dc5d.md \
-  --tier=standard --event-id=5718a86ab953dc5d \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9be4c4d3c96e9831.md \
+  --tier=standard --event-id=9be4c4d3c96e9831 \
   --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
   --event-title="Δεν θα πεθάνουμε κιόλας" \
-  --event-date=2026-03-08 --event-price=paid
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/5d4bd00f00834f0a.md \
-  --tier=standard --event-id=5d4bd00f00834f0a \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4f646860da96f6c7.md \
+  --tier=premium --event-id=4f646860da96f6c7 \
+  --event-type=sports --event-venue="ΚΠΙΣΝ" \
+  --event-title="Αθλητισμός για Όλους" \
+  --event-date=2026-03-15 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/b17ab55bd78f5f16.md \
+  --tier=standard --event-id=b17ab55bd78f5f16 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-08 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/26fdf80f2ac4a00a.md \
-  --tier=stub --event-id=26fdf80f2ac4a00a \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="Dury Dava" \
-  --event-date=2026-03-08 --event-price=tba
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 5718a86ab953dc5d | Δεν θα πεθάνουμε κιόλας | /100 | | |
-| 5d4bd00f00834f0a | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 26fdf80f2ac4a00a | Dury Dava | /100 | | |
+| 9be4c4d3c96e9831 | Δεν θα πεθάνουμε κιόλας | /100 | | |
+| 4f646860da96f6c7 | Αθλητισμός για Όλους | /100 | | |
+| b17ab55bd78f5f16 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |

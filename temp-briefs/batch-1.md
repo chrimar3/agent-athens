@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: d8c24738b8292f90, 4020dcb2b77b5406, c16943fad6b97ae6
+- Event IDs: b0cc94be77e51a6a, d9ca02fc9fc3c6d4, 8b8ddb3c76ed35b4
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,57 +53,65 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
+- "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
+- "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
+
 ---
 
 ## Events to Enrich
 
-### Νίκος Μερτζάνος
-- **ID**: d8c24738b8292f90
+### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
+- **ID**: b0cc94be77e51a6a
 - **Type**: theater
-- **Venue**: Καφεθέατρο
+- **Venue**: ROES THEATER
 - **Price**: paid
-- **Date**: 2026-03-08
-- **Time**: 21:30
-- **URL**: https://www.athinorama.gr/music/gig/nikos_mertzanos-10085358/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-10
+- **Time**: 21:00
+- **URL**: https://www.ticketservices.gr/event/13911/
+- **Source**: ticketservices
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Καφεθέατρο Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
 
-### Γυναίκες Είμαστε!
-- **ID**: 4020dcb2b77b5406
+### &#171;Γυναίκα&#187;
+- **ID**: d9ca02fc9fc3c6d4
 - **Type**: concert
-- **Venue**: Christmas Theater
+- **Venue**: Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;
 - **Price**: paid
-- **Date**: 2026-03-08
-- **Time**: 19:30
-- **URL**: https://www.more.com/gr-el/tickets/music/gynaikes-eimaste/
-- **Source**: more.com
+- **Date**: 2026-03-10
+- **Time**: 20:00
+- **URL**: https://www.athinorama.gr/music/gig/gunaika-10089277/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Christmas Theater Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; Athens" for context.
 
-### Afterhours: Roko + Tomahs + Plus. T + Stoz
-- **ID**: c16943fad6b97ae6
+### Αλιγάτορες
+- **ID**: 8b8ddb3c76ed35b4
 - **Type**: dj_set
-- **Venue**: Skullbar
-- **Price**: door
-- **Date**: 2026-03-08T05:00:00
-- **Time**: 05:00
-- **URL**: https://www.clubber.gr/events/afterhours-roko-tomahs-plus-t-stoz/
-- **Source**: clubber.gr
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-03-10T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Skullbar Athens" for context.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -152,33 +160,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d8c24738b8292f90.md \
-  --tier=standard --event-id=d8c24738b8292f90 \
-  --event-type=theater --event-venue="Καφεθέατρο" \
-  --event-title="Νίκος Μερτζάνος" \
-  --event-date=2026-03-08 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b0cc94be77e51a6a.md \
+  --tier=standard --event-id=b0cc94be77e51a6a \
+  --event-type=theater --event-venue="ROES THEATER" \
+  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4020dcb2b77b5406.md \
-  --tier=stub --event-id=4020dcb2b77b5406 \
-  --event-type=concert --event-venue="Christmas Theater" \
-  --event-title="Γυναίκες Είμαστε!" \
-  --event-date=2026-03-08 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d9ca02fc9fc3c6d4.md \
+  --tier=stub --event-id=d9ca02fc9fc3c6d4 \
+  --event-type=concert --event-venue="Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;" \
+  --event-title="&#171;Γυναίκα&#187;" \
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c16943fad6b97ae6.md \
-  --tier=stub --event-id=c16943fad6b97ae6 \
-  --event-type=dj_set --event-venue="Skullbar" \
-  --event-title="Afterhours: Roko + Tomahs + Plus. T + Stoz" \
-  --event-date=2026-03-08 --event-price=door
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8b8ddb3c76ed35b4.md \
+  --tier=stub --event-id=8b8ddb3c76ed35b4 \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Αλιγάτορες" \
+  --event-date=2026-03-10 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| d8c24738b8292f90 | Νίκος Μερτζάνος | /100 | | |
-| 4020dcb2b77b5406 | Γυναίκες Είμαστε! | /100 | | |
-| c16943fad6b97ae6 | Afterhours: Roko + Tomahs + Plus. T + Stoz | /100 | | |
+| b0cc94be77e51a6a | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
+| d9ca02fc9fc3c6d4 | &#171;Γυναίκα&#187; | /100 | | |
+| 8b8ddb3c76ed35b4 | Αλιγάτορες | /100 | | |
