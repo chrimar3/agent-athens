@@ -1,86 +1,86 @@
 {
   "version": 1,
-  "generatedAt": "2026-03-10T09:58:54.913+02:00",
+  "generatedAt": "2026-03-11T11:52:58.861+02:00",
   "entries": {
     "today": {
-      "hash": "4f589d0c48f3db76",
-      "lastModified": "2026-03-10"
+      "hash": "dc061d02fb52b9a0",
+      "lastModified": "2026-03-11"
     },
     "tomorrow": {
-      "hash": "7ce1f6d60c03d154",
-      "lastModified": "2026-03-10"
+      "hash": "2bbf53b2c6af8537",
+      "lastModified": "2026-03-11"
     },
     "this-week": {
-      "hash": "9097008618c817ac",
-      "lastModified": "2026-03-10"
+      "hash": "cbb69fc7b1cd6751",
+      "lastModified": "2026-03-11"
     },
     "this-weekend": {
-      "hash": "0d1c7017cfa144b6",
-      "lastModified": "2026-03-10"
+      "hash": "c18b29f94f6dfa2a",
+      "lastModified": "2026-03-11"
     },
     "this-month": {
-      "hash": "fcf0dfc251b3e63f",
-      "lastModified": "2026-03-10"
+      "hash": "cadb34341d5f86f1",
+      "lastModified": "2026-03-11"
     },
     "next-month": {
       "hash": "6b5cffbfbed4645d",
       "lastModified": "2026-03-10"
     },
     "index": {
-      "hash": "df4143a14ba6ba68",
-      "lastModified": "2026-03-10"
+      "hash": "cdfbaa2d24cca0ec",
+      "lastModified": "2026-03-11"
     },
     "concert": {
-      "hash": "cd2fd3767c166a64",
-      "lastModified": "2026-03-10"
+      "hash": "c296898383921a20",
+      "lastModified": "2026-03-11"
     },
     "concert-today": {
-      "hash": "ed6abf992007c9cf",
-      "lastModified": "2026-03-10"
+      "hash": "06f209b63d0f41ba",
+      "lastModified": "2026-03-11"
     },
     "concert-tomorrow": {
-      "hash": "ce7089497f9ada11",
-      "lastModified": "2026-03-10"
+      "hash": "7481fb66ee01519c",
+      "lastModified": "2026-03-11"
     },
     "concert-this-week": {
-      "hash": "741b26900d553243",
-      "lastModified": "2026-03-10"
+      "hash": "c51b0d878b7350e1",
+      "lastModified": "2026-03-11"
     },
     "concert-this-weekend": {
-      "hash": "1b63ce706d50fd1e",
-      "lastModified": "2026-03-10"
+      "hash": "7c4e698567bbf0c4",
+      "lastModified": "2026-03-11"
     },
     "concert-this-month": {
-      "hash": "a0052d456f383b0e",
-      "lastModified": "2026-03-10"
+      "hash": "a7f7b8132512adcd",
+      "lastModified": "2026-03-11"
     },
     "concert-next-month": {
       "hash": "16ffaa1c9d60b0c3",
       "lastModified": "2026-03-10"
     },
     "dj_set": {
-      "hash": "5fa788ee1a4acad8",
-      "lastModified": "2026-03-10"
+      "hash": "94be1d31d36944b2",
+      "lastModified": "2026-03-11"
     },
     "dj_set-today": {
-      "hash": "50e44748c90ecdb7",
-      "lastModified": "2026-03-10"
+      "hash": "b6ec6f5c53a30124",
+      "lastModified": "2026-03-11"
     },
     "dj_set-tomorrow": {
-      "hash": "4c6fa992e905db39",
-      "lastModified": "2026-03-10"
+      "hash": "752c980973bdf450",
+      "lastModified": "2026-03-11"
     },
     "dj_set-this-week": {
-      "hash": "80ebc6a46e2e497a",
-      "lastModified": "2026-03-10"
+      "hash": "a6ef2fb77acd15e7",
+      "lastModified": "2026-03-11"
     },
     "dj_set-this-weekend": {
-      "hash": "86d010199ffe0de2",
-      "lastModified": "2026-03-10"
+      "hash": "4d6ac6925f415cf1",
+      "lastModified": "2026-03-11"
     },
     "dj_set-this-month": {
-      "hash": "db5cd7ee92ea135f",
-      "lastModified": "2026-03-10"
+      "hash": "d9d4ec25c9ca12f6",
+      "lastModified": "2026-03-11"
     },
     "dj_set-next-month": {
       "hash": "35d939927bd44ff8",
@@ -143,28 +143,28 @@
       "lastModified": "2026-03-09"
     },
     "theater": {
-      "hash": "72b11a3ba29e3313",
-      "lastModified": "2026-03-10"
+      "hash": "a9703b747aed9dc5",
+      "lastModified": "2026-03-11"
     },
     "theater-today": {
-      "hash": "3b0c5a4a46e4d2fa",
-      "lastModified": "2026-03-10"
+      "hash": "81e8d9405c820189",
+      "lastModified": "2026-03-11"
     },
     "theater-tomorrow": {
-      "hash": "cc79aa5f7ae38c7f",
-      "lastModified": "2026-03-10"
+      "hash": "9d66b6178b04e3f9",
+      "lastModified": "2026-03-11"
     },
     "theater-this-week": {
-      "hash": "40eae47153734afa",
-      "lastModified": "2026-03-10"
+      "hash": "90bbabe924c02c84",
+      "lastModified": "2026-03-11"
     },
     "theater-this-weekend": {
-      "hash": "c7340d7323c9f084",
-      "lastModified": "2026-03-10"
+      "hash": "7439580210c7459a",
+      "lastModified": "2026-03-11"
     },
     "theater-this-month": {
-      "hash": "5d54b41edf1829c0",
-      "lastModified": "2026-03-10"
+      "hash": "c6a3ac2f2b6fbdcb",
+      "lastModified": "2026-03-11"
     },
     "theater-next-month": {
       "hash": "a1127e75d92c2cea",
@@ -199,56 +199,56 @@
       "lastModified": "2026-03-09"
     },
     "show": {
-      "hash": "3cb79cc928245ee1",
-      "lastModified": "2026-03-10"
+      "hash": "840554129d1dced6",
+      "lastModified": "2026-03-11"
     },
     "show-today": {
-      "hash": "c6b71c341634ed3e",
-      "lastModified": "2026-03-10"
+      "hash": "7acd8ad4448d414d",
+      "lastModified": "2026-03-11"
     },
     "show-tomorrow": {
       "hash": "4ad8d0101449a0a7",
       "lastModified": "2026-03-09"
     },
     "show-this-week": {
-      "hash": "20d7fc23193a1d4e",
-      "lastModified": "2026-03-10"
+      "hash": "e0b38bebd1aa3892",
+      "lastModified": "2026-03-11"
     },
     "show-this-weekend": {
       "hash": "b4ae0b6077881a4a",
       "lastModified": "2026-03-09"
     },
     "show-this-month": {
-      "hash": "ad1e9945c839fbde",
-      "lastModified": "2026-03-10"
+      "hash": "cf24b5347aeee677",
+      "lastModified": "2026-03-11"
     },
     "show-next-month": {
       "hash": "9c80af5801e15c53",
       "lastModified": "2026-03-09"
     },
     "workshop": {
-      "hash": "63671f6e38e84869",
-      "lastModified": "2026-03-10"
+      "hash": "f188179f58c3b275",
+      "lastModified": "2026-03-11"
     },
     "workshop-today": {
-      "hash": "c4fbc4553dc393d7",
-      "lastModified": "2026-03-10"
+      "hash": "c2eaef29d2914e0d",
+      "lastModified": "2026-03-11"
     },
     "workshop-tomorrow": {
       "hash": "39cab70f18a901ab",
       "lastModified": "2026-03-10"
     },
     "workshop-this-week": {
-      "hash": "40012ba205b13503",
-      "lastModified": "2026-03-10"
+      "hash": "744e152351a4df50",
+      "lastModified": "2026-03-11"
     },
     "workshop-this-weekend": {
       "hash": "e405b6c2878810cd",
       "lastModified": "2026-03-09"
     },
     "workshop-this-month": {
-      "hash": "7189d91bf885fed0",
-      "lastModified": "2026-03-10"
+      "hash": "076ba42d7983f472",
+      "lastModified": "2026-03-11"
     },
     "workshop-next-month": {
       "hash": "1aeae89535272981",
@@ -311,8 +311,8 @@
       "lastModified": "2026-03-09"
     },
     "dance": {
-      "hash": "f28ddd5a2657aef4",
-      "lastModified": "2026-03-09"
+      "hash": "349c62a26e20f362",
+      "lastModified": "2026-03-11"
     },
     "dance-today": {
       "hash": "bb2a56d589ae8417",
@@ -323,8 +323,8 @@
       "lastModified": "2026-03-09"
     },
     "dance-this-week": {
-      "hash": "a0147835e82a650d",
-      "lastModified": "2026-03-09"
+      "hash": "aa341d1de12cfce2",
+      "lastModified": "2026-03-11"
     },
     "dance-this-weekend": {
       "hash": "065a7b7de4a33739",
@@ -367,56 +367,56 @@
       "lastModified": "2026-03-09"
     },
     "open": {
-      "hash": "4fb97c0febd5bc89",
-      "lastModified": "2026-03-10"
+      "hash": "b4c51e9346246bad",
+      "lastModified": "2026-03-11"
     },
     "open-today": {
-      "hash": "b013f714e679d3a1",
-      "lastModified": "2026-03-10"
+      "hash": "d1f645d6cfc4dc81",
+      "lastModified": "2026-03-11"
     },
     "open-tomorrow": {
       "hash": "26325ae8fd06f90e",
       "lastModified": "2026-03-10"
     },
     "open-this-week": {
-      "hash": "2c7dfe7510801647",
-      "lastModified": "2026-03-09"
+      "hash": "0206b35c34207d68",
+      "lastModified": "2026-03-11"
     },
     "open-this-weekend": {
       "hash": "62b7509c0c0036df",
       "lastModified": "2026-03-09"
     },
     "open-this-month": {
-      "hash": "1081f50b55d2be53",
-      "lastModified": "2026-03-09"
+      "hash": "a07d0582e538a0c1",
+      "lastModified": "2026-03-11"
     },
     "open-next-month": {
       "hash": "f9e57305486e565a",
       "lastModified": "2026-03-09"
     },
     "with-ticket": {
-      "hash": "2e4ac27af07c0367",
-      "lastModified": "2026-03-10"
+      "hash": "77cde6e7f07632e1",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-today": {
-      "hash": "9eb19b6760e45e98",
-      "lastModified": "2026-03-10"
+      "hash": "b061efe77a477f68",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-tomorrow": {
-      "hash": "9a11db20b2ad4460",
-      "lastModified": "2026-03-10"
+      "hash": "7ca78a50698ecc50",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-this-week": {
-      "hash": "e6647000a3e5596f",
-      "lastModified": "2026-03-10"
+      "hash": "22eb0bd3d91fbf8f",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-this-weekend": {
-      "hash": "0376c8bc6c1794f6",
-      "lastModified": "2026-03-10"
+      "hash": "0ada31cf1e9100df",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-this-month": {
-      "hash": "b0d8e339220b4c0b",
-      "lastModified": "2026-03-10"
+      "hash": "2f0f0e6a1f479e99",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-next-month": {
       "hash": "292bb029ade560cd",
@@ -451,28 +451,28 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-concert": {
-      "hash": "83c2991848c09fbd",
-      "lastModified": "2026-03-10"
+      "hash": "bc282f0a94439273",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-today": {
-      "hash": "9f052f9b03bc00c3",
-      "lastModified": "2026-03-10"
+      "hash": "ff85cde2dc04a165",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-tomorrow": {
-      "hash": "e99c1df8cbc4a620",
-      "lastModified": "2026-03-10"
+      "hash": "9e0b3a96cab2afc3",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-this-week": {
-      "hash": "78ceef298e4c709b",
-      "lastModified": "2026-03-10"
+      "hash": "b26e6b8ceac53f22",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-this-weekend": {
-      "hash": "b514aa4cc707a4de",
-      "lastModified": "2026-03-10"
+      "hash": "23128631a94e394a",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-this-month": {
-      "hash": "18ce2027e77fdae3",
-      "lastModified": "2026-03-10"
+      "hash": "b2b5c77eab67e6ae",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-concert-next-month": {
       "hash": "71d3c88624ee7659",
@@ -507,28 +507,28 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-dj_set": {
-      "hash": "1cd8168c4204a665",
-      "lastModified": "2026-03-10"
+      "hash": "fb9a18d3dcab0d2e",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-today": {
-      "hash": "64bc7663927058b6",
-      "lastModified": "2026-03-10"
+      "hash": "893e629038df0e1f",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-tomorrow": {
-      "hash": "9b89e31f8ad86550",
-      "lastModified": "2026-03-10"
+      "hash": "037c49debbf1b28a",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-this-week": {
-      "hash": "8c8382dc31385d7d",
-      "lastModified": "2026-03-10"
+      "hash": "d41f729ce56481dc",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-this-weekend": {
-      "hash": "344222b3e31f416e",
-      "lastModified": "2026-03-10"
+      "hash": "d109b799fa69f6d7",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-this-month": {
-      "hash": "3161e376f04314bd",
-      "lastModified": "2026-03-10"
+      "hash": "631f6729d908f010",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dj_set-next-month": {
       "hash": "3ec06d7e0759a0dd",
@@ -675,28 +675,28 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-theater": {
-      "hash": "83c6c21e777a2741",
-      "lastModified": "2026-03-10"
+      "hash": "62dc2f500c4e510e",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-today": {
-      "hash": "12c71aaa8ba9ee4b",
-      "lastModified": "2026-03-10"
+      "hash": "1a6373ebe6459c36",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-tomorrow": {
-      "hash": "a5572eccf47cc132",
-      "lastModified": "2026-03-10"
+      "hash": "91eb93ab28f704f2",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-this-week": {
-      "hash": "6e87c86e6d85a3b1",
-      "lastModified": "2026-03-10"
+      "hash": "5a25ef7926a9a0a9",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-this-weekend": {
-      "hash": "84691c9cc35f1aec",
-      "lastModified": "2026-03-10"
+      "hash": "ce1a128038835da4",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-this-month": {
-      "hash": "6e2139f18b863645",
-      "lastModified": "2026-03-10"
+      "hash": "9e3f442cb3242a51",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-theater-next-month": {
       "hash": "d3538e2d69093d66",
@@ -787,56 +787,56 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-show": {
-      "hash": "f502348621e935bd",
-      "lastModified": "2026-03-10"
+      "hash": "20d9344e9c948bec",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-show-today": {
-      "hash": "1f2ba1766b9bcbc3",
-      "lastModified": "2026-03-10"
+      "hash": "3067c98ae932be52",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-show-tomorrow": {
       "hash": "95dd6483bf3b2369",
       "lastModified": "2026-03-09"
     },
     "with-ticket-show-this-week": {
-      "hash": "022693e6e8cbe12b",
-      "lastModified": "2026-03-10"
+      "hash": "718c14e8233d47e2",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-show-this-weekend": {
       "hash": "bf45d9a868a19ea2",
       "lastModified": "2026-03-09"
     },
     "with-ticket-show-this-month": {
-      "hash": "3c6e87fa97aa6c2b",
-      "lastModified": "2026-03-10"
+      "hash": "d34faf0413ed4864",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-show-next-month": {
       "hash": "805d41ad8806069b",
       "lastModified": "2026-03-09"
     },
     "open-workshop": {
-      "hash": "2b5bd90579e0e559",
-      "lastModified": "2026-03-10"
+      "hash": "4b0e6f2d50495168",
+      "lastModified": "2026-03-11"
     },
     "open-workshop-today": {
-      "hash": "d62fd91d6044bec5",
-      "lastModified": "2026-03-10"
+      "hash": "75f42769d0785149",
+      "lastModified": "2026-03-11"
     },
     "open-workshop-tomorrow": {
       "hash": "e110ad2185610cfa",
       "lastModified": "2026-03-10"
     },
     "open-workshop-this-week": {
-      "hash": "71182050cad7c3e5",
-      "lastModified": "2026-03-09"
+      "hash": "a0c78c14cc232b97",
+      "lastModified": "2026-03-11"
     },
     "open-workshop-this-weekend": {
       "hash": "8d8db927ab7d512d",
       "lastModified": "2026-03-09"
     },
     "open-workshop-this-month": {
-      "hash": "0906cc504a18ba81",
-      "lastModified": "2026-03-09"
+      "hash": "c52b361367d0bef0",
+      "lastModified": "2026-03-11"
     },
     "open-workshop-next-month": {
       "hash": "a930c8972e94842a",
@@ -1011,8 +1011,8 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-dance": {
-      "hash": "6b4266c747039a19",
-      "lastModified": "2026-03-09"
+      "hash": "e0e4a40ab9d6bfc9",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dance-today": {
       "hash": "b6f64f81f0ef48f2",
@@ -1023,8 +1023,8 @@
       "lastModified": "2026-03-09"
     },
     "with-ticket-dance-this-week": {
-      "hash": "e220f8c7a0c18017",
-      "lastModified": "2026-03-09"
+      "hash": "e122f4e8d93ac6d2",
+      "lastModified": "2026-03-11"
     },
     "with-ticket-dance-this-weekend": {
       "hash": "38c5579d69feabe7",
@@ -4623,12 +4623,12 @@
       "lastModified": "2026-03-09"
     },
     "concerts": {
-      "hash": "732fbba96f4b799d",
-      "lastModified": "2026-03-10"
+      "hash": "c56d9c4090b06a30",
+      "lastModified": "2026-03-11"
     },
     "clubs": {
-      "hash": "b487396e918c23a3",
-      "lastModified": "2026-03-10"
+      "hash": "fc665284df01dc74",
+      "lastModified": "2026-03-11"
     },
     "rebetiko": {
       "hash": "0d95bd2e7e8d68b3",
@@ -4643,12 +4643,12 @@
       "lastModified": "2026-03-09"
     },
     "theatre": {
-      "hash": "a6a50cbfccb58ea8",
-      "lastModified": "2026-03-10"
+      "hash": "6f329f5ee425704a",
+      "lastModified": "2026-03-11"
     },
     "comedy": {
-      "hash": "db388697e72c970d",
-      "lastModified": "2026-03-10"
+      "hash": "7ba4f8422ba11ce6",
+      "lastModified": "2026-03-11"
     },
     "exhibitions": {
       "hash": "cbf0a0d5c7d431a0",
@@ -4659,60 +4659,60 @@
       "lastModified": "2026-03-09"
     },
     "workshops": {
-      "hash": "a937280b6193f622",
-      "lastModified": "2026-03-10"
+      "hash": "e3007b3e0e39c561",
+      "lastModified": "2026-03-11"
     },
     "en/today": {
-      "hash": "ad6c250f599de7d3",
-      "lastModified": "2026-03-10"
+      "hash": "2463ac62427189aa",
+      "lastModified": "2026-03-11"
     },
     "en/this-weekend": {
-      "hash": "dc585ec536393ff6",
-      "lastModified": "2026-03-10"
+      "hash": "62622d5924aa1779",
+      "lastModified": "2026-03-11"
     },
     "en/concerts": {
-      "hash": "125556a499a4833d",
-      "lastModified": "2026-03-10"
+      "hash": "1ff223c5c609f67e",
+      "lastModified": "2026-03-11"
     },
     "en/theater": {
-      "hash": "d0ada2c2fa8474b9",
-      "lastModified": "2026-03-10"
+      "hash": "83c44c41ae4d968c",
+      "lastModified": "2026-03-11"
     },
     "en/nightlife": {
-      "hash": "b60fd0025ce3db84",
-      "lastModified": "2026-03-10"
+      "hash": "c95639f061c43746",
+      "lastModified": "2026-03-11"
     },
     "en/festivals": {
       "hash": "bd7c8c69a096a5fd",
       "lastModified": "2026-03-09"
     },
     "en/kids": {
-      "hash": "1182756647ed4c44",
-      "lastModified": "2026-03-10"
+      "hash": "6d5634f8062c6e28",
+      "lastModified": "2026-03-11"
     },
     "en/open": {
-      "hash": "68f5fb0a7c30c2e5",
-      "lastModified": "2026-03-10"
+      "hash": "7f478eaf8e65741b",
+      "lastModified": "2026-03-11"
     },
     "en/classical-music": {
-      "hash": "63af2759edae4231",
-      "lastModified": "2026-03-10"
+      "hash": "3b014470a35384f2",
+      "lastModified": "2026-03-11"
     },
     "en/this-month": {
-      "hash": "f0b31a3279d09e41",
-      "lastModified": "2026-03-10"
+      "hash": "3116dd43d8f99200",
+      "lastModified": "2026-03-11"
     },
     "en/with-ticket": {
-      "hash": "74f3fa2b5d6b52df",
-      "lastModified": "2026-03-10"
+      "hash": "68e6d5bb19976a0a",
+      "lastModified": "2026-03-11"
     },
     "events/5864d4f5-138-": {
       "hash": "655ee5da3f0db8b1",
       "lastModified": "2026-03-09"
     },
     "events/580fe29c-138-20": {
-      "hash": "dca852f04569c7cb",
-      "lastModified": "2026-03-09"
+      "hash": "43d3da6f3befe4e3",
+      "lastModified": "2026-03-11"
     },
     "events/8787e304-138-20": {
       "hash": "c09e304e45b6e7f8",
@@ -5271,16 +5271,16 @@
       "lastModified": "2026-03-09"
     },
     "events/75e9f12f-vox-": {
-      "hash": "5edd77d6fdc39072",
-      "lastModified": "2026-03-09"
+      "hash": "483ed644deddfd13",
+      "lastModified": "2026-03-11"
     },
     "events/24f7e6cd--": {
       "hash": "60792c243fe635ea",
       "lastModified": "2026-03-09"
     },
     "events/ba2bedb9--": {
-      "hash": "c34ccb150f0b139a",
-      "lastModified": "2026-03-09"
+      "hash": "649b652f5d7916bb",
+      "lastModified": "2026-03-11"
     },
     "events/961a5c5d--171-187": {
       "hash": "79ab4b6848708c47",
@@ -5303,8 +5303,8 @@
       "lastModified": "2026-03-09"
     },
     "events/a907ffdc-vox-": {
-      "hash": "e00e533277a44eef",
-      "lastModified": "2026-03-09"
+      "hash": "dc09e711d5c7ca25",
+      "lastModified": "2026-03-11"
     },
     "events/bf6af31b--dr-part-2": {
       "hash": "0904f2da5f8f7d24",
@@ -5363,8 +5363,8 @@
       "lastModified": "2026-03-10"
     },
     "events/ba429649--": {
-      "hash": "dc6a9c525189c99b",
-      "lastModified": "2026-03-10"
+      "hash": "3ef7fbc2544b6d79",
+      "lastModified": "2026-03-11"
     },
     "events/fef7e513--": {
       "hash": "6fe51951a91d5c30",
@@ -5515,8 +5515,8 @@
       "lastModified": "2026-03-10"
     },
     "events/d858b03a--": {
-      "hash": "f04257e67962e18f",
-      "lastModified": "2026-03-10"
+      "hash": "f11a41115ef03a70",
+      "lastModified": "2026-03-11"
     },
     "events/48b1d61f--": {
       "hash": "eb930fd6f800d7b1",
@@ -5583,8 +5583,8 @@
       "lastModified": "2026-03-10"
     },
     "events/721e2dd0--": {
-      "hash": "a59b3307eb9ce6ae",
-      "lastModified": "2026-03-10"
+      "hash": "24a03287a27c0c58",
+      "lastModified": "2026-03-11"
     },
     "events/3b3e8843-studio-": {
       "hash": "99c0f802ff4d3262",
@@ -5603,8 +5603,8 @@
       "lastModified": "2026-03-10"
     },
     "events/28705a2d--": {
-      "hash": "6d4e7f8b1cd32d75",
-      "lastModified": "2026-03-10"
+      "hash": "b6d4955fce263d45",
+      "lastModified": "2026-03-11"
     },
     "events/f0cdd6a4--": {
       "hash": "f1c5912bb13bdfaf",
@@ -5671,24 +5671,24 @@
       "lastModified": "2026-03-10"
     },
     "events/b3a1c05b--": {
-      "hash": "e8cae55152032cc4",
-      "lastModified": "2026-03-10"
+      "hash": "3df92acbb0e52492",
+      "lastModified": "2026-03-11"
     },
     "events/150e7125-brecht-2510-": {
       "hash": "853efff46a6774f1",
       "lastModified": "2026-03-10"
     },
     "events/2ca49feb-radar-": {
-      "hash": "f5744f22c90a59a7",
-      "lastModified": "2026-03-10"
+      "hash": "b3903e19281f778f",
+      "lastModified": "2026-03-11"
     },
     "events/cc171a54--": {
       "hash": "bf25362fc3847702",
       "lastModified": "2026-03-09"
     },
     "events/47a99d71--": {
-      "hash": "62432fab53d82537",
-      "lastModified": "2026-03-10"
+      "hash": "e03f0755cdf5cfa5",
+      "lastModified": "2026-03-11"
     },
     "events/fa40ced8--": {
       "hash": "4c87ec686a792936",
@@ -5699,8 +5699,8 @@
       "lastModified": "2026-03-10"
     },
     "events/94222afd--": {
-      "hash": "e00620bf8feb481d",
-      "lastModified": "2026-03-10"
+      "hash": "e88a61c94c83d0c6",
+      "lastModified": "2026-03-11"
     },
     "events/85f3c3f9--dolls": {
       "hash": "43171c458489aef6",
@@ -5715,12 +5715,12 @@
       "lastModified": "2026-03-10"
     },
     "events/e6e89c0f--": {
-      "hash": "cb4ed1f3461d1b8b",
-      "lastModified": "2026-03-10"
+      "hash": "b15055deffb33228",
+      "lastModified": "2026-03-11"
     },
     "events/86277e65--": {
-      "hash": "068771db140752c0",
-      "lastModified": "2026-03-10"
+      "hash": "821fafd1e65951c0",
+      "lastModified": "2026-03-11"
     },
     "events/985a3d7e--": {
       "hash": "985540f95f1fd673",
@@ -6311,8 +6311,8 @@
       "lastModified": "2026-03-09"
     },
     "events/b17333d0--h-228-xan-live-soundtrack": {
-      "hash": "e87ce69c6f19c841",
-      "lastModified": "2026-03-09"
+      "hash": "25b290aa1cd3b35d",
+      "lastModified": "2026-03-11"
     },
     "events/a212a64d--": {
       "hash": "36b4cf6d8a141476",
@@ -6359,8 +6359,8 @@
       "lastModified": "2026-03-10"
     },
     "events/552bc0db--": {
-      "hash": "d640ad8bddcd3c17",
-      "lastModified": "2026-03-10"
+      "hash": "55162aa152f3d095",
+      "lastModified": "2026-03-11"
     },
     "events/5709747c--": {
       "hash": "1e831eda97646cd7",
@@ -6511,8 +6511,8 @@
       "lastModified": "2026-03-10"
     },
     "events/2905bb7c--": {
-      "hash": "73cacf6a966e7072",
-      "lastModified": "2026-03-10"
+      "hash": "cb9cc8ba23132869",
+      "lastModified": "2026-03-11"
     },
     "events/e4a98135--": {
       "hash": "c3b26e88c55a0f01",
@@ -6579,8 +6579,8 @@
       "lastModified": "2026-03-10"
     },
     "events/b05650c6--": {
-      "hash": "20a159db5ad1363b",
-      "lastModified": "2026-03-10"
+      "hash": "8aeef5c5e164a7ed",
+      "lastModified": "2026-03-11"
     },
     "events/35371d8b-studio-": {
       "hash": "267d314e302d727b",
@@ -6599,8 +6599,8 @@
       "lastModified": "2026-03-10"
     },
     "events/aa43d7df--": {
-      "hash": "eac652650431a335",
-      "lastModified": "2026-03-10"
+      "hash": "be14e8da2c6b1dbd",
+      "lastModified": "2026-03-11"
     },
     "events/83117cbf--misery": {
       "hash": "78239e184be95cb2",
@@ -6671,20 +6671,20 @@
       "lastModified": "2026-03-10"
     },
     "events/588fbc11--": {
-      "hash": "21641f0711c69eb0",
-      "lastModified": "2026-03-10"
+      "hash": "34a3257d7fcac84d",
+      "lastModified": "2026-03-11"
     },
     "events/a2ae70be-brecht-2510-": {
       "hash": "7cae885980e8b817",
       "lastModified": "2026-03-10"
     },
     "events/159b4d0f-radar-": {
-      "hash": "36044828eaaa0315",
-      "lastModified": "2026-03-10"
+      "hash": "2295664472b28395",
+      "lastModified": "2026-03-11"
     },
     "events/5177ce5f--": {
-      "hash": "28082791b4f6ddd8",
-      "lastModified": "2026-03-10"
+      "hash": "9a234cf94037132b",
+      "lastModified": "2026-03-11"
     },
     "events/32ee126e--": {
       "hash": "8f680256e980b794",
@@ -6695,8 +6695,8 @@
       "lastModified": "2026-03-10"
     },
     "events/9258b3f9--": {
-      "hash": "bc3fa86d1b3645bd",
-      "lastModified": "2026-03-10"
+      "hash": "0f716a9d2105c348",
+      "lastModified": "2026-03-11"
     },
     "events/529a3a0d--dolls": {
       "hash": "8126ef89863d7e2f",
@@ -6711,12 +6711,12 @@
       "lastModified": "2026-03-10"
     },
     "events/db6c96f4--": {
-      "hash": "eb1121af9c991a7a",
-      "lastModified": "2026-03-10"
+      "hash": "0d4bdb31c0394d8f",
+      "lastModified": "2026-03-11"
     },
     "events/7542de37--": {
-      "hash": "646c1f9f08e852da",
-      "lastModified": "2026-03-10"
+      "hash": "2c9e5af3c0a19e27",
+      "lastModified": "2026-03-11"
     },
     "events/f5a46f58--": {
       "hash": "d9a09187217d6abd",
@@ -7039,8 +7039,8 @@
       "lastModified": "2026-03-10"
     },
     "events/6c06df4f-baumstrasse-": {
-      "hash": "2ef46a34bc0f206b",
-      "lastModified": "2026-03-10"
+      "hash": "03d0e3522e196ed0",
+      "lastModified": "2026-03-11"
     },
     "events/ba986cf9--": {
       "hash": "37415a41a4a22c7b",
@@ -7307,8 +7307,8 @@
       "lastModified": "2026-03-10"
     },
     "events/d2de2029-gazarte-leon-of-athens": {
-      "hash": "0665fbc896d50d9b",
-      "lastModified": "2026-03-10"
+      "hash": "9dc7c305509c7b8c",
+      "lastModified": "2026-03-11"
     },
     "events/f1c82536--": {
       "hash": "76a78f9f629aedfd",
@@ -7379,24 +7379,24 @@
       "lastModified": "2026-03-09"
     },
     "events/a6f291b6-caja-de-musica-amp": {
-      "hash": "0ab1125604f652c3",
-      "lastModified": "2026-03-09"
+      "hash": "f578a812c29e3b90",
+      "lastModified": "2026-03-11"
     },
     "events/71efe5f4--ready-freddie-show": {
       "hash": "ad1ce2caf9cc5d58",
       "lastModified": "2026-03-10"
     },
     "events/e4f11743-171-187-171-nelly-39-s-187": {
-      "hash": "198e1f1e84711053",
-      "lastModified": "2026-03-09"
+      "hash": "f53391ba1a6aded2",
+      "lastModified": "2026-03-11"
     },
     "events/3ca9c6cf--171-187": {
       "hash": "3fef41771ffb2ed4",
       "lastModified": "2026-03-10"
     },
     "events/9b13a596--": {
-      "hash": "42cf9ed97b9141ab",
-      "lastModified": "2026-03-10"
+      "hash": "440f1c5ccea77d7d",
+      "lastModified": "2026-03-11"
     },
     "events/677d657f-coronet-theater-": {
       "hash": "7dfc096cab4f752e",
@@ -7419,8 +7419,8 @@
       "lastModified": "2026-03-10"
     },
     "events/477e7970-gazarte-eden-live-presents-stavroz": {
-      "hash": "0c9fd8ad63755314",
-      "lastModified": "2026-03-10"
+      "hash": "7e25acef2f188348",
+      "lastModified": "2026-03-11"
     },
     "events/8f71937a-arch-club-dirty-granny-tales": {
       "hash": "e027e50b30866cd3",
@@ -7431,8 +7431,8 @@
       "lastModified": "2026-03-09"
     },
     "events/c04ed052-onassis-stegi-": {
-      "hash": "bc5164d73cba9396",
-      "lastModified": "2026-03-10"
+      "hash": "5402555876554caa",
+      "lastModified": "2026-03-11"
     },
     "events/4e8d11ab-bios-nora-the-hell-s-house": {
       "hash": "55e2f96db8fccf6b",
@@ -7491,8 +7491,8 @@
       "lastModified": "2026-03-10"
     },
     "events/cc92da2e-piraeus-club-academy-road-duck": {
-      "hash": "df2f701ba2315448",
-      "lastModified": "2026-03-09"
+      "hash": "e095b17700eb8515",
+      "lastModified": "2026-03-11"
     },
     "events/f9959df8--amp": {
       "hash": "eed41568daa89241",
@@ -7515,16 +7515,16 @@
       "lastModified": "2026-03-09"
     },
     "events/1adc2cab--soledad-zarka-amp-loup-uberto": {
-      "hash": "90bccc4f9dc1a2ec",
-      "lastModified": "2026-03-09"
+      "hash": "b0aa0cbf5b64d19b",
+      "lastModified": "2026-03-11"
     },
     "events/41fd6e73--171-187": {
       "hash": "a6465d2c8902f281",
       "lastModified": "2026-03-09"
     },
     "events/28b37526-caja-de-musica-amp": {
-      "hash": "e544cff8f714ba65",
-      "lastModified": "2026-03-09"
+      "hash": "c0c5cd9ebf62b59e",
+      "lastModified": "2026-03-11"
     },
     "events/57031ef9-stage-7-": {
       "hash": "a8b0c861e08ff264",
@@ -7543,8 +7543,8 @@
       "lastModified": "2026-03-09"
     },
     "events/0158fee2--": {
-      "hash": "cf0c4677c6c29b03",
-      "lastModified": "2026-03-10"
+      "hash": "ddc1363734b80f55",
+      "lastModified": "2026-03-11"
     },
     "events/df4f4f38--in-motion": {
       "hash": "eb38d6e34af8c94e",
@@ -7587,8 +7587,8 @@
       "lastModified": "2026-03-10"
     },
     "events/bb512047--": {
-      "hash": "b0e0b43c2550c1b4",
-      "lastModified": "2026-03-10"
+      "hash": "55bede201ccd8053",
+      "lastModified": "2026-03-11"
     },
     "events/55fc4f08--": {
       "hash": "224ef7bab1ef8ee7",
@@ -7743,8 +7743,8 @@
       "lastModified": "2026-03-10"
     },
     "events/7981cc6b--": {
-      "hash": "2b48d7b47e29c11a",
-      "lastModified": "2026-03-10"
+      "hash": "07980169a286474d",
+      "lastModified": "2026-03-11"
     },
     "events/cffc90da--": {
       "hash": "d16a5fa4dbc0546d",
@@ -7815,8 +7815,8 @@
       "lastModified": "2026-03-10"
     },
     "events/e39ee142--": {
-      "hash": "42b549292a272621",
-      "lastModified": "2026-03-10"
+      "hash": "7b4ffe7a8b7b7503",
+      "lastModified": "2026-03-11"
     },
     "events/fbd27dd9-studio-": {
       "hash": "e6e4880aa17d47b4",
@@ -7843,8 +7843,8 @@
       "lastModified": "2026-03-10"
     },
     "events/8c70803e--": {
-      "hash": "4d2762f52999b47a",
-      "lastModified": "2026-03-10"
+      "hash": "a66150a15b4481db",
+      "lastModified": "2026-03-11"
     },
     "events/1e726337--": {
       "hash": "0cf1a5d3181ef01e",
@@ -7875,8 +7875,8 @@
       "lastModified": "2026-03-10"
     },
     "events/7b681e01--": {
-      "hash": "469b163304126e16",
-      "lastModified": "2026-03-10"
+      "hash": "18c3caa7141761b6",
+      "lastModified": "2026-03-11"
     },
     "events/ce68f608--": {
       "hash": "ce80f7a6f137764d",
@@ -7915,8 +7915,8 @@
       "lastModified": "2026-03-10"
     },
     "events/e81ea244--": {
-      "hash": "ddcb3d32e9d534f8",
-      "lastModified": "2026-03-10"
+      "hash": "074c890355ca9fa5",
+      "lastModified": "2026-03-11"
     },
     "events/e67bcbaf--part-2": {
       "hash": "7680e5f6fe3092e3",
@@ -7935,24 +7935,24 @@
       "lastModified": "2026-03-10"
     },
     "events/db2f8336--": {
-      "hash": "1d03ccee115ece78",
-      "lastModified": "2026-03-10"
+      "hash": "c3c732b10366a25c",
+      "lastModified": "2026-03-11"
     },
     "events/36a692cb-brecht-2510-": {
       "hash": "35032df1abc13246",
       "lastModified": "2026-03-10"
     },
     "events/146105a6-radar-": {
-      "hash": "f4e9d2774d2da082",
-      "lastModified": "2026-03-10"
+      "hash": "419aaafa9b5f1011",
+      "lastModified": "2026-03-11"
     },
     "events/e844d276-gazarte-conan-live-in-athens": {
-      "hash": "bced791088da642f",
-      "lastModified": "2026-03-10"
+      "hash": "8938ebab7c8f50e9",
+      "lastModified": "2026-03-11"
     },
     "events/610f008c-fuzz-club-nightfall": {
-      "hash": "086415f7d6462882",
-      "lastModified": "2026-03-09"
+      "hash": "afb3eeef158b5482",
+      "lastModified": "2026-03-11"
     },
     "events/2a4c5473--": {
       "hash": "a07eab1b432ca200",
@@ -7975,8 +7975,8 @@
       "lastModified": "2026-03-10"
     },
     "events/f33541dc--": {
-      "hash": "b1a9a5c54fc84d83",
-      "lastModified": "2026-03-10"
+      "hash": "2ee6773f0dc9ad29",
+      "lastModified": "2026-03-11"
     },
     "events/dc283d99--": {
       "hash": "c45d3d54191c0ae5",
@@ -7987,8 +7987,8 @@
       "lastModified": "2026-03-10"
     },
     "events/3d0d06d3--": {
-      "hash": "32c1e29c1573322a",
-      "lastModified": "2026-03-10"
+      "hash": "97bb9873f2c5ed20",
+      "lastModified": "2026-03-11"
     },
     "events/56285dc3--dolls": {
       "hash": "2011074caaaf65b8",
@@ -8003,12 +8003,12 @@
       "lastModified": "2026-03-10"
     },
     "events/e4fa3cc5--": {
-      "hash": "552d7bcfd8158e90",
-      "lastModified": "2026-03-10"
+      "hash": "1a8686d4dd480092",
+      "lastModified": "2026-03-11"
     },
     "events/9270d0bd--": {
-      "hash": "5f759c9bf7edae66",
-      "lastModified": "2026-03-10"
+      "hash": "702f0df38302d716",
+      "lastModified": "2026-03-11"
     },
     "events/f62f0dc6--": {
       "hash": "967f86d00c5b4ac0",
@@ -8375,8 +8375,8 @@
       "lastModified": "2026-03-10"
     },
     "events/5fde265f-onassis-stegi-": {
-      "hash": "62ddcd19067eed38",
-      "lastModified": "2026-03-10"
+      "hash": "7455ff5324a1e095",
+      "lastModified": "2026-03-11"
     },
     "events/a38b6f2a-concert-1-baumstrasse-": {
       "hash": "c49162406fb18829",
@@ -8647,8 +8647,8 @@
       "lastModified": "2026-03-10"
     },
     "events/4ef2d30e--": {
-      "hash": "b7f5a5889d5b0ddd",
-      "lastModified": "2026-03-10"
+      "hash": "a276ce2a044a0123",
+      "lastModified": "2026-03-11"
     },
     "events/0a322f9f--71": {
       "hash": "90d3b297f123b9a1",
@@ -8683,12 +8683,12 @@
       "lastModified": "2026-03-10"
     },
     "events/31b31bd2-universe-solace-pre-party": {
-      "hash": "027e6be97e029df9",
-      "lastModified": "2026-03-10"
+      "hash": "4bb3809fd34e0e2f",
+      "lastModified": "2026-03-11"
     },
     "events/eb0ad026-universe-dimitri-vegas-in-athens": {
-      "hash": "cd56d1c1a65bcb31",
-      "lastModified": "2026-03-10"
+      "hash": "90056d3d25c41d7a",
+      "lastModified": "2026-03-11"
     },
     "events/68920064-dunk-athens-piratka-riot": {
       "hash": "4d7c1c834170e12d",
@@ -8699,32 +8699,32 @@
       "lastModified": "2026-03-09"
     },
     "events/55bcdd37-universe-dimitri-vegas-manolaco-lost-prince": {
-      "hash": "3d215dc34733fb58",
-      "lastModified": "2026-03-10"
+      "hash": "fd94ad1645960bc3",
+      "lastModified": "2026-03-11"
     },
     "events/4ff0ff92-astron-espectro-oculto-with-cortical-systematics-rnxrx-marianella-n": {
       "hash": "6e6804cd85a9d82e",
       "lastModified": "2026-03-10"
     },
     "events/6deab945-aux-club-fenimore-cirkle-ate": {
-      "hash": "cf8aa4e09a1b1a34",
-      "lastModified": "2026-03-09"
+      "hash": "946c918c6d632a28",
+      "lastModified": "2026-03-11"
     },
     "events/c4692c14-oddity-enlight-frequencies-with-byorn": {
       "hash": "696d33326c67ded3",
       "lastModified": "2026-03-10"
     },
     "events/32e5285f-aux-club-aux-fenimore": {
-      "hash": "34f579ec88e366b2",
-      "lastModified": "2026-03-09"
+      "hash": "553f67909e73756e",
+      "lastModified": "2026-03-11"
     },
     "events/86a32b75-crust-hannecart-vbx-x-zino-slapfunk-x-jonn-x-always-late": {
-      "hash": "c80d64250bf093b4",
-      "lastModified": "2026-03-09"
+      "hash": "9fb5739d66cd30fb",
+      "lastModified": "2026-03-11"
     },
     "events/1f0dddeb-dybbuk-take-9-album-presentation-by-thodoris-bouzidi-mercury": {
-      "hash": "49d196c92220fedf",
-      "lastModified": "2026-03-09"
+      "hash": "a07a2d4b58583ffb",
+      "lastModified": "2026-03-11"
     },
     "events/79903b76--": {
       "hash": "2de03cb126e4b4a4",
@@ -8735,8 +8735,8 @@
       "lastModified": "2026-03-09"
     },
     "events/b8039d67-piraeus-club-academy-oathswan-the-heirloom-piraeus-club-academy": {
-      "hash": "a00689534a0e1ea4",
-      "lastModified": "2026-03-09"
+      "hash": "1245aaa71e15beac",
+      "lastModified": "2026-03-11"
     },
     "events/a4472e35--": {
       "hash": "a00ff932518ed937",
@@ -8755,16 +8755,16 @@
       "lastModified": "2026-03-09"
     },
     "events/6264057a-fuzz-club-": {
-      "hash": "0f581a6fbeb64b28",
-      "lastModified": "2026-03-09"
+      "hash": "57f461b89e5f53b8",
+      "lastModified": "2026-03-11"
     },
     "events/1fd1e4cf-plus-amp": {
       "hash": "0c310c2a17971647",
       "lastModified": "2026-03-09"
     },
     "events/5e5e9141-171-187-": {
-      "hash": "9a1033119b24f843",
-      "lastModified": "2026-03-09"
+      "hash": "d339eae754a55519",
+      "lastModified": "2026-03-11"
     },
     "events/f6b14d85-stage-7-": {
       "hash": "98d04721f4901fed",
@@ -8783,8 +8783,8 @@
       "lastModified": "2026-03-09"
     },
     "events/04063ea9-piraeus-club-academy-oathswan": {
-      "hash": "1c77a3e80790e437",
-      "lastModified": "2026-03-09"
+      "hash": "74998ea05b79280c",
+      "lastModified": "2026-03-11"
     },
     "events/fb414f23-el-chapo-simos-danalis-mo-tion-s-ant": {
       "hash": "79c72d8d326b9cd8",
@@ -8807,12 +8807,12 @@
       "lastModified": "2026-03-09"
     },
     "events/1b7ed35a-onassis-stegi-yorgos-lanthimos-photographs": {
-      "hash": "e20dc9edca408593",
-      "lastModified": "2026-03-10"
+      "hash": "57a06cce98ef1a92",
+      "lastModified": "2026-03-11"
     },
     "events/c9585b39--": {
-      "hash": "22a0e3fa5063def3",
-      "lastModified": "2026-03-10"
+      "hash": "4ab17852f5199d99",
+      "lastModified": "2026-03-11"
     },
     "events/ddfe5e93--in-motion": {
       "hash": "89b9bb8e0f2a76d6",
@@ -8859,8 +8859,8 @@
       "lastModified": "2026-03-10"
     },
     "events/aba4a118--": {
-      "hash": "07613abc48e006c4",
-      "lastModified": "2026-03-10"
+      "hash": "294bef0d9648f9b0",
+      "lastModified": "2026-03-11"
     },
     "events/d4065f98--": {
       "hash": "23819115e44b59a7",
@@ -9063,8 +9063,8 @@
       "lastModified": "2026-03-10"
     },
     "events/3b855b89--": {
-      "hash": "0ce7f7b26fc4c329",
-      "lastModified": "2026-03-10"
+      "hash": "1b390c00f58b7246",
+      "lastModified": "2026-03-11"
     },
     "events/f28a5e6d--": {
       "hash": "e6d44fbc2c715745",
@@ -9143,8 +9143,8 @@
       "lastModified": "2026-03-10"
     },
     "events/91af957c--": {
-      "hash": "68768bdf09da5c68",
-      "lastModified": "2026-03-10"
+      "hash": "37605f41b8377d7b",
+      "lastModified": "2026-03-11"
     },
     "events/3832882e-studio-": {
       "hash": "e7b2fd1845268474",
@@ -9179,8 +9179,8 @@
       "lastModified": "2026-03-09"
     },
     "events/af8bc3f5--": {
-      "hash": "f10d74c0ff56ba3d",
-      "lastModified": "2026-03-10"
+      "hash": "25281d6255f656f0",
+      "lastModified": "2026-03-11"
     },
     "events/3ceae510--": {
       "hash": "ddaad35f7f91bc72",
@@ -9215,8 +9215,8 @@
       "lastModified": "2026-03-10"
     },
     "events/0238786c--": {
-      "hash": "b59688308d8d6116",
-      "lastModified": "2026-03-10"
+      "hash": "7697b687525b2d7c",
+      "lastModified": "2026-03-11"
     },
     "events/fb4874a6--": {
       "hash": "61f2422a71405556",
@@ -9255,8 +9255,8 @@
       "lastModified": "2026-03-10"
     },
     "events/dddc9c42--": {
-      "hash": "03a6b0d371761db0",
-      "lastModified": "2026-03-10"
+      "hash": "3cead2d319d57fda",
+      "lastModified": "2026-03-11"
     },
     "events/9078e7d0--part-2": {
       "hash": "95fc7ea09b963cc1",
@@ -9275,28 +9275,28 @@
       "lastModified": "2026-03-10"
     },
     "events/f8eef772--": {
-      "hash": "bd9193d146ba2682",
-      "lastModified": "2026-03-10"
+      "hash": "35a1c52ad655b874",
+      "lastModified": "2026-03-11"
     },
     "events/a11791d8-brecht-2510-": {
       "hash": "8343d5e8e9242e64",
       "lastModified": "2026-03-10"
     },
     "events/6c882b51-radar-": {
-      "hash": "a572969c74ce0b12",
-      "lastModified": "2026-03-10"
+      "hash": "09f4627fb675ab7c",
+      "lastModified": "2026-03-11"
     },
     "events/95fd115f-burger-disco-club-xtracavanza-dj-taf-afterhours-sunshine-pedro": {
-      "hash": "f898604f31d4ba93",
-      "lastModified": "2026-03-09"
+      "hash": "a0e73b81a1c8ff9a",
+      "lastModified": "2026-03-11"
     },
     "events/dr-jorda-sunel-arena-dr-jordan-b-peterson-an-evening-to-transform-your-life": {
       "hash": "2a5ca90e35d756ed",
       "lastModified": "2026-03-09"
     },
     "events/8da54119-floyd-1000mods-2026": {
-      "hash": "1f996b2173334a0f",
-      "lastModified": "2026-03-09"
+      "hash": "033e68350a9f3394",
+      "lastModified": "2026-03-11"
     },
     "events/345ec70b--": {
       "hash": "8beee44eab458aa6",
@@ -9315,8 +9315,8 @@
       "lastModified": "2026-03-10"
     },
     "events/54a2a98f--": {
-      "hash": "b0bc895e2898a630",
-      "lastModified": "2026-03-10"
+      "hash": "96ea9f73f6cb72b4",
+      "lastModified": "2026-03-11"
     },
     "events/aca45e74--": {
       "hash": "f274f61e938bac91",
@@ -9327,8 +9327,8 @@
       "lastModified": "2026-03-10"
     },
     "events/b0491149--": {
-      "hash": "493c88f61ec7d663",
-      "lastModified": "2026-03-10"
+      "hash": "e24a828757bf62a1",
+      "lastModified": "2026-03-11"
     },
     "events/4d6092e3--dolls": {
       "hash": "e6fe6d1f75d2a9b5",
@@ -9343,12 +9343,12 @@
       "lastModified": "2026-03-10"
     },
     "events/77b41233--": {
-      "hash": "f86edd1857646526",
-      "lastModified": "2026-03-10"
+      "hash": "826979b26a0a85c9",
+      "lastModified": "2026-03-11"
     },
     "events/6aea754a--": {
-      "hash": "15647aecf3e8923d",
-      "lastModified": "2026-03-10"
+      "hash": "fda6e4b3f163e7e9",
+      "lastModified": "2026-03-11"
     },
     "events/4268542c--": {
       "hash": "1efbc3f619876548",
@@ -9691,12 +9691,12 @@
       "lastModified": "2026-03-10"
     },
     "events/8fa21195-onassis-stegi-": {
-      "hash": "2ac4ee7da5b9c82b",
-      "lastModified": "2026-03-10"
+      "hash": "51d722321b5c20d1",
+      "lastModified": "2026-03-11"
     },
     "events/66dd84b4-baumstrasse-": {
-      "hash": "f7f57c5a6ec6cf1c",
-      "lastModified": "2026-03-10"
+      "hash": "ca49546643bd1095",
+      "lastModified": "2026-03-11"
     },
     "events/7a59899f--": {
       "hash": "4b54218f754ce1b2",
@@ -9987,8 +9987,8 @@
       "lastModified": "2026-03-10"
     },
     "events/bd99cbb9--": {
-      "hash": "82a0fb6026bb53f2",
-      "lastModified": "2026-03-10"
+      "hash": "dcf013de5901762c",
+      "lastModified": "2026-03-11"
     },
     "events/84774c9d--71": {
       "hash": "01b24b81c657d269",
@@ -10011,16 +10011,16 @@
       "lastModified": "2026-03-09"
     },
     "events/52bde444-2ten-gl57-by-zair": {
-      "hash": "778e668f149656d7",
-      "lastModified": "2026-03-09"
+      "hash": "794ec4a04c1fd3cb",
+      "lastModified": "2026-03-11"
     },
     "events/28678482-jazzet-cafe-banda-valeu": {
       "hash": "9c5f969d1504e265",
       "lastModified": "2026-03-10"
     },
     "events/3783f2a3-vox-live-vox": {
-      "hash": "d29e0a3bcd7a5fc2",
-      "lastModified": "2026-03-09"
+      "hash": "94242777d31e3610",
+      "lastModified": "2026-03-11"
     },
     "events/c26db884-bless-me-father-devv": {
       "hash": "48b72a8bc713da2d",
@@ -10047,8 +10047,8 @@
       "lastModified": "2026-03-10"
     },
     "events/0ca00f0e-universe-rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissima": {
-      "hash": "ca561c181cc7ff31",
-      "lastModified": "2026-03-10"
+      "hash": "b6d55eb1b07df42c",
+      "lastModified": "2026-03-11"
     },
     "events/433d6fc3-astron-soft-crush-w-dj-yazi-outermost-katra": {
       "hash": "30a0c2712af6f0f5",
@@ -10067,16 +10067,16 @@
       "lastModified": "2026-03-09"
     },
     "events/3c79c0b0-dybbuk-sila-deren-katya-livingston-innassi-aphroditee": {
-      "hash": "33267a079e222cf2",
-      "lastModified": "2026-03-09"
+      "hash": "ab6291e7f59b9d34",
+      "lastModified": "2026-03-11"
     },
     "events/03110f18-dybbuk-sat-traumer-jonn-always-late": {
-      "hash": "9d9264906a9ae1fd",
-      "lastModified": "2026-03-09"
+      "hash": "4e816fc7c39ebfb1",
+      "lastModified": "2026-03-11"
     },
     "events/ba31eb75-dybbuk-saturday-women-s-day-line-up": {
-      "hash": "9ebfd2aa493a4b49",
-      "lastModified": "2026-03-09"
+      "hash": "6903175cf4e5f912",
+      "lastModified": "2026-03-11"
     },
     "events/851e46c4-zelus-lehar-pan": {
       "hash": "a535b28b864901ee",
@@ -10107,8 +10107,8 @@
       "lastModified": "2026-03-09"
     },
     "events/6166dcca-it-athens-the-7th-gate-by-lory-aka-archaic": {
-      "hash": "4f7b553e757cf993",
-      "lastModified": "2026-03-09"
+      "hash": "396d20206fa32b0d",
+      "lastModified": "2026-03-11"
     },
     "events/a1d2c6b6-temple-422m-athens-presents-localism-series-saturday-7th-of-march": {
       "hash": "e6db63b39fb5af75",
@@ -10119,8 +10119,8 @@
       "lastModified": "2026-03-10"
     },
     "events/07acf6b2-crust-akylla-x-koro": {
-      "hash": "48b67c98cfe7c4ed",
-      "lastModified": "2026-03-09"
+      "hash": "3c9108764f1ebef7",
+      "lastModified": "2026-03-11"
     },
     "events/c208b81d-myrtillo-cafe-alcedo-folk-band": {
       "hash": "e774c4dcf6699523",
@@ -10139,8 +10139,8 @@
       "lastModified": "2026-03-10"
     },
     "events/12315fb7-171-187-4-women": {
-      "hash": "116ae9c5685fac2d",
-      "lastModified": "2026-03-09"
+      "hash": "136190b253c24ae8",
+      "lastModified": "2026-03-11"
     },
     "events/69cad2c1--zoran-dukic": {
       "hash": "d9694971eca0778b",
@@ -10155,8 +10155,8 @@
       "lastModified": "2026-03-09"
     },
     "events/4831be1e-caja-de-musica-": {
-      "hash": "ef96b91c8ea3a028",
-      "lastModified": "2026-03-09"
+      "hash": "e6bd0363680f4f2a",
+      "lastModified": "2026-03-11"
     },
     "events/02451093-electra-palace-": {
       "hash": "d1d821f8a778f853",
@@ -10187,8 +10187,8 @@
       "lastModified": "2026-03-09"
     },
     "events/53307433--": {
-      "hash": "2d8554e78ef9433f",
-      "lastModified": "2026-03-10"
+      "hash": "766f5aa7640ab941",
+      "lastModified": "2026-03-11"
     },
     "events/27173fd2--in-motion": {
       "hash": "07276ad3afb8c3d0",
@@ -10235,8 +10235,8 @@
       "lastModified": "2026-03-10"
     },
     "events/f45fca7c--": {
-      "hash": "6f79c29b59d9cbeb",
-      "lastModified": "2026-03-10"
+      "hash": "ae1be0ee5178e651",
+      "lastModified": "2026-03-11"
     },
     "events/23b94a90--": {
       "hash": "895c6be28b8c999c",
@@ -10399,12 +10399,12 @@
       "lastModified": "2026-03-09"
     },
     "events/76c8b52b-burger-disco-club-leon-manolaco-philip-z-kobo": {
-      "hash": "74275a8281f60751",
-      "lastModified": "2026-03-09"
+      "hash": "2b1dbd9338f66e6f",
+      "lastModified": "2026-03-11"
     },
     "events/76790529-crust-sunrise-zone-petros-floorfiller-dj-pascal-greg-staikos": {
-      "hash": "b78b83748a5c2c6b",
-      "lastModified": "2026-03-09"
+      "hash": "769367e972aa2e90",
+      "lastModified": "2026-03-11"
     },
     "events/c66ed058--": {
       "hash": "4ae5af3350090ff3",
@@ -10419,8 +10419,8 @@
       "lastModified": "2026-03-10"
     },
     "events/3876556a--": {
-      "hash": "40ca45c1b596f0ed",
-      "lastModified": "2026-03-10"
+      "hash": "e67992958c1a52b4",
+      "lastModified": "2026-03-11"
     },
     "events/a671a3d9--": {
       "hash": "0728d1e8e6cdbb2a",
@@ -10507,8 +10507,8 @@
       "lastModified": "2026-03-10"
     },
     "events/09187b5c--": {
-      "hash": "6324c65136f462d9",
-      "lastModified": "2026-03-10"
+      "hash": "7e0d9f0539207bb3",
+      "lastModified": "2026-03-11"
     },
     "events/5cd43725-studio-": {
       "hash": "8fab7aa9912c3f62",
@@ -10539,8 +10539,8 @@
       "lastModified": "2026-03-10"
     },
     "events/8be96c1a--": {
-      "hash": "e6e5cc4a8136c53e",
-      "lastModified": "2026-03-10"
+      "hash": "a7ae48ae51ffa694",
+      "lastModified": "2026-03-11"
     },
     "events/f51540f0--": {
       "hash": "1a2a7bed663baa68",
@@ -10575,8 +10575,8 @@
       "lastModified": "2026-03-10"
     },
     "events/a3c1680b--": {
-      "hash": "aafd05ecbd8179a9",
-      "lastModified": "2026-03-10"
+      "hash": "c090999aae41176a",
+      "lastModified": "2026-03-11"
     },
     "events/707eefd5--": {
       "hash": "e85525fff7fc576e",
@@ -10615,8 +10615,8 @@
       "lastModified": "2026-03-10"
     },
     "events/e47ccdae--": {
-      "hash": "06941888189e9a2d",
-      "lastModified": "2026-03-10"
+      "hash": "51e83df99cfc19b8",
+      "lastModified": "2026-03-11"
     },
     "events/cc95daf2--part-2": {
       "hash": "7a1bec550440ec0d",
@@ -10635,16 +10635,16 @@
       "lastModified": "2026-03-10"
     },
     "events/f4ea3526--": {
-      "hash": "c93d2480d9159d48",
-      "lastModified": "2026-03-10"
+      "hash": "e0329c7e4cef77c5",
+      "lastModified": "2026-03-11"
     },
     "events/685c0866-brecht-2510-": {
       "hash": "3fc697c72d0a72cb",
       "lastModified": "2026-03-10"
     },
     "events/a69d43d5-radar-": {
-      "hash": "b4fe72cc055be27f",
-      "lastModified": "2026-03-10"
+      "hash": "f7a4997952ba3f18",
+      "lastModified": "2026-03-11"
     },
     "events/44be7705-an-club-lamp-of-murmuur-special-guest": {
       "hash": "874f26891e4564df",
@@ -10659,8 +10659,8 @@
       "lastModified": "2026-03-09"
     },
     "events/abd7aae8--": {
-      "hash": "b3813c0eb9b275fb",
-      "lastModified": "2026-03-10"
+      "hash": "c8e8ae0e4652aaaa",
+      "lastModified": "2026-03-11"
     },
     "events/8301ccc2--": {
       "hash": "ce8f56238fc2846d",
@@ -10675,8 +10675,8 @@
       "lastModified": "2026-03-10"
     },
     "events/1ae70f94--": {
-      "hash": "02eea85836ca41bf",
-      "lastModified": "2026-03-10"
+      "hash": "2ffcbcfd9512f5b4",
+      "lastModified": "2026-03-11"
     },
     "events/920ca0cc--dolls": {
       "hash": "adf00f1d74693c07",
@@ -10691,12 +10691,12 @@
       "lastModified": "2026-03-10"
     },
     "events/15b61da7--": {
-      "hash": "f672f47a24575b41",
-      "lastModified": "2026-03-10"
+      "hash": "fa0ea06208a1dbd7",
+      "lastModified": "2026-03-11"
     },
     "events/6d158850--": {
-      "hash": "ab07be4d50320600",
-      "lastModified": "2026-03-10"
+      "hash": "1e23d4adaabf50e1",
+      "lastModified": "2026-03-11"
     },
     "events/e7a8e0c2--": {
       "hash": "81ad7810e993f27d",
@@ -11027,12 +11027,12 @@
       "lastModified": "2026-03-10"
     },
     "events/7f88cf34-onassis-stegi-": {
-      "hash": "0a7cb2c7fe807995",
-      "lastModified": "2026-03-10"
+      "hash": "15065d90bcea7b47",
+      "lastModified": "2026-03-11"
     },
     "events/4fed2058-baumstrasse-": {
-      "hash": "7a15642fb2aac0fb",
-      "lastModified": "2026-03-10"
+      "hash": "7f7fb5fce5f2eb77",
+      "lastModified": "2026-03-11"
     },
     "events/a5a1043a--": {
       "hash": "04b62c5932f86b25",
@@ -11319,8 +11319,8 @@
       "lastModified": "2026-03-10"
     },
     "events/281c16bc--": {
-      "hash": "be9f98f8ae3ddf29",
-      "lastModified": "2026-03-10"
+      "hash": "007054f67a273c52",
+      "lastModified": "2026-03-11"
     },
     "events/04771340--71": {
       "hash": "123cbfa96f214be8",
@@ -11391,1084 +11391,1084 @@
       "lastModified": "2026-03-10"
     },
     "events/b0cc94be-roes-theater-vol-2": {
-      "hash": "4df45bd526fa1d26",
-      "lastModified": "2026-03-10"
+      "hash": "38bbd77cf29aa616",
+      "lastModified": "2026-03-11"
     },
     "events/d9ca02fc-171-187-171-187": {
-      "hash": "b2d4ca5d6e2dd8b4",
-      "lastModified": "2026-03-10"
+      "hash": "794d9120e688d1b2",
+      "lastModified": "2026-03-11"
     },
     "events/24ca7ac1-leof-mesogeion-15-the-ai-thing-ai-essentials-to-advance-your-career-workshop-a": {
-      "hash": "1252e79ce277762f",
-      "lastModified": "2026-03-09"
+      "hash": "0de666693c6ba701",
+      "lastModified": "2026-03-11"
     },
     "events/756b01d2--": {
-      "hash": "67b0859218c05bc3",
-      "lastModified": "2026-03-10"
+      "hash": "71f193b4c69a22ec",
+      "lastModified": "2026-03-11"
     },
     "events/b17ab55b-olvio-": {
-      "hash": "17a938bd09f0def4",
-      "lastModified": "2026-03-10"
+      "hash": "ea09344a63cf7e76",
+      "lastModified": "2026-03-11"
     },
     "events/9fb3f05a--": {
-      "hash": "79c473e3a44d2e4f",
-      "lastModified": "2026-03-10"
+      "hash": "ae7b5f11b7da27ec",
+      "lastModified": "2026-03-11"
     },
     "events/27be57de--in-motion": {
-      "hash": "de5a990167027bff",
-      "lastModified": "2026-03-10"
+      "hash": "12e6c60e5c7ec841",
+      "lastModified": "2026-03-11"
     },
     "events/d6047eb3--o": {
-      "hash": "44ab5c51fd6fede8",
-      "lastModified": "2026-03-10"
+      "hash": "54797d24de69554a",
+      "lastModified": "2026-03-11"
     },
     "events/92873437--": {
-      "hash": "007b154e36730afc",
-      "lastModified": "2026-03-10"
+      "hash": "ae89ecafc27696f6",
+      "lastModified": "2026-03-11"
     },
     "events/aea6a971--": {
-      "hash": "8df9328a3156240b",
-      "lastModified": "2026-03-10"
+      "hash": "f104d98b2b2287cd",
+      "lastModified": "2026-03-11"
     },
     "events/811817ec--": {
-      "hash": "eed6174d148c4bbf",
-      "lastModified": "2026-03-10"
+      "hash": "0fca4a902e47d012",
+      "lastModified": "2026-03-11"
     },
     "events/f8437205-olvio-": {
-      "hash": "05c7fe66899d5b36",
-      "lastModified": "2026-03-10"
+      "hash": "b62a5f56e941f140",
+      "lastModified": "2026-03-11"
     },
     "events/d0e030be--4": {
-      "hash": "eebba8edd6f40385",
-      "lastModified": "2026-03-10"
+      "hash": "78ddd42719f4c71e",
+      "lastModified": "2026-03-11"
     },
     "events/d6cb8a17-104-": {
-      "hash": "dba3a553fb281818",
-      "lastModified": "2026-03-10"
+      "hash": "58a3df50e38b7087",
+      "lastModified": "2026-03-11"
     },
     "events/563ea9ec-olvio-": {
-      "hash": "e95b05ba94affc79",
-      "lastModified": "2026-03-10"
+      "hash": "1045f1d14fdd9272",
+      "lastModified": "2026-03-11"
     },
     "events/5f7a4efb--80": {
-      "hash": "bf172f6ed8483d0f",
-      "lastModified": "2026-03-10"
+      "hash": "7f1aa132379fcbc5",
+      "lastModified": "2026-03-11"
     },
     "events/8a69e0e5--": {
-      "hash": "98c75da99f2917b5",
-      "lastModified": "2026-03-10"
+      "hash": "25914c59544dec63",
+      "lastModified": "2026-03-11"
     },
     "events/778eabc4--": {
-      "hash": "2333f790458a8fb8",
-      "lastModified": "2026-03-10"
+      "hash": "e357b913bd6af826",
+      "lastModified": "2026-03-11"
     },
     "events/d1835907--": {
-      "hash": "f5f7bb3b8582d623",
-      "lastModified": "2026-03-10"
+      "hash": "a5a16c226dd4614e",
+      "lastModified": "2026-03-11"
     },
     "events/bf041609-at-victoria-": {
-      "hash": "327b8f929202a098",
-      "lastModified": "2026-03-10"
+      "hash": "387af4db5bfcc2cd",
+      "lastModified": "2026-03-11"
     },
     "events/57c6144b--": {
-      "hash": "f345d46988805ea2",
-      "lastModified": "2026-03-10"
+      "hash": "da4fd917af31c50e",
+      "lastModified": "2026-03-11"
     },
     "events/ce86012c-calderone-art-space-": {
-      "hash": "c74b441db9f268ed",
-      "lastModified": "2026-03-10"
+      "hash": "b26e7d9445f4d481",
+      "lastModified": "2026-03-11"
     },
     "events/31d50d37--": {
-      "hash": "407de6aeafb2582c",
-      "lastModified": "2026-03-10"
+      "hash": "345b4a73c6beeeec",
+      "lastModified": "2026-03-11"
     },
     "events/e26c0b15-studio-": {
-      "hash": "9b32c260360972ab",
-      "lastModified": "2026-03-10"
+      "hash": "71ccddbebcc77d90",
+      "lastModified": "2026-03-11"
     },
     "events/307e63c0--": {
-      "hash": "d65649b4ef511116",
-      "lastModified": "2026-03-10"
+      "hash": "df93e1b62525af54",
+      "lastModified": "2026-03-11"
     },
     "events/3c03f8ab--": {
-      "hash": "d6f6e0b33a1bfb0c",
-      "lastModified": "2026-03-10"
+      "hash": "0e53791d0c1d7fd7",
+      "lastModified": "2026-03-11"
     },
     "events/7ae85275--": {
-      "hash": "b67cb4672a26f88b",
-      "lastModified": "2026-03-10"
+      "hash": "33a3aa32c359d15a",
+      "lastModified": "2026-03-11"
     },
     "events/fcde465c--": {
-      "hash": "2e913d6c18c108f3",
-      "lastModified": "2026-03-10"
+      "hash": "eed5013571dd9d7f",
+      "lastModified": "2026-03-11"
     },
     "events/64259263--": {
-      "hash": "592bf6ab4e2cd22e",
-      "lastModified": "2026-03-10"
+      "hash": "37a0ed37dd88dbd5",
+      "lastModified": "2026-03-11"
     },
     "events/472005f3-paraga-paraga": {
-      "hash": "3d80641bd4eaa76f",
-      "lastModified": "2026-03-10"
+      "hash": "edaad67d0a5baded",
+      "lastModified": "2026-03-11"
     },
     "events/536dfa9a-131-": {
-      "hash": "1f3ce24b42e382d0",
-      "lastModified": "2026-03-10"
+      "hash": "bcf39f1f9793ff50",
+      "lastModified": "2026-03-11"
     },
     "events/078c2449--": {
-      "hash": "867576b680900753",
-      "lastModified": "2026-03-10"
+      "hash": "58c854d5d6a7f7d0",
+      "lastModified": "2026-03-11"
     },
     "events/d312c148--": {
-      "hash": "d9907e73339525b9",
-      "lastModified": "2026-03-10"
+      "hash": "c5815c858957e0a2",
+      "lastModified": "2026-03-11"
     },
     "events/b0c3a371--": {
-      "hash": "dc6c775f7fb19299",
-      "lastModified": "2026-03-10"
+      "hash": "7477b0d12f557b07",
+      "lastModified": "2026-03-11"
     },
     "events/9dc04b1f--": {
-      "hash": "c1d5e61aa68764fc",
-      "lastModified": "2026-03-10"
+      "hash": "b0aa207120b86a9d",
+      "lastModified": "2026-03-11"
     },
     "events/3343ef75-olvio-": {
-      "hash": "f8cc863376daf4fc",
-      "lastModified": "2026-03-10"
+      "hash": "1a566707da214e2c",
+      "lastModified": "2026-03-11"
     },
     "events/fcfb4060--": {
-      "hash": "396c15b9df3cd6d3",
-      "lastModified": "2026-03-10"
+      "hash": "977b740132c4d1db",
+      "lastModified": "2026-03-11"
     },
     "events/030c9af1--": {
-      "hash": "a65495bf1b2436b8",
-      "lastModified": "2026-03-10"
+      "hash": "b24de0a6127bc3b7",
+      "lastModified": "2026-03-11"
     },
     "events/3128d29e--": {
-      "hash": "b52407e2f0385372",
-      "lastModified": "2026-03-10"
+      "hash": "bab7531570e5db17",
+      "lastModified": "2026-03-11"
     },
     "events/8246df94--": {
-      "hash": "c423b506c3119469",
-      "lastModified": "2026-03-10"
+      "hash": "7d7a56bd6410f0d7",
+      "lastModified": "2026-03-11"
     },
     "events/baa1afd1--": {
-      "hash": "7cfa8ec1e230759e",
-      "lastModified": "2026-03-10"
+      "hash": "58f75d7279c83386",
+      "lastModified": "2026-03-11"
     },
     "events/b58a9731--": {
-      "hash": "75d9c0853f5f5fe0",
-      "lastModified": "2026-03-10"
+      "hash": "11e3ff5e42e56851",
+      "lastModified": "2026-03-11"
     },
     "events/eae95837--": {
-      "hash": "56825adda735db77",
-      "lastModified": "2026-03-10"
+      "hash": "727b4c170305284a",
+      "lastModified": "2026-03-11"
     },
     "events/fc609c64--": {
-      "hash": "29a440a758653b6c",
-      "lastModified": "2026-03-10"
+      "hash": "1a5d2d569dc04687",
+      "lastModified": "2026-03-11"
     },
     "events/1d63d1ae--": {
-      "hash": "145b4c6c6c4a8af9",
-      "lastModified": "2026-03-10"
+      "hash": "9958f5dc10092be3",
+      "lastModified": "2026-03-11"
     },
     "events/6ab3187b-paraga-": {
-      "hash": "fd733b359ba3e923",
-      "lastModified": "2026-03-10"
+      "hash": "70e1573215b0fd6d",
+      "lastModified": "2026-03-11"
     },
     "events/83c6eabe--": {
-      "hash": "3a58882f11357a0f",
-      "lastModified": "2026-03-10"
+      "hash": "83ce8f2a6f91780e",
+      "lastModified": "2026-03-11"
     },
     "events/6ac29e81--": {
-      "hash": "50e8e38ddc262585",
-      "lastModified": "2026-03-10"
+      "hash": "c53c111ae7b8dee9",
+      "lastModified": "2026-03-11"
     },
     "events/136e6037--cartoon": {
-      "hash": "72b4b25ee380a317",
-      "lastModified": "2026-03-10"
+      "hash": "f190f4b38be3082e",
+      "lastModified": "2026-03-11"
     },
     "events/b27389a4--the-mr-and-mrs-bubble-show": {
-      "hash": "62cc58c81c007893",
-      "lastModified": "2026-03-10"
+      "hash": "61b72f56fd12ec7b",
+      "lastModified": "2026-03-11"
     },
     "events/3cb064a9--": {
-      "hash": "d91bff27c7bd0837",
-      "lastModified": "2026-03-10"
+      "hash": "32a0b00349bbd3b2",
+      "lastModified": "2026-03-11"
     },
     "events/a1c8c8a7-olvio-": {
-      "hash": "fa3b5caf55a101d9",
-      "lastModified": "2026-03-10"
+      "hash": "e7203a1c4ac1134a",
+      "lastModified": "2026-03-11"
     },
     "events/c8292f07-olvio-": {
-      "hash": "885fd30161e0fa4c",
-      "lastModified": "2026-03-10"
+      "hash": "e4814ce8058031f9",
+      "lastModified": "2026-03-11"
     },
     "events/c4ba7250--": {
-      "hash": "0d3a921f31bc9a93",
-      "lastModified": "2026-03-10"
+      "hash": "e4d0c71aae3ca6b2",
+      "lastModified": "2026-03-11"
     },
     "events/14041f33-104-": {
-      "hash": "9bd28badca0b46f8",
-      "lastModified": "2026-03-10"
+      "hash": "3505debd6f75e020",
+      "lastModified": "2026-03-11"
     },
     "events/bbf0de56--": {
-      "hash": "6f89b5482484ba8b",
-      "lastModified": "2026-03-10"
+      "hash": "ee84ed0dcc18168c",
+      "lastModified": "2026-03-11"
     },
     "events/bb96e4d6--": {
-      "hash": "ac35bf1f7046e1e4",
-      "lastModified": "2026-03-10"
+      "hash": "6aceed2811496fc1",
+      "lastModified": "2026-03-11"
     },
     "events/0dd4b59f--": {
-      "hash": "0e8a08db832d4130",
-      "lastModified": "2026-03-10"
+      "hash": "43dd62764097bc80",
+      "lastModified": "2026-03-11"
     },
     "events/0312285e-olvio-": {
-      "hash": "d5f52ee47dbcd73e",
-      "lastModified": "2026-03-10"
+      "hash": "20efedecf11110a7",
+      "lastModified": "2026-03-11"
     },
     "events/fa6d92e6--": {
-      "hash": "296c8f00feba3b2e",
-      "lastModified": "2026-03-10"
+      "hash": "2143ad6034993646",
+      "lastModified": "2026-03-11"
     },
     "events/d86d602c--": {
-      "hash": "b3a91f272eb5a81e",
-      "lastModified": "2026-03-10"
+      "hash": "bc25108a8bdbe2ad",
+      "lastModified": "2026-03-11"
     },
     "events/2a67f15f--": {
-      "hash": "d52e1ee9d567333f",
-      "lastModified": "2026-03-10"
+      "hash": "a59954171827dc26",
+      "lastModified": "2026-03-11"
     },
     "events/2f71aa61--": {
-      "hash": "1f5078c6f23db73a",
-      "lastModified": "2026-03-10"
+      "hash": "17f3799ba1c76e18",
+      "lastModified": "2026-03-11"
     },
     "events/06d65af1--": {
-      "hash": "b78a7dc86ea0d8ea",
-      "lastModified": "2026-03-10"
+      "hash": "22cb08c7b2773946",
+      "lastModified": "2026-03-11"
     },
     "events/2aadbb19--": {
-      "hash": "bcb1781ffb4fa581",
-      "lastModified": "2026-03-10"
+      "hash": "7868c94a7692b0a2",
+      "lastModified": "2026-03-11"
     },
     "events/2416cb4d--": {
-      "hash": "5584820405318310",
-      "lastModified": "2026-03-10"
+      "hash": "755d55f0bd66f361",
+      "lastModified": "2026-03-11"
     },
     "events/8178a162--yerma": {
-      "hash": "2410f4c3721eabf5",
-      "lastModified": "2026-03-10"
+      "hash": "4b63f0965aee29fc",
+      "lastModified": "2026-03-11"
     },
     "events/916e176e--": {
-      "hash": "964421716718cc8c",
-      "lastModified": "2026-03-10"
+      "hash": "c7b39ac95579cbc9",
+      "lastModified": "2026-03-11"
     },
     "events/e04786b1--": {
-      "hash": "59abb82343220c0a",
-      "lastModified": "2026-03-10"
+      "hash": "f7618b6daa6a79b1",
+      "lastModified": "2026-03-11"
     },
     "events/0e3f69d7-calderone-art-space-": {
-      "hash": "55d6b8ef023edcb9",
-      "lastModified": "2026-03-10"
+      "hash": "ce4a84ed48ce6d6f",
+      "lastModified": "2026-03-11"
     },
     "events/c655a572-studio-": {
-      "hash": "1e083b6e5da4febd",
-      "lastModified": "2026-03-10"
+      "hash": "d91ffa54b50b6d81",
+      "lastModified": "2026-03-11"
     },
     "events/c493f3d1-arroyo-theater-": {
-      "hash": "53a63508aa68acaa",
-      "lastModified": "2026-03-10"
+      "hash": "9b1a6d394fdf1179",
+      "lastModified": "2026-03-11"
     },
     "events/dcda4cd3--": {
-      "hash": "05e42edc2008371f",
-      "lastModified": "2026-03-10"
+      "hash": "c19c19bf5805bf9b",
+      "lastModified": "2026-03-11"
     },
     "events/7c926a83-studio-": {
-      "hash": "2bf725a307e5d6b4",
-      "lastModified": "2026-03-10"
+      "hash": "d251bad6d181d35c",
+      "lastModified": "2026-03-11"
     },
     "events/a18010c8--": {
-      "hash": "758417fe50148f5c",
-      "lastModified": "2026-03-10"
+      "hash": "666e50b9e4f0c623",
+      "lastModified": "2026-03-11"
     },
     "events/9cffe873--": {
-      "hash": "5f2684271db6c187",
-      "lastModified": "2026-03-10"
+      "hash": "9fd7962f29d99189",
+      "lastModified": "2026-03-11"
     },
     "events/7a331df3--": {
-      "hash": "937a9a9bb9c09a95",
-      "lastModified": "2026-03-10"
+      "hash": "0113e4372c5fdc5b",
+      "lastModified": "2026-03-11"
     },
     "events/ce4a9ca3--": {
-      "hash": "4685ba665c27b80a",
-      "lastModified": "2026-03-10"
+      "hash": "3a9b8ac81f068ca9",
+      "lastModified": "2026-03-11"
     },
     "events/fd290416--": {
-      "hash": "68c22ee5a2b21aa5",
-      "lastModified": "2026-03-10"
+      "hash": "32735ee2c351e7e8",
+      "lastModified": "2026-03-11"
     },
     "events/1acacee8--": {
-      "hash": "058b1ccaa7b8e8ca",
-      "lastModified": "2026-03-10"
+      "hash": "1938c2ff5466b77a",
+      "lastModified": "2026-03-11"
     },
     "events/3a0bcc5b--": {
-      "hash": "62afeec3fd61e8b2",
-      "lastModified": "2026-03-10"
+      "hash": "fb8fae8ea1efcf15",
+      "lastModified": "2026-03-11"
     },
     "events/022c2992-lib-ro-": {
-      "hash": "a0eeffb0a581fc64",
-      "lastModified": "2026-03-10"
+      "hash": "c9bfc649a0d7e103",
+      "lastModified": "2026-03-11"
     },
     "events/d6d876a2--": {
-      "hash": "a5bd5fe4e51bc767",
-      "lastModified": "2026-03-10"
+      "hash": "45a3de3345a0a622",
+      "lastModified": "2026-03-11"
     },
     "events/6d4c67e3--": {
-      "hash": "3da3325cb737a105",
-      "lastModified": "2026-03-10"
+      "hash": "af02dc07985463ec",
+      "lastModified": "2026-03-11"
     },
     "events/e81dd63c--": {
-      "hash": "4e1bb6b35a65d49a",
-      "lastModified": "2026-03-10"
+      "hash": "5424cf684570fcf8",
+      "lastModified": "2026-03-11"
     },
     "events/7849cd11--cleansed": {
-      "hash": "f26b8ce1497db405",
-      "lastModified": "2026-03-10"
+      "hash": "5a888361bd2cb64e",
+      "lastModified": "2026-03-11"
     },
     "events/ae5df0d8--": {
-      "hash": "79de0f887cc25858",
-      "lastModified": "2026-03-10"
+      "hash": "30341b7a6ab2f4a4",
+      "lastModified": "2026-03-11"
     },
     "events/070fd3ee-nous-": {
-      "hash": "7ce66e4f69c6753a",
-      "lastModified": "2026-03-10"
+      "hash": "43bdf74ccb728fcb",
+      "lastModified": "2026-03-11"
     },
     "events/276a8f4b--": {
-      "hash": "a1fc81d7772d8bba",
-      "lastModified": "2026-03-10"
+      "hash": "051fbb5379a991e1",
+      "lastModified": "2026-03-11"
     },
     "events/fb65a4d0--": {
-      "hash": "9250b20d119b648d",
-      "lastModified": "2026-03-10"
+      "hash": "da632714c25dd10d",
+      "lastModified": "2026-03-11"
     },
     "events/e7b49e94--": {
-      "hash": "8e25baeda8500363",
-      "lastModified": "2026-03-10"
+      "hash": "d293ae0cd01d65ca",
+      "lastModified": "2026-03-11"
     },
     "events/7c3cdf6a-coronet-theater-": {
-      "hash": "dd340b10ff532d5d",
-      "lastModified": "2026-03-10"
+      "hash": "5ef198d7e6517a22",
+      "lastModified": "2026-03-11"
     },
     "events/aa35b514--": {
-      "hash": "871f2fa2d063544d",
-      "lastModified": "2026-03-10"
+      "hash": "59f2588f04eb9779",
+      "lastModified": "2026-03-11"
     },
     "events/a337e2c1--": {
-      "hash": "2af3ba19e4fd95f4",
-      "lastModified": "2026-03-10"
+      "hash": "4bd540d20fee8762",
+      "lastModified": "2026-03-11"
     },
     "events/7114eeb3--": {
-      "hash": "0e3482603b8cf165",
-      "lastModified": "2026-03-10"
+      "hash": "97ae7f0c32d9b8d4",
+      "lastModified": "2026-03-11"
     },
     "events/253dacf6--": {
-      "hash": "2d6c8223a4a9020e",
-      "lastModified": "2026-03-10"
+      "hash": "3fb6127d25bc1a97",
+      "lastModified": "2026-03-11"
     },
     "events/92879910--": {
-      "hash": "a785f7db07aae7c5",
-      "lastModified": "2026-03-10"
+      "hash": "b7832dbb1d5fcdf0",
+      "lastModified": "2026-03-11"
     },
     "events/a94ea8e1--": {
-      "hash": "b8b2abaa237a3f0c",
-      "lastModified": "2026-03-10"
+      "hash": "9cf64b87e8c03bdf",
+      "lastModified": "2026-03-11"
     },
     "events/4d110832--part-2": {
-      "hash": "7990021d6e211412",
-      "lastModified": "2026-03-10"
+      "hash": "5825363840dff300",
+      "lastModified": "2026-03-11"
     },
     "events/60d5182a-at-victoria-": {
-      "hash": "34e9379ddb1f1abc",
-      "lastModified": "2026-03-10"
+      "hash": "bfd3f2acf7ca9790",
+      "lastModified": "2026-03-11"
     },
     "events/2718182d-altera-pars-": {
-      "hash": "553478fbe2dc2813",
-      "lastModified": "2026-03-10"
+      "hash": "871363cd78fc78be",
+      "lastModified": "2026-03-11"
     },
     "events/ab715de9--": {
-      "hash": "a85ea3cd2866390c",
-      "lastModified": "2026-03-10"
+      "hash": "38b0bf4d6c28a5a0",
+      "lastModified": "2026-03-11"
     },
     "events/eeaac125--": {
-      "hash": "d6019a4cec349e9b",
-      "lastModified": "2026-03-10"
+      "hash": "4a07186244e00bac",
+      "lastModified": "2026-03-11"
     },
     "events/69b2dd3b-brecht-2510-": {
-      "hash": "73f5756451897b54",
-      "lastModified": "2026-03-10"
+      "hash": "dc96b86e61ae6232",
+      "lastModified": "2026-03-11"
     },
     "events/c1512f3d-radar-": {
-      "hash": "e91433aaca76f9ec",
-      "lastModified": "2026-03-10"
+      "hash": "3e8dca8433b06821",
+      "lastModified": "2026-03-11"
     },
     "events/aae6f5e3--": {
-      "hash": "3555cb99196bb7d6",
-      "lastModified": "2026-03-10"
+      "hash": "aeea9d7925ad6a27",
+      "lastModified": "2026-03-11"
     },
     "events/2cbbb05b--": {
-      "hash": "2f8e59c7c48a6cca",
-      "lastModified": "2026-03-10"
+      "hash": "311fe8136bc05312",
+      "lastModified": "2026-03-11"
     },
     "events/2fc4c0a0--": {
-      "hash": "84f8dbac45933c29",
-      "lastModified": "2026-03-10"
+      "hash": "4cac3b0afbcb49f4",
+      "lastModified": "2026-03-11"
     },
     "events/b1e86fef--": {
-      "hash": "e93f8f368fdaca1d",
-      "lastModified": "2026-03-10"
+      "hash": "d64e7262e4b5b8bd",
+      "lastModified": "2026-03-11"
     },
     "events/2c45a49f--": {
-      "hash": "60509068869d9349",
-      "lastModified": "2026-03-10"
+      "hash": "9b414afe60863ce7",
+      "lastModified": "2026-03-11"
     },
     "events/0ee9ad11--": {
-      "hash": "37e83a48ab0dffbc",
-      "lastModified": "2026-03-10"
+      "hash": "af09c7c56d08b934",
+      "lastModified": "2026-03-11"
     },
     "events/96fa3c2f--dolls": {
-      "hash": "3e2e647a5f251b17",
-      "lastModified": "2026-03-10"
+      "hash": "171af48a91f6878a",
+      "lastModified": "2026-03-11"
     },
     "events/aaed0cd6--": {
-      "hash": "9846100ad0554f41",
-      "lastModified": "2026-03-10"
+      "hash": "6f745e382c885271",
+      "lastModified": "2026-03-11"
     },
     "events/1c3718d7--": {
-      "hash": "47e09978e12b069f",
-      "lastModified": "2026-03-10"
+      "hash": "6104ace80f4cf683",
+      "lastModified": "2026-03-11"
     },
     "events/66e15eb6--": {
-      "hash": "96c99ad954b0a8e6",
-      "lastModified": "2026-03-10"
+      "hash": "54fe225eb466b563",
+      "lastModified": "2026-03-11"
     },
     "events/8856944e--": {
-      "hash": "f30f7480d2fd9efd",
-      "lastModified": "2026-03-10"
+      "hash": "6fb0807d1f9e342b",
+      "lastModified": "2026-03-11"
     },
     "events/1460c738--": {
-      "hash": "c0cc4bf2b2ea1c19",
-      "lastModified": "2026-03-10"
+      "hash": "0d6353790864c62a",
+      "lastModified": "2026-03-11"
     },
     "events/e013a147--": {
-      "hash": "5cc4b8aceeeab479",
-      "lastModified": "2026-03-10"
+      "hash": "c33be77da5d2406d",
+      "lastModified": "2026-03-11"
     },
     "events/5adac4e8--": {
-      "hash": "f8d4c7565b709e71",
-      "lastModified": "2026-03-10"
+      "hash": "0614b82c7007db64",
+      "lastModified": "2026-03-11"
     },
     "events/48929c43--": {
-      "hash": "c333da616b14d89c",
-      "lastModified": "2026-03-10"
+      "hash": "d0e6ec2fd1d0821c",
+      "lastModified": "2026-03-11"
     },
     "events/1edc679f--": {
-      "hash": "10c7970d08ce117d",
-      "lastModified": "2026-03-10"
+      "hash": "459be014eef068f5",
+      "lastModified": "2026-03-11"
     },
     "events/3cc367b3--": {
-      "hash": "eaebe125923de5a8",
-      "lastModified": "2026-03-10"
+      "hash": "df51e79a96df1082",
+      "lastModified": "2026-03-11"
     },
     "events/81f93703--": {
-      "hash": "b82e8dd26b23a938",
-      "lastModified": "2026-03-10"
+      "hash": "1284432e0fdcb77a",
+      "lastModified": "2026-03-11"
     },
     "events/be606c46--": {
-      "hash": "67fcec051af91ad3",
-      "lastModified": "2026-03-10"
+      "hash": "cd50a1484a30d275",
+      "lastModified": "2026-03-11"
     },
     "events/633078f6--": {
-      "hash": "0b6bdf4861a48e0d",
-      "lastModified": "2026-03-10"
+      "hash": "d043313fad657246",
+      "lastModified": "2026-03-11"
     },
     "events/95a97871--5": {
-      "hash": "d02b4b3d14612956",
-      "lastModified": "2026-03-10"
+      "hash": "fd4e95b3d490d870",
+      "lastModified": "2026-03-11"
     },
     "events/0c94dd07-theatre-of-the-no-": {
-      "hash": "0dc2fcbb28304159",
-      "lastModified": "2026-03-10"
+      "hash": "06627915d66b99bb",
+      "lastModified": "2026-03-11"
     },
     "events/6adf01d8--": {
-      "hash": "d8fcae0c7fcfa114",
-      "lastModified": "2026-03-10"
+      "hash": "57de3d31b16f6c5e",
+      "lastModified": "2026-03-11"
     },
     "events/45b648bf--": {
-      "hash": "3726d7df8f56c707",
-      "lastModified": "2026-03-10"
+      "hash": "b0997e72878df465",
+      "lastModified": "2026-03-11"
     },
     "events/0f43c949--": {
-      "hash": "ac89daa34e39a1ec",
-      "lastModified": "2026-03-10"
+      "hash": "0c2dd717066fa1ca",
+      "lastModified": "2026-03-11"
     },
     "events/c896c419--": {
-      "hash": "3ec3e05c9cc4964b",
-      "lastModified": "2026-03-10"
+      "hash": "dc6fd79e2266b690",
+      "lastModified": "2026-03-11"
     },
     "events/313425ab--": {
-      "hash": "dbf55eeaccd51744",
-      "lastModified": "2026-03-10"
+      "hash": "c38c52ab2cea91ca",
+      "lastModified": "2026-03-11"
     },
     "events/8b8ddb3c-auditorium-": {
-      "hash": "815234670b20857e",
-      "lastModified": "2026-03-10"
+      "hash": "eae04616ac07e8f6",
+      "lastModified": "2026-03-11"
     },
     "events/d0e2361f--": {
-      "hash": "90be628e9a732c30",
-      "lastModified": "2026-03-10"
+      "hash": "df9f4bdae30ee36a",
+      "lastModified": "2026-03-11"
     },
     "events/fc4d9801--": {
-      "hash": "5977b82d8d13f460",
-      "lastModified": "2026-03-10"
+      "hash": "ddfb1421e7fb1350",
+      "lastModified": "2026-03-11"
     },
     "events/144047e1-studio-20": {
-      "hash": "575075fa322bea26",
-      "lastModified": "2026-03-10"
+      "hash": "16ebdb46b7f93a1f",
+      "lastModified": "2026-03-11"
     },
     "events/a4b80c4c-studio-": {
-      "hash": "320e56e6b83f1f2a",
-      "lastModified": "2026-03-10"
+      "hash": "75c806b3a9297217",
+      "lastModified": "2026-03-11"
     },
     "events/7af78dce-nous-": {
-      "hash": "ce706f6880d490d6",
-      "lastModified": "2026-03-10"
+      "hash": "7693b6d2ab403299",
+      "lastModified": "2026-03-11"
     },
     "events/a46ccd88-brecht-2510-": {
-      "hash": "669829f07efdafa3",
-      "lastModified": "2026-03-10"
+      "hash": "bcad3db67a988284",
+      "lastModified": "2026-03-11"
     },
     "events/6ada0514--aneantir": {
-      "hash": "599781216c05eafa",
-      "lastModified": "2026-03-10"
+      "hash": "958f9dc5b6b7d04b",
+      "lastModified": "2026-03-11"
     },
     "events/a00ea8a5-cartel-": {
-      "hash": "b939545e4b84c804",
-      "lastModified": "2026-03-10"
+      "hash": "df278ed7f9457022",
+      "lastModified": "2026-03-11"
     },
     "events/b3a230f5--": {
-      "hash": "d9887b513b384365",
-      "lastModified": "2026-03-10"
+      "hash": "ee8f7046f80cbec0",
+      "lastModified": "2026-03-11"
     },
     "events/dfcabbb4--": {
-      "hash": "94ec00f1b6373327",
-      "lastModified": "2026-03-10"
+      "hash": "58921107369e24b2",
+      "lastModified": "2026-03-11"
     },
     "events/767a0730--": {
-      "hash": "44f73ddf9d2dfa3a",
-      "lastModified": "2026-03-10"
+      "hash": "6b5481c90302fa2d",
+      "lastModified": "2026-03-11"
     },
     "events/972f68df-arroyo-theater-": {
-      "hash": "cce789ba122f3049",
-      "lastModified": "2026-03-10"
+      "hash": "27fec76b37444a07",
+      "lastModified": "2026-03-11"
     },
     "events/7832474e--best-of": {
-      "hash": "c69d70e3f54d06ae",
-      "lastModified": "2026-03-10"
+      "hash": "f6f907d149598709",
+      "lastModified": "2026-03-11"
     },
     "events/d4418a5a--": {
-      "hash": "c7c376129778a6d1",
-      "lastModified": "2026-03-10"
+      "hash": "31ac79532ecf059e",
+      "lastModified": "2026-03-11"
     },
     "events/f389daf0--bull": {
-      "hash": "bff1cb293baf7e86",
-      "lastModified": "2026-03-10"
+      "hash": "fd120650c05c6dfe",
+      "lastModified": "2026-03-11"
     },
     "events/c751c6e7--": {
-      "hash": "2b256cf401ea0712",
-      "lastModified": "2026-03-10"
+      "hash": "25ce65902101fac6",
+      "lastModified": "2026-03-11"
     },
     "events/5150f0ad--": {
-      "hash": "299ca7e668157b01",
-      "lastModified": "2026-03-10"
+      "hash": "644e1d60d6010440",
+      "lastModified": "2026-03-11"
     },
     "events/1ecb844a--": {
-      "hash": "8029819324452813",
-      "lastModified": "2026-03-10"
+      "hash": "31cf716b022aa63a",
+      "lastModified": "2026-03-11"
     },
     "events/db834885--": {
-      "hash": "1d89f626d994c814",
-      "lastModified": "2026-03-10"
+      "hash": "eea6f09aa9388715",
+      "lastModified": "2026-03-11"
     },
     "events/fd5283f3--": {
-      "hash": "dd621ab202f8706c",
-      "lastModified": "2026-03-10"
+      "hash": "3a7feedcd6ad74cd",
+      "lastModified": "2026-03-11"
     },
     "events/9be4c4d3-red-jasper-cabaret-theatre-": {
-      "hash": "e46a3870e94a8336",
-      "lastModified": "2026-03-10"
+      "hash": "8f615565b70ca7c4",
+      "lastModified": "2026-03-11"
     },
     "events/8d1822d9--": {
-      "hash": "1dfa30c4e8a567e1",
-      "lastModified": "2026-03-10"
+      "hash": "f150e28a6757eae6",
+      "lastModified": "2026-03-11"
     },
     "events/999cdb85-nous-": {
-      "hash": "418e97e7dadd1db2",
-      "lastModified": "2026-03-10"
+      "hash": "eb6d82cf358115ec",
+      "lastModified": "2026-03-11"
     },
     "events/752f7da1--": {
-      "hash": "eed43ad90dcb39ee",
-      "lastModified": "2026-03-10"
+      "hash": "372178fb0be59ca8",
+      "lastModified": "2026-03-11"
     },
     "events/3c393355--": {
-      "hash": "bfaf548251a33e45",
-      "lastModified": "2026-03-10"
+      "hash": "85a4138920c6d283",
+      "lastModified": "2026-03-11"
     },
     "events/f01ef23f--": {
-      "hash": "dd069ff4fa3bbf88",
-      "lastModified": "2026-03-10"
+      "hash": "725f1640bee2cfd7",
+      "lastModified": "2026-03-11"
     },
     "events/b77cc434-bios-": {
-      "hash": "3f55a5e7b7f6471c",
-      "lastModified": "2026-03-10"
+      "hash": "c82a7b1fc5b66e78",
+      "lastModified": "2026-03-11"
     },
     "events/9c6611f7--": {
-      "hash": "8ae7ec2ba465756a",
-      "lastModified": "2026-03-10"
+      "hash": "4dc555a38c8c0a71",
+      "lastModified": "2026-03-11"
     },
     "events/ad7ce545--": {
-      "hash": "a50de89153a09897",
-      "lastModified": "2026-03-10"
+      "hash": "e1ff83fb21456bd1",
+      "lastModified": "2026-03-11"
     },
     "events/6655bd28--": {
-      "hash": "22e5d36671ce0bf5",
-      "lastModified": "2026-03-10"
+      "hash": "485204c2ea2d2f40",
+      "lastModified": "2026-03-11"
     },
     "events/144bd0d3--": {
-      "hash": "bc598f8e78084b61",
-      "lastModified": "2026-03-10"
+      "hash": "777439ffcc9fb98d",
+      "lastModified": "2026-03-11"
     },
     "events/866f36d8--24": {
-      "hash": "185520f0665fdae3",
-      "lastModified": "2026-03-10"
+      "hash": "adf1b5265b6f8adb",
+      "lastModified": "2026-03-11"
     },
     "events/995cda33-studio-": {
-      "hash": "fabfd232f4c74699",
-      "lastModified": "2026-03-10"
+      "hash": "b937c9fec1f89ead",
+      "lastModified": "2026-03-11"
     },
     "events/7628915f--2-0": {
-      "hash": "52de0943b54c7d74",
-      "lastModified": "2026-03-10"
+      "hash": "5a83403e3748f719",
+      "lastModified": "2026-03-11"
     },
     "events/f4e51016--": {
-      "hash": "67ce005925e54abc",
-      "lastModified": "2026-03-10"
+      "hash": "6deac1ea3c8d2070",
+      "lastModified": "2026-03-11"
     },
     "events/d6c716bc--": {
-      "hash": "110a2802db40c99f",
-      "lastModified": "2026-03-10"
+      "hash": "dae4e323ffae7658",
+      "lastModified": "2026-03-11"
     },
     "events/37187a79--": {
-      "hash": "9e2a8dd969f9ee84",
-      "lastModified": "2026-03-10"
+      "hash": "51dd0ceb0ffcdaa8",
+      "lastModified": "2026-03-11"
     },
     "events/289eb3bd--": {
-      "hash": "23e3901a9d12321c",
-      "lastModified": "2026-03-10"
+      "hash": "922717ac51066af0",
+      "lastModified": "2026-03-11"
     },
     "events/2e8d1211-rabbithole-": {
-      "hash": "6266efc8c7c6a523",
-      "lastModified": "2026-03-10"
+      "hash": "8d725aac0902543d",
+      "lastModified": "2026-03-11"
     },
     "events/ed9c36dd--": {
-      "hash": "d270e15acb5a6e32",
-      "lastModified": "2026-03-10"
+      "hash": "d2abcd5eea1ff5aa",
+      "lastModified": "2026-03-11"
     },
     "events/1cd9f2d7-at-victoria-": {
-      "hash": "cc000469ab20f279",
-      "lastModified": "2026-03-10"
+      "hash": "82549a4fd032b919",
+      "lastModified": "2026-03-11"
     },
     "events/1497f489-nous-francis-bacon-project-scream-of-the-body": {
-      "hash": "008bf49f61ae1ddc",
-      "lastModified": "2026-03-10"
+      "hash": "3476af935eef377c",
+      "lastModified": "2026-03-11"
     },
     "events/5493dea5--": {
-      "hash": "174968aa0add4b32",
-      "lastModified": "2026-03-10"
+      "hash": "f58b8c44b97f72f6",
+      "lastModified": "2026-03-11"
     },
     "events/e840cf80--": {
-      "hash": "ab0120f0ad5589f7",
-      "lastModified": "2026-03-10"
+      "hash": "939d8cc3725b2dc4",
+      "lastModified": "2026-03-11"
     },
     "events/b6979a40--": {
-      "hash": "e1d91e8a0e454b29",
-      "lastModified": "2026-03-10"
+      "hash": "c24c0d591a5de144",
+      "lastModified": "2026-03-11"
     },
     "events/7d64dc95-arroyo-theater-": {
-      "hash": "fdfa3a9428d18490",
-      "lastModified": "2026-03-10"
+      "hash": "4f542c46f2f253b2",
+      "lastModified": "2026-03-11"
     },
     "events/14177de5--intra-muros": {
-      "hash": "0b5fd3a9a0d0a32d",
-      "lastModified": "2026-03-10"
+      "hash": "144462f31c784a93",
+      "lastModified": "2026-03-11"
     },
     "events/f24fe0de-brecht-2510-jazz-standards": {
-      "hash": "0c443b6be2053278",
-      "lastModified": "2026-03-10"
+      "hash": "fac87811e68f9af9",
+      "lastModified": "2026-03-11"
     },
     "events/0fa6cadb--": {
-      "hash": "4e83e091efa3fa44",
-      "lastModified": "2026-03-10"
+      "hash": "4b4d7f6ded1bac9c",
+      "lastModified": "2026-03-11"
     },
     "events/f8fb5c4a-rabbithole-": {
-      "hash": "c0b5c7d4e0e3a0b5",
-      "lastModified": "2026-03-10"
+      "hash": "83eb5aac7c7d7635",
+      "lastModified": "2026-03-11"
     },
     "events/9655dfbf-studio-": {
-      "hash": "ba097c81988c434c",
-      "lastModified": "2026-03-10"
+      "hash": "768150051ba5ca40",
+      "lastModified": "2026-03-11"
     },
     "events/92a62fcd--": {
-      "hash": "abeb6a2e3c649c19",
-      "lastModified": "2026-03-10"
+      "hash": "3656320b8056dcae",
+      "lastModified": "2026-03-11"
     },
     "events/fb124781--": {
-      "hash": "6a139f991ffda1fc",
-      "lastModified": "2026-03-10"
+      "hash": "a22219afa72b9033",
+      "lastModified": "2026-03-11"
     },
     "events/b43db435--": {
-      "hash": "305c468f14ccd746",
-      "lastModified": "2026-03-10"
+      "hash": "3e5bd51deffedb77",
+      "lastModified": "2026-03-11"
     },
     "events/3284ae6b--2": {
-      "hash": "59b850a7a1b088ee",
-      "lastModified": "2026-03-10"
+      "hash": "f0e98ea437e029a1",
+      "lastModified": "2026-03-11"
     },
     "events/b11d6676--": {
-      "hash": "8d5ac30ea445790e",
-      "lastModified": "2026-03-10"
+      "hash": "191b4b2f21b219c2",
+      "lastModified": "2026-03-11"
     },
     "events/7072ad03-arroyo-theater-": {
-      "hash": "54218b07b6c05998",
-      "lastModified": "2026-03-10"
+      "hash": "7b1082dd6bfa4e4d",
+      "lastModified": "2026-03-11"
     },
     "events/121bf945-bios-lo": {
-      "hash": "3ce740fb1b46e72e",
-      "lastModified": "2026-03-10"
+      "hash": "24956a752ff904be",
+      "lastModified": "2026-03-11"
     },
     "events/e8ada0c4-altera-pars-lost-amp-found": {
-      "hash": "a4e259e0bd88963d",
-      "lastModified": "2026-03-10"
+      "hash": "a8674be51fb1a9b8",
+      "lastModified": "2026-03-11"
     },
     "events/52edab13-h-ug-art-space-": {
-      "hash": "f94badc49d4d701b",
-      "lastModified": "2026-03-10"
+      "hash": "1f0c8960d5f8146e",
+      "lastModified": "2026-03-11"
     },
     "events/9ed4580c--mein-komplex": {
-      "hash": "8a8249ef8fa84740",
-      "lastModified": "2026-03-10"
+      "hash": "d0ea272fe1d5f56b",
+      "lastModified": "2026-03-11"
     },
     "events/77655b6a-newman-cinema-meta": {
-      "hash": "feefb3f8394c2b26",
-      "lastModified": "2026-03-10"
+      "hash": "0b1afe86db2262e9",
+      "lastModified": "2026-03-11"
     },
     "events/78d74e30-onassis-stegi-": {
-      "hash": "1e2c83a5ee5f121b",
-      "lastModified": "2026-03-10"
+      "hash": "28088862aed9c420",
+      "lastModified": "2026-03-11"
     },
     "events/341b09b0-baumstrasse-": {
-      "hash": "1aa64202b9d76c25",
-      "lastModified": "2026-03-10"
+      "hash": "c2ed68a1afde2980",
+      "lastModified": "2026-03-11"
     },
     "events/52347740--": {
-      "hash": "a35c31fd0417fc50",
-      "lastModified": "2026-03-10"
+      "hash": "36ee41a66ef85ce8",
+      "lastModified": "2026-03-11"
     },
     "events/61f516b5--": {
-      "hash": "f71cb692c6bfd015",
-      "lastModified": "2026-03-10"
+      "hash": "54ea52b322e0dedb",
+      "lastModified": "2026-03-11"
     },
     "events/63bb459b--": {
-      "hash": "af56458c6117ca26",
-      "lastModified": "2026-03-10"
+      "hash": "6e4bf84f8ab64cd5",
+      "lastModified": "2026-03-11"
     },
     "events/c3131fab-olvio-": {
-      "hash": "94bd2bbe0f98b0c2",
-      "lastModified": "2026-03-10"
+      "hash": "56281895e69e4a03",
+      "lastModified": "2026-03-11"
     },
     "events/91d60dbb-studio-": {
-      "hash": "7ce1baf6df3c27d2",
-      "lastModified": "2026-03-10"
+      "hash": "ad596687870e53bb",
+      "lastModified": "2026-03-11"
     },
     "events/39133c57--": {
-      "hash": "07cc4d6a3b1191d2",
-      "lastModified": "2026-03-10"
+      "hash": "8b527fa5102a6484",
+      "lastModified": "2026-03-11"
     },
     "events/9783475f--": {
-      "hash": "c81862d697dcfe88",
-      "lastModified": "2026-03-10"
+      "hash": "188b4356c5465b65",
+      "lastModified": "2026-03-11"
     },
     "events/8bc99cd8-bios-nora-the-hell-s-house": {
-      "hash": "fa4bc875c7774a1e",
-      "lastModified": "2026-03-10"
+      "hash": "3d1083d07f8f2dd7",
+      "lastModified": "2026-03-11"
     },
     "events/5c829850-arch-club-": {
-      "hash": "ad2bd81516160c79",
-      "lastModified": "2026-03-10"
+      "hash": "d941eebd1c5c3d33",
+      "lastModified": "2026-03-11"
     },
     "events/1bb6894b--": {
-      "hash": "b9740354cb5b0535",
-      "lastModified": "2026-03-10"
+      "hash": "63766e88d796fe2e",
+      "lastModified": "2026-03-11"
     },
     "events/47d6b16f--the-play-that-goes-wrong": {
-      "hash": "cb6f6488f53fb438",
-      "lastModified": "2026-03-10"
+      "hash": "ccf85c5dc6e4a9ad",
+      "lastModified": "2026-03-11"
     },
     "events/05fc8731--4": {
-      "hash": "16ab6a22bcc75319",
-      "lastModified": "2026-03-10"
+      "hash": "05d01de1246642ce",
+      "lastModified": "2026-03-11"
     },
     "events/e37319da--": {
-      "hash": "5cf007743f0d7b6a",
-      "lastModified": "2026-03-10"
+      "hash": "5cc7a22e1d96db6e",
+      "lastModified": "2026-03-11"
     },
     "events/5e052103--": {
-      "hash": "ceef4f488aeaf103",
-      "lastModified": "2026-03-10"
+      "hash": "e94a3fe5374fd68f",
+      "lastModified": "2026-03-11"
     },
     "events/caca2ee5-brecht-2510-": {
-      "hash": "2e29d189fba751d7",
-      "lastModified": "2026-03-10"
+      "hash": "b712ff963b4b0f04",
+      "lastModified": "2026-03-11"
     },
     "events/3e090699-cafe-bar-5": {
-      "hash": "9b25c1cf074ad830",
-      "lastModified": "2026-03-10"
+      "hash": "bd04384c231e95fd",
+      "lastModified": "2026-03-11"
     },
     "events/75151566-104-perfetta": {
-      "hash": "20ab6a1c021e2b2f",
-      "lastModified": "2026-03-10"
+      "hash": "61a8c71da81f2c74",
+      "lastModified": "2026-03-11"
     },
     "events/1a5977dd--": {
-      "hash": "53209c09354e3d9e",
-      "lastModified": "2026-03-10"
+      "hash": "d5a6ca469a7cd0d3",
+      "lastModified": "2026-03-11"
     },
     "events/e8057324--": {
-      "hash": "2cbe33e03f452103",
-      "lastModified": "2026-03-10"
+      "hash": "be7c9090cf36b0ce",
+      "lastModified": "2026-03-11"
     },
     "events/91263ca0-stage-7-30": {
-      "hash": "39ab026d22e6461c",
-      "lastModified": "2026-03-10"
+      "hash": "f1bd0b1cd39a84be",
+      "lastModified": "2026-03-11"
     },
     "events/88f0a119--": {
-      "hash": "eda37154a39c211b",
-      "lastModified": "2026-03-10"
+      "hash": "82249c8cdce4ef18",
+      "lastModified": "2026-03-11"
     },
     "events/573d6eb3--": {
-      "hash": "5ecf5c856111d132",
-      "lastModified": "2026-03-10"
+      "hash": "2432861ae9aa2ddd",
+      "lastModified": "2026-03-11"
     },
     "events/09bf4ed4--": {
-      "hash": "4497300330737af9",
-      "lastModified": "2026-03-10"
+      "hash": "f4ed8c8e70343119",
+      "lastModified": "2026-03-11"
     },
     "events/c2e64418--push-up": {
-      "hash": "9061c95d2fbcf2d9",
-      "lastModified": "2026-03-10"
+      "hash": "06f66417a0d3b346",
+      "lastModified": "2026-03-11"
     },
     "events/d945e288--": {
-      "hash": "8cf5b955417e49d1",
-      "lastModified": "2026-03-10"
+      "hash": "84cf5cebd71d092f",
+      "lastModified": "2026-03-11"
     },
     "events/91d2ca81-104-smalltown-boy": {
-      "hash": "5f7f02f3c866cde7",
-      "lastModified": "2026-03-10"
+      "hash": "6b2678aaa6f948df",
+      "lastModified": "2026-03-11"
     },
     "events/6179a354--": {
-      "hash": "5cd6d60ffbdf6fbc",
-      "lastModified": "2026-03-10"
+      "hash": "99f22e30fb54447d",
+      "lastModified": "2026-03-11"
     },
     "events/f1e2c92d--": {
-      "hash": "98f674029abf9a71",
-      "lastModified": "2026-03-10"
+      "hash": "5b253dc871f504a1",
+      "lastModified": "2026-03-11"
     },
     "events/3253a836-nous-": {
-      "hash": "ed4dbeeeedc759b2",
-      "lastModified": "2026-03-10"
+      "hash": "112e68f522c748ac",
+      "lastModified": "2026-03-11"
     },
     "events/b9c7991d--": {
-      "hash": "708a735eeaf60153",
-      "lastModified": "2026-03-10"
+      "hash": "a525ba0238e9a808",
+      "lastModified": "2026-03-11"
     },
     "events/31120849--tootsie-the-musical": {
-      "hash": "251576af4bee8205",
-      "lastModified": "2026-03-10"
+      "hash": "2c144633cc6de29a",
+      "lastModified": "2026-03-11"
     },
     "events/e3d70c89--toxic": {
-      "hash": "a924c24091cda33a",
-      "lastModified": "2026-03-10"
+      "hash": "4afc8903abba42a4",
+      "lastModified": "2026-03-11"
     },
     "events/367cf72e--": {
-      "hash": "11a218c57668a58c",
-      "lastModified": "2026-03-10"
+      "hash": "0b6269155df5aa29",
+      "lastModified": "2026-03-11"
     },
     "events/b849e7f2--": {
-      "hash": "3bd2f89a5a085f25",
-      "lastModified": "2026-03-10"
+      "hash": "787013f56d1c5921",
+      "lastModified": "2026-03-11"
     },
     "events/0fdd1603--": {
-      "hash": "8de1eca34f5191d4",
-      "lastModified": "2026-03-10"
+      "hash": "1b46c49aae42aa81",
+      "lastModified": "2026-03-11"
     },
     "events/daea1b8f-art-bar-": {
-      "hash": "6f10a343a8edfcd9",
-      "lastModified": "2026-03-10"
+      "hash": "4fc82ddcf57d9d17",
+      "lastModified": "2026-03-11"
     },
     "events/c4b7fd4a--": {
-      "hash": "2b24e02c3b397c1a",
-      "lastModified": "2026-03-10"
+      "hash": "26ddafad8683ee63",
+      "lastModified": "2026-03-11"
     },
     "events/3de39cda-nox-the-velvet-night-amp": {
-      "hash": "51fc6c20d278a705",
-      "lastModified": "2026-03-10"
+      "hash": "9746611d61881c75",
+      "lastModified": "2026-03-11"
     },
     "events/fc7d5eb9--": {
-      "hash": "79f032540447d529",
-      "lastModified": "2026-03-10"
+      "hash": "229a8ed6de61de1b",
+      "lastModified": "2026-03-11"
     },
     "events/62522aed--1984": {
-      "hash": "e04b106e056b21be",
-      "lastModified": "2026-03-10"
+      "hash": "debe1cd2d25da70e",
+      "lastModified": "2026-03-11"
     },
     "events/7c8eb167--": {
-      "hash": "e88b1d7a9f46a67b",
-      "lastModified": "2026-03-10"
+      "hash": "3a9a0a4da5368426",
+      "lastModified": "2026-03-11"
     },
     "events/6b32162e--andy": {
-      "hash": "0a1f245686e27a35",
-      "lastModified": "2026-03-10"
+      "hash": "a1bc20a7227f1bd0",
+      "lastModified": "2026-03-11"
     },
     "events/a87f36e2--": {
-      "hash": "e54fd1542e278ada",
-      "lastModified": "2026-03-10"
+      "hash": "af7ba33581893f2b",
+      "lastModified": "2026-03-11"
     },
     "events/12f9e0c4--": {
-      "hash": "0142a36b99173edf",
-      "lastModified": "2026-03-10"
+      "hash": "4b1c3efb3134d59d",
+      "lastModified": "2026-03-11"
     },
     "events/b465c7e6--": {
-      "hash": "8565986af097dec9",
-      "lastModified": "2026-03-10"
+      "hash": "f847250a4f93f883",
+      "lastModified": "2026-03-11"
     },
     "events/86565cbd--": {
-      "hash": "99c77d4ee29f9fd1",
-      "lastModified": "2026-03-10"
+      "hash": "b6d589fac48886a0",
+      "lastModified": "2026-03-11"
     },
     "events/a2a9e84c-calderone-art-space-": {
-      "hash": "a4a939b0dc7b6a5b",
-      "lastModified": "2026-03-10"
+      "hash": "f42fc0e3556534fd",
+      "lastModified": "2026-03-11"
     },
     "events/91e678b7--": {
-      "hash": "0d901fb0583e3bcf",
-      "lastModified": "2026-03-10"
+      "hash": "57cb85be41779dd0",
+      "lastModified": "2026-03-11"
     },
     "events/6ae15d9f-art-63-": {
-      "hash": "ea92408a80ed1271",
-      "lastModified": "2026-03-10"
+      "hash": "e0639ed85dc53bf9",
+      "lastModified": "2026-03-11"
     },
     "events/dc6c0c58--a-la-gourmet": {
-      "hash": "928abda06e7e43d2",
-      "lastModified": "2026-03-10"
+      "hash": "8b3e1675ed921068",
+      "lastModified": "2026-03-11"
     },
     "events/48be8294--linda": {
-      "hash": "0962a1180dcda0d5",
-      "lastModified": "2026-03-10"
+      "hash": "1f3c6f4b42fe4479",
+      "lastModified": "2026-03-11"
     },
     "events/fe8efa56-eliart-the-loop": {
-      "hash": "bfcec25671ba409b",
-      "lastModified": "2026-03-10"
+      "hash": "3265d89256bcd5ad",
+      "lastModified": "2026-03-11"
     },
     "events/d375bb2b--": {
-      "hash": "a1914184fe0f61bf",
-      "lastModified": "2026-03-10"
+      "hash": "0118d63d10dbc408",
+      "lastModified": "2026-03-11"
     },
     "events/221d5929--misery": {
-      "hash": "a8d63f8ff359b612",
-      "lastModified": "2026-03-10"
+      "hash": "5d975fc653f0258d",
+      "lastModified": "2026-03-11"
     },
     "events/629681ef--": {
-      "hash": "4902f28b9c375870",
-      "lastModified": "2026-03-10"
+      "hash": "b81b4be05cc49549",
+      "lastModified": "2026-03-11"
     },
     "events/f837d61b--surriento": {
-      "hash": "d8e9aab3e407ad31",
-      "lastModified": "2026-03-10"
+      "hash": "26573fcee9741695",
+      "lastModified": "2026-03-11"
     },
     "events/f4cbb8ce--doriangrayfilter": {
-      "hash": "f47fe1d14f1bf941",
-      "lastModified": "2026-03-10"
+      "hash": "5d3cea5b1b827639",
+      "lastModified": "2026-03-11"
     },
     "events/79577f17--21": {
-      "hash": "c57dc410c283ef72",
-      "lastModified": "2026-03-10"
+      "hash": "ea50a03017aeef99",
+      "lastModified": "2026-03-11"
     },
     "events/43eff1c2--": {
-      "hash": "726a11dc77c773b8",
-      "lastModified": "2026-03-10"
+      "hash": "12ce571231deeceb",
+      "lastModified": "2026-03-11"
     },
     "events/3a7363c9--": {
-      "hash": "ce4d8eb71c141119",
-      "lastModified": "2026-03-10"
+      "hash": "fbdba3114543e6d4",
+      "lastModified": "2026-03-11"
     },
     "events/8aa46685-nous-": {
-      "hash": "a1fec075424b33b0",
-      "lastModified": "2026-03-10"
+      "hash": "6ea6cd8a5f322c5b",
+      "lastModified": "2026-03-11"
     },
     "events/5eb191a2--": {
-      "hash": "ad556116526fd803",
-      "lastModified": "2026-03-10"
+      "hash": "5cb56e707b105454",
+      "lastModified": "2026-03-11"
     },
     "events/c7bd2e66--by-night": {
-      "hash": "8f7f8a1cac67b4db",
-      "lastModified": "2026-03-10"
+      "hash": "868db50b9cac7544",
+      "lastModified": "2026-03-11"
     },
     "events/335a50b7--": {
-      "hash": "ffcaffccfe04954d",
-      "lastModified": "2026-03-10"
+      "hash": "28cdf839984ab84d",
+      "lastModified": "2026-03-11"
     },
     "events/334cf0ed--killer-joe": {
-      "hash": "ade4761159e40ac2",
-      "lastModified": "2026-03-10"
+      "hash": "1d986dca39830d50",
+      "lastModified": "2026-03-11"
     },
     "events/bf20709d--vs": {
-      "hash": "d905b903a742382a",
-      "lastModified": "2026-03-10"
+      "hash": "2bbc0c966b086d96",
+      "lastModified": "2026-03-11"
     },
     "events/18c59ae6-olvio-": {
-      "hash": "8917a5681ffa56e4",
-      "lastModified": "2026-03-10"
+      "hash": "a0ae877556d560ae",
+      "lastModified": "2026-03-11"
     },
     "events/1a657bad-arch-club-the-philanthropist": {
-      "hash": "81321e538e8b38b1",
-      "lastModified": "2026-03-10"
+      "hash": "55cf46710cf23662",
+      "lastModified": "2026-03-11"
     },
     "events/f5893a3a--": {
-      "hash": "9b62b305596b9208",
-      "lastModified": "2026-03-10"
+      "hash": "7113f270192a43cf",
+      "lastModified": "2026-03-11"
     },
     "events/dd73cd59--71": {
-      "hash": "1faf8af86f07389a",
-      "lastModified": "2026-03-10"
+      "hash": "43196f35fcc5dfea",
+      "lastModified": "2026-03-11"
     },
     "events/da838ac3--": {
-      "hash": "4298b79180d92300",
-      "lastModified": "2026-03-10"
+      "hash": "20b61e1e188a15b3",
+      "lastModified": "2026-03-11"
     },
     "events/b834069f--": {
-      "hash": "9d91de3b3fdd65b8",
-      "lastModified": "2026-03-10"
+      "hash": "5b6b8d2b1bd99f9a",
+      "lastModified": "2026-03-11"
     },
     "events/d594f1a7-lib-ro-": {
-      "hash": "2905366caafddd06",
-      "lastModified": "2026-03-10"
+      "hash": "b9265520016f5b46",
+      "lastModified": "2026-03-11"
     },
     "events/242e47fb--": {
       "hash": "4c811899851c3ab2",
@@ -12486,6 +12486,266 @@
       "hash": "23c74042ff4c42f3",
       "lastModified": "2026-03-09"
     },
+    "events/3ebcd1f7--": {
+      "hash": "9b390828e83bdb75",
+      "lastModified": "2026-03-11"
+    },
+    "events/3a6358e2-olvio-": {
+      "hash": "d002273be407ec34",
+      "lastModified": "2026-03-11"
+    },
+    "events/a963731d--": {
+      "hash": "3ade599d1e905afe",
+      "lastModified": "2026-03-11"
+    },
+    "events/61e16037--in-motion": {
+      "hash": "9748e054f42ab714",
+      "lastModified": "2026-03-11"
+    },
+    "events/561da82f--o": {
+      "hash": "8e7d246269a6d6b2",
+      "lastModified": "2026-03-11"
+    },
+    "events/f3527d62--": {
+      "hash": "fd49427854f3de53",
+      "lastModified": "2026-03-11"
+    },
+    "events/224c45a6--": {
+      "hash": "6c4aa9b177a8d960",
+      "lastModified": "2026-03-11"
+    },
+    "events/a6fdd657--": {
+      "hash": "a3ca6b43497eb8b6",
+      "lastModified": "2026-03-11"
+    },
+    "events/88571b4e-olvio-": {
+      "hash": "88aec3dfb36495f6",
+      "lastModified": "2026-03-11"
+    },
+    "events/6e288e5b--4": {
+      "hash": "f8e4be56a21715be",
+      "lastModified": "2026-03-11"
+    },
+    "events/2fc971c4-104-": {
+      "hash": "6dde0940f5a2b2b3",
+      "lastModified": "2026-03-11"
+    },
+    "events/c2a6f6a8-olvio-": {
+      "hash": "ea6e0c8ea8d07456",
+      "lastModified": "2026-03-11"
+    },
+    "events/3a9ec1b5--80": {
+      "hash": "d8d36e3c053fd30d",
+      "lastModified": "2026-03-11"
+    },
+    "events/ef05509d--": {
+      "hash": "5d8e52672f63dfc2",
+      "lastModified": "2026-03-11"
+    },
+    "events/4ffa21b0--": {
+      "hash": "6f44444f7271b728",
+      "lastModified": "2026-03-11"
+    },
+    "events/0f8e0105--": {
+      "hash": "303aec33097b4d9c",
+      "lastModified": "2026-03-11"
+    },
+    "events/01184c5c-at-victoria-": {
+      "hash": "acfc7e95ad76baf8",
+      "lastModified": "2026-03-11"
+    },
+    "events/fd0cd608--": {
+      "hash": "9208b412824f2f68",
+      "lastModified": "2026-03-11"
+    },
+    "events/1075c155-calderone-art-space-": {
+      "hash": "fbd62c03e5be8979",
+      "lastModified": "2026-03-11"
+    },
+    "events/d0f977b3--": {
+      "hash": "7967def32fa7f2d4",
+      "lastModified": "2026-03-11"
+    },
+    "events/02a06148-studio-": {
+      "hash": "60f3534bfee4c240",
+      "lastModified": "2026-03-11"
+    },
+    "events/25d0c06c--": {
+      "hash": "ccab7e524ef84c64",
+      "lastModified": "2026-03-11"
+    },
+    "events/5ae10096--": {
+      "hash": "944b75dadb03d5c9",
+      "lastModified": "2026-03-11"
+    },
+    "events/be2e8294--": {
+      "hash": "7bb1e257bf1246c3",
+      "lastModified": "2026-03-11"
+    },
+    "events/3fd9fb20--": {
+      "hash": "1eb0930dc6cb047b",
+      "lastModified": "2026-03-11"
+    },
+    "events/5aaa23c9--": {
+      "hash": "cb264e58f6efe8c7",
+      "lastModified": "2026-03-11"
+    },
+    "events/b81d164b-paraga-paraga": {
+      "hash": "ccd9bf94e1ae28a1",
+      "lastModified": "2026-03-11"
+    },
+    "events/83844f59-131-": {
+      "hash": "e7f6fe241b5b58ca",
+      "lastModified": "2026-03-11"
+    },
+    "events/472207ab--": {
+      "hash": "b26c3d09fd3feec9",
+      "lastModified": "2026-03-11"
+    },
+    "events/d82ceb0f--": {
+      "hash": "174ae1005334e3fa",
+      "lastModified": "2026-03-11"
+    },
+    "events/9ac79ea3--": {
+      "hash": "93bf3c03865d5d0c",
+      "lastModified": "2026-03-11"
+    },
+    "events/121078d0--": {
+      "hash": "9bc52c403ff53e21",
+      "lastModified": "2026-03-11"
+    },
+    "events/15466313-olvio-": {
+      "hash": "c6239d2ff8a1973e",
+      "lastModified": "2026-03-11"
+    },
+    "events/08090c22--": {
+      "hash": "e8fbfa72539f4292",
+      "lastModified": "2026-03-11"
+    },
+    "events/96996cab--": {
+      "hash": "06d5f5644f371516",
+      "lastModified": "2026-03-11"
+    },
+    "events/54297eaf--": {
+      "hash": "ebca8020aa58a640",
+      "lastModified": "2026-03-11"
+    },
+    "events/f379f745--": {
+      "hash": "02cb1a2a1ed2f1be",
+      "lastModified": "2026-03-11"
+    },
+    "events/c7d5b8b6--": {
+      "hash": "323f8bdf0bb736e5",
+      "lastModified": "2026-03-11"
+    },
+    "events/b130d060--": {
+      "hash": "2831076d9b708d2b",
+      "lastModified": "2026-03-11"
+    },
+    "events/5889cfea--": {
+      "hash": "8300783e7c170be4",
+      "lastModified": "2026-03-11"
+    },
+    "events/3015e8c4--": {
+      "hash": "95fecf5607b1e2dd",
+      "lastModified": "2026-03-11"
+    },
+    "events/3512a467--": {
+      "hash": "746ac4bc935ccc4d",
+      "lastModified": "2026-03-11"
+    },
+    "events/2054f5e3-paraga-": {
+      "hash": "22bf2e979e1a6b62",
+      "lastModified": "2026-03-11"
+    },
+    "events/1eb74ae5--": {
+      "hash": "b02f8d6043ffb92c",
+      "lastModified": "2026-03-11"
+    },
+    "events/0b062ff3--": {
+      "hash": "7f325d0ebe2c849d",
+      "lastModified": "2026-03-11"
+    },
+    "events/321b6d76--cartoon": {
+      "hash": "602cd60d51ed03d6",
+      "lastModified": "2026-03-11"
+    },
+    "events/7297f230--the-mr-and-mrs-bubble-show": {
+      "hash": "240b729756bc6d73",
+      "lastModified": "2026-03-11"
+    },
+    "events/27e914ac--": {
+      "hash": "1075cb54cbda9753",
+      "lastModified": "2026-03-11"
+    },
+    "events/f575612c-olvio-": {
+      "hash": "ff10e50bb0334c9e",
+      "lastModified": "2026-03-11"
+    },
+    "events/c72737ab-olvio-": {
+      "hash": "eb827ba249f431f7",
+      "lastModified": "2026-03-11"
+    },
+    "events/b810e723--": {
+      "hash": "b507fd3075091605",
+      "lastModified": "2026-03-11"
+    },
+    "events/8d868d45-104-": {
+      "hash": "4e072fdd84ff817e",
+      "lastModified": "2026-03-11"
+    },
+    "events/b6fb81bf--": {
+      "hash": "b7a0f07c7eacbb0f",
+      "lastModified": "2026-03-11"
+    },
+    "events/b6ca23d6--": {
+      "hash": "b1a476e80f0dc074",
+      "lastModified": "2026-03-11"
+    },
+    "events/a34ab56d--": {
+      "hash": "043c8937ea5a091a",
+      "lastModified": "2026-03-11"
+    },
+    "events/c949f8df-olvio-": {
+      "hash": "a7c73fcbf5b1b30a",
+      "lastModified": "2026-03-11"
+    },
+    "events/1aba443e--": {
+      "hash": "d0c258ef479a0fc7",
+      "lastModified": "2026-03-11"
+    },
+    "events/d74fba6e--": {
+      "hash": "65850cc3ffda9ff9",
+      "lastModified": "2026-03-11"
+    },
+    "events/a633594a--": {
+      "hash": "e46589ff6352b5c5",
+      "lastModified": "2026-03-11"
+    },
+    "events/d073f348--": {
+      "hash": "2837011f02d1f447",
+      "lastModified": "2026-03-11"
+    },
+    "events/7589401e--": {
+      "hash": "820beb3917b5d16c",
+      "lastModified": "2026-03-11"
+    },
+    "events/9368c312--": {
+      "hash": "5f0668d0acccd5a4",
+      "lastModified": "2026-03-11"
+    },
+    "events/b9aeda39--": {
+      "hash": "c0bc8565e421b1fe",
+      "lastModified": "2026-03-11"
+    },
+    "events/6e2f28e7--yerma": {
+      "hash": "e225935dcf17c0b4",
+      "lastModified": "2026-03-11"
+    },
+    "events/eeb87984--": {
+      "hash": "7321cb59c1c62f2a",
+      "lastModified": "2026-03-11"
+    },
     "events/b4ecb3e2-sunel-arena-aek-bc-tofas-bursa": {
       "hash": "c61b491a1e2c503f",
       "lastModified": "2026-03-09"
@@ -12494,9 +12754,69 @@
       "hash": "acb6f81277063ac8",
       "lastModified": "2026-03-10"
     },
+    "events/a276fe6f--": {
+      "hash": "c0a7323796a19227",
+      "lastModified": "2026-03-11"
+    },
+    "events/e4daca52-calderone-art-space-": {
+      "hash": "ee7eec249760cbd5",
+      "lastModified": "2026-03-11"
+    },
+    "events/dce841d5-studio-": {
+      "hash": "af4e787790fbdec6",
+      "lastModified": "2026-03-11"
+    },
+    "events/30339e1d-arroyo-theater-": {
+      "hash": "dc6850e4ccd7d1e7",
+      "lastModified": "2026-03-11"
+    },
+    "events/f377cf84--": {
+      "hash": "2d78358266edd36f",
+      "lastModified": "2026-03-11"
+    },
+    "events/c7e66009-studio-": {
+      "hash": "5316ecba1c56a03f",
+      "lastModified": "2026-03-11"
+    },
+    "events/9950d4de--": {
+      "hash": "6a7448c48ea19f9c",
+      "lastModified": "2026-03-11"
+    },
+    "events/3d7362e9--": {
+      "hash": "cd853625cc6c2d53",
+      "lastModified": "2026-03-11"
+    },
+    "events/75d5a266--": {
+      "hash": "913fcb6a600411df",
+      "lastModified": "2026-03-11"
+    },
+    "events/cad7b61c-burger-disco-club-the-dancehall-shake": {
+      "hash": "977324470164f591",
+      "lastModified": "2026-03-11"
+    },
     "events/94f8404c--": {
       "hash": "5560b92b0eebf047",
       "lastModified": "2026-03-10"
+    },
+    "events/af08bab3--": {
+      "hash": "d0331c8442b51f4c",
+      "lastModified": "2026-03-11"
+    },
+    "events/e06b9521--": {
+      "hash": "8ee2015405ee504a",
+      "lastModified": "2026-03-11"
+    },
+    "events/35d9cd0b--": {
+      "hash": "464db81ede83c28c",
+      "lastModified": "2026-03-11"
+    },
+    "events/9b5e9734--": {
+      "hash": "8b5b960dc9068722",
+      "lastModified": "2026-03-11"
+    },
+    "events/88798857-lib-ro-": {
+      "hash": "32bb31ea69927038",
+      "lastModified": "2026-03-11"
     },
     "events/a5cf288a--3": {
       "hash": "efaf0b75eb60d79f",
@@ -12514,6 +12834,90 @@
       "hash": "ca14092a7275896c",
       "lastModified": "2026-03-10"
     },
+    "events/1c5c9d15--": {
+      "hash": "fc3ee5c625bceae7",
+      "lastModified": "2026-03-11"
+    },
+    "events/29b0f7df--cleansed": {
+      "hash": "708762dc8cc7e7c9",
+      "lastModified": "2026-03-11"
+    },
+    "events/68a08951--": {
+      "hash": "584a92e3484c8890",
+      "lastModified": "2026-03-11"
+    },
+    "events/cf8c7ccd-nous-": {
+      "hash": "103cfa597b1065dd",
+      "lastModified": "2026-03-11"
+    },
+    "events/2e68cc6f--": {
+      "hash": "83fdd6841cd6a456",
+      "lastModified": "2026-03-11"
+    },
+    "events/074dbdba--": {
+      "hash": "81528cf3d6660970",
+      "lastModified": "2026-03-11"
+    },
+    "events/6489a1ca--": {
+      "hash": "7dddc4806815803b",
+      "lastModified": "2026-03-11"
+    },
+    "events/68ffa5cf-coronet-theater-": {
+      "hash": "3d0179658a6fb385",
+      "lastModified": "2026-03-11"
+    },
+    "events/a54291e2--": {
+      "hash": "bb6e1a06c3655dc1",
+      "lastModified": "2026-03-11"
+    },
+    "events/da1a9812--": {
+      "hash": "8d68546dfd0b0435",
+      "lastModified": "2026-03-11"
+    },
+    "events/540a74eb--": {
+      "hash": "003818c22cb1aa3b",
+      "lastModified": "2026-03-11"
+    },
+    "events/ebae0e68--": {
+      "hash": "f2e456d51e73e35c",
+      "lastModified": "2026-03-11"
+    },
+    "events/691350ec--": {
+      "hash": "8dc3494f968030d0",
+      "lastModified": "2026-03-11"
+    },
+    "events/80198911--": {
+      "hash": "ee4294350d86b05d",
+      "lastModified": "2026-03-11"
+    },
+    "events/91384760--part-2": {
+      "hash": "07d35a9a02e00c6e",
+      "lastModified": "2026-03-11"
+    },
+    "events/6b6b6472-at-victoria-": {
+      "hash": "e8f804253a20c144",
+      "lastModified": "2026-03-11"
+    },
+    "events/4ce772bc-altera-pars-": {
+      "hash": "9e250f7bb7be558a",
+      "lastModified": "2026-03-11"
+    },
+    "events/9d6d4f09--": {
+      "hash": "53118526a36173e4",
+      "lastModified": "2026-03-11"
+    },
+    "events/d9361346--": {
+      "hash": "1babfa110ed6a0af",
+      "lastModified": "2026-03-11"
+    },
+    "events/dfe354ae-brecht-2510-": {
+      "hash": "0314f0fff11c4f05",
+      "lastModified": "2026-03-11"
+    },
+    "events/5d2aa439-radar-": {
+      "hash": "f0ba4a3e5998a1ad",
+      "lastModified": "2026-03-11"
+    },
     "events/35cad09f-christmas-theater-": {
       "hash": "a326226ad605c6ae",
       "lastModified": "2026-03-10"
@@ -12521,6 +12925,10 @@
     "events/32334794--dara-o-briain": {
       "hash": "52d49a72699ba15c",
       "lastModified": "2026-03-09"
+    },
+    "events/1c6129c2--": {
+      "hash": "907f6e4f45922aa9",
+      "lastModified": "2026-03-11"
     },
     "events/4219bcc2--14": {
       "hash": "f4312d5f310bebb7",
@@ -12530,6 +12938,90 @@
       "hash": "9ea52dfc3f63ffc2",
       "lastModified": "2026-03-09"
     },
+    "events/a50c50f7--": {
+      "hash": "b5c06e79e9a1505e",
+      "lastModified": "2026-03-11"
+    },
+    "events/c8f80100--": {
+      "hash": "5ab3e0abf95a7720",
+      "lastModified": "2026-03-11"
+    },
+    "events/21e7b470--": {
+      "hash": "63894b65b470b14c",
+      "lastModified": "2026-03-11"
+    },
+    "events/c3413689--": {
+      "hash": "efc3d6e8c9ed0ef3",
+      "lastModified": "2026-03-11"
+    },
+    "events/25076fbe--dolls": {
+      "hash": "1851cbe3b2a94893",
+      "lastModified": "2026-03-11"
+    },
+    "events/4ae7b196--": {
+      "hash": "4e9b64df7312e24f",
+      "lastModified": "2026-03-11"
+    },
+    "events/5e5e2db7--": {
+      "hash": "28262d5248ee3c66",
+      "lastModified": "2026-03-11"
+    },
+    "events/ce2bab3c--": {
+      "hash": "e99325b574c7d6e4",
+      "lastModified": "2026-03-11"
+    },
+    "events/9e19fcd6--": {
+      "hash": "f23238037937ff58",
+      "lastModified": "2026-03-11"
+    },
+    "events/7c7aed72--": {
+      "hash": "64c9740b916dc8be",
+      "lastModified": "2026-03-11"
+    },
+    "events/5625fd07--": {
+      "hash": "b66b8baebe208cb5",
+      "lastModified": "2026-03-11"
+    },
+    "events/ae8ba2b0--": {
+      "hash": "0406177a2238f892",
+      "lastModified": "2026-03-11"
+    },
+    "events/2b4e71c6--": {
+      "hash": "d5707ade18e6f271",
+      "lastModified": "2026-03-11"
+    },
+    "events/14d0171c--": {
+      "hash": "987b8ca4040d8c43",
+      "lastModified": "2026-03-11"
+    },
+    "events/aab2884c--": {
+      "hash": "e68373e92058987b",
+      "lastModified": "2026-03-11"
+    },
+    "events/f0bfca5e--": {
+      "hash": "99381a37d2720bd8",
+      "lastModified": "2026-03-11"
+    },
+    "events/b0190ac3--": {
+      "hash": "600e70c20940b1f5",
+      "lastModified": "2026-03-11"
+    },
+    "events/434a9e51--": {
+      "hash": "4ce699840ff5c8f4",
+      "lastModified": "2026-03-11"
+    },
+    "events/ee67a735--5": {
+      "hash": "7d62f7e39099d857",
+      "lastModified": "2026-03-11"
+    },
+    "events/121883d5-theatre-of-the-no-": {
+      "hash": "6280eef78d59b658",
+      "lastModified": "2026-03-11"
+    },
+    "events/59a150d5--": {
+      "hash": "f8adb1f21ef66eb2",
+      "lastModified": "2026-03-11"
+    },
     "events/a0cb8b63-cantina-social-lockbird": {
       "hash": "06eeb9132a825306",
       "lastModified": "2026-03-09"
@@ -12538,13 +13030,565 @@
       "hash": "037086730d16b021",
       "lastModified": "2026-03-10"
     },
+    "events/ae1d7b15--": {
+      "hash": "69614229df6fad2f",
+      "lastModified": "2026-03-11"
+    },
+    "events/38ed00f4--": {
+      "hash": "88490f8274c9214b",
+      "lastModified": "2026-03-11"
+    },
+    "events/cd3e9f4b--": {
+      "hash": "4dea6b883efd8e6c",
+      "lastModified": "2026-03-11"
+    },
+    "events/b0e7f995-auditorium-": {
+      "hash": "1e69fd3110cd7e87",
+      "lastModified": "2026-03-11"
+    },
+    "events/9c9da490--": {
+      "hash": "9c04e0fc2d612abf",
+      "lastModified": "2026-03-11"
+    },
+    "events/f9664798--": {
+      "hash": "e40cfacc1e41e1ec",
+      "lastModified": "2026-03-11"
+    },
+    "events/a74d3e83-studio-20": {
+      "hash": "fc497f287f41b758",
+      "lastModified": "2026-03-11"
+    },
+    "events/2ac9cb81-studio-": {
+      "hash": "6ab3e22afb6c01e3",
+      "lastModified": "2026-03-11"
+    },
+    "events/29d3c26f-nous-": {
+      "hash": "b852510b8c1b1a89",
+      "lastModified": "2026-03-11"
+    },
+    "events/03d8fc2f-brecht-2510-": {
+      "hash": "62b173d49f2d5399",
+      "lastModified": "2026-03-11"
+    },
+    "events/0f041567--aneantir": {
+      "hash": "2bbc658cbb9ba874",
+      "lastModified": "2026-03-11"
+    },
+    "events/a477c704-cartel-": {
+      "hash": "32e2c61d8356a9e0",
+      "lastModified": "2026-03-11"
+    },
+    "events/4ab9bc98--": {
+      "hash": "efb099c7d7495715",
+      "lastModified": "2026-03-11"
+    },
+    "events/779951b8--": {
+      "hash": "61982c8c68081c89",
+      "lastModified": "2026-03-11"
+    },
+    "events/83b82fbc--": {
+      "hash": "626f4b4e9e5614cd",
+      "lastModified": "2026-03-11"
+    },
+    "events/39849714-arroyo-theater-": {
+      "hash": "4caf4bdcf9429a96",
+      "lastModified": "2026-03-11"
+    },
+    "events/d10232fd--best-of": {
+      "hash": "a31926ab98dfd1a7",
+      "lastModified": "2026-03-11"
+    },
+    "events/0f186a4f--": {
+      "hash": "309f543ed6b7a0cc",
+      "lastModified": "2026-03-11"
+    },
+    "events/7d91f1a2--bull": {
+      "hash": "03bdc75db3c5772c",
+      "lastModified": "2026-03-11"
+    },
+    "events/be001f31--": {
+      "hash": "4faf64fd14eed163",
+      "lastModified": "2026-03-11"
+    },
+    "events/655868fb--": {
+      "hash": "368aedd508af079a",
+      "lastModified": "2026-03-11"
+    },
+    "events/d067f3f6--": {
+      "hash": "5c482216c08e5375",
+      "lastModified": "2026-03-11"
+    },
+    "events/6f19e5e2--": {
+      "hash": "50bdb7c405d73272",
+      "lastModified": "2026-03-11"
+    },
+    "events/d14fb4bf--": {
+      "hash": "5c336c797347d321",
+      "lastModified": "2026-03-11"
+    },
+    "events/064670ba-red-jasper-cabaret-theatre-": {
+      "hash": "9710af4f1f94383e",
+      "lastModified": "2026-03-11"
+    },
+    "events/f0a33931--": {
+      "hash": "21c4483871a7e2ba",
+      "lastModified": "2026-03-11"
+    },
+    "events/9c670f9d-nous-": {
+      "hash": "85d6ac2fcfe837b2",
+      "lastModified": "2026-03-11"
+    },
+    "events/1ea31ade--": {
+      "hash": "dcc02120745c33ff",
+      "lastModified": "2026-03-11"
+    },
+    "events/6e809c88--": {
+      "hash": "4a44e37d6938af51",
+      "lastModified": "2026-03-11"
+    },
+    "events/9903de19--": {
+      "hash": "60bea55fa73f03af",
+      "lastModified": "2026-03-11"
+    },
+    "events/c4af92ef-bios-": {
+      "hash": "7bdbb856d38010c8",
+      "lastModified": "2026-03-11"
+    },
+    "events/988bedd3--": {
+      "hash": "1e2130984fbbd352",
+      "lastModified": "2026-03-11"
+    },
+    "events/96f43b58--": {
+      "hash": "0379bfb95d15594f",
+      "lastModified": "2026-03-11"
+    },
+    "events/6a0139e8--": {
+      "hash": "f30f1a0bc2c1cb73",
+      "lastModified": "2026-03-11"
+    },
+    "events/cbd35893--": {
+      "hash": "944eca1cd8f07590",
+      "lastModified": "2026-03-11"
+    },
+    "events/e0f3bc2f--24": {
+      "hash": "ccd9f48f3b1453a5",
+      "lastModified": "2026-03-11"
+    },
+    "events/eaaf86f1-studio-": {
+      "hash": "7ec765b20d98ff0e",
+      "lastModified": "2026-03-11"
+    },
+    "events/0da7effb--2-0": {
+      "hash": "8d923e112738f7fe",
+      "lastModified": "2026-03-11"
+    },
+    "events/17854d9c--": {
+      "hash": "65e80ad8fab6d18c",
+      "lastModified": "2026-03-11"
+    },
+    "events/9bfada9f--": {
+      "hash": "209e4ef8242a785c",
+      "lastModified": "2026-03-11"
+    },
+    "events/bac414e9--": {
+      "hash": "1af62a38fb214242",
+      "lastModified": "2026-03-11"
+    },
+    "events/5be79053--": {
+      "hash": "447afb303ad790ff",
+      "lastModified": "2026-03-11"
+    },
+    "events/a96fcd4d-rabbithole-": {
+      "hash": "5624f592fab34e13",
+      "lastModified": "2026-03-11"
+    },
+    "events/7496a729-at-victoria-": {
+      "hash": "2fbe8d240f473ef3",
+      "lastModified": "2026-03-11"
+    },
+    "events/fc810e23-nous-francis-bacon-project-scream-of-the-body": {
+      "hash": "89396ab39b589cf3",
+      "lastModified": "2026-03-11"
+    },
+    "events/73ccde5d--": {
+      "hash": "db80f7c14990891a",
+      "lastModified": "2026-03-11"
+    },
+    "events/760d799f--": {
+      "hash": "7aac3cf79fce5473",
+      "lastModified": "2026-03-11"
+    },
+    "events/e119d8d0--": {
+      "hash": "f24f89b9d8550491",
+      "lastModified": "2026-03-11"
+    },
+    "events/b0f6e334-arroyo-theater-": {
+      "hash": "59ba3299e2bcaf0a",
+      "lastModified": "2026-03-11"
+    },
+    "events/7810a532--intra-muros": {
+      "hash": "5100d43025590b00",
+      "lastModified": "2026-03-11"
+    },
+    "events/5eee034d-brecht-2510-jazz-standards": {
+      "hash": "b92d67324fabe0a9",
+      "lastModified": "2026-03-11"
+    },
+    "events/3225d3a9--": {
+      "hash": "265245d71285ccb7",
+      "lastModified": "2026-03-11"
+    },
+    "events/6dad6ff5-rabbithole-": {
+      "hash": "1ac6b89181e7835a",
+      "lastModified": "2026-03-11"
+    },
+    "events/9a52cf3d-studio-": {
+      "hash": "b65df0ab02470d03",
+      "lastModified": "2026-03-11"
+    },
+    "events/f430d6b2--": {
+      "hash": "4bb2e6ecf022bc3f",
+      "lastModified": "2026-03-11"
+    },
+    "events/8716d5ce--": {
+      "hash": "195b6946948a9a9e",
+      "lastModified": "2026-03-11"
+    },
+    "events/7a06cfd7--": {
+      "hash": "db22f010cafd140c",
+      "lastModified": "2026-03-11"
+    },
+    "events/3d6c30f2--2": {
+      "hash": "2f79f18d04566b25",
+      "lastModified": "2026-03-11"
+    },
+    "events/87c44fdc--": {
+      "hash": "f624894b56cc7b31",
+      "lastModified": "2026-03-11"
+    },
+    "events/0c08c8b3-arroyo-theater-": {
+      "hash": "017aa02426c1e123",
+      "lastModified": "2026-03-11"
+    },
+    "events/69fa6d5b-bios-lo": {
+      "hash": "7b84b31ad6ee9629",
+      "lastModified": "2026-03-11"
+    },
+    "events/e847ee67-altera-pars-lost-amp-found": {
+      "hash": "3605663b04adb54a",
+      "lastModified": "2026-03-11"
+    },
+    "events/18dd2e95-h-ug-art-space-": {
+      "hash": "dcc03f2008c6040b",
+      "lastModified": "2026-03-11"
+    },
+    "events/b9623a72--mein-komplex": {
+      "hash": "202f7914b454b978",
+      "lastModified": "2026-03-11"
+    },
+    "events/e4ca5b76-onassis-stegi-": {
+      "hash": "afd4eebabfdeb2bb",
+      "lastModified": "2026-03-11"
+    },
+    "events/91fe2d94-baumstrasse-": {
+      "hash": "c21fbfafbebdab13",
+      "lastModified": "2026-03-11"
+    },
+    "events/5b9038d4--": {
+      "hash": "003ce46b9ae138f4",
+      "lastModified": "2026-03-11"
+    },
+    "events/9fc3d828--": {
+      "hash": "573711582763ef39",
+      "lastModified": "2026-03-11"
+    },
+    "events/b3c61d96--": {
+      "hash": "6e27f96755b71a41",
+      "lastModified": "2026-03-11"
+    },
+    "events/64e6b2bd-olvio-": {
+      "hash": "4c3197eb76488102",
+      "lastModified": "2026-03-11"
+    },
+    "events/5c4be3ed-studio-": {
+      "hash": "5bd936b102fef6e6",
+      "lastModified": "2026-03-11"
+    },
+    "events/9d9782a5--": {
+      "hash": "f4c2b5cb6a2769fb",
+      "lastModified": "2026-03-11"
+    },
+    "events/48c81fa3--": {
+      "hash": "77b4d531c7620dae",
+      "lastModified": "2026-03-11"
+    },
+    "events/e252b25d-bios-nora-the-hell-s-house": {
+      "hash": "5fba6b45fda69ab2",
+      "lastModified": "2026-03-11"
+    },
+    "events/4315afec-arch-club-": {
+      "hash": "21ddfd864cbda14e",
+      "lastModified": "2026-03-11"
+    },
+    "events/f31d8ae6--": {
+      "hash": "84c0b6092251f8df",
+      "lastModified": "2026-03-11"
+    },
+    "events/49e6ec10--the-play-that-goes-wrong": {
+      "hash": "9171760398b9e03a",
+      "lastModified": "2026-03-11"
+    },
+    "events/56ece161--4": {
+      "hash": "8da4af8cf8515586",
+      "lastModified": "2026-03-11"
+    },
+    "events/adfa5aca--": {
+      "hash": "75f008f90f380433",
+      "lastModified": "2026-03-11"
+    },
+    "events/6139f9cb--": {
+      "hash": "eb3dff077fa5acc7",
+      "lastModified": "2026-03-11"
+    },
+    "events/079466d0-brecht-2510-": {
+      "hash": "8ce649dba81a3ce3",
+      "lastModified": "2026-03-11"
+    },
+    "events/94a6aa16-cafe-bar-5": {
+      "hash": "5c740bbcb076ca80",
+      "lastModified": "2026-03-11"
+    },
+    "events/f7ecfd94-104-perfetta": {
+      "hash": "db535f9da12fdeb6",
+      "lastModified": "2026-03-11"
+    },
+    "events/6632d8fe--": {
+      "hash": "32893a856ac7f75d",
+      "lastModified": "2026-03-11"
+    },
+    "events/aaffac52--": {
+      "hash": "8dcce1b0562e4fb4",
+      "lastModified": "2026-03-11"
+    },
+    "events/21f5eadc-stage-7-30": {
+      "hash": "3a05953bcc853153",
+      "lastModified": "2026-03-11"
+    },
+    "events/3299bd0e--": {
+      "hash": "2b612be011a258fa",
+      "lastModified": "2026-03-11"
+    },
+    "events/f73ddf74--": {
+      "hash": "2a3832a6e50f9b0b",
+      "lastModified": "2026-03-11"
+    },
+    "events/17df13db--": {
+      "hash": "e1fa5f2151f82212",
+      "lastModified": "2026-03-11"
+    },
+    "events/41c5cb1e--push-up": {
+      "hash": "25abb194be9f2e1e",
+      "lastModified": "2026-03-11"
+    },
+    "events/02401b54--": {
+      "hash": "96f166a187be9ff8",
+      "lastModified": "2026-03-11"
+    },
+    "events/549a666a-104-smalltown-boy": {
+      "hash": "a837feb8048affce",
+      "lastModified": "2026-03-11"
+    },
+    "events/3bb84997--": {
+      "hash": "c4d99cbe6beac799",
+      "lastModified": "2026-03-11"
+    },
+    "events/fd682c3a--": {
+      "hash": "41ecbcdba057d888",
+      "lastModified": "2026-03-11"
+    },
+    "events/7f96b147-nous-": {
+      "hash": "f758cb43761eb2f3",
+      "lastModified": "2026-03-11"
+    },
+    "events/c5776ed3--": {
+      "hash": "fef4fd79f925a6ef",
+      "lastModified": "2026-03-11"
+    },
+    "events/748373ed--tootsie-the-musical": {
+      "hash": "f530d285297ec854",
+      "lastModified": "2026-03-11"
+    },
+    "events/683d7ed0--toxic": {
+      "hash": "cafd8d04af086f3f",
+      "lastModified": "2026-03-11"
+    },
+    "events/fc29c92f--": {
+      "hash": "66960a8ed894e98e",
+      "lastModified": "2026-03-11"
+    },
+    "events/756f9bde--": {
+      "hash": "e18d88629452186a",
+      "lastModified": "2026-03-11"
+    },
+    "events/844c0079--": {
+      "hash": "2362250ef0e5a36c",
+      "lastModified": "2026-03-11"
+    },
+    "events/cd7579c9-art-bar-": {
+      "hash": "c35d6b09fdddd3ea",
+      "lastModified": "2026-03-11"
+    },
+    "events/3a2d37c4-nox-the-velvet-night-amp": {
+      "hash": "e3a0b82c81462bf6",
+      "lastModified": "2026-03-11"
+    },
+    "events/1dff3bba--": {
+      "hash": "34097b299f05013f",
+      "lastModified": "2026-03-11"
+    },
+    "events/872f7b79--1984": {
+      "hash": "616ff50a4e5681cf",
+      "lastModified": "2026-03-11"
+    },
+    "events/062b6984--": {
+      "hash": "9dbc9d352135abcb",
+      "lastModified": "2026-03-11"
+    },
+    "events/4c0dbc09--andy": {
+      "hash": "3b395aa7e2bb14cf",
+      "lastModified": "2026-03-11"
+    },
+    "events/22d33bb0--": {
+      "hash": "2294e6d572e3ef5a",
+      "lastModified": "2026-03-11"
+    },
+    "events/da6654b6--": {
+      "hash": "95a96d17f1db2fdf",
+      "lastModified": "2026-03-11"
+    },
+    "events/e16c778d--": {
+      "hash": "bd638240e4a3c438",
+      "lastModified": "2026-03-11"
+    },
+    "events/e67468eb--": {
+      "hash": "9a5a1f20769ab8ae",
+      "lastModified": "2026-03-11"
+    },
+    "events/e769c952-calderone-art-space-": {
+      "hash": "5c93207b7af8d8de",
+      "lastModified": "2026-03-11"
+    },
+    "events/d6df9f40--": {
+      "hash": "c12055efaf0e153e",
+      "lastModified": "2026-03-11"
+    },
+    "events/026d39ee-art-63-": {
+      "hash": "5470e79d79b7e9da",
+      "lastModified": "2026-03-11"
+    },
+    "events/ce90cb55--a-la-gourmet": {
+      "hash": "410ab6e420e4afd1",
+      "lastModified": "2026-03-11"
+    },
+    "events/56986975--linda": {
+      "hash": "48810aa3348a2b8c",
+      "lastModified": "2026-03-11"
+    },
+    "events/73fab0dd-eliart-the-loop": {
+      "hash": "2ee17411f9bd7efb",
+      "lastModified": "2026-03-11"
+    },
+    "events/d6c61b96--": {
+      "hash": "8b6d199b60853048",
+      "lastModified": "2026-03-11"
+    },
+    "events/3fab19c8--misery": {
+      "hash": "8ffab9f125dcff77",
+      "lastModified": "2026-03-11"
+    },
+    "events/09747b82--": {
+      "hash": "4944cb49e5036a57",
+      "lastModified": "2026-03-11"
+    },
+    "events/2b5d6ae7--surriento": {
+      "hash": "4d088b4904de29c8",
+      "lastModified": "2026-03-11"
+    },
+    "events/41da3986--doriangrayfilter": {
+      "hash": "ba28702bbd10fc8f",
+      "lastModified": "2026-03-11"
+    },
     "events/077ba4bf-half-note-jazz-club-haig-yazdjian-live-special-guest": {
       "hash": "2d8ae2ff1725c219",
       "lastModified": "2026-03-10"
     },
+    "events/f5613431--21": {
+      "hash": "bbd1c45ad62c6426",
+      "lastModified": "2026-03-11"
+    },
+    "events/1b4d3750--": {
+      "hash": "8051b7bbeca8d96f",
+      "lastModified": "2026-03-11"
+    },
+    "events/afcc0f72--": {
+      "hash": "98038e0aadd60ad4",
+      "lastModified": "2026-03-11"
+    },
+    "events/e4b397bb-nous-": {
+      "hash": "c4273b65075dd573",
+      "lastModified": "2026-03-11"
+    },
+    "events/97cb498b--": {
+      "hash": "05889a02a35f42c8",
+      "lastModified": "2026-03-11"
+    },
+    "events/aac959df--by-night": {
+      "hash": "fa16139dc2098753",
+      "lastModified": "2026-03-11"
+    },
+    "events/b9ef2eae--": {
+      "hash": "b9a5220b72f9eb8f",
+      "lastModified": "2026-03-11"
+    },
+    "events/443b0cce--killer-joe": {
+      "hash": "f3a60e882cea8f6c",
+      "lastModified": "2026-03-11"
+    },
+    "events/2d269844--vs": {
+      "hash": "090c2fa04549f5c1",
+      "lastModified": "2026-03-11"
+    },
+    "events/b543bdec-olvio-": {
+      "hash": "fee501c00f12ae88",
+      "lastModified": "2026-03-11"
+    },
+    "events/d8a2a1fa-arch-club-the-philanthropist": {
+      "hash": "ef9a7ea40e019dfd",
+      "lastModified": "2026-03-11"
+    },
+    "events/a95e7ea7--": {
+      "hash": "5523fe52dd7fc497",
+      "lastModified": "2026-03-11"
+    },
+    "events/9a8d4405--71": {
+      "hash": "298a30093f436d34",
+      "lastModified": "2026-03-11"
+    },
+    "events/845671d4--": {
+      "hash": "59ed38c75f30877c",
+      "lastModified": "2026-03-11"
+    },
+    "events/d4a107f0--": {
+      "hash": "1fa0eba7e50d0a2f",
+      "lastModified": "2026-03-11"
+    },
     "events/01dbe970-metron-stage-": {
       "hash": "6f311276fbc70cc8",
       "lastModified": "2026-03-09"
+    },
+    "events/e39085c0-lib-ro-": {
+      "hash": "ca0bf037badb282d",
+      "lastModified": "2026-03-11"
     },
     "events/b8347235--": {
       "hash": "a5a3be8d7498b50d",
@@ -12566,10 +13610,6 @@
       "hash": "bc2780bcd0c7c746",
       "lastModified": "2026-03-09"
     },
-    "events/ff44e02a--": {
-      "hash": "2d5ad38946f9484a",
-      "lastModified": "2026-03-10"
-    },
     "events/eec60d73-coronet-theater-": {
       "hash": "ac1ad035ae3714cf",
       "lastModified": "2026-03-10"
@@ -12577,6 +13617,18 @@
     "events/0fec0e1c-embassy-theater-": {
       "hash": "bc7fb20df3ead151",
       "lastModified": "2026-03-10"
+    },
+    "events/f022177c-131-": {
+      "hash": "d7ba30b48ce88643",
+      "lastModified": "2026-03-11"
+    },
+    "events/45e9e132--": {
+      "hash": "087c3b489110da74",
+      "lastModified": "2026-03-11"
+    },
+    "events/e41d462b-burger-disco-club-singles-disco-club": {
+      "hash": "64f8ee6c27084194",
+      "lastModified": "2026-03-11"
     },
     "events/211c4c72-hood-art-space-": {
       "hash": "9e3085083edd2f1e",
@@ -12603,8 +13655,8 @@
       "lastModified": "2026-03-10"
     },
     "events/7627521b-caja-de-musica-39-39-39-39": {
-      "hash": "695e820617086b48",
-      "lastModified": "2026-03-09"
+      "hash": "be26c690b726c597",
+      "lastModified": "2026-03-11"
     },
     "events/d250a925-hood-art-space-": {
       "hash": "79de248b253f18c6",
@@ -12619,8 +13671,8 @@
       "lastModified": "2026-03-10"
     },
     "events/b0c4127a-104-": {
-      "hash": "3fea3d8c8a2c1cba",
-      "lastModified": "2026-03-10"
+      "hash": "8f8acd2830e20522",
+      "lastModified": "2026-03-11"
     },
     "events/30c79c8b--the-d-o-g": {
       "hash": "832da590b12dd5b4",
@@ -12643,8 +13695,8 @@
       "lastModified": "2026-03-09"
     },
     "events/ddc2f7a4-aux-club-": {
-      "hash": "cf31e9cdcfc3cce6",
-      "lastModified": "2026-03-09"
+      "hash": "56e37cf3aaac46b0",
+      "lastModified": "2026-03-11"
     },
     "events/56fba6ab-doors-ft-jerome-kaluta": {
       "hash": "806647840a98f326",
@@ -12655,24 +13707,28 @@
       "lastModified": "2026-03-10"
     },
     "events/8c0cd639-aux-club-aux-anagenesis-with-negitiv-friday-13-march": {
-      "hash": "603c530604754964",
-      "lastModified": "2026-03-09"
+      "hash": "814d886cafed816a",
+      "lastModified": "2026-03-11"
+    },
+    "events/16d502f8-bios-bacchae-6-0": {
+      "hash": "72099bb08f7d2196",
+      "lastModified": "2026-03-11"
     },
     "events/c8db933e-floyd-rationalistas": {
-      "hash": "39e21f2d2ec86ea7",
-      "lastModified": "2026-03-09"
+      "hash": "cedbeb3892171137",
+      "lastModified": "2026-03-11"
     },
     "events/37b429c0--171-187": {
       "hash": "ec4143c9a97cf0ee",
       "lastModified": "2026-03-09"
     },
     "events/1a56a706-gazarte-heretoir-live-in-athens": {
-      "hash": "15a6e6cd110af654",
-      "lastModified": "2026-03-10"
+      "hash": "ca5cf96ce9db4d1b",
+      "lastModified": "2026-03-11"
     },
     "events/4ad34c49--jazz-evi-mazi-manos-kitsikopoulos": {
-      "hash": "121f23ebddf83691",
-      "lastModified": "2026-03-10"
+      "hash": "d6e73e661604280d",
+      "lastModified": "2026-03-11"
     },
     "events/6200f184--": {
       "hash": "4be72a2d1154439c",
@@ -12715,16 +13771,16 @@
       "lastModified": "2026-03-10"
     },
     "events/274cbfdc-gazarte-heretoir-amp-havukruunu": {
-      "hash": "5d2df6d61af56b91",
-      "lastModified": "2026-03-10"
+      "hash": "5a3dc76494a355a3",
+      "lastModified": "2026-03-11"
     },
     "events/03faaa11-theatre-of-the-no-amp": {
       "hash": "c88f504ca7b64369",
       "lastModified": "2026-03-09"
     },
     "events/05003d06-caja-de-musica-": {
-      "hash": "46a056dd6e54a649",
-      "lastModified": "2026-03-09"
+      "hash": "ff7e87cdb7f60711",
+      "lastModified": "2026-03-11"
     },
     "events/df18ef5b--amp-otra-rota": {
       "hash": "60cebcf95948a6a8",
@@ -12733,6 +13789,10 @@
     "events/764507a1-jazzet-cafe-": {
       "hash": "5d0c4ce7a9cfd858",
       "lastModified": "2026-03-10"
+    },
+    "events/7b948303-burger-disco-club-clubkid-x-nikolas-gale": {
+      "hash": "994641baaa913c35",
+      "lastModified": "2026-03-11"
     },
     "events/198e78b0-half-note-jazz-club-voodoo-groove": {
       "hash": "657d59e17be4d897",
@@ -12759,20 +13819,20 @@
       "lastModified": "2026-03-10"
     },
     "events/52ca6653-dybbuk-fri-ame-dj-da-mike": {
-      "hash": "abdb850789f8bfcf",
-      "lastModified": "2026-03-09"
+      "hash": "94cf46f15f8e55f2",
+      "lastModified": "2026-03-11"
     },
     "events/5bb7995b-crust-pigs-kaput-bellas": {
-      "hash": "bf04009a391ef113",
-      "lastModified": "2026-03-09"
+      "hash": "f244adc10a9e674c",
+      "lastModified": "2026-03-11"
     },
     "events/2fe6c223-2ten-all-night-long-matea-x-alisa-murphy": {
-      "hash": "e1e9df92c694a084",
-      "lastModified": "2026-03-09"
+      "hash": "c28d3df37f8b8bb1",
+      "lastModified": "2026-03-11"
     },
     "events/d83d39ad-it-athens-the-13th-tribe": {
-      "hash": "85bbd9fe89d34c50",
-      "lastModified": "2026-03-09"
+      "hash": "a357d4e79b01f0cd",
+      "lastModified": "2026-03-11"
     },
     "events/a2b7fe23--": {
       "hash": "b4ed5596c12e0a65",
@@ -12797,6 +13857,10 @@
     "events/8e60e8eb--con-2026": {
       "hash": "996cd312a296a2e3",
       "lastModified": "2026-03-10"
+    },
+    "events/5d44911d--maroussi-chery-vs-betsson": {
+      "hash": "89dfd946d981adc9",
+      "lastModified": "2026-03-11"
     },
     "events/d1061a8e-bios-cannilab-3": {
       "hash": "d3b86f395cf727e1",
@@ -12827,12 +13891,16 @@
       "lastModified": "2026-03-09"
     },
     "events/e5a2b15c-olvio-moliere-le-comedien": {
-      "hash": "7ceb5d77fe22e578",
-      "lastModified": "2026-03-09"
+      "hash": "239315acc4129ba3",
+      "lastModified": "2026-03-11"
+    },
+    "events/12c88bbe-burger-disco-club-xtracavanza": {
+      "hash": "df04069c29ab1d3b",
+      "lastModified": "2026-03-11"
     },
     "events/6400dc6d-piraeus-club-academy-dreamlord-piraeus-club-academy": {
-      "hash": "bb7ed4a92d6d60f5",
-      "lastModified": "2026-03-09"
+      "hash": "6d410f3e3694d162",
+      "lastModified": "2026-03-11"
     },
     "events/dca499ed-temple-ordo-rosarius-equilibrio": {
       "hash": "50c3b7a429d2c883",
@@ -12843,8 +13911,8 @@
       "lastModified": "2026-03-09"
     },
     "events/85019274-death-disco-bragolin": {
-      "hash": "c901d5f5cdff2367",
-      "lastModified": "2026-03-09"
+      "hash": "6cac2c7d3cf7164f",
+      "lastModified": "2026-03-11"
     },
     "events/34c03323-underflow-ciccada": {
       "hash": "eb0f40bbc2ac45e3",
@@ -12883,24 +13951,28 @@
       "lastModified": "2026-03-09"
     },
     "events/5b292e49-gazarte-no-clear-mind-amp": {
-      "hash": "897b4adcdf2e0013",
-      "lastModified": "2026-03-10"
+      "hash": "4a57627d9db1c491",
+      "lastModified": "2026-03-11"
     },
     "events/11443b73-jazzet-cafe-michael-dotson": {
       "hash": "0580d544e9e49f44",
       "lastModified": "2026-03-10"
     },
     "events/f6ae46db-caja-de-musica-": {
-      "hash": "b23e5c2fcd1d8a7c",
-      "lastModified": "2026-03-09"
+      "hash": "cc0e37bf53ebd073",
+      "lastModified": "2026-03-11"
     },
     "events/81992947--": {
       "hash": "290cc594b36e5c6e",
       "lastModified": "2026-03-09"
     },
+    "events/80f4027e-vox-live-vox": {
+      "hash": "a1ed2a47a91e79e4",
+      "lastModified": "2026-03-11"
+    },
     "events/0fab9a50-fuzz-club-trashformers": {
-      "hash": "9c937b2560c4deb2",
-      "lastModified": "2026-03-09"
+      "hash": "1d94ecc558615e26",
+      "lastModified": "2026-03-11"
     },
     "events/0bace205-half-note-jazz-club-": {
       "hash": "3fd595228e4af90f",
@@ -12919,8 +13991,8 @@
       "lastModified": "2026-03-09"
     },
     "events/e27399e8-dybbuk-sat-raresh-jonn-always-late": {
-      "hash": "4054e84a02d1f643",
-      "lastModified": "2026-03-09"
+      "hash": "0c46d7438ba3dd5a",
+      "lastModified": "2026-03-11"
     },
     "events/84f8aecc-astron-mnjm-with-elayn-loopa-kasja-milad-samara": {
       "hash": "71bf8cfe383f834f",
@@ -12931,12 +14003,12 @@
       "lastModified": "2026-03-10"
     },
     "events/150473c5-aux-club-yonti-k-perrakis-salin-vssls": {
-      "hash": "6b078ef5e5ca91b9",
-      "lastModified": "2026-03-09"
+      "hash": "4eba2096f3a0cc2e",
+      "lastModified": "2026-03-11"
     },
     "events/6f778fd7-crust-reign-of-time-thabo-gaia": {
-      "hash": "373589e5491109c7",
-      "lastModified": "2026-03-09"
+      "hash": "0ece5f3b93eabd52",
+      "lastModified": "2026-03-11"
     },
     "events/9daffd8e-smut-4-10438-greece-fadi-mohem-x-philippa-pacho-x-onur": {
       "hash": "6a299b48d5dbe661",
@@ -12951,12 +14023,16 @@
       "lastModified": "2026-03-10"
     },
     "events/4eca97e4-aux-club-aux-yonti": {
-      "hash": "89e9c18ff99b3671",
-      "lastModified": "2026-03-09"
+      "hash": "c151462c615896b4",
+      "lastModified": "2026-03-11"
     },
     "events/883b1e2f-it-athens-natural-high-nat-361-psychedelic-gatherings-part-one": {
-      "hash": "5d3107f808135528",
-      "lastModified": "2026-03-09"
+      "hash": "0ac4069701cbd002",
+      "lastModified": "2026-03-11"
+    },
+    "events/3efa9017-dybbuk-believe-presents-raresh-a-rpia-r-along-with-jonn-always-late": {
+      "hash": "b895c3f5353e36e0",
+      "lastModified": "2026-03-11"
     },
     "events/a73c66b5-myrtillo-cafe-alcedo-folk-band": {
       "hash": "836f89dbc361ae93",
@@ -12983,8 +14059,8 @@
       "lastModified": "2026-03-10"
     },
     "events/6456bfc0-171-187-": {
-      "hash": "2d561d4675c0292f",
-      "lastModified": "2026-03-09"
+      "hash": "7911b1ee608ab296",
+      "lastModified": "2026-03-11"
     },
     "events/4419e83d-don-t-be-a-dick-club-bottom": {
       "hash": "5a0a2e4776af5adf",
@@ -13026,6 +14102,10 @@
       "hash": "fc2be7b33e515d5e",
       "lastModified": "2026-03-09"
     },
+    "events/f9d3af83--misery": {
+      "hash": "6dddc5cd8ccb00eb",
+      "lastModified": "2026-03-11"
+    },
     "events/18199784-half-note-jazz-club-jeepers-creepers-jazz-band": {
       "hash": "76b0a21068998a2d",
       "lastModified": "2026-03-10"
@@ -13059,24 +14139,24 @@
       "lastModified": "2026-03-09"
     },
     "events/a09a01a9-vox-": {
-      "hash": "f0b20f5b0f84c19f",
-      "lastModified": "2026-03-09"
+      "hash": "97c2f65c40496b3d",
+      "lastModified": "2026-03-11"
     },
     "events/c73c131c--three-times-three-6": {
-      "hash": "1a8445e78af8d1c9",
-      "lastModified": "2026-03-09"
+      "hash": "0a7bd6c8940e6af9",
+      "lastModified": "2026-03-11"
+    },
+    "events/69f49719--": {
+      "hash": "5143af047543b77d",
+      "lastModified": "2026-03-11"
     },
     "events/9c9ec1be-half-note-jazz-club-yannis-papadopoulos-group": {
       "hash": "421ae798d2299ea5",
       "lastModified": "2026-03-10"
     },
     "events/a6892bcd-crust-": {
-      "hash": "aaec2c33b0783583",
-      "lastModified": "2026-03-09"
-    },
-    "events/25090c87-radar-": {
-      "hash": "a05a1814bdab426b",
-      "lastModified": "2026-03-10"
+      "hash": "af5769f681fd0285",
+      "lastModified": "2026-03-11"
     },
     "events/232f7fb8-roes-theater-vol-2": {
       "hash": "411b19c85929f8a1",
@@ -13087,20 +14167,20 @@
       "lastModified": "2026-03-10"
     },
     "events/82d693fa--ihsane": {
-      "hash": "9da003d7a59aab32",
-      "lastModified": "2026-03-09"
+      "hash": "630942858e4fc04b",
+      "lastModified": "2026-03-11"
     },
     "events/43c75169-171-187-yoel-soto-and-friends": {
-      "hash": "0805e1de53030132",
-      "lastModified": "2026-03-09"
+      "hash": "fec537391e2e9959",
+      "lastModified": "2026-03-11"
     },
     "events/483894e4--": {
       "hash": "7c30dc86cba1fe9b",
       "lastModified": "2026-03-09"
     },
     "events/8fd926f2--paul-klee-bach-bauhaus": {
-      "hash": "7c8b17c9538a2eb6",
-      "lastModified": "2026-03-09"
+      "hash": "29aacac1798e0858",
+      "lastModified": "2026-03-11"
     },
     "events/202f5af0--ballet-du-grand-theatre-de-geneve-eastman-ihsane-sidi-larbi-": {
       "hash": "120f86fb501dcdcd",
@@ -13115,8 +14195,8 @@
       "lastModified": "2026-03-09"
     },
     "events/9dc85193--sound-of-color-6": {
-      "hash": "485bf5963cb777c7",
-      "lastModified": "2026-03-09"
+      "hash": "a5f1266b644120b6",
+      "lastModified": "2026-03-11"
     },
     "events/324e6223--": {
       "hash": "5721df9e7f02bcbb",
@@ -13162,6 +14242,18 @@
       "hash": "b0b47e93a773aa2e",
       "lastModified": "2026-03-09"
     },
+    "events/705aac49--": {
+      "hash": "c4c1dddc0efd549f",
+      "lastModified": "2026-03-11"
+    },
+    "events/28810701--amp": {
+      "hash": "cd4bc01af35014a3",
+      "lastModified": "2026-03-11"
+    },
+    "events/beb2f88a-caja-de-musica-amp": {
+      "hash": "e70ddb53e1fb9493",
+      "lastModified": "2026-03-11"
+    },
     "events/02f329fc-half-note-jazz-club-d-wissels-a-rocha-a-polyzogopoulos": {
       "hash": "8e2e215d3ce513ab",
       "lastModified": "2026-03-10"
@@ -13174,13 +14266,29 @@
       "hash": "9add46c5c8b1097c",
       "lastModified": "2026-03-10"
     },
+    "events/6eba4f6f-aux-club-el-camino": {
+      "hash": "395fafe77b7ebba5",
+      "lastModified": "2026-03-11"
+    },
     "events/18c9dc47-bios-back-to-the-90s-party": {
       "hash": "7a0c9df1e4e3bc25",
       "lastModified": "2026-03-10"
     },
+    "events/aa0737b5-fuzz-club-sadomas": {
+      "hash": "3857c5e9ee8097f1",
+      "lastModified": "2026-03-11"
+    },
     "events/342044a2--2026": {
       "hash": "c985bb9198442e8a",
       "lastModified": "2026-03-09"
+    },
+    "events/db3bd40b-arch-club-the-underground-youth": {
+      "hash": "0bcf4181513a3850",
+      "lastModified": "2026-03-11"
+    },
+    "events/a29d3924--perkele": {
+      "hash": "e97b334274898e4d",
+      "lastModified": "2026-03-11"
     },
     "events/93d806de-wild-poppies-chris-child-d-tzere": {
       "hash": "1b24f073ebeb3618",
@@ -13198,6 +14306,34 @@
       "hash": "34f881bc06e05561",
       "lastModified": "2026-03-10"
     },
+    "events/83c21128-gazarte-khirki-amp": {
+      "hash": "99ce19d473db09ad",
+      "lastModified": "2026-03-11"
+    },
+    "events/41e73c63--amp": {
+      "hash": "dc65e00d425bb7ec",
+      "lastModified": "2026-03-11"
+    },
+    "events/fa9213b3--": {
+      "hash": "78c9613451870cd7",
+      "lastModified": "2026-03-11"
+    },
+    "events/2f2d59d5--171-187": {
+      "hash": "6beb0aa992cb5f06",
+      "lastModified": "2026-03-11"
+    },
+    "events/ea753960-theatre-of-the-no-encardia": {
+      "hash": "ac640f3fecdc888d",
+      "lastModified": "2026-03-11"
+    },
+    "events/c590cf3c-death-disco-taylor-swift-night": {
+      "hash": "05495d880d73375b",
+      "lastModified": "2026-03-11"
+    },
+    "events/a1c783d5-caja-de-musica-": {
+      "hash": "83b9615904c3f891",
+      "lastModified": "2026-03-11"
+    },
     "events/0f11e3cd-half-note-jazz-club-dena-derose-trio": {
       "hash": "fd005b7b2ca0ffbf",
       "lastModified": "2026-03-10"
@@ -13205,6 +14341,10 @@
     "events/28d005f9-astron-astron-club-night-with-oko-dj-alexis-le-tan-eiger-drums-prop": {
       "hash": "faf17a061f9b0a23",
       "lastModified": "2026-03-10"
+    },
+    "events/203a4eb8-rohas-athens-live-stage-": {
+      "hash": "f53ca891e25b9aaf",
+      "lastModified": "2026-03-11"
     },
     "events/07c7b2f8-aux-club-anagenesis-pres-ueberrest-deherian-b2b-imperium-siasios-vlas": {
       "hash": "962b2f3b1a91db68",
@@ -13215,20 +14355,44 @@
       "lastModified": "2026-03-09"
     },
     "events/4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste": {
-      "hash": "61e84c589b23748f",
-      "lastModified": "2026-03-10"
+      "hash": "dc76a9f5f8b30b79",
+      "lastModified": "2026-03-11"
     },
     "events/c6509aee--195": {
       "hash": "1069455c54c782e6",
       "lastModified": "2026-03-09"
+    },
+    "events/69316f09-universe-hgemona": {
+      "hash": "b9ef694d3ea27d73",
+      "lastModified": "2026-03-11"
+    },
+    "events/2939edd1-plus-cap-201-tte": {
+      "hash": "a66207e821e38a1d",
+      "lastModified": "2026-03-11"
+    },
+    "events/e5708cb9-stage-7-": {
+      "hash": "2135f3c9d1c3b6e8",
+      "lastModified": "2026-03-11"
     },
     "events/3b8828cb-christmas-theater-alban-skenderaj-motiv": {
       "hash": "355884a4bcbbd184",
       "lastModified": "2026-03-10"
     },
     "events/441535e0-piraeus-club-academy-deus-culpa-album-presentation-w-reversed-piraeus-club-academ": {
-      "hash": "497e905ea1a89782",
-      "lastModified": "2026-03-09"
+      "hash": "6703fb95d792bc9c",
+      "lastModified": "2026-03-11"
+    },
+    "events/1e752d30-fuzz-club-": {
+      "hash": "26ce3b669c92dbd5",
+      "lastModified": "2026-03-11"
+    },
+    "events/17c6f4f3-live-music-space-papaz-243": {
+      "hash": "4e307fd45cefcd67",
+      "lastModified": "2026-03-11"
+    },
+    "events/474b8a2f--": {
+      "hash": "3f71072368e1c9e3",
+      "lastModified": "2026-03-11"
     },
     "events/ea6f33ad--st-paul-apos-s-sessions-8-alva-noto-present-hybr-id-uni-para": {
       "hash": "1c2022baddbf08e7",
@@ -13242,13 +14406,37 @@
       "hash": "9afce4b99453ffaa",
       "lastModified": "2026-03-09"
     },
+    "events/35ac5942-gazarte-gadjo-dilo": {
+      "hash": "bd622e463e286267",
+      "lastModified": "2026-03-11"
+    },
+    "events/12ce1a84-death-disco-": {
+      "hash": "303e9dbd525e6621",
+      "lastModified": "2026-03-11"
+    },
+    "events/69742f0f-floyd-the-great-gig": {
+      "hash": "7eebd2adf5e12731",
+      "lastModified": "2026-03-11"
+    },
     "events/173e83d2-gazarte-4-in-groop": {
       "hash": "593429cdfb9bc98f",
       "lastModified": "2026-03-10"
     },
+    "events/979c3154-gazarte-": {
+      "hash": "ed3f4c44b416f0ec",
+      "lastModified": "2026-03-11"
+    },
     "events/fbb184d3-jazzet-cafe-human-touch": {
       "hash": "e7e3eec4d8bd80a4",
       "lastModified": "2026-03-10"
+    },
+    "events/17eb9371-caja-de-musica-": {
+      "hash": "1bc34c36fab09fc0",
+      "lastModified": "2026-03-11"
+    },
+    "events/8394ed6a-gazarte-the-swingin-cats": {
+      "hash": "f7419c75c3d3fa48",
+      "lastModified": "2026-03-11"
     },
     "events/590730ef-half-note-jazz-club-dena-derose-trio": {
       "hash": "b99a0574ee75f873",
@@ -13275,8 +14463,20 @@
       "lastModified": "2026-03-10"
     },
     "events/85e63b22-it-athens-underdogs-techno": {
-      "hash": "e0461cc00888f9a8",
-      "lastModified": "2026-03-09"
+      "hash": "5ade0e477dbaa217",
+      "lastModified": "2026-03-11"
+    },
+    "events/7f3e561b-universe-vlct-zero-with-dvs1-oscar-mulero-yanamaste": {
+      "hash": "8a023824444807f6",
+      "lastModified": "2026-03-11"
+    },
+    "events/bb302f91--171-187": {
+      "hash": "d97ddbfdc11a09fa",
+      "lastModified": "2026-03-11"
+    },
+    "events/e3a7ecdc-death-disco-the-steams": {
+      "hash": "4a745ad2a5c190f4",
+      "lastModified": "2026-03-11"
     },
     "events/2afdd949--dream-requiem-rufus-wainwright": {
       "hash": "e7920d8fde240466",
@@ -13315,8 +14515,12 @@
       "lastModified": "2026-03-09"
     },
     "events/cdf82709-piraeus-club-academy-calyces-live-at-piraeus-academy": {
-      "hash": "883d27ae4fffc8e6",
-      "lastModified": "2026-03-09"
+      "hash": "f571d7b560cc587e",
+      "lastModified": "2026-03-11"
+    },
+    "events/b888e644-plus-lost-bodies": {
+      "hash": "4a16544f64cf26f0",
+      "lastModified": "2026-03-11"
     },
     "events/b6641168--": {
       "hash": "a7425f0167e73805",
@@ -13325,6 +14529,22 @@
     "events/5eb0304e-parnassos-literary-society-": {
       "hash": "00adba4cb1ccbaad",
       "lastModified": "2026-03-09"
+    },
+    "events/857afe32-piraeus-club-academy-calyces": {
+      "hash": "06543585eda00b7f",
+      "lastModified": "2026-03-11"
+    },
+    "events/af08e86b-171-187-jazz-tribute-to-manos-hadjidakis": {
+      "hash": "6853e29f276d9c48",
+      "lastModified": "2026-03-11"
+    },
+    "events/9bf94dd7-arch-club-vnv-nation": {
+      "hash": "f61a688c03f0311f",
+      "lastModified": "2026-03-11"
+    },
+    "events/bf29c884--171-socrates-drank-the-conium-tribute-187": {
+      "hash": "809df8bdf0d30e57",
+      "lastModified": "2026-03-11"
     },
     "events/8ec1384c-astron-tropism-w-legowelt-live": {
       "hash": "06454a5b0d457351",
@@ -13346,6 +14566,10 @@
       "hash": "bc6ec58f6932b237",
       "lastModified": "2026-03-09"
     },
+    "events/a40d4b63-plus-laura-jane-grace": {
+      "hash": "253d4e6d4343c6b4",
+      "lastModified": "2026-03-11"
+    },
     "events/f5249e0a--usurum-live": {
       "hash": "7f6538d493d49bab",
       "lastModified": "2026-03-09"
@@ -13353,6 +14577,10 @@
     "events/d71ea4e5-half-note-jazz-club-yiorgos-pantazopoulos-trio": {
       "hash": "b3b45ca49f6dff2c",
       "lastModified": "2026-03-10"
+    },
+    "events/12efc7d8--katsaros-he-cosmopolitan-rebetis-friends-what-are-we-gonna-d": {
+      "hash": "c99a9bae8f45ded2",
+      "lastModified": "2026-03-11"
     },
     "events/840e5877-half-note-jazz-club-thanasis-valsamis-quintet-deepest-load-line": {
       "hash": "b6410abc307cd292",
@@ -13369,10 +14597,6 @@
     "events/3205122c--": {
       "hash": "e6bab5ca2942d3e6",
       "lastModified": "2026-03-09"
-    },
-    "events/4182b282--friends-what-are-we-gonna-do": {
-      "hash": "02c5cdd50ba3c33b",
-      "lastModified": "2026-03-10"
     },
     "events/c1dee276-plus-33-lovers-am-i-in-a-dream-at-plus": {
       "hash": "c63108464370757f",
@@ -13407,8 +14631,8 @@
       "lastModified": "2026-03-09"
     },
     "events/b1b58e00-floyd-inna-show": {
-      "hash": "8bd8f9a32597b442",
-      "lastModified": "2026-03-09"
+      "hash": "20561e0c092b4bf5",
+      "lastModified": "2026-03-11"
     },
     "events/3aa2cbb8-skull-bar-you-are-what-you-dance": {
       "hash": "dfefa764845996f1",
@@ -13439,8 +14663,12 @@
       "lastModified": "2026-03-09"
     },
     "events/39ea7f5b-death-disco-bloody-pleasures": {
-      "hash": "8928b8e74f5a78a7",
-      "lastModified": "2026-03-09"
+      "hash": "28d29ef0ee443641",
+      "lastModified": "2026-03-11"
+    },
+    "events/9dc63452-2ten-kollektiv-the-parallel": {
+      "hash": "6caa6212f79729e7",
+      "lastModified": "2026-03-11"
     },
     "events/7a871a06-myrtillo-cafe-alcedo-folk-band": {
       "hash": "3ee918e13d66fa9b",
@@ -13502,6 +14730,10 @@
       "hash": "16fb52ce8f03250d",
       "lastModified": "2026-03-09"
     },
+    "events/02c3173f-radar-": {
+      "hash": "e7380ca0385fc022",
+      "lastModified": "2026-03-11"
+    },
     "events/1c5e9d8a--": {
       "hash": "b5c60db721eb6d32",
       "lastModified": "2026-03-09"
@@ -13531,16 +14763,16 @@
       "lastModified": "2026-03-09"
     },
     "events/0820d442-fuzz-club-": {
-      "hash": "fb9494ae93cb4cc6",
-      "lastModified": "2026-03-09"
+      "hash": "bb735884f4e70f62",
+      "lastModified": "2026-03-11"
     },
     "events/56d0608f-gazarte-death-disco-indoor-festival-2026": {
       "hash": "4ef34dc0931bebc5",
       "lastModified": "2026-03-09"
     },
     "events/1504103a--jazz-idylle-piano-trio-idylle-piano-trio": {
-      "hash": "a939992c9b1354f8",
-      "lastModified": "2026-03-10"
+      "hash": "2ab49c1230057d1a",
+      "lastModified": "2026-03-11"
     },
     "events/8f79c8ae--sir-john-eliot-gardiner-constellation-choir-and-orchestra": {
       "hash": "fe1fba586154881c",
@@ -13555,8 +14787,8 @@
       "lastModified": "2026-03-10"
     },
     "events/ec1d24c2-it-athens-hypnagogia-presents-sensient-live-zenon-records": {
-      "hash": "5a0c0f9384757f46",
-      "lastModified": "2026-03-09"
+      "hash": "8b8461008f56092a",
+      "lastModified": "2026-03-11"
     },
     "events/5c45bc01-gazarte-dj-koco-aka-shimokita-first-time-in-athens-special-guests-ti": {
       "hash": "0618429cad49a962",
@@ -13571,8 +14803,8 @@
       "lastModified": "2026-03-10"
     },
     "events/119028d9-floyd-imminence": {
-      "hash": "96266a2e06aa9c75",
-      "lastModified": "2026-03-09"
+      "hash": "7d2d840ba36d2914",
+      "lastModified": "2026-03-11"
     },
     "events/683312e4--7-8": {
       "hash": "99619953e210e682",
@@ -13595,8 +14827,8 @@
       "lastModified": "2026-03-10"
     },
     "events/37e327cc-universe-velocity-arena-pres-i-hate-models-dj-hyperdrive-lokier-ate-p": {
-      "hash": "fb37d6fbfe5af919",
-      "lastModified": "2026-03-10"
+      "hash": "a1df970d463a15eb",
+      "lastModified": "2026-03-11"
     },
     "events/e6dba1f8-smut-athens-primal-instinct-x-smut-with-chlar-x-hadone-x-vera-grace": {
       "hash": "5ecfe5fdbe25db64",
@@ -13607,8 +14839,8 @@
       "lastModified": "2026-03-10"
     },
     "events/9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026": {
-      "hash": "b3a9d1676b31aeaa",
-      "lastModified": "2026-03-09"
+      "hash": "5c0cb7d140126a43",
+      "lastModified": "2026-03-11"
     },
     "events/47dd1fce--": {
       "hash": "3422b16e6c99cfaa",
@@ -13651,8 +14883,8 @@
       "lastModified": "2026-03-09"
     },
     "events/af299bbd-floyd-godspeed-you-black-emperor-2026": {
-      "hash": "ff2138d7ece2cc17",
-      "lastModified": "2026-03-09"
+      "hash": "e719bf8fa53a5e99",
+      "lastModified": "2026-03-11"
     },
     "events/86cb62f0-gagarin-205-roy-khan-norway-the-black-halo-and-beyond-seven-spires-usa": {
       "hash": "3c1cb87f462fb639",
@@ -13695,8 +14927,8 @@
       "lastModified": "2026-03-10"
     },
     "events/875f4154-universe-vlct-arena-w-cloudy-kuko-johannes-schuster": {
-      "hash": "cecaf158a3cf2be7",
-      "lastModified": "2026-03-10"
+      "hash": "b344086c94725a04",
+      "lastModified": "2026-03-11"
     },
     "events/e3370aed-smut-athens-somov-x-smut-with-ignez-x-inox-traxx-x-wala": {
       "hash": "a0719d22e10d334f",
@@ -13747,8 +14979,8 @@
       "lastModified": "2026-03-09"
     },
     "events/47b03e95-bolivar-bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph": {
-      "hash": "2af40ccb805e4227",
-      "lastModified": "2026-03-09"
+      "hash": "0fc479feaf72f687",
+      "lastModified": "2026-03-11"
     },
     "events/ebc0fe82--jamie-duffy": {
       "hash": "b5b395b589a2b255",
@@ -13783,8 +15015,8 @@
       "lastModified": "2026-03-09"
     },
     "events/fc2a3144-bolivar-bolivar-opening-with-gioli-assia-i-sat-april-25": {
-      "hash": "088cb357f4b831be",
-      "lastModified": "2026-03-09"
+      "hash": "9aeaabc1d3aa7d47",
+      "lastModified": "2026-03-11"
     },
     "events/ba40f4aa-parnassos-literary-society-": {
       "hash": "c5e95cee2d895932",
@@ -13823,8 +15055,8 @@
       "lastModified": "2026-03-09"
     },
     "events/ae70b988--jazz-george-kontrafouris-quartet-international-jazz-day": {
-      "hash": "b91726f7030faa79",
-      "lastModified": "2026-03-10"
+      "hash": "72d32f5c5706cf23",
+      "lastModified": "2026-03-11"
     },
     "events/3e5ea351--": {
       "hash": "ff85c7730ffc0153",
@@ -13839,12 +15071,12 @@
       "lastModified": "2026-03-10"
     },
     "events/3e25d6d6-floyd-morad": {
-      "hash": "02e2c8c9457cced1",
-      "lastModified": "2026-03-09"
+      "hash": "3e45cceeb77d4ecc",
+      "lastModified": "2026-03-11"
     },
     "events/006bf4e8-bolivar-adam-beyer-i-bart-skils-i-sat-may-2": {
-      "hash": "286df3951bb64038",
-      "lastModified": "2026-03-09"
+      "hash": "c1923617b70daa48",
+      "lastModified": "2026-03-11"
     },
     "events/46a0d604--": {
       "hash": "a547e18ac4b7ed78",
@@ -13867,20 +15099,20 @@
       "lastModified": "2026-03-09"
     },
     "events/eb88d8af-bolivar-mayans-with-hardt-antoine-i-thu-may-7": {
-      "hash": "5f3a0eb7f7392226",
-      "lastModified": "2026-03-09"
+      "hash": "d76896c634d03105",
+      "lastModified": "2026-03-11"
     },
     "events/8667bb9f-universe-stolen-mic": {
-      "hash": "65fc8f6a9dfb6ef6",
-      "lastModified": "2026-03-10"
+      "hash": "6e31ad99631d9a93",
+      "lastModified": "2026-03-11"
     },
     "events/d1b3dcc8-bolivar-mind-against-i-fri-may-8": {
-      "hash": "ee9bf79e4113ecea",
-      "lastModified": "2026-03-09"
+      "hash": "7b97598766ea12a0",
+      "lastModified": "2026-03-11"
     },
     "events/2b4d123f-universe-teletech-athens-2026-pre-registration": {
-      "hash": "6ab1425d0cac6415",
-      "lastModified": "2026-03-10"
+      "hash": "4463d161142e7660",
+      "lastModified": "2026-03-11"
     },
     "events/429aa68f--": {
       "hash": "80f16fc506077d3c",
@@ -13895,16 +15127,20 @@
       "lastModified": "2026-03-09"
     },
     "events/9c6778f2-bolivar-padre-guilherme-i-sat-may-9": {
-      "hash": "9f3520fc61e4fb08",
-      "lastModified": "2026-03-09"
+      "hash": "18f211c23ba50213",
+      "lastModified": "2026-03-11"
     },
     "events/231d9833-universe-blend-x-seds-x-vlct-pres-teletech-azyr-fantasm-ate-b2b-salin": {
-      "hash": "8ab7ab11db0b834d",
-      "lastModified": "2026-03-10"
+      "hash": "541903c68239af26",
+      "lastModified": "2026-03-11"
     },
     "events/4daa340a-temple-demonyx-ritual-vol-1": {
       "hash": "226d2c9a1383ed70",
       "lastModified": "2026-03-09"
+    },
+    "events/6976340c-smut-athens-weeerdos-x-smut-with-lolsnake-x-phase-fatale-x-juliana-huxta": {
+      "hash": "a0037dec4e901d8a",
+      "lastModified": "2026-03-11"
     },
     "events/c36254ea-onassis-stegi-yorgos-lanthimos-photographs": {
       "hash": "02b6d626e3ff788b",
@@ -13934,6 +15170,10 @@
       "hash": "7eaa9afff293bdd6",
       "lastModified": "2026-03-09"
     },
+    "events/1492b751-bolivar-mayans-with-coeus-i-thu-may-14": {
+      "hash": "d08fb532ad50d95e",
+      "lastModified": "2026-03-11"
+    },
     "events/9454cac8-christmas-theater-this-is-michael-tribute-show-michael-jackson-15-christmas-th": {
       "hash": "880babd3860db488",
       "lastModified": "2026-03-10"
@@ -13943,8 +15183,8 @@
       "lastModified": "2026-03-09"
     },
     "events/a47a1c7c-floyd-tinariwen": {
-      "hash": "3f5a1c4efe2c7b14",
-      "lastModified": "2026-03-10"
+      "hash": "379081607a7b9f04",
+      "lastModified": "2026-03-11"
     },
     "events/74629d5b--": {
       "hash": "899d40fd3bbd31df",
@@ -13995,8 +15235,8 @@
       "lastModified": "2026-03-10"
     },
     "events/c6e08f27-floyd-clutch": {
-      "hash": "0eb26baaa9691d89",
-      "lastModified": "2026-03-09"
+      "hash": "7477505e1bce134c",
+      "lastModified": "2026-03-11"
     },
     "events/2d9f2883--ax-emanuel-cencic": {
       "hash": "6e267009be4fc1e3",
@@ -14031,8 +15271,8 @@
       "lastModified": "2026-03-09"
     },
     "events/191a40b0-island-athens-riviera-valeron": {
-      "hash": "a843b581996ef097",
-      "lastModified": "2026-03-09"
+      "hash": "4c730005f8598ec9",
+      "lastModified": "2026-03-11"
     },
     "events/2113a2fb--": {
       "hash": "3195a8eb47650b36",
@@ -14055,16 +15295,16 @@
       "lastModified": "2026-03-09"
     },
     "events/0e9e87c9-island-athens-riviera-jafari-presents-ameme": {
-      "hash": "0db6620df4364ff5",
-      "lastModified": "2026-03-09"
+      "hash": "0fda191a9de08b1d",
+      "lastModified": "2026-03-11"
     },
     "events/7f0d7ecc-island-athens-riviera-mimi-x-fy": {
-      "hash": "acf87a3d955060e4",
-      "lastModified": "2026-03-09"
+      "hash": "3e48429101b95733",
+      "lastModified": "2026-03-11"
     },
     "events/02cea575-island-athens-riviera-liva-k": {
-      "hash": "8daa89bda8e79d46",
-      "lastModified": "2026-03-09"
+      "hash": "8f4e5e1215117ba9",
+      "lastModified": "2026-03-11"
     },
     "events/e50d43de--michelle-gurevich": {
       "hash": "dad1b39329d726e1",
@@ -14087,8 +15327,8 @@
       "lastModified": "2026-03-09"
     },
     "events/6129c603-island-athens-riviera-jafari-presents-mathame": {
-      "hash": "7f1550dd023b3f5e",
-      "lastModified": "2026-03-09"
+      "hash": "2f672ba8f8163c9b",
+      "lastModified": "2026-03-11"
     },
     "events/84c0516f--release-athens-2026-limp-bizkit": {
       "hash": "d2454ee9844dc7c7",
@@ -14155,8 +15395,8 @@
       "lastModified": "2026-03-09"
     },
     "events/682ca60d-island-athens-riviera-liva-k": {
-      "hash": "181918195e1a065b",
-      "lastModified": "2026-03-09"
+      "hash": "a30d3313d71f800e",
+      "lastModified": "2026-03-11"
     },
     "events/4d6e2cc0--release-athens-2026-sabaton-savatage-epica": {
       "hash": "41f8fec7691b48ea",
@@ -14178,9 +15418,17 @@
       "hash": "6ade19c5d88eed04",
       "lastModified": "2026-03-09"
     },
+    "events/a28aaf8d-bolivar-maceo-plex-i-marcel-dettmann-i-sat-july-18": {
+      "hash": "900d82960f6b587e",
+      "lastModified": "2026-03-11"
+    },
     "events/8907fa44--godsmack": {
       "hash": "1c2620f0663ec7a5",
       "lastModified": "2026-03-09"
+    },
+    "events/2c9b53c9-island-athens-riviera-notre-dame-jafari": {
+      "hash": "6775a42ac8036b9f",
+      "lastModified": "2026-03-11"
     },
     "events/a48d9ab1-island-athens-riviera-valeron": {
       "hash": "3bdf6e0b7bbe8ed2",
@@ -14199,12 +15447,12 @@
       "lastModified": "2026-03-10"
     },
     "events/e6a75256-universe-autechre": {
-      "hash": "b9f45bc0bf09e408",
-      "lastModified": "2026-03-10"
+      "hash": "b98635e30ddc9e21",
+      "lastModified": "2026-03-11"
     },
     "events/51c1ba90-fuzz-club-doro-pesch": {
-      "hash": "eeda6a6f90185744",
-      "lastModified": "2026-03-09"
+      "hash": "56f3e1853e39f085",
+      "lastModified": "2026-03-11"
     },
     "events/deep-pur--deep-purple-live": {
       "hash": "123b3f6bfb5d5c54",
@@ -14239,8 +15487,8 @@
       "lastModified": "2026-03-10"
     },
     "events/85d4dc30-it-athens-": {
-      "hash": "9148b744f6864a8d",
-      "lastModified": "2026-03-09"
+      "hash": "8be1a225db91a1d2",
+      "lastModified": "2026-03-11"
     },
     "events/aa4f0921--": {
       "hash": "35b411442be8801d",
@@ -14291,8 +15539,8 @@
       "lastModified": "2026-03-10"
     },
     "events/49b184b6--jerome-kaluta": {
-      "hash": "44d374adb795bb18",
-      "lastModified": "2026-03-09"
+      "hash": "a4408d515d4ca20b",
+      "lastModified": "2026-03-11"
     },
     "events/87905740-couleur-locale-deerislnd-from-silence-to-sound": {
       "hash": "1ab335ca91d5a8db",
@@ -14367,8 +15615,8 @@
       "lastModified": "2026-03-09"
     },
     "events/8a687b55-fuzz-club-": {
-      "hash": "d5ca266841bf5041",
-      "lastModified": "2026-03-09"
+      "hash": "73fbe2fccab6ac2f",
+      "lastModified": "2026-03-11"
     },
     "events/2dfd7b30-half-note-jazz-club-": {
       "hash": "ad808af11a71483d",
@@ -14379,8 +15627,8 @@
       "lastModified": "2026-03-09"
     },
     "events/3371791a-death-disco-pop-girlies-night-vol-3": {
-      "hash": "377694473e837626",
-      "lastModified": "2026-03-09"
+      "hash": "7c0ca1515e89bc47",
+      "lastModified": "2026-03-11"
     },
     "events/a66b2e43-oddity-marika-rossa": {
       "hash": "96d17e3799e4b37d",
@@ -14391,8 +15639,8 @@
       "lastModified": "2026-03-09"
     },
     "events/21772202--laura-agnusdei-amp-free-piece-of-tape": {
-      "hash": "e9b2ac864b85a363",
-      "lastModified": "2026-03-09"
+      "hash": "ef810b42948b8438",
+      "lastModified": "2026-03-11"
     },
     "events/33959f9f-temple-skullcrush-fest": {
       "hash": "0545be9579e439aa",
@@ -14411,8 +15659,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/580fe29c-138-20": {
-      "hash": "015b6b99a94ec073",
-      "lastModified": "2026-03-09"
+      "hash": "fd4de02719681a85",
+      "lastModified": "2026-03-11"
     },
     "en/events/2a16cb2b-b-side-athens-petros-spatharos-datalogs": {
       "hash": "a2fe230f49594687",
@@ -14467,16 +15715,16 @@
       "lastModified": "2026-03-09"
     },
     "en/events/75e9f12f-vox-": {
-      "hash": "b5e8ca208de31686",
-      "lastModified": "2026-03-09"
+      "hash": "f7514cfacaf400c1",
+      "lastModified": "2026-03-11"
     },
     "en/events/24f7e6cd--": {
       "hash": "38742480322ca5ec",
       "lastModified": "2026-03-09"
     },
     "en/events/ba2bedb9--": {
-      "hash": "53ff15c30d6ea6cb",
-      "lastModified": "2026-03-09"
+      "hash": "cafe8f1d1eee143c",
+      "lastModified": "2026-03-11"
     },
     "en/events/961a5c5d--171-187": {
       "hash": "bb2b6e9d663b859f",
@@ -14551,8 +15799,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/ba429649--": {
-      "hash": "ba940c6feaea731a",
-      "lastModified": "2026-03-10"
+      "hash": "e096f876f878a395",
+      "lastModified": "2026-03-11"
     },
     "en/events/fef7e513--": {
       "hash": "db97b22d023649b4",
@@ -14675,8 +15923,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/b17333d0--h-228-xan-live-soundtrack": {
-      "hash": "f2a548f5b0bca17b",
-      "lastModified": "2026-03-09"
+      "hash": "63573ade296a266f",
+      "lastModified": "2026-03-11"
     },
     "en/events/a212a64d--": {
       "hash": "da2be8a48a24dd38",
@@ -14715,8 +15963,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/552bc0db--": {
-      "hash": "976acd8817c8bd2d",
-      "lastModified": "2026-03-10"
+      "hash": "a38d8379bc545b9a",
+      "lastModified": "2026-03-11"
     },
     "en/events/5709747c--": {
       "hash": "f3fda8399b5c2c5b",
@@ -14759,8 +16007,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/d2de2029-gazarte-leon-of-athens": {
-      "hash": "4dc363c9a5078812",
-      "lastModified": "2026-03-10"
+      "hash": "5ed0c81c8a7beefe",
+      "lastModified": "2026-03-11"
     },
     "en/events/f1c82536--": {
       "hash": "a6346bb8c58a2a1a",
@@ -14831,12 +16079,12 @@
       "lastModified": "2026-03-09"
     },
     "en/events/a6f291b6-caja-de-musica-amp": {
-      "hash": "adc2e249e74634f7",
-      "lastModified": "2026-03-09"
+      "hash": "fc797b933d3ffdc9",
+      "lastModified": "2026-03-11"
     },
     "en/events/e4f11743-171-187-171-nelly-39-s-187": {
-      "hash": "ab4cf241a7709bfa",
-      "lastModified": "2026-03-09"
+      "hash": "274cdbe5e5a1d77d",
+      "lastModified": "2026-03-11"
     },
     "en/events/3ca9c6cf--171-187": {
       "hash": "353c4e11fcc7ba76",
@@ -14847,8 +16095,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/477e7970-gazarte-eden-live-presents-stavroz": {
-      "hash": "97f8c18f60af0acc",
-      "lastModified": "2026-03-10"
+      "hash": "5a333f88d8b58f8b",
+      "lastModified": "2026-03-11"
     },
     "en/events/8f71937a-arch-club-dirty-granny-tales": {
       "hash": "70e17cb7cd7fc9bd",
@@ -14903,8 +16151,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/cc92da2e-piraeus-club-academy-road-duck": {
-      "hash": "7ed785b0ae34afe4",
-      "lastModified": "2026-03-09"
+      "hash": "b7d1209356bbfa1d",
+      "lastModified": "2026-03-11"
     },
     "en/events/f9959df8--amp": {
       "hash": "8703c51eea862741",
@@ -14931,12 +16179,12 @@
       "lastModified": "2026-03-10"
     },
     "en/events/e844d276-gazarte-conan-live-in-athens": {
-      "hash": "1c5623b85ada8f1b",
-      "lastModified": "2026-03-10"
+      "hash": "a92bd15d4d1e3f80",
+      "lastModified": "2026-03-11"
     },
     "en/events/610f008c-fuzz-club-nightfall": {
-      "hash": "629a2e3f81639266",
-      "lastModified": "2026-03-09"
+      "hash": "4f9a9f09b63e8e2e",
+      "lastModified": "2026-03-11"
     },
     "en/events/1d2a9ccb-concert-1-baumstrasse-quartet": {
       "hash": "fdc271904819957b",
@@ -14955,8 +16203,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/31b31bd2-universe-solace-pre-party": {
-      "hash": "a38d357850bc7275",
-      "lastModified": "2026-03-10"
+      "hash": "223c3be617d0827d",
+      "lastModified": "2026-03-11"
     },
     "en/events/68920064-dunk-athens-piratka-riot": {
       "hash": "359fa7edde6631de",
@@ -14971,8 +16219,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/6deab945-aux-club-fenimore-cirkle-ate": {
-      "hash": "baa7a67005f7be88",
-      "lastModified": "2026-03-09"
+      "hash": "1fd62eb3b8b8d4cc",
+      "lastModified": "2026-03-11"
     },
     "en/events/c4692c14-oddity-enlight-frequencies-with-byorn": {
       "hash": "b5a97bfbc17f2990",
@@ -14983,16 +16231,16 @@
       "lastModified": "2026-03-09"
     },
     "en/events/5e5e9141-171-187-": {
-      "hash": "7c27da4e385271a4",
-      "lastModified": "2026-03-09"
+      "hash": "2ca6078ab2656069",
+      "lastModified": "2026-03-11"
     },
     "en/events/fb414f23-el-chapo-simos-danalis-mo-tion-s-ant": {
       "hash": "69a7be51568f96a6",
       "lastModified": "2026-03-10"
     },
     "en/events/1b7ed35a-onassis-stegi-yorgos-lanthimos-photographs": {
-      "hash": "05b494cb5d23de29",
-      "lastModified": "2026-03-10"
+      "hash": "61b6b5b3d5a0cfd9",
+      "lastModified": "2026-03-11"
     },
     "en/events/fba1c7ce-christmas-theater-fight-for-glory-iii": {
       "hash": "cef44b0287c279a8",
@@ -15007,20 +16255,20 @@
       "lastModified": "2026-03-09"
     },
     "en/events/8da54119-floyd-1000mods-2026": {
-      "hash": "e18a3797900c34c6",
-      "lastModified": "2026-03-09"
+      "hash": "27c0f22e2ae498a1",
+      "lastModified": "2026-03-11"
     },
     "en/events/52bde444-2ten-gl57-by-zair": {
-      "hash": "1985aa4d3cd47541",
-      "lastModified": "2026-03-09"
+      "hash": "255f42208832f4d9",
+      "lastModified": "2026-03-11"
     },
     "en/events/9ab8506d-gazi-view-uplifting-goa-trance-rooftop-party-gaziview": {
       "hash": "d7ac87127949538a",
       "lastModified": "2026-03-09"
     },
     "en/events/0ca00f0e-universe-rejuv-pres-solace-pre-party-dbbd-amor-satyr-dj-spit-evissima": {
-      "hash": "275ce5e18fadde90",
-      "lastModified": "2026-03-10"
+      "hash": "ffe8df799c1bb865",
+      "lastModified": "2026-03-11"
     },
     "en/events/433d6fc3-astron-soft-crush-w-dj-yazi-outermost-katra": {
       "hash": "f3205cbcd693d7da",
@@ -15055,8 +16303,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/6166dcca-it-athens-the-7th-gate-by-lory-aka-archaic": {
-      "hash": "c56d85a9eefb3e9e",
-      "lastModified": "2026-03-09"
+      "hash": "38578fce64edebb0",
+      "lastModified": "2026-03-11"
     },
     "en/events/c208b81d-myrtillo-cafe-alcedo-folk-band": {
       "hash": "2eacc9645da237ff",
@@ -15103,20 +16351,20 @@
       "lastModified": "2026-03-10"
     },
     "en/events/b0cc94be-roes-theater-vol-2": {
-      "hash": "80edbe7b025c4466",
-      "lastModified": "2026-03-10"
+      "hash": "f8a0769ba4a231c2",
+      "lastModified": "2026-03-11"
     },
     "en/events/d9ca02fc-171-187-171-187": {
-      "hash": "93a9fd26e91d3183",
-      "lastModified": "2026-03-10"
+      "hash": "bb2e1f185ffbc632",
+      "lastModified": "2026-03-11"
     },
     "en/events/24ca7ac1-leof-mesogeion-15-the-ai-thing-ai-essentials-to-advance-your-career-workshop-a": {
-      "hash": "2c34ab76245601c9",
-      "lastModified": "2026-03-09"
+      "hash": "5c91cab740130d99",
+      "lastModified": "2026-03-11"
     },
     "en/events/8b8ddb3c-auditorium-": {
-      "hash": "743f2fc5662861f2",
-      "lastModified": "2026-03-10"
+      "hash": "2b25b5f15bbf8150",
+      "lastModified": "2026-03-11"
     },
     "en/events/242e47fb--": {
       "hash": "498883e210efc2e9",
@@ -15159,16 +16407,16 @@
       "lastModified": "2026-03-09"
     },
     "en/events/8c0cd639-aux-club-aux-anagenesis-with-negitiv-friday-13-march": {
-      "hash": "59c08df5e0196f96",
-      "lastModified": "2026-03-09"
+      "hash": "843dd5eec63234fd",
+      "lastModified": "2026-03-11"
     },
     "en/events/1a56a706-gazarte-heretoir-live-in-athens": {
-      "hash": "28fbcd477f96c444",
-      "lastModified": "2026-03-10"
+      "hash": "669816d2a2510b2a",
+      "lastModified": "2026-03-11"
     },
     "en/events/4ad34c49--jazz-evi-mazi-manos-kitsikopoulos": {
-      "hash": "1299eb543e0c3705",
-      "lastModified": "2026-03-10"
+      "hash": "239b1b427daaa8b7",
+      "lastModified": "2026-03-11"
     },
     "en/events/a53d0030-oddity-toxic-rave-x-oddity-with-noah-br": {
       "hash": "3ea3d6a17ef265f6",
@@ -15179,8 +16427,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/2fe6c223-2ten-all-night-long-matea-x-alisa-murphy": {
-      "hash": "6476bc016d86d072",
-      "lastModified": "2026-03-09"
+      "hash": "15193660d0b7ff91",
+      "lastModified": "2026-03-11"
     },
     "en/events/a2b7fe23--": {
       "hash": "b06475b0ba5ac850",
@@ -15191,8 +16439,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/6400dc6d-piraeus-club-academy-dreamlord-piraeus-club-academy": {
-      "hash": "e78c19cd220cad31",
-      "lastModified": "2026-03-09"
+      "hash": "feaf445eb4315027",
+      "lastModified": "2026-03-11"
     },
     "en/events/60c26eb4--": {
       "hash": "5e86e2bdc3bc7b63",
@@ -15255,16 +16503,16 @@
       "lastModified": "2026-03-09"
     },
     "en/events/4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste": {
-      "hash": "8325687a35be8594",
-      "lastModified": "2026-03-10"
+      "hash": "370e9600b0c97f9f",
+      "lastModified": "2026-03-11"
     },
     "en/events/3b8828cb-christmas-theater-alban-skenderaj-motiv": {
       "hash": "46fbeaca4db3eb77",
       "lastModified": "2026-03-10"
     },
     "en/events/441535e0-piraeus-club-academy-deus-culpa-album-presentation-w-reversed-piraeus-club-academ": {
-      "hash": "5cd1e3c7d2339dbb",
-      "lastModified": "2026-03-09"
+      "hash": "4bb01d9c12ba4773",
+      "lastModified": "2026-03-11"
     },
     "en/events/435044c6-wild-poppies-alex-kosh-aphrodite": {
       "hash": "7aa78ab947a3f699",
@@ -15283,8 +16531,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/85e63b22-it-athens-underdogs-techno": {
-      "hash": "ff7d91c838a196d4",
-      "lastModified": "2026-03-09"
+      "hash": "302ad2d157aeda2d",
+      "lastModified": "2026-03-11"
     },
     "en/events/f8034b36-wild-poppies-constantinos-dontas": {
       "hash": "142a3076dd333eb1",
@@ -15399,8 +16647,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/1504103a--jazz-idylle-piano-trio-idylle-piano-trio": {
-      "hash": "0721c5352590cb91",
-      "lastModified": "2026-03-10"
+      "hash": "0043b585ef766948",
+      "lastModified": "2026-03-11"
     },
     "en/events/8f79c8ae--sir-john-eliot-gardiner-constellation-choir-and-orchestra": {
       "hash": "f1842d8c271ba80a",
@@ -15419,8 +16667,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/119028d9-floyd-imminence": {
-      "hash": "ace42deb7a732bd6",
-      "lastModified": "2026-03-09"
+      "hash": "f589030cabc5ea61",
+      "lastModified": "2026-03-11"
     },
     "en/events/138fb233-astron-tiger-weeds-with-the-exaltics-live": {
       "hash": "77175c9d95698dad",
@@ -15431,8 +16679,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026": {
-      "hash": "aa0e9b3fd9c6b9fd",
-      "lastModified": "2026-03-09"
+      "hash": "39c96db19b2469b4",
+      "lastModified": "2026-03-11"
     },
     "en/events/84a3a33d--requiem-vakhtang-kakhidze": {
       "hash": "6f114326909f68ab",
@@ -15443,8 +16691,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/af299bbd-floyd-godspeed-you-black-emperor-2026": {
-      "hash": "e2c2555a44a57e2b",
-      "lastModified": "2026-03-09"
+      "hash": "8d8e9bde1fb2d699",
+      "lastModified": "2026-03-11"
     },
     "en/events/86cb62f0-gagarin-205-roy-khan-norway-the-black-halo-and-beyond-seven-spires-usa": {
       "hash": "cbf449220918eb3c",
@@ -15463,8 +16711,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/875f4154-universe-vlct-arena-w-cloudy-kuko-johannes-schuster": {
-      "hash": "003f8a42f13979c1",
-      "lastModified": "2026-03-10"
+      "hash": "50814fe28c6b8779",
+      "lastModified": "2026-03-11"
     },
     "en/events/3017f4e5-epignosis-hq-mindstone-athens-april-ai-meetup": {
       "hash": "1baeca910e164ea9",
@@ -15487,8 +16735,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/47b03e95-bolivar-bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph": {
-      "hash": "0ad6f1ee0747db61",
-      "lastModified": "2026-03-09"
+      "hash": "d27fe0b7bc8c4abb",
+      "lastModified": "2026-03-11"
     },
     "en/events/ddeab8d7-skull-bar-you-are-what-you-dance": {
       "hash": "e9101d7296a3c245",
@@ -15503,8 +16751,8 @@
       "lastModified": "2026-03-09"
     },
     "en/events/fc2a3144-bolivar-bolivar-opening-with-gioli-assia-i-sat-april-25": {
-      "hash": "691a45cc1d1134a9",
-      "lastModified": "2026-03-09"
+      "hash": "21bd17f94f5cd273",
+      "lastModified": "2026-03-11"
     },
     "en/events/ba321357-gagarin-205-grave-digger-tunes-of-war-30-years-anniversary-set-brainstor": {
       "hash": "5eca977b8fe5a359",
@@ -15519,16 +16767,16 @@
       "lastModified": "2026-03-10"
     },
     "en/events/ae70b988--jazz-george-kontrafouris-quartet-international-jazz-day": {
-      "hash": "0de5260c466c8c67",
-      "lastModified": "2026-03-10"
+      "hash": "7ffdbb1871725c16",
+      "lastModified": "2026-03-11"
     },
     "en/events/db458e80-gazarte-the-69-eyes-fi-live-in-athens": {
       "hash": "925d014a0a77552f",
       "lastModified": "2026-03-09"
     },
     "en/events/2b4d123f-universe-teletech-athens-2026-pre-registration": {
-      "hash": "a78c81814b7eded4",
-      "lastModified": "2026-03-10"
+      "hash": "35295c69b54e4f0c",
+      "lastModified": "2026-03-11"
     },
     "en/events/0573ab33-onassis-stegi-by-heart-tiago-rodrigues": {
       "hash": "8d3e2776e8e80d23",
@@ -15543,8 +16791,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/a47a1c7c-floyd-tinariwen": {
-      "hash": "0e2553ed14318698",
-      "lastModified": "2026-03-10"
+      "hash": "243cdc177cec1d6f",
+      "lastModified": "2026-03-11"
     },
     "en/events/560b76f0--crippled-symmetries-motifs-in-contemporary-music": {
       "hash": "bbd14fea28567efe",
@@ -15559,8 +16807,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/c6e08f27-floyd-clutch": {
-      "hash": "dd301129e1460de6",
-      "lastModified": "2026-03-09"
+      "hash": "4987db95ca27651b",
+      "lastModified": "2026-03-11"
     },
     "en/events/c3fe4ec6-gazarte-telenova-live-in-athens": {
       "hash": "07807c62ba748f9b",
@@ -15675,12 +16923,12 @@
       "lastModified": "2026-03-10"
     },
     "en/events/e6a75256-universe-autechre": {
-      "hash": "a380728559422e56",
-      "lastModified": "2026-03-10"
+      "hash": "9a8c923516a751bb",
+      "lastModified": "2026-03-11"
     },
     "en/events/51c1ba90-fuzz-club-doro-pesch": {
-      "hash": "6dbebe7b3a944e1b",
-      "lastModified": "2026-03-09"
+      "hash": "bc836805f26c3082",
+      "lastModified": "2026-03-11"
     },
     "en/events/deep-pur--deep-purple-live": {
       "hash": "d3f1cd4915d2cfe8",
@@ -15707,8 +16955,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/85d4dc30-it-athens-": {
-      "hash": "702eccbc951e29e7",
-      "lastModified": "2026-03-09"
+      "hash": "10f417eff6ab71a3",
+      "lastModified": "2026-03-11"
     },
     "en/events/aa4f0921--": {
       "hash": "0e271bdf001e01c4",
@@ -15759,8 +17007,8 @@
       "lastModified": "2026-03-10"
     },
     "en/events/49b184b6--jerome-kaluta": {
-      "hash": "3228c70246c40040",
-      "lastModified": "2026-03-09"
+      "hash": "ef0706405a7c5c60",
+      "lastModified": "2026-03-11"
     },
     "en/events/87905740-couleur-locale-deerislnd-from-silence-to-sound": {
       "hash": "fe4807c882730a49",
@@ -15774,113 +17022,109 @@
       "hash": "8dad2cf0537ea7e8",
       "lastModified": "2026-03-07"
     },
-    "venues/roes-theater": {
-      "hash": "3f8b4aa8d11685b5",
-      "lastModified": "2026-03-10"
-    },
-    "venues/171-187": {
-      "hash": "3ded248392435970",
-      "lastModified": "2026-03-09"
-    },
     "venues/": {
-      "hash": "c963d154ec655edf",
-      "lastModified": "2026-03-10"
-    },
-    "venues/olvio": {
-      "hash": "8b1e9225d7d5a281",
-      "lastModified": "2026-03-10"
-    },
-    "venues/104": {
-      "hash": "372800ff1bbc7284",
-      "lastModified": "2026-03-10"
-    },
-    "venues/at-victoria": {
-      "hash": "37aee6f01d1ec301",
-      "lastModified": "2026-03-10"
-    },
-    "venues/calderone-art-space": {
-      "hash": "7f1f60b1f4c3ea8f",
-      "lastModified": "2026-03-10"
-    },
-    "venues/studio": {
-      "hash": "87cab330aa572119",
-      "lastModified": "2026-03-10"
-    },
-    "venues/paraga": {
-      "hash": "17f0068fa04dc8cf",
-      "lastModified": "2026-03-10"
-    },
-    "venues/arroyo-theater": {
-      "hash": "699db64a34301449",
-      "lastModified": "2026-03-10"
+      "hash": "44de3f0680979476",
+      "lastModified": "2026-03-11"
     },
     "venues/lib-ro": {
-      "hash": "78ca8c39f634e63b",
-      "lastModified": "2026-03-10"
+      "hash": "75c3cdd692820206",
+      "lastModified": "2026-03-11"
+    },
+    "venues/olvio": {
+      "hash": "96be120bfa510b00",
+      "lastModified": "2026-03-11"
+    },
+    "venues/104": {
+      "hash": "f4869e88df5b195f",
+      "lastModified": "2026-03-11"
+    },
+    "venues/at-victoria": {
+      "hash": "de3a56b154b73447",
+      "lastModified": "2026-03-11"
+    },
+    "venues/calderone-art-space": {
+      "hash": "c13852f09620fa09",
+      "lastModified": "2026-03-11"
+    },
+    "venues/studio": {
+      "hash": "8e67d25d103f5e91",
+      "lastModified": "2026-03-11"
+    },
+    "venues/paraga": {
+      "hash": "a0b984526e4f1165",
+      "lastModified": "2026-03-11"
+    },
+    "venues/131": {
+      "hash": "fb075479d489bad3",
+      "lastModified": "2026-03-11"
+    },
+    "venues/arroyo-theater": {
+      "hash": "b9dfeffc76eca02c",
+      "lastModified": "2026-03-11"
+    },
+    "venues/burger-disco-club": {
+      "hash": "1a941bdf87f9cb72",
+      "lastModified": "2026-03-11"
     },
     "venues/nous": {
-      "hash": "4484fffdae2e3ebd",
-      "lastModified": "2026-03-10"
+      "hash": "39f3aaab24ed262f",
+      "lastModified": "2026-03-11"
     },
     "venues/coronet-theater": {
-      "hash": "62f3129699e9c5fd",
-      "lastModified": "2026-03-10"
+      "hash": "c831bca44fc65321",
+      "lastModified": "2026-03-11"
     },
     "venues/altera-pars": {
-      "hash": "37fb608190b45d69",
-      "lastModified": "2026-03-10"
+      "hash": "019a22e7d32d782f",
+      "lastModified": "2026-03-11"
     },
     "venues/brecht-2510": {
-      "hash": "f3cb57f2a80be14c",
-      "lastModified": "2026-03-10"
+      "hash": "78e1ffc2807e6493",
+      "lastModified": "2026-03-11"
     },
     "venues/radar": {
-      "hash": "ced5981573741d22",
-      "lastModified": "2026-03-10"
-    },
-    "venues/theatre-of-the-no": {
-      "hash": "e34b69e5129548f9",
-      "lastModified": "2026-03-10"
-    },
-    "venues/cartel": {
-      "hash": "2c6265e52d60eaa6",
-      "lastModified": "2026-03-10"
-    },
-    "venues/bios": {
-      "hash": "9e3dce5ca2c6f6bf",
-      "lastModified": "2026-03-10"
-    },
-    "venues/rabbithole": {
-      "hash": "88f6fdcc926d88ee",
-      "lastModified": "2026-03-10"
-    },
-    "venues/newman-cinema": {
-      "hash": "af064418a4155670",
-      "lastModified": "2026-03-10"
-    },
-    "venues/onassis-stegi": {
-      "hash": "4ce7196882457a73",
-      "lastModified": "2026-03-10"
-    },
-    "venues/arch-club": {
-      "hash": "fa5b5b72895d3776",
-      "lastModified": "2026-03-10"
-    },
-    "venues/stage-7": {
-      "hash": "847f2fd1e0337363",
-      "lastModified": "2026-03-10"
-    },
-    "venues/art-63": {
-      "hash": "77be8537adaec355",
-      "lastModified": "2026-03-10"
+      "hash": "182c3359b3e34c7a",
+      "lastModified": "2026-03-11"
     },
     "venues/christmas-theater": {
       "hash": "363f6cd801acf2a3",
       "lastModified": "2026-03-10"
     },
+    "venues/theatre-of-the-no": {
+      "hash": "667146e512e1ce1d",
+      "lastModified": "2026-03-11"
+    },
     "venues/cantina-social": {
       "hash": "109e61ee281a5e38",
       "lastModified": "2026-03-09"
+    },
+    "venues/rabbithole": {
+      "hash": "499bd101b5e8f98b",
+      "lastModified": "2026-03-11"
+    },
+    "venues/cartel": {
+      "hash": "75e88b00fd0b4fc4",
+      "lastModified": "2026-03-11"
+    },
+    "venues/bios": {
+      "hash": "fb48a9f3f2d9510b",
+      "lastModified": "2026-03-11"
+    },
+    "venues/onassis-stegi": {
+      "hash": "84033a763fa284f4",
+      "lastModified": "2026-03-11"
+    },
+    "venues/arch-club": {
+      "hash": "be3832d04a54fb63",
+      "lastModified": "2026-03-11"
+    },
+    "venues/stage-7": {
+      "hash": "cc62495d99628562",
+      "lastModified": "2026-03-11"
+    },
+    "venues/art-63": {
+      "hash": "171a5b9f26941308",
+      "lastModified": "2026-03-11"
     },
     "venues/half-note-jazz-club": {
       "hash": "b3e3ec58065a3214",
@@ -15895,36 +17139,36 @@
       "lastModified": "2026-03-09"
     },
     "venues/plus": {
-      "hash": "2e0e911ec4bc341a",
-      "lastModified": "2026-03-09"
+      "hash": "9e13d94cc4cd8a2d",
+      "lastModified": "2026-03-11"
     },
     "venues/hood-art-space": {
       "hash": "ec6f1e892a1fe6a8",
       "lastModified": "2026-03-10"
     },
     "venues/caja-de-musica": {
-      "hash": "a4e9b56fca515cd0",
-      "lastModified": "2026-03-09"
+      "hash": "7b38b9d8bf176fce",
+      "lastModified": "2026-03-11"
     },
     "venues/parnassos-literary-society": {
       "hash": "19fd5d49cec59ccb",
       "lastModified": "2026-03-07"
     },
     "venues/aux-club": {
-      "hash": "21d72012d3a61a9d",
-      "lastModified": "2026-03-07"
+      "hash": "46f880ced9dc8df6",
+      "lastModified": "2026-03-11"
     },
     "venues/doors": {
       "hash": "291ab459b5f2df2b",
       "lastModified": "2026-03-07"
     },
     "venues/floyd": {
-      "hash": "51e945d1535dbee3",
-      "lastModified": "2026-03-09"
+      "hash": "3a8d060bf0a7653f",
+      "lastModified": "2026-03-11"
     },
     "venues/gazarte": {
-      "hash": "50652a8c6bed604e",
-      "lastModified": "2026-03-10"
+      "hash": "0407d808b8340114",
+      "lastModified": "2026-03-11"
     },
     "venues/an-club": {
       "hash": "74eac77c499a9dca",
@@ -15947,60 +17191,76 @@
       "lastModified": "2026-03-10"
     },
     "venues/dybbuk": {
-      "hash": "79386a08c777f16e",
-      "lastModified": "2026-03-09"
+      "hash": "1d4d6e2868ad1585",
+      "lastModified": "2026-03-11"
     },
     "venues/crust": {
-      "hash": "4c433ae0064c4b65",
-      "lastModified": "2026-03-09"
+      "hash": "0c8cadf75a361c33",
+      "lastModified": "2026-03-11"
+    },
+    "venues/2ten": {
+      "hash": "3a37704fae9f8fdf",
+      "lastModified": "2026-03-11"
     },
     "venues/it-athens": {
-      "hash": "b250e21afd2ed50a",
-      "lastModified": "2026-03-09"
+      "hash": "b58a73200429249e",
+      "lastModified": "2026-03-11"
     },
     "venues/piraeus-club-academy": {
-      "hash": "f9ebc89757787c24",
-      "lastModified": "2026-03-09"
+      "hash": "f1f4d7b25b4658d7",
+      "lastModified": "2026-03-11"
     },
     "venues/temple": {
       "hash": "da48b686d7977e30",
       "lastModified": "2026-03-09"
     },
     "venues/death-disco": {
-      "hash": "064237a6de33e5d4",
-      "lastModified": "2026-03-07"
+      "hash": "62e1512c4e3a4d75",
+      "lastModified": "2026-03-11"
     },
     "venues/underflow": {
       "hash": "cf6967d2cd914822",
       "lastModified": "2026-03-07"
     },
+    "venues/vox": {
+      "hash": "a526c63c60ece7b5",
+      "lastModified": "2026-03-11"
+    },
     "venues/fuzz-club": {
-      "hash": "5af3a6c82c38a44a",
-      "lastModified": "2026-03-09"
+      "hash": "a56d00f0708fdf69",
+      "lastModified": "2026-03-11"
     },
     "venues/smut-4-10438-greece": {
       "hash": "9609f12f14bdb385",
       "lastModified": "2026-03-07"
     },
     "venues/smut-athens": {
-      "hash": "621efead7ce49750",
-      "lastModified": "2026-03-10"
+      "hash": "a2a71f6827549588",
+      "lastModified": "2026-03-11"
     },
     "venues/myrtillo-cafe": {
       "hash": "85ef5735cbc19aa9",
       "lastModified": "2026-03-09"
     },
+    "venues/171-187": {
+      "hash": "a251f5eef7a43e99",
+      "lastModified": "2026-03-11"
+    },
     "venues/st-paul-s-anglican-church": {
       "hash": "409301d130602c69",
       "lastModified": "2026-03-07"
+    },
+    "venues/roes-theater": {
+      "hash": "559cad6e9dbfdf88",
+      "lastModified": "2026-03-11"
     },
     "venues/wild-poppies": {
       "hash": "066c784ce46af3d4",
       "lastModified": "2026-03-07"
     },
     "venues/universe": {
-      "hash": "38a56e6e435a05c6",
-      "lastModified": "2026-03-10"
+      "hash": "c8aa82ece50d30ed",
+      "lastModified": "2026-03-11"
     },
     "venues/cozmo-athens": {
       "hash": "f36c184bbf2fcff4",
@@ -16023,12 +17283,12 @@
       "lastModified": "2026-03-07"
     },
     "venues/bolivar": {
-      "hash": "e5e14ddfbf07a193",
-      "lastModified": "2026-03-10"
+      "hash": "6bc89943d91c6e54",
+      "lastModified": "2026-03-11"
     },
     "venues/island-athens-riviera": {
-      "hash": "55e8447e25926162",
-      "lastModified": "2026-03-07"
+      "hash": "c7643b69f4a4aaca",
+      "lastModified": "2026-03-11"
     },
     "venues/lycabettus-theater": {
       "hash": "f4a5389238b7670d",
