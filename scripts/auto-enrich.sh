@@ -29,7 +29,7 @@ DB_PATH="$PROJECT_DIR/data/events.db"
 BRIEFS_DIR="$PROJECT_DIR/temp-briefs"
 LOG_DIR="$PROJECT_DIR/logs"
 
-CLAUDE_BIN="/Users/chrism/.npm-global/bin/claude"
+CLAUDE_BIN="$(command -v claude)"
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
 EVENTS_PER_BATCH=3
