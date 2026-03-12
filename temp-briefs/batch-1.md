@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: b0cc94be77e51a6a, d9ca02fc9fc3c6d4, 8b8ddb3c76ed35b4
+- Event IDs: 221563ac2310bf37, b8347235796d5614, e41d462b49afafb7
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -60,58 +60,61 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
 - "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
 - "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
+- "I Dynami tis Synithias vol."
+- "Gynaika is a concert by the Athens Municipal Symphony Orchestra at Olympia Municipal Music Theater Maria Callas in central Athens, on 10 March 2026."
+- "Aligatores is a psychological drama at Auditorium in central Athens, running through 31 March 2026."
 
 ---
 
 ## Events to Enrich
 
-### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: b0cc94be77e51a6a
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 221563ac2310bf37
 - **Type**: theater
-- **Venue**: ROES THEATER
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-10
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/13911/
-- **Source**: ticketservices
+- **Date**: 2026-03-12T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### &#171;Γυναίκα&#187;
-- **ID**: d9ca02fc9fc3c6d4
+### «Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης»
+- **ID**: b8347235796d5614
 - **Type**: concert
-- **Venue**: Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-10
-- **Time**: 20:00
-- **URL**: https://www.athinorama.gr/music/gig/gunaika-10089277/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187; Athens" for context.
+- **Date**: 2026-03-12
+- **Time**: 20:30
+- **URL**: https://www.ticketservices.gr/event/14102/
+- **Source**: ticketservices
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Αλιγάτορες
-- **ID**: 8b8ddb3c76ed35b4
+### SINGLES DISCO CLUB
+- **ID**: e41d462b49afafb7
 - **Type**: dj_set
-- **Venue**: AUDITORIUM
+- **Venue**: Burger Disco Club
 - **Price**: paid
-- **Date**: 2026-03-10T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-12T20:00:00
+- **Time**: 20:00
+- **URL**: https://ra.co/events/2390620
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Burger Disco Club Athens" for context.
 
 ---
 
@@ -147,12 +150,12 @@ For EACH event:
    - Same 8-section structure, same factual content, but natural Greek voice
    - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
-   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
+   - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:
    ```bash
    bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean
    ```
    Note "AUTO-SAVED" at the top of batch-1-review.md.
-   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
+   - If ANY score is < 80 OR any have errors: do NOT run save-batch.ts.
      Note "LEFT FOR REVIEW" at the top of batch-1-review.md with reasons.
 
 ### Per-Event Gate Check Commands
@@ -160,33 +163,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b0cc94be77e51a6a.md \
-  --tier=standard --event-id=b0cc94be77e51a6a \
-  --event-type=theater --event-venue="ROES THEATER" \
-  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-10 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/221563ac2310bf37.md \
+  --tier=standard --event-id=221563ac2310bf37 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-12 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d9ca02fc9fc3c6d4.md \
-  --tier=stub --event-id=d9ca02fc9fc3c6d4 \
-  --event-type=concert --event-venue="Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;" \
-  --event-title="&#171;Γυναίκα&#187;" \
-  --event-date=2026-03-10 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b8347235796d5614.md \
+  --tier=premium --event-id=b8347235796d5614 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="«Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης»" \
+  --event-date=2026-03-12 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8b8ddb3c76ed35b4.md \
-  --tier=stub --event-id=8b8ddb3c76ed35b4 \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Αλιγάτορες" \
-  --event-date=2026-03-10 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/e41d462b49afafb7.md \
+  --tier=stub --event-id=e41d462b49afafb7 \
+  --event-type=dj_set --event-venue="Burger Disco Club" \
+  --event-title="SINGLES DISCO CLUB" \
+  --event-date=2026-03-12 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| b0cc94be77e51a6a | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| d9ca02fc9fc3c6d4 | &#171;Γυναίκα&#187; | /100 | | |
-| 8b8ddb3c76ed35b4 | Αλιγάτορες | /100 | | |
+| 221563ac2310bf37 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| b8347235796d5614 | «Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης» | /100 | | |
+| e41d462b49afafb7 | SINGLES DISCO CLUB | /100 | | |

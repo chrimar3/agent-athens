@@ -29,7 +29,13 @@ DB_PATH="$PROJECT_DIR/data/events.db"
 BRIEFS_DIR="$PROJECT_DIR/temp-briefs"
 LOG_DIR="$PROJECT_DIR/logs"
 
-CLAUDE_BIN="$(command -v claude)"
+# Resolve claude binary: try PATH first, then known install locations
+CLAUDE_BIN="$(command -v claude 2>/dev/null || true)"
+if [[ -z "$CLAUDE_BIN" ]]; then
+    for candidate in "$HOME/.local/bin/claude" "$HOME/.npm-global/bin/claude" "/usr/local/bin/claude"; do
+        [[ -x "$candidate" ]] && CLAUDE_BIN="$candidate" && break
+    done
+fi
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
 EVENTS_PER_BATCH=3
@@ -57,19 +63,33 @@ log_error() {
 
 # ============================================================================
 # Kill orphaned claude CLI processes from previous auto-enrich runs
+# Only targets true orphans (parent PID 1) with auto-enrich signatures.
+# Never kills interactive sessions or processes with living parents.
 # ============================================================================
 
 STALE_PIDS=$(pgrep -x claude 2>/dev/null || true)
 if [[ -n "$STALE_PIDS" ]]; then
     echo "$STALE_PIDS" | while read pid; do
-        # Skip if it's the current session parent
-        if [[ "$pid" != "$$" ]]; then
-            PROC_CMD=$(ps -p "$pid" -o args= 2>/dev/null || true)
-            # Only kill headless CLI processes, not Claude desktop app
-            if [[ "$PROC_CMD" == "claude" || "$PROC_CMD" == "claude "* ]] && [[ "$PROC_CMD" != *"Claude.app"* ]]; then
-                log "Killing orphaned claude process $pid"
-                kill "$pid" 2>/dev/null || true
-            fi
+        PPID_OF_PROC=$(ps -p "$pid" -o ppid= 2>/dev/null | tr -d ' ' || true)
+        [[ -z "$PPID_OF_PROC" ]] && continue
+
+        # Only kill true orphans (reparented to init/launchd, PPID=1)
+        [[ "$PPID_OF_PROC" != "1" ]] && continue
+
+        PROC_CMD=$(ps -p "$pid" -o args= 2>/dev/null || true)
+        [[ -z "$PROC_CMD" ]] && continue
+
+        # Skip Claude desktop app
+        [[ "$PROC_CMD" == *"Claude.app"* ]] && continue
+
+        # Skip interactive sessions
+        [[ "$PROC_CMD" == *"--dangerously-skip-permissions"* ]] && continue
+
+        # Only kill if it looks like an auto-enrich spawned process:
+        # claude -p with --output-format text (the exact flags we use on line 214)
+        if [[ "$PROC_CMD" == *" -p "* ]] && [[ "$PROC_CMD" == *"--output-format"* ]]; then
+            log "Killing orphaned auto-enrich claude process $pid (PPID=1, cmd: ${PROC_CMD:0:80})"
+            kill "$pid" 2>/dev/null || true
         fi
     done
 fi

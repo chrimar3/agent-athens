@@ -162,6 +162,7 @@ Pitfalls encountered and how to avoid them.
 | launchd path with spaces | Exit code 127, `/bin/bash: /Users/chrism/Project: No such file or directory` | Wrap paths in quotes inside `-c` argument: `<string>"/path/with spaces/script.sh"</string>` |
 | Duplicate/stale plist files | Multiple plists for same job cause confusion and errors | Clean up old plists; keep only one authoritative plist per job |
 | bun: command not found in launchd | launchd runs with minimal PATH, can't find bun | Add explicit PATH export at script start: `export PATH="/Users/chrism/.bun/bin:$PATH"` |
+| Auto-enrich tested only in interactive shell | launchd runs with minimal PATH — `command -v claude` returns nothing. Interactive terminal testing doesn't catch environment differences. | Always test automation scripts with: `env -i HOME="$HOME" PATH="<plist-PATH>" bash script.sh --dry-run` |
 | Too broad LIKE queries | `WHERE venue LIKE '%Σωκράτης%'` deleted Athens AND Amfissa venues | Use exact match or verify manually; same venue name can exist in different cities |
 | Same venue name, different cities | "Καφενείο Ο Σωκράτης" exists in both Athens (Χίου 42) AND Amfissa | Always verify addresses; add distinguishing notes in rejected-locations.json |
 | Assuming API module exists | Script imported non-existent `callToolAgent()` from `tool-agent` | Claude Code operates interactively - design scripts to output data, not call APIs |

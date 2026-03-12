@@ -953,6 +953,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Σφενδόνη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Θέατρο Σφενδόνη, 4",
+    "lat": 37.969183,
+    "lng": 23.730403,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-12"
+  },
   "Τεχνοχώρος Εργοτάξιον": {
     "name_en": "Ergotaxion Technochoros",
     "neighborhood": "Agios Dimitrios",

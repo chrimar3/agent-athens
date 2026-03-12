@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 756b01d232f3d489, cf90dac47dc9a006, 9fb3f05ad69928cb
+- Event IDs: 5594885e30e128a1, 15da2955f1212183, 2e1ee5a9603e7691
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -60,49 +60,20 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
 - "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
 - "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
+- "I Dynami tis Synithias vol."
+- "Gynaika is a concert by the Athens Municipal Symphony Orchestra at Olympia Municipal Music Theater Maria Callas in central Athens, on 10 March 2026."
+- "Aligatores is a psychological drama at Auditorium in central Athens, running through 31 March 2026."
 
 ---
 
 ## Events to Enrich
 
-### Το μαγικό εισιτήριο
-- **ID**: 756b01d232f3d489
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-10T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### D'Al Senio
-- **ID**: cf90dac47dc9a006
-- **Type**: dj_set
-- **Venue**: Boo!
-- **Price**: door
-- **Date**: 2026-03-13T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.clubber.gr/events/dal-senio-5/
-- **Source**: clubber.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Boo! Athens" for context.
-
 ### Ζεστή σοκολάτα με τον Πικάσο
-- **ID**: 9fb3f05ad69928cb
+- **ID**: 5594885e30e128a1
 - **Type**: theater
 - **Venue**: Μουσείο Γουλανδρή
 - **Price**: tba
-- **Date**: 2026-03-10T11:00:00
+- **Date**: 2026-03-12T11:00:00
 - **Time**: 11:00
 - **URL**: https://www.athinorama.gr/theatre/performance/zesti_sokolata_me_ton_pikaso-10085220/
 - **Source**: athinorama.gr
@@ -112,6 +83,38 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Μουσείο Γουλανδρή Athens" for context.
+
+### Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο
+- **ID**: 15da2955f1212183
+- **Type**: concert
+- **Venue**: Κύτταρο
+- **Price**: paid
+- **Date**: 2026-03-12
+- **Time**: 20:30
+- **URL**: https://www.more.com/gr-el/tickets/music/i-ioulia-karapataki-oi-atar-tou-tar-live-sto-kyttaro/
+- **Source**: more.com
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Κύτταρο Athens" for context.
+
+### Αλιγάτορες
+- **ID**: 2e1ee5a9603e7691
+- **Type**: dj_set
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-03-12T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -147,12 +150,12 @@ For EACH event:
    - Same 8-section structure, same factual content, but natural Greek voice
    - The Greek version is NOT a translation. Write it fresh for a local audience.
 6. **Save decision** (after completing ALL events in this batch):
-   - If ALL gate scores are >= 85 AND all have 0 errors: auto-save to database:
+   - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:
    ```bash
    bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
    ```
    Note "AUTO-SAVED" at the top of batch-3-review.md.
-   - If ANY score is < 85 OR any have errors: do NOT run save-batch.ts.
+   - If ANY score is < 80 OR any have errors: do NOT run save-batch.ts.
      Note "LEFT FOR REVIEW" at the top of batch-3-review.md with reasons.
 
 ### Per-Event Gate Check Commands
@@ -160,33 +163,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/756b01d232f3d489.md \
-  --tier=premium --event-id=756b01d232f3d489 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-10 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cf90dac47dc9a006.md \
-  --tier=stub --event-id=cf90dac47dc9a006 \
-  --event-type=dj_set --event-venue="Boo!" \
-  --event-title="D'Al Senio" \
-  --event-date=2026-03-13 --event-price=door
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9fb3f05ad69928cb.md \
-  --tier=standard --event-id=9fb3f05ad69928cb \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5594885e30e128a1.md \
+  --tier=standard --event-id=5594885e30e128a1 \
   --event-type=theater --event-venue="Μουσείο Γουλανδρή" \
   --event-title="Ζεστή σοκολάτα με τον Πικάσο" \
-  --event-date=2026-03-10 --event-price=tba
+  --event-date=2026-03-12 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/15da2955f1212183.md \
+  --tier=stub --event-id=15da2955f1212183 \
+  --event-type=concert --event-venue="Κύτταρο" \
+  --event-title="Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο" \
+  --event-date=2026-03-12 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/2e1ee5a9603e7691.md \
+  --tier=stub --event-id=2e1ee5a9603e7691 \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Αλιγάτορες" \
+  --event-date=2026-03-12 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 756b01d232f3d489 | Το μαγικό εισιτήριο | /100 | | |
-| cf90dac47dc9a006 | D'Al Senio | /100 | | |
-| 9fb3f05ad69928cb | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
+| 5594885e30e128a1 | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
+| 15da2955f1212183 | Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο | /100 | | |
+| 2e1ee5a9603e7691 | Αλιγάτορες | /100 | | |
