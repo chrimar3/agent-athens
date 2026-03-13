@@ -953,6 +953,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Σύγχρονο Θέατρο": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Σύγχρονο Θέατρο, 45",
+    "lat": 37.979885,
+    "lng": 23.711319,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-13"
+  },
   "Σφενδόνη": {
     "name_en": "",
     "neighborhood": "",
@@ -1680,6 +1691,17 @@
     "type": "live_music_venue",
     "description": "Historic music venue since 1995, one of Athens' most popular concert halls featuring rock, pop, and art music performances",
     "metro": "Syngrou-Fix"
+  },
+  "Stoa Athens": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Μουσείο της Τράπεζας της Ελλάδος, Στοά Μιχαήλ Κ. Λεμού",
+    "lat": 37.977958,
+    "lng": 23.734163,
+    "type": "tourism",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-13"
   },
   "Studio Κυψέλης": {
     "name_en": "Studio Kypseli",

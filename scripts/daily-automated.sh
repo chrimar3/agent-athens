@@ -15,7 +15,10 @@
 # @see specs/001-data-pipeline/tasks.md (Task 6.3)
 # @see docs/LAUNCHD-SETUP.md
 
-set -e  # Exit on error
+set -o pipefail  # Catch pipe failures but don't exit on every error
+# Note: set -e removed — it conflicts with per-phase error handling and
+# killed the pipeline mid-email-ingestion on 2026-03-13. Every phase
+# already has explicit if/else error handling.
 
 # ============================================================================
 # PATH Setup (for launchd which doesn't inherit user's PATH)
@@ -104,11 +107,10 @@ run_ingest() {
 
     if bun run scripts/ingest-emails.ts >> "$LOG_FILE" 2>&1; then
         log "Email ingestion completed"
-        return 0
     else
-        log_error "Email ingestion failed"
-        return 1
+        log_error "Email ingestion failed (non-fatal, continuing...)"
     fi
+    return 0
 }
 
 # Phase 2: Parse emails
@@ -123,11 +125,10 @@ run_parse() {
 
     if bun run scripts/parse-newsletter-emails.ts >> "$LOG_FILE" 2>&1; then
         log "Email parsing completed"
-        return 0
     else
-        log_error "Email parsing failed"
-        return 1
+        log_error "Email parsing failed (non-fatal, continuing...)"
     fi
+    return 0
 }
 
 # Phase 2b: Web scraping
@@ -575,77 +576,48 @@ main() {
     check_dependencies
 
     # Run pipeline phases
-    local failed=0
+    # All phases are non-fatal except generate and deploy.
+    # A failed email or scrape should never block enrichment or deployment
+    # of already-good data.
 
-    run_ingest || failed=1
-
-    if [[ $failed -eq 0 ]]; then
-        run_parse || failed=1
-    fi
-
-    # Web scraping (non-fatal)
+    # Data acquisition (all non-fatal)
+    run_ingest
+    run_parse
     run_scrape
 
-    if [[ $failed -eq 0 ]]; then
-        run_quality || failed=1
-    fi
-
-    # Deduplication — same-source (non-fatal)
+    # Data quality (all non-fatal)
+    run_quality
     run_dedup_removal
-
-    # Deduplication — cross-source merge (non-fatal)
     run_dedup_merge
-
-    # Price acquisition (non-fatal)
     run_prices
-
-    # Ticket URL validation (non-fatal)
     run_tickets
-
-    # Schema.org generation (non-fatal)
     run_schema
 
-    # Enrichment queue sync (non-fatal)
+    # Enrichment (all non-fatal)
     run_enrichment_sync
-
-    # Automated AI enrichment (non-fatal)
     run_auto_enrichment
-
-    # Time data enrichment (non-fatal)
     run_time_enrichment
-
-    # Image enrichment (non-fatal)
     run_image_enrichment
-
-    # Image download and optimization (non-fatal)
     run_image_download
-
-    # Geocode new venues (non-fatal, high-confidence only)
     run_geocode
 
-    if [[ $failed -eq 0 ]]; then
-        run_generate || failed=1
-    fi
-
-    # Health check (non-fatal)
-    run_health_check
-
-    if [[ $failed -eq 0 ]]; then
-        run_deploy || failed=1
-    fi
-
-    # Image cleanup (non-fatal, after deploy)
-    run_image_cleanup
-
-    # IndexNow ping (only after successful deploy)
-    if [[ $failed -eq 0 ]]; then
-        run_indexnow_ping
+    # Build & deploy (fatal — no point deploying a broken build)
+    local deploy_ok=0
+    if run_generate; then
+        run_health_check
+        if run_deploy; then
+            deploy_ok=1
+            run_image_cleanup
+            run_indexnow_ping
+        fi
+    else
+        log_error "Site generation failed — skipping deploy"
     fi
 
     # Print summary
     print_summary
 
-    if [[ $failed -eq 1 ]]; then
+    if [[ $deploy_ok -eq 0 ]]; then
         log_error "Pipeline completed with errors"
         exit 1
     else

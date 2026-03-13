@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 221563ac2310bf37, b8347235796d5614, e41d462b49afafb7
+- Event IDs: 1d570435001b3716, d9488d66b3708caf, 16d502f8fe202294
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,23 +57,32 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
-- "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
-- "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
-- "I Dynami tis Synithias vol."
-- "Gynaika is a concert by the Athens Municipal Symphony Orchestra at Olympia Municipal Music Theater Maria Callas in central Athens, on 10 March 2026."
-- "Aligatores is a psychological drama at Auditorium in central Athens, running through 31 March 2026."
+- "O Tou-tou kai i Tsaf-tsouf is a puppet theater performance for babies at Olvio in Botanikos, Athens, on 12 March 2026."
+- "Tragoudia Aneipota is a vocal recital at Megaron Mousikis in Ampelokipoi, Athens, on 12 March 2026."
+- "SINGLES DISCO CLUB is a DJ night and singles social at Burger Disco Club on Nikis 11 near Syntagma, Athens, on 12 March 2026."
+- "Retro Savvata me ton David Nachmia is a concert at the B."
+- "MAROUSSI CHERY VS PERISTERI BETSSON is a Greek Basket League game at the OAKA Indoor Arena in Maroussi, Athens, on 14 March 2026."
+- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre on Kefallinias Street in Kypseli, Athens, running Fridays through 27 March 2026."
+- "Zesti Sokolata me ton Pikaso is a children's theater production at the Goulandris Museum amphitheater in Pangrati, Athens, on 12 March 2026 at 11:00."
+- "Ioulia Karapataki and Atar tou Tar play rebetiko and old laika at Kyttaro near Victoria Square in Athens, on 12 March 2026."
+- "Andrew Keatley's Aligatores plays at Auditorium on Sina 2-4 in central Athens, through 31 March 2026."
+- "O Kipos tou Epikourou is a painting exhibition by Erietta Vordoni at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 30 March 2026."
+- "Athlitismos gia Olous is an adapted sports program for children with disabilities at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, running weekends from January through March 2026."
+- "Katerina Papoutsaki ft."
+- "D'Al Senio is a DJ set at Boo!"
+- "Agamemnon: The Cycle of Blood is a solo theater work at Theatro Mavili on Mavili Square in Ampelokipoi, Athens, premiering 13 March 2026 at 21:00."
+- "Marva Von Theo and MoonMoth play a concert at St."
 
 ---
 
 ## Events to Enrich
 
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 221563ac2310bf37
+- **ID**: 1d570435001b3716
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-12T10:30:00
+- **Date**: 2026-03-13T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -84,37 +93,51 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### «Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης»
-- **ID**: b8347235796d5614
+### The Bonnie Nettles
+- **ID**: d9488d66b3708caf
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-12
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14102/
-- **Source**: ticketservices
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-03-13
+- **URL**: https://www.athinorama.gr/music/gig/the_bonnie_nettles-10057746/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
-### SINGLES DISCO CLUB
-- **ID**: e41d462b49afafb7
+### Bacchae 6.0
+- **ID**: 16d502f8fe202294
 - **Type**: dj_set
-- **Venue**: Burger Disco Club
-- **Price**: paid
-- **Date**: 2026-03-12T20:00:00
-- **Time**: 20:00
-- **URL**: https://ra.co/events/2390620
+- **Venue**: Bios Ρομάντσο
+- **Price**: tba
+- **Date**: 2026-03-13T11:00:00
+- **Time**: 11:00
+- **URL**: https://ra.co/events/2390237
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Burger Disco Club Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
 
 ---
 
@@ -163,33 +186,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/221563ac2310bf37.md \
-  --tier=standard --event-id=221563ac2310bf37 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/1d570435001b3716.md \
+  --tier=standard --event-id=1d570435001b3716 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-12 --event-price=paid
+  --event-date=2026-03-13 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b8347235796d5614.md \
-  --tier=premium --event-id=b8347235796d5614 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="«Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης»" \
-  --event-date=2026-03-12 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d9488d66b3708caf.md \
+  --tier=stub --event-id=d9488d66b3708caf \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="The Bonnie Nettles" \
+  --event-date=2026-03-13 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/e41d462b49afafb7.md \
-  --tier=stub --event-id=e41d462b49afafb7 \
-  --event-type=dj_set --event-venue="Burger Disco Club" \
-  --event-title="SINGLES DISCO CLUB" \
-  --event-date=2026-03-12 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/16d502f8fe202294.md \
+  --tier=stub --event-id=16d502f8fe202294 \
+  --event-type=dj_set --event-venue="Bios Ρομάντσο" \
+  --event-title="Bacchae 6.0" \
+  --event-date=2026-03-13 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 221563ac2310bf37 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| b8347235796d5614 | «Τραγούδια ανείπωτα... Νεζερίτης - Παλλάντιος - Γεωργιάδης» | /100 | | |
-| e41d462b49afafb7 | SINGLES DISCO CLUB | /100 | | |
+| 1d570435001b3716 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| d9488d66b3708caf | The Bonnie Nettles | /100 | | |
+| 16d502f8fe202294 | Bacchae 6.0 | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 5594885e30e128a1, 15da2955f1212183, 2e1ee5a9603e7691
+- Event IDs: 236f9f6ba20a6565, a2d34d0667998419, ab3ff44be932a7b5
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,55 +57,32 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "Resonances is a concert for two pianos at the Philippos Nakas Concert Hall on Ippokratous Street in central Athens, performed by Lydia Linardou and Hero Menegou."
-- "Sneaky Club is a DJ night at Zelus on Ploutarchou 9 in Kolonaki, starting at 23:00 on Thursday 12 March 2026."
-- "Parantaiz — I aithousa klimatizetai is a contemporary theater production at Theatre 104 in Gazi, written by Lena Kitsopoulou and directed by Giota Seremeti."
-- "I Dynami tis Synithias vol."
-- "Gynaika is a concert by the Athens Municipal Symphony Orchestra at Olympia Municipal Music Theater Maria Callas in central Athens, on 10 March 2026."
-- "Aligatores is a psychological drama at Auditorium in central Athens, running through 31 March 2026."
+- "O Tou-tou kai i Tsaf-tsouf is a puppet theater performance for babies at Olvio in Botanikos, Athens, on 12 March 2026."
+- "Tragoudia Aneipota is a vocal recital at Megaron Mousikis in Ampelokipoi, Athens, on 12 March 2026."
+- "SINGLES DISCO CLUB is a DJ night and singles social at Burger Disco Club on Nikis 11 near Syntagma, Athens, on 12 March 2026."
+- "Retro Savvata me ton David Nachmia is a concert at the B."
+- "MAROUSSI CHERY VS PERISTERI BETSSON is a Greek Basket League game at the OAKA Indoor Arena in Maroussi, Athens, on 14 March 2026."
+- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre on Kefallinias Street in Kypseli, Athens, running Fridays through 27 March 2026."
+- "Zesti Sokolata me ton Pikaso is a children's theater production at the Goulandris Museum amphitheater in Pangrati, Athens, on 12 March 2026 at 11:00."
+- "Ioulia Karapataki and Atar tou Tar play rebetiko and old laika at Kyttaro near Victoria Square in Athens, on 12 March 2026."
+- "Andrew Keatley's Aligatores plays at Auditorium on Sina 2-4 in central Athens, through 31 March 2026."
+- "O Kipos tou Epikourou is a painting exhibition by Erietta Vordoni at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 30 March 2026."
+- "Athlitismos gia Olous is an adapted sports program for children with disabilities at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, running weekends from January through March 2026."
+- "Katerina Papoutsaki ft."
+- "D'Al Senio is a DJ set at Boo!"
+- "Agamemnon: The Cycle of Blood is a solo theater work at Theatro Mavili on Mavili Square in Ampelokipoi, Athens, premiering 13 March 2026 at 21:00."
+- "Marva Von Theo and MoonMoth play a concert at St."
 
 ---
 
 ## Events to Enrich
 
-### Ζεστή σοκολάτα με τον Πικάσο
-- **ID**: 5594885e30e128a1
-- **Type**: theater
-- **Venue**: Μουσείο Γουλανδρή
-- **Price**: tba
-- **Date**: 2026-03-12T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/zesti_sokolata_me_ton_pikaso-10085220/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Μουσείο Γουλανδρή Athens" for context.
-
-### Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο
-- **ID**: 15da2955f1212183
-- **Type**: concert
-- **Venue**: Κύτταρο
-- **Price**: paid
-- **Date**: 2026-03-12
-- **Time**: 20:30
-- **URL**: https://www.more.com/gr-el/tickets/music/i-ioulia-karapataki-oi-atar-tou-tar-live-sto-kyttaro/
-- **Source**: more.com
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Κύτταρο Athens" for context.
-
 ### Αλιγάτορες
-- **ID**: 2e1ee5a9603e7691
+- **ID**: 236f9f6ba20a6565
 - **Type**: dj_set
 - **Venue**: AUDITORIUM
 - **Price**: paid
-- **Date**: 2026-03-12T21:00:00
+- **Date**: 2026-03-13T21:00:00
 - **Time**: 21:00
 - **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
 - **Source**: athinorama.gr
@@ -115,6 +92,38 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
 - **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+
+### Velvet Cabaret – NY in Athens
+- **ID**: a2d34d0667998419
+- **Type**: show
+- **Venue**: MÉTRON Stage
+- **Price**: paid
+- **Date**: 2026-03-13T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.athinorama.gr/theatre/performance/velvet_cabaret_%e2%80%93_ny_in_athens-10089520/
+- **Source**: athinorama.gr
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "MÉTRON Stage Athens" for context.
+
+### In motion: Ένα άγαλμα που το ’σκασε
+- **ID**: ab3ff44be932a7b5
+- **Type**: theater
+- **Venue**: Δημοτικό Θέατρο Πειραιά
+- **Price**: tba
+- **Date**: 2026-03-13T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
 
 ---
 
@@ -163,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5594885e30e128a1.md \
-  --tier=standard --event-id=5594885e30e128a1 \
-  --event-type=theater --event-venue="Μουσείο Γουλανδρή" \
-  --event-title="Ζεστή σοκολάτα με τον Πικάσο" \
-  --event-date=2026-03-12 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/15da2955f1212183.md \
-  --tier=stub --event-id=15da2955f1212183 \
-  --event-type=concert --event-venue="Κύτταρο" \
-  --event-title="Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο" \
-  --event-date=2026-03-12 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/2e1ee5a9603e7691.md \
-  --tier=stub --event-id=2e1ee5a9603e7691 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/236f9f6ba20a6565.md \
+  --tier=stub --event-id=236f9f6ba20a6565 \
   --event-type=dj_set --event-venue="AUDITORIUM" \
   --event-title="Αλιγάτορες" \
-  --event-date=2026-03-12 --event-price=paid
+  --event-date=2026-03-13 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a2d34d0667998419.md \
+  --tier=standard --event-id=a2d34d0667998419 \
+  --event-type=show --event-venue="MÉTRON Stage" \
+  --event-title="Velvet Cabaret – NY in Athens" \
+  --event-date=2026-03-13 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ab3ff44be932a7b5.md \
+  --tier=standard --event-id=ab3ff44be932a7b5 \
+  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
+  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
+  --event-date=2026-03-13 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 5594885e30e128a1 | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
-| 15da2955f1212183 | Η Ιουλία Καραπατάκη  & οι ΑΤΑΡ ΤΟΥ ΤΑΡ Live στο Κύτταρο | /100 | | |
-| 2e1ee5a9603e7691 | Αλιγάτορες | /100 | | |
+| 236f9f6ba20a6565 | Αλιγάτορες | /100 | | |
+| a2d34d0667998419 | Velvet Cabaret – NY in Athens | /100 | | |
+| ab3ff44be932a7b5 | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |

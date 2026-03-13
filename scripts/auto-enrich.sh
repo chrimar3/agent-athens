@@ -213,7 +213,19 @@ fi
 
 log "Generated ${#BATCH_FILES[@]} batch file(s)"
 
-# 8. Run claude -p on each batch (sequential for SQLite safety)
+# 8. Warm up Claude CLI (forces startup overhead into a throwaway call)
+log "Warming up Claude CLI..."
+# macOS lacks GNU timeout — use background process with watchdog
+"$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json > /dev/null 2>&1 &
+WARMUP_PID=$!
+( sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
+WATCHDOG_PID=$!
+wait "$WARMUP_PID" 2>/dev/null || true
+kill "$WATCHDOG_PID" 2>/dev/null || true
+wait "$WATCHDOG_PID" 2>/dev/null || true
+log "Warm-up complete"
+
+# 9. Run claude -p on each batch (sequential for SQLite safety)
 SUCCEEDED=0
 FAILED=0
 
