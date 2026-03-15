@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 1d570435001b3716, d9488d66b3708caf, 16d502f8fe202294
+- Event IDs: bc83f6b2cda45abb, 4acbb1b1b4f55e1b, 5f10accd91bab172
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,32 +57,32 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "O Tou-tou kai i Tsaf-tsouf is a puppet theater performance for babies at Olvio in Botanikos, Athens, on 12 March 2026."
-- "Tragoudia Aneipota is a vocal recital at Megaron Mousikis in Ampelokipoi, Athens, on 12 March 2026."
-- "SINGLES DISCO CLUB is a DJ night and singles social at Burger Disco Club on Nikis 11 near Syntagma, Athens, on 12 March 2026."
-- "Retro Savvata me ton David Nachmia is a concert at the B."
-- "MAROUSSI CHERY VS PERISTERI BETSSON is a Greek Basket League game at the OAKA Indoor Arena in Maroussi, Athens, on 14 March 2026."
-- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre on Kefallinias Street in Kypseli, Athens, running Fridays through 27 March 2026."
-- "Zesti Sokolata me ton Pikaso is a children's theater production at the Goulandris Museum amphitheater in Pangrati, Athens, on 12 March 2026 at 11:00."
-- "Ioulia Karapataki and Atar tou Tar play rebetiko and old laika at Kyttaro near Victoria Square in Athens, on 12 March 2026."
-- "Andrew Keatley's Aligatores plays at Auditorium on Sina 2-4 in central Athens, through 31 March 2026."
-- "O Kipos tou Epikourou is a painting exhibition by Erietta Vordoni at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 30 March 2026."
-- "Athlitismos gia Olous is an adapted sports program for children with disabilities at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, running weekends from January through March 2026."
-- "Katerina Papoutsaki ft."
-- "D'Al Senio is a DJ set at Boo!"
-- "Agamemnon: The Cycle of Blood is a solo theater work at Theatro Mavili on Mavili Square in Ampelokipoi, Athens, premiering 13 March 2026 at 21:00."
-- "Marva Von Theo and MoonMoth play a concert at St."
+- "To Megalo Mas Tsirko, a show by Iakovos Kampanellis at Theatron in Tavros, Athens, on 13 March 2026, fills the stage with an eight-piece orchestra and twenty actors."
+- "Zesti Sokolata me ton Pikaso is a children's theater piece at the Goulandris Museum in Pangrati, Athens, on 13 March 2026 at 11:00."
+- "To Magiko Eisitirio is a baby theater production at the Giannis Marinos Hall in Megaron Mousikis in Ampelokipoi, Athens, on 13 March 2026 at 10:30."
+- "A professor's life unravels from a single accusation."
+- "Twenty costume changes in seventy minutes."
+- "The stage becomes a museum, and one of the statues is missing."
+- "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
+- "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
+- "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
+- "O Kyrios Bromylos is a children's theater production at Theatro Technis in Plaka, Athens, on 13 March 2026 at 11:00."
+- "Denekeدoupoli Xana is an interactive children's show with live music at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:00."
+- "Falsa Magra, Stochastic, and Demian play a DJ set at B-Side on Mavrokordatou in central Athens, on 13 March 2026 from 21:00."
+- "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
+- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
+- "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
 
 ---
 
 ## Events to Enrich
 
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 1d570435001b3716
+- **ID**: bc83f6b2cda45abb
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-13T10:30:00
+- **Date**: 2026-03-14T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -93,51 +93,37 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### The Bonnie Nettles
-- **ID**: d9488d66b3708caf
+### Γιάννης Νικολάου «Καινούργια Ρούχα»
+- **ID**: 4acbb1b1b4f55e1b
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: tba
-- **Date**: 2026-03-13
-- **URL**: https://www.athinorama.gr/music/gig/the_bonnie_nettles-10057746/
-- **Source**: athinorama.gr
+- **Venue**: Gustav Athens
+- **Price**: paid
+- **Date**: 2026-03-14
+- **Time**: 21:45
+- **URL**: https://www.ticketservices.gr/event/14184/
+- **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Gustav Athens Athens" for context.
 
-### Bacchae 6.0
-- **ID**: 16d502f8fe202294
+### NHOAH (Berlin) Tanison Anss Synch Off
+- **ID**: 5f10accd91bab172
 - **Type**: dj_set
-- **Venue**: Bios Ρομάντσο
-- **Price**: tba
-- **Date**: 2026-03-13T11:00:00
-- **Time**: 11:00
-- **URL**: https://ra.co/events/2390237
+- **Venue**: El Chapo
+- **Price**: free
+- **Date**: 2026-03-14T01:30:00
+- **Time**: 01:30
+- **URL**: https://ra.co/events/2388766
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
 
 ---
 
@@ -186,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/1d570435001b3716.md \
-  --tier=standard --event-id=1d570435001b3716 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/bc83f6b2cda45abb.md \
+  --tier=standard --event-id=bc83f6b2cda45abb \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-13 --event-price=paid
+  --event-date=2026-03-14 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d9488d66b3708caf.md \
-  --tier=stub --event-id=d9488d66b3708caf \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="The Bonnie Nettles" \
-  --event-date=2026-03-13 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4acbb1b1b4f55e1b.md \
+  --tier=stub --event-id=4acbb1b1b4f55e1b \
+  --event-type=concert --event-venue="Gustav Athens" \
+  --event-title="Γιάννης Νικολάου «Καινούργια Ρούχα»" \
+  --event-date=2026-03-14 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/16d502f8fe202294.md \
-  --tier=stub --event-id=16d502f8fe202294 \
-  --event-type=dj_set --event-venue="Bios Ρομάντσο" \
-  --event-title="Bacchae 6.0" \
-  --event-date=2026-03-13 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5f10accd91bab172.md \
+  --tier=stub --event-id=5f10accd91bab172 \
+  --event-type=dj_set --event-venue="El Chapo" \
+  --event-title="NHOAH (Berlin) Tanison Anss Synch Off" \
+  --event-date=2026-03-14 --event-price=free
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 1d570435001b3716 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| d9488d66b3708caf | The Bonnie Nettles | /100 | | |
-| 16d502f8fe202294 | Bacchae 6.0 | /100 | | |
+| bc83f6b2cda45abb | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 4acbb1b1b4f55e1b | Γιάννης Νικολάου «Καινούργια Ρούχα» | /100 | | |
+| 5f10accd91bab172 | NHOAH (Berlin) Tanison Anss Synch Off | /100 | | |

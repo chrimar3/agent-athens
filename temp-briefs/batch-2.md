@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: bdc2d10d47d52424, 20a34e4128c86f41, 520e5b1e219d83f0
+- Event IDs: 36e94a097d37e569, 4a35fd3fe46aaa35, d1372efdd4b8bc0d
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,32 +57,32 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "O Tou-tou kai i Tsaf-tsouf is a puppet theater performance for babies at Olvio in Botanikos, Athens, on 12 March 2026."
-- "Tragoudia Aneipota is a vocal recital at Megaron Mousikis in Ampelokipoi, Athens, on 12 March 2026."
-- "SINGLES DISCO CLUB is a DJ night and singles social at Burger Disco Club on Nikis 11 near Syntagma, Athens, on 12 March 2026."
-- "Retro Savvata me ton David Nachmia is a concert at the B."
-- "MAROUSSI CHERY VS PERISTERI BETSSON is a Greek Basket League game at the OAKA Indoor Arena in Maroussi, Athens, on 14 March 2026."
-- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre on Kefallinias Street in Kypseli, Athens, running Fridays through 27 March 2026."
-- "Zesti Sokolata me ton Pikaso is a children's theater production at the Goulandris Museum amphitheater in Pangrati, Athens, on 12 March 2026 at 11:00."
-- "Ioulia Karapataki and Atar tou Tar play rebetiko and old laika at Kyttaro near Victoria Square in Athens, on 12 March 2026."
-- "Andrew Keatley's Aligatores plays at Auditorium on Sina 2-4 in central Athens, through 31 March 2026."
-- "O Kipos tou Epikourou is a painting exhibition by Erietta Vordoni at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 30 March 2026."
-- "Athlitismos gia Olous is an adapted sports program for children with disabilities at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, running weekends from January through March 2026."
-- "Katerina Papoutsaki ft."
-- "D'Al Senio is a DJ set at Boo!"
-- "Agamemnon: The Cycle of Blood is a solo theater work at Theatro Mavili on Mavili Square in Ampelokipoi, Athens, premiering 13 March 2026 at 21:00."
-- "Marva Von Theo and MoonMoth play a concert at St."
+- "To Megalo Mas Tsirko, a show by Iakovos Kampanellis at Theatron in Tavros, Athens, on 13 March 2026, fills the stage with an eight-piece orchestra and twenty actors."
+- "Zesti Sokolata me ton Pikaso is a children's theater piece at the Goulandris Museum in Pangrati, Athens, on 13 March 2026 at 11:00."
+- "To Magiko Eisitirio is a baby theater production at the Giannis Marinos Hall in Megaron Mousikis in Ampelokipoi, Athens, on 13 March 2026 at 10:30."
+- "A professor's life unravels from a single accusation."
+- "Twenty costume changes in seventy minutes."
+- "The stage becomes a museum, and one of the statues is missing."
+- "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
+- "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
+- "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
+- "O Kyrios Bromylos is a children's theater production at Theatro Technis in Plaka, Athens, on 13 March 2026 at 11:00."
+- "Denekeدoupoli Xana is an interactive children's show with live music at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:00."
+- "Falsa Magra, Stochastic, and Demian play a DJ set at B-Side on Mavrokordatou in central Athens, on 13 March 2026 from 21:00."
+- "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
+- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
+- "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
 
 ---
 
 ## Events to Enrich
 
 ### Το μεγάλο μας τσίρκο
-- **ID**: bdc2d10d47d52424
+- **ID**: 36e94a097d37e569
 - **Type**: show
 - **Venue**: Θέατρον Ελληνικός Κόσμος
 - **Price**: paid
-- **Date**: 2026-03-13T19:00:00
+- **Date**: 2026-03-14T19:00:00
 - **Time**: 19:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_megalo_mas_tsirko-10088270/
 - **Source**: athinorama.gr
@@ -93,12 +93,28 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρον Ελληνικός Κόσμος Athens" for context.
 
+### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
+- **ID**: 4a35fd3fe46aaa35
+- **Type**: performance
+- **Venue**: Θέατρο Άβατον
+- **Price**: tba
+- **Date**: 2026-03-14T18:00:00
+- **Time**: 18:00
+- **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
+
 ### Ζεστή σοκολάτα με τον Πικάσο
-- **ID**: 20a34e4128c86f41
+- **ID**: d1372efdd4b8bc0d
 - **Type**: theater
 - **Venue**: Μουσείο Γουλανδρή
 - **Price**: tba
-- **Date**: 2026-03-13T11:00:00
+- **Date**: 2026-03-14T11:00:00
 - **Time**: 11:00
 - **URL**: https://www.athinorama.gr/theatre/performance/zesti_sokolata_me_ton_pikaso-10085220/
 - **Source**: athinorama.gr
@@ -108,22 +124,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Μουσείο Γουλανδρή Athens" for context.
-
-### Το μαγικό εισιτήριο
-- **ID**: 520e5b1e219d83f0
-- **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-03-13T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/bdc2d10d47d52424.md \
-  --tier=standard --event-id=bdc2d10d47d52424 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/36e94a097d37e569.md \
+  --tier=standard --event-id=36e94a097d37e569 \
   --event-type=show --event-venue="Θέατρον Ελληνικός Κόσμος" \
   --event-title="Το μεγάλο μας τσίρκο" \
-  --event-date=2026-03-13 --event-price=paid
+  --event-date=2026-03-14 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/20a34e4128c86f41.md \
-  --tier=standard --event-id=20a34e4128c86f41 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4a35fd3fe46aaa35.md \
+  --tier=standard --event-id=4a35fd3fe46aaa35 \
+  --event-type=performance --event-venue="Θέατρο Άβατον" \
+  --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
+  --event-date=2026-03-14 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d1372efdd4b8bc0d.md \
+  --tier=standard --event-id=d1372efdd4b8bc0d \
   --event-type=theater --event-venue="Μουσείο Γουλανδρή" \
   --event-title="Ζεστή σοκολάτα με τον Πικάσο" \
-  --event-date=2026-03-13 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/520e5b1e219d83f0.md \
-  --tier=premium --event-id=520e5b1e219d83f0 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-13 --event-price=paid
+  --event-date=2026-03-14 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| bdc2d10d47d52424 | Το μεγάλο μας τσίρκο | /100 | | |
-| 20a34e4128c86f41 | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
-| 520e5b1e219d83f0 | Το μαγικό εισιτήριο | /100 | | |
+| 36e94a097d37e569 | Το μεγάλο μας τσίρκο | /100 | | |
+| 4a35fd3fe46aaa35 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| d1372efdd4b8bc0d | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |

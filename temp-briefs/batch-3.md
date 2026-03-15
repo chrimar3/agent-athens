@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 236f9f6ba20a6565, a2d34d0667998419, ab3ff44be932a7b5
+- Event IDs: 77bb8688da499734, d56bfb341ca554b0, 53cb3a489db9e7f0
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,9 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/theater-tartuffe.md` — structural reference
 - `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
+- `exemplars/festival-sonic-sisters.md` — structural reference
 
 ## Anti-patterns
 
@@ -57,48 +57,63 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "O Tou-tou kai i Tsaf-tsouf is a puppet theater performance for babies at Olvio in Botanikos, Athens, on 12 March 2026."
-- "Tragoudia Aneipota is a vocal recital at Megaron Mousikis in Ampelokipoi, Athens, on 12 March 2026."
-- "SINGLES DISCO CLUB is a DJ night and singles social at Burger Disco Club on Nikis 11 near Syntagma, Athens, on 12 March 2026."
-- "Retro Savvata me ton David Nachmia is a concert at the B."
-- "MAROUSSI CHERY VS PERISTERI BETSSON is a Greek Basket League game at the OAKA Indoor Arena in Maroussi, Athens, on 14 March 2026."
-- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre on Kefallinias Street in Kypseli, Athens, running Fridays through 27 March 2026."
-- "Zesti Sokolata me ton Pikaso is a children's theater production at the Goulandris Museum amphitheater in Pangrati, Athens, on 12 March 2026 at 11:00."
-- "Ioulia Karapataki and Atar tou Tar play rebetiko and old laika at Kyttaro near Victoria Square in Athens, on 12 March 2026."
-- "Andrew Keatley's Aligatores plays at Auditorium on Sina 2-4 in central Athens, through 31 March 2026."
-- "O Kipos tou Epikourou is a painting exhibition by Erietta Vordoni at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 30 March 2026."
-- "Athlitismos gia Olous is an adapted sports program for children with disabilities at the Stavros Niarchos Foundation Cultural Center in Kallithea, Athens, running weekends from January through March 2026."
-- "Katerina Papoutsaki ft."
-- "D'Al Senio is a DJ set at Boo!"
-- "Agamemnon: The Cycle of Blood is a solo theater work at Theatro Mavili on Mavili Square in Ampelokipoi, Athens, premiering 13 March 2026 at 21:00."
-- "Marva Von Theo and MoonMoth play a concert at St."
+- "To Megalo Mas Tsirko, a show by Iakovos Kampanellis at Theatron in Tavros, Athens, on 13 March 2026, fills the stage with an eight-piece orchestra and twenty actors."
+- "Zesti Sokolata me ton Pikaso is a children's theater piece at the Goulandris Museum in Pangrati, Athens, on 13 March 2026 at 11:00."
+- "To Magiko Eisitirio is a baby theater production at the Giannis Marinos Hall in Megaron Mousikis in Ampelokipoi, Athens, on 13 March 2026 at 10:30."
+- "A professor's life unravels from a single accusation."
+- "Twenty costume changes in seventy minutes."
+- "The stage becomes a museum, and one of the statues is missing."
+- "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
+- "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
+- "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
+- "O Kyrios Bromylos is a children's theater production at Theatro Technis in Plaka, Athens, on 13 March 2026 at 11:00."
+- "Denekeدoupoli Xana is an interactive children's show with live music at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:00."
+- "Falsa Magra, Stochastic, and Demian play a DJ set at B-Side on Mavrokordatou in central Athens, on 13 March 2026 from 21:00."
+- "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
+- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
+- "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
 
 ---
 
 ## Events to Enrich
 
-### Αλιγάτορες
-- **ID**: 236f9f6ba20a6565
-- **Type**: dj_set
-- **Venue**: AUDITORIUM
-- **Price**: paid
-- **Date**: 2026-03-13T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+### Στάθης Δρογώσης
+- **ID**: 77bb8688da499734
+- **Type**: concert
+- **Venue**: Αγγλικανική Εκκλησία Αγίου Παύλου
+- **Price**: tba
+- **Date**: 2026-03-14
+- **URL**: https://www.athinorama.gr/music/gig/stathis_drogosis-10026571/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Αγγλικανική Εκκλησία Αγίου Παύλου Athens" for context.
+
+### Afterhours: Zoo Roo at Skulbar
+- **ID**: d56bfb341ca554b0
+- **Type**: dj_set
+- **Venue**: Skull Bar
+- **Price**: paid
+- **Date**: 2026-03-14T05:00:00
+- **Time**: 05:00
+- **URL**: https://ra.co/events/2391479
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Skull Bar Athens" for context.
 
 ### Velvet Cabaret – NY in Athens
-- **ID**: a2d34d0667998419
+- **ID**: 53cb3a489db9e7f0
 - **Type**: show
 - **Venue**: MÉTRON Stage
 - **Price**: paid
-- **Date**: 2026-03-13T20:30:00
+- **Date**: 2026-03-14T20:30:00
 - **Time**: 20:30
 - **URL**: https://www.athinorama.gr/theatre/performance/velvet_cabaret_%e2%80%93_ny_in_athens-10089520/
 - **Source**: athinorama.gr
@@ -108,22 +123,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "MÉTRON Stage Athens" for context.
-
-### In motion: Ένα άγαλμα που το ’σκασε
-- **ID**: ab3ff44be932a7b5
-- **Type**: theater
-- **Venue**: Δημοτικό Θέατρο Πειραιά
-- **Price**: tba
-- **Date**: 2026-03-13T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
 
 ---
 
@@ -172,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/236f9f6ba20a6565.md \
-  --tier=stub --event-id=236f9f6ba20a6565 \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Αλιγάτορες" \
-  --event-date=2026-03-13 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/77bb8688da499734.md \
+  --tier=stub --event-id=77bb8688da499734 \
+  --event-type=concert --event-venue="Αγγλικανική Εκκλησία Αγίου Παύλου" \
+  --event-title="Στάθης Δρογώσης" \
+  --event-date=2026-03-14 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a2d34d0667998419.md \
-  --tier=standard --event-id=a2d34d0667998419 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d56bfb341ca554b0.md \
+  --tier=stub --event-id=d56bfb341ca554b0 \
+  --event-type=dj_set --event-venue="Skull Bar" \
+  --event-title="Afterhours: Zoo Roo at Skulbar" \
+  --event-date=2026-03-14 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/53cb3a489db9e7f0.md \
+  --tier=standard --event-id=53cb3a489db9e7f0 \
   --event-type=show --event-venue="MÉTRON Stage" \
   --event-title="Velvet Cabaret – NY in Athens" \
-  --event-date=2026-03-13 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ab3ff44be932a7b5.md \
-  --tier=standard --event-id=ab3ff44be932a7b5 \
-  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
-  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
-  --event-date=2026-03-13 --event-price=tba
+  --event-date=2026-03-14 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 236f9f6ba20a6565 | Αλιγάτορες | /100 | | |
-| a2d34d0667998419 | Velvet Cabaret – NY in Athens | /100 | | |
-| ab3ff44be932a7b5 | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
+| 77bb8688da499734 | Στάθης Δρογώσης | /100 | | |
+| d56bfb341ca554b0 | Afterhours: Zoo Roo at Skulbar | /100 | | |
+| 53cb3a489db9e7f0 | Velvet Cabaret – NY in Athens | /100 | | |
