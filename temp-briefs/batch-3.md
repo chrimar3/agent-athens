@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 77bb8688da499734, d56bfb341ca554b0, 53cb3a489db9e7f0
+- Event IDs: f02f7e4b1b6a02ef, a6892bcd96546a16, 5bdd79f65eb2437e
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,43 +77,44 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Στάθης Δρογώσης
-- **ID**: 77bb8688da499734
+### Το μαγικό εισιτήριο
+- **ID**: f02f7e4b1b6a02ef
 - **Type**: concert
-- **Venue**: Αγγλικανική Εκκλησία Αγίου Παύλου
-- **Price**: tba
-- **Date**: 2026-03-14
-- **URL**: https://www.athinorama.gr/music/gig/stathis_drogosis-10026571/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Αγγλικανική Εκκλησία Αγίου Παύλου Athens" for context.
-
-### Afterhours: Zoo Roo at Skulbar
-- **ID**: d56bfb341ca554b0
-- **Type**: dj_set
-- **Venue**: Skull Bar
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-14T05:00:00
-- **Time**: 05:00
-- **URL**: https://ra.co/events/2391479
+- **Date**: 2026-03-16T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
+- **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
+### ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ "Μια νύχτα που τα έκανα σκατά"
+- **ID**: a6892bcd96546a16
+- **Type**: dj_set
+- **Venue**: Crust
+- **Price**: tba
+- **Date**: 2026-03-16T21:30:00
+- **Time**: 21:30
+- **URL**: https://ra.co/events/2388323
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Skull Bar Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Crust Athens" for context.
 
 ### Velvet Cabaret – NY in Athens
-- **ID**: 53cb3a489db9e7f0
+- **ID**: 5bdd79f65eb2437e
 - **Type**: show
 - **Venue**: MÉTRON Stage
 - **Price**: paid
-- **Date**: 2026-03-14T20:30:00
+- **Date**: 2026-03-16T20:30:00
 - **Time**: 20:30
 - **URL**: https://www.athinorama.gr/theatre/performance/velvet_cabaret_%e2%80%93_ny_in_athens-10089520/
 - **Source**: athinorama.gr
@@ -171,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/77bb8688da499734.md \
-  --tier=stub --event-id=77bb8688da499734 \
-  --event-type=concert --event-venue="Αγγλικανική Εκκλησία Αγίου Παύλου" \
-  --event-title="Στάθης Δρογώσης" \
-  --event-date=2026-03-14 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f02f7e4b1b6a02ef.md \
+  --tier=premium --event-id=f02f7e4b1b6a02ef \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Το μαγικό εισιτήριο" \
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d56bfb341ca554b0.md \
-  --tier=stub --event-id=d56bfb341ca554b0 \
-  --event-type=dj_set --event-venue="Skull Bar" \
-  --event-title="Afterhours: Zoo Roo at Skulbar" \
-  --event-date=2026-03-14 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a6892bcd96546a16.md \
+  --tier=stub --event-id=a6892bcd96546a16 \
+  --event-type=dj_set --event-venue="Crust" \
+  --event-title="ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ \"Μια νύχτα που τα έκανα σκατά\"" \
+  --event-date=2026-03-16 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/53cb3a489db9e7f0.md \
-  --tier=standard --event-id=53cb3a489db9e7f0 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5bdd79f65eb2437e.md \
+  --tier=standard --event-id=5bdd79f65eb2437e \
   --event-type=show --event-venue="MÉTRON Stage" \
   --event-title="Velvet Cabaret – NY in Athens" \
-  --event-date=2026-03-14 --event-price=paid
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 77bb8688da499734 | Στάθης Δρογώσης | /100 | | |
-| d56bfb341ca554b0 | Afterhours: Zoo Roo at Skulbar | /100 | | |
-| 53cb3a489db9e7f0 | Velvet Cabaret – NY in Athens | /100 | | |
+| f02f7e4b1b6a02ef | Το μαγικό εισιτήριο | /100 | | |
+| a6892bcd96546a16 | ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ "Μια νύχτα που τα έκανα σκατά" | /100 | | |
+| 5bdd79f65eb2437e | Velvet Cabaret – NY in Athens | /100 | | |

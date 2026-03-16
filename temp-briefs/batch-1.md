@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: bc83f6b2cda45abb, 4acbb1b1b4f55e1b, 5f10accd91bab172
+- Event IDs: b825ee68656373d2, 46fa81f7cf08c64e, b48712c890f5dc26
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,53 +77,53 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: bc83f6b2cda45abb
+### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
+- **ID**: b825ee68656373d2
 - **Type**: theater
-- **Venue**: Olvio
+- **Venue**: ROES THEATER
 - **Price**: paid
-- **Date**: 2026-03-14T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-16
+- **Time**: 21:00
+- **URL**: https://www.ticketservices.gr/event/13911/
+- **Source**: ticketservices
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
 
-### Γιάννης Νικολάου «Καινούργια Ρούχα»
-- **ID**: 4acbb1b1b4f55e1b
+### Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ
+- **ID**: 46fa81f7cf08c64e
 - **Type**: concert
-- **Venue**: Gustav Athens
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-14
-- **Time**: 21:45
-- **URL**: https://www.ticketservices.gr/event/14184/
+- **Date**: 2026-03-16
+- **Time**: 19:30
+- **URL**: https://www.ticketservices.gr/event/14175/
 - **Source**: ticketservices
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Gustav Athens Athens" for context.
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### NHOAH (Berlin) Tanison Anss Synch Off
-- **ID**: 5f10accd91bab172
+### Αλιγάτορες
+- **ID**: b48712c890f5dc26
 - **Type**: dj_set
-- **Venue**: El Chapo
-- **Price**: free
-- **Date**: 2026-03-14T01:30:00
-- **Time**: 01:30
-- **URL**: https://ra.co/events/2388766
-- **Source**: residentadvisor
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-03-16T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/bc83f6b2cda45abb.md \
-  --tier=standard --event-id=bc83f6b2cda45abb \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-14 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b825ee68656373d2.md \
+  --tier=standard --event-id=b825ee68656373d2 \
+  --event-type=theater --event-venue="ROES THEATER" \
+  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4acbb1b1b4f55e1b.md \
-  --tier=stub --event-id=4acbb1b1b4f55e1b \
-  --event-type=concert --event-venue="Gustav Athens" \
-  --event-title="Γιάννης Νικολάου «Καινούργια Ρούχα»" \
-  --event-date=2026-03-14 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/46fa81f7cf08c64e.md \
+  --tier=premium --event-id=46fa81f7cf08c64e \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ" \
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5f10accd91bab172.md \
-  --tier=stub --event-id=5f10accd91bab172 \
-  --event-type=dj_set --event-venue="El Chapo" \
-  --event-title="NHOAH (Berlin) Tanison Anss Synch Off" \
-  --event-date=2026-03-14 --event-price=free
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/b48712c890f5dc26.md \
+  --tier=stub --event-id=b48712c890f5dc26 \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Αλιγάτορες" \
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| bc83f6b2cda45abb | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 4acbb1b1b4f55e1b | Γιάννης Νικολάου «Καινούργια Ρούχα» | /100 | | |
-| 5f10accd91bab172 | NHOAH (Berlin) Tanison Anss Synch Off | /100 | | |
+| b825ee68656373d2 | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
+| 46fa81f7cf08c64e | Η ΝΑΝΤΙΑ ΚΑΡΑΓΙΑΝΝΗ τραγουδάει ΣΟΦΙΑ ΒΕΜΠΟ | /100 | | |
+| b48712c890f5dc26 | Αλιγάτορες | /100 | | |

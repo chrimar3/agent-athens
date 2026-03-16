@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 36e94a097d37e569, 4a35fd3fe46aaa35, d1372efdd4b8bc0d
+- Event IDs: 3a268bfc5c7dc550, e50d4e4a7213d5ed, 32113ccc64127af0
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το μεγάλο μας τσίρκο
-- **ID**: 36e94a097d37e569
+- **ID**: 3a268bfc5c7dc550
 - **Type**: show
 - **Venue**: Θέατρον Ελληνικός Κόσμος
 - **Price**: paid
-- **Date**: 2026-03-14T19:00:00
+- **Date**: 2026-03-16T19:00:00
 - **Time**: 19:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_megalo_mas_tsirko-10088270/
 - **Source**: athinorama.gr
@@ -94,11 +94,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Venue intel**: Not in database. WebSearch "Θέατρον Ελληνικός Κόσμος Athens" for context.
 
 ### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: 4a35fd3fe46aaa35
+- **ID**: e50d4e4a7213d5ed
 - **Type**: performance
 - **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-14T18:00:00
+- **Date**: 2026-03-16T18:00:00
 - **Time**: 18:00
 - **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
@@ -109,21 +109,21 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
 
-### Ζεστή σοκολάτα με τον Πικάσο
-- **ID**: d1372efdd4b8bc0d
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 32113ccc64127af0
 - **Type**: theater
-- **Venue**: Μουσείο Γουλανδρή
-- **Price**: tba
-- **Date**: 2026-03-14T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/zesti_sokolata_me_ton_pikaso-10085220/
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-16T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Μουσείο Γουλανδρή Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/36e94a097d37e569.md \
-  --tier=standard --event-id=36e94a097d37e569 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/3a268bfc5c7dc550.md \
+  --tier=standard --event-id=3a268bfc5c7dc550 \
   --event-type=show --event-venue="Θέατρον Ελληνικός Κόσμος" \
   --event-title="Το μεγάλο μας τσίρκο" \
-  --event-date=2026-03-14 --event-price=paid
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4a35fd3fe46aaa35.md \
-  --tier=standard --event-id=4a35fd3fe46aaa35 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e50d4e4a7213d5ed.md \
+  --tier=standard --event-id=e50d4e4a7213d5ed \
   --event-type=performance --event-venue="Θέατρο Άβατον" \
   --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-14 --event-price=tba
+  --event-date=2026-03-16 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d1372efdd4b8bc0d.md \
-  --tier=standard --event-id=d1372efdd4b8bc0d \
-  --event-type=theater --event-venue="Μουσείο Γουλανδρή" \
-  --event-title="Ζεστή σοκολάτα με τον Πικάσο" \
-  --event-date=2026-03-14 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/32113ccc64127af0.md \
+  --tier=standard --event-id=32113ccc64127af0 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-16 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 36e94a097d37e569 | Το μεγάλο μας τσίρκο | /100 | | |
-| 4a35fd3fe46aaa35 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
-| d1372efdd4b8bc0d | Ζεστή σοκολάτα με τον Πικάσο | /100 | | |
+| 3a268bfc5c7dc550 | Το μεγάλο μας τσίρκο | /100 | | |
+| e50d4e4a7213d5ed | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 32113ccc64127af0 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
