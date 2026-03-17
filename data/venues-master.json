@@ -123,6 +123,17 @@
     "lng": 23.7198,
     "type": "theater"
   },
+  "Αρχιτεκτονική": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Αρχιτεκτονική, 23",
+    "lat": 37.97785,
+    "lng": 23.762108,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-17"
+  },
   "Άττις": {
     "name_en": "Attis Theatre",
     "neighborhood": "Metaxourgeio",

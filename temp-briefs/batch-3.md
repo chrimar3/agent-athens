@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: f02f7e4b1b6a02ef, a6892bcd96546a16, 5bdd79f65eb2437e
+- Event IDs: 976fdd53c89cb3c9, 952d8a93af6e2392, cd325f04b11cdfdd
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,9 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
+- `exemplars/theater-tartuffe.md` — structural reference
 - `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
-- `exemplars/festival-sonic-sisters.md` — structural reference
 
 ## Anti-patterns
 
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko, a show by Iakovos Kampanellis at Theatron in Tavros, Athens, on 13 March 2026, fills the stage with an eight-piece orchestra and twenty actors."
-- "Zesti Sokolata me ton Pikaso is a children's theater piece at the Goulandris Museum in Pangrati, Athens, on 13 March 2026 at 11:00."
-- "To Magiko Eisitirio is a baby theater production at the Giannis Marinos Hall in Megaron Mousikis in Ampelokipoi, Athens, on 13 March 2026 at 10:30."
-- "A professor's life unravels from a single accusation."
-- "Twenty costume changes in seventy minutes."
-- "The stage becomes a museum, and one of the statues is missing."
 - "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
 - "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
 - "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
@@ -72,17 +66,55 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
 - "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
 - "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
+- "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
+- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
+- "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
+- "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
+- "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
 
 ---
 
 ## Events to Enrich
 
+### Αθλητισμός για Όλους
+- **ID**: 976fdd53c89cb3c9
+- **Type**: sports
+- **Venue**: ΚΠΙΣΝ
+- **Price**: tba
+- **Date**: 2026-03-22T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
+- **Source**: more.com
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
+
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 952d8a93af6e2392
+- **Type**: theater
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-17T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+
 ### Το μαγικό εισιτήριο
-- **ID**: f02f7e4b1b6a02ef
+- **ID**: cd325f04b11cdfdd
 - **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-16T10:30:00
+- **Date**: 2026-03-17T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
 - **Source**: athinorama.gr
@@ -92,38 +124,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: full-8-section
 - **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ "Μια νύχτα που τα έκανα σκατά"
-- **ID**: a6892bcd96546a16
-- **Type**: dj_set
-- **Venue**: Crust
-- **Price**: tba
-- **Date**: 2026-03-16T21:30:00
-- **Time**: 21:30
-- **URL**: https://ra.co/events/2388323
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Crust Athens" for context.
-
-### Velvet Cabaret – NY in Athens
-- **ID**: 5bdd79f65eb2437e
-- **Type**: show
-- **Venue**: MÉTRON Stage
-- **Price**: paid
-- **Date**: 2026-03-16T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.athinorama.gr/theatre/performance/velvet_cabaret_%e2%80%93_ny_in_athens-10089520/
-- **Source**: athinorama.gr
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "MÉTRON Stage Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f02f7e4b1b6a02ef.md \
-  --tier=premium --event-id=f02f7e4b1b6a02ef \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/976fdd53c89cb3c9.md \
+  --tier=premium --event-id=976fdd53c89cb3c9 \
+  --event-type=sports --event-venue="ΚΠΙΣΝ" \
+  --event-title="Αθλητισμός για Όλους" \
+  --event-date=2026-03-22 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/952d8a93af6e2392.md \
+  --tier=standard --event-id=952d8a93af6e2392 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-17 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cd325f04b11cdfdd.md \
+  --tier=premium --event-id=cd325f04b11cdfdd \
   --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
   --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-16 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a6892bcd96546a16.md \
-  --tier=stub --event-id=a6892bcd96546a16 \
-  --event-type=dj_set --event-venue="Crust" \
-  --event-title="ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ \"Μια νύχτα που τα έκανα σκατά\"" \
-  --event-date=2026-03-16 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5bdd79f65eb2437e.md \
-  --tier=standard --event-id=5bdd79f65eb2437e \
-  --event-type=show --event-venue="MÉTRON Stage" \
-  --event-title="Velvet Cabaret – NY in Athens" \
-  --event-date=2026-03-16 --event-price=paid
+  --event-date=2026-03-17 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| f02f7e4b1b6a02ef | Το μαγικό εισιτήριο | /100 | | |
-| a6892bcd96546a16 | ΑΚΡΟΑΣΗ ΔΙΣΚΟΥ σε απόλυτο σκοτάδι // ΠΙΕΒ "Μια νύχτα που τα έκανα σκατά" | /100 | | |
-| 5bdd79f65eb2437e | Velvet Cabaret – NY in Athens | /100 | | |
+| 976fdd53c89cb3c9 | Αθλητισμός για Όλους | /100 | | |
+| 952d8a93af6e2392 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| cd325f04b11cdfdd | Το μαγικό εισιτήριο | /100 | | |

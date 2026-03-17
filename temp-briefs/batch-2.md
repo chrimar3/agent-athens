@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 3a268bfc5c7dc550, e50d4e4a7213d5ed, 32113ccc64127af0
+- Event IDs: 4025ead6556be833, fe81327b5dc25341, 9538ec3698e4a80e
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,7 +31,7 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/theater-tartuffe.md` — structural reference
+- `exemplars/festival-sonic-sisters.md` — structural reference
 - `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
 
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko, a show by Iakovos Kampanellis at Theatron in Tavros, Athens, on 13 March 2026, fills the stage with an eight-piece orchestra and twenty actors."
-- "Zesti Sokolata me ton Pikaso is a children's theater piece at the Goulandris Museum in Pangrati, Athens, on 13 March 2026 at 11:00."
-- "To Magiko Eisitirio is a baby theater production at the Giannis Marinos Hall in Megaron Mousikis in Ampelokipoi, Athens, on 13 March 2026 at 10:30."
-- "A professor's life unravels from a single accusation."
-- "Twenty costume changes in seventy minutes."
-- "The stage becomes a museum, and one of the statues is missing."
 - "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
 - "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
 - "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
@@ -72,17 +66,23 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
 - "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
 - "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
+- "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
+- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
+- "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
+- "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
+- "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
 
 ---
 
 ## Events to Enrich
 
 ### Το μεγάλο μας τσίρκο
-- **ID**: 3a268bfc5c7dc550
+- **ID**: 4025ead6556be833
 - **Type**: show
 - **Venue**: Θέατρον Ελληνικός Κόσμος
 - **Price**: paid
-- **Date**: 2026-03-16T19:00:00
+- **Date**: 2026-03-17T19:00:00
 - **Time**: 19:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_megalo_mas_tsirko-10088270/
 - **Source**: athinorama.gr
@@ -93,12 +93,27 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρον Ελληνικός Κόσμος Athens" for context.
 
+### 3ο Greek Beer Festival
+- **ID**: fe81327b5dc25341
+- **Type**: festival
+- **Venue**: Παλιό Αμαξοστάσιο ΟΣΥ
+- **Price**: tba
+- **Date**: 2026-03-27
+- **URL**: https://www.athinorama.gr/music/gig/3o_greek_beer_festival-10089550/
+- **Source**: athinorama.gr
+- **Category**: festival_parent
+- **Target words (English)**: 250-400
+- **Target words (Greek)**: 215-340
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 250-400 words. Greek MUST be 215-340 words.
+- **Venue intel**: Not in database. WebSearch "Παλιό Αμαξοστάσιο ΟΣΥ Athens" for context.
+
 ### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: e50d4e4a7213d5ed
+- **ID**: 9538ec3698e4a80e
 - **Type**: performance
 - **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-16T18:00:00
+- **Date**: 2026-03-17T18:00:00
 - **Time**: 18:00
 - **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
@@ -108,22 +123,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
-
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 32113ccc64127af0
-- **Type**: theater
-- **Venue**: Olvio
-- **Price**: paid
-- **Date**: 2026-03-16T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
 ---
 
@@ -172,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/3a268bfc5c7dc550.md \
-  --tier=standard --event-id=3a268bfc5c7dc550 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4025ead6556be833.md \
+  --tier=standard --event-id=4025ead6556be833 \
   --event-type=show --event-venue="Θέατρον Ελληνικός Κόσμος" \
   --event-title="Το μεγάλο μας τσίρκο" \
-  --event-date=2026-03-16 --event-price=paid
+  --event-date=2026-03-17 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/e50d4e4a7213d5ed.md \
-  --tier=standard --event-id=e50d4e4a7213d5ed \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/fe81327b5dc25341.md \
+  --tier=premium --event-id=fe81327b5dc25341 \
+  --event-type=festival --event-venue="Παλιό Αμαξοστάσιο ΟΣΥ" \
+  --event-title="3ο Greek Beer Festival" \
+  --event-date=2026-03-27 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9538ec3698e4a80e.md \
+  --tier=standard --event-id=9538ec3698e4a80e \
   --event-type=performance --event-venue="Θέατρο Άβατον" \
   --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-16 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/32113ccc64127af0.md \
-  --tier=standard --event-id=32113ccc64127af0 \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-16 --event-price=paid
+  --event-date=2026-03-17 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 3a268bfc5c7dc550 | Το μεγάλο μας τσίρκο | /100 | | |
-| e50d4e4a7213d5ed | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
-| 32113ccc64127af0 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 4025ead6556be833 | Το μεγάλο μας τσίρκο | /100 | | |
+| fe81327b5dc25341 | 3ο Greek Beer Festival | /100 | | |
+| 9538ec3698e4a80e | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
