@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 232f7fb8f2af3130, 89aeed73eda5cb94, beec50b6396e34fe
+- Event IDs: 8eefc592e0cde7ad, 5ccdf721fc1ebcf4, 65f59d58fdc8c907
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "Athens English Comedy Club is a stand-up comedy open mic at Eliart in Botanikos, Athens, on 13 March 2026 at 21:00."
-- "Mia Istoria Pou Den Xerei Pou Paei is a children's improv theater show at Theatro Avaton in Gazi, Athens, on 13 March 2026 at 11:00."
-- "To Kaplani tis Vitrinas is a children's theater adaptation of Alki Zei's novel at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:30."
-- "O Kyrios Bromylos is a children's theater production at Theatro Technis in Plaka, Athens, on 13 March 2026 at 11:00."
-- "Denekeدoupoli Xana is an interactive children's show with live music at the Michael Cacoyannis Foundation in Tavros, Athens, on 13 March 2026 at 11:00."
-- "Falsa Magra, Stochastic, and Demian play a DJ set at B-Side on Mavrokordatou in central Athens, on 13 March 2026 from 21:00."
 - "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
 - "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
 - "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
@@ -72,48 +66,55 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
 - "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
 - "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
+- "I Dynami tis Synithias vol."
+- "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
+- "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
+- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
+- "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
 
 ---
 
 ## Events to Enrich
 
-### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: 232f7fb8f2af3130
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 8eefc592e0cde7ad
 - **Type**: theater
-- **Venue**: ROES THEATER
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-17
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/13911/
-- **Source**: ticketservices
+- **Date**: 2026-03-18T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Παντελής Θαλασσινός &amp; Πάνος Δημητρακόπουλος
-- **ID**: 89aeed73eda5cb94
+### Το μαγικό εισιτήριο
+- **ID**: 5ccdf721fc1ebcf4
 - **Type**: concert
-- **Venue**: Αγγλικανική Εκκλησία Αγίου Παύλου
-- **Price**: tba
-- **Date**: 2026-03-17
-- **URL**: https://www.athinorama.gr/music/gig/pantelis_thalassinos_kai_panos_dimitrakopoulos-10089396/
+- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Price**: paid
+- **Date**: 2026-03-18T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Αγγλικανική Εκκλησία Αγίου Παύλου Athens" for context.
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ### Αλιγάτορες
-- **ID**: beec50b6396e34fe
+- **ID**: 65f59d58fdc8c907
 - **Type**: dj_set
 - **Venue**: AUDITORIUM
 - **Price**: paid
-- **Date**: 2026-03-17T21:00:00
+- **Date**: 2026-03-18T21:00:00
 - **Time**: 21:00
 - **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
 - **Source**: athinorama.gr
@@ -171,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/232f7fb8f2af3130.md \
-  --tier=standard --event-id=232f7fb8f2af3130 \
-  --event-type=theater --event-venue="ROES THEATER" \
-  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-17 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8eefc592e0cde7ad.md \
+  --tier=standard --event-id=8eefc592e0cde7ad \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-18 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/89aeed73eda5cb94.md \
-  --tier=stub --event-id=89aeed73eda5cb94 \
-  --event-type=concert --event-venue="Αγγλικανική Εκκλησία Αγίου Παύλου" \
-  --event-title="Παντελής Θαλασσινός &amp; Πάνος Δημητρακόπουλος" \
-  --event-date=2026-03-17 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5ccdf721fc1ebcf4.md \
+  --tier=premium --event-id=5ccdf721fc1ebcf4 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Το μαγικό εισιτήριο" \
+  --event-date=2026-03-18 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/beec50b6396e34fe.md \
-  --tier=stub --event-id=beec50b6396e34fe \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/65f59d58fdc8c907.md \
+  --tier=stub --event-id=65f59d58fdc8c907 \
   --event-type=dj_set --event-venue="AUDITORIUM" \
   --event-title="Αλιγάτορες" \
-  --event-date=2026-03-17 --event-price=paid
+  --event-date=2026-03-18 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 232f7fb8f2af3130 | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| 89aeed73eda5cb94 | Παντελής Θαλασσινός &amp; Πάνος Δημητρακόπουλος | /100 | | |
-| beec50b6396e34fe | Αλιγάτορες | /100 | | |
+| 8eefc592e0cde7ad | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 5ccdf721fc1ebcf4 | Το μαγικό εισιτήριο | /100 | | |
+| 65f59d58fdc8c907 | Αλιγάτορες | /100 | | |

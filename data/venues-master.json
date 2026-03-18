@@ -191,6 +191,17 @@
     "description": "Musical theater venue established 1997 on Syngrou Avenue presenting contemporary Greek and international musical productions",
     "metro": "Agios Ioannis"
   },
+  "Δαναός": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Δαναός, 109",
+    "lat": 37.993412,
+    "lng": 23.766703,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-18"
+  },
   "Δημοτικη Αγορα Κυψελης": {
     "name_en": "Kypseli Municipal Market",
     "neighborhood": "Kypseli",
