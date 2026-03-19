@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 8eefc592e0cde7ad, 5ccdf721fc1ebcf4, 65f59d58fdc8c907
+- Event IDs: 4579f83837c14d8e, 75572d3dc7130d32, 576dad5fac6e4ad6
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,9 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "ClubKid x Nikolas Gale is a DJ set at Burger Disco Club near Syntagma Square in central Athens, on 13 March 2026."
-- "Den tha Pethanoume Kiolas is a stand-up comedy show at Red Jasper Cabaret Theatre in Kypseli, Athens, on 13 March 2026 at 21:00."
-- "Otan o Mikis Itan Paidi is a children's theater production at Theatro Akropol in central Athens, on 13 March 2026."
 - "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
 - "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
@@ -72,33 +69,36 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
 - "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
+- "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
+- "Ntenekedoupoli xana!"
+- "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
 
 ---
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 8eefc592e0cde7ad
+### ASTORIA
+- **ID**: 4579f83837c14d8e
 - **Type**: theater
-- **Venue**: Olvio
+- **Venue**: Θέατρο Παλλάς
 - **Price**: paid
-- **Date**: 2026-03-18T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-19
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/astoria/
+- **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Παλλάς Athens" for context.
 
 ### Το μαγικό εισιτήριο
-- **ID**: 5ccdf721fc1ebcf4
+- **ID**: 75572d3dc7130d32
 - **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-18T10:30:00
+- **Date**: 2026-03-19T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
 - **Source**: athinorama.gr
@@ -109,21 +109,21 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Αλιγάτορες
-- **ID**: 65f59d58fdc8c907
+### Δύο ρεσιτάλ πιάνου του Nikolai Lugansky
+- **ID**: 576dad5fac6e4ad6
 - **Type**: dj_set
-- **Venue**: AUDITORIUM
+- **Venue**: Parnassos Literary Society
 - **Price**: paid
-- **Date**: 2026-03-18T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-19T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.ticketservices.gr/event/13543/
+- **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Parnassos Literary Society Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/8eefc592e0cde7ad.md \
-  --tier=standard --event-id=8eefc592e0cde7ad \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-18 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4579f83837c14d8e.md \
+  --tier=standard --event-id=4579f83837c14d8e \
+  --event-type=theater --event-venue="Θέατρο Παλλάς" \
+  --event-title="ASTORIA" \
+  --event-date=2026-03-19 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5ccdf721fc1ebcf4.md \
-  --tier=premium --event-id=5ccdf721fc1ebcf4 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/75572d3dc7130d32.md \
+  --tier=premium --event-id=75572d3dc7130d32 \
   --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
   --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-18 --event-price=paid
+  --event-date=2026-03-19 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/65f59d58fdc8c907.md \
-  --tier=stub --event-id=65f59d58fdc8c907 \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Αλιγάτορες" \
-  --event-date=2026-03-18 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/576dad5fac6e4ad6.md \
+  --tier=stub --event-id=576dad5fac6e4ad6 \
+  --event-type=dj_set --event-venue="Parnassos Literary Society" \
+  --event-title="Δύο ρεσιτάλ πιάνου του Nikolai Lugansky" \
+  --event-date=2026-03-19 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 8eefc592e0cde7ad | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 5ccdf721fc1ebcf4 | Το μαγικό εισιτήριο | /100 | | |
-| 65f59d58fdc8c907 | Αλιγάτορες | /100 | | |
+| 4579f83837c14d8e | ASTORIA | /100 | | |
+| 75572d3dc7130d32 | Το μαγικό εισιτήριο | /100 | | |
+| 576dad5fac6e4ad6 | Δύο ρεσιτάλ πιάνου του Nikolai Lugansky | /100 | | |
