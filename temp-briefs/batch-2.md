@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: adaa6342c35a072a, a95479261966fefe, 27437d2bece51a41
+- Event IDs: 73148926e46b3442, 4984644b6bc363bb, 976fdd53c89cb3c9
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,9 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/festival-sonic-sisters.md` — structural reference
 - `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
+- `exemplars/festival-sonic-sisters.md` — structural reference
 
 ## Anti-patterns
 
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
-- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
-- "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
-- "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
-- "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
 - "I Dynami tis Synithias vol."
 - "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
 - "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
@@ -72,17 +66,23 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
 - "Ntenekedoupoli xana!"
 - "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
+- "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
+- "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
+- "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
+- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
+- "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
 
 ---
 
 ## Events to Enrich
 
 ### Το μεγάλο μας τσίρκο
-- **ID**: adaa6342c35a072a
+- **ID**: 73148926e46b3442
 - **Type**: show
 - **Venue**: Θέατρον Ελληνικός Κόσμος
 - **Price**: paid
-- **Date**: 2026-03-19T19:00:00
+- **Date**: 2026-03-20T19:00:00
 - **Time**: 19:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_megalo_mas_tsirko-10088270/
 - **Source**: athinorama.gr
@@ -93,42 +93,12 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρον Ελληνικός Κόσμος Athens" for context.
 
-### NAILSTORM CHARITY FESTIVAL
-- **ID**: a95479261966fefe
-- **Type**: festival
-- **Venue**: AN Club
-- **Price**: paid
-- **Date**: 2026-04-08T19:30:00
-- **Time**: 19:30
-- **URL**: https://www.athinorama.gr/music/gig/nailstorm_charity_festival-10089613/
-- **Source**: athinorama.gr
-- **Category**: festival_parent
-- **Target words (English)**: 250-400
-- **Target words (Greek)**: 215-340
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 250-400 words. Greek MUST be 215-340 words.
-- **Venue intel** (from database):
-  ```
-  ### AN Club
-  | Field | Data |
-  |-------|------|
-  | **Address** | Exarchia |
-  | **Metro** | Omonoia or Panepistimio (walk) |
-  | **Capacity** | ~400 |
-  | **Tickets** | €15-25 typical, €25-35 international acts |
-  | **Timing** | LATE STARTS — bands often after 22:00 |
-  | **History** | 30+ years, Athens' oldest rock venue |
-  | **Genre** | Hardcore rock/punk/metal |
-  
-  ---
-  ```
-
 ### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: 27437d2bece51a41
+- **ID**: 4984644b6bc363bb
 - **Type**: performance
 - **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-19T18:00:00
+- **Date**: 2026-03-20T18:00:00
 - **Time**: 18:00
 - **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
@@ -138,6 +108,22 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
+
+### Αθλητισμός για Όλους
+- **ID**: 976fdd53c89cb3c9
+- **Type**: sports
+- **Venue**: ΚΠΙΣΝ
+- **Price**: tba
+- **Date**: 2026-03-22T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
+- **Source**: more.com
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
 
 ---
 
@@ -186,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/adaa6342c35a072a.md \
-  --tier=standard --event-id=adaa6342c35a072a \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/73148926e46b3442.md \
+  --tier=standard --event-id=73148926e46b3442 \
   --event-type=show --event-venue="Θέατρον Ελληνικός Κόσμος" \
   --event-title="Το μεγάλο μας τσίρκο" \
-  --event-date=2026-03-19 --event-price=paid
+  --event-date=2026-03-20 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/a95479261966fefe.md \
-  --tier=premium --event-id=a95479261966fefe \
-  --event-type=festival --event-venue="AN Club" \
-  --event-title="NAILSTORM CHARITY FESTIVAL" \
-  --event-date=2026-04-08 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/27437d2bece51a41.md \
-  --tier=standard --event-id=27437d2bece51a41 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4984644b6bc363bb.md \
+  --tier=standard --event-id=4984644b6bc363bb \
   --event-type=performance --event-venue="Θέατρο Άβατον" \
   --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-19 --event-price=tba
+  --event-date=2026-03-20 --event-price=tba
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/976fdd53c89cb3c9.md \
+  --tier=premium --event-id=976fdd53c89cb3c9 \
+  --event-type=sports --event-venue="ΚΠΙΣΝ" \
+  --event-title="Αθλητισμός για Όλους" \
+  --event-date=2026-03-22 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| adaa6342c35a072a | Το μεγάλο μας τσίρκο | /100 | | |
-| a95479261966fefe | NAILSTORM CHARITY FESTIVAL | /100 | | |
-| 27437d2bece51a41 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 73148926e46b3442 | Το μεγάλο μας τσίρκο | /100 | | |
+| 4984644b6bc363bb | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 976fdd53c89cb3c9 | Αθλητισμός για Όλους | /100 | | |

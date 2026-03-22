@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 976fdd53c89cb3c9, 46d59cc003991f12, 6d938b7c98a76662
+- Event IDs: 92a1b15aa04a3bce, d1f220b68b4716d2, 18c9dc47c7bbbff5
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
-- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
-- "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
-- "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
-- "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
 - "I Dynami tis Synithias vol."
 - "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
 - "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
@@ -72,58 +66,78 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
 - "Ntenekedoupoli xana!"
 - "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
+- "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
+- "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
+- "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
+- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
+- "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
 
 ---
 
 ## Events to Enrich
 
-### Αθλητισμός για Όλους
-- **ID**: 976fdd53c89cb3c9
-- **Type**: sports
-- **Venue**: ΚΠΙΣΝ
-- **Price**: tba
-- **Date**: 2026-03-22T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
-- **Source**: more.com
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
-
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 46d59cc003991f12
+### In motion: Ένα άγαλμα που το ’σκασε
+- **ID**: 92a1b15aa04a3bce
 - **Type**: theater
-- **Venue**: Olvio
-- **Price**: paid
-- **Date**: 2026-03-19T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Venue**: Δημοτικό Θέατρο Πειραιά
+- **Price**: tba
+- **Date**: 2026-03-20T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
 
-### Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου
-- **ID**: 6d938b7c98a76662
+### Λουδοβίκος των Ανωγείων
+- **ID**: d1f220b68b4716d2
 - **Type**: concert
-- **Venue**: Ίδρυμα Μιχάλης Κακογιάννης
+- **Venue**: Stage 7
 - **Price**: tba
-- **Date**: 2026-03-19T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/ntenekedoupoli_ksana!_to_megalo_taksidi_tou_meleniou-10083469/
+- **Date**: 2026-03-20
+- **URL**: https://www.athinorama.gr/music/gig/loudobikos_ton_anogeion-10028689/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ίδρυμα Μιχάλης Κακογιάννης Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Stage 7 Athens" for context.
+
+### Back to the 90s Party
+- **ID**: 18c9dc47c7bbbff5
+- **Type**: dj_set
+- **Venue**: Bios Ρομάντσο
+- **Price**: free
+- **Date**: 2026-03-20T20:00:00
+- **Time**: 20:00
+- **URL**: https://ra.co/events/2389466
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
 
 ---
 
@@ -172,33 +186,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/976fdd53c89cb3c9.md \
-  --tier=premium --event-id=976fdd53c89cb3c9 \
-  --event-type=sports --event-venue="ΚΠΙΣΝ" \
-  --event-title="Αθλητισμός για Όλους" \
-  --event-date=2026-03-22 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/92a1b15aa04a3bce.md \
+  --tier=standard --event-id=92a1b15aa04a3bce \
+  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
+  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
+  --event-date=2026-03-20 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/46d59cc003991f12.md \
-  --tier=standard --event-id=46d59cc003991f12 \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-19 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d1f220b68b4716d2.md \
+  --tier=stub --event-id=d1f220b68b4716d2 \
+  --event-type=concert --event-venue="Stage 7" \
+  --event-title="Λουδοβίκος των Ανωγείων" \
+  --event-date=2026-03-20 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/6d938b7c98a76662.md \
-  --tier=stub --event-id=6d938b7c98a76662 \
-  --event-type=concert --event-venue="Ίδρυμα Μιχάλης Κακογιάννης" \
-  --event-title="Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου" \
-  --event-date=2026-03-19 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/18c9dc47c7bbbff5.md \
+  --tier=stub --event-id=18c9dc47c7bbbff5 \
+  --event-type=dj_set --event-venue="Bios Ρομάντσο" \
+  --event-title="Back to the 90s Party" \
+  --event-date=2026-03-20 --event-price=free
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 976fdd53c89cb3c9 | Αθλητισμός για Όλους | /100 | | |
-| 46d59cc003991f12 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 6d938b7c98a76662 | Ντενεκεδούπολη ξανά! Το μεγάλο ταξίδι του Μελένιου | /100 | | |
+| 92a1b15aa04a3bce | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
+| d1f220b68b4716d2 | Λουδοβίκος των Ανωγείων | /100 | | |
+| 18c9dc47c7bbbff5 | Back to the 90s Party | /100 | | |

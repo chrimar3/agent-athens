@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 4579f83837c14d8e, 75572d3dc7130d32, 576dad5fac6e4ad6
+- Event IDs: f1fbb3dcf30a23ae, ae1e4ed7ed3ef0e1, 36c29e391ccaddcc
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko is a musical show by Iakovos Kampanellis at Theatron Ellinikos Kosmos in Tavros, Athens, on 16 March 2026 at 19:00."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 16 March 2026 at 18:00."
-- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Botanikos, Athens, on 16 March 2026 at 10:30."
-- "To Magiko Eisitirio is a theater performance for babies at Megaron Mousikis Athinon in Ampelokipoi, Athens, running Sundays through 29 March 2026."
-- "Akroasi Diskou se Apolito Skotadi is an album listening session in complete darkness at Crust in Psyrri, Athens, on 16 March 2026 at 21:30."
-- "Velvet Cabaret — NY in Athens is a cabaret show at METRON Stage in Gazi, Athens, every Sunday at 20:30 through 5 April 2026."
 - "I Dynami tis Synithias vol."
 - "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
 - "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
@@ -72,58 +66,64 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
 - "Ntenekedoupoli xana!"
 - "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
+- "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
+- "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
+- "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
+- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
+- "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
+- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
 
 ---
 
 ## Events to Enrich
 
-### ASTORIA
-- **ID**: 4579f83837c14d8e
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: f1fbb3dcf30a23ae
 - **Type**: theater
-- **Venue**: Θέατρο Παλλάς
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-19
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/astoria/
-- **Source**: more.com
+- **Date**: 2026-03-20T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Παλλάς Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Το μαγικό εισιτήριο
-- **ID**: 75572d3dc7130d32
+### ΑΝΗΜΕΡΑ - Billie Kark x ody icons
+- **ID**: ae1e4ed7ed3ef0e1
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Venue**: ΙΛΙΟΝ Plus
 - **Price**: paid
-- **Date**: 2026-03-19T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### Δύο ρεσιτάλ πιάνου του Nikolai Lugansky
-- **ID**: 576dad5fac6e4ad6
-- **Type**: dj_set
-- **Venue**: Parnassos Literary Society
-- **Price**: paid
-- **Date**: 2026-03-19T20:30:00
+- **Date**: 2026-03-20
 - **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/13543/
+- **URL**: https://www.ticketservices.gr/event/14092/
 - **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Parnassos Literary Society Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+
+### Inco - Luvvy - S.ant
+- **ID**: 36c29e391ccaddcc
+- **Type**: dj_set
+- **Venue**: El Chapo
+- **Price**: tba
+- **Date**: 2026-03-20T01:30:00
+- **Time**: 01:30
+- **URL**: https://ra.co/events/2397241
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4579f83837c14d8e.md \
-  --tier=standard --event-id=4579f83837c14d8e \
-  --event-type=theater --event-venue="Θέατρο Παλλάς" \
-  --event-title="ASTORIA" \
-  --event-date=2026-03-19 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f1fbb3dcf30a23ae.md \
+  --tier=standard --event-id=f1fbb3dcf30a23ae \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-20 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/75572d3dc7130d32.md \
-  --tier=premium --event-id=75572d3dc7130d32 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-19 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ae1e4ed7ed3ef0e1.md \
+  --tier=stub --event-id=ae1e4ed7ed3ef0e1 \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="ΑΝΗΜΕΡΑ - Billie Kark x ody icons" \
+  --event-date=2026-03-20 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/576dad5fac6e4ad6.md \
-  --tier=stub --event-id=576dad5fac6e4ad6 \
-  --event-type=dj_set --event-venue="Parnassos Literary Society" \
-  --event-title="Δύο ρεσιτάλ πιάνου του Nikolai Lugansky" \
-  --event-date=2026-03-19 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/36c29e391ccaddcc.md \
+  --tier=stub --event-id=36c29e391ccaddcc \
+  --event-type=dj_set --event-venue="El Chapo" \
+  --event-title="Inco - Luvvy - S.ant" \
+  --event-date=2026-03-20 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 4579f83837c14d8e | ASTORIA | /100 | | |
-| 75572d3dc7130d32 | Το μαγικό εισιτήριο | /100 | | |
-| 576dad5fac6e4ad6 | Δύο ρεσιτάλ πιάνου του Nikolai Lugansky | /100 | | |
+| f1fbb3dcf30a23ae | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| ae1e4ed7ed3ef0e1 | ΑΝΗΜΕΡΑ - Billie Kark x ody icons | /100 | | |
+| 36c29e391ccaddcc | Inco - Luvvy - S.ant | /100 | | |

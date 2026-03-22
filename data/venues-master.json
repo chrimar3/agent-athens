@@ -229,6 +229,17 @@
     "lng": 23.647,
     "type": "theater"
   },
+  "Διάνα": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Διάνα, 7",
+    "lat": 37.981607,
+    "lng": 23.73295,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-22"
+  },
   "Δίπυλον": {
     "name_en": "Dipylon Theatre",
     "neighborhood": "Psyrri",
@@ -1024,6 +1035,17 @@
     "lng": 23.7037,
     "type": "cultural_center"
   },
+  "Τόπος Αλλού": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Τόπος Αλλού, 17",
+    "lat": 37.998586,
+    "lng": 23.736272,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-22"
+  },
   "Φιλίπ": {
     "name_en": "Filipp Theatre",
     "neighborhood": "Vyronas",
@@ -1491,6 +1513,17 @@
     "type": "jazz_club",
     "description": "All-time classic Athens jazz venue with successful history since 1979, located near First Cemetery",
     "metro": "Akropoli / Evangelismos"
+  },
+  "HolyWood Stage": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "HolyWood stage, Βουλιαγμένης",
+    "lat": 37.945113,
+    "lng": 23.739509,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-22"
   },
   "HOOD art space": {
     "name_en": "HOOD Art Space",

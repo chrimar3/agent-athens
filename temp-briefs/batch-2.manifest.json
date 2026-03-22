@@ -1,10 +1,10 @@
 {
   "batch_id": 2,
-  "generated_at": "2026-03-19T06:11:20.947Z",
+  "generated_at": "2026-03-20T22:40:48.959Z",
   "event_ids": [
-    "adaa6342c35a072a",
-    "a95479261966fefe",
-    "27437d2bece51a41"
+    "73148926e46b3442",
+    "4984644b6bc363bb",
+    "976fdd53c89cb3c9"
   ],
   "output_dir": "temp-descriptions/batch-2"
 }
