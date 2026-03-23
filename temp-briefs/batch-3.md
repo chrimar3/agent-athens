@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 92a1b15aa04a3bce, d1f220b68b4716d2, 18c9dc47c7bbbff5
+- Event IDs: f615cff6af3bad71, 6255a6993d035391, 0f817bb7ca61d092
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,67 +77,53 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### In motion: Ένα άγαλμα που το ’σκασε
-- **ID**: 92a1b15aa04a3bce
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: f615cff6af3bad71
 - **Type**: theater
-- **Venue**: Δημοτικό Θέατρο Πειραιά
-- **Price**: tba
-- **Date**: 2026-03-20T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-23T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Λουδοβίκος των Ανωγείων
-- **ID**: d1f220b68b4716d2
+### Στιγμές του 20ου αιώνα
+- **ID**: 6255a6993d035391
 - **Type**: concert
-- **Venue**: Stage 7
-- **Price**: tba
-- **Date**: 2026-03-20
-- **URL**: https://www.athinorama.gr/music/gig/loudobikos_ton_anogeion-10028689/
-- **Source**: athinorama.gr
+- **Venue**: ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ
+- **Price**: paid
+- **Date**: 2026-03-23
+- **Time**: 20:30
+- **URL**: https://www.ticketservices.gr/event/14166/
+- **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Stage 7 Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ Athens" for context.
 
-### Back to the 90s Party
-- **ID**: 18c9dc47c7bbbff5
+### Bellas
+- **ID**: 0f817bb7ca61d092
 - **Type**: dj_set
-- **Venue**: Bios Ρομάντσο
-- **Price**: free
-- **Date**: 2026-03-20T20:00:00
-- **Time**: 20:00
-- **URL**: https://ra.co/events/2389466
+- **Venue**: Pharaoh
+- **Price**: tba
+- **Date**: 2026-03-23T21:00:00
+- **Time**: 21:00
+- **URL**: https://ra.co/events/2399576
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Pharaoh Athens" for context.
 
 ---
 
@@ -186,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/92a1b15aa04a3bce.md \
-  --tier=standard --event-id=92a1b15aa04a3bce \
-  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
-  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
-  --event-date=2026-03-20 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f615cff6af3bad71.md \
+  --tier=standard --event-id=f615cff6af3bad71 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d1f220b68b4716d2.md \
-  --tier=stub --event-id=d1f220b68b4716d2 \
-  --event-type=concert --event-venue="Stage 7" \
-  --event-title="Λουδοβίκος των Ανωγείων" \
-  --event-date=2026-03-20 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/6255a6993d035391.md \
+  --tier=stub --event-id=6255a6993d035391 \
+  --event-type=concert --event-venue="ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ" \
+  --event-title="Στιγμές του 20ου αιώνα" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/18c9dc47c7bbbff5.md \
-  --tier=stub --event-id=18c9dc47c7bbbff5 \
-  --event-type=dj_set --event-venue="Bios Ρομάντσο" \
-  --event-title="Back to the 90s Party" \
-  --event-date=2026-03-20 --event-price=free
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/0f817bb7ca61d092.md \
+  --tier=stub --event-id=0f817bb7ca61d092 \
+  --event-type=dj_set --event-venue="Pharaoh" \
+  --event-title="Bellas" \
+  --event-date=2026-03-23 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 92a1b15aa04a3bce | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
-| d1f220b68b4716d2 | Λουδοβίκος των Ανωγείων | /100 | | |
-| 18c9dc47c7bbbff5 | Back to the 90s Party | /100 | | |
+| f615cff6af3bad71 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 6255a6993d035391 | Στιγμές του 20ου αιώνα | /100 | | |
+| 0f817bb7ca61d092 | Bellas | /100 | | |

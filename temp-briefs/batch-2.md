@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 73148926e46b3442, 4984644b6bc363bb, 976fdd53c89cb3c9
+- Event IDs: 9c2b898beb4ff9a1, f466a46de3497155, 671532fe4a8a9069
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,28 +77,44 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Το μεγάλο μας τσίρκο
-- **ID**: 73148926e46b3442
+### Το τσίρκο των σκιών
+- **ID**: 9c2b898beb4ff9a1
 - **Type**: show
-- **Venue**: Θέατρον Ελληνικός Κόσμος
+- **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-20T19:00:00
-- **Time**: 19:00
-- **URL**: https://www.athinorama.gr/theatre/performance/to_megalo_mas_tsirko-10088270/
+- **Date**: 2026-03-23T16:00:00
+- **Time**: 16:00
+- **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
 - **Category**: default
 - **Target words (English)**: 120-200
 - **Target words (Greek)**: 100-170
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρον Ελληνικός Κόσμος Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
+
+### AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson
+- **ID**: f466a46de3497155
+- **Type**: sports
+- **Venue**: Sunel Arena
+- **Price**: paid
+- **Date**: 2026-03-28T18:15:00
+- **Time**: 18:15
+- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-peristeri-betsson/
+- **Source**: more.com
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
 
 ### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: 4984644b6bc363bb
+- **ID**: 671532fe4a8a9069
 - **Type**: performance
 - **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-20T18:00:00
+- **Date**: 2026-03-23T18:00:00
 - **Time**: 18:00
 - **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
@@ -108,22 +124,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
-
-### Αθλητισμός για Όλους
-- **ID**: 976fdd53c89cb3c9
-- **Type**: sports
-- **Venue**: ΚΠΙΣΝ
-- **Price**: tba
-- **Date**: 2026-03-22T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
-- **Source**: more.com
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/73148926e46b3442.md \
-  --tier=standard --event-id=73148926e46b3442 \
-  --event-type=show --event-venue="Θέατρον Ελληνικός Κόσμος" \
-  --event-title="Το μεγάλο μας τσίρκο" \
-  --event-date=2026-03-20 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9c2b898beb4ff9a1.md \
+  --tier=standard --event-id=9c2b898beb4ff9a1 \
+  --event-type=show --event-venue="Coronet Theater" \
+  --event-title="Το τσίρκο των σκιών" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4984644b6bc363bb.md \
-  --tier=standard --event-id=4984644b6bc363bb \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md \
+  --tier=standard --event-id=f466a46de3497155 \
+  --event-type=sports --event-venue="Sunel Arena" \
+  --event-title="AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson" \
+  --event-date=2026-03-28 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/671532fe4a8a9069.md \
+  --tier=standard --event-id=671532fe4a8a9069 \
   --event-type=performance --event-venue="Θέατρο Άβατον" \
   --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-20 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/976fdd53c89cb3c9.md \
-  --tier=premium --event-id=976fdd53c89cb3c9 \
-  --event-type=sports --event-venue="ΚΠΙΣΝ" \
-  --event-title="Αθλητισμός για Όλους" \
-  --event-date=2026-03-22 --event-price=tba
+  --event-date=2026-03-23 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 73148926e46b3442 | Το μεγάλο μας τσίρκο | /100 | | |
-| 4984644b6bc363bb | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
-| 976fdd53c89cb3c9 | Αθλητισμός για Όλους | /100 | | |
+| 9c2b898beb4ff9a1 | Το τσίρκο των σκιών | /100 | | |
+| f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
+| 671532fe4a8a9069 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |

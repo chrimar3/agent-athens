@@ -1633,6 +1633,17 @@
     "lng": 23.7314,
     "type": "concert_hall"
   },
+  "Pharaoh": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Pharaoh, 54",
+    "lat": 37.987035,
+    "lng": 23.730689,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-03-23"
+  },
   "Piraeus Club Academy": {
     "name_en": "Piraeus Club Academy",
     "neighborhood": "Omonia / Central Athens",

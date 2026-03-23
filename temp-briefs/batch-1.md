@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: f1fbb3dcf30a23ae, ae1e4ed7ed3ef0e1, 36c29e391ccaddcc
+- Event IDs: 2b4eae8e8c53caee, 16013527dd22b8a5, f5cf928462c5baf4
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,53 +77,53 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: f1fbb3dcf30a23ae
+### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
+- **ID**: 2b4eae8e8c53caee
 - **Type**: theater
-- **Venue**: Olvio
+- **Venue**: ROES THEATER
 - **Price**: paid
-- **Date**: 2026-03-20T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
-- **Source**: athinorama.gr
+- **Date**: 2026-03-23
+- **Time**: 21:00
+- **URL**: https://www.ticketservices.gr/event/13911/
+- **Source**: ticketservices
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
 
-### ΑΝΗΜΕΡΑ - Billie Kark x ody icons
-- **ID**: ae1e4ed7ed3ef0e1
+### ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»
+- **ID**: 16013527dd22b8a5
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
+- **Venue**: Theseum - A Theatre for the Arts
 - **Price**: paid
-- **Date**: 2026-03-20
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14092/
+- **Date**: 2026-03-23
+- **Time**: 21:00
+- **URL**: https://www.ticketservices.gr/event/14141/
 - **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Theseum - A Theatre for the Arts Athens" for context.
 
-### Inco - Luvvy - S.ant
-- **ID**: 36c29e391ccaddcc
+### Αλιγάτορες
+- **ID**: f5cf928462c5baf4
 - **Type**: dj_set
-- **Venue**: El Chapo
-- **Price**: tba
-- **Date**: 2026-03-20T01:30:00
-- **Time**: 01:30
-- **URL**: https://ra.co/events/2397241
-- **Source**: residentadvisor
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-03-23T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f1fbb3dcf30a23ae.md \
-  --tier=standard --event-id=f1fbb3dcf30a23ae \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-20 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/2b4eae8e8c53caee.md \
+  --tier=standard --event-id=2b4eae8e8c53caee \
+  --event-type=theater --event-venue="ROES THEATER" \
+  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ae1e4ed7ed3ef0e1.md \
-  --tier=stub --event-id=ae1e4ed7ed3ef0e1 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="ΑΝΗΜΕΡΑ - Billie Kark x ody icons" \
-  --event-date=2026-03-20 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/16013527dd22b8a5.md \
+  --tier=stub --event-id=16013527dd22b8a5 \
+  --event-type=concert --event-venue="Theseum - A Theatre for the Arts" \
+  --event-title="ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/36c29e391ccaddcc.md \
-  --tier=stub --event-id=36c29e391ccaddcc \
-  --event-type=dj_set --event-venue="El Chapo" \
-  --event-title="Inco - Luvvy - S.ant" \
-  --event-date=2026-03-20 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f5cf928462c5baf4.md \
+  --tier=stub --event-id=f5cf928462c5baf4 \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Αλιγάτορες" \
+  --event-date=2026-03-23 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| f1fbb3dcf30a23ae | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| ae1e4ed7ed3ef0e1 | ΑΝΗΜΕΡΑ - Billie Kark x ody icons | /100 | | |
-| 36c29e391ccaddcc | Inco - Luvvy - S.ant | /100 | | |
+| 2b4eae8e8c53caee | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
+| 16013527dd22b8a5 | ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ» | /100 | | |
+| f5cf928462c5baf4 | Αλιγάτορες | /100 | | |
