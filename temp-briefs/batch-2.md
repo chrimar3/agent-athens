@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 9c2b898beb4ff9a1, f466a46de3497155, 671532fe4a8a9069
+- Event IDs: 4bd658562ad2d959, f466a46de3497155, 0b87fb4a0531cb14
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 9c2b898beb4ff9a1
+- **ID**: 4bd658562ad2d959
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-23T16:00:00
+- **Date**: 2026-03-24T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -110,11 +110,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
 
 ### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: 671532fe4a8a9069
+- **ID**: 0b87fb4a0531cb14
 - **Type**: performance
 - **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-23T18:00:00
+- **Date**: 2026-03-24T18:00:00
 - **Time**: 18:00
 - **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
@@ -172,11 +172,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/9c2b898beb4ff9a1.md \
-  --tier=standard --event-id=9c2b898beb4ff9a1 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4bd658562ad2d959.md \
+  --tier=standard --event-id=4bd658562ad2d959 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-03-23 --event-price=paid
+  --event-date=2026-03-24 --event-price=paid
 ```
 
 ```bash
@@ -188,17 +188,17 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/671532fe4a8a9069.md \
-  --tier=standard --event-id=671532fe4a8a9069 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/0b87fb4a0531cb14.md \
+  --tier=standard --event-id=0b87fb4a0531cb14 \
   --event-type=performance --event-venue="Θέατρο Άβατον" \
   --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-23 --event-price=tba
+  --event-date=2026-03-24 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 9c2b898beb4ff9a1 | Το τσίρκο των σκιών | /100 | | |
+| 4bd658562ad2d959 | Το τσίρκο των σκιών | /100 | | |
 | f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
-| 671532fe4a8a9069 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 0b87fb4a0531cb14 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |

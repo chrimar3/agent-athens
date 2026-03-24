@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: f615cff6af3bad71, 6255a6993d035391, 0f817bb7ca61d092
+- Event IDs: 40e5bcd109933c22, b888e644e87edb47, 3afa825271e8b712
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: f615cff6af3bad71
+- **ID**: 40e5bcd109933c22
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-23T10:30:00
+- **Date**: 2026-03-24T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -93,30 +93,29 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Στιγμές του 20ου αιώνα
-- **ID**: 6255a6993d035391
+### Lost Bodies
+- **ID**: b888e644e87edb47
 - **Type**: concert
-- **Venue**: ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ
-- **Price**: paid
-- **Date**: 2026-03-23
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14166/
-- **Source**: ticketservices
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-03-24
+- **URL**: https://www.athinorama.gr/music/gig/lost_bodies-10052777/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
-### Bellas
-- **ID**: 0f817bb7ca61d092
+### Ilias Baker
+- **ID**: 3afa825271e8b712
 - **Type**: dj_set
 - **Venue**: Pharaoh
 - **Price**: tba
-- **Date**: 2026-03-23T21:00:00
+- **Date**: 2026-03-24T21:00:00
 - **Time**: 21:00
-- **URL**: https://ra.co/events/2399576
+- **URL**: https://ra.co/events/2399577
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -172,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f615cff6af3bad71.md \
-  --tier=standard --event-id=f615cff6af3bad71 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/40e5bcd109933c22.md \
+  --tier=standard --event-id=40e5bcd109933c22 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-23 --event-price=paid
+  --event-date=2026-03-24 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/6255a6993d035391.md \
-  --tier=stub --event-id=6255a6993d035391 \
-  --event-type=concert --event-venue="ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ" \
-  --event-title="Στιγμές του 20ου αιώνα" \
-  --event-date=2026-03-23 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b888e644e87edb47.md \
+  --tier=stub --event-id=b888e644e87edb47 \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="Lost Bodies" \
+  --event-date=2026-03-24 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/0f817bb7ca61d092.md \
-  --tier=stub --event-id=0f817bb7ca61d092 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/3afa825271e8b712.md \
+  --tier=stub --event-id=3afa825271e8b712 \
   --event-type=dj_set --event-venue="Pharaoh" \
-  --event-title="Bellas" \
-  --event-date=2026-03-23 --event-price=tba
+  --event-title="Ilias Baker" \
+  --event-date=2026-03-24 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| f615cff6af3bad71 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 6255a6993d035391 | Στιγμές του 20ου αιώνα | /100 | | |
-| 0f817bb7ca61d092 | Bellas | /100 | | |
+| 40e5bcd109933c22 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| b888e644e87edb47 | Lost Bodies | /100 | | |
+| 3afa825271e8b712 | Ilias Baker | /100 | | |

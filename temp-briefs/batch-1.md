@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 2b4eae8e8c53caee, 16013527dd22b8a5, f5cf928462c5baf4
+- Event IDs: f67d6fb1769f3cdb, cdf827091a89cb26, ad26be78844b9c89
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: 2b4eae8e8c53caee
+- **ID**: f67d6fb1769f3cdb
 - **Type**: theater
 - **Venue**: ROES THEATER
 - **Price**: paid
-- **Date**: 2026-03-23
+- **Date**: 2026-03-24
 - **Time**: 21:00
 - **URL**: https://www.ticketservices.gr/event/13911/
 - **Source**: ticketservices
@@ -93,37 +93,37 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
 
-### ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»
-- **ID**: 16013527dd22b8a5
+### Calyces Live at Piraeus Academy
+- **ID**: cdf827091a89cb26
 - **Type**: concert
-- **Venue**: Theseum - A Theatre for the Arts
+- **Venue**: Piraeus Club Academy
 - **Price**: paid
-- **Date**: 2026-03-23
+- **Date**: 2026-03-24
 - **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/14141/
-- **Source**: ticketservices
+- **URL**: https://www.more.com/gr-el/tickets/music/calyces-live-at-piraeus-academy/
+- **Source**: more.com
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Theseum - A Theatre for the Arts Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Piraeus Club Academy Athens" for context.
 
-### Αλιγάτορες
-- **ID**: f5cf928462c5baf4
+### Mångata Projekt + Sal
+- **ID**: ad26be78844b9c89
 - **Type**: dj_set
-- **Venue**: AUDITORIUM
-- **Price**: paid
-- **Date**: 2026-03-23T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
-- **Source**: athinorama.gr
+- **Venue**: Burger Disco Club
+- **Price**: door
+- **Date**: 2026-03-24T19:00:00
+- **Time**: 19:00
+- **URL**: https://www.clubber.gr/events/mangata-projekt-sal/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Burger Disco Club Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/2b4eae8e8c53caee.md \
-  --tier=standard --event-id=2b4eae8e8c53caee \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f67d6fb1769f3cdb.md \
+  --tier=standard --event-id=f67d6fb1769f3cdb \
   --event-type=theater --event-venue="ROES THEATER" \
   --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-23 --event-price=paid
+  --event-date=2026-03-24 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/16013527dd22b8a5.md \
-  --tier=stub --event-id=16013527dd22b8a5 \
-  --event-type=concert --event-venue="Theseum - A Theatre for the Arts" \
-  --event-title="ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ»" \
-  --event-date=2026-03-23 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/cdf827091a89cb26.md \
+  --tier=stub --event-id=cdf827091a89cb26 \
+  --event-type=concert --event-venue="Piraeus Club Academy" \
+  --event-title="Calyces Live at Piraeus Academy" \
+  --event-date=2026-03-24 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f5cf928462c5baf4.md \
-  --tier=stub --event-id=f5cf928462c5baf4 \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Αλιγάτορες" \
-  --event-date=2026-03-23 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ad26be78844b9c89.md \
+  --tier=stub --event-id=ad26be78844b9c89 \
+  --event-type=dj_set --event-venue="Burger Disco Club" \
+  --event-title="Mångata Projekt + Sal" \
+  --event-date=2026-03-24 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 2b4eae8e8c53caee | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| 16013527dd22b8a5 | ΝΑΤΑΣΣΑ ΜΠΟΦΙΛΙΟΥ, ΜΑΝΩΛΗΣ ΦΑΜΕΛΛΟΣ  «ΟΛΑ ΕΙΝΑΙ ΜΠΡΟΣΤΑ» | /100 | | |
-| f5cf928462c5baf4 | Αλιγάτορες | /100 | | |
+| f67d6fb1769f3cdb | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
+| cdf827091a89cb26 | Calyces Live at Piraeus Academy | /100 | | |
+| ad26be78844b9c89 | Mångata Projekt + Sal | /100 | | |
