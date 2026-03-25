@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: f67d6fb1769f3cdb, cdf827091a89cb26, ad26be78844b9c89
+- Event IDs: 31b4e9cdcf89f873, a40d4b63b1c9ee85, 34c210bfe1dd8488
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,53 +77,52 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: f67d6fb1769f3cdb
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 31b4e9cdcf89f873
 - **Type**: theater
-- **Venue**: ROES THEATER
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-24
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/13911/
-- **Source**: ticketservices
+- **Date**: 2026-03-25T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Calyces Live at Piraeus Academy
-- **ID**: cdf827091a89cb26
+### Laura Jane Grace
+- **ID**: a40d4b63b1c9ee85
 - **Type**: concert
-- **Venue**: Piraeus Club Academy
-- **Price**: paid
-- **Date**: 2026-03-24
-- **Time**: 21:00
-- **URL**: https://www.more.com/gr-el/tickets/music/calyces-live-at-piraeus-academy/
-- **Source**: more.com
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-03-25
+- **URL**: https://www.athinorama.gr/music/gig/laura_jane_grace-10080401/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Piraeus Club Academy Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
-### Mångata Projekt + Sal
-- **ID**: ad26be78844b9c89
+### Lilis Dim
+- **ID**: 34c210bfe1dd8488
 - **Type**: dj_set
-- **Venue**: Burger Disco Club
-- **Price**: door
-- **Date**: 2026-03-24T19:00:00
-- **Time**: 19:00
-- **URL**: https://www.clubber.gr/events/mangata-projekt-sal/
-- **Source**: clubber.gr
+- **Venue**: Pharaoh
+- **Price**: tba
+- **Date**: 2026-03-25T21:00:00
+- **Time**: 21:00
+- **URL**: https://ra.co/events/2399578
+- **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Burger Disco Club Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Pharaoh Athens" for context.
 
 ---
 
@@ -172,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f67d6fb1769f3cdb.md \
-  --tier=standard --event-id=f67d6fb1769f3cdb \
-  --event-type=theater --event-venue="ROES THEATER" \
-  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-24 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/31b4e9cdcf89f873.md \
+  --tier=standard --event-id=31b4e9cdcf89f873 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-25 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/cdf827091a89cb26.md \
-  --tier=stub --event-id=cdf827091a89cb26 \
-  --event-type=concert --event-venue="Piraeus Club Academy" \
-  --event-title="Calyces Live at Piraeus Academy" \
-  --event-date=2026-03-24 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/a40d4b63b1c9ee85.md \
+  --tier=stub --event-id=a40d4b63b1c9ee85 \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="Laura Jane Grace" \
+  --event-date=2026-03-25 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ad26be78844b9c89.md \
-  --tier=stub --event-id=ad26be78844b9c89 \
-  --event-type=dj_set --event-venue="Burger Disco Club" \
-  --event-title="Mångata Projekt + Sal" \
-  --event-date=2026-03-24 --event-price=door
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/34c210bfe1dd8488.md \
+  --tier=stub --event-id=34c210bfe1dd8488 \
+  --event-type=dj_set --event-venue="Pharaoh" \
+  --event-title="Lilis Dim" \
+  --event-date=2026-03-25 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| f67d6fb1769f3cdb | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| cdf827091a89cb26 | Calyces Live at Piraeus Academy | /100 | | |
-| ad26be78844b9c89 | Mångata Projekt + Sal | /100 | | |
+| 31b4e9cdcf89f873 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| a40d4b63b1c9ee85 | Laura Jane Grace | /100 | | |
+| 34c210bfe1dd8488 | Lilis Dim | /100 | | |

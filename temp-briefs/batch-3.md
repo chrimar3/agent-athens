@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 40e5bcd109933c22, b888e644e87edb47, 3afa825271e8b712
+- Event IDs: 7b65d0bc8085c11b, 49cedbbfea663280, b2f2db75f1aac5f0
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,52 +77,52 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 40e5bcd109933c22
-- **Type**: theater
-- **Venue**: Olvio
-- **Price**: paid
-- **Date**: 2026-03-24T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
+- **ID**: 7b65d0bc8085c11b
+- **Type**: performance
+- **Venue**: Θέατρο Άβατον
+- **Price**: tba
+- **Date**: 2026-03-25T18:00:00
+- **Time**: 18:00
+- **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
 
-### Lost Bodies
-- **ID**: b888e644e87edb47
-- **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
+### In motion: Ένα άγαλμα που το ’σκασε
+- **ID**: 49cedbbfea663280
+- **Type**: theater
+- **Venue**: Δημοτικό Θέατρο Πειραιά
 - **Price**: tba
-- **Date**: 2026-03-24
-- **URL**: https://www.athinorama.gr/music/gig/lost_bodies-10052777/
+- **Date**: 2026-03-25T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/in_motion_ena_agalma_pou_to_%e2%80%99skase-10088271/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Δημοτικό Θέατρο Πειραιά Athens" for context.
+
+### Nayra
+- **ID**: b2f2db75f1aac5f0
+- **Type**: concert
+- **Venue**: Αγγλικανική Εκκλησία Αγίου Παύλου
+- **Price**: tba
+- **Date**: 2026-03-25
+- **URL**: https://www.athinorama.gr/music/gig/nayra-10041204/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
-
-### Ilias Baker
-- **ID**: 3afa825271e8b712
-- **Type**: dj_set
-- **Venue**: Pharaoh
-- **Price**: tba
-- **Date**: 2026-03-24T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2399577
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Pharaoh Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Αγγλικανική Εκκλησία Αγίου Παύλου Athens" for context.
 
 ---
 
@@ -171,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/40e5bcd109933c22.md \
-  --tier=standard --event-id=40e5bcd109933c22 \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-24 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/7b65d0bc8085c11b.md \
+  --tier=standard --event-id=7b65d0bc8085c11b \
+  --event-type=performance --event-venue="Θέατρο Άβατον" \
+  --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
+  --event-date=2026-03-25 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b888e644e87edb47.md \
-  --tier=stub --event-id=b888e644e87edb47 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="Lost Bodies" \
-  --event-date=2026-03-24 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/49cedbbfea663280.md \
+  --tier=standard --event-id=49cedbbfea663280 \
+  --event-type=theater --event-venue="Δημοτικό Θέατρο Πειραιά" \
+  --event-title="In motion: Ένα άγαλμα που το ’σκασε" \
+  --event-date=2026-03-25 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/3afa825271e8b712.md \
-  --tier=stub --event-id=3afa825271e8b712 \
-  --event-type=dj_set --event-venue="Pharaoh" \
-  --event-title="Ilias Baker" \
-  --event-date=2026-03-24 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b2f2db75f1aac5f0.md \
+  --tier=stub --event-id=b2f2db75f1aac5f0 \
+  --event-type=concert --event-venue="Αγγλικανική Εκκλησία Αγίου Παύλου" \
+  --event-title="Nayra" \
+  --event-date=2026-03-25 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 40e5bcd109933c22 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| b888e644e87edb47 | Lost Bodies | /100 | | |
-| 3afa825271e8b712 | Ilias Baker | /100 | | |
+| 7b65d0bc8085c11b | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 49cedbbfea663280 | In motion: Ένα άγαλμα που το ’σκασε | /100 | | |
+| b2f2db75f1aac5f0 | Nayra | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 4bd658562ad2d959, f466a46de3497155, 0b87fb4a0531cb14
+- Event IDs: 29a6550dc9877da5, f466a46de3497155, 655ba3e5140015f9
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,9 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
+- `exemplars/festival-sonic-sisters.md` — structural reference
 - `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
-- `exemplars/festival-sonic-sisters.md` — structural reference
 
 ## Anti-patterns
 
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 4bd658562ad2d959
+- **ID**: 29a6550dc9877da5
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-24T16:00:00
+- **Date**: 2026-03-25T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -109,21 +109,36 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
 
-### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: 0b87fb4a0531cb14
-- **Type**: performance
-- **Venue**: Θέατρο Άβατον
-- **Price**: tba
-- **Date**: 2026-03-24T18:00:00
-- **Time**: 18:00
-- **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
+### Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar
+- **ID**: 655ba3e5140015f9
+- **Type**: festival
+- **Venue**: Bios Ρομάντσο
+- **Price**: paid
+- **Date**: 2026-04-03T23:00:00
+- **Time**: 23:00
+- **URL**: https://ra.co/events/2387142
+- **Source**: residentadvisor
+- **Category**: festival_parent
+- **Target words (English)**: 250-400
+- **Target words (Greek)**: 215-340
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 250-400 words. Greek MUST be 215-340 words.
+- **Venue intel** (from database):
+  ```
+  ### Bios
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 84, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~300 across spaces |
+  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
+  | **Drinks** | Cocktails €9 (pricey for Athens) |
+  | **Door Policy** | Relaxed |
+  | **Notable acts** | Autechre, Mala, Objekt |
+  | **Character** | Multi-space arts center, Bauhaus building |
+  
+  ---
+  ```
 
 ---
 
@@ -172,11 +187,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/4bd658562ad2d959.md \
-  --tier=standard --event-id=4bd658562ad2d959 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/29a6550dc9877da5.md \
+  --tier=standard --event-id=29a6550dc9877da5 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-03-24 --event-price=paid
+  --event-date=2026-03-25 --event-price=paid
 ```
 
 ```bash
@@ -188,17 +203,17 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/0b87fb4a0531cb14.md \
-  --tier=standard --event-id=0b87fb4a0531cb14 \
-  --event-type=performance --event-venue="Θέατρο Άβατον" \
-  --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-24 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md \
+  --tier=premium --event-id=655ba3e5140015f9 \
+  --event-type=festival --event-venue="Bios Ρομάντσο" \
+  --event-title="Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar" \
+  --event-date=2026-04-03 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 4bd658562ad2d959 | Το τσίρκο των σκιών | /100 | | |
+| 29a6550dc9877da5 | Το τσίρκο των σκιών | /100 | | |
 | f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
-| 0b87fb4a0531cb14 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
