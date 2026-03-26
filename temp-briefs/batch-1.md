@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 31b4e9cdcf89f873, a40d4b63b1c9ee85, 34c210bfe1dd8488
+- Event IDs: 7bc4a2150d220242, 10d67e4bbd3645a1, db51a7f6afe3626f
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,52 +77,67 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 31b4e9cdcf89f873
-- **Type**: theater
-- **Venue**: Olvio
+### &#171;Aννα Μπολένα&#187;
+- **ID**: 7bc4a2150d220242
+- **Type**: concert
+- **Venue**: Εθνική Λυρική Σκηνή
 - **Price**: paid
-- **Date**: 2026-03-25T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Date**: 2026-03-26T19:30:00
+- **Time**: 19:30
+- **URL**: https://www.athinorama.gr/music/gig/anna_mpolena-10089570/
 - **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Εθνική Λυρική Σκηνή Athens" for context.
+
+### Stampin&#39; Ground
+- **ID**: 10d67e4bbd3645a1
+- **Type**: dj_set
+- **Venue**: Temple
+- **Price**: paid
+- **Date**: 2026-03-26T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/music/gig/stampin_ground-10040201/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### Temple Athens
+  | Field | Data |
+  |-------|------|
+  | **Address** | Iakhou 17, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~600 |
+  | **Entry** | €15-25 |
+  | **Door Policy** | Some selection on big nights |
+  | **Sound** | Funktion-One, serious laser rig |
+  | **Character** | Big-room techno, two floors, basement is the peak experience |
+  
+  ---
+  ```
+
+### Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ
+- **ID**: db51a7f6afe3626f
+- **Type**: theater
+- **Venue**: Ιλίσια
+- **Price**: paid
+- **Date**: 2026-03-26T20:00:00
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/i-pio-yperoxi-xeiroteri-tou-kosmou/
+- **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
-
-### Laura Jane Grace
-- **ID**: a40d4b63b1c9ee85
-- **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: tba
-- **Date**: 2026-03-25
-- **URL**: https://www.athinorama.gr/music/gig/laura_jane_grace-10080401/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
-
-### Lilis Dim
-- **ID**: 34c210bfe1dd8488
-- **Type**: dj_set
-- **Venue**: Pharaoh
-- **Price**: tba
-- **Date**: 2026-03-25T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2399578
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Pharaoh Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Ιλίσια Athens" for context.
 
 ---
 
@@ -171,33 +186,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/31b4e9cdcf89f873.md \
-  --tier=standard --event-id=31b4e9cdcf89f873 \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-25 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/7bc4a2150d220242.md \
+  --tier=stub --event-id=7bc4a2150d220242 \
+  --event-type=concert --event-venue="Εθνική Λυρική Σκηνή" \
+  --event-title="&#171;Aννα Μπολένα&#187;" \
+  --event-date=2026-03-26 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/a40d4b63b1c9ee85.md \
-  --tier=stub --event-id=a40d4b63b1c9ee85 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="Laura Jane Grace" \
-  --event-date=2026-03-25 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/10d67e4bbd3645a1.md \
+  --tier=stub --event-id=10d67e4bbd3645a1 \
+  --event-type=dj_set --event-venue="Temple" \
+  --event-title="Stampin&#39; Ground" \
+  --event-date=2026-03-26 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/34c210bfe1dd8488.md \
-  --tier=stub --event-id=34c210bfe1dd8488 \
-  --event-type=dj_set --event-venue="Pharaoh" \
-  --event-title="Lilis Dim" \
-  --event-date=2026-03-25 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/db51a7f6afe3626f.md \
+  --tier=standard --event-id=db51a7f6afe3626f \
+  --event-type=theater --event-venue="Ιλίσια" \
+  --event-title="Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ" \
+  --event-date=2026-03-26 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 31b4e9cdcf89f873 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| a40d4b63b1c9ee85 | Laura Jane Grace | /100 | | |
-| 34c210bfe1dd8488 | Lilis Dim | /100 | | |
+| 7bc4a2150d220242 | &#171;Aννα Μπολένα&#187; | /100 | | |
+| 10d67e4bbd3645a1 | Stampin&#39; Ground | /100 | | |
+| db51a7f6afe3626f | Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ | /100 | | |
