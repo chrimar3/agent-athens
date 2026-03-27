@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 7bc4a2150d220242, 10d67e4bbd3645a1, db51a7f6afe3626f
+- Event IDs: cd7dc0e6e20b10c4, 3205122ce108d14c, d1705f845754bc62
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,67 +77,53 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### &#171;Aννα Μπολένα&#187;
-- **ID**: 7bc4a2150d220242
-- **Type**: concert
-- **Venue**: Εθνική Λυρική Σκηνή
-- **Price**: paid
-- **Date**: 2026-03-26T19:30:00
-- **Time**: 19:30
-- **URL**: https://www.athinorama.gr/music/gig/anna_mpolena-10089570/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Εθνική Λυρική Σκηνή Athens" for context.
-
-### Stampin&#39; Ground
-- **ID**: 10d67e4bbd3645a1
-- **Type**: dj_set
-- **Venue**: Temple
-- **Price**: paid
-- **Date**: 2026-03-26T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/music/gig/stampin_ground-10040201/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Temple Athens
-  | Field | Data |
-  |-------|------|
-  | **Address** | Iakhou 17, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~600 |
-  | **Entry** | €15-25 |
-  | **Door Policy** | Some selection on big nights |
-  | **Sound** | Funktion-One, serious laser rig |
-  | **Character** | Big-room techno, two floors, basement is the peak experience |
-  
-  ---
-  ```
-
-### Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ
-- **ID**: db51a7f6afe3626f
+### Ιππόκαμπος/3ος Χρόνος
+- **ID**: cd7dc0e6e20b10c4
 - **Type**: theater
-- **Venue**: Ιλίσια
+- **Venue**: Μικρός Κεραμεικός
 - **Price**: paid
-- **Date**: 2026-03-26T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/i-pio-yperoxi-xeiroteri-tou-kosmou/
+- **Date**: 2026-03-27
+- **Time**: 21:00
+- **URL**: https://www.more.com/gr-el/tickets/theater/ippokampos-na-thymasai-pos-me-lene/
 - **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Ιλίσια Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Μικρός Κεραμεικός Athens" for context.
+
+### Εαρινό Πάθος με την Ηρώ Σαΐα
+- **ID**: 3205122ce108d14c
+- **Type**: concert
+- **Venue**: Γερμανική Εκκλησία Αθηνών
+- **Price**: paid
+- **Date**: 2026-03-27
+- **Time**: 20:00
+- **URL**: https://www.ticketservices.gr/event/14151/
+- **Source**: ticketservices
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Γερμανική Εκκλησία Αθηνών Athens" for context.
+
+### El Chapo afterparty w/ Modok + S.ant
+- **ID**: d1705f845754bc62
+- **Type**: dj_set
+- **Venue**: El Chapo
+- **Price**: tba
+- **Date**: 2026-03-27T01:30:00
+- **Time**: 01:30
+- **URL**: https://ra.co/events/2403508
+- **Source**: residentadvisor
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
 
 ---
 
@@ -186,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/7bc4a2150d220242.md \
-  --tier=stub --event-id=7bc4a2150d220242 \
-  --event-type=concert --event-venue="Εθνική Λυρική Σκηνή" \
-  --event-title="&#171;Aννα Μπολένα&#187;" \
-  --event-date=2026-03-26 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/cd7dc0e6e20b10c4.md \
+  --tier=standard --event-id=cd7dc0e6e20b10c4 \
+  --event-type=theater --event-venue="Μικρός Κεραμεικός" \
+  --event-title="Ιππόκαμπος/3ος Χρόνος" \
+  --event-date=2026-03-27 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/10d67e4bbd3645a1.md \
-  --tier=stub --event-id=10d67e4bbd3645a1 \
-  --event-type=dj_set --event-venue="Temple" \
-  --event-title="Stampin&#39; Ground" \
-  --event-date=2026-03-26 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3205122ce108d14c.md \
+  --tier=stub --event-id=3205122ce108d14c \
+  --event-type=concert --event-venue="Γερμανική Εκκλησία Αθηνών" \
+  --event-title="Εαρινό Πάθος με την Ηρώ Σαΐα" \
+  --event-date=2026-03-27 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/db51a7f6afe3626f.md \
-  --tier=standard --event-id=db51a7f6afe3626f \
-  --event-type=theater --event-venue="Ιλίσια" \
-  --event-title="Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ" \
-  --event-date=2026-03-26 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d1705f845754bc62.md \
+  --tier=stub --event-id=d1705f845754bc62 \
+  --event-type=dj_set --event-venue="El Chapo" \
+  --event-title="El Chapo afterparty w/ Modok + S.ant" \
+  --event-date=2026-03-27 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 7bc4a2150d220242 | &#171;Aννα Μπολένα&#187; | /100 | | |
-| 10d67e4bbd3645a1 | Stampin&#39; Ground | /100 | | |
-| db51a7f6afe3626f | Η ΠΙΟ ΥΠΕΡΟΧΗ ΧΕΙΡΟΤΕΡΗ ΤΟΥ ΚΟΣΜΟΥ | /100 | | |
+| cd7dc0e6e20b10c4 | Ιππόκαμπος/3ος Χρόνος | /100 | | |
+| 3205122ce108d14c | Εαρινό Πάθος με την Ηρώ Σαΐα | /100 | | |
+| d1705f845754bc62 | El Chapo afterparty w/ Modok + S.ant | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: f466a46de3497155, 655ba3e5140015f9, 54b9af638de62780
+- Event IDs: 769eebfb668f2851, f466a46de3497155, 655ba3e5140015f9
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,6 +77,22 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
+### Το τσίρκο των σκιών
+- **ID**: 769eebfb668f2851
+- **Type**: show
+- **Venue**: Coronet Theater
+- **Price**: paid
+- **Date**: 2026-03-27T16:00:00
+- **Time**: 16:00
+- **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
+- **Source**: athinorama.gr
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
+
 ### AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson
 - **ID**: f466a46de3497155
 - **Type**: sports
@@ -120,36 +136,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
   | **Door Policy** | Relaxed |
   | **Notable acts** | Autechre, Mala, Objekt |
   | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
-
-### Slaughter to Prevail
-- **ID**: 54b9af638de62780
-- **Type**: show
-- **Venue**: Floyd
-- **Price**: paid
-- **Date**: 2026-07-24T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/music/slaughter-to-prevail/
-- **Source**: more.com
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel** (from database):
-  ```
-  ### Floyd Live Music Venue
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 117, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | 2,000+ |
-  | **Tickets** | €25-45 |
-  | **Opened** | October 2023 (sold-out Blind Guardian) |
-  | **Programming** | Epica, Franz Ferdinand tier |
-  | **Issues noted** | Parking difficulties, smoking enforcement, acoustics need improvement |
   
   ---
   ```
@@ -201,6 +187,14 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/769eebfb668f2851.md \
+  --tier=standard --event-id=769eebfb668f2851 \
+  --event-type=show --event-venue="Coronet Theater" \
+  --event-title="Το τσίρκο των σκιών" \
+  --event-date=2026-03-27 --event-price=paid
+```
+
+```bash
 bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md \
   --tier=standard --event-id=f466a46de3497155 \
   --event-type=sports --event-venue="Sunel Arena" \
@@ -216,18 +210,10 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md
   --event-date=2026-04-03 --event-price=paid
 ```
 
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/54b9af638de62780.md \
-  --tier=standard --event-id=54b9af638de62780 \
-  --event-type=show --event-venue="Floyd" \
-  --event-title="Slaughter to Prevail" \
-  --event-date=2026-07-24 --event-price=paid
-```
-
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
+| 769eebfb668f2851 | Το τσίρκο των σκιών | /100 | | |
 | f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
-| 54b9af638de62780 | Slaughter to Prevail | /100 | | |

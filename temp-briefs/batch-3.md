@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: b7ad306760d98a9f, d77d60aeeca1dd3e, d4e0ec236af79147
+- Event IDs: cfbf5729d38810b9, 1156f51ca29fc707, c1dee2762638554e
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,53 +77,53 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Γιάννης Χαρούλης
-- **ID**: b7ad306760d98a9f
-- **Type**: concert
-- **Venue**: Σταυρός του Νότου
+### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
+- **ID**: cfbf5729d38810b9
+- **Type**: performance
+- **Venue**: Θέατρο Άβατον
 - **Price**: tba
-- **Date**: 2026-03-26T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.athinorama.gr/music/gig/giannis_xaroulis-10071612/
+- **Date**: 2026-03-27T18:00:00
+- **Time**: 18:00
+- **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
 - **Source**: athinorama.gr
-- **Category**: concert_major
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Σταυρός του Νότου Athens" for context.
-
-### Richardo Alesio
-- **ID**: d77d60aeeca1dd3e
-- **Type**: dj_set
-- **Venue**: Pharaoh
-- **Price**: tba
-- **Date**: 2026-03-26T21:00:00
-- **Time**: 21:00
-- **URL**: https://ra.co/events/2399579
-- **Source**: residentadvisor
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Pharaoh Athens" for context.
-
-### ΠΡΟΣΕΧΕ ΠΟΙΟΝ ΣΚΟΤΩΝΕΙΣ
-- **ID**: d4e0ec236af79147
-- **Type**: theater
-- **Venue**: Θέατρο Πειραιώς 131
-- **Price**: paid
-- **Date**: 2026-03-26T20:00:00
-- **Time**: 20:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/prosexe-poion-skotoneis/
-- **Source**: more.com
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Πειραιώς 131 Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
+
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: 1156f51ca29fc707
+- **Type**: theater
+- **Venue**: Olvio
+- **Price**: paid
+- **Date**: 2026-03-27T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Source**: athinorama.gr
+- **Category**: theater_contemporary
+- **Target words (English)**: 120-180
+- **Target words (Greek)**: 100-155
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+
+### 33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus
+- **ID**: c1dee2762638554e
+- **Type**: concert
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: paid
+- **Date**: 2026-03-27
+- **Time**: 20:45
+- **URL**: https://www.more.com/gr-el/tickets/music/33-lovers-am-i-in-a-dream-at-ilion-plus/
+- **Source**: more.com
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
 ---
 
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b7ad306760d98a9f.md \
-  --tier=standard --event-id=b7ad306760d98a9f \
-  --event-type=concert --event-venue="Σταυρός του Νότου" \
-  --event-title="Γιάννης Χαρούλης" \
-  --event-date=2026-03-26 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cfbf5729d38810b9.md \
+  --tier=standard --event-id=cfbf5729d38810b9 \
+  --event-type=performance --event-venue="Θέατρο Άβατον" \
+  --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
+  --event-date=2026-03-27 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d77d60aeeca1dd3e.md \
-  --tier=stub --event-id=d77d60aeeca1dd3e \
-  --event-type=dj_set --event-venue="Pharaoh" \
-  --event-title="Richardo Alesio" \
-  --event-date=2026-03-26 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/1156f51ca29fc707.md \
+  --tier=standard --event-id=1156f51ca29fc707 \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-03-27 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d4e0ec236af79147.md \
-  --tier=standard --event-id=d4e0ec236af79147 \
-  --event-type=theater --event-venue="Θέατρο Πειραιώς 131" \
-  --event-title="ΠΡΟΣΕΧΕ ΠΟΙΟΝ ΣΚΟΤΩΝΕΙΣ" \
-  --event-date=2026-03-26 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/c1dee2762638554e.md \
+  --tier=stub --event-id=c1dee2762638554e \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus" \
+  --event-date=2026-03-27 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| b7ad306760d98a9f | Γιάννης Χαρούλης | /100 | | |
-| d77d60aeeca1dd3e | Richardo Alesio | /100 | | |
-| d4e0ec236af79147 | ΠΡΟΣΕΧΕ ΠΟΙΟΝ ΣΚΟΤΩΝΕΙΣ | /100 | | |
+| cfbf5729d38810b9 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
+| 1156f51ca29fc707 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| c1dee2762638554e | 33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus | /100 | | |
