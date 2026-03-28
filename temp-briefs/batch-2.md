@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 769eebfb668f2851, f466a46de3497155, 655ba3e5140015f9
+- Event IDs: 3c9447cd59332a32, 655ba3e5140015f9, f466a46de3497155
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 769eebfb668f2851
+- **ID**: 3c9447cd59332a32
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-27T16:00:00
+- **Date**: 2026-03-28T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -92,22 +92,6 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
-
-### AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson
-- **ID**: f466a46de3497155
-- **Type**: sports
-- **Venue**: Sunel Arena
-- **Price**: paid
-- **Date**: 2026-03-28T18:15:00
-- **Time**: 18:15
-- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-peristeri-betsson/
-- **Source**: more.com
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
 
 ### Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar
 - **ID**: 655ba3e5140015f9
@@ -139,6 +123,22 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
   
   ---
   ```
+
+### AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson
+- **ID**: f466a46de3497155
+- **Type**: sports
+- **Venue**: Sunel Arena
+- **Price**: paid
+- **Date**: 2026-03-28T18:15:00
+- **Time**: 18:15
+- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-peristeri-betsson/
+- **Source**: more.com
+- **Category**: default
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
 
 ---
 
@@ -187,18 +187,10 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/769eebfb668f2851.md \
-  --tier=standard --event-id=769eebfb668f2851 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/3c9447cd59332a32.md \
+  --tier=standard --event-id=3c9447cd59332a32 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-03-27 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md \
-  --tier=standard --event-id=f466a46de3497155 \
-  --event-type=sports --event-venue="Sunel Arena" \
-  --event-title="AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson" \
   --event-date=2026-03-28 --event-price=paid
 ```
 
@@ -210,10 +202,18 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md
   --event-date=2026-04-03 --event-price=paid
 ```
 
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md \
+  --tier=standard --event-id=f466a46de3497155 \
+  --event-type=sports --event-venue="Sunel Arena" \
+  --event-title="AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson" \
+  --event-date=2026-03-28 --event-price=paid
+```
+
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 769eebfb668f2851 | Το τσίρκο των σκιών | /100 | | |
-| f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
+| 3c9447cd59332a32 | Το τσίρκο των σκιών | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
+| f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |

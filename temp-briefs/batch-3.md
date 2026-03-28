@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: cfbf5729d38810b9, 1156f51ca29fc707, c1dee2762638554e
+- Event IDs: ee49d11953a71574, b1b58e00f8e993f1, 7da623e8694b0daa
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,28 +77,12 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας
-- **ID**: cfbf5729d38810b9
-- **Type**: performance
-- **Venue**: Θέατρο Άβατον
-- **Price**: tba
-- **Date**: 2026-03-27T18:00:00
-- **Time**: 18:00
-- **URL**: https://www.athinorama.gr/theatre/performance/ilias_o_protos_gatos_xoreutis_tis_gatoistorias-10075634/
-- **Source**: athinorama.gr
-- **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Θέατρο Άβατον Athens" for context.
-
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 1156f51ca29fc707
+- **ID**: ee49d11953a71574
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-27T10:30:00
+- **Date**: 2026-03-28T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -109,21 +93,51 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### 33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus
-- **ID**: c1dee2762638554e
+### INNA Show
+- **ID**: b1b58e00f8e993f1
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
+- **Venue**: Floyd
 - **Price**: paid
-- **Date**: 2026-03-27
-- **Time**: 20:45
-- **URL**: https://www.more.com/gr-el/tickets/music/33-lovers-am-i-in-a-dream-at-ilion-plus/
+- **Date**: 2026-03-28
+- **Time**: 21:00
+- **URL**: https://www.more.com/gr-el/tickets/music/inna-show/
 - **Source**: more.com
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### Floyd Live Music Venue
+  | Field | Data |
+  |-------|------|
+  | **Address** | Pireos 117, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | 2,000+ |
+  | **Tickets** | €25-45 |
+  | **Opened** | October 2023 (sold-out Blind Guardian) |
+  | **Programming** | Epica, Franz Ferdinand tier |
+  | **Issues noted** | Parking difficulties, smoking enforcement, acoustics need improvement |
+  
+  ---
+  ```
+
+### Modok + S.ant
+- **ID**: 7da623e8694b0daa
+- **Type**: dj_set
+- **Venue**: El Chapo
+- **Price**: door
+- **Date**: 2026-03-28T01:30:00
+- **Time**: 01:30
+- **URL**: https://www.clubber.gr/events/modok-s-ant/
+- **Source**: clubber.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
 
 ---
 
@@ -172,33 +186,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/cfbf5729d38810b9.md \
-  --tier=standard --event-id=cfbf5729d38810b9 \
-  --event-type=performance --event-venue="Θέατρο Άβατον" \
-  --event-title="Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας" \
-  --event-date=2026-03-27 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/1156f51ca29fc707.md \
-  --tier=standard --event-id=1156f51ca29fc707 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ee49d11953a71574.md \
+  --tier=standard --event-id=ee49d11953a71574 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-27 --event-price=paid
+  --event-date=2026-03-28 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/c1dee2762638554e.md \
-  --tier=stub --event-id=c1dee2762638554e \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus" \
-  --event-date=2026-03-27 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b1b58e00f8e993f1.md \
+  --tier=stub --event-id=b1b58e00f8e993f1 \
+  --event-type=concert --event-venue="Floyd" \
+  --event-title="INNA Show" \
+  --event-date=2026-03-28 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/7da623e8694b0daa.md \
+  --tier=stub --event-id=7da623e8694b0daa \
+  --event-type=dj_set --event-venue="El Chapo" \
+  --event-title="Modok + S.ant" \
+  --event-date=2026-03-28 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| cfbf5729d38810b9 | Ηλίας, ο πρώτος γάτος χορευτής της γατοϊστορίας | /100 | | |
-| 1156f51ca29fc707 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| c1dee2762638554e | 33 Lovers - Am I In A Dream at ΙΛΙΟΝ plus | /100 | | |
+| ee49d11953a71574 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| b1b58e00f8e993f1 | INNA Show | /100 | | |
+| 7da623e8694b0daa | Modok + S.ant | /100 | | |

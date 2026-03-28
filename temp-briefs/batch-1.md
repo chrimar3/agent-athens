@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: cd7dc0e6e20b10c4, 3205122ce108d14c, d1705f845754bc62
+- Event IDs: 6d83f1a876ff2c35, a4dca248c940ef3e, 2698275b8bd9e6c0
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,46 +77,46 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ιππόκαμπος/3ος Χρόνος
-- **ID**: cd7dc0e6e20b10c4
+### Θα σ’ αγαπώ και του χρόνου
+- **ID**: 6d83f1a876ff2c35
 - **Type**: theater
-- **Venue**: Μικρός Κεραμεικός
+- **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-03-27
-- **Time**: 21:00
-- **URL**: https://www.more.com/gr-el/tickets/theater/ippokampos-na-thymasai-pos-me-lene/
-- **Source**: more.com
+- **Date**: 2026-03-28T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Μικρός Κεραμεικός Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### Εαρινό Πάθος με την Ηρώ Σαΐα
-- **ID**: 3205122ce108d14c
+### Ανδριάνα Δημητρίου
+- **ID**: a4dca248c940ef3e
 - **Type**: concert
-- **Venue**: Γερμανική Εκκλησία Αθηνών
+- **Venue**: ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ
 - **Price**: paid
-- **Date**: 2026-03-27
-- **Time**: 20:00
-- **URL**: https://www.ticketservices.gr/event/14151/
+- **Date**: 2026-03-28
+- **Time**: 22:00
+- **URL**: https://www.ticketservices.gr/event/14051/
 - **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Γερμανική Εκκλησία Αθηνών Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ Athens" for context.
 
-### El Chapo afterparty w/ Modok + S.ant
-- **ID**: d1705f845754bc62
+### El Chapo afterparty w/ Steve Tsama + Essen K + S.ant (resident dj)
+- **ID**: 2698275b8bd9e6c0
 - **Type**: dj_set
 - **Venue**: El Chapo
 - **Price**: tba
-- **Date**: 2026-03-27T01:30:00
+- **Date**: 2026-03-28T01:30:00
 - **Time**: 01:30
-- **URL**: https://ra.co/events/2403508
+- **URL**: https://ra.co/events/2403511
 - **Source**: residentadvisor
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/cd7dc0e6e20b10c4.md \
-  --tier=standard --event-id=cd7dc0e6e20b10c4 \
-  --event-type=theater --event-venue="Μικρός Κεραμεικός" \
-  --event-title="Ιππόκαμπος/3ος Χρόνος" \
-  --event-date=2026-03-27 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/6d83f1a876ff2c35.md \
+  --tier=standard --event-id=6d83f1a876ff2c35 \
+  --event-type=theater --event-venue="ARROYO THEATER" \
+  --event-title="Θα σ’ αγαπώ και του χρόνου" \
+  --event-date=2026-03-28 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3205122ce108d14c.md \
-  --tier=stub --event-id=3205122ce108d14c \
-  --event-type=concert --event-venue="Γερμανική Εκκλησία Αθηνών" \
-  --event-title="Εαρινό Πάθος με την Ηρώ Σαΐα" \
-  --event-date=2026-03-27 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/a4dca248c940ef3e.md \
+  --tier=stub --event-id=a4dca248c940ef3e \
+  --event-type=concert --event-venue="ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ" \
+  --event-title="Ανδριάνα Δημητρίου" \
+  --event-date=2026-03-28 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d1705f845754bc62.md \
-  --tier=stub --event-id=d1705f845754bc62 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/2698275b8bd9e6c0.md \
+  --tier=stub --event-id=2698275b8bd9e6c0 \
   --event-type=dj_set --event-venue="El Chapo" \
-  --event-title="El Chapo afterparty w/ Modok + S.ant" \
-  --event-date=2026-03-27 --event-price=tba
+  --event-title="El Chapo afterparty w/ Steve Tsama + Essen K + S.ant (resident dj)" \
+  --event-date=2026-03-28 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| cd7dc0e6e20b10c4 | Ιππόκαμπος/3ος Χρόνος | /100 | | |
-| 3205122ce108d14c | Εαρινό Πάθος με την Ηρώ Σαΐα | /100 | | |
-| d1705f845754bc62 | El Chapo afterparty w/ Modok + S.ant | /100 | | |
+| 6d83f1a876ff2c35 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| a4dca248c940ef3e | Ανδριάνα Δημητρίου | /100 | | |
+| 2698275b8bd9e6c0 | El Chapo afterparty w/ Steve Tsama + Essen K + S.ant (resident dj) | /100 | | |
