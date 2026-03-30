@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 3c9447cd59332a32, 655ba3e5140015f9, f466a46de3497155
+- Event IDs: 730a6f1c43b9a70a, 655ba3e5140015f9, 76502a558b32ece9
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 3c9447cd59332a32
+- **ID**: 730a6f1c43b9a70a
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-28T16:00:00
+- **Date**: 2026-03-30T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -124,14 +124,14 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
   ---
   ```
 
-### AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson
-- **ID**: f466a46de3497155
+### AEK BC - Asisa Joventut
+- **ID**: 76502a558b32ece9
 - **Type**: sports
 - **Venue**: Sunel Arena
 - **Price**: paid
-- **Date**: 2026-03-28T18:15:00
-- **Time**: 18:15
-- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-peristeri-betsson/
+- **Date**: 2026-04-01T19:30:00
+- **Time**: 19:30
+- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-asisa-joventut/
 - **Source**: more.com
 - **Category**: default
 - **Target words (English)**: 120-200
@@ -187,11 +187,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/3c9447cd59332a32.md \
-  --tier=standard --event-id=3c9447cd59332a32 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/730a6f1c43b9a70a.md \
+  --tier=standard --event-id=730a6f1c43b9a70a \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-03-28 --event-price=paid
+  --event-date=2026-03-30 --event-price=paid
 ```
 
 ```bash
@@ -203,17 +203,17 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/f466a46de3497155.md \
-  --tier=standard --event-id=f466a46de3497155 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/76502a558b32ece9.md \
+  --tier=standard --event-id=76502a558b32ece9 \
   --event-type=sports --event-venue="Sunel Arena" \
-  --event-title="AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson" \
-  --event-date=2026-03-28 --event-price=paid
+  --event-title="AEK BC - Asisa Joventut" \
+  --event-date=2026-04-01 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 3c9447cd59332a32 | Το τσίρκο των σκιών | /100 | | |
+| 730a6f1c43b9a70a | Το τσίρκο των σκιών | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
-| f466a46de3497155 | AEK BC - ΠΕΡΙΣΤΕΡΙ Betsson | /100 | | |
+| 76502a558b32ece9 | AEK BC - Asisa Joventut | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: ee49d11953a71574, b1b58e00f8e993f1, 7da623e8694b0daa
+- Event IDs: 87b79971df2c4736, d3187b4bb9d55ee5, 4bff6a0a5b11b7a5
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,67 +77,52 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: ee49d11953a71574
+### Θα σ’ αγαπώ και του χρόνου
+- **ID**: 87b79971df2c4736
 - **Type**: theater
-- **Venue**: Olvio
+- **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-03-28T10:30:00
+- **Date**: 2026-03-30T10:30:00
 - **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### INNA Show
-- **ID**: b1b58e00f8e993f1
+### Melina Xota
+- **ID**: d3187b4bb9d55ee5
 - **Type**: concert
-- **Venue**: Floyd
-- **Price**: paid
-- **Date**: 2026-03-28
-- **Time**: 21:00
-- **URL**: https://www.more.com/gr-el/tickets/music/inna-show/
-- **Source**: more.com
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-03-30
+- **URL**: https://www.athinorama.gr/music/gig/melina_xota-10089576/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Floyd Live Music Venue
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 117, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | 2,000+ |
-  | **Tickets** | €25-45 |
-  | **Opened** | October 2023 (sold-out Blind Guardian) |
-  | **Programming** | Epica, Franz Ferdinand tier |
-  | **Issues noted** | Parking difficulties, smoking enforcement, acoustics need improvement |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
 
-### Modok + S.ant
-- **ID**: 7da623e8694b0daa
+### Στρακαστρούκες
+- **ID**: 4bff6a0a5b11b7a5
 - **Type**: dj_set
-- **Venue**: El Chapo
-- **Price**: door
-- **Date**: 2026-03-28T01:30:00
-- **Time**: 01:30
-- **URL**: https://www.clubber.gr/events/modok-s-ant/
-- **Source**: clubber.gr
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-03-30T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
+- **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -186,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ee49d11953a71574.md \
-  --tier=standard --event-id=ee49d11953a71574 \
-  --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-03-28 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/87b79971df2c4736.md \
+  --tier=standard --event-id=87b79971df2c4736 \
+  --event-type=theater --event-venue="ARROYO THEATER" \
+  --event-title="Θα σ’ αγαπώ και του χρόνου" \
+  --event-date=2026-03-30 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b1b58e00f8e993f1.md \
-  --tier=stub --event-id=b1b58e00f8e993f1 \
-  --event-type=concert --event-venue="Floyd" \
-  --event-title="INNA Show" \
-  --event-date=2026-03-28 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d3187b4bb9d55ee5.md \
+  --tier=stub --event-id=d3187b4bb9d55ee5 \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="Melina Xota" \
+  --event-date=2026-03-30 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/7da623e8694b0daa.md \
-  --tier=stub --event-id=7da623e8694b0daa \
-  --event-type=dj_set --event-venue="El Chapo" \
-  --event-title="Modok + S.ant" \
-  --event-date=2026-03-28 --event-price=door
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/4bff6a0a5b11b7a5.md \
+  --tier=stub --event-id=4bff6a0a5b11b7a5 \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Στρακαστρούκες" \
+  --event-date=2026-03-30 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| ee49d11953a71574 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| b1b58e00f8e993f1 | INNA Show | /100 | | |
-| 7da623e8694b0daa | Modok + S.ant | /100 | | |
+| 87b79971df2c4736 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| d3187b4bb9d55ee5 | Melina Xota | /100 | | |
+| 4bff6a0a5b11b7a5 | Στρακαστρούκες | /100 | | |
