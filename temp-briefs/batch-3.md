@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 87b79971df2c4736, d3187b4bb9d55ee5, 4bff6a0a5b11b7a5
+- Event IDs: 441568031fc2ea5a, 5fd4abcf28e13f8e, f6b2ec3f2d0b69e5
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,8 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/theater-tartuffe.md` — structural reference
-- `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
+- `exemplars/theater-tartuffe.md` — structural reference
 
 ## Anti-patterns
 
@@ -77,12 +76,28 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
+### Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη
+- **ID**: 441568031fc2ea5a
+- **Type**: exhibition
+- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Price**: with-ticket
+- **Date**: 2026-03-31T20:30:00
+- **Time**: 20:30
+- **URL**: https://www.megaron.gr/event/o-kipos-tou-epikourouekthesi-zografikis-tis-eriettas-vordoni/
+- **Source**: megaron.gr
+- **Category**: exhibition
+- **Target words (English)**: 200-300
+- **Target words (Greek)**: 170-260
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 200-300 words. Greek MUST be 170-260 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
 ### Θα σ’ αγαπώ και του χρόνου
-- **ID**: 87b79971df2c4736
+- **ID**: 5fd4abcf28e13f8e
 - **Type**: theater
 - **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-03-30T10:30:00
+- **Date**: 2026-03-31T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
 - **Source**: athinorama.gr
@@ -93,36 +108,21 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### Melina Xota
-- **ID**: d3187b4bb9d55ee5
+### Η βασίλισσα των πάντων
+- **ID**: f6b2ec3f2d0b69e5
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: tba
-- **Date**: 2026-03-30
-- **URL**: https://www.athinorama.gr/music/gig/melina_xota-10089576/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
-
-### Στρακαστρούκες
-- **ID**: 4bff6a0a5b11b7a5
-- **Type**: dj_set
-- **Venue**: AUDITORIUM
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-30T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
+- **Date**: 2026-03-31T12:30:00
+- **Time**: 12:30
+- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
 - **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ---
 
@@ -171,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/87b79971df2c4736.md \
-  --tier=standard --event-id=87b79971df2c4736 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/441568031fc2ea5a.md \
+  --tier=standard --event-id=441568031fc2ea5a \
+  --event-type=exhibition --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη" \
+  --event-date=2026-03-31 --event-price=with-ticket
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5fd4abcf28e13f8e.md \
+  --tier=standard --event-id=5fd4abcf28e13f8e \
   --event-type=theater --event-venue="ARROYO THEATER" \
   --event-title="Θα σ’ αγαπώ και του χρόνου" \
-  --event-date=2026-03-30 --event-price=paid
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d3187b4bb9d55ee5.md \
-  --tier=stub --event-id=d3187b4bb9d55ee5 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="Melina Xota" \
-  --event-date=2026-03-30 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/4bff6a0a5b11b7a5.md \
-  --tier=stub --event-id=4bff6a0a5b11b7a5 \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Στρακαστρούκες" \
-  --event-date=2026-03-30 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f6b2ec3f2d0b69e5.md \
+  --tier=premium --event-id=f6b2ec3f2d0b69e5 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Η βασίλισσα των πάντων" \
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 87b79971df2c4736 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
-| d3187b4bb9d55ee5 | Melina Xota | /100 | | |
-| 4bff6a0a5b11b7a5 | Στρακαστρούκες | /100 | | |
+| 441568031fc2ea5a | Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη | /100 | | |
+| 5fd4abcf28e13f8e | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| f6b2ec3f2d0b69e5 | Η βασίλισσα των πάντων | /100 | | |

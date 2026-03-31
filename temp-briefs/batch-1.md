@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 9c4c4c3cad8ddfb4, 3150b8cc19047a6a, d8ccb0047be94d4c
+- Event IDs: dd0ac3e82cc80142, c2b31fde730c24c4, 5ad721082b73ef02
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: 9c4c4c3cad8ddfb4
+- **ID**: dd0ac3e82cc80142
 - **Type**: theater
 - **Venue**: ROES THEATER
 - **Price**: paid
-- **Date**: 2026-03-30
+- **Date**: 2026-03-31
 - **Time**: 21:00
 - **URL**: https://www.ticketservices.gr/event/13911/
 - **Source**: ticketservices
@@ -93,28 +93,28 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
 
-### Τρεις Φωνές του Ρομαντισμού Άγγελος Πολίτης, Alexis Bove, Λευκή Καρποδίνη κλαρινέτο-τσέλο-πιάνο
-- **ID**: 3150b8cc19047a6a
+### Το μαγικό εισιτήριο
+- **ID**: c2b31fde730c24c4
 - **Type**: concert
-- **Venue**: ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ
+- **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-30
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14146/
-- **Source**: ticketservices
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ Athens" for context.
+- **Date**: 2026-03-31T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
+- **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
 ### Αλιγάτορες
-- **ID**: d8ccb0047be94d4c
+- **ID**: 5ad721082b73ef02
 - **Type**: dj_set
 - **Venue**: AUDITORIUM
 - **Price**: paid
-- **Date**: 2026-03-30T21:00:00
+- **Date**: 2026-03-31T21:00:00
 - **Time**: 21:00
 - **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
 - **Source**: athinorama.gr
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/9c4c4c3cad8ddfb4.md \
-  --tier=standard --event-id=9c4c4c3cad8ddfb4 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/dd0ac3e82cc80142.md \
+  --tier=standard --event-id=dd0ac3e82cc80142 \
   --event-type=theater --event-venue="ROES THEATER" \
   --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-30 --event-price=paid
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3150b8cc19047a6a.md \
-  --tier=stub --event-id=3150b8cc19047a6a \
-  --event-type=concert --event-venue="ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ" \
-  --event-title="Τρεις Φωνές του Ρομαντισμού Άγγελος Πολίτης, Alexis Bove, Λευκή Καρποδίνη κλαρινέτο-τσέλο-πιάνο" \
-  --event-date=2026-03-30 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c2b31fde730c24c4.md \
+  --tier=premium --event-id=c2b31fde730c24c4 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Το μαγικό εισιτήριο" \
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/d8ccb0047be94d4c.md \
-  --tier=stub --event-id=d8ccb0047be94d4c \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5ad721082b73ef02.md \
+  --tier=stub --event-id=5ad721082b73ef02 \
   --event-type=dj_set --event-venue="AUDITORIUM" \
   --event-title="Αλιγάτορες" \
-  --event-date=2026-03-30 --event-price=paid
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 9c4c4c3cad8ddfb4 | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| 3150b8cc19047a6a | Τρεις Φωνές του Ρομαντισμού Άγγελος Πολίτης, Alexis Bove, Λευκή Καρποδίνη κλαρινέτο-τσέλο-πιάνο | /100 | | |
-| d8ccb0047be94d4c | Αλιγάτορες | /100 | | |
+| dd0ac3e82cc80142 | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
+| c2b31fde730c24c4 | Το μαγικό εισιτήριο | /100 | | |
+| 5ad721082b73ef02 | Αλιγάτορες | /100 | | |

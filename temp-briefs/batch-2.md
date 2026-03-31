@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 730a6f1c43b9a70a, 655ba3e5140015f9, 76502a558b32ece9
+- Event IDs: 07705694323ede99, 655ba3e5140015f9, 76502a558b32ece9
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -78,11 +78,11 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 730a6f1c43b9a70a
+- **ID**: 07705694323ede99
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-03-30T16:00:00
+- **Date**: 2026-03-31T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -187,11 +187,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/730a6f1c43b9a70a.md \
-  --tier=standard --event-id=730a6f1c43b9a70a \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/07705694323ede99.md \
+  --tier=standard --event-id=07705694323ede99 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-03-30 --event-price=paid
+  --event-date=2026-03-31 --event-price=paid
 ```
 
 ```bash
@@ -214,6 +214,6 @@ After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 730a6f1c43b9a70a | Το τσίρκο των σκιών | /100 | | |
+| 07705694323ede99 | Το τσίρκο των σκιών | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
 | 76502a558b32ece9 | AEK BC - Asisa Joventut | /100 | | |
