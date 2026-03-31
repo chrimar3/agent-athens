@@ -84,6 +84,13 @@ export function renderSiteFooter(): string {
 </footer>`;
 }
 
+/** Build-time cache-buster for static assets (changes every deploy) */
+const BUILD_STAMP = Date.now().toString(36);
+
+export function renderCssLink(): string {
+  return `<link rel="stylesheet" href="/styles/design-system.css?v=${BUILD_STAMP}">`;
+}
+
 export function renderFontLinks(): string {
   return `<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

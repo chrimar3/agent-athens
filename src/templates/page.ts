@@ -11,7 +11,7 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
 import { generateEventSlug } from '../generators/event-page';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 
@@ -135,7 +135,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
 
 </head>
 <body${allEvents ? ' class="has-filter-bar"' : ''}>

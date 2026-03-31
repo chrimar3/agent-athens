@@ -2,7 +2,7 @@
 // Uses site chrome (nav, footer, hamburger) but no filter bar, cards, or hero.
 // Supports locale for bilingual E-E-A-T pages (el + en).
 
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
 const BASE_URL = 'https://agentathens.netlify.app';
@@ -72,7 +72,7 @@ export function renderContentPage(
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
 </head>
 <body>
   ${renderSiteNav()}

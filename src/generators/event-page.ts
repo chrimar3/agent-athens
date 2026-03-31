@@ -24,7 +24,7 @@ import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus } from '../utils/schema-geo';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
@@ -400,7 +400,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>
   <meta name="description" content="${generateEventMetaDescription(event)}">

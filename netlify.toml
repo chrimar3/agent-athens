@@ -59,6 +59,12 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
+# CSS - refresh every hour (updated with daily builds)
+[[headers]]
+  for = "/styles/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
 # Favicons - cache for 1 week (rarely change)
 [[headers]]
   for = "/favicon*"

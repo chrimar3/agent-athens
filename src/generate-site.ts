@@ -23,7 +23,7 @@ import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from './templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
@@ -1205,7 +1205,7 @@ function generate404Page(): void {
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
   <title>Η σελίδα δεν βρέθηκε | agent-athens</title>
   <meta name="robots" content="noindex">
 </head>

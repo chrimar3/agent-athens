@@ -18,7 +18,7 @@ import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates'
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace } from '../utils/schema-geo';
-import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks } from '../templates/site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -153,7 +153,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
 
   <title>${venue.name} - Εκδηλώσεις | agent-athens</title>
   <meta name="description" content="${generateVenueMetaDescription({ name: venue.name, neighborhood: venue.neighborhood, events: venue.events.slice(0, 1).map(e => ({ title: e.title, startDate: e.startDate })), eventCount: venue.eventCount })}">
@@ -346,7 +346,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
   ${renderFontLinks()}
-  <link rel="stylesheet" href="/styles/design-system.css">
+  ${renderCssLink()}
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
   <meta name="description" content="${generateVenueIndexMetaDescription(venues.length)}">
