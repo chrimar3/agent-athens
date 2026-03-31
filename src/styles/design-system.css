@@ -16,7 +16,7 @@
   --text-primary: #f0f0f0;
   --text-secondary: #a0a0a0;
   --text-tertiary: #959595;   /* was #888 — bumped for 4.5:1 on --bg-surface */
-  --text-muted: #6b6b6b;     /* was #444 — bumped for 4.5:1 on --bg-primary */
+  --text-muted: #7a7a7a;     /* was #444 → #6b6b6b → #7a7a7a for 4.5:1 on --bg-primary */
 
   --accent-primary: #f5e642;   /* Limit to: CTAs, active states, links, highlights, badges */
   --accent-secondary: #ef2c46; /* Limit to: urgency/live indicators only */
@@ -625,7 +625,7 @@ div#main-content {
 
 .search-kbd {
   display: none;
-  font-size: var(--type-caption);
+  font-size: var(--type-ui);  /* was --type-caption (11px) — bumped to 12px minimum */
   font-family: var(--font-primary);
   color: var(--text-tertiary);
   background: var(--bg-surface);
@@ -806,7 +806,7 @@ div#main-content {
 }
 
 .footer-copyright {
-  font-size: var(--type-caption);
+  font-size: var(--type-ui);  /* was --type-caption (11px) — bumped to 12px minimum */
   color: var(--text-muted);
 }
 
@@ -2037,7 +2037,7 @@ div#main-content {
 
 .search-group { display: none; }
 .search-group-title {
-  font-size: var(--type-caption);
+  font-size: var(--type-ui);  /* was --type-caption (11px) — bumped to 12px minimum */
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -2150,7 +2150,7 @@ div#main-content {
 .card-badge-sold-out {
   position: absolute;
   top: var(--space-sm); right: var(--space-sm);
-  font-size: 11px;
+  font-size: var(--type-ui);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -2207,7 +2207,7 @@ div#main-content {
   gap: 16px;
 }
 .page-header h1 { font-size: 2rem; margin: 0; }
-.last-update { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0; }
+.last-update { font-size: var(--type-ui); color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0; }
 .related-pages { margin: 30px 0; padding: 20px; background: var(--bg-surface); border-radius: 8px; }
 .related-pages ul { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-03-31T18:06:57.520+03:00",
+  "generatedAt": "2026-03-31T21:28:42.842+03:00",
   "entries": {
     "today": {
       "hash": "f84bf7d487d0a6c7",
@@ -36515,7 +36515,7 @@
       "lastModified": "2026-03-31"
     },
     "venues/": {
-      "hash": "8ae9e1eed6fafc00",
+      "hash": "2864735f3e046e38",
       "lastModified": "2026-03-31"
     },
     "venues/olvio": {
@@ -36743,27 +36743,27 @@
       "lastModified": "2026-03-31"
     },
     "about/": {
-      "hash": "388e336b2d5a2bed",
+      "hash": "684391181641d582",
       "lastModified": "2026-03-31"
     },
     "en/about/": {
-      "hash": "f8cfc95ec1d50406",
+      "hash": "92a8769bad6f1f1f",
       "lastModified": "2026-03-31"
     },
     "editorial/": {
-      "hash": "fb17593ceb31b865",
+      "hash": "1fa3c07ab819e93c",
       "lastModified": "2026-03-31"
     },
     "en/editorial/": {
-      "hash": "fa15ea4fd915b0ee",
+      "hash": "0ea3c9202c874056",
       "lastModified": "2026-03-31"
     },
     "corrections/": {
-      "hash": "6473d975ddb1d896",
+      "hash": "83525232e0bd3d18",
       "lastModified": "2026-03-31"
     },
     "en/corrections/": {
-      "hash": "3bd5fc845cfb6232",
+      "hash": "88c30610c242ceba",
       "lastModified": "2026-03-31"
     }
   }

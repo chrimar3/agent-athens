@@ -79,9 +79,9 @@ export function renderContentPage(
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="content-page-body" id="main-content" tabindex="-1">
+  <main class="content-page-body" id="main-content" tabindex="-1">
     ${bodyHtml}
-  </div>
+  </main>
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}

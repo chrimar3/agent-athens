@@ -378,7 +378,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="venue-index-content">
+  <main class="venue-index-content">
     <header class="venue-index-header">
       <h1>Χώροι Εκδηλώσεων</h1>
       <p class="summary">${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα</p>
@@ -387,7 +387,7 @@ function generateVenueIndex(venues: VenueData[]): void {
     <ul class="venue-list">
       ${venueListHtml}
     </ul>
-  </div>
+  </main>
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}

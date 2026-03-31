@@ -1214,12 +1214,12 @@ function generate404Page(): void {
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="error-page">
+  <main class="error-page">
     <div class="error-code">404</div>
     <h1>Η σελίδα δεν βρέθηκε</h1>
     <p>Η σελίδα που ψάχνετε δεν υπάρχει ή έχει μετακινηθεί. Το ημερολόγιο ενημερώνεται καθημερινά — ίσως η εκδήλωση έχει παρέλθει.</p>
     <a href="/" class="error-home-link">Αρχική σελίδα</a>
-  </div>
+  </main>
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
