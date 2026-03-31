@@ -31,7 +31,7 @@ export function renderSiteNav(locale: 'el' | 'en' = 'el'): string {
 
 export function renderHamburgerMenu(): string {
   return `<div class="mobile-overlay" aria-hidden="true"></div>
-<nav class="mobile-menu" aria-hidden="true">
+<nav class="mobile-menu" aria-label="Κύρια πλοήγηση" aria-hidden="true">
   <button class="mobile-menu-close" aria-label="Κλείσιμο μενού">\u00d7</button>
   <ul class="mobile-menu-items">
     <li><button class="mobile-menu-search" type="button">Αναζήτηση</button></li>
@@ -87,7 +87,7 @@ export function renderSiteFooter(): string {
 export function renderFontLinks(): string {
   return `<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&subset=greek,latin&display=swap">`;
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&subset=greek,latin&display=swap">`;
 }
 
 export function renderFaviconLinks(): string {

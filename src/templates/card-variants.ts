@@ -15,7 +15,7 @@ export function renderEventCardList(event: Event): string {
   return `
   <article class="event-card-list">
     <div class="list-image-wrapper" data-type="${event.type}">
-      ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      ${imgSrc ? `<img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
@@ -39,7 +39,7 @@ export function renderFeatureCard(event: Event): string {
   return `
   <article class="event-card-feature">
     <div class="feature-image-wrapper" data-type="${event.type}">
-      ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      ${imgSrc ? `<img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>
@@ -131,7 +131,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
     <a href="${featuredData.href}" class="hero-card hero-card--featured">
       <div class="hero-card-image-wrapper" data-type="${featured.type}">
         ${featuredImg
-          ? `<img class="hero-card-image" src="${featuredImg}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">`
+          ? `<img class="hero-card-image" src="${featuredImg}" alt="${featured.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">`
           : ''}
         <span class="card-placeholder-icon" aria-hidden="true"${featuredImg ? ' style="display:none"' : ''}>${featuredIcon}</span>
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
@@ -154,7 +154,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
       <a href="${data.href}" class="hero-card hero-card--pick">
         <div class="hero-pick-image" data-type="${event.type}">
           ${imgSrc
-            ? `<img src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">`
+            ? `<img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">`
             : ''}
           <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
         </div>
@@ -170,7 +170,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
   <section class="hero-section" aria-label="${heading}">
     <div class="hero-header">
       <h2 class="hero-heading">${heading}</h2>
-      <a href="${seeAllHref}" class="hero-see-all">Δες όλα &rarr;</a>
+      <a href="${seeAllHref}" class="hero-see-all">Δείτε όλα &rarr;</a>
     </div>
     <div class="hero-grid">
       <div class="hero-featured">${featuredHtml}</div>

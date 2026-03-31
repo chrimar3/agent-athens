@@ -197,7 +197,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
-  <div class="venue-page-content" id="main-content" tabindex="-1">
+  <main class="venue-page-content" id="main-content" tabindex="-1">
     <nav class="breadcrumb">
       <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${venue.name}
     </nav>
@@ -234,7 +234,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
       </div>
       ${moreEventsNote}
     </section>
-  </div>
+  </main>
 
   ${renderSiteFooter()}
   ${renderHamburgerScript()}

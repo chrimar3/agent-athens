@@ -447,6 +447,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   ${renderHamburgerMenu()}
   ${renderSearchOverlay()}
 
+  <main>
   <article id="main-content" tabindex="-1" itemscope itemtype="https://schema.org/${schemaType}"${isPast ? ' data-past="true"' : ''}>
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
       <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
@@ -504,6 +505,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
       ${relatedHtml}
     </div>
   </article>
+  </main>
 
   ${mobileBarHtml}
 
@@ -551,7 +553,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   return `
   <article class="event-card">
     <div class="card-image-wrapper" data-type="${event.type}">
-      ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
