@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: dd0ac3e82cc80142, c2b31fde730c24c4, 5ad721082b73ef02
+- Event IDs: c49811602142340d, 3083716e745a005e, 57a16b640435bf8d
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -77,28 +77,28 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2
-- **ID**: dd0ac3e82cc80142
+### Θα σ’ αγαπώ και του χρόνου
+- **ID**: c49811602142340d
 - **Type**: theater
-- **Venue**: ROES THEATER
+- **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-03-31
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/13911/
-- **Source**: ticketservices
+- **Date**: 2026-04-01T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
+- **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "ROES THEATER Athens" for context.
+- **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
 ### Το μαγικό εισιτήριο
-- **ID**: c2b31fde730c24c4
+- **ID**: 3083716e745a005e
 - **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-31T10:30:00
+- **Date**: 2026-04-01T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
 - **Source**: athinorama.gr
@@ -109,14 +109,14 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
 
-### Αλιγάτορες
-- **ID**: 5ad721082b73ef02
+### Στρακαστρούκες
+- **ID**: 57a16b640435bf8d
 - **Type**: dj_set
 - **Venue**: AUDITORIUM
 - **Price**: paid
-- **Date**: 2026-03-31T21:00:00
+- **Date**: 2026-04-01T21:00:00
 - **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/aligatores-10081818/
+- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -172,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/dd0ac3e82cc80142.md \
-  --tier=standard --event-id=dd0ac3e82cc80142 \
-  --event-type=theater --event-venue="ROES THEATER" \
-  --event-title="Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2" \
-  --event-date=2026-03-31 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c49811602142340d.md \
+  --tier=standard --event-id=c49811602142340d \
+  --event-type=theater --event-venue="ARROYO THEATER" \
+  --event-title="Θα σ’ αγαπώ και του χρόνου" \
+  --event-date=2026-04-01 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c2b31fde730c24c4.md \
-  --tier=premium --event-id=c2b31fde730c24c4 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3083716e745a005e.md \
+  --tier=premium --event-id=3083716e745a005e \
   --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
   --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-03-31 --event-price=paid
+  --event-date=2026-04-01 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/5ad721082b73ef02.md \
-  --tier=stub --event-id=5ad721082b73ef02 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/57a16b640435bf8d.md \
+  --tier=stub --event-id=57a16b640435bf8d \
   --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Αλιγάτορες" \
-  --event-date=2026-03-31 --event-price=paid
+  --event-title="Στρακαστρούκες" \
+  --event-date=2026-04-01 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| dd0ac3e82cc80142 | Η ΔΥΝΑΜΗ ΤΗΣ ΣΥΝΗΘΕΙΑΣ vol. 2 | /100 | | |
-| c2b31fde730c24c4 | Το μαγικό εισιτήριο | /100 | | |
-| 5ad721082b73ef02 | Αλιγάτορες | /100 | | |
+| c49811602142340d | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| 3083716e745a005e | Το μαγικό εισιτήριο | /100 | | |
+| 57a16b640435bf8d | Στρακαστρούκες | /100 | | |

@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 441568031fc2ea5a, 5fd4abcf28e13f8e, f6b2ec3f2d0b69e5
+- Event IDs: b3f70980aeae0a6f, 2ca3f43ce5a0b554, 569f102ab2594bd2
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,8 +31,9 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/exhibition-swinton.md` — structural reference
 - `exemplars/theater-tartuffe.md` — structural reference
+- `exemplars/classical-lpo-jarvi.md` — structural reference
+- `exemplars/exhibition-swinton.md` — structural reference
 
 ## Anti-patterns
 
@@ -76,44 +77,28 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 
 ## Events to Enrich
 
-### Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη
-- **ID**: 441568031fc2ea5a
-- **Type**: exhibition
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: with-ticket
-- **Date**: 2026-03-31T20:30:00
-- **Time**: 20:30
-- **URL**: https://www.megaron.gr/event/o-kipos-tou-epikourouekthesi-zografikis-tis-eriettas-vordoni/
-- **Source**: megaron.gr
-- **Category**: exhibition
-- **Target words (English)**: 200-300
-- **Target words (Greek)**: 170-260
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 200-300 words. Greek MUST be 170-260 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### Θα σ’ αγαπώ και του χρόνου
-- **ID**: 5fd4abcf28e13f8e
+### Ο Του-του και η Τσαφ-τσουφ
+- **ID**: b3f70980aeae0a6f
 - **Type**: theater
-- **Venue**: ARROYO THEATER
+- **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-03-31T10:30:00
+- **Date**: 2026-04-01T10:30:00
 - **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
+- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
 - **Target words (English)**: 120-180
 - **Target words (Greek)**: 100-155
 - **Structure**: hybrid
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
-- **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
 ### Η βασίλισσα των πάντων
-- **ID**: f6b2ec3f2d0b69e5
+- **ID**: 2ca3f43ce5a0b554
 - **Type**: concert
 - **Venue**: Μέγαρο Μουσικής Αθηνών
 - **Price**: paid
-- **Date**: 2026-03-31T12:30:00
+- **Date**: 2026-04-01T12:30:00
 - **Time**: 12:30
 - **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
 - **Source**: athinorama.gr
@@ -123,6 +108,38 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **Structure**: full-8-section
 - **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
 - **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
+### SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set)
+- **ID**: 569f102ab2594bd2
+- **Type**: dj_set
+- **Venue**: Astron
+- **Price**: paid
+- **Date**: 2026-04-02T23:00:00
+- **Time**: 23:00
+- **URL**: https://www.clubber.gr/events/sakta-vol-4-pentti-igor-skyddsrum-sonic-gammadodeka-kera-vinyl-set/
+- **Source**: clubber.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel** (from database):
+  ```
+  ### Astron Club
+  | Field | Data |
+  |-------|------|
+  | **Address** | Leoforos Konstantinoupoleos 121, Gazi |
+  | **Metro** | Kerameikos (Blue) |
+  | **Capacity** | ~150 ("the box") |
+  | **Entry** | €10-15 |
+  | **Door Policy** | Berlin-lite selection — singles > groups, couples sometimes rejected, "look like you dance" |
+  | **Drinks** | Alfa beer ONLY, €5 |
+  | **Finding it** | NO SIGN — look for shaking windows |
+  | **Acts** | Helena Hauff, DJ Bone caliber |
+  | **Note** | Relocated to Gazi summer 2024 |
+  
+  ---
+  ```
 
 ---
 
@@ -171,33 +188,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/441568031fc2ea5a.md \
-  --tier=standard --event-id=441568031fc2ea5a \
-  --event-type=exhibition --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη" \
-  --event-date=2026-03-31 --event-price=with-ticket
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b3f70980aeae0a6f.md \
+  --tier=standard --event-id=b3f70980aeae0a6f \
+  --event-type=theater --event-venue="Olvio" \
+  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
+  --event-date=2026-04-01 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5fd4abcf28e13f8e.md \
-  --tier=standard --event-id=5fd4abcf28e13f8e \
-  --event-type=theater --event-venue="ARROYO THEATER" \
-  --event-title="Θα σ’ αγαπώ και του χρόνου" \
-  --event-date=2026-03-31 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/f6b2ec3f2d0b69e5.md \
-  --tier=premium --event-id=f6b2ec3f2d0b69e5 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/2ca3f43ce5a0b554.md \
+  --tier=premium --event-id=2ca3f43ce5a0b554 \
   --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
   --event-title="Η βασίλισσα των πάντων" \
-  --event-date=2026-03-31 --event-price=paid
+  --event-date=2026-04-01 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/569f102ab2594bd2.md \
+  --tier=stub --event-id=569f102ab2594bd2 \
+  --event-type=dj_set --event-venue="Astron" \
+  --event-title="SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set)" \
+  --event-date=2026-04-02 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 441568031fc2ea5a | Ο Κήπος του Επίκουρου – Έκθεση ζωγραφικής της Εριέττας Βορδώνη | /100 | | |
-| 5fd4abcf28e13f8e | Θα σ’ αγαπώ και του χρόνου | /100 | | |
-| f6b2ec3f2d0b69e5 | Η βασίλισσα των πάντων | /100 | | |
+| b3f70980aeae0a6f | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 2ca3f43ce5a0b554 | Η βασίλισσα των πάντων | /100 | | |
+| 569f102ab2594bd2 | SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set) | /100 | | |

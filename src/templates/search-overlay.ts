@@ -20,7 +20,7 @@ export function renderSearchOverlay(): string {
       <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
       </svg>
-      <input class="search-input" type="search" placeholder="Αναζήτηση εκδηλώσεων…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results-list" aria-activedescendant="" aria-haspopup="listbox">
+      <input class="search-input" type="search" placeholder="Αναζήτηση εκδηλώσεων…" aria-label="Αναζήτηση εκδηλώσεων" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results-list" aria-activedescendant="" aria-haspopup="listbox">
       <button class="search-clear-btn" aria-label="Καθαρισμός" type="button" style="display:none">&times;</button>
     </div>
     <div class="search-skeleton" style="display:none">

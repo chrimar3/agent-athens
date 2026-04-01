@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System Audit — Agent Athens</title>
+<style>
+  :root { --bg: #0d0d0d; --surface: #1a1a1a; --card: #242424; --text: #f0f0f0; --muted: #a0a0a0; --accent: #f5e642; --red: #ef2c46; --green: #34D399; --orange: #FBBF24; --blue: #7eb8f7; --font: 'Manrope', system-ui, sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; padding: 40px 24px; max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 48px; }
+  h2 { font-size: 1.5rem; font-weight: 700; margin: 48px 0 24px; padding-bottom: 8px; border-bottom: 1px solid rgba(240,240,240,0.15); }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; }
+  p, li { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+  ul { padding-left: 20px; margin: 8px 0 16px; }
+  li { margin-bottom: 6px; }
+
+  .grade-banner { display: flex; align-items: center; gap: 24px; background: var(--surface); border-radius: 12px; padding: 32px; margin-bottom: 40px; border: 1px solid rgba(240,240,240,0.1); }
+  .grade-circle { width: 80px; height: 80px; border-radius: 50%; background: var(--accent); color: #0d0d0d; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; flex-shrink: 0; }
+  .grade-text h3 { margin: 0 0 4px; color: var(--text); font-size: 1.25rem; }
+  .grade-text p { margin: 0; }
+
+  .scorecard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0; }
+  .score-item { background: var(--surface); border-radius: 8px; padding: 20px; border: 1px solid rgba(240,240,240,0.08); }
+  .score-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+  .score-value { font-size: 1.5rem; font-weight: 700; }
+  .score-value.pass { color: var(--green); }
+  .score-value.warn { color: var(--orange); }
+  .score-value.fail { color: var(--red); }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.875rem; }
+  th { text-align: left; padding: 10px 12px; background: var(--surface); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.8px; }
+  td { padding: 10px 12px; border-bottom: 1px solid rgba(240,240,240,0.06); }
+  tr:hover td { background: rgba(240,240,240,0.03); }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-critical { background: rgba(239,44,70,0.2); color: var(--red); }
+  .badge-high { background: rgba(251,191,36,0.2); color: var(--orange); }
+  .badge-medium { background: rgba(126,184,247,0.2); color: var(--blue); }
+  .badge-low { background: rgba(52,211,153,0.2); color: var(--green); }
+  .badge-pass { background: rgba(52,211,153,0.15); color: var(--green); }
+
+  .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 12px 0; }
+  .token-chip { background: var(--surface); border-radius: 6px; padding: 8px 12px; font-size: 0.8rem; font-family: monospace; }
+  .token-chip .label { color: var(--muted); font-size: 0.65rem; display: block; margin-bottom: 2px; font-family: var(--font); }
+
+  code { background: var(--surface); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+  .section-anchor { color: var(--accent); text-decoration: none; }
+  .finding-block { background: var(--surface); border-radius: 8px; padding: 16px 20px; margin: 12px 0; border-left: 3px solid var(--orange); }
+  .finding-block.critical { border-left-color: var(--red); }
+  .finding-block.good { border-left-color: var(--green); }
+  .finding-block h4 { font-size: 0.9rem; color: var(--text); margin-bottom: 6px; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap">
+</head>
+<body>
+
+<h1>Design System Audit</h1>
+<p class="subtitle">agent athens &mdash; March 31, 2026</p>
+
+<div class="grade-banner">
+  <div class="grade-circle">B+</div>
+  <div class="grade-text">
+    <h3>Strong foundation with room for token discipline</h3>
+    <p>99 design tokens, WCAG AA compliant, solid component architecture. Key improvements: reduce hardcoded values, add missing focus states, complete spacing/radius scales.</p>
+  </div>
+</div>
+
+<div class="scorecard">
+  <div class="score-item">
+    <div class="score-label">Design Tokens</div>
+    <div class="score-value pass">99</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">WCAG Compliance</div>
+    <div class="score-value pass">AA</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Contrast Ratios</div>
+    <div class="score-value pass">All &gt;4.5:1</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Hardcoded Values</div>
+    <div class="score-value warn">~60</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Missing Focus States</div>
+    <div class="score-value warn">7</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Semantic HTML</div>
+    <div class="score-value pass">Pass</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>1. Token Coverage</h2>
+
+<h3>What's working well</h3>
+<div class="finding-block good">
+  <h4>Comprehensive token layer</h4>
+  <p>The <code>:root</code> block defines 99 tokens across all six categories: colors (28), typography (13), spacing (8), motion (9), borders (4), shadows (4), z-index (9), safe areas (4), and 20 event-type colors. Transitions consistently use <code>var(--t-*)</code> tokens throughout.</p>
+</div>
+
+<h3>Gaps in the token scales</h3>
+
+<table>
+  <tr><th>Scale</th><th>Defined</th><th>Missing (used in CSS)</th></tr>
+  <tr><td>Spacing</td><td>4, 8, 12, 16, 24, 32, 64, 96 px</td><td>6, 10, 14, 15, 20, 30, 40, 48, 72, 80 px</td></tr>
+  <tr><td>Border Radius</td><td>4, 8, 12, 999 px</td><td>2, 10, 16 px; <code>50%</code> (circles)</td></tr>
+  <tr><td>Shadows</td><td>sm, md, lg, xl</td><td>3 custom shadows don't match tokens</td></tr>
+  <tr><td>Type Scale</td><td>9 steps (hero→ui)</td><td>18px, 22px, 28px, 40px hardcoded</td></tr>
+</table>
+
+<h3>Unused / dormant tokens</h3>
+<div class="token-grid">
+  <div class="token-chip"><span class="label">Never used</span>--focus-ring-invert</div>
+  <div class="token-chip"><span class="label">Never used</span>--font-weight-semibold</div>
+  <div class="token-chip"><span class="label">Never used</span>--leading-card</div>
+  <div class="token-chip"><span class="label">Never used</span>--leading-ui</div>
+  <div class="token-chip"><span class="label">Rarely used</span>--ease-in-out</div>
+  <div class="token-chip"><span class="label">Rarely used</span>--ease-out-hard</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>2. Hardcoded Values</h2>
+
+<p>~60 instances across the CSS where raw values bypass tokens. The biggest offenders by category:</p>
+
+<h3>Font sizes (14 instances)</h3>
+<table>
+  <tr><th>Line</th><th>Selector</th><th>Value</th><th>Suggested Token</th></tr>
+  <tr><td>605</td><td>.site-logo</td><td>18px</td><td>--type-body-lg (18px) or new --type-logo</td></tr>
+  <tr><td>1075</td><td>.event-practical h2</td><td>1.1rem</td><td>--type-h3 (1.25rem) or --type-body-lg</td></tr>
+  <tr><td>1080</td><td>.practical-table th</td><td>0.85rem</td><td>--type-small (0.875rem)</td></tr>
+  <tr><td>1784</td><td>.hero-card-title</td><td>28px</td><td>--type-h2 (1.75rem = 28px)</td></tr>
+  <tr><td>1798</td><td>.hero-card-desc</td><td>14px</td><td>--type-small</td></tr>
+  <tr><td>1900</td><td>.hero-card-title (mobile)</td><td>22px</td><td>New token or --type-h2 mobile</td></tr>
+  <tr><td>1914</td><td>.content-page h1</td><td>40px</td><td>--type-h1 (2.5rem = 40px)</td></tr>
+  <tr><td>2209</td><td>.page-header h1</td><td>2rem</td><td>--type-h1</td></tr>
+  <tr><td>2312</td><td>.hub-card-title</td><td>0.875rem</td><td>--type-small</td></tr>
+</table>
+
+<h3>Spacing (20+ instances)</h3>
+<p>Values like 6px, 10px, 15px, 20px, 40px, 48px, 72px, 80px are used in padding/margin without tokens. The spacing scale jumps from 32px straight to 64px, missing the 40px and 48px steps that the layout frequently needs.</p>
+
+<h3>Border radius (8 instances)</h3>
+<p><code>border-radius: 50%</code> used for circles (6 places), <code>16px</code> for panels (2 places), <code>10px</code> for badges, <code>2px</code> for handles — none have tokens.</p>
+
+<h3>Z-index (6 instances)</h3>
+<p>Hardcoded <code>z-index: 1</code>, <code>2</code>, <code>199</code>, <code>201</code> create implicit stacking that could conflict with the named scale.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>3. Component State Coverage</h2>
+
+<h3>Well-covered components</h3>
+<table>
+  <tr><th>Component</th><th>:hover</th><th>:focus-visible</th><th>:active</th><th>:disabled</th></tr>
+  <tr><td>.edp-cta (CTA button)</td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td><td>—</td><td>—</td></tr>
+  <tr><td>.filter-pill</td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td></tr>
+  <tr><td>.card-link (event cards)</td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td><td>—</td><td>—</td></tr>
+  <tr><td>.search-result-item</td><td><span class="badge badge-pass">Yes</span></td><td><span class="badge badge-pass">Yes</span></td><td>—</td><td>—</td></tr>
+  <tr><td>.hero-card--featured</td><td><span class="badge badge-pass">Yes</span></td><td>—</td><td>—</td><td>—</td></tr>
+</table>
+
+<h3>Missing focus states</h3>
+<div class="finding-block">
+  <h4>7 interactive elements lack :focus-visible</h4>
+  <p>These elements have :hover but no keyboard focus indicator:</p>
+  <ul>
+    <li><code>.nav-search-btn</code> — search button in header</li>
+    <li><code>.hamburger-btn</code> — mobile menu toggle</li>
+    <li><code>.filter-pill-dismiss</code> — filter clear button</li>
+    <li><code>.mobile-menu-items a</code> — mobile nav links</li>
+    <li><code>.footer-links a</code> — footer navigation</li>
+    <li><code>.edp-read-more</code> — "Read more" expand button</li>
+    <li><code>.search-input</code> — search text field (relies on browser default)</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>4. Accessibility (Live Site)</h2>
+
+<h3>What's passing</h3>
+<div class="finding-block good">
+  <h4>WCAG AA contrast — all text passes</h4>
+  <p>Primary text at 18.43:1, secondary at 7.01:1, tertiary at 4.5:1+. No sub-12px fonts anywhere on the site. All 33 images have alt text. Proper landmarks: <code>&lt;main&gt;</code>, <code>&lt;header role="banner"&gt;</code>, <code>&lt;footer role="contentinfo"&gt;</code>, <code>&lt;nav aria-label&gt;</code>. Skip link present. Heading hierarchy correct (H1→H2→H3, no skips). Reduced motion preference respected.</p>
+</div>
+
+<h3>Issues found</h3>
+
+<div class="finding-block critical">
+  <h4><span class="badge badge-critical">Critical</span> Search input has no accessible label</h4>
+  <p>The <code>&lt;input type="search"&gt;</code> has only a placeholder — no <code>aria-label</code>, no <code>&lt;label&gt;</code>, no <code>aria-labelledby</code>. Screen readers cannot identify this field. Fix: add <code>aria-label="Αναζήτηση εκδηλώσεων"</code>.</p>
+</div>
+
+<div class="finding-block">
+  <h4><span class="badge badge-high">Major</span> "Read More" button below 44px touch target</h4>
+  <p>The "Περισσότερα ▾" button measures 114x36px — below the WCAG 2.5.5 minimum of 44px height. Fix: add <code>min-height: 44px</code> to <code>.edp-read-more</code>.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>5. Naming Conventions</h2>
+
+<div class="finding-block good">
+  <h4>Consistent BEM-like naming throughout</h4>
+  <p>Clear prefixes: <code>.card-*</code>, <code>.edp-*</code>, <code>.filter-*</code>, <code>.hero-*</code>, <code>.search-*</code>, <code>.hub-*</code>. State classes use <code>.is-*</code> pattern (<code>.is-open</code>, <code>.is-active</code>, <code>.is-disabled</code>, <code>.is-loaded</code>, <code>.is-selected</code>).</p>
+</div>
+
+<h3>Minor inconsistencies</h3>
+<table>
+  <tr><th>Selector</th><th>Issue</th><th>Suggestion</th></tr>
+  <tr><td>.event-practical</td><td>Prefix doesn't match <code>.edp-*</code> pattern for detail page</td><td>.edp-practical</td></tr>
+  <tr><td>.open-now-badge</td><td>Uses <code>open-now</code> instead of component prefix</td><td>.edp-open-badge or .badge-open</td></tr>
+  <tr><td>.related-pages</td><td>Generic, not scoped</td><td>.page-related or .content-related</td></tr>
+  <tr><td>.page-header</td><td>Too generic for scoped component</td><td>Scoped under parent selector</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2>6. Recommended Actions</h2>
+
+<table>
+  <tr><th>Priority</th><th>Action</th><th>Impact</th><th>Effort</th></tr>
+  <tr>
+    <td><span class="badge badge-critical">P0</span></td>
+    <td>Add <code>aria-label</code> to search input</td>
+    <td>WCAG compliance</td>
+    <td>1 line</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-critical">P0</span></td>
+    <td>Increase .edp-read-more min-height to 44px</td>
+    <td>Touch target compliance</td>
+    <td>1 line</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-high">P1</span></td>
+    <td>Add :focus-visible to 7 interactive elements</td>
+    <td>Keyboard accessibility</td>
+    <td>~20 lines CSS</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-high">P1</span></td>
+    <td>Extend spacing scale: add --space-lg-xl (40px), --space-xl-2xl (48px)</td>
+    <td>Reduces ~15 hardcoded values</td>
+    <td>2 tokens + migration</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-medium">P2</span></td>
+    <td>Add --radius-circle: 50% and --radius-xl: 16px tokens</td>
+    <td>Eliminates 8 hardcoded radii</td>
+    <td>2 tokens + migration</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-medium">P2</span></td>
+    <td>Migrate ~14 hardcoded font-sizes to existing type scale tokens</td>
+    <td>Type consistency</td>
+    <td>14 line edits</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-medium">P2</span></td>
+    <td>Replace hardcoded z-index (199, 201) with named tokens</td>
+    <td>Predictable stacking</td>
+    <td>2 tokens + 6 edits</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-low">P3</span></td>
+    <td>Remove unused tokens (--focus-ring-invert, --leading-card, etc.)</td>
+    <td>Cleaner system</td>
+    <td>Delete 6 lines</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-low">P3</span></td>
+    <td>Rename .event-practical → .edp-practical for consistency</td>
+    <td>Naming convention</td>
+    <td>Find & replace</td>
+  </tr>
+</table>
+
+<p style="margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(240,240,240,0.1); color: var(--muted); font-size: 0.8rem;">
+  Generated by design system audit &mdash; agent athens &mdash; March 31, 2026
+</p>
+
+</body>
+</html>
