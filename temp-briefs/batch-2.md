@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: da57f71e422092d9, 655ba3e5140015f9, 76502a558b32ece9
+- Event IDs: 84f64f35ba68762f, 655ba3e5140015f9, bf4a8ce981c09c99
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,9 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "I Dynami tis Synithias vol."
-- "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
-- "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
 - "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
@@ -72,17 +69,20 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
 - "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
+- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
+- "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
+- "SAKTA vol."
 
 ---
 
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: da57f71e422092d9
+- **ID**: 84f64f35ba68762f
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-04-01T16:00:00
+- **Date**: 2026-04-02T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -124,21 +124,21 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
   ---
   ```
 
-### AEK BC - Asisa Joventut
-- **ID**: 76502a558b32ece9
+### Αθλητισμός για Όλους
+- **ID**: bf4a8ce981c09c99
 - **Type**: sports
-- **Venue**: Sunel Arena
-- **Price**: paid
-- **Date**: 2026-04-01T19:30:00
-- **Time**: 19:30
-- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-asisa-joventut/
+- **Venue**: ΚΠΙΣΝ
+- **Price**: tba
+- **Date**: 2026-04-05T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
 - **Source**: more.com
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
-- **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
+- **Category**: premium_showcase
+- **Target words (English)**: 400-600
+- **Target words (Greek)**: 340-510
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
+- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
 
 ---
 
@@ -187,11 +187,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/da57f71e422092d9.md \
-  --tier=standard --event-id=da57f71e422092d9 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/84f64f35ba68762f.md \
+  --tier=standard --event-id=84f64f35ba68762f \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-04-01 --event-price=paid
+  --event-date=2026-04-02 --event-price=paid
 ```
 
 ```bash
@@ -203,17 +203,17 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/76502a558b32ece9.md \
-  --tier=standard --event-id=76502a558b32ece9 \
-  --event-type=sports --event-venue="Sunel Arena" \
-  --event-title="AEK BC - Asisa Joventut" \
-  --event-date=2026-04-01 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/bf4a8ce981c09c99.md \
+  --tier=premium --event-id=bf4a8ce981c09c99 \
+  --event-type=sports --event-venue="ΚΠΙΣΝ" \
+  --event-title="Αθλητισμός για Όλους" \
+  --event-date=2026-04-05 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| da57f71e422092d9 | Το τσίρκο των σκιών | /100 | | |
+| 84f64f35ba68762f | Το τσίρκο των σκιών | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
-| 76502a558b32ece9 | AEK BC - Asisa Joventut | /100 | | |
+| bf4a8ce981c09c99 | Αθλητισμός για Όλους | /100 | | |

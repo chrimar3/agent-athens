@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: b3f70980aeae0a6f, 2ca3f43ce5a0b554, 569f102ab2594bd2
+- Event IDs: ee8adbb2b5a08bd8, 44945e64a8b356f8, 9f3c3f6a0b128cfe
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,9 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "I Dynami tis Synithias vol."
-- "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
-- "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
 - "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
@@ -72,17 +69,20 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
 - "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
+- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
+- "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
+- "SAKTA vol."
 
 ---
 
 ## Events to Enrich
 
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: b3f70980aeae0a6f
+- **ID**: ee8adbb2b5a08bd8
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-04-01T10:30:00
+- **Date**: 2026-04-02T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -93,53 +93,36 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### Η βασίλισσα των πάντων
-- **ID**: 2ca3f43ce5a0b554
+### FALAINES, Mr. TRICKSTER &amp; GLASSVALE
+- **ID**: 44945e64a8b356f8
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
-- **Price**: paid
-- **Date**: 2026-04-01T12:30:00
-- **Time**: 12:30
-- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
+- **Venue**: ΙΛΙΟΝ Plus
+- **Price**: tba
+- **Date**: 2026-04-02
+- **URL**: https://www.athinorama.gr/music/gig/falaines_mr_trickster_kai_glassvale_-10089639/
 - **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
-
-### SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set)
-- **ID**: 569f102ab2594bd2
-- **Type**: dj_set
-- **Venue**: Astron
-- **Price**: paid
-- **Date**: 2026-04-02T23:00:00
-- **Time**: 23:00
-- **URL**: https://www.clubber.gr/events/sakta-vol-4-pentti-igor-skyddsrum-sonic-gammadodeka-kera-vinyl-set/
-- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### Astron Club
-  | Field | Data |
-  |-------|------|
-  | **Address** | Leoforos Konstantinoupoleos 121, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~150 ("the box") |
-  | **Entry** | €10-15 |
-  | **Door Policy** | Berlin-lite selection — singles > groups, couples sometimes rejected, "look like you dance" |
-  | **Drinks** | Alfa beer ONLY, €5 |
-  | **Finding it** | NO SIGN — look for shaking windows |
-  | **Acts** | Helena Hauff, DJ Bone caliber |
-  | **Note** | Relocated to Gazi summer 2024 |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+
+### Στρακαστρούκες
+- **ID**: 9f3c3f6a0b128cfe
+- **Type**: dj_set
+- **Venue**: AUDITORIUM
+- **Price**: paid
+- **Date**: 2026-04-02T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
+- **Source**: athinorama.gr
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
 
 ---
 
@@ -188,26 +171,26 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/b3f70980aeae0a6f.md \
-  --tier=standard --event-id=b3f70980aeae0a6f \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ee8adbb2b5a08bd8.md \
+  --tier=standard --event-id=ee8adbb2b5a08bd8 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-04-01 --event-price=paid
+  --event-date=2026-04-02 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/2ca3f43ce5a0b554.md \
-  --tier=premium --event-id=2ca3f43ce5a0b554 \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Η βασίλισσα των πάντων" \
-  --event-date=2026-04-01 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/44945e64a8b356f8.md \
+  --tier=stub --event-id=44945e64a8b356f8 \
+  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
+  --event-title="FALAINES, Mr. TRICKSTER &amp; GLASSVALE" \
+  --event-date=2026-04-02 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/569f102ab2594bd2.md \
-  --tier=stub --event-id=569f102ab2594bd2 \
-  --event-type=dj_set --event-venue="Astron" \
-  --event-title="SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set)" \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9f3c3f6a0b128cfe.md \
+  --tier=stub --event-id=9f3c3f6a0b128cfe \
+  --event-type=dj_set --event-venue="AUDITORIUM" \
+  --event-title="Στρακαστρούκες" \
   --event-date=2026-04-02 --event-price=paid
 ```
 
@@ -215,6 +198,6 @@ After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| b3f70980aeae0a6f | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 2ca3f43ce5a0b554 | Η βασίλισσα των πάντων | /100 | | |
-| 569f102ab2594bd2 | SAKTA vol. 4: Pentti Igor (Skyddsrum & Sonic) + Gammadodeka + Kera (vinyl set) | /100 | | |
+| ee8adbb2b5a08bd8 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 44945e64a8b356f8 | FALAINES, Mr. TRICKSTER &amp; GLASSVALE | /100 | | |
+| 9f3c3f6a0b128cfe | Στρακαστρούκες | /100 | | |

@@ -856,6 +856,17 @@
     "lng": 23.7013,
     "type": "cultural_center"
   },
+  "Πόλις Πολυχώρος": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "ΠΟΛΙΣ Πολυχώρος, Μαρίνου Αντύπα",
+    "lat": 38.043464,
+    "lng": 23.771844,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-02"
+  },
   "Πολυχώρος Διέλευσις": {
     "name_en": "Dieleusis Cultural Center",
     "neighborhood": "Kypseli",

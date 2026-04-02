@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: c49811602142340d, 3083716e745a005e, 57a16b640435bf8d
+- Event IDs: 56dea65f551299eb, 4e1bac9ba550ae09, df5bfd7a1ed2e3b8
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,9 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "I Dynami tis Synithias vol."
-- "Pantelis Thalassinos and Panos Dimitrakopoulos perform a concert at St."
-- "Aligatores is a theater production of Andrew Keatley's Alligators at Auditorium on Sina Street in central Athens, running Mondays and Tuesdays through 31 March 2026."
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
 - "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
@@ -72,17 +69,20 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
 - "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
 - "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
+- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
+- "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
+- "SAKTA vol."
 
 ---
 
 ## Events to Enrich
 
 ### Θα σ’ αγαπώ και του χρόνου
-- **ID**: c49811602142340d
+- **ID**: 56dea65f551299eb
 - **Type**: theater
 - **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-04-01T10:30:00
+- **Date**: 2026-04-02T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
 - **Source**: athinorama.gr
@@ -93,30 +93,29 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### Το μαγικό εισιτήριο
-- **ID**: 3083716e745a005e
+### Η Νεφέλη Φασούλη Live στο Κύτταρο
+- **ID**: 4e1bac9ba550ae09
 - **Type**: concert
-- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Venue**: Κύτταρο
 - **Price**: paid
-- **Date**: 2026-04-01T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
-- **Source**: athinorama.gr
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+- **Date**: 2026-04-02
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/music/i-nefeli-fasouli-live-sto-kyttaro/
+- **Source**: more.com
+- **Category**: concert_local
+- **Target words (English)**: 80-120
+- **Target words (Greek)**: 70-100
+- **Structure**: three-part-block
+- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
+- **Venue intel**: Not in database. WebSearch "Κύτταρο Athens" for context.
 
-### Στρακαστρούκες
-- **ID**: 57a16b640435bf8d
+### &#171;Τοκάτα για την Κόρη με το Καμένο Πρόσωπο&#187;
+- **ID**: df5bfd7a1ed2e3b8
 - **Type**: dj_set
 - **Venue**: AUDITORIUM
-- **Price**: paid
-- **Date**: 2026-04-01T21:00:00
-- **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
+- **Price**: tba
+- **Date**: 2026-04-02
+- **URL**: https://www.athinorama.gr/music/gig/tokata_gia_tin_kori_me_to_kameno_prosopo-10089631/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
@@ -172,33 +171,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/c49811602142340d.md \
-  --tier=standard --event-id=c49811602142340d \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/56dea65f551299eb.md \
+  --tier=standard --event-id=56dea65f551299eb \
   --event-type=theater --event-venue="ARROYO THEATER" \
   --event-title="Θα σ’ αγαπώ και του χρόνου" \
-  --event-date=2026-04-01 --event-price=paid
+  --event-date=2026-04-02 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/3083716e745a005e.md \
-  --tier=premium --event-id=3083716e745a005e \
-  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
-  --event-title="Το μαγικό εισιτήριο" \
-  --event-date=2026-04-01 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4e1bac9ba550ae09.md \
+  --tier=stub --event-id=4e1bac9ba550ae09 \
+  --event-type=concert --event-venue="Κύτταρο" \
+  --event-title="Η Νεφέλη Φασούλη Live στο Κύτταρο" \
+  --event-date=2026-04-02 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/57a16b640435bf8d.md \
-  --tier=stub --event-id=57a16b640435bf8d \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/df5bfd7a1ed2e3b8.md \
+  --tier=stub --event-id=df5bfd7a1ed2e3b8 \
   --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Στρακαστρούκες" \
-  --event-date=2026-04-01 --event-price=paid
+  --event-title="&#171;Τοκάτα για την Κόρη με το Καμένο Πρόσωπο&#187;" \
+  --event-date=2026-04-02 --event-price=tba
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| c49811602142340d | Θα σ’ αγαπώ και του χρόνου | /100 | | |
-| 3083716e745a005e | Το μαγικό εισιτήριο | /100 | | |
-| 57a16b640435bf8d | Στρακαστρούκες | /100 | | |
+| 56dea65f551299eb | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| 4e1bac9ba550ae09 | Η Νεφέλη Φασούλη Live στο Κύτταρο | /100 | | |
+| df5bfd7a1ed2e3b8 | &#171;Τοκάτα για την Κόρη με το Καμένο Πρόσωπο&#187; | /100 | | |
