@@ -21,6 +21,7 @@
   --accent-primary: #f5e642;   /* Limit to: CTAs, active states, links, highlights, badges */
   --accent-secondary: #ef2c46; /* Limit to: urgency/live indicators only */
 
+  --border-whisper: rgba(240, 240, 240, 0.06);
   --border-subtle: rgba(240, 240, 240, 0.15);  /* was 0.10 — bumped for visibility */
   --border-default: rgba(240, 240, 240, 0.40);
   --border-active: rgba(240, 240, 240, 0.80);
@@ -133,6 +134,13 @@
   --z-overlay-above: 201;
   --z-modal: 300;
   --z-skip-link: 999;
+}
+
+/* ── Tabular numbers for aligned numeric data ─────── */
+.event-card-date, .event-card-price, .event-card-time,
+.hub-event-count, .comparison-table td,
+time, [data-price], [data-count] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Mobile type overrides ──────────────────────────── */
@@ -1108,7 +1116,7 @@ div#main-content {
   right: 0;
   z-index: var(--z-bottom-bar);
   background: var(--bg-elevated);
-  border-top: 1px solid var(--border-subtle);
+  box-shadow: 0 -1px 0 var(--border-whisper);
   padding: 12px 16px;
   padding-bottom: calc(12px + var(--safe-bottom));
   transform: translateY(100%);
@@ -1173,7 +1181,7 @@ div#main-content {
   height: 56px;
   display: flex;
   background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 0 var(--border-whisper);
   padding: 0;
 }
 
