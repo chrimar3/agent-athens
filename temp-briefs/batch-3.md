@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: ee8adbb2b5a08bd8, 44945e64a8b356f8, 9f3c3f6a0b128cfe
+- Event IDs: 5f37e86fdbe2d4d0, 0820d4422a956131, a1b4c0de84b4a716
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
-- "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
-- "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
-- "Ntenekedoupoli xana!"
-- "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
 - "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
 - "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
 - "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
@@ -72,17 +66,23 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
 - "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
 - "SAKTA vol."
+- "Tha s' agapo kai tou chronou is a baby theater performance at Theatro Arroyo in Keramikos, Athens, on 2 April 2026 at 10:30."
+- "Nefeli Fasouli Live is a concert at Kyttaro near Victoria Square in Athens on 2 April 2026, doors at 20:00, music from 21:00."
+- "Tokata gia tin Kori me to Kameno Prosopo is a contemporary oratorio at the Auditorium on Sina Street in central Athens on 2 April 2026 at 20:30."
+- "A puppet appears at arm's length and a ten-month-old reaches for it."
+- "FALAINES, Mr."
+- "Ten minutes before Easter bells ring in a Cretan village, a man named Konstantis stands holding candy and improvised jokes."
 
 ---
 
 ## Events to Enrich
 
 ### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: ee8adbb2b5a08bd8
+- **ID**: 5f37e86fdbe2d4d0
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-04-02T10:30:00
+- **Date**: 2026-04-03T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
 - **Source**: athinorama.gr
@@ -93,36 +93,37 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
 
-### FALAINES, Mr. TRICKSTER &amp; GLASSVALE
-- **ID**: 44945e64a8b356f8
+### ΤΖΑΜΑΛ
+- **ID**: 0820d4422a956131
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
+- **Venue**: Fuzz Club
 - **Price**: tba
-- **Date**: 2026-04-02
-- **URL**: https://www.athinorama.gr/music/gig/falaines_mr_trickster_kai_glassvale_-10089639/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+- **Date**: 2026-04-03
+- **Time**: 20:00
+- **URL**: https://www.more.com/gr-el/tickets/music/tzamal-10-xronia-live-stin-athina/
+- **Source**: more.com
+- **Category**: concert_major
+- **Target words (English)**: 120-200
+- **Target words (Greek)**: 100-170
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
+- **Venue intel**: Not in database. WebSearch "Fuzz Club Athens" for context.
 
-### Στρακαστρούκες
-- **ID**: 9f3c3f6a0b128cfe
+### Υπόγεια Ρεύματα &amp; Τσοπάνα Rave
+- **ID**: a1b4c0de84b4a716
 - **Type**: dj_set
-- **Venue**: AUDITORIUM
+- **Venue**: Κύτταρο
 - **Price**: paid
-- **Date**: 2026-04-02T21:00:00
+- **Date**: 2026-04-03T21:00:00
 - **Time**: 21:00
-- **URL**: https://www.athinorama.gr/theatre/performance/strakastroukes-10079547/
+- **URL**: https://www.athinorama.gr/music/gig/upogeia_reumata_kai_tsopana_rave-10089583/
 - **Source**: athinorama.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "AUDITORIUM Athens" for context.
+- **Venue intel**: Not in database. WebSearch "Κύτταρο Athens" for context.
 
 ---
 
@@ -171,33 +172,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/ee8adbb2b5a08bd8.md \
-  --tier=standard --event-id=ee8adbb2b5a08bd8 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/5f37e86fdbe2d4d0.md \
+  --tier=standard --event-id=5f37e86fdbe2d4d0 \
   --event-type=theater --event-venue="Olvio" \
   --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-04-02 --event-price=paid
+  --event-date=2026-04-03 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/44945e64a8b356f8.md \
-  --tier=stub --event-id=44945e64a8b356f8 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="FALAINES, Mr. TRICKSTER &amp; GLASSVALE" \
-  --event-date=2026-04-02 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/0820d4422a956131.md \
+  --tier=standard --event-id=0820d4422a956131 \
+  --event-type=concert --event-venue="Fuzz Club" \
+  --event-title="ΤΖΑΜΑΛ" \
+  --event-date=2026-04-03 --event-price=tba
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9f3c3f6a0b128cfe.md \
-  --tier=stub --event-id=9f3c3f6a0b128cfe \
-  --event-type=dj_set --event-venue="AUDITORIUM" \
-  --event-title="Στρακαστρούκες" \
-  --event-date=2026-04-02 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/a1b4c0de84b4a716.md \
+  --tier=stub --event-id=a1b4c0de84b4a716 \
+  --event-type=dj_set --event-venue="Κύτταρο" \
+  --event-title="Υπόγεια Ρεύματα &amp; Τσοπάνα Rave" \
+  --event-date=2026-04-03 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| ee8adbb2b5a08bd8 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 44945e64a8b356f8 | FALAINES, Mr. TRICKSTER &amp; GLASSVALE | /100 | | |
-| 9f3c3f6a0b128cfe | Στρακαστρούκες | /100 | | |
+| 5f37e86fdbe2d4d0 | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
+| 0820d4422a956131 | ΤΖΑΜΑΛ | /100 | | |
+| a1b4c0de84b4a716 | Υπόγεια Ρεύματα &amp; Τσοπάνα Rave | /100 | | |

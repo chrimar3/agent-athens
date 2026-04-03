@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 84f64f35ba68762f, 655ba3e5140015f9, bf4a8ce981c09c99
+- Event IDs: 27f2513ab7f3cf20, 655ba3e5140015f9, bf4a8ce981c09c99
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -57,12 +57,6 @@ These terms MUST remain untranslated in English descriptions:
 
 These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
 
-- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 17 March 2026 at 19:00."
-- "The 3rd Greek Beer Festival is a festival at Palio Amaxostasio OSY in Gazi, Athens, from 27 to 29 March 2026."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance at Theatro Avaton in Gazi, Athens, on 17 March 2026 at 18:00."
-- "In motion: Ena agalma pou to 'skase is a children's theater production at the Municipal Theater in Piraeus, Athens, running Sundays through 5 April 2026."
-- "Ntenekedoupoli xana!"
-- "Street Rituals with IMPVLSIV is a DJ set at B side Athens near Omonia in central Athens, on 18 March 2026 at 21:00."
 - "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
 - "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
 - "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
@@ -72,17 +66,23 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
 - "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
 - "SAKTA vol."
+- "Tha s' agapo kai tou chronou is a baby theater performance at Theatro Arroyo in Keramikos, Athens, on 2 April 2026 at 10:30."
+- "Nefeli Fasouli Live is a concert at Kyttaro near Victoria Square in Athens on 2 April 2026, doors at 20:00, music from 21:00."
+- "Tokata gia tin Kori me to Kameno Prosopo is a contemporary oratorio at the Auditorium on Sina Street in central Athens on 2 April 2026 at 20:30."
+- "A puppet appears at arm's length and a ten-month-old reaches for it."
+- "FALAINES, Mr."
+- "Ten minutes before Easter bells ring in a Cretan village, a man named Konstantis stands holding candy and improvised jokes."
 
 ---
 
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 84f64f35ba68762f
+- **ID**: 27f2513ab7f3cf20
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-04-02T16:00:00
+- **Date**: 2026-04-03T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -187,11 +187,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/84f64f35ba68762f.md \
-  --tier=standard --event-id=84f64f35ba68762f \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/27f2513ab7f3cf20.md \
+  --tier=standard --event-id=27f2513ab7f3cf20 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-04-02 --event-price=paid
+  --event-date=2026-04-03 --event-price=paid
 ```
 
 ```bash
@@ -214,6 +214,6 @@ After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 84f64f35ba68762f | Το τσίρκο των σκιών | /100 | | |
+| 27f2513ab7f3cf20 | Το τσίρκο των σκιών | /100 | | |
 | 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
 | bf4a8ce981c09c99 | Αθλητισμός για Όλους | /100 | | |

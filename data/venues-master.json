@@ -7,6 +7,17 @@
     "lng": 23.7112,
     "type": "theater"
   },
+  "41 Street Cafe": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "41 Street Cafe, 41",
+    "lat": 37.953903,
+    "lng": 23.745394,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-03"
+  },
   "Αγγέλων Βήμα": {
     "name_en": "Angelon Vima",
     "neighborhood": "Metaxourgeio",
