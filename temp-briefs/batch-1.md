@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 370905a842c72a22, 4c8ab467ac64f462, eaee400d9d6b61de
+- Event IDs: 702e4b31b286f1f9, f9786873e473afaa, fc3eb637a74aff34
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,36 +53,16 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
-## Recent Openings (DO NOT REUSE)
-
-These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
-
-- "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
-- "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
-- "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
-- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
-- "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
-- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
-- "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
-- "SAKTA vol."
-- "Tha s' agapo kai tou chronou is a baby theater performance at Theatro Arroyo in Keramikos, Athens, on 2 April 2026 at 10:30."
-- "Nefeli Fasouli Live is a concert at Kyttaro near Victoria Square in Athens on 2 April 2026, doors at 20:00, music from 21:00."
-- "Tokata gia tin Kori me to Kameno Prosopo is a contemporary oratorio at the Auditorium on Sina Street in central Athens on 2 April 2026 at 20:30."
-- "A puppet appears at arm's length and a ten-month-old reaches for it."
-- "FALAINES, Mr."
-- "Ten minutes before Easter bells ring in a Cretan village, a man named Konstantis stands holding candy and improvised jokes."
-
 ---
 
 ## Events to Enrich
 
 ### Θα σ’ αγαπώ και του χρόνου
-- **ID**: 370905a842c72a22
+- **ID**: 702e4b31b286f1f9
 - **Type**: theater
 - **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-04-03T10:30:00
+- **Date**: 2026-04-04T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
 - **Source**: athinorama.gr
@@ -93,37 +73,51 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
 - **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### ΑΝΗΜΕΡΑ - Billie Kark x ody icons
-- **ID**: 4c8ab467ac64f462
+### Αντίγνωμος + Friends
+- **ID**: f9786873e473afaa
 - **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
+- **Venue**: AN Club
 - **Price**: paid
-- **Date**: 2026-04-03
-- **Time**: 20:30
-- **URL**: https://www.ticketservices.gr/event/14092/
+- **Date**: 2026-04-04
+- **Time**: 21:00
+- **URL**: https://www.ticketservices.gr/event/14091/
 - **Source**: ticketservices
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
+- **Venue intel** (from database):
+  ```
+  ### AN Club
+  | Field | Data |
+  |-------|------|
+  | **Address** | Exarchia |
+  | **Metro** | Omonoia or Panepistimio (walk) |
+  | **Capacity** | ~400 |
+  | **Tickets** | €15-25 typical, €25-35 international acts |
+  | **Timing** | LATE STARTS — bands often after 22:00 |
+  | **History** | 30+ years, Athens' oldest rock venue |
+  | **Genre** | Hardcore rock/punk/metal |
+  
+  ---
+  ```
 
-### Tensile_Gathering
-- **ID**: eaee400d9d6b61de
+### Nikkolas Dashy + S.ant
+- **ID**: fc3eb637a74aff34
 - **Type**: dj_set
-- **Venue**: Patision65
-- **Price**: tba
-- **Date**: 2026-04-03T19:30:00
-- **Time**: 19:30
-- **URL**: https://ra.co/events/2406931
-- **Source**: residentadvisor
+- **Venue**: El Chapo
+- **Price**: door
+- **Date**: 2026-04-04T01:30:00
+- **Time**: 01:30
+- **URL**: https://www.clubber.gr/events/nikkolas-dashy-s-ant/
+- **Source**: clubber.gr
 - **Category**: concert_local
 - **Target words (English)**: 80-120
 - **Target words (Greek)**: 70-100
 - **Structure**: three-part-block
 - **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Patision65 Athens" for context.
+- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
 
 ---
 
@@ -172,33 +166,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/370905a842c72a22.md \
-  --tier=standard --event-id=370905a842c72a22 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/702e4b31b286f1f9.md \
+  --tier=standard --event-id=702e4b31b286f1f9 \
   --event-type=theater --event-venue="ARROYO THEATER" \
   --event-title="Θα σ’ αγαπώ και του χρόνου" \
-  --event-date=2026-04-03 --event-price=paid
+  --event-date=2026-04-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/4c8ab467ac64f462.md \
-  --tier=stub --event-id=4c8ab467ac64f462 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="ΑΝΗΜΕΡΑ - Billie Kark x ody icons" \
-  --event-date=2026-04-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f9786873e473afaa.md \
+  --tier=stub --event-id=f9786873e473afaa \
+  --event-type=concert --event-venue="AN Club" \
+  --event-title="Αντίγνωμος + Friends" \
+  --event-date=2026-04-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/eaee400d9d6b61de.md \
-  --tier=stub --event-id=eaee400d9d6b61de \
-  --event-type=dj_set --event-venue="Patision65" \
-  --event-title="Tensile_Gathering" \
-  --event-date=2026-04-03 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/fc3eb637a74aff34.md \
+  --tier=stub --event-id=fc3eb637a74aff34 \
+  --event-type=dj_set --event-venue="El Chapo" \
+  --event-title="Nikkolas Dashy + S.ant" \
+  --event-date=2026-04-04 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 370905a842c72a22 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
-| 4c8ab467ac64f462 | ΑΝΗΜΕΡΑ - Billie Kark x ody icons | /100 | | |
-| eaee400d9d6b61de | Tensile_Gathering | /100 | | |
+| 702e4b31b286f1f9 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| f9786873e473afaa | Αντίγνωμος + Friends | /100 | | |
+| fc3eb637a74aff34 | Nikkolas Dashy + S.ant | /100 | | |

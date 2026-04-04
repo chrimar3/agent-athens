@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: 27f2513ab7f3cf20, 655ba3e5140015f9, bf4a8ce981c09c99
+- Event IDs: d92d0d7d028adb00, 0ed4202c1aa2a351, bf4a8ce981c09c99
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,36 +53,16 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
-## Recent Openings (DO NOT REUSE)
-
-These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
-
-- "ASTORIA is a musical theater production at Theatro Pallas on Voukourestiou in central Athens, premiering 19 March 2026."
-- "To Magiko Eisitirio is a Sunday-morning theater performance for infants at Megaron Mousikis Athinon in Ampelokipoi, Athens, through 29 March 2026."
-- "Nikolai Lugansky and Vadim Rudenko perform a two-piano recital at Parnassos Literary Society on Plateia Karitsi in central Athens, on 19 March 2026 at 20:30."
-- "To Megalo Mas Tsirko is a show at Theatron Ellinikos Kosmos in Tavros, Athens, on 19 March 2026."
-- "Nailstorm Charity Festival is a metal festival at AN Club in Exarchia, Athens, on 8 April 2026."
-- "Ilias, o Protos Gatos Choreftis tis Gatoistorias is a children's performance in its third season at Theatro Avaton in Gazi, Athens, on 19 March 2026."
-- "O Tou-tou kai i Tsaf-tsouf is a baby theater performance at Olvio in Gazi, Athens, on 1 April 2026 at 10:30."
-- "I Vasilissa ton Panton is a baby theater performance at Megaron Mousikis Athinon in Ampelokipoi, Athens, on 1 April 2026 at 12:30."
-- "SAKTA vol."
-- "Tha s' agapo kai tou chronou is a baby theater performance at Theatro Arroyo in Keramikos, Athens, on 2 April 2026 at 10:30."
-- "Nefeli Fasouli Live is a concert at Kyttaro near Victoria Square in Athens on 2 April 2026, doors at 20:00, music from 21:00."
-- "Tokata gia tin Kori me to Kameno Prosopo is a contemporary oratorio at the Auditorium on Sina Street in central Athens on 2 April 2026 at 20:30."
-- "A puppet appears at arm's length and a ten-month-old reaches for it."
-- "FALAINES, Mr."
-- "Ten minutes before Easter bells ring in a Cretan village, a man named Konstantis stands holding candy and improvised jokes."
-
 ---
 
 ## Events to Enrich
 
 ### Το τσίρκο των σκιών
-- **ID**: 27f2513ab7f3cf20
+- **ID**: d92d0d7d028adb00
 - **Type**: show
 - **Venue**: Coronet Theater
 - **Price**: paid
-- **Date**: 2026-04-03T16:00:00
+- **Date**: 2026-04-04T16:00:00
 - **Time**: 16:00
 - **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
 - **Source**: athinorama.gr
@@ -93,36 +73,20 @@ These opening sentences were used in recent batches. Use a DIFFERENT entry strat
 - **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
 - **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
 
-### Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar
-- **ID**: 655ba3e5140015f9
+### 3ο Greek Beer Festival
+- **ID**: 0ed4202c1aa2a351
 - **Type**: festival
-- **Venue**: Bios Ρομάντσο
-- **Price**: paid
-- **Date**: 2026-04-03T23:00:00
-- **Time**: 23:00
-- **URL**: https://ra.co/events/2387142
-- **Source**: residentadvisor
+- **Venue**: Παλιό Αμαξοστάσιο ΟΣΥ
+- **Price**: tba
+- **Date**: 2027-03-27
+- **URL**: https://www.athinorama.gr/music/gig/3o_greek_beer_festival-10089550/
+- **Source**: athinorama.gr
 - **Category**: festival_parent
 - **Target words (English)**: 250-400
 - **Target words (Greek)**: 215-340
 - **Structure**: full-8-section
 - **HARD CONSTRAINT**: English description MUST be 250-400 words. Greek MUST be 215-340 words.
-- **Venue intel** (from database):
-  ```
-  ### Bios
-  | Field | Data |
-  |-------|------|
-  | **Address** | Pireos 84, Gazi |
-  | **Metro** | Kerameikos (Blue) |
-  | **Capacity** | ~300 across spaces |
-  | **Spaces** | Tesla bar (ground, winter), basement (Funktion-One), rooftop (summer, Acropolis views) |
-  | **Drinks** | Cocktails €9 (pricey for Athens) |
-  | **Door Policy** | Relaxed |
-  | **Notable acts** | Autechre, Mala, Objekt |
-  | **Character** | Multi-space arts center, Bauhaus building |
-  
-  ---
-  ```
+- **Venue intel**: Not in database. WebSearch "Παλιό Αμαξοστάσιο ΟΣΥ Athens" for context.
 
 ### Αθλητισμός για Όλους
 - **ID**: bf4a8ce981c09c99
@@ -187,19 +151,19 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/27f2513ab7f3cf20.md \
-  --tier=standard --event-id=27f2513ab7f3cf20 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d92d0d7d028adb00.md \
+  --tier=standard --event-id=d92d0d7d028adb00 \
   --event-type=show --event-venue="Coronet Theater" \
   --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-04-03 --event-price=paid
+  --event-date=2026-04-04 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/655ba3e5140015f9.md \
-  --tier=premium --event-id=655ba3e5140015f9 \
-  --event-type=festival --event-venue="Bios Ρομάντσο" \
-  --event-title="Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar" \
-  --event-date=2026-04-03 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/0ed4202c1aa2a351.md \
+  --tier=premium --event-id=0ed4202c1aa2a351 \
+  --event-type=festival --event-venue="Παλιό Αμαξοστάσιο ΟΣΥ" \
+  --event-title="3ο Greek Beer Festival" \
+  --event-date=2027-03-27 --event-price=tba
 ```
 
 ```bash
@@ -214,6 +178,6 @@ After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 27f2513ab7f3cf20 | Το τσίρκο των σκιών | /100 | | |
-| 655ba3e5140015f9 | Polja Festival Showcase with André Pahl, K.atou, tadi, Kӣr, Houschyar | /100 | | |
+| d92d0d7d028adb00 | Το τσίρκο των σκιών | /100 | | |
+| 0ed4202c1aa2a351 | 3ο Greek Beer Festival | /100 | | |
 | bf4a8ce981c09c99 | Αθλητισμός για Όλους | /100 | | |
