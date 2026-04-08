@@ -38,7 +38,7 @@ if [[ -z "$CLAUDE_BIN" ]]; then
 fi
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=3
-EVENTS_PER_BATCH=3
+EVENTS_PER_BATCH=4  # Raised from 3 on 2026-04-08 (throughput session). 4-event batches project ~1156s mean / ~1664s worst, safe under BATCH_TIMEOUT=1800. Target: 9→12 events/day (+33%).
 MIN_QUEUE=3
 BATCH_TIMEOUT=1800  # 30 minutes max per batch (batches avg 15-20 min)
 

@@ -944,3 +944,61 @@ This is a collaboration pattern, not a code pattern. It applies whenever diagnos
 - launchd `StartCalendarInterval` firing while the laptop is closed
 - Any test involving `ioreg -n AppleClamshellState` observed state
 - Network transitions (Wi-Fi drop, VPN reconnect) that require physically toggling the radio
+
+## Batch Sizing Constraints Pattern
+
+When changing `EVENTS_PER_BATCH` or `MAX_BATCHES` in `scripts/auto-enrich.sh`, five coupled constraints must hold simultaneously. This pattern documents the constraints and the projection methodology.
+
+### The five constraints
+
+```
+(1) MAX_BATCHES × BATCH_TIMEOUT + warmup_overhead ≤ LOCK_MAX_AGE
+(2) Projected 5th-percentile batch duration < BATCH_TIMEOUT (timeout safety margin)
+(3) Projected mean batch duration × MAX_BATCHES + scrape_phase_time < 2h (total run budget)
+(4) Brief token count per batch < context budget (~15K tokens ceiling; currently ~3.5K at 5 events)
+(5) Per-batch event ID list unique across concurrent batches (prevents manifest collision)
+```
+
+Constraint (1) is load-bearing for the lock-mtime recovery mechanism — if violated, the stale-lock check installed in the R2 session will force-kill valid in-progress runs. The numeric values must hold together, not in isolation.
+
+### Timing projection methodology
+
+Raw linear scaling (`new_duration = old_duration × new_count / old_count`) over-predicts because each batch has fixed per-batch overhead (warmup, brief load, exemplar reads). Use an affine model:
+
+```
+batch_duration ≈ fixed_cost + per_event_cost × N_events
+```
+
+**Fit the model from observed data:**
+1. Grep `logs/auto-enrich-*.log` for `completed in` lines to get durations
+2. Use at least 5-6 data points for stability
+3. Check the range: if max > 1.4 × mean, the distribution has a heavy upper tail — plan against the max, not the mean
+4. Extrapolate both mean and upper-tail:
+   - Mean projection: `fixed_cost + per_event_cost × new_N`
+   - Worst-case projection: `fixed_cost + per_event_cost × new_N × (max / mean)`
+5. If worst-case projection exceeds BATCH_TIMEOUT by any margin, fall back one step on N and recheck
+
+### The Step 0 → Step 1 → Step 2 → re-verify loop
+
+**Critical:** re-verify assumptions between steps when new data arrives. In the 2026-04-08 throughput session, Step 1 analysis used 5 batch samples (max 913s). A 6th batch completed during Step 2 at 1249s, shifting the worst-case projection from 1455s (safe) to 2082s (over-timeout). Without re-running the timing grep between Step 1 and Step 3, the change would have shipped with ~5% expected timeout rate. **Always re-verify distribution stats after any new batch completes during the session.**
+
+### Single-lever change rule
+
+Batch sizing changes come in three levers: events-per-batch, batches-per-run, runs-per-day. **Change one lever per session**, then collect ≥3 days of production data before changing another. Reasons:
+1. If something regresses, you know which lever caused it
+2. Lever interactions are non-obvious — a 4-event bump + a BATCH_TIMEOUT raise + a MAX_BATCHES bump together might pass all individual safety checks and still hit `LOCK_MAX_AGE` in combination
+3. Rollback blast radius stays bounded to one variable
+
+### Safe fallback hierarchy
+
+If a batch sizing change causes problems:
+1. **First line:** revert the changed variable to its prior value. One-line edit to `auto-enrich.sh`. Zero architectural impact.
+2. **Second line:** if reverting doesn't fully recover (e.g., queue state corruption from timed-out batches), also run `UPDATE enrichment_queue SET status='pending' WHERE status='in_progress' AND updated_at < datetime('now', '-1 day')` to re-enable events that got stuck.
+3. **Third line:** if the lock-mtime recovery mechanism failed and there's a zombie lock, `rm .auto-enrich.lock` after confirming no running `claude -p` process holds it (`pgrep -f "claude -p"`).
+
+### Never change these without a plan
+
+- `LOCK_MAX_AGE` — load-bearing for stale-lock recovery from the R2 session
+- `caffeinate -s` in the watchdog (line 303) — load-bearing for clamshell-on-AC survival
+- `MIN_QUEUE` floor — raising it above `EVENTS_PER_BATCH` causes skipped runs on low-content days, working against throughput goals
+- `temp-briefs/batch-N.md` naming convention — the save-batch.ts `--batch=N` flag expects this format

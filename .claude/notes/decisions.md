@@ -1095,3 +1095,37 @@ Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venue
 | Fallback trusts currentType for all venues (removed `!isMixedVenue` guard) | URL pass (Pass 3) now catches misclassifications at mixed venues, so fallback can trust scraper type for remaining events instead of defaulting to concert | 2026-04-06 |
 | ticketservices.gr and megaron.gr NOT added to url-category-patterns.json | Both use flat URL structures (`/event/<id>/` and `/event/<slug>/`) with no type-specific path segments. Concert, theater, and other types share identical URL patterns. No reliable signal for categorization | 2026-04-06 |
 | Known gap: concerts at theater venues from ticketservices/megaron sources | Without type-specific URLs, these events get venue-locked to theater. Medium-confidence URL patterns don't override venue lock (by design). Requires either: (a) source-specific scraper metadata, (b) artist-name keyword lists, or (c) manual correction | 2026-04-06 |
+
+## Enrichment Throughput Scaling — Lever (a) (2026-04-08)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Raise `EVENTS_PER_BATCH` from 3 to 4 in `scripts/auto-enrich.sh:41` | Baseline coverage KPI showed ~7% for the next-14-day window, capped by throughput not prioritization. Pipeline was producing ~9 events/day against ~15-18 new showable events/day. Conservative +33% bump demonstrates the lever works without touching the R2 watchdog timeout | 2026-04-08 |
+| Chose 4 over 5 despite lower throughput gain | Empirical timing data: 6 batches completed today ranged 657-1249s (mean 866s). 5-event linear projection put worst-case at ~2082s, exceeding the 1800s BATCH_TIMEOUT by ~280s. 4-event projection is 1156s mean / 1664s worst — safe with ~136s margin. 5 would have required also raising BATCH_TIMEOUT (Step 4), which would compound risk with the R2 clamshell fix that shipped the same day | 2026-04-08 |
+| Did NOT raise `MAX_BATCHES` from 3 | Batches run serially (confirmed from log: batch-2 starts exactly when batch-1 ends). Adding a 4th batch adds full wall-clock cost linearly and pushes `3 × BATCH_TIMEOUT` to within 0s of `LOCK_MAX_AGE=7200`. Hidden coupling makes it a 2-variable change, not 1 | 2026-04-08 |
+| Did NOT ship lever (c) (second daily run) in this session | Documented separately in `specs/throughput-scaling.md`. Deferred to dedicated session after ≥3 days of lever (a) production data. Lever (c) is launchd infra work (new plist), not a config value — different session shape | 2026-04-08 |
+| Did NOT adjust `MIN_QUEUE` to match new EVENTS_PER_BATCH | Keeping `MIN_QUEUE=3` means the script still runs on small-queue days rather than skipping. Strict alignment (`MIN_QUEUE=4`) would lose throughput on low-content days, opposite of session goal | 2026-04-08 |
+
+### Hidden coupling flagged during Step 0 (not triggered this session, documented for future)
+
+`LOCK_MAX_AGE` in `auto-enrich.sh:135` must satisfy `MAX_BATCHES × BATCH_TIMEOUT + warmup_overhead ≤ LOCK_MAX_AGE`. Current values: `3 × 1800 + ~1800 = 7200 = LOCK_MAX_AGE` (exactly at ceiling). **Any future change that raises `MAX_BATCHES` or `BATCH_TIMEOUT` MUST also raise `LOCK_MAX_AGE` proportionally**, or the lock-mtime recovery mechanism will force-kill valid in-progress runs. The constraint is load-bearing documentation in the comment on line 134.
+
+### Throughput rollback plan
+
+If post-change quality gate rejection rate rises meaningfully or `batch-N-review.md` files show "LEFT FOR REVIEW" more frequently than baseline: revert line 41 to `EVENTS_PER_BATCH=3`. Single-line change, zero architectural impact. Alternatively, if 4-event batches are demonstrably safe after 3-5 production days, the next session can push to 5 alongside Step 4 (timeout + lock-age adjustment).
+
+### Known Debt — Deferred Cleanup (discovered during this session)
+
+**11 events stuck in `enrichment_queue.status = 'in_progress'`.** Discovered during Step 2 safety check. These are leftover from prior interrupted runs (SIGKILLs, crashes, or Mode D exit-1 scenarios) that never transitioned back to `pending`. The queue manager likely treats them as "being worked on" and excludes them from new batch assembly, so they're silently invisible to enrichment.
+
+**Recommended one-time cleanup (NOT run this session):**
+```sql
+UPDATE enrichment_queue
+SET status='pending', updated_at=datetime('now')
+WHERE status='in_progress'
+  AND updated_at < datetime('now', '-1 day');
+```
+
+The `updated_at < -1 day` guard ensures we don't clobber currently-running batches. Worth running during the next cleanup session, alongside any other state-audit tasks. Expected impact: ~11 previously invisible events become re-enrichable.
+
+**Why not fixed today:** out of scope for throughput session (lever (a) is config, not state cleanup). Also orthogonal — fixing these 11 events adds ≤1 batch of work to tomorrow's run, which the lever (a) change already handles.
