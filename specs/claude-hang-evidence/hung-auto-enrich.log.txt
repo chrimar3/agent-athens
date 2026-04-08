@@ -1,0 +1,61 @@
+[2026-04-07 14:26:11] === Auto-enrichment starting ===
+[2026-04-07 14:26:11] Enrichment queue: 367 events
+[2026-04-07 14:26:11] Will generate 3 batch(es) of 3 events
+[2026-04-07 14:26:11] Cleaned old batch files
+[2026-04-07 14:26:11] Syncing enrichment queue...
+
+🔄 Syncing events to enrichment queue...
+
+✅ Sync complete:
+   Added:   0
+   Updated: 8309
+   Removed: 0
+
+📊 Queue now has 8309 pending events
+[2026-04-07 14:26:11] Generating 3 enrichment briefs...
+
+=== Generate Enrichment Brief ===
+Start batch: 1 | Batches: 3 | Events per batch: 3
+
+Selected 9 events total:
+Type distribution: concert:2, theater:2, dj_set:2, exhibition:1, festival:1, show:1
+Venue intel: 1/8 venues found in database
+Entity knowledge: 0/9 events have matching entities
+Recent openings loaded: 10 (for dedup reference)
+
+Batch 1: 3 events, ~1023 tokens
+  concert      «ΤΑ ΠΑΘΗ»
+  theater      Θα σ’ αγαπώ και του χρόνου
+  dj_set       Occult Practices vol.II
+  Written: temp-briefs/batch-1.md
+  Manifest: temp-briefs/batch-1.manifest.json
+
+Batch 2: 3 events, ~1024 tokens
+  exhibition   Yorgos Lanthimos: Photographs | Προσβάσιμες περιηγ...
+  festival     Bobos Arts Festival
+  show         Γάτες με φράντζες
+  Written: temp-briefs/batch-2.md
+  Manifest: temp-briefs/batch-2.manifest.json
+
+Batch 3: 3 events, ~1105 tokens
+  concert      &#171;ΤΑ ΠΑΘΗ&#187;
+  theater      Η φάρμα των ζώων – Η παράσταση αρχίζει!
+  dj_set       Astron Club Night with K.atou & Maria Politi
+  Written: temp-briefs/batch-3.md
+  Manifest: temp-briefs/batch-3.manifest.json
+
+=== Generated 3 batch(es) ===
+
+To run enrichment:
+  Batch 1: spawn subagent with temp-briefs/batch-1.md
+  Batch 2: spawn subagent with temp-briefs/batch-2.md
+  Batch 3: spawn subagent with temp-briefs/batch-3.md
+
+To save:
+  bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean
+  bun run scripts/save-batch.ts --manifest=temp-briefs/batch-2.manifest.json --session=batch-2 --batch=2 --clean
+  bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
+[2026-04-07 14:26:11] Generated 3 batch file(s)
+[2026-04-07 14:26:11] Warming up Claude CLI...
+[2026-04-07 14:27:39] Warm-up complete
+[2026-04-07 14:27:39] Enriching batch-1...
