@@ -94,6 +94,8 @@ Pitfalls encountered and how to avoid them.
 | Too many non-standard types | 14+ types accumulated (classical, opera, dance, comedy, conference, meetup, hackathon, seminar, sports) causing Schema.org markup errors | Consolidated to 12 canonical types (incl. `other`). Use transaction + `AND type = 'old_type'` safety guard for remaps |
 | Sports events in cultural DB | "Αθλητισμός για Όλους", boxing events imported | Delete non-cultural types at ingestion; categorizer now has no `sports` type |
 | Type consolidation without updating tests | Changed types in src/types.ts and categorizers but left test files with old expectations. 11 tests broke | Type changes are shotgun surgery — update types.ts → config JSONs → categorizers → tests in ONE commit |
+| hasNativeGreek added without updating fixtures | Required `hasNativeGreek: boolean` field added to Event type but 6 test fixtures + 3 test helpers + normalize.ts weren't updated. 11 TS errors across 5 files, invisible to `bun test` (only caught by `tsc --noEmit`) | When adding required fields to Event type, grep all fixtures/helpers: `grep -r "Event = {" tests/ src/**/__tests__/` |
+| Test written for unimplemented feature | `save-batch-integration.test.ts` test expected `full_description_gr` to be populated, but `saveBatch()` only writes English columns. Test failed every run since it was added | Don't merge tests for unimplemented features — use `test.skip()` with a comment explaining what's pending |
 
 ## Categorizer Issues (2026-02-26)
 
@@ -140,6 +142,14 @@ Pitfalls encountered and how to avoid them.
 | Mistake | What Happened | Correct Approach |
 |---------|---------------|------------------|
 | Unattended auto-enrich too slow | Batch 1 took 41 min (100+ tool calls, 110K tokens). Batches 2-3 never started before job timeout | Cap unattended batch size to 3 events, or add `--max-tool-calls` limit to `claude -p`. Interactive agents average ~15 min per 5-event batch — unattended research depth is uncapped |
+
+## Auto-Enrich Clamshell Sleep (2026-04-08)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| `caffeinate -i` does not survive clamshell sleep on battery | Apr 7 batch-1 hang: laptop lid closed on battery power, `caffeinate -i sleep 1800` watchdog was suspended along with the rest of user-space, batch hung for 19h 42m until the lock-age check force-recovered it. R1.A test measured `caffeinate -i sleep 300` taking **753s** wall-clock on battery + 8-min clamshell. `-i` only asserts the "idle sleep prevention" flag; clamshell sleep is a *different* sleep path that idle-sleep blocking does not cover | Split by power state. Detect via `pmset -g batt`: on battery, **skip the batch entirely** (the next launchd cycle retries — idempotent, safe). On AC, use `caffeinate -s sleep "$BATCH_TIMEOUT"` — `-s` is documented to block system sleep and R1.A re-test on AC measured `caffeinate -s sleep 300` at exactly 300s through an 8-min clamshell window. See `scripts/auto-enrich.sh` commit `5a4a529f4` |
+| `caffeinate -s` on battery is *not* a fix | Per `man caffeinate` on this machine: `-s` is "valid only when system is running on AC power". On battery it silently falls through to an idle-sleep assertion — equivalent to `-i`, which we already measured at 753s of FAIL. Reading the man page reveals this; running the command does not (it exits 0 either way) | Never rely on `caffeinate -s` on battery. If your process *must* run on battery + lid closed, there is no userspace fix — the only answer is to not start. Hence the battery-skip branch |
+| Hardware-dependent tests cannot run inside Claude Code | R1.A requires closing the laptop lid for 8 minutes. Claude Code shares the user's terminal session — closing the lid suspends Claude too, and Claude cannot "wait 8 minutes then observe" across a suspend. The only way to run this test is a bare-metal user session with a phone timer | Prepare the exact one-line test recipe for the user to run in a non-Claude terminal, capture the `Elapsed:` output when they return, then continue diagnosis. Do NOT try to run `caffeinate -i sleep 300` from inside a Claude tool call — the tool call will either block for 5 minutes (burning context) or get killed by Claude's own timeout. See `patterns.md` → "Hardware-Dependent Test Pattern" |
 
 ## Auto-Enrich Timeout & Zombies (2026-03-09)
 

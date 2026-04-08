@@ -848,3 +848,99 @@ Cross-document View Transitions are CSS-only progressive enhancement. The patter
 4. `@view-transition { navigation: none; }` inside `@media (prefers-reduced-motion: reduce)`
 
 **Do NOT** add inline `style="view-transition-name: event-{slug}"` on cards if a page can have >50 cards — each name creates a compositor snapshot layer. Use class-based names for structural elements only.
+
+## Surface Token + Z-Index Stacks
+
+4-level surface hierarchy in `design-system.css`:
+
+| Token | Hex | Role | Example selectors |
+|-------|-----|------|-------------------|
+| `--bg-primary` | #0d0d0d | Page body | `body`, main layout |
+| `--bg-elevated` | #151515 | Structural panels, overlays | Filter dropdown, search overlay, footer |
+| `--bg-surface` | #1e1e1e | Content sections on page body | `.edp-venue-section`, `.related-pages`, `.neighborhood` |
+| `--bg-raised` | #282828 | Interactive states inside elevated containers | Hover/active in filter dropdown, search results |
+
+Rule: use `--bg-raised` for hover/active/focus states **inside** `--bg-elevated` containers. Use `--bg-surface` for static content blocks sitting on `--bg-primary`.
+
+## WCAG Contrast Validation Process
+
+When changing surface tokens, validate all text/surface combinations:
+
+1. List all text tokens (`--text-primary` through `--text-muted`)
+2. List all surface tokens where that text appears
+3. Calculate contrast ratio (WebAIM tool or `(L1 + 0.05) / (L2 + 0.05)`)
+4. Require ≥ 4.5:1 for normal text (AA), ≥ 3:1 for large text
+5. Document any failing combos as CSS comments (e.g., `--text-muted` on `--bg-raised` = 3.4:1)
+6. Verify no component actually uses the failing combination
+
+## Pull Quote Insertion
+
+Pull quotes are injected into hub page card grids via `injectPullQuotes()` in `hub-page.ts`.
+
+**How it works:**
+1. Split card grid HTML at `<h2 class="date-group-header">` boundaries
+2. Track cumulative card count via `data-count` attributes on `<div class="date-group">`
+3. After every ~10 cards, insert `<aside class="pull-quote" aria-hidden="true">`
+4. CSS `grid-column: 1 / -1` makes the aside span the full grid width
+
+**Key details:**
+- Quotes come from `getPullQuotes(hubSlug, locale)` in `editorial-content.ts`
+- If no quotes exist for a hub, nothing is injected (graceful empty array)
+- The aside goes *between* date groups, not inside them — it's a sibling of the `<div class="date-group">` elements
+
+## Featured Editorial Card Pattern
+
+`renderFeaturedEventCard(event, vignette, badgeTreatment)` in `card-variants.ts`.
+
+**Structure:**
+- `.event-card-featured-editorial` — `isolation: isolate` stacking context
+- `.featured-editorial-image` — 16:9 (padding-top: 56.25%)
+- `.featured-editorial-title` — `--type-h2` (28px), `--font-weight-bold` (700)
+- `.featured-editorial-vignette` — editorial text, 3-line clamp
+- `.card-link::before` — full-card click target (S64 pattern)
+
+**Badge treatment:** Pass `'yellow'` (event type color) or `'neutral'` (`--bg-raised` background).
+
+## Section Editorial
+
+In hub-page.ts, section editorials inject below the event blocks `<h2>` heading:
+```html
+<h2>Αναλυτικά</h2>
+<p class="section-editorial">Editorial text here</p>
+```
+Max-width 720px. Only appears when both enriched events AND editorial content exist for the hub.
+
+## Hardware-Dependent Test Pattern
+
+Tests that depend on physical machine state (lid close, power source, thermal state, display hotplug, external peripherals, battery drain, sleep/wake transitions) **cannot run inside a Claude Code tool call**. Claude shares the user's terminal session — if the user closes the lid or disconnects power, Claude's subprocess suspends too, and there is no way for Claude to "observe from outside" the event it is supposedly measuring.
+
+This is a collaboration pattern, not a code pattern. It applies whenever diagnosis needs data from the physical machine.
+
+**Claude's responsibilities:**
+1. Identify that the test is hardware-dependent as early as possible — before writing any test harness.
+2. Prepare a **single-line, self-contained recipe** the user can paste into a fresh terminal (NOT inside Claude Code). Include:
+   - The exact command, with `START=$(date +%s); ...; END=$(date +%s); echo "Elapsed: $((END-START))s"` wrapping for timing.
+   - Pre-conditions the user must set up (e.g., *"disconnect AC adapter first"*, *"close all other Claude Code windows"*).
+   - Expected PASS and FAIL values, with a clear gap between them so there is no ambiguous middle range.
+   - What to do on the ambiguous case (usually: "rerun with stricter conditions").
+3. Specify *where* the user should run it ("Terminal.app, NOT inside Claude Code").
+4. Tell the user what to copy-paste back when they return.
+5. When the result arrives, resume diagnosis from there.
+
+**User's responsibilities:**
+1. Run the recipe bare-metal, with a phone/watch timer for the physical event (lid close, unplug, etc.).
+2. Paste the `Elapsed:` output back into the Claude Code session.
+
+**What NOT to do (from direct experience):**
+- Do NOT run `caffeinate -i sleep 300` or similar *inside* a Claude Code Bash tool call. It either blocks for 5 minutes (burning context with no useful work) or gets killed by Claude's tool timeout, yielding no measurement. We already know this — see `mistakes.md` → "Hardware-dependent tests cannot run inside Claude Code".
+- Do NOT ask the user to "try different things and report back" — hardware tests are expensive (8-40 minutes real-world wait per run). Give one precise recipe per round-trip.
+- Do NOT combine multiple physical events into one test ("close the lid AND unplug AND run on external monitor"). If the test fails, you won't know which variable caused it. One physical variable per recipe.
+
+**Reference implementation:** `specs/claude-hang-diagnostic.md` → Section 8 → "R1 Appendix — Empirical test recipe" → "R1.A" is the canonical example. It has all five elements: exact command with timing wrapper, pre-condition ("disconnect the power adapter"), PASS/FAIL values with a 470s gap, ambiguous-case instructions, and "NOT inside Claude Code" guidance. Use it as the template for any future hardware-dependent test.
+
+**Common hardware-dependent scenarios in this project:**
+- `caffeinate` behavior under clamshell sleep / battery vs. AC (solved; see R1.A)
+- `pmset` assertion interaction with user-space processes
+- launchd `StartCalendarInterval` firing while the laptop is closed
+- Any test involving `ioreg -n AppleClamshellState` observed state
+- Network transitions (Wi-Fi drop, VPN reconnect) that require physically toggling the radio
