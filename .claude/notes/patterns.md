@@ -1002,3 +1002,93 @@ If a batch sizing change causes problems:
 - `caffeinate -s` in the watchdog (line 303) — load-bearing for clamshell-on-AC survival
 - `MIN_QUEUE` floor — raising it above `EVENTS_PER_BATCH` causes skipped runs on low-content days, working against throughput goals
 - `temp-briefs/batch-N.md` naming convention — the save-batch.ts `--batch=N` flag expects this format
+
+## Runtime Artifacts vs Source Code Pattern
+
+**Rule:** runtime-generated files (databases, caches, state files, temporary work files) should NEVER be tracked by git. Source code and configuration SHOULD be tracked. The distinction matters more than it looks.
+
+### What counts as "runtime artifact"
+
+If answering YES to any of these, it's a runtime artifact:
+- Is the file *generated* by a script, not hand-edited by a human?
+- Does it change on every pipeline run without a matching source code change?
+- Could a fresh clone regenerate it by running the pipeline once?
+- Is it binary and >1 MB?
+- Does its delta show thousands of changed lines per day?
+- Would a diff between two versions be uninformative to a human reviewer?
+
+Examples of runtime artifacts in this project (all now gitignored as of 2026-04-08):
+- `data/events.db` — SQLite database, 36 MB, mutated by every pipeline phase
+- `data/content-hashes.json` — incremental hash tracking for sitemap generation
+- `data/health-reports/*.txt` — auto-generated daily health snapshots
+- `temp-briefs/*.md` — scratch space for enrichment batches
+- `dist/` — built site output (already gitignored)
+- `data/images/` — scraped image cache (already gitignored)
+- `logs/*.log` — all log files (already covered by `*.log`)
+
+Examples of things that LOOK like runtime artifacts but are actually source:
+- `config/athens-venues.json` — hand-curated venue list with variations
+- `config/enrichment-knowledge.md` — human-written venue intel
+- `exemplars/*.md` — reference descriptions used as training examples
+- `data/venues-master.json` — the single source of truth for venue canonicalization (small, manually updated)
+
+**Heuristic:** if removing the file and running the pipeline regenerates it identically, it's a runtime artifact. If removing it breaks the pipeline until a human rewrites it, it's source code.
+
+### The `git add -A` antipattern
+
+`git add -A` stages every modified file in the working tree that isn't `.gitignore`-excluded. Combined with a pipeline that mutates runtime artifacts living in unignored directories, this creates a feedback loop:
+
+1. Pipeline mutates `data/events.db` (36 MB binary)
+2. Pipeline calls `git add -A && git commit`
+3. Git packs the 36 MB binary diff (slow)
+4. `git push` transfers the pack (slower — 40 minutes observed)
+5. GitHub processes the binary delta server-side (slowest)
+6. The next day, repeat from step 1 — each commit re-packs a new version
+
+**The bloat compounds.** Every day's binary diff is stored forever in git history. After 60 days you have 60 binary deltas, each ~1 MB compressed. The repo's `.git/` grows linearly with calendar days, not with actual code change volume.
+
+**Detection:** run `git count-objects -vH`. If `size` (loose objects) is >> `size-pack`, git history hasn't been gc'd recently AND likely contains large binaries. On this project, the ratio was 375 MiB loose vs 72 MiB packed — a 5:1 ratio is suspicious.
+
+**Remediation:**
+1. Add the paths to `.gitignore`
+2. Run `git rm --cached --ignore-unmatch <path>` for each path
+3. Commit with a descriptive message
+4. (Optional, separate session) Rewrite history with `git filter-repo` to purge historical blobs. Destructive — requires backup of `.git/` first.
+
+### The Backup-Script-Before-Untrack Pattern
+
+When untracking something that was implicitly backed up by git history (databases, state files), you need an explicit replacement safety net BEFORE the untrack lands.
+
+**Sequence:**
+1. Write the backup script and hook it into the relevant cron/pipeline
+2. **Actually run the backup script once** — prove empirically it produces a recoverable artifact
+3. Verify recoverability (decompress, query row count, `PRAGMA integrity_check`)
+4. Only then proceed with `git rm --cached` and the `.gitignore` edit
+5. Commit the gitignore change AND the backup script in ONE atomic commit
+
+**Why the atomicity matters:** a two-commit approach (backup script first, then gitignore) has a window where git is still the only backup. A one-commit approach means at the moment the gitignore change lands, the safety net is already in place.
+
+**Reference implementation:** `scripts/backup-events-db.sh`. Uses `VACUUM INTO` (not `cp`) because SQLite WAL mode makes `cp` unsafe. Uses gzip (84% compression observed on this DB). Backups live at `$HOME/agent-athens-backups/` (outside the project dir) so they survive `rm -rf project/`. Retention is 7 days via `find -mtime +7 -delete`. Runtime: <1 second for 36 MB source.
+
+### SQLite backup specifics
+
+**Use `VACUUM INTO`, not `cp`.** SQLite in WAL mode has companion files (`events.db-shm`, `events.db-wal`) that hold uncommitted writes. A `cp data/events.db backup.db` during active writes may capture a database missing the WAL-pending state — potentially corrupt or stale.
+
+```bash
+# ✓ CORRECT — uses SQLite's online backup API, safe under WAL
+sqlite3 data/events.db "VACUUM INTO '/path/to/backup.db'"
+
+# ✗ WRONG — races with active writers
+cp data/events.db /path/to/backup.db
+```
+
+`VACUUM INTO` additionally defragments (reclaims empty pages), so the output is often smaller than the source even before compression. Observed ratio on this project: 36 MB source → 5.6 MB gzipped backup (84% reduction, most of which is the defrag + text compression of the sqlite_master schema).
+
+### Backup location decision tree
+
+- **Inside project dir, gitignored**: simplest, but lost if `rm -rf project/` happens. Use only for truly disposable backups.
+- **`$HOME/{projectname}-backups/`**: survives project-dir wipe, still on same machine. Good default for dev-machine backups. **This is what we chose.**
+- **Network share / NAS**: survives single-machine failure. Adds complexity (mount reliability, credentials). Layer on top of local backups, don't replace.
+- **Cloud (S3, etc.)**: survives physical disaster. Adds external dependencies + secrets + cost. Only necessary for production-critical data.
+
+The tradeoff is reliability vs complexity. Agent Athens is a single-dev project on a laptop; `$HOME/agent-athens-backups/` is the right tier — if the laptop dies, the scrapers can rebuild the DB from scratch in a few hours. If it were a production multi-user service, S3 would be table stakes.
