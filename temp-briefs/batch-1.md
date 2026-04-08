@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 1
-- Event IDs: 702e4b31b286f1f9, f9786873e473afaa, fc3eb637a74aff34
+- Event IDs: f0b86bf3892c35f5, 32220f6e4a305c9a, 7e6317bcd6896a0e
 - Write descriptions to: temp-descriptions/batch-1/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,71 +53,74 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "The curtain rises on a hospital bed."
+- "What happens when you compress the largest battle in human history into a room with two actors and no scenery?"
+- "Amalia Arseni walks onstage carrying her aunt's words."
+- "The house lights dim in the Alexandra Trianti Hall and a living room appears on the screen — an American backyard, a broken tree, a family sitting in lawn chairs as if nothing is wrong."
+- "A young man stumbles into a pub in County Mayo and announces he has killed his father."
+- "Four musicians sit along the back wall."
+- "Eleni Rantou stands alone onstage with a microphone and a lifetime of material."
+- "A journalist sits across from Leni Riefenstahl and asks the question the twentieth century never settled: does the artist bear responsibility for what the art served?"
+- "The sixth Caryatid returns from the British Museum."
+- "Sacri Respiri brings countertenor Nikos Spanatis, the S.T.A.B."
+- "By day Patision65 is a vintage clothing bazaar on 28is Oktovriou; by night it opens as a techno venue."
+- "Inside Onassis Stegi, the Yorgos Lanthimos: Photographs exhibition is laid out in the shape of a classical Greek temple — a central altar-like space displaying 110 new photographs, ringed by three outer bodies of work drawn from the spaces of his recent films."
+- "A Saturday in May, and the lawns of the Megaron Concert Hall garden have been turned over to ages three through twelve."
+- "Evanthia Reboutsika and Aris Davarakis open their songbook at the Pallas."
+- "Slaughter to Prevail bring their summer European tour to Floyd in Gazi on 24 July 2026."
+
 ---
 
 ## Events to Enrich
 
+### Το μαγικό εισιτήριο
+- **ID**: f0b86bf3892c35f5
+- **Type**: concert
+- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Price**: paid
+- **Date**: 2026-04-08T10:30:00
+- **Time**: 10:30
+- **URL**: https://www.athinorama.gr/theatre/performance/to_magiko_eisitirio-10088235/
+- **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words**: 400-600
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: Description MUST be 400-600 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
 ### Θα σ’ αγαπώ και του χρόνου
-- **ID**: 702e4b31b286f1f9
+- **ID**: 32220f6e4a305c9a
 - **Type**: theater
 - **Venue**: ARROYO THEATER
 - **Price**: paid
-- **Date**: 2026-04-04T10:30:00
+- **Date**: 2026-04-08T10:30:00
 - **Time**: 10:30
 - **URL**: https://www.athinorama.gr/theatre/performance/tha_s%e2%80%99_agapo_kai_tou_xronou-10082867/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
+- **Target words**: 120-180
 - **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
 - **Venue intel**: Not in database. WebSearch "ARROYO THEATER Athens" for context.
 
-### Αντίγνωμος + Friends
-- **ID**: f9786873e473afaa
-- **Type**: concert
-- **Venue**: AN Club
-- **Price**: paid
-- **Date**: 2026-04-04
-- **Time**: 21:00
-- **URL**: https://www.ticketservices.gr/event/14091/
-- **Source**: ticketservices
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel** (from database):
-  ```
-  ### AN Club
-  | Field | Data |
-  |-------|------|
-  | **Address** | Exarchia |
-  | **Metro** | Omonoia or Panepistimio (walk) |
-  | **Capacity** | ~400 |
-  | **Tickets** | €15-25 typical, €25-35 international acts |
-  | **Timing** | LATE STARTS — bands often after 22:00 |
-  | **History** | 30+ years, Athens' oldest rock venue |
-  | **Genre** | Hardcore rock/punk/metal |
-  
-  ---
-  ```
-
-### Nikkolas Dashy + S.ant
-- **ID**: fc3eb637a74aff34
+### Ritual pres. Jipan
+- **ID**: 7e6317bcd6896a0e
 - **Type**: dj_set
-- **Venue**: El Chapo
+- **Venue**: B-Side
 - **Price**: door
-- **Date**: 2026-04-04T01:30:00
-- **Time**: 01:30
-- **URL**: https://www.clubber.gr/events/nikkolas-dashy-s-ant/
+- **Date**: 2026-04-08T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.clubber.gr/events/ritual-pres-jipan/
 - **Source**: clubber.gr
 - **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
+- **Target words**: 80-120
 - **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "El Chapo Athens" for context.
+- **HARD CONSTRAINT**: Description MUST be 80-120 words.
+- **Venue intel**: Not in database. WebSearch "B-Side Athens" for context.
 
 ---
 
@@ -141,18 +144,7 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-1 Tag1 Tag2 Tag3...
    ```
-5. **Write Greek description** (optional secondary): Write a condensed Greek version.
-   Save to `temp-descriptions/batch-1/<event-id>.gr.md`. Greek word target shown per event above.
-   ```bash
-   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-1 --lang=gr "<greek description>"
-   ```
-   **Greek description rules**:
-   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
-   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
-   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)
-   - Same 8-section structure, same factual content, but natural Greek voice
-   - The Greek version is NOT a translation. Write it fresh for a local audience.
-6. **Save decision** (after completing ALL events in this batch):
+5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:
    ```bash
    bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean
@@ -166,33 +158,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/702e4b31b286f1f9.md \
-  --tier=standard --event-id=702e4b31b286f1f9 \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f0b86bf3892c35f5.md \
+  --tier=premium --event-id=f0b86bf3892c35f5 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Το μαγικό εισιτήριο" \
+  --event-date=2026-04-08 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/32220f6e4a305c9a.md \
+  --tier=standard --event-id=32220f6e4a305c9a \
   --event-type=theater --event-venue="ARROYO THEATER" \
   --event-title="Θα σ’ αγαπώ και του χρόνου" \
-  --event-date=2026-04-04 --event-price=paid
+  --event-date=2026-04-08 --event-price=paid
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/f9786873e473afaa.md \
-  --tier=stub --event-id=f9786873e473afaa \
-  --event-type=concert --event-venue="AN Club" \
-  --event-title="Αντίγνωμος + Friends" \
-  --event-date=2026-04-04 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/fc3eb637a74aff34.md \
-  --tier=stub --event-id=fc3eb637a74aff34 \
-  --event-type=dj_set --event-venue="El Chapo" \
-  --event-title="Nikkolas Dashy + S.ant" \
-  --event-date=2026-04-04 --event-price=door
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/7e6317bcd6896a0e.md \
+  --tier=stub --event-id=7e6317bcd6896a0e \
+  --event-type=dj_set --event-venue="B-Side" \
+  --event-title="Ritual pres. Jipan" \
+  --event-date=2026-04-08 --event-price=door
 ```
 
 After all events, create `temp-descriptions/batch-1/batch-1-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 702e4b31b286f1f9 | Θα σ’ αγαπώ και του χρόνου | /100 | | |
-| f9786873e473afaa | Αντίγνωμος + Friends | /100 | | |
-| fc3eb637a74aff34 | Nikkolas Dashy + S.ant | /100 | | |
+| f0b86bf3892c35f5 | Το μαγικό εισιτήριο | /100 | | |
+| 32220f6e4a305c9a | Θα σ’ αγαπώ και του χρόνου | /100 | | |
+| 7e6317bcd6896a0e | Ritual pres. Jipan | /100 | | |

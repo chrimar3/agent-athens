@@ -109,14 +109,16 @@ export function loadRecentOpenings(): RecentOpening[] {
 // CLI
 // ============================================================================
 
-export function parseArgs(): { count: number; batches: number; startBatch: number } {
+export function parseArgs(): { count: number; batches: number; startBatch: number; typeFilter: string | null } {
   const args = process.argv.slice(2);
   const countArg = args.find(a => a.startsWith('--count='));
   const batchArg = args.find(a => a.startsWith('--batch='));
   const batchesArg = args.find(a => a.startsWith('--batches='));
+  const typeArg = args.find(a => a.startsWith('--type='));
 
   const count = parseInt(countArg?.split('=')[1] || '5', 10);
   const batches = parseInt(batchesArg?.split('=')[1] || '1', 10);
+  const typeFilter = typeArg?.split('=')[1] || null;
 
   // Auto-increment batch number from existing briefs
   let startBatch = 1;
@@ -131,7 +133,7 @@ export function parseArgs(): { count: number; batches: number; startBatch: numbe
     }
   }
 
-  return { count, batches, startBatch };
+  return { count, batches, startBatch, typeFilter };
 }
 
 // ============================================================================
@@ -155,7 +157,7 @@ const MULTI_HALL_VENUES = new Set([
   'στέγη ιδρύματος ωνάση',
 ]);
 
-export function selectDiverseBatch(db: Database, count: number, maxPerType: number = DEFAULT_MAX_PER_TYPE): EventRecord[] {
+export function selectDiverseBatch(db: Database, count: number, maxPerType: number = DEFAULT_MAX_PER_TYPE, typeFilter: string | null = null): EventRecord[] {
   if (count <= 0) return [];
 
   // Build a set of already-enriched (venue, date) combos to skip cross-source duplicates.
@@ -172,6 +174,8 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
   }
 
   // Query all eligible events grouped by type, soonest first
+  const typeClause = typeFilter ? `AND type = ?` : '';
+  const params = typeFilter ? [typeFilter] : [];
   const rows = db.prepare(`
     SELECT id, title, type, venue_name, price_type, start_date, end_date,
            time_doors, url, description, source
@@ -183,8 +187,9 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
         CASE WHEN type='exhibition' THEN end_date ELSE NULL END,
         start_date
       )) >= date('now')
+      ${typeClause}
     ORDER BY type, start_date ASC
-  `).all() as EventRecord[];
+  `).all(...params) as EventRecord[];
 
   if (rows.length === 0) return [];
 
@@ -520,10 +525,9 @@ export function buildBrief(
     const category = classifyEvent({ type: event.type, venue_name: event.venue_name, title: event.title });
     const target = getWordTarget({ type: event.type, venue_name: event.venue_name, title: event.title });
     lines.push(`- **Category**: ${category}`);
-    lines.push(`- **Target words (English)**: ${target.min}-${target.max}`);
-    lines.push(`- **Target words (Greek)**: ${target.gr_min}-${target.gr_max}`);
+    lines.push(`- **Target words**: ${target.min}-${target.max}`);
     lines.push(`- **Structure**: ${target.structure}`);
-    lines.push(`- **HARD CONSTRAINT**: English description MUST be ${target.min}-${target.max} words. Greek MUST be ${target.gr_min}-${target.gr_max} words.`);
+    lines.push(`- **HARD CONSTRAINT**: Description MUST be ${target.min}-${target.max} words.`);
 
     // Venue intel
     const intel = venueIntel.get(event.venue_name || '');
@@ -573,18 +577,7 @@ export function buildBrief(
   lines.push('   ```bash');
   lines.push(`   bun run scripts/write-tags.ts <event-id> --batch-dir=${batchDir} Tag1 Tag2 Tag3...`);
   lines.push('   ```');
-  lines.push('5. **Write Greek description** (optional secondary): Write a condensed Greek version.');
-  lines.push(`   Save to \`${batchDir}/<event-id>.gr.md\`. Greek word target shown per event above.`);
-  lines.push('   ```bash');
-  lines.push(`   bun run scripts/write-description.ts <event-id> --batch-dir=${batchDir} --lang=gr "<greek description>"`);
-  lines.push('   ```');
-  lines.push('   **Greek description rules**:');
-  lines.push('   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)');
-  lines.push('   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events');
-  lines.push('   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)');
-  lines.push('   - Same 8-section structure, same factual content, but natural Greek voice');
-  lines.push('   - The Greek version is NOT a translation. Write it fresh for a local audience.');
-  lines.push('6. **Save decision** (after completing ALL events in this batch):');
+  lines.push('5. **Save decision** (after completing ALL events in this batch):');
   lines.push('   - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:');
   lines.push('   ```bash');
   lines.push(`   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${batchNumber}.manifest.json --session=batch-${batchNumber} --batch=${batchNumber} --clean`);
@@ -642,18 +635,19 @@ function getExemplarAnnotation(filename: string): string {
 // ============================================================================
 
 function main(): void {
-  const { count, batches, startBatch } = parseArgs();
+  const { count, batches, startBatch, typeFilter } = parseArgs();
 
   console.log(`\n=== Generate Enrichment Brief ===`);
-  console.log(`Start batch: ${startBatch} | Batches: ${batches} | Events per batch: ${count}\n`);
+  console.log(`Start batch: ${startBatch} | Batches: ${batches} | Events per batch: ${count}${typeFilter ? ` | Type: ${typeFilter}` : ''}\n`);
 
   const db = new Database(DB_PATH);
 
   // 1. Select all events for all batches at once
   //    Scale MAX_PER_TYPE by batch count so each batch can maintain diversity
+  //    When filtering by type, lift maxPerType to the total needed
   const totalNeeded = count * batches;
-  const scaledMaxPerType = DEFAULT_MAX_PER_TYPE * batches;
-  const allEvents = selectDiverseBatch(db, totalNeeded, scaledMaxPerType);
+  const scaledMaxPerType = typeFilter ? totalNeeded : DEFAULT_MAX_PER_TYPE * batches;
+  const allEvents = selectDiverseBatch(db, totalNeeded, scaledMaxPerType, typeFilter);
   if (allEvents.length === 0) {
     console.log('No eligible events found for enrichment.');
     db.close();

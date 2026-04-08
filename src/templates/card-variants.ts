@@ -1,8 +1,10 @@
-// Card variant templates — list row, feature card, featured carousel
+// Card variant templates — list row, feature card, featured carousel, featured editorial
 // All reuse prepareCardData() for consistent date/price/badge/venue logic.
 
 import type { Event } from '../types';
 import { prepareCardData, TYPE_ICONS } from './page';
+
+export type BadgeTreatment = 'yellow' | 'neutral';
 
 /**
  * Horizontal list row: image left, content right.
@@ -177,4 +179,41 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
       <div class="hero-picks">${picksHtml}</div>
     </div>
   </section>`;
+}
+
+/**
+ * Featured editorial card: 16:9 image, large title, editorial vignette.
+ * Variant #6 — editorial curation (hand-written vignettes vs. auto-extracted descriptions).
+ * Uses isolation: isolate + heading <a>::before pattern (S64).
+ */
+export function renderFeaturedEventCard(
+  event: Event,
+  vignette: string,
+  badgeTreatment: BadgeTreatment = 'yellow'
+): string {
+  const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event);
+  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+
+  const badgeClass = badgeTreatment === 'neutral'
+    ? 'card-badge card-badge--neutral'
+    : `card-badge${lightText}`;
+  const badgeStyle = badgeTreatment === 'neutral'
+    ? ''
+    : `style="background: ${colorVar}"`;
+
+  return `
+  <article class="event-card-featured-editorial">
+    <div class="featured-editorial-image" data-type="${event.type}">
+      ${imgSrc ? `<img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
+      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
+      <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
+    </div>
+    <div class="featured-editorial-body">
+      <h3 class="featured-editorial-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <p class="featured-editorial-vignette">${vignette}</p>
+      <span class="card-date">${dateStr}</span>
+      <span class="card-venue">${venueText}</span>
+      <span class="card-price">${priceText}</span>
+    </div>
+  </article>`;
 }

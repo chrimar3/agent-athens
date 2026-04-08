@@ -1,0 +1,32 @@
+{
+  "pullQuotes": [
+    {
+      "textEl": "[PLACEHOLDER] Η Αθήνα δεν κοιμάται ποτέ — κάθε βράδυ μια νέα σκηνή ανοίγει τις πόρτες της.",
+      "textEn": "[PLACEHOLDER] Athens never sleeps — every night a new stage opens its doors.",
+      "hubs": ["concerts", "nightlife"],
+      "season": null
+    },
+    {
+      "textEl": "[PLACEHOLDER] Το καλοκαίρι στην Αθήνα, η τέχνη βγαίνει στους δρόμους.",
+      "textEn": "[PLACEHOLDER] In Athens, summer moves art outdoors.",
+      "hubs": ["exhibitions", "theater"],
+      "season": "summer"
+    }
+  ],
+  "featuredEvents": {
+    "PLACEHOLDER_EVENT_001": {
+      "vignetteEl": "[PLACEHOLDER] Μια βραδιά που αξίζει να θυμάσαι — ζωντανή μουσική στο κέντρο της πόλης.",
+      "vignetteEn": "[PLACEHOLDER] A night worth remembering — live music in the heart of the city."
+    }
+  },
+  "sectionEditorials": {
+    "concerts": {
+      "textEl": "[PLACEHOLDER] Από ρεμπέτικο μέχρι ηλεκτρονική, η μουσική σκηνή της Αθήνας καλύπτει κάθε γούστο.",
+      "textEn": "[PLACEHOLDER] From rebetiko to electronic, the Athens music scene covers every taste."
+    },
+    "exhibitions": {
+      "textEl": "[PLACEHOLDER] Γκαλερί και μουσεία φιλοξενούν σύγχρονη και κλασική τέχνη σε κάθε γωνιά της πόλης.",
+      "textEn": "[PLACEHOLDER] Galleries and museums host contemporary and classical art across the city."
+    }
+  }
+}

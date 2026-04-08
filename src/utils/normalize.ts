@@ -46,7 +46,8 @@ export function normalizeEvents(rawEvents: { events: RawEvent[] }): Event[] {
       source: raw.source,
       createdAt: now,
       updatedAt: now,
-      language: "en"
+      language: "en",
+      hasNativeGreek: false
     };
   });
 }

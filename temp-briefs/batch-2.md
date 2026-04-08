@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 2
-- Event IDs: d92d0d7d028adb00, 0ed4202c1aa2a351, bf4a8ce981c09c99
+- Event IDs: ba1cb764c001ee17, 0ed4202c1aa2a351, 8cd851b811d8321f
 - Write descriptions to: temp-descriptions/batch-2/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -31,9 +31,8 @@ You are writing premium event descriptions for Agent Athens, an AI-curated cultu
 
 ## Exemplars (read for structural guidance)
 
-- `exemplars/festival-sonic-sisters.md` — structural reference
-- `exemplars/classical-lpo-jarvi.md` — structural reference
 - `exemplars/exhibition-swinton.md` — structural reference
+- `exemplars/festival-sonic-sisters.md` — structural reference
 
 ## Anti-patterns
 
@@ -53,25 +52,44 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "The curtain rises on a hospital bed."
+- "What happens when you compress the largest battle in human history into a room with two actors and no scenery?"
+- "Amalia Arseni walks onstage carrying her aunt's words."
+- "The house lights dim in the Alexandra Trianti Hall and a living room appears on the screen — an American backyard, a broken tree, a family sitting in lawn chairs as if nothing is wrong."
+- "A young man stumbles into a pub in County Mayo and announces he has killed his father."
+- "Four musicians sit along the back wall."
+- "Eleni Rantou stands alone onstage with a microphone and a lifetime of material."
+- "A journalist sits across from Leni Riefenstahl and asks the question the twentieth century never settled: does the artist bear responsibility for what the art served?"
+- "The sixth Caryatid returns from the British Museum."
+- "Sacri Respiri brings countertenor Nikos Spanatis, the S.T.A.B."
+- "By day Patision65 is a vintage clothing bazaar on 28is Oktovriou; by night it opens as a techno venue."
+- "Inside Onassis Stegi, the Yorgos Lanthimos: Photographs exhibition is laid out in the shape of a classical Greek temple — a central altar-like space displaying 110 new photographs, ringed by three outer bodies of work drawn from the spaces of his recent films."
+- "A Saturday in May, and the lawns of the Megaron Concert Hall garden have been turned over to ages three through twelve."
+- "Evanthia Reboutsika and Aris Davarakis open their songbook at the Pallas."
+- "Slaughter to Prevail bring their summer European tour to Floyd in Gazi on 24 July 2026."
+
 ---
 
 ## Events to Enrich
 
-### Το τσίρκο των σκιών
-- **ID**: d92d0d7d028adb00
-- **Type**: show
-- **Venue**: Coronet Theater
-- **Price**: paid
-- **Date**: 2026-04-04T16:00:00
-- **Time**: 16:00
-- **URL**: https://www.athinorama.gr/theatre/performance/to_tsirko_ton_skion-10089657/
-- **Source**: athinorama.gr
-- **Category**: default
-- **Target words (English)**: 120-200
-- **Target words (Greek)**: 100-170
+### Yorgos Lanthimos: Photographs
+- **ID**: ba1cb764c001ee17
+- **Type**: exhibition
+- **Venue**: Onassis Stegi
+- **Price**: with-ticket
+- **Date**: 2026-05-17T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.onassis.org/el/whats-on/yorgos-lanthimos-photographs
+- **Source**: onassis
+- **Category**: exhibition
+- **Target words**: 200-300
 - **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-200 words. Greek MUST be 100-170 words.
-- **Venue intel**: Not in database. WebSearch "Coronet Theater Athens" for context.
+- **HARD CONSTRAINT**: Description MUST be 200-300 words.
+- **Venue intel**: Not in database. WebSearch "Onassis Stegi Athens" for context.
 
 ### 3ο Greek Beer Festival
 - **ID**: 0ed4202c1aa2a351
@@ -82,27 +100,25 @@ These terms MUST remain untranslated in English descriptions:
 - **URL**: https://www.athinorama.gr/music/gig/3o_greek_beer_festival-10089550/
 - **Source**: athinorama.gr
 - **Category**: festival_parent
-- **Target words (English)**: 250-400
-- **Target words (Greek)**: 215-340
+- **Target words**: 250-400
 - **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 250-400 words. Greek MUST be 215-340 words.
+- **HARD CONSTRAINT**: Description MUST be 250-400 words.
 - **Venue intel**: Not in database. WebSearch "Παλιό Αμαξοστάσιο ΟΣΥ Athens" for context.
 
-### Αθλητισμός για Όλους
-- **ID**: bf4a8ce981c09c99
-- **Type**: sports
-- **Venue**: ΚΠΙΣΝ
-- **Price**: tba
-- **Date**: 2026-04-05T11:00:00
-- **Time**: 11:00
-- **URL**: https://www.more.com/gr-el/tickets/sports/athlitismos-gia-olous/
-- **Source**: more.com
-- **Category**: premium_showcase
-- **Target words (English)**: 400-600
-- **Target words (Greek)**: 340-510
-- **Structure**: full-8-section
-- **HARD CONSTRAINT**: English description MUST be 400-600 words. Greek MUST be 340-510 words.
-- **Venue intel**: Not in database. WebSearch "ΚΠΙΣΝ Athens" for context.
+### Γάτες με φράντζες
+- **ID**: 8cd851b811d8321f
+- **Type**: show
+- **Venue**: Red Jasper Cabaret Theatre
+- **Price**: paid
+- **Date**: 2026-04-08T21:00:00
+- **Time**: 21:00
+- **URL**: https://www.athinorama.gr/theatre/performance/gates_me_frantzes-10089683/
+- **Source**: athinorama.gr
+- **Category**: default
+- **Target words**: 120-200
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-200 words.
+- **Venue intel**: Not in database. WebSearch "Red Jasper Cabaret Theatre Athens" for context.
 
 ---
 
@@ -126,18 +142,7 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-2 Tag1 Tag2 Tag3...
    ```
-5. **Write Greek description** (optional secondary): Write a condensed Greek version.
-   Save to `temp-descriptions/batch-2/<event-id>.gr.md`. Greek word target shown per event above.
-   ```bash
-   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-2 --lang=gr "<greek description>"
-   ```
-   **Greek description rules**:
-   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
-   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
-   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)
-   - Same 8-section structure, same factual content, but natural Greek voice
-   - The Greek version is NOT a translation. Write it fresh for a local audience.
-6. **Save decision** (after completing ALL events in this batch):
+5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:
    ```bash
    bun run scripts/save-batch.ts --manifest=temp-briefs/batch-2.manifest.json --session=batch-2 --batch=2 --clean
@@ -151,11 +156,11 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/d92d0d7d028adb00.md \
-  --tier=standard --event-id=d92d0d7d028adb00 \
-  --event-type=show --event-venue="Coronet Theater" \
-  --event-title="Το τσίρκο των σκιών" \
-  --event-date=2026-04-04 --event-price=paid
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/ba1cb764c001ee17.md \
+  --tier=standard --event-id=ba1cb764c001ee17 \
+  --event-type=exhibition --event-venue="Onassis Stegi" \
+  --event-title="Yorgos Lanthimos: Photographs" \
+  --event-date=2026-05-17 --event-price=with-ticket
 ```
 
 ```bash
@@ -167,17 +172,17 @@ bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/0ed4202c1aa2a351.md
 ```
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/bf4a8ce981c09c99.md \
-  --tier=premium --event-id=bf4a8ce981c09c99 \
-  --event-type=sports --event-venue="ΚΠΙΣΝ" \
-  --event-title="Αθλητισμός για Όλους" \
-  --event-date=2026-04-05 --event-price=tba
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-2/8cd851b811d8321f.md \
+  --tier=standard --event-id=8cd851b811d8321f \
+  --event-type=show --event-venue="Red Jasper Cabaret Theatre" \
+  --event-title="Γάτες με φράντζες" \
+  --event-date=2026-04-08 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-2/batch-2-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| d92d0d7d028adb00 | Το τσίρκο των σκιών | /100 | | |
+| ba1cb764c001ee17 | Yorgos Lanthimos: Photographs | /100 | | |
 | 0ed4202c1aa2a351 | 3ο Greek Beer Festival | /100 | | |
-| bf4a8ce981c09c99 | Αθλητισμός για Όλους | /100 | | |
+| 8cd851b811d8321f | Γάτες με φράντζες | /100 | | |

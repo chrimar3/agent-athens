@@ -9,14 +9,15 @@
 :root {
   /* Colors — Dark theme */
   --bg-primary: #0d0d0d;
-  --bg-surface: #242424;
-  --bg-elevated: #1a1a1a;
+  --bg-elevated: #151515;
+  --bg-surface: #1e1e1e;
+  --bg-raised: #282828;           /* interactive states inside elevated containers */
   --bg-overlay: rgba(13,13,13,0.92);
 
   --text-primary: #f0f0f0;
   --text-secondary: #a0a0a0;
   --text-tertiary: #959595;   /* was #888 — bumped for 4.5:1 on --bg-surface */
-  --text-muted: #7a7a7a;     /* was #444 → #6b6b6b → #7a7a7a for 4.5:1 on --bg-primary */
+  --text-muted: #7a7a7a;     /* was #444 → #6b6b6b → #7a7a7a for 4.5:1 on --bg-primary. Do NOT use on --bg-raised (3.4:1 — WCAG AA FAIL) */
 
   --accent-primary: #f5e642;   /* Limit to: CTAs, active states, links, highlights, badges */
   --accent-secondary: #ef2c46; /* Limit to: urgency/live indicators only */
@@ -1234,7 +1235,7 @@ div#main-content {
   transition: transform var(--t-fast);
 }
 .filter-pill.is-open {
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   border-color: var(--border-active);
   color: var(--text-primary);
 }
@@ -1425,7 +1426,7 @@ div#main-content {
   align-items: center;
   gap: 10px;
   padding: var(--space-sm-md) 14px;
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -1511,7 +1512,7 @@ div#main-content {
   transition: background var(--t-fast);
 }
 .filter-radio-row:hover {
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   text-decoration: none;
   color: var(--text-primary);
 }
@@ -1567,7 +1568,7 @@ div#main-content {
 }
 .filter-panel-close:hover {
   color: var(--text-primary);
-  background: var(--bg-surface);
+  background: var(--bg-raised);
 }
 
 @media (min-width: 768px) {
@@ -2071,7 +2072,7 @@ div#main-content {
   transition: background var(--t-instant);
 }
 .search-result-item:hover {
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   text-decoration: none;
   color: var(--text-primary);
 }
@@ -2085,7 +2086,7 @@ div#main-content {
 .search-result-thumb-placeholder {
   width: 48px; height: 32px;
   border-radius: var(--radius-sm);
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   flex-shrink: 0;
 }
 
@@ -2120,7 +2121,7 @@ div#main-content {
   border-radius: var(--radius-md); z-index: 1;
   transition: background var(--t-fast);
 }
-.search-close-btn:hover { background: var(--bg-surface); }
+.search-close-btn:hover { background: var(--bg-raised); }
 
 /* Clear button */
 .search-clear-btn {
@@ -2180,7 +2181,7 @@ div#main-content {
 
 /* Active item highlight (keyboard nav) */
 .search-result-item.is-active {
-  background: var(--bg-surface);
+  background: var(--bg-raised);
   outline: 2px solid var(--focus-ring);
   outline-offset: -2px;
 }

@@ -1,10 +1,11 @@
 /**
  * Event Categorizer - Hybrid Rules-Based Categorization System
  *
- * Three-pass categorization:
+ * Four-pass categorization:
  * 1. Venue-based rules (highest confidence) - some venues ONLY host one type
  * 2. Keyword rules (medium-high confidence) - scan title/description/genres
- * 3. Source hints (medium confidence) - clubber.gr → dj_set, etc.
+ * 3. URL path rules (medium confidence) - /music/gig/ → concert, etc.
+ * 4. Source hints (medium confidence) - clubber.gr → dj_set, etc.
  *
  * Returns categorization result with confidence level for human review.
  */
@@ -53,13 +54,23 @@ export interface EventInput {
   fullDescription?: string;
   genres?: string[];
   venue?: string;
+  url?: string;
   source?: string;
   currentType?: EventType;
+}
+
+interface UrlPatternConfig {
+  patterns: Array<{
+    url_contains: string;
+    type: EventType;
+    confidence: ConfidenceLevel;
+  }>;
 }
 
 // Cache for loaded configs
 let venueConfig: VenueConfig | null = null;
 let keywordConfig: KeywordConfig | null = null;
+let urlPatternConfig: UrlPatternConfig | null = null;
 
 /**
  * Load venue categories config synchronously
@@ -109,6 +120,24 @@ function loadKeywordConfig(): KeywordConfig {
       schema_org_mapping: {} as Record<EventType, string>
     };
     return keywordConfig!;
+  }
+}
+
+/**
+ * Load URL pattern config synchronously
+ */
+function loadUrlPatternConfig(): UrlPatternConfig {
+  if (urlPatternConfig) return urlPatternConfig;
+
+  try {
+    const filePath = join(CONFIG_PATH, 'url-category-patterns.json');
+    const fs = require('fs');
+    const content = fs.readFileSync(filePath, 'utf-8');
+    urlPatternConfig = JSON.parse(content) as UrlPatternConfig;
+    return urlPatternConfig;
+  } catch (e) {
+    urlPatternConfig = { patterns: [] };
+    return urlPatternConfig;
   }
 }
 
@@ -195,6 +224,8 @@ function matchesGenre(eventGenres: string[], categoryGenres: string[]): boolean 
 
 /**
  * Pass 1: Venue-Based Categorization (Highest Confidence)
+ * Skips mixed venues. For locked venues, yields if a high-confidence URL
+ * pattern contradicts the lock (e.g., /music/gig/ at a theater venue).
  */
 function categorizeByVenue(event: EventInput): CategorizationResult | null {
   if (!event.venue) return null;
@@ -215,6 +246,18 @@ function categorizeByVenue(event: EventInput): CategorizationResult | null {
   const venueType = findVenueMatch(event.venue, config.venue_type_map);
 
   if (venueType) {
+    // Check if a high-confidence URL pattern contradicts the venue lock.
+    // This handles concerts at theater venues (e.g., /music/gig/ at Θέατρο Παλλάς).
+    if (event.url) {
+      const urlConfig = loadUrlPatternConfig();
+      const urlLower = event.url.toLowerCase();
+      for (const pattern of urlConfig.patterns) {
+        if (pattern.confidence === 'high' && pattern.type !== venueType && urlLower.includes(pattern.url_contains)) {
+          return null; // URL contradicts venue lock — let keywords/URL pass decide
+        }
+      }
+    }
+
     const genreHint = config.venue_genre_override[event.venue];
     return {
       type: venueType,
@@ -299,7 +342,30 @@ function categorizeByKeywords(event: EventInput): CategorizationResult | null {
 }
 
 /**
- * Pass 3: Source-Based Hints (Medium Confidence)
+ * Pass 3: URL Path-Based Rules (Medium Confidence)
+ * Catches concerts at mixed venues when keywords miss (e.g., artist-name-only titles).
+ */
+function categorizeByUrl(event: EventInput): CategorizationResult | null {
+  if (!event.url) return null;
+
+  const config = loadUrlPatternConfig();
+  const urlLower = event.url.toLowerCase();
+
+  for (const pattern of config.patterns) {
+    if (urlLower.includes(pattern.url_contains)) {
+      return {
+        type: pattern.type,
+        confidence: pattern.confidence,
+        reason: `URL contains "${pattern.url_contains}"`
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Pass 4: Source-Based Hints (Medium Confidence)
  */
 function categorizeBySource(event: EventInput): CategorizationResult | null {
   if (!event.source) return null;
@@ -333,11 +399,12 @@ function categorizeBySource(event: EventInput): CategorizationResult | null {
 /**
  * Main Categorization Function
  *
- * Applies three-pass categorization:
+ * Applies four-pass categorization:
  * 1. Venue rules (high confidence)
  * 2. Keyword rules (medium confidence)
- * 3. Source hints (medium confidence)
- * 4. Falls back to current type or 'concert'
+ * 3. URL path rules (medium confidence)
+ * 4. Source hints (medium confidence)
+ * 5. Falls back to current type or 'concert'
  */
 export function categorizeEvent(event: EventInput): CategorizationResult {
   // Pass 1: Venue-based (highest confidence)
@@ -348,19 +415,16 @@ export function categorizeEvent(event: EventInput): CategorizationResult {
   const keywordResult = categorizeByKeywords(event);
   if (keywordResult) return keywordResult;
 
-  // Pass 3: Source-based hints (medium confidence)
+  // Pass 3: URL path-based (medium confidence)
+  const urlResult = categorizeByUrl(event);
+  if (urlResult) return urlResult;
+
+  // Pass 4: Source-based hints (medium confidence)
   const sourceResult = categorizeBySource(event);
   if (sourceResult) return sourceResult;
 
-  // Check if this is a mixed venue — don't trust currentType from scraper
-  const config = loadVenueConfig();
-  const isMixedVenue = event.venue && config.mixed_venues.some(mv =>
-    normalizeVenueName(mv).toLowerCase() === normalizeVenueName(event.venue || '').toLowerCase()
-  );
-
   // Fallback: use current type or default to 'concert'
-  // For mixed venues, scraper type is unreliable — default to 'concert'
-  if (!isMixedVenue && event.currentType && event.currentType !== 'other') {
+  if (event.currentType && event.currentType !== 'other') {
     return {
       type: event.currentType,
       confidence: 'low',
@@ -371,9 +435,7 @@ export function categorizeEvent(event: EventInput): CategorizationResult {
   return {
     type: 'concert',
     confidence: 'low',
-    reason: isMixedVenue
-      ? `Mixed venue "${event.venue}" — defaulted to concert`
-      : 'No matching rules, defaulted to concert'
+    reason: 'No matching rules, defaulted to concert'
   };
 }
 
@@ -406,4 +468,5 @@ export function needsHumanReview(result: CategorizationResult): boolean {
 export function clearConfigCache(): void {
   venueConfig = null;
   keywordConfig = null;
+  urlPatternConfig = null;
 }

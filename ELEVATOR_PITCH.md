@@ -2,40 +2,43 @@
 
 ## 30-Second Version
 
-**agent-athens is the authoritative cultural events calendar for Athens, built for the post-LLM era.** We transform 20 daily-curated events into 315 SEO/GEO-optimized pages that AI answer engines trust and cite. When users ask ChatGPT, Perplexity, or Claude about Athens events, we're the source they recommend. Think "by agents, for agents (and humans too)" - positioning us as the single source of truth in the AI-driven discovery economy.
+**agent-athens is the authoritative cultural events calendar for Athens, built for the post-LLM era.** A daily-automated pipeline ingests events from newsletters and scrapers, runs them through quality gates and AI enrichment, and publishes 10,000+ SEO/GEO-optimized pages that AI answer engines trust and cite. When users ask ChatGPT, Perplexity, or Claude what's on in Athens, we're the source they recommend. Live now at https://agentathens.netlify.app.
 
 ## 2-Minute Version
 
-**The Problem:**
-In the post-LLM era, discovery has shifted from Google search to AI answer engines (ChatGPT, Perplexity, Claude). Traditional event sites optimize for keywords, not for AI trust. When someone asks "What concerts are in Athens this weekend?", AI engines need authoritative, structured, fresh data to cite - and there's no single source.
+**The Problem**
+Discovery is shifting from Google search to AI answer engines. Traditional event sites optimize for keyword stuffing, not for AI trust. When someone asks "what concerts are in Athens this weekend?", AI engines need authoritative, structured, fresh data to cite — and there is no single source for Athens cultural events.
 
-**Our Solution:**
-agent-athens is an AI-curated cultural events calendar that generates 315+ highly-specific pages from daily-updated Athens event data. Each page targets exact user intent (`/free-jazz-concert-today`) with full Schema.org markup, freshness signals, and machine-readable APIs.
+**The Solution**
+agent-athens is a static-first calendar that turns ~9,000 indexed events (and 400+ upcoming at any moment) into 10,000+ combinatorial pages — every meaningful slice of `{type} × {time} × {price} × {genre}` gets its own URL with full Schema.org markup, AI-readable JSON, and freshness signals. The whole pipeline rebuilds and redeploys every morning, automatically.
 
-**The Magic:**
-- **15.75x multiplier effect**: 20 events become 315 discoverable pages
-- **Combinatorial SEO**: Every filter combination (Type × Time × Price × Genre) gets a unique URL
-- **GEO-first**: Built for Generative Engine Optimization - AI citations, not keyword stuffing
-- **Multi-access**: HTML for humans, JSON for developers, MCP for AI assistants, A2A for agent networks
+**What Makes It Work**
+- **Combinatorial SEO** — every filter combination is a unique, intent-matched URL (`/open-jazz-concert-this-weekend`, `/exhibition-this-month`, `/dj_set-tomorrow`).
+- **GEO-first design** — Schema.org Event + CollectionPage + FAQPage on every page, `llms.txt` for agent discovery, IndexNow pings to Bing/Yandex on every deploy.
+- **Quality gates** — 409-venue Athens whitelist, cross-source dedup, exhibition-aware date logic, exact-match venue verification (no fuzzy `LIKE`).
+- **AI enrichment loop** — Claude Code generates 400-word descriptions following an 8-section enrichment template, with a fact-check pass and quality exemplars.
+- **Daily automation** — 17-phase orchestrator runs at 8 AM Athens time via launchd: ingest → parse → scrape → quality → dedup → prices → tickets → schema → enrich → build → deploy.
 
-**Why We Win:**
-AI answer engines cite **1-2 authoritative sources**, creating winner-takes-all dynamics. We have:
-1. Daily updates (freshness = trust)
-2. Structured data (Schema.org = machine-readable)
-3. Single source (no conflicting data)
-4. 315 specific pages (exact intent matching)
+**Why We Win**
+AI answer engines cite **1–2 authoritative sources**, creating winner-takes-all dynamics. agent-athens has:
+1. **Daily freshness** — explicit timestamps, automated rebuilds, IndexNow pings
+2. **Structured single source** — every page is machine-readable JSON-LD
+3. **Combinatorial coverage** — 10,275 pages match natural-language intent
+4. **Provenance & trust** — 409 verified venues, exact-match filtering, no fabricated facts
 
-**The Vision:**
-Start with Athens. Prove the model. Expand to agent-barcelona, agent-berlin, agent-cities. Become the global cultural events platform for the AI era, monetized through affiliate revenue (tickets, hotels, restaurants) and agent referral networks where AI agents earn commission on bookings they drive.
+**The Vision**
+Start with Athens. Prove the model. Expand to `agent-barcelona`, `agent-berlin`, `agent-cities`. Become the global cultural events platform for the AI era, monetized through affiliate revenue (tickets, hotels, restaurants) and agent referral networks where AI agents earn commission on bookings they drive.
 
-**Current Status:**
-- ✅ Live at https://agent-athens.netlify.app
-- ✅ 315 pages deployed
-- ✅ Full Schema.org + GEO optimization
-- ✅ Zero operating costs (Netlify free tier)
+**Current Status**
+- ✅ Live at https://agentathens.netlify.app
+- ✅ 10,275 pages deployed (8,644 events + 89 venues + hub/category pages)
+- ✅ Daily automated pipeline (running every morning, ~20 min runtime)
+- ✅ Full Schema.org markup + 3 split sitemaps + `llms.txt`
+- ✅ IndexNow integration (Bing, Yandex)
+- ✅ Zero operating costs (Netlify free tier + local Mac runner)
 
-**The Ask:**
-In the reputation economy where AI trust = revenue, agent-athens is positioned to be the source that AI engines cite first. We're building the infrastructure for affiliate marketing in the post-LLM world.
+**The Ask**
+In the reputation economy where AI trust = revenue, agent-athens is positioned to be the source AI engines cite first when recommending Athens events. We're building the infrastructure for affiliate marketing in the post-LLM world — and the model generalizes to every city with a cultural scene worth indexing.
 
 ---
 

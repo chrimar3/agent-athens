@@ -1,10 +1,11 @@
 /**
  * Unit tests for Event Categorizer
  *
- * Tests the three-pass categorization:
+ * Tests the four-pass categorization:
  * 1. Venue-based rules
  * 2. Keyword-based rules
- * 3. Source-based hints
+ * 3. URL path-based rules
+ * 4. Source-based hints
  */
 
 import { describe, it, expect, beforeEach } from 'bun:test';
@@ -60,13 +61,45 @@ describe('Event Categorizer', () => {
       expect(result.confidence).toBe('medium');
     });
 
-    it('should categorize theater venue events as theater', () => {
+    it('should venue-lock Θέατρο Παλλάς to theater (no URL override)', () => {
       const result = categorizeEvent({
         title: 'New Play Production',
         venue: 'Θέατρο Παλλάς'
       });
       expect(result.type).toBe('theater');
       expect(result.confidence).toBe('high');
+    });
+
+    it('should skip venue lock when high-confidence URL contradicts it', () => {
+      const result = categorizeEvent({
+        title: 'ΡΕΜΟΣ',
+        venue: 'Θέατρο Παλλάς',
+        url: 'https://www.athinorama.gr/music/gig/remos/12345'
+      });
+      // URL override: /music/gig/ (high, concert) ≠ theater → venue lock yields
+      // Falls through to URL pass → concert
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should keep venue lock when URL does not contradict', () => {
+      const result = categorizeEvent({
+        title: 'Λόλα',
+        venue: 'Θέατρο Παλλάς',
+        url: 'https://www.more.com/tickets/theater/lola/99999'
+      });
+      // /tickets/theater/ (high, theater) = theater → no contradiction → venue lock holds
+      expect(result.type).toBe('theater');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should treat Θέατρο Ολύμπια as mixed venue', () => {
+      const result = categorizeEvent({
+        title: 'Συναυλία Ορχήστρας',
+        venue: 'Θέατρο Ολύμπια'
+      });
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('medium');
     });
 
     it('should categorize Red Jasper events as show', () => {
@@ -202,7 +235,120 @@ describe('Event Categorizer', () => {
     });
   });
 
-  describe('Pass 3: Source-Based Hints', () => {
+  describe('Pass 3: URL Path-Based Rules', () => {
+    it('should categorize athinorama /music/gig/ as concert (high)', () => {
+      const result = categorizeEvent({
+        title: 'Unknown Artist',
+        venue: 'Unknown Venue',
+        url: 'https://www.athinorama.gr/music/gig/artist/12345'
+      });
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should categorize more.com /tickets/theater/ as theater (high)', () => {
+      const result = categorizeEvent({
+        title: 'Λόλα',
+        venue: 'Unknown Venue',
+        url: 'https://www.more.com/tickets/theater/lola/99999'
+      });
+      expect(result.type).toBe('theater');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should categorize more.com /tickets/music/ as concert (medium)', () => {
+      const result = categorizeEvent({
+        title: 'Artist Name',
+        venue: 'Unknown Venue',
+        url: 'https://www.more.com/tickets/music/artist/88888'
+      });
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('medium');
+    });
+
+    it('should let keywords win over URL for festivals', () => {
+      const result = categorizeEvent({
+        title: 'EJEKT FESTIVAL 2026',
+        venue: 'Πλατεία Νερού',
+        url: 'https://www.athinorama.gr/music/gig/ejekt/55555'
+      });
+      expect(result.type).toBe('festival');
+    });
+
+    it('should let keywords win over URL for dj_sets', () => {
+      const result = categorizeEvent({
+        title: 'DJ KOZE',
+        venue: 'Gagarin 205',
+        url: 'https://www.more.com/tickets/music/dj-koze/77777'
+      });
+      expect(result.type).toBe('dj_set');
+    });
+
+    it('should fall through gracefully when no URL provided', () => {
+      const result = categorizeEvent({
+        title: 'Mysterious Event',
+        venue: 'Unknown Venue'
+      });
+      // Should reach fallback, not crash
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('low');
+    });
+
+  });
+
+  describe('URL Override + Mixed Venue Integration', () => {
+    it('should venue-lock theater event at Παλλάς when no music URL', () => {
+      const result = categorizeEvent({
+        title: 'Λόλα',
+        venue: 'Θέατρο Παλλάς',
+        currentType: 'theater'
+      });
+      expect(result.type).toBe('theater');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should override venue lock at Παλλάς when /music/gig/ URL present', () => {
+      const result = categorizeEvent({
+        title: 'ΑΝΤΩΝΗΣ ΡΕΜΟΣ',
+        venue: 'Θέατρο Παλλάς',
+        url: 'https://www.athinorama.gr/music/gig/remos/12345',
+        currentType: 'theater'
+      });
+      expect(result.type).toBe('concert');
+    });
+
+    it('should not override venue lock with medium-confidence URL', () => {
+      const result = categorizeEvent({
+        title: 'Unknown Artist',
+        venue: 'Θέατρο Παλλάς',
+        url: 'https://www.more.com/tickets/music/artist/88888'
+      });
+      // /tickets/music/ is medium confidence — not enough to override venue lock
+      expect(result.type).toBe('theater');
+      expect(result.confidence).toBe('high');
+    });
+
+    it('should categorize Θέατρο Ολύμπια concert via keywords (mixed venue)', () => {
+      const result = categorizeEvent({
+        title: 'Μεγάλη Συναυλία',
+        venue: 'Θέατρο Ολύμπια'
+      });
+      expect(result.type).toBe('concert');
+      expect(result.confidence).toBe('medium');
+    });
+
+    it('should trust currentType for Ολύμπια when no rules match', () => {
+      const result = categorizeEvent({
+        title: 'Unnamed Event',
+        venue: 'Θέατρο Ολύμπια',
+        currentType: 'theater'
+      });
+      expect(result.type).toBe('theater');
+      expect(result.confidence).toBe('low');
+    });
+  });
+
+  describe('Pass 4: Source-Based Hints', () => {
     it('should categorize clubber.gr events as dj_set', () => {
       const result = categorizeEvent({
         title: 'Party Night',

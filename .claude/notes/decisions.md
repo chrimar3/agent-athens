@@ -1056,3 +1056,42 @@ Coverage: 81.4% → 88.3% (986/1117 events with geo coordinates). Added 37 venue
 | `contentPagePairs` structure in generate-site.ts | Groups el/en pages together so hreflang alternateSlug is always correct. Iterates both locales in one loop | 2026-03-07 |
 | Detect `hasHreflang` by checking XML output for `xhtml:link` | Previous approach checked parameter sets — missed content page hreflang. Output-based detection works for all hreflang sources | 2026-03-07 |
 | x-default → English for content pages | English is the international default; Greek is primary but visitors without locale preference should see English | 2026-03-07 |
+
+## Surface Token System
+
+| Decision | Why | Date |
+|----------|-----|------|
+| 4-level surface hierarchy: primary → elevated → surface → raised | 3 levels conflated interactive states inside elevated containers with content sections on the page body. 4th level (`--bg-raised`) disambiguates hover/active states from structural backgrounds | 2026-04-06 |
+| `--bg-elevated` #1a1a1a → #151515, `--bg-surface` #242424 → #1e1e1e | Tighter spacing between levels creates perceptually uniform steps (~+7-10 hex per level). All WCAG AA text/surface pairs re-validated | 2026-04-06 |
+| `--bg-raised` = #282828 | Interactive states inside elevated containers (filter dropdowns, search overlay hovers). Passes WCAG AA with all text tokens except `--text-muted` (3.4:1 — documented in CSS comment) | 2026-04-06 |
+| CSS-only change, no template edits | Minimizes blast radius. `category-page.ts` hover direction (surface→elevated = lighter→darker) was already inverted pre-change; visual step is similar | 2026-04-06 |
+
+## Editorial Content Infrastructure
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Separate `config/editorial-content.json` instead of extending `hub-pages.json` | Editorial content is cross-cutting (pull quotes span multiple hubs, vignettes are keyed by event ID). Mixing into hub-pages.json would conflate hub-centric config with cross-hub editorial | 2026-04-06 |
+| `El`/`En` suffixes on bilingual fields (`textEl`, `textEn`, `vignetteEl`, `vignetteEn`) | Matches existing convention in `hub-pages.json` (`titleEl`, `answerCapsuleEn`). Flat structure is greppable and avoids nested locale objects | 2026-04-06 |
+| Graceful degradation — loader returns `[]`/`null` when config is missing or malformed | Templates that consume editorial content shouldn't crash if content hasn't been authored yet. Infrastructure ships before content | 2026-04-06 |
+| Infrastructure-only scope — no template integration | Content generation (Session C) depends on this plumbing existing. Template integration is a separate session to keep changes reviewable and blast radius small | 2026-04-06 |
+| Module-level cache in `editorial-content.ts` | Same pattern as `schema-geo.ts`. Build-time static generator reads config once; no invalidation needed since process exits after generation | 2026-04-06 |
+
+## Editorial Template Integration
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Pull quotes injected between date groups via `injectPullQuotes()` | Date group boundaries are natural content breaks. Splitting on `<h2 class="date-group-header">` + counting `data-count` avoids fragile card-by-card HTML parsing. Threshold: every ~10 cards | 2026-04-06 |
+| Section editorial placed below event blocks `<h2>`, not answer capsule | Thematic editorial text introduces the detailed enriched descriptions. Placing it near the answer capsule would compete with the capsule's distinct SEO purpose | 2026-04-06 |
+| Featured editorial card as variant #6 (`renderFeaturedEventCard`) | Fills editorial curation gap — only variant using hand-written vignettes vs. auto-extracted descriptions. Earns its place despite approaching 5-variant complexity ceiling | 2026-04-06 |
+| Badge treatment via `BadgeTreatment` type: `'yellow' \| 'neutral'` | Yellow = established visual language (event type colors). Neutral = reduced noise for editorial contexts. CSS class approach avoids badge logic duplication | 2026-04-06 |
+| `aria-hidden="true"` on pull quote asides | Pull quotes are decorative editorial repetitions — screen readers should skip them to avoid double-reading content | 2026-04-06 |
+
+## Categorizer URL Override Fix (2026-04-06)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| URL override in venue lock (Pass 1) instead of moving venues to mixed_venues | Moving 7 venues exposed theater events to keyword false positives (e.g., "μαγνητοταινία" → cinema). URL override is surgical: only fires when high-confidence URL contradicts venue lock | 2026-04-06 |
+| Only 2 venues moved to mixed_venues: Θέατρο Ολύμπια + Δημ. Θέατρο Λυκαβηττού | Ολύμπια has balanced 7/3 theater/concert mix; Λυκαβηττού has concerts only. Other 5 venues have 90%+ theater — venue lock is correct default for them | 2026-04-06 |
+| Fallback trusts currentType for all venues (removed `!isMixedVenue` guard) | URL pass (Pass 3) now catches misclassifications at mixed venues, so fallback can trust scraper type for remaining events instead of defaulting to concert | 2026-04-06 |
+| ticketservices.gr and megaron.gr NOT added to url-category-patterns.json | Both use flat URL structures (`/event/<id>/` and `/event/<slug>/`) with no type-specific path segments. Concert, theater, and other types share identical URL patterns. No reliable signal for categorization | 2026-04-06 |
+| Known gap: concerts at theater venues from ticketservices/megaron sources | Without type-specific URLs, these events get venue-locked to theater. Medium-confidence URL patterns don't override venue lock (by design). Requires either: (a) source-specific scraper metadata, (b) artist-name keyword lists, or (c) manual correction | 2026-04-06 |

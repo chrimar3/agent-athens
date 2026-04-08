@@ -1677,6 +1677,17 @@
     "description": "Athens' biggest and most active live music venue in the city center, hosting diverse international and local productions",
     "metro": "Omonia"
   },
+  "Poetry Bar": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Poetry bar, 2-4",
+    "lat": 37.985952,
+    "lng": 23.733488,
+    "type": "amenity",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-08"
+  },
   "Rabbithole": {
     "name_en": "Rabbithole",
     "neighborhood": "Syntagma",

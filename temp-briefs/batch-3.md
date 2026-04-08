@@ -2,7 +2,7 @@
 
 ## VERIFICATION CHECKLIST
 - This is Batch 3
-- Event IDs: 9be90ba3cea2558e, 4e84d81ce4c23bb1, 453f3524b0060f6e
+- Event IDs: 36e2360d8acf29f5, 030bc4a2f61712c2, d95bbb55d1137023
 - Write descriptions to: temp-descriptions/batch-3/
 - BEFORE writing any file, verify the event ID appears in this list
 - ⚠️ DO NOT omit --batch-dir= from write commands. Files without --batch-dir go to a shared directory and contaminate other batches.
@@ -53,56 +53,74 @@ These terms MUST remain untranslated in English descriptions:
 - **Time format**: 24h format with colon (e.g., '21:00', never '9 PM')
 - **Currency**: EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')
 
+## Recent Openings (DO NOT REUSE)
+
+These opening sentences were used in recent batches. Use a DIFFERENT entry strategy:
+
+- "The curtain rises on a hospital bed."
+- "What happens when you compress the largest battle in human history into a room with two actors and no scenery?"
+- "Amalia Arseni walks onstage carrying her aunt's words."
+- "The house lights dim in the Alexandra Trianti Hall and a living room appears on the screen — an American backyard, a broken tree, a family sitting in lawn chairs as if nothing is wrong."
+- "A young man stumbles into a pub in County Mayo and announces he has killed his father."
+- "Four musicians sit along the back wall."
+- "Eleni Rantou stands alone onstage with a microphone and a lifetime of material."
+- "A journalist sits across from Leni Riefenstahl and asks the question the twentieth century never settled: does the artist bear responsibility for what the art served?"
+- "The sixth Caryatid returns from the British Museum."
+- "Sacri Respiri brings countertenor Nikos Spanatis, the S.T.A.B."
+- "By day Patision65 is a vintage clothing bazaar on 28is Oktovriou; by night it opens as a techno venue."
+- "Inside Onassis Stegi, the Yorgos Lanthimos: Photographs exhibition is laid out in the shape of a classical Greek temple — a central altar-like space displaying 110 new photographs, ringed by three outer bodies of work drawn from the spaces of his recent films."
+- "A Saturday in May, and the lawns of the Megaron Concert Hall garden have been turned over to ages three through twelve."
+- "Evanthia Reboutsika and Aris Davarakis open their songbook at the Pallas."
+- "Slaughter to Prevail bring their summer European tour to Floyd in Gazi on 24 July 2026."
+
 ---
 
 ## Events to Enrich
 
-### Ο Του-του και η Τσαφ-τσουφ
-- **ID**: 9be90ba3cea2558e
+### AEK BC - Asisa Joventut
+- **ID**: 36e2360d8acf29f5
+- **Type**: sports
+- **Venue**: Sunel Arena
+- **Price**: paid
+- **Date**: 2026-04-15T19:30:00
+- **Time**: 19:30
+- **URL**: https://www.more.com/gr-el/tickets/sports/aek-bc-asisa-joventut-1/
+- **Source**: more.com
+- **Category**: default
+- **Target words**: 120-200
+- **Structure**: hybrid
+- **HARD CONSTRAINT**: Description MUST be 120-200 words.
+- **Venue intel**: Not in database. WebSearch "Sunel Arena Athens" for context.
+
+### Η βασίλισσα των πάντων
+- **ID**: 030bc4a2f61712c2
+- **Type**: concert
+- **Venue**: Μέγαρο Μουσικής Αθηνών
+- **Price**: paid
+- **Date**: 2026-04-08T12:30:00
+- **Time**: 12:30
+- **URL**: https://www.athinorama.gr/theatre/performance/i_basilissa_ton_panton-10070185/
+- **Source**: athinorama.gr
+- **Category**: premium_showcase
+- **Target words**: 400-600
+- **Structure**: full-8-section
+- **HARD CONSTRAINT**: Description MUST be 400-600 words.
+- **Venue intel**: Not in database. WebSearch "Μέγαρο Μουσικής Αθηνών Athens" for context.
+
+### Άτα με τη γάτα
+- **ID**: d95bbb55d1137023
 - **Type**: theater
 - **Venue**: Olvio
 - **Price**: paid
-- **Date**: 2026-04-04T10:30:00
-- **Time**: 10:30
-- **URL**: https://www.athinorama.gr/theatre/performance/o_tou_tou_kai_i_tsaf_tsouf-10066380/
+- **Date**: 2026-04-08T11:00:00
+- **Time**: 11:00
+- **URL**: https://www.athinorama.gr/theatre/performance/ata_me_ti_gata-10065874/
 - **Source**: athinorama.gr
 - **Category**: theater_contemporary
-- **Target words (English)**: 120-180
-- **Target words (Greek)**: 100-155
+- **Target words**: 120-180
 - **Structure**: hybrid
-- **HARD CONSTRAINT**: English description MUST be 120-180 words. Greek MUST be 100-155 words.
+- **HARD CONSTRAINT**: Description MUST be 120-180 words.
 - **Venue intel**: Not in database. WebSearch "Olvio Athens" for context.
-
-### Super Stereo
-- **ID**: 4e84d81ce4c23bb1
-- **Type**: concert
-- **Venue**: ΙΛΙΟΝ Plus
-- **Price**: tba
-- **Date**: 2026-04-04
-- **URL**: https://www.athinorama.gr/music/gig/super_stereo-10045839/
-- **Source**: athinorama.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "ΙΛΙΟΝ Plus Athens" for context.
-
-### Full Circle pres. Styx Agency: Mångata Projekt + Man With The Speaker + Filippos + Maarkk + Sioma
-- **ID**: 453f3524b0060f6e
-- **Type**: dj_set
-- **Venue**: Ωδείο Αθηνών
-- **Price**: door
-- **Date**: 2026-04-04T19:00:00
-- **Time**: 19:00
-- **URL**: https://www.clubber.gr/events/full-circle-pres-styx-agency-mangata-projekt-man-with-the-speaker-filippos-maarkk-sioma/
-- **Source**: clubber.gr
-- **Category**: concert_local
-- **Target words (English)**: 80-120
-- **Target words (Greek)**: 70-100
-- **Structure**: three-part-block
-- **HARD CONSTRAINT**: English description MUST be 80-120 words. Greek MUST be 70-100 words.
-- **Venue intel**: Not in database. WebSearch "Ωδείο Αθηνών Athens" for context.
 
 ---
 
@@ -126,18 +144,7 @@ For EACH event:
    ```bash
    bun run scripts/write-tags.ts <event-id> --batch-dir=temp-descriptions/batch-3 Tag1 Tag2 Tag3...
    ```
-5. **Write Greek description** (optional secondary): Write a condensed Greek version.
-   Save to `temp-descriptions/batch-3/<event-id>.gr.md`. Greek word target shown per event above.
-   ```bash
-   bun run scripts/write-description.ts <event-id> --batch-dir=temp-descriptions/batch-3 --lang=gr "<greek description>"
-   ```
-   **Greek description rules**:
-   - Cultural terms in Greek (e.g., ρεμπέτικο, λαϊκό, έντεχνο — not transliterated)
-   - Use "ελεύθερη είσοδος" not "δωρεάν" for free events
-   - Venue names MUST be in Greek script: Μέγαρο Μουσικής (not Megaron), Τεχνόπολη (not Technopolis), Στέγη Ωνάση (not Onassis Stegi), Εθνικό Θέατρο (not National Theatre)
-   - Same 8-section structure, same factual content, but natural Greek voice
-   - The Greek version is NOT a translation. Write it fresh for a local audience.
-6. **Save decision** (after completing ALL events in this batch):
+5. **Save decision** (after completing ALL events in this batch):
    - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:
    ```bash
    bun run scripts/save-batch.ts --manifest=temp-briefs/batch-3.manifest.json --session=batch-3 --batch=3 --clean
@@ -151,33 +158,33 @@ For EACH event:
 Copy-paste these with the correct tier for each event:
 
 ```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/9be90ba3cea2558e.md \
-  --tier=standard --event-id=9be90ba3cea2558e \
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/36e2360d8acf29f5.md \
+  --tier=standard --event-id=36e2360d8acf29f5 \
+  --event-type=sports --event-venue="Sunel Arena" \
+  --event-title="AEK BC - Asisa Joventut" \
+  --event-date=2026-04-15 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/030bc4a2f61712c2.md \
+  --tier=premium --event-id=030bc4a2f61712c2 \
+  --event-type=concert --event-venue="Μέγαρο Μουσικής Αθηνών" \
+  --event-title="Η βασίλισσα των πάντων" \
+  --event-date=2026-04-08 --event-price=paid
+```
+
+```bash
+bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/d95bbb55d1137023.md \
+  --tier=standard --event-id=d95bbb55d1137023 \
   --event-type=theater --event-venue="Olvio" \
-  --event-title="Ο Του-του και η Τσαφ-τσουφ" \
-  --event-date=2026-04-04 --event-price=paid
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/4e84d81ce4c23bb1.md \
-  --tier=stub --event-id=4e84d81ce4c23bb1 \
-  --event-type=concert --event-venue="ΙΛΙΟΝ Plus" \
-  --event-title="Super Stereo" \
-  --event-date=2026-04-04 --event-price=tba
-```
-
-```bash
-bun run scripts/auto-gate-check.ts temp-descriptions/batch-3/453f3524b0060f6e.md \
-  --tier=stub --event-id=453f3524b0060f6e \
-  --event-type=dj_set --event-venue="Ωδείο Αθηνών" \
-  --event-title="Full Circle pres. Styx Agency: Mångata Projekt + Man With The Speaker + Filippos + Maarkk + Sioma" \
-  --event-date=2026-04-04 --event-price=door
+  --event-title="Άτα με τη γάτα" \
+  --event-date=2026-04-08 --event-price=paid
 ```
 
 After all events, create `temp-descriptions/batch-3/batch-3-review.md` with:
 
 | Event ID | Title | Gate Score | Issues | Confidence |
 |----------|-------|------------|--------|------------|
-| 9be90ba3cea2558e | Ο Του-του και η Τσαφ-τσουφ | /100 | | |
-| 4e84d81ce4c23bb1 | Super Stereo | /100 | | |
-| 453f3524b0060f6e | Full Circle pres. Styx Agency: Mångata Projekt + Man With The Speaker + Filippos + Maarkk + Sioma | /100 | | |
+| 36e2360d8acf29f5 | AEK BC - Asisa Joventut | /100 | | |
+| 030bc4a2f61712c2 | Η βασίλισσα των πάντων | /100 | | |
+| d95bbb55d1137023 | Άτα με τη γάτα | /100 | | |

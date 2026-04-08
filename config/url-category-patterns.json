@@ -1,0 +1,14 @@
+{
+  "_description": "URL path patterns for event categorization (Pass 3). Only verified high-reliability patterns.",
+  "_version": "1.0",
+  "_excluded_sources": [
+    "ticketservices.gr — flat /event/<id>/ structure, no type signal",
+    "megaron.gr — flat /event/<slug>/ structure, no type signal",
+    "athinorama.gr /theatre/performance/ — only 50% accurate in spike"
+  ],
+  "patterns": [
+    { "url_contains": "/music/gig/", "type": "concert", "confidence": "high" },
+    { "url_contains": "/tickets/theater/", "type": "theater", "confidence": "high" },
+    { "url_contains": "/tickets/music/", "type": "concert", "confidence": "medium" }
+  ]
+}

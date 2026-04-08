@@ -206,6 +206,7 @@ describe("Exhibition Tier 1: running exhibitions in time filters", () => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       language: "el",
+      hasNativeGreek: false,
       ...overrides,
     };
   }
@@ -324,6 +325,7 @@ describe("Exhibition Tier 1: running exhibitions in time filters", () => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       language: "el",
+      hasNativeGreek: false,
     };
     const filtered = filterEvents([pastConcert], { time: "today" });
     expect(filtered.length).toBe(0);

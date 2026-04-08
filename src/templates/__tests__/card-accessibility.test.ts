@@ -11,7 +11,7 @@
 
 import { describe, test, expect } from "bun:test";
 import { renderEventCard } from "../page";
-import { renderEventCardList, renderFeatureCard } from "../card-variants";
+import { renderEventCardList, renderFeatureCard, renderFeaturedEventCard } from "../card-variants";
 import { renderRelatedEventCard } from "../../generators/event-page";
 import { sampleConcert, sampleFreeExhibition } from "../../../tests/fixtures/events";
 
@@ -97,5 +97,49 @@ describe("Card accessibility — exhibition card", () => {
   test("exhibition card also uses article wrapper", () => {
     expect(html).toContain("<article");
     expect(html).not.toMatch(A_TAG_WITH("event-card"));
+  });
+});
+
+describe("Card accessibility — featured editorial card", () => {
+  const vignette = "A night of rebetiko in the heart of Athens.";
+  const html = renderFeaturedEventCard(sampleConcert, vignette);
+
+  test("wraps in <article>, not <a>", () => {
+    expect(html).toContain("<article");
+    expect(html).toContain('class="event-card-featured-editorial"');
+    expect(html).not.toMatch(A_TAG_WITH("event-card-featured-editorial"));
+  });
+
+  test("heading contains card-link <a>", () => {
+    expect(html).toMatch(/<h3[^>]*class="featured-editorial-title"[^>]*>\s*<a\s[^>]*class="card-link"/);
+  });
+
+  test("renders vignette text", () => {
+    expect(html).toContain('class="featured-editorial-vignette"');
+    expect(html).toContain(vignette);
+  });
+
+  test("uses 16:9 image wrapper", () => {
+    expect(html).toContain('class="featured-editorial-image"');
+  });
+
+  test("closes with </article>", () => {
+    expect(html).toContain("</article>");
+  });
+});
+
+describe("Featured editorial card — badge treatments", () => {
+  const vignette = "Test vignette text.";
+
+  test("yellow treatment uses event type color", () => {
+    const html = renderFeaturedEventCard(sampleConcert, vignette, 'yellow');
+    expect(html).toContain('style="background:');
+    expect(html).not.toContain('card-badge--neutral');
+  });
+
+  test("neutral treatment uses neutral class, no inline color", () => {
+    const html = renderFeaturedEventCard(sampleConcert, vignette, 'neutral');
+    expect(html).toContain('card-badge--neutral');
+    expect(html).not.toContain('style="background:');
   });
 });

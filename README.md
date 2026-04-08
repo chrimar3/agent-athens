@@ -1,835 +1,334 @@
 # agent-athens
 
-AI-curated cultural events calendar for Athens, Greece. Transforms daily event newsletters and events scraped from the internet into SEO/GEO-optimized static pages designed for AI answer engines (ChatGPT, Perplexity, Claude), future A2A assistants, and humans.
+**AI-curated cultural events calendar for Athens, Greece.** A static-first site that turns daily newsletters and scraped event listings into SEO/GEO-optimized pages designed for AI answer engines (ChatGPT, Perplexity, Claude), agent-to-agent (A2A) protocols, and humans.
 
-## Status
-
-**Phase:** Live Prototype (Developer-Only)
-**Current Milestone:** Available only to project developers
-**Next Milestone:** Make available to search engines
-**Future Milestone:** Release to small group of first users for feedback
-**Mode:** Static Site (Netlify CDN)
-**Pages:** Dynamic (currently ~315 pages based on active events)
-**Location:** Athens, Greece (EET/UTC+2)
-**Deployment:** Netlify (auto-deploy on git push)
-
-**Latest Update (Jan 2026)**: ✅ **TDD Data Pipeline Complete - 599 Tests Passing**
-- ✅ Email ingestion integrated (Priority 0 - fetches newsletters from Gmail)
-- ✅ Web scraping automation (3-step pipeline with frequency-based scheduling)
-- ✅ **Location filtering with venue whitelist/blacklist** (78 verified Athens venues)
-- ✅ **Quality gates** (deduplication, location verification)
-- ✅ **AI enrichment workflow** (150-300 word descriptions optimized for AI answer engines)
-- ✅ **Pipeline state tracking** (JSON-based daily progress tracking)
-- ✅ launchd automation (daily 8 AM Athens time)
-- ✅ 599 tests across 23 test files
-- See `docs/LAUNCHD-SETUP.md` and `docs/CLAUDE-SESSION-GUIDE.md`
-
-## The Vision
-
-Start with Athens. Prove the model. Expand to agent-barcelona, agent-berlin, agent-cities. Become the global cultural events platform for the AI era, monetized through affiliate revenue (tickets, hotels, restaurants) and agent referral networks where AI agents earn commission on bookings they drive.
-
-## The Ask
-
-In the reputation economy where AI trust = revenue, agent-athens is positioned to be the source that AI engines cite first. We're building the infrastructure for affiliate marketing in the post-LLM world.
+🔗 **Live site:** https://agentathens.netlify.app
+🤖 **AI discovery:** https://agentathens.netlify.app/llms.txt
+📦 **Repository:** https://github.com/chrimar3/agent-athens
 
 ---
 
-## How It Works: Complete System Flow
+## What It Is
 
-### Phase 1: Event Collection (Daily, ~8:00 AM Athens)
+A daily-updated calendar of concerts, DJ sets, exhibitions, theater, festivals, and cultural happenings in Athens. The pipeline runs automatically every morning: it ingests events from email newsletters and web scrapers, runs them through quality gates (location verification, deduplication), enriches them with AI-generated descriptions, and publishes a static site to Netlify.
 
-**1A. Email Ingestion** (✅ **INTEGRATED** - Automated newsletter fetching):
+The site is optimized to be the source AI engines cite when users ask "what's on in Athens this weekend?" — structured data, freshness signals, and combinatorial URLs that match natural-language intent.
 
-**Status**: Integrated into orchestrator as Priority 0 (runs before web scraping)
+## Current Stats
 
-**Workflow**:
-1. Connect to Gmail via IMAP (`agentathens.events@gmail.com`)
-2. Fetch unread newsletter emails from INBOX
-3. Save emails to `data/emails-to-parse/` for Claude Code parsing
-4. Mark as processed in `data/processed-emails.json` (prevents reprocessing)
-5. Archive emails (move from INBOX → All Mail)
+| Metric | Value |
+|---|---|
+| Pages generated (last build) | **10,275** |
+| Event pages | 8,644 |
+| Venue pages | 89 |
+| Hub / category pages | ~50 |
+| Events in database | 9,389 |
+| Upcoming events | 412 |
+| Verified Athens venues | 409 |
+| Build time | ~11s |
+| Pipeline runtime | ~20 min |
 
-**Features**:
-- ✅ **Frequency-based scheduling**: daily (integrated into orchestrator)
-- ✅ **Duplicate prevention**: Tracks Message-IDs to avoid reprocessing
-- ✅ **Email archiving**: Keeps inbox clean, creates audit trail
-- ✅ **Timeout handling**: 60-second timeout with 2 retries
-- ✅ **State tracking**: Included in orchestrator state management
+## Tech Stack
 
-**Scripts**:
-- `scripts/ingest-emails.ts` - Standalone email fetching
-- `scripts/parse-emails.ts` - Helper for Claude Code parsing workflow
-- `src/ingest/email-ingestion.ts` - Core email fetching logic
-
-**Usage**:
-```bash
-# Standalone (test only)
-bun run scripts/ingest-emails.ts           # Fetch emails
-bun run scripts/ingest-emails.ts --dry-run # Preview
-
-# Integrated (production)
-bun run scripts/scrape-all-sources.ts      # Runs email ingestion first (Step 0)
-```
-
-**Parsing Workflow**:
-1. Emails saved to `data/emails-to-parse/`
-2. Ask Claude Code: "Parse emails in data/emails-to-parse/ and add events to database"
-3. Claude Code uses FREE `tool_agent` (no API costs!)
-4. Events imported to database with auto-deduplication
-
-**Configuration**: `config/orchestrator-config.json` → `email_ingestion` section
-
-**1B. Web Scraping** (✅ **AUTOMATED** - Standalone orchestrator with frequency scheduling):
-
-**Orchestrator**: `bun run scripts/scrape-all-sources.ts`
-
-**Features**:
-- ✅ **Frequency-based scheduling**: daily/weekly/monthly (only scrapes when due)
-- ✅ **Timeout handling**: kills runaway processes (configurable per source)
-- ✅ **Retry logic**: exponential backoff (2s, 4s, 8s)
-- ✅ **State tracking**: `data/scrape-state.json` (timestamps, counts, errors)
-- ✅ **Rate limiting**: configurable delays between sources
-- ✅ **CLI modes**: `--force`, `--source=X`, `--dry-run`
-
-**Configuration**:
-- `config/orchestrator-config.json` - Pipeline config (timeout, retry, frequency, priority)
-- `config/scrape-list.json` - Scraper config (sites, URLs, user agent)
-- Currently configured: viva.gr (daily), more.com (daily), gazarte.gr (weekly)
-
-**Pipeline** (3-step execution per source):
-1. **Scraper**: Python scraper (`scripts/scrape-all-sites.py --site X`)
-   - Crawls website URL
-   - Saves HTML to `data/html-to-parse/`
-2. **Parser**: Python parser (`scripts/parse_tier1_sites.py`)
-   - Extracts events from HTML
-   - Saves JSON to `data/parsed-events/`
-3. **Importer**: Bun importer (`scripts/import-X-events.ts`)
-   - Imports events to database
-   - Auto-deduplicates by hash(title+date+venue)
-
-**Usage**:
-```bash
-# Run all sources that are due (frequency-based)
-bun run scripts/scrape-all-sources.ts
-
-# Force all sources (ignore frequency)
-bun run scripts/scrape-all-sources.ts --force
-
-# Run specific source
-bun run scripts/scrape-all-sources.ts --source=viva.gr
-
-# Preview without executing
-bun run scripts/scrape-all-sources.ts --dry-run
-```
-
-**Automation**: ✅ **ACTIVE** - Cron job running daily at 8 AM
-
-**Cron Schedule**:
-```bash
-0 8 * * * cd /Users/chrism/Project\ with\ Claude/AgentAthens/agent-athens && /Users/chrism/.bun/bin/bun run scripts/scrape-all-sources.ts >> logs/scrape-$(date +\%Y\%m\%d).log 2>&1
-```
-
-**Documentation**: See `docs/EMAIL-INGESTION-INTEGRATION.md`, `docs/CRON-AUTOMATION-SETUP.md`, and `docs/INTEGRATION-COMPLETE.md`
-
-**1C. Database Upsert** (Deduplication & Storage):
-1. Normalize all collected events (from email + web) to Schema.org format
-2. For each event:
-   - Generate event ID (hash of `title+date+venue`)
-   - Check if ID exists in database
-   - **IF exists:** UPDATE (description, price, URL changes)
-   - **IF new:** INSERT
-3. Log results summary
-
-**Output**:
-```
-📊 Database Upsert Results:
-  ✅ X new events inserted
-  🔄 Y events updated (price/description changes)
-  ⏭️  Z duplicates skipped (already current)
-```
-
-**Total:** New raw events per day in database (dynamic number - realistically we don't expect hundreds of new events every day)
+- **Runtime:** [Bun](https://bun.sh) (never Node.js — see `.claude/CLAUDE.md`)
+- **Language:** TypeScript
+- **Database:** SQLite via `better-sqlite3`
+- **Site generation:** Custom static generator (`src/generate-site.ts`)
+- **AI enrichment:** Claude Code CLI (`claude -p`) via `scripts/auto-enrich.sh`
+- **Hosting:** Netlify (CDN + edge functions)
+- **Automation:** macOS `launchd` (daily 8 AM Athens time)
+- **Scraping:** Bun + Python (Puppeteer, Cheerio, BeautifulSoup)
+- **Email ingestion:** IMAP via `imap-simple`
+- **Schema validation:** Schema.org JSON-LD (Event, CollectionPage, FAQPage)
 
 ---
 
-### Phase 2: Event Enrichment (Daily, ~8:05 AM)
-
-**AI Description Generator** (`bun run scripts/run-enrichment-pipeline.ts`):
-
-For each event without a full description:
-
-1. **Build enrichment prompt**:
-   - Include event metadata (title, type, venue, date, genre)
-   - Request exactly 400 words (±20 acceptable)
-   - Emphasize cultural context, artist background, what makes it special
-   - Avoid marketing fluff, focus on authentic storytelling
-
-2. **Call `tool_agent`** (need to work on scheduling a call to the Agent SDK to run the project like we manually do in Claude Code, which uses the internal `tool_agent`):
-   - Generate compelling narrative description
-   - Include practical details naturally (time, location, price)
-   - Mention Athens neighborhood connections when relevant
-   - Never fabricate facts
-
-3. **Update database**:
-   - Store in `full_description` column
-   - Update `updated_at` timestamp
-   - Word count validation (must be ~400 words)
-
-4. **Rate limiting**:
-   - 2-second pause between `tool_agent` calls
-   - Handle 429 errors gracefully (wait 30s)
-   - Log progress and errors
-
-**Output**: All events have rich 400-word descriptions
-
-**Cost**: **CRITICAL: FREE when using `tool_agent`!**
-
----
-
-### Phase 3: Database Cleanup (Daily, ~8:10 AM)
-
-**Automatic Event Lifecycle** (within `generate-site.ts`):
-
-1. **Delete expired events**:
-   - Remove events older than 1 day (past events)
-   - Keep today/future events only
-   - Maintains database size (~300-500 event categories typical)
-
-2. **Smart date handling**:
-   - "Today" automatically updates daily
-   - "Tomorrow" becomes "today" (no manual updates)
-   - Past events disappear automatically
-
-**Output**: Clean database with only current/future events
-
----
-
-### Phase 4: Static Site Generation (Daily, ~8:15 AM)
-
-**Combinatorial Page Generator** (`bun run build`):
-
-1. **Load events from database**:
-   ```typescript
-   const allEvents = getAllEvents();
-   console.log(`📥 Loaded ${allEvents.length} events`);
-   ```
-
-2. **Generate combinatorial pages** (Type × Time × Price × Genre = dynamic number of pages, currently ~315):
-
-   **Core time pages** (dynamic count):
-   - `/today`, `/tomorrow`, `/this-week`, `/this-weekend`, `/this-month`, `/next-month`, `/all-events`
-   - **TODO**: Consider if we also need pages with specific values, such as `/november-2025` (which currently appears as "next-month")
-
-   **Type pages** (dynamic count: types × time ranges):
-   - `/concert-today`, `/exhibition-this-week`, `/cinema-this-weekend`, etc.
-
-   **Price pages** (dynamic count: price filters × time ranges):
-   - `/open-today`, `/with-ticket-this-week`, etc.
-   - **Note**: Using "open" and "with-ticket" terminology instead of "free/paid"
-
-   **Type + Price pages** (dynamic count: types × prices × time ranges):
-   - `/open-concert-today`, `/with-ticket-exhibition-this-week`, etc.
-
-   **Genre pages** (dynamic count: genres × time ranges × prices):
-   - `/jazz-concert-today`, `/open-jazz-concert-this-week`, etc.
-
-3. **For each page**:
-   - Filter events matching criteria (type, time, price, genre)
-   - Generate HTML with Schema.org markup (Event CollectionPage)
-   - Generate JSON API (same data, different format)
-   - Handle empty pages gracefully ("0 events found, check back tomorrow")
-   - Add cross-links to related pages
-
-4. **Generate discovery files**:
-   - `llms.txt` - AI agent discovery (what this site offers) - **TODO: Confirm if this is a good practice**
-   - `robots.txt` - Search engine crawling rules
-   - `sitemap.xml` - All URLs for search engines (dynamic count)
-
-**Output**: HTML pages + JSON APIs + 3 discovery files (total size ~4.1 MB)
-
-**Build time**: ~2-5 seconds (Bun is fast!)
-
----
-
-### Phase 5: Deployment (Daily, ~8:20 AM)
-
-**Git + Netlify Auto-Deploy**:
-
-1. **Commit changes**:
-   ```bash
-   git add dist/ data/events.db
-   git commit -m "chore: Daily update $(date +%Y-%m-%d)
-
-   - X new events added
-   - Y events enriched with AI descriptions
-   - Z past events removed
-
-   🤖 Automated daily update"
-   git push origin main
-   ```
-
-2. **Netlify detects push**:
-   - Triggers build (instant - just copies files)
-   - Atomic deployment (zero downtime)
-   - Global CDN distribution
-   - SSL/HTTPS automatic
-
-3. **Site goes live**:
-   - https://agent-athens.netlify.app
-   - All pages updated (dynamic count)
-   - Fresh data visible to users and AI agents
-
-**Deploy time**: ~30 seconds (Netlify build + CDN propagation)
-
-**Total pipeline**: ~20 minutes (collection → enrichment → generation → deployment)
-
----
-
-## Daily Timeline (Athens Time / ET)
-
-**Note:** Designed for Athens (EET/EEST) but configurable for any timezone.
+## Architecture
 
 ```
-08:00 AM - Email ingestion + Web scraping (PRIORITY - need to develop now)
-08:05 AM - AI enrichment (using tool_agent)
-08:10 AM - Database cleanup
-08:15 AM - Site generation (dynamic page count)
-08:20 AM - Git commit + Netlify deploy
-08:25 AM - ✅ Live site updated
+┌─────────────────────────────────────────────────────────────┐
+│                     DAILY PIPELINE (8 AM)                   │
+│                                                             │
+│  ┌──────────┐    ┌──────────┐    ┌──────────────────────┐   │
+│  │  EMAIL   │    │   WEB    │    │  ICAL / NEWSLETTERS  │   │
+│  │  IMAP    │    │ SCRAPING │    │    (planned)         │   │
+│  └────┬─────┘    └────┬─────┘    └──────────┬───────────┘   │
+│       └───────────────┼────────────────────-┘               │
+│                       ▼                                     │
+│       ┌─────────────────────────────────┐                   │
+│       │   QUALITY GATES                 │                   │
+│       │   • Location filter (whitelist) │                   │
+│       │   • Same-source dedup           │                   │
+│       │   • Cross-source merge          │                   │
+│       │   • Price acquisition           │                   │
+│       │   • Ticket URL validation       │                   │
+│       │   • Schema.org generation       │                   │
+│       └─────────────────┬───────────────┘                   │
+│                         ▼                                   │
+│       ┌─────────────────────────────────┐                   │
+│       │   AI ENRICHMENT                 │                   │
+│       │   • Description generation      │                   │
+│       │   • Time / image extraction     │                   │
+│       │   • Venue geocoding             │                   │
+│       └─────────────────┬───────────────┘                   │
+│                         ▼                                   │
+│       ┌─────────────────────────────────┐                   │
+│       │   STATIC SITE GENERATION        │                   │
+│       │   • 10,275 pages, ~11s          │                   │
+│       │   • OG images + favicons        │                   │
+│       │   • 3 sitemaps + llms.txt       │                   │
+│       └─────────────────┬───────────────┘                   │
+│                         ▼                                   │
+│       ┌─────────────────────────────────┐                   │
+│       │   DEPLOY                        │                   │
+│       │   • Git push → Netlify          │                   │
+│       │   • IndexNow ping (Bing/Yandex) │                   │
+│       └─────────────────────────────────┘                   │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Current (Manual)**: Run `bun run build` whenever events are added/updated. Manual from the perspective of the human developer can mean asking Claude Code to run these tasks. Agent SDK will be able to run them as standalone when called through the SDK.
-
-**Future (Automated)**: macOS launchd triggers full pipeline daily at 8 AM.
-
----
-
-## Key Decision Points
-
-1. **Do we have new events?** → Yes: Enrich with AI descriptions
-2. **Are events enriched?** → No: Run `scripts/run-enrichment-pipeline.ts`
-3. **Are there past events?** → Yes: Auto-cleanup on site generation
-4. **Page has 0 events?** → Still generate (show "0 events found" message)
-5. **Database has changes?** → Regenerate ALL pages (ensures consistency)
-6. **Deployment ready?** → Git push → Netlify auto-deploys
-
----
-
-## Human Setup Requirements
-
-Before you start coding, you'll need to set up a few things manually. These are one-time setup tasks that enable you to own and operate the production infrastructure.
-
-### 1. Set Up GitHub Repository (Required)
-
-**Why:** You'll own the codebase and control deployments.
-
-**Steps:**
-1. **Fork or transfer** the repository to your GitHub account:
-   - Option A: Fork: `https://github.com/chrimar3/agent-athens` → Click "Fork"
-   - Option B: Transfer: Repo owner transfers ownership to you (Settings → Transfer)
-2. Clone YOUR repository:
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/agent-athens.git
-   cd agent-athens
-   ```
-3. You now control the `main` branch and all deployments
-
-### 2. Set Up Netlify for Production (Required)
-
-**Why:** You'll own the production deployment and domain.
-
-**Steps:**
-1. Go to [netlify.com](https://netlify.com) and sign up (free tier is plenty)
-2. Click "Add new site" → "Import an existing project"
-3. Connect to your GitHub repository (`YOUR-USERNAME/agent-athens`)
-4. Configure build settings:
-   - **Build command:** `bun run build` (or leave empty - we commit `dist/`)
-   - **Publish directory:** `dist`
-   - **Branch:** `main`
-5. Click "Deploy site"
-6. Your production site is live at: `agent-athens.netlify.app` (or custom domain)
-
-**Auto-Deploy Setup:**
-- Netlify will auto-deploy every time you push to `main`
-- Or use CLI: `netlify deploy --prod --dir=dist`
-
-**Local CLI Setup:**
-```bash
-npm install -g netlify-cli
-netlify login
-netlify link  # Links to YOUR production site
-```
-
-### 3. Create a Newsletter Subscription Email (Future)
-
-**Why:** To receive Athens event newsletters for testing email ingestion (Phase 1A - not yet implemented).
-
-**Steps:**
-1. Create a new Gmail account (e.g., `yourname.athens.events@gmail.com`)
-2. Enable IMAP in Gmail:
-   - Settings → Forwarding and POP/IMAP → Enable IMAP
-3. Generate an App Password:
-   - Google Account → Security → 2-Step Verification → App Passwords
-   - Select "Mail" and generate a 16-character password
-4. Subscribe to Athens event newsletters:
-   - This is Athens: [thisisathens.org](https://thisisathens.org)
-   - Lifo Guide: [lifo.gr/guide](https://lifo.gr/guide)
-   - Venue newsletters: Six D.O.G.S, Gazarte, Bios, Fuzz Club, SNFCC
-5. Save your credentials to `.env`:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your email and app password
-   ```
-
-**Note:** Email ingestion is not yet implemented. For now, the pipeline uses web scraping (no credentials needed).
-
-### 4. Get Claude Code (Required for Interactive AI Tasks)
-
-**Why:** HTML parsing and event enrichment use Claude Code tool_agent (free with your subscription).
-
-**Steps:**
-1. Install Claude Code CLI: Follow instructions at [claude.ai/code](https://claude.ai/code)
-2. Authenticate: `claude login`
-3. You're ready to use interactive AI features (HTML parsing, enrichment)
-
-**What you'll use it for:**
-- Parsing HTML event pages into structured JSON
-- Generating 400-word event descriptions
-- Database queries and transformations
+The orchestrator (`scripts/daily-automated.sh`) runs every phase as non-fatal except site generation and deploy — a flaky scraper never blocks publishing already-good data.
 
 ---
 
 ## Quick Start
 
-### 1. Prerequisites
+### Prerequisites
 
 ```bash
-# Install Bun (fast JavaScript runtime)
+# Install Bun
 curl -fsSL https://bun.sh/install | bash
 
-# Verify installation
-bun --version
+# Install Claude Code CLI (for enrichment)
+# https://claude.com/claude-code
 ```
 
-### 2. Setup Project
+### Setup
 
 ```bash
-# Clone repository
 git clone https://github.com/chrimar3/agent-athens.git
 cd agent-athens
-
-# Install dependencies
 bun install
+cp .env.example .env  # add IMAP credentials if using email ingestion
 ```
 
-### 3. Initialize Database
+### Run the pipeline
 
 ```bash
-# Create SQLite database with schema
-bun run scripts/init-database.ts
+# Full daily pipeline (ingest → enrich → build → deploy)
+./scripts/daily-automated.sh
 
-# Import sample events (optional)
-bun run scripts/import-scraped-events.ts
-```
+# Dry run (show what would happen)
+./scripts/daily-automated.sh --dry-run
 
-### 4. Enrich Events with AI
-
-```bash
-# Generate 400-word descriptions for all events
-bun run scripts/run-enrichment-pipeline.ts
-
-# Or enrich in batches (need to decide on tool_agent capacity)
-bun run scripts/enrich-5-events.ts
-```
-
-### 5. Generate Static Site
-
-```bash
-# Build all pages (dynamic count)
+# Just build the site
 bun run build
 
-# Output: dist/ directory with HTML + JSON files
-```
+# Just scrape (specific source or all)
+bun run scripts/scrape-all.ts
+bun run scripts/scrape-all.ts --source=viva.gr --dry-run
 
-### 6. Deploy to Netlify
-
-```bash
-# First time: Connect to Netlify
-netlify login
-netlify init
-
-# Deploy (or just git push if auto-deploy is configured)
-bun run deploy
-# Or manually: netlify deploy --prod --dir=dist
+# Deploy manually
+bun run deploy   # netlify deploy --prod --dir=dist
 ```
 
 ---
 
 ## Project Structure
 
-**Note:** The following is offered as an example architecture.
-
 ```
 agent-athens/
-├── src/                        # Source code
-│   ├── generate-site.ts        # Main site generator (combinatorial logic)
-│   ├── types.ts                # TypeScript types (Event, Filters, etc.)
-│   ├── db/                     # Database layer
-│   │   └── database.ts         # SQLite queries (insert, update, get events)
-│   ├── templates/              # HTML generation
-│   │   └── page.ts             # Page renderer (Schema.org markup)
-│   └── utils/                  # Utilities
-│       ├── normalize.ts        # Event normalization (Schema.org format)
-│       ├── filters.ts          # Event filtering (type, time, price, genre)
-│       └── urls.ts             # URL building (/open-jazz-concert-today)
-├── scripts/                    # Standalone scripts
-│   ├── init-database.ts        # Database initialization
-│   ├── scrape-events.ts        # Web scraping
-│   ├── import-scraped-events.ts # Import JSON events to DB
-│   ├── run-enrichment-pipeline.ts        # AI description generation (all events)
-│   └── enrich-5-events.ts      # AI enrichment (batched)
-├── data/                       # Data files (gitignored except .sql)
-│   ├── events.db               # SQLite database (gitignored)
-│   ├── events.sql              # Database schema
-│   ├── scraped-events.json     # Raw scraped events (gitignored)
-│   └── unenriched-events.json  # Events pending enrichment (gitignored)
-├── dist/                       # Generated static site (gitignored locally, committed for Netlify)
-│   ├── *.html                  # HTML pages (dynamic count)
-│   ├── api/*.json              # JSON API endpoints (dynamic count)
-│   ├── llms.txt                # AI agent discovery
-│   ├── robots.txt              # Search engine rules
-│   └── sitemap.xml             # Search engine sitemap
-├── logs/                       # Runtime logs (gitignored)
-├── netlify.toml                # Netlify configuration
-├── package.json                # Bun dependencies
-├── tsconfig.json               # TypeScript configuration
-├── .gitignore                  # Git exclusions
-├── README.md                   # This file
-├── PROJECT_DESCRIPTION.md      # Full technical overview
-├── ELEVATOR_PITCH.md           # 30-second + 2-minute pitches
-├── IMPLEMENTATION_PLAN.md      # 4-step daily pipeline architecture
-├── ENRICHMENT_README.md        # AI enrichment guide
-└── COMBINATORIAL_SEO_STRATEGY.md # SEO/GEO strategy documentation
+├── src/
+│   ├── generate-site.ts        # Main static site generator
+│   ├── types.ts                # Core types (Event, EventType, Price, …)
+│   ├── db/                     # SQLite layer
+│   ├── ingest/                 # Email IMAP ingestion
+│   ├── scraping/               # Web scrapers
+│   ├── categorizer/            # Event type classification
+│   ├── enrichment/             # AI description pipeline
+│   ├── quality/                # Dedup, location filter, validators
+│   ├── generators/             # Page builders (event, hub, venue)
+│   ├── templates/              # HTML templates + card variants
+│   ├── images/                 # OG image + favicon generation
+│   ├── sitemap/                # Sitemap splitting
+│   └── styles/                 # Design system CSS
+├── scripts/                    # 70+ operational scripts
+│   ├── daily-automated.sh      # Daily pipeline orchestrator
+│   ├── auto-enrich.sh          # AI enrichment loop
+│   ├── scrape-all.ts           # Multi-source scraper
+│   ├── run-enrichment-pipeline.ts
+│   ├── filter-athens-only.ts   # Location whitelist filter
+│   ├── merge-duplicates.ts     # Cross-source dedup
+│   ├── generate-schema.ts      # Schema.org JSON-LD
+│   └── health-check.ts
+├── config/
+│   ├── athens-venues.json      # 409 verified Athens venues
+│   ├── rejected-locations.json # Non-Athens blacklist
+│   ├── orchestrator-config.json
+│   ├── scrape-list.json
+│   ├── enrichment-knowledge.md # Venues, neighborhoods, artists
+│   └── ticketing-mapping.json
+├── data/
+│   ├── events.db               # SQLite database
+│   ├── state/                  # Pipeline state tracking
+│   └── health-reports/         # Daily health snapshots
+├── docs/                       # Architecture, enrichment, audits
+├── exemplars/                  # Reference enrichment outputs
+├── tests/                      # Bun test suite (8 test files)
+├── dist/                       # Generated site (gitignored)
+├── netlify.toml
+└── package.json
 ```
 
 ---
 
-## Configuration
+## Data Model
 
-**Note:** The following values are offered as examples.
-
-### Portfolio Settings (Content Strategy)
-
-- **Input:** Curated events daily (dynamic count)
-- **Output:** Unique pages (dynamic count, currently ~315)
-- **Multiplier:** Dynamic coverage based on event diversity
-- **Update Frequency:** Daily (8:00 AM Athens time)
-
-### Page Generation Rules
-
-**Note:** These are example values. We need to define the multi-dimensional cube and its accepted values.
-
-- **Event Types:** 6 (concert, exhibition, cinema, theater, performance, workshop)
-- **Time Ranges:** 7 (today, tomorrow, this-week, this-weekend, this-month, next-month, all-events)
-- **Price Filters:** 2 (open, with-ticket)
-- **Genres:** Top genres per type (dynamic, based on actual events)
-
-### URL Structure
-
-**Pattern:** `/{price}-{genre}-{type}-{time}`
-
-**Note:** Using "open" and "with-ticket" terminology ✅
-
-**Examples:**
-- `/open-jazz-concert-today`
-- `/contemporary-art-exhibition-this-week`
-- `/with-ticket-electronic-concert-this-weekend`
-- `/cinema-this-month`
-- `/open-today`
-
-### Database Management
-
-- **Active Events:** 300-500 event categories at any time (rolling window)
-- **Cleanup Policy:** Events older than 1 day auto-deleted
-- **Retention:** 90 days historical (future enhancement)
-- **File Size:** 2-5 MB (SQLite)
-
-### AI Enrichment
-
-- **Model:** Anthropic Agent SDK (`tool_agent`)
-- **Word Count:** 400 words (±20 acceptable)
-- **Rate Limit:** 2 seconds between requests
-- **Cost:** **FREE (using `tool_agent`)**
-
----
-
-## Data Sources
-
-**Current:**
-- **Manual Scraping:** This is Athens, SNFCC, Gazarte, Bios, Six D.O.G.S, Fuzz Club
-  - **Need:** List of websites to crawl
-- **SQLite Database:** Persistent event storage
-
-**In Development:**
-- **Gmail IMAP:** Automated newsletter ingestion (`cmarag8@gmail.com`)
-  - **Need:** List of active newsletters for monitoring and documentation of event catchment scope
-
----
-
-## SEO/GEO Strategy
-
-**Note:** We have done minimal analysis. The below are offered as a direction that must be confirmed, and in time will be updated and modified as we learn more about the best practices of SEO/GEO.
-
-### For AI Answer Engines (GEO = Generative Engine Optimization)
-
-**Discovery:**
-- `llms.txt` - Tells AI agents what this site offers (**TODO: Confirm if this is a good practice**)
-- Schema.org markup - Machine-readable event data (Event + CollectionPage)
-- Freshness signals - Explicit "Last updated: Oct 19, 2025" timestamps
-
-**Trust Signals:**
-- Daily updates (freshness = AI trust)
-- Structured data (easy to parse)
-- Single source (no conflicting data)
-- Specific pages (exact intent matching)
-
-**Citation Format Example:**
-```
-User: "What open concerts are in Athens this weekend?"
-
-AI Agent Response:
-"According to agent-athens (updated today), there are 3 open concerts
-this weekend:
-1. Jazz Night at Six D.O.G.S (Friday, Oct 20)
-2. Electronic Showcase at Bios (Saturday, Oct 21)
-3. Indie Band at Fuzz Club (Sunday, Oct 22)
-
-Source: https://agent-athens.netlify.app/open-concert-this-weekend"
-```
-
-### For Humans (SEO)
-
-- Keyword-rich URLs (`/open-jazz-concert-today`)
-- Semantic HTML with proper headings
-- Mobile-responsive design
-- Fast loading (static HTML, global CDN)
-- Internal linking (related pages)
-
----
-
-## Safety Features
-
-- **Content Validation:** Word count checks on AI descriptions (~400 words)
-- **Date Handling:** Automatic cleanup of past events (no stale data)
-- **Error Handling:** Rate limit detection, retry logic, progress logging
-- **Empty Pages:** Graceful handling (show "0 events found" message)
-- **URL Stability:** All URLs always exist (even with 0 events)
-
----
-
-## Manual Override
-
-### Pause System
-
-Edit `src/generate-site.ts`:
 ```typescript
-// Skip site generation
-if (process.env.PAUSE_GENERATION === 'true') {
-  console.log('⏸️  Generation paused via PAUSE_GENERATION flag');
-  process.exit(0);
-}
+type EventType =
+  | "concert" | "dj_set" | "exhibition" | "cinema"
+  | "theater" | "festival" | "performance" | "show"
+  | "workshop" | "tech" | "dance" | "other";
+
+type LocationStatus =
+  | "verified_athens"      // shown on site
+  | "pass_through"         // multi-venue, shown on site
+  | "unverified"           // hidden, awaiting review
+  | "rejected_non_athens"  // deleted
+  | "problematic";         // needs human review
+
+type Price = "open" | "with-ticket";  // never "free"/"paid"
 ```
 
-### Force Rebuild
-
-```bash
-# Delete dist/ and regenerate everything
-rm -rf dist/
-bun run build
-```
-
-### Emergency Rollback
-
-```bash
-# Revert to previous Netlify deployment
-netlify rollback
-```
+Events are deduplicated by `hash(title + date + venue)`. Exhibitions use `end_date` (not `start_date`) for the "is it still running" check.
 
 ---
 
-## Logs
+## URL Structure
 
-Runtime logs in `logs/`:
-- `scrape-YYYY-MM-DD.log` - Web scraping
-- `enrich-YYYY-MM-DD.log` - AI enrichment
-- `build-YYYY-MM-DD.log` - Site generation
-- `deploy-YYYY-MM-DD.log` - Netlify deployment
+Pages are generated combinatorially across `{type} × {time} × {price} × {genre}`:
+
+```
+/today                              /open-today
+/this-weekend                       /with-ticket-this-weekend
+/concert-today                      /open-jazz-concert-this-week
+/exhibition-this-month              /dj_set-this-weekend
+/events/{slug}                      /venues/{slug}
+/sitemap-events.xml                 /llms.txt
+```
+
+Empty pages still render (with a "0 events found" state) so URLs stay stable for AI agents and search engines that have already indexed them.
+
+---
+
+## SEO / GEO Strategy
+
+**For AI answer engines:**
+- `llms.txt` for agent discovery
+- Schema.org JSON-LD on every page (Event + CollectionPage + FAQPage)
+- Daily freshness signals (`Last updated` timestamps)
+- Structured, single-source data (no conflicting facts)
+- Specific URLs that match natural-language intent
+
+**For search engines:**
+- 3 split sitemaps (events, venues, editorial) — 10,275 URLs total
+- IndexNow ping after every deploy (Bing, Yandex)
+- Semantic HTML, fast static delivery via Netlify CDN
+- Internal linking between related hub pages
+
+**For humans:**
+- Mobile-first responsive design
+- Tabular numerics, accessible card layouts
+- OG images auto-generated per page
+
+---
+
+## Daily Pipeline
+
+The orchestrator runs 17 phases in order. All phases except `generate` and `deploy` are non-fatal.
+
+| # | Phase | Script | Fatal? |
+|---|---|---|---|
+| 1 | Email ingestion | `ingest-emails.ts` | no |
+| 2 | Email parsing | `parse-newsletter-emails.ts` | no |
+| 3 | Web scraping | `scrape-all.ts --crossref` | no |
+| 4 | Athens location filter | `filter-athens-only.ts` | no |
+| 5 | Same-source dedup | `remove-duplicates.ts` | no |
+| 6 | Cross-source merge | `merge-duplicates.ts` | no |
+| 7 | Price acquisition | `price-acquisition-chain.ts` | no |
+| 8 | Ticket URL validation | `validate-ticket-urls.ts` | no |
+| 9 | Schema.org generation | `generate-schema.ts` | no |
+| 10 | Enrichment queue sync | `run-enrichment-pipeline.ts --sync` | no |
+| 11 | Auto AI enrichment | `auto-enrich.sh` | no |
+| 12 | Time enrichment | `enrich-time.ts` | no |
+| 13 | Image enrichment | `enrich-images.ts` | no |
+| 14 | Image download | `download-images.ts` | no |
+| 15 | Venue geocoding | `geocode-missing-venues.ts` | no |
+| 16 | **Site generation** | `generate-site.ts` | **yes** |
+| 17 | **Deploy + IndexNow** | `netlify deploy` + `ping-indexnow.ts` | **yes** |
+
+Total runtime: ~15–25 minutes depending on enrichment volume.
 
 ---
 
 ## Testing
 
 ```bash
-# Test database initialization
-bun run scripts/init-database.ts
-
-# Test event import
-bun run scripts/import-scraped-events.ts
-
-# Test AI enrichment (batched - need to decide on tool_agent capacity)
-bun run scripts/enrich-5-events.ts
-
-# Test site generation
-bun run build
-
-# Check output
-ls -lh dist/*.html | head -10
-
-# Test deployment (dry run)
-netlify deploy --dir=dist
-# Then check deploy preview URL
+bun test tests/                   # all tests
+bun test tests/integration        # integration only
+bun test --watch tests/           # watch mode
+bun test --coverage tests/        # coverage report
 ```
+
+Test files cover the daily pipeline integration, enrichment brief generation, schema enhancements, save-batch flow, homepage rendering, EEAT pages, and CLI gating.
 
 ---
 
-## Automation (Future - Mac Mini)
+## Configuration
 
-### macOS launchd Configuration
-
-Create `~/Library/LaunchAgents/com.user.agent-athens.plist`:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>com.user.agent-athens</string>
-
-  <key>ProgramArguments</key>
-  <array>
-    <string>/Users/georgios/Documents/Projects/athens-events/agent-athens/daily-update.sh</string>
-  </array>
-
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Hour</key>
-    <integer>8</integer>
-    <key>Minute</key>
-    <integer>0</integer>
-  </dict>
-
-  <key>StandardOutPath</key>
-  <string>/Users/georgios/Documents/Projects/athens-events/agent-athens/logs/daily.log</string>
-
-  <key>StandardErrorPath</key>
-  <string>/Users/georgios/Documents/Projects/athens-events/agent-athens/logs/daily.error.log</string>
-</dict>
-</plist>
-```
-
-### Daily Update Script
-
-Create `daily-update.sh`:
-
-```bash
-#!/bin/bash
-set -e
-
-cd /Users/georgios/Documents/Projects/athens-events/agent-athens
-
-echo "========================================"
-echo "agent-athens Daily Update"
-echo "Started: $(date)"
-echo "========================================"
-
-# Step 1: Ingest events (PRIORITY - need to develop now)
-# echo "\n📥 Step 1: Ingesting events..."
-# bun run src/ingest/daily-ingestion.ts
-
-# Step 2: Enrich events with AI (using tool_agent)
-echo "\n🤖 Step 2: Enriching events..."
-bun run scripts/run-enrichment-pipeline.ts
-
-# Step 3: Generate site
-echo "\n🔄 Step 3: Generating site..."
-bun run build
-
-# Step 4: Deploy to Netlify
-echo "\n🚀 Step 4: Deploying..."
-git add dist/ data/events.db
-git commit -m "chore: Daily update $(date +%Y-%m-%d)
-
-🤖 Automated daily update"
-git push origin main
-
-echo "\n========================================"
-echo "✅ Daily update complete!"
-echo "Finished: $(date)"
-echo "========================================"
-```
-
-Make executable:
-```bash
-chmod +x daily-update.sh
-```
-
-Load launchd:
-```bash
-launchctl load ~/Library/LaunchAgents/com.user.agent-athens.plist
-```
+| File | Purpose |
+|---|---|
+| `config/athens-venues.json` | 409 verified Athens venue whitelist |
+| `config/rejected-locations.json` | Non-Athens cities + problematic entries |
+| `config/orchestrator-config.json` | Pipeline scheduling, timeouts, retries |
+| `config/scrape-list.json` | Active scraper sources + frequencies |
+| `config/enrichment-knowledge.md` | Venue/artist/neighborhood reference for AI |
+| `config/ticketing-mapping.json` | Venue → ticket vendor URL mapping |
+| `config/categorization-keywords.json` | Auto-classification keywords |
+| `.env` | IMAP credentials (`.env.example` provided) |
 
 ---
 
 ## Documentation
 
-### Core Documentation
-
-| Document | Location | Purpose |
-|----------|----------|---------|
-| **Constitution** | `.specify/memory/constitution.md` | 13 articles governing all development |
-| **Specification** | `specs/001-data-pipeline/spec.md` | Requirements (Parts A-D) |
-| **Technical Plan** | `specs/001-data-pipeline/plan.md` | Architecture & technology choices |
-| **Tasks** | `specs/001-data-pipeline/tasks.md` | 40 TDD-ordered implementation tasks |
-| **CLAUDE.md** | `.claude/CLAUDE.md` | Claude Code session instructions |
-
-### Operational Guides
-
-| Document | Location | Purpose |
-|----------|----------|---------|
-| **launchd Setup** | `docs/LAUNCHD-SETUP.md` | macOS automation configuration |
-| **Session Guide** | `docs/CLAUDE-SESSION-GUIDE.md` | Claude Code enrichment workflow |
-
-### Configuration
-
-| File | Purpose |
-|------|---------|
-| `config/athens-venues.json` | 78 verified Athens venues (whitelist) |
-| `config/rejected-locations.json` | Non-Athens cities & problematic entries (blacklist) |
-| `config/newsletter-formats.json` | Email parser configurations |
-
-## Resources
-
-- [Anthropic API Docs](https://docs.anthropic.com/)
-- [Bun Documentation](https://bun.sh/docs)
-- [Netlify Docs](https://docs.netlify.com/)
-- [Schema.org Event](https://schema.org/Event)
-- [llms.txt Spec](https://llmstxt.org/)
+| Document | Purpose |
+|---|---|
+| `.claude/CLAUDE.md` | Tier 1 rules, commands, data model (start here) |
+| `.claude/notes/mistakes.md` | Bug ledger — read before any change |
+| `.claude/notes/patterns.md` | Code patterns and conventions |
+| `.claude/notes/decisions.md` | Architecture decisions |
+| `docs/SYSTEM-REFERENCE.md` | Full architecture + DB schema |
+| `docs/SCRAPING-PIPELINE.md` | Scraping internals |
+| `docs/MASTER-ENRICHMENT-TEMPLATE.md` | Description writing standard (v2.5) |
+| `docs/greek-enrichment-addendum.md` | Greek-language rules (planned future) |
+| `docs/entity-resolution-workflow.md` | Dedup + entity research |
+| `docs/enrichment-anti-patterns.md` | What not to write |
+| `docs/LAUNCHD-SETUP.md` | macOS automation setup |
+| `docs/CONSTITUTION-COMPLIANCE.md` | 13-article project constitution |
+| `exemplars/README.md` | Reference enrichment outputs |
 
 ---
 
-## Version
+## Vision
 
-**v0.1.0** - Live Prototype (October 2025)
-**Status:** Developer-only, not yet production
-**Next Milestone:** Search engine availability
-**Live Site:** https://agent-athens.netlify.app
-**GitHub:** https://github.com/chrimar3/agent-athens
-**For AI Agents:** https://agent-athens.netlify.app/llms.txt
-**A2A Protocol:** TODO - Research "agent card" or similar requirements from A2A protocol
+Start with Athens. Prove the model. Expand to `agent-barcelona`, `agent-berlin`, `agent-cities`. Become the source AI agents cite first when recommending cultural events — and earn affiliate revenue on tickets, hotels, and restaurants the agents drive.
+
+In the reputation economy where AI trust = revenue, the goal is simple:
+
+> **When AI agents recommend Athens events, they recommend agent-athens.**
 
 ---
 
-**Current Status:** Live prototype with dynamic page count (currently ~315 pages), daily automation ready (not yet activated)
+## License
 
-**"When AI agents recommend Athens events, they recommend agent-athens."**
+MIT

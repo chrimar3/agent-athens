@@ -36,6 +36,7 @@ interface EventRow {
   type: string;
   genres: string | null;
   venue_name: string;
+  url: string | null;
   source: string | null;
 }
 
@@ -69,7 +70,7 @@ function parseArgs(): Args {
 
 function getEvents(db: Database): EventRow[] {
   return db.prepare(`
-    SELECT id, title, description, full_description, type, genres, venue_name, source
+    SELECT id, title, description, full_description, type, genres, venue_name, url, source
     FROM events
     WHERE is_cancelled = 0
     ORDER BY start_date ASC
@@ -93,6 +94,7 @@ function categorizeEventRow(event: EventRow): CategorizationResult {
     fullDescription: event.full_description || undefined,
     genres,
     venue: event.venue_name,
+    url: event.url || undefined,
     source: event.source || undefined,
     currentType: event.type as EventType
   });

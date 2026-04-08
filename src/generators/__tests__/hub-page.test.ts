@@ -1,4 +1,4 @@
-// Hub page tests — structure, schema, filtering, excerpt extraction
+// Hub page tests — structure, schema, filtering, excerpt extraction, editorial content
 import { describe, test, expect } from 'bun:test';
 import {
   renderHubPage,
@@ -8,6 +8,7 @@ import {
   renderEventBlock,
   renderFaqSection,
   renderFaqSchema,
+  injectPullQuotes,
 } from '../hub-page';
 import { sampleConcert, sampleFreeExhibition, getTodayEvent } from '../../../tests/fixtures/events';
 import type { Event, HubConfig, HubFaq } from '../../types';
@@ -56,6 +57,7 @@ function makeEvent(overrides: Partial<Event>): Event {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     language: 'el',
+    hasNativeGreek: false,
     ...overrides,
   };
 }
@@ -432,5 +434,91 @@ describe('FAQ section HTML', () => {
       expect(schemaQ).toBeTruthy();
       expect(schemaQ.acceptedAnswer.text).toBe(faq.answerEl);
     }
+  });
+});
+
+// --- Editorial content integration tests ---
+
+describe('Pull quote injection', () => {
+  test('injectPullQuotes inserts aside into HTML with enough cards', () => {
+    // Simulate card grid with 2 date groups: 6 + 6 = 12 cards
+    const html = `<html><section class="card-grid" itemscope>
+<h2 class="date-group-header">Monday</h2>
+<div class="date-group" data-count="6">cards</div>
+<h2 class="date-group-header">Tuesday</h2>
+<div class="date-group" data-count="6">cards</div>
+</section></html>`;
+
+    const result = injectPullQuotes(html, ['Test quote']);
+    expect(result).toContain('class="pull-quote"');
+    expect(result).toContain('aria-hidden="true"');
+    expect(result).toContain('Test quote');
+  });
+
+  test('injectPullQuotes returns unchanged HTML when no quotes', () => {
+    const html = '<section class="card-grid"><div class="date-group" data-count="20">cards</div></section>';
+    expect(injectPullQuotes(html, [])).toBe(html);
+  });
+
+  test('injectPullQuotes returns unchanged HTML when too few cards', () => {
+    const html = `<section class="card-grid" itemscope>
+<h2 class="date-group-header">Monday</h2>
+<div class="date-group" data-count="3">cards</div>
+</section>`;
+    const result = injectPullQuotes(html, ['Quote']);
+    expect(result).not.toContain('pull-quote');
+  });
+
+  test('injectPullQuotes inserts multiple quotes at intervals', () => {
+    const html = `<section class="card-grid" itemscope>
+<h2 class="date-group-header">Day 1</h2>
+<div class="date-group" data-count="12">cards</div>
+<h2 class="date-group-header">Day 2</h2>
+<div class="date-group" data-count="12">cards</div>
+<h2 class="date-group-header">Day 3</h2>
+<div class="date-group" data-count="5">cards</div>
+</section>`;
+
+    const result = injectPullQuotes(html, ['Quote A', 'Quote B']);
+    expect(result).toContain('Quote A');
+    expect(result).toContain('Quote B');
+    const quoteCount = (result.match(/class="pull-quote"/g) || []).length;
+    expect(quoteCount).toBe(2);
+  });
+
+  test('Concerts hub page includes pull quotes from editorial config', () => {
+    const events = makeConcertEvents(15);
+    const html = renderHubPage(concertsHubConfig, events, events);
+    // config/editorial-content.json has pull quotes for "concerts" hub
+    expect(html!).toContain('class="pull-quote"');
+  });
+});
+
+describe('Section editorial', () => {
+  test('Concerts hub shows section editorial in event blocks', () => {
+    const events = makeConcertEvents(5).map((e, i) => ({
+      ...e,
+      fullDescription: `Full description for concert ${i}. With detail sentences.`,
+    }));
+    const html = renderHubPage(concertsHubConfig, events, events);
+    // config/editorial-content.json has section editorial for "concerts"
+    expect(html!).toContain('class="section-editorial"');
+  });
+
+  test('Hub without editorial config does not render section editorial', () => {
+    const events = makeTodayEvents(5).map((e, i) => ({
+      ...e,
+      fullDescription: `Full description for event ${i}. With detail sentences.`,
+    }));
+    const html = renderHubPage(todayHubConfig, events, events);
+    // "today" hub has no section editorial in config
+    expect(html!).not.toContain('class="section-editorial"');
+  });
+
+  test('Hub without enriched events skips section editorial entirely', () => {
+    const events = makeConcertEvents(5); // no fullDescription
+    const html = renderHubPage(concertsHubConfig, events, events);
+    // No event blocks section → no section editorial injection point
+    expect(html!).not.toContain('class="section-editorial"');
   });
 });

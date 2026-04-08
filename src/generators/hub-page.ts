@@ -23,6 +23,7 @@ import { generateEventSlug } from './event-page';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { formatDateOnly } from '../utils/i18n-date';
 import { renderHubCrossLinks } from '../utils/cornerstone-links';
+import { getPullQuotes, getSectionEditorial } from '../utils/editorial-content';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -32,6 +33,7 @@ const MIN_EVENTS_THRESHOLD = 3;
 const MAX_TABLE_ROWS = 20;
 const MAX_EVENT_BLOCKS = 8;
 export const HUB_EVENT_LIMIT = 30;
+const PULL_QUOTE_INTERVAL = 10;
 
 /**
  * Get hub-filtered events based on config
@@ -98,6 +100,47 @@ export function extractExcerpt(fullDescription: string): string {
 
   const result = sentences.slice(0, 2).join(' ');
   return result;
+}
+
+/**
+ * Inject pull quote asides between date groups in the card grid.
+ * Inserts after every ~PULL_QUOTE_INTERVAL cards, cycling through available quotes.
+ */
+export function injectPullQuotes(html: string, quotes: string[]): string {
+  if (quotes.length === 0) return html;
+
+  const gridStart = html.indexOf('<section class="card-grid"');
+  if (gridStart === -1) return html;
+
+  const gridTagEnd = html.indexOf('>', gridStart) + 1;
+  const gridSectionEnd = html.indexOf('</section>', gridStart);
+  if (gridSectionEnd === -1) return html;
+
+  const gridContent = html.substring(gridTagEnd, gridSectionEnd);
+
+  // Split on date group header boundaries (lookahead preserves the delimiter)
+  const segments = gridContent.split(/(?=<h2 class="date-group-header">)/);
+
+  let cumulative = 0;
+  let quoteIdx = 0;
+  const result: string[] = [];
+
+  for (const segment of segments) {
+    result.push(segment);
+
+    const countMatch = segment.match(/data-count="(\d+)"/);
+    if (countMatch) {
+      cumulative += parseInt(countMatch[1], 10);
+    }
+
+    if (cumulative >= PULL_QUOTE_INTERVAL && quoteIdx < quotes.length) {
+      result.push(`\n<aside class="pull-quote" aria-hidden="true">${quotes[quoteIdx]}</aside>\n`);
+      quoteIdx++;
+      cumulative = 0;
+    }
+  }
+
+  return html.substring(0, gridTagEnd) + result.join('') + html.substring(gridSectionEnd);
 }
 
 /**
@@ -240,6 +283,10 @@ export function renderHubPage(
 
   let html = baseHtml;
 
+  // Inject pull quote asides between date groups in the card grid
+  const pullQuotes = getPullQuotes(config.slug, locale);
+  html = injectPullQuotes(html, pullQuotes);
+
   // Set HTML lang attribute
   html = html.replace(/<html lang="[^"]*">/, `<html lang="${t.lang}">`);
 
@@ -363,9 +410,13 @@ export function renderHubPage(
 
   let eventBlocksHtml = '';
   if (enrichedEvents.length > 0) {
+    const sectionEditorial = getSectionEditorial(config.slug, locale);
+    const editorialP = sectionEditorial
+      ? `\n  <p class="section-editorial">${sectionEditorial}</p>`
+      : '';
     const blocks = enrichedEvents.map(e => renderEventBlock(e, locale)).join('\n  ');
     eventBlocksHtml = `<section class="hub-event-blocks">
-  <h2>${t.hubDetailed}</h2>
+  <h2>${t.hubDetailed}</h2>${editorialP}
   ${blocks}
 </section>`;
   }

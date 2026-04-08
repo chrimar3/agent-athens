@@ -1376,6 +1376,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         title: e.title,
         description: e.description,
         venue: e.venue_name,
+        url: e.url,
         source: e.source,
         currentType: eventType
       });

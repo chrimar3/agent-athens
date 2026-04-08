@@ -33,6 +33,7 @@ function makeEvent(overrides: Partial<Event> = {}): Event {
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-01-01T00:00:00Z',
     language: 'en',
+    hasNativeGreek: false,
     ...overrides,
   };
 }
