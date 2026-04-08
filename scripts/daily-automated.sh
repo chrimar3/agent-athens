@@ -95,6 +95,23 @@ check_dependencies() {
 # Pipeline Phases
 # ============================================================================
 
+# Phase 0: Backup database (safety net — replaces git tracking, see decisions.md 2026-04-08)
+run_backup_db() {
+    log_phase "DATABASE BACKUP"
+    log "Creating 7-day rolling backup of events.db..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: ./scripts/backup-events-db.sh"
+        return 0
+    fi
+
+    if ./scripts/backup-events-db.sh >> "$LOG_FILE" 2>&1; then
+        log "Database backup completed"
+    else
+        log_error "Database backup failed (non-fatal, continuing — check ~/agent-athens-backups/)"
+    fi
+}
+
 # Phase 1: Ingest emails
 run_ingest() {
     log_phase "EMAIL INGESTION"
@@ -574,6 +591,9 @@ main() {
 
     # Check dependencies
     check_dependencies
+
+    # Backup database BEFORE any phase mutates it (replaces git tracking)
+    run_backup_db
 
     # Run pipeline phases
     # All phases are non-fatal except generate and deploy.

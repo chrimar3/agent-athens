@@ -34,6 +34,16 @@ temp-research/
 # Downloaded event images (cached locally, served from dist/)
 data/images/
 
+# Runtime artifacts (not source code)
+# These change every pipeline run and were causing 40-min git pushes (2026-04-08).
+# Backed up locally via scripts/backup-events-db.sh (7-day rolling).
+data/events.db
+data/events.db-shm
+data/events.db-wal
+data/content-hashes.json
+temp-briefs/
+data/health-reports/
+
 # Local Netlify folder
 .netlify
 .git-old/
