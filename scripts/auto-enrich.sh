@@ -95,6 +95,37 @@ if [[ -n "$STALE_PIDS" ]]; then
 fi
 
 # ============================================================================
+# Battery precondition — defer enrichment when on battery power
+# ----------------------------------------------------------------------------
+# Why: caffeinate -s only prevents system sleep on AC power (per `man caffeinate`).
+# On battery, lid-close (Clamshell Sleep) suspends the entire bash process tree
+# including the watchdog timer, causing indefinite hangs. Apr 7 2026 incident
+# confirmed this empirically — see specs/claude-hang-diagnostic.md Section 5
+# (R1.A test 2026-04-08 measured 753s for `caffeinate -i sleep 300` on battery+clamshell).
+#
+# Skip strategy: exit 0 (success) so daily-automated.sh treats this as a normal
+# "nothing to do" outcome. The next launchd cycle will retry; the user can also
+# manually run when plugged in. The skip happens BEFORE the lock file is taken
+# so a battery skip does not consume a lock cycle.
+# ============================================================================
+
+POWER_SOURCE=$(pmset -g batt 2>/dev/null | head -1)
+case "$POWER_SOURCE" in
+    *"Battery Power"*)
+        log "On battery power — deferring enrichment to next AC cycle"
+        log "  (rationale: clamshell sleep on battery would suspend the watchdog;"
+        log "   see specs/claude-hang-diagnostic.md Section 5 for details)"
+        exit 0
+        ;;
+    *"AC Power"*)
+        : # proceed
+        ;;
+    *)
+        log "Power source unknown ('$POWER_SOURCE') — proceeding (fail-open)"
+        ;;
+esac
+
+# ============================================================================
 # Lock file — prevent overlapping runs
 # ============================================================================
 
@@ -233,10 +264,12 @@ log "Generated ${#BATCH_FILES[@]} batch file(s)"
 # 8. Warm up Claude CLI (forces startup overhead into a throwaway call)
 log "Warming up Claude CLI..."
 # macOS lacks GNU timeout — use background process with watchdog.
-# caffeinate -i prevents idle system sleep so the timer survives lid-close/sleep events.
+# caffeinate -s asserts no-system-sleep on AC power. Battery case is filtered
+# by the precondition check at the top of this script, so we are guaranteed
+# to be on AC by this point.
 "$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json > /dev/null 2>&1 &
 WARMUP_PID=$!
-( caffeinate -i sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
+( caffeinate -s sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
 WATCHDOG_PID=$!
 wait "$WARMUP_PID" 2>/dev/null || true
 kill "$WATCHDOG_PID" 2>/dev/null || true
@@ -262,9 +295,12 @@ for brief in "${BATCH_FILES[@]}"; do
     CLAUDE_PID=$!
 
     # Start watchdog timer in background.
-    # caffeinate -i prevents idle system sleep so the timer survives lid-close/sleep events.
-    # Without this, plain sleep pauses during system suspend and a 30-min timeout can stretch to days.
-    ( caffeinate -i sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
+    # caffeinate -s asserts no-system-sleep so the timer survives lid-close on AC power.
+    # On battery, the precondition check at the top of this script causes early exit,
+    # so we are guaranteed to be on AC by this point.
+    # Empirical: caffeinate -i was insufficient (R1.A test 2026-04-08 measured 753s for
+    # `caffeinate -i sleep 300` on battery+clamshell). See specs/claude-hang-diagnostic.md.
+    ( caffeinate -s sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
     TIMER_PID=$!
 
     # Wait for claude to finish (or be killed by watchdog)
