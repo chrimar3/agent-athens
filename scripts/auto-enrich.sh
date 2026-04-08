@@ -99,10 +99,27 @@ fi
 # ============================================================================
 
 LOCK_FILE="$PROJECT_DIR/.auto-enrich.lock"
+# Maximum age (in seconds) before a lock is considered stuck regardless of PID liveness.
+# Set higher than MAX_BATCHES * BATCH_TIMEOUT + warmup overhead. Default: 2 hours.
+LOCK_MAX_AGE=7200
 if [[ -f "$LOCK_FILE" ]]; then
     LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
-    if kill -0 "$LOCK_PID" 2>/dev/null; then
-        log "Another enrichment already running (PID $LOCK_PID). Skipping."
+    # Check lock age first — a stuck-but-alive process is no better than a crashed one.
+    # macOS stat: -f %m gives mtime as seconds since epoch.
+    LOCK_MTIME=$(stat -f %m "$LOCK_FILE" 2>/dev/null || echo 0)
+    NOW=$(date +%s)
+    LOCK_AGE=$((NOW - LOCK_MTIME))
+
+    if [[ "$LOCK_AGE" -gt "$LOCK_MAX_AGE" ]]; then
+        log "Lock file is ${LOCK_AGE}s old (>${LOCK_MAX_AGE}s max), holder PID $LOCK_PID is stuck. Force-removing and killing tree."
+        # Best-effort kill of the stuck process tree
+        if [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
+            pkill -9 -P "$LOCK_PID" 2>/dev/null || true
+            kill -9 "$LOCK_PID" 2>/dev/null || true
+        fi
+        rm -f "$LOCK_FILE"
+    elif kill -0 "$LOCK_PID" 2>/dev/null; then
+        log "Another enrichment already running (PID $LOCK_PID, age ${LOCK_AGE}s). Skipping."
         exit 0
     else
         log "Stale lock file found (PID $LOCK_PID dead). Removing."
@@ -215,10 +232,11 @@ log "Generated ${#BATCH_FILES[@]} batch file(s)"
 
 # 8. Warm up Claude CLI (forces startup overhead into a throwaway call)
 log "Warming up Claude CLI..."
-# macOS lacks GNU timeout — use background process with watchdog
+# macOS lacks GNU timeout — use background process with watchdog.
+# caffeinate -i prevents idle system sleep so the timer survives lid-close/sleep events.
 "$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json > /dev/null 2>&1 &
 WARMUP_PID=$!
-( sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
+( caffeinate -i sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
 WATCHDOG_PID=$!
 wait "$WARMUP_PID" 2>/dev/null || true
 kill "$WATCHDOG_PID" 2>/dev/null || true
@@ -243,8 +261,10 @@ for brief in "${BATCH_FILES[@]}"; do
         >> "$LOG_FILE" 2>&1 &
     CLAUDE_PID=$!
 
-    # Start watchdog timer in background
-    ( sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
+    # Start watchdog timer in background.
+    # caffeinate -i prevents idle system sleep so the timer survives lid-close/sleep events.
+    # Without this, plain sleep pauses during system suspend and a 30-min timeout can stretch to days.
+    ( caffeinate -i sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
     TIMER_PID=$!
 
     # Wait for claude to finish (or be killed by watchdog)
