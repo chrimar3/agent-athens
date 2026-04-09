@@ -276,25 +276,36 @@ kill "$WATCHDOG_PID" 2>/dev/null || true
 wait "$WATCHDOG_PID" 2>/dev/null || true
 log "Warm-up complete"
 
-# 9. Run claude -p on each batch (sequential for SQLite safety)
+# 9. Run claude -p on all batches in parallel (S80)
+#    Each batch's save-batch.ts invocation (inside its own claude -p) opens its
+#    own SQLite connection with PRAGMA busy_timeout = 30000, so concurrent saves
+#    serialize safely at the SQLite level (commit 46667ce35). Prior to S80 this
+#    loop ran batches sequentially — see git log for the rationale if this
+#    reverts.
 SUCCEEDED=0
 FAILED=0
 
+declare -a CLAUDE_PIDS=()
+declare -a WATCHDOG_PIDS=()
+declare -a BATCH_NAMES=()
+declare -a START_TIMES=()
+
+# Launch all batches in parallel
 for brief in "${BATCH_FILES[@]}"; do
     BATCH_NAME=$(basename "$brief" .md)
-    log "Enriching $BATCH_NAME..."
+    log "Launching $BATCH_NAME (parallel)..."
 
     BRIEF_CONTENT=$(cat "$brief")
     START_TIME=$(date +%s)
 
-    # Run claude in background with watchdog timer (replaces broken perl alarm)
+    # Run claude in background
     "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format text \
         --allowedTools "$ALLOWED_TOOLS" \
         >> "$LOG_FILE" 2>&1 &
     CLAUDE_PID=$!
 
-    # Start watchdog timer in background.
+    # Per-batch watchdog timer.
     # caffeinate -s asserts no-system-sleep so the timer survives lid-close on AC power.
     # On battery, the precondition check at the top of this script causes early exit,
     # so we are guaranteed to be on AC by this point.
@@ -303,10 +314,28 @@ for brief in "${BATCH_FILES[@]}"; do
     ( caffeinate -s sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
     TIMER_PID=$!
 
+    CLAUDE_PIDS+=("$CLAUDE_PID")
+    WATCHDOG_PIDS+=("$TIMER_PID")
+    BATCH_NAMES+=("$BATCH_NAME")
+    START_TIMES+=("$START_TIME")
+done
+
+log "All ${#CLAUDE_PIDS[@]} batches launched in parallel. Waiting for completion..."
+
+# Collect results in launch order.
+# Note: wait() blocks on the specific PID, so if batch-1 takes longer than batch-2,
+# the loop still waits for batch-1 first. Log output is in launch order (1, 2, 3)
+# not finish order — intentional for predictable log parsing.
+for i in "${!CLAUDE_PIDS[@]}"; do
+    CLAUDE_PID="${CLAUDE_PIDS[$i]}"
+    TIMER_PID="${WATCHDOG_PIDS[$i]}"
+    BATCH_NAME="${BATCH_NAMES[$i]}"
+    START_TIME="${START_TIMES[$i]}"
+
     # Wait for claude to finish (or be killed by watchdog)
     wait "$CLAUDE_PID" && EXIT_CODE=0 || EXIT_CODE=$?
 
-    # Cancel the timer if claude finished before timeout
+    # Cancel this batch's watchdog if claude finished before timeout
     kill "$TIMER_PID" 2>/dev/null || true
     wait "$TIMER_PID" 2>/dev/null || true
 
