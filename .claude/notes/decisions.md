@@ -1336,6 +1336,61 @@ The production Step D run (19:17) then supplied the missing empirical evidence f
 46667ce35 fix: add PRAGMA busy_timeout = 30000 ... (S80 safety)  ← prerequisite
 ```
 
+## Throughput Maximization — EVENTS_PER_BATCH=5 + 4 Daily Runs (S81, 2026-04-09)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Raise `EVENTS_PER_BATCH` from 4 to 5 | With S80's parallel batches, observed 4-event variance was 285-854s. Linear 5-event projection worst case ~1070s (= 854 × 5/4), still well under BATCH_TIMEOUT=1800s with ~730s margin. The original S77 worst-case projection of 1664s was over-pessimistic; empirical data supports a safe 5-event bump | 2026-04-09 |
+| Add 3 new enrichment triggers: 13:00, 16:30, 19:00 (joining existing 10:00) | Target: 60 events/day (from current 12). Math: 5 events/batch × 3 parallel batches × 4 runs/day = 60. Each run ~14 min parallel critical path; gaps between runs (3h, 3.5h, 2.5h) are ≫ run duration, so zero overlap risk at the schedule level | 2026-04-09 |
+| 19:00 for the last run despite being borderline evening | User may or may not be at desk/on-AC at 19:00. **The battery-skip and lock safety nets make extra runs safe by default**: if the laptop is unplugged, the run auto-skips and the next morning's 08:00 trigger resumes normal operation. If the user IS at the desk, the run completes normally. Worst case = same throughput as skipping 19:00 would have been; best case = 15 extra events | 2026-04-09 |
+| All 4 enrichment plists call the SAME `daily-automated.sh enrichment` mode | Zero code changes to the plists beyond Label + Hour/Minute + log paths. Each trigger hits the same per-mode lock file, the same battery check, the same parallel batch loop. No new failure modes — just more invocations of a proven code path | 2026-04-09 |
+| Used naming convention `enrichment-{hour}` with the hour as the suffix | Four labels: `enrichment` (10:00), `enrichment-13`, `enrichment-16`, `enrichment-19`. The "-16" suffix is slightly ambiguous because the run is at 16:30, not 16:00, but the hour-only convention is more readable than `enrichment-16-30`. Documented in each plist's header comment for clarity | 2026-04-09 |
+| Zero new code written — S81 is purely a config/schedule change | Every piece of infrastructure already exists: parallel batches (S80), per-mode locks (S79), pipeline split (S79), battery skip (S76 R2), WAL+busy_timeout (S80 + pre-existing). S81 leverages all of them by adding triggers. This is the compounding payoff of the prior sessions — each infra fix created the conditions for the next improvement to be trivial | 2026-04-09 |
+
+### Coverage math and expected impact
+
+**Current state (before S81):**
+- 7-day window (earlier today): 9 enriched / 135 total = **6.7% coverage**
+- Daily enrichment rate: 12 events/day (from the 10:00 run)
+- Time to fill the 7-day window at 12/day: 135/12 ≈ 11.25 days — but the window rolls forward, so coverage stays flat at ~7%
+
+**Projected after S81 (if all 4 daily runs succeed):**
+- Daily enrichment rate: 60 events/day (5× increase)
+- Time to fill the 7-day window at 60/day: 135/60 ≈ 2.25 days
+- **Coverage should climb visibly within 2-3 days**
+- After ~7 days of steady-state 60/day: the 7-day window should be majority-enriched
+
+**Expected bottleneck shift:** Once the accumulated enrichment_queue backlog is drained (currently ~435 events ÷ 60/day = ~7 days), the bottleneck moves from **throughput** to **queue depth**. The pipeline will start hitting `MIN_QUEUE=3` skips on low-scrape days, which is the correct behavior — "nothing to enrich, exit cleanly" is better than "burn tokens on stub events". This is the signal that we've reached the steady state where enrichment matches content acquisition rate.
+
+### The full daily schedule as of 2026-04-09 evening
+
+```
+08:00  com.agentathens.freshness       → scrape → quality → build → deploy (~24 min)
+09:00  com.agentathens.enrichment-check → health check (pre-existing, unchanged)
+10:00  com.agentathens.enrichment      → 15 events enriched (~14 min parallel)
+13:00  com.agentathens.enrichment-13   → 15 events enriched (~14 min parallel)  🆕
+16:30  com.agentathens.enrichment-16   → 15 events enriched (~14 min parallel)  🆕
+19:00  com.agentathens.enrichment-19   → 15 events enriched (~14 min parallel)  🆕
+```
+
+**Total compute time across the day:** ~24 min freshness + 4 × ~14 min enrichment = ~80 min active work. That's ~5.5% of the 24-hour day — plenty of headroom for the user to have the laptop open without S81 blocking other work.
+
+### Known follow-ups (inherited from earlier sessions, no new items from S81)
+
+- `src/db/database.ts` busy_timeout mirror (deferred from S80)
+- Tag taxonomy docs-code drift (deferred from S80)
+- RA.co HTTP 403 scraper fix (deferred from S80)
+- Mode C retry-with-backoff (deferred from S77 if it recurs)
+- `com.agentathens.auto-enrich.plist` audit (deferred from S79)
+
+### Commits (S81)
+
+```
+18cb500b1 feat: 5 events/batch + 4 daily enrichment runs (60 events/day target, S81)
+```
+
+Single atomic commit, 4 files, 216 insertions, 1 deletion.
+
 ## Runtime Artifacts Removed From Git Tracking (2026-04-08)
 
 | Decision | Why | Date |
