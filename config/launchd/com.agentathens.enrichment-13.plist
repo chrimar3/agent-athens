@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Agent Athens - Enrichment Pipeline, 13:00 slot (S81)
+        ====================================================
+
+        Second enrichment trigger of the day (first is 10:00).
+        Runs the same enrichment pipeline as com.agentathens.enrichment but at
+        13:00 Athens time. Part of the 4-run/day schedule targeting 60 events/day.
+
+        Schedule (S81, 4 enrichment windows across active hours):
+            10:00  com.agentathens.enrichment      (S79)
+            13:00  com.agentathens.enrichment-13   ← THIS FILE
+            16:30  com.agentathens.enrichment-16
+            19:00  com.agentathens.enrichment-19
+
+        Safety nets (inherited from prior sessions, zero additional work):
+        - Battery skip: auto-skips if unplugged
+        - .auto-enrich.lock: prevents overlap if somehow two triggers collide
+        - .pipeline-enrichment.lock: pipeline-level protection (S79)
+        - caffeinate -s watchdog: survives AC clamshell (S76 R2)
+        - Lock mtime guard: stuck processes auto-recover
+
+        Rollback: launchctl unload this file.
+    -->
+
+    <key>Label</key>
+    <string>com.agentathens.enrichment-13</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>"/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-automated.sh" enrichment</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>13</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
+        <key>TZ</key>
+        <string>Europe/Athens</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-13-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-13-stderr.log</string>
+
+    <key>KeepAlive</key>
+    <false/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Nice</key>
+    <integer>5</integer>
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>

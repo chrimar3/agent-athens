@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Agent Athens - Enrichment Pipeline, 19:00 slot (S81)
+        ====================================================
+
+        Fourth and last enrichment trigger of the day. Runs the same enrichment
+        pipeline as com.agentathens.enrichment but at 19:00 Athens time. Part
+        of the 4-run/day schedule targeting 60 events/day.
+
+        Schedule (S81, 4 enrichment windows across active hours):
+            10:00  com.agentathens.enrichment      (S79)
+            13:00  com.agentathens.enrichment-13
+            16:30  com.agentathens.enrichment-16
+            19:00  com.agentathens.enrichment-19   ← THIS FILE
+
+        19:00 is borderline evening. Battery skip protects if laptop is
+        unplugged, and the skip is idempotent — the next morning's 08:00
+        freshness + 10:00 enrichment resume normal operation.
+
+        Safety nets (inherited, zero additional work):
+        - Battery skip, lock files, caffeinate watchdog, mtime guard
+
+        Rollback: launchctl unload this file.
+    -->
+
+    <key>Label</key>
+    <string>com.agentathens.enrichment-19</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>"/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-automated.sh" enrichment</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>19</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
+        <key>TZ</key>
+        <string>Europe/Athens</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-19-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-19-stderr.log</string>
+
+    <key>KeepAlive</key>
+    <false/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Nice</key>
+    <integer>5</integer>
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>

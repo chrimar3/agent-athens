@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Agent Athens - Enrichment Pipeline, 16:30 slot (S81)
+        ====================================================
+
+        Third enrichment trigger of the day. Runs the same enrichment pipeline
+        as com.agentathens.enrichment but at 16:30 Athens time. Part of the
+        4-run/day schedule targeting 60 events/day.
+
+        Schedule (S81, 4 enrichment windows across active hours):
+            10:00  com.agentathens.enrichment      (S79)
+            13:00  com.agentathens.enrichment-13
+            16:30  com.agentathens.enrichment-16   ← THIS FILE
+            19:00  com.agentathens.enrichment-19
+
+        Note: despite the "-16" suffix, this fires at 16:30 (not 16:00).
+        The suffix is derived from the hour for brevity in log filenames.
+
+        Safety nets (inherited, zero additional work):
+        - Battery skip, lock files, caffeinate watchdog, mtime guard
+
+        Rollback: launchctl unload this file.
+    -->
+
+    <key>Label</key>
+    <string>com.agentathens.enrichment-16</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>"/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-automated.sh" enrichment</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>16</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
+        <key>TZ</key>
+        <string>Europe/Athens</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-16-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-16-stderr.log</string>
+
+    <key>KeepAlive</key>
+    <false/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Nice</key>
+    <integer>5</integer>
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>
