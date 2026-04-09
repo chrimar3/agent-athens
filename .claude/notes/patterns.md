@@ -1184,6 +1184,140 @@ This is the cheapest possible rollback path. The file is ~2KB; the cost of keepi
 
 Reference implementation: `scripts/daily-automated.sh` header comments in the freshness+enrichment plists at `~/Library/LaunchAgents/` and `config/launchd/` (S79, 2026-04-09).
 
+## Parallel Bash Process Management Pattern
+
+When a bash script needs to run N independent work items in parallel and collect results, the correct pattern is **parallel launch → indexed arrays → ordered wait**. Common mistakes: single-array tracking (loses per-batch metadata), parallel wait (doesn't work — bash `wait` only takes one PID at a time unless called with no args), finish-order logging (non-deterministic output).
+
+### The pattern
+
+```bash
+declare -a CHILD_PIDS=()
+declare -a WATCHDOG_PIDS=()
+declare -a ITEM_NAMES=()
+declare -a START_TIMES=()
+
+# Launch phase — all items fire in rapid succession
+for item in "${WORK_ITEMS[@]}"; do
+    NAME=$(basename "$item")
+    log "Launching $NAME..."
+    START=$(date +%s)
+
+    # Main work in background
+    do_work "$item" >> "$LOG_FILE" 2>&1 &
+    CHILD_PID=$!
+
+    # Per-item watchdog (independent timeout for each)
+    ( sleep "$TIMEOUT" && kill "$CHILD_PID" 2>/dev/null && log_error "$NAME timed out" ) &
+    WATCHDOG_PID=$!
+
+    # Store in parallel arrays
+    CHILD_PIDS+=("$CHILD_PID")
+    WATCHDOG_PIDS+=("$WATCHDOG_PID")
+    ITEM_NAMES+=("$NAME")
+    START_TIMES+=("$START")
+done
+
+log "All ${#CHILD_PIDS[@]} items launched in parallel."
+
+# Collect phase — iterate in launch order, wait on each specific PID
+for i in "${!CHILD_PIDS[@]}"; do
+    CHILD_PID="${CHILD_PIDS[$i]}"
+    WATCHDOG_PID="${WATCHDOG_PIDS[$i]}"
+    NAME="${ITEM_NAMES[$i]}"
+    START_TIME="${START_TIMES[$i]}"
+
+    # Block on this specific PID
+    wait "$CHILD_PID" && EXIT_CODE=0 || EXIT_CODE=$?
+
+    # Cancel the per-item watchdog (it fires on timeout OR we cancel it on success)
+    kill "$WATCHDOG_PID" 2>/dev/null || true
+    wait "$WATCHDOG_PID" 2>/dev/null || true
+
+    ELAPSED=$(( $(date +%s) - START_TIME ))
+
+    if [[ "$EXIT_CODE" -eq 0 ]]; then
+        log "$NAME completed in ${ELAPSED}s"
+    else
+        log_error "$NAME failed (exit $EXIT_CODE) after ${ELAPSED}s"
+    fi
+done
+```
+
+### Key properties
+
+**Parallel arrays, not associative arrays**: the four `declare -a` arrays (CHILD_PIDS, WATCHDOG_PIDS, ITEM_NAMES, START_TIMES) are indexed by the SAME integer index. Access pattern: `CHILD_PIDS[$i]`, `WATCHDOG_PIDS[$i]`, etc. This works because bash `declare -a` arrays are ordered. Associative arrays (`declare -A`) are unordered and break the "iterate in launch order" property.
+
+**Launch-order wait, not finish-order wait**: `wait $PID` blocks on a specific PID. If batch-1 is slow and batch-2+3 finish first, the loop still waits on batch-1 FIRST. After batch-1 exits, the loop moves to batch-2 (already done, returns immediately) then batch-3 (also done, returns immediately). Total loop time = `max(work durations)`. The log output order is launch order (predictable) even though finish order was different.
+
+**Wait returns specific exit codes per PID**: `wait "$PID" && EXIT_CODE=0 || EXIT_CODE=$?` captures each child's exit code independently. Without the PID argument, `wait` waits for ALL children and returns the exit code of the LAST one — useless for per-item tracking.
+
+**Per-item watchdogs, not a global watchdog**: each child gets its own `( sleep $TIMEOUT && kill $PID )` subshell. One hung work item doesn't kill the others, and one work item's timeout doesn't affect another's deadline. The watchdog cancellation (`kill $WATCHDOG_PID`) after normal exit cleans up the subshell process.
+
+### Common antipatterns to avoid
+
+**❌ `wait` with no args + counting exits:**
+```bash
+do_work1 &
+do_work2 &
+do_work3 &
+wait  # Blocks until ALL children exit, but you lose per-item exit codes
+```
+
+**❌ Using `jobs -p` + wait:**
+```bash
+do_work1 &
+do_work2 &
+for pid in $(jobs -p); do wait $pid; done  # Works but loses launch order and metadata
+```
+
+**❌ Parallel waits via subshell backgrounds:**
+```bash
+( wait $PID1 && log "done 1" ) &
+( wait $PID2 && log "done 2" ) &
+# The subshell's `wait` can't wait on a process that isn't ITS child — doesn't work
+```
+
+**❌ Finish-order logging via polling:**
+```bash
+while [[ ${#PIDS[@]} -gt 0 ]]; do
+    for pid in "${PIDS[@]}"; do
+        if ! kill -0 $pid 2>/dev/null; then
+            log "$pid done"
+            # Hard to cleanly remove from array; polling wastes CPU
+        fi
+    done
+    sleep 1
+done
+```
+
+### SQLite + concurrent writes — the companion pattern
+
+If parallel work items write to the same SQLite database, the bash parallelism is only safe if the database connections are configured for concurrency. Two PRAGMAs are required:
+
+```sql
+PRAGMA journal_mode = WAL;        -- Concurrent readers, serialized writers
+PRAGMA busy_timeout = 30000;      -- Writer waits up to 30s for lock
+```
+
+**Both are load-bearing.** WAL mode enables reader concurrency AND makes the writer lock window tight (milliseconds, not seconds). busy_timeout converts "immediate SQLITE_BUSY error" into "wait up to N ms, then error if still locked".
+
+**Where to set them**: right after `new Database(path)`, before any `prepare` or `run` calls. Each independent DB connection in the concurrent scenario must set its OWN PRAGMAs — they're per-connection, not database-wide.
+
+Reference implementation: `scripts/auto-enrich.sh` (S80, 2026-04-09) uses this pattern for 3 concurrent `claude -p` calls, each of which internally invokes `save-batch.ts` (which sets busy_timeout at line 344). Measured speedup: 67% reduction in enrichment wall-clock vs serial (43 min → 14 min).
+
+### When the overhead is worth it
+
+Parallel bash is notably more complex than serial. The overhead (4 arrays, launch phase, collect phase, per-item watchdogs, watchdog cancellation) roughly doubles the loop code. Worth it when:
+
+1. **The work items dominate wall-clock** (e.g., 3 items × 15 min each = 45 min serial → 15 min parallel is a 30-min win)
+2. **The items are genuinely independent** (no shared mutable state beyond what DB-level concurrency primitives protect)
+3. **The parallelism count is small** (3-10 items). For 100+ items, use a work queue pattern instead
+
+Not worth it when:
+- Items are fast (< 10s each) — overhead dominates the savings
+- Items share state that can't be safely parallelized
+- The item count is unknown at launch time (use a queue instead)
+
 ## Runtime Artifacts vs Source Code Pattern
 
 **Rule:** runtime-generated files (databases, caches, state files, temporary work files) should NEVER be tracked by git. Source code and configuration SHOULD be tracked. The distinction matters more than it looks.
