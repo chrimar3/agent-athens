@@ -573,14 +573,48 @@ print_summary() {
 main() {
     # Parse arguments
     DRY_RUN="false"
+    PIPELINE_MODE="full"
     for arg in "$@"; do
         case $arg in
-            --dry-run)
-                DRY_RUN="true"
-                log "Running in DRY RUN mode"
-                ;;
+            --dry-run)         DRY_RUN="true" ;;
+            --mode=*)          PIPELINE_MODE="${arg#--mode=}" ;;
+            full|freshness|enrichment) PIPELINE_MODE="$arg" ;;
+            --help|-h)         echo "Usage: $0 [full|freshness|enrichment] [--dry-run]"; exit 0 ;;
+            *)                 echo "Unknown arg: $arg"; echo "Usage: $0 [full|freshness|enrichment] [--dry-run]"; exit 1 ;;
         esac
     done
+
+    case "$PIPELINE_MODE" in
+        full|freshness|enrichment) ;;
+        *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
+    esac
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "Running in DRY RUN mode"
+    fi
+    log "Pipeline mode: $PIPELINE_MODE"
+
+    # Pipeline-level lock: prevent concurrent runs of the same mode (S79)
+    # Per-mode lock files allow freshness + enrichment to run simultaneously,
+    # since they write different columns and don't conflict in practice.
+    LOCK_FILE="$PROJECT_DIR/.pipeline-${PIPELINE_MODE}.lock"
+    LOCK_MAX_AGE=25200  # 7 hours — covers worst-case cold morning run
+    if [[ -f "$LOCK_FILE" ]]; then
+        LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+        LOCK_AGE=$(( $(date +%s) - $(stat -f%m "$LOCK_FILE" 2>/dev/null || echo 0) ))
+        if [[ $LOCK_AGE -gt $LOCK_MAX_AGE ]]; then
+            log "Stale $PIPELINE_MODE lock (age: ${LOCK_AGE}s > ${LOCK_MAX_AGE}s). Force-removing."
+            rm -f "$LOCK_FILE"
+        elif [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
+            log "Pipeline $PIPELINE_MODE already running (PID=$LOCK_PID, mode may differ). Exiting cleanly."
+            exit 0
+        else
+            log "Dead $PIPELINE_MODE lock (PID=$LOCK_PID not running). Removing."
+            rm -f "$LOCK_FILE"
+        fi
+    fi
+    echo $$ > "$LOCK_FILE"
+    trap 'rm -f "$LOCK_FILE"' EXIT
 
     log "=========================================="
     log "Agent Athens - Daily Automated Pipeline"
@@ -595,43 +629,57 @@ main() {
     # Backup database BEFORE any phase mutates it (replaces git tracking)
     run_backup_db
 
-    # Run pipeline phases
+    # Run pipeline phases (S79: gated by PIPELINE_MODE)
     # All phases are non-fatal except generate and deploy.
     # A failed email or scrape should never block enrichment or deployment
     # of already-good data.
 
-    # Data acquisition (all non-fatal)
-    run_ingest
-    run_parse
-    run_scrape
+    # ── FRESHNESS PHASES: data acquisition + quality (skip in enrichment mode) ──
+    if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
+        # Data acquisition (all non-fatal)
+        run_ingest
+        run_parse
+        run_scrape
 
-    # Data quality (all non-fatal)
-    run_quality
-    run_dedup_removal
-    run_dedup_merge
-    run_prices
-    run_tickets
-    run_schema
+        # Data quality (all non-fatal)
+        run_quality
+        run_dedup_removal
+        run_dedup_merge
+        run_prices
+        run_tickets
+        run_schema
+    fi
 
-    # Enrichment (all non-fatal)
-    run_enrichment_sync
-    run_auto_enrichment
-    run_time_enrichment
-    run_image_enrichment
-    run_image_download
-    run_geocode
+    # ── ENRICHMENT PHASES (skip in freshness mode) ──
+    if [[ "$PIPELINE_MODE" != "freshness" ]]; then
+        # Enrichment (all non-fatal)
+        run_enrichment_sync
+        run_auto_enrichment
+        run_time_enrichment
+        run_image_enrichment
+        run_image_download
+        run_geocode
+    fi
 
-    # Build & deploy (fatal — no point deploying a broken build)
+    # ── BUILD & DEPLOY (skip in enrichment mode — 22h latency by design) ──
+    # Fatal — no point deploying a broken build.
     local deploy_ok=0
-    if run_generate; then
-        run_health_check
-        if run_deploy; then
-            deploy_ok=1
-            run_image_cleanup
-            run_indexnow_ping
+    if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
+        if run_generate; then
+            run_health_check
+            if run_deploy; then
+                deploy_ok=1
+                run_image_cleanup
+                run_indexnow_ping
+            fi
+        else
+            log_error "Site generation failed — skipping deploy"
         fi
     else
-        log_error "Site generation failed — skipping deploy"
+        # Enrichment-only mode has nothing to deploy. Mark deploy_ok=1 so the
+        # exit-status check below doesn't flag the run as failed.
+        deploy_ok=1
+        log "Enrichment mode: skipping build + deploy (next freshness run deploys enriched content)"
     fi
 
     # Print summary

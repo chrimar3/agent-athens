@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Agent Athens - Enrichment Pipeline (S79)
+        ========================================
+
+        Runs the enrichment pipeline at 10:00 AM daily:
+            enrichment queue sync → AI enrichment → time/image/geocode
+
+        Does NOT run scraping or deploy. Scraping runs in freshness pipeline
+        at 08:00 (see com.agentathens.freshness.plist). Enriched events appear
+        on the site on the NEXT freshness run (max 22h latency by design).
+
+        Installation:
+            cp com.agentathens.enrichment.plist ~/Library/LaunchAgents/
+            launchctl load ~/Library/LaunchAgents/com.agentathens.enrichment.plist
+
+        Rollback to old monolithic pipeline:
+            launchctl unload ~/Library/LaunchAgents/com.agentathens.enrichment.plist
+            launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist
+
+        IMPORTANT: launchd does NOT expand $HOME or ~ in paths.
+    -->
+
+    <key>Label</key>
+    <string>com.agentathens.enrichment</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>"/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-automated.sh" enrichment</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>10</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
+        <key>TZ</key>
+        <string>Europe/Athens</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-stderr.log</string>
+
+    <key>KeepAlive</key>
+    <false/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Nice</key>
+    <integer>5</integer>
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        Agent Athens - Freshness Pipeline (S79)
+        =======================================
+
+        Runs the freshness pipeline at 8:00 AM daily:
+            email fetch → parse → scrape → quality → build → deploy
+
+        Does NOT run enrichment (10 → 15). Enrichment has its own plist at 10:00.
+        See com.agentathens.enrichment.plist.
+
+        Installation:
+            cp com.agentathens.freshness.plist ~/Library/LaunchAgents/
+            launchctl load ~/Library/LaunchAgents/com.agentathens.freshness.plist
+
+        Rollback to old monolithic pipeline:
+            launchctl unload ~/Library/LaunchAgents/com.agentathens.freshness.plist
+            launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist
+
+        IMPORTANT: launchd does NOT expand $HOME or ~ in paths.
+    -->
+
+    <key>Label</key>
+    <string>com.agentathens.freshness</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>"/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-automated.sh" freshness</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin</string>
+        <key>TZ</key>
+        <string>Europe/Athens</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/freshness-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/freshness-stderr.log</string>
+
+    <key>KeepAlive</key>
+    <false/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Nice</key>
+    <integer>5</integer>
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>
