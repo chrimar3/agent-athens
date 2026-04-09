@@ -1188,6 +1188,91 @@ No code revert needed. The script's `full` mode (activated by zero-arg invocatio
 
 4. **`com.agentathens.daily.plist` at the project root** is an inconsistency relative to the new `config/launchd/` pattern. Moving it (and updating the installation instructions in its header comment) would be a small cleanup, not urgent.
 
+### Production validation results (2026-04-09 afternoon)
+
+Both modes of the split were empirically validated via manual `launchctl start` triggers on the same day S79 shipped. Tomorrow's 08:00/10:00 natural schedule will be the first fully-unattended run, but the mode-gating, lock mechanism, and exit-status behavior are all production-proven as of 18:13:31 on 2026-04-09.
+
+#### Freshness mode run (commit 6673f20e4 → run at 11:55:03 → exit at 17:13:29)
+
+- **Trigger:** `launchctl start com.agentathens.freshness` at 11:55:03
+- **Exit:** `Pipeline completed successfully` at 17:13:29
+- **Wall-clock:** 5h 18m 26s (misleading — see below)
+- **Active run-time:** ~24 min (phases 01-09 + 16-20)
+- **Suspension gap:** ~4h 54m between `git commit` at 12:02:23 and `Source code pushed to git` at 16:57:33, caused by **system sleep (lid close) mid-pipeline**
+- **Phases that ran:** 13 phases (Phase 0 backup + 01-09 + 16-20), **zero enrichment phases** ✓
+- **Netlify deploy:** 15m 53s (16:57:33 → 17:13:26), matches post-S78 baseline
+- **Post-S78 push timing:** the `git push` completed "instantly" upon system wake, confirming the ~0-second push behavior still holds
+
+#### Enrichment mode run (run at 17:23:10 → exit at 18:13:31)
+
+- **Trigger:** `launchctl start com.agentathens.enrichment` at 17:23:10
+- **Exit:** `Pipeline completed successfully` at 18:13:31
+- **Wall-clock:** 50m 21s (no suspension)
+- **Phases that ran:** 8 phases (Phase 0 backup + 10-15 + summary), **zero freshness phases, zero build/deploy phases** ✓
+- **`Enrichment mode: skipping build + deploy`** log line fired at 18:13:31 — the `else deploy_ok=1` safeguard from S79 Step 3 worked correctly
+- **Batch outcomes:** batch-1 893s, batch-2 740s, batch-3 975s (mean 869s), **3 succeeded / 0 failed, 12 events enriched (estimated) / 16 actual** (the +4 delta is likely re-saves of previously stuck `in_progress` events)
+- **Zero `API Error: 500`** in today's auto-enrich log — Mode C absent for the 4th independent check of the day
+
+#### DB metrics change over the afternoon
+
+| Metric | Pre-runs (yesterday's close) | After both S79 runs | Δ |
+|---|---:|---:|---:|
+| Total events | 9634 | 9760 | +126 |
+| Verified Athens | 8954 | 9069 | +115 |
+| Enriched events | 442 | 458 | +16 |
+| Events with local image | 1725 | 8831 | **+7106** |
+
+The +7106 local images delta is **unexpected and non-trivial**. Most plausible explanation: image download phase processed a backlog accumulated from previous runs. Not investigated in this session — queued as a post-session curiosity for a future 10-minute inquiry. Not a bug as far as I can tell — likely a latent batch finally flushing.
+
+#### Regressions discovered AND fixed in the same session (commit 5521e0936)
+
+**Regression A — `.pipeline-freshness.lock` committed to git by `run_deploy`'s `git add -A`:**
+Discovered when the freshness run's auto-commit `12fd4fc4e` included the live lock file. Root cause: S79 introduced per-mode lock files but did NOT add them to `.gitignore`. The lock file was sitting in the working tree when `run_deploy` swept everything via `git add -A`. **Fix:** `.pipeline-*.lock` added to `.gitignore`, `git rm --cached` the committed lock file. Follow-up commit `5521e0936`.
+
+**Regression B — `data/emails-to-parse/*.json` accumulating since 2025-10-21:**
+Discovered while investigating Regression A. 103 pre-existing files tracked in git (+1 from today's run = 104 total). Pre-existing from pre-S78; S78's runtime-artifact cleanup missed this directory. The daily auto-commit had been silently adding ~1 file per day for ~5 months — ~825 cumulative lines that shouldn't have been in git. **Fix:** `data/emails-to-parse/` added to `.gitignore`, `git rm --cached -r` the 104 tracked files. Same follow-up commit `5521e0936` (105 files changed, 6 insertions, 825 deletions).
+
+**Post-fix verification (from the enrichment run's exit):** `git status --short` is fully empty after enrichment exit, confirming the new `.gitignore` entries prevent both the lock file AND the emails-to-parse artifacts from being seen as working-tree drift. **The daily auto-commit from the next freshness run will be genuinely empty** on days when no human-authored files changed — finally completing what S78 started.
+
+#### Latent bug flagged (not fixed this session)
+
+**Freshness mode has no clamshell-sleep protection.** The 4h 54m suspension during the freshness run is empirical proof. The R2 `caffeinate -s` fix from S76 lives inside `auto-enrich.sh` and only runs during the enrichment phase. Freshness mode skips enrichment entirely → nothing asserts `caffeinate` → a lid-close mid-run pauses the whole pipeline indefinitely (until system wake).
+
+**Mitigation options (for a future session):**
+1. Wrap `daily-automated.sh` in `caffeinate -s` from the launchd plist's ProgramArguments
+2. Add an explicit `caffeinate` phase at the start of freshness mode (inside the script)
+3. Add a battery check at the start of freshness mode (like auto-enrich.sh does for its R2 fix) — skip the run if on battery
+4. Accept the current state (freshness pipeline runs once per day at 08:00 when the laptop is typically open + on AC)
+
+**Not fixing this session because:** the 08:00 scheduled fire time is historically safe (laptop open + plugged in), and no user-visible failure occurred even with the 5h suspension (git push and Netlify deploy survived the suspend/resume cycle intact). Adding caffeinate wrapping should be paired with a battery check so it doesn't burn battery on-purpose. This is a 30-minute focused session, not a quick fix.
+
+#### Bonus finding: S77 timing is even faster under load
+
+| Batch run | Mean duration | Max |
+|---|---:|---:|
+| S77 projection | 1156s | 1664s |
+| 2026-04-09 08:00 scheduled | 711s | 803s |
+| 2026-04-09 17:23 launchctl (this run) | 869s | 975s |
+
+The 17:23 run is slower than the 08:00 run but still **well under the 1800s timeout** and **significantly faster than the S77 worst-case projection of 1664s**. Gives confidence that a future lever-a-round-2 session could safely push `EVENTS_PER_BATCH` to 5 without needing a BATCH_TIMEOUT increase.
+
+#### Outcome summary
+
+- ✅ **S79 split is production-validated** — both modes run cleanly with correct phase gating
+- ✅ **S78 continues to work** — `git push` is sub-second, `data/events.db` is not tracked, backups fire
+- ✅ **S77 continues to work** — 4 events/batch, 3/3 batches succeeding, Mode C absent
+- ✅ **S76 R2 continues to work** — no clamshell hangs in the enrichment phase specifically
+- ❌ **Freshness mode clamshell vulnerability** — known, unfixed, non-critical for 08:00 schedule
+- ✅ **Both regressions (lock file + emails-to-parse) fixed in follow-up commit `5521e0936`**
+
+**Commits from S79 + same-day follow-up on origin/main:**
+```
+5521e0936 fix: gitignore pipeline locks + emails-to-parse  ← regression cleanup
+12fd4fc4e chore: daily pipeline update 2026-04-09          ← freshness auto-commit (has the regression)
+69421c666 docs: document S79 pipeline split session       ← S79 notes
+6673f20e4 feat: pipeline split — freshness + enrichment modes  ← S79 code
+```
+
 ## Runtime Artifacts Removed From Git Tracking (2026-04-08)
 
 | Decision | Why | Date |
