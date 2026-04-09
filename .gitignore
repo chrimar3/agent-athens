@@ -47,3 +47,9 @@ data/health-reports/
 # Local Netlify folder
 .netlify
 .git-old/
+
+# Pipeline lock files (runtime state)
+.pipeline-*.lock
+
+# Parsed email artifacts (not source code)
+data/emails-to-parse/
