@@ -1003,6 +1003,187 @@ If a batch sizing change causes problems:
 - `MIN_QUEUE` floor — raising it above `EVENTS_PER_BATCH` causes skipped runs on low-content days, working against throughput goals
 - `temp-briefs/batch-N.md` naming convention — the save-batch.ts `--batch=N` flag expects this format
 
+## Mode-Flag Pattern for Bash Pipeline Scripts
+
+When a long-running bash pipeline script needs to support multiple execution modes (e.g., `full` vs `freshness` vs `enrichment` in Agent Athens' `daily-automated.sh`), extending the existing argument parser is meaningfully better than introducing a positional default.
+
+### The antipattern: positional default
+
+```bash
+# ❌ WRONG — breaks existing --dry-run compatibility
+PIPELINE_MODE="${1:-full}"
+
+case "$PIPELINE_MODE" in
+    full|freshness|enrichment) ;;
+    *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
+esac
+```
+
+Why it's wrong: if the script is ever invoked as `./daily-automated.sh --dry-run`, `$1` is `--dry-run`, which becomes `PIPELINE_MODE`, which fails the case validation, which exits. **Every existing `--dry-run` invocation silently breaks.** The regression is invisible until someone tries to dry-run the script.
+
+### The pattern: extend the existing case block
+
+```bash
+# ✓ CORRECT — extends existing for-arg loop, preserves --dry-run
+main() {
+    DRY_RUN="false"
+    PIPELINE_MODE="full"
+    for arg in "$@"; do
+        case $arg in
+            --dry-run)         DRY_RUN="true" ;;
+            --mode=*)          PIPELINE_MODE="${arg#--mode=}" ;;
+            full|freshness|enrichment) PIPELINE_MODE="$arg" ;;
+            --help|-h)         echo "Usage: $0 [mode] [--dry-run]"; exit 0 ;;
+            *)                 echo "Unknown arg: $arg"; exit 1 ;;
+        esac
+    done
+
+    case "$PIPELINE_MODE" in
+        full|freshness|enrichment) ;;
+        *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
+    esac
+
+    # ... rest of main() ...
+}
+```
+
+Three properties this pattern guarantees:
+1. **Both positional and flag syntax work:** `daily-automated.sh freshness` AND `daily-automated.sh --mode=freshness` both set PIPELINE_MODE=freshness
+2. **Arg order independence:** `--dry-run freshness` and `freshness --dry-run` both work the same way
+3. **Backward compatibility:** zero-arg invocation (`daily-automated.sh`) defaults to the existing full-pipeline behavior via `PIPELINE_MODE="full"` initialization before the loop
+
+Reference implementation: `scripts/daily-automated.sh:573-595` (S79, 2026-04-09).
+
+### Phase-gating pattern
+
+Once mode is parsed, gate phase groups via `if [[ "$PIPELINE_MODE" != "<excluded_mode>" ]]; then ... fi` blocks. Do NOT move phase function definitions — just wrap the calls in main():
+
+```bash
+main() {
+    # Always run (all modes)
+    check_dependencies
+    run_backup_db
+
+    # Freshness phases (skip in enrichment mode)
+    if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
+        run_ingest
+        run_parse
+        # ...
+    fi
+
+    # Enrichment phases (skip in freshness mode)
+    if [[ "$PIPELINE_MODE" != "freshness" ]]; then
+        run_enrichment_sync
+        # ...
+    fi
+
+    # Build & deploy (skip in enrichment mode)
+    local deploy_ok=0
+    if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
+        if run_generate; then
+            # ... nested conditional unchanged ...
+        fi
+    else
+        # Enrichment-only mode: nothing to deploy. Mark deploy_ok=1 so
+        # the exit-status check below doesn't flag the run as failed.
+        deploy_ok=1
+        log "Enrichment mode: skipping build + deploy"
+    fi
+}
+```
+
+**Critical:** if any mode intentionally skips a phase that sets state used by the exit-status check (like `deploy_ok`), the else-branch MUST explicitly set that state. Otherwise the skipped mode looks like a failure to the caller (launchd logs it as `LastExitStatus=1`).
+
+## Per-Mode Lock File Pattern
+
+When a bash script supports multiple execution modes that write to a shared backing store (like SQLite), single-lock-per-script is pessimistic. Two modes that touch different columns/tables can safely run concurrently. Use per-mode locks instead.
+
+### Design
+
+```bash
+# One lock file per mode, not one global lock
+LOCK_FILE="$PROJECT_DIR/.pipeline-${PIPELINE_MODE}.lock"
+LOCK_MAX_AGE=25200  # 7 hours — covers worst-case cold morning run
+
+if [[ -f "$LOCK_FILE" ]]; then
+    LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+    LOCK_AGE=$(( $(date +%s) - $(stat -f%m "$LOCK_FILE" 2>/dev/null || echo 0) ))
+    if [[ $LOCK_AGE -gt $LOCK_MAX_AGE ]]; then
+        log "Stale $PIPELINE_MODE lock (age: ${LOCK_AGE}s). Force-removing."
+        rm -f "$LOCK_FILE"
+    elif [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
+        log "Pipeline $PIPELINE_MODE already running (PID=$LOCK_PID). Exiting cleanly."
+        exit 0  # NOT exit 1 — launchd would log as failure
+    else
+        log "Dead $PIPELINE_MODE lock (PID=$LOCK_PID not running). Removing."
+        rm -f "$LOCK_FILE"
+    fi
+fi
+echo $$ > "$LOCK_FILE"
+trap 'rm -f "$LOCK_FILE"' EXIT
+```
+
+### Four critical properties
+
+1. **Exit 0 on "already running"**: launchd (or cron) logs non-zero exits as failures. A correctly-detected concurrent run is not a failure — it's the lock doing its job. Exiting 0 keeps error logs clean.
+2. **Stale-lock detection via mtime**: a long-running process that was SIGKILLed may leave a stale lock file behind. Without an mtime check, future runs would be blocked indefinitely. The `LOCK_MAX_AGE` should be set to `max_expected_runtime + safety_margin` — for Agent Athens pipeline, worst-case observed was 6h cold-scrape morning runs, so 7 hours gives ~1h margin.
+3. **Dead-process detection via `kill -0`**: an even better check than mtime, since processes can die cleanly without removing their lock file (e.g., OOM kill, power loss). `kill -0 $PID` is a POSIX-standard no-op that returns 0 if the process exists, non-zero otherwise. Combine BOTH checks: mtime catches hung-but-alive processes, kill -0 catches dead-without-cleanup processes.
+4. **`trap 'rm -f "$LOCK_FILE"' EXIT`**: cleanup the lock on normal exit. Without this, every successful run leaves its lock behind for the stale-age check to catch — which works but is noisy.
+
+### When single-lock is still correct
+
+Per-mode locks are only correct when modes truly don't conflict. If two modes write the same DB row or modify the same in-flight file, they MUST use a shared lock. For Agent Athens `daily-automated.sh`:
+- `freshness` writes to: `events` (scrape-insert, quality-filter, dedup-merge), `content-hashes.json`, `dist/`
+- `enrichment` writes to: `events` (description, enriched_at), `enrichment_queue`, `temp-briefs/`, `temp-descriptions/`
+- Overlap: both write to the `events` table, but to different COLUMNS. SQLite's row-level locking handles this at the statement level; bash-level serialization isn't needed.
+- **`full` mode uses its own `.pipeline-full.lock`** and blocks both sub-modes — because full mode writes to everything.
+
+Reference implementation: `scripts/daily-automated.sh:597-617` (S79, 2026-04-09).
+
+## Launchctl Transition Pattern (load new, unload old)
+
+When replacing a launchd job with a new version (or splitting one job into multiple), the load/unload order matters subtly.
+
+### The pattern
+
+```bash
+# ✓ CORRECT: load new first, unload old second
+launchctl load ~/Library/LaunchAgents/new-job-A.plist
+launchctl load ~/Library/LaunchAgents/new-job-B.plist
+launchctl unload ~/Library/LaunchAgents/old-job.plist
+```
+
+### Why this order
+
+The scheduler is always covered by at least one registered job during the transition. Between the `load new` calls and the `unload old` call, ALL THREE jobs are briefly registered simultaneously — if a trigger time happens to fall in that window, the OLD job runs (which is still correct behavior per its pre-existing schedule). The NEW jobs won't trigger until THEIR scheduled times, which are in the future.
+
+### The wrong order
+
+```bash
+# ✗ WRONG: unload old first, then load new
+launchctl unload old-job.plist
+launchctl load new-job-A.plist
+launchctl load new-job-B.plist
+```
+
+Between the unload and the subsequent loads, NO agentathens-prefixed job is registered. If a system event causes a scheduled trigger check in that window, nothing runs. In practice this window is a few tens of milliseconds — unlikely to cause a miss — but the "load first, unload second" habit costs nothing and eliminates the risk entirely.
+
+### Keep the old plist file on disk
+
+```bash
+# After loading new jobs and unloading the old registration:
+ls ~/Library/LaunchAgents/old-job.plist
+# File still exists — only the launchd registration was removed.
+
+# Rollback is now a single launchctl load:
+launchctl load ~/Library/LaunchAgents/old-job.plist
+# The old job fires on its pre-existing schedule again.
+```
+
+This is the cheapest possible rollback path. The file is ~2KB; the cost of keeping it on disk forever is negligible compared to the option value of being able to revert in one command. For Agent Athens, `com.agentathens.daily.plist` has been kept as a "rollback insurance" file since S79.
+
+Reference implementation: `scripts/daily-automated.sh` header comments in the freshness+enrichment plists at `~/Library/LaunchAgents/` and `config/launchd/` (S79, 2026-04-09).
+
 ## Runtime Artifacts vs Source Code Pattern
 
 **Rule:** runtime-generated files (databases, caches, state files, temporary work files) should NEVER be tracked by git. Source code and configuration SHOULD be tracked. The distinction matters more than it looks.

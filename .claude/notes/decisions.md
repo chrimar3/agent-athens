@@ -1130,6 +1130,64 @@ The `updated_at < -1 day` guard ensures we don't clobber currently-running batch
 
 **Why not fixed today:** out of scope for throughput session (lever (a) is config, not state cleanup). Also orthogonal — fixing these 11 events adds ≤1 batch of work to tomorrow's run, which the lever (a) change already handles.
 
+## Pipeline Split — Freshness + Enrichment Modes (S79, 2026-04-09)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Split `daily-automated.sh` into three execution modes (`full`/`freshness`/`enrichment`) via a mode-flag argument on the SAME file, not via separate scripts | Mode-flag-over-separate-scripts is the minimum-change pattern: same file, same phase functions, same test surface — just different `if` blocks inside `main()` wrapping the phase calls. If the split proves wrong later, reverting is one-line (`launchctl load com.agentathens.daily.plist`). Separate scripts would have duplicated ~300 lines and required keeping them in sync | 2026-04-09 |
+| **Phase groups:** freshness = 01-09 (data+quality) + 16-20 (build+deploy); enrichment = 10-15 (all enrichment work); always = check_dependencies + run_backup_db | Verified via full main() read in S79 Step 1: zero shared bash state between groups, all inter-phase communication goes through `data/events.db`. `src/generate-site.ts` reads DB state at build time with no assumption about same-run enrichment, so freshness-only mode can safely render the site using the previous day's enrichments | 2026-04-09 |
+| **Per-mode lock files** (`.pipeline-{mode}.lock`) instead of a single `.pipeline.lock` | Freshness and enrichment write to different columns in `events.db` and don't conflict in practice. A single shared lock would have pessimistically prevented them from overlapping. Per-mode locks let them run in parallel if they happen to overlap (e.g., freshness runs long, enrichment starts before freshness finishes) while still preventing same-mode concurrency | 2026-04-09 |
+| **Lock `exit 0` on "already running", not `exit 1`** | launchd logs non-zero exits as failures. A correctly-detected "another instance is running" is not a failure — it's the lock doing its job. Exiting 0 keeps the launchd error log clean. Same pattern as `auto-enrich.sh:132-170` | 2026-04-09 |
+| **`LOCK_MAX_AGE=25200` (7 hours)** for stale-lock recovery | Empirical: Apr 7 pre-S78 runs saw 6h+ scraping phases on cold-cache mornings. 7 hours gives ~1 hour of margin above the observed worst case. Longer than needed for warm-cache runs (7 min scraping) but that doesn't cost anything — the check only fires when a lock file is actually present | 2026-04-09 |
+| **Enrichment mode sets `deploy_ok=1` explicitly** in the else-branch instead of letting it default to 0 | `daily-automated.sh:634` exits with code 1 if `deploy_ok=0` at the end. In enrichment mode there's no deploy to succeed or fail — the run is inherently "successful with nothing to deploy". Setting `deploy_ok=1` prevents launchd from logging all enrichment runs as failures | 2026-04-09 |
+| **Enrichment-to-deploy latency: up to 22h (by design)** | Morning enrichment run at 10:00 writes new descriptions to DB. They don't appear on the live site until the NEXT freshness run (08:00 next day). Alternatively enrichment mode could also run build+deploy at the end, reducing latency to ~0 but re-coupling what the split was meant to decouple. Chosen to keep the split pure. If 22h proves too long in production, flipping the condition in Step 3's `else` branch is a one-line fix | 2026-04-09 |
+| **Mode-flag arg parser extends existing `for arg` case block, NOT positional** | `PIPELINE_MODE="${1:-full}"` would have broken the existing `--dry-run` behavior: `daily-automated.sh --dry-run` would set `PIPELINE_MODE=--dry-run`, fail validation, and exit. Extending the existing case block accepts both positional (`freshness`) and flag (`--mode=freshness`) syntax AND preserves `--dry-run` | 2026-04-09 |
+| **Launchd: load new plists BEFORE unloading old one** | Loading first + unloading second means the schedule is always covered. Reverse ordering creates a brief window where no plist is registered — if a trigger happens to fire during that window, nothing runs. 10:48 AM (S79 execution time) wasn't near any trigger time so the risk was theoretical, but the ordering is a safe habit | 2026-04-09 |
+| Kept `com.agentathens.daily.plist` file on disk after unload (not deleted) | One-line rollback: `launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist`. Zero code changes needed because `full` mode is backward compatible with the zero-arg invocation the old plist uses | 2026-04-09 |
+| Plist reference copies committed to `config/launchd/`, NOT copies of the live files | The live plists are at `~/Library/LaunchAgents/` where launchd reads them. The `config/launchd/` copies are for version control + audit history + fresh-clone onboarding. `git log config/launchd/` now shows every plist change. Previous pattern (old `com.agentathens.daily.plist` at the project root) was an inconsistency I did NOT fix in this session — leaving it alone to avoid scope creep | 2026-04-09 |
+| Did NOT touch `auto-enrich.sh` | The split is purely about `main()` in `daily-automated.sh`. S79 boundary explicitly excluded `auto-enrich.sh` to keep Mode C / enrichment concerns out of scope | 2026-04-09 |
+| Did NOT touch `com.agentathens.auto-enrich.plist` or `com.agentathens.enrichment-check.plist` | These pre-existing launchd jobs are outside S79's scope. `auto-enrich.plist` has `LastExitStatus=1` (possibly from tonight's Mode C event) and is flagged for post-session audit | 2026-04-09 |
+
+### Production validation before commit
+
+Session started at 10:37 Athens time on 2026-04-09. Before ANY edits, verified that tonight's 20:22 manual launchctl run AND this morning's 08:00 natural launchd run had both been fully successful on the post-S78 code:
+
+- `81a690b57` at HEAD (+`f2f6163cb` for notes)
+- Git push phase: `"No source code changes to commit"` at 08:53:17 — sub-second no-op
+- Phase 0 backup: `events-2026-04-09.db.gz` mtime `Apr 9 08:00`, 5.6MB
+- EVENTS_PER_BATCH=4 config active: `"Will generate 3 batch(es) of 4 events"` at 08:09:20
+- Enrichment outcomes this morning: **batch-1 726s, batch-2 803s, batch-3 604s, 3/3 succeeded, 12 events enriched**
+- Mode C state: **zero `API Error: 500` in today's log** — the Apr 8 20:29 event was transient (resolved within hours)
+
+### Bonus finding: S77 performance is better than projected
+
+Step 1 of the prior throughput session (S77) projected 4-event batches at mean ~1156s / worst ~1664s. Today's first 4-event batches under production load came in at mean 711s / max 803s — **38% faster than projected**. The per-event linear scaling model I used was too pessimistic; per-batch fixed overhead is higher than I estimated, which means each additional event costs less than the per-event rate suggests. **Implication:** a future throughput session could safely bump `EVENTS_PER_BATCH` to 5 without needing the BATCH_TIMEOUT increase I had projected as necessary. Revised 5-event projections: mean ~890s, worst ~1004s, still well under 1800s. Not doing this now — S79 is about the split, not throughput — but flagging for a future lever-(a)-round-2 session.
+
+### Rollback path (documented for next operator)
+
+```bash
+# Full rollback from pipeline split to monolithic daily pipeline:
+launchctl unload ~/Library/LaunchAgents/com.agentathens.freshness.plist
+launchctl unload ~/Library/LaunchAgents/com.agentathens.enrichment.plist
+launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist
+
+# Verify:
+launchctl list | grep agentathens
+# Expected: daily + whatever else was running before
+```
+
+No code revert needed. The script's `full` mode (activated by zero-arg invocation, which is what the old daily.plist does) is backward compatible with all prior behavior. `config/launchd/*.plist` reference copies remain in the repo as documentation even after rollback.
+
+### Known post-session audit items
+
+1. **`com.agentathens.auto-enrich.plist`** (2008 bytes, Mar 12) — a third pre-existing launchd job that I discovered mid-S79 via `launchctl list`. Currently shows `LastExitStatus=1`. Purpose, schedule, and interaction with the new `com.agentathens.enrichment` plist at 10:00 are unknown. The per-mode lock (`.pipeline-enrichment.lock`) protects against any collision, but the job should be audited in a follow-up session to understand whether it's still needed or should be unloaded.
+
+2. **11 events stuck in `enrichment_queue.in_progress`** — still not cleaned up. Noted in the earlier throughput session's Known Debt section. One-line SQL fix available whenever a cleanup session is scheduled.
+
+3. **`specs/claude-hang-diagnostic.md` Mode C entry is stale** — Section 2 still classifies Mode C as "unknown external cause". Tonight's 20:29 evidence upgraded this to "Anthropic API 500 errors, transient, three captured request_ids". A 5-minute diagnostic update is worth doing in a future session to reflect the actual root cause.
+
+4. **`com.agentathens.daily.plist` at the project root** is an inconsistency relative to the new `config/launchd/` pattern. Moving it (and updating the installation instructions in its header comment) would be a small cleanup, not urgent.
+
 ## Runtime Artifacts Removed From Git Tracking (2026-04-08)
 
 | Decision | Why | Date |
