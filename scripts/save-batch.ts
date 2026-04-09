@@ -341,6 +341,7 @@ function main(): void {
   const db = new Database(DB_PATH);
   db.run('PRAGMA journal_mode = WAL;');
   db.run('PRAGMA foreign_keys = ON;');
+  db.run('PRAGMA busy_timeout = 30000;'); // 30s wait on lock contention — safe for parallel save-batch.ts invocations (S80)
 
   const { results, openings } = saveBatch(db, manifest.event_ids, session, batch, dryRun, manifest.output_dir);
 
