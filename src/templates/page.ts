@@ -15,6 +15,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 import { BASE_URL } from '../config/site-url';
+import { renderAnalytics } from '../config/analytics';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -138,6 +139,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   ${renderFontLinks()}
   ${renderCssLink()}
 
+${renderAnalytics()}
 </head>
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav()}

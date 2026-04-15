@@ -6,6 +6,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
 import { BASE_URL } from '../config/site-url';
+import { renderAnalytics } from '../config/analytics';
 
 interface ContentPageOptions {
   metaDescription?: string;
@@ -73,6 +74,7 @@ export function renderContentPage(
   ${renderFaviconLinks()}
   ${renderFontLinks()}
   ${renderCssLink()}
+${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav()}

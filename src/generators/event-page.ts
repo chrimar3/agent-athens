@@ -32,6 +32,7 @@ import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 import { BASE_URL } from '../config/site-url';
+import { renderAnalytics } from '../config/analytics';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -441,6 +442,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <script type="application/ld+json">
   ${schemaJson}
   </script>
+${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav(locale)}

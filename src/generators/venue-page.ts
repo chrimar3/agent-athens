@@ -23,6 +23,7 @@ import { renderSearchOverlay, renderSearchScript } from '../templates/search-ove
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 import { BASE_URL } from '../config/site-url';
+import { renderAnalytics } from '../config/analytics';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -191,6 +192,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   </script>
   ` : ''}
 
+${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav()}
@@ -372,6 +374,7 @@ function generateVenueIndex(venues: VenueData[]): void {
   <meta name="twitter:description" content="${venues.length} χώροι με επερχόμενες εκδηλώσεις στην Αθήνα">
   <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">
 
+${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav()}
