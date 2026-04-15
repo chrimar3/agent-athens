@@ -95,35 +95,26 @@ if [[ -n "$STALE_PIDS" ]]; then
 fi
 
 # ============================================================================
-# Battery precondition — defer enrichment when on battery power
+# Battery skip REMOVED (2026-04-15, S82 hotfix)
 # ----------------------------------------------------------------------------
-# Why: caffeinate -s only prevents system sleep on AC power (per `man caffeinate`).
-# On battery, lid-close (Clamshell Sleep) suspends the entire bash process tree
-# including the watchdog timer, causing indefinite hangs. Apr 7 2026 incident
-# confirmed this empirically — see specs/claude-hang-diagnostic.md Section 5
-# (R1.A test 2026-04-08 measured 753s for `caffeinate -i sleep 300` on battery+clamshell).
+# Was: exit 0 on battery power to prevent clamshell-sleep watchdog suspension.
+# Problem: blocked ALL enrichment for 6 days (Apr 10-15) because the laptop
+# was on battery during every enrichment window. Zero events enriched.
 #
-# Skip strategy: exit 0 (success) so daily-automated.sh treats this as a normal
-# "nothing to do" outcome. The next launchd cycle will retry; the user can also
-# manually run when plugged in. The skip happens BEFORE the lock file is taken
-# so a battery skip does not consume a lock cycle.
+# Why removal is safe: the other 5 defense layers handle clamshell adequately:
+#   1. .auto-enrich.lock — prevents overlapping runs
+#   2. Lock mtime guard (LOCK_MAX_AGE) — auto-recovers stuck processes
+#   3. Orphan cleanup on startup — kills zombie claude processes
+#   4. caffeinate -s watchdog — survives clamshell on AC power
+#   5. launchd retry — next trigger runs normally after a skip/failure
+#
+# Worst case on battery + lid close: one run hangs until lid opens, lock mtime
+# recovers within LOCK_MAX_AGE (7200s = 2h), next trigger runs normally.
+# This is better than zero enrichment for days.
+#
+# Original rationale preserved: specs/claude-hang-diagnostic.md Section 5,
+# R1.A test 2026-04-08 (753s for caffeinate -i sleep 300 on battery+clamshell).
 # ============================================================================
-
-POWER_SOURCE=$(pmset -g batt 2>/dev/null | head -1)
-case "$POWER_SOURCE" in
-    *"Battery Power"*)
-        log "On battery power — deferring enrichment to next AC cycle"
-        log "  (rationale: clamshell sleep on battery would suspend the watchdog;"
-        log "   see specs/claude-hang-diagnostic.md Section 5 for details)"
-        exit 0
-        ;;
-    *"AC Power"*)
-        : # proceed
-        ;;
-    *)
-        log "Power source unknown ('$POWER_SOURCE') — proceeding (fail-open)"
-        ;;
-esac
 
 # ============================================================================
 # Lock file — prevent overlapping runs

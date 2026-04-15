@@ -416,7 +416,9 @@ run_geocode() {
         return 0
     fi
 
-    if bun run scripts/geocode-missing-venues.ts --confidence=high >> "$LOG_FILE" 2>&1; then
+    # --limit=20: cap at 20 venues per run (was unlimited, caused 12h+ runs from Nominatim
+    # rate limiting at 1 req/sec). Remaining venues get picked up on the next run.
+    if bun run scripts/geocode-missing-venues.ts --confidence=high --limit=20 >> "$LOG_FILE" 2>&1; then
         log "Venue geocoding completed"
         return 0
     else
@@ -648,6 +650,12 @@ main() {
         run_prices
         run_tickets
         run_schema
+
+        # Venue geocoding — moved here from enrichment block (S82, 2026-04-15).
+        # Geocoding is venue data (Nominatim API), not AI enrichment. Keeping it
+        # in the enrichment block caused 12h+ geocoding runs to hold the enrichment
+        # lock, blocking ALL subsequent enrichment triggers for the day.
+        run_geocode
     fi
 
     # ── ENRICHMENT PHASES (skip in freshness mode) ──
@@ -658,7 +666,6 @@ main() {
         run_time_enrichment
         run_image_enrichment
         run_image_download
-        run_geocode
     fi
 
     # ── BUILD & DEPLOY (skip in enrichment mode — 22h latency by design) ──
