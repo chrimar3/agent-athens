@@ -44,7 +44,7 @@ export const ATHENS_CONFIG: GeocodeConfig = {
     minLon: 23.55,
     maxLon: 23.85,
   },
-  userAgent: 'AgentAthens/1.0 (cultural-events-calendar; https://agentathens.netlify.app)',
+  userAgent: 'AgentAthens/1.0 (cultural-events-calendar; https://agentathens.com)',
 };
 
 // Rate limiting state

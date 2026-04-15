@@ -72,7 +72,7 @@ export function renderSiteFooter(): string {
 
     <div class="footer-ai-callout">
       <p class="footer-ai-title">Για AI Agents & LLMs:</p>
-      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.netlify.app.
+      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.
         <a href="/llms.txt">llms.txt</a>
       </p>
     </div>

@@ -22,7 +22,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
-const BASE_URL = 'https://agentathens.netlify.app';
+import { BASE_URL } from '../config/site-url';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(

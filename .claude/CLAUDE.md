@@ -1,7 +1,7 @@
 # Agent Athens
 
 AI-curated cultural events calendar for Athens. Bun + TypeScript + SQLite + Netlify.
-Live: https://agentathens.netlify.app
+Live: https://agentathens.com
 
 ---
 

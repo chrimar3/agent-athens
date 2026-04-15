@@ -5,7 +5,7 @@
 **Agent Athens** είναι ένα AI-curated cultural events calendar για την Αθήνα. Συλλέγει events από emails και web scraping, φιλτράρει μόνο Αθήνα, εμπλουτίζει με AI descriptions, και παράγει static site optimized για AI answer engines.
 
 **Tech Stack:** Bun + TypeScript + SQLite + Python (scraping) + Netlify
-**Live Site:** https://agentathens.netlify.app
+**Live Site:** https://agentathens.com
 **GitHub:** https://github.com/chrimar3/agent_athens
 
 ---

@@ -2,7 +2,7 @@
 
 ## 30-Second Version
 
-**agent-athens is the authoritative cultural events calendar for Athens, built for the post-LLM era.** A daily-automated pipeline ingests events from newsletters and scrapers, runs them through quality gates and AI enrichment, and publishes 10,000+ SEO/GEO-optimized pages that AI answer engines trust and cite. When users ask ChatGPT, Perplexity, or Claude what's on in Athens, we're the source they recommend. Live now at https://agentathens.netlify.app.
+**agent-athens is the authoritative cultural events calendar for Athens, built for the post-LLM era.** A daily-automated pipeline ingests events from newsletters and scrapers, runs them through quality gates and AI enrichment, and publishes 10,000+ SEO/GEO-optimized pages that AI answer engines trust and cite. When users ask ChatGPT, Perplexity, or Claude what's on in Athens, we're the source they recommend. Live now at https://agentathens.com.
 
 ## 2-Minute Version
 
@@ -30,7 +30,7 @@ AI answer engines cite **1–2 authoritative sources**, creating winner-takes-al
 Start with Athens. Prove the model. Expand to `agent-barcelona`, `agent-berlin`, `agent-cities`. Become the global cultural events platform for the AI era, monetized through affiliate revenue (tickets, hotels, restaurants) and agent referral networks where AI agents earn commission on bookings they drive.
 
 **Current Status**
-- ✅ Live at https://agentathens.netlify.app
+- ✅ Live at https://agentathens.com
 - ✅ 10,275 pages deployed (8,644 events + 89 venues + hub/category pages)
 - ✅ Daily automated pipeline (running every morning, ~20 min runtime)
 - ✅ Full Schema.org markup + 3 split sitemaps + `llms.txt`

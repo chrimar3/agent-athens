@@ -27,4 +27,4 @@ console.log(`   Has full_description: ${row.has_desc ? 'YES' : 'NO'}`);
 
 db.close();
 
-console.log('\n🚀 Now rebuild site to see enriched description on agentathens.netlify.app');
+console.log('\n🚀 Now rebuild site to see enriched description on agentathens.com');

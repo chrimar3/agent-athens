@@ -2,8 +2,8 @@
 
 **AI-curated cultural events calendar for Athens, Greece.** A static-first site that turns daily newsletters and scraped event listings into SEO/GEO-optimized pages designed for AI answer engines (ChatGPT, Perplexity, Claude), agent-to-agent (A2A) protocols, and humans.
 
-🔗 **Live site:** https://agentathens.netlify.app
-🤖 **AI discovery:** https://agentathens.netlify.app/llms.txt
+🔗 **Live site:** https://agentathens.com
+🤖 **AI discovery:** https://agentathens.com/llms.txt
 📦 **Repository:** https://github.com/chrimar3/agent-athens
 
 ---

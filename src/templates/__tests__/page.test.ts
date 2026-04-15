@@ -41,7 +41,7 @@ describe("renderPage", () => {
     expect(html).toContain('name="keywords" content="jazz, concerts, athens, live music, greece, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture"');
 
     // Canonical URL
-    expect(html).toContain('rel="canonical" href="https://agentathens.netlify.app/jazz-concert-this-week"');
+    expect(html).toContain('rel="canonical" href="https://agentathens.com/jazz-concert-this-week"');
   });
 
   test("should include GEO meta tags", () => {
@@ -64,7 +64,7 @@ describe("renderPage", () => {
 
     expect(html).toContain('property="og:title" content="Jazz Concerts in Athens"');
     expect(html).toContain('property="og:description"');
-    expect(html).toContain('property="og:url" content="https://agentathens.netlify.app/jazz-concert-this-week"');
+    expect(html).toContain('property="og:url" content="https://agentathens.com/jazz-concert-this-week"');
     expect(html).toContain('property="og:type" content="website"');
     expect(html).toContain('property="og:locale" content="el_GR"'); // Greek locale
     expect(html).toContain('property="og:site_name" content="agent-athens"');
@@ -122,7 +122,7 @@ describe("renderPage", () => {
 
     expect(html).toContain('class="site-footer"');
     expect(html).toContain("Για AI Agents");
-    expect(html).toContain("agentathens.netlify.app");
+    expect(html).toContain("agentathens.com");
     expect(html).toContain("/llms.txt");
   });
 
@@ -375,7 +375,7 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
 
     expect(jsonLd.name).toContain("Test Events");
     expect(jsonLd.description).toBeTruthy();
-    expect(jsonLd.url).toBe("https://agentathens.netlify.app/test");
+    expect(jsonLd.url).toBe("https://agentathens.com/test");
     expect(jsonLd.inLanguage).toBe("el"); // Greek language
   });
 

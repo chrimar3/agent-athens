@@ -14,6 +14,7 @@ import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
+import { BASE_URL } from '../config/site-url';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -86,10 +87,10 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="keywords" content="${keywords}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
 
   <!-- Canonical URL (English slug for international SEO) -->
-  <link rel="canonical" href="https://agentathens.netlify.app/${url}">
+  <link rel="canonical" href="${BASE_URL}/${url}">
 
   <!-- Language Alternates -->
-  <link rel="alternate" hreflang="el" href="https://agentathens.netlify.app/${url}">
+  <link rel="alternate" hreflang="el" href="${BASE_URL}/${url}">
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="${new Date().toISOString().split('T')[0]}">
@@ -102,18 +103,18 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- OpenGraph: Greek Primary, English Secondary -->
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
-  <meta property="og:url" content="https://agentathens.netlify.app/${url}">
+  <meta property="og:url" content="${BASE_URL}/${url}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="el_GR">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="agent-athens">
-  <meta property="og:image" content="https://agentathens.netlify.app${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
+  <meta property="og:image" content="${BASE_URL}${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
-  <meta name="twitter:image" content="https://agentathens.netlify.app${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
+  <meta name="twitter:image" content="${BASE_URL}${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -420,7 +421,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
     "@type": "CollectionPage",
     "name": `${metadata.title} | Cultural Events in Athens`,  // Add English context
     "description": `${events.length} cultural events in Athens, Greece`,  // English
-    "url": `https://agentathens.netlify.app/${metadata.url}`,
+    "url": `${BASE_URL}/${metadata.url}`,
     "inLanguage": locale === 'en' ? 'en' : 'el',
     "about": {
       "@type": "Place",

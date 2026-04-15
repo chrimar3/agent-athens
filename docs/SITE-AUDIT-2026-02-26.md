@@ -1,7 +1,7 @@
 # Agent Athens — Site Audit Report
 
 **Date:** 2026-02-26
-**URL:** https://agentathens.netlify.app
+**URL:** https://agentathens.com
 **Auditor:** Claude Code (automated)
 
 ---

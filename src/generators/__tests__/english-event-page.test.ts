@@ -55,13 +55,13 @@ describe("English event page — canonical URL", () => {
   test("English canonical includes /en/ prefix", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'en');
-    expect(html).toContain(`href="https://agentathens.netlify.app/en/events/${slug}/"`);
+    expect(html).toContain(`href="https://agentathens.com/en/events/${slug}/"`);
   });
 
   test("Greek canonical has no /en/ prefix", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'el');
-    expect(html).toContain(`href="https://agentathens.netlify.app/events/${slug}/"`);
+    expect(html).toContain(`href="https://agentathens.com/events/${slug}/"`);
   });
 });
 
@@ -69,9 +69,9 @@ describe("English event page — hreflang tags", () => {
   test("bilingual event has el + en + x-default hreflang", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'en');
-    expect(html).toContain(`hreflang="el" href="https://agentathens.netlify.app/events/${slug}/"`);
-    expect(html).toContain(`hreflang="en" href="https://agentathens.netlify.app/en/events/${slug}/"`);
-    expect(html).toContain(`hreflang="x-default" href="https://agentathens.netlify.app/en/events/${slug}/"`);
+    expect(html).toContain(`hreflang="el" href="https://agentathens.com/events/${slug}/"`);
+    expect(html).toContain(`hreflang="en" href="https://agentathens.com/en/events/${slug}/"`);
+    expect(html).toContain(`hreflang="x-default" href="https://agentathens.com/en/events/${slug}/"`);
   });
 
   test("Greek-only event has only el hreflang", () => {

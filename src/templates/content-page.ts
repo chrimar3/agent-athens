@@ -5,7 +5,7 @@
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
-const BASE_URL = 'https://agentathens.netlify.app';
+import { BASE_URL } from '../config/site-url';
 
 interface ContentPageOptions {
   metaDescription?: string;

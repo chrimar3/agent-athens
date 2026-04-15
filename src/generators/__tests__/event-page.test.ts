@@ -254,7 +254,7 @@ describe("Event Detail Page — Schema.org / SEO", () => {
   test("canonical URL correct", () => {
     const slug = generateEventSlug(sampleConcert);
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain(`<link rel="canonical" href="https://agentathens.netlify.app/events/${slug}/"`);
+    expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/"`);
   });
 
   test("uses SCHEMA_TYPE_MAP for itemtype", () => {

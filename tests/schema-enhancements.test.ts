@@ -111,7 +111,7 @@ describe('Organization schema', () => {
   test('ORGANIZATION_SCHEMA has correct structure', () => {
     expect(ORGANIZATION_SCHEMA['@type']).toBe('Organization');
     expect(ORGANIZATION_SCHEMA.name).toBe('agent-athens');
-    expect(ORGANIZATION_SCHEMA.url).toBe('https://agentathens.netlify.app');
+    expect(ORGANIZATION_SCHEMA.url).toBe('https://agentathens.com');
   });
 
   test('homepage includes Organization JSON-LD', () => {

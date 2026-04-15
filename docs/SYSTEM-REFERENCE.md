@@ -8,7 +8,7 @@
 
 AI-curated cultural events calendar for Athens, Greece. Static site generated from SQLite, deployed on Netlify. Updated daily from 10 scrapers.
 
-- **Live:** https://agentathens.netlify.app
+- **Live:** https://agentathens.com
 - **Stack:** Bun + TypeScript + SQLite + Netlify
 - **Repo:** github.com/chrimar3/agent-athens
 

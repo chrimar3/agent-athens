@@ -31,7 +31,7 @@ import { getPerformerSameAs } from '../utils/performer-sameAs';
 import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
-const BASE_URL = 'https://agentathens.netlify.app';
+import { BASE_URL } from '../config/site-url';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(

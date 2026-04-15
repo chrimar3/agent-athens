@@ -136,7 +136,7 @@ async function querySparql(name: string): Promise<WikidataResult[]> {
   const response = await fetch(url, {
     headers: {
       'Accept': 'application/sparql-results+json',
-      'User-Agent': 'AgentAthens/1.0 (https://agentathens.netlify.app; cultural events calendar)',
+      'User-Agent': 'AgentAthens/1.0 (https://agentathens.com; cultural events calendar)',
     },
   });
 

@@ -11,7 +11,7 @@ const COMPLETE_SCHEMA = {
   'eventStatus': 'https://schema.org/EventScheduled',
   'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
   'inLanguage': 'en',
-  'url': 'https://agentathens.netlify.app/events/test/',
+  'url': 'https://agentathens.com/events/test/',
   'location': {
     '@type': 'EventVenue',
     'name': 'Half Note Jazz Club',
@@ -36,7 +36,7 @@ const COMPLETE_SCHEMA = {
     'availability': 'https://schema.org/InStock',
     'url': 'https://example.com/tickets',
   },
-  'image': 'https://agentathens.netlify.app/images/og/concert-default.png',
+  'image': 'https://agentathens.com/images/og/concert-default.png',
   'performer': {
     '@type': 'MusicGroup',
     'name': 'Test Artist',

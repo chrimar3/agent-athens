@@ -2,7 +2,7 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import type { ContentHashManifest } from './content-hasher';
 
-const BASE_URL = 'https://agentathens.netlify.app';
+import { BASE_URL } from '../config/site-url';
 const DIST_DIR = join(import.meta.dir, '../../dist');
 
 type SitemapBucket = 'events' | 'venues' | 'editorial';

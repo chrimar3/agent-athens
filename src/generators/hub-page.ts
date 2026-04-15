@@ -24,6 +24,7 @@ import { STRINGS, type Locale } from '../i18n/strings';
 import { formatDateOnly } from '../utils/i18n-date';
 import { renderHubCrossLinks } from '../utils/cornerstone-links';
 import { getPullQuotes, getSectionEditorial } from '../utils/editorial-content';
+import { BASE_URL } from '../config/site-url';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -249,7 +250,6 @@ export function renderHubPage(
   }
 
   const t = STRINGS[locale];
-  const BASE_URL = 'https://agentathens.netlify.app';
 
   // For English locale, require answerCapsuleEn
   if (locale === 'en' && !config.answerCapsuleEn) {
@@ -546,7 +546,7 @@ export function generateHubPages(allEvents: Event[]): string[] {
         total: filteredEvents.length,
         enrichedCount: filteredEvents.filter(e => e.fullDescription).length,
         lastUpdate: new Date().toISOString(),
-        url: `https://agentathens.netlify.app/${config.slug}`
+        url: `${BASE_URL}/${config.slug}`
       }
     };
 

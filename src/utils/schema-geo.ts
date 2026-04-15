@@ -9,6 +9,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NEIGHBORHOOD_GREEK } from './neighborhoods';
+import { BASE_URL } from '../config/site-url';
 
 // Load geodata configs
 const neighborhoodGeodata: Record<string, { name: string; qid: string; lat: number; lng: number }> =
@@ -121,7 +122,7 @@ export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   'name': 'agent-athens',
-  'url': 'https://agentathens.netlify.app',
+  'url': BASE_URL,
   'description': 'AI-curated cultural events calendar for Athens, Greece. Daily updated listings for concerts, exhibitions, theater, and more.',
   'areaServed': {
     '@type': 'Place',

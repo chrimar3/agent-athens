@@ -29,6 +29,7 @@ import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
+import { BASE_URL } from './config/site-url';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -330,7 +331,7 @@ async function main() {
         total: homepageEvents.length,
         totalAll: events.length,
         lastUpdate: new Date().toISOString(),
-        url: 'https://agentathens.netlify.app/'
+        url: `${BASE_URL}/`
       }
     }, null, 2)
   );
@@ -522,7 +523,7 @@ async function main() {
 
   // Initialize _redirects (sitemap redirect only — /en/* redirect removed for bilingual pages)
   const redirectsPath = join(DIST_DIR, '_redirects');
-  writeFileSync(redirectsPath, '/sitemap.xml  /sitemap-index.xml  301\n');
+  writeFileSync(redirectsPath, `https://agentathens.netlify.app/*  ${BASE_URL}/:splat  301!\n/sitemap.xml  /sitemap-index.xml  301\n`);
 
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
@@ -541,7 +542,6 @@ async function main() {
 
   // Generate content pages (about, editorial, corrections)
   console.log('\n📄 Generating content pages...');
-  const BASE_URL = 'https://agentathens.netlify.app';
   const todayIso = DateTime.now().setZone('Europe/Athens').toISODate();
   const publisher = {
     '@type': 'Organization',
@@ -967,7 +967,7 @@ async function generatePage(filters: Filters, allEvents: Event[], preContentHtml
     meta: {
       total: filteredEvents.length,
       lastUpdate: new Date().toISOString(),
-      url: `https://agentathens.netlify.app/${url}`
+      url: `${BASE_URL}/${url}`
     }
   };
 
@@ -1017,7 +1017,7 @@ async function generateCategoryPages(events: Event[]): Promise<string[]> {
       meta: {
         total: filteredEvents.length,
         lastUpdate: new Date().toISOString(),
-        url: `https://agentathens.netlify.app/${category.slug}`
+        url: `${BASE_URL}/${category.slug}`
       }
     };
 
@@ -1041,7 +1041,7 @@ async function generateLLMsTxt(params: {
   englishHubCount?: number;
 }) {
   const { events, venuePageUrls, categoryConfigs, englishEventCount = 0, englishHubCount = 0 } = params;
-  const base = 'https://agentathens.netlify.app';
+  const base = BASE_URL;
 
   const eventCount = events.length;
   const venueCount = venuePageUrls.length;
@@ -1171,7 +1171,7 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://agentathens.netlify.app/sitemap-index.xml
+Sitemap: ${BASE_URL}/sitemap-index.xml
 `;
 
   writeFileSync(join(DIST_DIR, 'robots.txt'), content);
