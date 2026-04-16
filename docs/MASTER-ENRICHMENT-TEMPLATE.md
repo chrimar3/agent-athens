@@ -500,6 +500,11 @@ Before publishing, verify every description passes these gates:
 | **Opening includes event type keyword** | Genre/type word in first sentence | "concert," "exhibition," "theater," etc. present (Round 7) |
 | **Opening includes date** | Temporal reference in first sentence | Date or date range in anchor sentence (Round 7) |
 | **No empty schema description** | Every event has at minimum 1-sentence declarative description | See PART 0 minimum template (Round 7) |
+| **Word count matrix check** | Description word count within matrix range for this event type | countWords() vs getWordTarget() min/max |
+| **Structure matches word budget** | ≤200w = three-part-block, 201-400w = hybrid, 400+w = full-8-section | Check structure field from enrichment matrix |
+| **Entity recurrence** | Title artist/performer appears beyond opening paragraph | Ctrl+F artist name after first paragraph |
+| **Given data priority** | Category 1 facts appear before Category 2 atmosphere | First fact mention before first atmosphere sentence |
+| **Timeliness signal present** | Description answers "why now?" with Tier 1/2/3 signal | Contains temporal hook beyond event date |
 
 ## The Citability Test
 

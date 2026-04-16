@@ -53,6 +53,25 @@ export const ENRICHMENT_MATRIX: Record<EventCategory, MatrixEntry> = {
 };
 
 // ============================================================================
+// Timeliness Hints (per-event-type guidance for brief generation)
+// ============================================================================
+
+export const TIMELINESS_HINTS: Record<string, string> = {
+  concert:     'Check for: album anniversary, tour cycle, return to Athens, career milestone. Fallback: seasonal slot or "first Athens date since [year]."',
+  dj_set:      'Check for: residency duration, label anniversary, format origin. Fallback: "Week N of [format]" or "the Saturday slot that..."',
+  exhibition:  'Check for: career retrospective, institutional milestone, curatorial debut. Fallback: "Running through [end date] — [N weeks] remaining."',
+  cinema:      'Check for: anniversary screening, restoration, director retrospective. Fallback: seasonal programming or festival context.',
+  theater:     'Check for: playwright anniversary, director\'s first staging, season count, award, premiere status. Fallback: "[Nth] consecutive season" or "Athens premiere."',
+  festival:    'Edition number is always available. Also check: headline changes, venue shift, anniversary.',
+  performance: 'Check for: premiere status, commission context, limited-run dates. Dance/spoken word often has very short runs — say so.',
+  show:        'Check for: tour routing, residency length, one-off status. Cabaret and variety need "why this specific night."',
+  workshop:    'Check for: enrollment deadline, capacity limit, series position. "Third of six sessions" or "last spots" creates urgency.',
+  tech:        'Check for: industry cycle, speaker exclusivity, community milestone.',
+  dance:       'Check for: premiere status, choreographer context, venue-specific staging that won\'t recur.',
+  other:       'Find the one fact that answers "why this week and not next week?" If nothing, state "single-run" or "limited engagement."',
+};
+
+// ============================================================================
 // Classification
 // ============================================================================
 

@@ -178,7 +178,7 @@ function buildRewriteBrief(
   // Condensed rules (same as enrichment brief)
   lines.push('## Rules');
   lines.push('');
-  lines.push('1. **8-section structure**: Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer');
+  lines.push('1. **8-section structure** (for 400+ word events): Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer. See Rule 10 for shorter targets.');
   lines.push('2. **Voice**: Second person ("you"), present tense, sensory-first.');
   lines.push('3. **Word count**: Per-event target shown below. Hard constraints.');
   lines.push('4. **Show don\'t tell**: No lazy adjectives — legendary, immersive, iconic, captivating, mesmerizing, breathtaking, enchanting, amazing, incredible, fantastic, wonderful, stunning, vibrant, extraordinary, exceptional, world-class, phenomenal, remarkable');
@@ -186,6 +186,11 @@ function buildRewriteBrief(
   lines.push('6. **CRITICAL: Do not fabricate information.**');
   lines.push('7. **Terminology**: Use "open" not "free". Latin transliteration for Greek names in prose.');
   lines.push('8. **Description only**: No tags, no metadata beyond Aspect/Details table.');
+  lines.push('9. **POST-WRITE WORD CHECK**: If over the target max, cut whole paragraphs — do not trim individual words from multiple paragraphs.');
+  lines.push('10. **STRUCTURE BY WORD BUDGET**: ≤200w → three-part block. 201-400w → hybrid. 400+w → full 8-section. Overrides Rule 1 for shorter targets.');
+  lines.push('11. **NAMED ENTITY ANCHORING**: Title/artist/performer name must appear beyond the opening paragraph.');
+  lines.push('12. **GIVEN DATA BEFORE ATMOSPHERE**: Exhaust verified facts before adding sensory color. If word budget is tight, facts win.');
+  lines.push('13. **TIMELINESS SIGNAL**: Every description must answer "why now?" — verifiable fact, contextual frame, or temporal anchor. Do not remove existing timeliness hooks unless factually wrong.');
   lines.push('');
 
   // Rewrite-specific instruction

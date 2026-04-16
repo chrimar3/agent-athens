@@ -19,7 +19,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
-import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
+import { classifyEvent, getWordTarget, structureToTier, TIMELINESS_HINTS } from '../src/enrichment/enrichment-matrix';
 
 const DB_PATH = 'data/events.db';
 const VENUE_INTEL_PATH = 'config/venue-intelligence.md';
@@ -432,7 +432,7 @@ export function buildBrief(
   // Condensed rules
   lines.push('## Rules');
   lines.push('');
-  lines.push('1. **8-section structure**: Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer');
+  lines.push('1. **8-section structure** (for 400+ word events): Sensory opening → Credentials → Tribe → Details table → Experience → Filter → Logistics → Closer. For shorter events, see Rule 19.');
   lines.push('2. **Voice**: Second person ("you"), present tense, sensory-first. Transport before inform.');
   lines.push('3. **Word count**: Per-event target shown below each event (NOT always 400-600). Follow the target range — these are hard constraints, not suggestions.');
   lines.push('4. **Details table**: 4 rows — Setting, Vibe, Sound, Door (or Format/Access for tech events)');
@@ -449,6 +449,12 @@ export function buildBrief(
   lines.push('15. **CREDENTIALS**: If you cannot verify a specific release, album, label, or credential through web search, do not include it. State what you can confirm. A missing detail is always better than a wrong one. If web search returns nothing on an artist, say so in batch-review.md and use a venue-forward approach.');
   lines.push('16. **OPENING DIVERSITY**: Do not default to sound-first openings. After writing all descriptions in this batch, re-read your openings consecutively. If more than 2 of 5 use the same entry strategy (sound-first, space-first, action-first), rewrite one using a different approach. Options: visual detail, physical action, temporal framing, contrast/tension, a question the space poses.');
   lines.push('17. **CLOSER DIVERSITY**: Do not reuse the word "combination" or the phrase "will not reassemble/recur" across multiple closers in the same batch. Each closer must find its own structural fact or framing.');
+  lines.push('18. **POST-WRITE WORD CHECK**: After drafting, count words. If over the card maximum, cut whole paragraphs — starting with the one with the lowest ratio of named entities to total words. Do not trim sentences from multiple paragraphs. Recount. Repeat until within range.');
+  lines.push('19. **STRUCTURE BY WORD BUDGET**: ≤200 words → three-part block (What is it? / Why it matters / What to expect). 201-400 words → hybrid (anchor + condensed sections + closer). 400+ words → full 8-section. Structure follows word budget, not how much you know.');
+  lines.push('20. **NAMED ENTITY ANCHORING**: The event title and primary artist/company name must appear beyond the opening paragraph. For ≤200w: name in at least 2 of 3 sections. For 200+w: at least 3 occurrences across the full text.');
+  lines.push('21. **GIVEN DATA BEFORE ATMOSPHERE**: Exhaust Category 1 facts (title, artist, venue, genre, date, price, source details) before reaching for Category 2 atmosphere. If word budget is tight, facts win.');
+  lines.push('22. **TIMELINESS SIGNAL REQUIRED**: Every description must answer "why now?" Tier 1 (preferred): anniversary, milestone, comeback, premiere, album release. Tier 2: season position, limited run, Athens premiere. Tier 3 (always available): seasonal fit, calendar position, programming context. See per-event timeliness hint below.');
+  lines.push('23. **TIMELINESS STALENESS FLAG**: After writing, add `<!-- timeliness-expires: YYYY-MM-DD -->` at the end of the description. Date = when the timeliness claim becomes stale (closing date, +90 days for album hooks, series end date for recurring).');
   lines.push('');
 
   // Exemplar references
@@ -528,6 +534,8 @@ export function buildBrief(
     lines.push(`- **Target words**: ${target.min}-${target.max}`);
     lines.push(`- **Structure**: ${target.structure}`);
     lines.push(`- **HARD CONSTRAINT**: Description MUST be ${target.min}-${target.max} words.`);
+    const timelinessHint = TIMELINESS_HINTS[event.type] || TIMELINESS_HINTS['other'];
+    lines.push(`- **Timeliness hint**: ${timelinessHint}`);
 
     // Venue intel
     const intel = venueIntel.get(event.venue_name || '');
