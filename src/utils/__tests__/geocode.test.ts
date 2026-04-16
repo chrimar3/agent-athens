@@ -228,6 +228,152 @@ describe('geocodeVenue', () => {
   });
 });
 
+// ── Google Fallback Mock Responses ─────────────
+
+/** Google Geocoding — ROOFTOP establishment (high confidence) */
+const GOOGLE_ROOFTOP_RESPONSE = {
+  status: 'OK',
+  results: [{
+    geometry: {
+      location: { lat: 37.9810, lng: 23.7330 },
+      location_type: 'ROOFTOP',
+    },
+    formatted_address: 'Ippokratous 17, Athina 106 79, Greece',
+    types: ['establishment', 'point_of_interest'],
+    address_components: [],
+  }],
+};
+
+/** Google Geocoding — APPROXIMATE city-level (low confidence, rejected) */
+const GOOGLE_APPROXIMATE_RESPONSE = {
+  status: 'OK',
+  results: [{
+    geometry: {
+      location: { lat: 37.9838, lng: 23.7275 },
+      location_type: 'APPROXIMATE',
+    },
+    formatted_address: 'Athens, Greece',
+    types: ['locality', 'political'],
+    address_components: [],
+  }],
+};
+
+describe('Google fallback', () => {
+  beforeEach(() => {
+    _resetRateLimit();
+    process.env.GOOGLE_GEOCODING_API_KEY = 'test-key';
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+    delete process.env.GOOGLE_GEOCODING_API_KEY;
+  });
+
+  test('falls back to Google when Nominatim returns no results', async () => {
+    // 3 Nominatim calls (empty) + 1 Google call (success)
+    mockFetchSequence([
+      { body: [] },
+      { body: [] },
+      { body: [] },
+      { body: GOOGLE_ROOFTOP_RESPONSE },
+    ]);
+
+    const result = await geocodeVenue('Obscure Bar');
+    expect(result).not.toBeNull();
+    expect(result!.source as string).toBe('google');
+    expect(result!.confidence).toBe('high');
+    expect(result!.lat).toBeCloseTo(37.9810, 3);
+    expect(result!.lon).toBeCloseTo(23.7330, 3);
+    expect(result!.matchQuery).toContain('[google]');
+  });
+
+  test('does not call Google when Nominatim succeeds', async () => {
+    mockFetchResponse(MEGARON_RESPONSE);
+
+    const result = await geocodeVenue('Μέγαρο Μουσικής Αθηνών');
+    expect(result!.source).toBe('nominatim');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('skips Google when no API key is set', async () => {
+    delete process.env.GOOGLE_GEOCODING_API_KEY;
+    mockFetchResponse([]);
+
+    const result = await geocodeVenue('Unknown Venue');
+    expect(result).toBeNull();
+    // 3 Nominatim calls, 0 Google calls
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  test('rejects Google APPROXIMATE results as low confidence', async () => {
+    mockFetchSequence([
+      { body: [] },
+      { body: [] },
+      { body: [] },
+      { body: GOOGLE_APPROXIMATE_RESPONSE },
+    ]);
+
+    const result = await geocodeVenue('Vague Place');
+    expect(result).toBeNull();
+  });
+
+  test('assigns medium confidence for RANGE_INTERPOLATED', async () => {
+    const interpolatedResponse = {
+      status: 'OK',
+      results: [{
+        geometry: {
+          location: { lat: 37.9800, lng: 23.7300 },
+          location_type: 'RANGE_INTERPOLATED',
+        },
+        formatted_address: 'Ippokratous 99, Athina, Greece',
+        types: ['street_address'],
+        address_components: [],
+      }],
+    };
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },
+      { body: interpolatedResponse },
+    ]);
+
+    const result = await geocodeVenue('Some Address');
+    expect(result).not.toBeNull();
+    expect(result!.confidence).toBe('medium');
+    expect(result!.source as string).toBe('google');
+  });
+
+  test('rejects Google results outside Athens bounding box', async () => {
+    const outsideBoundsResponse = {
+      status: 'OK',
+      results: [{
+        geometry: {
+          location: { lat: 40.6401, lng: 22.9444 },
+          location_type: 'ROOFTOP',
+        },
+        formatted_address: 'Thessaloniki, Greece',
+        types: ['establishment'],
+        address_components: [],
+      }],
+    };
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },
+      { body: outsideBoundsResponse },
+    ]);
+
+    const result = await geocodeVenue('Northern Venue');
+    expect(result).toBeNull();
+  });
+
+  test('handles Google API errors gracefully', async () => {
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },
+      { body: { status: 'REQUEST_DENIED', results: [], error_message: 'Invalid key' } },
+    ]);
+
+    const result = await geocodeVenue('Error Venue');
+    expect(result).toBeNull();
+  });
+});
+
 describe('geocodeVenues (batch)', () => {
   beforeEach(() => {
     _resetRateLimit();

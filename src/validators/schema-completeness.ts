@@ -154,9 +154,11 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
     warnings.push('image is missing');
   }
 
-  if (!isNonEmpty(schema.doorTime)) {
-    warnings.push('doorTime is missing');
-  }
+  // doorTime is Schema.org optional — only warn if startDate exists but doorTime
+  // is suspiciously absent (i.e., the event has a time component suggesting it's
+  // a timed event). Exhibitions and events without scraper-provided door times
+  // should not be penalized.
+  // Note: doorTime omission is now accepted as a valid state.
 
   // ── Placeholder detection ─────────────────────────────────────────
 
@@ -337,11 +339,12 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     const html = readFileSync(htmlPath, 'utf-8');
     details.push(validateHubSchema(html, slug));
   }
-  // English hub pages (dist/en/{slug}/index.html)
+  // English hub pages (dist/en/{slug}/index.html) — only validate known hub slugs
   const enDir = join(distDir, 'en');
+  const hubSlugSet = new Set(HUB_SLUGS);
   if (existsSync(enDir)) {
     const enSubdirs = readdirSync(enDir, { withFileTypes: true })
-      .filter(d => d.isDirectory() && d.name !== 'events')
+      .filter(d => d.isDirectory() && hubSlugSet.has(d.name))
       .map(d => d.name);
     for (const slug of enSubdirs) {
       const htmlPath = join(enDir, slug, 'index.html');

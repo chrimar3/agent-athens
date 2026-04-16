@@ -13,10 +13,11 @@ export interface GeocodeResult {
   lon: number;
   displayName: string;
   confidence: 'high' | 'medium' | 'low';
-  source: 'nominatim';
-  osmType: string;       // 'node' | 'way' | 'relation'
-  category: string;      // e.g., 'amenity', 'tourism', 'building'
-  matchQuery: string;    // Which query variant succeeded
+  source: 'nominatim' | 'google';
+  osmType?: string;              // 'node' | 'way' | 'relation' (Nominatim only)
+  category?: string;             // Nominatim class or Google primary type
+  googleLocationType?: string;   // 'ROOFTOP' | 'RANGE_INTERPOLATED' etc. (Google only)
+  matchQuery: string;            // Which query variant succeeded
 }
 
 export interface GeocodeConfig {
@@ -71,6 +72,112 @@ interface NominatimResult {
   importance: number;
   boundingbox: string[];
 }
+
+// ── Google Geocoding Types ─────────────────────
+
+interface GoogleGeocodeResponse {
+  status: 'OK' | 'ZERO_RESULTS' | 'OVER_DAILY_LIMIT' | 'OVER_QUERY_LIMIT' | 'REQUEST_DENIED' | 'INVALID_REQUEST' | 'UNKNOWN_ERROR';
+  results: GoogleGeocodeResult[];
+  error_message?: string;
+}
+
+interface GoogleGeocodeResult {
+  geometry: {
+    location: { lat: number; lng: number };
+    location_type: 'ROOFTOP' | 'RANGE_INTERPOLATED' | 'GEOMETRIC_CENTER' | 'APPROXIMATE';
+  };
+  formatted_address: string;
+  types: string[];
+  address_components: Array<{
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }>;
+}
+
+// Google rate limiting — separate from Nominatim (different TOS, different limits)
+let googleLastRequestTime = 0;
+const GOOGLE_MIN_INTERVAL_MS = 200; // 5 req/sec (conservative vs Google's 50/sec)
+
+async function googleRateLimitedFetch(url: string): Promise<Response> {
+  const now = Date.now();
+  const elapsed = now - googleLastRequestTime;
+  if (elapsed < GOOGLE_MIN_INTERVAL_MS) {
+    await new Promise(resolve => setTimeout(resolve, GOOGLE_MIN_INTERVAL_MS - elapsed));
+  }
+  googleLastRequestTime = Date.now();
+  return fetch(url);
+}
+
+/**
+ * Assign confidence based on Google Geocoding result quality.
+ * - high: ROOFTOP with establishment/POI types (exact building match)
+ * - medium: ROOFTOP without POI, or RANGE_INTERPOLATED (street-level)
+ * - low: GEOMETRIC_CENTER or APPROXIMATE (area centroid — rejected)
+ */
+function assignGoogleConfidence(result: GoogleGeocodeResult): 'high' | 'medium' | 'low' {
+  const { location_type } = result.geometry;
+  const types = result.types;
+
+  const poiTypes = ['establishment', 'point_of_interest', 'premise', 'subpremise'];
+  if (location_type === 'ROOFTOP' && types.some(t => poiTypes.includes(t))) {
+    return 'high';
+  }
+
+  if (location_type === 'ROOFTOP' || location_type === 'RANGE_INTERPOLATED') {
+    return 'medium';
+  }
+
+  return 'low';
+}
+
+async function queryGoogle(
+  query: string,
+  config: GeocodeConfig
+): Promise<GoogleGeocodeResult | null> {
+  const apiKey = process.env.GOOGLE_GEOCODING_API_KEY;
+  if (!apiKey) return null;
+
+  const params = new URLSearchParams({
+    address: `${query}, ${config.city}, ${config.country}`,
+    key: apiKey,
+    bounds: `${config.boundingBox.minLat},${config.boundingBox.minLon}|${config.boundingBox.maxLat},${config.boundingBox.maxLon}`,
+  });
+
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?${params}`;
+
+  try {
+    const response = await googleRateLimitedFetch(url);
+    if (!response.ok) {
+      console.error(`  Google Geocoding HTTP ${response.status} for: ${query}`);
+      return null;
+    }
+
+    const data = await response.json() as GoogleGeocodeResponse;
+
+    if (data.status !== 'OK' || !data.results.length) {
+      if (data.status === 'REQUEST_DENIED') {
+        console.error(`  Google Geocoding API key invalid: ${data.error_message}`);
+      }
+      return null;
+    }
+
+    // Find first result within bounding box
+    for (const result of data.results) {
+      const { lat, lng } = result.geometry.location;
+      if (isWithinBoundingBox(lat, lng, config)) {
+        return result;
+      }
+    }
+
+    return null;
+  } catch (err) {
+    console.error(`  Google Geocoding error for "${query}":`, (err as Error).message);
+    return null;
+  }
+}
+
+// ── Shared Utilities ───────────────────────────
 
 function isWithinBoundingBox(lat: number, lon: number, config: GeocodeConfig): boolean {
   const { minLat, maxLat, minLon, maxLon } = config.boundingBox;
@@ -192,6 +299,25 @@ export async function geocodeVenue(
     };
   }
 
+  // ── Google fallback (when Nominatim exhausted) ──
+  const googleResult = await queryGoogle(venueName, config);
+  if (googleResult) {
+    const confidence = assignGoogleConfidence(googleResult);
+    if (confidence !== 'low') {
+      const { lat, lng } = googleResult.geometry.location;
+      return {
+        lat,
+        lon: lng,
+        displayName: googleResult.formatted_address,
+        confidence,
+        source: 'google',
+        category: googleResult.types[0],
+        googleLocationType: googleResult.geometry.location_type,
+        matchQuery: `${venueName} [google]`,
+      };
+    }
+  }
+
   return null;
 }
 
@@ -224,4 +350,5 @@ export async function geocodeVenues(
 /** Reset rate limiting state (for testing) */
 export function _resetRateLimit(): void {
   lastRequestTime = 0;
+  googleLastRequestTime = 0;
 }

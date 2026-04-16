@@ -7,6 +7,17 @@
     "lng": 23.7112,
     "type": "theater"
   },
+  "2ten": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ermou 135, Athina 105 55",
+    "lat": 37.97717,
+    "lng": 23.721469,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "41 Street Cafe": {
     "name_en": "",
     "neighborhood": "",
@@ -25,6 +36,39 @@
     "lat": 37.9855,
     "lng": 23.7265,
     "type": "theater"
+  },
+  "Αγγλικανική Εκκλησία Αγίου Παύλου": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Filellinon 27, Athina 105 57",
+    "lat": 37.972325,
+    "lng": 23.733681,
+    "type": "church",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Αθηναϊκή Σκηνή Κάλβου-Καλαμπόκη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ακρόπολη Athens, Akropolis",
+    "lat": 37.968382,
+    "lng": 23.73113,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Megaro Mousikis, Athina 115 21",
+    "lat": 37.981015,
+    "lng": 23.754098,
+    "type": "premise",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "ΑΙΘΟΥΣΑ ΣΥΝΑΥΛΙΩΝ ΦΙΛΙΠΠΟΣ ΝΑΚΑΣ": {
     "name_en": "Filippos Nakas Concert Hall",
@@ -87,6 +131,17 @@
     "lat": 37.9985,
     "lng": 23.736,
     "type": "open_air_theater"
+  },
+  "Άλφα Ληναίος-Φωτίου": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "28is Oktovriou 37, Athina 104 32",
+    "lat": 37.987341,
+    "lng": 23.730073,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Αμφιθεατρο Ιωαννης Δεσποτοπουλος Ωδειο Αθηνων": {
     "name_en": "Ioannis Despotopoulos Amphitheatre - Athens Conservatoire",
@@ -240,6 +295,17 @@
     "lng": 23.647,
     "type": "theater"
   },
+  "Δημοτικό Κηποθέατρο Παπάγου": {
+    "name_en": "Papagou Municipal Garden Theatre",
+    "neighborhood": "Papagou",
+    "address": "Korytsas, Papagou 156 69, Greece",
+    "lat": 37.9925,
+    "lng": 23.796,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
+  },
   "Διάνα": {
     "name_en": "",
     "neighborhood": "",
@@ -330,6 +396,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "ΕΞΑ - ΑΘΗΝΑ": {
+    "name_en": "EXA Athens",
+    "neighborhood": "Gazi",
+    "address": "Ierofanton 13, Athina 118 54, Greece",
+    "lat": 37.9788,
+    "lng": 23.7144,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Επί Κολωνώ": {
     "name_en": "Epi Kolono Theatre",
     "neighborhood": "Kolonos",
@@ -371,6 +448,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Θέατρο Αλκυονίς": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ioulianou 42, Athina 104 33",
+    "lat": 37.991833,
+    "lng": 23.728311,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Θέατρο Βασιλάκου": {
     "name_en": "",
     "neighborhood": "",
@@ -381,6 +469,17 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
+  },
+  "Θέατρο Βέμπο": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Karolou 18, Athina 104 37",
+    "lat": 37.985986,
+    "lng": 23.722414,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Θέατρο Δρόμος": {
     "name_en": "Theatre Dromos",
@@ -397,6 +496,50 @@
     "lat": 37.9703,
     "lng": 23.7306,
     "type": "theater"
+  },
+  "Θέατρο ΕΝ-Α": {
+    "name_en": "Theatre EN-A",
+    "neighborhood": "Korydallos",
+    "address": "Dimitriou Malagardi 95, Koridallos 181 20, Greece",
+    "lat": 37.9734,
+    "lng": 23.6477,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
+  },
+  "Θέατρο Ζίνα": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Alexandras 74, Athina 114 73",
+    "lat": 37.989843,
+    "lng": 23.742082,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Θέατρο Καλλιρρόης": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Kallirrois 10, Athina 117 43",
+    "lat": 37.967011,
+    "lng": 23.7317,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Θέατρο Κάτια Δανδουλάκη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Agiou Meletiou 61, Athina 112 51",
+    "lat": 38.000067,
+    "lng": 23.733053,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Θέατρο Κάτω Από Τη Γέφυρα": {
     "name_en": "Theatre Under the Bridge",
@@ -417,6 +560,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Θέατρο Μαβίλη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Dorileou 10-12, Athina 115 21",
+    "lat": 37.983313,
+    "lng": 23.755935,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Θέατρο Μεταξουργείο": {
     "name_en": "Metaxourgeio Theatre",
     "neighborhood": "Metaxourgeio",
@@ -424,6 +578,28 @@
     "lat": 37.9821,
     "lng": 23.7206,
     "type": "theater"
+  },
+  "Θέατρο Μετς": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Αιδεσίου 19-23, Ekalis &",
+    "lat": 37.964525,
+    "lng": 23.743383,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Θέατρο Μικρό Χορν": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Amerikis 10, Athina 106 71",
+    "lat": 37.978391,
+    "lng": 23.735574,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Θέατρο Μπέλλος": {
     "name_en": "",
@@ -455,6 +631,17 @@
     "description": "Historic 1932 cinema-theatre renovated in 2006, once the finest in the Balkans. Hosts theatrical, musical performances, and concerts",
     "metro": "Syntagma"
   },
+  "Θέατρο Πειραιώς 131": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Pireos 131, Athina 118 54",
+    "lat": 37.975064,
+    "lng": 23.710096,
+    "type": "premise",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Θέατρο Τέχνης": {
     "name_en": "",
     "neighborhood": "",
@@ -465,6 +652,17 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
+  },
+  "Θέατρο Τζένη Καρέζη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Akadimias 3, Athina 106 71",
+    "lat": 37.976909,
+    "lng": 23.737627,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Θέατρο της Ημέρας": {
     "name_en": "Theatre of the Day",
@@ -528,6 +726,28 @@
     "lng": 23.732,
     "type": "theater"
   },
+  "ΘΕΑΤΡΟ RADAR": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Πλατεία Αγίου Ιωάννου και, Pitheou 93",
+    "lat": 37.955876,
+    "lng": 23.734733,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Θέατρον Ελληνικός Κόσμος": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Pireos 254, Tavros 177 78",
+    "lat": 37.962736,
+    "lng": 23.690965,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Θησείον": {
     "name_en": "Cine Thiseion",
     "neighborhood": "Thiseio",
@@ -535,6 +755,17 @@
     "lat": 37.9727,
     "lng": 23.7204,
     "type": "cinema"
+  },
+  "Θυμέλη Έλλης Βοζικιάδου": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Moschonision 32, Athina 112 52",
+    "lat": 38.002646,
+    "lng": 23.7323,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Ίδρυμα Β. & Μ. Θεοχαράκη": {
     "name_en": "",
@@ -574,6 +805,17 @@
     "lng": 23.7369,
     "type": "live_music_venue"
   },
+  "Ιλίσια": {
+    "name_en": "Ilisia Theater",
+    "neighborhood": "Ilisia",
+    "address": "Papadiamantopoulou 4, Athina 115 28, Greece",
+    "lat": 37.9781,
+    "lng": 23.7527,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Ίσον": {
     "name_en": "ISON Theatre - Dance",
     "neighborhood": "Botanikos / Gazi",
@@ -581,6 +823,17 @@
     "lat": 37.9745,
     "lng": 23.705,
     "type": "theater"
+  },
+  "Ιωάννου Παπαρρηγοπούλου 1": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "loannou Paparrigopoulou 1, Athina 105 61",
+    "lat": 37.979163,
+    "lng": 23.731993,
+    "type": "street_address",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Κάμιρος": {
     "name_en": "Kamiros Scenic Field",
@@ -598,6 +851,17 @@
     "lng": 23.735,
     "type": "theater"
   },
+  "Καταφύ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Formionos 267, Vironas 162 33",
+    "lat": 37.95528,
+    "lng": 23.765444,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Καφεθεατρο": {
     "name_en": "Kafetheatro",
     "neighborhood": "Pedion Areos / Plateia Viktorias",
@@ -608,6 +872,17 @@
     "type": "cafe_theater",
     "description": "Theater cafe venue near Pedion Areos hosting music performances and cultural events in intimate setting",
     "metro": "Victoria"
+  },
+  "Καφενείο Ο Σωκράτης": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Konstantinoupoleos Ave. 60, Athina 118 54",
+    "lat": 37.979446,
+    "lng": 23.710612,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Κεντρο ελεγχου τηλεορασεων": {
     "name_en": "TV Control Center (KET)",
@@ -642,6 +917,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Κλειστό Γήπεδο Αμαρουσίου": {
+    "name_en": "Maroussi Indoor Arena",
+    "neighborhood": "Maroussi",
+    "address": "Maroussi, Greece",
+    "lat": 38.0463,
+    "lng": 23.8074,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "low",
+    "geocoded_at": "2026-04-15"
+  },
   "Κλειστό Καλλιθέας": {
     "name_en": "",
     "neighborhood": "",
@@ -664,6 +950,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-10"
   },
+  "Κύτταρο": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Αχαρνών, Ipeirou και",
+    "lat": 37.990675,
+    "lng": 23.726265,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Κυτταρο Live": {
     "name_en": "Kyttaro Live",
     "neighborhood": "Metaxourgeio / Viktoria",
@@ -683,6 +980,28 @@
     "lng": 23.7303,
     "type": "bar_venue"
   },
+  "Λύχνος τέχνης και πολιτισμού": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Chalkidikis 83, Athina 118 55",
+    "lat": 37.980872,
+    "lng": 23.710604,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Μεγάλη Μουσική Βιβλιοθήκη της Ελλάδος": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Petrou Kokkali 1, Athina 115 21",
+    "lat": 37.980608,
+    "lng": 23.753891,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Μέγαρο Μουσικής Αθηνών": {
     "name_en": "Athens Concert Hall (Megaron)",
     "neighborhood": "Ilisia",
@@ -698,6 +1017,17 @@
     "lat": 37.9849,
     "lng": 23.7343,
     "type": "theater"
+  },
+  "Μικρό Παλλάς": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Amerikis 4, Athina 105 64",
+    "lat": 37.977611,
+    "lng": 23.734191,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Μικρός Κεραμεικός": {
     "name_en": "Mikros Kerameikos",
@@ -733,6 +1063,17 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
+  },
+  "Μουσείο Μπενάκη Ελληνικού Πολιτισμού": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Koumpari 1, Athina 106 74",
+    "lat": 37.975952,
+    "lng": 23.740446,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Μουσούρη": {
     "name_en": "",
@@ -786,6 +1127,28 @@
     "lng": 23.7858,
     "type": "stadium"
   },
+  "Οικία Ιλίτς": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Eptanisou 30, Athina 113 61",
+    "lat": 37.999084,
+    "lng": 23.735903,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Οικία Κατακουζηνού": {
+    "name_en": "Katakouzinos House",
+    "neighborhood": "Plaka",
+    "address": "Katakouzinou, Athina, Greece",
+    "lat": 37.9846,
+    "lng": 23.7309,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
+  },
   "Οικογενειακα Προγραμματα - Μουσειο Μαρια Καλλας": {
     "name_en": "Maria Callas Museum",
     "neighborhood": "Syntagma / Technopolis",
@@ -796,6 +1159,17 @@
     "type": "museum",
     "description": "First Maria Callas museum worldwide, opened 2023. Immersive opera exhibition opposite Athens Cathedral with family programs",
     "metro": "Syntagma / Monastiraki"
+  },
+  "Οίκος Ερμηνείας Ελευθερία": {
+    "name_en": "Oikos Erminias Eleftheria",
+    "neighborhood": "Kypseli",
+    "address": "Eleftherias, Athina 113 63, Greece",
+    "lat": 38.0046,
+    "lng": 23.7563,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
   },
   "Ολύμπια - Δημοτικό Μουσικό Θέατρο «Μαρία Κάλλας»": {
     "name_en": "Olympia Maria Callas Municipal Music Theatre",
@@ -812,6 +1186,39 @@
     "lat": 37.9824,
     "lng": 23.7333,
     "type": "music_theater"
+  },
+  "Ον Off Studio": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Fidippidou 22, Athina 115 27",
+    "lat": 37.985858,
+    "lng": 23.763677,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Ορφέας Cafe Bar": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Fokionos Negri 25, Athina 113 61",
+    "lat": 38.001183,
+    "lng": 23.736635,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Παλιά Βουλή": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "ΜΕΓΑΡΟ ΠΑΛΑΙΑΣ ΒΟΥΛΗΣ ΠΛΑΤΕΙΑ ΚΟΛΟΚΟΤΡΩΝΗ, Stadiou 13",
+    "lat": 37.977884,
+    "lng": 23.732881,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Παλιό Αμαξοστάσιο ΟΣΥ": {
     "name_en": "Old OSY Bus Depot",
@@ -902,6 +1309,17 @@
     "lng": 23.7662,
     "type": "theater"
   },
+  "Πτι Παλαί": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Rizari 24, Athina 116 35",
+    "lat": 37.972092,
+    "lng": 23.747107,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Ράδιο": {
     "name_en": "Radio Music Stage",
     "neighborhood": "Gazi / Keramikos",
@@ -909,6 +1327,28 @@
     "lat": 37.977,
     "lng": 23.713,
     "type": "live_music_venue"
+  },
+  "ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Dekeleon 24, Athina 118 54",
+    "lat": 37.977897,
+    "lng": 23.710068,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Ρεκτιφιέ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Aetorachis 27, Galatsi 111 46",
+    "lat": 38.014361,
+    "lng": 23.744753,
+    "type": "car_repair",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Ριάλτο": {
     "name_en": "",
@@ -939,6 +1379,17 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
+  },
+  "Σκηνή Μπέκετ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Zaimi 38, Athina 106 82",
+    "lat": 37.989572,
+    "lng": 23.734345,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Σκηνή BRECHT - 2510": {
     "name_en": "Brecht Stage 2510",
@@ -1008,6 +1459,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Στούντιο Ευρύχωρος": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ikonomou 3, Athina 106 83",
+    "lat": 37.98703,
+    "lng": 23.735364,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Σύγχρονο Θέατρο": {
     "name_en": "",
     "neighborhood": "",
@@ -1029,6 +1491,17 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-12"
+  },
+  "Τεχνόπολη": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Pireos 100, Athina 118 54",
+    "lat": 37.978226,
+    "lng": 23.713648,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Τεχνοχώρος Εργοτάξιον": {
     "name_en": "Ergotaxion Technochoros",
@@ -1068,6 +1541,28 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-22"
   },
+  "Φάος - Χώρος Τέχνης": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Eggeli 10, Athina 117 44",
+    "lat": 37.95684,
+    "lng": 23.725232,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "ΦΙΑΤ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Falirou 97, Athina 117 41",
+    "lat": 37.962134,
+    "lng": 23.723431,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Φιλίπ": {
     "name_en": "Filipp Theatre",
     "neighborhood": "Vyronas",
@@ -1092,6 +1587,17 @@
     "lng": 23.7055,
     "type": "theater"
   },
+  "Χώρος Σωματείου Οδηγών Ταξί Αττικής": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Odisseos 8, Athina 104 37",
+    "lat": 37.986014,
+    "lng": 23.72057,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Χώρος Τέχνης Ασωμάτων": {
     "name_en": "Asomaton Art Space",
     "neighborhood": "Thiseio",
@@ -1100,6 +1606,17 @@
     "lng": 23.7205,
     "type": "cultural_center"
   },
+  "Χώρος Τέχνης Ηχόδραση": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Genneou Kolokotroni 12, Athina 117 41",
+    "lat": 37.962608,
+    "lng": 23.718597,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Ωδείο Αθηνών": {
     "name_en": "Athens Conservatoire",
     "neighborhood": "Ilisia",
@@ -1107,6 +1624,17 @@
     "lat": 37.975,
     "lng": 23.753,
     "type": "conservatory"
+  },
+  "ACE AUEB": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "28is Oktovriou 76, Athina 104 34",
+    "lat": 37.994067,
+    "lng": 23.732104,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Alhambra Art Theater": {
     "name_en": "Alhambra Art Theater",
@@ -1160,6 +1688,17 @@
     "description": "Concert hall with excellent acoustics hosting international and local artists across multiple genres",
     "metro": "Petralona"
   },
+  "ARCH Club": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Konstantinoupoleos Ave. 111, Athina 104 47",
+    "lat": 37.981791,
+    "lng": 23.711975,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "ARROYO THEATER": {
     "name_en": "Arroyo Theater",
     "neighborhood": "Kerameikos",
@@ -1175,6 +1714,17 @@
     "lat": 37.991,
     "lng": 23.731,
     "type": "cultural_center"
+  },
+  "Asteria Domus Glyfada": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Poseidonos 110, Glifada 166 75",
+    "lat": 37.860011,
+    "lng": 23.750379,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Astron": {
     "name_en": "Astron Club",
@@ -1236,6 +1786,28 @@
     "description": "Multi-venue cultural center in a Bauhaus building with music halls, theater, rooftop bar, and Acropolis views. Founded in 2001",
     "metro": "Kerameikos"
   },
+  "Bios Ρομάντσο": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Anaxagora 3, Athina 105 52",
+    "lat": 37.982304,
+    "lng": 23.725872,
+    "type": "art_gallery",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Bless Me Father": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Plateia Karytsi 2, Athina 105 61",
+    "lat": 37.977857,
+    "lng": 23.731182,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Bolivar": {
     "name_en": "Bolivar Beach Bar",
     "neighborhood": "Alimos",
@@ -1254,6 +1826,28 @@
     "geocoded_source": "nominatim",
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-07"
+  },
+  "Bòtoxe": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Trifillias 47, Athina 115 24",
+    "lat": 37.994842,
+    "lng": 23.761726,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Burger Disco Club": {
+    "name_en": "Burger Disco Club",
+    "neighborhood": "Syntagma",
+    "address": "Nikis 11, Downtown 105 57, Greece",
+    "lat": 37.9749,
+    "lng": 23.7332,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
   },
   "Caja De Musica": {
     "name_en": "Caja De Musica",
@@ -1369,6 +1963,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-06"
   },
+  "Daddy's All Day Bar": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Chatzichristou 20, Athina 117 42",
+    "lat": 37.967323,
+    "lng": 23.730043,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Death Disco": {
     "name_en": "Death Disco",
     "neighborhood": "Psyrri",
@@ -1387,6 +1992,28 @@
     "lat": 37.976,
     "lng": 23.7425,
     "type": "bar_venue"
+  },
+  "Dunk Athens": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Alexi Pavli 37, Athina 115 24",
+    "lat": 37.993685,
+    "lng": 23.765447,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Dybbuk": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Patriarchou Ioakim 37, Athina 105 62",
+    "lat": 37.978224,
+    "lng": 23.744387,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "El Chapo": {
     "name_en": "",
@@ -1429,6 +2056,28 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "Epignosis HQ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Likourgou 1, Athina 105 51",
+    "lat": 37.982489,
+    "lng": 23.728769,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Eugenides Foundation Conference Centre": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Andrea Siggrou 387, Athina 175 64",
+    "lat": 37.94031,
+    "lng": 23.696217,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "EXA": {
     "name_en": "EXA",
     "neighborhood": "Gazi / Keramikos",
@@ -1458,6 +2107,17 @@
     "type": "live_music_venue",
     "description": "New major indoor live venue opened October 2023 by Fuzz Productions, hosting international and Greek artists with 2,300 capacity",
     "metro": "Kerameikos"
+  },
+  "Foyer Art Stage": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ierou Lochou 7, Peristeri 121 31",
+    "lat": 38.006775,
+    "lng": 23.69808,
+    "type": "cafe",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Fuzz Club": {
     "name_en": "Fuzz Live Music Club",
@@ -1525,6 +2185,39 @@
     "description": "Main concert stage at Gazarte cultural complex",
     "metro": "Kerameikos"
   },
+  "Gazi View": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Iakchou 22, Athina 118 54",
+    "lat": 37.977833,
+    "lng": 23.711989,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Gustav Athens": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Char. Trikoupi 6-10, Athina 106 79",
+    "lat": 37.982299,
+    "lng": 23.732415,
+    "type": "cafe",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "H.ug Art Space": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Meliteon 14, Athina 118 51",
+    "lat": 37.971674,
+    "lng": 23.712589,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Half Note Jazz Club": {
     "name_en": "Half Note Jazz Club",
     "neighborhood": "Mets",
@@ -1555,6 +2248,17 @@
     "lng": 23.7235,
     "type": "theater"
   },
+  "Island Athens Riviera": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "3 Vasileos Georgiou A, Pl. Sintagmatos Str",
+    "lat": 37.976435,
+    "lng": 23.734889,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "IT Athens": {
     "name_en": "IT Athens",
     "neighborhood": "Exarchia",
@@ -1562,6 +2266,17 @@
     "lat": 37.987,
     "lng": 23.7325,
     "type": "live_music_venue"
+  },
+  "Jazzet Cafe": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ανδρέα Μιαούλη 26, Athina 105 54",
+    "lat": 37.97831,
+    "lng": 23.725167,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "K4": {
     "name_en": "K4 Cultural Center",
@@ -1573,6 +2288,39 @@
     "type": "cultural_center",
     "description": "Independent cultural space in Koukaki hosting experimental theater, dance, and performance art",
     "metro": "Syngrou-Fix"
+  },
+  "Kukaracha Theaterspace": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Korinthou 9, Athina 104 41",
+    "lat": 37.99055,
+    "lng": 23.713534,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Leof. Mesogeion 15": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Mesogeion 15, Athina 115 26",
+    "lat": 37.985722,
+    "lng": 23.762181,
+    "type": "street_address",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "Libertine, Λεωφόρος Δεκελείας 114, Νέα Φιλαδέλφεια, Αθήνα, Greece": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Dekelias 114, Nea Filadelfia 143 41",
+    "lat": 38.035178,
+    "lng": 23.73854,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "MEGARON - The Athens Concert Hall": {
     "name_en": "Megaron - The Athens Concert Hall",
@@ -1595,6 +2343,17 @@
     "type": "concert_hall",
     "description": "Athens' premier classical music venue, hosting the Athens State Orchestra and international symphony orchestras",
     "metro": "Megaro Moussikis"
+  },
+  "MÉTRON Stage": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Voutadon 42, Athina 118 54",
+    "lat": 37.978997,
+    "lng": 23.711613,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Myrtillo Cafe": {
     "name_en": "Myrtillo Cafe",
@@ -1623,6 +2382,28 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-03-03"
   },
+  "NOX": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Iera Odos 18-20, Athina 104 35",
+    "lat": 37.979591,
+    "lng": 23.715502,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "OAKA - OLYMPIC TENNIS CENTER": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Kifisias 37, Marousi 151 23",
+    "lat": 38.039311,
+    "lng": 23.791071,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Oddity": {
     "name_en": "Oddity Club",
     "neighborhood": "Petralona / Thissio",
@@ -1647,6 +2428,39 @@
     "lng": 23.7404,
     "type": "cultural_center"
   },
+  "opbo studio": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Filonos 86, Pireas 185 36",
+    "lat": 37.93978,
+    "lng": 23.641491,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "OTEAcademy": {
+    "name_en": "OTE Academy",
+    "neighborhood": "Maroussi",
+    "address": "Pelika ke Spartis, Marousi 151 22, Greece",
+    "lat": 38.0495,
+    "lng": 23.7886,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
+  },
+  "Paraga": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Akti Koumoundourou 34, Μικρολίμανο 185 33",
+    "lat": 37.938251,
+    "lng": 23.658917,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Parnassos Literary Society": {
     "name_en": "Parnassos Literary Society",
     "neighborhood": "Syntagma",
@@ -1654,6 +2468,17 @@
     "lat": 37.9774,
     "lng": 23.7314,
     "type": "concert_hall"
+  },
+  "Patision65": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "28is Oktovriou 65, Athina 104 33",
+    "lat": 37.99104,
+    "lng": 23.730928,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Pharaoh": {
     "name_en": "",
@@ -1696,6 +2521,17 @@
     "lng": 23.7349,
     "type": "bar_venue"
   },
+  "Red Jasper Cabaret Theatre": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Kefallinias 18, Athina 113 61",
+    "lat": 37.998641,
+    "lng": 23.736061,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "ROES THEATER": {
     "name_en": "Roes Theatre",
     "neighborhood": "Gazi",
@@ -1703,6 +2539,17 @@
     "lat": 37.977,
     "lng": 23.7135,
     "type": "theater"
+  },
+  "Rohas Athens Live Stage": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Chatzigianni Mexi 6, Athina 115 28",
+    "lat": 37.976399,
+    "lng": 23.75154,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Romantso": {
     "name_en": "Bios Romantso",
@@ -1714,6 +2561,17 @@
     "type": "cultural_center",
     "description": "Former Romantso magazine printing plant converted to creative hub and cultural center by Bios. Multi-space venue with rooftop (600), club (500), and main stage (400)",
     "metro": "Omonia"
+  },
+  "Route 06": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Leof. Pentelis 1, Vrilissia 152 38, Greece",
+    "lat": 38.034122,
+    "lng": 23.822695,
+    "type": "bar",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-16"
   },
   "Shamone": {
     "name_en": "Shamone",
@@ -1760,6 +2618,28 @@
     "lat": 37.9841,
     "lng": 23.7284,
     "type": "nightclub"
+  },
+  "Smut, Βατσαξή 4, 10438, Αθήνα, Greece": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Vatsaxi 4, Athina 104 38",
+    "lat": 37.987531,
+    "lng": 23.725211,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
+  "St. Paul's Anglican Church": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Filellinon 27, Athina 105 57",
+    "lat": 37.972325,
+    "lng": 23.733681,
+    "type": "church",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   },
   "Stage 7": {
     "name_en": "Stage 7",
@@ -1870,6 +2750,17 @@
     "description": "Major live venue with top-notch sound system hosting rock, metal, punk, techno, and electronic music. Capacity 1,200 standing or 600 seated",
     "metro": "Kerameikos"
   },
+  "The Ellinikon Experience Centre": {
+    "name_en": "The Ellinikon Experience Centre",
+    "neighborhood": "Elliniko",
+    "address": "Elliniko 167 77, Greece",
+    "lat": 37.8895,
+    "lng": 23.7418,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-04-15"
+  },
   "Theatre of the NO": {
     "name_en": "Theatre of the NO",
     "neighborhood": "Metaxourgeio",
@@ -1925,6 +2816,17 @@
     "description": "Established theater company since 1971 presenting new Greek and international contemporary drama and premieres",
     "metro": "Zografou"
   },
+  "Theseum - A Theatre for the Arts": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Iouliou Smith 3, Athina 118 51",
+    "lat": 37.972683,
+    "lng": 23.720171,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
+  },
   "Underflow": {
     "name_en": "",
     "neighborhood": "",
@@ -1970,5 +2872,16 @@
     "lat": 37.9771,
     "lng": 23.7339,
     "type": "bar_venue"
+  },
+  "Zelus": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Ploutarchou 9, Athina 106 75",
+    "lat": 37.977288,
+    "lng": 23.745141,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-15"
   }
 }

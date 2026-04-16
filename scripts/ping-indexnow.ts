@@ -121,19 +121,19 @@ async function main() {
   }
 
   // 4. Submit to IndexNow
-  const payload = {
-    host: config.host,
-    key: config.indexnow_key,
-    keyLocation: `https://${config.host}/${config.indexnow_key}.txt`,
-    urlList
-  };
+  // API limit: 10,000 URLs per request. Use 9,500 to leave safety margin.
+  const BATCH_SIZE = 9500;
+  const batches: string[][] = [];
+  for (let i = 0; i < urlList.length; i += BATCH_SIZE) {
+    batches.push(urlList.slice(i, i + BATCH_SIZE));
+  }
 
   if (dryRun) {
     console.log('\n--- DRY RUN: Would submit the following ---');
     console.log(`Endpoint: ${config.indexnow_endpoint}`);
     console.log(`Host: ${config.host}`);
     console.log(`Key: ${config.indexnow_key}`);
-    console.log(`URL count: ${urlList.length}`);
+    console.log(`URL count: ${urlList.length} (in ${batches.length} batch${batches.length === 1 ? '' : 'es'} of ≤${BATCH_SIZE})`);
     console.log('\nSample URLs (first 20):');
     urlList.slice(0, 20).forEach(u => console.log(`  ${u}`));
     if (urlList.length > 20) {
@@ -142,27 +142,50 @@ async function main() {
     process.exit(0);
   }
 
-  try {
-    const response = await fetch(config.indexnow_endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify(payload)
-    });
+  console.log(`\n📦 Submitting in ${batches.length} batch${batches.length === 1 ? '' : 'es'} of ≤${BATCH_SIZE}...`);
 
-    console.log(`\n📡 IndexNow response: ${response.status} ${response.statusText}`);
+  let batchFailures = 0;
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
+    const payload = {
+      host: config.host,
+      key: config.indexnow_key,
+      keyLocation: `https://${config.host}/${config.indexnow_key}.txt`,
+      urlList: batch,
+    };
 
-    if (response.status === 200 || response.status === 202) {
-      console.log('✅ URLs submitted successfully');
-    } else {
-      const body = await response.text();
-      console.log(`⚠️  Unexpected response: ${body}`);
+    try {
+      const response = await fetch(config.indexnow_endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.status === 200 || response.status === 202) {
+        console.log(`  ✅ Batch ${i + 1}/${batches.length}: ${response.status} ${response.statusText} (${batch.length} URLs)`);
+      } else {
+        batchFailures++;
+        const body = await response.text();
+        console.log(`  ⚠️  Batch ${i + 1}/${batches.length}: ${response.status} ${response.statusText} — ${body}`);
+      }
+    } catch (err) {
+      batchFailures++;
+      console.error(`  ❌ Batch ${i + 1}/${batches.length} failed:`, err);
     }
-  } catch (err) {
-    console.error('⚠️  IndexNow API call failed:', err);
-    // Non-fatal — exit 0
+
+    // Small pacing delay between batches (skip after last).
+    if (i < batches.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
   }
 
-  process.exit(0);
+  if (batchFailures === 0) {
+    console.log(`\n✅ All ${batches.length} batch${batches.length === 1 ? '' : 'es'} submitted successfully (${urlList.length} URLs total)`);
+    process.exit(0);
+  } else {
+    console.log(`\n⚠️  ${batchFailures}/${batches.length} batch${batches.length === 1 ? '' : 'es'} failed`);
+    process.exit(1);
+  }
 }
 
 main();

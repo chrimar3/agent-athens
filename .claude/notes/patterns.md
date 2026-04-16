@@ -1407,3 +1407,34 @@ cp data/events.db /path/to/backup.db
 - **Cloud (S3, etc.)**: survives physical disaster. Adds external dependencies + secrets + cost. Only necessary for production-critical data.
 
 The tradeoff is reliability vs complexity. Agent Athens is a single-dev project on a laptop; `$HOME/agent-athens-backups/` is the right tier — if the laptop dies, the scrapers can rebuild the DB from scratch in a few hours. If it were a production multi-user service, S3 would be table stakes.
+
+## Quality Gate Scope Rule
+
+Gate checks must only score things the description writer controls. Specifically:
+
+- **Word count**: Use per-event matrix targets from `classifyEvent()` + `getWordTarget()`, not hardcoded tier limits
+- **Schema.org validation**: Only check when schema is actually provided. Schema is generated at build time by `generateSchemaOrg()`, not by the writer
+- **Section structure**: Don't check for literal template strings ('practical block', 'tags', 'last verified') in description text — these are rendered by the site generator
+- **Event metadata**: Missing date/time/venue/price fields are data pipeline concerns, not description quality issues. Score as `info`, not `warning`
+
+The `validateEnglishDescription()` and `validateGreekDescription()` validators already follow this pattern — they were written after the matrix was established. The legacy `validateQualityGates()` was the one that violated it (fixed in Session 85).
+
+## Venue Name Matching Pattern
+
+Always normalize venue names before matching against venue lists. Greek venue names arrive from scrapers in different cases (mixed case, ALL CAPS, no accents) and languages (Greek, English).
+
+```typescript
+// ✅ CORRECT — case-insensitive + accent-insensitive
+function normalizeVenue(s: string): string {
+  return s.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+function venueMatches(venue: string, list: string[]): boolean {
+  const norm = normalizeVenue(venue);
+  return list.some(v => norm.includes(normalizeVenue(v)));
+}
+
+// ❌ WRONG — JS case + Greek diacritics break this
+VENUES.some(v => venue.includes(v))
+```
+
+When adding venues to PREMIUM_VENUES or MAJOR_CONCERT_VENUES, include ALL known name variants (Greek, English, abbreviated). The `venueMatches()` helper handles case/accent differences, but completely different names (e.g., "Στέγη Ιδρύματος Ωνάση" vs "Onassis Stegi") still need separate entries.

@@ -185,11 +185,11 @@ describe('validateSchemaCompleteness', () => {
       expect(result.warnings.some(w => w.includes('image'))).toBe(true);
     });
 
-    test('missing doorTime → WARNING', () => {
+    test('missing doorTime → no warning (Schema.org optional)', () => {
       const schema = makeValidSchema();
       delete schema['doorTime'];
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-door');
-      expect(result.warnings.some(w => w.includes('doorTime'))).toBe(true);
+      expect(result.warnings.some(w => w.includes('doorTime'))).toBe(false);
     });
 
     test('placeholder "TBA" in name → WARNING', () => {

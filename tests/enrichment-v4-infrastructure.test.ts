@@ -623,17 +623,19 @@ last verified`;
   test('fails on word count < minimum for tier', () => {
     const shortDesc = 'A jazz concert happens at a venue. You should come.';
     const result = validateQualityGates(makeEvent(), shortDesc, 'premium');
-    const wordIssue = result.issues.find(i => i.code === 'TOO_SHORT');
+    // Matrix-based: concert_major min is 120, so this triggers UNDER_MATRIX_MIN
+    const wordIssue = result.issues.find(i => i.code === 'UNDER_MATRIX_MIN' || i.code === 'TOO_SHORT');
     expect(wordIssue).toBeDefined();
     expect(result.passed).toBe(false);
   });
 
   test('fails on word count > maximum for tier', () => {
-    // Generate an overly long description (500+ words for standard tier max 300)
+    // Generate an overly long description (350+ words for concert_major max 200)
     const words = Array(350).fill('word').join(' ');
     const longDesc = `You walk into the venue. ${words} This is a test description about Half Note Jazz Club.`;
     const result = validateQualityGates(makeEvent(), longDesc, 'standard');
-    const wordIssue = result.issues.find(i => i.code === 'TOO_LONG');
+    // Matrix-based: concert_major max is 200, so this triggers OVER_MATRIX_MAX
+    const wordIssue = result.issues.find(i => i.code === 'OVER_MATRIX_MAX' || i.code === 'TOO_LONG');
     expect(wordIssue).toBeDefined();
   });
 

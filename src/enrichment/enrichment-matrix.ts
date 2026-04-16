@@ -56,10 +56,24 @@ export const ENRICHMENT_MATRIX: Record<EventCategory, MatrixEntry> = {
 // Classification
 // ============================================================================
 
-const PREMIUM_VENUES = ['Μέγαρο Μουσικής', 'Στέγη Ιδρύματος Ωνάση', 'ΚΠΙΣΝ', 'Ηρώδειο'];
+const PREMIUM_VENUES = [
+  'Μέγαρο Μουσικής', 'Στέγη Ιδρύματος Ωνάση', 'ΚΠΙΣΝ', 'Ηρώδειο',
+  'Onassis Stegi', 'Onassis Ready', // English venue name variants
+];
 const MAJOR_CONCERT_VENUES = ['Half Note', 'Gazarte', 'Σταυρός του Νότου', 'Fuzz', 'Gagarin'];
 const KIDS_INDICATORS = ['παιδ', 'μωρ', 'νήπι', 'οικογέν', 'ages', 'ηλικ', 'kids', 'baby', 'toddler', 'children'];
 const ANCIENT_INDICATORS = ['Αισχύλ', 'Σοφοκλ', 'Ευριπίδ', 'Αριστοφάν', 'Ιψεν', 'Ibsen', 'Τσέχωφ', 'Chekhov', 'Shakespeare'];
+
+/** Normalize venue name for matching: uppercase + strip Greek diacritics */
+function normalizeVenue(s: string): string {
+  return s.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+/** Case-insensitive, accent-insensitive venue list check */
+function venueMatches(venue: string, list: string[]): boolean {
+  const norm = normalizeVenue(venue);
+  return list.some(v => norm.includes(normalizeVenue(v)));
+}
 
 /**
  * Classify an event into an enrichment category based on type, venue, price, and title.
@@ -75,7 +89,7 @@ export function classifyEvent(event: {
   const title = (event.title || '').toLowerCase();
 
   // Premium venues -> premium_showcase (unless exhibition or kids)
-  if (PREMIUM_VENUES.some(v => venue.includes(v)) && type !== 'exhibition') {
+  if (venueMatches(venue, PREMIUM_VENUES) && type !== 'exhibition') {
     if (KIDS_INDICATORS.some(k => title.includes(k))) {
       return 'kids_family';
     }
@@ -98,10 +112,9 @@ export function classifyEvent(event: {
     return 'theater_contemporary';
   }
 
-  // Concert/DJ classification
-  if (type === 'dj_set') return 'concert_local';
-  if (type === 'concert') {
-    if (MAJOR_CONCERT_VENUES.some(v => venue.includes(v))) return 'concert_major';
+  // Concert/DJ classification — both types check venue and price
+  if (type === 'dj_set' || type === 'concert') {
+    if (venueMatches(venue, MAJOR_CONCERT_VENUES)) return 'concert_major';
     if (event.price_amount && event.price_amount >= 25) return 'concert_major';
     return 'concert_local';
   }

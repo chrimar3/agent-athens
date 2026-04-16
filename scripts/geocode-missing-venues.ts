@@ -102,7 +102,8 @@ const geocoded: GeocodedVenue[] = [];
 const failed: Array<{ name: string; events: number }> = [];
 const skippedLowConfidence: Array<{ name: string; events: number; confidence: string }> = [];
 
-console.log('Geocoding venues via Nominatim (1 req/sec)...\n');
+const hasGoogleKey = !!process.env.GOOGLE_GEOCODING_API_KEY;
+console.log(`Geocoding venues via Nominatim${hasGoogleKey ? ' + Google fallback' : ''} (rate-limited)...\n`);
 
 for (let i = 0; i < toGeocode.length; i++) {
   const { venue_name, event_count } = toGeocode[i];
@@ -124,7 +125,8 @@ for (let i = 0; i < toGeocode.length; i++) {
 
   geocoded.push({ venueName: venue_name, eventCount: event_count, result });
   const conf = result.confidence === 'high' ? '✓' : '◐';
-  console.log(`  ${progress} ${conf} ${venue_name} (${event_count} events) — ${result.lat.toFixed(4)}, ${result.lon.toFixed(4)} [${result.confidence}]`);
+  const src = result.source === 'google' ? ' [G]' : '';
+  console.log(`  ${progress} ${conf} ${venue_name}${src} (${event_count} events) — ${result.lat.toFixed(4)}, ${result.lon.toFixed(4)} [${result.confidence}]`);
 }
 
 // ── Summary ────────────────────────────────────────
@@ -153,11 +155,13 @@ if (!dryRun) {
     masterVenues[venueName] = {
       name_en: '',  // Can be filled later
       neighborhood: '',
-      address: result.displayName.split(',').slice(0, 2).join(',').trim(),
+      address: result.source === 'google'
+        ? result.displayName  // Google formatted_address is already concise
+        : result.displayName.split(',').slice(0, 2).join(',').trim(),
       lat: parseFloat(result.lat.toFixed(6)),
       lng: parseFloat(result.lon.toFixed(6)),
-      type: result.category,
-      geocoded_source: 'nominatim',
+      type: result.category ?? 'unknown',
+      geocoded_source: result.source,
       geocoded_confidence: result.confidence,
       geocoded_at: new Date().toISOString().split('T')[0],
     };

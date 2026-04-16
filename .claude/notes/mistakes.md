@@ -39,6 +39,9 @@ Pitfalls encountered and how to avoid them.
 |---------|---------------|------------------|
 | Using external API calls | Cost money unnecessarily | Use `callToolAgent()` which uses Claude Max subscription |
 | No rate limiting | Hit API limits | Always add 2 second delay between AI calls |
+| classifyEvent() venue matching was case-sensitive | `"ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ".includes("Σταυρός του Νότου")` is false in JS because of case AND Greek diacritics. Also English venue names ("Onassis Stegi") were missing from PREMIUM_VENUES. And `dj_set` was hardcoded to `concert_local` bypassing venue/price checks | Added `venueMatches()` helper with `toUpperCase()` + NFD accent stripping. Added English venue names. Unified concert/dj_set branching |
+| TOO_LONG used global max instead of matrix target | `validateTechnical()` checked word count against tier-based hardcoded limits (stub:200, standard:300, premium:600). A 200-word concert_local (matrix max: 120) passed because 200 < 300. Meanwhile OVER_MATRIX_MAX fired correctly as a warning but was secondary to the legacy check | Removed legacy word count from `validateTechnical()`. Matrix-based check in `validateQualityGates()` is now the primary enforcement. Legacy fallback only when event.type is null |
+| Phantom penalties docked ~15pts for template-level concerns | SCHEMA_MISSING (-5): fired whenever no schema provided, but schema is generated at build time. MISSING_SECTION (-15): checked for literal strings 'practical block', 'tags', 'last verified' that never appear in descriptions. MISSING_PRACTICAL (-5): checked event metadata fields, not description content | SCHEMA_MISSING: removed (schema not the writer's concern). MISSING_SECTION: removed (template concepts, not text patterns). MISSING_PRACTICAL: downgraded to info (metadata, not content) |
 
 ## Transit/Logistics (2026-03-03)
 

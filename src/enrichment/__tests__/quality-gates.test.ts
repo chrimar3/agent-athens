@@ -319,6 +319,116 @@ describe('Greek: δωρεάν prohibition and clean pass', () => {
 });
 
 // ============================================================================
+// Matrix-Aware Word Count (validateQualityGates)
+// ============================================================================
+
+describe('Matrix-aware word count in validateQualityGates', () => {
+  test('concert_local at 200 words triggers word count violation', () => {
+    // concert_local matrix max is 120 words. A 200-word description should fail.
+    const djEvent: EventForEnrichment = {
+      ...baseEvent,
+      type: 'dj_set', // classifyEvent maps dj_set → concert_local
+      title: 'DJ Night at Small Bar',
+      venue: 'Small Bar',
+    };
+    const longDesc = cleanDescription(200);
+    const result = validateQualityGates(djEvent, longDesc, 'standard');
+    // Should have a word count violation — either OVER_MATRIX_MAX promoted to error/warning,
+    // or TOO_LONG with matrix-aware threshold
+    const wordIssue = result.issues.find(i =>
+      i.code === 'OVER_MATRIX_MAX' || i.code === 'TOO_LONG'
+    );
+    expect(wordIssue).toBeDefined();
+    // The legacy TOO_LONG should NOT fire with the old 300-word standard threshold
+    const legacyTooLong = result.issues.find(i =>
+      i.code === 'TOO_LONG' && i.message.includes('maximum 300')
+    );
+    expect(legacyTooLong).toBeUndefined();
+  });
+
+  test('concert_local at 100 words has no word count warnings', () => {
+    const djEvent: EventForEnrichment = {
+      ...baseEvent,
+      type: 'dj_set',
+      title: 'DJ Night at Small Bar',
+      venue: 'Small Bar',
+    };
+    // 100 words is within concert_local range (80-120)
+    const goodDesc = cleanDescription(100);
+    const result = validateQualityGates(djEvent, goodDesc, 'standard');
+    const wordIssues = result.issues.filter(i =>
+      i.code === 'TOO_LONG' || i.code === 'TOO_SHORT' ||
+      i.code === 'OVER_MATRIX_MAX' || i.code === 'UNDER_MATRIX_MIN'
+    );
+    expect(wordIssues.length).toBe(0);
+  });
+
+  test('exhibition at 280 words passes (within 200-300 matrix range)', () => {
+    const exhibEvent: EventForEnrichment = {
+      ...baseEvent,
+      type: 'exhibition',
+      title: 'Modern Art at Benaki',
+      venue: 'Benaki Museum',
+    };
+    const desc = cleanDescription(280);
+    const result = validateQualityGates(exhibEvent, desc, 'standard');
+    const wordIssues = result.issues.filter(i =>
+      i.code === 'TOO_LONG' || i.code === 'OVER_MATRIX_MAX'
+    );
+    expect(wordIssues.length).toBe(0);
+  });
+});
+
+// ============================================================================
+// Phantom Penalty Suppression (validateQualityGates)
+// ============================================================================
+
+describe('Phantom penalties should not dock points', () => {
+  test('SCHEMA_MISSING does not appear when no schema provided', () => {
+    const desc = cleanDescription(200);
+    // No schemaJson passed — should NOT get penalized
+    const result = validateQualityGates(baseEvent, desc, 'standard');
+    const schemaIssue = result.issues.find(i => i.code === 'SCHEMA_MISSING');
+    expect(schemaIssue).toBeUndefined();
+  });
+
+  test('MISSING_PRACTICAL does not dock points for missing event metadata', () => {
+    const sparseEvent: EventForEnrichment = {
+      id: 'test-sparse',
+      title: 'Mystery Concert',
+      date: '2025-04-01',
+      time: null,     // missing
+      venue: null,    // missing
+      type: 'concert',
+      genre: null,
+      price: null,    // missing
+    };
+    const desc = cleanDescription(200);
+    const result = validateQualityGates(sparseEvent, desc, 'standard');
+    const practicalIssue = result.issues.find(i => i.code === 'MISSING_PRACTICAL');
+    // Should either not exist, or be 'info' severity (not 'warning')
+    if (practicalIssue) {
+      expect(practicalIssue.severity).toBe('info');
+    }
+  });
+
+  test('MISSING_SECTION does not appear for premium descriptions', () => {
+    const desc = cleanDescription(450);
+    const result = validateQualityGates(baseEvent, desc, 'premium');
+    const sectionIssues = result.issues.filter(i => i.code === 'MISSING_SECTION');
+    expect(sectionIssues.length).toBe(0);
+  });
+
+  test('score not penalized by phantom checks on clean description', () => {
+    // A clean description with complete event data should score high
+    const desc = cleanDescription(200);
+    const result = validateQualityGates(baseEvent, desc, 'standard');
+    // Schema layer should get full 25 points when no schema is provided (not our concern)
+    expect(result.layer_scores.schema).toBe(25);
+  });
+});
+
+// ============================================================================
 // Entity Locking — Context-Aware Matching
 // ============================================================================
 

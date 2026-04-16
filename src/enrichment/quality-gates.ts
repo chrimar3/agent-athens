@@ -90,13 +90,6 @@ const WORD_COUNT_REQUIREMENTS = {
   premium: { min: 200, max: 600 },
 };
 
-/** Required sections in premium descriptions */
-const PREMIUM_REQUIRED_SECTIONS = [
-  'practical block', // Info table with details
-  'tags',
-  'last verified',
-];
-
 /** Second-person pronouns (for resonance check) */
 const SECOND_PERSON_MARKERS = ['you', 'your', "you're", "you'll", "you've"];
 
@@ -151,10 +144,11 @@ export function validateQualityGates(
 ): QualityGateResult {
   const issues: QualityIssue[] = [];
 
-  // Schema Layer validation
+  // Schema Layer validation — only when schema is provided (it's generated at build time,
+  // not by the description writer, so missing schema should not penalize the score)
   const schemaIssues = schemaJson
     ? validateSchemaLayer(schemaJson, event)
-    : [createIssue('schema', 'warning', 'SCHEMA_MISSING', 'Schema.org JSON-LD not provided')];
+    : [];
   issues.push(...schemaIssues);
 
   // 5-Question Layer validation
@@ -178,14 +172,14 @@ export function validateQualityGates(
   const technicalIssues = validateTechnical(description, tier);
   issues.push(...technicalIssues);
 
-  // Matrix-based word count validation (per-event-type ranges)
+  // Word count validation — matrix-based when event type available, legacy fallback otherwise
+  const wordCount = countWords(description);
   if (event.type) {
     const matrixTarget = getWordTarget({
       type: event.type,
       venue_name: event.venue,
       title: event.title,
     });
-    const wordCount = countWords(description);
     const category = classifyEvent({
       type: event.type,
       venue_name: event.venue,
@@ -196,8 +190,18 @@ export function validateQualityGates(
         `${wordCount} words exceeds ${matrixTarget.max}w matrix max for ${category}`));
     }
     if (wordCount < matrixTarget.min * 0.9) {
-      issues.push(createIssue('technical', 'warning', 'UNDER_MATRIX_MIN',
+      issues.push(createIssue('technical', 'error', 'UNDER_MATRIX_MIN',
         `${wordCount} words below ${matrixTarget.min}w matrix min for ${category}`));
+    }
+  } else {
+    // Legacy fallback when event type is unknown
+    const { min, max } = WORD_COUNT_REQUIREMENTS[tier];
+    if (wordCount < min) {
+      issues.push(createIssue('technical', 'error', 'TOO_SHORT',
+        `Description too short: ${wordCount} words (minimum ${min})`));
+    } else if (wordCount > max) {
+      issues.push(createIssue('technical', 'warning', 'TOO_LONG',
+        `Description too long: ${wordCount} words (maximum ${max})`));
     }
   }
 
@@ -370,10 +374,12 @@ function validateFiveQuestionLayer(
     return !value;
   });
   if (missingPractical.length > 0) {
+    // Downgraded to 'info': these are event metadata fields, not description content.
+    // The writer can't add a missing venue or price — that's a data pipeline concern.
     issues.push(
       createIssue(
         'five_question',
-        'warning',
+        'info',
         'MISSING_PRACTICAL',
         `Missing practical details: ${missingPractical.join(', ')}`
       )
@@ -646,46 +652,12 @@ function validateTechnical(
   const issues: QualityIssue[] = [];
   const lowerDesc = description.toLowerCase();
 
-  // Word count
-  const wordCount = countWords(description);
-  const { min, max } = WORD_COUNT_REQUIREMENTS[tier];
+  // Word count is now handled by matrix-based validation in validateQualityGates()
+  // (legacy TOO_SHORT/TOO_LONG removed — see Session 85)
 
-  if (wordCount < min) {
-    issues.push(
-      createIssue(
-        'technical',
-        'error',
-        'TOO_SHORT',
-        `Description too short: ${wordCount} words (minimum ${min})`
-      )
-    );
-  } else if (wordCount > max) {
-    issues.push(
-      createIssue(
-        'technical',
-        'warning',
-        'TOO_LONG',
-        `Description too long: ${wordCount} words (maximum ${max})`
-      )
-    );
-  }
-
-  // Premium: check for required sections
-  if (tier === 'premium') {
-    for (const section of PREMIUM_REQUIRED_SECTIONS) {
-      if (!lowerDesc.includes(section)) {
-        issues.push(
-          createIssue(
-            'technical',
-            'warning',
-            'MISSING_SECTION',
-            `Premium description missing: ${section}`
-          )
-        );
-      }
-    }
-
-  }
+  // MISSING_SECTION removed (Session 85): checked for literal strings 'practical block',
+  // 'tags', 'last verified' in description text. These are template-level structural concepts
+  // rendered by the site generator, not content the description writer produces.
 
   // Check for markdown tables (prose bridges preferred)
   const tableSeparatorCount = (description.match(/^\|[-| ]+\|$/gm) || []).length;

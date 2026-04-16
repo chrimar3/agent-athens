@@ -1,6 +1,6 @@
 # Enrichment Exemplars
 
-5 gold-standard descriptions (2026-03-02) demonstrating the Variable Enrichment Matrix word count tiers. Citation anchor opening, no markdown table, prose bridges.
+6 gold-standard descriptions demonstrating the Variable Enrichment Matrix word count tiers. Citation anchor opening, no markdown table, prose bridges.
 
 ## Files
 
@@ -11,6 +11,7 @@
 | `classical-lpo-jarvi.md` | concert (orchestral) | 400-600w (premium) | 453 | Rare programming choice explained, competition backstory, accessible technical detail |
 | `theater-tartuffe.md` | theater (comedy/satirical) | 120-180w | 176 | Compact three-block structure for contemporary theater. Shows maximum impact in minimum words. |
 | `festival-sonic-sisters.md` | festival | 250-400w (parent page) | 390 | Festival anchor page — overview, curatorial logic, lineup structure, historical context |
+| `dj-set-softcrush-astron.md` | dj_set (electronic club night) | 400-600w (premium) | 548 | Unmarked-door sensory opening. Named international + local pairing. Door policy and venue detail rendered as prose, not table. Complements the template's IT Athens/Exarchia example with a Gazi club-scene angle. |
 
 ## Structure
 
@@ -41,16 +42,21 @@ The subagent reads the files directly for structural guidance.
 | concert (orchestral) | lpo-jarvi | 400-600w premium |
 | theater (comedy/satirical) | tartuffe | 120-180w |
 | festival | sonic-sisters | 250-400w parent page |
+| dj_set (electronic) | softcrush-astron | 400-600w premium |
+
+### Known gap
+No exemplar yet for the **dj_set standard tier** (80-200w three-part-block) that `concert_local` classification prescribes. Current enricher output for dj_set consistently lands at 500-600 words regardless of tier — see `docs/enrichment-anti-patterns.md` for whether this is intentional. If a standard-tier dj_set exemplar is added later, it should demonstrate the compact three-block form (setup → filter → logistics) that `theater-tartuffe.md` uses for 120-180w contemporary theater.
 
 ## Pattern Watch
 
 ### Opening Diversity
-The five exemplars demonstrate different entry points:
+The six exemplars demonstrate different entry points:
 - **Swinton**: Collaborative framing — two names, one project, institutional context
 - **Charoulis**: Sound cutting through conversation, crowd falling quiet from recognition
 - **LPO/Jarvi**: Architectural scale — seat count, pipe organ, silence before downbeat
 - **Tartuffe**: Venue history meeting character — monument cinema, 1664 con artist
 - **Sonic Sisters**: Return format — second edition, open admission, already live
+- **Soft Crush**: Unmarked door — absence of signage as the sensory anchor, bass through a wall
 
 Subagents must vary openings across a batch. If two events are in similar venues, find different sensory anchors.
 

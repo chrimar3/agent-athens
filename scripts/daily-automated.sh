@@ -677,8 +677,11 @@ main() {
             if run_deploy; then
                 deploy_ok=1
                 run_image_cleanup
-                run_indexnow_ping
             fi
+            # IndexNow pings URLs from the freshly-built sitemap. Those URLs are
+            # already live from the last successful deploy, so a failed deploy
+            # today doesn't invalidate the ping — don't gate on deploy success.
+            run_indexnow_ping
         else
             log_error "Site generation failed — skipping deploy"
         fi

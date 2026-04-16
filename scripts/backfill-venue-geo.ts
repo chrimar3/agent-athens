@@ -155,14 +155,19 @@ console.log(`Loaded ${athensConfig.venues.length} athens-venues.json entries`);
 console.log(`Built lookup with ${lookup.size} name forms\n`);
 
 // Get venues needing geo data
+// Return NULL for venue_lat when ANY event in the group lacks geo — ensures backfill
+// catches venues where some events have coordinates but others don't.
 const venuesNeedingGeo = db.query<
   { venue_name: string; event_count: number; venue_lat: number | null; venue_address: string | null },
   []
 >(`
   SELECT venue_name,
          COUNT(*) as event_count,
-         venue_lat,
-         venue_address
+         CASE WHEN SUM(CASE WHEN venue_lat IS NULL OR venue_lat = 0 THEN 1 ELSE 0 END) > 0
+              THEN NULL
+              ELSE MAX(venue_lat)
+         END as venue_lat,
+         MIN(venue_address) as venue_address
   FROM events
   WHERE location_status IN ('verified_athens', 'pass_through')
   GROUP BY venue_name

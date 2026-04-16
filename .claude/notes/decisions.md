@@ -1437,4 +1437,24 @@ sqlite3 data/events.db "SELECT COUNT(*) FROM events; PRAGMA integrity_check;"
 
 - **Tomorrow's 08:00 launchd run will be the first production validation.** Watch for: (a) Phase 0 "DATABASE BACKUP" appears in the log near the start; (b) `~/agent-athens-backups/events-2026-04-09.db.gz` exists after the run; (c) `git push` in DEPLOYMENT phase finishes in seconds, not minutes.
 - **Git history rewrite to remove old DB blobs** is potentially valuable (375 MiB → ~75 MiB) but destructive. Defer to a dedicated session with a clear backup of `.git/` first.
+
+## Quality Gate Scoring Fix (S85, 2026-04-15)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Removed legacy TOO_LONG/TOO_SHORT from `validateTechnical()` | Legacy check used tier-based hardcoded limits (stub:200, standard:300, premium:600) that didn't match the enrichment matrix. A `concert_local` at 200 words (matrix max: 120) passed because 200 < 300. The matrix-based check (OVER_MATRIX_MAX) was already present but only as a secondary warning | 2026-04-15 |
+| Promoted matrix check as primary word count enforcement | OVER_MATRIX_MAX kept as warning severity, UNDER_MATRIX_MIN promoted to error (matching old TOO_SHORT error severity). Legacy fallback retained only when `event.type` is null | 2026-04-15 |
+| Removed SCHEMA_MISSING penalty entirely | Schema.org JSON-LD is generated at build time by `generateSchemaOrg()`, not by the description writer. Penalizing when no schema is passed penalized every description-validation call path. Considered downgrading to 'info' but decided removal is cleaner — schema validation still runs when schema IS provided | 2026-04-15 |
+| Downgraded MISSING_PRACTICAL from warning to info | Checks event metadata fields (date, time, venue, price), not description content. The writer can't add a missing venue. Keeping as info (1pt vs 5pt penalty) preserves the signal in issue lists without affecting score | 2026-04-15 |
+| Removed MISSING_SECTION check entirely | Checked for literal strings 'practical block', 'tags', 'last verified' in description text. These are template-level structural concepts rendered by the site generator. No description ever contained them → always fired 3× for premium descriptions, docking 15 phantom points | 2026-04-15 |
+
+### Sweep results — before vs after
+
+| Metric | Session 59 baseline | Post-fix |
+|--------|------------------:|--------:|
+| EN pass rate | ~28% (93/328) | 53% (271/514) |
+| EN warn | 235 (72%) | 241 (47%) |
+| EN fail | 0 | 2 (entity lock violations) |
+| Top issue | (hidden by legacy thresholds) | EN_OVER_MATRIX_MAX: 217 (42%) |
+| Phantom penalties | ~15pts per description | 0 |
 - **The 11 events stuck in `enrichment_queue.in_progress`** from the previous throughput session are still there. Different problem, not addressed here.

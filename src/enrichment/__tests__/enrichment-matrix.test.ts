@@ -80,6 +80,37 @@ describe('Enrichment Matrix', () => {
     test('performance type returns theater_contemporary', () => {
       expect(classifyEvent({ type: 'performance', title: 'Dance Show' })).toBe('theater_contemporary');
     });
+
+    // Bug fix: case-insensitive venue matching
+    test('all-caps venue matches MAJOR list (case-insensitive)', () => {
+      expect(classifyEvent({ type: 'concert', venue_name: 'ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ' })).toBe('concert_major');
+    });
+
+    // Bug fix: English venue names in PREMIUM_VENUES
+    test('Onassis Stegi (English name) returns premium_showcase', () => {
+      expect(classifyEvent({ type: 'theater', venue_name: 'Onassis Stegi' })).toBe('premium_showcase');
+    });
+
+    test('Onassis Ready (English name) returns premium_showcase', () => {
+      expect(classifyEvent({ type: 'performance', venue_name: 'Onassis Ready' })).toBe('premium_showcase');
+    });
+
+    // Bug fix: dj_set checks venue/price before defaulting to concert_local
+    test('dj_set at major venue returns concert_major', () => {
+      expect(classifyEvent({ type: 'dj_set', venue_name: 'Gazarte' })).toBe('concert_major');
+    });
+
+    test('dj_set with high price returns concert_major', () => {
+      expect(classifyEvent({ type: 'dj_set', venue_name: 'Unknown Club', price_amount: 30 })).toBe('concert_major');
+    });
+
+    test('dj_set at premium venue returns premium_showcase', () => {
+      expect(classifyEvent({ type: 'dj_set', venue_name: 'Μέγαρο Μουσικής' })).toBe('premium_showcase');
+    });
+
+    test('dj_set at small venue still returns concert_local', () => {
+      expect(classifyEvent({ type: 'dj_set', venue_name: 'Skull Bar' })).toBe('concert_local');
+    });
   });
 
   describe('getWordTarget', () => {
