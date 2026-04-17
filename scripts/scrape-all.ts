@@ -49,6 +49,7 @@ interface ScrapedEvent {
   title: string;
   description: string;
   start_date: string;
+  end_date?: string | null;
   time: string;
   type: string;
   genres: string;
@@ -70,7 +71,7 @@ interface ScrapeResult {
   duration: number;
 }
 
-type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'onassis' | 'benaki' | 'megaron';
+type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'snfcc' | 'onassis' | 'benaki' | 'megaron';
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -1320,11 +1321,11 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
 
   const stmt = db.prepare(`
     INSERT INTO events (
-      id, title, description, start_date, time_doors, time_source, type, genres,
+      id, title, description, start_date, end_date, time_doors, time_source, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,
       location_status, image_url, image_source, needs_enrichment, created_at, updated_at
     ) VALUES (
-      $id, $title, $description, $start_date, $time_doors, $time_source, $type, $genres,
+      $id, $title, $description, $start_date, $end_date, $time_doors, $time_source, $type, $genres,
       $venue_name, $url, $price_type, $price_amount, $price_range, $source,
       $location_status, $image_url, $image_source, 1, datetime('now'), datetime('now')
     )
@@ -1332,6 +1333,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
       title = $title,
       url = $url,
       type = $type,
+      end_date = COALESCE($end_date, end_date),
       price_type = COALESCE($price_type, price_type),
       price_amount = COALESCE($price_amount, price_amount),
       price_range = COALESCE($price_range, price_range),
@@ -1389,6 +1391,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         $title: e.title,
         $description: e.description,
         $start_date: startDateTime,
+        $end_date: e.end_date || null,
         $time_doors: e.time || null,
         $time_source: timeSource,
         $type: eventType,
@@ -1417,14 +1420,15 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
 // MAIN ORCHESTRATOR
 // ============================================================================
 
-// Adapter to convert exhibition events to standard format
+// Adapter to convert SNFCC events to standard format
 async function scrapeSNFCCAdapter(): Promise<ScrapedEvent[]> {
-  const exhibitions = await scrapeSNFCC();
-  return exhibitions.map(e => ({
+  const snfccEvents = await scrapeSNFCC();
+  return snfccEvents.map(e => ({
     id: e.id,
     title: e.title,
     description: e.description,
     start_date: e.start_date,
+    end_date: e.end_date,
     time: e.time,
     type: e.type,
     genres: e.genres,
@@ -1434,7 +1438,8 @@ async function scrapeSNFCCAdapter(): Promise<ScrapedEvent[]> {
     price_amount: e.price_amount,
     price_range: e.price_range,
     source: e.source,
-    location_status: e.location_status
+    location_status: e.location_status,
+    image_url: e.image_url
   }));
 }
 
@@ -1446,6 +1451,7 @@ async function scrapeOnassisAdapter(): Promise<ScrapedEvent[]> {
     title: e.title,
     description: e.description,
     start_date: e.start_date,
+    end_date: e.end_date,
     time: '11:00', // Default opening time
     type: 'exhibition',
     genres: JSON.stringify(['Art', 'Contemporary']),
@@ -1467,6 +1473,7 @@ async function scrapeBenakiAdapter(): Promise<ScrapedEvent[]> {
     title: e.title,
     description: e.description,
     start_date: e.start_date,
+    end_date: e.end_date,
     time: '10:00', // Default opening time
     type: 'exhibition',
     genres: JSON.stringify(['Art', 'History', 'Culture']),
@@ -1510,9 +1517,7 @@ const SOURCES: Record<SourceId, { name: string; scraper: () => Promise<ScrapedEv
   ticketservices: { name: 'TicketServices.gr', scraper: scrapeTicketServices },
   halfnote: { name: 'Half Note Jazz', scraper: scrapeHalfNote },
   ra: { name: 'Resident Advisor', scraper: scrapeResidentAdvisor },
-  // SNFCC disabled: scraper picks up non-events (fountains, tours, camps, patron programs)
-  // and all URLs point to generic snfcc.org/el/events. Real SNFCC events come via athinorama/ticketservices.
-  // snfcc: { name: 'SNFCC', scraper: scrapeSNFCCAdapter },
+  snfcc: { name: 'SNFCC', scraper: scrapeSNFCCAdapter },
   onassis: { name: 'Onassis Stegi', scraper: scrapeOnassisAdapter },
   benaki: { name: 'Benaki Museum', scraper: scrapeBenakiAdapter },
   megaron: { name: 'Megaron Mousikis', scraper: scrapeMegaronAdapter },

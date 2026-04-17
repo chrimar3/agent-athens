@@ -128,15 +128,19 @@
       "expected_events": 20,
       "crawl_frequency": "weekly",
       "pages": [
-        "https://www.snfcc.org/el/events",
-        "https://www.snfcc.org/el/exhibitions"
+        "https://www.snfcc.org/event-category/moysiki/",
+        "https://www.snfcc.org/event-category/kinimatografos/",
+        "https://www.snfcc.org/event-category/parastaseis/",
+        "https://www.snfcc.org/event-category/ergastiria/",
+        "https://www.snfcc.org/event-category/ektheseis/",
+        "https://www.snfcc.org/event-category/dialexeis-amp-amp-omilies/"
       ],
-      "categories": ["exhibitions", "concerts", "performances", "workshops"],
+      "categories": ["exhibitions", "concerts", "cinema", "performances", "workshops", "lectures"],
       "skip": false,
       "scrape_method": "puppeteer",
       "parser": "scrape-snfcc.ts",
       "importer": "scrape-snfcc.ts",
-      "notes": "Major cultural center - exhibitions, events, free admission, verified Athens venue (ΚΠΙΣΝ)"
+      "notes": "Major cultural center - scrapes per-category pages (not /el/events which is a photo gallery). Akamai bot protection requires Puppeteer. Excludes sports and tours categories."
     }
   ]
 }

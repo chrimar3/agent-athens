@@ -14,6 +14,7 @@ import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
+import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript } from './action-bar';
 import { BASE_URL } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
 
@@ -183,6 +184,8 @@ ${renderAnalytics()}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
   ${filterBarScriptHTML}
+  ${renderSavedEventsScript()}
+  ${renderCardSaveScript()}
 </body>
 </html>`;
 }
@@ -208,6 +211,7 @@ export interface CardData {
   dateStr: string;
   priceText: string;
   href: string;
+  slug: string;
   badgeLabel: string;
   colorVar: string;
   lightText: string;
@@ -272,11 +276,11 @@ export function prepareCardData(event: Event): CardData {
   // Numeric price for data attribute (sort-by-price)
   const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
 
-  return { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType };
+  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType };
 }
 
 export function renderEventCard(event: Event): string {
-  const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
+  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
@@ -287,6 +291,7 @@ export function renderEventCard(event: Event): string {
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
+      ${renderCardSaveButton(event.id, slug, event.title)}
     </div>
     <div class="card-body">
       <h3 class="card-title" itemprop="name"><a href="${href}" class="card-link">${event.title}</a></h3>

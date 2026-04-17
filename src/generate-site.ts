@@ -23,6 +23,7 @@ import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
+import { STRINGS } from './i18n/strings';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
@@ -853,6 +854,37 @@ async function main() {
       pagesGenerated++;
       console.log(`  ✓ /${page.slug}/`);
     }
+  }
+
+  // Generate /saved/ pages (el + en)
+  console.log('\n💾 Generating saved-events pages...');
+  const { renderSavedEventsScript, renderSavedPageScript } = await import('./templates/action-bar');
+  for (const savedLocale of ['el', 'en'] as const) {
+    const st = STRINGS[savedLocale];
+    const savedSlug = savedLocale === 'en' ? 'en/saved' : 'saved';
+    const savedAltSlug = savedLocale === 'en' ? 'saved' : 'en/saved';
+    const savedBodyHtml = `
+    <h1>${st.savedEvents}</h1>
+    <noscript><p>${st.savedRequiresJs}</p></noscript>
+    <div id="saved-events-list" class="saved-events-container"></div>
+    <div class="saved-empty-state" id="saved-empty" style="display:none">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <p>${st.savedEventsEmpty}</p>
+    </div>`;
+    const savedExtraScripts = renderSavedEventsScript() + renderSavedPageScript(savedLocale);
+    const savedHtml = renderContentPage(savedSlug, st.savedEvents, savedBodyHtml, {
+      metaDescription: st.savedEventsDesc,
+      locale: savedLocale,
+      alternateSlug: savedAltSlug,
+      noindex: true,
+      extraScripts: savedExtraScripts,
+    });
+    const savedPageDir = join(DIST_DIR, savedSlug);
+    if (!existsSync(savedPageDir)) mkdirSync(savedPageDir, { recursive: true });
+    writeFileSync(join(savedPageDir, 'index.html'), savedHtml);
+    generatedUrls.push(`${savedSlug}/`);
+    pagesGenerated++;
+    console.log(`  ✓ /${savedSlug}/`);
   }
 
   // Generate 404 page

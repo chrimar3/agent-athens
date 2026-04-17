@@ -25,6 +25,16 @@ export type EventCategory =
   | 'theater_ancient'
   | 'theater_contemporary'
   | 'premium_showcase'
+  | 'sports'
+  | 'workshop'
+  | 'dance'
+  | 'lecture_talk'
+  | 'cinema'
+  | 'conference'
+  | 'nightlife_dj'
+  | 'performance'
+  | 'show'
+  | 'tech'
   | 'default';
 
 export interface MatrixEntry {
@@ -49,6 +59,16 @@ export const ENRICHMENT_MATRIX: Record<EventCategory, MatrixEntry> = {
   theater_ancient:      { min: 180, max: 250, gr_min: 155, gr_max: 215, structure: 'hybrid' },
   theater_contemporary: { min: 120, max: 180, gr_min: 100, gr_max: 155, structure: 'hybrid' },
   premium_showcase:     { min: 400, max: 600, gr_min: 340, gr_max: 510, structure: 'full-8-section' },
+  sports:               { min: 80,  max: 150, gr_min: 70,  gr_max: 130, structure: 'three-part-block' },
+  workshop:             { min: 80,  max: 150, gr_min: 70,  gr_max: 130, structure: 'three-part-block' },
+  dance:                { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
+  lecture_talk:          { min: 80,  max: 150, gr_min: 70,  gr_max: 130, structure: 'three-part-block' },
+  cinema:               { min: 80,  max: 120, gr_min: 70,  gr_max: 100, structure: 'three-part-block' },
+  conference:           { min: 150, max: 250, gr_min: 130, gr_max: 215, structure: 'hybrid' },
+  nightlife_dj:         { min: 80,  max: 120, gr_min: 70,  gr_max: 100, structure: 'three-part-block' },
+  performance:          { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
+  show:                 { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
+  tech:                 { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
   default:              { min: 120, max: 200, gr_min: 100, gr_max: 170, structure: 'hybrid' },
 };
 
@@ -124,7 +144,7 @@ export function classifyEvent(event: {
   }
 
   // Theater classification
-  if (type === 'theater' || type === 'performance') {
+  if (type === 'theater') {
     if (ANCIENT_INDICATORS.some(k => (event.title || '').includes(k))) {
       return 'theater_ancient';
     }
@@ -136,6 +156,19 @@ export function classifyEvent(event: {
     if (venueMatches(venue, MAJOR_CONCERT_VENUES)) return 'concert_major';
     if (event.price_amount && event.price_amount >= 25) return 'concert_major';
     return 'concert_local';
+  }
+
+  // New category-specific routing (previously fell through to default)
+  if (type === 'dance') return 'dance';
+  if (type === 'performance') return 'performance';
+  if (type === 'workshop') return 'workshop';
+  if (type === 'cinema') return 'cinema';
+  if (type === 'show') return 'show';
+  if (type === 'tech') return 'tech';
+
+  // Log a warning when hitting default — indicates a category the matrix doesn't cover
+  if (type !== 'other') {
+    console.warn(`[enrichment-matrix] Event type "${type}" hit default fallback — consider adding a matrix row`);
   }
 
   return 'default';

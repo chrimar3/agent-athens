@@ -37,6 +37,7 @@ export function renderHamburgerMenu(): string {
     <li><button class="mobile-menu-search" type="button">Αναζήτηση</button></li>
     <li><a href="/">Εκδηλώσεις</a></li>
     <li><a href="/venues/">Χώροι</a></li>
+    <li><a href="/saved/">Αποθηκευμένα</a></li>
     <li><a href="/about/">Σχετικά</a></li>
     <li><a href="/llms.txt">Για AI Agents</a></li>
   </ul>
@@ -56,6 +57,7 @@ export function renderSiteFooter(): string {
         <ul class="footer-links">
           <li><a href="/">Εκδηλώσεις</a></li>
           <li><a href="/venues/">Χώροι</a></li>
+          <li><a href="/saved/">Αποθηκευμένα</a></li>
         </ul>
       </div>
       <div class="footer-col">

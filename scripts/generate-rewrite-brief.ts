@@ -191,6 +191,7 @@ function buildRewriteBrief(
   lines.push('11. **NAMED ENTITY ANCHORING**: Title/artist/performer name must appear beyond the opening paragraph.');
   lines.push('12. **GIVEN DATA BEFORE ATMOSPHERE**: Exhaust verified facts before adding sensory color. If word budget is tight, facts win.');
   lines.push('13. **TIMELINESS SIGNAL**: Every description must answer "why now?" — verifiable fact, contextual frame, or temporal anchor. Do not remove existing timeliness hooks unless factually wrong.');
+  lines.push('14. **VENUE-SPECIFIC INSIDER DETAIL**: Every rewrite must contain at least one concrete venue-or-event detail not derivable from structured fields (address, metro, price, capacity, event time) or venue-profile baseline. Qualifying: door timing, terrace/smoking policy, late-night atmosphere shifts, sightline notes, crowd-by-hour patterns, walking quirks. Woven into narrative prose — never a header or bullet list. Required for 201w+; attempted for ≤200w (may be omitted if topical load is heavy — log as "insider omitted: topical load"). Never fabricate: if no insider detail is verifiable, flag the gap rather than inventing one.');
   lines.push('');
 
   // Rewrite-specific instruction

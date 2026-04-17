@@ -6,7 +6,7 @@
 
 ## Overview
 
-AI-curated cultural events calendar for Athens, Greece. Static site generated from SQLite, deployed on Netlify. Updated daily from 10 scrapers.
+AI-curated cultural events calendar for Athens, Greece. Static site generated from SQLite, deployed on Netlify. Updated daily from 11 scrapers.
 
 - **Live:** https://agentathens.com
 - **Stack:** Bun + TypeScript + SQLite + Netlify
@@ -17,7 +17,7 @@ AI-curated cultural events calendar for Athens, Greece. Static site generated fr
 ## Architecture
 
 ```
-Scrapers (10 sources)
+Scrapers (11 sources)
     ↓
 SQLite Database (data/events.db)
     ↓
@@ -180,7 +180,7 @@ career_highlights TEXT
 
 ## Data Pipeline
 
-### 1. Scraping (10 active sources)
+### 1. Scraping (11 active sources)
 
 | Source | Type | Events |
 |--------|------|--------|
@@ -192,6 +192,7 @@ career_highlights TEXT
 | megaron.gr | Web scraper | 34 |
 | halfnote | Web scraper | 21 |
 | onassis | Web scraper | 5 |
+| snfcc | Web scraper (Puppeteer) | 4 |
 | benaki | Web scraper | 2 |
 | manual | Manual entry | 1 |
 

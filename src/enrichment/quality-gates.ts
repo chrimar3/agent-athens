@@ -186,8 +186,11 @@ export function validateQualityGates(
       title: event.title,
     });
     if (wordCount > matrixTarget.max * 1.1) {
-      issues.push(createIssue('technical', 'warning', 'OVER_MATRIX_MAX',
-        `${wordCount} words exceeds ${matrixTarget.max}w matrix max for ${category}`));
+      issues.push(createIssue('technical', 'error', 'OVER_MATRIX_MAX',
+        `${wordCount} words exceeds ${matrixTarget.max}w matrix max for ${category} by >10% — hard fail`));
+    } else if (wordCount > matrixTarget.max) {
+      issues.push(createIssue('technical', 'warning', 'WORD_COUNT_OVERSHOOT',
+        `${wordCount} words exceeds ${matrixTarget.max}w matrix max for ${category} — trim recommended`));
     }
     if (wordCount < matrixTarget.min * 0.9) {
       issues.push(createIssue('technical', 'error', 'UNDER_MATRIX_MIN',
@@ -205,9 +208,14 @@ export function validateQualityGates(
     }
   }
 
-  // Calculate scores
+  // Calculate scores — exclude universal non-scoring issues from the calculation
+  // (MISSING_PRACTICAL fires on ~100% of entries because it checks event metadata,
+  // not description quality. Keeping it as info but excluding from scoring so real
+  // quality differences surface in the scores.)
+  const NON_SCORING_CODES = new Set(['MISSING_PRACTICAL']);
   const schemaScore = calculateLayerScore(schemaIssues, 25);
-  const fiveQuestionScore = calculateLayerScore(fiveQuestionIssues, 40);
+  const scoringFiveQuestionIssues = fiveQuestionIssues.filter(i => !NON_SCORING_CODES.has(i.code));
+  const fiveQuestionScore = calculateLayerScore(scoringFiveQuestionIssues, 40);
   const resonanceScore = tier === 'stub' ? 35 : calculateLayerScore(resonanceIssues, 35);
 
   const totalScore = schemaScore + fiveQuestionScore + resonanceScore;
@@ -346,9 +354,9 @@ function validateFiveQuestionLayer(
     issues.push(
       createIssue(
         'five_question',
-        'info',
+        'warning',
         'NO_TIMELINESS',
-        'Consider adding timeliness hook (Why now?)'
+        'Missing timeliness signal — every description must answer "why now?" (Tier 1/2/3)'
       )
     );
   }
@@ -559,6 +567,34 @@ export function detectGenericContent(
       code: 'GENERIC_NO_EVENT_REFERENCE',
       message: 'Description doesn\'t reference the specific event or artist — could apply to anything'
     });
+  }
+
+  // Entity recurrence check: event/artist name must appear beyond the opening anchor
+  if (mentionsEvent && tier !== 'stub') {
+    // Split into sentences and check occurrences after the first sentence
+    const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const bodyText = sentences.slice(1).join('. ').toLowerCase();
+    const bodyOccurrences = titleWords.filter(w => w && bodyText.includes(w)).length;
+    const wordCount = description.trim().split(/\s+/).length;
+
+    // Required recurrences based on structure/length
+    let requiredRecurrences: number;
+    if (wordCount <= 200) {
+      requiredRecurrences = 1; // 2 total (1 in anchor + 1 in body)
+    } else if (wordCount <= 400) {
+      requiredRecurrences = 2; // 3 total
+    } else {
+      requiredRecurrences = 3; // 4 total
+    }
+
+    if (bodyOccurrences < requiredRecurrences) {
+      issues.push({
+        layer: 'resonance',
+        severity: 'warning',
+        code: 'ENTITY_RECURRENCE_FAIL',
+        message: `Event/artist name appears only ${bodyOccurrences} time(s) in body (need ${requiredRecurrences}+ beyond anchor) — mid-description must be anchored to this specific event`
+      });
+    }
   }
 
   // 2. Does it mention the venue?

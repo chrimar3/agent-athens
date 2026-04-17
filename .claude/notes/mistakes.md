@@ -17,6 +17,8 @@ Pitfalls encountered and how to avoid them.
 | No Puppeteer for protected sites | Onassis/Benaki returned empty pages | Use Puppeteer for sites with bot protection |
 | Hardcoding event dates | Scraped events expired quickly | Parse dates dynamically from page content |
 | No fallback data | Scraper failures = empty pages | Include known events as fallback |
+| SNFCC scraper pointed at wrong URL | `/el/events` was a WordPress photo gallery (canonical: `photo-gallery/events/`), not the events listing. Real events at `/ekdiloseis/` with category pages at `/event-category/<slug>/` | Always verify URL canonical (`<link rel="canonical">`) before building a scraper. First curl in Step 0 of the plan caught this. |
+| end_date missing from scrape-all.ts adapter | Onassis/Benaki/SNFCC exhibitions lost `end_date` when run through orchestrator; only standalone scraper preserved it | Added `end_date` to `ScrapedEvent` interface, INSERT SQL, and all exhibition adapters |
 
 ## Site Generation
 
@@ -25,6 +27,18 @@ Pitfalls encountered and how to avoid them.
 | Wrong event type for scraped data | SNFCC events typed as "other" | Explicitly set `type: 'exhibition'` in scraper |
 | Scroll lock race condition | Filter bar and hamburger menu both set `body.style.overflow` directly — closing one unlocked scroll while the other was still open | Use independent CSS classes (`scroll-locked` / `scroll-locked-menu`) so each component locks/unlocks independently |
 | Redundant "all-events" option in date panel | "Όλες 891" linked to `/` on the homepage — a dead link to the page the user is already on | Removed from `TIME_OPTIONS`; dismiss `×` on active date pills already clears the time filter |
+| data-slug format divergence in save feature | Card save buttons on browse page stored `data-event-slug="/events/abc-123/"` (full path via `href`) while event detail page stored bare slug `"abc-123"`. The /saved/ page prepends `/events/` → double prefix → 404. Root cause: `prepareCardData` returned `href` but not `slug`. | Always emit raw identifiers in `data-*` attributes. If a downstream consumer adds a prefix, emitters MUST store the unprefixed value. Fixed by adding `slug` to `CardData` interface + `prepareCardData` return + migration IIFE for legacy localStorage entries. |
+
+## URL structure — hub pages are root-level, not nested
+
+Greek hubs: `/{slug}/` (e.g. `/today/`, `/sabbatokyriako/`)
+English hubs: `/en/{slug}/` (e.g. `/en/today/`, `/en/this-weekend/`)
+
+NOT `/events/{slug}/` or `/en/events/{slug}/` — that path pattern doesn't exist.
+
+When diagnosing a 404 on any hub-related URL, first verify the URL itself is correct
+before assuming a generator/routing bug. Check `ls dist/{path}/` to confirm the
+expected file location before investigating further.
 
 ## Terminology
 

@@ -61,6 +61,16 @@ export interface UIStrings {
   hubColEntry: string;
   hubFreeEntry: string;
   hubTicketed: string;
+
+  // Save & Share
+  saveEvent: string;
+  unsaveEvent: string;
+  savedEvents: string;
+  savedEventsEmpty: string;
+  savedEventsDesc: string;
+  shareEvent: string;
+  linkCopied: string;
+  savedRequiresJs: string;
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -159,6 +169,15 @@ export const STRINGS: Record<Locale, UIStrings> = {
     hubColEntry: 'Είσοδος',
     hubFreeEntry: 'Ελ. είσοδος',
     hubTicketed: 'Εισιτήριο',
+
+    saveEvent: 'Αποθήκευση',
+    unsaveEvent: 'Αποθηκευμένο',
+    savedEvents: 'Αποθηκευμένα',
+    savedEventsEmpty: 'Δεν έχετε αποθηκευμένες εκδηλώσεις ακόμα.',
+    savedEventsDesc: 'Τα αποθηκευμένα σας events — agent athens πολιτιστικές εκδηλώσεις Αθήνα',
+    shareEvent: 'Κοινοποίηση',
+    linkCopied: 'Ο σύνδεσμος αντιγράφηκε!',
+    savedRequiresJs: 'Απαιτείται JavaScript για την προβολή αποθηκευμένων εκδηλώσεων.',
   },
 
   en: {
@@ -256,5 +275,14 @@ export const STRINGS: Record<Locale, UIStrings> = {
     hubColEntry: 'Entry',
     hubFreeEntry: 'Free',
     hubTicketed: 'Ticket',
+
+    saveEvent: 'Save',
+    unsaveEvent: 'Saved',
+    savedEvents: 'Saved Events',
+    savedEventsEmpty: 'You have no saved events yet.',
+    savedEventsDesc: 'Your saved events — agent athens cultural events Athens',
+    shareEvent: 'Share',
+    linkCopied: 'Link copied!',
+    savedRequiresJs: 'JavaScript is required to view saved events.',
   },
 };

@@ -14,6 +14,8 @@ interface ContentPageOptions {
   locale?: 'el' | 'en';
   /** Slug of the alternate-language version (for hreflang) */
   alternateSlug?: string;
+  noindex?: boolean;
+  extraScripts?: string;
 }
 
 /**
@@ -56,7 +58,7 @@ export function renderContentPage(
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${title} | agent-athens</title>
   <meta name="description" content="${metaDesc}">
-  <link rel="canonical" href="${BASE_URL}/${slug}/">${hreflangHtml}
+  <link rel="canonical" href="${BASE_URL}/${slug}/">${options?.noindex ? '\n  <meta name="robots" content="noindex">' : ''}${hreflangHtml}
   <meta property="og:title" content="${title} | agent-athens">
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${BASE_URL}/${slug}/">
@@ -88,6 +90,7 @@ ${renderAnalytics()}
   ${renderSiteFooter()}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
+  ${options?.extraScripts || ''}
 </body>
 </html>`;
 }

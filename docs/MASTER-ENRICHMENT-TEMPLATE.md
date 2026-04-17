@@ -339,6 +339,14 @@ Different event types need different investment levels based on their searchabil
 | **Theater (ancient drama)** | 180 words | 250 words | Include 2-3 sentences of ancient context. This is agent-athens's GEO differentiator — no competitor can match playwright history at historical venues. |
 | **Theater (contemporary)** | 120 words | 180 words | Director, theme, language/subtitles. |
 | **Premium showcase** | 400 words | 600 words | Full 8-section treatment. Signature events, major residencies, anchor programming. |
+| **Sports/running** | 80 words | 150 words | Route + cause + registration logistics. Schema carries distance, date, price. Participant decisions hinge on practical facts, not atmosphere. |
+| **Workshop/class** | 80 words | 150 words | What you'll make or learn + who teaches + what to bring. Registrants need facts. Atmospheric prose wastes word budget here. |
+| **Dance performance** | 120 words | 200 words | Company + choreographer + tradition. Short runs = tight word budget. Production-specific over genre-general. |
+| **Lecture/talk** | 80 words | 150 words | Speaker + topic + relevance. The talk itself is the content — the description orients, it does not pre-summarize. |
+| **Cinema/screening** | 80 words | 120 words | Film data lives in IMDb/Letterboxd. The description adds what's specific to *this screening* (outdoor venue, Q&A, restored print, festival context). |
+| **Conference/summit** | 150 words | 250 words | Multi-session needs orientation, not coverage. Headline speakers + why-attend + logistics. Avoid track-by-track summaries. |
+| **Nightlife/DJ set** | 80 words | 120 words | Identical logic to Concert (local/DJ). Genre + vibe + practical. Schema carries the rest. |
+| **Performance (misc.)** | 120 words | 200 words | Default for hybrid-format performance events (performance art, multidisciplinary, circus, etc.). |
 
 **Important:** These are ceilings, not floors to pad toward. An 85-word DJ set description that nails genre + vibe + practical info beats a 120-word padded one. Information density beats word count (correlation between word count and AI citation: r = 0.04).
 
@@ -489,7 +497,7 @@ Before publishing, verify every description passes these gates:
 | **Citation anchor** | First sentence is declarative "is" statement | Names event, venue, neighborhood |
 | **Information density** | Statistics or attributed facts present | At least one per enrichment where possible |
 | **Neighborhood + metro** | Hyperlocal fields present | Neighborhood name + nearest metro station |
-| **Insider detail** | At least one detail not in source listing | Would a local tell a friend this? |
+| **Insider detail** | Venue-or-event-specific detail woven into prose (door timing, terrace/smoking policy, late-night shifts, sightlines, crowd-by-hour patterns, walking quirks). Not address/metro/price/capacity/event time/venue-profile baseline. **Required for 201w+. Attempted for ≤200w.** | Would a local tell a friend this? |
 | **Word count by type** | Within range for this event type | See Variable Enrichment Matrix |
 | **Opening ≤50 words** | Citation anchor + sensory transport combined | Count words in first paragraph |
 | **No markdown tables** | Prose bridge replaces details table | No `\| Aspect \|` or `\|---\|` in description |
@@ -505,6 +513,8 @@ Before publishing, verify every description passes these gates:
 | **Entity recurrence** | Title artist/performer appears beyond opening paragraph | Ctrl+F artist name after first paragraph |
 | **Given data priority** | Category 1 facts appear before Category 2 atmosphere | First fact mention before first atmosphere sentence |
 | **Timeliness signal present** | Description answers "why now?" with Tier 1/2/3 signal | Contains temporal hook beyond event date |
+
+> **On the insider detail requirement:** For ≤200w three-part blocks, the detail may be omitted when the event's topical burden is heavy (ancient drama, large-scale opera, visiting artist requiring biographical setup) — log as "insider omitted: topical load" in the audit note rather than flagging as fail. If the venue is not in the Enrichment Knowledge Base and no insider detail is verifiable from source or context, lead with genre-prototypical experience (Safe Inferences) and flag the gap to the Editorial Director for KB expansion. Never fabricate insider detail to satisfy the rule.
 
 ## The Citability Test
 

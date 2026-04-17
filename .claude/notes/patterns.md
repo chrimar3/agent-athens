@@ -28,6 +28,26 @@ export async function scrapeSourceName(): Promise<ScrapedEvent[]> {
 }
 ```
 
+### Raw Identifiers in data-* Attributes
+
+When templates emit `data-*` attributes that will be consumed by downstream code (e.g., a `/saved/` page that constructs URLs), always store the **raw identifier** (bare slug, bare ID), not the pre-prefixed form (like `/events/slug/`). If the consumer adds a prefix, the emitter must NOT. Otherwise you get double-prefixing. Applies to any value shared between build-time templates and client-side hydration scripts.
+
+### Three-Layer Filtering (for venues with non-event programming)
+
+When a venue hosts both cultural events AND non-event content (sports, tours, facilities), use this stack:
+
+1. **URL pattern filter** — Only accept `/event/` URLs, reject `/venue/`, `/episkepsi/`, etc.
+2. **Title regex exclusion** — Catch sports, tours, fountains, camps, open calls by keyword
+3. **Category exclusion** — Never scrape entire categories that aren't cultural (sports, tours)
+
+Pattern is reusable for any venue with mixed content (e.g., Technopolis has Industrial Gas Museum tours alongside concerts).
+
+### Category-First Scraping
+
+When a source has per-category pages (WordPress taxonomy archives, etc.), scrape categories first for accurate type classification, then use the main listing page as fallback. Category pages give authoritative types without keyword guessing.
+
+Order: category pages → main events page (only adds events not already found in categories)
+
 ## Database Conversion Pattern
 
 Always use `eventToRow()` and `rowToEvent()` for database operations:
@@ -1438,3 +1458,6 @@ VENUES.some(v => venue.includes(v))
 ```
 
 When adding venues to PREMIUM_VENUES or MAJOR_CONCERT_VENUES, include ALL known name variants (Greek, English, abbreviated). The `venueMatches()` helper handles case/accent differences, but completely different names (e.g., "Στέγη Ιδρύματος Ωνάση" vs "Onassis Stegi") still need separate entries.
+
+### Suppressed Gate → Behavioral Rule Pattern
+When suppressing a scored quality gate (e.g., MISSING_PRACTICAL) to eliminate phantom penalties, consider whether a replacement **behavioral rule** preserves the intent without reintroducing automated scoring. Rule 24 (venue-specific insider detail) demonstrates this: the suppressed gate's intent (practical info) was reframed as a citation-oriented LLM instruction, with human review via the quality gate checklist rather than code enforcement.

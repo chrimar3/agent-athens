@@ -12,7 +12,7 @@
  *   bun run scripts/ping-indexnow.ts --dry-run   # Show what would be submitted
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const PROJECT_DIR = join(import.meta.dir, '..');
@@ -145,6 +145,7 @@ async function main() {
   console.log(`\n📦 Submitting in ${batches.length} batch${batches.length === 1 ? '' : 'es'} of ≤${BATCH_SIZE}...`);
 
   let batchFailures = 0;
+  let successCount = 0;
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
     const payload = {
@@ -162,6 +163,7 @@ async function main() {
       });
 
       if (response.status === 200 || response.status === 202) {
+        successCount += batch.length;
         console.log(`  ✅ Batch ${i + 1}/${batches.length}: ${response.status} ${response.statusText} (${batch.length} URLs)`);
       } else {
         batchFailures++;
@@ -177,6 +179,22 @@ async function main() {
     if (i < batches.length - 1) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
+  }
+
+  // Write machine-readable summary for monitoring scripts.
+  // try/catch: ping is production path, monitoring is observability side-effect.
+  try {
+    const summary = {
+      timestamp: new Date().toISOString(),
+      submitted: urlList.length,
+      success: successCount,
+      batches: batches.length,
+      failures: batchFailures,
+    };
+    writeFileSync(join(PROJECT_DIR, 'logs/indexnow-latest.json'), JSON.stringify(summary, null, 2));
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`⚠️  Monitoring summary write failed: ${msg}`);
   }
 
   if (batchFailures === 0) {

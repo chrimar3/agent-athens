@@ -1172,6 +1172,168 @@ div#main-content {
   body:has(.edp-mobile-bar) { padding-bottom: 80px; }
 }
 
+/* ── Save & Share Action Bar (Event Detail) ────── */
+
+.edp-action-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.edp-save-btn,
+.edp-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) 12px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--type-small);
+  font-family: inherit;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+  min-height: 36px;
+}
+
+.edp-save-btn:hover,
+.edp-share-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.edp-save-btn:focus-visible,
+.edp-share-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.edp-save-btn.is-saved {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.edp-save-btn.is-saved svg { fill: var(--accent-primary); }
+
+/* ── Card Save Button ──────────────────────────── */
+
+.card-save-btn {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: rgba(13, 13, 13, 0.6);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: var(--radius-circle);
+  color: var(--text-primary);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease-out);
+}
+
+.event-card:hover .card-save-btn,
+.card-save-btn:focus-visible { opacity: 1; }
+
+.card-save-btn.is-saved {
+  opacity: 1;
+  color: var(--accent-primary);
+}
+
+.card-save-btn.is-saved svg { fill: var(--accent-primary); }
+
+.card-save-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (hover: none) {
+  .card-save-btn { opacity: 1; }
+}
+
+/* ── Toast Notification ────────────────────────── */
+
+.aa-toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-modal);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-size: var(--type-small);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: toast-in 150ms var(--ease-out);
+  pointer-events: none;
+}
+
+.aa-toast.is-leaving {
+  animation: toast-out 150ms var(--ease-out) forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── Saved Events Page ─────────────────────────── */
+
+.saved-events-container { max-width: 800px; margin: 0 auto; }
+
+.saved-event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border-whisper);
+}
+
+.saved-event-item a {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.saved-event-item a:hover { color: var(--accent-primary); }
+
+.saved-event-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--space-xs);
+  font-size: var(--type-small);
+  font-family: inherit;
+}
+
+.saved-event-remove:hover { color: var(--status-error, #ef4444); }
+
+.saved-empty-state {
+  text-align: center;
+  padding: 64px var(--space-md);
+  color: var(--text-secondary);
+}
+
+.saved-empty-state svg {
+  margin-bottom: var(--space-md);
+  color: var(--text-muted);
+}
+
 /* ── Filter Bar ───────────────────────────────── */
 
 .filter-bar {

@@ -43,6 +43,7 @@ data/events.db-wal
 data/content-hashes.json
 temp-briefs/
 data/health-reports/
+data/search-visibility-log.csv
 
 # Local Netlify folder
 .netlify

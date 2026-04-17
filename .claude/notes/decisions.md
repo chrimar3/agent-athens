@@ -20,7 +20,7 @@ Accumulated decisions made during Agent Athens development.
 | Consolidate all 10 sources in scrape-all.ts | Single master orchestrator ensures consistent pipeline; sources run independently but share same adapter pattern | 2026-02 |
 | Use more.com as primary aggregator (not viva.gr) | more.com aggregates ALL viva.gr events plus many other sources; single source reduces duplication and API calls | 2026-02 |
 
-### Active Scraper Sources (10 total)
+### Active Scraper Sources (11 total)
 
 | Source | Type | Notes |
 |--------|------|-------|
@@ -31,9 +31,18 @@ Accumulated decisions made during Agent Athens development.
 | halfnote.gr | Venue | Jazz club - iCal feed |
 | residentadvisor | Nightlife | Electronic music events |
 | megaron.gr | Venue | Athens Concert Hall - classical |
-| snfcc | Venue | Stavros Niarchos Foundation |
+| snfcc | Venue | SNFCC (ΚΠΙΣΝ) - per-category Puppeteer scraping, sports excluded |
 | onassis | Venue | Onassis Stegi - cultural (Puppeteer) |
 | benaki | Venue | Benaki Museum - exhibitions (Puppeteer) |
+
+### SNFCC-Specific Decisions
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Canonical venue name: ΚΠΙΣΝ (not full Greek, not SNFCC English) | All other forms are aliases in athens-venues.json; matches existing DB convention | 2026-04 |
+| Sports/fitness excluded from SNFCC scraper | We're a cultural events platform, not a fitness calendar. SNFCC has extensive sports (running, basketball, climbing, pilates, kayak). To reconsider: change EXCLUDE_TITLE_PATTERNS in scrape-snfcc.ts | 2026-04 |
+| GNO (Εθνική Λυρική Σκηνή) remains separate venue from ΚΠΙΣΝ | Different organization operating within SNFCC complex; has its own venue entry in athens-venues.json | 2026-04 |
+| end_date propagated to ScrapedEvent in scrape-all.ts | Onassis/Benaki/SNFCC exhibitions all need end_date for lifecycle; was missing from orchestrator adapter | 2026-04 |
 
 ## Site Generation
 
@@ -1458,3 +1467,11 @@ sqlite3 data/events.db "SELECT COUNT(*) FROM events; PRAGMA integrity_check;"
 | Top issue | (hidden by legacy thresholds) | EN_OVER_MATRIX_MAX: 217 (42%) |
 | Phantom penalties | ~15pts per description | 0 |
 - **The 11 events stuck in `enrichment_queue.in_progress`** from the previous throughput session are still there. Different problem, not addressed here.
+
+## Rule 24: Venue-Specific Insider Detail (2026-04-16)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Added Rule 24 (venue-specific insider detail) as behavioral rule in both brief generators | GEO Strategist + Enrichment Writer alignment: descriptions need concrete venue/event-specific details not derivable from structured fields. Replaces suppressed MISSING_PRACTICAL gate with a citation-oriented reframe — insider context, not practical duplication. | 2026-04-16 |
+| Behavioral-only, not code-enforced | Phantom penalty avoidance: automated scoring of subjective "insider detail" would produce false negatives. The rule instructs the LLM; the audit checklist catches it in human review. | 2026-04-16 |
+| Updated existing quality gate row instead of adding new item | The "Insider detail" concept was already in the quality gate table (terse form). Sharpened it with threshold-by-structure requirements + added annotation paragraph for exceptions. | 2026-04-16 |

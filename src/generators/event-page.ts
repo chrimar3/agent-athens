@@ -28,6 +28,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
+import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript } from '../templates/action-bar';
 import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -469,6 +470,7 @@ ${renderAnalytics()}
             · ${priceDisplay}
           </div>
           ${ctaHtml}
+          ${renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale)}
         </header>
       </div>
     </section>
@@ -515,6 +517,10 @@ ${renderAnalytics()}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
   ${renderEventDetailScript()}
+  ${renderSavedEventsScript()}
+  ${renderSaveButtonScript()}
+  ${renderCardSaveScript()}
+  ${renderShareButtonScript()}
 </body>
 </html>`;
 }
@@ -559,6 +565,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
       <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
+      ${renderCardSaveButton(event.id, slug, event.title)}
     </div>
     <div class="card-body">
       <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
