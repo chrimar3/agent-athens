@@ -508,20 +508,21 @@ Before publishing, verify every description passes these gates:
 | **Opening includes event type keyword** | Genre/type word in first sentence | "concert," "exhibition," "theater," etc. present (Round 7) |
 | **Opening includes date** | Temporal reference in first sentence | Date or date range in anchor sentence (Round 7) |
 | **No empty schema description** | Every event has at minimum 1-sentence declarative description | See PART 0 minimum template (Round 7) |
-| **Word count matrix check** | Description word count within matrix range for this event type | countWords() vs getWordTarget() min/max |
+| **Word count matrix check** | Description word count within matrix range AND post-write cut procedure applied (cut whole paragraphs, not distributed trimming — see PART 4C) | countWords() vs getWordTarget() min/max |
 | **Structure matches word budget** | ≤200w = three-part-block, 201-400w = hybrid, 400+w = full-8-section | Check structure field from enrichment matrix |
-| **Entity recurrence** | Title artist/performer appears beyond opening paragraph | Ctrl+F artist name after first paragraph |
+| **Entity recurrence** | Event/artist name appears in anchor AND at least 2/3/4 more times in body (per PART 4D Named Entity Recurrence requirement) | Ctrl+F artist name — count body occurrences |
 | **Given data priority** | Category 1 facts appear before Category 2 atmosphere | First fact mention before first atmosphere sentence |
-| **Timeliness signal present** | Description answers "why now?" with Tier 1/2/3 signal | Contains temporal hook beyond event date |
+| **Timeliness signal present** | Description answers "why now?" with Tier 1/2/3 signal (PART 4E) — every description must have one | Contains temporal hook beyond event date |
 
 > **On the insider detail requirement:** For ≤200w three-part blocks, the detail may be omitted when the event's topical burden is heavy (ancient drama, large-scale opera, visiting artist requiring biographical setup) — log as "insider omitted: topical load" in the audit note rather than flagging as fail. If the venue is not in the Enrichment Knowledge Base and no insider detail is verifiable from source or context, lead with genre-prototypical experience (Safe Inferences) and flag the gap to the Editorial Director for KB expansion. Never fabricate insider detail to satisfy the rule.
 
-## The Citability Test
+## The Citability Test (updated)
 
 An AI answer engine should be able to extract **at least 2 standalone sentences** that:
 1. Contain specific, factual information
 2. Would make sense quoted without surrounding context
 3. Cannot work if you substitute a different artist/venue name
+4. **At least one of the two sentences must come from the description body, not the opening anchor.** An extracted mid-paragraph sentence that only says "the bass hits your chest" fails the test — it works for any electronic event at any venue. The mid-paragraph sentence must carry at least one named entity or event-specific fact.
 
 ---
 
@@ -554,6 +555,162 @@ When writing editorial content for hub pages, include structured comparison data
 | Statistics | 20+ throughout |
 | FAQ entries | 8+ |
 | Refresh cadence | Monthly |
+
+---
+
+# PART 4C: WORD COUNT ENFORCEMENT
+
+The Variable Enrichment Matrix (PART 1B) defines type-specific word count ceilings. These are hard gates, not targets. The audit of 1,497 enriched entries found ~70% of descriptions exceeded their matrix ceiling, with some event types (sports, workshop, dance) overshooting by 2.8×. Presenting the constraint as a ceiling in the brief is not sufficient — the writer needs a procedural enforcement step.
+
+## The Post-Write Word Count Gate
+
+After completing a description, before submitting to the gate checker:
+
+1. **Count the words** in the description body (exclude metadata, tags).
+2. **Compare against the matrix maximum** for this event's type.
+3. **If over the maximum**: identify the paragraph with the lowest ratio of named entities to total words — the paragraph that's doing the least specific work. Cut it entirely.
+4. **Recount**. If still over, repeat step 3.
+5. **Do not trim sentences from multiple paragraphs.** Cut whole paragraphs, starting with the weakest. Distributed trimming produces a description that's 10% shorter but retains the padding distribution that caused the overshoot.
+
+A description that exceeds its matrix maximum by more than 10% fails the quality gate regardless of prose quality. Exceeding the matrix ceiling by a single word is not a failure — these are editorial ceilings, not fence posts. But 530 words against a 200-word target is not an editorial judgment; it's structural disobedience.
+
+## Structure Selection by Word Budget
+
+The structure used must match the word budget, not the volume of source material found:
+
+| Matrix Maximum | Required Structure |
+|---|---|
+| ≤ 200 words | Three-part block (What is it? / Why it matters / What to expect) |
+| 201–400 words | Hybrid (anchor + condensed 8-section) |
+| > 400 words | Full 8-section |
+
+The full 8-section structure at 150 words creates pressure to fill sections that shouldn't exist at that length. A workshop where the writer found rich source material still gets the three-part block at 150 words — the solution to good source material at a short word budget is tighter sentences with more entities, not more sections. The structure is determined by the budget, not by what the writer knows.
+
+## The Cutting Hierarchy (For Overshoot Corrections)
+
+When cutting to hit a ceiling, preserve in this order (cut from the bottom up):
+
+1. **Keep** — the citation anchor (sentence 1)
+2. **Keep** — sensory transport (sentences 2–3)
+3. **Keep** — the specific timeliness hook (PART 4E)
+4. **Keep** — named entities (artist, venue, neighborhood, date)
+5. **Keep** — practical decision facts (Good to Know)
+6. **Keep** — the Filter section (honest self-selection)
+7. **Cut first** — generic context paragraphs (any paragraph where the content could apply to another event of the same type)
+8. **Cut second** — repetitive atmosphere (if two paragraphs do the same sensory work, merge to one)
+9. **Cut third** — transitional connective tissue (at short lengths, sections follow each other without bridges)
+
+---
+
+# PART 4D: GIVEN DATA PRIORITY & ENTITY ANCHORING
+
+The audit found that 54.4% of enriched descriptions don't reference the event or artist by name past the opening citation anchor, and 44.6% don't name the venue in the body. The descriptions that fail this test could apply to any event of the same genre — they're atmospheric but not specific. This is the single biggest citability problem in the enrichment pipeline.
+
+## The Over-Correction Diagnosis
+
+The template's verification discipline (PART 4A — Requires Verification, Never Generate) is correctly aimed at Category 3 claims: credentials, critical reception, historical claims, invented associations. When the writer hits one of these, the substitution ladder redirects the claim to a richer genre-grounded expression.
+
+But the verification discipline has been over-applied. The writer defaults to atmosphere even when writing about Category 1 facts (event title, artist name, venue name, date, genre, price) — facts that came directly from the scraper and are the most verified data in the entire pipeline. The writer is avoiding naming things it can safely name.
+
+## The Rule
+
+**Exhaust Category 1 before reaching for Category 2.** When writing the Context and Experience sections, use all available Given Data (event title, artist/company name, venue name, genre, date, price, any source-provided details) before adding Safe Inferences (genre-prototypical atmosphere). Atmosphere is texture around facts — not a substitute for them.
+
+The verification discipline applies to Category 3 (claims that could be wrong). It does not apply to Category 1 (facts the scraper already verified). Do not avoid naming things that are already in the source data.
+
+## Named Entity Recurrence Requirement
+
+The event title and primary artist/company name are Given Data. They must appear in the citation anchor sentence AND at least once more in the body of the description.
+
+| Structure | Minimum recurrences of event/artist name |
+|---|---|
+| Three-part block (≤200 words) | 2 occurrences across at least 2 of the 3 sections |
+| Hybrid (201–400 words) | 3 occurrences across the full text |
+| Full 8-section (400+ words) | 4 occurrences across the full text |
+
+A description where the artist name appears only in the opening sentence and never again fails the citability test. AI engines don't always extract from the opening — 53% of paragraph-level citations come from the middle. A mid-description passage needs to be anchored to the specific event, not to "a jazz evening" or "a DJ night."
+
+## Practical Test
+
+Run the interchange test on every description: swap the Context paragraph with the Context paragraph from another description of the same genre. If both still make sense, neither is specific enough. A well-anchored description cannot be swapped — the artist name, venue reference, or date-specific claim in the middle of the text breaks the substitution.
+
+---
+
+# PART 4E: TIMELINESS HIERARCHY
+
+The audit found 52.6% of descriptions don't answer "why attend this now rather than any other time?" Passing descriptions anchor in time beyond the event date — anniversaries, returns, milestones, edition numbers, seasonal context. Failing descriptions open with atmosphere and never establish temporal relevance.
+
+Not every event has a dramatic temporal hook. A random Tuesday DJ set doesn't have a "fifty years after" story. The template accommodates this with a three-tier hierarchy: try Tier 1 first, fall through to Tier 2 if nothing is there, use Tier 3 as a safety net.
+
+## Tier 1 — Research-Based Hooks (always preferred)
+
+Sourced from artist context, venue history, or event programming. When found, lead the Context section with the Tier 1 hook.
+
+- Anniversary (artist career milestone, album release anniversary, historical date)
+- Return/comeback after absence
+- First Athens appearance (or first in N years)
+- Final performance, farewell run, last-of-its-kind
+- Festival edition number (25th Jazz Festival, 7th edition)
+- Post-renovation reopening, venue milestone
+- Legacy connection (composer birth/death centenary, premiere anniversary)
+- Album release tied to this specific performance
+- Director's new interpretation of a canonical work
+
+## Tier 2 — Structural Hooks (use when Tier 1 doesn't exist)
+
+Sourced from the event's position within a season or programming structure. Less dramatic than Tier 1 but still event-specific.
+
+- Season opener/closer
+- Limited run (state how many performances: "three nights only")
+- Residency night (N of M)
+- Athens premiere (after touring from another city)
+- Greek premiere (international production landing here)
+- Curator's first show at this institution
+- Artist's Athens debut
+
+## Tier 3 — Contextual Fallbacks (always available)
+
+When no Tier 1 or Tier 2 hook exists, every event still has contextual relevance that can anchor it in time. Use one of these:
+
+- **Seasonal fit**: "an outdoor screening in the week Athens breaks 30°C," "the first spring trail run on Hymettus"
+- **Calendar position**: "closing weekend," "the Sunday slot that closes a month-long residency"
+- **Programming context**: "the third rebetiko booking this season at a venue that's historically booked electronic music"
+- **Athens scene context**: "part of a growing wave of experimental jazz programming in a city building its audience for it"
+
+The fallback sentence doesn't need to be dramatic. "Closing weekend of a three-week run" is a sufficient Tier 3 signal.
+
+## Exception: Recurring Fixtures
+
+Events that are recurring weekly/monthly fixtures (standing Saturday residency, monthly meetup, weekly open mic) satisfy the timeliness requirement with a single phrase acknowledging recurrence and duration: "the Saturday slot this collective has held for two years." The recurring nature itself is the temporal anchor.
+
+## Staleness Management
+
+Tier 1 hooks are date-anchored and perishable. A description that says "returns for its third consecutive year" becomes misleading if the same description is reused next year. When a Tier 1 hook is used:
+
+- Tag the event with `timeliness_expiry` in database metadata
+- On re-verification, check whether the hook still holds
+- If the hook has become stale, remove or replace it — a stale timeliness claim is worse than no timeliness claim
+
+Tier 2 and Tier 3 hooks expire naturally with the event and don't require explicit staleness flags.
+
+## Timeliness Hook Templates by Event Type
+
+| Event Type | Tier 1 likely sources | Tier 3 fallback pattern |
+|---|---|---|
+| Concert (major) | Album anniversary, tour cycle, Athens return, career milestone | "[Artist]'s first Athens date since [year]" / seasonal slot |
+| Concert (local/DJ) | Residency duration, label anniversary, collective's origin | "Week N of [format]" / "the slot this collective has held for [duration]" |
+| Exhibition | Career retrospective, institutional milestone, curator's first | "Running through [end date] — [N weeks] remaining" |
+| Theater (ancient) | Playwright date, venue restoration, director's first staging | "The [Nth] season of Athens Festival programming at [venue]" |
+| Theater (contemporary) | Season count, award recognition, premiere status | "[Nth] consecutive season" / "Athens premiere after [origin]" |
+| Sports/running | Edition number, cause tie-in, route change | "[Nth] edition" / "the first event of the spring running calendar" |
+| Workshop | Instructor milestone, curriculum shift, seasonal relevance | "Spring session" / "a format that's run [N] times at [venue]" |
+| Kids/family | Longevity, performance count, holiday tie-in | "Running every Sunday through [end date]" |
+| Festival (parent) | Edition number, headline changes, venue shift | Always has one — edition number is structural |
+| Cinema | Restored print, director Q&A, festival context, outdoor season | "Summer cinema season opener" / "restored print after [year]" |
+| Dance | Choreographer milestone, company anniversary, tour | "The company's [Nth] Athens appearance" |
+| Conference | Edition number, speaker lineup, format change | "[Nth] edition" / always structural |
+
+---
 
 # PART 5: VOICE PRINCIPLES
 

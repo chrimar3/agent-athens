@@ -79,6 +79,11 @@ Run through these before every description:
 21. Opening anchor includes "Athens" explicitly? (Round 7: machine grounding queries require city name)
 22. Opening anchor includes event type keyword? (Round 7: "concert," "exhibition," "theater," etc.)
 23. Opening anchor includes date or temporal reference? (Round 7: matches entity + date + category retrieval pattern)
+24. Word count within matrix range AND post-write cut procedure applied? (Cut whole paragraphs, not distributed trimming — see Master Template PART 4C)
+25. Structure matches word budget? (≤200w = three-part block; 201-400w = hybrid; >400w = full 8-section)
+26. Event/artist name appears in anchor AND at least 2/3/4 more times in body? (Per Named Entity Recurrence requirement, Master Template PART 4D)
+27. Category 1 Given Data exhausted before Category 2 atmosphere added? (Artist name, venue name, date, genre all present in body — not just anchor)
+28. Timeliness signal at Tier 1, 2, or 3 present? (Master Template PART 4E — every description must answer "why now?")
 
 ---
 
@@ -2046,6 +2051,72 @@ When writing hub page editorial (the static content for `/concerts`, `/exhibitio
 - 20%+ proper noun density
 - 1,500-2,500 words total (ceiling, not floor)
 - Q&A is the best-performing GEO format — the FAQ section is critical
+
+---
+
+# SECTION 18: TIMELINESS HOOK TEMPLATES
+
+Every description must answer "why attend this now?" Check in order: Tier 1 (research-based), Tier 2 (structural), Tier 3 (contextual fallback). See Master Template PART 4E for the full hierarchy.
+
+## Per-Event-Type Hook Sources
+
+### Concert (major)
+- **Tier 1**: Album release anniversary, Athens return after absence, tour cycle milestone, artist career milestone (decade, album count), collaboration debut
+- **Tier 2**: Athens leg of international tour, venue debut, limited run (state count)
+- **Tier 3**: Seasonal slot, calendar position in annual programming
+
+### Concert (local) / DJ set
+- **Tier 1**: Residency anniversary, label milestone, collective's decade, artist's first album on this label
+- **Tier 2**: Night N of M-night residency, season opener/closer for venue
+- **Tier 3**: Weekly/monthly fixture ("the Saturday slot this collective has held for N years"), seasonal transition
+
+### Exhibition
+- **Tier 1**: Artist career retrospective, institutional anniversary (museum's 50th year), curator's institutional debut, acquisition tied to show
+- **Tier 2**: Greek premiere of international show, final weeks of run, show coinciding with festival/biennial
+- **Tier 3**: Running dates with time remaining, seasonal programming slot
+
+### Theater (ancient drama)
+- **Tier 1**: Playwright anniversary (e.g., 2,500 years since first staging), venue restoration, director's first Epidaurus/Herodion staging
+- **Tier 2**: Athens Festival edition, season opener at venue
+- **Tier 3**: Summer festival season context
+
+### Theater (contemporary)
+- **Tier 1**: Season count (seventh consecutive season), award recognition (Dimitris Horn, Karolos Koun), performance milestone (300th staging)
+- **Tier 2**: Athens premiere after touring, limited revival run, director's return to the play
+- **Tier 3**: Season position, closing weekend
+
+### Sports / running
+- **Tier 1**: Edition number (10th Classic Marathon, 3rd Trail), cause partnership milestone, route change, first post-renovation event
+- **Tier 2**: First event of spring/fall running calendar, charity campaign anniversary
+- **Tier 3**: Seasonal first ("first spring trail"), weather-linked timing
+
+### Workshop / class
+- **Tier 1**: Instructor milestone (anniversary of teaching, book release tied to class), curriculum debut
+- **Tier 2**: Seasonal session (spring series opener), format count ("fifth time this workshop has run")
+- **Tier 3**: Seasonal relevance, recurring slot
+
+### Kids / family
+- **Tier 1**: Performance milestone (100th staging), company anniversary, season count
+- **Tier 2**: Limited run ("three Sundays only"), holiday tie-in
+- **Tier 3**: Weekly recurrence with end date ("running every Sunday through [date]")
+
+### Cinema / screening
+- **Tier 1**: Restored print, director Q&A, film anniversary, festival context
+- **Tier 2**: Retrospective series position, special format (35mm, outdoor)
+- **Tier 3**: Summer outdoor season, festival week
+
+### Dance
+- **Tier 1**: Choreographer milestone, company anniversary, tour premiere
+- **Tier 2**: Athens debut of production, season position
+- **Tier 3**: Season calendar position
+
+### Conference / summit
+- **Tier 1**: Edition number (structural — always available), speaker lineup change, format milestone
+- **Tier 2**: Industry event calendar position
+- **Tier 3**: Annual calendar slot
+
+### Festival (parent page)
+- **Tier 1**: Always structural — edition number is the default anchor
 
 ---
 

@@ -77,8 +77,16 @@ describe('Enrichment Matrix', () => {
       expect(classifyEvent({ type: 'other' })).toBe('default');
     });
 
-    test('performance type returns theater_contemporary', () => {
-      expect(classifyEvent({ type: 'performance', title: 'Dance Show' })).toBe('theater_contemporary');
+    test('performance type returns performance (own category)', () => {
+      expect(classifyEvent({ type: 'performance', title: 'Dance Show' })).toBe('performance');
+    });
+
+    test('new event types route to their own categories', () => {
+      expect(classifyEvent({ type: 'workshop' })).toBe('workshop');
+      expect(classifyEvent({ type: 'dance' })).toBe('dance');
+      expect(classifyEvent({ type: 'cinema' })).toBe('cinema');
+      expect(classifyEvent({ type: 'show' })).toBe('show');
+      expect(classifyEvent({ type: 'tech' })).toBe('tech');
     });
 
     // Bug fix: case-insensitive venue matching
