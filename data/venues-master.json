@@ -2846,6 +2846,17 @@
     "lng": 23.6733,
     "type": "live_music_venue"
   },
+  "Venue": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Navarchou Notara 29, Athina 106 83, Greece",
+    "lat": 37.989242,
+    "lng": 23.734637,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-19"
+  },
   "Vergina Theatro": {
     "name_en": "Vergina Theatro",
     "neighborhood": "Patission",
