@@ -1461,3 +1461,35 @@ When adding venues to PREMIUM_VENUES or MAJOR_CONCERT_VENUES, include ALL known 
 
 ### Suppressed Gate → Behavioral Rule Pattern
 When suppressing a scored quality gate (e.g., MISSING_PRACTICAL) to eliminate phantom penalties, consider whether a replacement **behavioral rule** preserves the intent without reintroducing automated scoring. Rule 24 (venue-specific insider detail) demonstrates this: the suppressed gate's intent (practical info) was reframed as a citation-oriented LLM instruction, with human review via the quality gate checklist rather than code enforcement.
+
+## Wall-Clock Watchdog Pattern (S89, 2026-04-20)
+
+When a bash script needs a timeout for a backgrounded process that might span a macOS system-sleep or clamshell-sleep event, `sleep N` in a background subshell is NOT safe — the kernel pauses the `sleep` process during sleep, so the watchdog never fires. `caffeinate -s` asserts against *idle* sleep only; it does not prevent lid-close sleep. The reliable pattern is a wall-clock loop using `date +%s`, which measures real time and keeps advancing through system sleep:
+
+```bash
+# Start the actual work in the background
+"$CLAUDE_BIN" -p "..." > "$LOG_FILE" 2>&1 &
+CLAUDE_PID=$!
+
+# Wall-clock watchdog — fires after TIMEOUT seconds of real time,
+# even if the laptop lid is closed for part of that time
+( WATCHDOG_END=$(( $(date +%s) + TIMEOUT ))
+  while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do sleep 30; done
+  kill "$CLAUDE_PID" 2>/dev/null
+  log_error "Batch timed out after ${TIMEOUT}s"
+) &
+TIMER_PID=$!
+
+# Wait for the work. If it finishes first, cancel the watchdog.
+wait "$CLAUDE_PID" && EXIT_CODE=0 || EXIT_CODE=$?
+kill "$TIMER_PID" 2>/dev/null || true
+wait "$TIMER_PID" 2>/dev/null || true
+```
+
+Key properties:
+- **`date +%s` advances during system sleep** — `sleep 30` inside the loop may be stretched by the kernel during sleep, but when the system wakes up `$(date +%s)` returns the correct real-time value and the loop exits promptly.
+- **30-second poll interval** — trades ±30s timeout granularity for ~120× fewer wakeups than a `sleep 1` loop. Well under any meaningful BATCH_TIMEOUT precision.
+- **Cancellation is unchanged** — after the real work finishes, `kill "$TIMER_PID"` + `wait "$TIMER_PID"` cleans up the watchdog. The `while` loop's `sleep 30` is interruptible by SIGTERM.
+- **Unconditional log after kill** — write the `log_error` line *after* the kill rather than chaining with `&&`, so the timeout event is always logged even if the work process already exited between the timeout-tick and the kill call.
+
+Use this pattern anywhere the previous `caffeinate -s sleep N` or `timeout N` idioms were used on macOS — it's strictly more correct on laptop hardware and equivalent on always-on hardware. See `scripts/auto-enrich.sh` for the production usage (warm-up watchdog at ~L263, per-batch watchdog at ~L318).
