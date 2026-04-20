@@ -38,7 +38,7 @@ if [[ -z "$CLAUDE_BIN" ]]; then
 fi
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=2
-EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. With parallel (S80) + 4 runs/day (S81): 15 events × 4 = 60 events/day target.
+EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. Architectural target: 10 events × 6 slots = 60 events/day (2 batches × 5 events × 6 daily triggers). S89 (2026-04-20): overnight slots 01:00 + 22:00 unloaded — laptop lid closed; effective throughput is 40/day until always-on hardware available.
 MIN_QUEUE=3
 BATCH_TIMEOUT=1800  # 30 minutes max per batch (batches avg 15-20 min)
 
@@ -105,15 +105,18 @@ fi
 #   1. .auto-enrich.lock — prevents overlapping runs
 #   2. Lock mtime guard (LOCK_MAX_AGE) — auto-recovers stuck processes
 #   3. Orphan cleanup on startup — kills zombie claude processes
-#   4. caffeinate -s watchdog — survives clamshell on AC power
+#   4. Wall-clock watchdog (S89) — `date +%s` advances through system sleep,
+#      so BATCH_TIMEOUT fires correctly even with the lid closed. Replaces
+#      the previous `caffeinate -s sleep` which was paused by clamshell sleep
+#      and stretched 30-min timeouts into multi-hour hangs.
 #   5. launchd retry — next trigger runs normally after a skip/failure
 #
-# Worst case on battery + lid close: one run hangs until lid opens, lock mtime
-# recovers within LOCK_MAX_AGE (7200s = 2h), next trigger runs normally.
-# This is better than zero enrichment for days.
+# Worst case on battery + lid close: BATCH_TIMEOUT (1800s) fires as designed,
+# the batch is killed, and the next launchd trigger runs normally.
 #
 # Original rationale preserved: specs/claude-hang-diagnostic.md Section 5,
-# R1.A test 2026-04-08 (753s for caffeinate -i sleep 300 on battery+clamshell).
+# R1.A test 2026-04-08 (753s for caffeinate -i sleep 300 on battery+clamshell)
+# — this data motivated the wall-clock replacement in S89.
 # ============================================================================
 
 # ============================================================================
@@ -255,17 +258,30 @@ log "Generated ${#BATCH_FILES[@]} batch file(s)"
 # 8. Warm up Claude CLI (forces startup overhead into a throwaway call)
 log "Warming up Claude CLI..."
 # macOS lacks GNU timeout — use background process with watchdog.
-# caffeinate -s asserts no-system-sleep on AC power. Battery case is filtered
-# by the precondition check at the top of this script, so we are guaranteed
-# to be on AC by this point.
+# Wall-clock watchdog: `date +%s` measures real time and advances through
+# system/clamshell sleep, unlike `sleep N` which is paused by the kernel.
+# caffeinate was previously used to assert against idle sleep but did NOT
+# prevent lid-close sleep, so timeouts could stretch to hours (S89).
 "$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json > /dev/null 2>&1 &
 WARMUP_PID=$!
-( caffeinate -s sleep 120 && kill "$WARMUP_PID" 2>/dev/null ) &
+( WATCHDOG_END=$(( $(date +%s) + 120 ))
+  while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do sleep 30; done
+  kill "$WARMUP_PID" 2>/dev/null
+) &
 WATCHDOG_PID=$!
 wait "$WARMUP_PID" 2>/dev/null || true
 kill "$WATCHDOG_PID" 2>/dev/null || true
 wait "$WATCHDOG_PID" 2>/dev/null || true
 log "Warm-up complete"
+
+# 8b. Pre-flight auth check (S89) — fail fast on 401 instead of burning
+#     30 min of BATCH_TIMEOUT per batch when the CLI session is expired.
+log "Running auth pre-check..."
+if ! echo "ok" | "$CLAUDE_BIN" -p --output-format json >/dev/null 2>&1; then
+  log_error "Claude CLI auth check failed — aborting enrichment run"
+  exit 1
+fi
+log "Auth pre-check passed"
 
 # 9. Run claude -p on all batches in parallel (S80)
 #    Each batch's save-batch.ts invocation (inside its own claude -p) opens its
@@ -296,13 +312,17 @@ for brief in "${BATCH_FILES[@]}"; do
         >> "$LOG_FILE" 2>&1 &
     CLAUDE_PID=$!
 
-    # Per-batch watchdog timer.
-    # caffeinate -s asserts no-system-sleep so the timer survives lid-close on AC power.
-    # On battery, the precondition check at the top of this script causes early exit,
-    # so we are guaranteed to be on AC by this point.
-    # Empirical: caffeinate -i was insufficient (R1.A test 2026-04-08 measured 753s for
-    # `caffeinate -i sleep 300` on battery+clamshell). See specs/claude-hang-diagnostic.md.
-    ( caffeinate -s sleep "$BATCH_TIMEOUT" && kill "$CLAUDE_PID" 2>/dev/null && log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)" ) &
+    # Per-batch watchdog timer — wall-clock based (S89).
+    # `date +%s` advances through system/clamshell sleep; `sleep N` does not.
+    # Previously `caffeinate -s sleep N` was used to survive idle sleep, but
+    # caffeinate does not prevent lid-close sleep — sleeps of 30 min stretched
+    # to hours when the laptop was closed, blocking subsequent batches.
+    # See specs/claude-hang-diagnostic.md for the original caffeinate tests.
+    ( WATCHDOG_END=$(( $(date +%s) + BATCH_TIMEOUT ))
+      while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do sleep 30; done
+      kill "$CLAUDE_PID" 2>/dev/null
+      log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)"
+    ) &
     TIMER_PID=$!
 
     CLAUDE_PIDS+=("$CLAUDE_PID")
