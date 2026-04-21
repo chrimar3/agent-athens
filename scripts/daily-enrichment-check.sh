@@ -19,6 +19,11 @@ LOG_DIR="$PROJECT_DIR/logs"
 REPORT_DIR="$HOME/Desktop/Agent-Athens/enrichment AgentAthens"
 THRESHOLD=5  # Minimum events to trigger notification
 
+# Throughput constants — mirror scripts/auto-enrich.sh; update together if those change.
+EVENTS_PER_BATCH=5     # matches EVENTS_PER_BATCH in auto-enrich.sh
+BATCHES_PER_RUN=2      # matches MAX_BATCHES in auto-enrich.sh
+ACTIVE_DAILY_SLOTS=4   # 10:00, 13:00, 16:00, 19:00 (01:00 + 22:00 unloaded S89)
+
 # Ensure log and report directories exist
 mkdir -p "$LOG_DIR"
 mkdir -p "$REPORT_DIR"
@@ -123,17 +128,18 @@ if [ "$UNENRICHED" -gt 0 ]; then
 
   echo "" >> "$REPORT_FILE"
 
-  # Calculate batches (3 events per batch, ~8 min each)
-  BATCHES=$(( (UNENRICHED + 2) / 3 ))
-  EST_TIME=$(( BATCHES * 8 ))
+  # Derived throughput — see constants at top of script
+  EVENTS_PER_DAY=$(( BATCHES_PER_RUN * EVENTS_PER_BATCH * ACTIVE_DAILY_SLOTS ))
+  BATCHES_NEEDED=$(( (UNENRICHED + EVENTS_PER_BATCH - 1) / EVENTS_PER_BATCH ))
+  DAYS_TO_CLEAR=$(( (UNENRICHED + EVENTS_PER_DAY - 1) / EVENTS_PER_DAY ))
 
   cat >> "$REPORT_FILE" << EOF
 
 ENRICHMENT ESTIMATE
 -------------------
-Events to enrich: $UNENRICHED
-Batches of 3:     $BATCHES
-Est. time:        ~$EST_TIME minutes
+Events to enrich:  $UNENRICHED
+Batches ($EVENTS_PER_BATCH each):   $BATCHES_NEEDED
+Days to clear:     ~$DAYS_TO_CLEAR (at $EVENTS_PER_DAY/day = $ACTIVE_DAILY_SLOTS slots x $BATCHES_PER_RUN batches x $EVENTS_PER_BATCH events)
 
 HOW TO ENRICH (AUTOMATED)
 --------------------------
