@@ -56,6 +56,14 @@ const today = DateTime.now().setZone('Europe/Athens').toISODate();
 
 ### Runtime — Bun, never Node.js
 
+### Institutional memory is historical record
+
+Applies to: `docs/session-log.md`, `docs/known-issues.md`, `.claude/notes/mistakes.md`, `.claude/notes/patterns.md`, `.claude/notes/decisions.md`.
+
+Do not retrofit fields, normalize structure, or assert negatives (e.g. "None", "N/A") for entries that predate the current format. Format changes apply going forward only. Older entries using different field names (e.g. "Next priority" instead of "Open items") are signal about how the process evolved — do not rewrite them to match the current template.
+
+Policy decisions about what fields to keep, drop, or compress in these files belong to the user, not the executor. If tempted to compress for file size, stop and ask first.
+
 ---
 
 ## Commands
@@ -146,6 +154,12 @@ Before venue changes: `/project:pre-venue-check`
 ## After Every Session
 
 Update with anything new discovered:
+
+**Always:**
 - `.claude/notes/mistakes.md` — bugs found (format: `| What | Why | Fix |`)
 - `.claude/notes/patterns.md` — patterns discovered
 - `.claude/notes/decisions.md` — architecture choices
+- `docs/session-log.md` — append `### Session N — Title` entry (Plan / What happened / Verified / Learnings / Open items). Session number = last + 1.
+
+**Only when relevant:**
+- `docs/known-issues.md` — add or update ONLY if the session surfaced a recurring issue, or changed an existing entry's Status. One-shot bug fixes belong in `mistakes.md`, not here. Use severity tiers (🔴/🟡/🟢) and always fill in First seen / Frequency / Symptoms / Workaround / Fix plan / Status.
