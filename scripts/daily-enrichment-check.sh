@@ -16,11 +16,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 DB_PATH="$PROJECT_DIR/data/events.db"
 LOG_DIR="$PROJECT_DIR/logs"
-REPORT_DIR="$HOME/Desktop"
+REPORT_DIR="$HOME/Desktop/Agent-Athens/enrichment AgentAthens"
 THRESHOLD=5  # Minimum events to trigger notification
 
-# Ensure log directory exists
+# Ensure log and report directories exist
 mkdir -p "$LOG_DIR"
+mkdir -p "$REPORT_DIR"
 
 # Log file
 LOG_FILE="$LOG_DIR/enrichment-check.log"
