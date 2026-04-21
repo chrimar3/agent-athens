@@ -86,8 +86,27 @@ export function renderSiteFooter(): string {
 </footer>`;
 }
 
-/** Build-time cache-buster for static assets (changes every deploy) */
-const BUILD_STAMP = Date.now().toString(36);
+/**
+ * Build-time cache-buster for CSS — content-addressed.
+ * Hashes ALL .css files in src/styles/ so the stamp is stable across builds
+ * when CSS hasn't changed. Required for the incremental build cache: a
+ * timestamp-based stamp made every HTML page differ on every build.
+ */
+function computeCssStamp(): string {
+  const { readdirSync, readFileSync } = require('fs') as typeof import('fs');
+  const { join } = require('path') as typeof import('path');
+  const { createHash } = require('crypto') as typeof import('crypto');
+  const stylesDir = join(import.meta.dir, '../styles');
+  const hash = createHash('sha256');
+  const files = readdirSync(stylesDir).filter((f: string) => f.endsWith('.css')).sort();
+  for (const file of files) {
+    hash.update(file);
+    hash.update(readFileSync(join(stylesDir, file)));
+  }
+  return hash.digest('hex').substring(0, 10);
+}
+
+const BUILD_STAMP = computeCssStamp();
 
 export function renderCssLink(): string {
   return `<link rel="stylesheet" href="/styles/design-system.css?v=${BUILD_STAMP}">`;

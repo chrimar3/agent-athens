@@ -11,7 +11,8 @@
  * Uses satori for flexbox-to-SVG rendering, then resvg for PNG output.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
@@ -277,14 +278,14 @@ export async function generateOgImages(): Promise<void> {
 
   // Site default
   const siteDefault = await generateSiteDefault();
-  writeFileSync(join(ogDir, 'agentathens-default.png'), siteDefault);
+  writeFileIfChangedSync(join(ogDir, 'agentathens-default.png'), siteDefault);
 
   // Type defaults
   const types = Object.keys(TYPE_COLORS);
   for (const type of types) {
     const png = await generateTypeDefault(type);
     const filename = `${type.replace('_', '-')}-default.png`;
-    writeFileSync(join(ogDir, filename), png);
+    writeFileIfChangedSync(join(ogDir, filename), png);
   }
 
   console.log(`  ✓ Generated ${types.length + 1} OG images`);
@@ -450,7 +451,7 @@ function loadOgCache(): Record<string, string> {
 }
 
 function saveOgCache(cache: Record<string, string>): void {
-  writeFileSync(join(DIST_DIR, '.og-cache.json'), JSON.stringify(cache));
+  writeFileIfChangedSync(join(DIST_DIR, '.og-cache.json'), JSON.stringify(cache));
 }
 
 /**
@@ -485,7 +486,7 @@ export async function generateEventOgImages(events: Event[]): Promise<number> {
     }
 
     const png = await generateEventOgImage(event);
-    writeFileSync(imagePath, png);
+    writeFileIfChangedSync(imagePath, png);
   }
 
   saveOgCache(newCache);
@@ -635,7 +636,7 @@ export async function generateHubOgImages(
 
     const accentColor = getHubAccentColor(config);
     const png = await generateHubOgImage(config.titleEl, eventCount, accentColor);
-    writeFileSync(join(hubsDir, `${config.slug}.png`), png);
+    writeFileIfChangedSync(join(hubsDir, `${config.slug}.png`), png);
     count++;
   }
 
@@ -655,7 +656,7 @@ export async function generateFavicons(): Promise<void> {
   <rect width="32" height="32" rx="6" fill="#111114"/>
   <text x="16" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#5ba4e6" text-anchor="middle">a</text>
 </svg>`;
-  writeFileSync(join(DIST_DIR, 'favicon.svg'), faviconSvg);
+  writeFileIfChangedSync(join(DIST_DIR, 'favicon.svg'), faviconSvg);
 
   // 32×32 PNG favicon via satori
   const favicon32Svg = await satori(
@@ -687,7 +688,7 @@ export async function generateFavicons(): Promise<void> {
     },
     { width: 32, height: 32, fonts: SATORI_FONTS }
   );
-  writeFileSync(join(DIST_DIR, 'favicon-32x32.png'), svgToPng(favicon32Svg, 32));
+  writeFileIfChangedSync(join(DIST_DIR, 'favicon-32x32.png'), svgToPng(favicon32Svg, 32));
 
   // 180×180 Apple Touch Icon
   const appleSvg = await satori(
@@ -719,7 +720,7 @@ export async function generateFavicons(): Promise<void> {
     },
     { width: 180, height: 180, fonts: SATORI_FONTS }
   );
-  writeFileSync(join(DIST_DIR, 'apple-touch-icon.png'), svgToPng(appleSvg, 180));
+  writeFileIfChangedSync(join(DIST_DIR, 'apple-touch-icon.png'), svgToPng(appleSvg, 180));
 
   console.log('  ✓ Generated favicon set (SVG + 32px PNG + Apple Touch Icon)');
 }

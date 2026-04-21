@@ -10,7 +10,8 @@
  * 5. Seasonal narrative (English-only, quarterly-swapped)
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { writeHtmlIfChangedSync, writeJsonApiIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event, HubConfig, HubFaq, TimeRange } from '../types';
 import { filterEvents } from '../utils/filters';
@@ -525,7 +526,7 @@ export function generateHubPages(allEvents: Event[]): string[] {
 
     // Write HTML to dist
     const filepath = join(DIST_DIR, `${config.slug}.html`);
-    writeFileSync(filepath, html);
+    writeHtmlIfChangedSync(filepath, html);
 
     // Write enhanced JSON API
     const apiDir = join(DIST_DIR, 'api');
@@ -550,10 +551,7 @@ export function generateHubPages(allEvents: Event[]): string[] {
       }
     };
 
-    writeFileSync(
-      join(apiDir, `${config.slug}.json`),
-      JSON.stringify(jsonData, null, 2)
-    );
+    writeJsonApiIfChangedSync(join(apiDir, `${config.slug}.json`), jsonData);
 
     console.log(`  ✓ /${config.slug} (${filteredEvents.length} events, ${filteredEvents.filter(e => e.fullDescription).length} enriched)`);
     generatedSlugs.push(config.slug);

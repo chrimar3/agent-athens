@@ -1,6 +1,7 @@
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import type { ContentHashManifest } from './content-hasher';
+import { writeFileIfChangedSync } from '../utils/write-if-changed';
 
 import { BASE_URL } from '../config/site-url';
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -172,12 +173,12 @@ export function generateSplitSitemaps(
     { name: 'sitemap-editorial.xml', count: buckets.editorial.length },
   ];
 
-  writeFileSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest, priorityOverrides, bilingualSlugs));
-  writeFileSync(join(DIST_DIR, 'sitemap-venues.xml'), buildSitemapXml(buckets.venues, manifest));
-  writeFileSync(join(DIST_DIR, 'sitemap-editorial.xml'), buildSitemapXml(buckets.editorial, manifest, undefined, undefined, bilingualHubSlugs));
+  writeFileIfChangedSync(join(DIST_DIR, 'sitemap-events.xml'), buildSitemapXml(buckets.events, manifest, priorityOverrides, bilingualSlugs));
+  writeFileIfChangedSync(join(DIST_DIR, 'sitemap-venues.xml'), buildSitemapXml(buckets.venues, manifest));
+  writeFileIfChangedSync(join(DIST_DIR, 'sitemap-editorial.xml'), buildSitemapXml(buckets.editorial, manifest, undefined, undefined, bilingualHubSlugs));
 
   // Write sitemap index
-  writeFileSync(
+  writeFileIfChangedSync(
     join(DIST_DIR, 'sitemap-index.xml'),
     buildSitemapIndex(childFiles.map(f => f.name))
   );

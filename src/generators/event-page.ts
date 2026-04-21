@@ -8,7 +8,8 @@
  * The event ID prefix ensures URL stability when titles change.
  */
 
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
+import { mkdirSync, existsSync, readFileSync } from 'fs';
+import { writeFileIfChangedSync, writeHtmlIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
 import { generatePracticalBlock } from './practical-block';
@@ -662,7 +663,7 @@ export async function generateEventPages(events: Event[]): Promise<{
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
     }
-    writeFileSync(join(pageDir, 'index.html'), html);
+    writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
 
     urls.push(urlPath);
   }
@@ -710,7 +711,7 @@ export function saveSlugHistory(
     newHistory[eventId] = allSlugs.slice(0, 3);
   }
 
-  writeFileSync(historyPath, JSON.stringify(newHistory, null, 2));
+  writeFileIfChangedSync(historyPath, JSON.stringify(newHistory, null, 2));
 }
 
 /**

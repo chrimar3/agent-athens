@@ -9,7 +9,8 @@
  * - Venue must have complete data (address + neighborhood)
  */
 
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
+import { mkdirSync, existsSync, readFileSync } from 'fs';
+import { writeHtmlIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
@@ -313,7 +314,7 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
     }
-    writeFileSync(join(pageDir, 'index.html'), html);
+    writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
 
     urls.push(`venues/${venue.slug}`);
   }
@@ -399,5 +400,5 @@ ${renderAnalytics()}
 </html>`;
 
   const venuesDir = join(DIST_DIR, 'venues');
-  writeFileSync(join(venuesDir, 'index.html'), html);
+  writeHtmlIfChangedSync(join(venuesDir, 'index.html'), html);
 }

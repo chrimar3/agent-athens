@@ -2,7 +2,8 @@
 
 // Main site generator - generates all combinatorial pages
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'fs';
+import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats } from './utils/write-if-changed';
 import { join, dirname } from 'path';
 import { Database } from 'bun:sqlite';
 import type { Event, EventType, TimeRange, PriceFilter, Filters, HubConfig } from './types';
@@ -95,6 +96,7 @@ const CATEGORIES_CONFIG = JSON.parse(
 
 async function main() {
   const buildStartTime = Date.now();
+  resetWriteStats();
   console.log('🚀 Starting site generation...\n');
 
   // Create dist directory
@@ -104,7 +106,7 @@ async function main() {
 
   // Copy design system CSS to dist
   mkdirSync(join(DIST_DIR, 'styles'), { recursive: true });
-  copyFileSync(
+  copyFileIfChangedSync(
     join(import.meta.dir, 'styles/design-system.css'),
     join(DIST_DIR, 'styles/design-system.css')
   );
@@ -116,7 +118,7 @@ async function main() {
     mkdirSync(eventImgDest, { recursive: true });
     const imageFiles = readdirSync(eventImgSrc).filter(f => f.endsWith('.webp'));
     for (const file of imageFiles) {
-      copyFileSync(join(eventImgSrc, file), join(eventImgDest, file));
+      copyFileIfChangedSync(join(eventImgSrc, file), join(eventImgDest, file));
     }
     console.log(`📸 Copied ${imageFiles.length} event images to dist/`);
   }
@@ -128,7 +130,7 @@ async function main() {
     mkdirSync(venueImgDest, { recursive: true });
     const venueImageFiles = readdirSync(venueImgSrc).filter(f => f.endsWith('.webp'));
     for (const file of venueImageFiles) {
-      copyFileSync(join(venueImgSrc, file), join(venueImgDest, file));
+      copyFileIfChangedSync(join(venueImgSrc, file), join(venueImgDest, file));
     }
     if (venueImageFiles.length > 0) {
       console.log(`📸 Copied ${venueImageFiles.length} venue images to dist/`);
@@ -225,7 +227,7 @@ async function main() {
   if (!existsSync(normalizedPath)) {
     mkdirSync(normalizedPath, { recursive: true });
   }
-  writeFileSync(
+  writeFileIfChangedSync(
     join(normalizedPath, 'events.json'),
     JSON.stringify(events, null, 2)
   );
@@ -236,7 +238,7 @@ async function main() {
 
   // Copy Fuse.js ESM to dist/scripts/
   mkdirSync(join(DIST_DIR, 'scripts'), { recursive: true });
-  copyFileSync(
+  copyFileIfChangedSync(
     join(import.meta.dir, '../node_modules/fuse.js/dist/fuse.mjs'),
     join(DIST_DIR, 'scripts/fuse.mjs')
   );
@@ -317,16 +319,16 @@ async function main() {
   const homeMetadata = buildPageMetadata({}, homepageEvents.length);
   const homeHtml = renderPage(homeMetadata, homepageEvents, undefined, homepagePreContent, 'el', homepagePostContent);
   const homeFilepath = join(DIST_DIR, 'index.html');
-  writeFileSync(homeFilepath, homeHtml);
+  writeHtmlIfChangedSync(homeFilepath, homeHtml);
 
   // Write homepage JSON API
   const homeApiDir = join(DIST_DIR, 'api');
   if (!existsSync(homeApiDir)) {
     mkdirSync(homeApiDir, { recursive: true });
   }
-  writeFileSync(
+  writeJsonApiIfChangedSync(
     join(homeApiDir, 'index.json'),
-    JSON.stringify({
+    {
       filters: {},
       events: homepageEvents,
       meta: {
@@ -335,7 +337,7 @@ async function main() {
         lastUpdate: new Date().toISOString(),
         url: `${BASE_URL}/`
       }
-    }, null, 2)
+    }
   );
 
   generatedUrls.push('index');
@@ -429,7 +431,7 @@ async function main() {
     const html = renderHubPage(config, filteredEvents, events, undefined, 'en');
     if (!html) continue;
     mkdirSync(join(DIST_DIR, 'en', config.slug), { recursive: true });
-    writeFileSync(join(DIST_DIR, 'en', config.slug, 'index.html'), html);
+    writeHtmlIfChangedSync(join(DIST_DIR, 'en', config.slug, 'index.html'), html);
     generatedUrls.push(`en/${config.slug}`);
     bilingualHubSlugs.add(config.slug);
     pagesGenerated++;
@@ -448,7 +450,7 @@ async function main() {
     const overflowHtml = renderOverflowPage(config, filteredEvents, events, 'el');
     const overflowDir = join(DIST_DIR, config.slug, 'all');
     mkdirSync(overflowDir, { recursive: true });
-    writeFileSync(join(overflowDir, 'index.html'), overflowHtml);
+    writeHtmlIfChangedSync(join(overflowDir, 'index.html'), overflowHtml);
     // NOT added to generatedUrls — noindex pages excluded from sitemap
     overflowCount++;
 
@@ -457,7 +459,7 @@ async function main() {
       const enHtml = renderOverflowPage(config, filteredEvents, events, 'en');
       const enDir = join(DIST_DIR, 'en', config.slug, 'all');
       mkdirSync(enDir, { recursive: true });
-      writeFileSync(join(enDir, 'index.html'), enHtml);
+      writeHtmlIfChangedSync(join(enDir, 'index.html'), enHtml);
       overflowCount++;
     }
   }
@@ -505,7 +507,7 @@ async function main() {
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
     }
-    writeFileSync(join(pageDir, 'index.html'), html);
+    writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
     generatedUrls.push(`en/events/${slug}`);
   }
   pagesGenerated += englishEvents.length;
@@ -525,14 +527,14 @@ async function main() {
 
   // Initialize _redirects (sitemap redirect only — /en/* redirect removed for bilingual pages)
   const redirectsPath = join(DIST_DIR, '_redirects');
-  writeFileSync(redirectsPath, `https://agentathens.netlify.app/*  ${BASE_URL}/:splat  301!\n/sitemap.xml  /sitemap-index.xml  301\n`);
+  writeFileIfChangedSync(redirectsPath, `https://agentathens.netlify.app/*  ${BASE_URL}/:splat  301!\n/sitemap.xml  /sitemap-index.xml  301\n/en  /en/today  302\n/en/  /en/today  302\n`);
 
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
   const redirects = generateRedirects(currentSlugs, previousSlugHistory);
   if (redirects.length > 0) {
     const existingRedirects = readFileSync(redirectsPath, 'utf-8');
-    writeFileSync(redirectsPath, existingRedirects + '\n' + redirects.join('\n'));
+    writeFileIfChangedSync(redirectsPath, existingRedirects + '\n' + redirects.join('\n'));
     console.log(`  ✓ Generated ${redirects.length} redirects for changed slugs`);
   }
 
@@ -849,7 +851,7 @@ async function main() {
       if (!existsSync(pageDir)) {
         mkdirSync(pageDir, { recursive: true });
       }
-      writeFileSync(join(pageDir, 'index.html'), html);
+      writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
       generatedUrls.push(`${page.slug}/`);
       pagesGenerated++;
       console.log(`  ✓ /${page.slug}/`);
@@ -881,7 +883,7 @@ async function main() {
     });
     const savedPageDir = join(DIST_DIR, savedSlug);
     if (!existsSync(savedPageDir)) mkdirSync(savedPageDir, { recursive: true });
-    writeFileSync(join(savedPageDir, 'index.html'), savedHtml);
+    writeHtmlIfChangedSync(join(savedPageDir, 'index.html'), savedHtml);
     generatedUrls.push(`${savedSlug}/`);
     pagesGenerated++;
     console.log(`  ✓ /${savedSlug}/`);
@@ -975,6 +977,7 @@ async function main() {
   console.log(`   - ${categoryUrls.length} category pages`);
   console.log(`🗺️  Sitemaps: ${sitemapUrlCount} URLs across 3 split sitemaps`);
   console.log(`🔐 Content hashes: ${unchangedCount} preserved, ${changedCount} updated`);
+  console.log(`💾 ${formatWriteStats()}`);
   console.log(`⏱️  Build time: ${(buildDurationMs / 1000).toFixed(1)}s`);
   console.log(`📁 Output directory: ${DIST_DIR}`);
 
@@ -994,7 +997,7 @@ async function generatePage(filters: Filters, allEvents: Event[], preContentHtml
   // Write HTML file
   const filename = url === 'index' ? 'index.html' : `${url}.html`;
   const filepath = join(DIST_DIR, filename);
-  writeFileSync(filepath, html);
+  writeHtmlIfChangedSync(filepath, html);
 
   // Also generate JSON API
   const apiDir = join(DIST_DIR, 'api');
@@ -1012,10 +1015,7 @@ async function generatePage(filters: Filters, allEvents: Event[], preContentHtml
     }
   };
 
-  writeFileSync(
-    join(apiDir, `${url}.json`),
-    JSON.stringify(jsonData, null, 2)
-  );
+  writeJsonApiIfChangedSync(join(apiDir, `${url}.json`), jsonData);
 
   console.log(`  ✓ ${url} (${filteredEvents.length} events)`);
   return url;
@@ -1035,7 +1035,7 @@ async function generateCategoryPages(events: Event[]): Promise<string[]> {
 
     // Write to dist/[slug].html (e.g., dist/concerts.html)
     const filepath = join(DIST_DIR, `${category.slug}.html`);
-    writeFileSync(filepath, html);
+    writeHtmlIfChangedSync(filepath, html);
 
     // Also generate JSON API for this category
     const apiDir = join(DIST_DIR, 'api', 'categories');
@@ -1062,10 +1062,7 @@ async function generateCategoryPages(events: Event[]): Promise<string[]> {
       }
     };
 
-    writeFileSync(
-      join(apiDir, `${category.slug}.json`),
-      JSON.stringify(jsonData, null, 2)
-    );
+    writeJsonApiIfChangedSync(join(apiDir, `${category.slug}.json`), jsonData);
 
     console.log(`  ✓ /${category.slug} (${filteredEvents.length} events)`);
     generatedUrls.push(category.slug);
@@ -1164,7 +1161,7 @@ Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 - Email: cmarag8@gmail.com
 `;
 
-  writeFileSync(join(DIST_DIR, 'llms.txt'), content);
+  writeFileIfChangedSync(join(DIST_DIR, 'llms.txt'), content);
   console.log('  ✓ llms.txt');
 }
 
@@ -1215,7 +1212,7 @@ Allow: /
 Sitemap: ${BASE_URL}/sitemap-index.xml
 `;
 
-  writeFileSync(join(DIST_DIR, 'robots.txt'), content);
+  writeFileIfChangedSync(join(DIST_DIR, 'robots.txt'), content);
   console.log('  ✓ robots.txt');
 }
 
@@ -1230,7 +1227,7 @@ async function generateIndexNowKeyFile() {
       return;
     }
 
-    writeFileSync(join(DIST_DIR, `${key}.txt`), key);
+    writeFileIfChangedSync(join(DIST_DIR, `${key}.txt`), key);
     console.log(`  ✓ IndexNow key file (${key}.txt)`);
   } catch (err) {
     console.log(`  ⚠️ IndexNow key file skipped: ${err}`);
@@ -1253,7 +1250,7 @@ function copyStaticRootFiles(): void {
     }
     const src = join(staticRootDir, name);
     if (!statSync(src).isFile()) continue;
-    copyFileSync(src, join(DIST_DIR, name));
+    copyFileIfChangedSync(src, join(DIST_DIR, name));
     copied++;
   }
   console.log(`📋 Copied ${copied} static root file${copied === 1 ? '' : 's'}`);
@@ -1373,7 +1370,7 @@ ${renderAnalytics()}
 </body>
 </html>`;
 
-  writeFileSync(join(DIST_DIR, '404.html'), html);
+  writeHtmlIfChangedSync(join(DIST_DIR, '404.html'), html);
   console.log('  ✓ 404.html');
 }
 

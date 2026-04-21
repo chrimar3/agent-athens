@@ -9,7 +9,8 @@
  * All text fields have a normalized (*N) counterpart for accent-insensitive Greek search.
  */
 
-import { writeFileSync, readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
+import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
 import { normalizeGreek } from '../utils/normalize-greek';
@@ -149,13 +150,26 @@ export function generateSearchIndex(events: Event[]): void {
       type: e.type,
     }));
 
+  const indexPath = join(DIST_DIR, 'search-index.json');
+  let generated = new Date().toISOString();
+  if (existsSync(indexPath)) {
+    try {
+      const prev = JSON.parse(readFileSync(indexPath, 'utf-8'));
+      const prevWithoutGen = { ...prev, generated: '' };
+      const nextWithoutGen = { events: eventRecords, venues: venueRecords, categories: categoryRecords, popular, generated: '' };
+      if (JSON.stringify(prevWithoutGen) === JSON.stringify(nextWithoutGen) && typeof prev.generated === 'string') {
+        generated = prev.generated;
+      }
+    } catch {}
+  }
+
   const index: SearchIndex = {
     events: eventRecords,
     venues: venueRecords,
     categories: categoryRecords,
     popular,
-    generated: new Date().toISOString(),
+    generated,
   };
 
-  writeFileSync(join(DIST_DIR, 'search-index.json'), JSON.stringify(index));
+  writeFileIfChangedSync(indexPath, JSON.stringify(index));
 }
