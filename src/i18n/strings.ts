@@ -71,6 +71,7 @@ export interface UIStrings {
   shareEvent: string;
   linkCopied: string;
   savedRequiresJs: string;
+  addToCalendar: string;
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -178,6 +179,7 @@ export const STRINGS: Record<Locale, UIStrings> = {
     shareEvent: 'Κοινοποίηση',
     linkCopied: 'Ο σύνδεσμος αντιγράφηκε!',
     savedRequiresJs: 'Απαιτείται JavaScript για την προβολή αποθηκευμένων εκδηλώσεων.',
+    addToCalendar: 'Ημερολόγιο',
   },
 
   en: {
@@ -284,5 +286,6 @@ export const STRINGS: Record<Locale, UIStrings> = {
     shareEvent: 'Share',
     linkCopied: 'Link copied!',
     savedRequiresJs: 'JavaScript is required to view saved events.',
+    addToCalendar: 'Calendar',
   },
 };

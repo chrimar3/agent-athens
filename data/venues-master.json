@@ -2322,6 +2322,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-04-15"
   },
+  "Live Music Space": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Sachtouri 4, Athina 105 53, Greece",
+    "lat": 37.979676,
+    "lng": 23.723024,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-22"
+  },
   "MEGARON - The Athens Concert Hall": {
     "name_en": "Megaron - The Athens Concert Hall",
     "neighborhood": "Kolonaki / Ilissia",

@@ -7,7 +7,9 @@ import {
   renderCardSaveScript,
   renderShareButtonScript,
   renderSavedPageScript,
+  renderCalendarScript,
   escapeAttr,
+  CALENDAR_ICON,
 } from "../action-bar";
 
 describe("escapeAttr", () => {
@@ -225,5 +227,97 @@ describe("renderSavedPageScript", () => {
   test("migration is idempotent — only writes if entries changed", () => {
     const script = renderSavedPageScript("el");
     expect(script).toContain("if (changed)");
+  });
+});
+
+describe("renderCalendarScript", () => {
+  const script = renderCalendarScript();
+
+  test("is wrapped in script tags", () => {
+    expect(script).toContain("<script>");
+    expect(script).toContain("</script>");
+  });
+
+  test("queries data-calendar-event selector", () => {
+    expect(script).toContain("[data-calendar-event]");
+  });
+
+  test("emits RFC 5545 envelope markers", () => {
+    expect(script).toContain("BEGIN:VCALENDAR");
+    expect(script).toContain("END:VCALENDAR");
+    expect(script).toContain("BEGIN:VEVENT");
+    expect(script).toContain("END:VEVENT");
+  });
+
+  test("uses TZID=Europe/Athens for DTSTART and DTEND", () => {
+    expect(script).toContain("DTSTART;TZID=Europe/Athens:");
+    expect(script).toContain("DTEND;TZID=Europe/Athens:");
+  });
+
+  test("builds UID with agentathens.com domain", () => {
+    expect(script).toContain("@agentathens.com");
+  });
+
+  test("declares Agent Athens PRODID", () => {
+    expect(script).toContain("PRODID:-//Agent Athens//agentathens.com//EN");
+  });
+
+  test("includes DTSTAMP in UTC", () => {
+    expect(script).toContain("DTSTAMP:");
+    expect(script).toContain("nowUtcStamp");
+  });
+
+  test("branches on exhibition eventType for end_date", () => {
+    expect(script).toContain("data.eventType === 'exhibition'");
+    expect(script).toContain("data.eventEnd");
+  });
+
+  test("falls back to +3h when no exhibition end_date", () => {
+    expect(script).toContain("addHours(startParts, 3)");
+  });
+
+  test("applies timePeak override via regex guard", () => {
+    expect(script).toContain("data.eventPeak");
+    expect(script).toContain("\\d{2}:\\d{2}");
+  });
+
+  test("performs RFC 5545 text escaping", () => {
+    // backslash-first ordering, semicolon, comma
+    expect(script).toContain("BSLASH");
+    expect(script).toContain("split(';')");
+    expect(script).toContain("split(',')");
+  });
+
+  test("folds long lines at 75 octets with CRLF + space", () => {
+    expect(script).toContain("75");
+    expect(script).toContain("TextEncoder");
+    // Multi-byte UTF-8 continuation guard
+    expect(script).toContain("0xC0");
+  });
+
+  test("uses text/calendar Blob MIME with utf-8", () => {
+    expect(script).toContain("text/calendar;charset=utf-8");
+  });
+
+  test("triggers .ics download via createObjectURL", () => {
+    expect(script).toContain("URL.createObjectURL");
+    expect(script).toContain("a.download");
+    expect(script).toContain("agentathens-");
+  });
+
+  test("revokes object URL after download", () => {
+    expect(script).toContain("URL.revokeObjectURL");
+  });
+
+  test("sanitizes slug for filename", () => {
+    expect(script).toContain("[^a-zA-Z0-9-]");
+  });
+});
+
+describe("CALENDAR_ICON", () => {
+  test("is a 20px SVG with calendar paths", () => {
+    expect(CALENDAR_ICON).toContain('width="20"');
+    expect(CALENDAR_ICON).toContain("<rect");
+    expect(CALENDAR_ICON).toContain('aria-hidden="true"');
   });
 });

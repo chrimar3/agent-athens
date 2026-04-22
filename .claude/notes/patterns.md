@@ -1493,3 +1493,41 @@ Key properties:
 - **Unconditional log after kill** — write the `log_error` line *after* the kill rather than chaining with `&&`, so the timeout event is always logged even if the work process already exited between the timeout-tick and the kill call.
 
 Use this pattern anywhere the previous `caffeinate -s sleep N` or `timeout N` idioms were used on macOS — it's strictly more correct on laptop hardware and equivalent on always-on hardware. See `scripts/auto-enrich.sh` for the production usage (warm-up watchdog at ~L263, per-batch watchdog at ~L318).
+
+## Inline-Script IIFE with `dataset` — .ics Calendar Export (2026-04-21)
+
+Pattern for client-side actions that need event-specific data but share one implementation across all pages: render a `<button>` with `data-*` attributes per event, then ship ONE script that queries `[data-...]` and reads `btn.dataset` on click. No per-page JS, no module loader, no hydration. Mirrors `renderSaveButtonScript` / `renderShareButtonScript` — calendar joins them as `renderCalendarScript` in `src/templates/action-bar.ts`.
+
+```html
+<button data-calendar-event
+  data-event-start="2026-10-25T19:00:00"
+  data-event-end="2026-03-29"
+  data-event-peak="22:00"
+  data-event-type="exhibition"
+  data-event-title="..." data-event-venue="..." ...>
+  Calendar
+</button>
+
+<script>(function(){
+  var btn = document.querySelector('[data-calendar-event]');
+  if (!btn) return;
+  btn.addEventListener('click', function() {
+    var d = btn.dataset;        // camelCased automatically
+    /* build payload → Blob → URL.createObjectURL → <a download> click */
+  });
+})();</script>
+```
+
+Gotchas specific to .ics generation:
+
+- **Date-only vs full ISO in a single parser**: DB stores `start_date` with time (`2026-10-25T19:00:00`) but `end_date` as date-only (`2026-03-29`). `parseIsoLocal()` must branch on both shapes; date-only defaults to `H=23, Mi=59` so exhibition closing day is preserved in calendar.
+
+- **No TZ offset in DB `start_date`**: raw values are Athens-local wall time. The `+03:00` is appended only by `formatSchemaDate` for Schema.org JSON-LD. Emit .ics with `DTSTART;TZID=Europe/Athens:YYYYMMDDTHHMMSS` — no offset conversion needed. Regex-strip separators (`-`, `:`) and you're done.
+
+- **TS template literal → JS string escape depth**: regex like `/\d{2}/` in the emitted JS requires `\\d{2}` in the TS template literal source. For RFC 5545 backslash escaping (where you need to *output* a literal backslash), skip the escape tower — use `String.fromCharCode(92)` once at the top of the IIFE and splice via `.split().join()` instead of regex.
+
+- **Line folding at 75 octets, not 75 characters**: Greek UTF-8 is 2 bytes/char, so a 50-char Greek SUMMARY is 100 octets and needs folding. Walk `new TextEncoder().encode(line)`, back off on continuation bytes (`(byte & 0xC0) === 0x80`) to avoid splitting a multi-byte sequence, then decode each chunk with `TextDecoder`.
+
+- **Filename sanitization**: slugs can contain unicode — strip non-`[a-zA-Z0-9-]` before building the `.ics` filename, otherwise the `a.download` attribute gets ignored by some browsers.
+
+- **No VTIMEZONE block**: Google/Apple/Outlook resolve `TZID=Europe/Athens` via the IANA tzdb, so the 30+ lines of VTIMEZONE/RRULE DST transitions aren't needed. Trade-off documented in `decisions.md`.

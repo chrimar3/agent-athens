@@ -1182,7 +1182,8 @@ div#main-content {
 }
 
 .edp-save-btn,
-.edp-share-btn {
+.edp-share-btn,
+.edp-calendar-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
@@ -1199,13 +1200,15 @@ div#main-content {
 }
 
 .edp-save-btn:hover,
-.edp-share-btn:hover {
+.edp-share-btn:hover,
+.edp-calendar-btn:hover {
   color: var(--text-primary);
   border-color: var(--border-default);
 }
 
 .edp-save-btn:focus-visible,
-.edp-share-btn:focus-visible {
+.edp-share-btn:focus-visible,
+.edp-calendar-btn:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }

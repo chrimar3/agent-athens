@@ -29,7 +29,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
-import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript } from '../templates/action-bar';
+import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript, renderCalendarScript, escapeAttr, CALENDAR_ICON } from '../templates/action-bar';
 import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -471,7 +471,14 @@ ${renderAnalytics()}
             · ${priceDisplay}
           </div>
           ${ctaHtml}
-          ${renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale)}
+          ${(() => {
+            const actionBar = renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale);
+            const calendarBtn = `<button class="edp-calendar-btn" data-calendar-event data-event-id="${event.id}" data-event-start="${event.startDate}" data-event-end="${event.endDate || ''}" data-event-peak="${event.timePeak || ''}" data-event-title="${escapeAttr(event.title)}" data-event-venue="${escapeAttr(event.venue.name || '')}" data-event-address="${escapeAttr(event.venue.address || '')}" data-event-slug="${slug}" data-event-url="${canonicalUrl}" data-event-type="${event.type}" type="button" aria-label="${t.addToCalendar}">
+            ${CALENDAR_ICON}
+            <span class="edp-calendar-label">${t.addToCalendar}</span>
+          </button>`;
+            return actionBar.replace('</div>', `${calendarBtn}</div>`);
+          })()}
         </header>
       </div>
     </section>
@@ -522,6 +529,7 @@ ${renderAnalytics()}
   ${renderSaveButtonScript()}
   ${renderCardSaveScript()}
   ${renderShareButtonScript()}
+  ${renderCalendarScript()}
 </body>
 </html>`;
 }

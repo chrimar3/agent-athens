@@ -422,3 +422,46 @@ describe("Event Detail Page — No inline styles", () => {
     expect(headSection).not.toContain('<style>');
   });
 });
+
+describe("Event Detail Page — Calendar (.ics) export button", () => {
+  test("renders calendar button inside action bar", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toContain('class="edp-calendar-btn"');
+    expect(html).toContain('data-calendar-event');
+  });
+
+  test("data-event-start carries ISO date with Athens offset", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toContain(`data-event-start="${sampleConcert.startDate}"`);
+  });
+
+  test("data-event-type carries valid event type", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toContain(`data-event-type="${sampleConcert.type}"`);
+  });
+
+  test("exhibition fixture produces non-empty data-event-end", () => {
+    const html = renderEventDetailPage(openExhibition, []);
+    // endDate is set on openExhibition fixture above
+    expect(html).toMatch(/data-event-end="\d{4}-\d{2}-\d{2}T/);
+  });
+
+  test("event without endDate produces empty data-event-end", () => {
+    const noEndEvent: Event = { ...sampleConcert, endDate: undefined };
+    const html = renderEventDetailPage(noEndEvent, []);
+    expect(html).toContain('data-event-end=""');
+  });
+
+  test("calendar script is appended to page", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toContain('[data-calendar-event]');
+    expect(html).toContain('BEGIN:VCALENDAR');
+  });
+
+  test("button has accessible label from i18n", () => {
+    const html = renderEventDetailPage(sampleConcert, [], 'el');
+    expect(html).toContain('aria-label="Ημερολόγιο"');
+    const enHtml = renderEventDetailPage(sampleConcert, [], 'en');
+    expect(enHtml).toContain('aria-label="Calendar"');
+  });
+});

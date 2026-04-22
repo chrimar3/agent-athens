@@ -8,6 +8,9 @@ export function escapeAttr(text: string): string {
 const BOOKMARK_ICON_20 = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
 const BOOKMARK_ICON_16 = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
 const SHARE_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+const CALENDAR_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+
+export { CALENDAR_ICON };
 
 export function renderActionBarHtml(
   eventId: string,
@@ -126,6 +129,126 @@ export function renderCardSaveScript(): string {
   });
   document.addEventListener('aa:saved-change', syncAll);
   syncAll();
+})();
+</script>`;
+}
+
+export function renderCalendarScript(): string {
+  return `<script>
+(function() {
+  var btn = document.querySelector('[data-calendar-event]');
+  if (!btn) return;
+
+  var BSLASH = String.fromCharCode(92);
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function parseIsoLocal(iso) {
+    if (!iso) return null;
+    var full = iso.match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})/);
+    if (full) return { Y: +full[1], M: +full[2], D: +full[3], H: +full[4], Mi: +full[5], S: +full[6] };
+    // Date-only (exhibition end_date): treat as end of day for a closing exhibition.
+    var dateOnly = iso.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);
+    if (dateOnly) return { Y: +dateOnly[1], M: +dateOnly[2], D: +dateOnly[3], H: 23, Mi: 59, S: 0 };
+    return null;
+  }
+
+  function formatICS(p) {
+    return p.Y + pad(p.M) + pad(p.D) + 'T' + pad(p.H) + pad(p.Mi) + pad(p.S);
+  }
+
+  function addHours(p, hours) {
+    var d = new Date(p.Y, p.M - 1, p.D, p.H + hours, p.Mi, p.S);
+    return { Y: d.getFullYear(), M: d.getMonth() + 1, D: d.getDate(), H: d.getHours(), Mi: d.getMinutes(), S: d.getSeconds() };
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    return String(s)
+      .split(BSLASH).join(BSLASH + BSLASH)
+      .split(';').join(BSLASH + ';')
+      .split(',').join(BSLASH + ',')
+      .split('\\n').join(BSLASH + 'n');
+  }
+
+  function fold(line) {
+    try {
+      var bytes = new TextEncoder().encode(line);
+      if (bytes.length <= 75) return line;
+      var out = '';
+      var start = 0;
+      while (start < bytes.length) {
+        var end = Math.min(start + 75, bytes.length);
+        while (end > start && end < bytes.length && (bytes[end] & 0xC0) === 0x80) end--;
+        var chunk = new TextDecoder().decode(bytes.slice(start, end));
+        out += (start === 0 ? '' : '\\r\\n ') + chunk;
+        start = end;
+      }
+      return out;
+    } catch (e) {
+      return line;
+    }
+  }
+
+  function nowUtcStamp() {
+    var d = new Date();
+    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' +
+           pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+  }
+
+  btn.addEventListener('click', function() {
+    var data = btn.dataset;
+    var startParts = parseIsoLocal(data.eventStart);
+    if (!startParts) return;
+
+    if (data.eventPeak && /^\\d{2}:\\d{2}$/.test(data.eventPeak)) {
+      var pm = data.eventPeak.match(/^(\\d{2}):(\\d{2})$/);
+      startParts.H = +pm[1];
+      startParts.Mi = +pm[2];
+      startParts.S = 0;
+    }
+
+    var endParts;
+    if (data.eventType === 'exhibition' && data.eventEnd) {
+      endParts = parseIsoLocal(data.eventEnd) || addHours(startParts, 3);
+    } else {
+      endParts = addHours(startParts, 3);
+    }
+
+    var loc = [data.eventVenue, data.eventAddress].filter(function(x) { return x; }).join(', ');
+    var uid = (data.eventId || data.eventSlug || 'event') + '@agentathens.com';
+
+    var lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Agent Athens//agentathens.com//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      fold('UID:' + uid),
+      'DTSTAMP:' + nowUtcStamp(),
+      'DTSTART;TZID=Europe/Athens:' + formatICS(startParts),
+      'DTEND;TZID=Europe/Athens:' + formatICS(endParts),
+      fold('SUMMARY:' + esc(data.eventTitle)),
+      fold('LOCATION:' + esc(loc)),
+      fold('DESCRIPTION:' + esc(data.eventTitle) + BSLASH + 'n' + esc(data.eventUrl)),
+      fold('URL:' + (data.eventUrl || '')),
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ];
+
+    var ics = lines.join('\\r\\n') + '\\r\\n';
+    var safeSlug = (data.eventSlug || 'event').replace(/[^a-zA-Z0-9-]/g, '-');
+    var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    var objUrl = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = objUrl;
+    a.download = 'agentathens-' + safeSlug + '.ics';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function() { URL.revokeObjectURL(objUrl); }, 1000);
+  });
 })();
 </script>`;
 }
