@@ -1568,3 +1568,34 @@ A monitoring signal has two independent attributes: **what it detects** and **ho
 **Rule:** every monitor must declare its alert class in its spec. A passive marker is often correct (most of our signals are not urgent enough for notifications), but it must be **chosen** passive, not default-passive by accident. When promoting passive → active, do it as a separate session with its own threshold spike — don't bolt a notification onto an existing monitor without measuring how often it would have fired in the last 30 days.
 
 S91's `enriched_last_24h` extension is declared passive. The weekend gap ("nobody checks the CSV on Saturday") is explicit non-coverage, tracked against the next time it bites rather than speculatively patched.
+
+## Semantic-fit gating (2026-04-23, Session 97)
+
+**Rule:** Any fallback that inherits from a container — venue, source, category, tag, or any other aggregation — must validate that the child's shape matches the container's typical shape before inheriting. **Structural availability ≠ semantic correctness.**
+
+**Third instance of this class in the codebase:**
+1. Enrichment classifier substring bug (pre-2026-03) — matched category keywords anywhere in title, ignoring token boundaries.
+2. Scraper dedupe on partial title matches (pre-2026-04) — collapsed distinct events because titles overlapped.
+3. `venue_default` price inheritance (2026-04-23, S97) — a tech conference at a classical venue inherited classical pricing because the chain checked "does this venue have a default?" not "does this event fit the venue's typical programming?"
+
+**Mechanism of the failure mode:** the fallback is a 2-step chain — (a) is there anything to inherit from, (b) inherit it. Step (a) only checks structure (a record exists, a key matches, a parent is present). It does not check whether the child's shape is compatible with the parent's shape. The missing step is a **compatibility predicate** between child and container.
+
+**How to apply:**
+
+1. When writing any fallback that inherits from a container, add a third step between (a) and (b): a predicate that returns true only if the child's shape matches the container's typical shape. If the predicate returns false, skip the inheritance and let the fall-through continue (usually to `unknown` / empty / null, which is usually safer than a confident wrong value).
+2. "Typical shape" is usually statistical, not hardcoded. For the venue_default case: the venue's top-N historical event types, computed from DB. For category defaults: the top-N titles that fit the category's keyword vocabulary. For source defaults: the top-N fields the source reliably provides.
+3. When the container has **no history** to compute typical shape from, default-reject. Inheriting from an empty prior is the same failure mode as inheriting from a mismatched prior — in both cases the inference is unsupported.
+4. The predicate must run **before** the structural lookup, not after. Otherwise a fuzzy-match or alias resolution can bypass it (the Megaron case: fuzzy-matching "Μέγαρο Μουσικής" to "Μέγαρο Μουσικής Αθηνών" would have bypassed a post-hoc check).
+
+**Code shape** (from `scripts/price-acquisition-chain.ts`):
+
+```ts
+function getX(containerKey: string, childShape: Shape, history: History): Result | null {
+  if (!isChildShapeCompatibleWithContainer(childShape, containerKey, history)) {
+    return null;  // refuse → caller falls through to unknown
+  }
+  // … existing structural lookup
+}
+```
+
+**Test shape:** for each gate, test at minimum: (i) compatible child returns inherited value, (ii) incompatible child returns null, (iii) no-history container returns null, (iv) fuzzy-match doesn't bypass the gate.

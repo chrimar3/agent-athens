@@ -2866,6 +2866,39 @@ Stepwise execution of the plan. Notable deviations:
 - Active-alert path (notification/email/chat) — separate session, gated on weekend-silence gap actually biting again.
 - The S95 recommit (whenever that session resumes) should not touch `.claude/notes/*.md` since Session 96 committed them with both sessions' additions intact.
 
+### Session 97 — Venue Default Price Type-Compat Gate (Devoxx €25 Bug) — 2026-04-23
+
+**Plan:** User flagged Devoxx Greece 2026 showing €25 in production — actual tech conference tickets are €200+. Trace → `price_source='venue_default'` inherited from Megaron's classical default. Fix: type-compatibility gate in price-acquisition-chain. Concurrent-execution risk (citability hit on Schema.org `offers.price`) → Step 0 stop-the-bleed patch before building the architectural fix. Priority: Compounding × Citability.
+
+**What happened:**
+- Step 0: ✅ Devoxx row patched (`price_source='unknown'`, amount/range nulled), rebuilt, deployed to Netlify production. Live page now shows "Επί πληρωμή" + "Αγοράστε εισιτήρια" CTA to devoxx.gr; Schema.org offers block retains `priceCurrency`/`availability`/`url` but omits `price` field cleanly.
+- Step 1: ✅ Classification of all 279 remaining `venue_default` rows (note: not 280 — Devoxx already patched in Step 0). Result: **273 match, 6 MISMATCH, 0 NO_HISTORY** (2.2% mismatch rate, well under the 7% narrow-gate threshold). CSV at `specs/venue-default-classification.csv`.
+- Step 2: ✅ DECISION GATE reported. Planner approved narrow gate ("type ∈ venue top-3") + NO_HISTORY-refuse.
+- Step 3: ✅ Failing tests written against 3-arg `getVenueDefaultPrice(venueName, eventType, history)` + `isTypeCompatibleWithVenue` + `createSqlVenueTypeHistory` exports. 1 fail (import error — exports don't exist yet). Red state confirmed.
+- Step 4: ✅ Gate implemented. 15 tests green. tsc clean. Gate runs BEFORE the structural lookup (direct + fuzzy venue match) so fuzzy-match aliases can't bypass.
+- Step 5: ✅ Dry-run `--reprocess-source=venue_default` showed 6 flips matching Step 1 classification exactly (03494395, 44156803, 8f79c8ae, 76812621, 9f1343f4, 453f3524). Applied. venue_default 279 → 273, unknown 844 → 850 (6-row shift). Idempotency verified (second dry-run = 0 flips).
+- Step 6: ✅ Dist sweep. All 6 flipped pages have empty Τιμή cell ("Επί πληρωμή") and no Schema.org `price` field. Two pages (9f1343f4, 453f3524) retain some `€25` string hits — one in the enriched description prose (`| **Price** | €25 advance / €28 door |`, written during enrichment from source research, independent of our structured data), one in related-event cards for other Ωδείο events that legitimately kept their €25. Structured price is clean across all 6.
+- Step 7: ✅ Full test suite (1638 pass, 0 fail, 1 skip), tsc clean.
+
+**Commit:** This session's commit (below session-log commit).
+
+**Surprises:**
+- **Two miscategorizations surfaced by the gate** at Megaron: Sir John Eliot Gardiner typed as `show` (actually classical concert), Τρισεύγενη typed as `show` (likely theater). `known-issues.md` line 38-44 marks Venue-Lock Type Mismatches as fixed at S71, but at least 2 cases have leaked through. **Not fixed in S97** — the gate routes them to `unknown + CTA` regardless of the underlying type error, so the user-facing bug is resolved. Flagged for a future categorizer audit.
+- **`price_range` contains free-text** at one row: Ωδείο DJ-set has `price_range: "Door price"`, a text label in what should be a structured `€X-Y` range. Suggests an upstream scraper or chain step writes free-text into a structured field. Not root-caused in S97; the row was gate-flipped to `unknown` anyway.
+- **Enriched descriptions carry independent price claims.** The Τρισεύγενη description has `| **Price** | €25 advance / €28 door |` baked into the prose — written during enrichment from source research, separate from the structured price fields. When the DB price is flipped to unknown but the description prose stays, the two can disagree. Worth a future pass that syncs narrative to structured — or at least flags obvious mismatches.
+
+**Learnings (added to notes):**
+- `patterns.md`: **"Semantic-fit gating"** — named pattern entry covering third-instance class (enrichment classifier substring match → scraper dedupe partial-title → venue_default price). Rule: any fallback that inherits from a container must validate the child's shape matches the container's typical shape before inheriting. Structural availability ≠ semantic correctness. Predicate runs **before** structural lookup so fuzzy-match can't bypass.
+- `mistakes.md`: Price-acquisition chain semantic-fit entries (venue_default without type check, Venue-Lock leak, price_range free-text, commit-scope lesson — the last one written earlier by the user after the S95/S96 entanglement).
+- `decisions.md`: Price-acquisition chain v2 decisions — 3-arg `getVenueDefaultPrice`, NO_HISTORY default-reject, gate-before-lookup ordering, one-shot `--reprocess-source` backfill flag stays permanent.
+
+**Queue status:** venue_default 273, unknown 850, direct 9738. Live Devoxx page confirmed showing "Επί πληρωμή" + CTA.
+
+**Open items:**
+- Categorizer audit session — Venue-Lock Type Mismatches has leaked at least 2 cases (Gardiner, Τρισεύγενη); promote `known-issues.md` line 38-44 to active.
+- `price_range` free-text audit — scope is a grep pass for non-conforming values + trace to the upstream writer.
+- Narrative/structured price consistency — enrichment descriptions can assert prices independent of the DB price field; when they diverge, what's the policy?
+
 ---
 
 > **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.

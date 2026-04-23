@@ -34,6 +34,7 @@ interface EventWithoutPrice {
   title: string;
   venue_name: string;
   start_date: string;
+  type: string | null;
   price_type: string;
   price_amount: number | null;
   price_source: string | null;
@@ -41,6 +42,59 @@ interface EventWithoutPrice {
 }
 
 type PriceSource = 'direct' | 'crossref_ra' | 'venue_default' | 'unknown';
+
+// ============================================================================
+// Type-Compatibility Gate (S96 follow-up)
+//
+// Venue defaults must only apply when the event's type matches the venue's
+// typical programming. Without this gate, a tech conference at a classical
+// venue inherits classical pricing (Devoxx Greece 2026 at Μέγαρο silently
+// shipped €25 / €15-80 in production).
+//
+// Semantic-fit gating pattern: any fallback inheriting from a container
+// (venue, source, category) must validate that the child's shape matches the
+// container's typical shape before inheriting. Structural availability ≠
+// semantic correctness.
+// ============================================================================
+
+export interface VenueTypeHistory {
+  /** Returns the top-N event types for a venue, ordered by count desc. Empty if no history. */
+  getTopTypes(venueName: string, n?: number): string[];
+}
+
+const DEFAULT_TOP_N = 3;
+
+export function isTypeCompatibleWithVenue(
+  eventType: string | null | undefined,
+  venueName: string,
+  history: VenueTypeHistory,
+  topN: number = DEFAULT_TOP_N,
+): boolean {
+  if (!eventType) return false;
+  const topTypes = history.getTopTypes(venueName, topN);
+  if (topTypes.length === 0) return false; // NO_HISTORY → refuse (safe default)
+  return topTypes.includes(eventType);
+}
+
+export function createSqlVenueTypeHistory(db: Database): VenueTypeHistory {
+  const stmt = db.prepare(`
+    SELECT type
+    FROM events
+    WHERE venue_name = ?
+      AND location_status IN ('verified_athens', 'pass_through')
+      AND type IS NOT NULL
+      AND type != ''
+    GROUP BY type
+    ORDER BY COUNT(*) DESC
+    LIMIT ?
+  `);
+  return {
+    getTopTypes(venueName: string, n: number = DEFAULT_TOP_N): string[] {
+      const rows = stmt.all(venueName, n) as Array<{ type: string }>;
+      return rows.map(r => r.type);
+    },
+  };
+}
 
 // ============================================================================
 // Venue Default Prices (from venue-intelligence.md)
@@ -287,12 +341,30 @@ function titleIndicatesFree(title: string): boolean {
 }
 
 /**
- * Get venue default price
+ * Get venue default price, gated by type-compatibility.
+ *
+ * Returns null when:
+ *   - venue is not in VENUE_DEFAULT_PRICES (directly or fuzzy)
+ *   - event type is not in venue's top-N historical types
+ *   - venue has no type history at all (NO_HISTORY safe default)
+ *
+ * Callers that receive null should route the event to price_source='unknown'
+ * and rely on ticket_url CTA instead of a guessed price.
  */
-function getVenueDefaultPrice(venueName: string): {
+export function getVenueDefaultPrice(
+  venueName: string,
+  eventType: string | null | undefined,
+  history: VenueTypeHistory,
+): {
   price: number | null;
   source: string;
 } | null {
+  // Gate: type must be compatible with the venue's typical programming.
+  // Applies BEFORE the directory lookup so a fuzzy match can't bypass.
+  if (!isTypeCompatibleWithVenue(eventType, venueName, history)) {
+    return null;
+  }
+
   // Direct match
   if (VENUE_DEFAULT_PRICES[venueName]) {
     const info = VENUE_DEFAULT_PRICES[venueName];
@@ -328,6 +400,7 @@ function getEventsWithoutPrices(db: Database): EventWithoutPrice[] {
       title,
       venue_name,
       start_date,
+      type,
       price_type,
       price_amount,
       price_source,
@@ -344,6 +417,30 @@ function getEventsWithoutPrices(db: Database): EventWithoutPrice[] {
 }
 
 /**
+ * Get events currently tagged `price_source='venue_default'`.
+ * Used by the --reprocess-source=venue_default backfill path to re-apply
+ * the type-compatibility gate to existing rows that predate the gate.
+ */
+function getVenueDefaultEvents(db: Database): EventWithoutPrice[] {
+  return db.prepare(`
+    SELECT
+      id,
+      title,
+      venue_name,
+      start_date,
+      type,
+      price_type,
+      price_amount,
+      price_source,
+      source
+    FROM events
+    WHERE location_status IN ('verified_athens', 'pass_through')
+      AND price_source = 'venue_default'
+    ORDER BY venue_name, start_date ASC
+  `).all() as EventWithoutPrice[];
+}
+
+/**
  * Apply venue default prices
  */
 function applyVenueDefaults(
@@ -354,6 +451,7 @@ function applyVenueDefaults(
   let skipped = 0;
 
   const events = getEventsWithoutPrices(db);
+  const history = createSqlVenueTypeHistory(db);
 
   const updateStmt = db.prepare(`
     UPDATE events
@@ -380,8 +478,8 @@ function applyVenueDefaults(
       continue;
     }
 
-    // Get venue default
-    const defaultPrice = getVenueDefaultPrice(event.venue_name);
+    // Get venue default (gated by type-compatibility)
+    const defaultPrice = getVenueDefaultPrice(event.venue_name, event.type, history);
 
     if (defaultPrice) {
       const venueInfo = VENUE_DEFAULT_PRICES[event.venue_name] ||
@@ -399,7 +497,7 @@ function applyVenueDefaults(
       console.log(`  💰 ${event.title.slice(0, 40)}... → €${defaultPrice.price} (${event.venue_name})`);
       updated++;
     } else {
-      // Mark as unknown if we can't determine price
+      // Mark as unknown if we can't determine price (including gate refusals)
       if (!dryRun && !event.price_source) {
         db.prepare(`
           UPDATE events SET price_source = 'unknown', updated_at = datetime('now')
@@ -411,6 +509,50 @@ function applyVenueDefaults(
   }
 
   return { updated, skipped };
+}
+
+/**
+ * Reprocess existing `price_source='venue_default'` rows against the current
+ * type-compatibility gate. Rows that the gate now refuses are flipped to
+ * `price_source='unknown'` with price_amount/price_range nulled; rows that
+ * still pass are left unchanged.
+ *
+ * Used by the Step 5 backfill (S96 follow-up). Separate from applyVenueDefaults
+ * because that one skips rows that already have a price.
+ */
+function reprocessVenueDefaults(
+  db: Database,
+  dryRun: boolean,
+): { kept: number; flippedToUnknown: number; rows: Array<{ id: string; title: string; type: string | null; venue: string; before: number | null; after: 'kept' | 'unknown' }> } {
+  const events = getVenueDefaultEvents(db);
+  const history = createSqlVenueTypeHistory(db);
+
+  const flipStmt = db.prepare(`
+    UPDATE events
+    SET price_amount = NULL,
+        price_range = NULL,
+        price_source = 'unknown',
+        updated_at = datetime('now')
+    WHERE id = ?
+  `);
+
+  let kept = 0;
+  let flippedToUnknown = 0;
+  const rows: Array<{ id: string; title: string; type: string | null; venue: string; before: number | null; after: 'kept' | 'unknown' }> = [];
+
+  for (const event of events) {
+    const compatible = isTypeCompatibleWithVenue(event.type, event.venue_name, history);
+    if (compatible) {
+      kept++;
+      rows.push({ id: event.id, title: event.title, type: event.type, venue: event.venue_name, before: event.price_amount, after: 'kept' });
+    } else {
+      flippedToUnknown++;
+      rows.push({ id: event.id, title: event.title, type: event.type, venue: event.venue_name, before: event.price_amount, after: 'unknown' });
+      if (!dryRun) flipStmt.run(event.id);
+    }
+  }
+
+  return { kept, flippedToUnknown, rows };
 }
 
 /**
@@ -526,12 +668,32 @@ async function main(): Promise<void> {
   const dryRun = args.includes('--dry-run');
   const statsOnly = args.includes('--stats');
   const defaultsOnly = args.includes('--defaults');
+  const reprocessArg = args.find(a => a.startsWith('--reprocess-source='));
+  const reprocessSource = reprocessArg?.split('=')[1];
 
   const db = openDatabase();
 
   try {
     if (statsOnly) {
       showPriceStats(db);
+      return;
+    }
+
+    if (reprocessSource === 'venue_default') {
+      console.log('╔═══════════════════════════════════════════════════════════════╗');
+      console.log('║  🔁 Reprocess: venue_default rows (type-compat gate)          ║');
+      console.log('╚═══════════════════════════════════════════════════════════════╝');
+      if (dryRun) console.log('\n🔍 DRY RUN - No changes will be made\n');
+
+      const { kept, flippedToUnknown, rows } = reprocessVenueDefaults(db, dryRun);
+
+      console.log('\n📋 Rows to flip (MISMATCH):');
+      for (const r of rows.filter(x => x.after === 'unknown')) {
+        console.log(`   → ${r.id.slice(0, 8)}  type=${r.type ?? '∅'}  @ ${r.venue.slice(0, 25)}  (was €${r.before ?? '∅'})`);
+      }
+
+      console.log(`\n✅ Kept: ${kept}   🚫 Flipped → unknown: ${flippedToUnknown}`);
+      if (dryRun) console.log('\n🔍 Run without --dry-run to apply changes');
       return;
     }
 
@@ -564,4 +726,6 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(console.error);
+if (import.meta.main) {
+  main().catch(console.error);
+}
