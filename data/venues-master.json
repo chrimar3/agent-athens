@@ -2513,6 +2513,17 @@
     "description": "Athens' biggest and most active live music venue in the city center, hosting diverse international and local productions",
     "metro": "Omonia"
   },
+  "Piree": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Kastoros 78, Pireas 185 45, Greece",
+    "lat": 37.950108,
+    "lng": 23.6381,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-23"
+  },
   "Poetry Bar": {
     "name_en": "",
     "neighborhood": "",
