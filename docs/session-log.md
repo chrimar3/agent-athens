@@ -2828,6 +2828,44 @@ Stepwise execution of the plan. Notable deviations:
 - `.claude/notes/patterns.md` — new section: "Canonical-format-at-importer-seam pattern" (classifier + normalizer + write-seam application + architectural guard test + render-side reuse + fail-loud on malformed).
 - `.claude/notes/decisions.md` — 3 new rows: canonical naive-local format, shared classifier, `no-bypass.test.ts` as architectural guard.
 
+### Session 96 — Enrichment Monitor Extension (Silent-Failure Window Closer) — 2026-04-23
+
+**Plan:** Close S91 coverage gap — monitor didn't watch enrichment throughput. Five silent days 04-16→04-20 exposed the non-coverage; day 6 (04-23) was only loud because S89 wall-clock watchdog made the hang visible.
+
+**What happened:**
+- Step 0: ✅ enrichment-check plist healthy, scheduled 20:00 Athens, exit 0 on 04-22. No fix needed (forecast confirmed).
+- Step 1: Skipped as predicted.
+- Step 2: `specs/monitor-enrichment-extension.md` written with known non-coverage (queue-empty false positive) and passive-marker declaration.
+- Step 3: `scripts/monitor-search-visibility.ts` extended. `getEnrichmentStats()` + `migrateCsvIfNeeded()` + `STALE_ENRICHMENT` marker. 17 tests including WAL-mode regression.
+- Step 4: End-to-end STALE simulation PASS — empty DB + prior 0-row → `STALE_ENRICHMENT` in today's row.
+- Step 5: Historical catalog in `mistakes.md` — stream-idle floor 2026-04-16, 401-auth pattern predates March.
+- Step 6: tsc clean, tests pass, CSV migrated 18→19 cols, today's row shows `enriched_last_24h=15`.
+
+**Commits:**
+- `67ec938ab` — `feat(monitor): track enrichment throughput in search-visibility CSV` — monitor script + tests + spec.
+- `beb881127` — `feat(date-format): ...` (S95). Session 96's additions to `.claude/notes/*.md` were absorbed into this commit under the S95 message during the concurrent-session recommit. Content is correctly labeled "(Session A, 2026-04-23)" inside the files, so archaeology works via grep even though the commit title doesn't mention it.
+- Pre-split `f580df806` remains in the object store as an orphan until GC.
+- This session-log entry itself lands in a follow-up commit after the split commits.
+
+**Surprises:**
+- Concurrent Claude Code session running date-format S95 committed both working trees under one message at 16:42:45, then reset at 16:52:51. Name collision: Session 96 is this repo's "Session A" for monitor work vs. userMemory's "Session A" for date-format S95. Numbered Session 96 to disambiguate.
+- 401-auth pattern predates stream-idle cluster — older, independent root cause. Catalog notes this.
+- `.auto-enrich.lock` was lingering post-13:48 failure but had self-cleaned by the time I checked; S74 mtime guard or the concurrent process handled it.
+- `{ readonly: true }` on `bun:sqlite` silently fails on WAL-mode DBs (SQLITE_CANTOPEN). First pass of the monitor extension returned empty `enriched_last_24h` via the try/catch. Caught in live run, not unit tests (tests use fresh rollback-journal DBs). Added regression test.
+
+**Learnings (added to notes):**
+- `patterns.md`: Every new monitor must specify non-coverage at design time.
+- `patterns.md`: Passive markers vs. active alerts — declare class at design time.
+- `decisions.md`: enrichment-check decoupled from pipeline success; runs daily independent. Plist verified healthy 2026-04-23 — do not re-check speculatively.
+- `mistakes.md`: Stream-idle silent-failure catalog (6-day table); 5-day window 04-16→04-20 undetected because S91 monitor scoped to sitemap only. Meta-lesson: coverage gaps are the failure mode, not the individual bugs. Also WAL-mode + readonly = SQLITE_CANTOPEN, and `readonly` is not free safety on WAL DBs.
+
+**Queue status:** `enriched_last_24h=15` (from prior clean days). Today's 10 lost events not recovered — reabsorbed by normal throughput.
+
+**Open items:**
+- Session B (retry + auth refresh) — gated on manual 1-event spike.
+- Active-alert path (notification/email/chat) — separate session, gated on weekend-silence gap actually biting again.
+- The S95 recommit (whenever that session resumes) should not touch `.claude/notes/*.md` since Session 96 committed them with both sessions' additions intact.
+
 ---
 
 > **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.
