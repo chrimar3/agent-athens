@@ -15,7 +15,7 @@ import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
 import { renderEventCardList } from '../templates/card-variants';
-import { getAthensTimezone, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace } from '../utils/schema-geo';
@@ -59,17 +59,6 @@ function meetsMinimumThreshold(venue: VenueData): boolean {
 function generateVenueSchema(venue: VenueData): string | null {
   if (!venue.address) return null;
 
-  // Get timezone from first event date, or default to current
-  let tz = '+02:00';
-  if (venue.events.length > 0) {
-    const dateMatch = venue.events[0].startDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (dateMatch) {
-      const [, year, month, day] = dateMatch;
-      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-      tz = getAthensTimezone(date);
-    }
-  }
-
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -99,21 +88,15 @@ function generateVenueSchema(venue: VenueData): string | null {
     }
   }
 
-  // Add upcoming events as part of schema
+  // Add upcoming events as part of schema. formatSchemaDate handles date-only
+  // passthrough and DST-aware offset appending for naive-ts.
   if (venue.events.length > 0) {
-    schema.event = venue.events.slice(0, 10).map(event => {
-      let startDate = event.startDate;
-      if (!startDate.includes('+') && !startDate.includes('Z')) {
-        startDate = startDate.includes('T') ? `${startDate}${tz}` : `${startDate}T00:00:00${tz}`;
-      }
-
-      return {
-        '@type': SCHEMA_TYPE_MAP[event.type] || 'Event',
-        'name': event.title,
-        'startDate': startDate,
-        'url': `${BASE_URL}/events/${generateEventSlug(event)}/`
-      };
-    });
+    schema.event = venue.events.slice(0, 10).map(event => ({
+      '@type': SCHEMA_TYPE_MAP[event.type] || 'Event',
+      'name': event.title,
+      'startDate': formatSchemaDate(event.startDate),
+      'url': `${BASE_URL}/events/${generateEventSlug(event)}/`
+    }));
   }
 
   return JSON.stringify(schema, null, 2);

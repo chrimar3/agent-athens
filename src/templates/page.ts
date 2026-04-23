@@ -6,7 +6,7 @@ import { join } from 'path';
 import type { Event, PageMetadata } from '../types';
 import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
-import { VENUE_TYPE_MAP, getAthensTimezone } from '../enrichment/quality-gates';
+import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
@@ -378,12 +378,9 @@ function renderRelatedPages(filters: any): string {
 }
 
 function normalizeStartDate(isoDate: string): string {
-  if (isoDate.includes('+') || isoDate.includes('Z')) return isoDate;
-  const dateMatch = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  const tz = dateMatch
-    ? getAthensTimezone(new Date(parseInt(dateMatch[1]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[3])))
-    : '+02:00';
-  return isoDate.includes('T') ? `${isoDate}${tz}` : `${isoDate}T00:00:00${tz}`;
+  // Delegates to the canonical Schema.org date formatter: date-only passthrough
+  // (no midnight timestamp), naive-ts + DST offset, tz-aware passthrough.
+  return formatSchemaDate(isoDate);
 }
 
 function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: Locale = 'el'): string {

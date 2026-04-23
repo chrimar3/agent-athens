@@ -356,27 +356,9 @@ export function upsertEvent(event: ParsedEvent): void {
       eventId
     );
   } else {
-    db.prepare(`
-      INSERT INTO events (
-        id, title, date, time, venue, type, genre, price, address, url,
-        short_description, full_description, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      eventId,
-      event.title,
-      event.date,
-      event.time,
-      event.venue,
-      event.type,
-      event.genre,
-      event.price,
-      event.address,
-      event.url,
-      event.short_description,
-      '',
-      now,
-      now
-    );
+    // DEAD CODE — schema divergence (writes date/time, events table has start_date/end_date).
+    // See specs/session-C-email-ingestion.md. Do not restore without schema reconciliation.
+    throw new Error('email ingestion: date/time schema deprecated; pending Session C unification');
   }
 }
 

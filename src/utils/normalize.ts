@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { RawEvent, Event, EventType, Venue, Price } from '../types';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { normalizeDateField } from './date-format';
 
 // Load venue coordinates from canonical source (venues-master.json)
 // This replaces the old 18-entry hardcoded map with all 80+ master venues
@@ -223,9 +224,10 @@ function normalizePrice(priceString: string): Price {
 }
 
 function normalizeDate(date: string, time?: string): string {
-  // Combine date and time into ISO 8601 format
+  // Produce canonical naive-local (no timezone offset). DST offset is applied
+  // at render time by formatSchemaDate(), never stored on-disk.
   const timeString = time || '20:00';
-  return `${date}T${timeString}:00+03:00`; // Athens timezone (UTC+3 in summer)
+  return normalizeDateField(`${date}T${timeString}:00`);
 }
 
 function generateTags(price: Price, type: EventType): string[] {

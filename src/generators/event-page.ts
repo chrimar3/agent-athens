@@ -140,27 +140,10 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
   const eventSlug = generateEventSlug(event);
   const urlPrefix = locale === 'en' ? 'en/' : '';
 
-  // Parse date for timezone
-  const dateMatch = event.startDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  let tz = '+02:00';
-  if (dateMatch) {
-    const [, year, month, day] = dateMatch;
-    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    tz = getAthensTimezone(date);
-  }
-
-  // Format start date with correct timezone
-  let startDate = event.startDate;
-  if (!startDate.includes('T') && (event.timeDoors || event.timePeak)) {
-    // Use known event time instead of midnight
-    startDate = formatSchemaDate(startDate, event.timeDoors || event.timePeak);
-  } else if (!startDate.includes('+') && !startDate.includes('Z')) {
-    if (!startDate.includes('T')) {
-      startDate = `${startDate}T00:00:00${tz}`;
-    } else {
-      startDate = `${startDate}${tz}`;
-    }
-  }
+  // formatSchemaDate handles all inputs: date-only passthrough (no midnight
+  // timestamp for all-day exhibitions), naive-ts + DST-aware offset, tz-aware
+  // passthrough, malformed throws.
+  const startDate = formatSchemaDate(event.startDate, event.timeDoors || event.timePeak || undefined);
 
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
@@ -188,17 +171,10 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     }
   };
 
-  // Add end date for exhibitions
+  // Add end date for exhibitions. Passes through date-only to emit all-day
+  // Schema.org endDate (matches startDate passthrough).
   if (event.endDate) {
-    let endDate = event.endDate;
-    if (!endDate.includes('+') && !endDate.includes('Z')) {
-      if (!endDate.includes('T')) {
-        endDate = `${endDate}T23:59:59${tz}`;
-      } else {
-        endDate = `${endDate}${tz}`;
-      }
-    }
-    schema.endDate = endDate;
+    schema.endDate = formatSchemaDate(event.endDate);
   }
 
   // For single-day events without endDate, use startDate (Schema.org convention)

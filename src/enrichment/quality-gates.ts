@@ -11,6 +11,7 @@
 
 import { TAG_TAXONOMY, FILLER_PHRASES, type EventForEnrichment } from './description-generator';
 import { getWordTarget, classifyEvent } from './enrichment-matrix';
+import { classifyDateFormat } from '../utils/date-format';
 
 // ============================================================================
 // Types
@@ -260,10 +261,11 @@ function validateSchemaLayer(schema: SchemaOrgEvent, event: EventForEnrichment):
     issues.push(createIssue('schema', 'error', 'MISSING_DATE', 'Missing startDate'));
   }
 
-  // Date format check (should include timezone)
-  if (schema.startDate && !schema.startDate.includes('+') && !schema.startDate.includes('Z')) {
+  // Date format check: naive-ts (no offset) flagged; date-only and tz-aware both
+  // Schema.org-valid for startDate (Date vs DateTime types).
+  if (schema.startDate && classifyDateFormat(schema.startDate) === 'naive-ts') {
     issues.push(
-      createIssue('schema', 'warning', 'NO_TIMEZONE', 'startDate missing timezone')
+      createIssue('schema', 'warning', 'NO_TIMEZONE', 'startDate is a naive timestamp without timezone offset')
     );
   }
 
@@ -821,29 +823,49 @@ function getLastSundayOfMonth(year: number, month: number): Date {
 }
 
 /**
- * Format a date with Athens timezone for Schema.org
+ * Format a date for Schema.org JSON-LD emission.
+ *
+ * Accepts any canonical input (date-only or naive-ts) plus legacy tz-aware
+ * (pre-migration and external imports). Produces output in the appropriate
+ * Schema.org form:
+ *   - date-only without explicit time  → YYYY-MM-DD (all-day event)
+ *   - date-only with explicit time     → YYYY-MM-DDTHH:MM:SS+tz
+ *   - naive-ts                         → YYYY-MM-DDTHH:MM:SS+tz
+ *   - tz-aware                         → passthrough (already Schema.org-shaped)
+ *   - malformed                        → throws
+ *
+ * DST offset (+03:00 summer, +02:00 winter) is computed from the event date
+ * via getAthensTimezone(). Uses the shared classifyDateFormat to stay in
+ * lockstep with normalizeDateField on the write path.
  */
 export function formatSchemaDate(dateStr: string, timeStr?: string): string {
-  // Parse the date
-  const dateMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!dateMatch) return dateStr;
+  const fmt = classifyDateFormat(dateStr);
 
+  if (fmt === 'malformed') {
+    throw new Error(`formatSchemaDate: malformed date string: ${JSON.stringify(dateStr)}`);
+  }
+
+  if (fmt === 'tz-aware') {
+    return dateStr;
+  }
+
+  const dateMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!dateMatch) {
+    // Unreachable given classifier contract; defensive only.
+    throw new Error(`formatSchemaDate: unparseable date portion: ${JSON.stringify(dateStr)}`);
+  }
   const [, year, month, day] = dateMatch;
   const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   const tz = getAthensTimezone(date);
 
-  if (timeStr && !dateStr.includes('T')) {
-    return `${dateStr}T${timeStr}:00${tz}`;
-  } else if (!dateStr.includes('T')) {
-    return `${dateStr}T00:00:00${tz}`;
+  if (fmt === 'date-only') {
+    // Explicit time promotes to a timed Schema.org event.
+    // No time → emit YYYY-MM-DD unchanged (all-day Schema.org event).
+    return timeStr ? `${dateStr}T${timeStr}:00${tz}` : dateStr;
   }
 
-  // If already has time, just ensure timezone
-  if (!dateStr.includes('+') && !dateStr.includes('Z')) {
-    return `${dateStr}${tz}`;
-  }
-
-  return dateStr;
+  // naive-ts: append DST-aware offset.
+  return `${dateStr}${tz}`;
 }
 
 /**

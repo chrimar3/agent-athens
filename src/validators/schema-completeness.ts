@@ -9,6 +9,7 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { classifyDateFormat } from '../utils/date-format';
 
 // Valid @type values from our canonical type map
 const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
@@ -95,8 +96,14 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
 
   if (!isNonEmpty(schema.startDate)) {
     errors.push('startDate is missing');
-  } else if (!/[+-]\d{2}:\d{2}$|Z$/.test(schema.startDate)) {
-    errors.push('startDate missing timezone offset');
+  } else {
+    const fmt = classifyDateFormat(schema.startDate);
+    if (fmt === 'malformed') {
+      errors.push(`startDate is malformed: ${schema.startDate}`);
+    } else if (fmt === 'naive-ts') {
+      errors.push('startDate is a naive timestamp without timezone offset');
+    }
+    // date-only (YYYY-MM-DD) and tz-aware are both Schema.org-valid for startDate.
   }
 
   // Location checks

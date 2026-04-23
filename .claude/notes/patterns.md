@@ -1531,3 +1531,40 @@ Gotchas specific to .ics generation:
 - **Filename sanitization**: slugs can contain unicode — strip non-`[a-zA-Z0-9-]` before building the `.ics` filename, otherwise the `a.download` attribute gets ignored by some browsers.
 
 - **No VTIMEZONE block**: Google/Apple/Outlook resolve `TZID=Europe/Athens` via the IANA tzdb, so the 30+ lines of VTIMEZONE/RRULE DST transitions aren't needed. Trade-off documented in `decisions.md`.
+
+## Canonical-format-at-importer-seam pattern
+
+When a string-valued DB column accretes multiple formats over time (from different scrapers, code paths, or schema versions), centralize the format contract:
+
+1. **One classifier, one normalizer** (`src/utils/date-format.ts` — `classifyDateFormat`, `normalizeDateField`). The classifier is the single source of truth for "what shape is this value?" Both write-path and render-path must call it so they can't silently diverge on edge cases (e.g. one treats `…T00:00:00.000Z` as naive-ts, the other as tz-aware).
+2. **Normalizer applied at every write seam** — the canonical `upsertEvent()` AND every allowlisted bypass scraper. The seam-side call is what makes the guarantee hold going forward; the one-time migration (`scripts/migrate-date-format.ts`) only cleans up existing data.
+3. **Architectural guard test** (`tests/no-bypass.test.ts`). Enumerate all `INSERT INTO <table>` sites across `src/` + `scripts/`, exclude test + archived directories via glob, assert each hit is either the canonical seam OR inside an explicitly listed `ALLOWED_BYPASSES` range. Use file + line-range (not exact line) so local edits don't break the guard. Each range entry carries a justification comment explaining **why** this site bypasses the canonical seam (usually performance, occasionally independent transaction semantics). If a new INSERT appears outside the allowlist, the test fails with an actionable error pointing the author at the allowlist file.
+4. **Render-side reuse** — the render path (Schema.org emitter, templates, per-event generators) routes through a single formatter (`formatSchemaDate`) that uses the same classifier. Prevents the classic duplicate-logic trap where three render paths each independently implement `…T00:00:00+tz` for date-only inputs and drift out of sync. Discovered S95: three such duplications in `event-page.ts`, `venue-page.ts`, `templates/page.ts`.
+5. **Malformed → throw, not silent passthrough.** Both the write-side normalizer and the render-side formatter throw on format-classifier `'malformed'`. Silent passthrough lets bad data flow to production; throws fail loud and surface upstream bugs.
+
+Reusable for any cross-cutting string-shape invariant: date columns, URL columns, phone-number columns, money/currency columns.
+
+## Every new monitor must specify its non-coverage at design time (2026-04-23, Session A)
+
+When adding a monitoring signal — S91 visibility monitor, a STALE marker, a health check, a metric — the first question is not "what does this watch?" but "what does this explicitly **not** watch?" S91 monitored sitemap freshness and IndexNow submission health. It did not monitor enrichment throughput. That omission was silent: no warning in the commit, no note in the spec, no comment at the top of the script. Five days of zero-event enrichment runs slipped past because the non-coverage was implicit.
+
+**Apply this going forward:**
+
+1. Every monitor spec has a "Known non-coverage" section naming the failure modes the signal will **not** catch. At minimum, enumerate the adjacent subsystems the monitor doesn't observe.
+2. When extending an existing monitor, audit its prior non-coverage list for what the extension still misses. Adding `enriched_last_24h` to S91 closes the enrichment-throughput gap, but the spec still names the empty-queue false-positive and the weekend-check-gap as active non-coverage.
+3. Reviewers reject PRs that add a monitor without this section. The cost of writing it is a paragraph. The cost of not writing it is S90 repeating silently for 5 days.
+
+The rule applies recursively: a monitor that catches a specific failure does not close the class of failures related to it. Declaring the boundary makes the next gap visible instead of latent.
+
+## Passive markers vs. active alerts (2026-04-23, Session A)
+
+A monitoring signal has two independent attributes: **what it detects** and **how it reaches a human**. These get conflated. The result is a pipeline where detection is strong and delivery is weak, and the weak link silently defeats the strong one.
+
+**Classes:**
+
+- **Passive marker** — the signal lands in a file (CSV column, log line, metric time-series, DB row). Detection fires correctly. A human surfaces it only by looking. Good: cheap to build, no retraining, no noise. Bad: silent across weekends, vacations, distraction windows.
+- **Active alert** — the signal pushes out: macOS notification, email, chat ping, pager. Detection fires and reaches a human within minutes. Good: survives attention gaps. Bad: needs noise management (threshold tuning, escalation rules, suppression during known outages), becomes tedious fast.
+
+**Rule:** every monitor must declare its alert class in its spec. A passive marker is often correct (most of our signals are not urgent enough for notifications), but it must be **chosen** passive, not default-passive by accident. When promoting passive → active, do it as a separate session with its own threshold spike — don't bolt a notification onto an existing monitor without measuring how often it would have fired in the last 30 days.
+
+S91's `enriched_last_24h` extension is declared passive. The weekend gap ("nobody checks the CSV on Saturday") is explicit non-coverage, tracked against the next time it bites rather than speculatively patched.

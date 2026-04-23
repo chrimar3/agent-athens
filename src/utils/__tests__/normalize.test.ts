@@ -12,7 +12,6 @@ import {
 } from "../../../tests/fixtures/raw-events";
 import {
   assertValidEvent,
-  assertValidISO8601,
   assertValidVenue,
   assertValidPrice
 } from "../../../tests/helpers/assertions";
@@ -111,11 +110,12 @@ describe("normalizeEvents", () => {
     expect(result[0].price.type).toBe("with-ticket");
   });
 
-  test("should combine date and time into ISO 8601 format", () => {
+  test("should combine date and time into naive-local ISO 8601 format", () => {
     const result = normalizeEvents({ events: [sampleRawConcert] });
     const event = result[0];
 
-    assertValidISO8601(event.startDate);
+    // Canonical naive-local shape: YYYY-MM-DDTHH:MM:SS (no offset).
+    expect(event.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/);
     expect(event.startDate).toContain(sampleRawConcert.date);
     expect(event.startDate).toContain(sampleRawConcert.time!);
   });
@@ -124,15 +124,20 @@ describe("normalizeEvents", () => {
     const result = normalizeEvents({ events: [sampleRawNoTime] });
     const event = result[0];
 
-    assertValidISO8601(event.startDate);
+    expect(event.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/);
     expect(event.startDate).toContain("20:00"); // Default time
   });
 
-  test("should include Athens timezone offset (+03:00)", () => {
+  test("should produce canonical naive-local format (no timezone offset)", () => {
+    // Session A: canonical on-disk format is naive-local. DST offset is applied
+    // at render time by formatSchemaDate(), never stored. See session plan
+    // /Users/chrism/.claude/plans/session-goal-normalize-crystalline-mountain.md
     const result = normalizeEvents({ events: [sampleRawConcert] });
     const event = result[0];
 
-    expect(event.startDate).toContain("+03:00");
+    expect(event.startDate).not.toContain("+03:00");
+    expect(event.startDate).not.toContain("+02:00");
+    expect(event.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/);
   });
 
   test("should preserve genre information", () => {

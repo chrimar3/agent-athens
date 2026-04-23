@@ -18,6 +18,7 @@ import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
+import { normalizeDateField } from '../src/utils/date-format';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -596,8 +597,8 @@ function saveEvents(events: ScrapedExhibition[], dryRun: boolean): number {
         $id: e.id,
         $title: e.title,
         $description: e.description,
-        $start_date: e.start_date,
-        $end_date: e.end_date,
+        $start_date: normalizeDateField(e.start_date),
+        $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
         $type: e.type,
         $genres: e.genres,
         $venue_name: e.venue_name,

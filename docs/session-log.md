@@ -2750,5 +2750,85 @@ First `parseIsoLocal()` regex handled full ISO only. Exhibition `end_date` store
 
 ---
 
+### Session 95 — Date Format Normalization (seal the importer) — 2026-04-23
+
+**Stream:** Major — Code Development / Pipeline Integrity
+**Scope:** Normalize `events.start_date` / `events.end_date` to canonical naive-local (Europe/Athens implied). Seal every INSERT seam so no new tz-aware row can enter. Ship a live-bug fix for all-day exhibitions being emitted as `T00:00:00+tz` in Schema.org.
+
+#### Plan
+
+Plan file: `~/.claude/plans/session-goal-normalize-crystalline-mountain.md`. Entered plan mode, hit Gate 1 stop-condition (4+ INSERT bypass writers — original assumption was 1), re-scoped under user direction to Option A modified: 3-entry allowlist + explicit `throw` for dead-code email-ingestion bypass, shared classifier for write/render parity, `formatSchemaDate` fixed in-place rather than relocated. Pre-session decision-tree check disproved the feared legacy-schema branch (no `date`/`time` columns exist; `email-ingestion.ts:360` was simply broken dead code).
+
+#### Files changed
+
+- `src/utils/date-format.ts` — NEW. `classifyDateFormat(raw) → 'date-only' | 'naive-ts' | 'tz-aware' | 'malformed'` + `normalizeDateField(raw)`. Single source of truth for format branching across write + render paths.
+- `src/utils/normalize.ts` — removed `+03:00` year-round hardcode from `normalizeDate()`; emits naive-local via `normalizeDateField`. This was the root cause of the `+03:00` rows in `megaron.gr`, `more.com`, `clubber.gr` scrapers (the S43-audit-identified 50/50 split will be addressed in Session B).
+- `src/enrichment/quality-gates.ts` — `formatSchemaDate()` rewritten around `classifyDateFormat`. Fixes: date-only with no time emits `YYYY-MM-DD` (not `T00:00:00+tz` — the live bug for all-day exhibitions); malformed throws instead of silent passthrough. Also fixed the sibling `NO_TIMEZONE` validator in the same file.
+- `src/db/database.ts` — `eventToRow` wraps `event.startDate` / `event.endDate` with `normalizeDateField`. Seals the canonical `upsertEvent()` seam.
+- `scripts/scrape-all.ts`, `scripts/scrape-snfcc.ts`, `scripts/scrape-ai-tech.ts` — `normalizeDateField` applied at bind time in each direct-INSERT bypass. Confirms the 3 allowlisted bypasses each normalize.
+- `src/ingest/email-ingestion.ts:360` — broken `INSERT INTO events` (writes to non-existent `date, time, venue, type, ...` columns) replaced with `throw new Error('email ingestion: date/time schema deprecated; pending Session C unification')`. Not allowlisted — broken code belongs in a throw, not the seam guard.
+- `src/validators/schema-completeness.ts` — validator widened to accept Schema.org date-only (`YYYY-MM-DD`) for startDate. Previously required `[+-]\d{2}:\d{2}|Z` suffix always; rejected the all-day-event emission the live-bug fix introduces.
+- `src/generators/event-page.ts`, `src/generators/venue-page.ts`, `src/templates/page.ts` — three independent duplicated render paths for `${date}T00:00:00+tz` collapsed to single calls through `formatSchemaDate`. Surprise find: this is why ID_2 in the spot-check still rendered midnight-timestamp after the first rebuild — the render path wasn't routing through the fixed utility. The plan was to fix `formatSchemaDate` only; in practice the three duplicates meant fixing the utility didn't reach user-visible output until these call sites were also routed through it.
+- `tests/no-bypass.test.ts` — NEW. Enumerates all `INSERT INTO events` sites in `src/` + `scripts/`; asserts each is either inside the canonical seam range (`src/db/database.ts` 170-250, covering the whole `upsertEvent()` function body so small edits don't drift the test) or one of 3 allowlisted bypass ranges (with justification comment per entry). Fails loudly if a new INSERT appears.
+- `src/utils/__tests__/date-format.test.ts` — NEW. Classifier + normalizer tests, including JS `Date.toISOString()` millisecond-fractional handling (caught a ripple during Step 3 when `createdAt`/`updatedAt` rows hit `normalizeDateField` via `eventToRow` — they had `.000Z` suffixes the initial classifier regex didn't tolerate).
+- `src/enrichment/__tests__/format-schema-date.test.ts` — NEW. `formatSchemaDate` coverage including DST boundaries (2026-03-29, 2026-10-25), date-only passthrough (the live-bug fix), malformed throw. 16 tests.
+- `src/db/__tests__/queries.test.ts` — +7 Tier 1 exhibition-filter tests (mixed naive-ts / date-only formats, past/ongoing/today branches). Were not present pre-S95 despite being project-canonical behavior.
+- `src/utils/__tests__/normalize.test.ts` — removed `+03:00` expectation + `assertValidISO8601` import; updated to assert canonical naive-local shape.
+- `scripts/migrate-date-format.ts` — NEW. One-shot migration following `scripts/migrate-price-types.ts` conventions. `--dry-run` reports per-source distribution + sample diffs + anomaly count; `--execute` refuses to run if anomalies > 0 (Gate G2). Anomalies written to `logs/date-migration-anomalies.log`.
+- `specs/session-C-email-ingestion.md` — NEW stub. Documents the deferred Session C scope: resolve the broken `email-ingestion.ts` path and decide the canonical column model for newsletter-ingested events.
+- `specs/start-date-format-audit.md` — updated pre-session audit; carried over unchanged into session.
+
+#### What happened
+
+Stepwise execution of the plan. Notable deviations:
+
+- **Gate 1 tripped during planning** (discovered 4 true INSERT bypasses, not 1). Re-scoped under user direction before writing any code. The 4th bypass (`email-ingestion.ts:360`) turned out to be broken dead code, not a real schema-divergent writer, so scope actually narrowed back to 3 + 1 throw.
+- **Millisecond-fractional ripple.** After implementing `normalizeDateField`, the full test suite surfaced 2 failing tests in `cleanupOldEvents` (the ones that call `new Date().toISOString()` and feed `createdAt` to the seam). Classifier regex was tightened to accept optional `.sss` fractional seconds; `normalizeDateField` slices to 19 chars for both naive-ts and tz-aware.
+- **Render-path duplication surprise.** Fixed `formatSchemaDate` → rebuilt → pinned ID_2 still rendered `2026-04-17T00:00:00+03:00` instead of `2026-04-17`. Root cause: three render sites (`event-page.ts:159`, `venue-page.ts:107`, `templates/page.ts:386`) independently built the `${date}T00:00:00${tz}` expression without routing through `formatSchemaDate`. Collapsed all three to single `formatSchemaDate` calls. Also widened `schema-completeness.ts` validator which had been enforcing "startDate must have `[+-]HH:MM|Z` suffix" — that rule, paired with the live-bug behavior, was actually hiding the bug. Loosened to accept Schema.org date-only for all-day events.
+- **Gate 2 (migration anomaly bucket) clean.** Dry-run: 114 tz-aware, 459 date-only, 11,205 naive-ts, 0 malformed. Execute: 114 rows migrated. Post-migration invariant: 0 tz-aware markers remain. Row count unchanged (11,778).
+- **Gate 4 clean.** No test mocked the broken `email-ingestion.ts` INSERT — safe to replace with throw without further discussion.
+- **Stretch deferred.** `formatSchemaDate` relocation from `src/enrichment/quality-gates.ts` to `src/utils/date-format.ts` skipped; context budget flagged for close-out. Rolls into Session B Step 0.
+
+#### Verification
+
+| Check | Result |
+|---|---|
+| `bun test` baseline (captured Step 0) | 1559 pass |
+| `bun test` final | **1606 pass, 1 skip, 0 fail** (+47 new tests) |
+| `bunx tsc --noEmit` | 0 errors |
+| `bun run build` | 11,618 pages, 0 schema errors, 20 unrelated warnings (geo/address/FAQPage — all pre-existing) |
+| DB tz-aware leftover | 0 |
+| DB row count | 11,778 (unchanged from pre-migration snapshot) |
+| Pinned ID_1 (concert naive-ts today) | `startDate: "2026-04-23T10:30:00+03:00"` ✓ DST-correct |
+| Pinned ID_2 (date-only exhibition — live-bug case) | `startDate: "2026-04-17"` ✓ **no midnight timestamp** |
+| Pinned ID_3 (tz-aware → stripped + re-rendered) | `startDate: "2026-09-24T20:00:00+03:00"` ✓ DST-correct via `formatSchemaDate` |
+| Seam grep (production `INSERT INTO events`) | 4 hits, all in allowlist: `src/db/database.ts:187` (canonical) + 3 scraper bypasses |
+| Hardcode grep (`+03:00`/`+02:00`) in `src/utils/` + `scripts/` | 3 hits: 2 are doc comments; 1 is `scripts/scrape-megaron.ts:165` — flows through `upsertEvent()` so seam normalizes it. Full scraper cleanup deferred to Session B. |
+
+#### Learnings
+
+- **Dead code ≠ design-by-bypass.** The `email-ingestion.ts` INSERT was tempting to allowlist "just to close the test" but doing so would have inverted the guard's meaning. Broken bypass code gets a `throw`, not a seam-allowlist entry. Captured in `.claude/notes/mistakes.md` as a first-class pattern.
+- **A write-path fix can be invisible until the render path also routes through the shared utility.** The live-bug fix sat dormant for one build cycle because three render sites independently implemented their own `T00:00:00+tz` logic. Lesson: when fixing a cross-cutting format concern, grep for the transformation *literal* (`T00:00:00`) not just the function name (`formatSchemaDate`).
+- **Validators and fixes must evolve together.** Tightening the on-disk format required loosening `schema-completeness.ts` (which had been enforcing "always has offset" as a proxy for correctness). Review sibling validators whenever a canonical format changes.
+- **Format classifiers pay for themselves.** A single `classifyDateFormat` used by both `normalizeDateField` and `formatSchemaDate` meant the parity assertion was one test, not a matrix of N-over-M compatibility checks. Also caught the `.sss` millisecond case once (in the classifier) rather than twice (in each caller).
+
+#### Open items / Next sessions
+
+- **Session B — scraper format root-cause.** `scripts/scrape-megaron.ts:165` still builds `…+03:00` strings internally. Seam strips them, but the scraper should emit naive-local directly. Also `more.com` 3-way split and `athinorama.gr` stragglers. Session B Step 0 inherits the deferred `formatSchemaDate` relocation.
+- **Session C — email-ingestion schema unification.** Tracked in `specs/session-C-email-ingestion.md`. The `throw` in `email-ingestion.ts:360` holds the line; actual unification of the date/time vs start_date/end_date column model is deferred.
+- **Monitoring the live-bug fix blast radius.** Unknown number of prior sessions shipped `T00:00:00+03:00` for all-day exhibitions. Schema.org validator output + any downstream `.ics` consumers (Save + Share Phase 2 when it lands) should be watched for midnight-start anomalies attributable to this emission.
+
+#### Deploy
+
+`netlify deploy --prod --dir=dist` — run after review.
+
+#### Post-session notes updated
+
+- `.claude/notes/mistakes.md` — 3 new rows: DB string-column format non-uniformity (2nd instance, cross-ref S43), DB abstraction bypass pattern, dead-code-not-allowlist.
+- `.claude/notes/patterns.md` — new section: "Canonical-format-at-importer-seam pattern" (classifier + normalizer + write-seam application + architectural guard test + render-side reuse + fail-loud on malformed).
+- `.claude/notes/decisions.md` — 3 new rows: canonical naive-local format, shared classifier, `no-bypass.test.ts` as architectural guard.
+
+---
+
 > **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.
 

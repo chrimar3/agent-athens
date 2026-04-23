@@ -313,6 +313,160 @@ describe("cleanupOldEvents", () => {
   });
 });
 
+/**
+ * Tier 1 exhibition-filter tests.
+ *
+ * Covers the project-canonical pattern:
+ *   COALESCE(CASE WHEN type = 'exhibition' THEN end_date ELSE NULL END, start_date) < cutoff
+ * at src/db/database.ts:352-357 (cleanupOldEvents).
+ *
+ * Session A canonical on-disk format is naive-local (no offset suffix).
+ * These tests inject rows directly via SQL so the filter is exercised against
+ * the post-migration format shape regardless of whether seedEvents normalizes.
+ */
+describe("cleanupOldEvents — Tier 1 exhibition filter (naive-local format)", () => {
+  let db: Database;
+
+  beforeEach(() => {
+    db = createTestDB();
+  });
+
+  afterEach(() => {
+    cleanupDB(db);
+  });
+
+  function seedRaw(row: {
+    id: string;
+    type: string;
+    start_date: string;
+    end_date?: string | null;
+  }): void {
+    // Use only columns present in src/db/schema.sql (test DB baseline).
+    db.prepare(`
+      INSERT INTO events (
+        id, title, description, start_date, end_date, type, genres, venue_name,
+        price_type, source, created_at, updated_at
+      ) VALUES (
+        $id, $title, '', $start_date, $end_date, $type, '[]', 'Test Venue',
+        'with-ticket', 'test', datetime('now'), datetime('now')
+      )
+    `).run({
+      $id: row.id,
+      $title: row.id,
+      $start_date: row.start_date,
+      $end_date: row.end_date ?? null,
+      $type: row.type,
+    });
+  }
+
+  test("deletes past concert with naive-ts start_date", () => {
+    const pastDate = new Date();
+    pastDate.setDate(pastDate.getDate() - 100);
+    const iso = pastDate.toISOString().slice(0, 19); // naive-ts: YYYY-MM-DDTHH:MM:SS
+
+    seedRaw({ id: "past-concert", type: "concert", start_date: iso });
+
+    expect(cleanupOldEvents(90, db)).toBe(1);
+    expect(countEvents(db)).toBe(0);
+  });
+
+  test("preserves ongoing exhibition with future naive-ts end_date even if start_date is in the past", () => {
+    const pastStart = new Date();
+    pastStart.setDate(pastStart.getDate() - 100);
+    const futureEnd = new Date();
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    seedRaw({
+      id: "ongoing-exhibition",
+      type: "exhibition",
+      start_date: pastStart.toISOString().slice(0, 19),
+      end_date: futureEnd.toISOString().slice(0, 19),
+    });
+
+    expect(cleanupOldEvents(90, db)).toBe(0);
+    expect(countEvents(db)).toBe(1);
+  });
+
+  test("deletes ended exhibition with past naive-ts end_date", () => {
+    const pastStart = new Date();
+    pastStart.setDate(pastStart.getDate() - 200);
+    const pastEnd = new Date();
+    pastEnd.setDate(pastEnd.getDate() - 120);
+
+    seedRaw({
+      id: "ended-exhibition",
+      type: "exhibition",
+      start_date: pastStart.toISOString().slice(0, 19),
+      end_date: pastEnd.toISOString().slice(0, 19),
+    });
+
+    expect(cleanupOldEvents(90, db)).toBe(1);
+    expect(countEvents(db)).toBe(0);
+  });
+
+  test("preserves ongoing exhibition with future date-only end_date", () => {
+    const pastStart = new Date();
+    pastStart.setDate(pastStart.getDate() - 100);
+    const futureEnd = new Date();
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    seedRaw({
+      id: "date-only-ongoing",
+      type: "exhibition",
+      start_date: pastStart.toISOString().slice(0, 10), // date-only
+      end_date: futureEnd.toISOString().slice(0, 10), // date-only
+    });
+
+    expect(cleanupOldEvents(90, db)).toBe(0);
+    expect(countEvents(db)).toBe(1);
+  });
+
+  test("deletes ended exhibition with past date-only end_date", () => {
+    const pastStart = new Date();
+    pastStart.setDate(pastStart.getDate() - 200);
+    const pastEnd = new Date();
+    pastEnd.setDate(pastEnd.getDate() - 120);
+
+    seedRaw({
+      id: "date-only-ended",
+      type: "exhibition",
+      start_date: pastStart.toISOString().slice(0, 10),
+      end_date: pastEnd.toISOString().slice(0, 10),
+    });
+
+    expect(cleanupOldEvents(90, db)).toBe(1);
+    expect(countEvents(db)).toBe(0);
+  });
+
+  test("preserves today's concert (naive-ts, no retention delete)", () => {
+    const today = new Date();
+    seedRaw({
+      id: "today-concert",
+      type: "concert",
+      start_date: today.toISOString().slice(0, 19),
+    });
+
+    expect(cleanupOldEvents(90, db)).toBe(0);
+    expect(countEvents(db)).toBe(1);
+  });
+
+  test("exhibition with NULL end_date falls back to start_date (canonical COALESCE behavior)", () => {
+    const pastDate = new Date();
+    pastDate.setDate(pastDate.getDate() - 150);
+
+    seedRaw({
+      id: "exhibition-no-end",
+      type: "exhibition",
+      start_date: pastDate.toISOString().slice(0, 19),
+      end_date: null,
+    });
+
+    // COALESCE falls through to start_date which is 150 days old → deleted at 90-day retention.
+    expect(cleanupOldEvents(90, db)).toBe(1);
+    expect(countEvents(db)).toBe(0);
+  });
+});
+
 describe("updateEvent", () => {
   let db: Database;
 

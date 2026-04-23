@@ -23,6 +23,7 @@
  */
 
 import { Database } from 'bun:sqlite';
+import { normalizeDateField } from '../src/utils/date-format';
 import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
@@ -1383,15 +1384,16 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         currentType: eventType
       });
 
-      // Append time to start_date if available, and save time separately to time_doors
+      // Append time to start_date if available, and save time separately to time_doors.
+      // normalizeDateField enforces canonical naive-local format at bind time.
       const startDateTime = e.time ? `${e.start_date}T${e.time}:00` : e.start_date;
       const timeSource = e.time ? 'scraped_listing' : null;
       stmt.run({
         $id: e.id,
         $title: e.title,
         $description: e.description,
-        $start_date: startDateTime,
-        $end_date: e.end_date || null,
+        $start_date: normalizeDateField(startDateTime),
+        $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
         $time_doors: e.time || null,
         $time_source: timeSource,
         $type: eventType,

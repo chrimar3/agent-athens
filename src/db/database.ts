@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { isAthensEvent } from "../utils/athens-filter";
 import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
+import { normalizeDateField } from "../utils/date-format";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -54,8 +55,8 @@ export function eventToRow(event: Event): Record<string, any> {
     $title: event.title,
     $description: event.description || "",
     $full_description: event.fullDescription || null,
-    $start_date: event.startDate,
-    $end_date: event.endDate || null,
+    $start_date: normalizeDateField(event.startDate),
+    $end_date: event.endDate ? normalizeDateField(event.endDate) : null,
     $type: event.type,
     $genres: JSON.stringify(event.genres),
     $tags: JSON.stringify(event.tags),

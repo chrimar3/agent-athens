@@ -22,6 +22,7 @@ import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
+import { normalizeDateField } from '../src/utils/date-format';
 
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
@@ -1047,8 +1048,8 @@ async function main() {
           $id: generateEventId(e.title, e.start_date, e.venue_name),
           $title: e.title,
           $description: e.description || '',
-          $start_date: e.time ? `${e.start_date}T${e.time}:00` : e.start_date,
-          $end_date: e.end_date || null,
+          $start_date: normalizeDateField(e.time ? `${e.start_date}T${e.time}:00` : e.start_date),
+          $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
           $time_doors: e.time || null,
           $type: e.event_type,
           $genres: JSON.stringify(['AI', 'Tech']),
