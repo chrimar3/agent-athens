@@ -289,8 +289,19 @@ log "Auth pre-check passed"
 #    serialize safely at the SQLite level (commit 46667ce35). Prior to S80 this
 #    loop ran batches sequentially — see git log for the rationale if this
 #    reverts.
+
+# S98: run-unique identifier for wrapper↔subprocess reconciliation.
+# Exported so `claude -p` inherits it, and save-batch.ts inside the subprocess
+# reads process.env.RUN_ID to tag each enrichment_log row. `date +%s` for
+# human-readable timestamp; `$$` disambiguates overlapping launchd-triggered
+# runs in the same second.
+RUN_ID="$(date +%s)-$$"
+export RUN_ID
+log "RUN_ID=$RUN_ID"
+
 SUCCEEDED=0
 FAILED=0
+TOTAL_ENRICHED=0
 
 declare -a CLAUDE_PIDS=()
 declare -a WATCHDOG_PIDS=()
@@ -342,6 +353,8 @@ for i in "${!CLAUDE_PIDS[@]}"; do
     TIMER_PID="${WATCHDOG_PIDS[$i]}"
     BATCH_NAME="${BATCH_NAMES[$i]}"
     START_TIME="${START_TIMES[$i]}"
+    # S98: extract integer batch number from "batch-N" for DB query filter.
+    BATCH_NUM="${BATCH_NAME#batch-}"
 
     # Wait for claude to finish (or be killed by watchdog)
     wait "$CLAUDE_PID" && EXIT_CODE=0 || EXIT_CODE=$?
@@ -353,20 +366,45 @@ for i in "${!CLAUDE_PIDS[@]}"; do
     END_TIME=$(date +%s)
     ELAPSED=$((END_TIME - START_TIME))
 
-    if [[ "$EXIT_CODE" -eq 0 ]]; then
-        log "$BATCH_NAME completed in ${ELAPSED}s"
+    # S98: reconcile against DB state. Authoritative signal is the count of
+    # enrichment_log rows this (run_id, batch_number) produced with
+    # saved_to_events=1. Subprocess exit code is advisory — stream-idle can
+    # exit non-zero after saves commit cleanly.
+    SAVED_THIS_BATCH=$(sqlite3 "$DB_PATH" "
+      SELECT COUNT(*) FROM enrichment_log
+      WHERE run_id = '$RUN_ID'
+        AND batch_number = $BATCH_NUM
+        AND saved_to_events = 1
+    " 2>/dev/null || echo 0)
+    SAVED_THIS_BATCH="${SAVED_THIS_BATCH:-0}"
+
+    # Four-quadrant log matrix (S98). Ground-truth bucketing: saves happened
+    # = SUCCEEDED, regardless of exit code. Exit code drives log severity only.
+    if [[ "$EXIT_CODE" -eq 0 && "$SAVED_THIS_BATCH" -gt 0 ]]; then
+        log "$BATCH_NAME OK: $SAVED_THIS_BATCH events saved in ${ELAPSED}s"
         SUCCEEDED=$((SUCCEEDED + 1))
+        TOTAL_ENRICHED=$((TOTAL_ENRICHED + SAVED_THIS_BATCH))
+    elif [[ "$EXIT_CODE" -ne 0 && "$SAVED_THIS_BATCH" -gt 0 ]]; then
+        # Wrapper-misreport quadrant — the class Session 98 was built to surface.
+        log "$BATCH_NAME WARN: subprocess exited $EXIT_CODE but $SAVED_THIS_BATCH events saved successfully (${ELAPSED}s)"
+        SUCCEEDED=$((SUCCEEDED + 1))
+        TOTAL_ENRICHED=$((TOTAL_ENRICHED + SAVED_THIS_BATCH))
+    elif [[ "$EXIT_CODE" -eq 0 && "$SAVED_THIS_BATCH" -eq 0 ]]; then
+        # New-failure-class detector. Theoretical today; if this ever fires,
+        # subprocess lied about success. Investigate immediately.
+        log_error "$BATCH_NAME WARN: subprocess reported success but no events saved (${ELAPSED}s) — possible new failure class"
+        FAILED=$((FAILED + 1))
     else
-        log_error "$BATCH_NAME failed (exit $EXIT_CODE) after ${ELAPSED}s"
+        log_error "$BATCH_NAME ERROR: subprocess failed (exit $EXIT_CODE) and no events saved (${ELAPSED}s)"
         FAILED=$((FAILED + 1))
     fi
 done
 
-# 9. Report
-TOTAL_ENRICHED=$((SUCCEEDED * EVENTS_PER_BATCH))
+# 9. Report — based on accumulated DB counts, not SUCCEEDED × EVENTS_PER_BATCH.
 log "=== Auto-enrichment complete ==="
+log "RUN_ID: $RUN_ID"
 log "Batches: $SUCCEEDED succeeded, $FAILED failed"
-log "Events enriched (est): $TOTAL_ENRICHED"
+log "Events enriched: $TOTAL_ENRICHED"
 
 if [[ "$FAILED" -gt 0 ]]; then
     exit 1

@@ -189,6 +189,10 @@ export function ensureV4Columns(db: Database): void {
     { name: 'quality_score', type: 'INTEGER' },
     { name: 'quality_issues', type: 'TEXT' },
     { name: 'tags_applied', type: 'TEXT' },
+    // Session 98: observability columns. Migration script owns the backfill;
+    // this ensures the columns exist for fresh/dev DBs that haven't run it.
+    { name: 'saved_to_events', type: 'BOOLEAN DEFAULT NULL' },
+    { name: 'run_id',          type: 'TEXT DEFAULT NULL' },
   ];
 
   for (const col of needed) {
@@ -275,32 +279,66 @@ export function saveBatch(
 
     const tagsJson = tags ? JSON.stringify(tags) : current?.tags || null;
 
-    if (!dryRun) {
-      // Update event — English only
-      db.prepare(`
-        UPDATE events SET
-          full_description = ?,
-          full_description_en = ?,
-          tags = ?,
-          needs_enrichment = 0,
-          enriched_at = datetime('now'),
-          updated_at = datetime('now')
-        WHERE id = ?
-      `).run(description, description, tagsJson, eventId);
+    // Session 98 observability. Read RUN_ID once per event so each log row is
+    // tagged with the wrapper-generated identifier; NULL for ad-hoc invocations.
+    const runId = process.env.RUN_ID ?? null;
+    let savedToEvents: 0 | 1 = 0;
+    let saveError: Error | null = null;
 
-      // Log to enrichment_log with full before/after
-      db.prepare(`
-        INSERT OR REPLACE INTO enrichment_log (
-          event_id, enrichment_version, description_before, description_after,
-          batch_number, session_id, quality_score, quality_issues,
-          tags_applied, word_count_en
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(
-        eventId, 'v4', descriptionBefore, description,
-        batch, session, gateResult.score,
-        JSON.stringify(gateResult.issues.map(i => `[${i.severity}] ${i.code}: ${i.message}`)),
-        tagsJson, wordResult.count
-      );
+    if (!dryRun) {
+      try {
+        // Update event — English only
+        db.prepare(`
+          UPDATE events SET
+            full_description = ?,
+            full_description_en = ?,
+            tags = ?,
+            needs_enrichment = 0,
+            enriched_at = datetime('now'),
+            updated_at = datetime('now')
+          WHERE id = ?
+        `).run(description, description, tagsJson, eventId);
+        savedToEvents = 1;
+      } catch (err) {
+        saveError = err instanceof Error ? err : new Error(String(err));
+        // savedToEvents stays 0; the INSERT below will log the attempt.
+      }
+
+      // Log the attempt regardless of save success. Wrapped in try/catch so a
+      // failure here cannot block the save (S91 discipline: observability
+      // side-effects must never kill production path).
+      try {
+        db.prepare(`
+          INSERT OR REPLACE INTO enrichment_log (
+            event_id, enrichment_version, description_before, description_after,
+            batch_number, session_id, quality_score, quality_issues,
+            tags_applied, word_count_en, saved_to_events, run_id
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(
+          eventId, 'v4', descriptionBefore, description,
+          batch, session, gateResult.score,
+          JSON.stringify(gateResult.issues.map(i => `[${i.severity}] ${i.code}: ${i.message}`)),
+          tagsJson, wordResult.count, savedToEvents, runId
+        );
+      } catch {
+        // Log-write failure is observability loss, not data loss. Skip.
+      }
+    }
+
+    // If the save itself failed, record the failure in results and skip the
+    // success path below. The enrichment_log row (if the INSERT succeeded)
+    // already captures saved_to_events=0 for wrapper reconciliation.
+    if (saveError) {
+      console.log(`  x ${eventId.substring(0, 12)}... — save failed (${saveError.message})`);
+      results.push({
+        eventId,
+        success: false,
+        wordCount: wordResult.count,
+        qualityScore: gateResult.score,
+        hadPreviousDescription: descriptionBefore !== null,
+        error: `Save failed: ${saveError.message}`,
+      });
+      continue;
     }
 
     // Extract opening sentence

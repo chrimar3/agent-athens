@@ -2899,6 +2899,42 @@ Stepwise execution of the plan. Notable deviations:
 - `price_range` free-text audit — scope is a grep pass for non-conforming values + trace to the upstream writer.
 - Narrative/structured price consistency — enrichment descriptions can assert prices independent of the DB price field; when they diverge, what's the policy?
 
+### Session 98 — Wrapper Reconciliation + `saved_to_events` (Inverted S90) — 2026-04-24
+
+**Plan:** Close the observability loop that Path C surfaced. The 2026-04-16 → 2026-04-20 "silent outage" was `auto-enrich.sh` misreporting saved batches as failures — `claude -p` exits non-zero on stream-idle, and the wrapper bucketed on exit code only. Fix at source: add `saved_to_events BOOLEAN` and `run_id TEXT` to `enrichment_log`, write at save time, read authoritatively from the wrapper.
+
+**What happened:**
+- Step 0 (HARD STOP): ✅ read wrapper logic. Misreport origin at lines 347, 357-362, 366 (subprocess exit code drives bucket + multiplication estimate). Single signal source, clean to swap. Surfaced that `SESSION_ID`/`BATCH_NUM` are NOT plumbed wrapper→subprocess today. Planner approved Row 3 of the decision tree (add `run_id`, leave `session_id` alone — rollback-batch.ts uses it as a destructive filter).
+- Step 1: ✅ migration `scripts/migrate-enrichment-log-observability.ts`. Dry-run delta under ±3% vs classification (1647 total: 501 TRUE, 194 FALSE, 952 NULL). Applied cleanly. Idempotent (re-run shows [skip] on both columns).
+- Step 2: ✅ 6 failing tests in `tests/enrichment-save-observability.test.ts`. Red state confirmed.
+- Step 3: ✅ wired into `scripts/save-batch.ts`. UPDATE try/catch → `savedToEvents` flag → INSERT (also wrapped in try/catch so observability can't block save). `RUN_ID` from `process.env`. All 6 tests green. Existing save-batch integration tests (29/1skip/0fail) unaffected.
+- Step 4: ✅ `scripts/auto-enrich.sh`: `RUN_ID="$(date +%s)-$$"` generated + exported, `BATCH_NUM` extracted from `BATCH_NAME`, post-batch DB query against `saved_to_events`, four-quadrant log matrix (OK / WARN wrapper-misreport / WARN new-failure-class / ERROR), `TOTAL_ENRICHED` accumulated from DB instead of `SUCCEEDED × EVENTS_PER_BATCH`. `bash -n` clean.
+- Step 5: ✅ S91 monitor extended with `wrapper_discrepancy_last_24h` column + STALE_WRAPPER (3-consecutive-day trigger). 30 tests pass (up from 17). Production CSV migrated 19 → 20 cols, today's row shows `enriched_last_24h=29`, `wrapper_discrepancy_last_24h=0`.
+- Step 6 (optional): ✅ `specs/cleanup-enrichment-log-orphans.sql` written with preconditions, scoped DELETE, verification. NOT executed — one blast radius per session.
+- Step 7: ✅ full suite 1644 pass / 0 fail / 1 skip. tsc clean. Commit + deploy next.
+
+**Commit:** Session 98's commit follows this session-log entry.
+
+**Surprises:**
+- `TOTAL_ENRICHED = SUCCEEDED × EVENTS_PER_BATCH` (line 366 of `auto-enrich.sh`) was a multiplication estimate, not a DB count — a **third misreport vector** beyond stream-idle. A partially-saved batch (3 of 5 saved, exit 0) would report 5 enriched. Step 4 replaces this with DB accumulation.
+- `enrichment_log` has 3 distinct `(session_id, batch_number)` tuples across 14 days (147 rows): `('batch-1', 1)`, `('batch-2', 2)`, `('batch-3', 3)`. `session_id` is batch-within-run, not session-level. Fourth instance of "status fields decay" this week.
+- TRIM-tolerant backfill matched 501 rows (expected ~493 from Path C classification). +8 delta most likely from fresh saves between classification and migration; the TRIM proxy didn't expose silent under-counting in the prior strict-equality proxy.
+- CSV migration's "only handle 18→19" guard from Session A needed generalization to N→20. Fixed via `toInsert = newCols - oldCols` + `Array(toInsert).fill('')` — zero regressions because 18→19 is a special case of the general form.
+
+**Learnings (added to notes):**
+- `patterns.md`: **"Status fields decay"** — four-instances-in-one-week pattern. `enrichment_tier`, `price_source`, commit-scope, `session_id`. Four remediation tactics: write at source, verify at read, name for current semantics, add new column instead of repurposing.
+- `patterns.md`: **"Observability at the source"** — when the thing-being-observed and the observation of it are written by different code paths, the observation drifts. `saved_to_events` at save site = ground truth; log-scraping or exit-code inference = proxy. Prefer the former.
+- `mistakes.md`: wrapper-misreport (inverted S90 polarity), `session_id` naming drift (fourth status-field-decay instance), CSV migration narrow-guard generalization, WAL + readonly discipline held under pressure.
+- `decisions.md`: six decisions — exit code advisory, `saved_to_events` at save site, new `run_id` column, env-var propagation (not brief prompt), S91 monitor extension, orphan cleanup deferred.
+
+**Queue status:** enriched_last_24h=29 (live), wrapper_discrepancy_last_24h=0 (live). `enrichment_log` has 501 TRUE, 194 FALSE, 952 NULL in `saved_to_events`; all rows have `run_id=NULL` until the next auto-enrich run populates it forward.
+
+**Open items:**
+- Next scheduled auto-enrich run (tonight 20:00 Athens via launchd, OR manual) will be the first live data point. Watch for: `RUN_ID=<timestamp>-<pid>` in the log, per-batch log lines using the four-quadrant matrix, `saved_to_events=1` on new `enrichment_log` rows with that run_id.
+- Orphan cleanup SQL at `specs/cleanup-enrichment-log-orphans.sql` — deferred to Pattern G maintenance batch after DB backup.
+- Parked from earlier sessions: categorizer audit (Venue-Lock Type Mismatches leak), `price_range` free-text audit, narrative/structured price consistency policy. All still open — Session 98 didn't touch them.
+- If a **fifth instance** of "status fields decay" surfaces in the next two weeks, elevate the pattern to a `no-bypass.test.ts`-style architectural guard.
+
 ---
 
 > **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.

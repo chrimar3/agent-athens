@@ -1599,3 +1599,44 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 ```
 
 **Test shape:** for each gate, test at minimum: (i) compatible child returns inherited value, (ii) incompatible child returns null, (iii) no-history container returns null, (iv) fuzzy-match doesn't bypass the gate.
+
+## Status fields decay (2026-04-24, Session 98)
+
+**Rule:** Any column that claims to summarize another state — `enrichment_tier`, `price_source`, `saved_to_events`, a field called `session_id` that stores something other than a session identifier — must be written at the moment the state changes AND verified against ground truth when read. Names promise; values drift. A read that trusts the name is a read of stale data.
+
+**Four instances surfaced in one week:**
+
+1. **`enrichment_tier='stub'` on fully-enriched events** (Session 97 diagnostic). The tier field stopped being updated somewhere in the save path. Events that passed quality gates at v4 with scores of 94+ still carry `stub`. Any filter like `WHERE enrichment_tier != 'stub'` undercount enriched events.
+2. **`price_source='venue_default'` on type-mismatched prices** (Session 97 fixed). The source field said "inherited from venue default" but the venue's default didn't apply to this event's type. Name-implies-semantic-fit; value-doesn't-deliver.
+3. **Commit scope doesn't match `git status` output** (Session 96 mistake, round-four of the same class). Different subsystem, same shape: `git status` presents a view that promises "this is what your commit will contain," but the index actually drives the commit. The name of the thing disagrees with the value.
+4. **`enrichment_log.session_id` stores batch-within-run name** (Session 98 diagnostic). Column named for session-level aggregation, populated with values like `'batch-1'`. Two runs on the same day share `session_id='batch-1'` — aggregation by session_id collapses history. The fix is `run_id` as a new column, not a semantic change to `session_id` (because scripts/rollback-batch.ts reads session_id as a destructive filter).
+
+**Four in one week is no longer "recurring" — it's the dominant bug class surfacing from this codebase.** Graduates from observation to working principle. Four remediation tactics:
+
+**(a) Write at source.** The column that records "X was saved successfully" must be written at the moment of the successful save, in the same transaction if possible. `saved_to_events BOOLEAN` on `enrichment_log` is Session 98's application: set by `save-batch.ts` in the same code block that runs `UPDATE events SET full_description = ...`. Not by a downstream cron, not by a log-scraping tool. At source.
+
+**(b) Verify at read.** Any filter that trusts a status field should carry a verification fallback — "is this really stub?" means reading the field AND checking a ground-truth signal (`LENGTH(full_description_en) > 200` for enrichment, `price_amount IS NOT NULL` for price, etc.). When the two disagree, prefer ground truth.
+
+**(c) Name for current semantics, not aspirational.** If a column is called `session_id` and nobody writes session-level values to it, rename to `batch_label` or add `run_id` as the real-semantic companion. Aspirational names invite readers to write queries that aren't supported by the actual values.
+
+**(d) Add a new column instead of repurposing.** When you find a status field whose values don't match its name, adding a new column with clean semantics is almost always cheaper than migrating the old one's values. Downstream readers of the old column might be using the broken semantics as a feature (rollback-batch.ts treats `session_id='batch-1'` as a targeting key, not a session identifier). Migration risks breaking those. New column keeps the blast radius at zero.
+
+**Future pressure test:** if a fifth instance surfaces in the next two weeks, elevate the principle to a `no-bypass.test.ts`-style architectural guard — grep for `SELECT ... FROM X WHERE status_field = ...` patterns across src/ and flag them for review.
+
+## Observability at the source (2026-04-24, Session 98)
+
+**Rule:** When the thing being observed and the observation of it are written by different code paths, the observation drifts from the thing. Keep them in the same code path.
+
+**Session 98 application:**
+- `saved_to_events BOOLEAN` is written by `save-batch.ts` in the same function as the `UPDATE events` call. If the UPDATE succeeds, `saved_to_events=1`. If it throws, `saved_to_events=0`. Both paths write a log row. The observation and the thing are the same commit.
+- `auto-enrich.sh` used to infer save count from subprocess exit code (a proxy on a different code path). Session 98 replaced that with a direct DB query against `saved_to_events`. The wrapper doesn't infer anymore; it reads.
+
+**Counter-examples (what this rule is not):**
+- Not an argument against monitoring or logs. Logs are fine; they're observability of observations. The rule is about the first observation layer — the one closest to the event — being written at the event.
+- Not an argument against async observability. A queue-then-persist observability pipeline is fine IF the initial "we did this thing" record is written at the thing. The queue/pipeline is a transport; the source-of-truth write happens in the same code path as the action.
+
+**How to apply:**
+
+1. When adding an observability signal, ask "where does the thing-being-observed happen?" — that's where the observability write should happen, not some log-scraping or exit-code-inferring cron that runs later.
+2. When fixing an observability bug, the fix is often "move the write earlier, into the same function as the action." Not "make the later layer smarter about inferring what the earlier layer did."
+3. S91 discipline still applies: observability writes must be best-effort (wrapped in try/catch) so they never block the action. The discipline "write at source" is compatible with "never kill production path" — put the try/catch around the observability write, not the action.

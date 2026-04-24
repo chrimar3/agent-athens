@@ -23,8 +23,9 @@ const CSV_PATH = join(PROJECT_DIR, 'data/search-visibility-log.csv');
 const DB_PATH = join(PROJECT_DIR, 'data/events.db');
 const BASE_URL = 'https://agentathens.com';
 
-export const CSV_HEADER = 'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,ai_citations_count,enriched_last_24h,notes';
+export const CSV_HEADER = 'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,ai_citations_count,enriched_last_24h,wrapper_discrepancy_last_24h,notes';
 const ENRICHED_COL_INDEX = 17;
+const WRAPPER_DISCREPANCY_COL_INDEX = 18;
 
 // ── CLI arg parsing ──────────────────────────────────────────
 
@@ -154,14 +155,18 @@ export function migrateCsvIfNeeded(csvPath: string = CSV_PATH): void {
 
     const oldCols = existingHeader.split(',').length;
     const newCols = CSV_HEADER.split(',').length;
-    if (newCols - oldCols !== 1) return;
+    const toInsert = newCols - oldCols;
+    // Only handle pure append: new columns inserted before the trailing `notes`
+    // column. Any out-of-order header divergence is unsafe to auto-migrate.
+    if (toInsert <= 0) return;
 
     const rest = content.slice(firstNewline + 1);
     const migratedLines = rest.split('\n').map(line => {
       if (line.length === 0) return line;
       const fields = line.split(',');
       if (fields.length !== oldCols) return line;
-      fields.splice(oldCols - 1, 0, '');
+      // Insert `toInsert` empty fields right before the last field (notes).
+      fields.splice(oldCols - 1, 0, ...Array(toInsert).fill(''));
       return fields.join(',');
     });
 
@@ -170,6 +175,90 @@ export function migrateCsvIfNeeded(csvPath: string = CSV_PATH): void {
     renameSync(tmpPath, csvPath);
   } catch {
     // never throw — observability must not kill production
+  }
+}
+
+// ── Wrapper-reconciliation discrepancy signal (Session 98) ───
+// Counts auto-enrich log lines where the subprocess exited non-zero but saves
+// happened anyway — the stream-idle-misreport class Session 98 was built to
+// surface. If >0 for 3 consecutive daily rows, emit STALE_WRAPPER to flag
+// that the underlying upstream issue is persistent.
+
+const LOGS_DIR = join(PROJECT_DIR, 'logs');
+const WRAPPER_MISREPORT_PATTERN = /WARN: subprocess exited \d+ but \d+ events saved successfully/g;
+
+export interface WrapperDiscrepancyStats {
+  wrapperDiscrepancyLast24h: number | string;
+}
+
+export function yesterdayAthensDate(today: string): string {
+  // Parse YYYY-MM-DD, subtract one day in UTC (safe at the day-granularity we need).
+  const [y, m, d] = today.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  date.setUTCDate(date.getUTCDate() - 1);
+  return date.toISOString().slice(0, 10);
+}
+
+export function countMisreportsInLog(logPath: string): number {
+  try {
+    if (!existsSync(logPath)) return 0;
+    const content = readFileSync(logPath, 'utf-8');
+    const matches = content.match(WRAPPER_MISREPORT_PATTERN);
+    return matches?.length ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function getWrapperDiscrepancyStats(
+  today: string,
+  csvPath: string = CSV_PATH,
+  logsDir: string = LOGS_DIR,
+): WrapperDiscrepancyStats {
+  try {
+    // Count misreports in today's + yesterday's auto-enrich logs. Covers a full
+    // rolling 24h at daily granularity without forcing log-line timestamp parsing.
+    const yesterday = yesterdayAthensDate(today);
+    const count =
+      countMisreportsInLog(join(logsDir, `auto-enrich-${today}.log`)) +
+      countMisreportsInLog(join(logsDir, `auto-enrich-${yesterday}.log`));
+
+    // STALE_WRAPPER trigger: count > 0 today AND the last two prior daily rows
+    // also had non-zero, non-empty counts. Three-consecutive-day elevated signal.
+    if (count > 0) {
+      const priorRows = lastTwoRowsBefore(today, csvPath);
+      const hadDiscrepancy = (row: string[] | null) => {
+        if (!row) return false;
+        const v = row[WRAPPER_DISCREPANCY_COL_INDEX];
+        return v !== undefined && v !== '' && v !== '0' && v !== 'STALE_WRAPPER';
+      };
+      if (hadDiscrepancy(priorRows[0]) && hadDiscrepancy(priorRows[1])) {
+        return { wrapperDiscrepancyLast24h: 'STALE_WRAPPER' };
+      }
+    }
+    return { wrapperDiscrepancyLast24h: count };
+  } catch {
+    return { wrapperDiscrepancyLast24h: '' };
+  }
+}
+
+export function lastTwoRowsBefore(today: string, csvPath: string = CSV_PATH): [string[] | null, string[] | null] {
+  try {
+    if (!existsSync(csvPath)) return [null, null];
+    const lines = readFileSync(csvPath, 'utf-8').trim().split('\n').slice(1);
+    const collected: string[][] = [];
+    const seenDates = new Set<string>();
+    for (let i = lines.length - 1; i >= 0 && collected.length < 2; i--) {
+      const fields = lines[i].split(',');
+      const rowDate = fields[0];
+      if (rowDate === today) continue;
+      if (seenDates.has(rowDate)) continue; // one row per date — use first seen (newest)
+      seenDates.add(rowDate);
+      collected.push(fields);
+    }
+    return [collected[0] ?? null, collected[1] ?? null];
+  } catch {
+    return [null, null];
   }
 }
 
@@ -249,6 +338,9 @@ async function main() {
   const enrichment = getEnrichmentStats(today);
   console.log(`Enrichment: last_24h=${enrichment.enrichedLast24h}`);
 
+  const wrapperStats = getWrapperDiscrepancyStats(today);
+  console.log(`Wrapper discrepancy last_24h: ${wrapperStats.wrapperDiscrepancyLast24h}`);
+
   const [robots, sitemap, llms] = await Promise.all([
     headCheck(`${BASE_URL}/robots.txt`),
     headCheck(`${BASE_URL}/sitemap-index.xml`),
@@ -283,6 +375,7 @@ async function main() {
     manual.bingIndexed,
     manual.aiCitations,
     enrichment.enrichedLast24h,
+    wrapperStats.wrapperDiscrepancyLast24h,
     '',
   ].join(',');
 

@@ -17,6 +17,10 @@ import {
   getEnrichmentStats,
   lastRowBefore,
   migrateCsvIfNeeded,
+  getWrapperDiscrepancyStats,
+  lastTwoRowsBefore,
+  yesterdayAthensDate,
+  countMisreportsInLog,
 } from '../scripts/monitor-search-visibility';
 
 const TMP_DIR = join(import.meta.dir, 'tmp/monitor-search-visibility');
@@ -48,11 +52,12 @@ afterEach(() => {
 });
 
 describe('CSV_HEADER', () => {
-  test('has 19 columns including enriched_last_24h before notes', () => {
+  test('has 20 columns with observability fields before notes', () => {
     const cols = CSV_HEADER.split(',');
-    expect(cols.length).toBe(19);
+    expect(cols.length).toBe(20);
     expect(cols[17]).toBe('enriched_last_24h');
-    expect(cols[18]).toBe('notes');
+    expect(cols[18]).toBe('wrapper_discrepancy_last_24h');
+    expect(cols[19]).toBe('notes');
   });
 });
 
@@ -170,15 +175,15 @@ describe('migrateCsvIfNeeded', () => {
     expect(readFileSync(TMP_CSV, 'utf-8')).toBe(CSV_HEADER + '\n');
   });
 
-  test('is a no-op when CSV already has new 19-col header', () => {
+  test('is a no-op when CSV already has new 20-col header', () => {
     const content =
-      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,33,\n';
+      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,33,0,\n';
     writeFileSync(TMP_CSV, content);
     migrateCsvIfNeeded(TMP_CSV);
     expect(readFileSync(TMP_CSV, 'utf-8')).toBe(content);
   });
 
-  test('migrates 18-col header → 19-col, inserts empty before notes', () => {
+  test('migrates 18-col header → 20-col, inserts two empties before notes (skip one, skip two)', () => {
     const oldContent =
       OLD_HEADER +
       '\n' +
@@ -189,12 +194,34 @@ describe('migrateCsvIfNeeded', () => {
     const migrated = readFileSync(TMP_CSV, 'utf-8');
     const lines = migrated.split('\n');
     expect(lines[0]).toBe(CSV_HEADER);
-    expect(lines[1]).toBe('2026-04-20,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,hello');
-    expect(lines[2]).toBe('2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,');
-    // Every non-empty row should have 19 fields
+    expect(lines[1]).toBe('2026-04-20,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,,hello');
+    expect(lines[2]).toBe('2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,,');
     for (const line of lines) {
       if (line.length === 0) continue;
-      expect(line.split(',').length).toBe(19);
+      expect(line.split(',').length).toBe(20);
+    }
+  });
+
+  test('migrates 19-col header → 20-col, inserts one empty before notes (S97 CSV → S98)', () => {
+    // Simulates a CSV that was already migrated to 19 cols during Session A
+    // and now needs a single additional column for Session 98.
+    const S97_HEADER =
+      'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,ai_citations_count,enriched_last_24h,notes';
+    const oldContent =
+      S97_HEADER +
+      '\n' +
+      '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,note-a\n' +
+      '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n';
+    writeFileSync(TMP_CSV, oldContent);
+    migrateCsvIfNeeded(TMP_CSV);
+    const migrated = readFileSync(TMP_CSV, 'utf-8');
+    const lines = migrated.split('\n');
+    expect(lines[0]).toBe(CSV_HEADER);
+    expect(lines[1]).toBe('2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,,note-a');
+    expect(lines[2]).toBe('2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,,');
+    for (const line of lines) {
+      if (line.length === 0) continue;
+      expect(line.split(',').length).toBe(20);
     }
   });
 
@@ -209,7 +236,7 @@ describe('migrateCsvIfNeeded', () => {
 });
 
 describe('column count invariant', () => {
-  test('full migration + simulated append yields 19-col rows throughout', () => {
+  test('full migration + simulated append yields 20-col rows throughout', () => {
     // Start with old 18-col CSV
     writeFileSync(
       TMP_CSV,
@@ -219,16 +246,156 @@ describe('column count invariant', () => {
         '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n',
     );
     migrateCsvIfNeeded(TMP_CSV);
-    // Simulate appending today's row (19 fields)
+    // Simulate appending today's row (20 fields)
     const todayRow =
-      '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,';
+      '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,0,';
     const appended = readFileSync(TMP_CSV, 'utf-8') + todayRow + '\n';
     writeFileSync(TMP_CSV, appended);
 
     const lines = readFileSync(TMP_CSV, 'utf-8').split('\n');
     for (const line of lines) {
       if (line.length === 0) continue;
-      expect(line.split(',').length).toBe(19);
+      expect(line.split(',').length).toBe(20);
     }
+  });
+});
+
+describe('yesterdayAthensDate', () => {
+  test('returns the prior day in YYYY-MM-DD', () => {
+    expect(yesterdayAthensDate('2026-04-24')).toBe('2026-04-23');
+    expect(yesterdayAthensDate('2026-03-01')).toBe('2026-02-28');
+    expect(yesterdayAthensDate('2027-01-01')).toBe('2026-12-31');
+  });
+});
+
+describe('countMisreportsInLog', () => {
+  const TMP_LOG = join(TMP_DIR, 'test-auto-enrich.log');
+
+  test('returns 0 when log file missing', () => {
+    expect(countMisreportsInLog(join(TMP_DIR, 'nonexistent.log'))).toBe(0);
+  });
+
+  test('counts WARN subprocess-exited-but-saved lines', () => {
+    const content = `
+[2026-04-24 10:12:20] batch-1 OK: 5 events saved in 847s
+[2026-04-24 10:15:33] batch-2 WARN: subprocess exited 143 but 4 events saved successfully (918s)
+[2026-04-24 10:20:00] batch-3 ERROR: subprocess failed (exit 1) and no events saved (120s)
+[2026-04-24 14:01:00] batch-1 WARN: subprocess exited 1 but 5 events saved successfully (850s)
+[2026-04-24 14:10:00] batch-2 OK: 5 events saved in 900s
+`;
+    writeFileSync(TMP_LOG, content);
+    expect(countMisreportsInLog(TMP_LOG)).toBe(2);
+  });
+
+  test('does not match OK or ERROR lines', () => {
+    const content = 'batch-1 OK: 5 events saved in 800s\nbatch-2 ERROR: subprocess failed (exit 1) and no events saved';
+    writeFileSync(TMP_LOG, content);
+    expect(countMisreportsInLog(TMP_LOG)).toBe(0);
+  });
+});
+
+describe('lastTwoRowsBefore', () => {
+  test('returns the two most recent rows before today', () => {
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,2,\n' +
+        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,1,\n' +
+        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,0,\n',
+    );
+    const [prior1, prior2] = lastTwoRowsBefore('2026-04-24', TMP_CSV);
+    expect(prior1).not.toBeNull();
+    expect(prior2).not.toBeNull();
+    expect(prior1![0]).toBe('2026-04-23');
+    expect(prior2![0]).toBe('2026-04-22');
+  });
+
+  test('returns [null, null] when CSV missing', () => {
+    const [a, b] = lastTwoRowsBefore('2026-04-24', join(TMP_DIR, 'none.csv'));
+    expect(a).toBeNull();
+    expect(b).toBeNull();
+  });
+
+  test('skips duplicate-date rows (returns first seen per date)', () => {
+    // Monitor may write multiple rows on the same day (manual reruns). lastTwoRowsBefore
+    // collapses same-date rows by taking only the newest per date.
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
+        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
+        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,0,\n',
+    );
+    const [prior1, prior2] = lastTwoRowsBefore('2026-04-24', TMP_CSV);
+    expect(prior1![0]).toBe('2026-04-23');
+    expect(prior2![0]).toBe('2026-04-22');
+  });
+});
+
+describe('getWrapperDiscrepancyStats', () => {
+  const TMP_LOGS = join(TMP_DIR, 'logs');
+
+  function setupLogs(files: Record<string, string>): void {
+    mkdirSync(TMP_LOGS, { recursive: true });
+    for (const [name, content] of Object.entries(files)) {
+      writeFileSync(join(TMP_LOGS, name), content);
+    }
+  }
+
+  test('returns 0 when no logs exist for today/yesterday', () => {
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n');
+    const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
+    expect(stats.wrapperDiscrepancyLast24h).toBe(0);
+  });
+
+  test('sums misreport counts from today and yesterday logs', () => {
+    setupLogs({
+      'auto-enrich-2026-04-23.log': 'batch-1 WARN: subprocess exited 1 but 3 events saved successfully\n',
+      'auto-enrich-2026-04-24.log': 'batch-1 WARN: subprocess exited 1 but 5 events saved successfully\nbatch-2 WARN: subprocess exited 143 but 4 events saved successfully\n',
+    });
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n');
+    const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
+    expect(stats.wrapperDiscrepancyLast24h).toBe(3); // 1 from yesterday + 2 from today
+  });
+
+  test('fires STALE_WRAPPER when count>0 AND prior 2 daily rows both had nonzero discrepancy', () => {
+    setupLogs({
+      'auto-enrich-2026-04-24.log': 'batch-1 WARN: subprocess exited 1 but 5 events saved successfully\n',
+    });
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,3,\n' +
+        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,2,\n',
+    );
+    const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
+    expect(stats.wrapperDiscrepancyLast24h).toBe('STALE_WRAPPER');
+  });
+
+  test('does not fire STALE_WRAPPER if prior day had 0 discrepancy', () => {
+    setupLogs({
+      'auto-enrich-2026-04-24.log': 'batch-1 WARN: subprocess exited 1 but 5 events saved successfully\n',
+    });
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
+        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,2,\n',
+    );
+    const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
+    expect(stats.wrapperDiscrepancyLast24h).toBe(1);
+  });
+
+  test('returns 0 today (no STALE) when today has discrepancy but prior rows empty (new deployment)', () => {
+    setupLogs({
+      'auto-enrich-2026-04-24.log': 'batch-1 WARN: subprocess exited 1 but 5 events saved successfully\n',
+    });
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n');
+    const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
+    expect(stats.wrapperDiscrepancyLast24h).toBe(1);
   });
 });
