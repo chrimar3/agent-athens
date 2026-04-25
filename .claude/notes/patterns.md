@@ -1640,3 +1640,43 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 1. When adding an observability signal, ask "where does the thing-being-observed happen?" — that's where the observability write should happen, not some log-scraping or exit-code-inferring cron that runs later.
 2. When fixing an observability bug, the fix is often "move the write earlier, into the same function as the action." Not "make the later layer smarter about inferring what the earlier layer did."
 3. S91 discipline still applies: observability writes must be best-effort (wrapped in try/catch) so they never block the action. The discipline "write at source" is compatible with "never kill production path" — put the try/catch around the observability write, not the action.
+
+## Date-annotate event IDs in multi-session plans (2026-04-24, Pre-A)
+
+**Rule:** Any time a plan references a specific event by ID for spot-checking or test purposes, annotate that ID with its `start_date`. Before using the ID in a downstream session, re-query the DB to confirm the event hasn't rolled into the past.
+
+**Why it matters:** Event-date-bound data decays faster than other kinds of project data. A plan authored on day N that references "the Lah Porella event at Ilion Plus" works on day N (event is upcoming) but silently breaks by day N+K (event is past, Tier 0 guard fires, cascade never exercises the intended path). The executor spotted this in Pre-A when the originally-cited Lah Porella event (2026-04-23) had rolled past today's date (2026-04-24), meaning the Ilion Plus Tier 2 search-pattern case in Session A had no live test example.
+
+**Counter-example (what this is not):** Not an argument against naming specific events in plans — concreteness is valuable. The rule is just "concreteness + date annotation + re-query before use," not "never reference specific events."
+
+**How to apply:**
+
+1. When a plan cites an event ID, always include `start_date` beside it. Future readers (including the author) can see at a glance whether the reference might have decayed.
+2. Before actually using a cited ID in a script/test, re-run the query that surfaced it. If the event has become past, either pick a replacement via the same query family, or note "no live test case — unit test only" in the session record.
+3. When writing spot-check sections of session plans, prefer queries over static IDs. A query (e.g. "earliest future ticketed event at venue X") continues to return valid results; a static ID does not.
+4. When documenting findings in scratch files like `specs/session-*-event-ids.md`, timestamp the capture moment in the file body (not just in filesystem metadata). Makes drift obvious on re-read.
+
+## Continue read-only work when blocked for planner decision (2026-04-24, Pre-A)
+
+**Rule:** When a session stops to await a planner decision, the executor should continue any read-only or diagnostic work in parallel that doesn't depend on the blocked decision. Don't idle. Don't wait for the decision before running the next read-only check that would have happened anyway.
+
+**Why it matters:** Planner decisions take non-zero time (minutes to hours in synchronous sessions, longer when async). During that window, the executor's session state — loaded files, warm caches, active tool connections, accumulated context — is at its peak relevance to the task. Wasting that window means re-bootstrapping some of that state when the decision comes back. Worse, the executor forgets incidental observations ("while I was poking around I noticed...") that would have informed the planner's decision if surfaced in time.
+
+**Session Pre-A demonstrated this:** when Step 2 (migration 007) stopped for the Option A/B/C decision on `_migrations` tracking drift, the executor continued with Step 1's writer enumeration (read-only, independent of the blocked decision), so when the planner approved Option A the writer list was already known and Step 3 scope could be reported confidently as part of the resumption. The planner's decision window cost near-zero context time.
+
+**What counts as "parallel-safe while blocked":**
+- Read-only DB queries (counts, samples, schema inspections)
+- File reads + grep surveys for enumeration
+- Documentation review (reading decisions.md, CLAUDE.md, known-issues.md for related context)
+- Capturing observations into a scratch file in `specs/`
+
+**What does NOT count (don't do these while blocked):**
+- Anything that writes to files the planner's decision might direct you to write differently
+- Running the subject-of-decision itself (e.g. if the decision is "should we run migration X", don't run migration X)
+- Anything that changes DB state, git state, or external services
+
+**How to apply:**
+
+1. When you stop for a planner decision, name 1-3 read-only tasks that would inform or follow the decision. Do them. Include their results in the same message where you present options for the decision.
+2. If nothing read-only is useful, say so. Don't invent busy-work.
+3. When reporting results, keep the blocked decision front-and-center. The parallel work is context, not a counterproposal to the decision.

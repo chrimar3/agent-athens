@@ -20,6 +20,23 @@ export interface Event {
   semanticTags?: SemanticTags;
   url?: string;
   ticketUrl?: string;  // Direct ticket purchase URL (more.com, viva.gr, etc.)
+  // Formalized per decisions.md D11. Resolver cascade produces these values;
+  // 'venue_registry' (legacy, pre-D11) retained for backward-compat during migration
+  // but all new resolver output uses venue_registry_direct / venue_registry_search.
+  ticketUrlStatus?:
+    | 'direct'
+    | 'detail_page'
+    | 'venue_registry'  // legacy (pre-D11); kept for compat, not emitted by resolver
+    | 'venue_registry_direct'
+    | 'venue_registry_search'
+    | 'crossref'
+    | 'platform_search'
+    | 'ai_discovered'
+    | 'venue_fallback'
+    | 'door_only'
+    | 'expired'
+    | 'unresolved'
+    | 'open_entry';
   source: string;
   createdAt: string;
   updatedAt: string;
@@ -67,6 +84,7 @@ export interface Venue {
     lon: number;
   };
   capacity?: number;
+  website?: string;  // Venue homepage; drives "Check venue website" Tier-5 CTA.
 }
 
 export interface Price {

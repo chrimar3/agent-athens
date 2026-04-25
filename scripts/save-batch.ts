@@ -23,6 +23,8 @@ import { validateQualityGates, validateEnglishDescription } from '../src/enrichm
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
 import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
+import { isTicketDomain, isVenueWebsiteHost } from '../src/ticketing/validator';
+import { getVenueByName } from '../src/ticketing/venue-registry';
 
 const DB_PATH = 'data/events.db';
 const DESCRIPTIONS_DIR = 'temp-descriptions';
@@ -235,7 +237,15 @@ export function saveBatch(
       continue;
     }
 
-    const description = readFileSync(descPath, 'utf-8');
+    const descriptionRaw = readFileSync(descPath, 'utf-8');
+
+    // Tier-4 ticket URL discovery: parse `ticket_url_discovered: https://…` if Claude
+    // surfaced one in the response, strip it from the description, and stage a candidate.
+    // Host-allowlist is applied below (after event context loads so venue-host matching works).
+    const TICKET_URL_RE = /^[ \t>]*ticket_url_discovered:\s*(https?:\/\/\S+?)\s*$/im;
+    const ticketMatch = descriptionRaw.match(TICKET_URL_RE);
+    const ticketCandidate = ticketMatch ? ticketMatch[1].replace(/[.,;]+$/, '') : null;
+    const description = descriptionRaw.replace(TICKET_URL_RE, '').trimEnd();
     const wordResult = countWords(description);
 
     // Load optional tags
@@ -302,6 +312,30 @@ export function saveBatch(
       } catch (err) {
         saveError = err instanceof Error ? err : new Error(String(err));
         // savedToEvents stays 0; the INSERT below will log the attempt.
+      }
+
+      // Tier-4 ticket URL persist: only if candidate is on the ticket-host allowlist
+      // OR matches the registered venue's website host. Rejects Claude-hallucinated URLs.
+      if (ticketCandidate) {
+        const venueRecord = getVenueByName(event.venue ?? null);
+        const accept = isTicketDomain(ticketCandidate) || isVenueWebsiteHost(ticketCandidate, venueRecord);
+        if (accept) {
+          try {
+            db.prepare(`
+              UPDATE events SET
+                ticket_url = ?,
+                ticket_url_status = 'ai_discovered',
+                ticket_url_source = 'ai_discovered',
+                ticket_url_resolved_at = datetime('now')
+              WHERE id = ?
+            `).run(ticketCandidate, eventId);
+            console.log(`  + ${eventId} — ticket_url_discovered accepted: ${ticketCandidate}`);
+          } catch (err) {
+            console.log(`  !  ${eventId} — ticket_url_discovered save failed: ${err instanceof Error ? err.message : err}`);
+          }
+        } else {
+          console.log(`  !  ${eventId} — ticket_url_discovered ${ticketCandidate} rejected (not on ticket-host allowlist)`);
+        }
       }
 
       // Log the attempt regardless of save success. Wrapped in try/catch so a

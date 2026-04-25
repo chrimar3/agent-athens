@@ -1529,3 +1529,128 @@ sqlite3 data/events.db "SELECT COUNT(*) FROM events; PRAGMA integrity_check;"
 | `RUN_ID` propagated via env var, not via the brief prompt | Brief prompts are content the LLM reads and might paraphrase; env vars survive `claude -p` invocation cleanly. `save-batch.ts` reads `process.env.RUN_ID` in the subprocess. If absent (ad-hoc developer invocations, tests), run_id writes NULL. Forward-only, same discipline as historical rows. | 2026-04-24 |
 | S91 monitor extended with `wrapper_discrepancy_last_24h` column + STALE_WRAPPER marker | Wrapper-misreport class tracked directly. Counts auto-enrich log lines matching the pattern `WARN: subprocess exited N but M events saved successfully` across today + yesterday's logs. STALE_WRAPPER if >0 across three consecutive daily rows. Passive class (same as Session A's `enriched_last_24h`); active alert remains a separate session. | 2026-04-24 |
 | Orphan `enrichment_log` rows from 2026-02-26 → 2026-03-02 (942 rows, events deleted) NOT cleaned in Session 98 | One blast radius per session. Session 98 already shipped schema migration + save-path change. Cleanup SQL written to `specs/cleanup-enrichment-log-orphans.sql` with preconditions (snapshot before execute) and scoped DELETE. Next maintenance batch executes after a DB backup. | 2026-04-24 |
+
+## 2026-04-24 — Ticket URL Resolver Architecture
+
+### Context
+Users hitting events with no ticket CTA. ~641 upcoming ticketed events need
+reliable ticket URL resolution (after Pre-A normalization). Three-algorithm
+design: resolver (finds URL), validator (classifies URL), renderer (displays
+CTA). Separate write-path from render-path.
+
+### Decisions
+
+**D1. Cascade composition (src/ticketing/resolver.ts).**
+Tiers in priority order:
+- Tier 0 guards: door_only, price=open, price=donation, past events → return early
+- Tier 1 (0.95): scraper-captured ticket URL on allowlisted host
+- Tier 2 direct (0.85): venue_registry.ticketing.url
+- Tier 2 search (0.6): venue_registry.ticketing.search_pattern
+- Tier 3b (0.7): Jaccard cross-reference; priority: residentadvisor, more.com, ticketservices
+- Tier 3 (0.5): platform search from ticketing-mapping.json
+- Tier 1b (0.9): HTTP fetch event detail page, extract outbound ticket link
+- Tier 5 (0.3): venue.website fallback
+- Tier 4 (0.8): ai_discovered — populated passively by enrichment pipeline
+
+**D2. Cascade strategy.**
+- Short-circuit on Tier 1 ≥ 0.95 (scraper already did the work)
+- Otherwise run all CHEAP tiers (2-direct, 2-search, 3b, 3, 5), collect candidates
+- If best cheap candidate ≥ 0.7 → return it
+- Else if opts.allowHttp → escalate to Tier 1b (HTTP)
+- Else return best cheap (may be low-confidence venue_fallback) or unresolved
+
+**D3. allowHttp split.**
+- Site generation: resolveTicketUrl(event, {allowHttp: false}) — no network
+- Backfill: resolveTicketUrl(event, {allowHttp: true}) — full cascade
+- Pre-flight revalidator: uses validateUrl directly, no resolver
+
+**D4. Tier 3b optimization.**
+Pre-load scraped events from residentadvisor, more.com, ticketservices into memory
+once at backfill start. Passed into resolveTicketUrl via opts.crossrefEvents.
+Tier 3b becomes in-memory Jaccard match — no per-event DB query.
+
+**D5. Ticket host allowlist (src/ticketing/validator.ts getTicketHosts()).**
+Add: ra.co, residentadvisor.net. RA is the authoritative ticketing source for
+underground/electronic venues in Athens (IT Athens, Six D.O.G.S., Temple,
+Romantso, Death Disco). Already a scraped source; not yet wired as a ticket
+resolution source.
+
+**D6. isHomepageRedirect algorithm (6-step procedure).**
+```
+1. If ctx.isVenueHost → return false (Tier 5 intent, preserve)
+2. Parse both URLs; count path segments (split on /, filter empty — handles trailing slashes)
+3. If finalSegments.length === 0 → return true (bare root, regardless of query string)
+4. If ctx.isTicketHost AND finalUrl has non-empty query AND finalSegments.length >= 1
+   → return false (legitimate search results page)
+5. If finalSegments.length < originalSegments.length → return true (segments lost)
+6. Return false
+```
+
+**D7. CTA decision table (src/ticketing/cta.ts).**
+| status | price | venue.website | CTA kind | Label |
+|---|---|---|---|---|
+| any | open | — | none | — |
+| any | donation | — | none | — |
+| direct | with-ticket | — | tickets | buyTicketsArrow |
+| detail_page | with-ticket | — | tickets | buyTicketsArrow |
+| venue_registry_direct | with-ticket | — | tickets | buyTicketsArrow |
+| crossref | with-ticket | — | tickets | buyTicketsArrow |
+| ai_discovered | with-ticket | — | tickets | buyTicketsArrow |
+| venue_registry_search | with-ticket | — | tickets | findTicketsArrow |
+| platform_search | with-ticket | — | tickets | findTicketsArrow |
+| venue_fallback | with-ticket | set | venue | checkVenueArrow |
+| venue_fallback | with-ticket | null | none | — |
+| door_only | with-ticket | — | door | doorOnly (href=null) |
+| unresolved / undef | with-ticket | set | venue | checkVenueArrow |
+| unresolved / undef | with-ticket | null | none | — |
+
+**D8. Secondary venue link rule.**
+When primary CTA status ∈ {platform_search, venue_registry_search}
+AND event.venue.website exists
+AND hostOf(venue.website) !== hostOf(ticketUrl):
+render secondary link "Or visit {venueHost}" below primary CTA.
+All other statuses: no secondary.
+
+**D9. Revalidation strategy: Option 2 — weekly pre-flight.**
+Runs as step N of the weekly scrape → import → revalidate → backfill → build pipeline.
+Not a separate cron. HEAD-checks all future events where ticket_url IS NOT NULL.
+On failure: ticket_url=null, ticket_url_status='expired'. Backfill then re-resolves
+in the same pipeline run. Scope: future events only. Past events with
+status='generated' stay as-is (inert — not rendered anywhere).
+
+**D10. price_type normalization (standalone migration, pre-Session A).**
+Legacy vocabulary migration to constitution values:
+- `paid` → `with-ticket`
+- `free` → `open`
+- `tba` retained — awaits scraper improvements
+
+**D10 addendum: `door` price_type (127 rows).**
+Migrate to price_type='with-ticket' AND ticket_url_status='door_only'. This
+corrects a data-model bleed where door-only (a CTA/ticketing-layer concept)
+leaked into price_type (a pricing-layer concept). Scrapers/importer must be
+updated to write ticket_url_status='door_only' when they detect door-only
+ticketing, not price_type='door'.
+
+Migration is one-time UPDATE. Resolver does NOT infer price_type from resolution
+outcome (keep data-hygiene separate from resolution). Scrapers/importer fixed
+to prevent legacy values going forward.
+
+**D11. New ticket_url_status values to support.**
+Valid states: direct, detail_page, venue_registry_direct, venue_registry_search,
+crossref, platform_search, ai_discovered, venue_fallback, door_only, expired,
+unresolved, open_entry.
+
+### Rationale (brief)
+- Validity > convenience: search URLs labeled "Find tickets" not "Buy tickets"
+- No build-time HTTP: render-path stays at 2–5s
+- Secondary venue link only where primary is a search URL (user backup when search misses)
+- Option 2 revalidation over Option 4: at 641-event scale, uniform weekly check
+  is cheap enough (~90s) that priority scoring isn't worth the code complexity
+- Data-model layer discipline: price_type is pricing; ticket_url_status is
+  ticketing/CTA. Keep them separate.
+
+### Related sessions
+- Session Pre-A — price_type normalization migration (blocks Session A)
+- Session A — TDD resolver + CTA + validator + dry-run
+- Session A.5 (conditional) — top-10 venue curation if coverage 70–90%
+- Session B (pending A numbers) — pre-flight revalidator + real backfill + deploy

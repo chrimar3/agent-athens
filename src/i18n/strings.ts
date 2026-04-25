@@ -21,6 +21,10 @@ export interface UIStrings {
   // Event page UI
   buyTickets: string;
   buyTicketsArrow: string;
+  findTicketsArrow: string;     // Tier-3 platform search ("lands on results, not the event")
+  checkVenueWebsite: string;    // Tier-5 fallback label
+  checkVenueArrow: string;      // Tier-5 fallback label with arrow
+  doorOnly: string;             // Events with no online purchase
   ticketsShort: string;
   freeEntry: string;
   openEntry: string;
@@ -114,6 +118,10 @@ export const STRINGS: Record<Locale, UIStrings> = {
 
     buyTickets: 'Αγοράστε εισιτήρια',
     buyTicketsArrow: 'Αγοράστε εισιτήρια →',
+    findTicketsArrow: 'Βρείτε εισιτήρια →',
+    checkVenueWebsite: 'Δείτε το site του χώρου',
+    checkVenueArrow: 'Δείτε το site του χώρου →',
+    doorOnly: 'Μόνο στην είσοδο',
     ticketsShort: 'Εισιτήρια',
     freeEntry: 'Ελεύθερη είσοδος',
     openEntry: 'Ελεύθερη είσοδος',
@@ -221,6 +229,10 @@ export const STRINGS: Record<Locale, UIStrings> = {
 
     buyTickets: 'Buy tickets',
     buyTicketsArrow: 'Buy tickets →',
+    findTicketsArrow: 'Find tickets →',
+    checkVenueWebsite: 'Check venue website',
+    checkVenueArrow: 'Check venue website →',
+    doorOnly: 'At the door',
     ticketsShort: 'Tickets',
     freeEntry: 'Free entry',
     openEntry: 'Free entry',

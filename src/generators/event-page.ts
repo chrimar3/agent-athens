@@ -26,6 +26,7 @@ import { buildContainedInPlace, resolveEventStatus } from '../utils/schema-geo';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
+import { resolveCtaForEvent } from '../ticketing/cta';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
@@ -311,20 +312,23 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">${t.eventsInArea} ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
   ].filter(Boolean);
 
-  // CTA (ticket link) — hidden for past events (ticket URL likely dead)
-  const showCta = Boolean(event.ticketUrl) && !isPast;
-  const ctaHtml = showCta
-    ? `<a href="${event.ticketUrl}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${t.buyTicketsArrow}</a>`
+  // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
+  const cta = resolveCtaForEvent(event, t);
+  const ctaLinkable = !isPast && cta.kind !== 'none' && cta.href;
+  const ctaHtml = ctaLinkable
+    ? `<a href="${cta.href}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${cta.label}</a>`
     : '';
 
   // Inline CTA for body content (GEO source order: after description, before venue)
   const inlineCtaHtml = isPast
     ? ''
-    : showCta
-      ? `<div class="edp-inline-cta"><a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">${t.buyTicketsArrow}</a></div>`
-      : event.price.type === 'open'
-        ? `<div class="edp-inline-cta"><span class="edp-open-entry">${t.openEntry}</span></div>`
-        : '';
+    : ctaLinkable
+      ? `<div class="edp-inline-cta"><a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${cta.label}</a></div>`
+      : cta.kind === 'door'
+        ? `<div class="edp-inline-cta"><span class="edp-door-only">${cta.label}</span></div>`
+        : event.price.type === 'open'
+          ? `<div class="edp-inline-cta"><span class="edp-open-entry">${t.openEntry}</span></div>`
+          : '';
 
   // Venue section — Google Maps link
   const mapsUrl = event.venue.coordinates
@@ -348,15 +352,16 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
       </section>`
     : '';
 
-  // Mobile sticky CTA bar — hidden for past events
-  const mobileBarHtml = showCta
+  // Mobile sticky CTA bar — only render when we have a linkable CTA
+  const mobileLabel = cta.kind === 'tickets' ? t.ticketsShort : cta.label;
+  const mobileBarHtml = ctaLinkable
     ? `<div class="edp-mobile-bar">
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">${event.title}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
-      <a href="${event.ticketUrl}" class="edp-cta" rel="noopener" target="_blank">${t.ticketsShort}</a>
+      <a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
     </div>
   </div>`
     : '';

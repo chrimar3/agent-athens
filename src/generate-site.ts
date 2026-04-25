@@ -212,6 +212,13 @@ async function main() {
     if (venueImg) event.venueImage = venueImg;
   }
 
+  // Attach venue.website from athens-venues.json (drives Tier-5 "Check venue website" CTA)
+  const { getVenueByName } = await import('./ticketing/venue-registry');
+  for (const event of pageableEvents) {
+    const venueRecord = getVenueByName(event.venue.name);
+    if (venueRecord?.website) event.venue.website = venueRecord.website;
+  }
+
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
   console.log(`📍 ${locationFiltered.length} events with verified Athens location`);
   console.log(`📅 Publishing ${upcomingEvents.length} current/upcoming events`);

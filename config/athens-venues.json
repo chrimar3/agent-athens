@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "last_updated": "2026-02-12",
+  "last_updated": "2026-04-24",
   "notes": "Consolidated venue whitelist with proper canonical_name format. Updated neighborhoods from web search.",
   "venues": [
     {
@@ -18,7 +18,12 @@
         "Megaron Athens International Conference Centre",
         "Megaron International Conference Centre"
       ],
-      "neighborhood": "Ilisia"
+      "neighborhood": "Ilisia",
+      "website": "https://www.megaron.gr",
+      "ticketing": {
+        "provider": "megaron.gr",
+        "search_pattern": "https://www.megaron.gr/event-search/?keyword={title}"
+      }
     },
     {
       "canonical_name": "Gazarte",
@@ -326,7 +331,12 @@
         "Half Note",
         "HalfNote"
       ],
-      "neighborhood": "Mets"
+      "neighborhood": "Mets",
+      "website": "https://www.halfnote.gr",
+      "ticketing": {
+        "provider": "halfnote.gr",
+        "url": "https://www.halfnote.gr/programma/"
+      }
     },
     {
       "canonical_name": "IT Athens",
@@ -525,12 +535,19 @@
       "neighborhood": "Central Athens"
     },
     {
-      "canonical_name": "ΙΛΙΟΝ Plus",
+      "canonical_name": "Ίλιον Plus",
       "variations": [
+        "ILION",
         "Ilion Plus",
-        "ILION"
+        "Ίλιον",
+        "ΙΛΙΟΝ Plus"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "website": "https://www.ilionplus.gr",
+      "ticketing": {
+        "provider": "more.com",
+        "search_pattern": "https://www.more.com/gr/el/tickets/search?query={title}+ilion+plus"
+      }
     },
     {
       "canonical_name": "Σύγχρονο Θέατρο",
@@ -729,7 +746,12 @@
         "Stegi",
         "Onassis Foundation"
       ],
-      "neighborhood": "Neos Kosmos"
+      "neighborhood": "Neos Kosmos",
+      "website": "https://www.onassis.org",
+      "ticketing": {
+        "provider": "onassis.org",
+        "search_pattern": "https://www.onassis.org/el/calendar?search={title}"
+      }
     },
     {
       "canonical_name": "GREEK NATIONAL OPERA - SNFCC",
@@ -987,15 +1009,6 @@
     {
       "canonical_name": "ΑΡΧΙΤΕΚΤΟΝΙΚΗ LIVE",
       "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
-      "canonical_name": "Ίλιον Plus",
-      "variations": [
-        "Ίλιον",
-        "Ilion Plus",
-        "ΙΛΙΟΝ Plus"
-      ],
       "neighborhood": "Unknown"
     },
     {
@@ -1694,8 +1707,8 @@
       "canonical_name": "Daddy's All Day Bar",
       "variations": [
         "Daddy'S all day bar",
-        "Daddy\u2019S all day bar",
-        "Daddy\u2019s All Day Bar",
+        "Daddy’S all day bar",
+        "Daddy’s All Day Bar",
         "Daddys All Day Bar",
         "Daddy's all day bar",
         "Daddy'S all day bar"
@@ -2107,7 +2120,7 @@
       ],
       "neighborhood": "Koukaki"
     },
-        {
+    {
       "canonical_name": "Άλφα Ληναίος-Φωτίου",
       "variations": [
         "Άλφα - «Ληναίος-Φωτίου»",
@@ -2115,7 +2128,7 @@
       ],
       "neighborhood": "Syntagma"
     },
-        {
+    {
       "canonical_name": "Cartel Τεχνοχώρος",
       "variations": [
         "Cartel"
@@ -2712,122 +2725,193 @@
     },
     {
       "canonical_name": "Θέατρο Lib'ro",
-      "variations": ["Θέατρο Lib\u2019ro", "Θέατρο Lib'ro", "Lib'ro", "Lib\u2019ro"],
+      "variations": [
+        "Θέατρο Lib’ro",
+        "Θέατρο Lib'ro",
+        "Lib'ro",
+        "Lib’ro"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Theseum - A Theatre for the Arts",
-      "variations": ["theseum-A THEATRE FOR THE ARTS", "Θησείον, Ένα Θέατρο Για Τις Τέχνες", "Theseum Theatre"],
+      "variations": [
+        "theseum-A THEATRE FOR THE ARTS",
+        "Θησείον, Ένα Θέατρο Για Τις Τέχνες",
+        "Theseum Theatre"
+      ],
       "neighborhood": "Thiseio"
     },
     {
       "canonical_name": "Gazi View",
-      "variations": ["GaziView"],
+      "variations": [
+        "GaziView"
+      ],
       "neighborhood": "Gazi"
     },
     {
       "canonical_name": "Θέατρο Μπέλλος",
-      "variations": ["ΘΕΑΤΡΟ ΜΠΕΛΛΟΣ", "Θέατρο «Μπέλλος»", "Θέατρο &#171;Μπέλλος&#187;"],
+      "variations": [
+        "ΘΕΑΤΡΟ ΜΠΕΛΛΟΣ",
+        "Θέατρο «Μπέλλος»",
+        "Θέατρο &#171;Μπέλλος&#187;"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Ακροπόλ",
-      "variations": ["ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ", "Θέατρο Ακροπόλ", "Akropol"],
+      "variations": [
+        "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "Θέατρο Ακροπόλ",
+        "Akropol"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Θέατρο Μικρό Χορν",
-      "variations": ["Μικρό Χορν", "&#171;Δημήτρης Χορν&#187;", "Θέατρο Χορν"],
+      "variations": [
+        "Μικρό Χορν",
+        "&#171;Δημήτρης Χορν&#187;",
+        "Θέατρο Χορν"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Θέατρο Κολλεγίου Αθηνών",
-      "variations": ["Athens College Theater", "Κολλέγιο Αθηνών"],
+      "variations": [
+        "Athens College Theater",
+        "Κολλέγιο Αθηνών"
+      ],
       "neighborhood": "Psychiko"
     },
     {
       "canonical_name": "Θέατρο Ζίνα",
-      "variations": ["Ζίνα", "Zina Theater"],
+      "variations": [
+        "Ζίνα",
+        "Zina Theater"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Διάνα",
-      "variations": ["Diana", "Θέατρο Διάνα"],
+      "variations": [
+        "Diana",
+        "Θέατρο Διάνα"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Δημοτικό Κηποθέατρο Παπάγου",
-      "variations": ["Κηποθέατρο Παπάγου"],
+      "variations": [
+        "Κηποθέατρο Παπάγου"
+      ],
       "neighborhood": "Papagou"
     },
     {
       "canonical_name": "Γερμανική Εκκλησία Αθηνών",
-      "variations": ["ΓΕΡΜΑΝΙΚΗ ΕΚΚΛΗΣΙΑ ΑΘΗΝΩΝ", "German Church Athens"],
+      "variations": [
+        "ΓΕΡΜΑΝΙΚΗ ΕΚΚΛΗΣΙΑ ΑΘΗΝΩΝ",
+        "German Church Athens"
+      ],
       "neighborhood": "Syntagma"
     },
     {
       "canonical_name": "Island Athens Riviera",
-      "variations": ["Island", "Island Club"],
+      "variations": [
+        "Island",
+        "Island Club"
+      ],
       "neighborhood": "Vouliagmeni"
     },
     {
       "canonical_name": "Piree",
-      "variations": ["Pirée"],
+      "variations": [
+        "Pirée"
+      ],
       "neighborhood": "Piraeus"
     },
     {
       "canonical_name": "Dunk Athens",
-      "variations": ["Dunk"],
+      "variations": [
+        "Dunk"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Foyer Art Stage",
-      "variations": ["Foyer"],
+      "variations": [
+        "Foyer"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Kukaracha Theaterspace",
-      "variations": ["Kukaracha"],
+      "variations": [
+        "Kukaracha"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Μπάγκειον",
-      "variations": ["Μπάγκειον Ξενοδοχείο", "Bageion Hotel", "Bageion"],
+      "variations": [
+        "Μπάγκειον Ξενοδοχείο",
+        "Bageion Hotel",
+        "Bageion"
+      ],
       "neighborhood": "Omonoia"
     },
     {
       "canonical_name": "Leof. Mesogeion 15",
-      "variations": ["Μεσογείων 15"],
+      "variations": [
+        "Μεσογείων 15"
+      ],
       "neighborhood": "Ampelokipoi"
     },
     {
       "canonical_name": "Μύρτιλλο",
-      "variations": ["Myrtillo"],
+      "variations": [
+        "Myrtillo"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Πόλις Πολυχώρος",
-      "variations": ["Πόλις Πολυχώρος Πολιτισμού και Εκπαίδευσης", "Polis"],
+      "variations": [
+        "Πόλις Πολυχώρος Πολιτισμού και Εκπαίδευσης",
+        "Polis"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Daddy's All Day Bar",
-      "variations": ["Daddy'S all day bar", "Daddy\u2019S all day bar", "Daddy\u2019s All Day Bar", "Daddys"],
+      "variations": [
+        "Daddy'S all day bar",
+        "Daddy’S all day bar",
+        "Daddy’s All Day Bar",
+        "Daddys"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Άλμα",
-      "variations": ["Alma Theater"],
+      "variations": [
+        "Alma Theater"
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "VOX",
-      "variations": ["VOX."],
+      "variations": [
+        "VOX."
+      ],
       "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "WE Πολυχώρος",
-      "variations": ["WE, Πολυχώρος Πολιτισμού & Αθλητισμού", "WE Polyxwros"],
+      "variations": [
+        "WE, Πολυχώρος Πολιτισμού & Αθλητισμού",
+        "WE Polyxwros"
+      ],
       "neighborhood": "Central Athens"
     },
     {

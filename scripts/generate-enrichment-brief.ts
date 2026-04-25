@@ -48,6 +48,8 @@ interface EventRecord {
   url: string | null;
   description: string | null;
   source: string | null;
+  ticket_url?: string | null;
+  ticket_url_status?: string | null;
 }
 
 interface EntityKnowledge {
@@ -178,7 +180,7 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
   const params = typeFilter ? [typeFilter] : [];
   const rows = db.prepare(`
     SELECT id, title, type, venue_name, price_type, start_date, end_date,
-           time_doors, url, description, source
+           time_doors, url, description, source, ticket_url, ticket_url_status
     FROM events
     WHERE (full_description IS NULL OR full_description = '')
       AND needs_enrichment = 1
@@ -527,6 +529,20 @@ export function buildBrief(
     if (event.time_doors) lines.push(`- **Time**: ${event.time_doors}`);
     if (event.url) lines.push(`- **URL**: ${event.url}`);
     lines.push(`- **Source**: ${event.source || 'unknown'}`);
+
+    // Tier-4 AI-discovery ask: emit only for ticketed events with no trustworthy ticket_url.
+    // Trustworthy = ticket_url_status in {'direct','venue_registry','ai_discovered'} AND ticket_url non-null.
+    // Everything else (generated pollution, null, unresolved, venue_fallback) asks Claude to try.
+    const trustedStatuses = new Set(['direct', 'venue_registry', 'ai_discovered']);
+    const hasTrustedTicketUrl = !!event.ticket_url && trustedStatuses.has(event.ticket_url_status || '');
+    const isTicketed = event.price_type === 'with-ticket' || event.price_type === 'tba';
+    if (isTicketed && !hasTrustedTicketUrl) {
+      lines.push('');
+      lines.push(`> **TICKET URL NEEDED** for "${event.title}" @ ${event.venue_name || 'unknown venue'}.`);
+      lines.push(`> If you can confirm a direct purchase page on more.com, ticketservices.gr, viva.gr, or the venue's own site (web-search if needed), append this line under the event's YAML frontmatter in your response:`);
+      lines.push(`>   \`ticket_url_discovered: https://...\``);
+      lines.push(`> Omit the line if you can't find one. Do NOT fabricate URLs.`);
+    }
 
     // Per-event enrichment matrix targets
     const category = classifyEvent({ type: event.type, venue_name: event.venue_name, title: event.title });

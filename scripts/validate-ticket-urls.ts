@@ -271,7 +271,7 @@ function generateMissingUrls(
     SELECT id, title, venue_name, ticket_url, ticket_url_status, url, start_date
     FROM events
     WHERE (ticket_url IS NULL OR ticket_url = '')
-      AND price_type NOT IN ('open', 'free')
+      AND price_type != 'open'
       AND location_status IN ('verified_athens', 'pass_through')
     ORDER BY start_date ASC
   `).all() as EventForValidation[];
@@ -346,7 +346,7 @@ function showStats(db: Database): void {
       SUM(CASE WHEN ticket_url_status = 'generated' THEN 1 ELSE 0 END) as status_generated,
       SUM(CASE WHEN ticket_url_status = 'door_only' THEN 1 ELSE 0 END) as status_door_only,
       SUM(CASE WHEN ticket_url_status = 'unverified' OR ticket_url_status IS NULL THEN 1 ELSE 0 END) as status_unverified,
-      SUM(CASE WHEN price_type NOT IN ('open', 'free') THEN 1 ELSE 0 END) as ticketed_events
+      SUM(CASE WHEN price_type != 'open' THEN 1 ELSE 0 END) as ticketed_events
     FROM events
     WHERE location_status IN ('verified_athens', 'pass_through')
   `).get() as {

@@ -62,6 +62,7 @@ interface ScrapedEvent {
   source: string;
   location_status?: string;
   image_url?: string | null;
+  ticket_url_status?: string;
 }
 
 interface ScrapeResult {
@@ -326,7 +327,7 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
             genres: '',
             venue_name: venueName,
             url: eventUrl,
-            price_type: price ? 'paid' : 'tba',
+            price_type: price ? 'with-ticket' : 'tba',
             price_amount: price,
             price_range: priceRange,
             source: 'more.com'
@@ -684,7 +685,7 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
           const maxPrice = price2 ? Math.max(price1, price2) : price1;
 
           event.price_amount = minPrice;
-          event.price_type = 'paid';
+          event.price_type = 'with-ticket';
           event.price_range = price2 ? `€${minPrice} - €${maxPrice}` : `€${minPrice}`;
           pricesFound++;
         }
@@ -757,7 +758,8 @@ async function scrapeClubber(): Promise<ScrapedEvent[]> {
         genres: '["electronic"]',
         venue_name: event.venue || 'TBA',
         url: event.url || 'https://www.clubber.gr/events/',
-        price_type: 'door',
+        price_type: 'with-ticket',
+        ticket_url_status: 'door_only',
         price_amount: null,
         price_range: 'Door price',
         source: 'clubber.gr'
@@ -922,7 +924,7 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
             // Update all events with this title
             for (const event of events) {
               if (event.title === e.title && event.source === 'ticketservices') {
-                event.price_type = 'paid';
+                event.price_type = 'with-ticket';
                 event.price_amount = minPrice;
                 event.price_range = priceRange;
               }
@@ -1014,7 +1016,7 @@ async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
         genres: '["jazz"]',
         venue_name: 'Half Note Jazz Club',
         url: event.url || 'https://www.halfnote.gr/events/',
-        price_type: price ? 'paid' : 'tba',
+        price_type: price ? 'with-ticket' : 'tba',
         price_amount: price,
         price_range: priceRange,
         source: 'halfnote',
@@ -1092,19 +1094,19 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
         if (e.cost === '0' || e.cost.toLowerCase() === 'free') {
           price = 0;
           priceRange = 'Free';
-          priceType = 'free';
+          priceType = 'open';
         } else {
           const rangeMatch = e.cost.match(/(\d+)\s*[-–]\s*(\d+)/);
           if (rangeMatch) {
             price = parseInt(rangeMatch[1]);
             priceRange = `€${rangeMatch[1]} - €${rangeMatch[2]}`;
-            priceType = 'paid';
+            priceType = 'with-ticket';
           } else {
             const singleMatch = e.cost.match(/(\d+(?:\.\d{2})?)/);
             if (singleMatch) {
               price = parseFloat(singleMatch[1]);
               priceRange = `€${Math.round(price)}`;
-              priceType = 'paid';
+              priceType = 'with-ticket';
             }
           }
         }
@@ -1162,7 +1164,7 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
 
             if (price1 >= 5 && price1 <= 100) {
               event.price_amount = price1;
-              event.price_type = 'paid';
+              event.price_type = 'with-ticket';
               event.price_range = price2 ? `€${price1} - €${price2}` : `€${price1}`;
               pricesFound++;
             }
@@ -1324,11 +1326,11 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
     INSERT INTO events (
       id, title, description, start_date, end_date, time_doors, time_source, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,
-      location_status, image_url, image_source, needs_enrichment, created_at, updated_at
+      location_status, image_url, image_source, ticket_url_status, needs_enrichment, created_at, updated_at
     ) VALUES (
       $id, $title, $description, $start_date, $end_date, $time_doors, $time_source, $type, $genres,
       $venue_name, $url, $price_type, $price_amount, $price_range, $source,
-      $location_status, $image_url, $image_source, 1, datetime('now'), datetime('now')
+      $location_status, $image_url, $image_source, $ticket_url_status, 1, datetime('now'), datetime('now')
     )
     ON CONFLICT(id) DO UPDATE SET
       title = $title,
@@ -1342,6 +1344,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
       time_source = COALESCE($time_source, time_source),
       image_url = COALESCE($image_url, image_url),
       image_source = COALESCE($image_source, image_source),
+      ticket_url_status = COALESCE($ticket_url_status, ticket_url_status),
       updated_at = datetime('now')
   `);
 
@@ -1406,7 +1409,8 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         $source: e.source,
         $location_status: e.location_status || 'unverified',
         $image_url: e.image_url || null,
-        $image_source: e.image_url ? 'scraped_listing' : null
+        $image_source: e.image_url ? 'scraped_listing' : null,
+        $ticket_url_status: e.ticket_url_status || null
       });
       saved++;
     } catch (err) {

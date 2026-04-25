@@ -12,6 +12,7 @@ import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
+import { resolveCtaForEvent } from '../ticketing/cta';
 
 export interface VenueInfo {
   address?: string;
@@ -115,24 +116,18 @@ export function generatePracticalBlock(
     value: priceText
   });
 
-  // Tickets - prefer ticketUrl (direct purchase) over url (listing page)
-  const bestUrl = (event as any).ticketUrl || event.url;
-  if (bestUrl && bestUrl.length > 0) {
-    // Basic validation: must have a path beyond just the homepage
-    try {
-      const parsedUrl = new URL(bestUrl);
-      const isValidTicketUrl = parsedUrl.pathname !== '/' || parsedUrl.search.length > 0;
-      if (isValidTicketUrl) {
-        fields.push({
-          label: 'Εισιτήρια',
-          labelEn: 'Tickets',
-          value: `<a href="${bestUrl}" rel="noopener" target="_blank">${t.buyTickets}</a>`,
-          isHtml: true
-        });
-      }
-    } catch {
-      // Invalid URL - skip ticket link
-    }
+  // Tickets — resolved via tiered cascade (see src/ticketing/cta.ts)
+  const cta = resolveCtaForEvent(event, t);
+  if (cta.kind !== 'none') {
+    const valueHtml = cta.href
+      ? `<a href="${cta.href}" rel="noopener" target="_blank">${cta.label}</a>${cta.subLabel ? `<br><small>${cta.subLabel}</small>` : ''}`
+      : cta.label;
+    fields.push({
+      label: 'Εισιτήρια',
+      labelEn: 'Tickets',
+      value: valueHtml,
+      isHtml: true
+    });
   }
 
   // Venue name

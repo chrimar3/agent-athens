@@ -47,6 +47,20 @@ export function closeDatabase(): void {
 }
 
 /**
+ * Belt-and-suspenders normalizer for legacy price_type values.
+ * Primary fix is at scraper boundary (scripts/scrape-all.ts); this catches
+ * any leftover paths (enrichment, tests, ad-hoc scripts) that could emit
+ * legacy vocab despite Event.price.type typing. Constitution: 'open' |
+ * 'with-ticket' | 'tba' | 'donation'.
+ */
+function normalizePriceType(value: string): string {
+  if (value === 'paid') return 'with-ticket';
+  if (value === 'free') return 'open';
+  if (value === 'door') return 'with-ticket';
+  return value;
+}
+
+/**
  * Convert Event object to database row
  */
 export function eventToRow(event: Event): Record<string, any> {
@@ -66,7 +80,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $venue_lat: event.venue.coordinates?.lat || null,
     $venue_lng: event.venue.coordinates?.lon || null,
     $venue_capacity: event.venue.capacity || null,
-    $price_type: event.price.type,
+    $price_type: normalizePriceType(event.price.type),
     $price_amount: event.price.amount || null,
     $price_currency: event.price.currency || "EUR",
     $price_range: event.price.range || null,
@@ -143,6 +157,7 @@ export function rowToEvent(row: any): Event {
     semanticTags: row.ai_context ? JSON.parse(row.ai_context) : undefined,
     url: row.url,
     ticketUrl: row.ticket_url || undefined,
+    ticketUrlStatus: row.ticket_url_status || undefined,
     source: row.source,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
