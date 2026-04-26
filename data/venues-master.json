@@ -972,6 +972,17 @@
     "description": "Historic live music venue with fifty years tradition on the rock and avant-garde musical scene",
     "metro": "Viktoria Square"
   },
+  "ΚΥΤΤΑΡΟ LIVE|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Αχαρνών, Ipeirou και, Athina 104 39, Greece",
+    "lat": 37.990675,
+    "lng": 23.726265,
+    "type": "establishment",
+    "geocoded_source": "google",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-04-26"
+  },
   "Λοσάντζελε": {
     "name_en": "Losantzele Comedy Club",
     "neighborhood": "Koukaki",
