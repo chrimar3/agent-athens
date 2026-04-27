@@ -14,7 +14,50 @@ Track recurring problems, known workarounds, and failure patterns here. When the
 
 ---
 
+## S97a Audit Reconciliation (2026-04-28)
+
+The S97 Phase 1 audit's "Items Confirmed FIXED" list was independently re-verified at the start of S97a per the rule "audit-derived FIXED claims must be re-verified before being marked Fixed in known-issues.md, even when sourced from a recent audit." All 9 items pass independent verification.
+
+- ✅ **G1 — Malformed genres field in DB** (sealed via DB invariant in S97a). Migration `008-genres-check-constraint.sql` added `CHECK(genres IS NULL OR json_valid(genres))` to events table; 11,751 empty-string rows normalized to `'[]'` (valid JSON empty array). Verified: 0 violations + 1 CHECK constraint in schema.
+- ✅ **J1 — `--text-muted` on `--bg-raised` Fails AA** (S92). Verified `src/styles/design-system.css:20`: `--text-muted: #7a7a7a;` with documented "Do NOT use on --bg-raised" comment. 4.5:1 contrast on `--bg-primary`.
+- ✅ **J3 — Bilingual skip link** (S92). Verified `src/templates/site-chrome.ts:10`: `Skip to content` / `Μετάβαση στο περιεχόμενο`.
+- ✅ **J-headings — h1 → h2 → h3 hierarchy in `src/templates/page.ts`**. Verified h1 (line 153), h2 (lines 329 + 373), h3 (line 297). Note: file source order is h1→h3→h2 because the h3 (card title) is in a sub-template invoked from contexts where the h2 sectioning header was already emitted; rendered DOM hierarchy is h1→h2→h3.
+- ✅ **F1-distribution — Score health** (post-S69c). Verified via `enrichment_log` query (last 14d): AVG 93.5, MAX 100, MIN 83, n=236 — well above memory's "soft ceiling 88-90".
+- ✅ **F3-Greek-pause — Greek paused at code AND schema level**. Verified column is `full_description_gr` (NOT `_el`); 0 new Greek rows in last 14 days; 142 historical Greek rows preserved.
+- ✅ **I1-Calendar / Save / Share / SavedPage / IIFE-slug-migration** (S92). Verified in `src/templates/action-bar.ts`: `renderSaveButtonScript` (78), `renderCalendarScript` (136, with `TZID=Europe/Athens` lines 230-231), `renderShareButtonScript` (256), `renderSavedPageScript` (301), S92 IIFE slug-migration comment "Migrate legacy entries" (307).
+- ✅ **A4 — Schema validator wired into build**. Verified `src/generate-site.ts:31` imports `validateAllPages`, line 992 invokes it. Build log: "98% completeness, 0 errors" as of 2026-04-28.
+- ✅ **Tests-time-sensitive — 3 known time-sensitive failures resolved**. Verified `bun test` returns 0 fails matching `event-lifecycle|pipeline-state|page` test files.
+
+Inline Status updates for the matching entries below have not been edited individually; the reconciliation table above is canonical for these 9 items as of 2026-04-28. The original entries remain in their position for institutional-memory continuity.
+
+---
+
 ## Active Issues
+
+### Recovery Mechanism Asymmetry on Stream Idle Cascades
+**Severity:** 🟡
+**First seen:** 2026-04-25 / 2026-04-26 (cascade producing 0 saves both days; reframed from S97 audit's NEW-2 "Stream idle timeout — new failure mode" framing)
+**Frequency:** Chronic timeouts (4 / 8 / 7 / 5 / 1 / 3 / 2 / 4 / 6 / 0 lines per day across Apr 16-27); 1 cascade event in 12 days
+**Symptoms:** Stream-idle-timeout pattern is chronic background noise. Recovery mechanism absorbed 4-8 timeouts/day on Apr 16, 20, 23, 24, 27 (events still enriched). Failed to absorb 4+6 on Apr 25-26 → 0 saves both days. STALE_ENRICHMENT flag in 2026-04-27 search-visibility CSV row likely correlated.
+**Forensic question:** What recovery mechanism exists between batches/cycles in `scripts/auto-enrich.sh`, and why did it work on most days but fail on Apr 25-26? Reframed from "what causes timeouts" — timeouts are chronic, recovery success/failure is the discriminating signal.
+**Workaround:** None until mechanism is identified.
+**Fix plan:** Dedicated diagnostic session — read auto-enrich.sh between-batch logic (specifically `claude -p` invocation flow at lines 6, 89, 214, 286-294 and the orphan-kill at line 65), reconstruct timeline of Apr 25-26 vs Apr 24/27, identify branching condition. Pattern E (Debugging), output `specs/stream-idle-recovery-diagnostic.md`.
+**Status:** 🔴 Open — investigation pending
+
+### SWEEP_ORPHANS Sweeper False-Positives on Hash-Preserved Pages
+**Severity:** 🟡 (blocks orphan cleanup, but no live-correctness impact today)
+**First seen:** 2026-04-28 (S97a Step 6 preview surfaced the bug; S97 audit's NEW-5 "6,382 orphans" was the same bug at an earlier accumulation point — count grew to 14,640 by S97a)
+**Frequency:** Every build with content-hash-preserved pages; all builds since hash-preserving writer was introduced
+**Symptoms:** `bun run src/generate-site.ts` preview-mode reports tens of thousands of "WOULD DELETE" entries including sitemap-listed pages (`dist/saved/index.html` is the canonical proof: in `dist/sitemap-editorial.xml` as `https://agentathens.com/saved/`, build log shows `✓ /saved/` generated this build, but mtime is Apr 21 — 7 days old). Running `SWEEP_ORPHANS=1` would delete ~10K+ legitimate pages, breaking the live site after the next deploy.
+**Root cause:** `sweepOrphans()` at `src/generate-site.ts:1266-1346` classifies a file as orphan if `mtimeMs < buildStartTime`. The build's content-hash-preserving writer (`copyFileIfChangedSync` at line 1260) doesn't bump mtime when content is unchanged. Build log confirms: "10420 pages hashed (10420 unchanged, 0 changed/new)" — with 0 changed, no file in dist had mtime updated, so the sweeper sees nearly the entire dist as "orphan." Also subsumes audit's NEW-4 (5,806 empty-slug dirs) — they're a subset of the sweep population.
+**Workaround:** Do NOT arm `SWEEP_ORPHANS=1` in `scripts/daily-automated.sh:440`. Do NOT run a one-shot sweep manually. Tolerate the dist accumulation (cost: deploy upload size, disk space; no live correctness impact since sitemap controls indexing).
+**Fix plan:** Three candidate paths documented in `specs/sweep-orphans-deferred.md`:
+1. Hash-preserving writer also touches mtime (smallest patch).
+2. Build emits manifest of intended outputs; sweeper compares against manifest, not mtime (cleanest architecturally — preferred).
+3. Two-phase build with forced regenerate before sweep (heaviest).
+
+Belongs in a dedicated session. Verification command for that session is at the bottom of `specs/sweep-orphans-deferred.md`.
+**Status:** 🔴 Open — fix deferred from S97a Step 6
 
 ### Zero Indexed Pages Across Search Engines (Citation Baseline)
 **Severity:** 🔴 (CRITICAL — blocks primary success metric)
