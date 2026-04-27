@@ -75,3 +75,16 @@
   for = "/apple-touch-icon.png"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+# /en bare path → /en/today (302 to preserve flexibility for future English homepage)
+[[redirects]]
+  from = "/en"
+  to = "/en/today"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/en/"
+  to = "/en/today"
+  status = 302
+  force = true
