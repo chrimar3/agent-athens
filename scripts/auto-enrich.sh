@@ -40,7 +40,20 @@ ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=2
 EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. Architectural target: 10 events × 6 slots = 60 events/day (2 batches × 5 events × 6 daily triggers). S89 (2026-04-20): overnight slots 01:00 + 22:00 unloaded — laptop lid closed; effective throughput is 40/day until always-on hardware available.
 MIN_QUEUE=3
-BATCH_TIMEOUT=1800  # 30 minutes max per batch (batches avg 15-20 min)
+# S99 (2026-04-28): tightened BATCH_TIMEOUT from 1800→900. v2.1.105+ ships a
+# server-side stream-idle watchdog at 5min; the wrapper's stdout-idle is 2min.
+# 900s wall-clock is the outer fence — anything taking longer than 15min is
+# already failing some inner gate. plist EnvironmentVariables can override.
+BATCH_TIMEOUT=${BATCH_TIMEOUT:-900}
+STDOUT_IDLE_CAP=${STDOUT_IDLE_CAP:-120}  # S99: kill batch if its stdout mtime hasn't advanced in N seconds.
+
+# S99: Server-side stream watchdog (Claude Code v2.1.105+). CLAUDE_STREAM_IDLE_TIMEOUT_MS
+# kills mid-stream stalls at 5min idle. CLAUDE_ENABLE_BYTE_WATCHDOG enables
+# byte-level idle detection in addition to event-level. Both are no-ops on
+# older claude versions; non-destructive to set unconditionally. plist
+# EnvironmentVariables override these defaults.
+export CLAUDE_STREAM_IDLE_TIMEOUT_MS=${CLAUDE_STREAM_IDLE_TIMEOUT_MS:-300000}
+export CLAUDE_ENABLE_BYTE_WATCHDOG=${CLAUDE_ENABLE_BYTE_WATCHDOG:-1}
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -307,6 +320,7 @@ declare -a CLAUDE_PIDS=()
 declare -a WATCHDOG_PIDS=()
 declare -a BATCH_NAMES=()
 declare -a START_TIMES=()
+declare -a BATCH_OUTS=()  # S99: per-batch stdout files for stdout-mtime watchdog
 
 # Launch all batches in parallel
 for brief in "${BATCH_FILES[@]}"; do
@@ -316,23 +330,50 @@ for brief in "${BATCH_FILES[@]}"; do
     BRIEF_CONTENT=$(cat "$brief")
     START_TIME=$(date +%s)
 
-    # Run claude in background
+    # S99: per-batch output file. Required for stdout-mtime watchdog in the
+    # parallel-batch model — a shared LOG_FILE has its mtime advanced by
+    # other batches' output, masking a stalled batch.
+    BATCH_OUT="$LOG_DIR/.batch-${BATCH_NAME}-${RUN_ID}.out"
+    rm -f "$BATCH_OUT" && touch "$BATCH_OUT"
+
+    # Run claude in background, output to per-batch file.
     "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format text \
         --allowedTools "$ALLOWED_TOOLS" \
-        >> "$LOG_FILE" 2>&1 &
+        > "$BATCH_OUT" 2>&1 &
     CLAUDE_PID=$!
 
-    # Per-batch watchdog timer — wall-clock based (S89).
-    # `date +%s` advances through system/clamshell sleep; `sleep N` does not.
-    # Previously `caffeinate -s sleep N` was used to survive idle sleep, but
-    # caffeinate does not prevent lid-close sleep — sleeps of 30 min stretched
-    # to hours when the laptop was closed, blocking subsequent batches.
-    # See specs/claude-hang-diagnostic.md for the original caffeinate tests.
+    # S99 watchdog: combined wall-clock + stdout-idle with T1 KILL_CAUSE logging.
+    # Wall-clock cap: BATCH_TIMEOUT (default 900s, was 1800).
+    # Stdout-idle cap: STDOUT_IDLE_CAP (default 120s).
+    # `date +%s` and `stat -f %m` (BSD/macOS) advance through system/clamshell
+    # sleep; `sleep N` does not. caffeinate does NOT prevent lid-close sleep
+    # (S89, see specs/claude-hang-diagnostic.md) so it stays removed.
+    # KILL_CAUSE log lines tag which gate fired for forensic attribution
+    # (see specs/s99-baseline-floor.md re-evaluation criteria).
     ( WATCHDOG_END=$(( $(date +%s) + BATCH_TIMEOUT ))
-      while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do sleep 30; done
-      kill "$CLAUDE_PID" 2>/dev/null
-      log_error "$BATCH_NAME timed out after ${BATCH_TIMEOUT}s (killed PID $CLAUDE_PID)"
+      while true; do
+        NOW=$(date +%s)
+        # Stop polling if claude already exited cleanly
+        kill -0 "$CLAUDE_PID" 2>/dev/null || break
+        # Wall-clock check
+        if [ "$NOW" -ge "$WATCHDOG_END" ]; then
+          ELAPSED=$(( NOW - WATCHDOG_END + BATCH_TIMEOUT ))
+          log_error "KILL_CAUSE: wrapper-wall-clock pid=$CLAUDE_PID elapsed=${ELAPSED}s exit=124 batch=$BATCH_NAME"
+          kill "$CLAUDE_PID" 2>/dev/null
+          break
+        fi
+        # Stdout-mtime idle check (NOTE: stat -f %m is BSD/macOS; use -c %Y on Linux)
+        MTIME=$(stat -f %m "$BATCH_OUT" 2>/dev/null || echo "$NOW")
+        IDLE=$(( NOW - MTIME ))
+        if [ "$IDLE" -ge "$STDOUT_IDLE_CAP" ]; then
+          ELAPSED=$(( NOW - START_TIME ))
+          log_error "KILL_CAUSE: stdout-idle pid=$CLAUDE_PID elapsed=${ELAPSED}s idle=${IDLE}s exit=125 batch=$BATCH_NAME"
+          kill "$CLAUDE_PID" 2>/dev/null
+          break
+        fi
+        sleep 15
+      done
     ) &
     TIMER_PID=$!
 
@@ -340,6 +381,7 @@ for brief in "${BATCH_FILES[@]}"; do
     WATCHDOG_PIDS+=("$TIMER_PID")
     BATCH_NAMES+=("$BATCH_NAME")
     START_TIMES+=("$START_TIME")
+    BATCH_OUTS+=("$BATCH_OUT")
 done
 
 log "All ${#CLAUDE_PIDS[@]} batches launched in parallel. Waiting for completion..."
@@ -353,6 +395,7 @@ for i in "${!CLAUDE_PIDS[@]}"; do
     TIMER_PID="${WATCHDOG_PIDS[$i]}"
     BATCH_NAME="${BATCH_NAMES[$i]}"
     START_TIME="${START_TIMES[$i]}"
+    BATCH_OUT="${BATCH_OUTS[$i]}"
     # S98: extract integer batch number from "batch-N" for DB query filter.
     BATCH_NUM="${BATCH_NAME#batch-}"
 
@@ -365,6 +408,28 @@ for i in "${!CLAUDE_PIDS[@]}"; do
 
     END_TIME=$(date +%s)
     ELAPSED=$((END_TIME - START_TIME))
+
+    # S99: append per-batch output to main log file BEFORE result categorization
+    # so log_error from below shares the file with the batch's stream output.
+    if [ -f "$BATCH_OUT" ]; then
+        cat "$BATCH_OUT" >> "$LOG_FILE"
+    fi
+
+    # S99 T1: detect if Claude Code's server-side stream watchdog (v2.1.105+)
+    # fired. It self-terminates and emits a recognizable signature in output.
+    # Log post-detection KILL_CAUSE so forensics can attribute. Exit code is
+    # whatever claude returned (likely non-zero).
+    SERVER_STREAM_IDLE=0
+    if [ -f "$BATCH_OUT" ] && grep -qiE 'stream.idle.timeout|stream watchdog|stream.idle' "$BATCH_OUT" 2>/dev/null; then
+        SERVER_STREAM_IDLE=1
+        log "KILL_CAUSE: server-stream-idle pid=$CLAUDE_PID elapsed=${ELAPSED}s exit=$EXIT_CODE batch=$BATCH_NAME"
+    fi
+
+    # Keep BATCH_OUT for forensics on failure or stream-idle detection;
+    # remove on clean success.
+    if [ "$EXIT_CODE" -eq 0 ] && [ "$SERVER_STREAM_IDLE" -eq 0 ] && [ -f "$BATCH_OUT" ]; then
+        rm -f "$BATCH_OUT"
+    fi
 
     # S98: reconcile against DB state. Authoritative signal is the count of
     # enrichment_log rows this (run_id, batch_number) produced with
