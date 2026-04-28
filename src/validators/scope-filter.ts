@@ -2,12 +2,13 @@
  * Scope Filter - Excludes non-cultural events from the database
  *
  * Filters out:
+ * - URLs in deny-listed paths (e.g., /tickets/sports/) — source-boundary policy, not overridable
  * - Sports events (basketball, football, etc.)
  * - Corporate events (conferences, meetings, etc.)
  * - Personal events (weddings, baptisms, etc.)
  * - Religious services
  *
- * Allows dance events (ballet, tango, contemporary) via override keywords
+ * Allows dance events (ballet, tango, contemporary) via override keywords (keyword/venue layer only)
  */
 
 import { readFileSync } from 'fs';
@@ -17,6 +18,7 @@ interface ScopeConfig {
   excludedKeywords: string[];
   excludedVenues: string[];
   allowedKeywordsOverride: string[];
+  excludedUrlPatterns?: string[];
 }
 
 // Load scope configuration
@@ -31,14 +33,25 @@ export interface ScopeResult {
 /**
  * Check if an event should be excluded from the cultural events database
  *
- * @param event - Event with title, venue, and optional description
+ * @param event - Event with title, venue, optional description, optional source URL
  * @returns ScopeResult indicating if event is in scope
  */
 export function shouldExcludeEvent(event: {
   title: string;
   venue?: string;
   description?: string;
+  url?: string;
 }): ScopeResult {
+  // URL-path deny-list runs first: source-boundary policy, not defeatable by allowedKeywordsOverride.
+  // A URL like /tickets/sports/ is out of scope regardless of what the title or venue claims.
+  if (event.url && scopeConfig.excludedUrlPatterns) {
+    for (const pattern of scopeConfig.excludedUrlPatterns) {
+      if (event.url.includes(pattern)) {
+        return { inScope: false, reason: `excluded_url_pattern:${pattern}` };
+      }
+    }
+  }
+
   const text = `${event.title} ${event.description || ''}`.toLowerCase();
   const venue = (event.venue || '').toLowerCase();
 
@@ -72,7 +85,7 @@ export function shouldExcludeEvent(event: {
  * @param events - Array of events to filter
  * @returns Filtered array of in-scope events
  */
-export function filterInScopeEvents<T extends { title: string; venue_name?: string; description?: string }>(
+export function filterInScopeEvents<T extends { title: string; venue_name?: string; description?: string; url?: string }>(
   events: T[]
 ): { inScope: T[]; excluded: Array<{ event: T; reason: string }> } {
   const inScope: T[] = [];
@@ -82,7 +95,8 @@ export function filterInScopeEvents<T extends { title: string; venue_name?: stri
     const result = shouldExcludeEvent({
       title: event.title,
       venue: event.venue_name,
-      description: event.description
+      description: event.description,
+      url: event.url
     });
 
     if (result.inScope) {

@@ -34,5 +34,8 @@
     "dance performance", "χορευτική παράσταση",
     "dance theater", "χοροθέατρο", "physical theater",
     "flamenco", "φλαμένκο", "salsa", "swing dance"
+  ],
+  "excludedUrlPatterns": [
+    "/tickets/sports/"
   ]
 }

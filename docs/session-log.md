@@ -2988,7 +2988,38 @@ Stepwise execution of the plan. Notable deviations:
 - Local `.s97a-backup*` files retained for now; delete after a few days of clean enrichment cycles confirm migration stability.
 - Research Run 2 + Run 1 — Christos kicks off per the brief.
 
----
+### Session S100 — Bad Events Cleanup (more.com sports + dj_set misclassifications) — 2026-04-28
 
-> **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.
+**Plan:** Resolve user-reported data-quality complaints (3 specific event ids — 2 H Hotels basketball tickets misclassified as `dj_set`, 1 theatre play misclassified as `dj_set`). Diagnose-then-fix arc with the diagnosis from 2026-04-24 (`specs/bad-events-diagnosis.md`) carried forward. Scope expanded by Planner to Option C: full `/tickets/sports/` deletion (not just H Hotels titles) + venue-based `dj_set` reclassification (not just non-electronic markers) + sub-type split for taxonomic precision.
+
+**What happened:**
+- **Step 0 — idempotency check** surfaced a scope mismatch in the plan (Step 0 used broader filters than the diagnosis). Re-ran exact diagnostic filters: 6 H Hotels + 3 Parnassos non-electronic-marker → confirmed no upstream drift, just plan-vs-diagnosis filter scope difference. Reported with breakdown; Planner endorsed the broader filters as the correct fix criterion (Option C).
+- **Step 1/2/3 — decision-gate report.** Surfaced that `url-category-patterns.json` deliberately excludes `athinorama.gr /theatre/performance/` (50% spike accuracy). Recategorizer dry-run found 0 of 46 dj_set targets would be auto-fixed (no venue rule for AUDITORIUM/Parnassos). Reported. Planner approved manual SQL replacement for Step 6/7.
+- **Step 4 (pre-write) — Guard 6 SURPRISE.** `scrape-list.json` has zero active consumers (all readers in `scripts/_archive/`). Active ingestion is `scripts/scrape-all.ts` invoked from `daily-automated.sh` via launchd; the URL allow-list lives **inline** at `scrape-all.ts:233` (`categories = ['music', 'theatre', 'sports']`). Original A2 plan would have shipped a deny-list config field with no runtime effect. Halted, reported, Planner approved revised A2 shape: extend existing `scope-filter.ts` mechanism (which already runs at every save) with `excludedUrlPatterns` co-located in `event-scope.json`.
+- **Step 4 — Path A applied.** L1: `scripts/scrape-all.ts` line 233 dropped `'sports'`, line 246 regex dropped `sports|`. L2: `src/validators/scope-filter.ts` extended `shouldExcludeEvent({title, venue, description, url?})` with URL-pattern check (runs BEFORE `allowedKeywordsOverride` to enforce source-boundary > content-override precedence). `config/event-scope.json` added `excludedUrlPatterns: ["/tickets/sports/"]`. Call site in `saveEvents` (line 1354) now passes `url: e.url`. 4 new tests in `scope-filter.test.ts` (URL-match excludes, no-match passes, override precedence, backward-compat). `scrape-list.json` marked `_status: DEPRECATED` to prevent recurrence of the stale-config trap.
+- **Step 5 — DELETE 39 sports rows** in transaction (30 `type='sports'` + 9 `type='dj_set'`, exact match to expected). Discovered `enrichment_queue` had 13 orphans (FK has `ON DELETE CASCADE` but SQLite default is `PRAGMA foreign_keys=OFF` per connection); cleaned up explicitly.
+- **Step 6/7 — three-UPDATE transaction.** AUDITORIUM `dj_set → theater`: 36 changes (count drifted from 33 at decision-gate to 36 at execution due to continued daily ingestion; venue-based filter naturally absorbed the +3). Parnassos non-Palamas `dj_set → concert`: 12 changes. Palamas literary tribute `dj_set → show`: 1 change. Total 49 reclassifications, exact match to expected.
+- **Step 8 — verification.** `bunx tsc --noEmit` clean. `bun test` 1717 pass / 0 fail / 1 skip (28 scope-filter tests including 4 new). `bun run build` succeeded; first run left stale orphan event pages in `dist/` from deleted DB rows. Re-ran with `SWEEP_ORPHANS=1` (existing built-in mechanism); orphans cleared. All three target SQL counts now 0. Reported event id `7bb8fe15…` confirmed `type=theater`; the 2 H Hotels ids no longer in DB.
+
+**Verified:**
+- DB: 0 rows in each of the three target queries (sports `more.com` + `/tickets/sports/`; AUDITORIUM `dj_set`; Parnassos `dj_set`).
+- Site: `find dist/events -name "*h-hotels*"` returns 0; reported id-prefixed slugs absent.
+- Tests: 1717 pass / 0 fail (1717 = previous 1713 + 4 new scope-filter tests).
+- TypeScript: `bunx tsc --noEmit` exit 0.
+- Build: 10444 pages, 0 errors, 98% schema completeness.
+- Scraper seal: `grep -n "sports" scripts/scrape-all.ts` confirms only docstring/log mentions remain (no allow-list entries).
+
+**Learnings:**
+- `mistakes.md`: 5 entries — `verified_athens` is not a category guard; `/tickets/sports/` allow-list config error; `scrape-list.json` stale-config trap (caught by Guard 6 pre-write); diagnostic filters ≠ fix filters; Greek-inflection blind spot flagged for separate session.
+- `patterns.md`: 1 entry — URL-path exclusion for source-boundary bugs (point-fix at discovery + deny-list at save, ship both).
+- `decisions.md`: 1 entry — `excludedUrlPatterns` field shape (substring, global scope, deny-list rather than allow-list, co-located with existing scope filter).
+- 4 new tests in `src/validators/__tests__/scope-filter.test.ts` lock the URL deny-list semantics (override precedence, backward-compat).
+
+**Open items:**
+- **Greek inflection blind spot in `event-scope.json` keyword matching** — separate diagnostic session. `text.includes()` against nominative-form keywords misses genitive/dative/accusative forms (confirmed: `αγώνες` excludes, `αγώνων` slips). Spike: sample 30 random rejected events + 30 random accepted, look for cross-contamination. Then decide stem-based matching / lemmatization library / expanded inflection lists.
+- **30 events with `type='sports'` (non-canonical EventType)** — root cause sealed in S100 (line 326 `type: category === 'music' ? 'concert' : category` no longer fires for sports since L1 drop). Existing 30 rows deserve cleanup: likely all are former `/tickets/sports/` ingests that the L2 deny-list didn't exist for at scrape time. Probably bulk-deletable; flagged for short follow-up session.
+- **`/theatre/performance/` URL-pattern re-spike for athinorama.gr** — current `_excluded_sources` status in `url-category-patterns.json` locks the pattern at 50% spike accuracy. Targeted spike across ~20 random athinorama `/theatre/performance/` URLs cross-checked against actual content types would tell us whether to promote, drop further, or introduce a secondary guard (combined venue+URL confidence). Session budget: 1 hour, read-only.
+- **`scrape-list.json` cleanup** — currently marked `_status: DEPRECATED`. Either delete entirely once verified no embeddings/docs reference it, or leave as historical artifact. Defer — low priority.
+
+
 

@@ -230,7 +230,7 @@ async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Pr
 async function scrapeMore(): Promise<ScrapedEvent[]> {
   console.log('   Fetching more.com categories...');
   const events: ScrapedEvent[] = [];
-  const categories = ['music', 'theatre', 'sports'];
+  const categories = ['music', 'theatre'];
   const today = new Date().toISOString().split('T')[0];
 
   for (const category of categories) {
@@ -243,7 +243,7 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
       const html = await response.text();
 
       // Extract event links from listing
-      const linkPattern = /href="(\/gr-el\/tickets\/(?:music|theatre|sports|theater)\/[a-z0-9-]+\/)"/gi;
+      const linkPattern = /href="(\/gr-el\/tickets\/(?:music|theatre|theater)\/[a-z0-9-]+\/)"/gi;
       const links = new Set<string>();
       let match;
       while ((match = linkPattern.exec(html)) !== null) {
@@ -1354,7 +1354,8 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
       const scopeResult = shouldExcludeEvent({
         title: e.title,
         venue: e.venue_name,
-        description: e.description
+        description: e.description,
+        url: e.url
       });
 
       if (!scopeResult.inScope) {

@@ -129,6 +129,43 @@ describe('shouldExcludeEvent', () => {
       expect(result.inScope).toBe(true);
     });
   });
+
+  describe('URL-path deny-list (excludedUrlPatterns)', () => {
+    test('should exclude events whose URL matches a deny-list pattern', () => {
+      const result = shouldExcludeEvent({
+        title: 'ΚΟΛΟΣΣΟΣ H HOTELS COLLECTION',
+        venue: 'Κλειστό Καλλιθέας',
+        url: 'https://www.more.com/gr-el/tickets/sports/kolossos-h-hotels-collection-karditsa/'
+      });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toBe('excluded_url_pattern:/tickets/sports/');
+    });
+
+    test('should allow events whose URL does not match any deny-list pattern', () => {
+      const result = shouldExcludeEvent({
+        title: 'Jazz concert',
+        url: 'https://www.more.com/gr-el/tickets/music/some-jazz-event/'
+      });
+      expect(result.inScope).toBe(true);
+    });
+
+    test('URL deny-list is source-boundary policy and overrides allowedKeywordsOverride', () => {
+      // A "ballet" title would normally be allowed by the dance override.
+      // But if the URL says /tickets/sports/, the source has classified it as sports —
+      // no content-level override should resurrect it.
+      const result = shouldExcludeEvent({
+        title: 'Ballet at the arena',
+        url: 'https://www.more.com/gr-el/tickets/sports/some-promo/'
+      });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toContain('excluded_url_pattern');
+    });
+
+    test('events without a url field still work (backward-compat)', () => {
+      const result = shouldExcludeEvent({ title: 'Jazz concert' });
+      expect(result.inScope).toBe(true);
+    });
+  });
 });
 
 describe('filterInScopeEvents', () => {

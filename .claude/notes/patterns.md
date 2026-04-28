@@ -1641,20 +1641,21 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 2. When fixing an observability bug, the fix is often "move the write earlier, into the same function as the action." Not "make the later layer smarter about inferring what the earlier layer did."
 3. S91 discipline still applies: observability writes must be best-effort (wrapped in try/catch) so they never block the action. The discipline "write at source" is compatible with "never kill production path" — put the try/catch around the observability write, not the action.
 
-## Date-annotate event IDs in multi-session plans (2026-04-24, Pre-A)
+## Spot-check event IDs have ~24-hour shelf life — re-query at time of use (2026-04-24 → promoted to standing rule 2026-04-28, Session A)
 
-**Rule:** Any time a plan references a specific event by ID for spot-checking or test purposes, annotate that ID with its `start_date`. Before using the ID in a downstream session, re-query the DB to confirm the event hasn't rolled into the past.
+**Standing rule:** A spot-check event ID in a plan or scratch file is a **claim about a moment in time, not a permanent reference.** Treat it as cached data that expires. Always re-query the originating filter at the time of use, even if the ID was captured earlier in the same session. **Within the same conversation, datasets can shift by 20%+ as events roll past** — Session A observed this directly: 609 future events at Step 5 first run → 473 at Step 5 second run within the same arc.
 
-**Why it matters:** Event-date-bound data decays faster than other kinds of project data. A plan authored on day N that references "the Lah Porella event at Ilion Plus" works on day N (event is upcoming) but silently breaks by day N+K (event is past, Tier 0 guard fires, cascade never exercises the intended path). The executor spotted this in Pre-A when the originally-cited Lah Porella event (2026-04-23) had rolled past today's date (2026-04-24), meaning the Ilion Plus Tier 2 search-pattern case in Session A had no live test example.
+**Why it matters:** Event-date-bound data decays faster than other project data. A plan authored on day N referencing "the Lah Porella event at Ilion Plus" works on day N (event upcoming) but silently breaks by day N+K (event past, Tier 0 guard fires, cascade never exercises the intended path). Pre-A caught this when the originally-cited Lah Porella event (2026-04-23) rolled past 2026-04-24. Session A then re-witnessed it: spot-check IDs captured at the start of Step 5 needed re-querying by the end of the same step.
 
-**Counter-example (what this is not):** Not an argument against naming specific events in plans — concreteness is valuable. The rule is just "concreteness + date annotation + re-query before use," not "never reference specific events."
+**Counter-example (what this is not):** Not an argument against naming specific events in plans — concreteness is valuable for review and reproducibility. The rule is "concreteness + date annotation + ALWAYS re-query at time of use," not "never reference specific events."
 
 **How to apply:**
 
-1. When a plan cites an event ID, always include `start_date` beside it. Future readers (including the author) can see at a glance whether the reference might have decayed.
-2. Before actually using a cited ID in a script/test, re-run the query that surfaced it. If the event has become past, either pick a replacement via the same query family, or note "no live test case — unit test only" in the session record.
-3. When writing spot-check sections of session plans, prefer queries over static IDs. A query (e.g. "earliest future ticketed event at venue X") continues to return valid results; a static ID does not.
-4. When documenting findings in scratch files like `specs/session-*-event-ids.md`, timestamp the capture moment in the file body (not just in filesystem metadata). Makes drift obvious on re-read.
+1. When a plan or scratch file cites an event ID, always include `start_date` beside it. Future readers (including the author) can see at a glance whether the reference might have decayed.
+2. **Re-query before use, every time.** Even if you captured the ID 30 minutes ago and the conversation hasn't ended. The query takes seconds; debugging a stale-ID failure takes much longer.
+3. When writing spot-check sections of session plans, prefer **queries** over static IDs. "Earliest future ticketed event at venue X" continues to return valid results; a static ID does not.
+4. When documenting findings in scratch files like `specs/session-*-event-ids.md`, timestamp the capture moment in the file body (not just in filesystem metadata). Makes drift obvious on re-read. Add a one-line "shelf-life note" for any event whose `start_date` is within 14 days.
+5. If the spot-check ID rolled past mid-session, **don't try to validate using a past event** — the past-event guard short-circuits the cascade you were trying to test. Re-pick a future event via the same query family, or document "no live test case currently — unit test only" in the session record and move on.
 
 ## Continue read-only work when blocked for planner decision (2026-04-24, Pre-A)
 
@@ -1709,3 +1710,56 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 4. **For one-off manual queries** (read-only inspection, ad-hoc fixes): `bun -e 'import { Database } from "bun:sqlite"; ...'` is safer than `sqlite3 data/events.db "SELECT ..."` — same FTS5-capable runtime as the application uses. The `sqlite3` CLI is fine for `.schema` / `PRAGMA` / `SELECT` on non-FTS5 tables, but defaulting to `bun:sqlite` removes the divergence trap entirely.
 
 **Detection signal:** if a migration plan shows `sqlite3 < file` AND the project has FTS5 (or any other compile-time-optional SQLite feature), flag the runner choice as Step 0 of the review.
+
+## URL-path exclusion for source-boundary bugs: config deletion + deny-list mechanism (2026-04-28, S100)
+
+**Rule:** When a scraper ingests out-of-scope URLs because of a config error, the fix has two orthogonal layers and you ship both: (1) **point-fix** — remove the specific URL from the source's allow-list at discovery time; (2) **category-fix** — add a per-source `excludedUrlPatterns` deny-list checked at save time, so future config errors and same-class regressions are caught even if the allow-list grows again.
+
+**Why it matters:** Point-fix without deny-list treats each case as novel — a future contributor who re-adds a section URL to the allow-list (or a new source whose URL taxonomy mixes cultural and out-of-scope paths) will recreate the same leak. Deny-list without point-fix leaves the active scraper still hitting and parsing out-of-scope URLs every cycle, only for the save-time filter to reject them — wasted compute and a noisy log signal that makes legitimate failures harder to spot. The two layers protect different failure modes (config drift vs operational waste). They're independent — adding one doesn't reduce the value of the other.
+
+**Why URL-path beats keyword/venue at this layer:** A title like `ΚΟΛΟΣΣΟΣ H HOTELS - ΕΙΣΙΤΗΡΙΑ ΑΓΩΝΩΝ 2025-2026` slips a Greek-keyword filter that has nominative `αγώνες` but not genitive `αγώνων` (Greek inflection blind spot — separate follow-up). A regional sports arena like `Κλειστό Καλλιθέας` slips a venue list that names ΟΑΚΑ/Καραϊσκάκης/SEF but missed the smaller venue. The URL path `/tickets/sports/` is **the source's own categorization** — the most authoritative signal available, language-independent, and stable as title formats and venue names evolve. Type-based filtering downstream (e.g., delete `type='sports'`) is a third-class defense — it depends on a categorizer that may itself be the cause of the leak.
+
+**How to apply:**
+
+1. **Layer 1 (point-fix at discovery):** Find the source's URL allow-list (often a hardcoded array in a per-source scraper). Remove the offending entry. This stops the scraper from hitting the URL at all.
+2. **Layer 2 (deny-list at save):** Co-locate URL deny-list with existing keyword/venue deny-list (e.g., extend `event-scope.json` with `excludedUrlPatterns: string[]` rather than create a new config file — one mental model, one config). Run the URL check **before** any allow-overrides, because URL-path policy is source-boundary and not defeatable by content overrides (e.g., a "ballet" override that legitimately resurrects a sports-venue event must NOT resurrect a `/tickets/sports/` URL).
+3. **Tests:** Cover (a) URL-match excludes, (b) no-match passes, (c) URL deny-list overrides allowed-keyword overrides (locks the precedence decision), (d) events without a URL field still work (backward-compat).
+4. **Prefer extending existing scope-filter mechanism over creating new files.** If the project already has a `shouldExcludeEvent`-style validator running at every save, add the URL check there. Avoids fragmenting "what does it mean for an event to be in scope" across multiple validators.
+
+**Detection signal:** when reviewing a leak that originated from a scraper's URL allow-list, ask "would a deny-list at save time have caught this even if the allow-list change reverted?" If yes, ship both layers; do not rely on the allow-list edit alone.
+
+**Related anti-pattern (do NOT do):** Add the URL deny-list to a config file that has no active code consumer. Verify config consumers via grep before writing — see `mistakes.md` S100 entry on `scrape-list.json`.
+
+## Coverage metrics need definition before threshold gates (2026-04-28, Session A)
+
+**Rule:** Any plan that contains a branch gate of the form "if coverage ≥ X% do A, else do B" **must define the metric explicitly in decisions.md before the gate fires.** Without explicit definition, the executor faces an ambiguity that is technically a planner decision and produces avoidable round-trips at the worst moment — when both options are viable and the answer changes the next session's scope.
+
+**Why it matters:** Session A's plan said "≥ 90% → skip curation; 70–90% → curate; < 70% → diagnose." When the executor produced two valid coverage numbers (64.5% real-URL only vs 74.2% with `door_only` counted as actionable), neither answered the gate definitively without a planner decision. Both interpretations are defensible; the plan didn't say which. The executor surfaced both, the planner aligned on which to use, but the round-trip happened at the most context-expensive moment (after the dry-run, with the result on screen).
+
+**The core failure mode:** plans treat metrics as obvious because their authors have an implicit definition in mind, but executors faithfully implementing the plan can compute multiple equally-defensible numbers from the same dataset.
+
+**How to apply:**
+
+1. When writing a branch gate based on a percentage, **inline the metric definition next to the threshold**. Example: `"Coverage = (count where status produces a non-null ticket URL) / (count of in-scope events). door_only counts as covered because it produces a valid CTA, just without URL."` That sentence in `decisions.md` D-section would have removed the ambiguity end-to-end.
+2. If the metric has multiple reasonable variants, **say which variant the gate uses** and (optionally) report the others for context. "The gate uses real-URL coverage; report total-actionable-CTA alongside for visibility."
+3. When the executor encounters a metric ambiguity at gate-fire time, the right move is **not** to pick one and proceed. It's to surface both with the framing "the gate requires a planner-level metric definition; here are the two reasonable readings." That converts a silent-wrong-answer risk into an explicit alignment moment.
+4. Retroactive fix when ambiguity is found: **add the definition to the relevant `decisions.md` D-entry** (not to the plan, which is ephemeral). Future sessions referencing the same gate inherit the resolved definition automatically.
+
+**Counter-example (what this is not):** Not an argument against having gates — gates are useful for branching. The rule is "gate + metric definition together," not "no gates."
+
+## Time-correlated data shifts during long-running session arcs (2026-04-28, Session A)
+
+**Rule:** Plans referencing **absolute counts** of time-bound data (events, posts, tickets, jobs) become brittle when the session takes more than a day. Reference **proportions or thresholds** instead, or include an explicit "re-baseline before gating" step. Long-running session arcs see datasets shift by 20%+ even within a single conversation.
+
+**Why it matters:** Session A's plan said "expect ≥ 600 future ticketed events" as a Step 0 verification gate. By the time Step 5 ran (two real-world days later in the same conversation arc), the count had drifted from 609 → 473 — a 22% shift. If "≥ 600" had been a hard gate later in the plan, the session would have stalled needlessly. The plan absorbed this drift gracefully because the threshold was only at Step 0; if the same threshold had been at Step 5's branch gate, it would have produced a false-failure stop.
+
+**The core observation:** absolute counts of time-bound data are valid as **point-in-time measurements**, not as **persistent invariants**. A plan that references them as invariants will silently rot.
+
+**How to apply:**
+
+1. When a plan needs a numeric threshold, prefer **proportions over absolute counts** wherever the underlying dataset is time-bound. "≥ 70% real-URL coverage" survives a 22% dataset shift; "≥ 600 events resolved" does not.
+2. When an absolute count is unavoidable (e.g. "≥ 100 events for the dry-run to be statistically meaningful"), **co-locate it with a re-baseline step**: "Step N — re-verify count before gating on it. If the count has shifted by more than ~20%, re-evaluate the gate's premise rather than failing closed."
+3. For multi-day session arcs, **timestamp every numeric reference in plans/scratch files** with the day it was captured. The reader can then judge for themselves whether to re-query.
+4. **Avoid daisy-chaining counts across sessions without re-verification.** Session N captures "608 future events"; Session N+3 plan says "process the 608 events from Session N." Wrong by Session N+3. Right form: "process the future-event set as defined by query Q at session start."
+
+**Combined with the spot-check shelf-life rule above:** these are the same underlying issue applied to different data types. Absolute counts are aggregate spot-checks; spot-check IDs are individual-row spot-checks. Both decay; both need re-query at time of use; both are silent-wrong-answer hazards in long-running session arcs.

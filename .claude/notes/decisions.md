@@ -1690,3 +1690,39 @@ Three architectural lessons surfaced during S97a/b execution graduated to perman
 | **Pre-flight queries for CHECK constraints must test the EXACT condition the CHECK will enforce, not an approximation.** S97a v3's `genres != ''` filter masked 11,751 of 12,539 rows that the CHECK would actually reject. Lesson is being added to Guard 1 template parenthetically rather than as a standalone pattern. | S97a Step 5 v1 failure recovery | Guard 1 template (per Christos), `mistakes.md` cross-reference |
 
 The hash-preserving-writer ↔ mtime-sweeper incompatibility (S97a Step 6 deferral) is a separate mini-design topic deferred to its own session per Christos's note; not promoted to patterns.md yet.
+
+## S100 — `excludedUrlPatterns` config field shape (2026-04-28)
+
+**Context:** S100 sealed a more.com `/tickets/sports/` ingestion leak. The fix needed a reusable URL-path deny-list mechanism for the existing scope filter (`src/validators/scope-filter.ts`, config at `config/event-scope.json`). This entry locks the field shape and the underlying principle.
+
+### Field shape
+
+Added to `config/event-scope.json`:
+
+```json
+{
+  "excludedKeywords":  [...],
+  "excludedVenues":    [...],
+  "allowedKeywordsOverride": [...],
+  "excludedUrlPatterns": ["/tickets/sports/"]
+}
+```
+
+- **Type:** `string[]`. Optional in the TS interface (`excludedUrlPatterns?: string[]`) for backward-compat with older scope configs.
+- **Match semantics:** **substring**, not regex. `event.url.includes(pattern)` — simple, predictable, readable as plain config without escape rules. Performance is fine at config sizes we expect (a small handful of patterns, at most tens).
+- **Scope:** global across all sources, not per-source. We deliberately did NOT structure this as `{ "more": ["/tickets/sports/"], "athinorama": [...] }` because:
+  - Most deny-listed paths describe a content category (sports, classifieds), not a source quirk. The same pattern would often apply across sources.
+  - Per-source deny-lists invite future drift where the same logical exclusion lives in N places.
+  - If genuine per-source needs arise (e.g., one source's `/marketing/` is fine but another's isn't), shape evolves to `{patterns: string[], sourceScopes?: Record<string, string[]>}` at that point — not preemptively.
+
+### Principle: deny-list, not allow-list
+
+The decision to use a deny-list (`excludedUrlPatterns`) rather than an allow-list (`allowedUrlPatterns`) is deliberate.
+
+| Decision | Rationale | Date |
+|---|---|---|
+| Deny-list (`excludedUrlPatterns`) over allow-list (`allowedUrlPatterns`) | An allow-list at save time would require enumerating every cultural-event URL pattern across all sources — a moving target as scrapers, sources, and URL taxonomies evolve. A deny-list scales cheaply: each new known-bad pattern adds one line. The allow-list role is already filled at *discovery* time (the per-source `categories` arrays in `scrape-all.ts`) — that's the right level for "what we will fetch." Save-time is the right level for "what we'll reject if it slips through." Mixing layers (allow-list at save) creates double-bookkeeping. | 2026-04-28 |
+| Substring match over regex | Config readability matters more than expressive power. `/tickets/sports/` reads as "anything with this path segment" without escape ambiguity. If a future pattern needs anchoring or alternation, regex can be added later as a separate field (`excludedUrlRegexes`) — keep the simple field simple. | 2026-04-28 |
+| URL check runs BEFORE `allowedKeywordsOverride` (source-boundary > content override) | URL deny-list represents source-classification policy ("/tickets/sports/ is sports, period") and must not be defeatable by content overrides ("ballet" allowed at sports venues). The override exists for content ambiguity at venues; URL paths are unambiguous. Test #3 in `scope-filter.test.ts` locks this ordering. | 2026-04-28 |
+| Co-locate in `event-scope.json` rather than new config file | One config file = one mental model for "what's in scope." A separate `url-deny-list.json` would fragment the answer to "why was this event rejected?" — readers would need to consult two files. Existing `event-scope.json` already has three list fields; a fourth is incremental, not architectural. | 2026-04-28 |
+| Did NOT add field to `config/scrape-list.json` (the original Planner instinct) | Pre-write Guard 6 grep revealed `scrape-list.json` has zero active consumers — all readers are in `scripts/_archive/`. The active orchestrator (`scripts/scrape-all.ts`) hardcodes URL allow-lists inline and doesn't read the JSON. Adding the field there would have been pure documentation with zero runtime effect. Marked `scrape-list.json` `_status: DEPRECATED` to prevent the same trap recurring. | 2026-04-28 |
