@@ -3021,5 +3021,34 @@ Stepwise execution of the plan. Notable deviations:
 - **`/theatre/performance/` URL-pattern re-spike for athinorama.gr** — current `_excluded_sources` status in `url-category-patterns.json` locks the pattern at 50% spike accuracy. Targeted spike across ~20 random athinorama `/theatre/performance/` URLs cross-checked against actual content types would tell us whether to promote, drop further, or introduce a secondary guard (combined venue+URL confidence). Session budget: 1 hour, read-only.
 - **`scrape-list.json` cleanup** — currently marked `_status: DEPRECATED`. Either delete entirely once verified no embeddings/docs reference it, or leave as historical artifact. Defer — low priority.
 
+### Session 99 — Stream-Idle Wrapper + Watchdog Adoption — 2026-04-28
+
+**Plan:** Adopt Claude Code v2.1.105+ server-side stream watchdog AND ship a local stdout-mtime watchdog wrapper around `claude -p` in `scripts/auto-enrich.sh`. Tighten BATCH_TIMEOUT 1800→900s on the 8 plists that transitively reach `claude -p`. Tag every termination path with structured `KILL_CAUSE: <gate> pid=… elapsed=…s exit=…` log lines (T1) so post-S99 forensics can attribute kills to specific gates. Reframe-complement only — does NOT supersede the S97a "Recovery Mechanism Asymmetry" entry. Source: approved plan at `/Users/chrism/.claude/plans/pre-research-maintenance-proud-bee.md`.
+
+**What happened:**
+- Step 0 — `claude` v2.1.121 already installed (16 patches past v2.1.105 target → upgrade SKIPPED). Single direct `claude -p` invoker = `scripts/auto-enrich.sh` (Path A). 8 plists transitively reach via `daily-automated.sh:324`. caffeinate confirmed not in active code (comments document deliberate removal due to lid-close sleep). `--include-partial-messages` flag supported but incompatible with existing `--output-format text`. Apr 25-26 stall pattern matches Issue #25979. 3 spec artifacts written: `s99-stream-idle-context.md`, `s99-plist-inventory.md`, `s99-baseline-floor.md` (the read-only watchdog-era observation floor with re-evaluation criteria for 2026-04-29 → 2026-05-12 window). Commit `07d6d80a6`.
+- Step 1 — SKIPPED (version past target).
+- Step 2 — Spike validated. `/tmp/spike-stall-test.sh` (synthetic stall, A2 re-runnable artifact): exit 125 at 121s, KILL_CAUSE log correct. `/tmp/spike-enrich.sh` (real claude -p, trivial prompt) × 2: exit 0 in 15s + 10s, 16 parseable stream-json lines each, watchdog did NOT fire on healthy path.
+- Step 3 — Watchdog wrapper promoted to `scripts/auto-enrich.sh`. Per-batch output files (`.batch-${BATCH_NAME}-${RUN_ID}.out`) added — required for stdout-mtime watch in parallel-batch model (shared LOG_FILE would mask stalls). T1 KILL_CAUSE tagging implemented for 3 termination paths: `wrapper-wall-clock` (exit 124), `stdout-idle` (exit 125), `server-stream-idle` (post-detection via grep). caffeinate stays REMOVED. `bash -n` clean; `env -i` dry-run exits 0. Commit `050150ed6`.
+- Step 4 — 8 plists edited via PlistBuddy Add-then-Set. New EnvironmentVariables on each: `BATCH_TIMEOUT=900`, `CLAUDE_STREAM_IDLE_TIMEOUT_MS=300000`, `CLAUDE_ENABLE_BYTE_WATCHDOG=1`. `plutil -lint` clean × 8. `launchctl unload && load` silent success × 8. All 11 plists remain loaded post-reload. Backups at `<plist>.s99-backup`. Live test deferred to interactive cadence (non-blocking). Commit `bc1a0c049`.
+- Step 5 — `bun test`: 1717 / 1 / 0 (identical pass/skip/fail to pre-S99 baseline; only timing diff). `bunx tsc --noEmit`: exit 0.
+
+**Verified:** 3 commits on `main` (`07d6d80a6` Step 0 specs, `050150ed6` Step 3 wrapper, `bc1a0c049` Step 4 plists). `claude --version` → 2.1.121. `bash -n` clean. `env -i` dry-run exits 0. PlistBuddy dump on all 8 plists shows the 3 new keys. `bun test` pass count parity (1717/1/0). tsc clean. Spike + synthetic-stall tests passed end-to-end. Live test deferred — STDOUT_IDLE_CAP tuning requires production data anyway.
+
+**Learnings:**
+- `mistakes.md`: 4 entries — spike topology ≠ production topology (parallel-batch shared-LOG_FILE issue), `--include-partial-messages` flag-pair precondition with stream-json, `&&` chain with `diff` masks subsequent commands, server-stream-idle grep patterns are educated guesses pending v2.1.105 production data.
+- `patterns.md`: stdout-mtime watchdog wrapper for unattended LLM CLI invocations — full executable spec including layered gate architecture (server-side / client-side / wall-clock), KILL_CAUSE log format, per-batch output files for parallel-batch models, BSD-vs-Linux `stat` portability note.
+- `decisions.md`: 7 decisions including why both watchdogs (server + client are different failure-mode coverage, not redundant), Path A inline over helper extraction, caffeinate stays removed, plist scope = 8 transitive invokers, per-batch output files, BATCH_TIMEOUT lowered, T1 mandatory kill-cause tagging, live test deferred.
+- `known-issues.md`: Recovery Mechanism Asymmetry entry updated with S99 note (NOT closed). Per plan: addresses symptom, not the recovery question.
+
+**Open items:**
+- **14-day watchdog-era observation window (2026-04-29 → 2026-05-12).** Track stream-idle timeout count per day, BATCH_TIMEOUT-900 hits, KILL_CAUSE distribution. Re-evaluation criteria in `specs/s99-baseline-floor.md`.
+- **Recovery-asymmetry diagnostic** (S97a entry, still open) — re-evaluate at end of window. If watchdog-era still shows zero-event days, the recovery-mechanism question is independent of stream-idle and warrants its own forensic session.
+- **STDOUT_IDLE_CAP retune candidate** — if >2 BATCH_TIMEOUT hits/day during observation window, raise from 120 → 180-240s.
+- **server-stream-idle grep pattern refinement** — at first observed kill, compare actual v2.1.105 stream-idle exit signature against the heuristic regex (`stream.idle.timeout|stream watchdog|stream.idle`). Refine if needed.
+- **Live launchd run** — first scheduled enrichment cycle after S99 land will be the first production data point. Watch for KILL_CAUSE log lines in `logs/auto-enrich-*.log` and per-batch `.batch-*-*.out` artifacts on failures.
+- **caffeinate reconciliation session** — out of S99 scope. Lid-close sleep is a separate defense layer; needs its own session that resolves the 30min-stretches issue documented in `specs/claude-hang-diagnostic.md`.
+- **S100 (deferred)** — defense-stack hardening: ExitTimeOut, AbandonProcessGroup, ThrottleInterval per plist. One concern per session.
+
 
 

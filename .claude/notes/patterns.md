@@ -1763,3 +1763,33 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 4. **Avoid daisy-chaining counts across sessions without re-verification.** Session N captures "608 future events"; Session N+3 plan says "process the 608 events from Session N." Wrong by Session N+3. Right form: "process the future-event set as defined by query Q at session start."
 
 **Combined with the spot-check shelf-life rule above:** these are the same underlying issue applied to different data types. Absolute counts are aggregate spot-checks; spot-check IDs are individual-row spot-checks. Both decay; both need re-query at time of use; both are silent-wrong-answer hazards in long-running session arcs.
+
+## Stdout-mtime watchdog wrapper for unattended LLM CLI invocations (2026-04-28, S99)
+
+**Rule:** When invoking `claude -p` (or any unattended LLM CLI) from a launchd-scheduled bash script, layer multiple independent timeout gates and tag which one fires for forensics. A single gate is fragile; layered gates with explicit attribution make every future failure debuggable.
+
+**Why it matters:** GitHub Issue #25979 + the Apr 25-26 cascade documented that `claude -p` can stay alive at 0% CPU mid-thinking-block with no SSE event progress. The server-side stream watchdog Anthropic shipped in v2.1.105 (`CLAUDE_STREAM_IDLE_TIMEOUT_MS`) catches these — but launchd has no idle gate of its own, and a hung process can sit at 0% CPU through clamshell sleep, network blips, or unrecognized stall variants. Without a client-side gate, recovery depends entirely on the server-side path being right, with no fallback. S97a's reframe (recovery-asymmetry) was inevitable as long as one gate carried all the weight.
+
+**Layered gate architecture (S99 production model in `scripts/auto-enrich.sh:309-389`):**
+
+1. **Server-side stream-idle (v2.1.105+)** — kicks in at `CLAUDE_STREAM_IDLE_TIMEOUT_MS` (default 300000=5min). Detected post-hoc by grepping the per-batch stdout file for the watchdog signature. KILL_CAUSE log: `server-stream-idle pid=… elapsed=…s exit=<claude-exit>`.
+2. **Client-side stdout-mtime watchdog (S99)** — in a bash watchdog subshell, poll `stat -f %m "$BATCH_OUT"` every 15s. Kill the child if mtime hasn't advanced in `STDOUT_IDLE_CAP` (default 120s) seconds. KILL_CAUSE log: `stdout-idle pid=… elapsed=…s idle=…s exit=125`.
+3. **Wall-clock outer fence (legacy + S99 tightened)** — `BATCH_TIMEOUT` (S99 = 900s, was 1800). Belt-and-suspenders for any stall mode the inner two miss. KILL_CAUSE log: `wrapper-wall-clock pid=… elapsed=…s exit=124`.
+
+**How to apply (executable spec):**
+
+1. **Use direct file redirect for stdout, NOT pipe.** macOS pipe block-buffering is 4-8 KB (Issue #25670). Pipe-buffered output makes mtime advance unreliable. Direct redirect (`> "$BATCH_OUT" 2>&1`) gives unbuffered byte-level mtime updates.
+2. **Per-batch output files in parallel-batch models.** A shared LOG_FILE has its mtime advanced by other batches' output, masking a stalled batch. Each batch needs its own file: `$LOG_DIR/.batch-${BATCH_NAME}-${RUN_ID}.out`. Append to the main log on completion; keep the per-batch file on failure for forensics.
+3. **`stat -f %m` is BSD/macOS; use `stat -c %Y` on Linux.** Add a comment marking the platform dependency.
+4. **Watchdog subshell polls `kill -0 "$CHILD"` to short-circuit when the process exits cleanly.** Without it, the subshell wastes the full timeout duration.
+5. **KILL_CAUSE log format is fixed: `KILL_CAUSE: <gate> pid=… elapsed=…s [idle=…s] exit=…[ batch=…]`.** Structured suffix (key=value pairs) so future log analyzers can parse without ambiguity.
+6. **Each gate's exit code is distinct and meaningful.** 124 = wrapper-wall-clock; 125 = stdout-idle; 143 = SIGTERM (what wait() sees when the watchdog killed); whatever claude returns = server-stream-idle.
+7. **Validate the synthetic-stall path with a re-runnable artifact** (`/tmp/spike-stall-test.sh` — replaces `claude -p` with `sleep N` to exercise the kill path independent of the live API). Re-run after any wrapper change or STDOUT_IDLE_CAP retune.
+
+**Why both server-side AND client-side (not just one):** they catch different failure modes.
+- Server-side: API-level stream stalls. Anthropic infrastructure decides "this stream is stuck."
+- Client-side: local-process stalls (DNS hang, TLS handshake timeout, kernel-level I/O block, post-recv processing loop). The process is alive, the API isn't sending, the local watchdog notices stdout isn't growing.
+
+If you only ship one, you have one failure-mode coverage. Two layered gates with KILL_CAUSE attribution let you observe which mode is dominant in production and tune accordingly. Without attribution, you're flying blind on which gate is doing the work.
+
+**Watchdog-era observation pattern:** before landing the wrapper, capture a baseline (frequency of stalls, cascade days, time-to-failure distribution) in a `specs/<session>-baseline-floor.md` artifact. Define a 14-day post-land window. Track KILL_CAUSE distribution across the window. Healthy distribution: server-side catches >80%; client-side catches the residual stall variants; wrapper-wall-clock and outer perl-alarm rates are ~0% (they're only doing work if all inner gates miss).

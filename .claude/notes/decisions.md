@@ -1726,3 +1726,33 @@ The decision to use a deny-list (`excludedUrlPatterns`) rather than an allow-lis
 | URL check runs BEFORE `allowedKeywordsOverride` (source-boundary > content override) | URL deny-list represents source-classification policy ("/tickets/sports/ is sports, period") and must not be defeatable by content overrides ("ballet" allowed at sports venues). The override exists for content ambiguity at venues; URL paths are unambiguous. Test #3 in `scope-filter.test.ts` locks this ordering. | 2026-04-28 |
 | Co-locate in `event-scope.json` rather than new config file | One config file = one mental model for "what's in scope." A separate `url-deny-list.json` would fragment the answer to "why was this event rejected?" — readers would need to consult two files. Existing `event-scope.json` already has three list fields; a fourth is incremental, not architectural. | 2026-04-28 |
 | Did NOT add field to `config/scrape-list.json` (the original Planner instinct) | Pre-write Guard 6 grep revealed `scrape-list.json` has zero active consumers — all readers are in `scripts/_archive/`. The active orchestrator (`scripts/scrape-all.ts`) hardcodes URL allow-lists inline and doesn't read the JSON. Adding the field there would have been pure documentation with zero runtime effect. Marked `scrape-list.json` `_status: DEPRECATED` to prevent the same trap recurring. | 2026-04-28 |
+
+## S99 — Stream-Idle Wrapper + Watchdog Adoption (2026-04-28)
+
+### Context
+Anthropic shipped Claude Code v2.1.105 with a 5-minute server-side stream watchdog (~four weeks before S99). The S97a Recovery Mechanism Asymmetry entry flagged Apr 25-26 zero-event days as a recovery question, not a timeout cause. S99 addresses the stall *symptom* via watchdog adoption while keeping the recovery-asymmetry forensic question open.
+
+### Decisions
+
+| Decision | Rationale | Date |
+|---|---|---|
+| Adopt v2.1.105+ env vars (`CLAUDE_STREAM_IDLE_TIMEOUT_MS`, `CLAUDE_ENABLE_BYTE_WATCHDOG`) AND ship a custom stdout-mtime watchdog wrapper. Not just one. | Server-side detects API-level stream stalls (Anthropic infra "this stream is stuck"). Client-side detects local-process stalls (DNS, TLS, kernel I/O, post-recv loop) — process alive, API not sending, local stdout-mtime catches it. Different failure modes need different gates. Single-gate coverage is fragile; layered gates with KILL_CAUSE attribution let production observe which mode is dominant. | 2026-04-28 |
+| Path A (single-script inline) over Path C (extracted helper at `scripts/lib/claude-watchdog.sh`) | S99 Step 0 grep confirmed only `scripts/auto-enrich.sh` invokes `claude -p` directly. Helper extraction has reuse value at ≥3 callers; at 1, it adds indirection without payoff. If a 2nd caller emerges, extract then. | 2026-04-28 |
+| Caffeinate stays REMOVED in `auto-enrich.sh` | Pre-S99 script comments at lines 263, 328-331 explicitly document deliberate removal — "caffeinate does not prevent lid-close sleep — sleeps of 30 min stretched to hours" (`specs/claude-hang-diagnostic.md`). Lid-close-sleep is orthogonal to stream-idle (different defense layers). Re-adding caffeinate without resolving the lid-close concern would re-introduce a known issue. Reconciliation belongs to its own session. | 2026-04-28 |
+| Plist scope = 8 transitive `claude -p` invokers. Skip 3 non-invoking. | `scripts/daily-automated.sh:324` calls `./scripts/auto-enrich.sh` which calls `claude -p`. So plists triggering `daily-automated.sh` modes that hit that path (full, enrichment) reach `claude -p` transitively. 8 plists touch this path: auto-enrich (direct), daily, enrichment, enrichment-{01,13,16,19,22}. 3 plists explicitly out: enrichment-check (different script), freshness (no enrichment phase), monitor-visibility (different script). Shotgun-surgery guard: every reachable plist must have the new env vars OR risk being the next stall surface. | 2026-04-28 |
+| Per-batch output files (`$LOG_DIR/.batch-${BATCH_NAME}-${RUN_ID}.out`) for stdout-mtime tracking | The existing parallel-batch model writes all batches to a single `$LOG_FILE`. A stdout-mtime watchdog on the shared file fails: one batch's output advances mtime even if another is hung. Per-batch files give independent mtime tracking. Append to LOG_FILE on completion; keep on failure for forensics. | 2026-04-28 |
+| BATCH_TIMEOUT default lowered 1800→900 in script + plist EnvironmentVariables override | v2.1.105+ stream watchdog catches stalls at 5min server-side; the wrapper's stdout-idle catches at 2min client-side. 900s wall-clock is the outer fence — anything taking longer than 15min is already failing some inner gate. plist override via `:-` form preserves runtime adjustability without script edits. | 2026-04-28 |
+| T1 KILL_CAUSE structured log format (mandatory, not optional) | Without explicit kill-cause attribution, post-S99 forensics on any future failure can't distinguish "v2.1.105 server-side caught it" from "stdout-idle wrapper caught it" from "wrapper-wall-clock caught it" from "perl-alarm caught it." S97a got burned exactly here — knowing failures occurred but not which gate caught them. Structured `KILL_CAUSE: <gate> pid=… elapsed=…s exit=…` log lines emitted at every termination path. Future analyzers can compute the kill-cause distribution mechanically. | 2026-04-28 |
+| Live test (`launchctl start auto-enrich`) deferred to interactive cadence | Not blocking on structural correctness (verified by spike + synthetic-stall + bash -n + env-i dry-run + post-edit dump). Costs API tokens (~50-100K) and 5-15 min wall-clock. Better to trigger from an interactive session at the next natural enrichment slot, watch the log live, observe the first KILL_CAUSE distribution sample. | 2026-04-28 |
+
+### Triggers for follow-up
+
+Per `specs/s99-baseline-floor.md`:
+- **Recovery-asymmetry diagnostic** (S97a known-issues entry, still open) — re-evaluate at end of 14-day watchdog-era window (2026-05-12). If watchdog-era still shows zero-event days, recovery mechanism is independent of stream-idle and warrants its own forensic session.
+- **STDOUT_IDLE_CAP retune** — if >2 BATCH_TIMEOUT-900 hits per day during the window, raise STDOUT_IDLE_CAP from 120 → 180-240s.
+- **Wrapper redundancy review** — if a future Claude Code release ships further watchdog improvements, re-evaluate whether the custom stdout-mtime layer still adds value.
+
+### Related sessions
+- Session 99 — Stream-idle wrapper landing (this entry)
+- S97a — Recovery mechanism asymmetry reframe (entry stays open post-S99)
+- S100 (deferred) — Defense-stack hardening (ExitTimeOut, AbandonProcessGroup, ThrottleInterval per plist)

@@ -43,6 +43,7 @@ Inline Status updates for the matching entries below have not been edited indivi
 **Workaround:** None until mechanism is identified.
 **Fix plan:** Dedicated diagnostic session — read auto-enrich.sh between-batch logic (specifically `claude -p` invocation flow at lines 6, 89, 214, 286-294 and the orphan-kill at line 65), reconstruct timeline of Apr 25-26 vs Apr 24/27, identify branching condition. Pattern E (Debugging), output `specs/stream-idle-recovery-diagnostic.md`.
 **Status:** 🔴 Open — investigation pending
+**S99 update (2026-04-28):** v2.1.105+ server-side stream watchdog (`CLAUDE_STREAM_IDLE_TIMEOUT_MS=300000`) and a local stdout-mtime watchdog wrapper (`STDOUT_IDLE_CAP=120`, T1 KILL_CAUSE tagging) landed in commits `050150ed6` (script) + `bc1a0c049` (8 plists). **This addresses the symptom (stalls) but NOT the recovery-asymmetry question.** The forensic question of why pipeline-level recovery worked on Apr 16/20/23/24/27 but failed Apr 25-26 specifically remains open. Re-evaluate after the watchdog-era observation window (`specs/s99-baseline-floor.md`, 2026-04-29 → 2026-05-12). If watchdog-era still shows zero-event days, recovery mechanism is independent of stream-idle and warrants its own forensic session.
 
 ### SWEEP_ORPHANS Sweeper False-Positives on Hash-Preserved Pages
 **Severity:** 🟡 (blocks orphan cleanup, but no live-correctness impact today)
