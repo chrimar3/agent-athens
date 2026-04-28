@@ -1756,3 +1756,28 @@ Per `specs/s99-baseline-floor.md`:
 - Session 99 — Stream-idle wrapper landing (this entry)
 - S97a — Recovery mechanism asymmetry reframe (entry stays open post-S99)
 - S100 (deferred) — Defense-stack hardening (ExitTimeOut, AbandonProcessGroup, ThrottleInterval per plist)
+
+## S100a — E3 Schema @type Audit Method + Class 0 Result (2026-04-28)
+
+### Context
+GEO Strategist (Run 1 E3) flagged FAQPage-as-primary-@type as the largest schema risk in the corpus, potentially bigger than missing CollectionPage on `/today/`. Hypothesis: AI engines parsing top-down attach page identity to whichever @type they see first; if event pages emit FAQPage as `@graph[0]`, engines misclassify the entire event corpus as Q&A pages. Original plan called for scanning local dist for 12,300 pages.
+
+### Decisions
+
+| Decision | Rationale | Date |
+|---|---|---|
+| Pivot from local-dist scan to live audit via sitemap | Local dist had only 45 .html files (build was partial/skeleton); ground truth is what AI engines see, which is the deployed site. Sampling live URLs via sitemap-events/venues/editorial gives the same answer in 15s with no local-build dependency. Path A (rebuild dist locally first) was offered but rejected to avoid the rebuild ambiguity vs the plan's "does not regenerate" guard. | 2026-04-28 |
+| Sample size: 200 events / 50 venues / 50 hubs / all cornerstones / 2 home (~314 total) | Statistical: at n=200 of 9186 events (2.2% sample) with 0 misclassified, 95% CI for true corpus rate is 0-1.5% — high-confidence Class 0 falsification. Full coverage of small classes (venues, cornerstones) makes their sample = corpus. ~314 URLs at concurrency 10 = 15s wall-clock — fits in any session. | 2026-04-28 |
+| Manual reclassification overrode the script's auto-tier | The audit script's `tierClassify()` counted any `match=false` row as misclassified, lumping wrong-@type with HTTP 404 and missing-JSON-LD. 4 rows tripped match=false: 1 was a missing-JSON-LD on the venue-index page; 3 were HTTP 404 on EN cornerstones. None were the GEO hypothesis (wrong primary @type). Manual reclassification: **Class 0 (clean) for the GEO hypothesis** with two unrelated low-severity findings flagged separately. | 2026-04-28 |
+| E3 closes; S101a-d ship as planned (CollectionPage-only fix) | Hypothesis falsified at high-confidence sample. The other schema-correctness work in S101 (CollectionPage on `/today/`, etc.) is unaffected by this audit's outcome. | 2026-04-28 |
+| Two new low-severity known-issues entries opened (not blocking) | (a) `/venues/` index page emits no JSON-LD — opportunistic one-line template fix. (b) 3 EN cornerstones return HTTP 404 — sitemap-vs-build consistency check. Neither is GEO P0; both can be addressed in any future session that touches the relevant template. | 2026-04-28 |
+| Audit script logged for follow-up improvement | The script's tierClassify conflates fetch-fail with wrong-@type. Future runs should distinguish: `match=false + fetchError null + wrong type` → real misclassification; `match=false + fetchError set` → sitemap-vs-build issue; `match=false + primaryType null` → completeness gap. Not blocking; logged for S101 prep. | 2026-04-28 |
+
+### Reusable artifact
+
+`scripts/audit-schema-types.ts` — sampled-corpus audit via live sitemap. Reusable for any future schema-correctness check (e.g., re-audit after a major template change, periodic E3 re-checks, or expanded audits at higher sample rates).
+
+### Related sessions
+- Session 100a — E3 audit (this entry)
+- S101a-d — cornerstone amplification + CollectionPage-on-`/today/` (unaffected by S100a)
+- Future low-priority touch sessions — `/venues/` JSON-LD addition, EN-cornerstone 404 reconciliation

@@ -1793,3 +1793,33 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 If you only ship one, you have one failure-mode coverage. Two layered gates with KILL_CAUSE attribution let you observe which mode is dominant in production and tune accordingly. Without attribution, you're flying blind on which gate is doing the work.
 
 **Watchdog-era observation pattern:** before landing the wrapper, capture a baseline (frequency of stalls, cascade days, time-to-failure distribution) in a `specs/<session>-baseline-floor.md` artifact. Define a 14-day post-land window. Track KILL_CAUSE distribution across the window. Healthy distribution: server-side catches >80%; client-side catches the residual stall variants; wrapper-wall-clock and outer perl-alarm rates are ~0% (they're only doing work if all inner gates miss).
+
+## Sampled-corpus audit via live sitemap (2026-04-28, S100a)
+
+**Rule:** When auditing schema-correctness or any other content property across a large generated corpus, prefer **live sitemap sampling** over local-dist scanning when (a) ground truth is what consumers see (AI engines, crawlers, search), and (b) local dist may be incomplete or out of sync with production. The sitemap is authoritative for "which URLs the site claims exist" and HTTP-fetching those URLs gives the same bytes the consumer sees.
+
+**Why it matters:** S100a's original plan called for scanning local `dist/` for 12,300 pages. Local dist had 45 pages (build was a partial/skeleton). Pivoting to live audit via sitemap got the same answer in 15 seconds (314 URLs at concurrency=10) without depending on local-build correctness.
+
+**How to apply:**
+
+1. **Fetch the sitemap index first.** `https://<origin>/sitemap-index.xml` lists sub-sitemaps (events / venues / editorial / etc.). Parse `<loc>` tags from each.
+2. **Sample per page class with statistical confidence in mind.** For binary classification (correct / incorrect):
+   - Full corpus (or near-full) for small classes (<100 URLs).
+   - 200-400 of N for large classes (>1000 URLs). At N=9186, sample of 200 (2.2%) gives 95% CI of 0–1.5% true rate if 0 misclassified — high-confidence falsification.
+   - The 95% CI rule: if k of n misclassified, the binomial upper bound is approximately `k/n + 1.96 * sqrt(k(n-k)/n^3)`. For k=0 use Wilson upper of `~3/n`.
+3. **Concurrency = 10** is polite for Netlify. ~3-5 min wall-clock for 300+ URLs.
+4. **Distinguish failure modes in classification.** A row that fails the audit can be one of:
+   - Real misclassification (the hypothesis under test) — count toward tier
+   - HTTP 404 (page in sitemap doesn't exist) — separate finding (sitemap-vs-build inconsistency)
+   - HTTP 5xx / network error — re-test or flag as transient
+   - Page returns 200 but emits no relevant data (e.g., no JSON-LD) — separate finding (completeness gap)
+
+   The audit script's classifier should NOT lump all `match=false` together. S100a's script did, leading to a misleading auto-tier of "Tier 1" when the real result was Class 0 (manually reclassified).
+
+5. **Output: structured findings file with three sections** — Step 0 (sitemap counts), Step 1 (small-sample preview), Step 2 (full-sample classification per URL class). Include both auto-classified AND manual-reclassified verdicts when they differ; explain the divergence.
+
+**Limitations:**
+
+- HTTP-based audits hit production; rate-limit politely, don't audit during traffic peaks.
+- Sample-based results don't prove the corpus is clean — 0/200 events misclassified means 95% confident the rate is <1.5%, not 0. A second audit at a higher sample rate (or full corpus pass) is the right escalation if the result is borderline.
+- Sitemap-based audit assumes the sitemap is correct. If the sitemap omits URLs, those URLs aren't audited. Cross-check sitemap URL count against build manifest if rigor is needed.

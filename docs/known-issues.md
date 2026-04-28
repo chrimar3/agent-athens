@@ -32,7 +32,49 @@ Inline Status updates for the matching entries below have not been edited indivi
 
 ---
 
+## S100a E3 Schema @type Audit (2026-04-28)
+
+GEO Strategist's E3 hypothesis (some pages emit FAQPage as primary @type instead of Event/CollectionPage/etc, masking the corpus to AI engines): **FALSIFIED at high-confidence sample.** S100a sampled 314 URLs from live agentathens.com sitemaps:
+
+- ✅ **events: 0 misclassified** of 200 sampled (2.2% of 9186; 95% CI for true corpus rate is 0–1.5%)
+- ✅ **venues: 0 misclassified** of 49 sampled (94% of 52 — corpus-equivalent)
+- ✅ **hubs: 0 misclassified** of 51 sampled
+- ✅ **cornerstones: 0 misclassified** of 7 EL successfully fetched
+- ✅ **home: 0 misclassified** of 2 sampled
+
+FAQPage appears as a secondary block (`@graph[1]`) on 7 pages — this is intentional per the project's hub schema design (CollectionPage primary + FAQPage secondary, documented in `src/validators/schema-completeness.ts:207-269`).
+
+**E3 closes.** S101a-d ship as planned (CollectionPage-on-`/today/` only). No @type-fix work needed in S101.
+
+Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit script: `scripts/audit-schema-types.ts`.
+
+---
+
 ## Active Issues
+
+### Venue-Index Page (`/venues/`) Emits No JSON-LD
+**Severity:** 🟢
+**First seen:** 2026-04-28 (S100a audit surfaced this; pre-existing in production)
+**Frequency:** Constant — every `/venues/` page load
+**Symptoms:** `https://agentathens.com/venues/` (the venue list/index page) returns 200 OK but contains no `<script type="application/ld+json">` block. All venue *detail* pages (`/venues/<slug>/`) correctly emit `LocalBusiness` schema.
+**Workaround:** None needed — venue detail pages have correct schema; only the index has the gap.
+**Fix plan:** One-line addition in the venue-index template (locate via `grep "venues/index" src/`): emit `CollectionPage` or `ItemList` schema enumerating venue detail URLs. Suitable for opportunistic fix in S101 or later; not blocking.
+**Status:** 🟢 Open — low priority
+
+### EN Cornerstones (`/en/tomorrow`, `/en/this-week`, `/en/next-month`) Return HTTP 404
+**Severity:** 🟢
+**First seen:** 2026-04-28 (S100a audit surfaced this)
+**Frequency:** Constant — every fetch of these EN URLs
+**Symptoms:** EL cornerstones at `/tomorrow`, `/this-week`, `/next-month` exist and emit `CollectionPage` correctly. The EN mirrors at `/en/tomorrow`, `/en/this-week`, `/en/next-month` return HTTP 404 despite being listed in `sitemap-editorial.xml`. (The other EN cornerstones `/en/today`, `/en/this-weekend`, `/en/this-month` were not in the audit sample but were absent from S97a's `dist/en/` directory listing — likely the same gap.)
+**Workaround:** None — affects EN-language users + AI crawlers parsing EN sitemap entries.
+**Fix plan:** Two candidate root causes:
+1. Build doesn't generate EN cornerstone pages (template/config gap).
+2. Build generates them but sitemap is misaligned, claiming URLs that don't exist.
+
+Recommend a `bun run src/generate-site.ts` then `find dist/en -name 'index.html'` cross-checked against `dist/sitemap-editorial.xml` URL list to localize. Suitable for opportunistic fix; not blocking citation work.
+**Status:** 🟢 Open — low priority
+
+---
 
 ### Recovery Mechanism Asymmetry on Stream Idle Cascades
 **Severity:** 🟡
