@@ -3079,5 +3079,39 @@ Stepwise execution of the plan. Notable deviations:
 - **EN-cornerstone 404s** — sitemap-vs-build consistency check; suitable for any future session that touches the build.
 - **Audit script tier-logic improvement** — distinguish fetch-fail from wrong-@type for accurate auto-classification. Suitable for any future session that re-runs the audit at a higher sample rate.
 
+### Session 100 — KPI Pipeline Foundation (Path B) — 2026-04-28
+
+**Plan:** Stand up a daily-refreshing KPI feed integrating BWT AI Performance + GSC long-query + GA4 AI-referral + server-log AI-bot fetches + 5 GEO Strategist priority prompts into `data/kpi.db`. Capture pre-amplification baseline for the May 19 (Google I/O) deadline. Source: approved plan via S100 mid-session pivot from Path A (full session) to Path B (minimum viable checkpoint) after Step 0 surfaced State C auth.
+
+**What happened:**
+- Step 0 — confirmed State C: no `googleapis`/`google-auth`/`@google-cloud` deps, no client code, no gcloud config. S91's `monitor-search-visibility.ts` is a CLI-flag CSV writer (manual entry), not an API client. Netlify access logs are dashboard-only on current plan. P4 target `/exhibitions` exists at `dist/exhibitions.html`; `/en/exhibitions.html` does NOT (joins 3 EN-route absences from S100a — pattern flagged for S101b).
+- User confirmed Path B (Steps 1, 2, 6.1, 8, 9 only); Steps 3, 4, 5, 7 deferred to S100b under explicit auth setup.
+- Step 1 — `scripts/kpi-init.ts` (200 lines) creates `data/kpi.db` with 7 tables + 6 indexes. Idempotent; --status flag. Bun:sqlite + WAL + FK enforcement. Added `data/kpi.db.*` glob to `.gitignore`.
+- Step 2 — `config/tracked-prompts.json` + `scripts/kpi-seed-prompts.ts`. INSERT OR REPLACE on prompt_id (idempotent re-seed). 5 prompts seeded: P1 EN /this-weekend, P2 EL /today, P3 EN /open, P4 EN /exhibitions, P5 EL /this-weekend. Greek text round-trips correctly (no mojibake).
+- Step 6.1 — `docs/kpi-setup.md` (111 lines) documents BWT manual CSV download workflow + Step 6.2 parser deferred until headers verified post-download + S100b prerequisite operator actions for GSC/GA4 service-account setup + Netlify dashboard CSV mode for server-log importer.
+- Step 8 — `specs/s100-kpi-baseline-2026-04-28.md` (159 lines). Honest empty-state baseline: 0 manual obs (5 prompts seeded, first weekly log scheduled 2026-05-01), 0 BWT (Apr 28 operator-verified), `n/a (auth pending — S100b)` for GSC/GA4/server-log. Cornerstone state cross-references S100a Class 0 audit. 4 trigger conditions for post-I/O follow-up.
+- Step 9 — `docs/kpi-manual-logging-template.md` (128 lines). GEO Strategist's Friday workflow + insert SQL pattern (5 prompts × 4 engines = 20 rows/week). Why-it-stays-manual rationale. Rotation procedure for 8-10 week prompt retirement.
+
+**Verified:**
+- Single commit `ef7b11869` (8 files, 829 insertions).
+- `bun run scripts/kpi-init.ts --status`: 7 tables (tracked_prompts: 5; others: 0). 6 indexes.
+- `sqlite3 data/kpi.db "SELECT prompt_id, lang, format, target_page FROM tracked_prompts"`: 5 rows, P2/P5 Greek text correct.
+- `bun test`: pass count parity (1717/1/0 unchanged from S100a baseline).
+- No emitter/template/generator touched. No deploy triggered. No S91 writer modification.
+
+**Learnings:**
+- `mistakes.md`: 2 entries — plan inferred existing GSC auth client from S91 monitoring, State C surprise / value-density per step is uneven when plans cross multi-source auth dependencies.
+- `patterns.md`: KPI pipeline architecture (separate read-mostly DB, manual-CSV importer pattern, vendor API auth as operator action) + baseline-as-deliverable (capture before amplification, honest empty-state, read-only after land).
+- `decisions.md`: 8 entries — Path B over Path A (stub code is documentation pretending to be infrastructure); kpi.db separate from events.db; **S91 + kpi.db are complementary — DO NOT consolidate in future cleanup** (explicit decision to prevent the trap); manual logging stays manual; prompts in config; vendor auth is operator action; `/en/exhibitions` routed to S101b; honest empty-state over fabricated zeros.
+- `known-issues.md`: new "S100 KPI Pipeline Foundation (2026-04-28)" reconciliation section documents Path B + first re-evaluation date (2026-05-26).
+
+**Open items:**
+- **First weekly manual logging** — Friday 2026-05-01 (GEO Strategist owns). 20 observations against 5 seeded prompts × 4 engines.
+- **S100b prerequisite operator setup** — Google Cloud service account + GSC API + GA4 API + property linkages (~20 min). Documented in `docs/kpi-setup.md`.
+- **S100b session** — slot week of May 12 (post S101a-d cornerstones). Will deliver `kpi-import-gsc.ts`, `kpi-import-ga4.ts`, `kpi-import-logs.ts`, `kpi-report.ts`.
+- **BWT CSV header probe** — operator downloads sample post-Apr-28; verify columns match expected schema; update Step 1 schema if drift found before S100b parser ships.
+- **Post-I/O retro** — ~2026-05-26. First measurable comparison against baseline. Triggers documented in `specs/s100-kpi-baseline-2026-04-28.md`.
+- **/en/exhibitions.html absence** — joins 3 other EN-route absences (`/en/tomorrow`, `/en/this-week`, `/en/next-month`); routed to S101b Step 0 EN-mirror generation audit.
+
 
 

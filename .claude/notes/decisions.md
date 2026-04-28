@@ -1781,3 +1781,38 @@ GEO Strategist (Run 1 E3) flagged FAQPage-as-primary-@type as the largest schema
 - Session 100a — E3 audit (this entry)
 - S101a-d — cornerstone amplification + CollectionPage-on-`/today/` (unaffected by S100a)
 - Future low-priority touch sessions — `/venues/` JSON-LD addition, EN-cornerstone 404 reconciliation
+
+## S100 — KPI Pipeline Foundation: Path B (2026-04-28)
+
+### Context
+GEO Strategist confirmed 5 priority prompts for citation tracking. Google I/O 2026 (May 19-20) is the soft deadline for first measurable citation. S100 establishes the KPI tracking infrastructure: `data/kpi.db` with 7 normalized tables, seeded prompts, baseline capture, and operator workflow docs. Step 0 confirmed State C (no existing Google Cloud auth client), forcing a Path A vs Path B vs Path C decision.
+
+### Decisions
+
+| Decision | Rationale | Date |
+|---|---|---|
+| Path B (minimum viable checkpoint) over Path A (full session with scaffolds) | Path A's scaffolds-with-TODOs are functionally identical to Path B for the I/O comparison anchor. Stub code that says "TODO: setup auth" is documentation pretending to be infrastructure. Path B ships the things that actually move the needle this week (schema + 5 prompts + manual logging template + honest baseline) and defers the auth-dependent importers to S100b where they'll land cleanly post-credential-creation. | 2026-04-28 |
+| `data/kpi.db` separate from `data/events.db` | Different write patterns (KPI is append-mostly, low frequency; events is write-heavy from scrapers + enrichment), different backup cadence, different consumer surface (analytics queries vs application reads). Mixing forces every events.db backup script to also handle KPI and entangles two unrelated rate-of-change profiles. | 2026-04-28 |
+| `data/kpi.db` and S91's `data/search-visibility-log.csv` are COMPLEMENTARY — DO NOT consolidate them in a future cleanup session | S91 has aggregate single-number daily counters (`gsc_indexed`, `bing_indexed`, `ai_citations_count` via CLI flags). kpi.db decomposes those into per-row tables (`gsc_queries_long` per query, `bwt_grounding_queries` per query, `manual_citation_log` per prompt × engine × week). They answer different questions: trend lines vs analytical drill-down. Both are needed. **Future session that "simplifies" by deleting one half loses signal.** This decision exists explicitly to prevent that consolidation. | 2026-04-28 |
+| Manual citation logging stays manual (do NOT auto-generate "all-zeros" rows) | The act of looking at each engine's actual response captures qualitative signal automation can't: which competitors are cited, format anomalies, prompt rewriting, "I don't have live data" caveats. Auto-generating loses engine-specific citation order, refusal patterns, and competitor visibility. The 10-min/week cost is the price of keeping qualitative signal, not a chore to optimize away. | 2026-04-28 |
+| Prompts in `config/tracked-prompts.json`, not hardcoded in seed script | GEO Strategist will rotate prompts per the 8-10 week rule. Config-vs-code separation makes rotation a 2-line config edit + 1 idempotent re-seed run, not a code change requiring review and commit message. | 2026-04-28 |
+| Vendor API auth (GSC, GA4) is operator action, not autonomous code | Service accounts + JSON keys + GCP project setup are security-relevant. Creating credentials autonomously and storing them in `~/.config/` would conflict with the user's existing credential management. S100b opens with explicit operator setup (~20 min in Google Cloud Console) before the importers ship. The Constitutional reminder ("GA4/GSC use existing Google Cloud auth") implicitly required existing auth — its absence forced the deferral. | 2026-04-28 |
+| `/en/exhibitions.html` absence routed to S101b Step 0, not S100 | Three other EN-route absences (`/en/tomorrow`, `/en/this-week`, `/en/next-month` per S100a) suggest a build-config or template-generation issue at the EN-mirror layer. S100 is KPI infrastructure; investigating EN-mirror generation is generator-layer work that belongs to S101b's `/today` touch. P4 seeded as-spec'd against `/exhibitions` (EL route); rotation via config if S101b audit determines otherwise. | 2026-04-28 |
+| Honest empty-state baseline ("n/a (auth pending — S100b)" markers) over fabricated zeros | Pretending importers are "deferred-but-coming-soon" is worse than pretending they're done; honest absence is better than fraudulent presence. Same principle as Editorial's content-hash cadence pushback. The baseline captures the watchdog-floor crossing; falsified data corrupts the comparison anchor. | 2026-04-28 |
+
+### S100b prerequisites (operator action before next session)
+
+1. Google Cloud project (new or reuse) → enable Search Console API + Google Analytics Data API.
+2. Service account `agentathens-kpi-reader` with JSON key saved to `~/.config/agentathens/gcp-kpi-reader.json` (gitignored).
+3. Grant service account email Restricted-access user role on GSC property `agentathens.com`.
+4. Grant service account Viewer role on GA4 property.
+5. ~20 min total. Documented in `docs/kpi-setup.md` § 2 + § 3.
+
+S100b will then deliver `scripts/kpi-import-gsc.ts`, `scripts/kpi-import-ga4.ts`, `scripts/kpi-import-logs.ts`, `scripts/kpi-report.ts`. Slot for week of May 12 — after S101a-d cornerstones land, before post-I/O retro.
+
+### Related sessions
+- Session 100 — KPI foundation (this entry)
+- S100a — E3 schema audit (Class 0 result; informs cornerstone-state baseline rows)
+- S100b — KPI auth + automated importers (deferred per Path B)
+- S101a-d — cornerstone rewrites (will benefit from kpi.db being ready to capture amplification effects)
+- Post-I/O retro (~2026-05-26) — first manual-citation-log readout against baseline triggers

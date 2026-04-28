@@ -32,6 +32,24 @@ Inline Status updates for the matching entries below have not been edited indivi
 
 ---
 
+## S100 KPI Pipeline Foundation (2026-04-28)
+
+KPI infrastructure landed in **Path B (minimum viable checkpoint)**: `data/kpi.db` schema with 7 normalized tables, 5 priority prompts seeded from `config/tracked-prompts.json`, manual logging template for GEO Strategist (`docs/kpi-manual-logging-template.md`), and pre-amplification baseline captured (`specs/s100-kpi-baseline-2026-04-28.md`).
+
+**First re-evaluation:** post-Google-I/O 2026 (~2026-05-26, 1 week post-keynote). Triggers documented in baseline file:
+- BWT Total Citations target ≥1 (any non-zero is signal)
+- Manual citation log target ≥1 cited observation across 4 engines × 5 prompts × 3 weekly logs = 60 cells
+- AI-bot fetches (PerplexityBot or OAI-SearchBot) non-zero in 30 days
+- GA4 AI-referral sessions non-zero from any of 5 engines
+
+**Deferred to S100b** (slot week of May 12, post-S101a-d cornerstones): GSC + GA4 + server-log automated importers + `scripts/kpi-report.ts` digest. Pre-S100b operator action: Google Cloud service account setup (~20 min, documented in `docs/kpi-setup.md` § 2-3).
+
+S91's `data/search-visibility-log.csv` (single-number daily aggregates) and S100's `data/kpi.db` (per-row tables) are **complementary, not redundant** — different questions answered. `decisions.md` has an explicit "DO NOT consolidate in future cleanup" entry to prevent the trap.
+
+Cross-references: S100a Class 0 audit (commit `b24937bc2`) confirms cornerstone schema state at baseline. The fourth EN-route absence (`/en/exhibitions.html`) joins the 3 from S100a (`/en/tomorrow`, `/en/this-week`, `/en/next-month`), routed to S101b Step 0 EN-mirror generation audit.
+
+---
+
 ## S100a E3 Schema @type Audit (2026-04-28)
 
 GEO Strategist's E3 hypothesis (some pages emit FAQPage as primary @type instead of Event/CollectionPage/etc, masking the corpus to AI engines): **FALSIFIED at high-confidence sample.** S100a sampled 314 URLs from live agentathens.com sitemaps:

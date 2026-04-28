@@ -1823,3 +1823,33 @@ If you only ship one, you have one failure-mode coverage. Two layered gates with
 - HTTP-based audits hit production; rate-limit politely, don't audit during traffic peaks.
 - Sample-based results don't prove the corpus is clean — 0/200 events misclassified means 95% confident the rate is <1.5%, not 0. A second audit at a higher sample rate (or full corpus pass) is the right escalation if the result is borderline.
 - Sitemap-based audit assumes the sitemap is correct. If the sitemap omits URLs, those URLs aren't audited. Cross-check sitemap URL count against build manifest if rigor is needed.
+
+## KPI pipeline architecture: separate read-mostly DB + baseline-as-deliverable (2026-04-28, S100)
+
+**Rule:** When standing up a new KPI/observability data pipeline that crosses multiple sources (vendor APIs, manual CSVs, server logs, manual observations), use a separate read-mostly SQLite database with normalized per-row tables — not a CSV append log, not a column added to an existing operational DB. And capture the pre-amplification baseline as a written artifact BEFORE the system goes live.
+
+**Why it matters:** S100 set up `data/kpi.db` separate from `data/events.db`. Different write patterns (KPI is append-mostly, low frequency; events is write-heavy from scrapers/enrichment), different backup cadence, different consumer surface (analytics queries vs application reads). Mixing them would force every events.db backup script to also handle KPI, bloat events.db backups, and entangle two unrelated rate-of-change profiles.
+
+**The baseline-as-deliverable side is independent and equally important.** Without `specs/s100-kpi-baseline-<date>.md` capturing the empty-state at S100 land, "first citation appeared on May X" is ambiguous between "first citation ever" vs "first citation we noticed." The honest empty-state IS the deliverable for the comparison anchor.
+
+**How to apply (KPI pipeline architecture):**
+
+1. **Schema-first migration** (`scripts/kpi-init.ts`): all tables + indexes in one idempotent script. Run with `--status` flag to dump table counts. Don't bundle data-import logic into the schema script.
+2. **Separate config from code for the things that change** (`config/tracked-prompts.json` for the 5 GEO Strategist priority prompts). Seed script reads JSON, INSERT OR REPLACE into the seed table. Updates become 1-line config edits, not code changes.
+3. **Per-row tables, not aggregate counters.** Even if the dashboard report shows daily totals, store per-query / per-page / per-engine rows. Aggregates are queries; row-level data is recoverable detail. The S91 (`data/search-visibility-log.csv`) aggregate-counter approach is COMPLEMENTARY (good for trend lines), not a substitute. Keep both; do not consolidate.
+4. **Manual-CSV importer pattern for vendor exports without APIs.** Bing Webmaster Tools, Netlify access logs (free tier), any vendor that doesn't expose machine-readable exports: ship the importer accepting `--file=<path>` arg, document the manual download workflow in `docs/<thing>-setup.md`. The importer being functional and exercised against a real (often zero-row) CSV is the deliverable.
+5. **Vendor API auth as operator action, not autonomous code.** Service accounts + JSON keys + property linkage are security-relevant; defer to a separate session where the user does the Google Cloud Console setup before the importer ships. The importer's auth-pending fallback is "scaffold + `docs/setup.md` operator workflow."
+6. **Gitignore the DB.** `data/<thing>.db`, `data/<thing>.db.*`, `-shm`, `-wal`. S97b lesson: pipeline `git add` will sweep the DB if not blocked at the gitignore level.
+
+**How to apply (baseline-as-deliverable):**
+
+1. **Capture before any amplification work lands.** S100 baseline captured BEFORE S101a-d cornerstone rewrites. The before/after window must be measurable from a fixed floor.
+2. **Write zero-state honestly.** "n/a (auth pending — S100b)" is better than fabricating values. Honest absence is better than fraudulent presence.
+3. **Cross-reference adjacent sessions' findings.** The baseline file links to S100a's Class 0 audit + S97a's known-issues entries; future readers can trace the corpus state across sessions.
+4. **Define re-evaluation criteria + trigger conditions.** "Zero non-zero deltas by date X" → action Y. "Citations land but rank 4+" → investigate Z. Without explicit triggers, the baseline becomes nostalgic data instead of an actionable comparison anchor.
+5. **Read-only after land.** The baseline file documents one moment; updates go in retro files (`specs/s100-kpi-amplification-results.md`) or session logs, not by editing the baseline.
+
+**Limitations:**
+
+- The "minimum viable checkpoint" framing (Path B) only works when manual logging carries the citation arc. If the watchdog window is short and manual logging cadence is too slow, the auth-pending importers are critical-path and the deferral hurts. S100's 4-week pre-I/O window + weekly Friday cadence + binary first-citation event makes Path B viable; tighter timelines would force Path A or Path C.
+- KPI databases inevitably grow some operational write patterns (insert-on-import). Watch for the database becoming a hot path for any user-facing query — if it does, it has crossed the line from "read-mostly" and needs operational tooling (backup script, migration runner, etc.) to match.
