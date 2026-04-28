@@ -1,0 +1,42 @@
+[
+  {
+    "prompt_id": "p1",
+    "text": "What cultural events are happening in Athens, Greece this weekend?",
+    "lang": "en",
+    "format": "question",
+    "target_page": "/this-weekend",
+    "expected_lead_engines": ["perplexity", "copilot", "gemini", "chatgpt"]
+  },
+  {
+    "prompt_id": "p2",
+    "text": "Τι πολιτιστικές εκδηλώσεις γίνονται στην Αθήνα απόψε;",
+    "lang": "el",
+    "format": "question",
+    "target_page": "/today",
+    "expected_lead_engines": ["perplexity", "gemini", "copilot", "chatgpt"]
+  },
+  {
+    "prompt_id": "p3",
+    "text": "Free vs ticketed cultural events in Athens, Greece this weekend — what's worth doing?",
+    "lang": "en",
+    "format": "comparison",
+    "target_page": "/open",
+    "expected_lead_engines": ["perplexity", "copilot", "gemini", "chatgpt"]
+  },
+  {
+    "prompt_id": "p4",
+    "text": "Which exhibitions are running in Athens, Greece this month?",
+    "lang": "en",
+    "format": "question",
+    "target_page": "/exhibitions",
+    "expected_lead_engines": ["perplexity", "gemini", "copilot", "chatgpt"]
+  },
+  {
+    "prompt_id": "p5",
+    "text": "Συναυλίες ή θέατρο στην Αθήνα αυτό το Σαββατοκώριακο;",
+    "lang": "el",
+    "format": "comparison",
+    "target_page": "/this-weekend",
+    "expected_lead_engines": ["perplexity", "gemini", "copilot", "chatgpt"]
+  }
+]

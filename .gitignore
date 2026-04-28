@@ -41,6 +41,10 @@ data/events.db
 data/events.db.*
 data/events.db-shm
 data/events.db-wal
+data/kpi.db
+data/kpi.db.*
+data/kpi.db-shm
+data/kpi.db-wal
 data/content-hashes.json
 temp-briefs/
 data/health-reports/
