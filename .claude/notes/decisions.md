@@ -1654,3 +1654,39 @@ unresolved, open_entry.
 - Session A — TDD resolver + CTA + validator + dry-run
 - Session A.5 (conditional) — top-10 venue curation if coverage 70–90%
 - Session B (pending A numbers) — pre-flight revalidator + real backfill + deploy
+
+## S97a/S97b — Migration Backup Leak Cleanup Strategy (2026-04-28)
+
+### Context
+Freshness pipeline's daily `git add` step swept 3 S97a migration backup files (`data/events.db.s97a-backup`, `…-backup-v2`, `…-postfail-snapshot`, ~50 MiB each) onto origin in commit `ff8bcaf82`. Discovered next-morning when S97b reload pre-flight surfaced the still-running freshness job mid-deploy. Two cleanup paths considered:
+
+- **Option A — Force-push history rewrite.** `git rebase` to drop the offending commit, `git push --force-with-lease`. Cleans history immediately; destructive on origin (acceptable risk on solo repo).
+- **Option B — Untrack + gitignore going forward.** `git rm --cached` the 3 files, add `data/events.db.*` glob to `.gitignore`, commit. Non-destructive; 150 MiB blobs remain in history forever.
+
+### Decision: Option B + defer history rewrite to bundled `git filter-repo` session
+
+**Decided:** Apply Option B immediately (commit `8a9a65efd`); defer history-rewrite to a future dedicated maintenance session that uses `git filter-repo` to clean both this 150 MiB AND the existing ~375 MiB historical DB cruft (loose objects from before S78 untracked the DB) in one operation.
+
+| Decision | Rationale | Date |
+|---|---|---|
+| Option B (untrack + gitignore) over Option A (force-push) for the immediate fix | (1) Bloat-not-leak: `events.db` content is public — the site publishes it as queryable data. So this is a size issue, not a confidentiality issue, which removes the urgency for force-push. (2) The repo already carries ~375 MiB of historical DB cruft (flagged in user memory as "Future cleanup via git filter-repo if needed"). Bundling both into one filter-repo run avoids doing the destructive operation twice. (3) Option B prevents the bloat from continuing to grow; combined with Track 3 gitignore patch, recurrence is impossible. | 2026-04-28 |
+| `data/events.db.*` glob in .gitignore (rather than per-suffix patterns) | Single glob catches all dot-suffix variants — backups, snapshots, future migration outputs. Combined with existing `-shm`/`-wal` dash-separated runtime patterns, the events.db family is now fully covered. Per-suffix would require updates each time a new convention is introduced. | 2026-04-28 |
+| Filter-repo deferred, not done now | Filter-repo is a destructive history-rewrite; safest done in a clean window (no pipeline running, no in-flight feature work). Doing it now during S97a/b execution risks colliding with `freshness` or `enrichment` if either resumes. Future session executes after explicit "clean window" pre-flight. | 2026-04-28 |
+| Local backup files preserved in working tree (not deleted) | The `.s97a-backup*` files served as forensic safety nets during the migration's failed first attempt and are still useful as recoverable snapshots until the post-S97a enrichment cycle confirms migration stability. Once a few days of clean enrichment runs pass with no CHECK errors, `rm` locally. | 2026-04-28 |
+
+### Related sessions
+- S97a — CHECK constraint migration (created the backup files; root-cause origin)
+- S97b — Plist reload + leak cleanup (chose Option B, applied gitignore patch)
+- Future filter-repo maintenance session — clean both this 150 MiB AND the legacy 375 MiB in one operation
+
+## S97a/S97b — Operational Patterns Promoted to `patterns.md` (2026-04-28)
+
+Three architectural lessons surfaced during S97a/b execution graduated to permanent patterns:
+
+| Pattern | Source | Saved location |
+|---|---|---|
+| **Pipeline phase isolation requires .gitignore audit, not just code-level locks.** Code-level locks (`.auto-enrich.lock` etc.) prevent phases from clobbering each other's writes, but do nothing about a phase's `git add` sweeping another phase's untracked output. Constitution Rule #5 needs operational corollary. | S97a leak via freshness `git add` (commit ff8bcaf82) | `patterns.md` |
+| **DB migrations on this project run through `bun run scripts/run-migrations.ts`, never `sqlite3 < file`.** macOS sqlite3 CLI lacks FTS5; bun:sqlite has it. CLI accepts the file at parse time, fails at runtime on FTS5 statements. Promoted to a hard rule. | S97a Step 5 migration runner switch | `patterns.md` |
+| **Pre-flight queries for CHECK constraints must test the EXACT condition the CHECK will enforce, not an approximation.** S97a v3's `genres != ''` filter masked 11,751 of 12,539 rows that the CHECK would actually reject. Lesson is being added to Guard 1 template parenthetically rather than as a standalone pattern. | S97a Step 5 v1 failure recovery | Guard 1 template (per Christos), `mistakes.md` cross-reference |
+
+The hash-preserving-writer ↔ mtime-sweeper incompatibility (S97a Step 6 deferral) is a separate mini-design topic deferred to its own session per Christos's note; not promoted to patterns.md yet.

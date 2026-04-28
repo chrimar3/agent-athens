@@ -2935,6 +2935,59 @@ Stepwise execution of the plan. Notable deviations:
 - Parked from earlier sessions: categorizer audit (Venue-Lock Type Mismatches leak), `price_range` free-text audit, narrative/structured price consistency policy. All still open — Session 98 didn't touch them.
 - If a **fifth instance** of "status fields decay" surfaces in the next two weeks, elevate the pattern to a `no-bypass.test.ts`-style architectural guard.
 
+### Session S97a — Pre-Research Maintenance Batch — 2026-04-28
+
+**Plan:** Apply S97 audit-confirmed mechanical fixes (8 steps) so parallel research runs target only genuinely-open architectural questions. Source: `/Users/chrism/.claude/plans/pre-research-maintenance-proud-bee.md` (revised v3, approved 2026-04-28).
+
+**What happened:**
+- Step 0 — D-1 deploy stale check: **OBSOLETE** (audit's NEW-1 was a `curl` artifact; trailing-slash 301 → no-slash redirect HTML had no JSON-LD; live `/today` does have CollectionPage + ItemList + 14 other types when followed with `-L`).
+- Step 1 — WIP decision: option (a), 5 unstaged WIP files committed to `ticket-url-backfill` branch (commit `daeceebbe`).
+- Step 2 — `/en` redirect added to `netlify.toml` (commit `52f4ee756`). Discovery: `dist/_redirects` already had these rules from build-time generation; netlify.toml change is redundant but discoverable.
+- Steps 3+4 — PATH consolidation across 11 plists + stale comment cleanup (commit `a0479924e`). PlistBuddy normalization stripped XML comments incidentally, completing Step 4 as a side effect. **Reload deferred** (`specs/canonical-path-reload-pending.md`) — hook denied unload/load.
+- Step 5 — `events.genres` CHECK constraint, FTS5-aware migration (commit `747074a33`). **First attempt failed** — pre-flight `genres != ''` filter masked 11,751 empty-string rows; INSERT failed inside transaction → 0 rows. Recovered cleanly from backup. v2 added Step 0 normalization (`UPDATE genres = '[]' WHERE genres = ''`). Applied via `bun run scripts/run-migrations.ts` (system `sqlite3` CLI lacks FTS5). Verified: 12,539 row parity, CHECK enforced (negative + positive), FTS5 rebuilt (142 vs pre-stale 60), 21 indices, 0 empty-string remaining.
+- Step 6 — SWEEP_ORPHANS: **DEFERRED** (`specs/sweep-orphans-deferred.md`). Preview 14,640 orphans (>10K STOP threshold), included `dist/saved/index.html` (sitemap-listed). Root cause: sweeper's mtime-check incompatible with hash-preserving writer (10,420 unchanged-content pages keep stale mtimes). Three candidate fixes documented; preferred is manifest-based sweeper.
+- Step 7 — `known-issues.md` reconciliation (commit `280bd8473`). All 9 audit-FIXED claims independently re-verified with file:line evidence. Two new Active Issues added: D-2 reframed (Recovery Mechanism Asymmetry on Stream Idle Cascades), SWEEP_ORPHANS sweeper bug.
+- Step 8 — Final verification: tsc clean, build 98%/0 errors. Tests 1683/1/4 — 4 fails are audit-predicted WIP-dependent CTA tests (will resolve when `ticket-url-backfill` merges). Maintenance touched no tested code.
+
+**Verified:** 5 commits on `main` for Steps 2/3+4/5/6/7; 1 commit on `ticket-url-backfill` for Step 1. `bunx tsc --noEmit` exit 0; `bun run src/generate-site.ts` reports 98% schema completeness, 0 errors. Migration 008 in `_migrations` table; 0 CHECK violations.
+
+**Learnings:**
+- `mistakes.md`: 4 entries — `.gitignore` drift (S97b discovery), pre-flight filter gotcha (Step 5 v1 failure), sqlite3 CLI vs bun:sqlite divergence, hook-denial scope-bounding.
+- `patterns.md`: 2 entries — phase isolation requires .gitignore audit, DB migrations through bun runner.
+- `decisions.md`: 2 entries — Option B over Option A for leak cleanup, 3 patterns promoted.
+- `known-issues.md`: 9 FIXED items reconciled, 2 new Active Issues (Stream-Idle recovery, SWEEP_ORPHANS sweeper bug).
+
+**Open items:**
+- `ticket-url-backfill` branch awaiting merge (restores +29 tests, fixes 4 CTA fails).
+- SWEEP_ORPHANS arming deferred — fix sweeper bug first; preferred path is manifest-based sweeper (option 2 in `specs/sweep-orphans-deferred.md`).
+- D-2 reframed Stream-Idle diagnostic deferred to dedicated forensic session.
+- 150 MiB binary blob commit `ff8bcaf82` on origin awaiting future `git filter-repo` cleanup (bundled with existing 375 MiB historical DB cruft).
+- Plist launchd reload deferred (resolved in S97b — see below).
+
+### Session S97b — Plist Reload + Backup Leak Cleanup — 2026-04-28
+
+**Plan:** Reload all 11 launchd plists so on-disk canonical PATH (set in S97a Step 3) becomes active in-memory state. Address backup file leak surfaced during pre-flight.
+
+**What happened:**
+- Step 0 — verified on-disk canonical PATH on all 11 plists (matches; no drift since S97a).
+- Step 1 — pre-flight launchctl state captured to `/tmp/launchctl-before-reload.txt`. **Surfaced:** 2 jobs running (`freshness` PID 51342 mid-deploy 2h15m; `enrichment` PID 55106 mid-batch 15m). Plan-spec required waiting.
+- **Backup leak discovered:** freshness log showed `create mode 100644 data/events.db.s97a-backup{,-v2,-postfail-snapshot}` followed by "Source code pushed to git" at 10:12. `git log` confirmed commit `ff8bcaf82` on `origin/main` adding 3 binary blobs (~150 MiB total). Root cause: `.gitignore:40` covered exact `data/events.db` but no glob for dot-suffix variants.
+- Track 3 + Track 1B applied (commit `8a9a65efd`): added `data/events.db.*` glob to `.gitignore`; `git rm --cached` the 3 backup files (preserve local copies). Force-push (Track 1A) deferred to bundled `git filter-repo` session per Christos's call.
+- Track 2 (W) — polled `launchctl list` every 30s until both jobs idle (~3 min wait; freshness deploy finished at 10:25:35 / 13 min total deploy). Then unloaded all 11 (8 success + 3 expected "Input/output error" for already-unloaded `daily`/`enrichment-01`/`enrichment-22`). Loaded all 11 (11 success). Verified canonical PATH active in-memory on 3 sampled plists (one from each prior pattern group).
+- Updated `specs/canonical-path-reload-pending.md` to mark resolved.
+
+**Verified:** `launchctl list | grep com.agentathens | wc -l` = 11. `launchctl print` for daily/enrichment-13/monitor-visibility all show canonical PATH `/Users/chrism/.local/bin:/Users/chrism/.npm-global/bin:/Users/chrism/.bun/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin` in EnvironmentVariables. No PATH-related errors in subsequent enrichment cycle.
+
+**Learnings:**
+- `mistakes.md`: 4 new entries (4 listed under S97a/S97b combined section above).
+- `patterns.md`: 2 new entries (phase isolation requires .gitignore audit; DB migrations through bun runner).
+- `decisions.md`: 2 new entries (Option B leak cleanup; 3 patterns promoted).
+
+**Open items:**
+- Future `git filter-repo` maintenance session — bundle 150 MiB (S97a backups via ff8bcaf82) + ~375 MiB historical DB cruft into one history rewrite.
+- Local `.s97a-backup*` files retained for now; delete after a few days of clean enrichment cycles confirm migration stability.
+- Research Run 2 + Run 1 — Christos kicks off per the brief.
+
 ---
 
 > **Note on source gaps:** Sessions 34-37 and 93 do not exist — the numbering jumps from Session 33 → Design Sessions D1-D11 (which ran in parallel with 26-33) → Session 38. Sessions 49, 57, and 73 appeared as accidental duplicates in the source paste; each is preserved once here.

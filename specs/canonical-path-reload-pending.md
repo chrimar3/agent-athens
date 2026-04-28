@@ -1,7 +1,28 @@
-# Canonical PATH reload — pending separate authorization
+# Canonical PATH reload — RESOLVED in S97b
 
 **Created:** 2026-04-28 (S97a session)
-**Status:** Files updated; launchd in-memory reload deferred
+**Resolved:** 2026-04-28 (S97b session, ~10:26 EEST)
+**Status:** ✅ Reload complete. All 11 plists loaded with canonical PATH active in-memory.
+
+## Resolution summary (2026-04-28, S97b)
+
+Pre-flight surfaced 2 jobs running (`freshness` mid-deploy 2h15m; `enrichment` mid-batch 15m). Polled every 30s until idle (~3 min wait; freshness deploy finished at 10:25:35). Unloaded all 11 (8 success + 3 expected "Input/output error" for the 3 already-unloaded plists per S89). Loaded all 11 (11 success). Verified canonical PATH active in-memory on 3 sampled plists from each prior pattern group:
+
+```
+PATH => /Users/chrism/.local/bin:/Users/chrism/.npm-global/bin:/Users/chrism/.bun/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
+```
+
+S97b also surfaced a backup-file leak (commit `ff8bcaf82` on origin, 150 MiB binary blobs from S97a Step 5 backups swept by freshness's `git add` because `.gitignore` had no glob for `data/events.db.*` dot-suffix variants). Cleanup via `.gitignore` patch + `git rm --cached` (commit `8a9a65efd`); force-push history rewrite deferred to bundled `git filter-repo` session.
+
+This file is kept for institutional-memory continuity; archive to `specs/archive/` when a future cleanup pass runs.
+
+---
+
+(Original deferred-state context follows for forensic reference.)
+
+---
+
+**Status (at S97a deferral time):** Files updated; launchd in-memory reload deferred
 
 ## Context
 

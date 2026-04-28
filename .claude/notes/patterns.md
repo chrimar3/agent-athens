@@ -1680,3 +1680,32 @@ function getX(containerKey: string, childShape: Shape, history: History): Result
 1. When you stop for a planner decision, name 1-3 read-only tasks that would inform or follow the decision. Do them. Include their results in the same message where you present options for the decision.
 2. If nothing read-only is useful, say so. Don't invent busy-work.
 3. When reporting results, keep the blocked decision front-and-center. The parallel work is context, not a counterproposal to the decision.
+
+## Pipeline phase isolation requires .gitignore audit, not just code-level locks (2026-04-28, S97a/S97b)
+
+**Rule:** Constitution Rule #5 ("phases independently failable") needs an operational corollary: phases must also be **independently file-isolated** — anything one phase writes to the working tree is fair game for any later phase that runs `git add`. A pipeline that uses `git add -A` (or a permissive equivalent) erases the file-isolation between phases unless `.gitignore` is comprehensive.
+
+**Why it matters:** S97a Step 5 (CHECK migration) created 3 forensic backup files in `data/`. S97a was conceptually isolated from the freshness pipeline by code-level locks (`.auto-enrich.lock`, `.pipeline-enrichment.lock`) — neither phase modifies the other's files. But the 08:00 freshness cycle ran its routine `git add` step, swept the untracked backup files, committed and pushed them to origin (~150 MiB binary blobs in commit ff8bcaf82). The locks did their job. The `git add` step did not — because `.gitignore` had no glob for `data/events.db.*`. Forensic intent (keep backups) and pipeline intent (commit changes) were on a collision course that lock-based isolation didn't catch.
+
+**How to apply:**
+
+1. **Step 0 of any plan that creates files in tracked directories:** grep `.gitignore` for coverage. If the new files don't match an existing rule, add the rule before creating the files.
+2. **When reviewing a plan that creates artifacts (backups, snapshots, dumps, intermediate logs):** ask "where do these files live, and would the daily/freshness `git add` step pick them up?" If yes, demand the gitignore patch as a precondition.
+3. **For pipelines using broad `git add` (`-A`, `.`, glob patterns):** maintain a `.gitignore` discipline that's strict-by-default. Better to add `data/*.bak`, `*.snapshot`, `*.tmp` patterns prophylactically than to remediate post-leak.
+
+**Bonus corollary — known caveat:** This pattern doesn't help if `.gitignore` itself has the wrong rule. The S97a leak's `.gitignore:40` had `data/events.db` (literal, no glob). A reviewer scanning the plan against the gitignore would have seen "events.db is gitignored" and not noticed the literal-vs-glob distinction. Step 0 grep should look for the *actual* file pattern, not the family it belongs to.
+
+## DB migrations run through `bun run scripts/run-migrations.ts`, never `sqlite3 < file` (2026-04-28, S97a)
+
+**Rule:** Migrations on this project execute via `bun run scripts/run-migrations.ts` (which uses `bun:sqlite`), never via the system `sqlite3` CLI. The two SQLite runtimes have different feature sets, and the divergence is silent until a feature-specific statement runs.
+
+**Why it matters:** macOS-shipped `sqlite3` does not include the FTS5 module. The project's `events_fts` virtual table is FTS5 (`content=events, content_rowid=rowid`). Any migration that touches FTS5 — `DROP TABLE events_fts`, `CREATE VIRTUAL TABLE … USING fts5(...)`, `INSERT INTO events_fts(events_fts) VALUES('rebuild')` — errors at runtime on the system CLI with `Error: in prepare, no such module: fts5`. The CLI accepts the file (parses ok); failure is execution-time. S97a v3 plan prescribed `sqlite3 < file`; pre-flight smoke test surfaced the divergence before any destructive operation.
+
+**How to apply:**
+
+1. **Author migrations in `src/db/migrations/NNN-description.sql`** (the runner's discovery path). Use the next available number per `ls src/db/migrations/`.
+2. **Apply via `bun run scripts/run-migrations.ts`**. The runner wraps each migration in BEGIN/COMMIT, tracks applied state in `_migrations`, rolls back on error, and uses `bun:sqlite` (FTS5-capable).
+3. **Do NOT use `sqlite3 < file` even for "simple" migrations.** The simplicity is illusory if the project schema includes any feature missing from system sqlite3. Even non-FTS5 migrations should go through the runner for `_migrations` tracking and the audit trail (`applied_at`, `applied_by`).
+4. **For one-off manual queries** (read-only inspection, ad-hoc fixes): `bun -e 'import { Database } from "bun:sqlite"; ...'` is safer than `sqlite3 data/events.db "SELECT ..."` — same FTS5-capable runtime as the application uses. The `sqlite3` CLI is fine for `.schema` / `PRAGMA` / `SELECT` on non-FTS5 tables, but defaulting to `bun:sqlite` removes the divergence trap entirely.
+
+**Detection signal:** if a migration plan shows `sqlite3 < file` AND the project has FTS5 (or any other compile-time-optional SQLite feature), flag the runner choice as Step 0 of the review.
