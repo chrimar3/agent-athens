@@ -1,0 +1,205 @@
+# banned-phrases.yaml
+# Owner:     Editorial Director (ED)
+# Consumers: F1 quality-gate batch — C1 mechanical match, C2 contextual judge
+# For:       S100b shared loader spec (Dev Planner, Apr 30 morning)
+# Updated:   2026-04-29
+#
+# Schema contract:
+#   banned.{lang}.absolute     → flat list of strings; loader does word-boundary
+#                                substring match against description text.
+#   banned.{lang}.contextual   → list of objects:
+#       phrase       — string (literal) OR string prefixed with `re:` (regex).
+#                      Greek contextual entries use regex to cover all inflections
+#                      in a single rule; EN entries use literals.
+#       banned_when  — English-language judge prompt context (see Note 1).
+#       allowed_when — English-language judge prompt context (see Note 1).
+#
+# Note 1 — judge-prompt language:
+#   Per the F1 batch architecture, all C1–C6 checks run in a single Claude call
+#   whose working language is English. banned_when / allowed_when are operator-
+#   readable English regardless of phrase language. Claude's Greek competence
+#   handles the phrase recognition itself; the judge needs the rule in its
+#   working language to apply it consistently across batches.
+#
+# Note 2 — regex engine compatibility:
+#   Patterns use `\b` for word boundaries. Python `re` and JS `RegExp` both
+#   handle Unicode word chars correctly. If the loader runs on a regex engine
+#   without Unicode `\b` support, contextual EL patterns need migration to
+#   explicit alternation. Flag during S100b build if relevant.
+#
+# Note 3 — sources:
+#   EN absolute canonical line:  content-types.md L478
+#   EN PR-speak qualifier:       content-types.md L169 ("premier destination")
+#   EN vibe-fabrication examples: editorial-decisions.md L321 (hallucination taxonomy)
+#                                + ED system prompt First Sentence Rule example
+#                                  ("Step into the smoky basement...")
+#   EL absolute canonical:       ED-greek-writing-guide.md ΜΕΡΟΣ 8
+#   EL outsider-tell additions:  ED-greek-writing-guide.md ΜΕΡΟΣ 10 §10
+#
+# Note 4 — promotions from absolute → contextual (editorial decision):
+#   Three EN words appear in the canonical absolute list (L478) but are
+#   promoted to contextual here, mirroring the explicit contextual treatment
+#   of their Greek counterparts in ED guide §8:
+#     - "unique"      → mirrors μοναδικός (concrete differentiator required)
+#     - "world-class" → mirrors κορυφαίος (factual backing required)
+#   Plus "premier" and "live" added to contextual (not in L478, but
+#   live = ζωντανός parallel; premier = κορυφαίος-adjacent PR-speak).
+#   If the loader can't yet handle contextual EN entries, the safe fallback
+#   is to move these four into `en.absolute` — F1 will over-flag, ED edits
+#   the false positives. Flag your preference; current default is contextual.
+
+banned:
+  en:
+    absolute:
+      # ─── Marketing-speak (canonical, content-types.md L478) ────────────────
+      - amazing
+      - incredible
+      - vibrant
+      - stunning
+      - breathtaking
+      - unforgettable
+      - must-see
+      - hidden gem
+
+      # ─── PR-speak qualifiers (content-types.md L169) ───────────────────────
+      - premier destination
+      - state-of-the-art
+
+      # ─── Vibe-fabrication patterns (hallucination taxonomy) ────────────────
+      # These are atmospheric claims that require physical presence and were
+      # not in source data. Fabrication risk is high enough to warrant
+      # absolute ban regardless of context.
+      - intimate candlelit
+      - leans in as the lights dim
+      - electric atmosphere
+      - magical atmosphere
+      - enchanting atmosphere
+      - mesmerizing
+      - captivating
+
+      # ─── Discovery / invitation tropes ─────────────────────────────────────
+      # These are openings that function as vibe transport rather than
+      # citation anchors. Direct conflict with First Sentence Rule.
+      - step into
+      - immerse yourself
+      - whisks you away
+      - transports you
+
+    contextual:
+      - phrase: live
+        banned_when: "Used as an adjective describing atmosphere, energy, or vibe (e.g., 'live atmosphere', 'live energy', 'live vibe'). The word becomes empty marketing-speak when applied to ambience rather than performance type."
+        allowed_when: "Used as a performance-type designation (e.g., 'live music', 'live performance', 'live set', 'live recording', 'live album'). This is genre and format nomenclature and must be permitted."
+
+      - phrase: unique
+        banned_when: "Used without a specific factual differentiator immediately following (e.g., 'unique experience', 'a unique venue', 'truly unique offering'). Fails the substitution test — the word adds no information."
+        allowed_when: "Used with a concrete, verifiable differentiator immediately following or in the same sentence (e.g., 'unique in being the only Athens venue with surviving 1891 acoustics'). The differentiator must be a specific fact, not another vague descriptor."
+
+      - phrase: world-class
+        banned_when: "Used as floating praise without supporting evidence in the same sentence or adjacent clause (e.g., 'world-class venue', 'world-class lineup', 'world-class production')."
+        allowed_when: "Used with measurable factual backing in the same sentence or adjacent clause (e.g., 'Half Note is world-class by any measure — the Wednesday jam has run continuously since 1979 with rotating international rhythm sections')."
+
+      - phrase: premier
+        banned_when: "Used as a PR-speak intensifier (e.g., 'Athens' premier nightlife destination', 'the city's premier jazz venue', 'the premier choice for'). Marketing copy with no informational content."
+        allowed_when: "Used as part of an official designation, proper noun, or factually accurate ranking (e.g., 'Greek Premier League', 'the venue's premier — i.e., debut — performance of the season'). Note: 'premiere' as noun meaning first performance is a distinct word and always allowed."
+
+      - phrase: iconic
+        banned_when: "Used as a generic praise descriptor for venues, events, or neighborhoods (e.g., 'iconic Athens nightlife', 'an iconic venue', 'iconic vibe')."
+        allowed_when: "Used in reference to a specific cultural icon or landmark with verifiable cultural-historical status and a concrete fact attached (e.g., 'the iconic 1973 Polytechnic protest', 'the iconic Acropolis silhouette visible from the rooftop')."
+
+      - phrase: legendary
+        banned_when: "Used as a generic praise descriptor (e.g., 'legendary night out', 'legendary chef', 'legendary venue'). Substitution test: works for any city, venue, or event without anchor."
+        allowed_when: "Used in reference to verifiable cultural-legend status with a concrete supporting fact (e.g., 'Stoa Athanaton, where the Athens rebetiko revival began in the 1970s, carries that legacy through its current weekly programming')."
+
+  el:
+    absolute:
+      # Σημείωση: Όλες οι μορφές κάθε επιθέτου ως ξεχωριστές καταχωρήσεις
+      # (loader spec: flat strings, word-boundary match).
+      # Καλύπτονται: ονομαστική / γενική / αιτιατική, ενικός & πληθυντικός,
+      # αρσενικό / θηλυκό / ουδέτερο.
+      # Πηγή: ED-greek-writing-guide.md ΜΕΡΟΣ 8
+
+      # ─── καταπληκτικός — "amazing" ─────────────────────────────────────────
+      - καταπληκτικός
+      - καταπληκτική
+      - καταπληκτικό
+      - καταπληκτικού
+      - καταπληκτικής
+      - καταπληκτικοί
+      - καταπληκτικές
+      - καταπληκτικά
+      - καταπληκτικών
+      - καταπληκτικούς
+
+      # ─── απίστευτος — "incredible" ─────────────────────────────────────────
+      - απίστευτος
+      - απίστευτη
+      - απίστευτο
+      - απίστευτου
+      - απίστευτης
+      - απίστευτοι
+      - απίστευτες
+      - απίστευτα
+      - απίστευτων
+      - απίστευτους
+
+      # ─── εντυπωσιακός — "stunning/impressive" ──────────────────────────────
+      - εντυπωσιακός
+      - εντυπωσιακή
+      - εντυπωσιακό
+      - εντυπωσιακού
+      - εντυπωσιακής
+      - εντυπωσιακοί
+      - εντυπωσιακές
+      - εντυπωσιακά
+      - εντυπωσιακών
+      - εντυπωσιακούς
+
+      # ─── αξέχαστος — "unforgettable" ───────────────────────────────────────
+      - αξέχαστος
+      - αξέχαστη
+      - αξέχαστο
+      - αξέχαστου
+      - αξέχαστης
+      - αξέχαστοι
+      - αξέχαστες
+      - αξέχαστα
+      - αξέχαστων
+      - αξέχαστους
+
+      # ─── Σταθερές φράσεις (fixed phrases — όλες οι παραλλαγές) ─────────────
+      - μη χάσετε
+      - μη χάσεις
+      - μην χάσετε
+      - μην χάσεις
+      - κρυφό στολίδι
+      - κρυφά στολίδια
+      - κρυφό διαμάντι
+      - κρυφά διαμάντια
+
+      # ─── Discovery narrative (ΜΕΡΟΣ 10 §10) ────────────────────────────────
+      - ανακαλύπτεται ξανά
+      - ανακαλύψτε την Αθήνα
+      - ανακάλυψε την Αθήνα
+
+      # ─── Promotional ατμόσφαιρα tropes ─────────────────────────────────────
+      - μαγευτική ατμόσφαιρα
+      - μαγική ατμόσφαιρα
+      - μυσταγωγική ατμόσφαιρα
+
+    contextual:
+      # Σημείωση: όλα τα contextual entries χρησιμοποιούν regex στο phrase field
+      # ώστε να καλύπτουν όλες τις κλίσεις του ίδιου επιθέτου με μία καταχώρηση.
+      # banned_when / allowed_when σε αγγλικά (judge-prompt working language —
+      # βλ. Note 1 στην κορυφή του αρχείου).
+
+      - phrase: "re:\\bζωντανός\\b|\\bζωντανή\\b|\\bζωντανό\\b|\\bζωντανού\\b|\\bζωντανής\\b|\\bζωντανοί\\b|\\bζωντανές\\b|\\bζωντανά\\b|\\bζωντανών\\b|\\bζωντανούς\\b"
+        banned_when: "Used as an adjective describing atmosphere, energy, or vibe (e.g., 'ζωντανή ατμόσφαιρα', 'ζωντανή ενέργεια', 'ζωντανή βραδιά'). The word becomes empty marketing when applied to ambience rather than performance type."
+        allowed_when: "Used as a performance-type designation (e.g., 'ζωντανή μουσική' = live music, 'ζωντανή εκτέλεση' = live performance, 'ζωντανή ηχογράφηση' = live recording). Greek genre nomenclature, must be permitted."
+
+      - phrase: "re:\\bκορυφαίος\\b|\\bκορυφαία\\b|\\bκορυφαίο\\b|\\bκορυφαίου\\b|\\bκορυφαίας\\b|\\bκορυφαίοι\\b|\\bκορυφαίες\\b|\\bκορυφαίων\\b|\\bκορυφαίους\\b"
+        banned_when: "Used as floating praise without factual backing in the same sentence or adjacent clause (e.g., 'κορυφαίο venue', 'κορυφαία βραδιά', 'κορυφαίος καλλιτέχνης'). Equivalent to English 'world-class' deployed without evidence."
+        allowed_when: "Used with measurable factual backing immediately following (e.g., 'κορυφαίος μπασίστας της σκηνής, με 30 χρόνια στο Half Note και τρεις δίσκους με τον Διονύση Σαββόπουλο'). The justification must be a verifiable fact, not another vague descriptor."
+
+      - phrase: "re:\\bμοναδικός\\b|\\bμοναδική\\b|\\bμοναδικό\\b|\\bμοναδικού\\b|\\bμοναδικής\\b|\\bμοναδικοί\\b|\\bμοναδικές\\b|\\bμοναδικά\\b|\\bμοναδικών\\b|\\bμοναδικούς\\b"
+        banned_when: "Used without a concrete factual differentiator immediately following (e.g., 'μοναδική εμπειρία', 'μοναδικός χώρος', 'μοναδική βραδιά'). The word adds no information — same failure mode as English 'unique' as floating descriptor."
+        allowed_when: "Used with a concrete verifiable differentiator immediately following (e.g., 'μοναδικός εξώστης με θέα στην Ακρόπολη χωρίς ενδιάμεσο κτίριο', 'μοναδικό αρχιτεκτονικό στοιχείο που σώζεται από το 1891'). The differentiator must be a specific fact, not another vague claim."
