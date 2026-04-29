@@ -75,7 +75,7 @@ const LOG_PATH = join(import.meta.dir, '..', 'data', 'backfill-ticket-urls.log.j
 function buildQuery(cli: Cli): { sql: string; params: unknown[] } {
   if (cli.eventId) {
     return {
-      sql: `SELECT id, title, venue_name, start_date, source, url,
+      sql: `SELECT id, title, venue_name, start_date, end_date, type, source, url,
                    ticket_url, ticket_url_status, price_type
             FROM events
             WHERE id = ?`,
@@ -86,6 +86,9 @@ function buildQuery(cli: Cli): { sql: string; params: unknown[] } {
   const conditions: string[] = [
     `price_type IN ('with-ticket','tba')`,
     `location_status IN ('verified_athens','pass_through')`,
+    // Exhibition-aware future filter (CLAUDE.md Tier 1 rule). Mirrors
+    // resolver's isPastEvent helper: exhibitions use end_date, others use start_date.
+    `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`,
   ];
 
   if (cli.onlyStatus) {
@@ -102,7 +105,7 @@ function buildQuery(cli: Cli): { sql: string; params: unknown[] } {
   }
 
   const sql = `
-    SELECT id, title, venue_name, start_date, source, url,
+    SELECT id, title, venue_name, start_date, end_date, type, source, url,
            ticket_url, ticket_url_status, price_type
     FROM events
     WHERE ${conditions.join(' AND ')}
@@ -130,11 +133,16 @@ type Outcome = {
 async function processEvent(
   event: ResolverEvent,
   db: Database,
-  cli: Cli
+  cli: Cli,
+  crossrefEvents: ReadonlyArray<{ title: string; venue: string; url: string }>
 ): Promise<Outcome> {
   const before = { url: event.ticket_url, status: event.ticket_url_status };
   try {
-    const resolved = await resolveTicketUrl(event, { db, skipNetwork: cli.skipTier.has(2) });
+    const resolved = await resolveTicketUrl(event, {
+      db,
+      skipNetwork: cli.skipTier.has(2),
+      crossrefEvents,
+    });
     if (cli.skipTier.has(resolved.tier)) {
       return {
         eventId: event.id,
@@ -209,12 +217,32 @@ async function main() {
   const { sql, params } = buildQuery(cli);
   const rows = db.prepare(sql).all(...(params as any[])) as ResolverEvent[];
 
+  // D4: pre-load Tier 3b crossref candidates once. Future events from
+  // residentadvisor / more.com / ticketservices with allowlisted ticket URLs.
+  // Resolver does in-memory Jaccard matching against this set per event.
+  const { isTicketDomain } = await import('../src/ticketing/validator');
+  const crossrefRows = db
+    .prepare(
+      `SELECT title, venue_name, ticket_url
+       FROM events
+       WHERE source IN ('residentadvisor', 'more.com', 'ticketservices')
+         AND start_date >= date('now')
+         AND ticket_url IS NOT NULL AND ticket_url != ''`
+    )
+    .all() as Array<{ title: string; venue_name: string | null; ticket_url: string }>;
+  const crossrefEvents = crossrefRows
+    .filter((r) => r.venue_name && isTicketDomain(r.ticket_url))
+    .map((r) => ({ title: r.title, venue: r.venue_name!, url: r.ticket_url }));
+
   console.log(
     `Backfill: ${rows.length} event(s), concurrency=${cli.concurrency}, ` +
-      `dryRun=${cli.dryRun}${cli.eventId ? `, eventId=${cli.eventId}` : ''}`
+      `dryRun=${cli.dryRun}, crossref=${crossrefEvents.length}` +
+      `${cli.eventId ? `, eventId=${cli.eventId}` : ''}`
   );
 
-  const outcomes = await runBounded(rows, cli.concurrency, (ev) => processEvent(ev, db, cli));
+  const outcomes = await runBounded(rows, cli.concurrency, (ev) =>
+    processEvent(ev, db, cli, crossrefEvents)
+  );
 
   const byStatus = new Map<string, number>();
   for (const o of outcomes) {

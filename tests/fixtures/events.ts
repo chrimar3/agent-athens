@@ -215,6 +215,10 @@ export function getTomorrowEvent(): Event {
 export const sampleConcertWithTicket: Event = {
   ...sampleConcert,
   ticketUrl: "https://www.viva.gr/tickets/jazz-night/",
+  // viva.gr is on the ticket-host allowlist; resolver classifies as Tier 1 direct.
+  // D7's CTA mapper requires ticketUrlStatus to gate "Buy tickets" rendering;
+  // pre-D11 tests relied on implicit "any ticketUrl → CTA" which D7 removed.
+  ticketUrlStatus: "direct",
 };
 
 // Collection of all sample events

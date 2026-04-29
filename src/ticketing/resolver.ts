@@ -270,12 +270,22 @@ function jaccardSimilarity(a: string, b: string): number {
   return union === 0 ? 0 : intersection / union;
 }
 
-const CROSSREF_THRESHOLD = 0.45;
+const CROSSREF_TITLE_THRESHOLD = 0.3;
+
+function venuesMatch(a: string | null | undefined, b: string | null | undefined): boolean {
+  return !!a && !!b && a.toLowerCase().trim() === b.toLowerCase().trim();
+}
 
 /**
- * D4: match event.title + venue_name against pre-loaded candidates via Jaccard.
- * Returns the best match above threshold. `ctx.crossrefEvents` omitted or []
- * short-circuits (site-gen path). Pure in-memory — no DB, no network.
+ * D4: match event.title against pre-loaded candidates via title-only Jaccard,
+ * gated by exact venue-name match. Two-stage filter avoids false positives
+ * where venue tokens dominate the score (observed: same-venue events with
+ * unrelated titles scored ≥0.45 on a combined title+venue Jaccard because
+ * venue tokens were 80% of both inputs). Title-only after venue prefilter
+ * gives semantically correct matching: "same venue, similar title."
+ *
+ * `ctx.crossrefEvents` omitted or [] short-circuits (site-gen path). Pure
+ * in-memory — no DB, no network.
  */
 export async function tier3b_crossref(
   event: ResolverEvent,
@@ -284,13 +294,11 @@ export async function tier3b_crossref(
   const candidates = ctx.crossrefEvents;
   if (!candidates || candidates.length === 0) return null;
 
-  const haystack = `${event.title ?? ''} ${event.venue_name ?? ''}`;
-
   let best: { url: string; score: number } | null = null;
   for (const c of candidates) {
-    const needle = `${c.title} ${c.venue}`;
-    const score = jaccardSimilarity(haystack, needle);
-    if (score >= CROSSREF_THRESHOLD && (!best || score > best.score)) {
+    if (!venuesMatch(event.venue_name, c.venue)) continue;
+    const score = jaccardSimilarity(event.title ?? '', c.title);
+    if (score >= CROSSREF_TITLE_THRESHOLD && (!best || score > best.score)) {
       best = { url: c.url, score };
     }
   }
@@ -301,7 +309,7 @@ export async function tier3b_crossref(
     status: 'crossref',
     confidence: 0.7,
     tier: 3, // 3b collapses to tier 3 bucket in scoring; source string distinguishes
-    source: `crossref:jaccard=${best.score.toFixed(2)}`,
+    source: `crossref:title_jaccard=${best.score.toFixed(2)}`,
   };
 }
 
