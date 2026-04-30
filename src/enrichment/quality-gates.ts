@@ -12,6 +12,7 @@
 import { TAG_TAXONOMY, FILLER_PHRASES, type EventForEnrichment } from './description-generator';
 import { getWordTarget, classifyEvent } from './enrichment-matrix';
 import { classifyDateFormat } from '../utils/date-format';
+import { getCountryCode, getCurrencyCode } from '../utils/schema-geo';
 
 // ============================================================================
 // Types
@@ -902,7 +903,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
       '@type': 'PostalAddress',
       addressLocality: 'Athens',
       addressRegion: event.neighborhood,
-      addressCountry: 'GR',
+      addressCountry: getCountryCode(),
     };
   }
 
@@ -919,7 +920,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
     schema.offers = {
       '@type': 'Offer',
       price: '0',
-      priceCurrency: 'EUR',
+      priceCurrency: getCurrencyCode(),
       availability: 'https://schema.org/InStock',
     };
   } else {
@@ -927,7 +928,7 @@ export function generateSchemaOrg(event: EventForEnrichment): SchemaOrgEvent {
     schema.offers = {
       '@type': 'Offer',
       price: price || '',
-      priceCurrency: 'EUR',
+      priceCurrency: getCurrencyCode(),
       availability: 'https://schema.org/InStock',
     };
     if (event.ticket_url) {

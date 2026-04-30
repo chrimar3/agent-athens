@@ -414,7 +414,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
         ...((event.price.type === 'open' || event.price.type === 'donation')
           ? { "price": "0" }
           : (event.price.amount ? { "price": event.price.amount.toString() } : {})),
-        "priceCurrency": event.price.currency || "EUR",
+        "priceCurrency": event.price.currency || getCurrencyCode(),
         "availability": "https://schema.org/InStock"
       }
     }

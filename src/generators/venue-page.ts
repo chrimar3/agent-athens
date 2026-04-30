@@ -18,7 +18,7 @@ import { renderEventCardList } from '../templates/card-variants';
 import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace } from '../utils/schema-geo';
+import { buildContainedInPlace, getCountryCode } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -68,7 +68,7 @@ function generateVenueSchema(venue: VenueData): string | null {
       'streetAddress': venue.address,
       'addressLocality': 'Athens',
       'addressRegion': venue.neighborhood || 'Attica',
-      'addressCountry': 'GR'
+      'addressCountry': getCountryCode()
     },
     'url': `${BASE_URL}/venues/${venue.slug}/`,
     'containedInPlace': buildContainedInPlace(venue.neighborhood)

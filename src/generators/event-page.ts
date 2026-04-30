@@ -166,7 +166,7 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
         'streetAddress': event.venue.address || '',
         'addressLocality': 'Athens',
         'addressRegion': 'Attica',
-        'addressCountry': 'GR'
+        'addressCountry': getCountryCode()
       },
       'containedInPlace': buildContainedInPlace(event.venue.neighborhood)
     }
@@ -203,7 +203,7 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     schema.offers = {
       '@type': 'Offer',
       'price': '0',
-      'priceCurrency': 'EUR',
+      'priceCurrency': getCurrencyCode(),
       'availability': 'https://schema.org/InStock',
       'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`
     };
@@ -211,10 +211,9 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     schema.isAccessibleForFree = false;
     const offerObj: Record<string, any> = {
       '@type': 'Offer',
-      'priceCurrency': event.price.currency || 'EUR',
+      'priceCurrency': event.price.currency || getCurrencyCode(),
       'availability': 'https://schema.org/InStock',
-      'url': event.ticketUrl || event.url || `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
-      'validFrom': event.createdAt || startDate
+      'url': event.ticketUrl || event.url || `${BASE_URL}/${urlPrefix}events/${eventSlug}/`
     };
     const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
     if (priceStr !== '') {
