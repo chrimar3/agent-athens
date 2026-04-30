@@ -13,6 +13,7 @@
  */
 
 import { countWords, validateWordCount } from './word-counter';
+import { loadBannedPhrases, type BannedPhrasesData } from '../utils/load-banned-phrases';
 
 // ============================================================================
 // Types
@@ -134,6 +135,30 @@ export const FILLER_PHRASES: string[] = [
 ];
 
 // ============================================================================
+// Banned phrases (loaded from config/banned-phrases.yaml)
+// ============================================================================
+
+const _bannedPhrases: BannedPhrasesData = loadBannedPhrases();
+
+function buildBannedPhrasesSection(language: 'en' | 'el'): string {
+  const absolute = _bannedPhrases.absolute
+    .filter((e) => e.language === language)
+    .map((e) => `- ${e.phrase}`)
+    .join('\n');
+
+  const contextual = _bannedPhrases.contextual
+    .filter((e) => e.language === language)
+    .map((e) => `- "${e.phrase}" — BANNED when: ${e.bannedWhen} ALLOWED when: ${e.allowedWhen}`)
+    .join('\n');
+
+  return `# Banned phrases (NEVER use):
+${absolute}
+
+# Contextually banned phrases (use only when context allows):
+${contextual}`;
+}
+
+// ============================================================================
 // Prompt Building - Standard (backward compatible)
 // ============================================================================
 
@@ -161,10 +186,11 @@ ${eventDetails}
 
 **Requirements:**
 - 150-300 words total
-- NO filler phrases (avoid: "unforgettable experience", "must-see", "don't miss")
 - NO superlatives unless factually accurate
 - First sentence must be independently quotable
 - Use present tense for ongoing exhibitions, future tense for upcoming events
+
+${buildBannedPhrasesSection('en')}
 
 **CRITICAL: Do not fabricate information. Only use the data provided. If details are missing, focus on what is known without inventing specifics.**
 
@@ -272,11 +298,12 @@ ${artistContext}
 **REQUIREMENTS:**
 - 400-600 words total
 - Voice: Sensory first, second person ("you"), present tense
-- NO lazy adjectives: "amazing", "incredible", "unique", "vibrant", "unforgettable"
 - SHOW don't TELL: "bass hits your chest" not "great sound"
 - At least 2 sentences that could be quoted standalone by an AI (citability test)
 - Include the Details table inline
 - PURE NARRATIVE ONLY — tags and timestamps are handled separately in the database
+
+${buildBannedPhrasesSection('en')}
 
 **CITABILITY TEST:**
 Your description MUST include at least 2 sentences that:
