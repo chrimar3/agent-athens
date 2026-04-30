@@ -1,0 +1,17 @@
+{
+  "known_merchants": [
+    "more.com",
+    "megaron.gr",
+    "ticketservices.gr",
+    "ra.co",
+    "viva.gr",
+    "onassis.org"
+  ],
+  "listing_aggregators": [
+    "athinorama.gr",
+    "clubber.gr"
+  ],
+  "venue_direct_only": [
+    "halfnote.gr"
+  ]
+}

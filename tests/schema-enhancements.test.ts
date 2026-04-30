@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../src/utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode, availabilityForEventStatus } from '../src/utils/schema-geo';
 import { renderPage } from '../src/templates/page';
 import { sampleConcert, sampleTheaterPerformance, sampleWorkshop, sampleFreeExhibition, sampleConcertWithTicket } from './fixtures/events';
 import { generateEventSchema } from '../src/generators/event-page';
@@ -198,6 +198,40 @@ describe('city-geodata accessors', () => {
     );
     expect(raw.country.code).toBe('GR');
     expect(raw.country.currency).toBe('EUR');
+  });
+});
+
+// ── availabilityForEventStatus ────────────────────────────
+
+describe('availabilityForEventStatus', () => {
+  test('EventScheduled → InStock', () => {
+    expect(availabilityForEventStatus('https://schema.org/EventScheduled'))
+      .toEqual({ kind: 'emit', value: 'https://schema.org/InStock' });
+  });
+
+  test('EventPostponed → InStock (deliberate per Strategist 2026-04-29)', () => {
+    expect(availabilityForEventStatus('https://schema.org/EventPostponed'))
+      .toEqual({ kind: 'emit', value: 'https://schema.org/InStock' });
+  });
+
+  test('EventRescheduled → InStock', () => {
+    expect(availabilityForEventStatus('https://schema.org/EventRescheduled'))
+      .toEqual({ kind: 'emit', value: 'https://schema.org/InStock' });
+  });
+
+  test('EventCancelled → Discontinued', () => {
+    expect(availabilityForEventStatus('https://schema.org/EventCancelled'))
+      .toEqual({ kind: 'emit', value: 'https://schema.org/Discontinued' });
+  });
+
+  test('EventCompleted → omit_offer', () => {
+    expect(availabilityForEventStatus('https://schema.org/EventCompleted'))
+      .toEqual({ kind: 'omit_offer' });
+  });
+
+  test('unknown status → InStock (defensive default)', () => {
+    expect(availabilityForEventStatus('https://schema.org/SomethingUnknown'))
+      .toEqual({ kind: 'emit', value: 'https://schema.org/InStock' });
   });
 });
 

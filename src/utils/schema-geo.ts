@@ -129,6 +129,33 @@ export function resolveEventStatus(startDate: string, endDate?: string | null, t
 }
 
 /**
+ * Availability decision for `offers.availability` based on `eventStatus`.
+ * Per 2026-04-29 Strategist spec:
+ *   EventScheduled / EventPostponed / EventRescheduled → InStock
+ *   EventCancelled → Discontinued
+ *   EventCompleted → omit the entire offers block (past events have no offer)
+ *   default → InStock (defensive — prefer presence to absence)
+ */
+export type AvailabilityResult =
+  | { kind: 'emit'; value: 'https://schema.org/InStock' | 'https://schema.org/Discontinued' }
+  | { kind: 'omit_offer' };
+
+export function availabilityForEventStatus(eventStatus: string): AvailabilityResult {
+  switch (eventStatus) {
+    case 'https://schema.org/EventScheduled':
+    case 'https://schema.org/EventPostponed':
+    case 'https://schema.org/EventRescheduled':
+      return { kind: 'emit', value: 'https://schema.org/InStock' };
+    case 'https://schema.org/EventCancelled':
+      return { kind: 'emit', value: 'https://schema.org/Discontinued' };
+    case 'https://schema.org/EventCompleted':
+      return { kind: 'omit_offer' };
+    default:
+      return { kind: 'emit', value: 'https://schema.org/InStock' };
+  }
+}
+
+/**
  * ISO-3166 country code for the configured city's country (e.g. "GR").
  * Single source of truth for `addressCountry` in JSON-LD address blocks.
  */
