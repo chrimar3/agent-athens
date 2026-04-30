@@ -13,6 +13,8 @@
   },
   "country": {
     "name": "Greece",
+    "code": "GR",
+    "currency": "EUR",
     "qid": "Q41",
     "lat": 39.0742,
     "lng": 21.8243

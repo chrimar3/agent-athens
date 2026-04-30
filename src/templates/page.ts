@@ -9,7 +9,7 @@ import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -405,7 +405,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
           "streetAddress": event.venue.address || "",
           "addressLocality": "Athens",
           "addressRegion": "Attica",
-          "addressCountry": "GR"
+          "addressCountry": getCountryCode()
         },
         "containedInPlace": buildContainedInPlace(event.venue.neighborhood)
       },
@@ -432,7 +432,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
       "name": "Athens",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "GR",
+        "addressCountry": getCountryCode(),
         "addressLocality": "Athens"
       }
     },

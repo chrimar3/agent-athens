@@ -22,7 +22,7 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';

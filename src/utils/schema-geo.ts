@@ -15,7 +15,20 @@ import { BASE_URL } from '../config/site-url';
 const neighborhoodGeodata: Record<string, { name: string; qid: string; lat: number; lng: number }> =
   JSON.parse(readFileSync(join(import.meta.dir, '../../config/neighborhood-geodata.json'), 'utf-8'));
 
-const cityGeodata: Record<string, { name: string; qid: string; lat: number; lng: number }> =
+interface CityGeoBlock {
+  name: string;
+  qid: string;
+  lat: number;
+  lng: number;
+}
+
+interface CityGeoData {
+  municipality: CityGeoBlock;
+  region: CityGeoBlock;
+  country: CityGeoBlock & { code: string; currency: string };
+}
+
+const cityGeodata: CityGeoData =
   JSON.parse(readFileSync(join(import.meta.dir, '../../config/city-geodata.json'), 'utf-8'));
 
 // Build reverse Greek→English lookup from NEIGHBORHOOD_GREEK
@@ -113,6 +126,22 @@ export function resolveEventStatus(startDate: string, endDate?: string | null, t
     return 'https://schema.org/EventScheduled';
   }
   return 'https://schema.org/EventCompleted';
+}
+
+/**
+ * ISO-3166 country code for the configured city's country (e.g. "GR").
+ * Single source of truth for `addressCountry` in JSON-LD address blocks.
+ */
+export function getCountryCode(): string {
+  return cityGeodata.country.code;
+}
+
+/**
+ * ISO-4217 currency code for the configured city's country (e.g. "EUR").
+ * Single source of truth for `priceCurrency` in JSON-LD offers blocks.
+ */
+export function getCurrencyCode(): string {
+  return cityGeodata.country.currency;
 }
 
 /**

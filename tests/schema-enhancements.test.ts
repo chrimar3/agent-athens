@@ -1,7 +1,8 @@
 import { describe, test, expect } from 'bun:test';
-import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA } from '../src/utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../src/utils/schema-geo';
 import { renderPage } from '../src/templates/page';
-import { sampleConcert, sampleTheaterPerformance, sampleWorkshop, sampleFreeExhibition } from './fixtures/events';
+import { sampleConcert, sampleTheaterPerformance, sampleWorkshop, sampleFreeExhibition, sampleConcertWithTicket } from './fixtures/events';
+import { generateEventSchema } from '../src/generators/event-page';
 import type { PageMetadata } from '../src/types';
 
 // ── containedInPlace ──────────────────────────────────────
@@ -174,5 +175,48 @@ describe('containedInPlace in rendered schema', () => {
     // sampleConcert has startDate in 2025 — should be EventCompleted
     const html = renderPage(metadata, [sampleConcert]);
     expect(html).toContain('EventCompleted');
+  });
+});
+
+// ── city-geodata accessors ────────────────────────────────
+
+describe('city-geodata accessors', () => {
+  test('getCountryCode returns GR', () => {
+    expect(getCountryCode()).toBe('GR');
+  });
+
+  test('getCurrencyCode returns EUR', () => {
+    expect(getCurrencyCode()).toBe('EUR');
+  });
+
+  test('city-geodata.json exposes country.code and country.currency', () => {
+    const raw = JSON.parse(
+      require('fs').readFileSync(
+        require('path').join(__dirname, '..', 'config', 'city-geodata.json'),
+        'utf-8'
+      )
+    );
+    expect(raw.country.code).toBe('GR');
+    expect(raw.country.currency).toBe('EUR');
+  });
+});
+
+// ── offers.validFrom removed ──────────────────────────────
+
+describe('offers.validFrom emission', () => {
+  test('paid event with ticket does NOT emit validFrom in offers', () => {
+    const jsonLd = generateEventSchema(sampleConcertWithTicket, 'el');
+    const schema = JSON.parse(jsonLd);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers['@type']).toBe('Offer');
+    expect(schema.offers.validFrom).toBeUndefined();
+  });
+
+  test('open-price event has no validFrom either (offers block has no temporal anchor)', () => {
+    const jsonLd = generateEventSchema(sampleFreeExhibition, 'el');
+    const schema = JSON.parse(jsonLd);
+    if (schema.offers) {
+      expect(schema.offers.validFrom).toBeUndefined();
+    }
   });
 });
