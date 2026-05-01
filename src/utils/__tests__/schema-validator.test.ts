@@ -35,6 +35,11 @@ const COMPLETE_SCHEMA = {
     'priceCurrency': 'EUR',
     'availability': 'https://schema.org/InStock',
     'url': 'https://example.com/tickets',
+    'seller': {
+      '@type': 'Organization',
+      'name': 'Example.com',
+      'url': 'https://example.com/',
+    },
   },
   'image': 'https://agentathens.com/images/og/concert-default.png',
   'performer': {
@@ -120,5 +125,48 @@ describe('validateEventSchema', () => {
   test('url is preserved in result', () => {
     const result = validateEventSchema('{}', '/events/my-event/');
     expect(result.url).toBe('/events/my-event/');
+  });
+});
+
+// ─── Offers contract (Sprint 1 Session 3 — Strategist 2026-04-29) ─────
+
+describe('validateEventSchema — offers contract', () => {
+  test('EventCompleted with NO offers does NOT flag offers as mandatory', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema.eventStatus = 'https://schema.org/EventCompleted';
+    delete schema.offers;
+    const result = validateEventSchema(JSON.stringify(schema), '/events/past/');
+    expect(result.missing).not.toContain('offers');
+  });
+
+  test('EventScheduled with NO offers DOES flag offers as mandatory (regression-guard)', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema.eventStatus = 'https://schema.org/EventScheduled';
+    delete schema.offers;
+    const result = validateEventSchema(JSON.stringify(schema), '/events/future/');
+    expect(result.missing).toContain('offers');
+  });
+
+  test('offers present but missing seller flags as mandatory', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    delete schema.offers.seller;
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.missing).toContain('offers.seller');
+  });
+
+  test('offers.seller as a non-Organization shape (string) flags as mandatory', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema.offers.seller = 'just-a-string';
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.missing).toContain('offers.seller');
+  });
+
+  test('offers present but missing offers.url flags as INFO (not WARN, not FAIL)', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    delete schema.offers.url;
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.missing).not.toContain('offers.url');
+    expect(result.warnings).not.toContain('offers.url');
+    expect(result.info ?? []).toContain('offers.url');
   });
 });

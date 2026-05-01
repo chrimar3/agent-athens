@@ -75,7 +75,12 @@ export interface SchemaOrgEvent {
     priceCurrency: string;
     availability?: string;
     url?: string;
-    validFrom?: string;
+    validFrom?: string;  // vestigial — emitter does not write it (S1 removed); type retained for forward compat
+    seller?: {
+      '@type': 'Organization';
+      name: string;
+      url?: string;
+    };
   };
 }
 

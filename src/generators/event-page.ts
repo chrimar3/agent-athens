@@ -22,7 +22,8 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode, availabilityForEventStatus } from '../utils/schema-geo';
+import { classifySource, extractHost, hostToName } from '../utils/ticket-source-classifier';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
@@ -197,29 +198,82 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     };
   }
 
-  // Add pricing — isAccessibleForFree + complete offers for ALL events
+  // Add pricing — isAccessibleForFree + complete offers per Strategist 2026-04-29
   if (event.price.type === 'open' || event.price.type === 'donation') {
+    // Free / donation events: self-canonical event page is the only "buy" link.
+    // Venue is the responsible Organization for the Offer (Strategist Q3 Option D
+    // principle applied: venue is the de-facto provider when there's no merchant).
     schema.isAccessibleForFree = true;
     schema.offers = {
       '@type': 'Offer',
       'price': '0',
       'priceCurrency': getCurrencyCode(),
       'availability': 'https://schema.org/InStock',
-      'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`
+      'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
+      'seller': {
+        '@type': 'Organization',
+        'name': event.venue.name,
+        ...(event.venue.website ? { url: event.venue.website } : {})
+      }
     };
   } else {
+    // with-ticket
     schema.isAccessibleForFree = false;
-    const offerObj: Record<string, any> = {
-      '@type': 'Offer',
-      'priceCurrency': event.price.currency || getCurrencyCode(),
-      'availability': 'https://schema.org/InStock',
-      'url': event.ticketUrl || event.url || `${BASE_URL}/${urlPrefix}events/${eventSlug}/`
-    };
-    const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
-    if (priceStr !== '') {
-      offerObj.price = priceStr;
+    const availability = availabilityForEventStatus(schema.eventStatus);
+
+    if (availability.kind === 'omit_offer') {
+      // Past event (EventCompleted) — emit no offers block at all.
+      // Per Strategist 2026-04-29, the offer is gone (not Discontinued).
+    } else {
+      const ticketUrl = event.ticketUrl;
+      const classification = classifySource(ticketUrl);
+
+      let offersUrl: string | undefined;
+      let sellerHost: string | null = null;
+
+      if (classification === 'known_merchant') {
+        offersUrl = ticketUrl;
+        sellerHost = extractHost(ticketUrl);
+      } else if (classification === 'listing_aggregator' || classification === 'venue_direct_only') {
+        // Host is not a merchant — omit offers.url; venue becomes the seller.
+        offersUrl = undefined;
+      } else {
+        // 'unclassified' — emit ticket_url as-is and warn for next audit pass.
+        offersUrl = ticketUrl;
+        const host = extractHost(ticketUrl);
+        if (host) {
+          console.warn(`[offers.url] unclassified ticket source: ${host} (event ${event.id})`);
+        }
+      }
+
+      // Inline seller (no @id, no @graph — that's Sprint 3+).
+      const seller: Record<string, any> = sellerHost
+        ? {
+            '@type': 'Organization',
+            'name': hostToName(sellerHost),
+            'url': `https://${sellerHost}/`
+          }
+        : {
+            '@type': 'Organization',
+            'name': event.venue.name,
+            ...(event.venue.website ? { url: event.venue.website } : {})
+          };
+
+      const offerObj: Record<string, any> = {
+        '@type': 'Offer',
+        'priceCurrency': event.price.currency || getCurrencyCode(),
+        'availability': availability.value,
+        'seller': seller
+      };
+      if (offersUrl) {
+        offerObj.url = offersUrl;
+      }
+      const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
+      if (priceStr !== '') {
+        offerObj.price = priceStr;
+      }
+      schema.offers = offerObj;
     }
-    schema.offers = offerObj;
   }
 
   // Add image if available

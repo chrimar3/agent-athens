@@ -238,8 +238,15 @@ describe('availabilityForEventStatus', () => {
 // ── offers.validFrom removed ──────────────────────────────
 
 describe('offers.validFrom emission', () => {
-  test('paid event with ticket does NOT emit validFrom in offers', () => {
-    const jsonLd = generateEventSchema(sampleConcertWithTicket, 'el');
+  test('paid event with ticket does NOT emit validFrom in offers (when offers is present)', () => {
+    // sampleConcertWithTicket has 2025 dates → EventCompleted post-S3 → offers omitted entirely.
+    // Force a future date so the offers block is emitted, then assert validFrom is absent.
+    const futureEvent = {
+      ...sampleConcertWithTicket,
+      startDate: '2099-11-15T21:30:00+03:00',
+      endDate: '2099-11-16T00:00:00+03:00',
+    };
+    const jsonLd = generateEventSchema(futureEvent, 'el');
     const schema = JSON.parse(jsonLd);
     expect(schema.offers).toBeDefined();
     expect(schema.offers['@type']).toBe('Offer');

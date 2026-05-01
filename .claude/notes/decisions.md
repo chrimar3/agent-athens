@@ -1816,3 +1816,27 @@ S100b will then deliver `scripts/kpi-import-gsc.ts`, `scripts/kpi-import-ga4.ts`
 - S100b — KPI auth + automated importers (deferred per Path B)
 - S101a-d — cornerstone rewrites (will benefit from kpi.db being ready to capture amplification effects)
 - Post-I/O retro (~2026-05-26) — first manual-citation-log readout against baseline triggers
+
+## S100b — Banned-phrases YAML loader (2026-04-30)
+
+### Context
+ED delivered `config/banned-phrases.yaml` 2026-04-29 EOD as the intended single source of truth for editorial banned-phrase enforcement. Two consumers had hardcoded duplicates: EW prompt builders in `src/enrichment/description-generator.ts` (LAZY/FILLER constants + inline template-literal guidance) and F1 quality-gate in `src/enrichment/quality-gates.ts` (separate hardcoded `LAZY_ADJECTIVES`). S100b ships the loader + EW integration; F1 dedupe deferred to S100c due to a re-export cascade through the test surface.
+
+### Decisions
+
+| Decision | Rationale | Date |
+|---|---|---|
+| `yaml` package over `js-yaml` | yaml@2.x: ~50KB, zero transitive deps, MIT, modern TS types out-of-the-box. js-yaml drags `argparse`. The bun.lock diff was 3 lines, validating the "no transitives" claim. | 2026-04-30 |
+| `re:` prefix dispatch (literal vs regex) on contextual `phrase` field | Lets a single YAML schema cover both ASCII literal matching (EN, fast and readable) and Unicode regex matching (EL inflection coverage). Adding a new match mode requires a code change; adding rules is a config edit. | 2026-04-30 |
+| `banned_when` / `allowed_when` are English regardless of phrase language | F1's contextual judge (week 2) runs in a single Claude call whose working language is English. Operator-readable English context applies consistently across batches; Greek phrase recognition is Claude's job, rule application is the operator's. | 2026-04-30 |
+| Path-keyed `Map<string, T>` cache instead of single-slot (extends `editorial-content.ts` pattern) | Tests can pass an alternate fixture YAML without polluting the default cache. Costs ~3 lines vs single-slot; pays for itself the first time anyone tests edge cases without hand-editing ED's seed. | 2026-04-30 |
+| Graceful regex degradation at load time (warn + flip `isRegex: false` + continue) | A single seed typo from ED should not kill the loader. Bad regex falls back to literal substring match — degraded but operational; loud-warns so the typo gets fixed. | 2026-04-30 |
+| `console.warn` on YAML missing/parse failure (extends `editorial-content.ts` pattern) | `editorial-content.ts` silently returns empty on missing JSON — fine for vignettes. For banned phrases, silent absence means EW prompts ship without rules, which is invisibly dangerous. The noise is the point. | 2026-04-30 |
+| Loader pre-processes `\b` → Unicode-aware lookarounds at compile time, instead of migrating ED's seed YAML to explicit alternation | ECMAScript `\b` is ASCII-only even with `'u'`/`'v'` flag — ED's `\bζωντανή\b` would never match Greek text in JS. Per-runtime transformation is the right layer: seed stays universally readable; the loader handles the JS quirk. ED's seed Note 2 implicitly authorized this. If a Python F1 evaluator later consumes the same YAML, do NOT apply the transformation there. | 2026-04-30 |
+| F1 quality-gate dedupe deferred to S100c, not bundled into S100b | `tests/enrichment-v4-infrastructure.test.ts:18` imports `LAZY_ADJECTIVES` from `description-generator.ts` (re-export cascade). Removing the constants in S100b would break tests. Splitting the cascade unwind into its own session keeps S100b's blast radius small and lets the test surface change land cleanly. | 2026-04-30 |
+| EW injects EN section only today; loader still parses EL (future-proof, no extra cost) | EW currently runs EN-only (per "feedback_english_only_enrichment" memory). Loader parses both languages so EL activation later is just a `buildBannedPhrasesSection('el')` swap, not a loader rewrite. | 2026-04-30 |
+
+### Related sessions
+- S100b — Banned-phrases YAML loader + EW integration (this entry)
+- S100c — F1 quality-gate dedupe (deferred; must unwind `description-generator.ts` → `tests/enrichment-v4-infrastructure.test.ts` re-export contract)
+- ED reconciliation (out-of-band) — YAML EN absolute (21) is **not** a strict superset of `quality-gates.ts` hardcoded `LAZY_ADJECTIVES` (27); ED dropped some terms and promoted others to contextual. S100c must reconcile with ED, not silently union

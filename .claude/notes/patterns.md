@@ -1853,3 +1853,71 @@ If you only ship one, you have one failure-mode coverage. Two layered gates with
 
 - The "minimum viable checkpoint" framing (Path B) only works when manual logging carries the citation arc. If the watchdog window is short and manual logging cadence is too slow, the auth-pending importers are critical-path and the deferral hurts. S100's 4-week pre-I/O window + weekly Friday cadence + binary first-citation event makes Path B viable; tighter timelines would force Path A or Path C.
 - KPI databases inevitably grow some operational write patterns (insert-on-import). Watch for the database becoming a hot path for any user-facing query — if it does, it has crossed the line from "read-mostly" and needs operational tooling (backup script, migration runner, etc.) to match.
+
+---
+
+## Pattern: City-config currency single-source — known incomplete
+
+**Date:** 2026-04-30 (country/currency single-source session)
+
+**Context:** `src/utils/schema-geo.ts` now exports `getCountryCode()` and `getCurrencyCode()`, sourcing from `config/city-geodata.json` (`country.code`, `country.currency`). All 5 hardcoded `'GR'` sites and all 5 hardcoded `'EUR'` sites in **JSON-LD schema emitters** now route through the accessors. Diagnostic missed one EUR site (`src/templates/page.ts:417`) — found during execution and added to the refactor.
+
+**What's still hardcoded (intentional — different concern):**
+
+- `src/utils/normalize.ts` — 9 sites (lines 126, 148, 158, 168, 178, 188, 198, 217, 223). Price-string parser fallbacks; produce `{currency: 'EUR'}` on the in-memory `Price` object during scraping/import.
+- `src/db/database.ts:85` — `$price_currency: event.price.currency || "EUR"`. DB write fallback at the persistence boundary.
+
+**Why these stayed literal:** parser/persistence defaults vs. schema emission are different concerns. A parser fallback's job is to be a known-safe constant when input is missing — making it depend on config-loading order is a regression. Schema emitters, by contrast, run during build where failing-loud is fine and a single source of truth removes shotgun surgery when more cities land.
+
+**Rule of thumb after this session:**
+- **JSON-LD or microdata block** → `getCountryCode()` / `getCurrencyCode()` accessor.
+- **Default object spread, parser fallback, DB write** → keep the literal `'EUR'` / `'GR'`.
+- Easy to grep, easy to enforce in review.
+
+**Revisit trigger:** when Barcelona/Berlin (or any second city) configs land. At that point determine whether parser fallbacks should pull from the active city's config or stay as defensive literals. Until then, 10 `'EUR'` literals in `normalize.ts` + `database.ts` are intentional, not technical debt.
+
+**Why `validFrom` was removed in the same session:** `event.createdAt` was being emitted as the schema.org `offers.validFrom` value — but that's "when our DB row was created," not "when tickets went on sale." Wrong signal is worse than no signal. schema.org marks the field optional, no validator enforces it, zero tests asserted it. Future column `tickets_on_sale_at` will repopulate when scrapers can capture it. Strategist decision 2026-04-29.
+
+---
+
+## Pattern: Shared YAML config + thin TypeScript loader (with `\b` ASCII gotcha)
+
+**Date:** 2026-04-30 (S100b banned-phrases YAML loader)
+
+**Context:** `config/banned-phrases.yaml` (delivered by Editorial Director) became the single source of truth for editorial banned-phrase enforcement. `src/utils/load-banned-phrases.ts` mirrors `src/utils/editorial-content.ts` shape (module-level cache, `import.meta.dir` paths, try/catch → empty fallback) and adds three things specific to per-language rule packs. This is the loader convention to reuse for any future per-language rule set: F1 binary criteria, ED writing-guide rules, multi-city per-locale config.
+
+**Loader convention:**
+
+1. **YAML carries data, TypeScript carries dispatch logic.** Schema: `<root>.{en|el}.absolute` (flat list of strings) + `<root>.{en|el}.contextual` (objects with `phrase` + machine-readable context). Adding rules is a YAML edit; adding a *match mode* is a code change.
+2. **`re:` prefix dispatch.** A contextual entry's `phrase` is literal by default, OR a regex if prefixed with `re:`. One seed entry covers ~10 inflection forms in EL via a single regex while EN entries stay readable as literals. Two match modes, one schema, zero bloat.
+3. **Path-keyed `Map<string, T>` cache** instead of single-slot. Tests can pass an alternate fixture YAML without polluting the default cache. Costs ~3 lines vs `editorial-content.ts`'s single-slot pattern; pays for itself the first time someone wants to test edge cases without hand-editing ED's seed.
+4. **Graceful regex degradation at load time.** If a `re:` pattern fails `new RegExp()`, warn + flip `isRegex: false` + continue. A single seed typo doesn't kill the loader.
+5. **Loud fallback (extension to `editorial-content.ts` pattern).** `editorial-content.ts` silently returns empty when its JSON is missing — fine for vignettes. For banned phrases, silent absence means EW prompts ship without rules, which is invisibly dangerous. Loader `console.warn`s once on fallback. Worth the noise.
+
+**The `\b` ASCII gotcha (don't repeat this — JavaScript-specific):**
+
+ECMAScript `\b` is **ASCII-only even with the `u` or `v` flag.** `\w` (which `\b` is built on) only matches `[A-Za-z0-9_]` regardless of regex flags. So `\bζωντανή\b`, even with `'iu'`, never matches Greek text in JS. Python `re` and most other engines respect Unicode in `\b`; ED's seed assumed that behavior. The brief's "use 'iu' for Unicode `\b`" instruction was based on the same misconception — verify before trusting.
+
+**Workaround applied in the loader (preserves seed verbatim):**
+
+```typescript
+const UNICODE_WORD_BOUNDARY =
+  '(?:(?<=[\\p{L}\\p{N}_])(?![\\p{L}\\p{N}_])|(?<![\\p{L}\\p{N}_])(?=[\\p{L}\\p{N}_]))';
+function unicodifyBoundaries(pattern: string): string {
+  return pattern.replace(/\\b/g, UNICODE_WORD_BOUNDARY);
+}
+```
+
+Substitute `\b` → Unicode-aware boundary at compile time. `\p{L}` (Unicode letters) + `\p{N}` (numbers) + `_` covers the word-char concept across Greek + ASCII. Lookbehind/lookahead asserts a transition in either direction. Combined with `'u'` flag for Unicode case folding. ED's note 2 in the seed YAML implicitly authorized this transformation as an alternative to migrating the seed to explicit alternation.
+
+**Rule of thumb:**
+
+- Any `\b` in a JS regex that needs to match non-ASCII text → must be substituted at compile time, not left raw.
+- The seed YAML stays correct (patterns are universally readable). The loader handles the JS-specific quirk.
+- If the same YAML is later consumed by a Python F1 evaluator, **do not apply the substitution there** — Python `re` honors Unicode `\b` natively. The transformation is per-runtime, not per-seed.
+- For any future loader that may parse user-supplied regex (vs ED-curated): test with non-ASCII input early, even if all known seed entries are ASCII today.
+
+**Limitations:**
+
+- The Unicode-aware boundary is *approximate* — it treats anything in `\p{L}` ∪ `\p{N}` ∪ `_` as a "word char." Strict standards (e.g. UAX #29 word segmentation) are more nuanced. Fine for banned-phrase matching across natural-language editorial copy; not appropriate for tokenizer-grade work.
+- Cache key is the resolved path string — symlinks and `./foo` vs `foo` would create separate cache slots. Acceptable for a config loader; would matter for a hot-path file cache.

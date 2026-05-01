@@ -20,6 +20,12 @@ export interface SchemaValidationResult {
   slug: string;
   errors: string[];
   warnings: string[];
+  /**
+   * INFO-level signals. Surfaced for awareness; not blocking, not warning.
+   * Per Strategist 2026-04-29: `offers.url` is INFO when omitted (legitimate
+   * for listing-aggregator and venue-direct-only ticket sources).
+   */
+  info?: string[];
 }
 
 export interface SchemaValidationSummary {
@@ -64,18 +70,19 @@ function isPlaceholder(value: unknown): boolean {
 export function validateSchemaCompleteness(htmlContent: string, eventSlug: string): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
+  const info: string[] = [];
 
   // Extract JSON-LD
   const match = htmlContent.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
   if (!match) {
-    return { slug: eventSlug, errors: ['No JSON-LD script tag found'], warnings: [] };
+    return { slug: eventSlug, errors: ['No JSON-LD script tag found'], warnings: [], info: [] };
   }
 
   let schema: Record<string, any>;
   try {
     schema = JSON.parse(match[1]);
   } catch {
-    return { slug: eventSlug, errors: ['Failed to parse JSON-LD'], warnings: [] };
+    return { slug: eventSlug, errors: ['Failed to parse JSON-LD'], warnings: [], info: [] };
   }
 
   // ── Mandatory fields (ERROR if missing) ──────────────────────────
@@ -112,7 +119,10 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
     errors.push('location.name is missing or empty');
   }
 
-  if (!schema.offers) {
+  // Conditional offers presence: required UNLESS event is completed.
+  // Per Strategist 2026-04-29, EventCompleted events legitimately have no Offer.
+  const isCompleted = schema.eventStatus === 'https://schema.org/EventCompleted';
+  if (!schema.offers && !isCompleted) {
     errors.push('offers is missing');
   }
 
@@ -128,17 +138,47 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
     errors.push('eventAttendanceMode is missing');
   }
 
-  // Price format: must be numeric, not contain currency symbols
-  if (schema.offers && isNonEmpty(schema.offers.price)) {
-    const price = schema.offers.price;
-    if (/[€$£¥]/.test(price) || (price !== '' && isNaN(Number(price)))) {
-      errors.push(`offers.price must be numeric, got "${price}"`);
-    }
-  }
+  // Offers structural checks (only when offers IS present).
+  // Sprint 1 Session 3 — Strategist 2026-04-29 spec.
+  if (schema.offers && typeof schema.offers === 'object') {
+    const offers = schema.offers;
 
-  // Empty price string is invalid — should be numeric or omitted entirely
-  if (schema.offers && schema.offers.price === '') {
-    warnings.push('offers.price is empty (should be numeric or omitted)');
+    // Price format: must be numeric, not contain currency symbols
+    if (isNonEmpty(offers.price)) {
+      const price = offers.price;
+      if (/[€$£¥]/.test(price) || (price !== '' && isNaN(Number(price)))) {
+        errors.push(`offers.price must be numeric, got "${price}"`);
+      }
+    }
+
+    // Empty price string is invalid — should be numeric or omitted entirely
+    if (offers.price === '') {
+      warnings.push('offers.price is empty (should be numeric or omitted)');
+    }
+
+    if (!isNonEmpty(offers.priceCurrency)) {
+      errors.push('offers.priceCurrency is missing');
+    }
+
+    if (!isNonEmpty(offers.availability)) {
+      errors.push('offers.availability is missing');
+    }
+
+    // seller: must be Organization-typed object with non-empty name
+    const seller = offers.seller;
+    const sellerIsValid =
+      seller !== null &&
+      typeof seller === 'object' &&
+      seller['@type'] === 'Organization' &&
+      isNonEmpty(seller.name);
+    if (!sellerIsValid) {
+      errors.push('offers.seller is missing or not an Organization with name');
+    }
+
+    // offers.url: INFO-level — surfaced for awareness, not blocking, not warning
+    if (!isNonEmpty(offers.url)) {
+      info.push('offers.url is omitted (legitimate for non-merchant ticket sources)');
+    }
   }
 
   // ── Data quality checks (WARNING if missing) ─────────────────────
@@ -181,7 +221,7 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
     }
   }
 
-  return { slug: eventSlug, errors, warnings };
+  return { slug: eventSlug, errors, warnings, info };
 }
 
 /**

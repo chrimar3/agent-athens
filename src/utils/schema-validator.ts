@@ -10,11 +10,16 @@ export interface SchemaValidationResult {
   url: string;
   missing: string[];
   warnings: string[];
+  info: string[];
 }
 
 /**
  * Mandatory fields — Google penalizes partial JSON-LD.
  * Dot notation for nested paths (e.g. 'location.name').
+ *
+ * Note: `offers` is checked conditionally below — required for non-completed
+ * events only. Per Strategist 2026-04-29, EventCompleted events legitimately
+ * have no Offer (the event is over; nothing to sell).
  */
 const MANDATORY_FIELDS = [
   '@context',
@@ -30,19 +35,27 @@ const MANDATORY_FIELDS = [
   'location.name',
   'location.address',
   'isAccessibleForFree',
-  'offers',
   'inLanguage',
 ];
 
 /**
- * Recommended fields — informational only, not blocking.
+ * Recommended fields — surface as warnings if missing, but not blocking.
  */
 const RECOMMENDED_FIELDS = [
   'image',
   'endDate',
   'location.geo',
-  'offers.url',
   'performer',
+];
+
+/**
+ * INFO-level fields — surfaced for awareness but not blocking and not warning.
+ * Per Strategist 2026-04-29, `offers.url` is an INFO signal: omitted when the
+ * ticket source is a listing aggregator or venue-direct-only host (the venue,
+ * not the host, is the seller in those cases).
+ */
+const INFO_FIELDS = [
+  'offers.url',
 ];
 
 /**
@@ -65,7 +78,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
  * Gracefully handles invalid JSON.
  */
 export function validateEventSchema(jsonLd: string, url: string): SchemaValidationResult {
-  const result: SchemaValidationResult = { url, missing: [], warnings: [] };
+  const result: SchemaValidationResult = { url, missing: [], warnings: [], info: [] };
 
   let schema: Record<string, unknown>;
   try {
@@ -87,10 +100,39 @@ export function validateEventSchema(jsonLd: string, url: string): SchemaValidati
     }
   }
 
+  // Conditional offers check: required UNLESS event is completed.
+  const isCompleted = schema.eventStatus === 'https://schema.org/EventCompleted';
+  const offersValue = schema.offers;
+  if (!isCompleted && (offersValue === undefined || offersValue === null || offersValue === '')) {
+    result.missing.push('offers');
+  }
+
+  // Offers structural checks (only when offers is present).
+  if (offersValue && typeof offersValue === 'object') {
+    const offers = offersValue as Record<string, unknown>;
+    const seller = offers.seller;
+    const sellerIsValid =
+      seller !== null &&
+      typeof seller === 'object' &&
+      (seller as Record<string, unknown>)['@type'] === 'Organization' &&
+      typeof (seller as Record<string, unknown>).name === 'string' &&
+      ((seller as Record<string, unknown>).name as string).trim().length > 0;
+    if (!sellerIsValid) {
+      result.missing.push('offers.seller');
+    }
+  }
+
   for (const field of RECOMMENDED_FIELDS) {
     const value = getNestedValue(schema, field);
     if (value === undefined || value === null || value === '') {
       result.warnings.push(field);
+    }
+  }
+
+  for (const field of INFO_FIELDS) {
+    const value = getNestedValue(schema, field);
+    if (value === undefined || value === null || value === '') {
+      result.info.push(field);
     }
   }
 

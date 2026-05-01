@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug } from "../event-page";
+import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema } from "../event-page";
 import {
   sampleConcert,
   sampleConcertWithTicket,
@@ -463,5 +463,176 @@ describe("Event Detail Page — Calendar (.ics) export button", () => {
     expect(html).toContain('aria-label="Ημερολόγιο"');
     const enHtml = renderEventDetailPage(sampleConcert, [], 'en');
     expect(enHtml).toContain('aria-label="Calendar"');
+  });
+});
+
+// ─── Offers emission (Sprint 1 Session 3 — Strategist 2026-04-29) ─────
+
+describe("Event Detail Page — offers emission", () => {
+  const parse = (event: Event, locale: 'el' | 'en' = 'el') =>
+    JSON.parse(generateEventSchema(event, locale));
+
+  // Fixture A — past event (EventCompleted): NO offers key
+  test("with-ticket past event: omits offers entirely", () => {
+    const pastEvent: Event = {
+      ...sampleConcertWithTicket,
+      startDate: '2025-01-01T20:00:00+03:00',
+      endDate: '2025-01-01T23:00:00+03:00',
+    };
+    const schema = parse(pastEvent);
+    expect(schema.eventStatus).toBe('https://schema.org/EventCompleted');
+    expect(schema.offers).toBeUndefined();
+    expect(schema.isAccessibleForFree).toBe(false);
+  });
+
+  // Fixture B — listing_aggregator (athinorama.gr): offers WITHOUT url, venue is seller
+  test("with-ticket future event on listing_aggregator host: omits offers.url, venue is seller", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.athinorama.gr/music/gig/some-event-12345/',
+      venue: {
+        ...sampleConcertWithTicket.venue,
+        website: 'https://halfnote.gr/',
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.url).toBeUndefined();
+    expect(schema.offers.availability).toBe('https://schema.org/InStock');
+    expect(schema.offers.priceCurrency).toBe('EUR');
+    expect(schema.offers.seller).toEqual({
+      '@type': 'Organization',
+      name: event.venue.name,
+      url: 'https://halfnote.gr/',
+    });
+  });
+
+  // Fixture B variant — venue lacks website: seller has name only
+  test("with-ticket on listing_aggregator with venue lacking website: seller has name only", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.athinorama.gr/x/y/',
+      venue: {
+        ...sampleConcertWithTicket.venue,
+        website: undefined,
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers.seller).toEqual({
+      '@type': 'Organization',
+      name: event.venue.name,
+    });
+    expect(schema.offers.seller.url).toBeUndefined();
+  });
+
+  // Fixture C — known_merchant (more.com): offers.url + Organization seller from host
+  test("with-ticket future event on known_merchant host: emits offers.url + Organization seller derived from host", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.more.com/gr-el/music/some-event/',
+    };
+    const schema = parse(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.url).toBe('https://www.more.com/gr-el/music/some-event/');
+    expect(schema.offers.availability).toBe('https://schema.org/InStock');
+    expect(schema.offers.priceCurrency).toBe('EUR');
+    expect(schema.offers.seller).toEqual({
+      '@type': 'Organization',
+      name: 'More.com',
+      url: 'https://more.com/',
+    });
+  });
+
+  // Venue-direct-only host (halfnote.gr): omits offers.url, venue is seller
+  test("with-ticket on venue_direct_only host: omits offers.url, venue is seller", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.halfnote.gr/en/calendar/',
+      venue: {
+        ...sampleConcertWithTicket.venue,
+        website: 'https://halfnote.gr/',
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers.url).toBeUndefined();
+    expect(schema.offers.seller.name).toBe(event.venue.name);
+  });
+
+  // Fixture D — unclassified host: emits offers.url + console.warn
+  test("with-ticket on unclassified host: emits offers.url + console.warn", () => {
+    const warnings: string[] = [];
+    const originalWarn = console.warn;
+    console.warn = (msg: string) => warnings.push(msg);
+    try {
+      const event: Event = {
+        ...sampleConcertWithTicket,
+        startDate: futureStartDate,
+        ticketUrl: 'https://example-not-in-config.com/event/123',
+      };
+      const schema = parse(event);
+      expect(schema.offers.url).toBe('https://example-not-in-config.com/event/123');
+      expect(warnings.some(w => w.includes('[offers.url] unclassified ticket source'))).toBe(true);
+      expect(warnings.some(w => w.includes('example-not-in-config.com'))).toBe(true);
+      expect(warnings.some(w => w.includes(event.id))).toBe(true);
+    } finally {
+      console.warn = originalWarn;
+    }
+  });
+
+  // Free events: venue-as-seller per Strategist Q3 Option D (venue is the responsible
+  // Organization when there's no merchant). 61 free events post-S3-checkpoint had
+  // no seller; this test guards against regression.
+  test("free (open) event: venue is the seller (Strategist Q3 Option D principle)", () => {
+    const event: Event = {
+      ...sampleFreeExhibition,
+      startDate: futureStartDate,
+      endDate: new Date(Date.now() + 86400000 * 30).toISOString(),
+      venue: {
+        ...sampleFreeExhibition.venue,
+        website: 'https://example-venue.gr/',
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.price).toBe('0');
+    expect(schema.offers.url).toMatch(/^https:\/\/agentathens\.com\/events\//);
+    expect(schema.offers.seller).toEqual({
+      '@type': 'Organization',
+      name: event.venue.name,
+      url: 'https://example-venue.gr/',
+    });
+  });
+
+  test("free event without venue website: seller has name only", () => {
+    const event: Event = {
+      ...sampleFreeExhibition,
+      startDate: futureStartDate,
+      endDate: new Date(Date.now() + 86400000 * 30).toISOString(),
+      venue: {
+        ...sampleFreeExhibition.venue,
+        website: undefined,
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers.seller).toEqual({
+      '@type': 'Organization',
+      name: event.venue.name,
+    });
+    expect(schema.offers.seller.url).toBeUndefined();
+  });
+
+  // validFrom remains absent (S1 + S3 sanity)
+  test("validFrom is never emitted in any offers block", () => {
+    const futureWithTicket: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.more.com/x/',
+    };
+    const schema = parse(futureWithTicket);
+    expect(schema.offers?.validFrom).toBeUndefined();
   });
 });

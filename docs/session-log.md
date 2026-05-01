@@ -3113,5 +3113,36 @@ Stepwise execution of the plan. Notable deviations:
 - **Post-I/O retro** — ~2026-05-26. First measurable comparison against baseline. Triggers documented in `specs/s100-kpi-baseline-2026-04-28.md`.
 - **/en/exhibitions.html absence** — joins 3 other EN-route absences (`/en/tomorrow`, `/en/this-week`, `/en/next-month`); routed to S101b Step 0 EN-mirror generation audit.
 
+### Session 100b — Banned-phrase YAML Loader (EW integration only) — 2026-04-30
 
+**Plan:** Land the shared TypeScript loader for `config/banned-phrases.yaml` (delivered by ED 2026-04-29 EOD) and wire it into both EW prompt builders. Make `config/banned-phrases.yaml` the single source of truth for the EW surface today; F1 quality-gate dedupe deferred to S100c due to `tests/enrichment-v4-infrastructure.test.ts:18` re-export cascade. Source: approved plan via Phase 4 of S100b briefing; pre-flight verification confirmed all brief assumptions except line numbers in `quality-gates.ts` (off-by-2) and entry count in F1's hardcoded list (27 vs claimed 21).
+
+**What happened:**
+- Pre-flight (read-only) — verified YAML (205 lines, schema matches), `editorial-content.ts` pattern source (92 lines), no existing yaml/js-yaml deps, `description-generator.ts` function start lines (L148 buildPrompt + L201 buildPremiumPrompt match brief), `tests/` flat layout convention, `enrichment-v4-infrastructure.test.ts:18` re-export confirmed. Found two deltas: `quality-gates.ts` LAZY_ADJECTIVES at L106–119 (27 entries) not L104–115 (21); YAML EN absolute is not a strict superset of F1's hardcoded list.
+- Step 1 — `bun add yaml` → yaml@2.8.3 under `dependencies`. bun.lock diff was 3 lines (zero transitive deps confirmed). Commit `ae36b7e05`.
+- Step 2 — `src/utils/load-banned-phrases.ts` (~150 LOC). Mirrors `editorial-content.ts` shape but uses path-keyed `Map<string, T>` cache (Option A — explicitly chosen over single-slot for test fixture friendliness). Three exports per brief: `loadBannedPhrases(yamlPath?)`, `checkAbsoluteMatch(text, entries)`, `compileContextualRegex(entry)`. Sanity scratch returned exactly the brief's expected counts (75 / 9 / 21 / 54 / 6 / 3 / 3).
+- **Mid-step discovery** — empirical Bun test of brief's `'iu'` flag claim revealed ECMAScript `\b` is ASCII-only regardless of `'u'` or `'v'` flag. ED's seed regex `\bζωντανή\b` would never match Greek text in JS. Loader compile-time substitution: `\b` → `(?:(?<=[\p{L}\p{N}_])(?![\p{L}\p{N}_])|(?<![\p{L}\p{N}_])(?=[\p{L}\p{N}_]))`. Seed YAML preserved verbatim. Per-runtime transformation; do NOT apply if a Python F1 evaluator later consumes the same YAML.
+- Step 3 — `tests/banned-phrases-loader.test.ts` (8 tests, ~75 LOC). 8/8 pass first-try. Commit `4ff7103d6`.
+- Step 4 — `src/enrichment/description-generator.ts`: added import + module-level `_bannedPhrases` cache + `buildBannedPhrasesSection(language)` helper between FILLER_PHRASES constant and Standard prompt-building section (matching the file's existing `// =====` divider style). Removed inline FILLER bullet in `buildPrompt()` and inline `NO lazy adjectives` line in `buildPremiumPrompt()`; injected `${buildBannedPhrasesSection('en')}` into both. `LAZY_ADJECTIVES` (L114) and `FILLER_PHRASES` (L128) exports preserved. Half-landing grep guard clean (`amazing|incredible|vibrant` only in constants, never in builder template literals). `--prompts --count=1` for both standard + premium tiers shows the new section. Commit `577c39a36`.
+- Step 5 — `bun test`: 1761 / 1 skip / 0 fail (parity with pre-S100b plus 8 new tests). `bunx tsc --noEmit`: exits 0.
+
+**Verified:**
+- 3 commits in order: yaml dep → loader+tests → EW integration. Stage-by-path; unrelated WIP from country/currency session and ticket-source-classification feature untouched.
+- Loader counts match brief expected totals exactly.
+- All 8 self-tests pass without weakening (Greek inflection coverage, EN absolute positive + negative, EN contextual judge-prompt context preserved).
+- EW prompt assembly verified at both tiers; spot phrases appear once per phrase (no inline duplication).
+- Full test suite: 1761 pass, 0 fail (including 8 new). No regression in `enrichment-v4-infrastructure.test.ts` or `description-generator.test.ts`.
+- `bunx tsc --noEmit` exits 0.
+
+**Learnings:**
+- `patterns.md`: shared YAML config + thin TypeScript loader convention (mirror `editorial-content.ts`, add path-keyed cache + `re:` dispatch + graceful regex degradation + loud fallback). The `\b` ASCII gotcha is documented as a JavaScript-specific quirk to substitute at compile time, with the exact transformation function and per-runtime rule of thumb.
+- `decisions.md`: 9 entries — `yaml` over `js-yaml`; `re:` prefix dispatch; English `banned_when`/`allowed_when` regardless of phrase language; path-keyed cache (Option A) over single-slot; graceful regex degradation; `console.warn` extension to `editorial-content.ts` pattern; loader-side `\b` substitution over seed migration; F1 dedupe deferred + reason; EW EN-only today + EL deferred.
+- `known-issues.md`: 1 new entry (🟡 F1 Quality-Gate Hardcodes LAZY_ADJECTIVES — Diverges from YAML Source of Truth). Explicit ED-reconciliation prerequisite documented; silent union would lose ED's prior curation work.
+- No `mistakes.md` entry — no test failures surfaced any seed bug.
+
+**Open items:**
+- **S100c — F1 quality-gate dedupe.** Replace `quality-gates.ts:106-119` LAZY_ADJECTIVES with `loadBannedPhrases()` call; unwind `description-generator.ts` → `tests/enrichment-v4-infrastructure.test.ts:18` re-export; remove the EW-only re-export. Prerequisite: ED reconciliation on the 15-term gap between F1's hardcoded 27 and YAML's 21.
+- **ED reconciliation (out-of-band, before S100c)** — YAML EN absolute (21) is not a strict superset of F1's hardcoded `LAZY_ADJECTIVES` (27). Confirm whether the 15 dropped terms (`fantastic`, `wonderful`, `great`, `excellent`, `perfect`, `spectacular`, `extraordinary`, `exceptional`, `immersive`, `remarkable`, `phenomenal`, `unparalleled`, `transcendent`, `awe-inspiring`, `spellbinding`) are intentional drops or should be re-added to the seed.
+- **EL EW activation** — loader already parses EL; switching EW to inject `buildBannedPhrasesSection('el')` is a one-line change when the broader EL enrichment policy unfreezes.
+- **Brief verification habit** — the brief's `'iu'` flag claim was empirically wrong for JavaScript. Adds another data point to the "verify path/assumption references in briefs against actual repo behavior before proceeding" pattern (now 4 mismatches: S71, S82, S95, S100b).
 

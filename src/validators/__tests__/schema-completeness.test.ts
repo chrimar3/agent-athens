@@ -26,6 +26,12 @@ function makeValidSchema(overrides: Record<string, unknown> = {}): Record<string
       'price': '15',
       'priceCurrency': 'EUR',
       'availability': 'https://schema.org/InStock',
+      'url': 'https://example.com/tickets',
+      'seller': {
+        '@type': 'Organization',
+        'name': 'Half Note Jazz Club',
+        'url': 'https://halfnote.gr/',
+      },
     },
     'location': {
       '@type': 'MusicVenue',
@@ -211,6 +217,66 @@ describe('validateSchemaCompleteness', () => {
       (schema.location as Record<string, any>).address.streetAddress = 'N/A';
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'na-addr');
       expect(result.warnings.some(w => w.includes('placeholder'))).toBe(true);
+    });
+  });
+
+  describe('offers contract (Sprint 1 Session 3 — Strategist 2026-04-29)', () => {
+    test('EventCompleted with NO offers does NOT flag offers as missing', () => {
+      const schema = makeValidSchema({ eventStatus: 'https://schema.org/EventCompleted' });
+      delete schema.offers;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'past-event');
+      expect(result.errors.some(e => e === 'offers is missing')).toBe(false);
+    });
+
+    test('EventScheduled with NO offers DOES flag offers as missing (regression-guard)', () => {
+      const schema = makeValidSchema({ eventStatus: 'https://schema.org/EventScheduled' });
+      delete schema.offers;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'future-event');
+      expect(result.errors).toContain('offers is missing');
+    });
+
+    test('offers present but missing seller → ERROR', () => {
+      const schema = makeValidSchema();
+      delete (schema.offers as Record<string, any>).seller;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-seller');
+      expect(result.errors.some(e => e.includes('seller'))).toBe(true);
+    });
+
+    test('offers.seller as a non-Organization shape (string) → ERROR', () => {
+      const schema = makeValidSchema();
+      (schema.offers as Record<string, any>).seller = 'just-a-string';
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'bad-seller-shape');
+      expect(result.errors.some(e => e.includes('seller'))).toBe(true);
+    });
+
+    test('offers.seller as Organization without name → ERROR', () => {
+      const schema = makeValidSchema();
+      (schema.offers as Record<string, any>).seller = { '@type': 'Organization' };
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'seller-no-name');
+      expect(result.errors.some(e => e.includes('seller'))).toBe(true);
+    });
+
+    test('offers present but missing offers.url → INFO (not WARN, not FAIL)', () => {
+      const schema = makeValidSchema();
+      delete (schema.offers as Record<string, any>).url;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-offers-url');
+      expect(result.errors.some(e => e.includes('offers.url'))).toBe(false);
+      expect(result.warnings.some(w => w.includes('offers.url'))).toBe(false);
+      expect((result.info ?? []).some(i => i.includes('offers.url'))).toBe(true);
+    });
+
+    test('offers missing priceCurrency → ERROR', () => {
+      const schema = makeValidSchema();
+      delete (schema.offers as Record<string, any>).priceCurrency;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-currency');
+      expect(result.errors.some(e => e.includes('priceCurrency'))).toBe(true);
+    });
+
+    test('offers missing availability → ERROR', () => {
+      const schema = makeValidSchema();
+      delete (schema.offers as Record<string, any>).availability;
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-availability');
+      expect(result.errors.some(e => e.includes('availability'))).toBe(true);
     });
   });
 

@@ -70,6 +70,15 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+### F1 Quality-Gate Hardcodes LAZY_ADJECTIVES (Diverges from YAML Source of Truth)
+**Severity:** 🟡
+**First seen:** 2026-04-30 (S100b post-mortem; pre-existing in production)
+**Frequency:** Every F1 quality-gate run uses the divergent list
+**Symptoms:** `src/enrichment/quality-gates.ts:106-119` hardcodes `LAZY_ADJECTIVES` with **27 entries**. `config/banned-phrases.yaml` (now the intended single source of truth, consumed by EW since S100b) has **21 EN absolute entries** and is **not a strict superset** of the F1 list. ED's seed deliberately drops some terms (`fantastic`, `wonderful`, `great`, `excellent`, `perfect`, `spectacular`, `extraordinary`, `exceptional`, `immersive`, `remarkable`, `phenomenal`, `unparalleled`, `transcendent`, `awe-inspiring`, `spellbinding`) and promotes others to contextual (`world-class`, `iconic`, `legendary`). EW prompts and F1 scoring now reference different banned-phrase lists — the curation philosophy split is live but unreconciled.
+**Workaround:** None required short-term — both surfaces work in isolation and both block the most egregious terms (`amazing`, `incredible`, `vibrant`, `breathtaking`, `unforgettable`, `mesmerizing`, `captivating`, `stunning`). The divergence affects mid-tier judgment calls, not floor-level quality.
+**Fix plan:** S100c — replace the hardcoded array in `quality-gates.ts:106-119` with a `loadBannedPhrases()` call. Then unwind the `tests/enrichment-v4-infrastructure.test.ts:18` re-export from `description-generator.ts` so the EW-only re-export can be removed. Reconcile with ED on the 15-term gap **before** deletion — silent union (taking the YAML as authoritative and dropping F1's 15 extras) would lose ED's prior curation work; ED needs to confirm what's intentional vs what should be re-added to the seed.
+**Status:** 🟡 Open — tracked for S100c with explicit ED-reconciliation prerequisite
+
 ### Venue-Index Page (`/venues/`) Emits No JSON-LD
 **Severity:** 🟢
 **First seen:** 2026-04-28 (S100a audit surfaced this; pre-existing in production)
