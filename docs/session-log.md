@@ -3545,3 +3545,43 @@ not by S103).
 **Open items (not session blockers):**
 - Exhibition 63% pass-rate root cause investigation — separate session
 - Strategist heads-up on watchpoint count math (instance 4+ across both Projects, codification activation likely earned)
+
+### Session 105 — /api/events.json Schema.org DataFeed (Sprint 2 Component A) — 2026-05-02
+
+**Plan:** Ship /api/events.json as additive Schema.org DataFeed endpoint per Strategist 2026-05-02 Q-A1 + Q-A2 locks. Discovery via homepage alternate-link + llms.txt bullet (sitemap-index infeasible per spec). Validator extends; Component D reporter flips datafeed_level to "measured."
+
+**What happened:**
+- Pre-flight (specs/component-a-preflight.md, 2026-05-02) verified all integration sites against actual src/. Step 0 confirmed values still held; no path drift.
+- generateEventSchema refactored: split into buildEventSchemaObject (returns object) + generateEventSchema = obj → JSON.stringify wrapper. Existing callers receive byte-identical string output. DataFeed reuses object form directly.
+- src/generators/datafeed.ts shipped: buildDataFeed(events, locale='el') + writeDataFeed wrapper. Sprint 1 three-lane seller logic preserved through the refactor.
+- DataFeed write block placed in discovery files section (sibling of llms.txt + robots.txt) rather than adjacent to /api/index.json — co-locates agent-discovery surfaces by semantic role.
+- Homepage alternate-link added at src/templates/page.ts:128 conditional on url === 'index'. Hub pages do not render the link (regression-guard test).
+- llms.txt bullet added inside existing JSON API section per Strategist Q-A4 lock.
+- schema-completeness.ts validateDataFeed extension: validates @type, @context, name, description, dateModified, dataFeedElement; routes via datafeed:events slug prefix.
+- printSchemaSummary breakdown line patched: was misclassifying datafeed: slugs as events via negative-match filter at line 497. Strictly additive correctness fix.
+- completeness-reporter.ts: new datafeed_level layer (measured at ship), new top-level datafeed aggregate alongside events/hubs/venues.
+
+**Tests:** 1841 pass / 0 fail (+31 new). tsc clean.
+
+**Build verification:**
+- /api/events.json: 16 MB raw, 7,451 events (Greek canonical locale)
+- 293-event gap (DB-pageable 7,744 vs DataFeed 7,451) is classifyEventLifecycle discrepancy from pre-flight §12 — not a Component A concern, separate audit pending
+- Aggregate completeness: 7736/7975 (97%), Component D baseline preserved (+1/+1 from natural daily drift), 0 errors, 239 warnings
+- Discovery surfaces: homepage alternate-link present in dist/index.html, hub pages clean, llms.txt contains "Schema.org DataFeed" bullet
+- Layer surface: event_level + offer_level + datafeed_level measured; place_level + aria_level stubbed for B/C
+
+**Commit:** 118bc810c (12 files, +410/-15). Not pushed.
+
+**Execution decisions worth recording:**
+- DataFeed write site: discovery files block, not adjacent to /api/index.json. Co-locates by semantic role (agent-discovery surfaces) rather than file-path adjacency.
+- llms.txt: no dedicated unit test (pure template literal; grep regression-guard sufficient).
+- Pre-flight spec (specs/component-a-preflight.md) left uncommitted: prior-session work product, belongs to its own commit if it ships.
+
+**Learnings:**
+- Activated discipline rule paying off cleanly: pre-flight caught two plan-blocking findings (Q-A1 endpoint contract, Q-A2 layer surface) before plan-write, plus seven operational findings. Rule operating de facto on both sides now.
+- Negative-match filter pattern (printSchemaSummary line 497) is fragile against new slug prefix expansion. Worth flagging — Sprint 3 work that adds performer: or organizer: slug prefixes will hit the same class of issue.
+- generateEventSchema refactor (split into object-builder + stringifier) was the right packaging — folded into Component A first step rather than fragmented into separate session. Existing callers unchanged; new consumer wraps cleanly.
+
+**Open items:**
+- 293-event gap (pre-flight §12) and exhibition 63% pass-rate gap (Component D finding) remain open investigations. Both surfaced from measurement infrastructure; both flagged for separate audit sessions when scope and cadence allow.
+- Component C (ARIA audit) next per Strategist locked sequencing (D → A → C → B).

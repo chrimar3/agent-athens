@@ -2142,3 +2142,28 @@ resolved URLs without further code changes.
 **Connects to:** "Per-EventType Schema Completeness Reporting" (2026-05-02), "Schema Completeness Validator" (S26), Variable Enrichment Matrix (Editorial 2026-03-02).
 
 **Status:** Open — investigation queued.
+
+## 2026-05-02 — /api/events.json Schema.org DataFeed (Sprint 2 Component A)
+
+**Context:** Sprint 2 needs DataFeed surface for AI-agent discovery. Existing /api/index.json serves JS clients via alternate-link contract at page.ts:127 (internal-model + Schema.org annotations, 56KB hybrid shape). DataFeed needs different consumer profile (clean Schema.org envelope, AI agents).
+
+**Decision:** Ship /api/events.json as additive new endpoint with full Schema.org DataFeed envelope. /api/index.json untouched.
+
+**Architecture:**
+- Endpoint: /api/events.json, ~16 MB raw / ~2 MB gzipped (7,451 events × ~2,185 bytes/event JSON-LD)
+- Locale: canonical Greek ('el') for dataFeedElement[]
+- Discovery: homepage <link rel="alternate" type="application/ld+json"> + llms.txt single bullet. Sitemap-index infeasible per sitemaps.org spec.
+- Build pipeline: writeJsonApiIfChangedSync via meta.lastUpdate strip (S93). Schema.org dateModified mirrors timestamp.
+- Validation: schema-completeness.ts validateDataFeed checks mandatory fields; routes via datafeed:events slug prefix.
+
+**Layer surface (per Strategist Q-A2):** new datafeed_level layer in build-completeness.json. Separate axis from event_level (per-event coverage) — DataFeed-specific concerns are per-feed measurements. Lumping would conflate two unrelated quality dimensions.
+
+**Refactor:** generateEventSchema split into buildEventSchemaObject (returns object) + thin stringifier wrapper. DataFeed consumes object form directly. Existing string callers unchanged.
+
+**Reasoning:** Two consumers, two endpoints, two semantic roles. /api/index.json serves alternate-link contract for JS clients. /api/events.json serves Schema.org DataFeed for AI agents. Breaking the alternate-link contract (reshaping /api/index.json) would carry silent BC risk; additive endpoint is the safe path.
+
+**Pre-flight evidence (specs/component-a-preflight.md):** /api/index.json wired into every page via alternate-link at page.ts:127. Existing consumers exist; zero-consumer assumption disconfirmed. Q2 lock from earlier confirmed correct.
+
+**Status:** Active (mechanism shipped 2026-05-02, commit 118bc810c).
+
+**Connects to:** "Per-EventType Schema Completeness Reporting" (Component D, 2026-05-02), "Schema.org Offers Implementation Spec" (Sprint 1, 2026-04-28), "Canonical Entity Graph" (Sprint 1, 2026-04-28).

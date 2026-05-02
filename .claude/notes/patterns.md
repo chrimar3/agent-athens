@@ -2271,3 +2271,64 @@ When an array's contents must mirror a TypeScript union (ordered iteration over 
 **Watchpoint** — three instances of "mechanical contract enforcement at type-level beats human discipline at edit-time." If a fourth instance surfaces with the same shape, codify.
 
 **Possibly the same meta-pattern as cross-module SoT watchpoint** (filed 2026-05-XX, same instance count). Whether they're one rubric or two becomes clear at the next instance — wait to fuse.
+
+## Build-completeness layer extension (pattern, 2026-05-02)
+
+Component D's build-completeness.json artifact established a layered measurement surface with status flags ("measured" / "not_measured"). Component A demonstrates the layer-extension pattern: new measurement axes ship as new layers, not as extensions of existing layers.
+
+**Why new layer beats extending an existing one:**
+- event_level measures per-event JSON-LD coverage (each Event page has valid schema). DataFeed measures per-feed coverage (mandatory fields populated, alternate-link wired, llms.txt updated). Different axes.
+- Conflating would hide signal — same way single aggregate hid the exhibition pass-rate gap (Component D finding 2026-05-02).
+- Pattern compounds: Sprint 3 multi-merchant federation gets its own layer; Sprint 4 work gets its own layer; etc.
+
+**Layer growth path observed:**
+- Sprint 2 D: event_level + offer_level (measured) + place_level + aria_level (stubbed)
+- Sprint 2 A: + datafeed_level (measured)
+- Sprint 2 B: place_level → measured
+- Sprint 2 C: aria_level → measured
+- Sprint 3+: future layers stub-then-measure
+
+**Discipline test:** add new layer when measurement axis is genuinely new. Extend existing layer when measurement is sub-dimension of existing one. The decision question: would conflating hide signal?
+
+**Instances:**
+1. Component D: established the layer surface (commit b6274644b)
+2. Component A: extended with datafeed_level (commit 118bc810c)
+
+Two instances; if Component B or C adds another layer cleanly, that's instance 3 and the pattern is established beyond first-of-its-kind.
+
+## Verification artifacts ship separately from implementation (watchpoint, 2026-05-02)
+
+Pre-flight specs, diagnostic specs, and other verification artifacts are first-class outputs that ship on their own cadence — not bundled into the implementation commit they inform.
+
+**Why:**
+- Verification artifact and implementation are different work units. The verification answers "what's the actual repo state?"; the implementation answers "now build the thing." Bundling conflates them.
+- Verification artifacts may be referenced by multiple downstream sessions (Component A pre-flight informs Component A; Sprint 2 diagnostic informs A + C + B + Component E verification).
+- If verification finds blocking issues, the verification ships standalone with the finding; implementation never starts. Bundling would force a phantom-implementation commit.
+
+**Instances observed:**
+1. Sprint 2 diagnostic spec (specs/sprint-2-diagnostic.md) — uncommitted, referenced by Component E disposition + Component A pre-flight
+2. Component A pre-flight spec (specs/component-a-preflight.md) — uncommitted at Component A ship, prior-session work product
+3. (orphan sweep + ticket_url_resolved had pre-flight findings inline in CC's plan, not separate spec files — different shape)
+
+**Watchpoint** — three instances of "verification artifacts as standalone work products" but only two as separate spec files. If a fourth instance with the spec-file shape surfaces, this earns codification.
+
+**Decision implication when it earns codification:** specs/ directory work products commit on their own cadence (or stay uncommitted as reference). Implementation commits stage by path explicitly, never including specs/ files.
+
+## Negative-match filters fragile against slug-prefix expansion (mistake-class, 2026-05-02)
+
+**Surfaced during:** Component A integration, line 497 of src/validators/schema-completeness.ts printSchemaSummary breakdown.
+
+**The pattern:** code that classifies items by "everything that isn't X is Y" works correctly when there are only two categories. When new categories are added (X stays the same; new Z and W appear), the negative match silently miscategorizes Z and W as Y.
+
+**Sprint 1 → Sprint 2 instance:** printSchemaSummary breakdown filter classified slugs by:
+- Starts with "hub:" → hub
+- Starts with "venue:" → venue
+- Otherwise → event (negative match)
+
+Component A added "datafeed:" slug prefix. The negative match misclassified datafeed:events as event, inflating event count by 1 and producing a 1-event datafeed gap in the breakdown. CC caught and patched inline (line 497 → explicit positive match for each known prefix; unknown prefix → log warning rather than silent miscategorize).
+
+**Forward concern (Sprint 3+):** Sprint 3's Performer + Organizer schema work will add more slug prefixes (likely performer:, organizer:). Same class of bug if any code uses negative-match classification. Worth a Sprint 3 pre-flight check: grep for negative-match filter patterns before implementation.
+
+**Pattern shape:** explicit positive matching > negative matching when categories may grow. Trades concise code for robustness against future expansion.
+
+**Status:** Watchpoint. If Sprint 3 surfaces another negative-match-filter bug, this earns codification as a code review rule.
