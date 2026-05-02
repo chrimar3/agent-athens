@@ -49,6 +49,7 @@ data/content-hashes.json
 temp-briefs/
 data/health-reports/
 data/search-visibility-log.csv
+data/banned-phrase-matches.csv
 
 # Local Netlify folder
 .netlify

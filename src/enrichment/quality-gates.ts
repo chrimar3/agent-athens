@@ -13,6 +13,13 @@ import { TAG_TAXONOMY, FILLER_PHRASES, type EventForEnrichment } from './descrip
 import { getWordTarget, classifyEvent } from './enrichment-matrix';
 import { classifyDateFormat } from '../utils/date-format';
 import { getCountryCode, getCurrencyCode } from '../utils/schema-geo';
+import {
+  loadBannedPhrases,
+  checkAbsoluteMatch,
+  type BannedPhrasesAbsoluteEntry,
+} from '../utils/load-banned-phrases';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // ============================================================================
 // Types
@@ -107,20 +114,6 @@ const SENSORY_WORDS = [
   'bright', 'loud', 'quiet', 'soft', 'hard', 'smooth', 'rough',
 ];
 
-/** Lazy adjectives that indicate generic content */
-const LAZY_ADJECTIVES = [
-  // Original 14
-  'amazing', 'incredible', 'fantastic', 'wonderful', 'great', 'excellent',
-  'perfect', 'unforgettable', 'world-class', 'stunning', 'spectacular',
-  'extraordinary', 'exceptional', 'vibrant',
-  // 7 confirmed by audit
-  'legendary', 'immersive', 'iconic', 'captivating', 'mesmerizing',
-  'breathtaking', 'enchanting',
-  // 6 likely at scale
-  'remarkable', 'phenomenal', 'unparalleled', 'transcendent',
-  'awe-inspiring', 'spellbinding',
-];
-
 /** Speculation/fabrication patterns — verified facts only */
 const SPECULATION_PATTERNS: RegExp[] = [
   /\blikely\b/i,
@@ -135,6 +128,58 @@ const SPECULATION_PATTERNS: RegExp[] = [
   /\bappears?\s+to\b/i,
   /\bseems?\s+to\b/i,
 ];
+
+// ============================================================================
+// Banned-phrase match-firing log
+// ============================================================================
+// ED reviews this CSV at 2-4 weeks of production data to decide which absolute
+// entries warrant promotion to contextual. Append-only; rotates independently
+// of events.db so ED can grep without SQL.
+
+const MATCH_LOG_PATH = path.resolve(import.meta.dir, '../../data/banned-phrase-matches.csv');
+const MATCH_LOG_HEADER = 'timestamp,event_id,language_of_match,matched_phrase,description_excerpt\n';
+
+function ensureMatchLog(): void {
+  if (!fs.existsSync(MATCH_LOG_PATH)) {
+    fs.writeFileSync(MATCH_LOG_PATH, MATCH_LOG_HEADER);
+  }
+}
+
+function logMatch(
+  eventId: string | undefined,
+  language: 'en' | 'el',
+  phrase: string,
+  description: string,
+): void {
+  // Bun sets NODE_ENV='test' automatically; opt out of log writes there so
+  // the test suite doesn't pollute the production CSV that ED reviews.
+  if (process.env.NODE_ENV === 'test') return;
+  try {
+    ensureMatchLog();
+    const lower = description.toLowerCase();
+    const idx = lower.indexOf(phrase.toLowerCase());
+    const start = idx >= 0 ? Math.max(0, idx - 30) : 0;
+    const end = idx >= 0 ? Math.min(description.length, idx + phrase.length + 30) : Math.min(description.length, 60);
+    const excerpt = description.slice(start, end).replace(/\s+/g, ' ').replace(/"/g, '""');
+    const row = `${new Date().toISOString()},${eventId ?? ''},${language},${phrase},"${excerpt}"\n`;
+    fs.appendFileSync(MATCH_LOG_PATH, row);
+  } catch {
+    // Never let log-write failures break a quality-gate run. The CSV is for
+    // editorial review, not enforcement; losing a row is a small cost.
+  }
+}
+
+function logAbsoluteHits(
+  eventId: string | undefined,
+  description: string,
+  hits: string[],
+  entries: BannedPhrasesAbsoluteEntry[],
+): void {
+  for (const phrase of hits) {
+    const entry = entries.find(e => e.phrase === phrase);
+    if (entry) logMatch(eventId, entry.language, phrase, description);
+  }
+}
 
 // ============================================================================
 // Main Validation Functions
@@ -172,7 +217,7 @@ export function validateQualityGates(
     title: event.title,
     venue: event.venue,
     type: event.type
-  }, tier);
+  }, tier, event.id);
   issues.push(...genericIssues);
 
   // Technical validation
@@ -553,7 +598,8 @@ function validateResonanceLayer(
 export function detectGenericContent(
   description: string,
   event: { title: string; venue: string | null; type: string | null },
-  tier: 'stub' | 'standard' | 'premium'
+  tier: 'stub' | 'standard' | 'premium',
+  eventId?: string,
 ): QualityIssue[] {
   const issues: QualityIssue[] = [];
   const lower = description.toLowerCase();
@@ -623,12 +669,14 @@ export function detectGenericContent(
     }
   }
 
-  // 3. Lazy adjective detection
-  const foundLazy = LAZY_ADJECTIVES.filter(adj =>
-    new RegExp(`\\b${adj}\\b`, 'i').test(description)
-  );
+  // 3. Lazy adjective detection — sources from config/banned-phrases.yaml v1.1+
+  // (S100c). Loader's checkAbsoluteMatch uses Unicode-aware word boundaries,
+  // so this site now correctly flags Greek adjective forms in code-mixed text.
+  const bannedAbs = loadBannedPhrases().absolute;
+  const foundLazy = checkAbsoluteMatch(description, bannedAbs);
 
   if (foundLazy.length > 0) {
+    logAbsoluteHits(eventId, description, foundLazy, bannedAbs);
     issues.push({
       layer: 'resonance',
       severity: tier === 'premium' ? 'error' : 'warning',
@@ -1105,11 +1153,11 @@ export function validateEnglishDescription(
       `Remove filler phrases: ${foundFillers.join(', ')}`));
   }
 
-  // 5. Lazy adjectives
-  const foundLazy = LAZY_ADJECTIVES.filter(adj =>
-    new RegExp(`\\b${adj}\\b`, 'i').test(description)
-  );
+  // 5. Lazy adjectives — sources from config/banned-phrases.yaml v1.1+ (S100c)
+  const bannedAbs = loadBannedPhrases().absolute;
+  const foundLazy = checkAbsoluteMatch(description, bannedAbs);
   if (foundLazy.length > 0) {
+    logAbsoluteHits(event.id, description, foundLazy, bannedAbs);
     issues.push(createIssue('resonance', tier === 'premium' ? 'error' : 'warning',
       'LAZY_ADJECTIVES', `Remove lazy adjectives: ${foundLazy.join(', ')}`));
   }

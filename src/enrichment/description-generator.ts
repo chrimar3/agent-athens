@@ -13,7 +13,7 @@
  */
 
 import { countWords, validateWordCount } from './word-counter';
-import { loadBannedPhrases, type BannedPhrasesData } from '../utils/load-banned-phrases';
+import { loadBannedPhrases, checkAbsoluteMatch, type BannedPhrasesData } from '../utils/load-banned-phrases';
 
 // ============================================================================
 // Types
@@ -110,21 +110,10 @@ export const TAG_TAXONOMY = {
 // ============================================================================
 
 /**
- * Lazy adjectives to reject in descriptions
- */
-export const LAZY_ADJECTIVES: string[] = [
-  'amazing', 'incredible', 'unique', 'vibrant', 'unforgettable',
-  'must-see', 'must-see event', "don't miss", 'not to be missed',
-  'once in a lifetime', 'one-of-a-kind', 'truly unique', 'absolutely amazing',
-  'incredible opportunity', 'spectacular event', 'breathtaking performance',
-  'world-class', 'state-of-the-art', 'cutting-edge', 'unparalleled',
-  'extraordinary', 'exceptional', 'remarkable', 'phenomenal',
-];
-
-/**
  * Filler phrases that are ALWAYS errors regardless of tier.
- * These are generic padding that adds zero information — distinct from lazy adjectives
- * which are tier-sensitive (warning at standard, error at premium).
+ * These are generic padding that adds zero information — distinct from lazy
+ * adjectives, which are sourced from config/banned-phrases.yaml as of S100c
+ * and consumed by F1 quality-gates via the loader.
  */
 export const FILLER_PHRASES: string[] = [
   'world-class', 'state-of-the-art', 'one-of-a-kind', 'must-see',
@@ -584,15 +573,14 @@ export function validateDescription(
     errors.push(`Description too long: ${wordCountResult.count} words (maximum ${maxWords})`);
   }
 
-  // Check for lazy adjectives
   const lowerDescription = description.toLowerCase();
-  const foundLazyAdjectives: string[] = [];
 
-  for (const phrase of LAZY_ADJECTIVES) {
-    if (lowerDescription.includes(phrase.toLowerCase())) {
-      foundLazyAdjectives.push(phrase);
-    }
-  }
+  // Check for lazy adjectives — sources from config/banned-phrases.yaml v1.1+
+  // (S100c). Upgraded from substring-includes to Unicode-aware word-boundary
+  // matching via the loader. CSV logging is currently scoped to F1
+  // quality-gates only; this site does not yet emit to data/banned-phrase-
+  // matches.csv (tracked as a follow-up).
+  const foundLazyAdjectives = checkAbsoluteMatch(description, _bannedPhrases.absolute);
 
   if (foundLazyAdjectives.length > 0) {
     errors.push(`Contains lazy adjectives: ${foundLazyAdjectives.join(', ')}`);
