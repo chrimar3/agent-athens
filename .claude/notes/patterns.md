@@ -2081,3 +2081,18 @@ A Friday plist would fire on a fixed schedule and rebuild — but its build woul
 
 - The `description` and `price.amount` fields are intentionally NOT in the event-set hash, by design (Editorial's Friday description-rewrites should not bump lastmod). If product needs change so that price-amount changes ARE reportable to AI engines as content updates, expand the hash.
 - The pattern depends on `metadata.lastUpdate` being the single source of timestamp truth in render. If a render path bypasses metadata and reads `new Date()` directly, the override won't help. Audit-grep `new Date()` and `Date.now()` in render-path files before extending.
+
+## Brief-vs-prod regression check via timestamp comparison (S101b, 2026-05-02)
+
+When a brief asserts "X is in production", verify prod build timestamp against the commit timestamp before assuming the assertion holds.
+
+The S101b brief asserted that S101a had wired hash-gating into prod for all hubs and asked for verification. Phase 0 fetched prod /this-weekend, found schema `dateModified` was a build-time ISO timestamp (not the expected date-only). Looked like a regression. Then `git log --format="%ai" 52f09d8d0` showed S101a was committed at 12:41:44 Athens, while the prod HTML's build timestamp was 11:07:48 Athens — production was rendered ~1.5 hours BEFORE the commit. No regression — deploy lag.
+
+**Reusable check:**
+1. Pull prod HTML's build timestamp from any per-build field (`dateModified` ISO, `<meta name="last-modified">`, or `<span class="last-update">` if rendered with full precision).
+2. `git log --format="%ai" <commit-hash> -1` for the commit the brief assumes is deployed.
+3. If commit timestamp > prod build timestamp, the assertion is "true post-next-deploy, not now."
+
+**Why it matters:** the brief's premise drives the scope. If we'd treated the prod observation as a regression, we'd have hunted a non-existent bug in the override path (`hub-page.ts:282-283` is correct). The diagnosis flips a 30-min hunt-the-bug into a 5-min "wait for next deploy + re-verify."
+
+**Pair with the broader brief-verification pattern:** check that the brief's named files exist with the claimed signatures (the user's "verify-paths-in-briefs" rule with 5 prior incidents — S71/S82/S95/S100b/S101a). The prod-vs-commit check extends that pattern to runtime state, not just code state.

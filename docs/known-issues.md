@@ -70,6 +70,15 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+### Content-Hash Snapshots Accumulate ~1.1MB/day in `data/content-hash-snapshots/`
+**Severity:** 🟢
+**First seen:** 2026-05-02 (S101b — directory created with first snapshot)
+**Frequency:** Grows by one ~1.1MB JSON per `--snapshot` run (intended daily by GEO).
+**Symptoms:** None operational. Directory is gitignored (added to `.gitignore` in S101b). At 1.1MB/day = ~33MB/month = ~400MB/year uncompressed. Nothing breaks at small scale; concern is unbounded growth on the development machine.
+**Workaround:** N/A. Directory is local-only.
+**Fix plan:** Add a rotation step (delete snapshots older than 90 days) once two conditions hold: (a) GEO has been logging weekly long enough that 90-day data has flowed through real use cases; (b) directory size warrants attention (~1GB threshold). Likely a small `find data/content-hash-snapshots/ -mtime +90 -delete` line added to `daily-automated.sh` or a separate maintenance script. Alternatively gzip snapshots in place (~1.1MB → ~50KB compressed) before rotation.
+**Status:** 🟢 Open — known future-cleanup, not urgent.
+
 ### F1 Quality-Gate Hardcodes LAZY_ADJECTIVES (Diverges from YAML Source of Truth)
 **Severity:** 🟡
 **First seen:** 2026-04-30 (S100b post-mortem; pre-existing in production)

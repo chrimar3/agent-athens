@@ -3219,3 +3219,46 @@ Stepwise execution of the plan. Notable deviations:
 - **Greek `dist/this-weekend.html` still rewrites between byte-identical builds** (mtime 12:17 → 12:19 across two consecutive builds with same DB; English mtime stayed at 12:17, correctly skipped). Pre-existing variance not caused by this session — somewhere in the Greek-only render path is a non-deterministic byte. Worth investigating in a future session with a `diff -u` between two consecutive builds' Greek HTML outputs to localize.
 - **JSON API payloads (e.g., `dist/api/this-weekend.json`)** still emit `new Date().toISOString()` as `meta.lastUpdate` (hub-page.ts:553). Out of scope this session — `writeJsonApiIfChangedSync` strips lastUpdate before comparing, so it doesn't cause spurious writes; but external clients fetching the JSON see today's timestamp regardless of content. Lower priority than HTML JSON-LD because clients of the JSON API are mostly the site itself.
 - **Editorial Director can begin /this-weekend cornerstone rewrite now** — schema fix is live and stable; rewrites can proceed against final structure (`@id` + `endDate` per Event child, honest `dateModified`).
+
+
+### Session 101b — Three-signal consistency verification + cornerstone-hash-stats — 2026-05-02
+
+**Plan:** Verify schema `dateModified` + visible "Last Updated" + sitemap `<lastmod>` are coherent on cornerstones+hubs after S101a. Ship `scripts/cornerstone-hash-stats.ts` for GEO's weekly self-validation. Plan file: `~/.claude/plans/session-three-signal-wiggly-hollerith.md`.
+
+**Phase 0 reframed the brief.** Three deviations from the brief's premise reshaped scope (asked the user via AskUserQuestion in plan mode, got: diagnose-first / use content-hashes.json / treat regression as in-scope):
+1. S101a's gating is by-design narrow — only `/this-weekend` and `/en/this-weekend`, per the inline comment at `generate-site.ts:425-428`. The brief's "8-URL alignment" expectation exceeded actual S101a scope.
+2. Two manifests do different jobs: `data/content-hashes.json` (9,437 entries, gitignored) gates sitemap; `data/event-set-hashes.json` (2 entries, committed) gates /this-weekend's `metadata.lastUpdate`. Brief targeted the wrong manifest for the stats script.
+3. Production /this-weekend showed schema/visible build timestamps. Looked like a regression. `git log` revealed S101a was committed at 12:41:44 Athens vs. prod build timestamp 11:07:48 Athens — prod simply hadn't redeployed. Deploy lag, not regression.
+
+**What happened:**
+- Phase 0 (Explore) — 3 parallel Explore agents verified: (a) `resolveLastModified` exists at `content-hasher.ts:66-76` (returns date-only or preserved prior); (b) `data/content-hashes.json` has 9,437 entries with `{hash, lastModified}` shape; (c) the gating chain `lastUpdateOverrides → renderHubPage → metadata.lastUpdate → page.ts:154+454-455` is wired correctly in local code. Curl-without-`-L` initially missed prod's redirect-then-fetch behavior — added `-L`, signals reappeared. Confirmed canonical URLs are no-trailing-slash; `/this-weekend/` 301s to `/this-weekend`.
+- Step 0 — Ran `bun run src/generate-site.ts` (16.1s, 9478 pages, 0 errors / 239 pre-existing warnings). Inspected `dist/this-weekend.html`: schema `dateModified: "2026-05-02"` (date-only), confirming the override is wired correctly in local builds. Production-vs-local divergence is purely deploy lag.
+- Step 1 — Three-signal table across 8 URLs (2 gated + 6 ungated). Gated rows: all three signals are date-only `2026-05-02`, aligned. Ungated rows: schema is full ISO build timestamp; visible is the same instant in Athens local time; sitemap is date-only — by-design divergence per S101a's documented scope. Captured in `specs/three-signal-consistency-2026-05-02.md`.
+- Step 1 incidental finding — `/this-week.html` has schema timestamp `09:17:21.216Z` while other ungated hubs have `11:57:00.xxxZ`, evidence that `writeHtmlIfChangedSync` is preserving older builds when content didn't change. The "honest timestamp" benefit extends beyond the gated URLs (timestamps don't bump on no-op rebuilds), it's just that ungated URLs still embed full-precision ISO instead of date-only.
+- Step 1 incidental finding — visible date on gated URLs renders as `03:00 πμ ώρα Αθήνας` (3am Athens). Artifact of `new Date("2026-05-02").toLocaleDateString('el-GR', {hour, minute})` parsing date-only as midnight UTC = 03:00 Athens DST. Date is correct; time component is decorative. Flagged for future UX session.
+- Step 2 — Wrote `scripts/cornerstone-hash-stats.ts`. Reuses `loadManifest` from `src/sitemap/content-hasher.ts` via the optional-path overload. Two CLI modes: `--snapshot` (saves today's manifest to `data/content-hash-snapshots/<YYYY-MM-DD>.json`) and `<days>` (reports bumped vs. held). URL bucket: 5 cornerstones + 12 type-hub matchers, both with optional `en/` prefix. Verified bucket against actual manifest keys → 21 URLs in current corpus (12 GR + 9 EN; some hubs lack English mirrors). Output is JSON + summary line; no a-priori threshold (calibration band TBD post-2026-05-22).
+- Step 2 — Added `data/content-hash-snapshots/` to `.gitignore` (snapshots are derived state, ~1.1MB/day = ~33MB/month uncompressed; same anti-pattern as the S78 events.db incident).
+- Step 3 — Smoke-tested both CLI modes: `--snapshot` saved `data/content-hash-snapshots/2026-05-02.json` (1.05MB). `<days>=1` correctly errored "no snapshot for 2026-05-01". `bunx tsc --noEmit` exits 0. `bun test` 1773 pass / 1 skip / 0 fail (matches S101a baseline exactly).
+
+**Verified:**
+- Local `dist/this-weekend.html` schema `datePublished="2026-05-02"`, `dateModified="2026-05-02"` — date-only, override path working correctly.
+- Local `dist/sitemap-editorial.xml` `<lastmod>2026-05-02</lastmod>` for /this-weekend — matches manifest.
+- Local `dist/en/this-weekend/index.html` schema `dateModified="2026-05-02"` — bilingual parity.
+- Three-signal alignment for both gated URLs.
+- Ungated URLs have intentional sitemap-vs-schema divergence (sitemap date-only, schema build-timestamp ISO) per S101a's documented narrow scope.
+- `bunx tsc --noEmit` exits 0; `bun test` 1773 pass (no regressions).
+- Stats script CLI modes both function correctly.
+- First snapshot saved to `data/content-hash-snapshots/2026-05-02.json`.
+
+**Learnings:**
+- `patterns.md`: appended brief-vs-prod regression-check pattern — when a brief asserts production behavior, compare prod build timestamp against the commit timestamp before assuming regression. The S101b brief's "regression" was pure deploy lag (commit 12:41 Athens, prod build 11:07 Athens, ~1.5h gap). 5-minute check vs. 30-min hunt-the-bug.
+- The user's "verify-paths-in-briefs" memory now extends to runtime state: not just "does file X exist with claimed signature Y," but also "does prod actually run the code that the brief assumes is deployed."
+- `writeHtmlIfChangedSync` works as a passive freshness gate even on URLs not explicitly hash-gated for schema — confirmed by `/this-week.html`'s 09:17 timestamp surviving an 11:57 rebuild. The S101a side-benefit ("hash-equal builds skip rewrites") is real and observable in the timestamp record.
+- For an evaluation-script's URL bucket: fixed-string set + regex (cornerstones + 12 hub names) is faster than parsing `hub-pages.json` for ~21 string comparisons. Drift risk is auditable in PR review.
+
+**Open items:**
+- **Post-prod-deploy re-verify** — once tomorrow's daily-automated.sh deploys S101a (~08:00 Athens), re-run `curl -sL https://agentathens.com/this-weekend | grep -oE '"dateModified":"[^"]*"'`. Expected: date-only, no `T`. If still showing build-timestamp ISO, then there's a real prod-only bug.
+- **GEO weekly log starts 2026-05-08** — daily snapshot at end of pipeline (`bun run scripts/cornerstone-hash-stats.ts --snapshot`); Friday log run (`<days>=7`); calibration band set after 2026-05-22.
+- **Should S101a's gating extend to other cornerstones?** Architectural question for next planning cycle. Snapshot data over the next 3 weeks helps quantify the cost of NOT extending — how often do ungated hubs' schema dateModified actually need to bump?
+- **3am visible-date artifact on gated rows** — flagged for future UX session. Low priority.
+- **Snapshot rotation** — `find data/content-hash-snapshots/ -mtime +90 -delete` once GEO has been logging long enough that 90-day data has flowed through real use cases. Tracked in `docs/known-issues.md`.
