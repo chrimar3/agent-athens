@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "lastUpdate": "2026-05-02T21:29:54.340Z"
+  },
+  "layers": {
+    "event_level": "measured",
+    "offer_level": "measured",
+    "place_level": "not_measured",
+    "aria_level": "not_measured"
+  },
+  "events": {
+    "byType": [
+      {
+        "type": "concert",
+        "total": 1212,
+        "pass": 1171,
+        "warn": 41,
+        "fail": 0,
+        "passRate": 97
+      },
+      {
+        "type": "dj_set",
+        "total": 465,
+        "pass": 428,
+        "warn": 37,
+        "fail": 0,
+        "passRate": 92
+      },
+      {
+        "type": "exhibition",
+        "total": 24,
+        "pass": 15,
+        "warn": 9,
+        "fail": 0,
+        "passRate": 63
+      },
+      {
+        "type": "theater",
+        "total": 6042,
+        "pass": 5897,
+        "warn": 145,
+        "fail": 0,
+        "passRate": 98
+      },
+      {
+        "type": "festival",
+        "total": 34,
+        "pass": 32,
+        "warn": 2,
+        "fail": 0,
+        "passRate": 94
+      },
+      {
+        "type": "performance",
+        "total": 20,
+        "pass": 18,
+        "warn": 2,
+        "fail": 0,
+        "passRate": 90
+      },
+      {
+        "type": "show",
+        "total": 77,
+        "pass": 77,
+        "warn": 0,
+        "fail": 0,
+        "passRate": 100
+      },
+      {
+        "type": "workshop",
+        "total": 12,
+        "pass": 12,
+        "warn": 0,
+        "fail": 0,
+        "passRate": 100
+      },
+      {
+        "type": "tech",
+        "total": 8,
+        "pass": 8,
+        "warn": 0,
+        "fail": 0,
+        "passRate": 100
+      },
+      {
+        "type": "dance",
+        "total": 2,
+        "pass": 2,
+        "warn": 0,
+        "fail": 0,
+        "passRate": 100
+      }
+    ],
+    "totals": {
+      "total": 7896,
+      "pass": 7660,
+      "warn": 236,
+      "fail": 0,
+      "passRate": 97
+    },
+    "orphanSlugs": []
+  },
+  "hubs": {
+    "total": 24,
+    "pass": 21,
+    "warn": 3,
+    "fail": 0
+  },
+  "venues": {
+    "total": 54,
+    "pass": 54,
+    "warn": 0,
+    "fail": 0
+  }
+}

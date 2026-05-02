@@ -30,6 +30,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
+import { buildCompletenessReport, printBucketSummary, writeCompletenessReport } from './validators/completeness-reporter';
 import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
 import { BASE_URL } from './config/site-url';
@@ -1030,6 +1031,14 @@ async function main() {
   // Schema completeness validation (warning-only, never blocks build)
   const schemaResults = validateAllPages(DIST_DIR);
   printSchemaSummary(schemaResults);
+
+  // Per-EventType bucket breakdown (Sprint 2 Component D)
+  const completenessReport = buildCompletenessReport(schemaResults, pageableEvents);
+  printBucketSummary(completenessReport);
+  writeCompletenessReport(
+    completenessReport,
+    join(import.meta.dir, '../data/build-completeness.json'),
+  );
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
