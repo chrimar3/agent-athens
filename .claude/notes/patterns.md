@@ -2197,3 +2197,50 @@ city's pageable set.
 `tests/generators/orphan-sweep.test.ts` (14 cases including
 false-positive protection, idempotency, parent-prune preserving
 PROTECTED_ROOTS).
+
+## Forward-looking spec scoping watchpoint, instance 1 (S103, 2026-05-02)
+
+When a decision/spec entry references a column / field / job / migration
+as **future work** without scoping its creation, that work tends to fall
+through the cracks. Watch for this shape in spec entries and acceptance
+criteria.
+
+**Concrete instance:** decisions.md 2026-04-29 (GEO Strategist) referenced
+`ticket_url_resolved` as future Sprint 2 work — "Sprint 2 adds nightly
+URL resolver populating `ticket_url_resolved`." Migration 006 (2026-04-24)
+added the audit columns (`ticket_url_resolved_at`, `ticket_url_source`)
+but the URL value column itself was never added. No Sprint 1 session
+shipped it. The Sprint 2 diagnostic caught the implicit assumption
+during pre-flight.
+
+**Why this happens:** the decision-author treats the column as
+"infrastructure for the resolver" (existence implied by the resolver
+being scoped); the resolver-author treats the column as
+"infrastructure" (existence assumed before the resolver runs). Neither
+adds it. Without explicit scoping ("Sprint 1 adds the column; Sprint 2
+populates it"), the column drifts into a future-tense limbo.
+
+**How to apply:**
+- When reading or writing decision/spec entries, look for nouns that
+  reference future state (`<table>.<new_column>`, `<service>`,
+  `<nightly_job>`). If the entry doesn't *also* scope the creation,
+  flag it.
+- During session pre-flight diagnostics for any session that mentions
+  a column/field/job by name, run a Step-0 verification: does the
+  named thing exist? If not, halt — file an explicit creation step
+  (or a separate session) before proceeding.
+- Diagnostic scripts that audit decisions-vs-reality should treat
+  forward-looking spec entries as candidates for "scoped or not?"
+  classification, not as evidence the thing exists.
+
+**Watch for instance 2** in Sprint 2.5 diagnostic (the resolver job
+itself is a forward-looking spec entry now — gets scoped explicitly
+in Sprint 2.5 brief intake) or Sprint 3 brief intake (any
+forward-looking entries we author this sprint that reference
+not-yet-built columns/jobs/services).
+
+**Pattern family:** "verify-assumptions" / "diagnostic-first" guards.
+Same family as "Brief-vs-prod regression check via timestamp comparison
+(S101b)" and the verify-paths-in-briefs feedback. The variant here is
+spec-vs-code (does X exist?) rather than prod-vs-code (does X behave
+correctly?).

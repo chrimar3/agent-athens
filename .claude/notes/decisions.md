@@ -2037,3 +2037,69 @@ S3's pageableEvents canonical filter (S33).
 **Status:** Implemented S102, 2026-05-02. 14 unit tests; full suite
 1795 pass / 0 fail; dry-run + idempotent live build verified
 (0 event orphans on real dist/ — current state aligned).
+
+## ticket_url_resolved column added — emitter prefers resolved URL with fallback (S103, 2026-05-02)
+
+**Decision:** Closed the 2026-04-29 forward-looking spec by adding
+the `ticket_url_resolved` column (migration 009) and wiring the
+emitter to prefer it over `ticket_url` when classifying for
+`offers.url` emission.
+
+**Reasoning:**
+
+1. **Forward-looking spec was unscoped.** The 2026-04-29 GEO Strategist
+   entry referenced `ticket_url_resolved` as Sprint 2 work without
+   specifying who creates the column. Migration 006 (2026-04-24)
+   added `ticket_url_resolved_at` + `ticket_url_source` (the audit
+   columns) but the URL value column itself was never added. Sprint 2
+   diagnostic caught the gap during pre-flight. Pre-Sprint-2 hygiene,
+   not Sprint 2 scope itself.
+
+2. **Emitter fallback (resolved URL preferred, original ticket URL
+   fallback) is the right shape.** Sprint 2.5's nightly resolver
+   populates `ticket_url_resolved` over time; until that runs (or
+   for sources the resolver cannot dereference), `ticket_url`
+   remains the only signal. The fallback `event.ticketUrlResolved
+   ?? event.ticketUrl` keeps the emitter functional today AND
+   automatically picks up resolver output when it lands. Same code
+   path serves both states.
+
+3. **Sprint 1 classification logic unchanged.** This commit ONLY
+   changes which URL gets fed into `classifySource()`. The 4-way
+   branching (known_merchant / listing_aggregator / venue_direct_only
+   / unclassified) and the dual-type seller for venue_direct_only
+   are untouched. Tests confirm: when `ticketUrlResolved` is null,
+   behavior is byte-for-byte identical to pre-S103.
+
+4. **Required field, not optional.** `ticketUrlResolved: string | null`
+   in the Event type — not `?: string | null`. Reasoning: null is
+   the expected state for unresolved rows, so callers must explicitly
+   express that intent. Optional would weaken the contract and let
+   bugs hide behind `undefined` defaults. Cost: 6 fixture sites needed
+   updates (sampleConcert + sampleFreeExhibition + sampleTheaterPerformance
+   + sampleWorkshop + getTodayEvent + getTomorrowEvent + 4 inline
+   test makeEvent helpers + normalize.ts production constructor).
+
+**Alternatives considered:**
+
+- **Optional field (`ticketUrlResolved?: string | null`).** Rejected
+  per contract-tightness reasoning above; fixture cascade was
+  modest enough to absorb.
+- **Replace `ticket_url` entirely with `ticket_url_resolved`.** Rejected:
+  destroys the as-scraped-source audit trail. The two columns have
+  different semantics: `ticket_url` is what we observed at scrape time,
+  `ticket_url_resolved` is what the resolver produced after dereferencing.
+  Both useful for debugging and provenance.
+- **Separate sweep mechanism for ticket-URL resolution.** Out of scope —
+  Sprint 2.5 is the dedicated session for resolver implementation.
+
+**Connects to:** Sprint 1 closeout dual-type seller decision
+(2026-05-02); 2026-04-29 GEO Strategist forward-looking entry that
+this session closes; Sprint 2.5 will populate the column nightly.
+
+**Status:** Implemented S103, 2026-05-02. Migration 009 applied to
+dev DB. Emitter wired with fallback. Full suite 1799/0 fail; schema
+completeness 97% / 0 errors. Manual canary (event 9454cac8...) confirmed
+offers.url unchanged from Sprint 1 behavior (NULL `ticket_url_resolved`
+→ fallback path). Sprint 2.5 will populate; emitter will switch to
+resolved URLs without further code changes.

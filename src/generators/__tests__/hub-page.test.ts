@@ -58,6 +58,7 @@ function makeEvent(overrides: Partial<Event>): Event {
     updatedAt: new Date().toISOString(),
     language: 'el',
     hasNativeGreek: false,
+    ticketUrlResolved: null,
     ...overrides,
   };
 }

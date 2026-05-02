@@ -3407,3 +3407,105 @@ rebuilds.
 - Three working-tree modifications left unstaged per stage-by-path
   rule: `.claude/notes/mistakes.md` (unstaged S101a entry from prior
   session), `data/event-set-hashes.json`, `scripts/ping-indexnow.ts`.
+
+### Session 103 — ticket_url_resolved column + emitter fallback (pre-Sprint-2 hygiene) — 2026-05-02
+
+**Plan:** Close 2026-04-29 forward-looking spec gap surfaced in Sprint 2
+diagnostic. Add `ticket_url_resolved` column to events table; wire
+emitter to read it with fallback to `ticket_url`. Pre-Sprint-2 hygiene,
+not part of Sprint 2 scope.
+
+**What happened:**
+
+Phase-0 verification caught five brief premise inaccuracies before any
+code changed:
+
+1. **Migration sequence is at 008, not 006.** Brief said "next-after-006"
+   — actual is "next-after-008" (007 = price-type vocabulary,
+   008 = genres CHECK constraint). New migration is **009**, not 007.
+2. **Migration 006 added BOTH `_at` and `_source`,** not just `_at` as
+   brief implied. Doesn't change the work but worth noting for accuracy.
+3. **Event type lives at `src/types.ts`** (flat), not `src/types/event.ts`.
+4. **DB row → Event mapping is at `src/db/database.ts:159`,** not
+   `src/utils/normalize.ts` (which only normalizes scraping input — price
+   strings → typed objects).
+5. **Test fixture cascade was larger than implied.** Six root Event
+   constructors in `tests/fixtures/events.ts` plus four inline
+   `makeEvent`/`makeExhibition` helpers across other test files plus one
+   production constructor in `src/utils/normalize.ts`. All needed
+   `ticketUrlResolved: null` after the type was made required.
+
+Brief premise was correct in the load-bearing parts: `ticket_url_resolved`
+column did NOT exist; no emitter code referenced it; the field was
+genuinely a forward-looking gap.
+
+Implementation: migration 009 (single ALTER TABLE), Event type field
+(required `string | null` per brief's contract-tightness reasoning),
+`row.ticket_url_resolved ?? null` in DB→Event decode at database.ts:160,
+emitter `effectiveTicketUrl = event.ticketUrlResolved ?? event.ticketUrl`
+fed into classifySource at event-page.ts:228-247. Sprint 1 4-way
+classification logic (known_merchant / listing_aggregator /
+venue_direct_only / unclassified) and dual-type seller for
+venue_direct_only ALL untouched.
+
+**Verified:**
+- 4 new tests (3 emitter cases + 1 migration case). Test 1 (resolved-wins)
+  is the meaningful new assertion; tests 2-3 are regression-guards that
+  pass against pre-S103 code (Sprint 1 behavior).
+- Full suite: 1799 pass / 1 skip / 0 fail.
+- `bunx tsc --noEmit` clean (after fixing 4 fixture cascade sites
+  + 1 normalize.ts production site).
+- Migration 009 applied via `bun run scripts/run-migrations.ts`.
+  Column 61 in events table: TEXT, dflt_value 'NULL' (literal SQL text;
+  functionally equivalent to no DEFAULT).
+- Schema completeness: 8039/8278 (97%), 0 errors, 239 warnings —
+  matches S101c baseline.
+- Build time: 14.7s.
+- Manual canary: event `9454cac8ff50ab94`
+  (`https://www.viva.gr/gr-el/tickets/music/this-is-michael/`) with
+  NULL `ticket_url_resolved` renders `offers.url` matching `ticket_url`
+  + Viva.gr Organization seller — byte-identical to Sprint 1 behavior.
+
+**Learnings:**
+
+1. **Forward-looking spec entries leak through cracks when the column/
+   field/job creation isn't explicitly scoped.** The 2026-04-29 entry
+   said "Sprint 2 adds nightly resolver populating ticket_url_resolved"
+   — the resolver-author treated the column as "infrastructure" assumed
+   to exist; the column-author was nobody. Filed in patterns.md as
+   "Forward-looking spec scoping watchpoint, instance 1" with
+   instance-2 watchpoints in Sprint 2.5 and Sprint 3 brief intake.
+
+2. **Required `string | null` over optional `?:` enforces contract.**
+   Six fixture sites + one production site needed updates. Cost
+   manageable. Benefit: callers can't silently omit. The asymmetry with
+   existing `ticketUrl?: string` (optional) is real but acceptable —
+   new code can be tighter; old code can stay until it next gets
+   touched.
+
+3. **The `effective ?? original` fallback pattern is a clean shape for
+   future-populated columns.** Sprint 2.5 will populate
+   `ticket_url_resolved` nightly; emitter automatically switches to it
+   without code changes. Same shape applies to any future column whose
+   population is asynchronous from its consumption (e.g., enrichment
+   fields, AI-discovered metadata).
+
+**Open items:**
+- Sprint 2.5 (nightly resolver job) is now unblocked. Emitter is ready
+  to receive the column's populated values.
+- Sprint 2 Component E (resolver contract verification) verified clean
+  by this commit — column exists, emitter reads it, tests assert the
+  contract. Sprint 2 ready to proceed when Strategist confirms full
+  sequencing.
+- Working-tree modifications left unstaged per stage-by-path rule:
+  `.claude/notes/mistakes.md` (unstaged S101a entry, persistent across
+  S102 + S103), `data/event-set-hashes.json`, `scripts/ping-indexnow.ts`.
+
+**Cross-session note:** S102's Dev Planner mistake (Guard-7 violation
+on the orphan-sweep brief) and this session's brief-premise inaccuracies
+are the same pattern family — forward-looking spec entries and
+brief-vs-reality drift. Both will be filed together in mistakes.md
+when the unstaged S101a entry gets handled (separate session). Per
+S103 brief's reorder note: "this session has no Dev Planner mistake
+to file" (the S102 mistake is owned by the post-S102 maintenance pass,
+not by S103).

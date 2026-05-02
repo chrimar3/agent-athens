@@ -666,4 +666,41 @@ describe("Event Detail Page — offers emission", () => {
     const schema = parse(futureWithTicket);
     expect(schema.offers?.validFrom).toBeUndefined();
   });
+
+  // ticket_url_resolved fallback (pre-Sprint-2 hygiene, 2026-05-02 forward-looking spec).
+  // Resolver populates ticketUrlResolved nightly; emitter prefers it over ticketUrl
+  // and feeds the *resolved* URL into classifySource.
+
+  test("offers.url uses ticketUrlResolved when populated and resolved host is known_merchant", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.athinorama.gr/event/x/',  // listing_aggregator
+      ticketUrlResolved: 'https://www.viva.gr/tickets/event-y/',  // known_merchant
+    };
+    const schema = parse(event);
+    expect(schema.offers.url).toBe('https://www.viva.gr/tickets/event-y/');
+  });
+
+  test("offers.url falls back to ticketUrl when ticketUrlResolved is null and host is known_merchant", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.viva.gr/tickets/event-x/',
+      ticketUrlResolved: null,
+    };
+    const schema = parse(event);
+    expect(schema.offers.url).toBe('https://www.viva.gr/tickets/event-x/');
+  });
+
+  test("offers.url omitted when ticketUrlResolved is null and ticketUrl host is listing_aggregator (regression-guard)", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.athinorama.gr/event/x/',
+      ticketUrlResolved: null,
+    };
+    const schema = parse(event);
+    expect(schema.offers.url).toBeUndefined();
+  });
 });

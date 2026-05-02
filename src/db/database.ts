@@ -158,6 +158,7 @@ export function rowToEvent(row: any): Event {
     url: row.url,
     ticketUrl: row.ticket_url || undefined,
     ticketUrlStatus: row.ticket_url_status || undefined,
+    ticketUrlResolved: row.ticket_url_resolved ?? null,
     source: row.source,
     createdAt: row.created_at,
     updatedAt: row.updated_at,

@@ -34,7 +34,8 @@ export const sampleConcert: Event = {
   source: "viva.gr",
   createdAt: "2025-10-31T10:00:00Z",
   updatedAt: "2025-10-31T10:00:00Z",
-  language: "en"
+  language: "en",
+  ticketUrlResolved: null,
 };
 
 export const sampleFreeExhibition: Event = {
@@ -65,7 +66,8 @@ export const sampleFreeExhibition: Event = {
   source: "more.com",
   createdAt: "2025-10-31T10:00:00Z",
   updatedAt: "2025-10-31T10:00:00Z",
-  language: "en"
+  language: "en",
+  ticketUrlResolved: null,
 };
 
 export const sampleTheaterPerformance: Event = {
@@ -97,7 +99,8 @@ export const sampleTheaterPerformance: Event = {
   source: "viva.gr",
   createdAt: "2025-10-31T10:00:00Z",
   updatedAt: "2025-10-31T10:00:00Z",
-  language: "en"
+  language: "en",
+  ticketUrlResolved: null,
 };
 
 export const sampleWorkshop: Event = {
@@ -131,7 +134,8 @@ export const sampleWorkshop: Event = {
   source: "This is Athens",
   createdAt: "2025-10-31T10:00:00Z",
   updatedAt: "2025-10-31T10:00:00Z",
-  language: "en"
+  language: "en",
+  ticketUrlResolved: null,
 };
 
 // Event happening today (dynamically generated)
@@ -170,7 +174,8 @@ export function getTodayEvent(): Event {
     source: "viva.gr",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    language: "en"
+    language: "en",
+    ticketUrlResolved: null,
   };
 }
 
@@ -208,7 +213,8 @@ export function getTomorrowEvent(): Event {
     source: "more.com",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    language: "en"
+    language: "en",
+    ticketUrlResolved: null,
   };
 }
 

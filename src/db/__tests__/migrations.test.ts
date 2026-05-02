@@ -251,4 +251,28 @@ describe('Database Migrations', () => {
 
     expect(badTimestamps.count).toBe(0);
   });
+
+  // 009 closes 2026-04-29 forward-looking spec ("Sprint 2 adds nightly resolver
+  // populating ticket_url_resolved"). Migration 006 added _at and _source;
+  // the URL column itself was never added until 009.
+  test('009_add_ticket_url_resolved adds ticket_url_resolved column', () => {
+    const columns = db.prepare(`PRAGMA table_info(events)`).all() as Array<{
+      name: string;
+      type: string;
+      notnull: number;
+      dflt_value: string | null;
+    }>;
+    const col = columns.find(c => c.name === 'ticket_url_resolved');
+    expect(col).toBeDefined();
+    expect(col?.type).toBe('TEXT');
+    expect(col?.notnull).toBe(0); // nullable — resolver hasn't run yet for most rows
+    // SQLite stores `DEFAULT NULL` as the literal SQL text 'NULL' in the metadata.
+    // Behaviorally identical to no DEFAULT clause; assertion checks the explicit
+    // intent expressed in the migration.
+    expect(col?.dflt_value).toBe('NULL');
+    // Functional default: a fresh INSERT without ticket_url_resolved gets NULL.
+    const before = db.prepare(`SELECT COUNT(*) as c FROM events WHERE ticket_url_resolved IS NULL`).get() as { c: number };
+    const total = db.prepare(`SELECT COUNT(*) as c FROM events`).get() as { c: number };
+    expect(before.c).toBe(total.c); // every row currently has NULL — resolver hasn't populated any yet
+  });
 });

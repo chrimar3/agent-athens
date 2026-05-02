@@ -225,22 +225,27 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
       // Past event (EventCompleted) — emit no offers block at all.
       // Per Strategist 2026-04-29, the offer is gone (not Discontinued).
     } else {
-      const ticketUrl = event.ticketUrl;
-      const classification = classifySource(ticketUrl);
+      // Prefer the resolver-produced URL when available. Sprint 2.5's nightly
+      // resolver populates ticketUrlResolved by dereferencing aggregator and
+      // intermediate links. Until that runs (or for sources the resolver
+      // cannot dereference), fall back to the as-scraped ticketUrl. Both the
+      // classifier and the emitted offers.url operate on the same effective URL.
+      const effectiveTicketUrl = event.ticketUrlResolved ?? event.ticketUrl;
+      const classification = classifySource(effectiveTicketUrl);
 
       let offersUrl: string | undefined;
       let sellerHost: string | null = null;
 
       if (classification === 'known_merchant') {
-        offersUrl = ticketUrl;
-        sellerHost = extractHost(ticketUrl);
+        offersUrl = effectiveTicketUrl;
+        sellerHost = extractHost(effectiveTicketUrl);
       } else if (classification === 'listing_aggregator' || classification === 'venue_direct_only') {
         // Host is not a merchant — omit offers.url; venue becomes the seller.
         offersUrl = undefined;
       } else {
-        // 'unclassified' — emit ticket_url as-is and warn for next audit pass.
-        offersUrl = ticketUrl;
-        const host = extractHost(ticketUrl);
+        // 'unclassified' — emit URL as-is and warn for next audit pass.
+        offersUrl = effectiveTicketUrl;
+        const host = extractHost(effectiveTicketUrl);
         if (host) {
           console.warn(`[offers.url] unclassified ticket source: ${host} (event ${event.id})`);
         }

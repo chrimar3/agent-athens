@@ -37,6 +37,11 @@ export interface Event {
     | 'expired'
     | 'unresolved'
     | 'open_entry';
+  // Populated by Sprint 2.5 nightly resolver. Emitter prefers this over
+  // ticketUrl when classifying for offers.url emission (see event-page.ts).
+  // Required (not optional) so callers must explicitly express "not yet
+  // resolved" via null rather than implicit undefined.
+  ticketUrlResolved: string | null;
   source: string;
   createdAt: string;
   updatedAt: string;
