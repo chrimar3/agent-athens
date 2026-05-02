@@ -383,6 +383,14 @@ function normalizeStartDate(isoDate: string): string {
   return formatSchemaDate(isoDate);
 }
 
+function resolveSchemaEndDate(event: Event): string {
+  // Tier 1: exhibitions use endDate (run-end); other events fall back to startDate if endDate missing.
+  if (event.type === 'exhibition' && event.endDate) {
+    return formatSchemaDate(event.endDate);
+  }
+  return formatSchemaDate(event.endDate ?? event.startDate);
+}
+
 function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: Locale = 'el'): string {
   // CRITICAL: Schema.org must ALWAYS be in English for AI agent parsing
   // Even though content is Greek, Schema.org is the universal standard
@@ -392,9 +400,11 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
     "position": index + 1,
     "item": {
       "@type": event['@type'],
+      "@id": `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${generateEventSlug(event)}/`,
       "name": event.title,
       "description": `${event.type} event in Athens`,
       "startDate": normalizeStartDate(event.startDate),
+      "endDate": resolveSchemaEndDate(event),
       "eventStatus": resolveEventStatus(event.startDate, event.endDate, event.type),
       "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {

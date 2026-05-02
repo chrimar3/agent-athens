@@ -244,7 +244,8 @@ export function renderHubPage(
   filteredEvents: Event[],
   allEvents: Event[],
   categoryNav?: string,
-  locale: Locale = 'el'
+  locale: Locale = 'el',
+  lastUpdateOverride?: string
 ): string | null {
   if (filteredEvents.length < MIN_EVENTS_THRESHOLD) {
     return null;
@@ -278,6 +279,9 @@ export function renderHubPage(
       break;
   }
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
+  if (lastUpdateOverride) {
+    metadata.lastUpdate = lastUpdateOverride;
+  }
   const displayEvents = filteredEvents.slice(0, HUB_EVENT_LIMIT);
   const hasOverflow = filteredEvents.length > HUB_EVENT_LIMIT;
   const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale);
@@ -489,7 +493,10 @@ export function renderHubPage(
  * Generate all hub pages — called from generate-site.ts
  * Returns array of generated slug URLs
  */
-export function generateHubPages(allEvents: Event[]): string[] {
+export function generateHubPages(
+  allEvents: Event[],
+  lastUpdateOverrides?: Record<string, string>
+): string[] {
   const hubConfigs: { hubs: HubConfig[] } = JSON.parse(
     readFileSync(CONFIG_PATH, 'utf-8')
   );
@@ -521,7 +528,7 @@ export function generateHubPages(allEvents: Event[]): string[] {
       categoryNav = renderCategoryNav(currentCategory, categoriesConfig.categories);
     }
 
-    const html = renderHubPage(config, filteredEvents, allEvents, categoryNav);
+    const html = renderHubPage(config, filteredEvents, allEvents, categoryNav, 'el', lastUpdateOverrides?.[config.slug]);
     if (!html) continue;
 
     // Write HTML to dist
