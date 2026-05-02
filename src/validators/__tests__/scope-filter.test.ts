@@ -165,6 +165,36 @@ describe('shouldExcludeEvent', () => {
       const result = shouldExcludeEvent({ title: 'Jazz concert' });
       expect(result.inScope).toBe(true);
     });
+
+    test('should exclude events on productledhub.com (industry conference)', () => {
+      // Editorial 2026-05-02: cultural participation, not professional networking.
+      // Practitioner-only audience; non-practitioners would not attend for cultural enjoyment.
+      const result = shouldExcludeEvent({
+        title: 'Disrupt AI Summit 2026',
+        url: 'https://productledhub.com/disrupt-ai-summit/'
+      });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toBe('excluded_url_pattern:productledhub.com');
+    });
+
+    test('should exclude events on athensseo.com (industry conference)', () => {
+      const result = shouldExcludeEvent({
+        title: 'Athens SEO 2026',
+        url: 'https://athensseo.com/'
+      });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toBe('excluded_url_pattern:athensseo.com');
+    });
+
+    test('should NOT exclude events on cultural-venue domains (megaron.gr regression guard)', () => {
+      // Megaron is a known cultural venue. Adding new deny patterns must not catch it.
+      const result = shouldExcludeEvent({
+        title: 'Classical concert',
+        venue: 'Megaron Athens Concert Hall',
+        url: 'https://www.megaron.gr/event/some-classical-concert/'
+      });
+      expect(result.inScope).toBe(true);
+    });
   });
 });
 

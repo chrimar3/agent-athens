@@ -36,6 +36,14 @@
     "flamenco", "φλαμένκο", "salsa", "swing dance"
   ],
   "excludedUrlPatterns": [
-    "/tickets/sports/"
+    "/tickets/sports/",
+    "productledhub.com",
+    "athensseo.com"
+  ],
+  "_excludedUrlPatterns_principle": "Per Editorial 2026-05-02: cultural participation, not professional networking. Tech meetups, business conferences, marketing/SEO/startup gatherings excluded regardless of venue. Tiebreaker: would non-practitioners attend for cultural enjoyment? If no, exclude.",
+  "_excludedUrlPatterns_log": [
+    "/tickets/sports/ — sports content category (S100, 2026-04-28)",
+    "productledhub.com — product-led growth / AI industry conference, practitioner audience (2026-05-02)",
+    "athensseo.com — SEO/marketing industry conference, practitioner audience (2026-05-02)"
   ]
 }
