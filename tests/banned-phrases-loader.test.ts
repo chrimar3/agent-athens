@@ -9,7 +9,7 @@ describe('banned-phrases loader', () => {
   const data = loadBannedPhrases();
 
   test('schema parses with expected counts', () => {
-    expect(data.absolute.length).toBe(75);
+    expect(data.absolute.length).toBe(169);
     expect(data.contextual.length).toBe(9);
   });
 

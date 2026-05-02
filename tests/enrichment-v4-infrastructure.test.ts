@@ -15,7 +15,7 @@ import { join } from 'path';
 
 // Import enrichment modules
 import { validateQualityGates, type QualityGateResult } from '../src/enrichment/quality-gates';
-import { LAZY_ADJECTIVES, TAG_TAXONOMY, type EventForEnrichment } from '../src/enrichment/description-generator';
+import { TAG_TAXONOMY, type EventForEnrichment } from '../src/enrichment/description-generator';
 import { countWords } from '../src/enrichment/word-counter';
 
 // ============================================================================

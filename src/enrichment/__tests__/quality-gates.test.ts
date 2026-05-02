@@ -74,12 +74,16 @@ function cleanGreekDescription(wordCount: number = 200): string {
 // ============================================================================
 
 describe('English: Lazy adjective detection', () => {
-  test('legendary triggers lazy adjective warning', () => {
-    const desc = cleanDescription().replace('distinctive sound', 'legendary sound');
+  // Per S100c, F1 sources its absolute list from config/banned-phrases.yaml.
+  // 'legendary' and 'iconic' moved from absolute → contextual in v1.1, so they
+  // no longer fire on absolute-only matching here. Tests for those terms were
+  // re-pointed at currently-absolute entries (fantastic, spectacular).
+  test('fantastic triggers lazy adjective warning', () => {
+    const desc = cleanDescription().replace('distinctive sound', 'fantastic sound');
     const issues = detectGenericContent(desc, { title: baseEvent.title, venue: baseEvent.venue, type: baseEvent.type }, 'standard');
     const lazyIssue = issues.find(i => i.code === 'LAZY_ADJECTIVES');
     expect(lazyIssue).toBeDefined();
-    expect(lazyIssue!.message).toContain('legendary');
+    expect(lazyIssue!.message).toContain('fantastic');
   });
 
   test('immersive triggers lazy adjective warning', () => {
@@ -98,12 +102,12 @@ describe('English: Lazy adjective detection', () => {
     expect(lazyIssue!.message).toContain('vibrant');
   });
 
-  test('iconic triggers lazy adjective warning', () => {
-    const desc = cleanDescription().replace('distinctive sound', 'iconic sound');
+  test('spectacular triggers lazy adjective warning', () => {
+    const desc = cleanDescription().replace('distinctive sound', 'spectacular sound');
     const issues = detectGenericContent(desc, { title: baseEvent.title, venue: baseEvent.venue, type: baseEvent.type }, 'standard');
     const lazyIssue = issues.find(i => i.code === 'LAZY_ADJECTIVES');
     expect(lazyIssue).toBeDefined();
-    expect(lazyIssue!.message).toContain('iconic');
+    expect(lazyIssue!.message).toContain('spectacular');
   });
 });
 
@@ -228,11 +232,12 @@ describe('English: Filler phrases and event reference', () => {
 
 describe('English: validateEnglishDescription', () => {
   test('lazy adjective detected via validateEnglishDescription', () => {
-    const desc = cleanDescription().replace('distinctive sound', 'legendary sound');
+    // Re-pointed from 'legendary' to 'fantastic' per S100c (legendary → contextual)
+    const desc = cleanDescription().replace('distinctive sound', 'fantastic sound');
     const result = validateEnglishDescription(baseEvent, desc, 'standard');
     const lazyIssue = result.issues.find(i => i.code === 'LAZY_ADJECTIVES');
     expect(lazyIssue).toBeDefined();
-    expect(lazyIssue!.message).toContain('legendary');
+    expect(lazyIssue!.message).toContain('fantastic');
   });
 });
 

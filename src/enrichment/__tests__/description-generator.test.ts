@@ -17,7 +17,6 @@ import {
   buildPrompt,
   validateDescription,
   FILLER_PHRASES,
-  LAZY_ADJECTIVES,
   type EventForEnrichment,
   type DescriptionValidationResult,
 } from '../description-generator';
@@ -293,16 +292,16 @@ describe('Description Generator', () => {
       expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
-    test('rejects description with "once in a lifetime"', () => {
-      const description = generateWords(180, true) + ' A once in a lifetime opportunity to see this artist.';
+    test('rejects description with "amazing"', () => {
+      const description = generateWords(180, true) + ' An absolutely amazing opportunity to see this artist.';
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
       expect(result.errors.some(e => e.toLowerCase().includes('lazy'))).toBe(true);
     });
 
-    test('rejects description with "not to be missed"', () => {
-      const description = generateWords(180, true) + ' An event not to be missed by anyone.';
+    test('rejects description with "fantastic"', () => {
+      const description = generateWords(180, true) + ' A fantastic event for everyone in the city.';
       const result = validateDescription(description);
 
       expect(result.valid).toBe(false);
@@ -372,12 +371,6 @@ describe('Description Generator', () => {
       expect(FILLER_PHRASES).toContain("don't miss");
       expect(FILLER_PHRASES).toContain('world-class');
       expect(FILLER_PHRASES).toContain('not to be missed');
-    });
-
-    test('is separate from LAZY_ADJECTIVES (not an alias)', () => {
-      expect(FILLER_PHRASES).not.toBe(LAZY_ADJECTIVES);
-      // FILLER_PHRASES should be shorter than LAZY_ADJECTIVES
-      expect(FILLER_PHRASES.length).toBeLessThan(LAZY_ADJECTIVES.length);
     });
 
     test('is a non-empty array', () => {
