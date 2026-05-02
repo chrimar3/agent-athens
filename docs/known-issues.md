@@ -74,10 +74,37 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 **Severity:** 🟡
 **First seen:** 2026-04-30 (S100b post-mortem; pre-existing in production)
 **Frequency:** Every F1 quality-gate run uses the divergent list
-**Symptoms:** `src/enrichment/quality-gates.ts:106-119` hardcodes `LAZY_ADJECTIVES` with **27 entries**. `config/banned-phrases.yaml` (now the intended single source of truth, consumed by EW since S100b) has **21 EN absolute entries** and is **not a strict superset** of the F1 list. ED's seed deliberately drops some terms (`fantastic`, `wonderful`, `great`, `excellent`, `perfect`, `spectacular`, `extraordinary`, `exceptional`, `immersive`, `remarkable`, `phenomenal`, `unparalleled`, `transcendent`, `awe-inspiring`, `spellbinding`) and promotes others to contextual (`world-class`, `iconic`, `legendary`). EW prompts and F1 scoring now reference different banned-phrase lists — the curation philosophy split is live but unreconciled.
-**Workaround:** None required short-term — both surfaces work in isolation and both block the most egregious terms (`amazing`, `incredible`, `vibrant`, `breathtaking`, `unforgettable`, `mesmerizing`, `captivating`, `stunning`). The divergence affects mid-tier judgment calls, not floor-level quality.
-**Fix plan:** S100c — replace the hardcoded array in `quality-gates.ts:106-119` with a `loadBannedPhrases()` call. Then unwind the `tests/enrichment-v4-infrastructure.test.ts:18` re-export from `description-generator.ts` so the EW-only re-export can be removed. Reconcile with ED on the 15-term gap **before** deletion — silent union (taking the YAML as authoritative and dropping F1's 15 extras) would lose ED's prior curation work; ED needs to confirm what's intentional vs what should be re-added to the seed.
-**Status:** 🟡 Open — tracked for S100c with explicit ED-reconciliation prerequisite
+**Symptoms:** `src/enrichment/quality-gates.ts:106-119` hardcoded `LAZY_ADJECTIVES` with 27 entries; `config/banned-phrases.yaml` (single source of truth as of S100b) had a different curation. EW prompts and F1 scoring referenced different banned-phrase lists.
+**Workaround:** None required short-term — both surfaces blocked the most egregious terms.
+**Fix plan:** S100c — replace the hardcoded array with a `loadBannedPhrases()` call; reconcile the 15-term gap with ED first (avoid silent union dropping ED's prior curation).
+**Status:** ✅ Closed (2026-05-02) — S100c shipped. ED v1.1 YAML restored 15 missing terms (now co-canonical), F1 now sources from `loadBannedPhrases()` at both consumption sites (`quality-gates.ts` `detectGenericContent` + `validateEnglishDescription`) plus the surfaced third consumer in `description-generator.ts` `validateDescription`. Behavior change: `legendary` / `iconic` / `immersive` moved from absolute hard-fail to contextual (currently silently allowed by F1's absolute-only check). Tracked separately below as a follow-up.
+
+### Match-Firing Log Pending First Editorial Review
+**Severity:** 🟢
+**First seen:** 2026-05-02 (created during S100c)
+**Frequency:** Append on every absolute banned-phrase match in F1 (production only — `NODE_ENV=test` is gated out)
+**Symptoms:** None. This is observability, not a defect. `data/banned-phrase-matches.csv` (gitignored) records `timestamp,event_id,language_of_match,matched_phrase,description_excerpt` for each F1 absolute match. ED reviews fire volumes per phrase to decide which absolutes warrant promotion to contextual, and which contextual entries should be tightened.
+**Workaround:** N/A.
+**Fix plan:** First ED review at 2-4 weeks of production data (~2026-05-15 to 2026-05-30). Watch list per ED's edge-case flags: `τέλειος` / `εξαιρετικός` / `μαγευτικός` / `great` / `perfect` (terms with edge-case functional uses kept absolute on the over-flag-then-relax principle). If override burden is measurably high for any, promote to contextual via YAML edit only (no code change).
+**Status:** 🟢 Open — observability pending data; not a defect.
+
+### F1 Contextual-Match Support Not Yet Implemented
+**Severity:** 🟢
+**First seen:** 2026-05-02 (S100c side-effect, documented for visibility)
+**Frequency:** Every description containing a contextual entry — currently silently passes F1
+**Symptoms:** `config/banned-phrases.yaml` has 9 contextual entries (6 EN: `live`, `unique`, `world-class`, `premier`, `iconic`, `legendary`; 3 EL: `ζωντανός`, `κορυφαίος`, `μοναδικός`). F1's `LAZY_ADJECTIVES` issue check now uses `checkAbsoluteMatch()` which only consults absolute entries. Contextual entries require LLM judgment of `banned_when` / `allowed_when` rules — not implemented in F1. Result: `iconic` / `legendary` / `immersive` etc. silently pass F1 even when used as floating praise.
+**Workaround:** EW prompts already include both absolute and contextual rules (via `buildBannedPhrasesSection`), so writers are still guided away from these terms during generation. F1's role here is the safety net, not the primary enforcement.
+**Fix plan:** Track via match-firing log. If silently-passed-contextual descriptions accumulate at scale, add a contextual-judge pass to F1 (probably one Claude call per description containing a contextual entry — needs design). S100d candidate.
+**Status:** 🟢 Open — known gap, deferred pending data.
+
+### FILLER_PHRASES Still Hardcoded in `description-generator.ts`
+**Severity:** 🟢
+**First seen:** 2026-05-02 (acknowledged S100c scope decision)
+**Frequency:** Every F1 quality-gate run on English descriptions
+**Symptoms:** `description-generator.ts:115` (post-S100c position) still exports `FILLER_PHRASES` (15 entries) which F1 consumes at 4 sites with substring matching. Distinct from `LAZY_ADJECTIVES` (now YAML-sourced) and from absolute-list overlap.
+**Workaround:** N/A — list works correctly; just not in YAML.
+**Fix plan:** S100d candidate. Migration needs explicit ED decision on substring-vs-word-boundary semantics (substring catches `'world-classy'` as `'world-class'`, word-boundary doesn't). Preserve the dedicated FILLER_PHRASES test block in `description-generator.test.ts:368-400` during migration.
+**Status:** 🟢 Open — explicit S100c scope decision; defer to S100d.
 
 ### Venue-Index Page (`/venues/`) Emits No JSON-LD
 **Severity:** 🟢

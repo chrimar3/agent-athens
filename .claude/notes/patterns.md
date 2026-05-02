@@ -2044,3 +2044,40 @@ After removing an exported constant or symbol, run `bunx tsc --noEmit` (or `tsc 
 - Doesn't catch consumers that use dynamic strings (`obj['LAZY_ADJECTIVES']`) — rare, but possible.
 - Doesn't catch consumers in untracked-by-tsconfig files (e.g., shell scripts, config files, docs). Always pair with a final `grep` after tsc is clean to catch these.
 - Doesn't catch consumers in workspaces tsc isn't told about (multi-repo / monorepo with separate `tsconfig`s). Run tsc in each project that imports from the modified module.
+
+## Honest JSON-LD timestamps via shared content-hash (S101a, 2026-05-02)
+
+**Context:** Editorial Pushback 2 — scheduled rebuilds without content-change detection produce timestamp-bumps that AI engines penalize. AgentAthens already had honest sitemap `<lastmod>` via `src/sitemap/content-hasher.ts` (volatile-stripped HTML hash → `resolveLastModified`). But JSON-LD `datePublished`/`dateModified` in CollectionPage emissions read from `metadata.lastUpdate = new Date().toISOString()` on every build — fraudulent bumps every day, even when /this-weekend's event set was unchanged.
+
+**Pattern (event-set hash → resolveLastModified → metadata override):**
+
+1. **Pre-render hash on stable identity.** Compute a content-set-level hash of the displayed event set BEFORE rendering, not from rendered HTML. For /this-weekend the digest is `id|title|startDate|endDate|venue.name`, sorted by line, SHA-256 truncated to 16 hex. Field selection captures user-visible identity changes (title/time/venue moves) and ignores intentional Friday-delta description rewrites — Editorial's content quality work shouldn't trip lastmod.
+
+2. **Reuse `resolveLastModified` from `content-hasher.ts`.** The helper already handles the truthful-lastmod logic (preserve prior date if hash unchanged, bump to today if changed) and `Europe/Athens` timezone. No new infrastructure — `loadManifest(path)` and `saveManifest(manifest, path)` accept an optional path arg, so the event-set manifest goes to `data/event-set-hashes.json` (separate from sitemap's `data/content-hashes.json` to avoid semantic collision).
+
+3. **Thread the resolved date into render via metadata override.** Add an optional `lastUpdateOverride: string` parameter to the page render function (e.g. `renderHubPage`'s 6th param). Inside, override `metadata.lastUpdate` once after `buildPageMetadata`. This propagates to ALL three downstream consumers — JSON-LD `datePublished`/`dateModified`, `<meta name="date">`, `<span class="last-update">` — at one override point.
+
+4. **Store the manifest at end of the relevant build phase.** `saveEventSetManifest(manifest, path)` after the hub-render section completes. Mid-build crash leaves the manifest unchanged (next build re-resolves from the unchanged prior state).
+
+**Critical implementation details:**
+
+- **`resolveLastModified` returns ISO date-only** (`2026-05-02`), not a timestamp. Whatever consumes `metadata.lastUpdate` must accept date-only — verify before threading. JSON-LD and HTML `<meta>` accept both. The `stripVolatileContent` regex strips both shapes.
+
+- **Pre-existing daily build covers the cadence.** No new plist needed when a daily build already runs and the JSON-LD hash-gating ensures honest timestamps regardless of when the build fires. Adding a Friday-only plist would NOT have addressed the JSON-LD issue.
+
+- **Side-benefit: `writeHtmlIfChangedSync` (byte-exact) actually skips rewrites.** With today's date no longer baked into JSON-LD on every build, hash-equal builds produce byte-identical HTML and the write is skipped. Free incrementality.
+
+**Why this beats a Friday plist:**
+
+A Friday plist would fire on a fixed schedule and rebuild — but its build would still emit today's date as `dateModified` regardless of whether the event set changed. Editorial's "no fraudulent bumps" concern is about the *rendered timestamp source*, not the *trigger schedule*. Hash-gating the source addresses the concern directly; a plist alone does not.
+
+**When to extend this pattern:**
+
+- Other cornerstone hubs (`/today`, `/this-week`, `/this-month`) — same shape; pre-compute hash in `generate-site.ts` ahead of `generateHubPages`, populate `lastUpdateOverrides` map.
+- Per-event pages — different surface; would need a per-event hash (event-row digest) rather than event-set. Worth doing only if AI engines start citing events from the detail-page URL with frequency that justifies the per-page lastmod precision.
+- Editorial pages, FAQ pages — same shape if they have a discrete content-set identity. Skip if their identity is just "the page exists" and updates are content-only.
+
+**Limitations:**
+
+- The `description` and `price.amount` fields are intentionally NOT in the event-set hash, by design (Editorial's Friday description-rewrites should not bump lastmod). If product needs change so that price-amount changes ARE reportable to AI engines as content updates, expand the hash.
+- The pattern depends on `metadata.lastUpdate` being the single source of timestamp truth in render. If a render path bypasses metadata and reads `new Date()` directly, the override won't help. Audit-grep `new Date()` and `Date.now()` in render-path files before extending.
