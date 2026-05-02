@@ -1,52 +1,85 @@
 # banned-phrases.yaml
 # Owner:     Editorial Director (ED)
 # Consumers: F1 quality-gate batch — C1 mechanical match, C2 contextual judge
-# For:       S100b shared loader spec (Dev Planner, Apr 30 morning)
-# Updated:   2026-04-29
+#            EW prompt — buildPrompt + buildPremiumPrompt
+# For:       S100c (F1 quality-gate dedupe / hardcoded list removal)
+# Updated:   2026-04-30
+# Version:   1.1
 #
-# Schema contract:
+# ─── Changelog ────────────────────────────────────────────────────────────────
+#   v1.1 (2026-04-30) — S100c reconciliation pass
+#     + EN absolute: restored 15 terms from F1 hardcoded LAZY_ADJECTIVES
+#       (fantastic, wonderful, great, excellent, perfect, spectacular,
+#        extraordinary, exceptional, immersive, remarkable, phenomenal,
+#        unparalleled, transcendent, awe-inspiring, spellbinding).
+#       v1.0 used content-types.md L478 as sole canonical source — L478 was
+#       illustrative, not exhaustive. F1 hardcoded list now folded in as
+#       co-canonical.
+#     + EL absolute: parallel expansion — 8 new Greek adjective families
+#       with full inflections to maintain symmetry across languages.
+#       Includes εξαιρετικός family (explicitly flagged in ED-greek-writing-
+#       guide §9 as bad: "εξαιρετική ακουστική" = banned floating descriptor).
+#     = EN contextual: unchanged. world-class, iconic, legendary, live,
+#       unique, premier all stay contextual per editorial parallel with
+#       Greek κορυφαίος / μοναδικός / ζωντανός in ED guide §8.
+#
+#   v1.0 (2026-04-29) — initial seed for S100b
+#
+# ─── Schema contract ──────────────────────────────────────────────────────────
 #   banned.{lang}.absolute     → flat list of strings; loader does word-boundary
 #                                substring match against description text.
 #   banned.{lang}.contextual   → list of objects:
 #       phrase       — string (literal) OR string prefixed with `re:` (regex).
-#                      Greek contextual entries use regex to cover all inflections
-#                      in a single rule; EN entries use literals.
-#       banned_when  — English-language judge prompt context (see Note 1).
-#       allowed_when — English-language judge prompt context (see Note 1).
+#                      Greek contextual entries use regex to cover all
+#                      inflections in a single rule; EN entries use literals.
+#       banned_when  — English-language judge prompt context (Note 1).
+#       allowed_when — English-language judge prompt context (Note 1).
 #
-# Note 1 — judge-prompt language:
-#   Per the F1 batch architecture, all C1–C6 checks run in a single Claude call
-#   whose working language is English. banned_when / allowed_when are operator-
-#   readable English regardless of phrase language. Claude's Greek competence
-#   handles the phrase recognition itself; the judge needs the rule in its
-#   working language to apply it consistently across batches.
+# ─── Note 1 — judge-prompt language ───────────────────────────────────────────
+#   F1 batches C1–C6 in one Claude call whose working language is English.
+#   banned_when / allowed_when are operator-readable English regardless of
+#   phrase language. Claude's Greek competence handles phrase recognition; the
+#   judge needs the rule in its working language to apply it consistently.
 #
-# Note 2 — regex engine compatibility:
-#   Patterns use `\b` for word boundaries. Python `re` and JS `RegExp` both
-#   handle Unicode word chars correctly. If the loader runs on a regex engine
-#   without Unicode `\b` support, contextual EL patterns need migration to
-#   explicit alternation. Flag during S100b build if relevant.
+# ─── Note 2 — regex engine compatibility ──────────────────────────────────────
+#   v1.0 ack: JavaScript RegExp's `\b` is ASCII-only, which mis-handles Greek
+#   word boundaries. Per Dev Planner, S100b loader has a workaround in place
+#   (likely a pre-tokenization pass or Unicode property classes). Patterns
+#   below remain `\b`-anchored — loader-side handling is canonical, the seed
+#   stays in standard regex notation. If the workaround changes, flag and we
+#   re-emit patterns to match the engine.
 #
-# Note 3 — sources:
-#   EN absolute canonical line:  content-types.md L478
-#   EN PR-speak qualifier:       content-types.md L169 ("premier destination")
-#   EN vibe-fabrication examples: editorial-decisions.md L321 (hallucination taxonomy)
-#                                + ED system prompt First Sentence Rule example
-#                                  ("Step into the smoky basement...")
-#   EL absolute canonical:       ED-greek-writing-guide.md ΜΕΡΟΣ 8
-#   EL outsider-tell additions:  ED-greek-writing-guide.md ΜΕΡΟΣ 10 §10
+# ─── Note 3 — single canonical list, both consumers ───────────────────────────
+#   EW prompt and F1 quality-gate read from the same lists. Different lists
+#   per consumer (Option 3 in S100c reconciliation) was rejected: contextual
+#   treatment of world-class / iconic / legendary is editorially *correct*,
+#   not lenient. F1 catches what EW failed to avoid — different layers, same
+#   standard.
 #
-# Note 4 — promotions from absolute → contextual (editorial decision):
-#   Three EN words appear in the canonical absolute list (L478) but are
-#   promoted to contextual here, mirroring the explicit contextual treatment
-#   of their Greek counterparts in ED guide §8:
-#     - "unique"      → mirrors μοναδικός (concrete differentiator required)
-#     - "world-class" → mirrors κορυφαίος (factual backing required)
-#   Plus "premier" and "live" added to contextual (not in L478, but
-#   live = ζωντανός parallel; premier = κορυφαίος-adjacent PR-speak).
-#   If the loader can't yet handle contextual EN entries, the safe fallback
-#   is to move these four into `en.absolute` — F1 will over-flag, ED edits
-#   the false positives. Flag your preference; current default is contextual.
+# ─── Note 4 — sources ─────────────────────────────────────────────────────────
+#   EN absolute, original line:    content-types.md L478
+#   EN absolute, F1 carryforward:  quality-gates.ts:106-119 LAZY_ADJECTIVES (pre-S100c)
+#   EN PR-speak qualifier:         content-types.md L169
+#   EN vibe-fabrication patterns:  editorial-decisions.md L321 hallucination taxonomy
+#                                  + ED system prompt First Sentence Rule examples
+#   EL absolute canonical:         ED-greek-writing-guide.md ΜΕΡΟΣ 8
+#   EL "εξαιρετική ακουστική":     ED-greek-writing-guide.md ΜΕΡΟΣ 9 (Δείξε, Μην Πες)
+#   EL outsider-tell additions:    ED-greek-writing-guide.md ΜΕΡΟΣ 10 §10
+#
+# ─── Note 5 — editorial promotions, EN absolute → contextual ──────────────────
+#   These four EN entries appeared in the F1 hardcoded list as absolute but
+#   are contextual here. The Greek guide §8 explicitly treats their EL
+#   counterparts as contextual ("OK with factual backing"). The EN parallel
+#   must match — banning them absolutely produces false positives in writing
+#   we explicitly want (e.g., "Half Note is world-class — the Wednesday jam
+#   has run continuously since 1979 with rotating international rhythm
+#   sections" should pass).
+#     - world-class  ↔ κορυφαίος
+#     - iconic       ↔ no direct EL parallel; same logic
+#     - legendary    ↔ no direct EL parallel; same logic
+#     - live         ↔ ζωντανός (genre nomenclature must be permitted)
+#   Plus `unique` and `premier` added per v1.0 reasoning (μοναδικός parallel
+#   and PR-speak intensifier with proper-noun exceptions).
 
 banned:
   en:
@@ -60,26 +93,46 @@ banned:
       - unforgettable
       - must-see
       - hidden gem
-
       # ─── PR-speak qualifiers (content-types.md L169) ───────────────────────
       - premier destination
       - state-of-the-art
-
-      # ─── Vibe-fabrication patterns (hallucination taxonomy) ────────────────
-      # These are atmospheric claims that require physical presence and were
-      # not in source data. Fabrication risk is high enough to warrant
-      # absolute ban regardless of context.
+      # ─── Generic-praise lazy adjectives ────────────────────────────────────
+      # Restored from F1 hardcoded LAZY_ADJECTIVES in v1.1.
+      # All fail the substitution test. `great` and `perfect` have edge-case
+      # functional uses ("great for solo dinner") — kept absolute on the
+      # principle that F1 over-flags catch lazy copy at the cost of a small
+      # ED override burden, which is the correct tradeoff.
+      - fantastic
+      - wonderful
+      - great
+      - excellent
+      - perfect
+      - extraordinary
+      - exceptional
+      - remarkable
+      - phenomenal
+      - unparalleled
+      # ─── Vibe-fabrication adjectives ───────────────────────────────────────
+      # Atmospheric/experiential claims that require physical presence.
+      # Some restored from F1 list (spectacular, immersive, transcendent,
+      # awe-inspiring, spellbinding); others (mesmerizing, captivating)
+      # held over from v1.0.
+      - spectacular
+      - immersive
+      - transcendent
+      - awe-inspiring
+      - spellbinding
+      - mesmerizing
+      - captivating
+      # ─── Vibe-fabrication phrases ──────────────────────────────────────────
       - intimate candlelit
       - leans in as the lights dim
       - electric atmosphere
       - magical atmosphere
       - enchanting atmosphere
-      - mesmerizing
-      - captivating
-
       # ─── Discovery / invitation tropes ─────────────────────────────────────
-      # These are openings that function as vibe transport rather than
-      # citation anchors. Direct conflict with First Sentence Rule.
+      # Openings that function as vibe transport rather than citation anchors.
+      # Direct conflict with First Sentence Rule.
       - step into
       - immerse yourself
       - whisks you away
@@ -116,9 +169,12 @@ banned:
       # (loader spec: flat strings, word-boundary match).
       # Καλύπτονται: ονομαστική / γενική / αιτιατική, ενικός & πληθυντικός,
       # αρσενικό / θηλυκό / ουδέτερο.
-      # Πηγή: ED-greek-writing-guide.md ΜΕΡΟΣ 8
+      # Πηγή v1.0: ED-greek-writing-guide.md ΜΕΡΟΣ 8 (4 families)
+      # Επέκταση v1.1: parallel expansion με την επέκταση του EN absolute
+      # (8 επιπλέον families). Πηγή: F1 hardcoded list parallels +
+      # ED-greek-writing-guide §9 (εξαιρετική ακουστική explicitly flagged).
 
-      # ─── καταπληκτικός — "amazing" ─────────────────────────────────────────
+      # ─── καταπληκτικός — "amazing" (v1.0) ──────────────────────────────────
       - καταπληκτικός
       - καταπληκτική
       - καταπληκτικό
@@ -130,7 +186,7 @@ banned:
       - καταπληκτικών
       - καταπληκτικούς
 
-      # ─── απίστευτος — "incredible" ─────────────────────────────────────────
+      # ─── απίστευτος — "incredible" (v1.0) ──────────────────────────────────
       - απίστευτος
       - απίστευτη
       - απίστευτο
@@ -142,7 +198,7 @@ banned:
       - απίστευτων
       - απίστευτους
 
-      # ─── εντυπωσιακός — "stunning/impressive" ──────────────────────────────
+      # ─── εντυπωσιακός — "stunning/impressive" (v1.0) ───────────────────────
       - εντυπωσιακός
       - εντυπωσιακή
       - εντυπωσιακό
@@ -154,7 +210,7 @@ banned:
       - εντυπωσιακών
       - εντυπωσιακούς
 
-      # ─── αξέχαστος — "unforgettable" ───────────────────────────────────────
+      # ─── αξέχαστος — "unforgettable" (v1.0) ────────────────────────────────
       - αξέχαστος
       - αξέχαστη
       - αξέχαστο
@@ -165,6 +221,114 @@ banned:
       - αξέχαστα
       - αξέχαστων
       - αξέχαστους
+
+      # ─── φανταστικός — "fantastic" (v1.1) ──────────────────────────────────
+      - φανταστικός
+      - φανταστική
+      - φανταστικό
+      - φανταστικού
+      - φανταστικής
+      - φανταστικοί
+      - φανταστικές
+      - φανταστικά
+      - φανταστικών
+      - φανταστικούς
+
+      # ─── υπέροχος — "wonderful" (v1.1) ─────────────────────────────────────
+      - υπέροχος
+      - υπέροχη
+      - υπέροχο
+      - υπέροχου
+      - υπέροχης
+      - υπέροχοι
+      - υπέροχες
+      - υπέροχα
+      - υπέροχων
+      - υπέροχους
+
+      # ─── τέλειος — "perfect" (v1.1) ────────────────────────────────────────
+      # Edge-case: τέλειος can also mean "complete" in formal Greek
+      # (e.g., "τέλειος και απόλυτος"). For our editorial domain, almost
+      # always lazy praise. Kept absolute; promote to contextual only if
+      # false-positive volume becomes a real burden.
+      - τέλειος
+      - τέλεια
+      - τέλειο
+      - τέλειου
+      - τέλειας
+      - τέλειοι
+      - τέλειες
+      - τέλειων
+      - τέλειους
+
+      # ─── θεαματικός — "spectacular" (v1.1) ─────────────────────────────────
+      - θεαματικός
+      - θεαματική
+      - θεαματικό
+      - θεαματικού
+      - θεαματικής
+      - θεαματικοί
+      - θεαματικές
+      - θεαματικά
+      - θεαματικών
+      - θεαματικούς
+
+      # ─── εξαιρετικός — "excellent / exceptional" (v1.1) ────────────────────
+      # Explicitly flagged in ED-greek-writing-guide §9: "εξαιρετική
+      # ακουστική" listed as the bad example to replace with concrete
+      # description ("Χαμηλά ταβάνια που συμπιέζουν τον ήχο...").
+      # Edge-case: εξαιρετικός has formal/legal usage ("εξαιρετική
+      # περίπτωση" = exceptional case). Outside our domain. Kept absolute.
+      - εξαιρετικός
+      - εξαιρετική
+      - εξαιρετικό
+      - εξαιρετικού
+      - εξαιρετικής
+      - εξαιρετικοί
+      - εξαιρετικές
+      - εξαιρετικά
+      - εξαιρετικών
+      - εξαιρετικούς
+
+      # ─── εκπληκτικός — "phenomenal / amazing" (v1.1) ───────────────────────
+      # Common AI-generated-Greek tic, parallel to English "amazing".
+      - εκπληκτικός
+      - εκπληκτική
+      - εκπληκτικό
+      - εκπληκτικού
+      - εκπληκτικής
+      - εκπληκτικοί
+      - εκπληκτικές
+      - εκπληκτικά
+      - εκπληκτικών
+      - εκπληκτικούς
+
+      # ─── απαράμιλλος — "unparalleled" (v1.1) ───────────────────────────────
+      - απαράμιλλος
+      - απαράμιλλη
+      - απαράμιλλο
+      - απαράμιλλου
+      - απαράμιλλης
+      - απαράμιλλοι
+      - απαράμιλλες
+      - απαράμιλλα
+      - απαράμιλλων
+      - απαράμιλλους
+
+      # ─── μαγευτικός — "spellbinding / enchanting" (v1.1) ───────────────────
+      # Note: "μαγευτική ατμόσφαιρα" already covered as fixed phrase below.
+      # Adjective-family entry catches all other deployments
+      # (e.g., "μαγευτική βραδιά", "μαγευτικό σόλο").
+      - μαγευτικός
+      - μαγευτική
+      - μαγευτικό
+      - μαγευτικού
+      - μαγευτικής
+      - μαγευτικοί
+      - μαγευτικές
+      - μαγευτικά
+      - μαγευτικών
+      - μαγευτικούς
 
       # ─── Σταθερές φράσεις (fixed phrases — όλες οι παραλλαγές) ─────────────
       - μη χάσετε
@@ -188,9 +352,9 @@ banned:
 
     contextual:
       # Σημείωση: όλα τα contextual entries χρησιμοποιούν regex στο phrase field
-      # ώστε να καλύπτουν όλες τις κλίσεις του ίδιου επιθέτου με μία καταχώρηση.
-      # banned_when / allowed_when σε αγγλικά (judge-prompt working language —
-      # βλ. Note 1 στην κορυφή του αρχείου).
+      # ώστε να καλύπτουν όλες τις κλίσεις του ίδιου επιθέτου με μία
+      # καταχώρηση. banned_when / allowed_when σε αγγλικά (judge-prompt
+      # working language — βλ. Note 1).
 
       - phrase: "re:\\bζωντανός\\b|\\bζωντανή\\b|\\bζωντανό\\b|\\bζωντανού\\b|\\bζωντανής\\b|\\bζωντανοί\\b|\\bζωντανές\\b|\\bζωντανά\\b|\\bζωντανών\\b|\\bζωντανούς\\b"
         banned_when: "Used as an adjective describing atmosphere, energy, or vibe (e.g., 'ζωντανή ατμόσφαιρα', 'ζωντανή ενέργεια', 'ζωντανή βραδιά'). The word becomes empty marketing when applied to ambience rather than performance type."
