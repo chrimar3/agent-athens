@@ -46,6 +46,7 @@ data/kpi.db.*
 data/kpi.db-shm
 data/kpi.db-wal
 data/content-hashes.json
+data/content-hash-snapshots/
 temp-briefs/
 data/health-reports/
 data/search-visibility-log.csv
