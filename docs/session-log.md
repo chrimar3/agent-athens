@@ -3304,3 +3304,106 @@ Cross-referenced.
 
 **Next:** dist/ orphan sweep (Sprint 2 P1, ~30 min, plan already
 written). Sprint 2 brief intake unblocked from both directions.
+
+### Session 102 — dist/ orphan sweep: slug-membership + mtime fallback (Sprint 2 #1) — 2026-05-02
+
+**Plan:** Add dist/ orphan sweep at build start. Diff DB pageable-event
+slugs against `dist/events/*` + `dist/en/events/*` + `dist/api/*.json`,
+remove orphans before generation runs. Closes hygiene gap from S84
+(deleted events) and Sprint 1 S3 (expired events). P1 from Sprint 1
+closeout.
+
+**What happened:**
+
+Phase-0 exploration caught two brief premise errors before any code
+changed:
+
+1. **A full sweep already existed at `src/generate-site.ts:1295–1375`,**
+   wired at L983, covering all three target locations. Used mtime-based
+   orphan criterion, dry-run by default (`SWEEP_ORPHANS=1` to arm).
+   Brief assumed no sweep; reality was a partial-arm sweep that hadn't
+   been turned on. Per brief Step 0 directive: extend, don't duplicate.
+
+2. **`event.slug` is not a column.** Brief proposed
+   `pageableEvents.map(e => e.slug)` — would have produced 100% false
+   orphans. Slug is computed by `generateEventSlug(event)` at
+   `src/generators/event-page.ts:110` from
+   `${id.substring(0,8)}-${slugify(venue.name)}-${slugify(title)}`.
+
+Plan rewritten in plan-mode to reflect both findings. User confirmed
+two design choices via AskUserQuestion: (a) arm event paths by default,
+keep non-event opt-in via `SWEEP_ORPHANS=1`; (b) slug-membership for
+event-named JSON only, mtime fallback for category aggregations
+(`dj_set-this-week.json` etc.).
+
+Three implementation choices locked in plan (not deferred to TODOs):
+`path.relative` + split for slug extraction (cross-platform safety);
+`armNonEvent` as parameter not env-read (testability); two-line logging
+(transparency about which mechanism caught what).
+
+Refactored existing inline `sweepOrphans` (~80 lines) into
+`src/generators/orphan-sweep.ts` with the slug-membership layer in
+front of the mtime fallback. Generate-site.ts call site updated to
+`sweepOrphans({distDir, validEventSlugs, buildStartTime, armNonEvent})`.
+
+**Verified:**
+- 14 new unit tests pass (5 pure-function + 9 orchestrator with tmpdir
+  fixtures). Coverage: false-positive protection for valid slugs with
+  old mtime; arm-by-default for event paths; mtime fallback for
+  non-event with armNonEvent parameter; idempotency; parent-dir
+  pruning preserves PROTECTED_ROOTS.
+- Full suite: 1795 pass / 1 skip / 0 fail.
+- `bunx tsc --noEmit` clean.
+- Dry-run build: 0 event orphans removed (slug-membership confirms
+  current alignment), 2330 non-event mtime-flagged (incremental-build
+  false positives, persistent across builds — unaffected without
+  `SWEEP_ORPHANS=1`).
+- Slug spot-check: DB `id=523def0775a979d4` with Greek venue
+  `Πολλαπλοί Χώροι` (slugifies to empty) maps to dist dir
+  `dist/events/523def07--dire-straits-legacy-live-in-greece` — match.
+- Idempotency: second consecutive build also reports 0 event orphans.
+- Schema completeness: 8039/8278 (97%), 0 errors, 239 warnings —
+  matches S101c baseline.
+
+**dist/events count after build: 7,749 = DB pageable count: 7,749.**
+The hygiene gap claimed in S84/Sprint1-S3 is currently closed (likely
+from clean rebuilds since). The new sweep makes the alignment a
+build-time invariant rather than relying on operator-driven clean
+rebuilds.
+
+**Learnings:**
+
+1. **Brief premise errors are catchable in Phase-0 exploration when
+   you actually verify rather than transcribe.** Both errors here would
+   have shipped if the plan stage had skipped the "does this already
+   exist?" / "what's the slug shape?" checks. This is the diagnostic-
+   first guard at work — file under Dev Planner mistakes (sixth
+   brief-vs-reality mismatch; prior: S71, S82, S95, S100b, S101a).
+   Mistakes.md has unstaged collaborator WIP, so this entry not yet
+   filed there — operator to file when they handle the unstaged S101a
+   entry.
+
+2. **Slug-membership is the right invariant for paths backed by a DB
+   set; mtime is the right backstop for paths without one.** Forcing
+   a single criterion across all path shapes either leaks DB semantics
+   into non-event paths or exposes event paths to incremental-build
+   false positives. Layered classification per path shape keeps each
+   on the right invariant.
+
+3. **Single-source-of-truth crossing module boundaries.** Importing
+   `generateEventSlug` from the generator into the sweep keeps the
+   slug formula in lockstep — same family of discipline as Sprint 1
+   S2's validator+emitter paired-shipping. Same principle, new domain.
+
+**Open items:**
+- Non-event mtime-flagged count is 2330 across consecutive builds —
+  these are persistent incremental-build false positives. Cleaning
+  them requires either a separate session that introduces a different
+  invariant for hub/venue/category paths, or a one-shot
+  `rm -rf dist/ && bun run src/generate-site.ts` followed by
+  `SWEEP_ORPHANS=1` arming for the non-event path. Not in this session
+  scope.
+- Sprint 2 P2 (URL resolver) remains independent.
+- Three working-tree modifications left unstaged per stage-by-path
+  rule: `.claude/notes/mistakes.md` (unstaged S101a entry from prior
+  session), `data/event-set-hashes.json`, `scripts/ping-indexnow.ts`.

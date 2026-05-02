@@ -2145,3 +2145,55 @@ about institutional memory hygiene rather than papering over the gap.
 closeout entry. Both appended at end of file after pre-existing
 2026-05-02 entries (S100c, S101a). Non-strict global chronology
 preserved over reordering filed entries.
+
+## dist/ orphan sweep: layered classification (slug-membership + mtime fallback) (S102, 2026-05-02)
+
+For `dist/` build artifacts, choose the orphan-detection criterion by
+whether a DB-backed valid set exists for that path shape. **Event paths
+have one (DB pageableEvents). Non-event paths don't.**
+
+**Layered logic:**
+- `dist/events/<slug>/index.html`, `dist/en/events/<slug>/index.html`
+  → slug-membership against `pageableEvents.map(generateEventSlug)`.
+  Out-of-set → sweep (arm-by-default; correctness-safe because DB is
+  source of truth, doesn't depend on whether file was rewritten this build).
+- `dist/api/<slug>.json` (excluding `api/categories/`, excluding `index.json`)
+  → if slug ∈ valid set, KEEP (false-positive protection). Otherwise
+  fall through to mtime check.
+- Other HTML / JSON (homepage, hubs, venue pages, category aggregations
+  like `dj_set-this-week.json`) → mtime check, requires `SWEEP_ORPHANS=1`
+  to arm.
+
+**Why slug-membership > mtime for event paths:** the build pipeline does
+incremental regeneration (manifest hashing at L974: "X unchanged, Y
+changed/new"). Pages with unchanged hashes are not rewritten; their
+mtime stays older than `buildStartTime`. Mtime-only would falsely flag
+every unchanged-but-valid page as orphan. Slug-membership is invariant
+to whether the file was touched this build — only "is this slug in the
+current pageable set?" matters.
+
+**Why mtime stays as backstop for non-event:** there's no DB-backed
+valid set for homepage/hubs/category JSON. These regenerate every build,
+so mtime IS a valid signal — but the same incremental-build issue means
+some legitimate non-event files may not be touched (hash-unchanged hub
+pages). Hence the `SWEEP_ORPHANS=1` opt-in arm for non-event paths.
+
+**Single source of truth for slug computation:** the sweep imports
+`generateEventSlug` from `src/generators/event-page.ts` — the same
+function that produces the dirname during page generation. If the slug
+formula ever changes, both sites update together. Same family of
+discipline as Sprint 1 S2's validator+emitter paired-shipping rule.
+
+**Idempotency check:** consecutive builds must sweep 0 event orphans.
+If second build > 0, something downstream of the sweep is creating
+event-shaped paths not in pageableEvents — investigate before shipping.
+
+**Multi-city ready:** `sweepOrphans()` takes `distDir` and
+`validEventSlugs` as parameters; nothing about the path shapes is
+city-specific. Barcelona/Berlin will pass their own DIST_DIR + their
+city's pageable set.
+
+**Reference:** `src/generators/orphan-sweep.ts`,
+`tests/generators/orphan-sweep.test.ts` (14 cases including
+false-positive protection, idempotency, parent-prune preserving
+PROTECTED_ROOTS).

@@ -1974,3 +1974,66 @@ identically across cities.
 (2026-04-29).
 
 **Status:** Implemented (Sprint 1 closeout, 2026-05-02).
+
+## dist/ orphan sweep — layered slug-membership + mtime, not pure replacement (S102, 2026-05-02)
+
+**Decision:** Extend the existing `sweepOrphans()` (mtime-based,
+dry-run by default) with a slug-membership layer for event paths,
+**rather than** replacing mtime entirely or duplicating with a separate
+sweep mechanism.
+
+**Reasoning:**
+
+1. **Different path shapes need different invariants.** Event HTML and
+   event API JSON are governed by `pageableEvents` (DB-backed valid
+   set). Homepage, hubs, venue pages, and category JSON aggregations
+   are not — there's no equivalent set to diff against. Forcing a
+   single criterion across all path shapes would either (a) leak DB
+   semantics into non-event paths or (b) leave event paths exposed to
+   incremental-build false positives. Layered classification keeps
+   each path shape on its appropriate invariant.
+
+2. **Slug-membership is correctness-safe; mtime isn't.** Mtime-only
+   was the original approach but stayed dry-run-by-default because
+   the manifest-hash incremental build (line 974: "X unchanged, Y
+   changed/new") legitimately leaves valid pages untouched. Arming
+   mtime-only would catastrophically delete every unchanged page.
+   Slug-membership doesn't have this failure mode: it diffs against
+   DB state, which doesn't care whether the file was rewritten.
+   Therefore event-path arm-by-default is safe; non-event arm
+   stays opt-in.
+
+3. **Extend, don't duplicate.** Brief Step 0 ("if partial sweep
+   exists: extend rather than create new") applied — single-source-of-
+   truth principle. Two separate sweep mechanisms would compete and
+   require dual-maintenance for protected paths, parent-prune logic,
+   and dist-walking. Refactoring into `src/generators/orphan-sweep.ts`
+   gave testability without splintering the mechanism.
+
+4. **Slug computation lives in `generateEventSlug`, imported by both
+   the generator AND the sweep.** Single source of truth for the slug
+   formula. If `${id.substring(0,8)}-${slugify(venue)}-${slugify(title)}`
+   ever changes, both call sites update together — no drift between
+   what gets written to disk and what the sweep treats as valid.
+
+**Alternatives considered:**
+
+- **Replace mtime entirely with slug-membership.** Rejected: no
+  DB-backed valid set exists for non-event paths (homepage, hubs,
+  category aggregations). Pure replacement would leave those paths
+  un-swept by any mechanism.
+- **Two separate sweep functions (one per criterion).** Rejected:
+  duplicates dist-walking, protected-paths config, and parent-prune
+  logic. Brief Step 0 explicitly directed against this.
+- **Add slug-membership only as an additional gate, never sweep
+  on the slug-only path.** Rejected: doesn't deliver the hygiene-gap
+  closure the session targeted. Event-path arm-by-default is the
+  whole point.
+
+**Connects to:** Sprint 1 S2's validator+emitter paired-shipping
+discipline (single source of truth across module boundaries). Sprint 1
+S3's pageableEvents canonical filter (S33).
+
+**Status:** Implemented S102, 2026-05-02. 14 unit tests; full suite
+1795 pass / 0 fail; dry-run + idempotent live build verified
+(0 event orphans on real dist/ — current state aligned).

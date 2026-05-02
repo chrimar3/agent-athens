@@ -2,7 +2,7 @@
 
 // Main site generator - generates all combinatorial pages
 
-import { readFileSync, mkdirSync, existsSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, readdirSync, statSync } from 'fs';
 import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats } from './utils/write-if-changed';
 import { join, dirname } from 'path';
 import { Database } from 'bun:sqlite';
@@ -15,7 +15,8 @@ import {
   renderCategoryPage,
   type CategoryConfig
 } from './templates/category-page';
-import { generateEventPages, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
+import { generateEventPages, generateEventSlug, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
+import { sweepOrphans } from './generators/orphan-sweep';
 import { generateVenuePages } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
@@ -978,9 +979,18 @@ async function main() {
   // These live at /static/root-files/ in the repo and must survive clean rebuilds.
   copyStaticRootFiles();
 
-  // Sweep orphaned HTML/JSON — any page/api JSON in dist/ not rewritten this build.
-  // Dry-run by default; set SWEEP_ORPHANS=1 to actually delete.
-  sweepOrphans(buildStartTime);
+  // Sweep orphaned dist/ entries. Event paths (dist/events, dist/en/events,
+  // dist/api/<slug>.json in pageable set) use slug-membership against the DB —
+  // armed by default (correctness-safe). Non-event paths fall back to mtime
+  // and require SWEEP_ORPHANS=1 to delete.
+  const validEventSlugs = new Set(pageableEvents.map(generateEventSlug));
+  console.log('\n🔍 Checking for orphaned files...');
+  sweepOrphans({
+    distDir: DIST_DIR,
+    validEventSlugs,
+    buildStartTime,
+    armNonEvent: process.env.SWEEP_ORPHANS === '1',
+  });
 
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');
@@ -1290,88 +1300,6 @@ function copyStaticRootFiles(): void {
     copied++;
   }
   console.log(`📋 Copied ${copied} static root file${copied === 1 ? '' : 's'}`);
-}
-
-function sweepOrphans(buildStartTime: number): void {
-  // Protected directory prefixes — nothing inside is ever swept (images, vendored JS/CSS,
-  // persistent caches). Files here may have stale mtimes if a conditional regenerator
-  // didn't touch them this build, so we skip them entirely rather than check mtime.
-  const PROTECTED_PREFIXES = [
-    join(DIST_DIR, 'images') + '/',
-    join(DIST_DIR, 'assets') + '/',
-    join(DIST_DIR, 'scripts') + '/',
-    join(DIST_DIR, 'styles') + '/',
-    join(DIST_DIR, 'api', 'categories') + '/',
-  ];
-  // Parents we never rmdir even when empty (they should always exist).
-  const PROTECTED_ROOTS = new Set([
-    DIST_DIR,
-    join(DIST_DIR, 'events'),
-    join(DIST_DIR, 'venues'),
-    join(DIST_DIR, 'en'),
-    join(DIST_DIR, 'en', 'events'),
-    join(DIST_DIR, 'en', 'venues'),
-    join(DIST_DIR, 'api'),
-  ]);
-
-  function walk(dir: string, out: string[] = []): string[] {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const path = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        if (PROTECTED_PREFIXES.some(p => (path + '/').startsWith(p))) continue;
-        walk(path, out);
-      } else if (entry.isFile()) {
-        out.push(path);
-      }
-    }
-    return out;
-  }
-
-  console.log('\n🔍 Checking for orphaned files...');
-  const orphans: string[] = [];
-  for (const path of walk(DIST_DIR)) {
-    const isHtml = path.endsWith('.html');
-    const isApiJson = path.endsWith('.json')
-      && path.includes(`${DIST_DIR}/api/`)
-      && !path.includes(`${DIST_DIR}/api/categories/`);
-    if (!isHtml && !isApiJson) continue;
-    if (statSync(path).mtimeMs >= buildStartTime) continue;
-    orphans.push(path);
-  }
-
-  if (orphans.length === 0) {
-    console.log('  ✓ No orphans found');
-    return;
-  }
-
-  const armed = process.env.SWEEP_ORPHANS === '1';
-  if (!armed) {
-    const preview = 10;
-    for (const path of orphans.slice(0, preview)) {
-      console.log(`  ⚠️  WOULD DELETE: ${path}`);
-    }
-    if (orphans.length > preview) {
-      console.log(`     ... and ${orphans.length - preview} more`);
-    }
-    console.log(`  ⚠️  ${orphans.length} orphan${orphans.length === 1 ? '' : 's'} found — set SWEEP_ORPHANS=1 to delete`);
-    return;
-  }
-
-  const parents = new Set<string>();
-  for (const path of orphans) {
-    unlinkSync(path);
-    parents.add(dirname(path));
-  }
-  // Prune newly-empty parent dirs (but never the protected roots).
-  for (const parent of parents) {
-    if (PROTECTED_ROOTS.has(parent)) continue;
-    try {
-      if (readdirSync(parent).length === 0) rmdirSync(parent);
-    } catch {
-      // Non-empty or already gone — ignore.
-    }
-  }
-  console.log(`  🗑️  Swept ${orphans.length} orphaned file${orphans.length === 1 ? '' : 's'}`);
 }
 
 function generate404Page(): void {
