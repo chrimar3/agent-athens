@@ -1921,3 +1921,126 @@ Substitute `\b` → Unicode-aware boundary at compile time. `\p{L}` (Unicode let
 
 - The Unicode-aware boundary is *approximate* — it treats anything in `\p{L}` ∪ `\p{N}` ∪ `_` as a "word char." Strict standards (e.g. UAX #29 word segmentation) are more nuanced. Fine for banned-phrase matching across natural-language editorial copy; not appropriate for tokenizer-grade work.
 - Cache key is the resolved path string — symlinks and `./foo` vs `foo` would create separate cache slots. Acceptable for a config loader; would matter for a hot-path file cache.
+
+---
+
+## Pattern: Coordinated validator + emitter changes — ship as one commit
+
+**Date:** 2026-05-02 (Sprint 1 Session 3 closeout)
+
+**Context:** Sprint 1 Sessions 2 + 3 reworked the JSON-LD `offers` contract. Three sessions, two halts, one coordinated commit. The lesson is reusable: when a validator enforces a contract that an emitter is changing, splitting the work across sessions or commits creates an unstable middle state.
+
+**The mistake (S2):** Plan said "validators are Session 3" — implying validator changes could ship after the emitter rewire. Reality: the validator lists `'offers'` in `MANDATORY_FIELDS` uniformly. When the emitter started omitting offers on `EventCompleted` events, the validator flagged 8194 errors (~92% of corpus). Hard stop and revert the emitter; ship classifier + helpers as standalone utilities.
+
+**The fix (S3):** Re-apply the emitter rewire *paired* with the validator extension in a single commit. Validator and emitter ship together or not at all. Single-test-suite green is necessary but not sufficient — the build-time invariant (schema completeness ≥98%) is the contract check that catches the coupling.
+
+**Rule:**
+
+1. **Identify validator-emitter pairs early.** Before splitting work, grep for every code path that enforces the contract you're changing. `MANDATORY_FIELDS` list is one signature; per-rule conditional checks are another. There may be 2+ files.
+2. **One commit per contract.** Validator update + emitter update + types + tests = one commit. Bisect-friendly.
+3. **The build is the contract test.** Tests can be green and the build still fail when emitters and validators disagree about what the schema looks like. Schema completeness (or equivalent build-time invariant) is the coupling detector.
+4. **Discover stale-state surprises before committing.** Clean-rebuild side effects (orphan dirs in dist/, cached HTML with old shape) can surface alongside contract changes. They're not regression — they're the validator newly seeing what was always wrong. Diagnose vs. silence-the-alarm; they're different.
+
+**Why:**
+
+- Stable middle states matter for git bisect, deployments, rollbacks.
+- The "I'll fix the validator next session" plan creates a window where the emitter looks broken; either you ship the broken state to production, or you stash the work, or you can't merge anything until both sessions complete.
+- Strict validators are *more* valuable than loose ones — they catch contract drift at build time. The cost is they constrain how you can split work.
+
+**How to apply:**
+
+- When proposing to split contract work across sessions, ask: "What is the build-time invariant that proves the contract holds?" If it's "schema completeness ≥X%", the emitter and validator must move together. If there's no build-time invariant, they can split.
+- When a validator change is coming, find every code path that enforces the related rule. `grep -rn 'CONSTANT_NAME\|relevant_field_name'` is rarely enough — a per-rule conditional in another file may be invisible to constant-search.
+- When a build flags a category of errors after an emitter change, the question is: "Is this category the spec contradiction, or stale state in build outputs?" Both are real findings; both need different fixes (spec callout vs. clean rebuild + orphan sweep).
+
+**Limitations:**
+
+- This pattern is for build-time contracts. Runtime contract changes (e.g., API schemas) have different deployment shapes — reverse-compatibility windows, dual-write phases, etc.
+- "One commit" assumes a single repo. Polyrepo pairs (separate emitter and validator services) can't ship one commit; they need a coordinated deploy with shared protocol versioning. The principle still applies (don't deploy them in opposite order); the mechanism differs.
+
+---
+
+## Pattern: Append-only CSV match-firing log for rule-curation observability
+
+**Date:** 2026-05-02 (S100c)
+
+**Context:** F1 quality-gate enforces banned phrases sourced from `config/banned-phrases.yaml` (ED-curated). When a rule fires (a banned phrase is matched in production text), we want to know which rules fire most so ED can decide which absolutes warrant promotion to contextual, and which contextual entries should tighten or loosen. This is *rule-curation observability* — not enforcement state, not a debug log. The audience is the rule-curator (ED), not the engineer.
+
+**Pattern:**
+
+```typescript
+// Colocated with the rule data in src/enrichment/quality-gates.ts
+const MATCH_LOG_PATH = path.resolve(import.meta.dir, '../../data/banned-phrase-matches.csv');
+const MATCH_LOG_HEADER = 'timestamp,event_id,language_of_match,matched_phrase,description_excerpt\n';
+
+function ensureMatchLog(): void {
+  if (!fs.existsSync(MATCH_LOG_PATH)) {
+    fs.writeFileSync(MATCH_LOG_PATH, MATCH_LOG_HEADER);
+  }
+}
+
+function logMatch(eventId, language, phrase, description): void {
+  if (process.env.NODE_ENV === 'test') return;  // <-- critical
+  try {
+    ensureMatchLog();
+    const idx = description.toLowerCase().indexOf(phrase.toLowerCase());
+    const start = Math.max(0, idx - 30);
+    const end = Math.min(description.length, idx + phrase.length + 30);
+    const excerpt = description.slice(start, end).replace(/\s+/g, ' ').replace(/"/g, '""');
+    const row = `${new Date().toISOString()},${eventId ?? ''},${language},${phrase},"${excerpt}"\n`;
+    fs.appendFileSync(MATCH_LOG_PATH, row);
+  } catch {
+    // Never block enforcement on a log write.
+  }
+}
+```
+
+**Rules of thumb:**
+
+- **CSV not SQLite for rule-curator audiences.** ED greps and eyeballs. Numbers/Excel opens it for free. SQLite needs a tool. CSV wins for low-volume, low-frequency editorial review.
+- **Append-only, gitignored.** High-write file with rotation needs different from source. Add to `.gitignore` next to other observability CSVs (e.g., `data/search-visibility-log.csv`).
+- **`NODE_ENV=test` early-return guard.** Bun's test runner sets `NODE_ENV='test'` automatically (verified empirically). Without this guard, every CI test run pads the production CSV with test event_ids. Standard convention for separating production telemetry from test-time noise — applies to **any** observability hook that writes to disk from production code.
+- **Try/catch around the write.** Log-write failures (disk-full, permissions, FS-stale) must never propagate up. The CSV is editorial telemetry, not enforcement state.
+- **Excerpt: ±30 chars, whitespace-collapsed, CSV-double-quote-escaped.** ED needs enough context to judge "was this floating praise or a justified use," but not so much that the CSV becomes unreadable. Whitespace collapse handles multi-line descriptions; CSV escape handles embedded quotes.
+- **Schema: `timestamp,event_id,language_of_match,matched_phrase,description_excerpt`.** event_id is nullable (some F1 entry points don't have it threaded through; that's OK — ED filters by phrase or timestamp instead). language_of_match is `'en'` or `'el'` — useful for sorting EN vs EL fire volumes separately.
+
+**When to use:**
+
+- Rule-based enforcement systems (banned phrases, lint rules, content moderation) where rule curation needs production firing data, not synthetic test cases.
+- Editorial / human-in-the-loop systems where the curator is non-engineering.
+- Slow-cycle review (weekly / monthly), not real-time alerting.
+
+**When NOT to use:**
+
+- High-volume hot paths (>100 writes/sec). Switch to a database with indexed columns.
+- Multi-process write contention. CSVs append synchronously; concurrent processes can't safely share one without locking.
+- Real-time / dashboard-driven workflows. CSV doesn't aggregate without a query layer.
+
+**Inverse of usual logging direction:**
+
+Usual logs capture **failures** for fixing — exception traces, error rates, slow queries. Match-firing logs capture **successes** (rule hits) so the rule itself can be tuned. The data flow is identical, but the analytical question is "is this rule still right?" not "is this code still working?" Useful framing when proposing observability for any rule-based system: ask the curator "what would let you decide if these rules are still right?" — the answer often shapes a different schema than what an engineer would default to.
+
+---
+
+## Pattern: TypeScript as cross-reference checker for refactors of cross-file constants
+
+**Date:** 2026-05-02 (S100c — surfaced when removing `LAZY_ADJECTIVES`)
+
+**Context:** Removing a cross-file exported constant. The explore phase used `grep -rn 'LAZY_ADJECTIVES' src/ tests/` to enumerate consumers. Grep doesn't distinguish in-file references from cross-file imports — and the third consumer was an in-file reference (`description-generator.ts:580` consumed the local `LAZY_ADJECTIVES` definition at L115). Grep listed it but it visually merged with the definition site, so the consumer count was off by one.
+
+**Pattern:**
+
+After removing an exported constant or symbol, run `bunx tsc --noEmit` (or `tsc --noEmit` for non-Bun projects) immediately. TypeScript's "Cannot find name 'X'" / "Module has no exported member 'X'" errors enumerate every consumer with line numbers — including in-file ones, ones in dynamic-import paths grep would miss, and ones in re-export chains. Faster and more reliable than grep for cross-reference enumeration.
+
+**Rules of thumb:**
+
+- **Trust tsc more than grep for cross-reference enumeration of named symbols.** Grep matches strings; tsc resolves names. The difference matters when the same string is both a definition and a usage in one file.
+- **The first tsc run after Step N is the highest-signal moment in a refactor.** Don't batch multiple removals before running tsc — the error list gets noisy and harder to attribute.
+- **Errors in test files are usually the easiest to fix; errors in production code paths are the hidden landmines.** Production-code errors mean a consumer the brief didn't anticipate; pause and decide whether to expand scope or roll back. Test errors usually just mean updating an import or a hardcoded count assertion.
+- **This works for any TypeScript project, not just Bun.** The pattern is "use the language server as a refactor surface" — applicable to any strongly-typed language with usable error messages (Rust's compiler, Java's IDE refactor tools, etc.).
+
+**Limitations:**
+
+- Doesn't catch consumers that use dynamic strings (`obj['LAZY_ADJECTIVES']`) — rare, but possible.
+- Doesn't catch consumers in untracked-by-tsconfig files (e.g., shell scripts, config files, docs). Always pair with a final `grep` after tsc is clean to catch these.
+- Doesn't catch consumers in workspaces tsc isn't told about (multi-repo / monorepo with separate `tsconfig`s). Run tsc in each project that imports from the modified module.
