@@ -3262,3 +3262,45 @@ Stepwise execution of the plan. Notable deviations:
 - **Should S101a's gating extend to other cornerstones?** Architectural question for next planning cycle. Snapshot data over the next 3 weeks helps quantify the cost of NOT extending — how often do ungated hubs' schema dateModified actually need to bump?
 - **3am visible-date artifact on gated rows** — flagged for future UX session. Low priority.
 - **Snapshot rotation** — `find data/content-hash-snapshots/ -mtime +90 -delete` once GEO has been logging long enough that 90-day data has flowed through real use cases. Tracked in `docs/known-issues.md`.
+
+### Session 101c — Sprint 1 amendment (venue_direct_only + decisions backfill) — 2026-05-02
+
+**Goal:** Apply Strategist 2026-05-02 amendments (venue_direct_only
+lane formalization, dual-type seller for self-merchant venues) and
+backfill 2026-04-29 decisions entry that was authored but never filed
+to disk.
+
+**What happened:**
+- benaki.org reclassified `unclassified` → `venue_direct_only` in
+  config/ticket-source-classification.json
+- Emitter (event-page.ts) splits venue-fallback branch on classification:
+  venue_direct_only emits dual-type `["Place", "Organization"]`;
+  listing_aggregator + unclassified + free events stay scalar `"Organization"`
+- Both validators (schema-validator.ts, schema-completeness.ts) accept
+  array @type containing "Organization" — required pairing per S2 protocol
+- SchemaOrgEvent.offers.seller["@type"] type widened to
+  `'Organization' | ['Place', 'Organization']` (tuple held; no fallback needed)
+- decisions.md backfilled with 2026-04-29 entry (Sprint 1 Schema Reality
+  Check) authored by GEO Strategist but never filed; landed alongside
+  2026-05-02 Sprint 1 Closeout entry
+- Tests: 1778 pass / 0 fail (+4 from S3 baseline)
+- Schema completeness: 97% / 0 errors / 239 warnings (matches S3 baseline)
+- Single commit: 8021646d1 (10 files, 175+/6−)
+- Three unrelated working-tree modifications (mistakes.md,
+  event-set-hashes.json, ping-indexnow.ts) left unstaged per plan's
+  stage-by-path rule
+
+**Backfill provenance:** The 2026-04-29 entry was authored by GEO
+Strategist as paste-ready decisions text in the Sprint 1 Q1/Q2/Q3
+callback response. It was referenced in S1, S2, and S3 commit messages
+and in the 2026-05-02 closeout entry, but never written to
+.claude/notes/decisions.md during S1/S2/S3 execution. This amendment
+session filed it 3 days late.
+
+**Sprint 1 fully closed.** Three commits: 749de0fd5 (S2 utilities),
+5d49315a1 (S3 source — auto-pipeline absorbed, validator+emitter
+paired), 3eaec15df (S3 closeout docs), 8021646d1 (this amendment).
+Cross-referenced.
+
+**Next:** dist/ orphan sweep (Sprint 2 P1, ~30 min, plan already
+written). Sprint 2 brief intake unblocked from both directions.

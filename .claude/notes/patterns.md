@@ -2096,3 +2096,52 @@ The S101b brief asserted that S101a had wired hash-gating into prod for all hubs
 **Why it matters:** the brief's premise drives the scope. If we'd treated the prod observation as a regression, we'd have hunted a non-existent bug in the override path (`hub-page.ts:282-283` is correct). The diagnosis flips a 30-min hunt-the-bug into a 5-min "wait for next deploy + re-verify."
 
 **Pair with the broader brief-verification pattern:** check that the brief's named files exist with the claimed signatures (the user's "verify-paths-in-briefs" rule with 5 prior incidents — S71/S82/S95/S100b/S101a). The prod-vs-commit check extends that pattern to runtime state, not just code state.
+
+## Dual-type seller for venue_direct_only (2026-05-02)
+
+When a venue is the merchant of record (homepage as ticket_url, no
+third-party platform), `seller["@type"]` emits as `["Place", "Organization"]`
+to match the 2026-04-28 Canonical Entity Graph spec for venue-as-merchant
+cases (Megaron, Onassis, Benaki — venues that self-merchant tickets).
+
+**Scope of dual-type:** ONLY venue_direct_only classification.
+
+**Other lanes stay scalar `"Organization"`:**
+- `known_merchant` — host is the seller (Viva.gr, More.com, etc.)
+- `listing_aggregator` — venue is de-facto seller, but not self-merchant
+- `unclassified` — venue fallback
+- Free events — venue as responsible Organization
+
+**Validators paired:** Both `schema-validator.ts` and
+`schema-completeness.ts` accept `seller["@type"]` as either scalar
+`"Organization"` OR array containing `"Organization"` (matching the
+emitter contract).
+
+**Sprint 3 upgrade path:** When @graph migration ships, inline seller
+objects move to `@id` references. The dual-type tuple stays — it's
+about entity nature (Place + Organization), not about reference style.
+
+**See:** decisions.md 2026-05-02 Sprint 1 Closeout entry; commit 8021646d1.
+
+## Append-only beats insert-in-place for decisions.md (2026-05-02)
+
+When backfilling a late-filed decision (authored on date X but written
+to disk on date Y), append at end-of-file in the order entries are
+filed — not inserted at the chronological position they would have
+occupied if filed on time.
+
+**Why:** decisions.md is a journal of decisions in the order they
+were filed, not a sorted index. Reordering already-filed entries
+rewrites history (git blame, file-order grep, "what was decided last"
+semantics). Strict chronological-by-decision-date sorting is not
+the file's purpose.
+
+**Honest practice:** Append the late entry, and let the commit message
+note "authored on X, filed on Y." The file order then tells the truth
+about institutional memory hygiene rather than papering over the gap.
+
+**Precedent:** Sprint 1 amendment session 2026-05-02 backfilled a
+2026-04-29 GEO Strategist entry alongside the same-day 2026-05-02
+closeout entry. Both appended at end of file after pre-existing
+2026-05-02 entries (S100c, S101a). Non-strict global chronology
+preserved over reordering filed entries.
