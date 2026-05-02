@@ -247,6 +247,9 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
       }
 
       // Inline seller (no @id, no @graph — that's Sprint 3+).
+      // venue_direct_only flips to dual-type ['Place', 'Organization'] (venue is self-merchant).
+      const sellerTypeForVenue: 'Organization' | ['Place', 'Organization'] =
+        classification === 'venue_direct_only' ? ['Place', 'Organization'] : 'Organization';
       const seller: Record<string, any> = sellerHost
         ? {
             '@type': 'Organization',
@@ -254,7 +257,7 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
             'url': `https://${sellerHost}/`
           }
         : {
-            '@type': 'Organization',
+            '@type': sellerTypeForVenue,
             'name': event.venue.name,
             ...(event.venue.website ? { url: event.venue.website } : {})
           };

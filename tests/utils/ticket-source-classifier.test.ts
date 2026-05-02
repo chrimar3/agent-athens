@@ -14,6 +14,10 @@ describe('classifySource', () => {
     expect(classifySource('https://www.halfnote.gr/en/calendar/')).toBe('venue_direct_only');
   });
 
+  test('benaki.org is venue_direct_only', () => {
+    expect(classifySource('https://www.benaki.org/some/event/path/')).toBe('venue_direct_only');
+  });
+
   test('host not in config is unclassified', () => {
     expect(classifySource('https://example-not-in-config.com/foo')).toBe('unclassified');
   });

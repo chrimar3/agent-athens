@@ -562,6 +562,37 @@ describe("Event Detail Page — offers emission", () => {
     expect(schema.offers.seller.name).toBe(event.venue.name);
   });
 
+  // venue_direct_only seller emits dual-type ["Place", "Organization"] per
+  // Canonical Entity Graph spec (2026-04-28): venue is self-merchant.
+  test("venue_direct_only host: seller emits dual-type ['Place', 'Organization']", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.benaki.org/event/123/',
+      venue: {
+        ...sampleConcertWithTicket.venue,
+        website: 'https://www.benaki.org/',
+      },
+    };
+    const schema = parse(event);
+    expect(schema.offers.seller['@type']).toEqual(['Place', 'Organization']);
+    expect(schema.offers.seller.name).toBe(event.venue.name);
+    expect(schema.offers.seller.url).toBe('https://www.benaki.org/');
+    expect(schema.offers.url).toBeUndefined();
+  });
+
+  // Regression-guard: listing_aggregator must STAY scalar 'Organization'.
+  // Only venue_direct_only flips to dual-type; aggregator + unclassified + free unchanged.
+  test("listing_aggregator host: seller stays scalar 'Organization' (regression-guard)", () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.athinorama.gr/x/y/',
+    };
+    const schema = parse(event);
+    expect(schema.offers.seller['@type']).toBe('Organization');
+  });
+
   // Fixture D — unclassified host: emits offers.url + console.warn
   test("with-ticket on unclassified host: emits offers.url + console.warn", () => {
     const warnings: string[] = [];

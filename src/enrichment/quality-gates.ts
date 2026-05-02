@@ -84,7 +84,8 @@ export interface SchemaOrgEvent {
     url?: string;
     validFrom?: string;  // vestigial — emitter does not write it (S1 removed); type retained for forward compat
     seller?: {
-      '@type': 'Organization';
+      // Dual-type for venue_direct_only (venue is self-merchant); see decisions.md 2026-05-02.
+      '@type': 'Organization' | ['Place', 'Organization'];
       name: string;
       url?: string;
     };

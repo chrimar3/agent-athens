@@ -164,12 +164,16 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
       errors.push('offers.availability is missing');
     }
 
-    // seller: must be Organization-typed object with non-empty name
+    // seller: must be Organization-typed object with non-empty name.
+    // Accepts dual-type ['Place', 'Organization'] for venue_direct_only (decisions.md 2026-05-02).
     const seller = offers.seller;
+    const sellerType = seller && typeof seller === 'object' ? seller['@type'] : undefined;
+    const sellerTypeOk = sellerType === 'Organization' ||
+      (Array.isArray(sellerType) && sellerType.includes('Organization'));
     const sellerIsValid =
       seller !== null &&
       typeof seller === 'object' &&
-      seller['@type'] === 'Organization' &&
+      sellerTypeOk &&
       isNonEmpty(seller.name);
     if (!sellerIsValid) {
       errors.push('offers.seller is missing or not an Organization with name');

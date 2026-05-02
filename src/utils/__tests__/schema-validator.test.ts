@@ -161,6 +161,17 @@ describe('validateEventSchema — offers contract', () => {
     expect(result.missing).toContain('offers.seller');
   });
 
+  test('offers.seller with dual-type ["Place", "Organization"] passes Organization check', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema.offers.seller = {
+      '@type': ['Place', 'Organization'],
+      name: 'Benaki Museum',
+      url: 'https://www.benaki.org/'
+    };
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.missing).not.toContain('offers.seller');
+  });
+
   test('offers present but missing offers.url flags as INFO (not WARN, not FAIL)', () => {
     const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
     delete schema.offers.url;

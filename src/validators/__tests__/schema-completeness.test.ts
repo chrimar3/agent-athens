@@ -256,6 +256,17 @@ describe('validateSchemaCompleteness', () => {
       expect(result.errors.some(e => e.includes('seller'))).toBe(true);
     });
 
+    test('offers.seller with dual-type ["Place", "Organization"] passes Organization check', () => {
+      const schema = makeValidSchema();
+      (schema.offers as Record<string, any>).seller = {
+        '@type': ['Place', 'Organization'],
+        name: 'Benaki Museum',
+        url: 'https://www.benaki.org/'
+      };
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'dual-type-seller');
+      expect(result.errors.some(e => e.includes('seller'))).toBe(false);
+    });
+
     test('offers present but missing offers.url → INFO (not WARN, not FAIL)', () => {
       const schema = makeValidSchema();
       delete (schema.offers as Record<string, any>).url;

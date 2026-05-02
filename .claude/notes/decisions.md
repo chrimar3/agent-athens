@@ -1877,3 +1877,100 @@ S100b shipped the loader + EW integration; F1 still hardcoded a divergent 27-ent
 ### Related sessions
 - S101a — schema fix + cadence wiring (this entry)
 - S100c — banned-phrase loader (prior section)
+
+## 2026-04-29 — Sprint 1 Schema Reality Check (Revises 2026-04-28 Validator Spec)
+
+**Context:** Dev Planner Sprint 1 diagnostic surfaced gaps between the
+2026-04-28 Schema.org Offers spec and ground-truth scraper data. Three
+adjustments to the validator and emission logic, plus an explicit decision
+to defer @graph migration.
+
+**Decisions:**
+
+1. **`validFrom`: emission dropped, validator downgraded FAIL → WARN.**
+   Scrapers don't capture ticket on-sale dates from current sources.
+   `createdAt` (DB-row insert timestamp) is not a defensible proxy.
+   Wrong signal worse than no signal. Future enrichment: capture into
+   `tickets_on_sale_at` column when sources expose it; emit `validFrom`
+   only when populated.
+
+2. **`availability` ↔ `eventStatus` mapping locked:**
+   - `EventScheduled` → `InStock`
+   - `EventCompleted` → omit `Offer` entirely (fires Day 0 post-event)
+   - `EventCancelled` → `Discontinued`
+   - `EventPostponed` → `InStock` (let `eventStatus` carry the
+     postponement signal; `LimitedAvailability` is a quantity signal,
+     not a timing signal)
+   - `EventRescheduled` → `InStock`
+
+3. **Listing-aggregator `offers.url` policy:** Add config-driven
+   classifier (`config/ticket-source-classification.json`) splitting
+   source hosts into `known_merchants` and `listing_aggregators`. When
+   ticket source is a listing aggregator and no merchant resolution
+   exists, omit `offers.url` (keep rest of Offer body). Validator FAIL
+   rule on missing `offers.url` gets exception clause for this case.
+   Sprint 2 adds nightly URL resolver populating `ticket_url_resolved`
+   from aggregator outbound buy-button links.
+
+4. **`@graph` migration deferred to Sprint 3.** Sprint 1 emits `seller`
+   as inline Organization object (no `@id` reference). Validator rules
+   on `seller.@id` and orphan-seller resolution downgraded FAIL → WARN
+   until Sprint 3 multi-merchant federation forces `@graph` envelope.
+
+**Replicability:** All four decisions universal. The aggregator-vs-merchant
+classifier is the multi-city pattern — agent-barcelona and agent-berlin
+ship with their own per-city configs.
+
+**Status:** Approved — Sprint 1 implementation
+
+## 2026-05-02 — Sprint 1 Closeout: venue_direct_only Lane, hostToName Casing, Free-Event Seller
+
+**Context:** Three follow-ups surfaced during Sprint 1 execution that
+required strategic resolution before they hardened into precedent.
+Sprint 1 closed clean (8,282 pages, 0 errors); these decisions affect
+ongoing emission and the Sprint 2 follow-up brief.
+
+**Decisions:**
+
+1. **`venue_direct_only` classifier lane introduced.** Hosts where the
+   venue is the merchant of record but the captured ticket_url is at
+   homepage level (no deep buy path scrapable). Sprint 1 entry:
+   `benaki.org`. Emission: seller as inline Organization with venue
+   data (Sprint 3 upgrades to dual-type `["Place", "Organization"]`
+   `@id` reference per Canonical Entity Graph spec); `offers.url`
+   omitted (existing aggregator exception clause extends to this lane).
+   Sprint 2 URL resolver job extended to attempt deep-URL resolution
+   on venue_direct_only hosts.
+
+2. **`hostToName()` capitalization: first-segment-only.** The 2026-04-29
+   prose conflicted with the worked example; example was correct.
+   Emission: "Viva.gr", "More.com", "Ticketservices.gr". Brand-correct
+   casing (e.g., "TicketServices.gr") deferrable to Sprint 3 when
+   canonical Organization entities replace inline `seller` objects
+   via `@id` reference.
+
+3. **Free-event seller: venue-as-seller confirmed.** Q3 Option D
+   principle ("no merchant in seller seat → responsible Organization
+   takes that role") extends cleanly to free events. Emission shape
+   shipped during Sprint 1 closeout is correct:
+   `seller: {@type: Organization, name: venue.name, url: venue.website}`.
+   Where venue.website is unknown, omit `url` (valid Schema.org).
+
+**Reasoning:** All three resolve to the same underlying principle —
+honest schema over partial-truth schema. (1) Homepage URLs as offers.url
+fail the deepest-link policy and create bad agent handoffs. (2) Casing
+beyond first-segment produces visually broken output ("More.Com") with
+no benefit to AI engine entity resolution. (3) Venue-as-seller on free
+events is the same pattern as venue-as-seller for aggregator-routed
+events — no merchant exists, the responsible Organization fills the
+seller role.
+
+**Replicability:** All three universal. The classifier config grows
+per-city; capitalization rule and free-event seller rule apply
+identically across cities.
+
+**Connects to:** "Schema.org Offers Implementation Spec" (2026-04-28),
+"Canonical Entity Graph" (2026-04-28), "Sprint 1 Schema Reality Check"
+(2026-04-29).
+
+**Status:** Implemented (Sprint 1 closeout, 2026-05-02).

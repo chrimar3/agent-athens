@@ -111,10 +111,16 @@ export function validateEventSchema(jsonLd: string, url: string): SchemaValidati
   if (offersValue && typeof offersValue === 'object') {
     const offers = offersValue as Record<string, unknown>;
     const seller = offers.seller;
+    const sellerType = seller && typeof seller === 'object'
+      ? (seller as Record<string, unknown>)['@type']
+      : undefined;
+    const sellerTypeOk =
+      sellerType === 'Organization' ||
+      (Array.isArray(sellerType) && sellerType.includes('Organization'));
     const sellerIsValid =
       seller !== null &&
       typeof seller === 'object' &&
-      (seller as Record<string, unknown>)['@type'] === 'Organization' &&
+      sellerTypeOk &&
       typeof (seller as Record<string, unknown>).name === 'string' &&
       ((seller as Record<string, unknown>).name as string).trim().length > 0;
     if (!sellerIsValid) {
