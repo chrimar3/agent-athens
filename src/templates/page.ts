@@ -125,6 +125,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- For AI agents: alternate formats -->
   <link rel="alternate" type="application/json" href="/api/${url}.json">
+  ${url === 'index' ? `<link rel="alternate" type="application/ld+json" href="/api/events.json">` : ''}
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">

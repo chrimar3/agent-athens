@@ -135,9 +135,13 @@ function getOgImage(event: Event): string {
 }
 
 /**
- * Generate Schema.org JSON-LD for an individual event page
+ * Build the Schema.org JSON-LD object for an individual event.
+ *
+ * Returns the hydrated object form so consumers can either serialize
+ * (see `generateEventSchema`) or embed directly (e.g. DataFeed wraps
+ * these as `dataFeedElement[]` entries — see `src/generators/datafeed.ts`).
  */
-function generateEventSchema(event: Event, locale: Locale = 'el'): string {
+function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<string, any> {
   const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
   const eventSlug = generateEventSlug(event);
   const urlPrefix = locale === 'en' ? 'en/' : '';
@@ -296,7 +300,17 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
     schema.performer = performer;
   }
 
-  return JSON.stringify(schema, null, 2);
+  return schema;
+}
+
+/**
+ * Generate Schema.org JSON-LD string for an individual event page.
+ *
+ * Thin wrapper around `buildEventSchemaObject`. Kept as the canonical
+ * call site for HTML embedding (output is byte-identical to pre-refactor).
+ */
+function generateEventSchema(event: Event, locale: Locale = 'el'): string {
+  return JSON.stringify(buildEventSchemaObject(event, locale), null, 2);
 }
 
 /**
@@ -787,4 +801,4 @@ export function generateRedirects(
 }
 
 // Exports for other modules
-export { getAthensTimezone, generateEventSchema };
+export { getAthensTimezone, generateEventSchema, buildEventSchemaObject };

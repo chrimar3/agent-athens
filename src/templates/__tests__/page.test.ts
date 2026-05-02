@@ -132,6 +132,21 @@ describe("renderPage", () => {
     expect(html).toContain('rel="alternate" type="application/json" href="/api/jazz-concert-this-week.json"');
   });
 
+  // Sprint 2 Component A — DataFeed alternate-link is homepage-only
+  test("homepage (url='index') includes Schema.org DataFeed alternate-link", () => {
+    const homepageMetadata: PageMetadata = { ...sampleMetadata, url: "index" };
+    const html = renderPage(homepageMetadata, [sampleConcert]);
+
+    expect(html).toContain('rel="alternate" type="application/ld+json" href="/api/events.json"');
+  });
+
+  test("non-homepage (e.g. url='today') does NOT include DataFeed alternate-link", () => {
+    const hubMetadata: PageMetadata = { ...sampleMetadata, url: "today" };
+    const html = renderPage(hubMetadata, [sampleConcert]);
+
+    expect(html).not.toContain('href="/api/events.json"');
+  });
+
   test("renders site nav header", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 

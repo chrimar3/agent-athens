@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema } from "../event-page";
+import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema, buildEventSchemaObject } from "../event-page";
 import {
   sampleConcert,
   sampleConcertWithTicket,
@@ -703,4 +703,35 @@ describe("Event Detail Page — offers emission", () => {
     const schema = parse(event);
     expect(schema.offers.url).toBeUndefined();
   });
+});
+
+// ─── buildEventSchemaObject / generateEventSchema equivalence (Sprint 2 Component A) ───
+// Refactor in S105 split the JSON-LD builder into an object form
+// (`buildEventSchemaObject`) and the original string form (`generateEventSchema`).
+// String output must remain byte-identical to the pre-refactor implementation,
+// and parsing the string must yield the same object the builder returns directly.
+// This is the contract DataFeed (`src/generators/datafeed.ts`) relies on.
+describe("Event schema — object/string equivalence", () => {
+  const fixtures: ReadonlyArray<readonly [string, Event, 'el' | 'en']> = [
+    ['concert (el)', sampleConcert, 'el'],
+    ['concert (en)', sampleConcert, 'en'],
+    ['with-ticket concert', sampleConcertWithTicket, 'el'],
+    ['free exhibition', sampleFreeExhibition, 'el'],
+    ['theater performance', sampleTheaterPerformance, 'el'],
+    ['workshop', sampleWorkshop, 'el'],
+  ];
+
+  for (const [label, event, locale] of fixtures) {
+    test(`generateEventSchema string === JSON.stringify(buildEventSchemaObject) for ${label}`, () => {
+      const stringForm = generateEventSchema(event, locale);
+      const objectForm = buildEventSchemaObject(event, locale);
+      expect(stringForm).toBe(JSON.stringify(objectForm, null, 2));
+    });
+
+    test(`buildEventSchemaObject deep-equals JSON.parse(generateEventSchema) for ${label}`, () => {
+      const parsed = JSON.parse(generateEventSchema(event, locale));
+      const objectForm = buildEventSchemaObject(event, locale);
+      expect(parsed).toEqual(objectForm);
+    });
+  }
 });

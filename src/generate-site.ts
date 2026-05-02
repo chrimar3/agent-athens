@@ -31,6 +31,7 @@ import { renderSearchOverlay, renderSearchScript } from './templates/search-over
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 import { buildCompletenessReport, printBucketSummary, writeCompletenessReport } from './validators/completeness-reporter';
+import { buildDataFeed, writeDataFeed } from './generators/datafeed';
 import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
 import { BASE_URL } from './config/site-url';
@@ -1003,6 +1004,15 @@ async function main() {
     englishHubCount: bilingualHubSlugs.size,
   });
   await generateRobotsTxt();
+
+  // Sprint 2 Component A — Schema.org DataFeed at /api/events.json.
+  // Discovery surface for AI agents and structured-data consumers; sibling
+  // of llms.txt + robots.txt rather than appendix to the homepage block.
+  // Written before validation at line 1032 so validateDataFeed can read it.
+  const dataFeed = buildDataFeed(pageableEvents, 'el');
+  writeDataFeed(dataFeed, join(DIST_DIR, 'api/events.json'));
+  console.log(`  ✓ /api/events.json (${dataFeed.dataFeedElement.length} events)`);
+
   // Build priority overrides for past-active event pages (lower sitemap priority)
   const priorityOverrides = new Map<string, string>();
   for (const url of pastEventUrls) {
@@ -1187,6 +1197,7 @@ Hub pages include answer capsules, comparison tables, FAQ sections and hreflang 
 Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 
 - [All Events](${base}/api/index.json)
+- [All Events as Schema.org DataFeed](${base}/api/events.json)
 - [Today](${base}/api/today.json)
 - [Category example](${base}/api/categories/concerts.json)
 

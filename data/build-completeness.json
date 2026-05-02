@@ -1,12 +1,13 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-02T21:29:54.340Z"
+    "lastUpdate": "2026-05-02T22:36:36.522Z"
   },
   "layers": {
     "event_level": "measured",
     "offer_level": "measured",
     "place_level": "not_measured",
-    "aria_level": "not_measured"
+    "aria_level": "not_measured",
+    "datafeed_level": "measured"
   },
   "events": {
     "byType": [
@@ -109,6 +110,12 @@
   "venues": {
     "total": 54,
     "pass": 54,
+    "warn": 0,
+    "fail": 0
+  },
+  "datafeed": {
+    "total": 1,
+    "pass": 1,
     "warn": 0,
     "fail": 0
   }

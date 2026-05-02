@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -444,10 +444,93 @@ describe('validateAllPages', () => {
     writeFileSync(join(dir3, 'index.html'), wrapInHtml(errSchema));
 
     const summary = validateAllPages(tmpDir);
-    expect(summary.total).toBe(3);
-    expect(summary.passCount).toBe(1);  // no errors, no warnings
-    expect(summary.warnCount).toBe(1);  // warnings only
-    expect(summary.failCount).toBe(1);  // has errors
-    expect(summary.details).toHaveLength(3);
+    // 3 event pages + 1 DataFeed slot (Sprint 2 Component A — validateAllPages
+    // appends validateDataFeed(distDir); the missing /api/events.json in tmpDir
+    // surfaces as a fourth entry with a "missing" error).
+    expect(summary.total).toBe(4);
+    expect(summary.passCount).toBe(1);  // valid event
+    expect(summary.warnCount).toBe(1);  // warn-event
+    expect(summary.failCount).toBe(2);  // error-event + missing DataFeed
+    expect(summary.details).toHaveLength(4);
+    expect(summary.details.some(r => r.slug === 'datafeed:events')).toBe(true);
+  });
+});
+
+// ─── validateDataFeed (Sprint 2 Component A) ─────────────────────
+// /api/events.json is the Schema.org DataFeed surface for AI agents and
+// structured-data consumers. Validates mandatory DataFeed fields per
+// schema.org spec. Routes via `datafeed:events` slug prefix (mirrors
+// the hub:/venue: prefix pattern Component D's reporter consumes).
+describe('validateDataFeed', () => {
+  const { mkdtempSync, writeFileSync, mkdirSync } = require('fs');
+  const { join } = require('path');
+  const os = require('os');
+
+  function makeTmpDir(): string {
+    return mkdtempSync(join(os.tmpdir(), 'datafeed-test-'));
+  }
+
+  function writeFeed(distDir: string, payload: any): void {
+    const apiDir = join(distDir, 'api');
+    mkdirSync(apiDir, { recursive: true });
+    writeFileSync(join(apiDir, 'events.json'), JSON.stringify(payload, null, 2));
+  }
+
+  function makeValidFeed(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'DataFeed',
+      name: 'Agent Athens — Cultural Events',
+      description: 'Cultural events in Athens, Greece. Updated daily.',
+      dateModified: '2026-05-02T08:00:00+03:00',
+      dataFeedElement: [{ '@type': 'MusicEvent', name: 'sample' }],
+      ...overrides,
+    };
+  }
+
+  test('valid DataFeed file → no errors, no warnings', () => {
+    const tmpDir = makeTmpDir();
+    writeFeed(tmpDir, makeValidFeed());
+    const result = validateDataFeed(tmpDir);
+    expect(result.slug).toBe('datafeed:events');
+    expect(result.errors).toEqual([]);
+    expect(result.warnings).toEqual([]);
+  });
+
+  test('missing DataFeed file → error', () => {
+    const tmpDir = makeTmpDir();
+    const result = validateDataFeed(tmpDir);
+    expect(result.errors).toContain('DataFeed file missing at /api/events.json');
+  });
+
+  test('missing dateModified → error', () => {
+    const tmpDir = makeTmpDir();
+    writeFeed(tmpDir, makeValidFeed({ dateModified: '' }));
+    const result = validateDataFeed(tmpDir);
+    expect(result.errors.some(e => e.includes('dateModified'))).toBe(true);
+  });
+
+  test('empty dataFeedElement → warning, not error', () => {
+    const tmpDir = makeTmpDir();
+    writeFeed(tmpDir, makeValidFeed({ dataFeedElement: [] }));
+    const result = validateDataFeed(tmpDir);
+    expect(result.errors).toEqual([]);
+    expect(result.warnings).toContain('dataFeedElement is empty');
+  });
+
+  test('wrong @type → error', () => {
+    const tmpDir = makeTmpDir();
+    writeFeed(tmpDir, makeValidFeed({ '@type': 'ItemList' }));
+    const result = validateDataFeed(tmpDir);
+    expect(result.errors.some(e => e.includes('@type'))).toBe(true);
+  });
+
+  test('malformed JSON → error', () => {
+    const tmpDir = makeTmpDir();
+    const apiDir = join(tmpDir, 'api');
+    mkdirSync(apiDir, { recursive: true });
+    writeFileSync(join(apiDir, 'events.json'), '{ this is not valid json');
+    const result = validateDataFeed(tmpDir);
+    expect(result.errors.some(e => e.includes('parse error'))).toBe(true);
   });
 });

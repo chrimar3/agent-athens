@@ -58,6 +58,7 @@ export interface CompletenessReport {
     offer_level: 'measured' | 'not_measured';
     place_level: 'measured' | 'not_measured';
     aria_level: 'measured' | 'not_measured';
+    datafeed_level: 'measured' | 'not_measured';
   };
   events: {
     byType: BucketReport[];
@@ -66,6 +67,7 @@ export interface CompletenessReport {
   };
   hubs: PageGroupReport;
   venues: PageGroupReport;
+  datafeed: PageGroupReport;
 }
 
 type Verdict = 'pass' | 'warn' | 'fail';
@@ -105,6 +107,7 @@ export function buildCompletenessReport(
 
   const hubs = emptyGroup();
   const venues = emptyGroup();
+  const datafeed = emptyGroup();
   const orphanSlugs: string[] = [];
 
   for (const result of summary.details) {
@@ -116,6 +119,10 @@ export function buildCompletenessReport(
     }
     if (result.slug.startsWith('venue:')) {
       tally(venues, verdict);
+      continue;
+    }
+    if (result.slug.startsWith('datafeed:')) {
+      tally(datafeed, verdict);
       continue;
     }
 
@@ -168,6 +175,7 @@ export function buildCompletenessReport(
       offer_level: 'measured',
       place_level: 'not_measured',
       aria_level: 'not_measured',
+      datafeed_level: 'measured',
     },
     events: {
       byType,
@@ -176,6 +184,7 @@ export function buildCompletenessReport(
     },
     hubs,
     venues,
+    datafeed,
   };
 }
 

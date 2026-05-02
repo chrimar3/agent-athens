@@ -342,6 +342,50 @@ export function validateVenueSchema(htmlContent: string, venueSlug: string): Sch
 }
 
 /**
+ * Validate the Schema.org DataFeed at /api/events.json (Sprint 2 Component A).
+ *
+ * Mandatory fields per Schema.org DataFeed spec: name, description,
+ * dateModified, dataFeedElement. @type must be "DataFeed". Empty
+ * dataFeedElement surfaces as a warning, not an error (the build still
+ * shipped a feed; consumers can detect emptiness).
+ *
+ * Slug prefix `datafeed:` mirrors the `hub:` / `venue:` pattern; the
+ * Component D reporter routes these into a dedicated `datafeed`
+ * aggregate rather than the per-EventType bucket breakdown.
+ */
+export function validateDataFeed(distDir: string): SchemaValidationResult {
+  const dataFeedPath = join(distDir, 'api/events.json');
+  const slug = 'datafeed:events';
+
+  if (!existsSync(dataFeedPath)) {
+    return { slug, errors: ['DataFeed file missing at /api/events.json'], warnings: [], info: [] };
+  }
+
+  let feed: any;
+  try {
+    feed = JSON.parse(readFileSync(dataFeedPath, 'utf-8'));
+  } catch (e) {
+    return { slug, errors: [`DataFeed JSON parse error: ${(e as Error).message}`], warnings: [], info: [] };
+  }
+
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (feed['@context'] !== 'https://schema.org') errors.push('@context must be "https://schema.org"');
+  if (feed['@type'] !== 'DataFeed') errors.push('@type must be "DataFeed"');
+  if (!isNonEmpty(feed.name)) errors.push('Missing or empty name');
+  if (!isNonEmpty(feed.description)) errors.push('Missing or empty description');
+  if (!isNonEmpty(feed.dateModified)) errors.push('Missing or empty dateModified');
+  if (!Array.isArray(feed.dataFeedElement)) {
+    errors.push('dataFeedElement must be an array');
+  } else if (feed.dataFeedElement.length === 0) {
+    warnings.push('dataFeedElement is empty');
+  }
+
+  return { slug, errors, warnings, info: [] };
+}
+
+/**
  * Validate all generated event pages in a dist directory.
  */
 export function validateAllPages(distDir: string): SchemaValidationSummary {
@@ -419,6 +463,9 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     }
   }
 
+  // Scan Schema.org DataFeed at /api/events.json (Sprint 2 Component A)
+  details.push(validateDataFeed(distDir));
+
   let passCount = 0;
   let warnCount = 0;
   let failCount = 0;
@@ -447,13 +494,22 @@ export function printSchemaSummary(summary: SchemaValidationSummary): void {
   }
 
   // Count by page type
-  const eventCount = details.filter(d => !d.slug.startsWith('hub:') && !d.slug.startsWith('venue:')).length;
+  const eventCount = details.filter(d =>
+    !d.slug.startsWith('hub:') &&
+    !d.slug.startsWith('venue:') &&
+    !d.slug.startsWith('datafeed:')
+  ).length;
   const hubCount = details.filter(d => d.slug.startsWith('hub:')).length;
   const venueCount = details.filter(d => d.slug.startsWith('venue:')).length;
+  const datafeedCount = details.filter(d => d.slug.startsWith('datafeed:')).length;
 
   const passRate = Math.round((passCount / total) * 100);
   console.log(`\n📋 Schema completeness: ${passCount}/${total} pages fully valid (${passRate}%)`);
-  console.log(`   📊 ${eventCount} event + ${hubCount} hub + ${venueCount} venue pages`);
+  console.log(
+    `   📊 ${eventCount} event + ${hubCount} hub + ${venueCount} venue` +
+      (datafeedCount > 0 ? ` + ${datafeedCount} datafeed` : '') +
+      ` pages`,
+  );
   console.log(`   ✅ ${passCount} pass  ⚠️  ${warnCount} warnings  ❌ ${failCount} errors`);
 
   // Show errors grouped by type

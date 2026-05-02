@@ -58,6 +58,7 @@ describe('buildCompletenessReport', () => {
     expect(report.events.orphanSlugs).toEqual([]);
     expect(report.hubs).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
     expect(report.venues).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
+    expect(report.datafeed).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
   });
 
   test('only EventTypes present in input appear in byType (lean artifact)', () => {
@@ -153,6 +154,25 @@ describe('buildCompletenessReport', () => {
     expect(report.layers.offer_level).toBe('measured');
     expect(report.layers.place_level).toBe('not_measured');
     expect(report.layers.aria_level).toBe('not_measured');
+    expect(report.layers.datafeed_level).toBe('measured');
+  });
+
+  // Sprint 2 Component A — datafeed:{slug} prefix routes into the new datafeed
+  // aggregate, not byType and not orphanSlugs.
+  test('datafeed: prefixed results route into datafeed aggregate, not byType or orphans', () => {
+    const event = makeEvent({ id: 'ffff6666', title: 'Show', venueName: 'X', type: 'concert' });
+    const summary = makeSummary([
+      makeResult(generateEventSlug(event)),
+      makeResult('datafeed:events'),                      // pass
+      makeResult('datafeed:other-feed', [], ['warn1']),   // warn
+      makeResult('datafeed:bad-feed', ['err1'], []),      // fail
+    ]);
+
+    const report = buildCompletenessReport(summary, [event]);
+    expect(report.events.byType).toHaveLength(1);
+    expect(report.events.byType[0].type).toBe('concert');
+    expect(report.events.orphanSlugs).toEqual([]);
+    expect(report.datafeed).toEqual({ total: 3, pass: 1, warn: 1, fail: 1 });
   });
 
   test('byType order matches EventType declaration order in types.ts', () => {
