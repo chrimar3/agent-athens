@@ -2244,3 +2244,30 @@ Same family as "Brief-vs-prod regression check via timestamp comparison
 (S101b)" and the verify-paths-in-briefs feedback. The variant here is
 spec-vs-code (does X exist?) rather than prod-vs-code (does X behave
 correctly?).
+
+## Pre-create contract surface, populate data later (pattern, 2026-05-02)
+
+When a contract has multiple data layers that ship at different cadences, define the full surface at first ship even if some layers are unpopulated. Layers gain a status field ("measured" / "not_measured") so consumers can disambiguate "data is zero" from "data is not yet measured."
+
+**Examples:**
+- ticket_url_resolved column (commit ce3ca0afc, 2026-05-02): ships as nullable, populated by Sprint 2.5 nightly resolver
+- build-completeness.json place_level + aria_level layers (commit b6274644b, 2026-05-02): ships as "not_measured", populated by Sprint 2 B + C as they ship
+
+**Pattern shape:** the contract surface is final at first ship. Future data work fills slots, doesn't reshape the artifact. Consumers write against the final shape from day one.
+
+**Anti-pattern:** ship only the layers that have data, force consumers to handle shape changes when more layers populate.
+
+## TS `satisfies` clause locks array against union evolution (watchpoint, 2026-05-02)
+
+When an array's contents must mirror a TypeScript union (ordered iteration over all members, type-aware bucket lists), declare with `as const satisfies readonly UnionType[]`. If the union evolves and the array doesn't, compile fails.
+
+**Instance:** Component D's BUCKET_ORDER mirrors EventType union declaration order, locked via `satisfies`.
+
+**Family — type system enforcing contract instead of human discipline at edit time:**
+1. ticketUrlResolved required-with-null (commit ce3ca0afc, 2026-05-02): forces every Event-construction site to express resolution state explicitly
+2. Orphan sweep generateEventSlug import (commit bba8c1830, 2026-05-02): single source of truth for slug computation across modules
+3. BUCKET_ORDER satisfies clause (commit b6274644b, 2026-05-02): array contents locked against union evolution
+
+**Watchpoint** — three instances of "mechanical contract enforcement at type-level beats human discipline at edit-time." If a fourth instance surfaces with the same shape, codify.
+
+**Possibly the same meta-pattern as cross-module SoT watchpoint** (filed 2026-05-XX, same instance count). Whether they're one rubric or two becomes clear at the next instance — wait to fuse.

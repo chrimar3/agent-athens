@@ -2103,3 +2103,42 @@ completeness 97% / 0 errors. Manual canary (event 9454cac8...) confirmed
 offers.url unchanged from Sprint 1 behavior (NULL `ticket_url_resolved`
 → fallback path). Sprint 2.5 will populate; emitter will switch to
 resolved URLs without further code changes.
+
+## 2026-05-02 — Per-EventType Schema Completeness Reporting (Sprint 2 Component D)
+
+**Context:** Sprint 2 needs per-bucket completeness signal so component-level deltas can be attributed cleanly as A/B/C ship. Existing validator output is single aggregate line covering events + hubs + venues.
+
+**Decision:** Per-bucket reporter ships as pure consumer of validateAllPages output. Joins SchemaValidationSummary.details against pageableEvents via generateEventSlug. Output written to data/build-completeness.json each build.
+
+**Architecture:**
+- Buckets: actual EventType union from types.ts (12 values), ordered by declaration via `BUCKET_ORDER as const satisfies readonly EventType[]`
+- Slug shapes: bare → event, en/{slug} → strip prefix and bucket, hub:{slug} + venue:{slug} → separate aggregates not in byType
+- Layers: event_level + offer_level "measured" at ship; place_level + aria_level "not_measured" until B/C populate
+- Strictly additive: existing validator and printSchemaSummary unchanged
+- Persistence: writeJsonApiIfChangedSync preserves meta.lastUpdate on unchanged content (no daily git churn)
+
+**Reasoning:** Pure-consumer architecture preserves Sprint 1 contract. Reporter can be removed without affecting validation. Bucket key choice = actual EventType enum, not the brief's invalid list (kids/comedy are HUB_SLUGS, not EventTypes — Strategist-side instance of paths-wrong watchpoint).
+
+**Sprint 2 baseline locked:** 7735/7974 pages valid (97%), 0 errors, 239 warnings.
+
+**Status:** Active (mechanism shipped 2026-05-02, commit b6274644b).
+
+---
+
+## 2026-05-02 — Exhibition Bucket Pass-Rate Anomaly (Open Investigation)
+
+**Context:** Component D's first per-bucket build surfaced an unexpected signal — exhibition pass-rate at 63% versus ~97% across other EventTypes. 34-point gap.
+
+**Decision:** Investigation deferred to dedicated session. Component D's scope was measurement infrastructure, not remediation. The signal is logged here so it doesn't get lost between Component A/C/B work.
+
+**Hypotheses worth testing in future investigation:**
+- Exhibitions use end_date not start_date (Tier 1 rule); validator may not be applying the COALESCE pattern correctly for exhibition lifecycle
+- Exhibition mandatory fields differ (organizer + endDate per type-specific list at agent-athens-system-reference.md:452); validator may emit warnings other types don't
+- Exhibition seller-shape may be venue_direct_only-heavy (Megaron/Onassis/Benaki are exhibition-heavy venues) — empty sameAs arrays from Sprint 2 B not yet shipped
+- Exhibition image field may be more frequently absent (different scrape sources for exhibition data)
+
+**Reasoning:** Filing the finding now (rather than after investigation completes) follows the file-when-decided pattern. The decision IS "investigate this, don't lose it." Status field flips when investigation lands.
+
+**Connects to:** "Per-EventType Schema Completeness Reporting" (2026-05-02), "Schema Completeness Validator" (S26), Variable Enrichment Matrix (Editorial 2026-03-02).
+
+**Status:** Open — investigation queued.

@@ -3509,3 +3509,39 @@ when the unstaged S101a entry gets handled (separate session). Per
 S103 brief's reorder note: "this session has no Dev Planner mistake
 to file" (the S102 mistake is owned by the post-S102 maintenance pass,
 not by S103).
+
+### Session 104 — Per-EventType Schema Completeness Reporter (Sprint 2 Component D) — 2026-05-02
+
+**Plan:** Add per-EventType bucket reporter as pure consumer of validateAllPages output. Lock post-hygiene Sprint 2 baseline as data/build-completeness.json artifact. Stub place_level + aria_level layers for B/C to fill in.
+
+**What happened:**
+- Pre-flight surfaced 6 brief premise drifts (EventType enum 11 vs 12 values; aggregate output covers events+hubs+venues not events-only; SchemaValidationResult has no type field — must join on slug; brief's "kids/comedy" buckets are HUB_SLUGS not EventTypes; correct events array is pageableEvents not upcomingEvents; four slug shapes need handling). Plan corrected before implementation.
+- Reporter shipped as src/validators/completeness-reporter.ts: pure consumer joining SchemaValidationSummary.details against pageableEvents via generateEventSlug.
+- BUCKET_ORDER: readonly EventType[] with `satisfies` clause — type system catches future EventType evolution that doesn't update the array.
+- Slug-prefix handling: bare → events bucket, en/{slug} → strip prefix bucket as event, hub:{slug} + venue:{slug} → separate hubs/venues aggregates (not in byType).
+- Layer status flags: event_level + offer_level marked "measured"; place_level + aria_level marked "not_measured" until Sprint 2 B/C populate.
+- writeJsonApiIfChangedSync (S93) reused — preserves meta.lastUpdate when content unchanged, prevents timestamp churn.
+- Baseline locked: 7735/7974 pages valid (97%), 0 errors, 239 warnings.
+- 0 orphan slugs in events.orphanSlugs — confirms pageableEvents was the correct join source.
+
+**Tests:** 11 new (all green). Full suite 1810/0 fail. tsc clean.
+
+**Build:** No regression on aggregate; bucket breakdown logs alongside existing summary.
+
+**First per-bucket signal (significant):**
+- Exhibition pass-rate: 63%
+- Other EventTypes: ~97%
+- 34-point gap is the kind of signal the reporter was built to surface
+- Not investigated this session (D's job is measurement infrastructure, not remediation)
+- Logged for follow-up (see decisions.md entry)
+
+**Learnings:**
+- Project knowledge files are not equivalent to actual code. /mnt/project/agent-athens-system-reference.md showed an EventType enum that didn't match types.ts. Discipline rule: verify specifics against src/, not against derived snapshots.
+- Pure-consumer architecture preserves Sprint 1 contract: existing validator and printSchemaSummary unchanged. Reporter can be removed without affecting validation.
+- Strategist-side bucket-list mismatch (kids/comedy as buckets) was located precisely at schema-completeness.ts:382 (HUB_SLUGS). Same shape as Astro reference: pattern-matching on names without reading underlying code.
+
+**Commit:** b6274644b — single commit, 4 files staged precisely. Not pushed (daily-pipeline cadence).
+
+**Open items (not session blockers):**
+- Exhibition 63% pass-rate root cause investigation — separate session
+- Strategist heads-up on watchpoint count math (instance 4+ across both Projects, codification activation likely earned)
