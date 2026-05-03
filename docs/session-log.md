@@ -3631,3 +3631,46 @@ not by S103).
 - Sprint 3 ARIA promotion sizing — pre-flight prediction confirmed; brief intake can use this evidence to size near-mechanical promotion work.
 - Build pipeline two-step sequence ("build → audit → build") documented but not automated. Shell wrapper deferred to Sprint 2.5+ if timing becomes painful.
 - Component B next per locked sequencing (D → A → C → B).
+
+### Session 107 — addressRegion convergence + sameAs wiring (Sprint 2 Component B-1) — 2026-05-03
+
+**Plan:** Wire venue sameAs through the schema chain (config → VenueRecord → Venue → JSON-LD; empty arrays today) per Strategist Q-B3 lock (sameAs inline on athens-venues.json). Converge venue-page.ts addressRegion to the canonical city.region.name from city-geodata.json per Strategist Q-B6 lock. Add validator rule guarding against future drift (FAIL on mismatch). Pre-flight at specs/sprint-2-component-b-preflight.md.
+
+**What happened:**
+- Step 0 confirmed baseline (1853/0 tests; 7734/7973 = 97% / 0 errors / 239 warnings). city-geodata.json shape was (b) — Attica lives at `cityGeodata.region.name`, parallel to municipality + country; not as `administrative_region` field. Required adding new `getRegionName()` helper to schema-geo.ts mirroring existing `getCountryCode()` / `getCurrencyCode()` pattern (not anticipated in pre-flight).
+- Steps 1-5 wired sameAs through 5 sites: VenueRecord interface, Venue interface, generate-site.ts attach loop (mirrored existing `venue.website` attach), venue-page.ts LocalBusiness builder (also extended internal VenueData interface to carry sameAs), event-page.ts location MusicVenue builder. All emissions use `...(x && x.length > 0 ? { sameAs: x } : {})` conditional spread per omit-when-empty contract. Mid-checkpoint after Step 5: tests held (one transient flake from geocode.test.ts hitting external Nominatim with HTTP 429 — not a regression, same warnings appeared in pre-Step-1 baseline).
+- Step 6 replaced `addressRegion: venue.neighborhood || 'Attica'` (venue-page.ts:70) with `getRegionName()`. Build verified Onassis Stegi venue page now emits `addressRegion: "Attica"` (was "Neos Kosmos"). Sweep verification surfaced 5 holdouts: 2 stale orphan files (oteacademy, ellinikon — Apr 29, no events in current DB) and 3 schema-less venue pages (cantina-social, crust, dybbuk — active venues without addresses, so `generateVenueSchema` returns null). Routed orphan handling to user; SWEEP_ORPHANS=1 was selected and triggered an over-broad sweep (deleted all 54 venues + 14 hubs). Recovered with clean rebuild — final state 46 venue + 22 hub pages, all live (orphan crud cleaned out as side effect; net page count 7973 → 7963).
+- Step 7 (TDD): added 4 tests to validateVenueSchema describe block (positive match; missing-address regression guard; "Neos Kosmos" mismatch ERROR with both values in message; multi-city replicability with expected="Catalonia"). Tests went red (2/4 failing as expected). Implemented rule: `validateVenueSchema(html, slug, expectedAddressRegion)` — required parameter (orchestrator passes `getRegionName()`, tests pass directly; pure function, no module mocking needed). Tests went green (53/0 in this file). Real-dist scan: 7724/7963 (97%) / 0 errors / 239 warnings — all 46 active venue pages emit addressRegion="Attica".
+- Step 8 split into 2 commits per never-`git add -A` rule: `418698fc9` (preflight spec, docs-only) and `4326996d9` (impl, 10 files). Pushed to origin/main.
+
+**Tests:** 4 new (validateVenueSchema addressRegion canonicalization). Full suite 1857/0 fail. tsc clean.
+
+**Build verification:**
+- 46 venue pages in dist/venues/, all emitting `addressRegion: "Attica"` (confirmed via `grep -l '"addressRegion": "Attica"' dist/venues/*/index.html | wc -l`)
+- Event detail pages emit no behavior change (sameAs omitted because no venue has sameAs in config yet; addressRegion already "Attica" by hardcode at event-page.ts:173)
+- data/build-completeness.json layers: place_level still "not_measured" (B-2 will flip when full place-vocab measurement lands)
+- Schema completeness 7724/7963 (97%) / 0 errors / 239 warnings — schema validity preserved across the dist baseline shift
+- Net page count: 7973 → 7963 (10 fewer due to SWEEP_ORPHANS removing 8 stale venue pages + 2 stale hub pages; new baseline reflects live build outputs only)
+
+**Commit:** 418698fc9 (preflight, 1 file) + 4326996d9 (impl, 10 files). Both pushed to origin/main.
+
+**Execution decisions worth recording:**
+- New helper `getRegionName()` added to schema-geo.ts. Pre-flight assumed config might already expose this or the rule would read cityGeodata directly; reality required the helper to keep API symmetry with `getCountryCode()` / `getCurrencyCode()` and avoid leaking config shape into venue-page.ts and validator.
+- validateVenueSchema signature change: now requires `expectedAddressRegion` parameter. Cleaner for testability than module-mocking schema-geo. Orchestrator (validateAllPages) computes expectedRegion once outside the venue scan loop. No other callers existed — safe sig change.
+- VenueData interface (internal to venue-page.ts) extended to carry sameAs alongside the existing address/neighborhood/coordinates. Pre-flight noted the wiring touches 4 files; reality was 5 because VenueData was a separate internal struct from the runtime Venue type.
+- event-page.ts:173 still hardcodes `addressRegion: 'Attica'`. Correct by accident (single-city today) but config-drift risk if Athens-only assumption ever changes. Out of scope this session per Strategist guidance; tracked for follow-up.
+- Orphan-sweep with SWEEP_ORPHANS=1 was over-broad: removed all 54 venues + 14 hubs based on its mtime heuristic, not just the 2 we wanted gone. Recovery via clean rebuild without the flag worked, but this is a steady-state behavior worth knowing — orphan-sweep arming in normal builds would routinely delete-and-regenerate any pages whose `writeHtmlIfChangedSync` short-circuited (no content change → mtime stays old → orphan-sweep flags as stale).
+- Mid-checkpoint test flake: `src/utils/__tests__/geocode.test.ts` hit external Nominatim/Google with HTTP 429. Same warnings appeared in pre-Step-1 baseline — not a regression. Worth noting that any session's mid-checkpoint can flake on this; treat as transient unless the warning text indicates code-level failure.
+
+**Learnings:**
+- Pre-flight finding #2 (naive sameAs WARN would crater pass-rate from 97% to ~3%) is now sidestepped this session — B-1 only wires emission, doesn't add a sameAs WARN. The actual Q-B1 (severity for missing sameAs) is still open and routes to a future Strategist lock.
+- The pre-flight's "wiring touches 5 sites" claim held but understated: VenueRecord (Step 1), Venue (Step 2), generate-site.ts attach (Step 3), event-page.ts emission (Step 5), venue-page.ts emission (Step 4) PLUS internal VenueData interface extension AND the new schema-geo.ts helper for Q-B6. 5 sites for sameAs alone, 2 more for addressRegion — total 7 (script estimated 7 ✓).
+- The "stale dist files cause stale validator results" risk is real. SWEEP_ORPHANS in armed mode is the project's own cleanup mechanism but is over-aggressive in the current implementation. Periodic clean rebuilds with SWEEP_ORPHANS=1 (or a more targeted sweep) would keep dist healthy.
+- TDD with required parameter (vs default-from-helper) made the tests trivially mockable without bun:test module mocking. Generalizable: validators that need config inputs should accept them as parameters from their orchestrator, not read filesystem directly inside the validate function.
+
+**Open items:**
+- Q-B1 (severity for missing venue sameAs at event-page level) still pending Strategist lock. Recommended INFO-level or Tier-1-only WARN per pre-flight TL;DR finding #2.
+- Q-B2 (place-layer aggregate granularity), Q-B4 (validator structural shape — extend vs new function), Q-B5 (place vocabulary scope — which fields beyond sameAs), Q-B7 (DataFeed Place inheritance) — Strategist locks needed before B-2.
+- event-page.ts:173 hardcoded "Attica" — convergence to `getRegionName()` deferred to follow-up.
+- 0 venues in athens-venues.json have sameAs values populated (Editorial brief upstream of B-2). Tier 1 sameAs data lands separately.
+- B-2 (place-layer measurement aggregate + place_level flag flip) is next. B-1 ships the emission surface and one rule; B-2 adds the per-place coverage measurement that flips `place_level: "not_measured"` → `"measured"`.

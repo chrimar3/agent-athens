@@ -2380,3 +2380,52 @@ Pa11y bundles puppeteer+Chromium together as a known-compatible pair. Different 
 - Standard Unix utilities (bash, grep, sed) — universal enough that "bundled" doesn't meaningfully apply
 
 **Status:** First-instance pattern. If Sprint 3+ tooling decisions surface a similar bundled-vs-system trade-off, that's instance 2 and the pattern is reinforced.
+
+---
+
+## Config-driven multi-city semantic via city-geodata.json (pattern, 2026-05-03)
+
+City-specific Schema.org / JSON-LD values that are stable per deployment (not per event, not per venue) live in `config/city-geodata.json` and are read via dedicated helpers in `src/utils/schema-geo.ts`. Helpers compose around the same `cityGeodata` cached read.
+
+**Established helpers (precedent + new):**
+- `getCountryCode()` → `cityGeodata.country.code` (e.g. "GR" for Athens)
+- `getCurrencyCode()` → `cityGeodata.country.currency` (e.g. "EUR")
+- `getRegionName()` → `cityGeodata.region.name` (e.g. "Attica", added 2026-05-03 for Q-B6)
+
+**Pattern shape:** when a Schema.org / JSON-LD field has a single canonical value per city deployment, source it from city-geodata.json via a typed helper. Don't hardcode in emitters; don't re-read config in validators; don't pass through environment variables.
+
+**Why this matters for the agent-* family of repos** (agent-athens, future agent-barcelona, agent-berlin): all city-specific values resolve from one config file. Forking agent-athens → agent-barcelona means one file replacement (`config/city-geodata.json`), not a grep-and-fix tour through emitters and validators.
+
+**Test for "is this a city-geodata candidate":**
+- Stable per deployment? Yes.
+- Single canonical value (no per-venue or per-event variation)? Yes.
+- Used in JSON-LD or other multi-city-replicable surface? Yes.
+- → Add a helper in schema-geo.ts.
+
+**Anti-pattern (refuted):** `addressRegion: venue.neighborhood || 'Attica'` (venue-page.ts:70 prior to 2026-05-03). Two values mixed at one site: per-venue neighborhood AND per-city fallback. Hard to reason about, hard to validate, fails multi-city replicability (a Barcelona venue with `neighborhood: "Eixample"` would emit "Eixample" instead of "Catalonia"). Replaced with `getRegionName()` per Q-B6.
+
+**Family — this is the third helper:** getCountryCode (Sprint 1 baseline), getCurrencyCode (Sprint 1 baseline), getRegionName (Sprint 2 Component B-1). Future helpers expected as more JSON-LD blocks need city-specific values: e.g. `getDefaultLanguage()`, `getTimezone()` if/when those surface as needs.
+
+**Status:** Active. Three-instance pattern with stable shape.
+
+---
+
+## Injectable expected-value parameter for testability (pattern, 2026-05-03)
+
+When a validator function needs a config-derived expected value for comparison, accept it as a required parameter from the orchestrator rather than reading config inside the validate function. Tests pass mock values directly; orchestrator computes once and passes to each invocation; no module mocking needed.
+
+**Instance:** `validateVenueSchema(htmlContent, venueSlug, expectedAddressRegion)` — orchestrator (validateAllPages) calls `getRegionName()` once before the venue scan loop, then passes the value into each validation. Tests pass `"Attica"` directly for positive case, `"Catalonia"` for multi-city replicability case.
+
+**Pattern shape:** validators are pure functions of their inputs. Config reads happen at the orchestrator boundary, not inside the per-item validator. Tests can pass arbitrary expected values without touching any config files or mocking any modules.
+
+**Why this beats default-from-helper:**
+- Default-from-helper signature: `validateVenueSchema(html, slug, expected = getRegionName())` — looks like an optional param but is really hidden config dependency. Tests that pass nothing get the real config value; tests that need a different value pass it explicitly. The default makes the function impure — calling without a third arg has filesystem side effects.
+- Required-param signature: `validateVenueSchema(html, slug, expected)` — function is purely a function of its inputs. Orchestrator carries the responsibility of computing `expected`. Tests have no implicit dependencies.
+
+**Trade-off:** required-param means the signature change is breaking for any pre-existing callers. In B-1 there were zero non-orchestrator callers, so this was free. For broader codebase changes, evaluate caller count first.
+
+**Anti-pattern (avoided):** mocking `bun:test` `mock.module()` to swap `schema-geo` for the multi-city test. Works but couples test to the module loader; brittle on future schema-geo refactors. The injectable-parameter approach has zero coupling to the module shape.
+
+**Family — generalizable to other validators:** any `validateX` function that compares against config-derived canonical values is a candidate. Examples that would benefit if extended: `validateDataFeed` could take `expectedFeedName` as parameter (currently hardcoded contract); future place-vocab validators in B-2 will likely need similar shape for per-city or per-venue expected values.
+
+**Status:** First-instance pattern in this codebase. Pre-existing validators (`validateSchemaCompleteness`, `validateHubSchema`, `validateDataFeed`) read globals or hardcode expectations. Refactor candidates if module-mocking ever becomes a need.

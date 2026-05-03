@@ -2210,3 +2210,47 @@ Per-page detail isn't lost — lives in separate artifact for humans investigati
 Shape divergence from events/hubs/venues slots is correct here: those measure per-page coverage of per-page concerns. ARIA measures template-level coverage of template-level concerns. Forcing reporter-shape uniformity would conflate two genuinely different measurement axes — same failure mode that single-aggregate completeness would have hidden the exhibition pass-rate gap (Component D finding 2026-05-02).
 
 **Status:** Active (mechanism shipped 2026-05-03, commit 98db28207).
+
+---
+
+## 2026-05-03 — Venue sameAs storage: inline on athens-venues.json (Sprint 2 Component B-1, Q-B3 lock)
+
+**Context:** Pre-flight (specs/sprint-2-component-b-preflight.md, Q-B3) raised the question: should venue sameAs values live inline in athens-venues.json (mirror Tier 5 `website` pattern, single config file), or in a separate config/venue-sameAs.json (mirror existing config/performer-sameAs.json precedent)? Trade-off: single file = one editorial workflow; separate file = clean separation between operational venue data and identity-graph data.
+
+**Decision:** Inline on athens-venues.json. New optional field `sameAs?: string[]` on VenueRecord (src/ticketing/venue-registry.ts).
+
+**Reasoning:** Editorial workflow already lives in athens-venues.json — venue website, ticketing config, neighborhood, variations all coexist there. Splitting identity-graph data into a separate file would force editorial to maintain two files in sync per venue addition. The performer-sameAs.json precedent applies to entities that are NOT in any other config (performers have no operational presence in athens-venues.json), so the separate-file shape made sense there. Venues are different — they already have a home, so sameAs joins it.
+
+**Architecture:**
+- `VenueRecord.sameAs?: string[]` — Wikidata QID URI, Google Place URL, official URL, etc. Empty arrays equivalent to absence (omit-when-empty contract; see "Omit-when-empty for JSON-LD identity arrays" pattern).
+- `Venue.sameAs?: string[]` — runtime mirror, populated from VenueRecord at build time via existing attach loop in src/generate-site.ts:218 (mirrors the venue.website attach pattern shipped in S81).
+- Emission via conditional spread in venue-page.ts LocalBusiness builder and event-page.ts location MusicVenue builder.
+
+**Trade-off:** athens-venues.json grows in line count and editorial scope. Acceptable — sameAs is sparse data (Tier 1 venues only initially) and natively lives near the canonical_name field where editors are already looking.
+
+**Status:** Active (emission surface shipped 2026-05-03, commit 4326996d9). Tier 1 sameAs data lands separately (Editorial brief upstream).
+
+**Connects to:** "Per-Template Aggregate for ARIA Findings" (Q-C1, 2026-05-03 — same Strategist-locks-the-shape-then-impl-ships pattern), pre-flight P5 finding "drop sameAs into config = zero code change" (refuted; required wiring through 5 sites + internal VenueData interface).
+
+---
+
+## 2026-05-03 — addressRegion canonicalization via city-geodata.json (Sprint 2 Component B-1, Q-B6 lock)
+
+**Context:** Pre-flight P2 found a divergence: event-page.ts emits `addressRegion: "Attica"` (hardcoded), venue-page.ts emits `addressRegion: venue.neighborhood || "Attica"` (neighborhood-level when available). This produced inconsistent JSON-LD across event-detail vs venue pages for the same venue (e.g. Onassis Stegi: "Attica" on event pages, "Neos Kosmos" on venue page). Q-B6 raised: which is canonical?
+
+**Decision:** addressRegion = `cityGeodata.region.name` from city-geodata.json (e.g. "Attica" for Athens, "Catalonia" for Barcelona, "Berlin" for Berlin). New `getRegionName()` helper in src/utils/schema-geo.ts mirrors existing `getCountryCode()` / `getCurrencyCode()`. Validator FAILs (ERROR, not WARN) on present-but-mismatched addressRegion in venue pages.
+
+**Reasoning:** Schema.org's addressRegion at the administrative-region level is the consumer-stable identifier (Wikidata, Google Knowledge Graph, etc. resolve regions, not neighborhoods). Neighborhood data isn't lost — it still flows into `containedInPlace` chain via `buildContainedInPlace()`. Severity is ERROR because the value is config-driven (single canonical answer per city); a divergent value is structural drift, not a data-quality gap. Mismatch surfaces in 0 cases at lock time but guards against future regression.
+
+**Architecture:**
+- `getRegionName()` reads `cityGeodata.region.name` once at module init (cityGeodata is already cached at module load).
+- venue-page.ts:70 calls `getRegionName()` directly.
+- validateVenueSchema(html, slug, expectedAddressRegion) takes expected region as required parameter; orchestrator (validateAllPages) computes `getRegionName()` once outside the venue scan loop and passes to each venue validation. Pure function, easily testable without module mocking.
+- Missing addressRegion does NOT fire the new rule (existing `address is missing` ERROR already covers the missing-address-block case).
+- Multi-city replicability: agent-barcelona/agent-berlin builds get their canonical region name automatically from their respective city-geodata.json — no per-venue, per-page, or per-template overrides needed.
+
+**Out of scope this session:** event-page.ts:173 still hardcodes `"Attica"`. Correct by accident (single-city today) but config-drift risk if Athens-only assumption ever changes. Convergence to `getRegionName()` deferred to follow-up. Validator currently only enforces the rule on venue pages.
+
+**Status:** Active (mechanism shipped 2026-05-03, commit 4326996d9). 46/46 active venue pages emit addressRegion="Attica"; validator rule passes on all of them.
+
+**Connects to:** Pre-flight P2 finding (event vs venue divergence), pre-flight P3 finding (severity machinery already supports ERROR/WARN/INFO with zero arch change), "Multi-city replicability via city-geodata.json" (cross-cutting design constraint for agent-* family of repos).
