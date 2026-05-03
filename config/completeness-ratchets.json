@@ -1,0 +1,9 @@
+{
+  "athens": {
+    "place": {
+      "venueSameAs": {
+        "warnAt": 0.5
+      }
+    }
+  }
+}

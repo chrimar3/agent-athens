@@ -102,7 +102,7 @@ export function classify(issues: Pa11yIssue[]): PageVerdict {
 }
 
 export function emptyGroup(): PageGroupReport {
-  return { total: 0, pass: 0, warn: 0, fail: 0 };
+  return { total: 0, pass: 0, warn: 0, fail: 0, info: 0 };
 }
 
 export function tallyAggregate(group: PageGroupReport, verdict: PageVerdict): void {

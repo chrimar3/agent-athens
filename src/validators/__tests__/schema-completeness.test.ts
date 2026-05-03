@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -443,7 +443,7 @@ describe('validateAllPages', () => {
     delete errSchema['@type'];
     writeFileSync(join(dir3, 'index.html'), wrapInHtml(errSchema));
 
-    const summary = validateAllPages(tmpDir);
+    const summary = validateAllPages(tmpDir, 'info');
     // 3 event pages + 1 DataFeed slot (Sprint 2 Component A — validateAllPages
     // appends validateDataFeed(distDir); the missing /api/events.json in tmpDir
     // surfaces as a fourth entry with a "missing" error).
@@ -563,7 +563,7 @@ function makeValidVenueSchema(overrides: Record<string, unknown> = {}): Record<s
 describe('validateVenueSchema — addressRegion canonicalization (Q-B6)', () => {
   test('addressRegion matches city.region.name → no error', () => {
     const html = wrapInHtml(makeValidVenueSchema());
-    const result = validateVenueSchema(html, 'half-note', 'Attica');
+    const result = validateVenueSchema(html, 'half-note', 'Attica', 'info');
     expect(result.errors).toEqual([]);
   });
 
@@ -571,7 +571,7 @@ describe('validateVenueSchema — addressRegion canonicalization (Q-B6)', () => 
     const schema = makeValidVenueSchema();
     delete (schema as { address?: unknown }).address;
     const html = wrapInHtml(schema);
-    const result = validateVenueSchema(html, 'no-address', 'Attica');
+    const result = validateVenueSchema(html, 'no-address', 'Attica', 'info');
     expect(result.errors.some(e => e.includes('address is missing'))).toBe(true);
     expect(result.errors.some(e => e.includes('addressRegion'))).toBe(false);
   });
@@ -580,7 +580,7 @@ describe('validateVenueSchema — addressRegion canonicalization (Q-B6)', () => 
     const schema = makeValidVenueSchema();
     (schema.address as Record<string, unknown>).addressRegion = 'Neos Kosmos';
     const html = wrapInHtml(schema);
-    const result = validateVenueSchema(html, 'wrong-region', 'Attica');
+    const result = validateVenueSchema(html, 'wrong-region', 'Attica', 'info');
     const mismatchError = result.errors.find(e => e.includes('addressRegion'));
     expect(mismatchError).toBeDefined();
     expect(mismatchError).toContain('Neos Kosmos');
@@ -589,10 +589,134 @@ describe('validateVenueSchema — addressRegion canonicalization (Q-B6)', () => 
 
   test('multi-city replicability: expected="Catalonia", venue page emits "Attica" → ERROR fires', () => {
     const html = wrapInHtml(makeValidVenueSchema());
-    const result = validateVenueSchema(html, 'wrong-city', 'Catalonia');
+    const result = validateVenueSchema(html, 'wrong-city', 'Catalonia', 'info');
     const mismatchError = result.errors.find(e => e.includes('addressRegion'));
     expect(mismatchError).toBeDefined();
     expect(mismatchError).toContain('Attica');
     expect(mismatchError).toContain('Catalonia');
+  });
+});
+
+// ── validateVenueSchema: venue sameAs (Q-B1 lock; Q-B5 sameAs-only this cycle) ──
+//
+// Per Strategist Q-B1 lock 2026-05-03: missing venue sameAs surfaces as INFO
+// universally; promotes to WARN when venueSameAs coverage in athens-venues.json
+// reaches the ratchet threshold (default 0.5). Severity decided once at build
+// start in generate-site.ts and threaded into the validator (B-1 pattern).
+describe('validateVenueSchema — venue sameAs (Q-B1 + Q-B5)', () => {
+  test('venue with sameAs populated → no sameAs finding at info severity', () => {
+    const schema = makeValidVenueSchema({ sameAs: ['https://www.wikidata.org/wiki/Q12345'] });
+    const html = wrapInHtml(schema);
+    const result = validateVenueSchema(html, 'with-sameas', 'Attica', 'info');
+    expect(result.warnings.some(w => w.includes('sameAs'))).toBe(false);
+    expect((result.info ?? []).some(i => i.includes('sameAs'))).toBe(false);
+  });
+
+  test('venue with sameAs populated → no sameAs finding at warn severity', () => {
+    const schema = makeValidVenueSchema({ sameAs: ['https://www.wikidata.org/wiki/Q12345'] });
+    const html = wrapInHtml(schema);
+    const result = validateVenueSchema(html, 'with-sameas', 'Attica', 'warn');
+    expect(result.warnings.some(w => w.includes('sameAs'))).toBe(false);
+    expect((result.info ?? []).some(i => i.includes('sameAs'))).toBe(false);
+  });
+
+  test('venue without sameAs + severity=info → result.info has sameAs message; result.warnings does not', () => {
+    const html = wrapInHtml(makeValidVenueSchema());
+    const result = validateVenueSchema(html, 'no-sameas', 'Attica', 'info');
+    expect((result.info ?? []).some(i => i.includes('sameAs'))).toBe(true);
+    expect(result.warnings.some(w => w.includes('sameAs'))).toBe(false);
+  });
+
+  test('venue without sameAs + severity=warn → result.warnings has sameAs message; result.info does not', () => {
+    const html = wrapInHtml(makeValidVenueSchema());
+    const result = validateVenueSchema(html, 'no-sameas', 'Attica', 'warn');
+    expect(result.warnings.some(w => w.includes('sameAs'))).toBe(true);
+    expect((result.info ?? []).some(i => i.includes('sameAs'))).toBe(false);
+  });
+});
+
+// ── printSchemaSummary: INFO surfacing (Sprint 2 Component B-2) ──
+//
+// INFO findings are surfaced separately from warnings, never conflated.
+// Console output gets a dedicated header line + a "Top INFO findings" block
+// when info[] is non-empty across the corpus.
+describe('printSchemaSummary — INFO surfacing (Q-B1 lock)', () => {
+  test('summary output contains INFO header + Top INFO findings when info[] is populated', () => {
+    const captured: string[] = [];
+    const origLog = console.log;
+    console.log = (...args: unknown[]) => { captured.push(args.join(' ')); };
+    try {
+      const summary = {
+        total: 2,
+        passCount: 2,
+        warnCount: 0,
+        failCount: 0,
+        details: [
+          { slug: 'a', errors: [], warnings: [], info: ['venue sameAs missing'] },
+          { slug: 'b', errors: [], warnings: [], info: ['venue sameAs missing'] },
+        ],
+      };
+      printSchemaSummary(summary);
+    } finally {
+      console.log = origLog;
+    }
+    const joined = captured.join('\n');
+    expect(joined).toContain('INFO');
+    expect(joined).toContain('venue sameAs missing');
+  });
+
+  test('summary output omits INFO line when no info findings exist', () => {
+    const captured: string[] = [];
+    const origLog = console.log;
+    console.log = (...args: unknown[]) => { captured.push(args.join(' ')); };
+    try {
+      const summary = {
+        total: 1,
+        passCount: 1,
+        warnCount: 0,
+        failCount: 0,
+        details: [
+          { slug: 'a', errors: [], warnings: [], info: [] },
+        ],
+      };
+      printSchemaSummary(summary);
+    } finally {
+      console.log = origLog;
+    }
+    const joined = captured.join('\n');
+    expect(joined).not.toContain('INFO');
+  });
+});
+
+// ── validateSchemaCompleteness: location.sameAs (Q-B1 + Q-B5 + Q-B7) ──
+//
+// Per Strategist Q-B7 lock 2026-05-03: DataFeed inherits per-event Place check
+// transitively. validateDataFeed is NOT extended. The check fires on event-page
+// location block, which is also what the DataFeed wraps.
+describe('validateSchemaCompleteness — location.sameAs (Q-B1 + Q-B5 + Q-B7)', () => {
+  test('event with location.sameAs → no sameAs finding', () => {
+    const schema = makeValidSchema({
+      location: {
+        '@type': 'MusicVenue',
+        'name': 'Half Note',
+        'address': { '@type': 'PostalAddress', 'streetAddress': 'X', 'addressLocality': 'Athens', 'addressRegion': 'Attica', 'addressCountry': 'GR' },
+        'sameAs': ['https://www.wikidata.org/wiki/Q12345'],
+      },
+    });
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 'with-sameas', 'info');
+    expect(result.warnings.some(w => w.includes('location.sameAs'))).toBe(false);
+    expect((result.info ?? []).some(i => i.includes('location.sameAs'))).toBe(false);
+  });
+
+  test('event without location.sameAs + severity=info → result.info has location.sameAs message; result.warnings does not', () => {
+    const result = validateSchemaCompleteness(wrapInHtml(makeValidSchema()), 'no-sameas-info', 'info');
+    expect((result.info ?? []).some(i => i.includes('location.sameAs'))).toBe(true);
+    expect(result.warnings.some(w => w.includes('location.sameAs'))).toBe(false);
+  });
+
+  test('event without location.sameAs + severity=warn → result.warnings has location.sameAs message; result.info does not', () => {
+    const result = validateSchemaCompleteness(wrapInHtml(makeValidSchema()), 'no-sameas-warn', 'warn');
+    expect(result.warnings.some(w => w.includes('location.sameAs'))).toBe(true);
+    expect((result.info ?? []).some(i => i.includes('location.sameAs'))).toBe(false);
   });
 });

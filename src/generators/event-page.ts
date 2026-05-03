@@ -22,7 +22,7 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode, availabilityForEventStatus } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode, getRegionName, availabilityForEventStatus } from '../utils/schema-geo';
 import { classifySource, extractHost, hostToName } from '../utils/ticket-source-classifier';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
@@ -170,7 +170,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
         '@type': 'PostalAddress',
         'streetAddress': event.venue.address || '',
         'addressLocality': 'Athens',
-        'addressRegion': 'Attica',
+        'addressRegion': getRegionName(),
         'addressCountry': getCountryCode()
       },
       'containedInPlace': buildContainedInPlace(event.venue.neighborhood),

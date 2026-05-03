@@ -4,6 +4,8 @@ import {
   type CompletenessReport,
   type BucketReport,
   type AriaAggregate,
+  type RatchetState,
+  type VenueBucketReport,
 } from '../completeness-reporter';
 import type { SchemaValidationSummary, SchemaValidationResult } from '../schema-completeness';
 import { generateEventSlug } from '../../generators/event-page';
@@ -14,8 +16,16 @@ import type { Event, EventType } from '../../types';
 // and consumed by generate-site.ts; the reporter is a pure passthrough for it.
 function emptyAria(): AriaAggregate {
   return {
-    hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
-    event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+    hub_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
+    event_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
+  };
+}
+
+// Sprint 2 Component B-2 — placeholder ratchet for tests that don't exercise
+// the place layer's ratchet state. Mirrors emptyAria() pattern from C.
+function emptyRatchet(): RatchetState {
+  return {
+    venueSameAs: { coverage: 0, populated: 0, total: 0, threshold: 0.5, currentSeverity: 'info' },
   };
 }
 
@@ -62,14 +72,14 @@ function makeSummary(details: SchemaValidationResult[]): SchemaValidationSummary
 
 describe('buildCompletenessReport', () => {
   test('empty input returns empty report with all-zero totals', () => {
-    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
     expect(report.events.byType).toEqual([]);
     expect(report.events.totals.total).toBe(0);
     expect(report.events.totals.pass).toBe(0);
     expect(report.events.orphanSlugs).toEqual([]);
-    expect(report.hubs).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
-    expect(report.venues).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
-    expect(report.datafeed).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
+    expect(report.hubs).toEqual({ total: 0, pass: 0, warn: 0, fail: 0, info: 0 });
+    expect(report.venues).toEqual({ total: 0, pass: 0, warn: 0, fail: 0, info: 0 });
+    expect(report.datafeed).toEqual({ total: 0, pass: 0, warn: 0, fail: 0, info: 0 });
   });
 
   test('only EventTypes present in input appear in byType (lean artifact)', () => {
@@ -82,7 +92,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(theaterEvent)),
     ]);
 
-    const report = buildCompletenessReport(summary, events, emptyAria());
+    const report = buildCompletenessReport(summary, events, emptyAria(), emptyRatchet());
     const types = report.events.byType.map(b => b.type);
     expect(types).toEqual(['concert', 'theater']);
     expect(types).not.toContain('exhibition');
@@ -96,7 +106,7 @@ describe('buildCompletenessReport', () => {
       makeResult('ghost-event-no-match'),
     ]);
 
-    const report = buildCompletenessReport(summary, [event], emptyAria());
+    const report = buildCompletenessReport(summary, [event], emptyAria(), emptyRatchet());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('concert');
     expect(report.events.byType[0].total).toBe(1);
@@ -111,7 +121,7 @@ describe('buildCompletenessReport', () => {
       makeResult(`en/${slug}`),
     ]);
 
-    const report = buildCompletenessReport(summary, [event], emptyAria());
+    const report = buildCompletenessReport(summary, [event], emptyAria(), emptyRatchet());
     expect(report.events.byType).toHaveLength(1);
     const concertBucket = report.events.byType[0];
     expect(concertBucket.type).toBe('concert');
@@ -129,12 +139,12 @@ describe('buildCompletenessReport', () => {
       makeResult('venue:megaron', ['error'], []),
     ]);
 
-    const report = buildCompletenessReport(summary, [event], emptyAria());
+    const report = buildCompletenessReport(summary, [event], emptyAria(), emptyRatchet());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('show');
     expect(report.events.orphanSlugs).toEqual([]);
-    expect(report.hubs).toEqual({ total: 2, pass: 1, warn: 1, fail: 0 });
-    expect(report.venues).toEqual({ total: 2, pass: 1, warn: 0, fail: 1 });
+    expect(report.hubs).toEqual({ total: 2, pass: 1, warn: 1, fail: 0, info: 0 });
+    expect(report.venues).toEqual({ total: 2, pass: 1, warn: 0, fail: 1, info: 0 });
   });
 
   test('pass/warn/fail classification mirrors validator rule (errors > 0 = fail; else warnings > 0 = warn; else pass)', () => {
@@ -150,7 +160,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(e4), ['e1'], ['w1']),              // fail (errors win)
     ]);
 
-    const report = buildCompletenessReport(summary, [e1, e2, e3, e4], emptyAria());
+    const report = buildCompletenessReport(summary, [e1, e2, e3, e4], emptyAria(), emptyRatchet());
     const cinema = report.events.byType.find(b => b.type === 'cinema')!;
     expect(cinema.total).toBe(4);
     expect(cinema.pass).toBe(1);
@@ -159,11 +169,11 @@ describe('buildCompletenessReport', () => {
     expect(cinema.passRate).toBe(25); // 1/4 = 25%
   });
 
-  test('layer flags: event/offer/aria/datafeed measured; place_level not_measured (post-Component-C)', () => {
-    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
+  test('layer flags: all five measured (post-Component-B-2)', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
     expect(report.layers.event_level).toBe('measured');
     expect(report.layers.offer_level).toBe('measured');
-    expect(report.layers.place_level).toBe('not_measured');
+    expect(report.layers.place_level).toBe('measured');
     expect(report.layers.aria_level).toBe('measured');
     expect(report.layers.datafeed_level).toBe('measured');
   });
@@ -173,19 +183,19 @@ describe('buildCompletenessReport', () => {
   // data; scripts/audit-aria.ts produces the aggregate, generate-site.ts
   // loads it and passes it in.
   test('aria slot: empty aggregate produces zero hub_template + event_template counts', () => {
-    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
     expect(report.aria).toEqual({
-      hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
-      event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+      hub_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
+      event_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
     });
   });
 
   test('aria slot: passthrough — values from ariaAggregate parameter appear unchanged in report', () => {
     const ariaInput: AriaAggregate = {
-      hub_template: { total: 50, pass: 45, warn: 5, fail: 0 },
-      event_template: { total: 100, pass: 92, warn: 6, fail: 2 },
+      hub_template: { total: 50, pass: 45, warn: 5, fail: 0, info: 0 },
+      event_template: { total: 100, pass: 92, warn: 6, fail: 2, info: 0 },
     };
-    const report = buildCompletenessReport(makeSummary([]), [], ariaInput);
+    const report = buildCompletenessReport(makeSummary([]), [], ariaInput, emptyRatchet());
     expect(report.aria).toEqual(ariaInput);
   });
 
@@ -200,11 +210,11 @@ describe('buildCompletenessReport', () => {
       makeResult('datafeed:bad-feed', ['err1'], []),      // fail
     ]);
 
-    const report = buildCompletenessReport(summary, [event], emptyAria());
+    const report = buildCompletenessReport(summary, [event], emptyAria(), emptyRatchet());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('concert');
     expect(report.events.orphanSlugs).toEqual([]);
-    expect(report.datafeed).toEqual({ total: 3, pass: 1, warn: 1, fail: 1 });
+    expect(report.datafeed).toEqual({ total: 3, pass: 1, warn: 1, fail: 1, info: 0 });
   });
 
   test('byType order matches EventType declaration order in types.ts', () => {
@@ -222,7 +232,7 @@ describe('buildCompletenessReport', () => {
     );
     const details = events.map(e => makeResult(generateEventSlug(e)));
 
-    const report = buildCompletenessReport(makeSummary(details), events, emptyAria());
+    const report = buildCompletenessReport(makeSummary(details), events, emptyAria(), emptyRatchet());
     expect(report.events.byType.map(b => b.type)).toEqual(declarationOrder);
   });
 
@@ -238,7 +248,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(events[2]), ['e'], []),
     ];
 
-    const report = buildCompletenessReport(makeSummary(details), events, emptyAria());
+    const report = buildCompletenessReport(makeSummary(details), events, emptyAria(), emptyRatchet());
     const sumTotal = report.events.byType.reduce((acc, b) => acc + b.total, 0);
     const sumPass = report.events.byType.reduce((acc, b) => acc + b.pass, 0);
     expect(report.events.totals.total).toBe(sumTotal);
@@ -255,13 +265,103 @@ describe('buildCompletenessReport', () => {
       makeResult('apple-event'),
       makeResult('mango-event'),
     ]);
-    const report = buildCompletenessReport(summary, [], emptyAria());
+    const report = buildCompletenessReport(summary, [], emptyAria(), emptyRatchet());
     expect(report.events.orphanSlugs).toEqual(['apple-event', 'mango-event', 'zebra-event']);
   });
 
   test('meta.lastUpdate is a valid ISO timestamp', () => {
-    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
     expect(report.meta.lastUpdate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
     expect(new Date(report.meta.lastUpdate).toString()).not.toBe('Invalid Date');
+  });
+});
+
+// Sprint 2 Component B-2 — place layer aggregate (Q-B2 hybrid: per-template + byVenue).
+describe('buildCompletenessReport — place layer (Q-B2)', () => {
+  test('place_level flag flips to "measured"', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
+    expect(report.layers.place_level).toBe('measured');
+  });
+
+  test('place.venue_template mirrors venues aggregate (template-axis lens)', () => {
+    const summary = makeSummary([
+      makeResult('venue:half-note'),
+      makeResult('venue:onassis-stegi', [], ['w1']),
+    ]);
+    const report = buildCompletenessReport(summary, [], emptyAria(), emptyRatchet());
+    expect(report.place.venue_template).toEqual(report.venues);
+    expect(report.place.venue_template.total).toBe(2);
+    expect(report.place.venue_template.pass).toBe(1);
+    expect(report.place.venue_template.warn).toBe(1);
+  });
+
+  test('place.event_template counts event pages from summary.details', () => {
+    const e1 = makeEvent({ id: 'aaaa1111', title: 'A', venueName: 'Half Note', type: 'concert' });
+    const e2 = makeEvent({ id: 'bbbb2222', title: 'B', venueName: 'Onassis Stegi', type: 'theater' });
+    const summary = makeSummary([
+      makeResult(generateEventSlug(e1)),
+      makeResult(generateEventSlug(e2), [], ['w1']),
+      makeResult('venue:half-note'),  // not counted in event_template
+    ]);
+    const report = buildCompletenessReport(summary, [e1, e2], emptyAria(), emptyRatchet());
+    expect(report.place.event_template.total).toBe(2);
+    expect(report.place.event_template.pass).toBe(1);
+    expect(report.place.event_template.warn).toBe(1);
+  });
+
+  test('place.byVenue empty corpus → []', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
+    expect(report.place.byVenue).toEqual([]);
+  });
+
+  test('place.byVenue populated → entries sorted alphabetically by normalized venue key', () => {
+    const ev1 = makeEvent({ id: 'aaaa1111', title: 'A', venueName: 'Zappeio', type: 'concert' });
+    const ev2 = makeEvent({ id: 'bbbb2222', title: 'B', venueName: 'Half Note', type: 'concert' });
+    const ev3 = makeEvent({ id: 'cccc3333', title: 'C', venueName: 'Onassis Stegi', type: 'theater' });
+    const summary = makeSummary([
+      makeResult(generateEventSlug(ev1)),
+      makeResult(generateEventSlug(ev2)),
+      makeResult(generateEventSlug(ev3), [], ['w1']),
+    ]);
+    const report = buildCompletenessReport(summary, [ev1, ev2, ev3], emptyAria(), emptyRatchet());
+    expect(report.place.byVenue.map(b => b.venue)).toEqual(['half note', 'onassis stegi', 'zappeio']);
+    const half = report.place.byVenue.find(b => b.venue === 'half note')!;
+    expect(half.total).toBe(1);
+    expect(half.pass).toBe(1);
+    expect(half.passRate).toBe(100);
+  });
+
+  test('place.byVenue includes sameAsState: "present" when any event at the venue has venue.sameAs', () => {
+    const ev1 = makeEvent({ id: 'aaaa1111', title: 'A', venueName: 'Half Note', type: 'concert' });
+    ev1.venue.sameAs = ['https://www.wikidata.org/wiki/Q12345'];
+    const ev2 = makeEvent({ id: 'bbbb2222', title: 'B', venueName: 'Onassis Stegi', type: 'theater' });
+    const summary = makeSummary([
+      makeResult(generateEventSlug(ev1)),
+      makeResult(generateEventSlug(ev2)),
+    ]);
+    const report = buildCompletenessReport(summary, [ev1, ev2], emptyAria(), emptyRatchet());
+    expect(report.place.byVenue.find(b => b.venue === 'half note')!.sameAsState).toBe('present');
+    expect(report.place.byVenue.find(b => b.venue === 'onassis stegi')!.sameAsState).toBe('missing');
+  });
+
+  test('place.ratchet is the passthrough of ratchetState parameter', () => {
+    const ratchet: RatchetState = {
+      venueSameAs: { coverage: 0.42, populated: 17, total: 40, threshold: 0.5, currentSeverity: 'info' },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), ratchet);
+    expect(report.place.ratchet).toEqual(ratchet);
+  });
+
+  test('place.byVenue normalizeVenueKey collapses Greek diacritics + casing variants', () => {
+    const ev1 = makeEvent({ id: 'aaaa1111', title: 'A', venueName: 'Ίλιον Plus', type: 'concert' });
+    const ev2 = makeEvent({ id: 'bbbb2222', title: 'B', venueName: 'ΙΛΙΟΝ Plus', type: 'concert' });
+    const summary = makeSummary([
+      makeResult(generateEventSlug(ev1)),
+      makeResult(generateEventSlug(ev2)),
+    ]);
+    const report = buildCompletenessReport(summary, [ev1, ev2], emptyAria(), emptyRatchet());
+    // Both events at the same canonical venue → single byVenue entry with total 2.
+    expect(report.place.byVenue).toHaveLength(1);
+    expect(report.place.byVenue[0].total).toBe(2);
   });
 });

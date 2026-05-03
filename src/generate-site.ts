@@ -219,7 +219,7 @@ async function main() {
   // Website drives Tier-5 "Check venue website" CTA. sameAs feeds Schema.org
   // identity links (Component B-1). Empty arrays omitted — JSON-LD readers
   // treat present-but-empty as a present-but-unknown signal, worse than absence.
-  const { getVenueByName } = await import('./ticketing/venue-registry');
+  const { getVenueByName, getAllVenues } = await import('./ticketing/venue-registry');
   for (const event of pageableEvents) {
     const venueRecord = getVenueByName(event.venue.name);
     if (venueRecord?.website) event.venue.website = venueRecord.website;
@@ -227,6 +227,28 @@ async function main() {
       event.venue.sameAs = venueRecord.sameAs;
     }
   }
+
+  // Component B-2: ratchet state for venue sameAs coverage.
+  // Severity decided once at build start, threaded into validators (B-1 pattern).
+  // INFO until coverage meets threshold; then promotes to WARN.
+  const ratchetConfig = JSON.parse(
+    readFileSync(join(import.meta.dir, '../config/completeness-ratchets.json'), 'utf-8'),
+  );
+  const allVenues = getAllVenues();
+  const totalVenues = allVenues.length;
+  const venuesWithSameAs = allVenues.filter(v => v.sameAs && v.sameAs.length > 0).length;
+  const sameAsCoverage = totalVenues > 0 ? venuesWithSameAs / totalVenues : 0;
+  const sameAsThreshold = ratchetConfig.athens.place.venueSameAs.warnAt;
+  const sameAsSeverity: 'info' | 'warn' = sameAsCoverage >= sameAsThreshold ? 'warn' : 'info';
+  const ratchetState = {
+    venueSameAs: {
+      coverage: sameAsCoverage,
+      populated: venuesWithSameAs,
+      total: totalVenues,
+      threshold: sameAsThreshold,
+      currentSeverity: sameAsSeverity,
+    },
+  };
 
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
   console.log(`📍 ${locationFiltered.length} events with verified Athens location`);
@@ -1044,8 +1066,9 @@ async function main() {
   console.log(`⏱️  Build time: ${(buildDurationMs / 1000).toFixed(1)}s`);
   console.log(`📁 Output directory: ${DIST_DIR}`);
 
-  // Schema completeness validation (warning-only, never blocks build)
-  const schemaResults = validateAllPages(DIST_DIR);
+  // Schema completeness validation (warning-only, never blocks build).
+  // sameAsSeverity decided at build start (Sprint 2 Component B-2 ratchet).
+  const schemaResults = validateAllPages(DIST_DIR, sameAsSeverity);
   printSchemaSummary(schemaResults);
 
   // Sprint 2 Component C — aria aggregate is produced by scripts/audit-aria.ts
@@ -1054,8 +1077,8 @@ async function main() {
   // zero-aggregate so aria_level can still flip to "measured" structurally.
   // Documented sequence: build → audit → rebuild (rebuild picks up aggregate).
   let ariaAggregate: AriaAggregate = {
-    hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
-    event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+    hub_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
+    event_template: { total: 0, pass: 0, warn: 0, fail: 0, info: 0 },
   };
   const ariaAggregatePath = join(import.meta.dir, '../data/build-aria-aggregate.json');
   if (existsSync(ariaAggregatePath)) {
@@ -1066,8 +1089,8 @@ async function main() {
     }
   }
 
-  // Per-EventType bucket breakdown (Sprint 2 Component D + C)
-  const completenessReport = buildCompletenessReport(schemaResults, pageableEvents, ariaAggregate);
+  // Per-EventType bucket breakdown (Sprint 2 Component D + C + B-2)
+  const completenessReport = buildCompletenessReport(schemaResults, pageableEvents, ariaAggregate, ratchetState);
   printBucketSummary(completenessReport);
   writeCompletenessReport(
     completenessReport,

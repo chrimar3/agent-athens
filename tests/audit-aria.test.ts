@@ -53,7 +53,7 @@ describe('classify', () => {
 
 describe('emptyGroup', () => {
   it('returns zeroed PageGroupReport', () => {
-    expect(emptyGroup()).toEqual({ total: 0, pass: 0, warn: 0, fail: 0 });
+    expect(emptyGroup()).toEqual({ total: 0, pass: 0, warn: 0, fail: 0, info: 0 });
   });
 });
 
@@ -64,7 +64,7 @@ describe('tallyAggregate', () => {
     tallyAggregate(g, 'warn');
     tallyAggregate(g, 'fail');
     tallyAggregate(g, 'pass');
-    expect(g).toEqual({ total: 4, pass: 2, warn: 1, fail: 1 });
+    expect(g).toEqual({ total: 4, pass: 2, warn: 1, fail: 1, info: 0 });
   });
 
   it('skips audit_error — does not increment any counter', () => {
@@ -72,7 +72,7 @@ describe('tallyAggregate', () => {
     tallyAggregate(g, 'pass');
     tallyAggregate(g, 'audit_error');
     tallyAggregate(g, 'audit_error');
-    expect(g).toEqual({ total: 1, pass: 1, warn: 0, fail: 0 });
+    expect(g).toEqual({ total: 1, pass: 1, warn: 0, fail: 0, info: 0 });
   });
 });
 
@@ -89,8 +89,8 @@ describe('per-template aggregation scenario', () => {
     tallyAggregate(eventAgg, 'warn');
     tallyAggregate(eventAgg, 'warn');
 
-    expect(hubAgg).toEqual({ total: 10, pass: 10, warn: 0, fail: 0 });
-    expect(eventAgg).toEqual({ total: 5, pass: 3, warn: 2, fail: 0 });
+    expect(hubAgg).toEqual({ total: 10, pass: 10, warn: 0, fail: 0, info: 0 });
+    expect(eventAgg).toEqual({ total: 5, pass: 3, warn: 2, fail: 0, info: 0 });
   });
 
   it('audit_error pages do not pollute aggregate counts', () => {
@@ -100,6 +100,6 @@ describe('per-template aggregation scenario', () => {
     tallyAggregate(agg, 'audit_error');
     tallyAggregate(agg, 'warn');
     tallyAggregate(agg, 'audit_error');
-    expect(agg).toEqual({ total: 3, pass: 2, warn: 1, fail: 0 });
+    expect(agg).toEqual({ total: 3, pass: 2, warn: 1, fail: 0, info: 0 });
   });
 });

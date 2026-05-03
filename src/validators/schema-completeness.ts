@@ -67,8 +67,17 @@ function isPlaceholder(value: unknown): boolean {
 
 /**
  * Validate a single page's JSON-LD schema completeness.
+ *
+ * `sameAsSeverity` (Sprint 2 Component B-2, Q-B1 + Q-B5 locks 2026-05-03):
+ * decided by orchestrator from venueSameAs ratchet. Default 'info' is a literal
+ * for test ergonomics — production paths (validateAllPages → generate-site.ts)
+ * always pass explicitly. Validator stays pure (no config reads).
  */
-export function validateSchemaCompleteness(htmlContent: string, eventSlug: string): SchemaValidationResult {
+export function validateSchemaCompleteness(
+  htmlContent: string,
+  eventSlug: string,
+  sameAsSeverity: 'info' | 'warn' = 'info',
+): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
   const info: string[] = [];
@@ -118,6 +127,19 @@ export function validateSchemaCompleteness(htmlContent: string, eventSlug: strin
   const location = schema.location;
   if (!location || !isNonEmpty(location.name)) {
     errors.push('location.name is missing or empty');
+  }
+
+  // Q-B1 + Q-B5 lock: location.sameAs surfaces as INFO universally; promotes
+  // to WARN when ratchet threshold met (decided by orchestrator). Q-B7: this
+  // covers DataFeed transitively — no separate check on the feed itself.
+  if (location && typeof location === 'object') {
+    const locSameAs = (location as Record<string, unknown>).sameAs;
+    const hasLocSameAs = Array.isArray(locSameAs) ? locSameAs.length > 0 : isNonEmpty(locSameAs);
+    if (!hasLocSameAs) {
+      const msg = 'location.sameAs missing (Wikidata QID, Google Place URL, official URL)';
+      if (sameAsSeverity === 'warn') warnings.push(msg);
+      else info.push(msg);
+    }
   }
 
   // Conditional offers presence: required UNLESS event is completed.
@@ -321,23 +343,30 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
  * addressRegion is structural drift, not a data-quality gap → ERROR.
  * Missing addressRegion is silent here (the existing `address is missing` ERROR
  * already covers the missing-address-block case).
+ *
+ * `sameAsSeverity` is decided once at build start by generate-site.ts based on
+ * the venueSameAs ratchet (config/completeness-ratchets.json). 'info' below
+ * threshold; 'warn' at-or-above. Validator is pure — receives the decision,
+ * doesn't read config (B-1 pattern lock). Q-B1 + Q-B5 locks 2026-05-03.
  */
 export function validateVenueSchema(
   htmlContent: string,
   venueSlug: string,
   expectedAddressRegion: string,
+  sameAsSeverity: 'info' | 'warn',
 ): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
+  const info: string[] = [];
 
   const match = htmlContent.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
-  if (!match) return { slug: `venue:${venueSlug}`, errors: [], warnings: [] };
+  if (!match) return { slug: `venue:${venueSlug}`, errors: [], warnings: [], info: [] };
 
   let schema: Record<string, any>;
   try {
     schema = JSON.parse(match[1]);
   } catch {
-    return { slug: `venue:${venueSlug}`, errors: ['Failed to parse JSON-LD'], warnings: [] };
+    return { slug: `venue:${venueSlug}`, errors: ['Failed to parse JSON-LD'], warnings: [], info: [] };
   }
 
   // Mandatory for LocalBusiness
@@ -351,11 +380,21 @@ export function validateVenueSchema(
     errors.push(`addressRegion mismatch: got "${got}", expected "${expectedAddressRegion}" per city-geodata.json`);
   }
 
+  // Q-B1 + Q-B5 lock: venue sameAs (Wikidata QID, Google Place URL, official URL)
+  // surfaces as INFO universally; promotes to WARN when ratchet threshold met.
+  const sameAs = schema.sameAs;
+  const hasSameAs = Array.isArray(sameAs) ? sameAs.length > 0 : isNonEmpty(sameAs);
+  if (!hasSameAs) {
+    const msg = 'venue sameAs missing (Wikidata QID, Google Place URL, official URL)';
+    if (sameAsSeverity === 'warn') warnings.push(msg);
+    else info.push(msg);
+  }
+
   // Recommended
   if (!schema.geo) warnings.push('geo coordinates missing');
   if (!isNonEmpty(schema.url)) warnings.push('url is missing');
 
-  return { slug: `venue:${venueSlug}`, errors, warnings };
+  return { slug: `venue:${venueSlug}`, errors, warnings, info };
 }
 
 /**
@@ -404,8 +443,13 @@ export function validateDataFeed(distDir: string): SchemaValidationResult {
 
 /**
  * Validate all generated event pages in a dist directory.
+ *
+ * `sameAsSeverity` is decided once at build start by generate-site.ts based on
+ * the venueSameAs ratchet (config/completeness-ratchets.json) and threaded
+ * into per-page validators here. B-1 pattern: orchestrator carries config
+ * dependencies; validators stay pure.
  */
-export function validateAllPages(distDir: string): SchemaValidationSummary {
+export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn'): SchemaValidationSummary {
   const eventsDir = join(distDir, 'events');
   if (!existsSync(eventsDir)) {
     return { total: 0, passCount: 0, warnCount: 0, failCount: 0, details: [] };
@@ -422,7 +466,7 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     if (!existsSync(htmlPath)) continue;
 
     const html = readFileSync(htmlPath, 'utf-8');
-    details.push(validateSchemaCompleteness(html, slug));
+    details.push(validateSchemaCompleteness(html, slug, sameAsSeverity));
   }
 
   // Also scan English pages (dist/en/events/)
@@ -435,7 +479,7 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
       const htmlPath = join(enEventsDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateSchemaCompleteness(html, `en/${slug}`));
+      details.push(validateSchemaCompleteness(html, `en/${slug}`, sameAsSeverity));
     }
   }
 
@@ -477,7 +521,7 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
       const htmlPath = join(venuesDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateVenueSchema(html, slug, expectedRegion));
+      details.push(validateVenueSchema(html, slug, expectedRegion, sameAsSeverity));
     }
   }
 
@@ -521,6 +565,10 @@ export function printSchemaSummary(summary: SchemaValidationSummary): void {
   const venueCount = details.filter(d => d.slug.startsWith('venue:')).length;
   const datafeedCount = details.filter(d => d.slug.startsWith('datafeed:')).length;
 
+  // Sprint 2 Component B-2: INFO is orthogonal to pass/warn/fail. A page can
+  // be PASS and still have INFO findings — INFO does not downgrade pass status.
+  const infoCount = details.filter(d => (d.info?.length ?? 0) > 0).length;
+
   const passRate = Math.round((passCount / total) * 100);
   console.log(`\n📋 Schema completeness: ${passCount}/${total} pages fully valid (${passRate}%)`);
   console.log(
@@ -529,6 +577,9 @@ export function printSchemaSummary(summary: SchemaValidationSummary): void {
       ` pages`,
   );
   console.log(`   ✅ ${passCount} pass  ⚠️  ${warnCount} warnings  ❌ ${failCount} errors`);
+  if (infoCount > 0) {
+    console.log(`   ℹ️  ${infoCount} pages with INFO findings (Sprint 2 Component B-2 — orthogonal to pass/warn/fail)`);
+  }
 
   // Show errors grouped by type
   if (failCount > 0) {
@@ -555,6 +606,25 @@ export function printSchemaSummary(summary: SchemaValidationSummary): void {
     if (warnCounts.size > 0) {
       console.log(`\n   Top data gaps:`);
       for (const [msg, count] of [...warnCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)) {
+        const pct = Math.round((count / total) * 100);
+        console.log(`     ${count}/${total} (${pct}%) ${msg}`);
+      }
+    }
+  }
+
+  // Sprint 2 Component B-2: top INFO findings — separate block, never conflated
+  // with WARN. Surfaces the most common INFO messages so consumers can see what
+  // INFO is currently signaling (most often: missing venue/location.sameAs).
+  if (infoCount > 0) {
+    const infoCounts = new Map<string, number>();
+    for (const result of details) {
+      for (const i of result.info ?? []) {
+        infoCounts.set(i, (infoCounts.get(i) || 0) + 1);
+      }
+    }
+    if (infoCounts.size > 0) {
+      console.log(`\n   Top INFO findings:`);
+      for (const [msg, count] of [...infoCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)) {
         const pct = Math.round((count / total) * 100);
         console.log(`     ${count}/${total} (${pct}%) ${msg}`);
       }
