@@ -18,7 +18,7 @@ import { renderEventCardList } from '../templates/card-variants';
 import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, getCountryCode } from '../utils/schema-geo';
+import { buildContainedInPlace, getCountryCode, getRegionName } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -38,6 +38,7 @@ interface VenueData {
   address?: string;
   neighborhood?: string;
   coordinates?: { lat: number; lon: number };
+  sameAs?: string[];
   events: Event[];
   eventCount: number;
 }
@@ -67,11 +68,12 @@ function generateVenueSchema(venue: VenueData): string | null {
       '@type': 'PostalAddress',
       'streetAddress': venue.address,
       'addressLocality': 'Athens',
-      'addressRegion': venue.neighborhood || 'Attica',
+      'addressRegion': getRegionName(),
       'addressCountry': getCountryCode()
     },
     'url': `${BASE_URL}/venues/${venue.slug}/`,
-    'containedInPlace': buildContainedInPlace(venue.neighborhood)
+    'containedInPlace': buildContainedInPlace(venue.neighborhood),
+    ...(venue.sameAs && venue.sameAs.length > 0 ? { sameAs: venue.sameAs } : {})
   };
 
   // Add geo coordinates if real (not the generic Athens center fallback)
@@ -253,6 +255,7 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
         address: event.venue.address,
         neighborhood: event.venue.neighborhood,
         coordinates: event.venue.coordinates,
+        sameAs: event.venue.sameAs,
         events: [],
         eventCount: 0
       };

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-03T05:13:58.600Z"
+    "lastUpdate": "2026-05-03T16:59:33.622Z"
   },
   "layers": {
     "event_level": "measured",
@@ -102,14 +102,14 @@
     "orphanSlugs": []
   },
   "hubs": {
-    "total": 24,
-    "pass": 21,
+    "total": 22,
+    "pass": 19,
     "warn": 3,
     "fail": 0
   },
   "venues": {
-    "total": 54,
-    "pass": 54,
+    "total": 46,
+    "pass": 46,
     "warn": 0,
     "fail": 0
   },

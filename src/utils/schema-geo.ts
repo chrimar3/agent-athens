@@ -172,6 +172,15 @@ export function getCurrencyCode(): string {
 }
 
 /**
+ * Administrative region name for the configured city (e.g. "Attica" for Athens,
+ * "Catalonia" for Barcelona, "Berlin" for Berlin). Single source of truth for
+ * `addressRegion` in JSON-LD address blocks. Q-B6 lock 2026-05-03.
+ */
+export function getRegionName(): string {
+  return cityGeodata.region.name;
+}
+
+/**
  * Organization schema for the homepage JSON-LD block.
  */
 export const ORGANIZATION_SCHEMA = {

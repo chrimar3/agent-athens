@@ -215,11 +215,17 @@ async function main() {
     if (venueImg) event.venueImage = venueImg;
   }
 
-  // Attach venue.website from athens-venues.json (drives Tier-5 "Check venue website" CTA)
+  // Attach venue.website + venue.sameAs from athens-venues.json.
+  // Website drives Tier-5 "Check venue website" CTA. sameAs feeds Schema.org
+  // identity links (Component B-1). Empty arrays omitted — JSON-LD readers
+  // treat present-but-empty as a present-but-unknown signal, worse than absence.
   const { getVenueByName } = await import('./ticketing/venue-registry');
   for (const event of pageableEvents) {
     const venueRecord = getVenueByName(event.venue.name);
     if (venueRecord?.website) event.venue.website = venueRecord.website;
+    if (venueRecord?.sameAs && venueRecord.sameAs.length > 0) {
+      event.venue.sameAs = venueRecord.sameAs;
+    }
   }
 
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);

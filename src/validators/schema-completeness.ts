@@ -10,6 +10,7 @@ import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { classifyDateFormat } from '../utils/date-format';
+import { getRegionName } from '../utils/schema-geo';
 
 // Valid @type values from our canonical type map
 const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
@@ -314,8 +315,18 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
 
 /**
  * Validate a venue page's JSON-LD schema (LocalBusiness).
+ *
+ * `expectedAddressRegion` is the canonical city.region.name from city-geodata.json
+ * (e.g. "Attica" for Athens). Q-B6 lock 2026-05-03: a present-but-mismatched
+ * addressRegion is structural drift, not a data-quality gap → ERROR.
+ * Missing addressRegion is silent here (the existing `address is missing` ERROR
+ * already covers the missing-address-block case).
  */
-export function validateVenueSchema(htmlContent: string, venueSlug: string): SchemaValidationResult {
+export function validateVenueSchema(
+  htmlContent: string,
+  venueSlug: string,
+  expectedAddressRegion: string,
+): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -333,6 +344,12 @@ export function validateVenueSchema(htmlContent: string, venueSlug: string): Sch
   if (schema['@type'] !== 'LocalBusiness') errors.push(`@type is "${schema['@type']}", expected LocalBusiness`);
   if (!isNonEmpty(schema.name)) errors.push('name is missing');
   if (!schema.address) errors.push('address is missing');
+
+  // Q-B6 lock: addressRegion must equal city.region.name when present.
+  const got = schema.address?.addressRegion;
+  if (typeof got === 'string' && got !== expectedAddressRegion) {
+    errors.push(`addressRegion mismatch: got "${got}", expected "${expectedAddressRegion}" per city-geodata.json`);
+  }
 
   // Recommended
   if (!schema.geo) warnings.push('geo coordinates missing');
@@ -455,11 +472,12 @@ export function validateAllPages(distDir: string): SchemaValidationSummary {
     const venueSlugs = readdirSync(venuesDir, { withFileTypes: true })
       .filter(d => d.isDirectory())
       .map(d => d.name);
+    const expectedRegion = getRegionName();
     for (const slug of venueSlugs) {
       const htmlPath = join(venuesDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateVenueSchema(html, slug));
+      details.push(validateVenueSchema(html, slug, expectedRegion));
     }
   }
 

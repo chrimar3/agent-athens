@@ -90,6 +90,7 @@ export interface Venue {
   };
   capacity?: number;
   website?: string;  // Venue homepage; drives "Check venue website" Tier-5 CTA.
+  sameAs?: string[];  // Identity links emitted as Schema.org sameAs; populated from VenueRecord via generate-site.ts attach.
 }
 
 export interface Price {

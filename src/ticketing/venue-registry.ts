@@ -29,6 +29,8 @@ export interface VenueRecord {
   website?: string;
   /** Ticketing configuration; drives Tier 2 resolution. */
   ticketing?: TicketingInfo;
+  /** Identity links (Wikidata QID URI, Google Place URL, official URL) emitted as Schema.org sameAs. */
+  sameAs?: string[];
 }
 
 interface RegistryFile {

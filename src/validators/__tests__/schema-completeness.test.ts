@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -532,5 +532,67 @@ describe('validateDataFeed', () => {
     writeFileSync(join(apiDir, 'events.json'), '{ this is not valid json');
     const result = validateDataFeed(tmpDir);
     expect(result.errors.some(e => e.includes('parse error'))).toBe(true);
+  });
+});
+
+// ── validateVenueSchema: addressRegion canonicalization (Q-B6 lock) ──
+//
+// Per Strategist Q-B6 lock 2026-05-03: addressRegion on venue pages must
+// equal city.region.name from city-geodata.json (e.g. "Attica" for Athens,
+// "Catalonia" for Barcelona, "Berlin" for Berlin). Mismatch is ERROR, not
+// WARN — the value is config-driven and a divergent value is a structural
+// drift, not a data-quality gap.
+function makeValidVenueSchema(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    'name': 'Half Note Jazz Club',
+    'address': {
+      '@type': 'PostalAddress',
+      'streetAddress': 'Trivonianou 17',
+      'addressLocality': 'Athens',
+      'addressRegion': 'Attica',
+      'addressCountry': 'GR',
+    },
+    'geo': { '@type': 'GeoCoordinates', 'latitude': 37.9688, 'longitude': 23.7375 },
+    'url': 'https://agentathens.com/venues/half-note/',
+    ...overrides,
+  };
+}
+
+describe('validateVenueSchema — addressRegion canonicalization (Q-B6)', () => {
+  test('addressRegion matches city.region.name → no error', () => {
+    const html = wrapInHtml(makeValidVenueSchema());
+    const result = validateVenueSchema(html, 'half-note', 'Attica');
+    expect(result.errors).toEqual([]);
+  });
+
+  test('address block missing → existing "address is missing" ERROR fires; no addressRegion-specific error', () => {
+    const schema = makeValidVenueSchema();
+    delete (schema as { address?: unknown }).address;
+    const html = wrapInHtml(schema);
+    const result = validateVenueSchema(html, 'no-address', 'Attica');
+    expect(result.errors.some(e => e.includes('address is missing'))).toBe(true);
+    expect(result.errors.some(e => e.includes('addressRegion'))).toBe(false);
+  });
+
+  test('addressRegion mismatch ("Neos Kosmos" vs expected "Attica") → ERROR with both values', () => {
+    const schema = makeValidVenueSchema();
+    (schema.address as Record<string, unknown>).addressRegion = 'Neos Kosmos';
+    const html = wrapInHtml(schema);
+    const result = validateVenueSchema(html, 'wrong-region', 'Attica');
+    const mismatchError = result.errors.find(e => e.includes('addressRegion'));
+    expect(mismatchError).toBeDefined();
+    expect(mismatchError).toContain('Neos Kosmos');
+    expect(mismatchError).toContain('Attica');
+  });
+
+  test('multi-city replicability: expected="Catalonia", venue page emits "Attica" → ERROR fires', () => {
+    const html = wrapInHtml(makeValidVenueSchema());
+    const result = validateVenueSchema(html, 'wrong-city', 'Catalonia');
+    const mismatchError = result.errors.find(e => e.includes('addressRegion'));
+    expect(mismatchError).toBeDefined();
+    expect(mismatchError).toContain('Attica');
+    expect(mismatchError).toContain('Catalonia');
   });
 });

@@ -173,7 +173,8 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
         'addressRegion': 'Attica',
         'addressCountry': getCountryCode()
       },
-      'containedInPlace': buildContainedInPlace(event.venue.neighborhood)
+      'containedInPlace': buildContainedInPlace(event.venue.neighborhood),
+      ...(event.venue.sameAs && event.venue.sameAs.length > 0 ? { sameAs: event.venue.sameAs } : {})
     }
   };
 
