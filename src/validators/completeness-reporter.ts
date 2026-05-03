@@ -51,6 +51,16 @@ export interface PageGroupReport {
   fail: number;
 }
 
+// Sprint 2 Component C — per-template ARIA aggregate. Per-page detail
+// lives in data/build-aria-report.json; this slot mirrors `datafeed`'s
+// flat-aggregate shape but split by template, since ARIA findings are
+// template-systemic (one CSS/HTML pattern affects thousands of pages).
+// Single source of truth: scripts/audit-aria.ts imports this type.
+export interface AriaAggregate {
+  hub_template: PageGroupReport;
+  event_template: PageGroupReport;
+}
+
 export interface CompletenessReport {
   meta: { lastUpdate: string };
   layers: {
@@ -68,6 +78,7 @@ export interface CompletenessReport {
   hubs: PageGroupReport;
   venues: PageGroupReport;
   datafeed: PageGroupReport;
+  aria: AriaAggregate;
 }
 
 type Verdict = 'pass' | 'warn' | 'fail';
@@ -90,6 +101,7 @@ function tally(group: PageGroupReport, verdict: Verdict): void {
 export function buildCompletenessReport(
   summary: SchemaValidationSummary,
   events: Event[],
+  ariaAggregate: AriaAggregate,
 ): CompletenessReport {
   // Build slug → EventType map. generateEventSlug is the canonical join key
   // shared with the page generator.
@@ -174,7 +186,7 @@ export function buildCompletenessReport(
       event_level: 'measured',
       offer_level: 'measured',
       place_level: 'not_measured',
-      aria_level: 'not_measured',
+      aria_level: 'measured',
       datafeed_level: 'measured',
     },
     events: {
@@ -185,6 +197,7 @@ export function buildCompletenessReport(
     hubs,
     venues,
     datafeed,
+    aria: ariaAggregate,
   };
 }
 

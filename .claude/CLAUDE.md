@@ -93,6 +93,15 @@ bun run scripts/run-enrichment-pipeline.ts --validate --id=ID
 bun run src/generate-site.ts
 bun test && git push origin main
 
+# ARIA audit (Sprint 2 Component C — WARN-only, never blocks build)
+# Default: all hubs + 5 stratified events per EventType + all English mirrors
+bun run scripts/audit-aria.ts
+# Exhaustive: every event-detail page (slow)
+bun run scripts/audit-aria.ts --full
+# Sequence to surface aria aggregate in build-completeness.json:
+#   bun run src/generate-site.ts && bun run scripts/audit-aria.ts && bun run src/generate-site.ts
+# Writes data/build-aria-report.json (per-page) + data/build-aria-aggregate.json (per-template).
+
 # Database checks
 sqlite3 data/events.db "SELECT location_status, COUNT(*) FROM events GROUP BY location_status;"
 sqlite3 data/events.db "SELECT source, COUNT(*) FROM events GROUP BY source;"

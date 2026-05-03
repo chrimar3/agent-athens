@@ -1,12 +1,12 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-02T22:36:36.522Z"
+    "lastUpdate": "2026-05-03T00:04:10.233Z"
   },
   "layers": {
     "event_level": "measured",
     "offer_level": "measured",
     "place_level": "not_measured",
-    "aria_level": "not_measured",
+    "aria_level": "measured",
     "datafeed_level": "measured"
   },
   "events": {
@@ -118,5 +118,19 @@
     "pass": 1,
     "warn": 0,
     "fail": 0
+  },
+  "aria": {
+    "hub_template": {
+      "total": 1168,
+      "pass": 1166,
+      "warn": 0,
+      "fail": 2
+    },
+    "event_template": {
+      "total": 490,
+      "pass": 490,
+      "warn": 0,
+      "fail": 0
+    }
   }
 }

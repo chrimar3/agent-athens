@@ -3,10 +3,21 @@ import {
   buildCompletenessReport,
   type CompletenessReport,
   type BucketReport,
+  type AriaAggregate,
 } from '../completeness-reporter';
 import type { SchemaValidationSummary, SchemaValidationResult } from '../schema-completeness';
 import { generateEventSlug } from '../../generators/event-page';
 import type { Event, EventType } from '../../types';
+
+// Sprint 2 Component C — zero aggregate placeholder for tests that don't
+// exercise the aria slot. Real aria data is produced by scripts/audit-aria.ts
+// and consumed by generate-site.ts; the reporter is a pure passthrough for it.
+function emptyAria(): AriaAggregate {
+  return {
+    hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+    event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+  };
+}
 
 // Minimal Event factory — only the fields the reporter joins on (id, title, venue.name, type)
 // matter; rest is filler to satisfy the type.
@@ -51,7 +62,7 @@ function makeSummary(details: SchemaValidationResult[]): SchemaValidationSummary
 
 describe('buildCompletenessReport', () => {
   test('empty input returns empty report with all-zero totals', () => {
-    const report = buildCompletenessReport(makeSummary([]), []);
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
     expect(report.events.byType).toEqual([]);
     expect(report.events.totals.total).toBe(0);
     expect(report.events.totals.pass).toBe(0);
@@ -71,7 +82,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(theaterEvent)),
     ]);
 
-    const report = buildCompletenessReport(summary, events);
+    const report = buildCompletenessReport(summary, events, emptyAria());
     const types = report.events.byType.map(b => b.type);
     expect(types).toEqual(['concert', 'theater']);
     expect(types).not.toContain('exhibition');
@@ -85,7 +96,7 @@ describe('buildCompletenessReport', () => {
       makeResult('ghost-event-no-match'),
     ]);
 
-    const report = buildCompletenessReport(summary, [event]);
+    const report = buildCompletenessReport(summary, [event], emptyAria());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('concert');
     expect(report.events.byType[0].total).toBe(1);
@@ -100,7 +111,7 @@ describe('buildCompletenessReport', () => {
       makeResult(`en/${slug}`),
     ]);
 
-    const report = buildCompletenessReport(summary, [event]);
+    const report = buildCompletenessReport(summary, [event], emptyAria());
     expect(report.events.byType).toHaveLength(1);
     const concertBucket = report.events.byType[0];
     expect(concertBucket.type).toBe('concert');
@@ -118,7 +129,7 @@ describe('buildCompletenessReport', () => {
       makeResult('venue:megaron', ['error'], []),
     ]);
 
-    const report = buildCompletenessReport(summary, [event]);
+    const report = buildCompletenessReport(summary, [event], emptyAria());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('show');
     expect(report.events.orphanSlugs).toEqual([]);
@@ -139,7 +150,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(e4), ['e1'], ['w1']),              // fail (errors win)
     ]);
 
-    const report = buildCompletenessReport(summary, [e1, e2, e3, e4]);
+    const report = buildCompletenessReport(summary, [e1, e2, e3, e4], emptyAria());
     const cinema = report.events.byType.find(b => b.type === 'cinema')!;
     expect(cinema.total).toBe(4);
     expect(cinema.pass).toBe(1);
@@ -148,13 +159,34 @@ describe('buildCompletenessReport', () => {
     expect(cinema.passRate).toBe(25); // 1/4 = 25%
   });
 
-  test('layer flags: event_level + offer_level measured; place_level + aria_level not_measured', () => {
-    const report = buildCompletenessReport(makeSummary([]), []);
+  test('layer flags: event/offer/aria/datafeed measured; place_level not_measured (post-Component-C)', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
     expect(report.layers.event_level).toBe('measured');
     expect(report.layers.offer_level).toBe('measured');
     expect(report.layers.place_level).toBe('not_measured');
-    expect(report.layers.aria_level).toBe('not_measured');
+    expect(report.layers.aria_level).toBe('measured');
     expect(report.layers.datafeed_level).toBe('measured');
+  });
+
+  // Sprint 2 Component C — aria slot is a pure passthrough of the
+  // ariaAggregate parameter. Reporter does not read filesystem for ARIA
+  // data; scripts/audit-aria.ts produces the aggregate, generate-site.ts
+  // loads it and passes it in.
+  test('aria slot: empty aggregate produces zero hub_template + event_template counts', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
+    expect(report.aria).toEqual({
+      hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+      event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+    });
+  });
+
+  test('aria slot: passthrough — values from ariaAggregate parameter appear unchanged in report', () => {
+    const ariaInput: AriaAggregate = {
+      hub_template: { total: 50, pass: 45, warn: 5, fail: 0 },
+      event_template: { total: 100, pass: 92, warn: 6, fail: 2 },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], ariaInput);
+    expect(report.aria).toEqual(ariaInput);
   });
 
   // Sprint 2 Component A — datafeed:{slug} prefix routes into the new datafeed
@@ -168,7 +200,7 @@ describe('buildCompletenessReport', () => {
       makeResult('datafeed:bad-feed', ['err1'], []),      // fail
     ]);
 
-    const report = buildCompletenessReport(summary, [event]);
+    const report = buildCompletenessReport(summary, [event], emptyAria());
     expect(report.events.byType).toHaveLength(1);
     expect(report.events.byType[0].type).toBe('concert');
     expect(report.events.orphanSlugs).toEqual([]);
@@ -190,7 +222,7 @@ describe('buildCompletenessReport', () => {
     );
     const details = events.map(e => makeResult(generateEventSlug(e)));
 
-    const report = buildCompletenessReport(makeSummary(details), events);
+    const report = buildCompletenessReport(makeSummary(details), events, emptyAria());
     expect(report.events.byType.map(b => b.type)).toEqual(declarationOrder);
   });
 
@@ -206,7 +238,7 @@ describe('buildCompletenessReport', () => {
       makeResult(generateEventSlug(events[2]), ['e'], []),
     ];
 
-    const report = buildCompletenessReport(makeSummary(details), events);
+    const report = buildCompletenessReport(makeSummary(details), events, emptyAria());
     const sumTotal = report.events.byType.reduce((acc, b) => acc + b.total, 0);
     const sumPass = report.events.byType.reduce((acc, b) => acc + b.pass, 0);
     expect(report.events.totals.total).toBe(sumTotal);
@@ -223,12 +255,12 @@ describe('buildCompletenessReport', () => {
       makeResult('apple-event'),
       makeResult('mango-event'),
     ]);
-    const report = buildCompletenessReport(summary, []);
+    const report = buildCompletenessReport(summary, [], emptyAria());
     expect(report.events.orphanSlugs).toEqual(['apple-event', 'mango-event', 'zebra-event']);
   });
 
   test('meta.lastUpdate is a valid ISO timestamp', () => {
-    const report = buildCompletenessReport(makeSummary([]), []);
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria());
     expect(report.meta.lastUpdate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
     expect(new Date(report.meta.lastUpdate).toString()).not.toBe('Invalid Date');
   });

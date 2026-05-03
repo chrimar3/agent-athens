@@ -30,7 +30,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
-import { buildCompletenessReport, printBucketSummary, writeCompletenessReport } from './validators/completeness-reporter';
+import { buildCompletenessReport, printBucketSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
 import { buildDataFeed, writeDataFeed } from './generators/datafeed';
 import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
@@ -1042,8 +1042,26 @@ async function main() {
   const schemaResults = validateAllPages(DIST_DIR);
   printSchemaSummary(schemaResults);
 
-  // Per-EventType bucket breakdown (Sprint 2 Component D)
-  const completenessReport = buildCompletenessReport(schemaResults, pageableEvents);
+  // Sprint 2 Component C — aria aggregate is produced by scripts/audit-aria.ts
+  // and persisted to data/build-aria-aggregate.json. Build never depends on
+  // audit having run: fresh checkouts (no aggregate file yet) fall back to
+  // zero-aggregate so aria_level can still flip to "measured" structurally.
+  // Documented sequence: build → audit → rebuild (rebuild picks up aggregate).
+  let ariaAggregate: AriaAggregate = {
+    hub_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+    event_template: { total: 0, pass: 0, warn: 0, fail: 0 },
+  };
+  const ariaAggregatePath = join(import.meta.dir, '../data/build-aria-aggregate.json');
+  if (existsSync(ariaAggregatePath)) {
+    try {
+      ariaAggregate = JSON.parse(readFileSync(ariaAggregatePath, 'utf8'));
+    } catch (e) {
+      console.warn('[aria] could not parse build-aria-aggregate.json; using zero-aggregate');
+    }
+  }
+
+  // Per-EventType bucket breakdown (Sprint 2 Component D + C)
+  const completenessReport = buildCompletenessReport(schemaResults, pageableEvents, ariaAggregate);
   printBucketSummary(completenessReport);
   writeCompletenessReport(
     completenessReport,

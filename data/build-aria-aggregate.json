@@ -1,0 +1,14 @@
+{
+  "hub_template": {
+    "total": 1168,
+    "pass": 1166,
+    "warn": 0,
+    "fail": 2
+  },
+  "event_template": {
+    "total": 490,
+    "pass": 490,
+    "warn": 0,
+    "fail": 0
+  }
+}
