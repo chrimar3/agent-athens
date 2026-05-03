@@ -3674,3 +3674,49 @@ not by S103).
 - event-page.ts:173 hardcoded "Attica" — convergence to `getRegionName()` deferred to follow-up.
 - 0 venues in athens-venues.json have sameAs values populated (Editorial brief upstream of B-2). Tier 1 sameAs data lands separately.
 - B-2 (place-layer measurement aggregate + place_level flag flip) is next. B-1 ships the emission surface and one rule; B-2 adds the per-place coverage measurement that flips `place_level: "not_measured"` → `"measured"`.
+
+### Session 108 — Place-layer measurement + INFO consumption + ratchet (Sprint 2 Component B-2) — 2026-05-03
+
+**Plan:** Wire INFO-tier reporter consumption + ratchet config infrastructure; add place-layer measurement (per-template + byVenue aggregates, place_level flag flip); close out Q-B6 hardcoded "Attica" in event-page.ts. Five Strategist locks active (Q-B1 INFO+ratchet, Q-B2 hybrid, Q-B4 extend, Q-B5 sameAs-only, Q-B7 DataFeed inherits). Two Planner decisions baked in (ratchet config home = separate file, byVenue shape = BucketReport[] + sameAsState).
+
+**What happened:**
+- Step 0 confirmed baseline (1857/0 tests; 7724/7963 = 97% / 0 errors / 239 warnings; 46 venue subdirs; sameAs in athens-venues.json = 0). Build-time coverage will be 0/408 → severity = INFO.
+- Steps 1–2 added `config/completeness-ratchets.json` (athens.place.venueSameAs.warnAt = 0.5) and wired ratchet read + coverage compute + severity decision in generate-site.ts using existing `getAllVenues()` helper (no parse duplication).
+- Step 3 extended `PageGroupReport` and `BucketReport` with `info: number` field, `tally()` with `hasInfo: boolean` param. tsc surfaced 20 cascading consumer breaks across 4 files (generate-site.ts ariaAggregate fallback, scripts/audit-aria.ts emptyGroup, two test files). Fixed all mechanically by adding `info: 0` to literal shapes.
+- Steps 4–5 (TDD): added 4 venue sameAs tests + 3 event sameAs tests; extended `validateVenueSchema(html, slug, expected, sameAsSeverity)` with required param (4 callers) and `validateSchemaCompleteness(html, slug, sameAsSeverity = 'info')` with literal-default optional param (33 callers). Validator stays pure (no config reads); orchestrator threads severity through. Q-B7: `validateDataFeed` left untouched (per-event check covers DataFeed transitively).
+- Step 6 added `VenueBucketReport` + `RatchetState` types, new `place` slot to `CompletenessReport` (`venue_template + event_template + byVenue + ratchet`). `buildCompletenessReport` signature gained `ratchetState` param. Implemented byVenue aggregation: `slugToVenue` Map (using `normalizeVenueKey` from venue-registry), per-venue PageGroupReport accumulator, sorted alphabetically. `sameAsState` = 'present' if any event at the venue has `venue.sameAs`. `place_level` flag flipped to "measured". 8 new tests (place_level flip, venue_template, event_template, byVenue empty/populated/sameAsState/ratchet/Greek-collapse).
+- Step 7 added INFO surfacing in `printSchemaSummary`: separate header line ("ℹ️ N pages with INFO findings") + dedicated "Top INFO findings" block (mirrors "Top data gaps" pattern). 2 new tests (info populated → output contains INFO; info empty → no INFO line).
+- Step 8 closed Q-B6 in event-page.ts: replaced hardcoded `addressRegion: 'Attica'` with `getRegionName()` import from schema-geo. No new test (existing addressRegion validator rule from B-1 covers regression).
+- Step 9: full suite 1874/0; tsc clean; build clean (7724/7963 = 97% / 0 errors / 239 warnings preserved; 7940 pages with INFO findings = 7894 events + 46 venues; all 5 layer flags now "measured"; ratchet at coverage=0/408 with severity=info; byVenue length=247 with all sameAsState=missing).
+
+**Tests:** 17 new (4 venue sameAs + 3 event sameAs + 8 place + 2 INFO surface). Full suite 1874/0. tsc clean.
+
+**Build verification:**
+- 7894 event + 22 hub + 46 venue + 1 datafeed = 7963 pages
+- 7724 pass / 239 warnings / 0 errors (preserved — INFO doesn't downgrade pass)
+- 7940 pages with INFO findings (new line)
+- Top INFO findings: location.sameAs missing 7894/7963 (99%); offers.url omitted 187 (existing Sprint 1); venue sameAs missing 46/7963 (1%)
+- All 5 layer flags now "measured" (place_level flipped from "not_measured")
+- ratchet.coverage = 0/408; currentSeverity = "info"
+- byVenue: 247 distinct normalized venues; all sameAsState = "missing" pre-Editorial
+
+**Commit:** 12703b950 (B-2 impl, 11 files staged precisely) + d0fe3d346 (B-2 preflight). Both pushed to origin/main. Closeout (this entry + decisions/patterns updates) shipped separately to avoid mixing with concurrent S101 enrichment-drought work in working tree.
+
+**Execution decisions worth recording:**
+- `validateSchemaCompleteness` got optional default 'info' for sameAsSeverity (33 existing test callers). Diverges from B-1's required-param pattern. Documented as patterns.md addendum: literal default is acceptable when production paths always pass explicitly AND default is compile-time literal (not a config-reading helper). `validateVenueSchema` kept required-param shape (4 callers, all needed update for new behavior anyway).
+- Extended `BucketReport` to include `info` even though Step 3 boundary said only PageGroupReport. Reasoning: byType output would otherwise lose the info dimension while flat aggregates have it. Strict consistency across the artifact.
+- byVenue surfaced `'2" πολλαπλοι χωροι'` as a venue (with stray quote + Greek "Multiple Locations"). Real data hygiene wart in the events DB; not B-2's problem to fix. Surfaced by measurement, flagged for downstream cleanup.
+- Stash-dance for closeout commit: S101 enrichment-drought diagnostic had uncommitted changes in `.claude/notes/{decisions,mistakes,patterns}.md` and `docs/session-log.md`. Per `feedback_stage_precisely.md` rule, stashed S101 changes before adding B-2 entries to avoid conflict; restoring after closeout commit.
+
+**Learnings:**
+- Pre-flight P4's "result.info[] is write-only" finding was pivotal. If Q-B1 had locked INFO without the pre-flight catching the unwired aggregation, B-2 would have shipped with a write-only INFO tier that misled future auditors. Documented as new pattern: "INFO tier requires explicit aggregate consumption + summary surfacing wiring."
+- The B-1 "evaluate caller count first" caveat in patterns.md proved its value at the validateSchemaCompleteness signature change. 33 callers crossed the implicit threshold for "broader change" → optional-default-literal won over strict required-param. Pattern refinement now documented.
+- `getAllVenues()` was already in the codebase (originally for "backfill diagnostics") — pre-flight P3 caught it as the canonical helper to reuse instead of fresh JSON.parse. Saved a parse + cache duplication.
+- The artifact's `place.ratchet` block (`coverage / populated / total / threshold / currentSeverity`) is now the diagnostic visibility surface for "why is severity what it is". When Editorial Tier 1 brief lands sameAs values, the artifact will show coverage rising and severity flipping at the threshold boundary — debuggable without code spelunking. New pattern: "Ratchet state surfaced in artifact for diagnostic visibility."
+
+**Open items:**
+- Editorial Tier 1 brief (sameAs values for Megaron / Onassis / Benaki / etc.) is upstream of B-2. When it lands, ratchet coverage will rise from 0/408 toward 0.5; once ≥204 venues populated, severity flips to WARN automatically.
+- Sprint 2 retrospective trigger active — D, A, C, B all shipped. 4/4 components closed.
+- B-2 surfaced `247` distinct normalized venues in byVenue vs `46` venue pages vs `408` athens-venues.json entries — interesting data hygiene gap (events reference venues that don't have pages OR that don't appear in registry). Worth a separate diagnostic session.
+- `'2" πολλαπλοι χωροι'` venue name in byVenue — stray quote + canonicalized Greek "Multiple Locations". Data hygiene cleanup deferred.
+- printBucketSummary (separate from printSchemaSummary) does not yet surface place layer info. Currently only events.byType is shown. If Editorial wants the byVenue surface in console output, that's a follow-up.

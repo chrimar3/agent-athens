@@ -2429,3 +2429,94 @@ When a validator function needs a config-derived expected value for comparison, 
 **Family — generalizable to other validators:** any `validateX` function that compares against config-derived canonical values is a candidate. Examples that would benefit if extended: `validateDataFeed` could take `expectedFeedName` as parameter (currently hardcoded contract); future place-vocab validators in B-2 will likely need similar shape for per-city or per-venue expected values.
 
 **Status:** First-instance pattern in this codebase. Pre-existing validators (`validateSchemaCompleteness`, `validateHubSchema`, `validateDataFeed`) read globals or hardcode expectations. Refactor candidates if module-mocking ever becomes a need.
+
+---
+
+## INFO tier requires explicit aggregate consumption + summary surfacing wiring (pattern, 2026-05-03)
+
+The validator-side `info[]` field on per-page results is necessary but not sufficient for INFO findings to reach consumers. Until the reporter aggregates info counts into PageGroupReport AND printSchemaSummary surfaces them in console output, INFO is write-only and effectively invisible.
+
+**Symptom of the trap (B-1 baseline → B-2 pre-flight finding):** Sprint 1 added `result.info[]` (line 23–28 of schema-completeness.ts) and the `offers.url` push at line 185. From B-1's pre-flight P3, the per-page severity machinery looked complete and "supports WARN/INFO/ERROR with zero arch change". This claim was true *at the per-page level* but missed the aggregation boundary. B-2's pre-flight P4 caught it: 7,894 events × INFO findings would write but never read, never surface.
+
+**Pattern shape:** When introducing a new severity tier, audit the full chain:
+1. **Validator emits** to `result.{errors|warnings|info}[]` ← Sprint 1 stopped here
+2. **Reporter aggregates** into PageGroupReport / BucketReport counters
+3. **Summary surfaces** in console via `printSchemaSummary` (header line + Top-N findings block)
+4. **Artifact persists** via `data/build-completeness.json` consumption
+
+Each step requires deliberate wiring; no auto-propagation. A "shipped" tier that only completes step 1 is a write-only signal that misleads later auditors into thinking the tier is operational.
+
+**B-2 instance:** Adding `info: number` to PageGroupReport + BucketReport (Step 3), updating `tally()` to take `hasInfo: boolean`, updating `printSchemaSummary` with separate INFO header + Top INFO findings block. Without these, Q-B1's "INFO universal" lock would have been a no-op.
+
+**Mitigation for future tiers:** When designing a new severity tier, the spec must include all four chain links. Default skepticism about "the machinery already supports it" — verify by tracing where each tier surfaces in the artifact + console output, not just where it gets pushed onto the result.
+
+**Family:** Related to "the contract is what consumers see, not what producers emit" — common across measurement/observability work.
+
+**Status:** Active. INFO is now fully wired (B-2). If a future tier (e.g., BLOCKING-INFO, DEFERRED-WARN) is introduced, audit all four steps before declaring it shipped.
+
+---
+
+## Default-with-literal vs required parameter for validator config dependencies (pattern addendum, 2026-05-03)
+
+B-1's "validators take config-derived expectations from orchestrator" pattern explicitly chose required parameters with no defaults. The reasoning: required params keep the function purely a function of its inputs; tests have no implicit dependencies; the orchestrator carries the responsibility of computing expected values.
+
+B-2 surfaced a real edge case: when a new severity-injection parameter is added to a validator with a high call-site count (33 existing event tests for `validateSchemaCompleteness`), strict required-param enforcement forces a mass mechanical update of every test, even though most tests don't exercise the new behavior.
+
+**Resolution:** Optional parameter with **literal default** is acceptable when:
+- Default is a compile-time literal (e.g., `'info'`) — NOT a function call (e.g., `getRegionName()`).
+- Production paths (orchestrator) always pass explicitly — verified by reading the orchestrator code.
+- Tests for the new behavior pass explicit values; tests that don't care use the literal default.
+
+**Why this preserves B-1's intent:**
+- Validator stays *pure*: the literal default is not a config read; it's just `'info'`. Function-of-inputs property holds.
+- Production path stays *explicit*: orchestrator passes explicitly (caught by code review or grep audit).
+- Tests stay *focused*: only the tests exercising the new behavior need to mention the parameter.
+
+**What this is NOT acceptable for** (B-1's original concern still stands):
+- Defaults that call helpers reading config (`expected = getRegionName()` — the call site looks like an optional param but is really a hidden config dependency in tests that pass nothing).
+- Defaults that wrap module-level mutable state.
+
+**Heuristic:** "Evaluate caller count first" (from B-1's patterns.md addendum). High caller count + literal default = acceptable. Any caller count + helper default = prefer required param.
+
+**Family:** Refines the B-1 "Injectable expected-value parameter for testability" entry; both patterns coexist with this distinction.
+
+**Status:** Active. B-2 used literal-default for `validateSchemaCompleteness(html, slug, sameAsSeverity = 'info')`; required-param for `validateVenueSchema(html, slug, expected, sameAsSeverity)` (only 4 callers, all needed update anyway).
+
+---
+
+## Ratchet state surfaced in artifact for diagnostic visibility (pattern, 2026-05-03)
+
+When introducing a coverage-based severity ratchet (severity decided once at build start based on a measurable ratio), persist the ratchet's full *state* — not just the resulting severity — in the build artifact for diagnostic visibility.
+
+**B-2 instance (`config/completeness-ratchets.json` + `place.ratchet` slot in `data/build-completeness.json`):**
+
+```json
+"ratchet": {
+  "venueSameAs": {
+    "coverage": 0,
+    "populated": 0,
+    "total": 408,
+    "threshold": 0.5,
+    "currentSeverity": "info"
+  }
+}
+```
+
+The persisted state includes both the inputs (`populated`, `total`, `threshold`) and the derived outputs (`coverage`, `currentSeverity`). Consumers can verify the math: `coverage = populated / total`; `currentSeverity = coverage >= threshold ? 'warn' : 'info'`.
+
+**Why this matters:**
+- **Diagnostic visibility:** when severity is "info" (or "warn"), readers see WHY without having to chase the threshold definition through config files.
+- **Trajectory tracking:** trends over builds can plot `coverage` rising toward the threshold; alerts can fire before the boundary is crossed.
+- **Audit trail:** if severity flips unexpectedly, the artifact captures the exact inputs at the time of the flip.
+- **Promotion confidence:** when coverage finally reaches threshold and severity flips to 'warn', the artifact records that this was the build at which it happened.
+
+**Pattern shape:** for any policy decision made at build start based on observable inputs, persist BOTH inputs and decision in the build artifact. Don't hide the math in code that ran once and discarded its inputs.
+
+**Generalizes to:**
+- Future ratchets (place.image_coverage, etc. — Q-B5 deferred but follows same shape).
+- Sprint 3 WARN→FAIL promotion ratchets — when a measurement metric hits a target, severity gets promoted; persist the metric inputs alongside the promotion decision.
+- Any "decided once at build start" decision (e.g., feature flag rollouts, A/B test buckets, locale defaults).
+
+**Anti-pattern (avoided):** persist only `currentSeverity: 'info'` in the artifact. Consumers can't reproduce the decision; future debugging requires re-running with logging.
+
+**Status:** First-instance pattern in this codebase. If Sprint 3 promotion or future B-N components introduce additional ratchets, follow the same shape.

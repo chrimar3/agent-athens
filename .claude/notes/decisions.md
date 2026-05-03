@@ -2254,3 +2254,47 @@ Shape divergence from events/hubs/venues slots is correct here: those measure pe
 **Status:** Active (mechanism shipped 2026-05-03, commit 4326996d9). 46/46 active venue pages emit addressRegion="Attica"; validator rule passes on all of them.
 
 **Connects to:** Pre-flight P2 finding (event vs venue divergence), pre-flight P3 finding (severity machinery already supports ERROR/WARN/INFO with zero arch change), "Multi-city replicability via city-geodata.json" (cross-cutting design constraint for agent-* family of repos).
+
+---
+
+## 2026-05-03 — Ratchet config home: separate file per cohesion (Sprint 2 Component B-2, Q-B1 lock)
+
+**Context:** Pre-flight P6 enumerated 3 cohesion options for the ratchet config home: (a) extend `city-geodata.json`, (b) new `config/completeness-ratchets.json`, (c) per-layer file proliferation. No prior precedent existed (zero ratchet configs in repo before B-2).
+
+**Decision:** Option (b). New `config/completeness-ratchets.json`, city-keyed: `{athens: {place: {venueSameAs: {warnAt: 0.5}}}}`.
+
+**Reasoning:** Ratchet thresholds are *measurement policy*, not *geographic identity*. Geo data is stable per deployment (Athens is in Attica, Q1524, etc.); thresholds tighten over time as coverage improves. Editorial workflows that touch geo (neighborhood normalization, region updates) shouldn't need to think about thresholds; thresholds may be tuned by Strategist independently. Mixing them in city-geodata.json would conflate two evolution rates.
+
+**Architecture:**
+- File shape: per-city → per-layer → per-rule → threshold. `warnAt` = ratio (0–1). Future thresholds (`errorAt`, etc.) extend the same shape.
+- Read by generate-site.ts at build start (single source of truth per build).
+- Severity decided once at orchestrator boundary (B-1 pattern); validators receive 'info' | 'warn' decision, never read config themselves.
+- `ratchet` slot in `place` aggregate of `data/build-completeness.json` records `coverage / populated / total / threshold / currentSeverity` for diagnostic visibility — consumers see *why* severity is what it is without spelunking.
+
+**Trade-off:** One more config file in `config/` (now 27 → 28 files). Acceptable — the file is small (~9 lines today) and conceptually atomic.
+
+**Status:** Active (mechanism shipped 2026-05-03, commit 12703b950). At ship: 0/408 venues have sameAs → coverage 0% → severity 'info'. Promotes to 'warn' when ≥204 venues populated.
+
+**Connects to:** "Config-driven multi-city semantic via city-geodata.json" (B-1 pattern; ratchet config follows same per-city keying convention), "Per-Template Aggregate for ARIA Findings" (Q-C1, similar Strategist-locks-shape-then-impl pattern), pre-flight P6 (3-option enumeration with cohesion arguments).
+
+---
+
+## 2026-05-03 — byVenue aggregate shape: BucketReport[] + sameAsState (Sprint 2 Component B-2, Q-B2 hybrid lock)
+
+**Context:** Q-B2 hybrid lock specified per-template (venue_template + event_template) + byVenue. The byVenue shape question: pure BucketReport[] (mirror events.byType), or extend with venue-specific metadata? Pre-flight P2 documented BucketReport[] as the natural mirror; Planner additionally locked one categorical `sameAsState` field for Editorial filtering.
+
+**Decision:** `VenueBucketReport[]` — extends BucketReport pattern with `venue` (normalized key) replacing `type`, plus `sameAsState: 'present' | 'missing'`. Sorted alphabetically by venue key (no canonical declaration order for venues, unlike EventType).
+
+**Reasoning:** Editorial needs to filter by "which venues still need sameAs added" — a binary categorical signal (present/missing) is the actionable axis. Numeric coverage already lives at the ratchet level. Mixing per-venue numeric coverage into byVenue would duplicate signal. The categorical field is denormalized but cheap to compute (one Map lookup per venue) and aligns with how Editorial consumes the data.
+
+**Architecture:**
+- byVenue keyed by `normalizeVenueKey(event.venue.name)` — same canonicalizer used by `getVenueByName` for venue-registry lookups (consistency across the codebase).
+- venueHasSameAs Map computed alongside slugToVenue in single pass over events; OR-fold (any event at venue X with sameAs → 'present').
+- Sort: alphabetical by venue key. Stable across builds. Diff-friendly when artifact is re-emitted.
+- venue_template reuses the venues PageGroupReport (same data, template-axis lens) — explicit reuse documented in the type comment.
+
+**Trade-off:** byVenue is dense (247 venues at ship; one row per distinct normalized venue across the events corpus). For 1,000+ venue corpora this would bloat the artifact. Acceptable today; revisit if artifact size becomes a concern.
+
+**Status:** Active (mechanism shipped 2026-05-03, commit 12703b950). 247 byVenue entries in deployed artifact; all sameAsState='missing' pre-Editorial-data.
+
+**Connects to:** "Per-Template Aggregate for ARIA Findings" (Q-C1, alternative shape choice — split-by-template for ARIA vs per-key-array for byVenue; both valid for their respective measurement axes), pre-flight P2 (BucketReport[] precedent verbatim).
