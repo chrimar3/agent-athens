@@ -2167,3 +2167,46 @@ resolved URLs without further code changes.
 **Status:** Active (mechanism shipped 2026-05-02, commit 118bc810c).
 
 **Connects to:** "Per-EventType Schema Completeness Reporting" (Component D, 2026-05-02), "Schema.org Offers Implementation Spec" (Sprint 1, 2026-04-28), "Canonical Entity Graph" (Sprint 1, 2026-04-28).
+
+## 2026-05-03 — ARIA Audit Tool Selection: Pa11y over axe-core CLI (Sprint 2 Component C)
+
+**Context:** Sprint 2 Component C's pre-flight (specs/component-c-preflight.md, §1) recommended @axe-core/cli with Pa11y as equally-defensible alternative. Mid-session, Step 0 Part C failed: @axe-core/cli's bundled ChromeDriver pinned to Chrome 148; system Chrome 147.0.7727.138.
+
+**Decision:** Switch to Pa11y. bun remove -d @axe-core/cli && bun add -d pa11y. Plan structure absorbed the swap with minimal deviation (file-path invocation simpler than axe's URL + serve pattern; per-template aggregate logic identical; severity mapping reshaped to Pa11y's three-level vocabulary).
+
+**Reasoning:**
+- Version-drift class of problem is structural, not incidental. axe-core CLI bundles ChromeDriver pinned to specific Chrome version; Chrome updates faster (~6 weeks) than axe-core releases new ChromeDriver pins. Mismatch state is the standard ~50% of the time.
+- Pa11y bundles puppeteer+Chromium together, locked to known-compatible pair. Different architectural choice, no version-drift surface.
+- Sprint 3 WARN→FAIL promotion benefits from stable measurement substrate. Tool that randomly breaks because Chrome auto-updated is a worse foundation for deploy-gate than tool with bundled browser.
+- Multi-city replicability holds: agent-barcelona/agent-berlin builds don't depend on per-machine Chrome version.
+
+**Trade-off:** Pa11y's severity vocabulary is coarser (error/warning/notice) than axe's four-level (minor/moderate/serious/critical). Sprint 3 promotion control surface less granular — promotes everything to FAIL or stays at WARN, can't tune by impact-level. Acceptable for ARIA findings (most are either "real problem" or "noise to filter"; fine-grained severity tuning rarely needed).
+
+**Severity mapping:**
+- Pa11y `error` → reporter `fail` (Sprint 3 will block deploys on these)
+- Pa11y `warning` → reporter `warn`
+- Pa11y `notice` → reporter `warn` (could skip if volume becomes noisy; default include)
+
+**Status:** Active (mechanism shipped 2026-05-03, commit 98db28207).
+
+---
+
+## 2026-05-03 — Per-Template Aggregate for ARIA Findings (Sprint 2 Component C, Q-C1 lock)
+
+**Context:** Component C adds an aria slot to CompletenessReport interface in src/validators/completeness-reporter.ts. Aggregation granularity question: per-page (mirror events.byType[], ~9,000 rows) or per-template (2 buckets: hub_template + event_template).
+
+**Decision:** Per-template aggregate in CompletenessReport slot; per-page detail in separate data/build-aria-report.json artifact.
+
+**Architecture:**
+- aria.hub_template: { total, pass, warn, fail } — covers all dist/*.html top-level pages
+- aria.event_template: { total, pass, warn, fail } — covers dist/events/*/index.html + dist/en/events/*/index.html (English mirrors aggregate under same template; accessibility contract identical regardless of locale)
+- Per-page detail: data/build-aria-report.json keyed by URL with full Pa11y issue arrays
+- Reporter is pure consumer; doesn't read filesystem for ARIA. generate-site.ts reads aggregate via existsSync gate, passes ariaAggregate parameter into buildCompletenessReport.
+
+**Reasoning:** ARIA findings are template-systemic, not page-systemic. A missing form-control label on event-detail repeats 7,451× across event pages — that's one finding, not 7,451 findings. Per-page aggregation in reporter would surface 7,451 rows of the same actionable issue (reporter noise, not signal). Per-template surfaces it as one row with count under hub_template or event_template — count gives volume, bucket gives location, team can act on a single finding.
+
+Per-page detail isn't lost — lives in separate artifact for humans investigating specific findings, future remediation sessions, trend-tracking. Mirrors the existing pattern (data/build-completeness.json aggregates; per-page validation detail recoverable from dist/).
+
+Shape divergence from events/hubs/venues slots is correct here: those measure per-page coverage of per-page concerns. ARIA measures template-level coverage of template-level concerns. Forcing reporter-shape uniformity would conflate two genuinely different measurement axes — same failure mode that single-aggregate completeness would have hidden the exhibition pass-rate gap (Component D finding 2026-05-02).
+
+**Status:** Active (mechanism shipped 2026-05-03, commit 98db28207).

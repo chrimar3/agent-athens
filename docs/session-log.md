@@ -3585,3 +3585,49 @@ not by S103).
 **Open items:**
 - 293-event gap (pre-flight §12) and exhibition 63% pass-rate gap (Component D finding) remain open investigations. Both surfaced from measurement infrastructure; both flagged for separate audit sessions when scope and cadence allow.
 - Component C (ARIA audit) next per Strategist locked sequencing (D → A → C → B).
+
+### Session 106 — ARIA Audit + Reporter Integration (Sprint 2 Component C) — 2026-05-03
+
+**Plan:** Ship post-build CLI ARIA audit per Strategist Q-C1 lock (per-template aggregate). Default tool axe-core CLI; sampled mode (all hubs + 50 stratified events + all English mirrors); WARN-level only; data/build-aria-report.json (per-page detail) + data/build-aria-aggregate.json (per-template aggregate consumed by completeness-reporter).
+
+**What happened:**
+- Pre-flight (specs/component-c-preflight.md, 2026-05-03) verified all integration sites and predicted single-digit per-page violations.
+- Step 0 Part A confirmed pre-flight values still held; reporter at lines 60 (interface) + 177 (init); 1841/0 test baseline; aria_level still "not_measured."
+- Step 0 Part B installed @axe-core/cli successfully but Step 0 Part C failed: bundled ChromeDriver pinned to Chrome 148; system Chrome 147.0.7727.138. Halted at surfacing point per protocol; routed decision to Dev Planner.
+- Dev Planner returned Option 2 (Pa11y) with reasoning: version-drift class of problem is structural; Pa11y bundles puppeteer+Chromium together; cleaner foundation for Sprint 3 WARN→FAIL promotion; multi-city replicability holds.
+- Tool swap: bun remove -d @axe-core/cli && bun add -d pa11y. Step 0 Part C re-ran via Pa11y file-path invocation (no ephemeral server needed).
+- scripts/audit-aria.ts shipped: Pa11y subprocess per page; severity mapping (error → fail; warning/notice → warn); concurrency=4; sampled mode default; --full flag for exhaustive scans.
+- completeness-reporter.ts: aria slot added (hub_template + event_template, mirroring datafeed slot shape). aria_level flipped to "measured." buildCompletenessReport accepts ariaAggregate parameter; existing call site in generate-site.ts updated.
+- Build pipeline: existsSync gate on data/build-aria-aggregate.json; falls back to zero-aggregate on fresh checkout. Build never depends on audit having run (invariant preserved).
+- Documentation: .claude/CLAUDE.md commands section updated; docs/aria-audit.md new (tool choice, sampling strategy, severity mapping, artifact shapes, Pa11y deviation reasoning, Sprint 3 promotion path).
+
+**Tests:** 12 new (audit-aria runner + reporter aria slot extension). Full suite 1853/0 fail. tsc clean.
+
+**Build verification:**
+- Audit run: 1,660 pages in ~14.5 min (concurrency=4, sampled mode)
+- data/build-aria-aggregate.json: hub_template 1166/1168 pass + 2 fail; event_template 490/490 pass
+- The 2 hub fails are non-template pages (dist/404.html, GSC verification file) — isolated artifacts, not systemic patterns
+- data/build-aria-report.json: per-page detail with full Pa11y issue arrays
+- data/build-completeness.json: layers.aria_level = "measured"; aria slot populated
+- Aggregate completeness 97% preserved, 0 errors, 239 warnings (Component A baseline holds)
+
+**Commit:** 98db28207 (12 files staged precisely). Not pushed.
+
+**Execution decisions worth recording:**
+- Tool deviation: Pa11y over @axe-core/cli per mid-session halt-and-route. ChromeDriver/Chrome version mismatch surfaced as architectural fork, not minor implementation detail.
+- Severity mapping for Pa11y's coarser vocabulary (error/warning/notice vs axe's minor/moderate/serious/critical): Pa11y `error` → fail; `warning`/`notice` → warn. Sprint 3 promotion control surface less granular but acceptable for actual decision needs.
+- File-path invocation: Pa11y reads dist/ directly, no ephemeral server needed. Simpler than the axe + serve pattern originally specified. Plan reshape was small.
+- 1,660 pages in 14.5 min with concurrency=4: acceptable runtime for sampled mode; --full mode would scale linearly.
+
+**Learnings:**
+- Pre-flight §4 prediction confirmed empirically: ARIA baseline materially stronger than "not_measured" suggested. Hub pages near-perfect; event-detail pages all-pass. Sprint 3 WARN→FAIL promotion is genuinely near-mechanical, not coordinated remediation work.
+- Halt-at-surfacing-point protocol operated correctly: CC didn't muscle through Chrome version mismatch with workarounds; routed the decision and Dev Planner returned a different tool choice. Plan structure absorbed the swap with minimal deviation.
+- Bundled-browser pattern (Pa11y/Playwright) eliminates version-drift class of problem; tools with transitive system dependencies (axe + system Chrome) are structurally fragile for measurement infrastructure.
+- The 2 hub fails (404.html, GSC verification) reveal a sub-classification opportunity within hub_template: "real hub pages" vs "incidental top-level HTML." Not actionable Sprint 2; flag for Sprint 3 if the distinction matters when promoting WARN→FAIL.
+
+**Open items:**
+- 293-event gap (DB-pageable vs Greek-page count) and exhibition 63% pass-rate gap (Component D finding) remain open investigations.
+- The 2 hub_template fails (404.html, GSC verification file) — investigate whether they should be excluded from audit scope or remediated. Defer to Sprint 3 promotion conversation.
+- Sprint 3 ARIA promotion sizing — pre-flight prediction confirmed; brief intake can use this evidence to size near-mechanical promotion work.
+- Build pipeline two-step sequence ("build → audit → build") documented but not automated. Shell wrapper deferred to Sprint 2.5+ if timing becomes painful.
+- Component B next per locked sequencing (D → A → C → B).

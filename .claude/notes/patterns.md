@@ -2332,3 +2332,51 @@ Component A added "datafeed:" slug prefix. The negative match misclassified data
 **Pattern shape:** explicit positive matching > negative matching when categories may grow. Trades concise code for robustness against future expansion.
 
 **Status:** Watchpoint. If Sprint 3 surfaces another negative-match-filter bug, this earns codification as a code review rule.
+
+## Halt-at-surfacing-point operating mid-session (pattern, 2026-05-03)
+
+When mid-session work surfaces an architectural fork (not a minor implementation detail), the executor halts and routes the decision rather than muscling through with workarounds.
+
+**Component C instance:** Step 0 Part C failed with @axe-core/cli's bundled ChromeDriver mismatching system Chrome version. Four options surfaced (pin chromedriver locally / switch to Pa11y / update system Chrome / pivot to Playwright). CC presented all four with trade-offs; routed to Dev Planner; received Option 2 (Pa11y) decision. Plan structure absorbed the swap with minimal deviation; session continued.
+
+**Why this matters:** the alternative (CC picks unilaterally and ships) would have hidden the architectural fork in implementation choices. Future sessions or teammates wouldn't see the trade-off explicitly. Routing decisions surface the fork as a decision worth recording in decisions.md, not a workaround buried in code.
+
+**Pattern shape:** when implementation work surfaces a choice that's load-bearing architecturally (tool selection, library swap, build pipeline shape, data-shape contract), halt and route rather than pick. Implementation choices that aren't load-bearing (variable naming, error message wording, log format) don't need routing.
+
+**Test for "load-bearing":** would the choice land in a decisions.md entry if surfaced explicitly? If yes, halt and route. If no, pick and proceed.
+
+**Family — this is the third compounded discipline operating mid-session:**
+1. Sprint 1 S2 protocol: validator + emitter ship together for contract changes (paired commits)
+2. Activated discipline rule (2026-05-02): verify against actual repo before publishing
+3. Halt-at-surfacing-point (this entry): mid-session forks routed rather than worked around
+
+All three share the same underlying principle — surface the decision-shaped work as decisions, don't bury it as implementation.
+
+**Instance count:** Component C ARIA tool fork is the first instance with this shape. Sprint 2 amendment session's daily-pipeline auto-commit collisions handled differently (didn't fork; absorbed into closeout pattern). If a similar mid-session architectural fork surfaces in Sprint 2 Component B, Sprint 2.5, or Sprint 3, that's instance 2.
+
+---
+
+## Bundled-browser pattern eliminates version-drift class (pattern, 2026-05-03)
+
+Tools with transitive system dependencies (e.g., axe-core CLI + system Chrome) are structurally fragile for measurement infrastructure. Tools that bundle their dependencies (Pa11y bundles puppeteer+Chromium; Playwright bundles its own Chromium) eliminate the entire class.
+
+**Component C instance:** axe-core CLI's bundled ChromeDriver pinned to Chrome 148; system Chrome 147.0.7727.138. Mismatch state is the standard ~50% of the time given Chrome's ~6-week release cadence. Pinning chromedriver locally just delays the next collision; doesn't solve the structural issue.
+
+Pa11y bundles puppeteer+Chromium together as a known-compatible pair. Different architectural choice, no version-drift surface.
+
+**Pattern shape:** for measurement infrastructure that needs to run reliably across environments (developer machines, CI, multi-city replicas), prefer tools that bundle transitive dependencies over tools that depend on system installs.
+
+**Trade-off:** bundled-browser tools have larger install footprints (~50-150 MB) than CLI-only tools (~5-20 MB). For measurement infrastructure where reliability matters more than disk footprint, the trade-off favors bundling.
+
+**Family:** related to "single source of truth" patterns — the bundled tool owns its full execution context, doesn't depend on environment to provide compatible parts.
+
+**Where this applies in the codebase:**
+- ARIA audit (Component C): Pa11y bundled
+- Future Playwright-based tooling if Sprint 3+ surfaces a need
+- Anywhere a CLI tool depends on system Chrome, system Python, system git, etc.
+
+**Where this doesn't apply:**
+- Bun runtime itself (we accept the dependency at the project level; Bun is the project's runtime contract)
+- Standard Unix utilities (bash, grep, sed) — universal enough that "bundled" doesn't meaningfully apply
+
+**Status:** First-instance pattern. If Sprint 3+ tooling decisions surface a similar bundled-vs-system trade-off, that's instance 2 and the pattern is reinforced.
