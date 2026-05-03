@@ -8,8 +8,9 @@
  * and submits them via the IndexNow API.
  *
  * Usage:
- *   bun run scripts/ping-indexnow.ts            # Submit URLs
- *   bun run scripts/ping-indexnow.ts --dry-run   # Show what would be submitted
+ *   bun run scripts/ping-indexnow.ts                                     # Submit all high-value URLs
+ *   bun run scripts/ping-indexnow.ts --dry-run                           # Show what would be submitted
+ *   bun run scripts/ping-indexnow.ts --paths=/this-weekend/,/en/this-weekend/  # Targeted re-ping (skips sitemap discovery)
  */
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -20,6 +21,10 @@ const DIST_DIR = join(PROJECT_DIR, 'dist');
 
 // Parse arguments
 const dryRun = process.argv.includes('--dry-run');
+const pathsArg = process.argv.find(a => a.startsWith('--paths='));
+const explicitPaths = pathsArg
+  ? pathsArg.slice('--paths='.length).split(',').map(p => p.trim()).filter(Boolean)
+  : null;
 
 async function main() {
   console.log(`🔔 IndexNow Ping${dryRun ? ' (DRY RUN)' : ''}\n`);
@@ -39,7 +44,16 @@ async function main() {
     process.exit(0);
   }
 
-  // 2. Parse all sitemaps
+  // 2. Parse all sitemaps (unless --paths supplied — then skip discovery and use explicit paths)
+  if (explicitPaths && explicitPaths.length > 0) {
+    const baseUrl = `https://${config.host}`;
+    const targetedUrls = explicitPaths.map(p => `${baseUrl}${p.startsWith('/') ? p : `/${p}`}`);
+    console.log(`🎯 Targeted ping: ${targetedUrls.length} explicit URL${targetedUrls.length === 1 ? '' : 's'}`);
+    targetedUrls.forEach(u => console.log(`   ${u}`));
+    await submitUrls(targetedUrls, config, dryRun);
+    return;
+  }
+
   const sitemapFiles = ['sitemap-events.xml', 'sitemap-editorial.xml', 'sitemap-venues.xml'];
   const allUrls: string[] = [];
   const locRegex = /<loc>([^<]+)<\/loc>/g;
@@ -120,7 +134,14 @@ async function main() {
     process.exit(0);
   }
 
-  // 4. Submit to IndexNow
+  await submitUrls(urlList, config, dryRun);
+}
+
+async function submitUrls(
+  urlList: string[],
+  config: { indexnow_key: string; indexnow_endpoint: string; host: string },
+  dryRun: boolean,
+): Promise<void> {
   // API limit: 10,000 URLs per request. Use 9,500 to leave safety margin.
   const BATCH_SIZE = 9500;
   const batches: string[][] = [];
@@ -175,14 +196,11 @@ async function main() {
       console.error(`  ❌ Batch ${i + 1}/${batches.length} failed:`, err);
     }
 
-    // Small pacing delay between batches (skip after last).
     if (i < batches.length - 1) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
 
-  // Write machine-readable summary for monitoring scripts.
-  // try/catch: ping is production path, monitoring is observability side-effect.
   try {
     const summary = {
       timestamp: new Date().toISOString(),

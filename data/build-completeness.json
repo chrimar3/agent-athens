@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-03T00:04:10.233Z"
+    "lastUpdate": "2026-05-03T05:13:58.600Z"
   },
   "layers": {
     "event_level": "measured",
@@ -29,11 +29,11 @@
       },
       {
         "type": "exhibition",
-        "total": 24,
-        "pass": 15,
+        "total": 22,
+        "pass": 13,
         "warn": 9,
         "fail": 0,
-        "passRate": 63
+        "passRate": 59
       },
       {
         "type": "theater",
@@ -93,8 +93,8 @@
       }
     ],
     "totals": {
-      "total": 7896,
-      "pass": 7660,
+      "total": 7894,
+      "pass": 7658,
       "warn": 236,
       "fail": 0,
       "passRate": 97
