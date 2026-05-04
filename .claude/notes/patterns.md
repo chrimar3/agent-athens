@@ -2432,6 +2432,27 @@ When a validator function needs a config-derived expected value for comparison, 
 
 ---
 
+## Preserved per-subprocess output as messenger-vs-cause discriminator (diagnostic technique, 2026-05-03)
+
+When a watchdog wrapper kills a subprocess on a stdout-idle gate, the question of "was the wrapper too aggressive (killing healthy work) vs. correctly detecting an upstream hang" is not answerable from the wrapper's own logs alone — the wrapper only knows that no bytes arrived. The discriminator is the **byte size of the preserved subprocess output file**:
+
+- File contains *any* bytes (even partial JSON, even one token of text) → subprocess was producing output and the wrapper killed mid-stream → **wrapper is suspect** (consider raising the timeout, switching to `stream-json` for incremental confirmation, or comparing to the server-side stream-idle threshold).
+- File is **0 bytes** → subprocess never wrote a single byte to stdout or stderr in the entire window → **wrapper is the messenger**, hang is upstream of any wrapper logic. Do not modify the wrapper; investigate the subprocess in isolation.
+
+**Instance:** S101 enrichment drought diagnostic (2026-05-03). The S99 wrapper (`scripts/auto-enrich.sh:336`) preserves per-batch output as `$LOG_DIR/.batch-${BATCH_NAME}-${RUN_ID}.out` for forensics on failure. Across 10+ failed runs over 4 separate slots (08:13, 10:00, 13:00, 16:42, 19:00 on 2026-05-03), every preserved file was 0 bytes. This single observation reclassified the failure from "wrapper bug, revert wrapper" (the brief's Class B prescription) to "Claude CLI inference call hangs at byte-0 in launchd context" (Class G, novel). Reverting the wrapper would have caused processes to hang forever instead of being killed at 121s — strictly worse.
+
+**Why this works:** the wrapper's stdout-idle gate is implemented via `stat -f %m` (mtime) on the per-batch output file, which only advances when bytes are written. If the file size is 0 at kill time, no bytes were ever written, so any conclusion about "wrapper too aggressive" is moot — there was nothing to be aggressive *about*.
+
+**Pre-condition:** the wrapper must preserve subprocess output on failure (not delete it). The S99 wrapper does this explicitly (line 428 comment: "Keep BATCH_OUT for forensics on failure or stream-idle detection"). Any future watchdog design should follow this — silent-on-success, preserve-on-failure, with a documented file-naming scheme so forensics can correlate batch IDs to run IDs.
+
+**Generalization:** applies to any wrapper-around-subprocess design where the wrapper enforces a stdout-idle (or stream-idle) timeout. Examples beyond auto-enrich: `caffeinate`-wrapped scripts, `timeout`-piped commands, custom watchdog harnesses around CI test runs, parallel-batch orchestrators (where shared-log mtime can mask single-batch stalls — also addressed by the per-batch file design in S99).
+
+**Anti-pattern:** designing a watchdog that captures only its own diagnostic output (`KILL_CAUSE: ...`) without preserving the subprocess's. Saves disk space but loses the messenger-vs-cause discriminator. The 0-byte signal IS the diagnostic.
+
+**Status:** First-instance use of this technique in S101. The wrapper itself was authored in S99 with forensics in mind — this session validated that the design choice paid off on its first real failure. Adding to patterns.md so future drought-class incidents recognize the pattern faster.
+
+---
+
 ## INFO tier requires explicit aggregate consumption + summary surfacing wiring (pattern, 2026-05-03)
 
 The validator-side `info[]` field on per-page results is necessary but not sufficient for INFO findings to reach consumers. Until the reporter aggregates info counts into PageGroupReport AND printSchemaSummary surfaces them in console output, INFO is write-only and effectively invisible.

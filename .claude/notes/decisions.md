@@ -2257,6 +2257,37 @@ Shape divergence from events/hubs/venues slots is correct here: those measure pe
 
 ---
 
+## 2026-05-03 — Do NOT revert S99 stream-idle wrapper despite 5-day enrichment drought (S101 diagnostic)
+
+**Context:** S101 brief offered a class-table mapping signature → known fix. Today's batch failures match Class B's signature exactly: "no progress for >TIMEOUT, no error." The brief's Class B prescription was: "S99 wrapper bug → revert to caffeinate -s (S76) until fix." Five days of zero enrichment saves (last save: 2026-04-28 07:16:31; 04-29 → 05-03 inclusive: 0 saves) made the temptation to apply the fix immediately significant.
+
+**Decision:** **Keep the S99 stream-idle wrapper exactly as-is.** Do NOT revert to the pre-S99 caffeinate-based design. Investigate the upstream Claude CLI hang in a separate session (S101a or successor).
+
+**Reasoning — keystone evidence:**
+- The wrapper preserves per-batch subprocess output as `logs/.batch-${BATCH_NAME}-${RUN_ID}.out` on failure (S99 design choice, line 336 of `scripts/auto-enrich.sh`).
+- All 10+ preserved files across today's 4 separate slot firings (08:13, 10:00, 13:00, 16:42, 19:00) are **0 bytes**.
+- 0 bytes means the subprocess never wrote a single byte to stdout or stderr before being killed at the 121s gate. The wrapper is the messenger, not the cause.
+- The hang is upstream of any wrapper logic — somewhere in `claude -p "..." --output-format text --allowedTools "..."` running in launchd context with CLI v2.1.126.
+- Reverting the wrapper to caffeinate-s would convert "killed at 121s" into "hangs forever," which is strictly worse: no recovery, no upper bound on damage, no forensic file to discriminate next time.
+
+**Why the brief's Class B fix exists at all:** the S89 caffeinate→watchdog migration (commit `5a4a529f4`) was the prior design; "revert" was the safe rollback path if S99's wrapper itself proved buggy. The brief reserved this option for cases where the wrapper *is* the cause. This session confirmed it isn't.
+
+**What this leaves on the table:**
+- Five days of coverage debt continues to accumulate. Demo deadline is 2026-05-29; every day of drought is real downstream cost. The fix session must be prioritized over S101a-cornerstone-schema work.
+- The brief also flagged that 22:00 / 01:00 launchd slots may be unloaded per memory. Both are currently loaded. Did not modify — out of scope for diagnostic, and the slots aren't the root cause regardless.
+
+**Hypotheses to test in the fix session (in priority order):**
+1. Add `< /dev/null` to the `claude -p` invocation. Stdin handling regression in v2.1.122+ is the cheapest hypothesis to falsify.
+2. Switch `--output-format text` → `--output-format stream-json` for one slot, observe whether incremental tokens appear in BATCH_OUT.
+3. Reproduce in foreground (interactive shell, same env): if hang is interactive-context-too, the cause is universal; if launchd-only, capture `dtrace`/`fs_usage` on the hung pid.
+4. Reduce `--allowedTools` to a minimal set, in case MCP server init is blocking.
+
+**Status:** Active until S101a (or successor) ships a root-cause fix. Enrichment will remain at 0 saves/day until fixed. Do not interpret the wrapper kills as wrapper bugs in the interim.
+
+**Connects to:** S99 stream-idle wrapper decision (2026-04-28), S89 caffeinate-removal decision (caffeinate does not prevent lid-close sleep), `specs/claude-hang-diagnostic.md` (prior CLI-hang investigation, may have relevant ground truth), `specs/auto-enrich-postmortem.md`, `specs/s101-enrichment-drought-diagnostic.md` (full evidence bundle for this session).
+
+---
+
 ## 2026-05-03 — Ratchet config home: separate file per cohesion (Sprint 2 Component B-2, Q-B1 lock)
 
 **Context:** Pre-flight P6 enumerated 3 cohesion options for the ratchet config home: (a) extend `city-geodata.json`, (b) new `config/completeness-ratchets.json`, (c) per-layer file proliferation. No prior precedent existed (zero ratchet configs in repo before B-2).

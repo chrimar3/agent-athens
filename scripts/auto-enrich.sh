@@ -99,7 +99,8 @@ if [[ -n "$STALE_PIDS" ]]; then
         [[ "$PROC_CMD" == *"--dangerously-skip-permissions"* ]] && continue
 
         # Only kill if it looks like an auto-enrich spawned process:
-        # claude -p with --output-format text (the exact flags we use on line 214)
+        # claude -p with --output-format (S101a: was "text"; now "stream-json").
+        # The check is format-agnostic — any --output-format flag matches.
         if [[ "$PROC_CMD" == *" -p "* ]] && [[ "$PROC_CMD" == *"--output-format"* ]]; then
             log "Killing orphaned auto-enrich claude process $pid (PPID=1, cmd: ${PROC_CMD:0:80})"
             kill "$pid" 2>/dev/null || true
@@ -275,7 +276,12 @@ log "Warming up Claude CLI..."
 # system/clamshell sleep, unlike `sleep N` which is paused by the kernel.
 # caffeinate was previously used to assert against idle sleep but did NOT
 # prevent lid-close sleep, so timeouts could stretch to hours (S89).
-"$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json > /dev/null 2>&1 &
+# S101a: explicit `< /dev/null`. Claude CLI v2.1.122+ reads stdin by default for
+# `-p` mode (3s grace period before warning). In launchd context stdin is a
+# blocking pipe that never EOFs → CLI hangs indefinitely. Foreground hits the
+# 3s grace and proceeds, but the 16-71min warm-ups seen on 04-29/05-02 were the
+# launchd manifestation of this same hang. `< /dev/null` provides immediate EOF.
+"$CLAUDE_BIN" -p "echo ready" --max-turns 1 --output-format json < /dev/null > /dev/null 2>&1 &
 WARMUP_PID=$!
 ( WATCHDOG_END=$(( $(date +%s) + 120 ))
   while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do sleep 30; done
@@ -337,10 +343,26 @@ for brief in "${BATCH_FILES[@]}"; do
     rm -f "$BATCH_OUT" && touch "$BATCH_OUT"
 
     # Run claude in background, output to per-batch file.
+    # S101a: stream-json + --verbose + --include-partial-messages required so
+    # the wrapper's stdout-mtime watchdog sees per-token progress.
+    #   - --output-format text buffered everything until task completion (the
+    #     5-day drought 0-byte BATCH_OUT signature, S101 diagnostic).
+    #   - --output-format stream-json alone emits per-turn events but a single
+    #     400–600w description's silent generation can exceed STDOUT_IDLE_CAP=120
+    #     (verified empirically 2026-05-03: idle=134s/127s on first post-fix run).
+    #   - --include-partial-messages adds content_block_delta events on every
+    #     few tokens, ensuring mtime updates while the model generates.
+    # `< /dev/null` prevents the stdin-wait hang in launchd context (same root
+    # as warm-up fix above).
+    # BATCH_OUT consumers are format-agnostic: stdout-mtime watchdog only
+    # checks file mtime; server-stream-idle grep matches in stream-json too;
+    # save accounting reads enrichment_log.saved_to_events from DB, not output.
     "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
-        --output-format text \
+        --output-format stream-json \
+        --verbose \
+        --include-partial-messages \
         --allowedTools "$ALLOWED_TOOLS" \
-        > "$BATCH_OUT" 2>&1 &
+        < /dev/null > "$BATCH_OUT" 2>&1 &
     CLAUDE_PID=$!
 
     # S99 watchdog: combined wall-clock + stdout-idle with T1 KILL_CAUSE logging.

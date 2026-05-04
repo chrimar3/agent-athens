@@ -3675,7 +3675,47 @@ not by S103).
 - 0 venues in athens-venues.json have sameAs values populated (Editorial brief upstream of B-2). Tier 1 sameAs data lands separately.
 - B-2 (place-layer measurement aggregate + place_level flag flip) is next. B-1 ships the emission surface and one rule; B-2 adds the per-place coverage measurement that flips `place_level: "not_measured"` → `"measured"`.
 
-### Session 108 — Place-layer measurement + INFO consumption + ratchet (Sprint 2 Component B-2) — 2026-05-03
+### Session 108 — Enrichment Drought Diagnostic (S101 in brief naming) — 2026-05-03
+
+**Mode:** Diagnostic-only. Pre-empted S101a-cornerstone-schema work due to compounding 5-day enrichment outage. Brief enforced verify-assumptions / don't-implement-yet / diagnostic-before-method / conditional-continuation guards.
+
+**Plan:** Brief from Planner mapped failure-signature → known fix via class table (A: stuck lock, B: clamshell sleep, C: CLI path, D: quality gate, E: geocoding lock, F: launchd not firing, G: novel). Steps 0–5 gather independent evidence; Step 6 classifies; Step 7 conditionally fixes only if Class A/C/F (cheap one-shot fixes); B/D/E/G → STOP and write findings to `specs/s101-enrichment-drought-diagnostic.md`.
+
+**What happened:**
+- Step 0 confirmed drought: last enriched_at 2026-04-28 07:16:31; 04-29 → 05-03 saves = 0; STALE_ENRICHMENT marker on 04-27, 05-01, 05-03.
+- Step 1: all 11 launchd slots loaded with last-exit-status=0; recent log mtimes prove slots fire daily. Rules out Class F.
+- Step 2 surfaced the failure signature: every batch gets `KILL_CAUSE: stdout-idle pid=X elapsed=121s idle=121s exit=125`. `elapsed == idle` always — subprocess produced zero stdout. Two adjacent anomalies bracketing drought start: 2026-04-29 19:09 warm-up phase took 71 minutes; 2026-05-02 19:01 warm-up took 16 minutes. Most other runs (including today 19:00) had normal 5–10s warm-up but still hung at the real batch invocation. Slot 19's stderr had been logging "Auto-enrichment failed (non-fatal, continuing...)" daily since 2026-04-18 (2+ weeks unmonitored).
+- Step 3: no lock files, no stuck enrichment processes. Rules out Class A and Class E.
+- Step 4: `claude` v2.1.126 resolves at `/Users/chrism/.local/bin/claude` in both interactive shell and minimal launchd-style env. Rules out Class C.
+- Step 5: S99 stream-idle wrapper (commit `050150ed6`) is current. `CLAUDE_STREAM_IDLE_TIMEOUT_MS=300000` (server-side 5min); local wrapper `STDOUT_IDLE_CAP=120` (2min). Wrapper kills first because it's the more aggressive gate. Exact CLI invocation: `claude -p "$BRIEF_CONTENT" --output-format text --allowedTools "$ALLOWED_TOOLS" > "$BATCH_OUT" 2>&1 &` (no explicit `< /dev/null`).
+- **Keystone evidence:** every preserved `logs/.batch-*-*.out` file across today's 4 slot firings (08:13, 10:00, 13:00, 16:42, 19:00) is **0 bytes**. The CLI subprocess never wrote a single byte to stdout or stderr before being killed. Rules out wrapper-as-cause.
+- Step 6 classified as **Class G (Novel)**. Signature closely matches Class B but the brief's prescribed Class B fix (revert wrapper to caffeinate -s) is *wrong* because the wrapper is the messenger, not the cause. Reverting would convert "killed at 121s" into "hangs forever" — strictly worse.
+- Step 7 NOT executed per brief's conditional-continuation rule (B/D/E/G → STOP). No fix applied this session.
+
+**Tests:** None modified. Test suite untouched.
+
+**Build verification:** No build run. No code modified outside notes/specs.
+
+**Commit:** None this session — diagnostic-only. Spec `specs/s101-enrichment-drought-diagnostic.md` written; notes appended in `mistakes.md`, `patterns.md`, `decisions.md`, this file.
+
+**Brief-vs-reality mismatches flagged (not modified):**
+- Brief assumed `.claude/notes/session-log.md` exists for session-number lookup; actual path per `.claude/CLAUDE.md` is `docs/session-log.md` (this file).
+- Brief memory said 22:00 / 01:00 launchd slots are unloaded; reality: both `enrichment-22` and `enrichment-01` currently loaded.
+- Brief floated Class C as possible ("CLI moved post-v2.1.121 upgrade"); reality: CLI resolves correctly at v2.1.126 in both contexts. The version is post-2.1.121, but path resolution isn't the issue.
+
+**Learnings:**
+- 0-byte preserved-output is the messenger-vs-cause discriminator for any stdout-idle-style watchdog kill. Promoted to a named technique in `patterns.md`. The S99 wrapper's design (preserve per-batch output on failure) paid off on its first real failure — without it, this would still be a guess.
+- "Non-fatal, continuing..." in a stderr line that fires every day for 2+ weeks is a code smell. The non-fatal designation refers to script flow control, not the user-visible KPI. Monitoring needs a positive-counter alert (`MAX(enriched_at) < now() - 36h → page`), not "did the script fail."
+- Conditional-continuation guards (B/D/E/G → STOP) caught what would have been a destructive misapplication of Class B's fix. Worth using this structure in any future class-table-driven diagnostic — STOP for any class whose fix has destructive-if-misapplied risk, not just for novel cases.
+
+**Open items:**
+- **S101a fix session needed urgently.** Hypotheses to test in priority order: (1) add `< /dev/null` to claude invocation (cheapest); (2) switch `--output-format text` → `--output-format stream-json` to see whether incremental tokens land; (3) reproduce in foreground vs launchd to localize; (4) reduce `--allowedTools` to minimal set in case MCP init blocks. Each is independent — A/B test one at a time, cheapest first.
+- **Demo deadline 2026-05-29.** Every day of continued drought is real coverage debt. Fix session pre-empts S101a-cornerstone-schema (was queued next).
+- **Monitoring gap.** Need a positive-counter alert on `enriched_at` freshness, not a "step failed" alert. Slot 19's 2+ weeks of silent failures should never have made it past day 2 unnoticed.
+- **Brief/memory drift.** The 22:00 / 01:00 launchd slot loaded-state in memory is stale. Update memory or re-decide loaded-state intentionally — but not as part of any "fix" until the root cause is understood.
+- **Editorial / GEO Strategist downstream of S100b.** Unblocked by this session's diagnostic landing — not blocked on it. They can proceed; the drought just means no new enrichments to operate on until S101a fixes the hang.
+
+### Session 109 — Place-layer measurement + INFO consumption + ratchet (Sprint 2 Component B-2) — 2026-05-03
 
 **Plan:** Wire INFO-tier reporter consumption + ratchet config infrastructure; add place-layer measurement (per-template + byVenue aggregates, place_level flag flip); close out Q-B6 hardcoded "Attica" in event-page.ts. Five Strategist locks active (Q-B1 INFO+ratchet, Q-B2 hybrid, Q-B4 extend, Q-B5 sameAs-only, Q-B7 DataFeed inherits). Two Planner decisions baked in (ratchet config home = separate file, byVenue shape = BucketReport[] + sameAsState).
 
