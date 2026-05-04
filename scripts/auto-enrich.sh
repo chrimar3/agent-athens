@@ -447,11 +447,8 @@ for i in "${!CLAUDE_PIDS[@]}"; do
         log "KILL_CAUSE: server-stream-idle pid=$CLAUDE_PID elapsed=${ELAPSED}s exit=$EXIT_CODE batch=$BATCH_NAME"
     fi
 
-    # Keep BATCH_OUT for forensics on failure or stream-idle detection;
-    # remove on clean success.
-    if [ "$EXIT_CODE" -eq 0 ] && [ "$SERVER_STREAM_IDLE" -eq 0 ] && [ -f "$BATCH_OUT" ]; then
-        rm -f "$BATCH_OUT"
-    fi
+    # S110e (2026-05-04): cleanup moved to AFTER the four-quadrant logging
+    # so it can condition on SAVED_THIS_BATCH. See block below the matrix.
 
     # S98: reconcile against DB state. Authoritative signal is the count of
     # enrichment_log rows this (run_id, batch_number) produced with
@@ -484,6 +481,22 @@ for i in "${!CLAUDE_PIDS[@]}"; do
     else
         log_error "$BATCH_NAME ERROR: subprocess failed (exit $EXIT_CODE) and no events saved (${ELAPSED}s)"
         FAILED=$((FAILED + 1))
+    fi
+
+    # S110e (2026-05-04): Keep BATCH_OUT for forensics on three failure classes:
+    #   - subprocess failure (exit != 0): the original case
+    #   - server-side stream-idle detection: the original case
+    #   - clean exit with zero saves (subprocess "lied about success"): NEW.
+    # The third class was first observed 2026-05-04 (S110c verification fire,
+    # batch-1 48s clean exit + 0 saves + empty temp-descriptions/batch-1/).
+    # Without preservation we can't apply the agent-text-in-BATCH_OUT diagnostic
+    # technique that broke S110 and S110b open. Delete only on bona fide
+    # success: exit 0 AND no stream-idle AND saves landed.
+    if [ "$EXIT_CODE" -eq 0 ] \
+       && [ "$SERVER_STREAM_IDLE" -eq 0 ] \
+       && [ "$SAVED_THIS_BATCH" -gt 0 ] \
+       && [ -f "$BATCH_OUT" ]; then
+        rm -f "$BATCH_OUT"
     fi
 done
 
