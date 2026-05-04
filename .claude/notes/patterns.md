@@ -2674,3 +2674,55 @@ than via post-mortem.
 contamination across at least 5 commits (adbaef38e, 72ce32c73,
 5d49315a1, 4a897a76b, 937f738de). Audit:
 `specs/daily-pipeline-staging-audit.md`. Closing commit: `8bae1d2e5`.
+
+### Bulk-config dedup via decision-tree script + manual-review subset
+
+When a config file has many duplicate records (e.g., 57 collisions in a
+408-record registry), don't merge by hand. Three steps:
+
+1. **Pre-flight sample classification** (10–20%): hand-classify a
+   reproducible alphabetical sample using a decision matrix (signals to
+   HOLD, signals to MERGE confidently, signals to flag for manual review).
+   Project the dominant pattern from sample to full set.
+2. **Bulk-merge script** (one-off, /tmp-scoped, not committed): codifies
+   the decision matrix as a classifier function. Applies to all groups,
+   producing a candidate merged config + a per-group decisions log.
+3. **Manual review of HOLD groups**: smaller subset (~10% of
+   collisions). Reclassify based on signals not encodable in the
+   classifier (e.g., local domain knowledge, semantic ambiguity).
+   Indeterminates route to a domain expert async.
+
+**Why a script, not jq/manual:** at 57 cases × 30 sec/case = 30+ minutes
+of error-prone manual edits. A 200-line script applies the matrix
+identically 57 times in seconds, with a reviewable log. The script is
+an instrument, not project code — write to `/tmp/`, run, copy output to
+real config, delete.
+
+**Decision-tree ordering matters:**
+- Hard conflict signals (different addresses/websites/ticketing) trump
+  everything → HOLD.
+- High-confidence merge signals (same address, same website) trump weak
+  signals → MERGE.
+- Cross-reference signals (variation overlap ≥ 50%) catch
+  same-entity-different-spelling cases that field comparison misses.
+- Soft signals (rich-vs-stub patterns) only fire after stronger signals
+  rule out.
+
+**Conservative-skip default for opportunistic enrichment:** if the
+script can sometimes lift data to a richer field (e.g., extract
+address from variation strings to top-level address field), require
+high confidence (e.g., regex pattern AND all-records-agree). Wrong
+data in a field that propagates to downstream emission (Schema.org,
+search) is worse than missing data. The conservative skip preserves
+embedded data — no information loss, just no promotion.
+
+**Treat placeholder values as null:** registries accumulate
+placeholders like `neighborhood: "Unknown"` from earlier normalization
+passes. The classifier should treat these as effective-null, not as
+"differing" values. Otherwise the rich-vs-stub branch mis-fires and
+artificially HOLDs cases that should merge.
+
+**Origin:** S112 venue dedup (Q-B8a Path 3), 2026-05-04. 51 of 57
+collisions auto-merged; 6 routed to Editorial. Pre-flight:
+`specs/venue-dedup-sample.md`. Script: `/tmp/b2d-merge.ts` (not
+committed). Closing commit: `d35855ada`.

@@ -3968,3 +3968,81 @@ re-baselining even after a careful pre-flight. Mistakes documented in
   of the new staging block.
 
 **Commit:** `8bae1d2e5` on origin/main.
+
+### Session 112 — B-2d Venue Dedup (Sprint 2 / Component B-2d) — 2026-05-04
+
+**Plan:** Resolve 57 duplicate canonical_names in
+`config/athens-venues.json` via bulk-merge of case-(ii) records with
+manual hold on case-(i) ambiguous cases. Opportunistic address
+extraction during merge. Pre-flight evidence:
+`specs/venue-dedup-sample.md`.
+
+**What happened:**
+- Step 0 baseline confirmed: 1881/0 tests, 408 venues, 57 collisions,
+  ratchet.total=244, validator clean.
+- Step 1 Greek-letter spot-check: 4/5 confident case-(ii)
+  (Άνεσις, Ίδρυμα Κακογιάννης, Ακροπόλ-triple, Αλίκη), 1/5 HOLD
+  (Αγγέλων Βήμα — both stubs, different neighborhoods). Pattern held;
+  proceeded to bulk-merge.
+- Step 2 (deviation from brief): used `/tmp/b2d-merge.ts` bun script
+  rather than 57 manual jq edits. Brief said "use jq/manual"; script
+  is more reliable for 57 cases. ~200 lines, decision-tree classifier
+  per pre-flight matrix. Output: 51 MERGE / 6 HOLD / 1 address lift.
+  Matched pre-flight projection (~51/~6) precisely.
+- Step 2 follow-up (mid-validation): normalized-key collision check
+  surfaced 2 extra case-folded uppercase-stub records (ΣΤΑΥΡΟΣ ΤΟΥ
+  ΝΟΤΟΥ, ΘΕΑΤΡΟ ΠΑΛΛΑΣ) the script missed because it grouped by exact
+  canonical_name. Fixed surgically with jq deletion. See mistakes.md
+  S112 for the lesson.
+- Step 3: all 6 HOLDs reviewed and routed to Editorial Director (no
+  reclassifications). All 6 share signature: bare-name in
+  neighborhood-A + full-address-bearing record in neighborhood-B (5
+  cases) OR both-stubs-different-neighborhoods (1 case).
+- Step 4 validation: 1881/0 tests, tsc clean, build OK, 47 venue
+  pages (+1 from baseline 46 — likely a merged record now meeting
+  threshold), validator 0 errors / 241 warnings, ratchet.total=244
+  unchanged (Q-B8b denominator is event-driven, robust to registry
+  consolidation). Lookups all resolve correctly via case-folded
+  normalize (including the dropped uppercase variants).
+
+**Tests:** 1881/0 unchanged. No test changes (config-only edit).
+
+**Brief-vs-reality mismatches encountered:**
+- Strategist Q-B8a Path 3 anchor (59 collisions) vs execution-time
+  reality (57). Drift of 2 since diagnostic. Pattern projection held;
+  exact numbers shifted. (mistakes.md S112)
+- Brief proposed "jq/manual edits"; actual: `/tmp/b2d-merge.ts` bun
+  script. Reliability > matching brief verbatim for 57 cases.
+- Brief's grouping was by `canonical_name`; actual normalization in
+  the registry uses `normalizeVenueKey`. The 2 case-folded uppercase
+  stubs hid in the gap. Surgical fix at Step 4. (mistakes.md S112)
+
+**Result:**
+- Source change shipped as `d35855ada` on origin/main.
+- 408 → 353 venues (-55 records).
+- 57 → 6 canonical-name collisions.
+- 8 → 6 normalized-key collisions.
+- 1 address lifted to top-level (Astron — both records' variations
+  contained identical Greece-suffix address).
+- 24 of 51 merges had neighborhood conflicts logged (kept first
+  non-null per brief; conflict noted in `/tmp/b2d-session.md`).
+
+**Editorial review queue (6 cases, async):** Cantina Social, Smut,
+Wild Poppies, Burger Disco Club, IT Athens, Αγγέλων Βήμα. Routed to
+Editorial Director via Christos relay. Format and full record dumps
+in `/tmp/b2d-session.md`. Decisions become a small follow-up config
+commit (~5 min when received).
+
+**Open items:**
+- B-2d follow-up after Editorial returns 6 case decisions (≤5 min
+  config commit).
+- Sprint 2 retrospective queued — runs after Editorial Tier 1 sameAs
+  data lands (which is sequence-independent of B-2d per pre-flight
+  Tier 1 cross-check).
+- Q-B9 (inactive-tail registry hygiene, ~150 zero-event records)
+  remains filed for future routing — out of B-2d scope per Strategist.
+- Address-extraction-as-hygiene-pass (>1 lift via richer regex than
+  Greece-suffix) deferred. 1/51 lift rate means most addresses stay
+  embedded in variations[]; not blocking but a future cleanup signal.
+
+**Commit:** `d35855ada` on origin/main.

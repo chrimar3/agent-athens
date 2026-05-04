@@ -2465,3 +2465,74 @@ investigation.
 script-side, not just convention-side); audit pre-flight mis-premise
 (brief assumed `dd47f4519` was a pipeline commit — actually
 hand-authored S110 work; pre-flight P3 caught the mistake).
+
+### S112 — B-2d venue dedup (Q-B8a Path 3 shipped 2026-05-04, commit d35855ada)
+
+**Decision:** Bulk-merge 51 case-(ii) duplicate venue records in
+`config/athens-venues.json` via decision-tree script
+(`/tmp/b2d-merge.ts`, /tmp-scoped). 6 case-(i)-candidate records held
+for Editorial Director review (Cantina Social, Smut, Wild Poppies,
+Burger Disco Club, IT Athens, Αγγέλων Βήμα). Address fields
+opportunistically lifted to top-level for 1 record (Astron) where
+both records' variations contained the identical Greece-suffix
+address pattern.
+
+**Decision-tree priority** (applied in order, first match wins):
+1. Conflict signals → HOLD (different addresses / websites / ticketing).
+2. Same address (in variations[]) OR same website → high-confidence MERGE.
+3. Variation overlap ≥ 50% → MERGE (Daddy's pattern: shared name spellings
+   like apostrophe/case variants).
+4. One address present + differing populated neighborhoods → HOLD
+   (Cantina/Smut/Wild Poppies/Burger Disco/IT Athens — 5 of 6 HOLDs
+   share this signature).
+5. Rich-vs-stub patterns with compatible/ambiguous neighborhoods → MERGE.
+6. Both stubs + different populated neighborhoods → HOLD (Αγγέλων Βήμα
+   — no signal to merge or distinguish).
+
+**"Unknown" neighborhood as effective-null:** stub records often had
+`neighborhood: "Unknown"` from earlier normalization passes. Treated
+as null/ambiguous (not as a "differing" value) so the rich-vs-stub
+classifier doesn't artificially HOLD on tag-error.
+
+**Address-extraction policy (opportunistic, conservative):** lift a
+variation string to top-level `address` ONLY when (a) the string
+matches `/, [^,]+, .*Greece$/` AND (b) all records in the merge group
+contain the same address string. Else leave embedded in variations[].
+Rationale: false positives in `address` propagate to Schema.org
+PostalAddress emission; missing data is recoverable, wrong data is not.
+Result: 1 of 51 merges produced an address lift (Astron). Low rate is
+expected — the regex is intentionally narrow; richer extraction is a
+future hygiene pass, not B-2d scope.
+
+**Drift surfaced (per Strategist Q-B8a Path 3 lock):** lock anchored
+on 59 collisions (diagnostic). Reality at execution was 57 (small
+registry edits since diagnostic). Pattern projection (~51 dedupable /
+~6 Editorial) held against the 57-collision reality. Pre-flight
+projection (Cantina Social as Editorial-need; Burger Disco / IT Athens
+as needs-flag) all confirmed by script output.
+
+**Editorial review queue (6 cases, async):** routed to Editorial
+Director via Christos relay. Each case is bare-name-in-neighborhood-A
++ full-address-bearing-record-in-neighborhood-B (5 cases) or
+both-stubs-different-neighborhoods (1 case). Editorial decides MERGE
+or KEEP-distinct per local Athens knowledge. Decisions become a small
+follow-up config commit (~5 min when received).
+
+**Verification (post-merge):**
+- Tests: 1881/0 unchanged.
+- Build: 47 venue pages (was 46; +1 likely from a merged record now
+  meeting threshold).
+- Validator: 0 errors / 241 warnings (stable).
+- Ratchet: `place.ratchet.venueSameAs.total` = 244 unchanged (Q-B8b
+  denominator is byVenue active-reachable; events drive the set,
+  registry consolidation doesn't shrink it).
+- Lookups: `getVenueByName('Astron')`, `'Akropol'`, `'ΣΤΑΥΡΟΣ ΤΟΥ
+  ΝΟΤΟΥ'` (uppercase, dropped) all resolve correctly.
+- Total venues: 408 → 353. Canonical-name collisions: 57 → 6.
+  Normalized-key collisions: 8 → 6 (the 2 case-folded uppercase stubs
+  dropped surgically post-script — see mistakes.md S112 entry).
+
+**Connects to:** Q-B8b denominator fix (B-2c, S111 closeout) —
+denominator stayed 244 because byVenue is event-driven; registry
+consolidation reduced records but not active-reachable keys. Confirms
+the Q-B8b design's robustness against registry hygiene work like this.
