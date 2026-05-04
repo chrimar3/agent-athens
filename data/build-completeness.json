@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-04T09:01:24.043Z"
+    "lastUpdate": "2026-05-04T11:50:30.232Z"
   },
   "layers": {
     "event_level": "measured",
@@ -22,12 +22,12 @@
       },
       {
         "type": "dj_set",
-        "total": 462,
+        "total": 463,
         "pass": 423,
-        "warn": 39,
+        "warn": 40,
         "fail": 0,
-        "info": 462,
-        "passRate": 92
+        "info": 463,
+        "passRate": 91
       },
       {
         "type": "exhibition",
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 7592,
+      "total": 7593,
       "pass": 7352,
-      "warn": 240,
+      "warn": 241,
       "fail": 0,
-      "info": 7592,
+      "info": 7593,
       "passRate": 97
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 46
     },
     "event_template": {
-      "total": 7592,
+      "total": 7593,
       "pass": 7352,
-      "warn": 240,
+      "warn": 241,
       "fail": 0,
-      "info": 7592
+      "info": 7593
     },
     "byVenue": [
       {
@@ -185,12 +185,12 @@
       },
       {
         "venue": "2ten",
-        "total": 10,
+        "total": 11,
         "pass": 10,
-        "warn": 0,
+        "warn": 1,
         "fail": 0,
-        "info": 10,
-        "passRate": 100,
+        "info": 11,
+        "passRate": 91,
         "sameAsState": "missing"
       },
       {
