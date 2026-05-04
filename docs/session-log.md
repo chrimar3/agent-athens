@@ -3846,3 +3846,44 @@ Editorial Tier 1 sameAs data lands.
 from the session brief before execution — getAllVenues vs getAllVenueRecords
 naming, dynamic-import-at-line-222 pattern, S101 contamination check. Each
 saved an in-session pause. Validates pre-flight pattern for Sprint 2 cadence.
+
+### Session 110 — Tier-Priority Queue Ordering (S110) — 2026-05-04
+
+**Mode:** Feature implementation. Continuation of S101 series (drought-recovery → tier prioritization). Brief enforced verify-assumptions / diagnostic-before-method / shotgun-surgery guards.
+
+**Plan:** Step 0 locate queue-selection file. Step 1 diagnose current ordering (Tier-1-already-dominant → close session; otherwise proceed). Step 2 TDD red. Step 3 implement. Step 4 tests + tsc. Step 5 real-DB SQL replay. Step 6 build + commit + push. Step 7 launchctl manual fire validation (≥3 Tier 1 saves required).
+
+**What happened:**
+- Step 0: located `scripts/generate-enrichment-brief.ts:194` as the actual call path from `auto-enrich.sh:256`. Two other ORDER-BY-bearing files exist (`src/enrichment/priority-queue-manager.ts` with a priority_score system; `src/enrichment/enrichment-queue.ts:99`) but neither is on the active path — the priority_queue_manager is dead code from the brief generator's perspective (zero imports). Architectural surprise worth flagging.
+- Step 1: top-20 of current queue = 100% Tier 2 (all early-May concerts). At 5 saves/day natural cadence, Tier 1's 20 events would never reach the queue head before demo. Change is justified.
+- Step 2 (TDD red): 3 new tests added — cross-type Tier 1 priority, exhibition end_date Tier 1 rule, custom-config override. Initially 1 of 3 passed by accident (insertion-order dependence on identical start_dates); strengthened to make all 3 reliably red.
+- Step 3 (implementation): `config/enrichment-priority.json` (new) with `tier1_window: {label, start, end, rationale}`. New `loadEnrichmentPriorityConfig()` mirroring `loadRecentOpenings`. `selectDiverseBatch` gains optional 5th param `priorityConfig?` for test injection. SQL ORDER BY adds tier-priority CASE first; secondary sort `type, start_date ASC` preserved.
+- Step 4: 3 new tests green; full suite 1881/0; tsc clean.
+- Step 5: top-20 of new ORDER BY = 100% Tier 1. Live brief generator dry-style produced batch with healthy round-robin distribution including Onassis Stegi (Tier 1 exhibition by end_date rule).
+- Step 6: `bun run build` clean in 11.9s. Staged 3 files explicitly (`scripts/generate-enrichment-brief.ts`, `tests/generate-enrichment-brief.test.ts`, `config/enrichment-priority.json`) — explicit-path discipline per `feedback_stage_precisely.md`. Commit `dd47f4519` with full attribution. Pushed to origin/main.
+- Step 7: **launchctl manual fire FAILED twice (0 saves both runs).** Investigation: the failures are NOT an S110 regression — the 10:07 daily pipeline run earlier today (BEFORE my S110 commit landed at 12:27) also produced 0 saves. The throughput problem pre-dates this session. The S110 ORDER BY change is verified correct at SQL+test+build levels, but its runtime payoff cannot be observed until throughput is restored.
+
+**Tests:** +3 new tests in `tests/generate-enrichment-brief.test.ts` (selectDiverseBatch tier priority describe block). Full suite 1881/0 fail. tsc clean.
+
+**Build verification:** `bun run build` 11.9s clean. dist/ regenerated. Schema completeness ratios held (97% across most types).
+
+**Commit:** `dd47f4519 feat(enrichment): tier-priority queue ordering — demo-window first (S110)` — pushed to origin/main.
+
+**Critical finding outside scope (Step 7 root-cause investigation):** the agent's killed BATCH_OUT contained the line *"All 5 files already have prior content within target word ranges. Let me read each, fact-check against my research, and decide whether to keep, edit, or fully rewrite each."* The wrapper cleans `temp-briefs/` between runs but NOT `temp-descriptions/`. Failed runs leave partial description files; the agent's next run finds them and downshifts from "write fresh" to "load + fact-check + decide", which takes longer, exhausts the 900s wall-clock cap, produces zero saves, and leaves more partial files for the next run. **This is a hidden negative-feedback loop in the failure regime.** Highest-priority follow-up for restoring throughput.
+
+**Brief-vs-reality mismatches encountered:**
+- Brief said "find the queue file" (generic). Reality: 3 candidate files, only one on the active call path. Followed the auto-enrich.sh invocation (line 256) to disambiguate.
+- Brief's Step 7 success criterion ("≥3 Tier 1 saves") was not achievable because of the pre-existing throughput regression. Did not revert (per brief's revert clause "fix may have regressed") because the fix is verified correct — the failure is upstream of the SQL change.
+
+**Learnings:**
+- The S110 fix's correctness (Tier 1 at queue head) is verifiable independent of runtime throughput. SQL replay + tests proved it. The "Done when" criteria in this brief conflate code-correctness with runtime-effectiveness — useful to separate them in future briefs so a pre-existing infrastructure issue doesn't masquerade as a code regression.
+- "Antifragility-flipping" via temp-descriptions/ persistence: a system designed for the success path that *worsens itself* on the failure path. Worth a pattern entry if seen again.
+- Config-injectable parameter (5th optional arg) was the right pattern again — same shape as B-1's `validateVenueSchema(html, slug, expectedAddressRegion)`. Pure function of inputs, tests use synthetic configs without module-mocking. Pattern is now firmly established.
+
+**Open items:**
+- **HIGHEST PRIORITY: temp-descriptions/ persistence cleanup.** Add `rm -rf temp-descriptions/*` before each run in `scripts/auto-enrich.sh` (parallel to existing `temp-briefs/` cleanup), OR teach the agent to start fresh. Without this, throughput stays at ~0%. Demo at risk.
+- **Reduce `EVENTS_PER_BATCH` 5→3** for shorter wall-clock per batch — smaller, more reliable atomic units. Currently in auto-enrich.sh as `EVENTS_PER_BATCH=5`.
+- **Investigate 122-130s silent gaps** even with `--include-partial-messages`. Stream content shows 1992 stream_event entries / 1769 content_block_delta in one killed BATCH_OUT — partial-messages IS firing, but the gaps fall *between* model thinking phases, not during text generation. Either extend `STDOUT_IDLE_CAP` to 180-300s, OR rely on server-side stream-idle (5min) by removing the wrapper's 2min gate.
+- **Memory drift:** 22:00 / 01:00 launchd plists' loaded-state still doesn't match memory (memory says unloaded; reality, both currently loaded). User flagged as a memory_user_edits cleanup whenever convenient.
+- **Dead code:** `src/enrichment/priority-queue-manager.ts` is computed but unused. Either wire it into the brief generator (proper queue table backing) or remove it. Hygiene-session candidate.
+- **Backlog drain math:** at 0% throughput, 0 events/day. Even at 50% S101a-baseline throughput (5/run, 4 daytime slots = 20/day), Tier 1 (20 pending) would clear in 1 day — IF saves were Tier 1. Now they will be, once throughput recovers.

@@ -2388,3 +2388,39 @@ Sprint 4+ per Strategist 2026-05-04. Schema unchanged this session.
 athens-venues.json records are inactive (aspirational/historic). Separate
 cleanup signal. Q-B8a Path 3 (B-2d) addresses the duplicate-canonical subset of
 this; the inactive-tail subset remains for future hygiene work.
+
+---
+
+## 2026-05-04 — Tier-priority queue ordering via SQL CASE + config-injectable window (S110)
+
+**Context:** S101a's fix restored enrichment but at ~50% throughput. Backlog tier sizing query (run after S101a closeout) revealed: Tier 1 (demo window 2026-05-29 → 2026-06-07) = 20 pending events, Tier 2 (now → 2026-05-28) = 111 pending, Tier 3 (post-demo) = 172. The brief generator's `ORDER BY type, start_date ASC` put all Tier 2 concerts ahead of Tier 1 because `concert` is alphabetically first and there are 11 Tier 2 concerts. At ~5 saves/day natural cadence, Tier 1's 20 events would never have been reached before demo (2026-05-29).
+
+**Decision:** Add a tier-priority CASE expression to the SQL ORDER BY in `scripts/generate-enrichment-brief.ts:selectDiverseBatch`. The Tier 1 window dates live in `config/enrichment-priority.json` so the next deadline can update them without code change. Within each tier, secondary sort is `type, start_date ASC` — preserving the existing round-robin selection's expectation that per-type sub-arrays are date-sorted.
+
+**Reasoning — config-driven over hardcoded:**
+- Quick option (hardcode `'2026-05-29'` / `'2026-06-07'` in SQL string): demo-specific, would need code edit + re-deploy at next deadline.
+- Better option (config file with `tier1_window: {label, start, end, rationale}`): reusable. `label` documents *which* deadline; `rationale` captures *why* (so future-me reading the file knows what to update). Picked because the marginal cost was <10 min and the reusability matters across multiple deadlines.
+- Validator at config-load time enforces ISO YYYY-MM-DD format → safe to interpolate string literals into SQL (no parameter binding needed for ORDER BY CASE clauses, which is more readable than `?` placeholders for fixed CASE branches).
+
+**Architecture:**
+- `config/enrichment-priority.json` (new): `{tier1_window: {label, start, end, rationale}}`. Schema-noted in a `$schema_note` field at the top so future readers see the file's purpose.
+- `loadEnrichmentPriorityConfig()` (new export, mirrors `loadRecentOpenings` pattern): validates ISO format, falls back to a no-match default (`1970-01-01` window) if missing/invalid. Default is intentionally inert — absence of config doesn't change ordering.
+- `selectDiverseBatch(db, count, maxPerType, typeFilter, priorityConfig?)`: optional 5th param for test injection. Production callers pass nothing (defaults to file load); tests pass synthetic windows. Pattern matches B-1's "injectable expected-value parameter for testability" — pure function of inputs, no module-mocking required.
+- ORDER BY: `CASE WHEN <effective_date> BETWEEN '${start}' AND '${end}' THEN 1 WHEN < start THEN 2 WHEN > end THEN 3 ELSE 4 END, type, start_date ASC`. Effective date = `date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date))` per the project's TIER 1 rule (exhibitions use end_date).
+- Round-robin selection downstream is unchanged — it now picks from per-type sub-arrays where Tier 1 events come first, so each type's first pick is its earliest Tier 1 event.
+
+**Verification:**
+- 3 new tests in `tests/generate-enrichment-brief.test.ts`: cross-type Tier 1 priority, exhibition end_date Tier 1 rule, custom-config override (proves config is read, not hardcoded). All red pre-fix, green post-fix. Full suite 1881/0.
+- Step 5 SQL replay against production DB: top-20 of new ORDER BY = 100% Tier 1 (10 concert + 10 dj_set, dates 2026-05-29 → 2026-06-07). Pre-fix top-20 was 100% Tier 2 (early-May concerts).
+- `bun run build` clean in 11.9s.
+- Step 7 manual launchctl validation: **failed twice (0 saves both runs)** due to a pre-existing throughput regression that surfaced 2026-05-04 (10:07 daily pipeline also failed before my S110 commit landed at 12:27). Failure is not an S110 regression; the SQL fix is verified correct.
+
+**Out of scope this session (logged for follow-up):**
+- The dead `priority_score`/tier system in `src/enrichment/priority-queue-manager.ts` is computed but never read by the brief generator (zero imports). Should be removed or re-wired in a hygiene session.
+- `temp-descriptions/` directory is NOT cleaned between runs (only `temp-briefs/` is). Failed runs leave partial description files; the agent's next run downshifts from "write fresh" to "load + fact-check + decide", which takes longer and exhausts the wrapper budget. This is a hidden negative-feedback loop in the failure regime. **Highest-priority follow-up** for restoring throughput.
+- `BATCH_TIMEOUT=900s` is at the edge of viability for 5-event Tier 1 batches with prompt-cached but research-heavy events. Either reduce `EVENTS_PER_BATCH` 5→3 (smaller batches, more headroom) or extend `BATCH_TIMEOUT` to 1500–1800s (with corresponding monitoring).
+- 22:00 / 01:00 launchd plists' loaded-state drift (per memory, they should be unloaded; reality, they're loaded). User flagged this for a memory_user_edits cleanup whenever convenient.
+
+**Status:** Active. Code change shipped commit `dd47f4519` (attributed `feat(enrichment): tier-priority queue ordering — demo-window first (S110)`). Throughput regression is now the top blocker — until throughput is restored, S110's win is unrealized.
+
+**Connects to:** `feedback_stage_precisely.md` (this commit was staged by explicit path; not scooped by daily pipeline), B-1's "injectable expected-value parameter for testability" pattern (same shape used here), S101a's drought-fix decision (this builds on it; the throughput regression was the open item from that session).
