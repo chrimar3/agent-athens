@@ -1,0 +1,9 @@
+{
+  "$schema_note": "Tier-priority window for enrichment queue. Tier 1 events (start_date or exhibition end_date in [start, end]) get queue priority over Tier 2 (now → start - 1 day) and Tier 3 (> end). When the next deadline lands, update the start/end dates and label here — no code change needed. See specs/s101-enrichment-drought-diagnostic.md and Session 109 for context.",
+  "tier1_window": {
+    "label": "demo-2026-05-29",
+    "start": "2026-05-29",
+    "end": "2026-06-07",
+    "rationale": "Investor demo window — first 10 days. Events in this window get priority in scripts/generate-enrichment-brief.ts:selectDiverseBatch."
+  }
+}

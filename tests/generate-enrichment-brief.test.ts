@@ -509,3 +509,101 @@ describe('loadRecentOpenings', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 });
+
+// ============================================================================
+// Tests: tier-priority queue ordering (S110)
+//
+// selectDiverseBatch should prioritize events whose effective date
+// (start_date for non-exhibitions, end_date for exhibitions) falls in
+// the configured Tier 1 window (default: demo-2026-05-29). Tests inject
+// a custom priorityConfig parameter so they don't depend on the
+// config/enrichment-priority.json file's contents.
+// ============================================================================
+
+describe('selectDiverseBatch — tier priority', () => {
+  let db: Database;
+
+  beforeEach(() => {
+    db = createBriefTestDB();
+  });
+
+  afterEach(() => {
+    db.close();
+  });
+
+  // Test config: Tier 1 = 2027-08-01 → 2027-08-10. Picked far in the future
+  // so the `>= date('now')` filter doesn't trip; uses different dates
+  // from the production config so tests prove the param is read, not hardcoded.
+  const TEST_CONFIG = {
+    tier1_window: {
+      label: 'test-window-2027-08',
+      start: '2027-08-01',
+      end: '2027-08-10',
+      rationale: 'Test window — not the production demo window',
+    },
+  };
+
+  test('Tier 1 events selected before Tier 2 across types', () => {
+    // Tier 1: 1 concert + 1 dj_set in window
+    insertEvent(db, { id: 't1-concert', type: 'concert', start_date: '2027-08-03T21:00:00' });
+    insertEvent(db, { id: 't1-dj_set', type: 'dj_set', start_date: '2027-08-05T23:00:00' });
+
+    // Tier 2: 2 concert + 2 dj_set BEFORE the window (today < start_date < window start)
+    insertEvent(db, { id: 't2-concert-1', type: 'concert', start_date: '2027-07-15T21:00:00' });
+    insertEvent(db, { id: 't2-concert-2', type: 'concert', start_date: '2027-07-20T21:00:00' });
+    insertEvent(db, { id: 't2-dj_set-1', type: 'dj_set', start_date: '2027-07-15T23:00:00' });
+    insertEvent(db, { id: 't2-dj_set-2', type: 'dj_set', start_date: '2027-07-20T23:00:00' });
+
+    // Pick 2 (max 1 per type) — round-robin should pick 1 concert + 1 dj_set, both Tier 1
+    const selected = selectDiverseBatch(db, 2, 1, null, TEST_CONFIG);
+
+    expect(selected.length).toBe(2);
+    const ids = selected.map(e => e.id).sort();
+    expect(ids).toEqual(['t1-concert', 't1-dj_set']);
+  });
+
+  test('Tier 1 exhibitions (end_date in window) selected before non-Tier-1 exhibitions', () => {
+    // Non-Tier-1 exhibition with EARLIER start_date — would win under current
+    // `ORDER BY type, start_date ASC` rule. Insert first to also stress
+    // insertion-order non-dependence.
+    insertEvent(db, {
+      id: 't3-exhibition',
+      type: 'exhibition',
+      start_date: '2027-05-01T10:00:00',
+      end_date: '2028-12-31T18:00:00',
+    });
+
+    // Tier 1 exhibition: LATER start_date but end_date inside the demo window.
+    // Should win under tier-priority because end_date(2027-08-05) ∈ [2027-08-01, 2027-08-10].
+    insertEvent(db, {
+      id: 't1-exhibition',
+      type: 'exhibition',
+      start_date: '2027-06-01T10:00:00',
+      end_date: '2027-08-05T18:00:00',
+      venue_name: 'Different Venue',
+    });
+
+    // Pick 1, no per-type cap restriction
+    const selected = selectDiverseBatch(db, 1, 5, null, TEST_CONFIG);
+
+    expect(selected.length).toBe(1);
+    expect(selected[0].id).toBe('t1-exhibition');
+  });
+
+  test('priorityConfig parameter overrides default — proves config is read, not hardcoded', () => {
+    // Insert two events: one in the TEST_CONFIG window, one outside
+    insertEvent(db, { id: 'in-test-window', type: 'concert', start_date: '2027-08-05T21:00:00' });
+    insertEvent(db, { id: 'before-test-window', type: 'concert', start_date: '2027-07-15T21:00:00', venue_name: 'Other Venue' });
+
+    // With TEST_CONFIG window 2027-08-01 → 2027-08-10, in-test-window is Tier 1
+    const withTestConfig = selectDiverseBatch(db, 1, 5, null, TEST_CONFIG);
+    expect(withTestConfig[0].id).toBe('in-test-window');
+
+    // With a SHIFTED config window 2027-07-10 → 2027-07-20, before-test-window is now Tier 1
+    const SHIFTED_CONFIG = {
+      tier1_window: { label: 'shifted', start: '2027-07-10', end: '2027-07-20', rationale: 'shifted' },
+    };
+    const withShiftedConfig = selectDiverseBatch(db, 1, 5, null, SHIFTED_CONFIG);
+    expect(withShiftedConfig[0].id).toBe('before-test-window');
+  });
+});

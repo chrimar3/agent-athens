@@ -108,6 +108,57 @@ export function loadRecentOpenings(): RecentOpening[] {
 }
 
 // ============================================================================
+// Tier-priority config (S110)
+//
+// Events whose effective date (start_date for non-exhibitions, end_date for
+// exhibitions per the Tier 1 rule) falls in `tier1_window` get queue priority
+// over events outside it. Update this file's dates when the next deadline lands;
+// no code change needed.
+// ============================================================================
+
+const ENRICHMENT_PRIORITY_PATH = 'config/enrichment-priority.json';
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+export interface EnrichmentPriorityConfig {
+  tier1_window: {
+    label: string;
+    start: string;  // YYYY-MM-DD
+    end: string;    // YYYY-MM-DD
+    rationale?: string;
+  };
+}
+
+const DEFAULT_PRIORITY_CONFIG: EnrichmentPriorityConfig = {
+  tier1_window: {
+    label: 'no-window',
+    start: '1970-01-01',
+    end: '1970-01-01',
+    rationale: 'Fallback when config/enrichment-priority.json is missing — no event will match Tier 1 priority.',
+  },
+};
+
+export function loadEnrichmentPriorityConfig(): EnrichmentPriorityConfig {
+  if (!existsSync(ENRICHMENT_PRIORITY_PATH)) return DEFAULT_PRIORITY_CONFIG;
+  try {
+    const raw = JSON.parse(readFileSync(ENRICHMENT_PRIORITY_PATH, 'utf-8'));
+    const tw = raw?.tier1_window;
+    if (!tw || !ISO_DATE.test(tw.start) || !ISO_DATE.test(tw.end)) {
+      return DEFAULT_PRIORITY_CONFIG;
+    }
+    return {
+      tier1_window: {
+        label: tw.label || 'unlabeled',
+        start: tw.start,
+        end: tw.end,
+        rationale: tw.rationale,
+      },
+    };
+  } catch {
+    return DEFAULT_PRIORITY_CONFIG;
+  }
+}
+
+// ============================================================================
 // CLI
 // ============================================================================
 
@@ -159,8 +210,24 @@ const MULTI_HALL_VENUES = new Set([
   'στέγη ιδρύματος ωνάση',
 ]);
 
-export function selectDiverseBatch(db: Database, count: number, maxPerType: number = DEFAULT_MAX_PER_TYPE, typeFilter: string | null = null): EventRecord[] {
+export function selectDiverseBatch(
+  db: Database,
+  count: number,
+  maxPerType: number = DEFAULT_MAX_PER_TYPE,
+  typeFilter: string | null = null,
+  priorityConfig?: EnrichmentPriorityConfig,
+): EventRecord[] {
   if (count <= 0) return [];
+
+  // Resolve the Tier 1 window. Caller may inject (used by tests); otherwise
+  // load from config/enrichment-priority.json. Validated to ISO YYYY-MM-DD
+  // by loadEnrichmentPriorityConfig so the literals below are safe to inline.
+  const config = priorityConfig ?? loadEnrichmentPriorityConfig();
+  const t1Start = config.tier1_window.start;
+  const t1End = config.tier1_window.end;
+  if (!ISO_DATE.test(t1Start) || !ISO_DATE.test(t1End)) {
+    throw new Error(`Invalid tier1_window dates: start=${t1Start} end=${t1End}`);
+  }
 
   // Build a set of already-enriched (venue, date) combos to skip cross-source duplicates.
   // If venue+date already has an enriched event, skip the unenriched sibling.
@@ -175,9 +242,14 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
     enrichedCombos.add(`${r.venue}|${r.date}`);
   }
 
-  // Query all eligible events grouped by type, soonest first
+  // Query all eligible events. ORDER BY a tier-priority CASE first so the
+  // per-type buckets built below are tier-sorted internally; the round-robin
+  // then naturally picks Tier 1 events of each type before Tier 2/3.
+  // Tier rule mirrors the sizing query in the S110 brief — exhibitions use
+  // end_date (Tier 1 rule), everything else uses start_date.
   const typeClause = typeFilter ? `AND type = ?` : '';
   const params = typeFilter ? [typeFilter] : [];
+  const effectiveDate = `date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date))`;
   const rows = db.prepare(`
     SELECT id, title, type, venue_name, price_type, start_date, end_date,
            time_doors, url, description, source, ticket_url, ticket_url_status
@@ -185,12 +257,17 @@ export function selectDiverseBatch(db: Database, count: number, maxPerType: numb
     WHERE (full_description IS NULL OR full_description = '')
       AND needs_enrichment = 1
       AND location_status IN ('verified_athens', 'pass_through')
-      AND date(COALESCE(
-        CASE WHEN type='exhibition' THEN end_date ELSE NULL END,
-        start_date
-      )) >= date('now')
+      AND ${effectiveDate} >= date('now')
       ${typeClause}
-    ORDER BY type, start_date ASC
+    ORDER BY
+      CASE
+        WHEN ${effectiveDate} BETWEEN '${t1Start}' AND '${t1End}' THEN 1
+        WHEN ${effectiveDate} < '${t1Start}' THEN 2
+        WHEN ${effectiveDate} > '${t1End}' THEN 3
+        ELSE 4
+      END,
+      type,
+      start_date ASC
   `).all(...params) as EventRecord[];
 
   if (rows.length === 0) return [];
