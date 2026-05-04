@@ -275,4 +275,34 @@ describe('Database Migrations', () => {
     const total = db.prepare(`SELECT COUNT(*) as c FROM events`).get() as { c: number };
     expect(before.c).toBe(total.c); // every row currently has NULL — resolver hasn't populated any yet
   });
+
+  // 010 adds editorial_pick_rank — denormalized cache of the editorial-content.json
+  // pick rank. Uniqueness lives JSON-side (one entry per event_id), so the DB column
+  // is just for query convenience (sort/filter). NULL = no pick. Partial index keeps
+  // the index tiny since most rows have NULL.
+  // Decision tree resolved Step 0: hub_slug/locale/week_starting do not exist on events,
+  // so the originally-spec'd composite unique constraint is not possible. Picks are
+  // globally rank-ordered per event window, not hub-scoped at the DB layer.
+  test('010_add_editorial_pick_rank adds editorial_pick_rank column', () => {
+    const columns = db.prepare(`PRAGMA table_info(events)`).all() as Array<{
+      name: string;
+      type: string;
+      notnull: number;
+      dflt_value: string | null;
+    }>;
+    const col = columns.find(c => c.name === 'editorial_pick_rank');
+    expect(col).toBeDefined();
+    expect(col?.type).toBe('INTEGER');
+    expect(col?.notnull).toBe(0); // nullable — NULL means "no pick"
+  });
+
+  test('010_add_editorial_pick_rank creates partial index on rank', () => {
+    const indexes = db.prepare(`PRAGMA index_list(events)`).all() as Array<{
+      name: string;
+      unique: number;
+    }>;
+    const idx = indexes.find(i => i.name === 'idx_editorial_pick_rank');
+    expect(idx).toBeDefined();
+    expect(idx?.unique).toBe(0); // non-unique: ranks can repeat across distinct windows
+  });
 });

@@ -69,3 +69,55 @@ describe('getSectionEditorial', () => {
     expect(english).toMatch(/rebetiko/);
   });
 });
+
+// S101a: date-windowed editorial picks. The featuredEvents map gains optional
+// validFrom/validUntil/rank fields per entry. Entries without those fields keep
+// their existing always-return behavior (backward compat for placeholder data).
+// Tests reference the worked-example entry added to editorial-content.json with
+// validFrom=2026-05-22, validUntil=2026-05-28.
+describe('getFeaturedVignette date window', () => {
+  // Real event ID from data/events.db (NO MORE FAKE DISCO, 2026-05-22).
+  // Coupled to the corresponding entry in config/editorial-content.json \u2014 if the
+  // event is removed from the DB, this entry stays orphaned but tests still pass
+  // since they exercise the JSON loader, not DB joins.
+  const WINDOWED_ID = '3636471c494352ae';
+
+  test('returns vignette when currentDate is within window', () => {
+    const result = getFeaturedVignette(WINDOWED_ID, 'el', '2026-05-25');
+    expect(result).not.toBeNull();
+    expect(result).toBeString();
+  });
+
+  test('returns null when currentDate is before validFrom', () => {
+    const result = getFeaturedVignette(WINDOWED_ID, 'el', '2026-05-21');
+    expect(result).toBeNull();
+  });
+
+  test('returns null when currentDate is after validUntil', () => {
+    const result = getFeaturedVignette(WINDOWED_ID, 'el', '2026-05-29');
+    expect(result).toBeNull();
+  });
+
+  test('boundary: validFrom date is inclusive', () => {
+    const result = getFeaturedVignette(WINDOWED_ID, 'el', '2026-05-22');
+    expect(result).not.toBeNull();
+  });
+
+  test('boundary: validUntil date is inclusive', () => {
+    const result = getFeaturedVignette(WINDOWED_ID, 'el', '2026-05-28');
+    expect(result).not.toBeNull();
+  });
+
+  test('backward compat: entries without date fields ignore currentDate', () => {
+    // PLACEHOLDER_EVENT_001 has no validFrom/validUntil \u2014 should always return
+    const inFuture = getFeaturedVignette('PLACEHOLDER_EVENT_001', 'el', '2099-01-01');
+    expect(inFuture).not.toBeNull();
+    expect(inFuture).toContain('PLACEHOLDER');
+  });
+
+  test('backward compat: omitting currentDate uses today', () => {
+    // No currentDate arg \u2014 entries without window fields still return as before
+    const result = getFeaturedVignette('PLACEHOLDER_EVENT_001', 'el');
+    expect(result).not.toBeNull();
+  });
+});

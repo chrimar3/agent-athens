@@ -2726,3 +2726,147 @@ artificially HOLDs cases that should merge.
 collisions auto-merged; 6 routed to Editorial. Pre-flight:
 `specs/venue-dedup-sample.md`. Script: `/tmp/b2d-merge.ts` (not
 committed). Closing commit: `d35855ada`.
+
+## Validator coverage audit precedes any FAIL-rule addition
+
+Before adding (or proposing) a FAIL rule to
+`src/validators/schema-completeness.ts`, audit two things first:
+
+1. **Coverage** — is the validator already running on the subtype/page-class
+   you'd be guarding? `VALID_SCHEMA_TYPES` (line 16) is built from
+   `Object.values(SCHEMA_TYPE_MAP)`, so any DB type without a map entry
+   silently falls to generic `Event` and may bypass type-conditional rules.
+2. **Existing rules** — the validator may already enforce what you think
+   you're adding. The price-symbol regex `/[€$£¥]/.test(price)` was already
+   live at `schema-completeness.ts:172` when S101a flagged "missing
+   price-format FAIL rule." The rule existed; the violation was on a
+   parallel emission surface the validator never reads (microdata, see next
+   pattern).
+
+**How to apply:** read the validator end-to-end before writing the spec
+for a new rule. If the rule exists, the gap is downstream (emission shape,
+emission surface, or upstream data) — not a missing rule. Misdiagnosing
+"missing rule" produces a no-op fix that ships clean diffs but doesn't
+change the violating output.
+
+**Origin:** S113 S101a-A audit, 2026-05-04. Spec:
+`specs/s101a-implementation.md` §2 + §5a.
+
+## JSON-LD validator is blind to microdata; check both surfaces when emission paths diverge
+
+`validateSchemaCompleteness` parses JSON-LD only —
+`htmlContent.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)`
+at `schema-completeness.ts:86`. Any schema attribute emitted as HTML
+microdata (`itemprop="price"`, `<meta itemprop="availability">`, etc.) is
+invisible to it. Build "passes" while the page emits violation-prone
+microdata that Google's rich-results parser will still flag.
+
+This is structural, not a bug — JSON-LD and microdata are independent
+emission paths in the codebase:
+
+| Emission surface              | Emitter                                  | Validator?              |
+|-------------------------------|------------------------------------------|-------------------------|
+| Per-event JSON-LD             | `buildEventSchemaObject` (event-page.ts) | Yes                     |
+| Hub CollectionPage JSON-LD    | `generateSchemaMarkup` (page.ts:395)     | Yes (validateHubSchema) |
+| Hub card microdata            | `renderEventCard` (page.ts:283)          | **No**                  |
+| DataFeed JSON                 | `buildEventSchemaObject` → datafeed.ts   | Yes (validateDataFeed)  |
+
+S101a-A surfaced 11,217 microdata price-symbol violations on hub cards
+while JSON-LD output was 100% clean — a coverage gap, not a rule gap.
+
+**How to apply:** when proposing a FAIL rule for a schema attribute, grep
+`itemprop="<attr>"` AND `"<attr>"` (JSON-LD form) across `src/templates/`
+and `src/generators/`. If both surfaces emit it, both need validator
+coverage OR the fix needs to enforce a single emission shape that both
+paths inherit. The S101a-B fix closes the microdata gap by adding a
+`validateMicrodata()` function to `schema-completeness.ts` AND by making
+`renderEventCard` source numeric values directly from `event.price.amount`
+rather than reusing the display-formatted `priceText`.
+
+**Origin:** S113 S101a-A audit, 2026-05-04. Spec:
+`specs/s101a-implementation.md` §2 (gap type d, "validator scope <
+emission scope") + §5a (11,217 microdata violations on 0 JSON-LD
+violations).
+
+## Date-windowed editorial JSON entries — `validFrom`/`validUntil`/`rank` extension
+
+Established 2026-05-04 (S114). When extending `config/editorial-content.json`
+or other in-repo authoring surfaces with time-bounded entries, the canonical
+field shape is:
+
+```json
+"<entry_key>": {
+  "vignetteEl": "...",
+  "vignetteEn": "...",
+  "validFrom": "2026-05-22",   // ISO YYYY-MM-DD, inclusive
+  "validUntil": "2026-05-28",  // ISO YYYY-MM-DD, inclusive
+  "rank": 1                    // optional integer, semantics defined per consumer
+}
+```
+
+Naming rationale:
+- `validFrom` / `validUntil` (camelCase, JSON convention) — chosen over
+  `startDate` / `endDate` to avoid namespace collision with event-level
+  `start_date` / `end_date` semantics. Also avoids the `effective` /
+  `expires` legal-ish framing.
+- `rank` is meaningful only to the consuming surface (e.g.
+  `MAX_PICK_RANK = 3` in `hub-page.ts`); the loader just exposes it.
+
+**Loader contract** (per `src/utils/editorial-content.ts`):
+- Both fields are optional. Entry without either → always returned
+  (backward compat for non-windowed featured vignettes).
+- Both fields inclusive. `today < validFrom` → null. `today > validUntil`
+  → null.
+- `currentDate` parameter optional; defaults to today in `Europe/Athens`
+  via `new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Athens' })`
+  — emits `YYYY-MM-DD` directly.
+- Two helpers cover the two access patterns: `getFeaturedVignette()`
+  returns the locale-resolved string; `getFeaturedPickRank()` returns
+  the integer (or null) for sort/filter.
+
+**How to apply:** if S101b or future work needs time-bounded pull
+quotes, section editorials, or other JSON-authored content, reuse this
+field shape rather than inventing new names. The Europe/Athens-default
+date logic and the inclusive-boundary semantics should be copied
+verbatim — they're load-bearing for editorial intuition (an editor
+sets "valid until May 28" expecting May 28 itself to count).
+
+**Origin:** S114 (S101a editorial picks infrastructure), 2026-05-04.
+File: `src/utils/editorial-content.ts:75-103`. Test coverage:
+`src/utils/__tests__/editorial-content.test.ts` "getFeaturedVignette
+date window" describe block (7 tests including boundary inclusivity
+and backward-compat).
+
+## Cornerstone-conditional surface elements in hub generator
+
+Established 2026-05-04 (S114). The hub generator already had three
+cornerstone-vs-non-cornerstone branches as of S60 (FAQ count 8 vs 4,
+seasonal narrative populated only on cornerstones, cross-link section
+inverted). S114 added a fourth: **the comparison table's Editor's Pick
+★ column appears on cornerstone hubs only**.
+
+Pattern for adding cornerstone-only structural elements:
+1. Branch in `renderHubPage` based on `config.cornerstone === true`.
+2. Render the affected element (header cell, section, etc.)
+   conditionally — emit empty string when not cornerstone.
+3. Don't gate the underlying helper function (e.g.
+   `renderComparisonRow`); thread the condition through as a boolean
+   prop and let the helper render minimally when false. This keeps
+   helpers data-pure and testable without HubConfig.
+4. Header/footer count consistency: if you add a 5th `<th>` to the
+   thead row, every `<tr>` in tbody needs to either match (5 cells)
+   or render as 4-cell rows on a separate non-cornerstone path. The
+   row helper's optional boolean prop handles both cases without
+   forking.
+
+**How to apply:** S101b's homepage editorial picks and any S102+ work
+that adds cornerstone-only surface elements should follow this pattern
+— branch in the orchestrator (hub-page.ts), thread booleans through to
+helpers, keep helpers ignorant of HubConfig.
+
+**Origin:** S114, `src/generators/hub-page.ts:161-183` (renderComparisonRow)
+and `src/generators/hub-page.ts:393-422` (Part 2 with showPickColumn
+branch). Test coverage: `src/generators/__tests__/hub-page.test.ts` —
+5 tests verifying 4-cell default, 5-cell with hasPick, cornerstone
+header rendering (Greek + English aria-label), and non-cornerstone
+column absence.

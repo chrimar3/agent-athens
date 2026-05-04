@@ -24,7 +24,7 @@ import { generateEventSlug } from './event-page';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { formatDateOnly } from '../utils/i18n-date';
 import { renderHubCrossLinks } from '../utils/cornerstone-links';
-import { getPullQuotes, getSectionEditorial } from '../utils/editorial-content';
+import { getPullQuotes, getSectionEditorial, getFeaturedPickRank } from '../utils/editorial-content';
 import { BASE_URL } from '../config/site-url';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -33,6 +33,11 @@ const CATEGORIES_CONFIG_PATH = join(import.meta.dir, '../../config/categories.js
 
 const MIN_EVENTS_THRESHOLD = 3;
 const MAX_TABLE_ROWS = 20;
+// S101a: Maximum editorial pick rank that earns the ★ marker in the comparison
+// table. Editors can author rank 1-N in editorial-content.json, but only ranks
+// ≤ MAX_PICK_RANK render as starred rows. Domain policy lives here, not in the
+// loader, since other surfaces (homepage in S101b) may use a different limit.
+const MAX_PICK_RANK = 3;
 const MAX_EVENT_BLOCKS = 8;
 export const HUB_EVENT_LIMIT = 30;
 const PULL_QUOTE_INTERVAL = 10;
@@ -156,9 +161,17 @@ function formatTablePrice(event: Event, locale: Locale = 'el'): string {
 }
 
 /**
- * Render a single comparison table row
+ * Render a single comparison table row.
+ *
+ * `hasPick` adds a 5th cell with the ★ marker — used on cornerstone hubs that
+ * render the Editor's Pick column. Pass `false` (default) for non-cornerstone
+ * hubs that render only the 4 standard columns.
  */
-export function renderComparisonRow(event: Event, locale: Locale = 'el'): string {
+export function renderComparisonRow(
+  event: Event,
+  locale: Locale = 'el',
+  hasPick: boolean = false
+): string {
   const slug = generateEventSlug(event);
   const dateStr = formatDateOnly(event.startDate, locale);
   const price = formatTablePrice(event, locale);
@@ -166,8 +179,11 @@ export function renderComparisonRow(event: Event, locale: Locale = 'el'): string
     ? event.title.substring(0, 57) + '...'
     : event.title;
   const linkPrefix = locale === 'en' ? '/en/events' : '/events';
+  const pickCell = hasPick
+    ? `<td class="pick-star">★</td>`
+    : '';
 
-  return `<tr><td><a href="${linkPrefix}/${slug}/">${title}</a></td><td>${event.venue.name}</td><td>${dateStr}</td><td>${price}</td></tr>`;
+  return `<tr><td><a href="${linkPrefix}/${slug}/">${title}</a></td><td>${event.venue.name}</td><td>${dateStr}</td><td>${price}</td>${pickCell}</tr>`;
 }
 
 /**
@@ -390,13 +406,30 @@ export function renderHubPage(
     new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
   );
   const tableEvents = sortedEvents.slice(0, MAX_TABLE_ROWS);
-  const tableRows = tableEvents.map(e => renderComparisonRow(e, locale)).join('\n        ');
+
+  // S101a: Editor's Pick (★) column — cornerstone hubs only. Pick eligibility
+  // = in-window editorial-content.json entry with rank ≤ MAX_PICK_RANK.
+  // Non-cornerstones render the legacy 4-column table unchanged.
+  const showPickColumn = config.cornerstone === true;
+  const pickAriaLabel = locale === 'en' ? "Editor's pick" : 'Επιλογή συντακτικής ομάδας';
+  const tableRows = tableEvents.map(e => {
+    const hasPick = showPickColumn
+      && (() => {
+        const rank = getFeaturedPickRank(e.id);
+        return rank !== null && rank <= MAX_PICK_RANK;
+      })();
+    return renderComparisonRow(e, locale, hasPick);
+  }).join('\n        ');
+
+  const pickHeaderCell = showPickColumn
+    ? `<th scope="col" aria-label="${pickAriaLabel}">★</th>`
+    : '';
 
   const tableHtml = `<section class="hub-comparison-table-section">
   <h2>${t.hubOverview}</h2>
   <div class="table-scroll-wrapper">
     <table class="hub-comparison-table">
-      <thead><tr><th scope="col">${t.hubColEvent}</th><th scope="col">${t.hubColVenue}</th><th scope="col">${t.hubColDate}</th><th scope="col">${t.hubColEntry}</th></tr></thead>
+      <thead><tr><th scope="col">${t.hubColEvent}</th><th scope="col">${t.hubColVenue}</th><th scope="col">${t.hubColDate}</th><th scope="col">${t.hubColEntry}</th>${pickHeaderCell}</tr></thead>
       <tbody>
         ${tableRows}
       </tbody>

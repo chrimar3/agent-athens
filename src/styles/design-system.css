@@ -2628,6 +2628,82 @@ div#main-content {
 .hub-seasonal-narrative { margin: var(--space-xl) 0; }
 .hub-seasonal-narrative:empty { display: none; }
 
+/* ── Editorial Picks (S101a infrastructure; S101b integrates) ────── */
+
+/* Section label utility — generic <h2> editorial section marker.
+   Used by: .editor-picks; future major editorial sections. */
+.section-label {
+  border-left: 2px solid var(--accent-primary);
+  padding-left: 12px; /* off-8px-grid: 2px line needs tight coupling at h2 scale */
+}
+
+/* Editor's picks component — appears as Part 1.5 on cornerstones (S101b),
+   decoration on homepage (S101b). Standalone in S101a. */
+.editor-picks {
+  background: var(--bg-elevated);
+  padding: var(--space-xl);
+  border-radius: 12px;
+  margin: var(--space-xl) 0;
+}
+
+.editor-picks .picks-intro {
+  font-size: var(--type-body); /* spec referenced --text-body which does not exist */
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+.editor-picks .picks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .editor-picks .picks-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .editor-picks .picks-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.editor-picks .pick {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor-picks .pick-rationale {
+  font-size: var(--type-small); /* spec referenced --text-small which does not exist */
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.editor-picks .picks-subhead {
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 16px;
+  margin-bottom: 12px;
+}
+
+/* Editor's pick marker — comparison table ★ column (cornerstone-only).
+   Yellow context: under "highlights/badges" thematic category. */
+.hub-comparison-table .pick-star {
+  color: var(--accent-primary);
+  font-size: 16px;
+  text-align: center;
+}
+
 /* Hub "See all" overflow link */
 .hub-see-all-wrapper {
   text-align: center;

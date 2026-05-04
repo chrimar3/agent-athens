@@ -4046,3 +4046,259 @@ commit (~5 min when received).
   embedded in variations[]; not blocking but a future cleanup signal.
 
 **Commit:** `d35855ada` on origin/main.
+
+### Session 113 — S101a-A Event-subtype Schema Audit (audit-only, no code) — 2026-05-04
+
+**Plan:** Audit Event-subtype generator paths, validator coverage, and
+current corpus violation counts (price-format + availability separately).
+Produce `specs/s101a-implementation.md` with concrete file list, two
+violation counts, distribution analysis, and per-fix sequence for
+S101a-B. Read-only except spec file. Pre-flight via 3 parallel Explore
+agents to verify run-book assumptions before query execution.
+
+**What happened:**
+- Pre-flight surfaced three material schema mismatches against the
+  run-book's assumptions: real columns are `price_amount` /
+  `price_currency` / `price_range` / `is_cancelled` (not `price` /
+  `ticket_price` / `event_status`). All §5 audit queries reformulated
+  before execution. `price_type` (TEXT NOT NULL, enum
+  `with-ticket | tba | open`) is the canonical ticketed-event proxy
+  with 11,345 non-cancelled rows.
+- Mapped Schema.org generator surface: 3 live emitters
+  (`buildEventSchemaObject` at `src/generators/event-page.ts:144` —
+  correct, dynamic; `generateSchemaMarkup` at `src/templates/page.ts:395`
+  — hardcodes InStock; `renderEventCard` at `src/templates/page.ts:283`
+  — microdata, source of all violations). Plus 1 dead emitter
+  (`generateSchemaOrg` at `src/enrichment/quality-gates.ts:929`, 0
+  production callers).
+- Validator audit: `schema-completeness.ts:172` ALREADY enforces the
+  numeric-only price rule — for JSON-LD only. Validator parses
+  `<script type="application/ld+json">` (line 86), never microdata. New
+  gap category `(d)` introduced in spec: "validator scope < emission
+  scope."
+- §4 narrowed: live curl of `/this-weekend` and `/theater` confirmed hub
+  ItemList items already emit `@id` and `endDate` — silently fixed in a
+  prior session. S101a-B no longer needs hub-page work.
+- §5a violation count: **11,217** events emit `€${price}` in microdata
+  hub cards. Distribution: theater 9,580 (85%) / concert 1,271 (11%) /
+  dj_set 217 (2%). Source: athinorama.gr 10,205 (91%). `price_amount`
+  100% clean (0 contaminated rows on
+  `CAST(price_amount AS TEXT) GLOB '*[a-zA-Z€$£]*'`). Both feasibility
+  conditions for emitter-side fix met. **Recommendation:
+  `emitter-side-fix-zero-backlog`** (the fourth option in §5a's
+  recommendation enum, conditional on the feasibility probe).
+- §5b reframed: `availabilityForEventStatus()` at `schema-geo.ts:143`
+  fully implements the Strategist 2026-04-29 spec (handles all 5
+  eventStatus values), but only `event-page.ts:227` calls it. Hub
+  (`page.ts:429`) and microdata paths bypass it. `resolveEventStatus()`
+  only ever returns `EventScheduled`/`EventCompleted`, so the
+  `EventPostponed`/`EventCancelled`/`EventRescheduled` branches are
+  dormant. **Recommendation: `fits-S101a-B`** as architectural
+  unification, not a violation count.
+- 5 open questions for GEO Strategist filed in §7 (cancelled-event
+  visibility, postponement infra, tier-pricing emission via
+  `price_advance`/`price_door`, dead-code removal, missing
+  `dance: 'DanceEvent'` map entry).
+
+**Tests:** No tests touched (audit-only session). No source code
+modified. No commits.
+
+**Verification:** All 7 spec self-checks pass — file exists, 8 sections
+(§1/§2/§3/§4/§5a/§5b/§6/§7), §5a contains 20 numeric strings, §5a/§5b
+recommendations match the literal enum (`emitter-side-fix-zero-backlog` /
+`fits-S101a-B`), §6 references 5 source paths, §7 lists 5 numbered
+questions. Live live-site spot-checks performed: hub TheaterEvent
+JSON-LD shows `"price":"15"` clean; same hub microdata shows
+`<span itemprop="price">€15</span>` (the actual violation).
+
+**Brief-vs-reality mismatches encountered:**
+- Run-book assumed columns `price` / `ticket_price` / `event_status` —
+  none exist. Real columns are `price_type` / `price_amount` /
+  `price_range` / `is_cancelled`. All Step 5 queries reformulated.
+- Run-book assumed §4 ItemList missing `@id`/`endDate`. Live verified:
+  both present. Likely silently fixed in S95-era endDate work.
+- Run-book assumed §5b would surface a violation count. Reality: it's
+  an architectural-unification gap with no count semantics
+  (`EventPostponed`/`EventCancelled` aren't emitted because no upstream
+  signal exists, not because the helper is missing).
+- Run-book §5a anticipated multi-source remediation; reality is one
+  template function is the entire violation surface (data is clean).
+
+**Discipline note:** The plan's conditional fourth recommendation
+(`emitter-side-fix-zero-backlog`) was added pre-execution with explicit
+gating on Step F findings. Both gates fired (`price_amount` clean +
+emitter redirect feasible), so the fourth option earned its place in
+§5a. Without that conditional add, the spec would have been forced into
+the wrong recommendation category. Lesson for future audits: when
+diagnostics could surface a fix shape orthogonal to the brief's
+mental model, gate the new recommendation on the diagnostic, don't
+preregister it unconditionally.
+
+**Open items:**
+- S101a-B implementation session: ~100 LOC
+  (`src/templates/page.ts` ~10 lines + `prepareCardData` ~3 lines +
+  `validators/schema-completeness.ts` ~30 lines for `validateMicrodata`
+  + ~60 lines test coverage). TDD red→green per FAIL rule. Closes
+  back-validation in same session — no S101a-C needed.
+- 5 GEO Strategist questions (§7) routed for review before S101a-B
+  starts — primarily to confirm scope on cancelled-event visibility and
+  whether tier-pricing emission joins this sub-session or defers.
+- Editorial Director unblocks at full S101a closure (after B), not at
+  A. Communicated via spec preface.
+
+**Commit:** none (audit-only). Spec at
+`specs/s101a-implementation.md` (335 lines).
+
+### Session 114 — S101a Editorial Picks Infrastructure (different S101a — picks, not microdata) — 2026-05-04
+
+**Plan:** Stand up editorial-picks infrastructure across 8 production
+files: DB column + index, JSON authoring extension with date-windowing,
+.section-label / .editor-picks CSS, standalone editor-picks template
+partial with JSON-LD ItemList, and ★ column on cornerstone-hub
+comparison tables. NO integration into /this-weekend (S101b's job), NO
+homepage selection logic (S101b). Discovery in Session 113… wait — that
+was the *other* S101a. This S101a's discovery report is at
+`specs/s101a-precondition-report.md` (written earlier same day, separate
+session). Brief named both "S101a" — disambiguated as
+"S101a-microdata" (Sess 113→S101a-A/B) vs "S101a-picks" (this session).
+
+**What happened:**
+- **Step 0 verification confirmed discovery report assumptions held.**
+  `is_featured` column 27 exists; `editorial_pick_rank` does not;
+  `hub_slug`/`locale`/`week_starting` do not exist on `events`.
+  `editorial-content.json` placeholders unchanged.
+  `getFeaturedVignette(eventId, locale): string | null` signature
+  exact-match.
+- **Step 3 schema decision tree resolved at Step 0.** Brief's composite
+  unique constraint on `(hub_slug, locale, week_starting,
+  editorial_pick_rank)` is impossible — none of the three preconditions
+  exist. Migration shipped a simple non-unique partial index instead:
+  `CREATE INDEX idx_editorial_pick_rank ON events(editorial_pick_rank)
+  WHERE editorial_pick_rank IS NOT NULL`. Uniqueness lives JSON-side
+  (one entry per event_id keyed in `featuredEvents`).
+- **Migration 010** applied via `bun run scripts/run-migrations.ts`.
+  Column 62: `editorial_pick_rank INTEGER` (nullable). Two passing
+  migration tests (column existence, partial index existence).
+- **Loader extended (backward-compat).** Added optional `currentDate?:
+  string` parameter to `getFeaturedVignette`. New helper
+  `getFeaturedPickRank` returns rank|null with the same window logic.
+  Both default `currentDate` to today in Europe/Athens via
+  `toLocaleDateString('en-CA', { timeZone: 'Europe/Athens' })` —
+  produces ISO YYYY-MM-DD without manual formatting. Entries without
+  `validFrom`/`validUntil` fields keep their always-return behavior.
+- **Worked example added to JSON.** Real future-dated event ID
+  `3636471c494352ae` (NO MORE FAKE DISCO, 2026-05-22) with
+  `validFrom: 2026-05-22`, `validUntil: 2026-05-28`, `rank: 1`. 7 new
+  date-window tests pass for the right reasons (boundary inclusivity,
+  in-window, before, after, backward compat with no-date entries).
+- **CSS divergence from brief.** Brief Step 5 referenced `--text-body`
+  and `--text-small` — neither exists in `design-system.css`. Replaced
+  with closest existing tokens `--type-body` (line 22 of variable
+  block: `1rem`) and `--type-small` (`0.875rem`). All other referenced
+  variables (`--bg-elevated`, `--text-secondary`, `--text-tertiary`,
+  `--space-xl/lg/md`) verified present. Annotated divergence inline in
+  CSS comments.
+- **`.section-label` and `.editor-picks` shipped.** Inserted at line
+  ~2630 of `design-system.css`, near `.hub-seasonal-narrative` for
+  cohesion. `.section-label` uses 2px yellow border-left + 12px
+  off-grid padding (per spec rationale on tight coupling at h2 scale).
+  `.editor-picks .picks-list` is a CSS Grid with 1/2/3-column responsive
+  breakpoints at 768/1024px.
+- **Editor-picks template partial standalone.** New file
+  `src/templates/editor-picks.ts` (~70 lines). Exports
+  `renderEditorPicks(props): string` plus `EditorPick` and
+  `EditorPicksProps` interfaces. Emits `<section class="editor-picks">`
+  with `<h2 class="section-label">`, `<p class="picks-intro">`, `<ol
+  class="picks-list">` of `<li class="pick">` rows (each with
+  `<!-- event-card slot: <eventId> -->` placeholder for S101b card
+  injection), and a JSON-LD `ItemList` with
+  `itemListOrder=ItemListOrderManual`, `numberOfItems`, and per-pick
+  `position`. URLs (`pageUrl`, `eventCanonicalUrl`) passed via props,
+  zero hardcoding. 9 tests pass.
+- **★ column on cornerstone hubs only.** `renderComparisonRow` gained
+  an optional `hasPick: boolean = false` parameter that conditionally
+  emits a 5th `<td class="pick-star">★</td>`. In `renderHubPage`'s
+  Part 2 block, the row helper is called with `hasPick = (rank !== null
+  && rank <= MAX_PICK_RANK)` where `MAX_PICK_RANK = 3` is a constant in
+  `hub-page.ts` (domain policy lives in the consumer, not the loader).
+  Header row gets a 5th `<th aria-label="..." scope="col">★</th>` only
+  when `config.cornerstone === true`. aria-labels:
+  `"Editor's pick"` (en) / `"Επιλογή συντακτικής ομάδας"` (el).
+  Schema.org JSON-LD untouched per brief — ★ is HTML-presentation only,
+  the picks signal is the separate ItemList that S101b will emit.
+
+**Tests:**
+- 5 new failing tests written first (Step 2 TDD), all 5 passing after
+  Steps 3-7 land. Added to `src/db/__tests__/migrations.test.ts` (2
+  tests) and `src/utils/__tests__/editorial-content.test.ts` (7
+  tests including 2 backward-compat).
+- 9 new tests in `src/templates/__tests__/editor-picks.test.ts`
+  (structure: 5, JSON-LD: 4).
+- 5 new tests in `src/generators/__tests__/hub-page.test.ts` (4-cell
+  default, 5-cell with hasPick, cornerstone Greek aria-label,
+  cornerstone English aria-label, non-cornerstone column absence).
+- Full suite: **1917 pass, 1 skip, 0 fail** (4004 expect calls, 76
+  files). Up from brief's 1559 baseline.
+
+**Verification:**
+- `bunx tsc --noEmit` clean (no output).
+- `bun run build` succeeds. 7598 events + 22 hubs + 46 venues + 1
+  datafeed. **0 errors**, 247 pre-existing warnings unchanged
+  (orthogonal data gaps).
+- Spot-check `dist/this-weekend.html`: 5-column header with
+  `aria-label="Επιλογή συντακτικής ομάδας"`. `dist/en/this-weekend/
+  index.html`: 5-column header with `aria-label="Editor's pick"`.
+  `dist/concerts.html` (non-cornerstone): 4 columns, no ★.
+
+**Brief-vs-reality mismatches encountered:**
+- Brief assumed `--text-body` / `--text-small` CSS variables exist.
+  They do not. Replaced with `--type-body` / `--type-small`. Annotated
+  inline.
+- Brief's Step 3 specified composite unique constraint on
+  `(hub_slug, locale, week_starting, editorial_pick_rank)` — three of
+  those four columns do not exist on `events`. The brief itself
+  flagged this as "almost certainly" the case in its decision tree;
+  followed the simple-non-unique-partial-index branch.
+- Brief's Step 2 wrote tests at `tests/db/editorial-pick-rank.test.ts`
+  — local convention is `src/<area>/__tests__/<name>.test.ts`.
+  Extended `src/db/__tests__/migrations.test.ts` instead (matches
+  prior `005`/`009` migration tests in the same file).
+
+**Discipline note:** The brief described this as
+"borderline overflow risk; checkpoint protocol active." Session
+completed all 8 steps without checkpointing. Files-touched count was 10
+production files (6 modified, 4 new) — within the brief's 8±tests
+budget. The biggest single contributor to fitting in budget was
+treating the failing-test phase as a 5-minute milestone rather than
+trying to write exhaustive coverage upfront.
+
+**Open items:**
+- **S101b** consumes this infrastructure: integrate `renderEditorPicks`
+  into `hub-page.ts` Part 1.5 on cornerstones (between answer capsule
+  and comparison table); wire homepage selection logic; replace
+  event-card slot placeholders with real card markup; define
+  rank-to-events sync (does the DB column get populated from JSON, or
+  is it left for S101c?).
+- **`is_featured` semantics**: this session did not check current
+  population of the column. Before any "use is_featured for picks"
+  shortcut in S101b, query
+  `SELECT COUNT(*) FROM events WHERE is_featured=1` to confirm whether
+  the column is dormant or actively used elsewhere.
+- **Date-windowing convention now established for in-repo editorial
+  content**: `validFrom`/`validUntil` ISO YYYY-MM-DD camelCase, both
+  inclusive. Future editorial surfaces (pull quotes? section
+  editorials?) should reuse this shape rather than invent new field
+  names.
+- **Worked-example coupling**: tests reference real event ID
+  `3636471c494352ae`. If the event leaves the DB before May 22, the
+  JSON entry becomes orphaned but tests still pass (they exercise the
+  loader, not DB joins). For S101b integration, the event-card slot
+  rendering will need to handle "pick references missing event"
+  gracefully — recommended: skip the pick silently rather than
+  surface 404-style error.
+
+**Commit:** none yet (post-session writeup pending). 10 files touched +
+new migration + 4 test files + 2 spec files. Migration already applied
+to `data/events.db`; rolling back requires a manual `ALTER TABLE events
+DROP COLUMN editorial_pick_rank` + `DROP INDEX idx_editorial_pick_rank`
+before any restoration of the unmodified pre-S101a-picks state.

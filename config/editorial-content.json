@@ -17,6 +17,13 @@
     "PLACEHOLDER_EVENT_001": {
       "vignetteEl": "[PLACEHOLDER] Μια βραδιά που αξίζει να θυμάσαι — ζωντανή μουσική στο κέντρο της πόλης.",
       "vignetteEn": "[PLACEHOLDER] A night worth remembering — live music in the heart of the city."
+    },
+    "3636471c494352ae": {
+      "vignetteEl": "[PLACEHOLDER — replace with editorial copy] NO MORE FAKE DISCO, 22 Μαΐου: μια βραδιά που γιορτάζει την αυθεντική disco σκηνή της Αθήνας.",
+      "vignetteEn": "[PLACEHOLDER — replace with editorial copy] NO MORE FAKE DISCO, May 22: a night celebrating Athens' authentic disco scene.",
+      "validFrom": "2026-05-22",
+      "validUntil": "2026-05-28",
+      "rank": 1
     }
   },
   "sectionEditorials": {

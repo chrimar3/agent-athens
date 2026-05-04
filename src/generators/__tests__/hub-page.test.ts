@@ -212,6 +212,55 @@ describe('Comparison table', () => {
     const row = renderComparisonRow(sampleFreeExhibition);
     expect(row).toContain('Ελ. είσοδος');
   });
+
+  // S101a: ★ column on cornerstone hubs only
+  test('renderComparisonRow without hasPick emits 4 cells', () => {
+    const row = renderComparisonRow(sampleConcert);
+    const tdCount = (row.match(/<td/g) || []).length;
+    expect(tdCount).toBe(4);
+    expect(row).not.toContain('pick-star');
+  });
+
+  test('renderComparisonRow with hasPick=true emits 5 cells with ★', () => {
+    const row = renderComparisonRow(sampleConcert, 'el', true);
+    const tdCount = (row.match(/<td/g) || []).length;
+    expect(tdCount).toBe(5);
+    expect(row).toContain('<td class="pick-star">★</td>');
+  });
+
+  test('Cornerstone hub renders ★ column header with aria-label', () => {
+    const cornerstoneToday: HubConfig = { ...todayHubConfig, cornerstone: true };
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(cornerstoneToday, events, events);
+    expect(html!).toContain('aria-label="Επιλογή συντακτικής ομάδας"');
+    // Header row contains 5 <th> cells (including ★)
+    const headerMatch = html!.match(/<thead><tr>(.*?)<\/tr><\/thead>/s);
+    expect(headerMatch).not.toBeNull();
+    const thCount = (headerMatch![1].match(/<th /g) || []).length;
+    expect(thCount).toBe(5);
+  });
+
+  test('Cornerstone English hub uses English aria-label', () => {
+    const cornerstoneToday: HubConfig = {
+      ...todayHubConfig,
+      cornerstone: true,
+      answerCapsuleEn: 'Events in Athens today.',
+    };
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(cornerstoneToday, events, events, undefined, 'en');
+    expect(html!).toContain('aria-label="Editor\'s pick"');
+  });
+
+  test('Non-cornerstone hub does NOT render ★ column header', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const headerMatch = html!.match(/<thead><tr>(.*?)<\/tr><\/thead>/s);
+    expect(headerMatch).not.toBeNull();
+    const thCount = (headerMatch![1].match(/<th /g) || []).length;
+    expect(thCount).toBe(4);
+    expect(html!).not.toContain('aria-label="Editor\'s pick"');
+    expect(html!).not.toContain('Επιλογή συντακτικής ομάδας');
+  });
 });
 
 describe('Event blocks', () => {

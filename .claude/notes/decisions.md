@@ -2536,3 +2536,149 @@ follow-up config commit (~5 min when received).
 denominator stayed 244 because byVenue is event-driven; registry
 consolidation reduced records but not active-reachable keys. Confirms
 the Q-B8b design's robustness against registry hygiene work like this.
+
+## S101a executes as A (audit/spec) + B (implement, ≤100 LOC); no S101a-C
+
+**Decision (2026-05-04, S113):** S101a closes in two sub-sessions —
+A (audit + spec, this session) and B (implementation). No back-validation
+session (S101a-C) is needed.
+
+**Why:** S101a-A surfaced that the 11,217 price-format violations live
+exclusively in HTML microdata at `src/templates/page.ts:283-306`
+(`renderEventCard`). The DB column `price_amount` is REAL with 0
+non-numeric contamination across the entire corpus. Both feasibility
+conditions for an emitter-side fix are met: clean numeric source data,
+and a one-template-function change is sufficient. The same template
+function runs on the next nightly build, so all 11,217 events emit clean
+microdata after a single `bun run src/generate-site.ts` cycle. There is
+no scattered, source-by-source data layer to re-normalize.
+
+**Why this matters as a recorded decision:** the original brief assumed
+this was a multi-source data-cleanup problem (athinorama.gr alone owns
+91% of the violation surface, and the brief proposed a per-source
+remediation pass). S101a-A's audit reframed it as a single-template fix
+with zero data work. The "no S101a-C" call is what makes the spec's §6
+sequence sized at ~100 LOC instead of a multi-day series.
+
+**How to apply:** when violation distribution is heavily source-skewed
+but the violation surface is at the emitter layer (template, formatter,
+generator), prefer emitter-side normalization with a build-time
+regression test over per-source remediation. Source distribution is a
+red herring when the fix is downstream of all sources.
+
+**Connects to:** spec `specs/s101a-implementation.md` §5a recommendation
+(`emitter-side-fix-zero-backlog`) + §5b recommendation (`fits-S101a-B`,
+architectural unification of `availabilityForEventStatus()` callers).
+Validator gap reframing in patterns.md ("Validator coverage audit
+precedes any FAIL-rule addition" + "JSON-LD validator is blind to
+microdata").
+
+## S114 — `editorial_pick_rank INTEGER` simple non-unique partial index (2026-05-04)
+
+**Decision:** Migration 010 ships
+`ALTER TABLE events ADD COLUMN editorial_pick_rank INTEGER` plus
+`CREATE INDEX idx_editorial_pick_rank ON events(editorial_pick_rank)
+WHERE editorial_pick_rank IS NOT NULL` — a simple non-unique partial
+index, not the composite unique constraint the brief originally
+prescribed.
+
+**Why:** the brief's intended composite UNIQUE constraint on
+`(hub_slug, locale, week_starting, editorial_pick_rank)` would
+enforce "one rank-N pick per (hub, locale, week)" at the DB layer.
+But none of `hub_slug`/`locale`/`week_starting` exist on the `events`
+table — picks are not hub-scoped at the schema level. Adding those
+columns would be a much larger schema change unrelated to picks
+infrastructure.
+
+The actual editorial source of truth is `config/editorial-content.json`,
+keyed by `event_id` alone. An event's pick window
+(`validFrom`/`validUntil`) and rank live in that one entry, so
+"uniqueness within a window" is implicit — there's exactly one entry
+per event_id, period. The DB column exists only as a denormalized
+cache: a query like "list current picks ordered by rank" can hit the
+column instead of re-parsing JSON on every read. Population of the
+column is deferred to S101b (sync at build time, runtime lookup, or
+backfill — open question).
+
+**Why this matters as a recorded decision:** when a brief prescribes a
+constraint that depends on schema preconditions, the preconditions
+must be validated FIRST. The brief's authors did this correctly —
+they wrote a decision tree with a fallback branch. The lesson for
+future authoring: **always include the validating query in Step 0
+("run X before writing migration; choose path A vs B based on
+output")** rather than making constraint shape contingent on
+discovery findings that may have drifted.
+
+**Connects to:** `src/db/migrations/010-add-editorial-pick-rank.sql`,
+`specs/s101a-precondition-report.md` §4 (DB schema findings,
+"hub_slug/locale/week_starting do not exist"),
+`src/db/__tests__/migrations.test.ts` (010-prefixed tests), patterns.md
+"Date-windowed editorial JSON entries" (canonical source-of-truth lives
+JSON-side, DB column is cache).
+
+## S114 — ★ column on cornerstone hubs only, with HTML-presentation-only Schema.org policy (2026-05-04)
+
+**Decision:** The comparison-table ★ column renders on cornerstone hubs
+(`today`, `this-weekend`, `open`, `this-month`) but not on the 12
+non-cornerstone hubs (concerts, theater, etc). And the ★ marker is
+HTML-presentation only — it is NOT reflected in the per-hub
+CollectionPage ItemList JSON-LD.
+
+**Why:**
+
+*Cornerstone scoping:* picks are an editorial-curation surface. The
+cornerstone hubs are the four that get full S60 treatment (8 FAQs,
+seasonal narrative, custom meta description, no cross-link section).
+They're the editorially-anchored entry points. Sprinkling picks across
+all 16 hubs would dilute the signal and complicate authoring (which
+hubs get picks? do all 16 share one pool? per-hub pools?). Constraining
+to 4 cornerstones keeps editorial authoring tractable: ED produces N
+picks per cornerstone window, period.
+
+*HTML-presentation-only Schema.org:* the picks signal IS structured
+data — but it lives in a separate JSON-LD `ItemList` with
+`itemListOrder=ItemListOrderManual` emitted by the dedicated
+`renderEditorPicks` partial when integrated in S101b. The
+comparison-table's existing CollectionPage ItemList is a
+date-ordered list of all hub events — adding "this one is starred"
+attributes there would conflate two different signals (chronological
+vs editorial). Keeping them separate per GEO Strategist guidance:
+the AI extractors should see "here is the time-ordered list of events
+this weekend" and SEPARATELY "here is the editorially-ranked manual
+list." Mixing them obscures both.
+
+**Why this matters as a recorded decision:** when adding a marker to an
+existing structured-data surface, the default impulse is to enrich the
+existing surface. The correct call here is to LEAVE the existing
+ItemList alone and emit a parallel signal. This is the same shape as
+the validator-coverage decision in the prior S101a-A audit — separate
+emission paths for separate semantics, not one-merged-emitter.
+
+**Connects to:** `src/generators/hub-page.ts:393-422` (Part 2
+comparison-table render, `showPickColumn` branch),
+`src/templates/editor-picks.ts` (Picks ItemList JSON-LD emitter — to be
+integrated in S101b), patterns.md "Cornerstone-conditional surface
+elements".
+
+## S114 — `MAX_PICK_RANK = 3` lives in consumer (`hub-page.ts`), not loader (2026-05-04)
+
+**Decision:** The "rank ≤ 3 earns a ★" threshold lives as `const
+MAX_PICK_RANK = 3` in `src/generators/hub-page.ts` (line 36), not in
+the editorial-content loader. The loader exposes raw rank via
+`getFeaturedPickRank()`; consumers apply their own thresholds.
+
+**Why:** rank is editorial metadata; the threshold is per-surface
+policy. The hub-table surface uses `≤ 3` because the table has limited
+visual weight per row. The S101b homepage surface might use a different
+threshold (`≤ 5` for a featured-section grid?). Putting the threshold
+in the loader would force every consumer through the same gate, or
+require a parameterized loader signature
+(`getFeaturedPickRank(eventId, currentDate, maxRank)`) which conflates
+"is this a pick" with "is this an above-threshold pick".
+
+**How to apply:** when adding new pick-displaying surfaces, define
+their own `MAX_*_RANK` constants in the surface file. The loader stays
+as a pure rank emitter.
+
+**Connects to:** `src/generators/hub-page.ts:32-36`,
+`src/utils/editorial-content.ts:105-130` (getFeaturedPickRank).

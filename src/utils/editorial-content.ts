@@ -22,6 +22,13 @@ interface PullQuote {
 interface Vignette {
   vignetteEl: string;
   vignetteEn: string;
+  // S101a: optional date window for editorial picks. When present, the entry is
+  // only "live" between validFrom and validUntil (both inclusive, ISO YYYY-MM-DD).
+  // Entries without these fields keep the always-return behavior for backward
+  // compat with non-pick featured vignettes.
+  validFrom?: string;
+  validUntil?: string;
+  rank?: number;
 }
 
 interface SectionEditorial {
@@ -70,13 +77,60 @@ export function getPullQuotes(hub: string, locale: Locale): string[] {
 
 /**
  * Returns the locale-appropriate vignette for a featured event.
- * Returns null if event ID is not in editorial content.
+ * Returns null if event ID is not in editorial content, OR if the entry has a
+ * date window (validFrom/validUntil) and currentDate falls outside it.
+ *
+ * Entries without validFrom/validUntil are always returned (backward-compat for
+ * non-pick featured vignettes seeded before S101a).
+ *
+ * @param currentDate ISO YYYY-MM-DD (Athens local). Defaults to today in
+ *                    Europe/Athens. Pass explicit date for deterministic tests.
  */
-export function getFeaturedVignette(eventId: string, locale: Locale): string | null {
+export function getFeaturedVignette(
+  eventId: string,
+  locale: Locale,
+  currentDate?: string
+): string | null {
   const content = loadEditorialContent();
   const entry = content.featuredEvents[eventId];
   if (!entry) return null;
+
+  if (entry.validFrom || entry.validUntil) {
+    const today = currentDate ?? new Date().toLocaleDateString('en-CA', {
+      timeZone: 'Europe/Athens',
+    });
+    if (entry.validFrom && today < entry.validFrom) return null;
+    if (entry.validUntil && today > entry.validUntil) return null;
+  }
+
   return locale === 'el' ? entry.vignetteEl : entry.vignetteEn;
+}
+
+/**
+ * Returns the editorial pick rank for an event, or null if no current pick.
+ * Same date-window semantics as getFeaturedVignette: entry must be in-window
+ * (or have no window fields). Returns null when entry has no rank set.
+ *
+ * Used by hub-page.ts to decide which comparison-table rows get the ★ marker.
+ */
+export function getFeaturedPickRank(
+  eventId: string,
+  currentDate?: string
+): number | null {
+  const content = loadEditorialContent();
+  const entry = content.featuredEvents[eventId];
+  if (!entry) return null;
+  if (typeof entry.rank !== 'number') return null;
+
+  if (entry.validFrom || entry.validUntil) {
+    const today = currentDate ?? new Date().toLocaleDateString('en-CA', {
+      timeZone: 'Europe/Athens',
+    });
+    if (entry.validFrom && today < entry.validFrom) return null;
+    if (entry.validUntil && today > entry.validUntil) return null;
+  }
+
+  return entry.rank;
 }
 
 /**
