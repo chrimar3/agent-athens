@@ -2607,3 +2607,70 @@ filtered to user-facing pages, etc.
 
 **Origin:** Q-B8b ratchet denominator fix, B-2c (sprint-2-session-7),
 2026-05-04.
+
+### Pipeline-output staging: explicit allow-list, never `git add -A`
+
+Automated pipelines that commit must stage by explicit path, not by
+working-tree dirtiness. The reason: a working tree dirty for ANY reason
+(developer WIP, leftover spec drafts, unrelated config edits) becomes
+indistinguishable from "pipeline produced new output" when staged via
+`-A`. The result is generic "chore" commits that scoop developer work
+under a misleading message — destroying attribution and entangling
+revert.
+
+**Wrong shape:**
+```bash
+if ! git diff --quiet || ! git diff --cached --quiet || \
+   [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+    git add -A
+    git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)"
+fi
+```
+
+**Right shape:**
+```bash
+local PIPELINE_ALLOWLIST=( "data/output-1.json" "data/output-2.json" )
+git add -- "${PIPELINE_ALLOWLIST[@]}"
+# Defense-in-depth: refuse to commit anything outside allow-list
+local UNEXPECTED=""
+while IFS= read -r staged; do
+    local is_allowed=0
+    for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
+        [[ "$staged" == "$allowed" ]] && { is_allowed=1; break; }
+    done
+    [[ $is_allowed -eq 0 ]] && UNEXPECTED="$UNEXPECTED $staged"
+done < <(git diff --cached --name-only)
+if [[ -n "$UNEXPECTED" ]]; then
+    git reset HEAD --   # abort, don't commit unexpected files
+elif git diff --cached --quiet; then
+    : # nothing to commit, fine
+else
+    git commit -m "..." && git push
+fi
+```
+
+**Allow-list discovery method:**
+1. Read every phase the pipeline runs; map each phase to its output
+   files.
+2. Cross-reference outputs against `.gitignore` — most data outputs are
+   already ignored (DB files, logs, CSVs).
+3. The remaining set IS the allow-list. Usually 1–3 paths.
+4. Verify against historical clean pipeline commits: their stat lines
+   should match this set exactly.
+
+**Detection block must scope to allow-list, not whole tree.** If
+detection uses `git diff` over the whole tree, an unrelated WIP
+modification triggers a pipeline commit attempt that will then trip the
+guard. Cleaner: stage allow-list, then check `git diff --cached --quiet`
+for "anything to commit?".
+
+**Defense-in-depth guard is non-optional.** `git add -- <paths>`
+shouldn't stage anything else, but a future bug — alias drift,
+gitattributes filter, hook side-effect — could. The guard is cheap (~10
+lines bash) and catches surprise contamination at commit time rather
+than via post-mortem.
+
+**Origin:** S111 daily-pipeline staging fix, 2026-05-04. Recurring
+contamination across at least 5 commits (adbaef38e, 72ce32c73,
+5d49315a1, 4a897a76b, 937f738de). Audit:
+`specs/daily-pipeline-staging-audit.md`. Closing commit: `8bae1d2e5`.

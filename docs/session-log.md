@@ -3887,3 +3887,84 @@ saved an in-session pause. Validates pre-flight pattern for Sprint 2 cadence.
 - **Memory drift:** 22:00 / 01:00 launchd plists' loaded-state still doesn't match memory (memory says unloaded; reality, both currently loaded). User flagged as a memory_user_edits cleanup whenever convenient.
 - **Dead code:** `src/enrichment/priority-queue-manager.ts` is computed but unused. Either wire it into the brief generator (proper queue table backing) or remove it. Hygiene-session candidate.
 - **Backlog drain math:** at 0% throughput, 0 events/day. Even at 50% S101a-baseline throughput (5/run, 4 daytime slots = 20/day), Tier 1 (20 pending) would clear in 1 day — IF saves were Tier 1. Now they will be, once throughput recovers.
+
+### Session 111 — Pipeline Staging Hygiene (sprint-2-supplementary) — 2026-05-04
+
+**Plan:** Replace `git add -A` in `scripts/daily-automated.sh:488–499`
+with explicit-path staging matched to the actual pipeline-output set.
+Scope the change-detection block to the same allow-list. Add
+`.auto-enrich.lock` to `.gitignore`. Verify behaviour via dry-run +
+foreground freshness run. Pre-flight evidence:
+`specs/daily-pipeline-staging-audit.md`.
+
+**What happened:**
+- Allow-list discovery refined from brief's 7 candidate paths down to 2.
+  Most candidates (events.db, health-reports/, search-visibility-log.csv,
+  *.db-wal, kpi.db) are already gitignored — only
+  `data/event-set-hashes.json` + `data/build-completeness.json` ever
+  reached commits historically. Past clean pipeline commits confirmed
+  this set.
+- ping-indexnow.ts writes to `logs/indexnow-latest.json`, NOT
+  `search-visibility-log.csv` (which is written by a separate
+  monitor-search-visibility.ts on a different launchd job, not
+  daily-automated.sh). Brief's reference was incorrect.
+- Replaced staging block with `PIPELINE_ALLOWLIST` array + `git add --`
+  + defense-in-depth guard (~38 lines net inside `run_deploy()`).
+  Bash 3.2-compatible (no process substitution in guard; pure-bash
+  iteration).
+- Added `.auto-enrich.lock` to `.gitignore` alongside existing
+  `.pipeline-*.lock` rule.
+
+**Tests:** Test suite touched 1881/0 (was 1878 pre-S110-tier-priority;
+delta = 3 tier-priority tests from `dd47f4519`). No new tests in this
+session — change is shell-script, not testable in bun.
+
+**Verification — empirical:**
+- Dry-run: zero git activity (DRY_RUN early-return short-circuits
+  staging block).
+- **Live foreground freshness run** with WIP in working tree (this
+  fix's edits + pre-flight spec + scripts/auto-enrich.sh S110b WIP +
+  2 pre-existing untracked specs). Pipeline commit `d47fdd607`
+  contains exactly 2 allow-list files, 16 insertions / 16 deletions.
+  None of the 5 unrelated WIP items scooped. Old `git add -A` would
+  have produced a 7-file contamination commit. **The fix protected real
+  WIP on the very first run.**
+
+**Result:**
+- Fix shipped as `8bae1d2e5` on origin/main (after pipeline-run commit
+  `d47fdd607`).
+- New pipeline behaviour visible in next pipeline log: "Checking for
+  pipeline-output changes..." (was "Checking for source code changes...").
+- Documented incidents being closed: adbaef38e (9 files), 72ce32c73
+  (7 files), 5d49315a1 (13 files), 4a897a76b (5 files), 937f738de
+  (9 files). Audit's count of 2 was an undercount; actual rate ≈ daily.
+
+**Brief-vs-reality mismatches encountered:**
+- Brief allowlist sized 7 paths; reality is 2 (rest gitignored).
+- Brief proposed `<(printf ...)` process substitution for guard; bash
+  3.2 portability concerns made me use plain-bash iteration instead.
+  Equivalent semantics, more portable.
+- Brief's Step 4b instructed stashing working tree before live run;
+  this would have stashed the fix itself, causing the pipeline to run
+  the OLD code. Deviated: ran with fix in working tree, which both
+  tested the new code AND exercised the contamination-protection on
+  real WIP (auto-enrich.sh S110b). Better test, simpler procedure.
+
+**Discipline note:** Pre-flight audit had two errors that the fix
+session caught — the dd47f4519 mis-attribution (P3 classified
+correctly) and the incident-count undercount (file-distribution scan
+during fix added 3 more). Validates the value of fix-session
+re-baselining even after a careful pre-flight. Mistakes documented in
+`.claude/notes/mistakes.md` S111 entry.
+
+**Open items:**
+- 6 launchd labels loaded but not in `config/launchd/` (`-01`, `-22`,
+  `daily`, `monitor-visibility`, `enrichment-check`, `auto-enrich`).
+  Source-tree drift; separate hygiene investigation.
+- S110b temp-descriptions cleanup work (in working tree as
+  `scripts/auto-enrich.sh` mod) — separate session, not staged here.
+- Daily pipeline still runs at 08:00, 13:00, 16:30, 19:00 Athens. Next
+  trigger after this session will be the first production validation
+  of the new staging block.
+
+**Commit:** `8bae1d2e5` on origin/main.

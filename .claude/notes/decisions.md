@@ -2424,3 +2424,44 @@ this; the inactive-tail subset remains for future hygiene work.
 **Status:** Active. Code change shipped commit `dd47f4519` (attributed `feat(enrichment): tier-priority queue ordering — demo-window first (S110)`). Throughput regression is now the top blocker — until throughput is restored, S110's win is unrealized.
 
 **Connects to:** `feedback_stage_precisely.md` (this commit was staged by explicit path; not scooped by daily pipeline), B-1's "injectable expected-value parameter for testability" pattern (same shape used here), S101a's drought-fix decision (this builds on it; the throughput regression was the open item from that session).
+
+### S111 — Daily-pipeline staging: explicit allow-list (locked + shipped 2026-05-04, commit 8bae1d2e5)
+
+**Decision:** `scripts/daily-automated.sh` `run_deploy()` stages exactly two
+files via explicit allow-list: `data/event-set-hashes.json` +
+`data/build-completeness.json`. All other "pipeline output" candidates
+(events.db, health-reports/, *.csv, *.db-wal, kpi.db, public/images/) are
+already gitignored — these two are the only artefacts that ever reach a
+commit. Replaces prior `git add -A`.
+
+**Reasoning:** `git add -A` produced recurring WIP contamination — every
+day the developer had work in working tree at 08:00 Athens, the pipeline
+scooped it under a generic "chore: daily pipeline update" message. Lost
+attribution, lost ability to revert pipeline runs without entangling
+developer work. Audit (`specs/daily-pipeline-staging-audit.md`) initially
+flagged 2 incidents (adbaef38e, 72ce32c73); subsequent file-count scan
+during fix session surfaced 3+ more (5d49315a1 13 files, 4a897a76b
+5 files, 937f738de 9 files) — pattern was endemic, not occasional.
+
+**Defense-in-depth:** after `git add -- "${PIPELINE_ALLOWLIST[@]}"`, scan
+`git diff --cached --name-only` and refuse to commit if anything outside
+the allow-list ended up staged. Catches alias drift, bash quoting bugs,
+or pre-existing developer-staged files. On trip: `git reset HEAD --`.
+
+**Empirical verification:** live foreground freshness run during fix
+session (commit `d47fdd607`) had 5 unrelated WIP items in working tree
+(this fix's edits + pre-flight spec + scripts/auto-enrich.sh S110b WIP +
+two pre-existing untracked specs). New code committed exactly the 2
+allow-list files; old code would have produced a 7-file contamination
+commit. The S110b WIP in `scripts/auto-enrich.sh` was a real-world
+contamination candidate that the fix correctly protected.
+
+**Adjacent finding:** 6 launchd labels are loaded but not in
+`config/launchd/` (`-01`, `-22`, `daily`, `monitor-visibility`,
+`enrichment-check`, `auto-enrich`). Source-tree drift; separate hygiene
+investigation.
+
+**Connects to:** `feedback_stage_precisely.md` (now enforced
+script-side, not just convention-side); audit pre-flight mis-premise
+(brief assumed `dd47f4519` was a pipeline commit — actually
+hand-authored S110 work; pre-flight P3 caught the mistake).
