@@ -483,18 +483,52 @@ run_deploy() {
         return 0
     fi
 
-    # Step 1: Commit and push source code (dist/ is gitignored)
-    log "Checking for source code changes..."
-    if ! git diff --quiet || ! git diff --cached --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
-        git add -A
+    # Step 1: Commit and push pipeline outputs (dist/ is gitignored)
+    #
+    # Explicit-allowlist staging (replaces prior `git add -A`). Pipeline must
+    # NEVER commit files outside this list, regardless of working-tree state.
+    # See specs/daily-pipeline-staging-audit.md (2026-05-04) — `git add -A`
+    # caused recurring WIP contamination (e.g. adbaef38e, 72ce32c73, 5d49315a1).
+    # Most other pipeline outputs (events.db, health-reports/, *.csv, *.db-wal)
+    # are gitignored — only these two artefacts survive to a commit.
+    local PIPELINE_ALLOWLIST=(
+        "data/event-set-hashes.json"
+        "data/build-completeness.json"
+    )
+
+    log "Checking for pipeline-output changes..."
+    git add -- "${PIPELINE_ALLOWLIST[@]}"
+
+    # Defense-in-depth guard: if anything outside the allow-list ended up in
+    # the index (e.g. developer had work pre-staged when pipeline fired), abort
+    # and reset rather than commit unintended files.
+    local UNEXPECTED=""
+    while IFS= read -r staged; do
+        local is_allowed=0
+        for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
+            if [[ "$staged" == "$allowed" ]]; then
+                is_allowed=1
+                break
+            fi
+        done
+        if [[ $is_allowed -eq 0 ]]; then
+            UNEXPECTED="$UNEXPECTED $staged"
+        fi
+    done < <(git diff --cached --name-only)
+
+    if [[ -n "$UNEXPECTED" ]]; then
+        log_error "Pipeline staging guard tripped — unexpected staged files:$UNEXPECTED"
+        log_error "Aborting commit to prevent WIP contamination. Resetting index."
+        git reset HEAD -- >> "$LOG_FILE" 2>&1 || true
+    elif git diff --cached --quiet; then
+        log "No pipeline-output changes to commit"
+    else
         git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
         if git push origin main >> "$LOG_FILE" 2>&1; then
-            log "Source code pushed to git"
+            log "Pipeline outputs pushed to git"
         else
             log_error "Git push failed (non-fatal, continuing to deploy)"
         fi
-    else
-        log "No source code changes to commit"
     fi
 
     # Step 2: Deploy dist/ via Netlify CLI
