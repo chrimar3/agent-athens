@@ -169,7 +169,8 @@
       "canonical_name": "Aux Club",
       "variations": [
         "AUX",
-        "Aux"
+        "Aux",
+        "Aux Club, Αγίου Όρους 15, Γκάζι, Αθήνα, Greece"
       ],
       "neighborhood": "Gazi"
     },
@@ -179,6 +180,13 @@
         "Cantina"
       ],
       "neighborhood": "Exarchia"
+    },
+    {
+      "canonical_name": "Cantina Social",
+      "variations": [
+        "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece"
+      ],
+      "neighborhood": "Psyrri"
     },
     {
       "canonical_name": "Piraeus Club Academy",
@@ -195,7 +203,8 @@
         "Astron Club",
         "Astron, Λεωφόρος Κωνσταντινουπόλεως 121, Αθήνα, 10447, Greece"
       ],
-      "neighborhood": "Pangrati"
+      "neighborhood": "Pangrati",
+      "address": "Astron, Λεωφόρος Κωνσταντινουπόλεως 121, Αθήνα, 10447, Greece"
     },
     {
       "canonical_name": "Crust",
@@ -227,6 +236,13 @@
         "SMUT"
       ],
       "neighborhood": "Metaxourgeio"
+    },
+    {
+      "canonical_name": "Smut",
+      "variations": [
+        "Smut, Βατσαξή 4, 10438, Αθήνα, Greece"
+      ],
+      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Temple",
@@ -268,6 +284,13 @@
       "neighborhood": "Koukaki"
     },
     {
+      "canonical_name": "Wild Poppies",
+      "variations": [
+        "Wild Poppies, Σταδίου 7, Αθήνα, 10562, Greece"
+      ],
+      "neighborhood": "Syntagma"
+    },
+    {
       "canonical_name": "2ten",
       "variations": [
         "2TEN",
@@ -291,7 +314,8 @@
       "canonical_name": "Bolivar",
       "variations": [
         "BOLIVAR",
-        "Bolivar Beach Bar"
+        "Bolivar Beach Bar",
+        "Bolivar, Ακτή Ηλίου, Άλιμος, Αθήνα, Greece"
       ],
       "neighborhood": "Alimos"
     },
@@ -301,6 +325,13 @@
         "Burger Disco"
       ],
       "neighborhood": "Gazi"
+    },
+    {
+      "canonical_name": "Burger Disco Club",
+      "variations": [
+        "Burger Disco Club, Νίκης 11, Σύνταγμα, Αθήνα, 10557, Greece"
+      ],
+      "neighborhood": "Syntagma"
     },
     {
       "canonical_name": "Doors",
@@ -344,6 +375,13 @@
         "IT"
       ],
       "neighborhood": "Gazi"
+    },
+    {
+      "canonical_name": "IT Athens",
+      "variations": [
+        "IT Athens, Σολωμού 30 &amp; Μπόταση 9, Εξάρχεια, Αθήνα, Greece"
+      ],
+      "neighborhood": "Exarchia"
     },
     {
       "canonical_name": "N.A.O.S.",
@@ -636,7 +674,8 @@
       "canonical_name": "Παλιό Αμαξοστάσιο ΟΣΥ",
       "variations": [
         "Παλιο Αμαξοστασιο - ΟΣΥ",
-        "OSY Depot"
+        "OSY Depot",
+        "Παλιό Αμαξοστάσιο - ΟΣΥ"
       ],
       "neighborhood": "Gazi"
     },
@@ -887,11 +926,6 @@
       "neighborhood": "Unknown"
     },
     {
-      "canonical_name": "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ",
-      "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
       "canonical_name": "Ολύμπια - Δημοτικό Μουσικό Θέατρο &#171;Μαρία Κάλλας&#187;",
       "variations": [],
       "neighborhood": "Unknown"
@@ -903,11 +937,6 @@
     },
     {
       "canonical_name": "ΡΑΔΙΟ - ΜΟΥΣΙΚΗ ΣΚΗΝΗ",
-      "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
-      "canonical_name": "ΘΕΑΤΡΟ ΠΑΛΛΑΣ",
       "variations": [],
       "neighborhood": "Unknown"
     },
@@ -992,7 +1021,7 @@
       "variations": [
         "Dipylon"
       ],
-      "neighborhood": "Unknown"
+      "neighborhood": "Kerameikos"
     },
     {
       "canonical_name": "Αρχιτεκτονική",
@@ -1002,9 +1031,11 @@
     {
       "canonical_name": "Ακροπόλ",
       "variations": [
-        "Akropol"
+        "Akropol",
+        "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
+        "Θέατρο Ακροπόλ"
       ],
-      "neighborhood": "Unknown"
+      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "ΑΡΧΙΤΕΚΤΟΝΙΚΗ LIVE",
@@ -1023,8 +1054,10 @@
     },
     {
       "canonical_name": "VOX",
-      "variations": [],
-      "neighborhood": "Unknown"
+      "variations": [
+        "VOX."
+      ],
+      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Universe - Multivenue",
@@ -1051,7 +1084,7 @@
       "variations": [
         "Red Jasper"
       ],
-      "neighborhood": "Unknown"
+      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Patision65",
@@ -1303,11 +1336,10 @@
       "variations": [
         "Libro",
         "Lib'ro",
-        "Lib'ro",
         "Θέατρο Lib'ro",
-        "Θέατρο Lib'ro",
-        "Θέατρο Lib'ro",
-        "Theatro Libro"
+        "Theatro Libro",
+        "Θέατρο Lib’ro",
+        "Lib’ro"
       ],
       "neighborhood": "Central Athens"
     },
@@ -1416,6 +1448,11 @@
       "canonical_name": "Αγγέλων Βήμα",
       "variations": [],
       "neighborhood": "Psyrri"
+    },
+    {
+      "canonical_name": "Αγγέλων Βήμα",
+      "variations": [],
+      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής",
@@ -1711,7 +1748,7 @@
         "Daddy’s All Day Bar",
         "Daddys All Day Bar",
         "Daddy's all day bar",
-        "Daddy'S all day bar"
+        "Daddys"
       ],
       "neighborhood": "Psyri"
     },
@@ -1726,7 +1763,8 @@
       "canonical_name": "Don't be a Dick",
       "variations": [
         "Dont be a Dick",
-        "Don't Be A Dick"
+        "Don't Be A Dick",
+        "Don't be a Dick, Φειδίου 4, Εξάρχεια, Αθήνα, Greece"
       ],
       "neighborhood": "Exarchia"
     },
@@ -1822,7 +1860,8 @@
       "variations": [
         "Θέατρο «Μπέλλος»",
         "Θέατρο &#171;Μπέλλος&#187;",
-        "Bellos Theatre"
+        "Bellos Theatre",
+        "ΘΕΑΤΡΟ ΜΠΕΛΛΟΣ"
       ],
       "neighborhood": "Plaka"
     },
@@ -2177,74 +2216,7 @@
       "neighborhood": "Ilisia"
     },
     {
-      "canonical_name": "Αλκμήνη",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Cantina Social",
-      "variations": [
-        "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece"
-      ],
-      "neighborhood": "Psyrri"
-    },
-    {
-      "canonical_name": "Olvio",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Astron",
-      "variations": [
-        "Astron, Λεωφόρος Κωνσταντινουπόλεως 121, Αθήνα, 10447, Greece",
-        "Astron Club"
-      ],
-      "neighborhood": "Perissos"
-    },
-    {
-      "canonical_name": "Μικρός Κεραμεικός",
-      "variations": [],
-      "neighborhood": "Kerameikos"
-    },
-    {
-      "canonical_name": "Θέατρο Nous",
-      "variations": [
-        "Θέατρο Nous - Creative space"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Ίδρυμα Μιχάλης Κακογιάννης",
-      "variations": [
-        "Ίδρυμα &#171;Μιχάλης Κακογιάννης&#187;",
-        "Michael Cacoyannis Foundation"
-      ],
-      "neighborhood": "Tavros"
-    },
-    {
       "canonical_name": "Άβατον",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Studio Μαυρομιχάλη",
-      "variations": [
-        "Studio Mαυρομιχάλη"
-      ],
-      "neighborhood": "Exarchia"
-    },
-    {
-      "canonical_name": "Φιλίπ",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Σταθμός Θέατρο",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "ΠΛΥΦΑ",
       "variations": [],
       "neighborhood": "Central Athens"
     },
@@ -2254,11 +2226,6 @@
       "neighborhood": "Central Athens"
     },
     {
-      "canonical_name": "Δημοτικό Θέατρο Πειραιά",
-      "variations": [],
-      "neighborhood": "Piraeus"
-    },
-    {
       "canonical_name": "Skullbar",
       "variations": [
         "Skullbar, Ιπποκράτους 200, Εξάρχεια, Αθήνα, 11471, Greece"
@@ -2266,40 +2233,11 @@
       "neighborhood": "Exarchia"
     },
     {
-      "canonical_name": "Calderone Art Space",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Burger Disco Club",
-      "variations": [
-        "Burger Disco Club, Νίκης 11, Σύνταγμα, Αθήνα, 10557, Greece"
-      ],
-      "neighborhood": "Syntagma"
-    },
-    {
       "canonical_name": "Boo!",
       "variations": [
         "Boo!, Λεπενιώτου 22, Αθήνα, 10554, Greece"
       ],
       "neighborhood": "Psyrri"
-    },
-    {
-      "canonical_name": "Χώρος Τέχνης Ασωμάτων",
-      "variations": [],
-      "neighborhood": "Thiseio"
-    },
-    {
-      "canonical_name": "Τεχνοχώρος Εργοτάξιον",
-      "variations": [
-        "Τεχνοχώρος&#160;Εργοτάξιον"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Τεχνοχώρος Φάμπρικα",
-      "variations": [],
-      "neighborhood": "Peristeri"
     },
     {
       "canonical_name": "Σκηνή Brecht",
@@ -2316,16 +2254,6 @@
       "neighborhood": "Victoria"
     },
     {
-      "canonical_name": "Μορφές Έκφρασης",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Μικρό Γκλόρια",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
       "canonical_name": "Βαφείο",
       "variations": [
         "Βαφείο-&#171;Λάκης Καραλής&#187;",
@@ -2334,48 +2262,11 @@
       "neighborhood": "Gazi"
     },
     {
-      "canonical_name": "Αυλαία Πολυχώρος",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Ακροπόλ",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Άνεσις",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Studio Κυψέλης",
-      "variations": [],
-      "neighborhood": "Kypseli"
-    },
-    {
       "canonical_name": "Romantso",
       "variations": [
         "Romantso, Αναξαγόρα 3-5, Ομόνοια, Αθήνα, 10552, Greece"
       ],
       "neighborhood": "Omonoia"
-    },
-    {
-      "canonical_name": "Red Jasper Cabaret Theatre",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Paraga",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Don't be a Dick",
-      "variations": [
-        "Don't be a Dick, Φειδίου 4, Εξάρχεια, Αθήνα, Greece"
-      ],
-      "neighborhood": "Exarchia"
     },
     {
       "canonical_name": "Bios",
@@ -2390,44 +2281,11 @@
       "neighborhood": "Omonoia"
     },
     {
-      "canonical_name": "Arroyo",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Wild Poppies",
-      "variations": [
-        "Wild Poppies, Σταδίου 7, Αθήνα, 10562, Greece"
-      ],
-      "neighborhood": "Syntagma"
-    },
-    {
-      "canonical_name": "Smut",
-      "variations": [
-        "Smut, Βατσαξή 4, 10438, Αθήνα, Greece"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "IT Athens",
-      "variations": [
-        "IT Athens, Σολωμού 30 &amp; Μπόταση 9, Εξάρχεια, Αθήνα, Greece"
-      ],
-      "neighborhood": "Exarchia"
-    },
-    {
       "canonical_name": "Cozmo",
       "variations": [
         "Cozmo, Λεωφόρος Βουλιαγμένης 22, Νέος Κόσμος, Αθήνα, Greece"
       ],
       "neighborhood": "Neos Kosmos"
-    },
-    {
-      "canonical_name": "Bolivar",
-      "variations": [
-        "Bolivar, Ακτή Ηλίου, Άλιμος, Αθήνα, Greece"
-      ],
-      "neighborhood": "Alimos"
     },
     {
       "canonical_name": "Bless Me Father",
@@ -2437,45 +2295,9 @@
       "neighborhood": "Syntagma"
     },
     {
-      "canonical_name": "Aux Club",
-      "variations": [
-        "Aux Club, Αγίου Όρους 15, Γκάζι, Αθήνα, Greece"
-      ],
-      "neighborhood": "Gazi"
-    },
-    {
-      "canonical_name": "Χώρος Κ4",
-      "variations": [
-        "Χώρος Κ4 (οι Άνθρωποι που Ακολουθούν τη Γη)"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Χώρα",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
       "canonical_name": "Φούρνος",
       "variations": [],
       "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Στοά",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Ρεκτιφιέ",
-      "variations": [
-        "Ρεκτιφιέ – Κέντρο Έρευνας Μεικτών Παραστατικών Τεχνών"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Παραμυθίας",
-      "variations": [],
-      "neighborhood": "Gazi"
     },
     {
       "canonical_name": "Μεταξουργείο",
@@ -2483,98 +2305,9 @@
       "neighborhood": "Metaxourgeio"
     },
     {
-      "canonical_name": "Λοσάντζελε",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Κάππα",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Κάμιρος",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Θυμέλη Έλλης Βοζικιάδου",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Θέατρο του Νέου Κόσμου",
-      "variations": [],
-      "neighborhood": "Neos Kosmos"
-    },
-    {
-      "canonical_name": "Θέατρο της Ημέρας",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Θέατρο Καλλιρρόης",
-      "variations": [],
-      "neighborhood": "Kallirois"
-    },
-    {
-      "canonical_name": "Θέατρο Κάτω Από Τη Γέφυρα",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Θέατρο Μπέλλος",
-      "variations": [
-        "Θέατρο &#171;Μπέλλος&#187;"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Επί Κολωνώ",
-      "variations": [],
-      "neighborhood": "Kolonos"
-    },
-    {
-      "canonical_name": "Εν Αθήναις",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Δίπυλον",
-      "variations": [],
-      "neighborhood": "Kerameikos"
-    },
-    {
-      "canonical_name": "Γυάλινο Μουσικό Θέατρο",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Αργώ",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Αλίκη",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Αγγέλων Βήμα",
-      "variations": [],
-      "neighborhood": "Central Athens"
-    },
-    {
       "canonical_name": "Big Table",
       "variations": [],
       "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Παλιό Αμαξοστάσιο ΟΣΥ",
-      "variations": [
-        "Παλιό Αμαξοστάσιο - ΟΣΥ"
-      ],
-      "neighborhood": "Gazi"
     },
     {
       "canonical_name": "Αγγλικανική Εκκλησία Αγίου Παύλου",
@@ -2724,16 +2457,6 @@
       "neighborhood": "Peania"
     },
     {
-      "canonical_name": "Θέατρο Lib'ro",
-      "variations": [
-        "Θέατρο Lib’ro",
-        "Θέατρο Lib'ro",
-        "Lib'ro",
-        "Lib’ro"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
       "canonical_name": "Theseum - A Theatre for the Arts",
       "variations": [
         "theseum-A THEATRE FOR THE ARTS",
@@ -2748,24 +2471,6 @@
         "GaziView"
       ],
       "neighborhood": "Gazi"
-    },
-    {
-      "canonical_name": "Θέατρο Μπέλλος",
-      "variations": [
-        "ΘΕΑΤΡΟ ΜΠΕΛΛΟΣ",
-        "Θέατρο «Μπέλλος»",
-        "Θέατρο &#171;Μπέλλος&#187;"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "Ακροπόλ",
-      "variations": [
-        "ΘΕΑΤΡΟ ΑΚΡΟΠΟΛ",
-        "Θέατρο Ακροπόλ",
-        "Akropol"
-      ],
-      "neighborhood": "Central Athens"
     },
     {
       "canonical_name": "Θέατρο Μικρό Χορν",
@@ -2883,26 +2588,9 @@
       "neighborhood": "Central Athens"
     },
     {
-      "canonical_name": "Daddy's All Day Bar",
-      "variations": [
-        "Daddy'S all day bar",
-        "Daddy’S all day bar",
-        "Daddy’s All Day Bar",
-        "Daddys"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
       "canonical_name": "Άλμα",
       "variations": [
         "Alma Theater"
-      ],
-      "neighborhood": "Central Athens"
-    },
-    {
-      "canonical_name": "VOX",
-      "variations": [
-        "VOX."
       ],
       "neighborhood": "Central Athens"
     },
