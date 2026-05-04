@@ -3760,3 +3760,49 @@ not by S103).
 - B-2 surfaced `247` distinct normalized venues in byVenue vs `46` venue pages vs `408` athens-venues.json entries — interesting data hygiene gap (events reference venues that don't have pages OR that don't appear in registry). Worth a separate diagnostic session.
 - `'2" πολλαπλοι χωροι'` venue name in byVenue — stray quote + canonicalized Greek "Multiple Locations". Data hygiene cleanup deferred.
 - printBucketSummary (separate from printSchemaSummary) does not yet surface place layer info. Currently only events.byType is shown. If Editorial wants the byVenue surface in console output, that's a follow-up.
+
+### Session 109 — Enrichment Drought Fix (S101a in brief naming) — 2026-05-03
+
+**Mode:** Fix-execution. Continuation of Session 108 (S101 diagnostic). Brief enforced verify-assumptions / don't-implement-yet / shotgun-surgery (when applying fix) / conditional-continuation guards. Pre-empted S101a-cornerstone-schema work due to compounding 5-day enrichment outage.
+
+**Plan:** Foreground-first reproduction with progressive complexity. Step 0 baseline → Step 1 bare claude -p → Step 2 a–e progressive variable isolation → Step 3 deeper instrumentation only if Step 2 inconclusive → Step 4 apply minimum fix to every site (Guard 6 shotgun) → Step 5 foreground re-validation → Step 6 production validation via launchctl + DB → Step 7 commit.
+
+**What happened:**
+- Step 0: claude v2.1.126, no locks, no stuck processes, MAX(enriched_at)=2026-04-28 07:16:31 unchanged. Latest session 107 (Session 108 from S101 diagnostic was still uncommitted).
+- Step 1: bare `claude -p "Reply with hello." --output-format text` produced "hello" in 8s but emitted `Warning: no stdin data received in 3s, proceeding without it. ... redirect stdin explicitly: < /dev/null to skip`. The CLI's own warning text directly hinted at H1.
+- Step 2a–c: progressive complexity confirmed the warning fires on every invocation without `< /dev/null`. With 16KB production-sized prompt + tools + text format, only 157 bytes (the warning) emitted in 90s — inference output never arrived.
+- Step 2e: bare prompt + `< /dev/null` → exit 0, 5s, 6 bytes ("hello"), no warning. The fix works at small scale.
+- Step 2e+: 16KB prompt + tools + `< /dev/null` → 0 bytes for 360s (watchdog kill). The redirect alone is necessary but not sufficient — text format still buffers.
+- Step 2f: switched to `--output-format stream-json --verbose` + same fix → first byte at 10s, 361KB streamed in 540s. The hang was actually two independent issues: stdin handling AND output buffering.
+- Step 4 (first iteration): applied two flags to scripts/auto-enrich.sh — `< /dev/null` to warm-up (line 284) and batch (line 355); `--output-format text` → `--output-format stream-json --verbose` for batch only. Auth pre-check at line 299 untouched (intentionally pipes "ok" via stdin). Stale comment at line 102 corrected.
+- Step 6 (first verification, RUN_ID=1777832932): both batches streamed 120KB / 295KB but were killed by wrapper's 120s stdout-idle gate (idle=134s/127s). Stream-json emits per-turn events; text generation between turns is silent. The wrapper killed during silent description generation despite real progress.
+- Diagnosis: need `--include-partial-messages` (`--help` confirms it works only with `--print --output-format=stream-json`). It emits `content_block_delta` events per few tokens during generation. Verified in foreground: 31s test, 31 stream_event entries, multiple delta types.
+- Step 4 (second iteration): added `--include-partial-messages` to batch invocation only.
+- Step 6 (second verification, RUN_ID=1777833477): batch-1 ran 819s, killed at idle=122s, but **5 events saved successfully** — wrapper's S98 reconciliation logic correctly flagged "subprocess exited 143 but 5 events saved successfully". batch-2 killed at 318s mid-task, 0 saves. Net: **5 events enriched in one run** (vs 0 events/day for prior 5 days). MAX(enriched_at) advanced 2026-04-28 → 2026-05-03 18:49:17 UTC. **Drought broken.**
+
+**Tests:** None modified. Test suite untouched.
+
+**Build verification:**
+- DB MAX(enriched_at) advanced from 2026-04-28 07:16:31 → 2026-05-03 18:49:17 UTC (= 21:49 Athens local).
+- 5 events enriched today: 18e85446a43daab5 (concert), 2219cd514ce22f51 (concert), 7394f2aed99c0424 (theater), 433f6dac79145605 (dj_set), 2b3e9206ffe9f074 (exhibition). All match batch-1's manifest.
+- bash -n syntax check on edited script: clean.
+
+**Commit:** Fix shipped under commit `adbaef38e` ("chore: daily pipeline update 2026-05-04") — the daily-automated.sh pipeline ran at 2026-05-04 08:12 Athens (midnight UTC + a bit) while this session's test was in flight, and scooped up the working-tree changes via `git add`-style behavior. That commit included: all 3 S101a fixes to scripts/auto-enrich.sh, S101 entries in 4 notes files, specs/s101-enrichment-drought-diagnostic.md, plus daily-rebuild artifacts (build-completeness.json, event-set-hashes.json). Already pushed to origin/main. **The substantive S101 + S101a work landed under a generic "daily pipeline update" message rather than an attributed fix(auto-enrich) commit** — flagged as a process issue in Open Items below. This session's S101a-specific notes (post-verification entries) were committed separately afterwards by hand.
+
+**Brief-vs-reality mismatches encountered:**
+- Brief's hypothesis priority list (cheapest first) was correct for *isolation* but underestimated that two fixes (`< /dev/null` AND format change) are needed together — not "either-or". Step 2f exposed this. Adding `--include-partial-messages` (a third fix) was a fork mid-session that the brief's priority list didn't anticipate.
+- Brief expected Step 7 to commit only `scripts/auto-enrich.sh`; reality is also note updates per "After Every Session" rule. Handled by reporting back rather than over-staging.
+
+**Learnings:**
+- The CLI's own warning text is the cheapest source of truth for diagnosing CLI-level regressions. `Warning: no stdin data received in 3s` directly recommended `< /dev/null` — that one observation could have skipped 4 hypothesis tests if I'd noticed it instantly. Worth a memory rule: "before any deeper instrumentation, read the CLI's first-emitted text."
+- Progressive complexity isolation (named pattern, added to patterns.md) was the right structure — it found two independent root causes where brute-force "try everything" would have credited the wrong fix. The technique generalizes beyond claude CLI to any multi-flag subprocess.
+- Foreground verification's gate logic must mirror production gate logic. My foreground 2f test polled via `wc -c` (which doesn't update mtime), while production wrapper polls via `stat -f %m`. The "works in foreground" feeling masked the silent-generation idle gap that production-wrapped runs would still hit. Lesson noted in mistakes.md.
+- Stream-json BATCH_OUT files are bigger but more diagnostic. Forensics now have per-token-level visibility. The S99 design choice ("preserve on failure") plus stream-json gives near-replay-quality post-mortem. Not a regression vs text format from forensics POV.
+
+**Open items:**
+- **batch-2 still killed mid-task at ~5min.** Throughput is ~50% (1 of 2 batches) on the verified run. Likely cause: silent gaps between events (model "thinking" without active token generation or tool calls). Workarounds without touching `STDOUT_IDLE_CAP` (per brief boundary): smaller batches (1–3 events instead of 5), or rely on server-side stream-idle (5min) by removing the 2min wrapper gate. Next session should investigate.
+- **Backlog drain.** Memory says target is 90 events/day; we're 5 days behind = 450 events of debt. With 4 daytime slots × 5 events/batch × 2 batches × ~50% success = ~20/day at current state. Needs to scale up before demo 2026-05-29.
+- **S101 deliverable uncommitted.** specs/s101-enrichment-drought-diagnostic.md + 4 notes files have S101 + S101a content commingled. Recommended: bundle into one commit per session (S101 + S101a) or two commits if user prefers separation.
+- **Monitoring alert still missing.** Per S101 mistakes.md: need positive-counter alert on `MAX(enriched_at) < now() - 36h`. Without it, the next drought won't be caught until day 5 again. Quick win for Session 110 or sooner.
+- **CLI version known-good record.** Add a check that compares deployed claude CLI version against a known-good entry; alert on version drift so we A/B-test new versions in launchd-style env before production rollout.
+- **Daily pipeline `git add -A` antipattern.** The `daily-automated.sh` pipeline scooped up uncommitted working-tree changes into a "chore: daily pipeline update" commit — exactly the pattern your memory's `feedback_stage_precisely.md` warns against. S101 + S101a's substantive work is hidden under that generic message in commit `adbaef38e`. Two cleanups: (a) audit `daily-automated.sh` to use `git add <specific-paths>` only (likely `data/*.json`, `data/*.csv`, the lock file); (b) consider whether to re-tag or annotate `adbaef38e` so future blame/git-log readers find the fix. **Risk:** this is the fifth sprint where uncommitted developer work was at risk of being commingled with daily artifacts — needs a hook or pipeline guard.

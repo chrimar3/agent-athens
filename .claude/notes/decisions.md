@@ -2288,6 +2288,38 @@ Shape divergence from events/hubs/venues slots is correct here: those measure pe
 
 ---
 
+## 2026-05-03 — auto-enrich CLI invocation: stdin-redirect + stream-json + partial-messages (S101a fix; supersedes "do not revert wrapper" reasoning above)
+
+**Context:** S101 diagnostic established Class G (novel) with 0-byte BATCH_OUT signature; explicitly deferred root-cause to a fix session. S101a executed the fix session via foreground A/B isolation (Step 1: bare claude -p surfaces a `Warning: no stdin data received in 3s` warning that hints at the cause; Steps 2a–2e: progressive variable isolation; Step 6: launchctl-driven production verification). Three independent issues were uncovered, each requiring its own flag:
+
+1. **`< /dev/null` (stdin redirect).** Claude CLI v2.1.122+ reads stdin by default in `-p` mode with a 3s grace period. In foreground stdin EOFs from the TTY and the grace expires; in launchd context stdin is a blocking pipe that never EOFs and the read hangs indefinitely. The CLI's own warning text recommends this fix.
+2. **`--output-format stream-json --verbose`** (replacing `--output-format text`). Text mode buffers the entire response until the agent finishes the task. For multi-event enrichment with heavy tool use, that's >8 minutes of zero-byte stdout — well past the wrapper's `STDOUT_IDLE_CAP=120` gate. Stream-json emits per-turn events (tool calls, tool results, assistant messages), keeping the file mtime advancing.
+3. **`--include-partial-messages`** (only valid with stream-json). Stream-json alone emits per-turn events but is silent during the model's text generation. A single 400–600w description's silent generation can exceed 120s. Verified empirically 2026-05-03: first post-fix run hit `idle=134s/127s` killing both batches even with stream-json. Partial-messages adds `content_block_delta` events on every few tokens, so mtime advances during generation as well as between turns.
+
+**Decision:** Apply all three flags to the production batch invocation in `scripts/auto-enrich.sh:355` (the only call site that runs the actual enrichment task). Apply `< /dev/null` only to the warm-up at line 284 (already uses --output-format json which streams ok; just needs stdin EOF). Do NOT touch line 299 (auth pre-check) — that intentionally pipes "ok" via stdin as the prompt; both stream-json and stdin-redirect would break it.
+
+**Reasoning:** Each flag addresses an independently observed failure mode with empirical evidence (foreground A/B in S101a Step 2). Bundling them into one commit avoids repeated drought windows (every day a slot fires under a partial fix is a new partial-data day). The brief's "cheapest first, one variable per cycle" guidance applies to *isolation*, not to *application* — once isolated, applying all three together is correct.
+
+**Architecture:**
+- Line 284 (warm-up): `claude -p "echo ready" --max-turns 1 --output-format json < /dev/null > /dev/null 2>&1 &`
+- Line 299 (auth pre-check): unchanged (`echo "ok" | claude -p --output-format json >/dev/null 2>&1`)
+- Line 355 (real batch): `claude -p "$BRIEF" --output-format stream-json --verbose --include-partial-messages --allowedTools "$ALLOWED_TOOLS" < /dev/null > "$BATCH_OUT" 2>&1 &`
+- Stale comment at line 102 (orphan-killer logic) updated to reflect new format.
+- BATCH_OUT format changes from text to stream-json. All consumers verified format-agnostic before edit: stdout-mtime watchdog reads only `stat -f %m`; server-side stream-idle grep matches in JSON too; save accounting reads `enrichment_log.saved_to_events` from DB, not stdout.
+
+**Verification (Step 6):**
+- First post-fix run (2 fixes only, no `--include-partial-messages`, RUN_ID=1777832932): both batches streamed but were killed by 120s idle gates during silent description generation. Confirmed need for the third flag.
+- Second post-fix run (all 3 fixes, RUN_ID=1777833477): batch-1 saved 5 events (818s elapsed, 122s final-idle = post-save-batch tail; wrapper killed but S98 reconciliation correctly counted 5 saves). batch-2 still killed mid-task at 318s elapsed, 0 saves. Net: 5 events enriched in one run vs 0 events/day for the prior 5 days. **Drought broken.**
+- DB MAX(enriched_at) advanced from 2026-04-28 07:16:31 → 2026-05-03 18:49:17 (UTC; = 21:49 Athens local).
+
+**Out of scope this session:** batch-2's mid-task kill is not fully resolved by these three flags. Throughput is ~50% (1 of 2 batches saving on the verified run). The remaining failure mode is an idle gap that exceeds 120s even with partial-messages emitting deltas — likely happens between events when the agent is "thinking" about the next event without active text generation or tool calls. Workarounds without touching `STDOUT_IDLE_CAP`: smaller batches (1–3 events instead of 5) so a single batch finishes before the wrapper's wall-clock cap, OR rely on server-side stream-idle (5min) and remove the 2min wrapper gate. Logged for follow-up; not changed in this session per brief boundary.
+
+**Status:** Active. Drought broken on first verification run. Throughput recovery to 90/day target requires either: more daytime slots (4 currently, can add 2 more in the 09–18 window), OR addressing batch-2 failure mode in a follow-up. **The "do not revert wrapper" decision (above, 2026-05-03 S101) is superseded by this fix — the wrapper is correct; the CLI invocation flags were the real issue. The wrapper's 0-byte BATCH_OUT preservation is what made this diagnosis possible, validating S99's design choice.**
+
+**Connects to:** "do not revert S99 wrapper" decision above (S101, now superseded by this fix), `specs/s101-enrichment-drought-diagnostic.md` (prior session's evidence), commit hash for this fix (see git log post-commit).
+
+---
+
 ## 2026-05-03 — Ratchet config home: separate file per cohesion (Sprint 2 Component B-2, Q-B1 lock)
 
 **Context:** Pre-flight P6 enumerated 3 cohesion options for the ratchet config home: (a) extend `city-geodata.json`, (b) new `config/completeness-ratchets.json`, (c) per-layer file proliferation. No prior precedent existed (zero ratchet configs in repo before B-2).

@@ -2541,3 +2541,38 @@ The persisted state includes both the inputs (`populated`, `total`, `threshold`)
 **Anti-pattern (avoided):** persist only `currentSeverity: 'info'` in the artifact. Consumers can't reproduce the decision; future debugging requires re-running with logging.
 
 **Status:** First-instance pattern in this codebase. If Sprint 3 promotion or future B-N components introduce additional ratchets, follow the same shape.
+
+---
+
+## Progressive complexity isolation for multi-variable subprocess hangs (diagnostic technique, 2026-05-03)
+
+When a subprocess hangs and the production invocation has multiple flags / env / size variables, the cheapest path to a fix is *progressive complexity*: start from the bare invocation, add one variable per cycle, watch where the behavior flips. Each cycle is bounded by a watchdog (e.g., `( cmd & PID=$!; (sleep N && kill -9 $PID) & wait $PID; ...)` for portable macOS) and produces a single observation: pass / hang / error + byte count. The variable that flips the outcome is the cause.
+
+**Instance:** S101a enrichment drought fix (2026-05-03). Production invocation had 3 differences from a "trivial" claude -p call:
+- bare prompt vs production-sized 16KB
+- no `--allowedTools` vs full tool set
+- interactive shell stdin (TTY) vs launchd-context stdin (blocking pipe)
+- `--output-format text` vs `--output-format stream-json --verbose`
+
+Steps 2a–2e in the fix brief isolated each variable:
+- 2a: bare `--output-format text` → works in 10s with stdin warning emitted
+- 2b: + `--allowedTools` → works in 9s, same warning
+- 2c: + 16KB prompt → 90s timeout, 157 bytes (just the warning, no inference output)
+- 2d: launchd-style `env -i` → "Not logged in" (test invalidated; auth context stripped, would not match production launchd which retains creds)
+- 2e: + `< /dev/null` → 5s clean run, no warning
+- 2f: + 16KB prompt + `< /dev/null` + stream-json → first byte at 10s, 361KB streamed in 540s
+
+The 2c → 2f arc isolated TWO independent root causes (stdin handling AND output buffering) where a more brute-force "try everything at once" approach would have applied multiple changes and credited the wrong one. The diagnostic technique distinguished between fixes-that-help and fixes-that-help-for-different-reasons.
+
+**Pre-conditions for using this technique:**
+- The production invocation can be reproduced in a foreground / interactive context (S101 had partial reproduction; S101a had clean foreground reproduction).
+- The variables that differ from a "trivial" baseline are enumerable and small (3–6 in S101a's case).
+- Each cycle is cheap (seconds–minutes, not hours).
+
+**Anti-pattern (refuted):** "fix the most likely cause and re-run production" — works when there's only one variable. When there are multiple, this leaves you guessing whether your fix worked or whether one of the other variables happened to behave differently this run. The drought-class incidents that span multiple days are exactly the cases where this guessing accumulates wasted runs.
+
+**Generalization:** applies to any multi-flag CLI invocation, watchdog-wrapped subprocess, or environment-dependent service. The technique is independent of the specific tool (claude / curl / ffmpeg / docker run) and applies any time you need to trace WHICH variable flipped behavior.
+
+**Family:** Connects to "0-byte preserved-output as messenger-vs-cause discriminator" (the S101 diagnostic technique that kicked off this session) — together they form a 2-step recipe for stdout-idle-style watchdog failures: (1) check 0-byte BATCH_OUT to confirm wrapper-as-messenger; (2) progressive complexity isolation to find the specific variable causing the hang.
+
+**Status:** First named application in S101a. Worth applying any time a "what changed?" investigation has more than 2 candidate variables.
