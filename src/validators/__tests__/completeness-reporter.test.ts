@@ -364,4 +364,17 @@ describe('buildCompletenessReport — place layer (Q-B2)', () => {
     expect(report.place.byVenue).toHaveLength(1);
     expect(report.place.byVenue[0].total).toBe(2);
   });
+
+  // Q-B8b lock 2026-05-04: ratchet denominator is active-reachable venue count
+  // (computed in generate-site.ts via getActiveReachableVenueKeys), not registry length.
+  // The reporter is pure passthrough — this test prevents regression if anyone
+  // ever adds recompute logic that re-derives total from a different basis.
+  test('place.ratchet.total passes through whatever denominator generate-site.ts computed (Q-B8b)', () => {
+    const ratchet: RatchetState = {
+      venueSameAs: { coverage: 0, populated: 0, total: 244, threshold: 0.5, currentSeverity: 'info' },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), ratchet);
+    expect(report.place.ratchet.venueSameAs.total).toBe(244);
+    expect(report.place.ratchet).toBe(ratchet);
+  });
 });

@@ -103,6 +103,34 @@ export function getAllVenues(): VenueRecord[] {
   return ensureCache().all;
 }
 
+/**
+ * Returns the set of normalized venue keys that are BOTH:
+ *  - active (have at least one event in the provided events array)
+ *  - reachable via the registry (canonical_name OR a variation normalizes to that key)
+ *
+ * Used as the ratchet denominator for place.venueSameAs coverage.
+ * Per Strategist Q-B8b lock 2026-05-04: denominator = byVenue keys reachable via registry.
+ */
+export function getActiveReachableVenueKeys(events: { venue: { name: string } }[]): Set<string> {
+  const registryKeys = new Set<string>();
+  for (const record of getAllVenues()) {
+    registryKeys.add(normalizeVenueKey(record.canonical_name));
+    for (const variation of record.variations ?? []) {
+      registryKeys.add(normalizeVenueKey(variation));
+    }
+  }
+
+  const activeReachable = new Set<string>();
+  for (const event of events) {
+    const key = normalizeVenueKey(event.venue.name);
+    if (registryKeys.has(key)) {
+      activeReachable.add(key);
+    }
+  }
+
+  return activeReachable;
+}
+
 /** For testing — drops the cache so a subsequent lookup re-reads the file. */
 export function _resetVenueRegistryCache() {
   cache = null;

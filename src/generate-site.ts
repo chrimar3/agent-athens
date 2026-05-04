@@ -219,7 +219,7 @@ async function main() {
   // Website drives Tier-5 "Check venue website" CTA. sameAs feeds Schema.org
   // identity links (Component B-1). Empty arrays omitted — JSON-LD readers
   // treat present-but-empty as a present-but-unknown signal, worse than absence.
-  const { getVenueByName, getAllVenues } = await import('./ticketing/venue-registry');
+  const { getVenueByName, getAllVenues, normalizeVenueKey, getActiveReachableVenueKeys } = await import('./ticketing/venue-registry');
   for (const event of pageableEvents) {
     const venueRecord = getVenueByName(event.venue.name);
     if (venueRecord?.website) event.venue.website = venueRecord.website;
@@ -234,9 +234,17 @@ async function main() {
   const ratchetConfig = JSON.parse(
     readFileSync(join(import.meta.dir, '../config/completeness-ratchets.json'), 'utf-8'),
   );
+  // Q-B8b lock 2026-05-04: denominator = venues active in pageableEvents AND
+  // reachable via registry (canonical_name OR variation normalizes into a registry key).
+  // Numerator filters by canonical_name membership only — must be subset of denominator's
+  // domain, so an inactive venue with sameAs cannot inflate the ratio.
   const allVenues = getAllVenues();
-  const totalVenues = allVenues.length;
-  const venuesWithSameAs = allVenues.filter(v => v.sameAs && v.sameAs.length > 0).length;
+  const activeReachableKeys = getActiveReachableVenueKeys(pageableEvents);
+  const totalVenues = activeReachableKeys.size;
+  const venuesWithSameAs = allVenues.filter(v =>
+    v.sameAs && v.sameAs.length > 0 &&
+    activeReachableKeys.has(normalizeVenueKey(v.canonical_name))
+  ).length;
   const sameAsCoverage = totalVenues > 0 ? venuesWithSameAs / totalVenues : 0;
   const sameAsThreshold = ratchetConfig.athens.place.venueSameAs.warnAt;
   const sameAsSeverity: 'info' | 'warn' = sameAsCoverage >= sameAsThreshold ? 'warn' : 'info';

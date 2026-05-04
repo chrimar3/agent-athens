@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-04T05:12:22.356Z"
+    "lastUpdate": "2026-05-04T09:01:24.043Z"
   },
   "layers": {
     "event_level": "measured",
@@ -2638,7 +2638,7 @@
       "venueSameAs": {
         "coverage": 0,
         "populated": 0,
-        "total": 408,
+        "total": 244,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
