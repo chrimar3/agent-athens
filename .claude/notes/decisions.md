@@ -2361,3 +2361,30 @@ Shape divergence from events/hubs/venues slots is correct here: those measure pe
 **Status:** Active (mechanism shipped 2026-05-03, commit 12703b950). 247 byVenue entries in deployed artifact; all sameAsState='missing' pre-Editorial-data.
 
 **Connects to:** "Per-Template Aggregate for ARIA Findings" (Q-C1, alternative shape choice — split-by-template for ARIA vs per-key-array for byVenue; both valid for their respective measurement axes), pre-flight P2 (BucketReport[] precedent verbatim).
+
+### Q-B8b — Ratchet denominator basis (locked 2026-05-04, shipped 4c9fd5704)
+
+**Decision:** place.ratchet.venueSameAs.total = byVenue keys reachable via registry
+(intersection of pageableEvents-active venues and registry-discoverable normalized
+keys). Implemented as getActiveReachableVenueKeys(events) in
+src/ticketing/venue-registry.ts. At ship build: 244 (was 408).
+
+**Reasoning:** Strategist Q-B8b lock — matches Editorial-addressable user-visible
+surface; 100% achievable (3 noise keys excluded as data hygiene, not coverage
+failure); robust to Q-B8a outcome since byVenue normalization sidesteps duplicate-
+canonical question.
+
+**Numerator semantics:** A venue counts as populated only if its canonical_name
+normalizes into the active-reachable set AND it has sameAs. Variations on the
+numerator side NOT checked — conservative read. If a venue's canonical doesn't
+normalize in but a variation does, the record is excluded. Flag for Strategist
+revisit only if B-2d (duplicate-canonicals scope) surfaces cases where this
+matters in practice.
+
+**Tiered ratchet schema (denominator field in config):** explicitly deferred to
+Sprint 4+ per Strategist 2026-05-04. Schema unchanged this session.
+
+**Adjacent finding (not Q-B8b scope):** 244/408 ratio reveals ~40% of
+athens-venues.json records are inactive (aspirational/historic). Separate
+cleanup signal. Q-B8a Path 3 (B-2d) addresses the duplicate-canonical subset of
+this; the inactive-tail subset remains for future hygiene work.

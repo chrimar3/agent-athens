@@ -3806,3 +3806,43 @@ not by S103).
 - **Monitoring alert still missing.** Per S101 mistakes.md: need positive-counter alert on `MAX(enriched_at) < now() - 36h`. Without it, the next drought won't be caught until day 5 again. Quick win for Session 110 or sooner.
 - **CLI version known-good record.** Add a check that compares deployed claude CLI version against a known-good entry; alert on version drift so we A/B-test new versions in launchd-style env before production rollout.
 - **Daily pipeline `git add -A` antipattern.** The `daily-automated.sh` pipeline scooped up uncommitted working-tree changes into a "chore: daily pipeline update" commit — exactly the pattern your memory's `feedback_stage_precisely.md` warns against. S101 + S101a's substantive work is hidden under that generic message in commit `adbaef38e`. Two cleanups: (a) audit `daily-automated.sh` to use `git add <specific-paths>` only (likely `data/*.json`, `data/*.csv`, the lock file); (b) consider whether to re-tag or annotate `adbaef38e` so future blame/git-log readers find the fix. **Risk:** this is the fifth sprint where uncommitted developer work was at risk of being commingled with daily artifacts — needs a hook or pipeline guard.
+
+### Session 110 — sprint-2-session-7 (Sprint 2 / Component B-2c — ratchet denominator)
+
+**Plan:** Q-B8b denominator fix per Strategist 2026-05-04 lock — switch ratchet
+basis from 408 (all registry records) to ~244 (active-reachable). Pure
+implementation; config schema unchanged.
+
+**What happened:**
+- New helper getActiveReachableVenueKeys(events) in venue-registry.ts —
+  intersection of pageableEvents-active venues with registry-discoverable
+  normalized keys (canonical + variations).
+- Wired into generate-site.ts ratchet block. Numerator filtered to denominator
+  domain (canonical_name membership). Conservative read on variations excluded
+  from numerator.
+- 4 tests added: 3 helper unit tests + 1 reporter passthrough regression test.
+
+**Tests:** 1878/0 (1874 baseline + 4 new). tsc clean. Build successful, 46
+venue pages unchanged.
+
+**Result:** data/build-completeness.json place.ratchet.venueSameAs.total
+flipped 408 → 244 (exact prediction match, no drift). populated: 0, coverage:
+0, currentSeverity: "info". Tier 1 sameAs data (Megaron + Onassis + Benaki×3,
+mid-flight from Editorial) will land against the meaningful denominator.
+
+**Adjacent finding:** 244/408 ratio reveals ~40% of registry records are
+inactive (aspirational or historic). Separate cleanup signal. Filed for future
+hygiene work; Q-B8a Path 3 (B-2d) addresses the duplicate-canonical subset.
+
+**Commit:** 4c9fd5704 on origin/main. Netlify CLI deploy required for
+production (per agent_athens_deploy_workflow.md — git push does not auto-deploy
+this project).
+
+**Open items:** B-2d (Q-B8a Path 3 — duplicate-canonical sample + bulk-resolve)
+remains unscheduled. Sprint 2 retrospective queued for after B-2d closes and
+Editorial Tier 1 sameAs data lands.
+
+**Discipline note:** Pre-flight (Phase 1) verification corrected three details
+from the session brief before execution — getAllVenues vs getAllVenueRecords
+naming, dynamic-import-at-line-222 pattern, S101 contamination check. Each
+saved an in-session pause. Validates pre-flight pattern for Sprint 2 cadence.

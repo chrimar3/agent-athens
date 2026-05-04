@@ -2576,3 +2576,34 @@ The 2c → 2f arc isolated TWO independent root causes (stdin handling AND outpu
 **Family:** Connects to "0-byte preserved-output as messenger-vs-cause discriminator" (the S101 diagnostic technique that kicked off this session) — together they form a 2-step recipe for stdout-idle-style watchdog failures: (1) check 0-byte BATCH_OUT to confirm wrapper-as-messenger; (2) progressive complexity isolation to find the specific variable causing the hang.
 
 **Status:** First named application in S101a. Worth applying any time a "what changed?" investigation has more than 2 candidate variables.
+
+### Numerator must subset denominator's domain
+
+When computing coverage ratios for ratchet-style measurements, the numerator
+must filter by denominator membership, not just by the primary criterion.
+
+**Wrong shape:**
+  populated = records.filter(r => r.sameAs && r.sameAs.length > 0).length
+  coverage = populated / activeReachableKeys.size  // numerator/denominator domain mismatch
+
+  → an inactive venue with sameAs (possible from a prior cycle) inflates
+    numerator beyond denominator's domain. Coverage can exceed 1.0.
+
+**Right shape:**
+  populated = records.filter(r =>
+    r.sameAs && r.sameAs.length > 0 &&
+    activeReachableKeys.has(normalizeVenueKey(r.canonical_name))
+  ).length
+  coverage = populated / activeReachableKeys.size  // both filtered to same domain
+
+**Generalization:** Whenever a coverage metric pairs a curated numerator
+(filtered by criterion X) with a curated denominator (filtered by criterion Y),
+the numerator filter MUST also enforce criterion Y. Otherwise the ratio is
+semantically meaningless above edge cases.
+
+**Examples beyond ratchets:** any "coverage of curated set" measurement —
+test coverage filtered to non-generated source files, accessibility coverage
+filtered to user-facing pages, etc.
+
+**Origin:** Q-B8b ratchet denominator fix, B-2c (sprint-2-session-7),
+2026-05-04.
