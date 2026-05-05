@@ -2907,3 +2907,29 @@ In S101a-B, all five source files plus two specs were modified locally and the d
 - Specs (`specs/*.md`) are session deliverables, not local-only scratch. Future planners reference them. Stage and commit them with the implementation that closes them.
 
 **Origin:** S101a-B (commit `d7003668b`). Sub-pattern reinforces [S111 explicit-path staging](https://github.com/chrimar3/agent-athens/commit/8bae1d2e5).
+
+### Test mirroring is anti-pattern, even when "hardcoded literals" rule looks like it applies
+
+The rule "Test assertions stay as hardcoded string literals" applies to
+per-assertion values (specific URLs, error strings, magic numbers) — values
+that should not be re-derived in tests because that would create tautology.
+It does NOT apply to whole exported data structures (maps, configs, type
+unions). Mirroring an entire SCHEMA_TYPE_MAP / Config object in test code
+creates a maintenance trap: every source-side edit requires a parallel test
+edit, and the mirror provides no test value beyond duplication.
+
+Correct pattern: import the structure and validate its shape/integrity
+(every key covered, no orphans, structural invariants). Don't mirror values.
+
+Source: S101a-B follow-up (b00ca0295) — single-line SCHEMA_TYPE_MAP edit
+broke transformations.test.ts:618 because it duplicated the full map.
+
+### git push ≠ deploy in this codebase
+
+Tasks ending at "commit + push" do not auto-deploy. Future task templates
+should include explicit `deploy: yes|no|conditional` field to remove
+ambiguity. Daily pipeline auto-deploy has variable timing and bundles
+unrelated changes; explicit `netlify deploy --prod --dir=dist` gives clean
+deploy-ID attribution and immediate citability impact.
+
+Source: recurring across S77, S101a-B, performance reclassification.
