@@ -841,6 +841,7 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   show: 'Event',
   festival: 'Festival',
   performance: 'DanceEvent',
+  dance: 'DanceEvent',
   sports: 'SportsEvent',
   other: 'Event',
 };

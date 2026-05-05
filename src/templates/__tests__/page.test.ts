@@ -1,8 +1,8 @@
 // Template tests for page rendering and Schema.org markup
 import { describe, test, expect } from "bun:test";
 import { renderPage } from "../page";
-import { sampleConcert, sampleFreeExhibition, getTodayEvent } from "../../../tests/fixtures/events";
-import type { PageMetadata } from "../../types";
+import { sampleConcert, sampleFreeExhibition, getTodayEvent, getTomorrowEvent } from "../../../tests/fixtures/events";
+import type { PageMetadata, Event } from "../../types";
 
 describe("renderPage", () => {
   const sampleMetadata: PageMetadata = {
@@ -297,7 +297,9 @@ describe("renderEventCard (via renderPage)", () => {
   });
 
   test("should render price with Schema.org offer markup", () => {
-    const html = renderPage(metadata, [sampleConcert]);
+    // Use a future-dated event: per S101a-B, past events legitimately
+    // omit the Offer block via availabilityForEventStatus omit_offer.
+    const html = renderPage(metadata, [getTomorrowEvent()]);
 
     expect(html).toContain('itemprop="offers"');
     expect(html).toContain('itemscope itemtype="https://schema.org/Offer"');
@@ -452,7 +454,9 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
   });
 
   test("should include offer/price information", () => {
-    const html = renderPage(metadata, [sampleConcert]);
+    // Use future-dated event: per S101a-B, past events emit no offers block.
+    const futureEvent = getTomorrowEvent();
+    const html = renderPage(metadata, [futureEvent]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
     const jsonLd = JSON.parse(jsonLdMatch![1]);
@@ -461,13 +465,18 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
 
     expect(firstEvent.offers).toBeDefined();
     expect(firstEvent.offers["@type"]).toBe("Offer");
-    expect(firstEvent.offers.price).toBe(sampleConcert.price.amount!.toString());
+    expect(firstEvent.offers.price).toBe(futureEvent.price.amount!.toString());
     expect(firstEvent.offers.priceCurrency).toBe("EUR");
     expect(firstEvent.isAccessibleForFree).toBe(false);
   });
 
   test("should handle free events with price 0", () => {
-    const html = renderPage(metadata, [sampleFreeExhibition]);
+    // Future-dated free event: past free events also omit offers per S101a-B.
+    const futureFreeEvent: Event = {
+      ...getTomorrowEvent(),
+      price: { type: 'open' },
+    };
+    const html = renderPage(metadata, [futureFreeEvent]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
     const jsonLd = JSON.parse(jsonLdMatch![1]);
@@ -634,5 +643,86 @@ describe("Site chrome accessibility (via renderPage)", () => {
   test("hamburger has aria-expanded", () => {
     const html = renderPage(metadata, [sampleConcert]);
     expect(html).toContain('aria-expanded="false"');
+  });
+});
+
+// ── S101a-B microdata price + availability fix ─────────────────────────
+//
+// Per Strategist 2026-04-29 spec + S101a-A audit:
+//   1. <span itemprop="price"> microdata must be numeric (no €/$/£/¥)
+//   2. <meta itemprop="availability"> must be present on with-ticket cards
+//   3. Past events (EventCompleted) omit both — mirrors detail-page omit_offer branch
+//   4. Hub JSON-LD Offer.availability must call availabilityForEventStatus(),
+//      not hardcode InStock
+describe("S101a-B microdata price + availability", () => {
+  const metadata: PageMetadata = {
+    title: "Test", description: "Test", keywords: "test",
+    url: "test", eventCount: 1, lastUpdate: "2025-11-01T10:00:00Z", filters: {}
+  };
+
+  test("ticketed future event microdata: itemprop=price emits numeric, no currency symbol", () => {
+    const futureEvent = getTomorrowEvent();
+    const html = renderPage(metadata, [futureEvent]);
+
+    // Numeric price reaches microdata via <meta itemprop="price">
+    expect(html).toContain(`<meta itemprop="price" content="${futureEvent.price.amount}">`);
+
+    // Bug regression guard: no €-prefixed value inside any itemprop="price" span/meta
+    expect(html).not.toMatch(/itemprop="price"[^>]*>\s*€/);
+    expect(html).not.toMatch(/itemprop="price"\s+content="€/);
+  });
+
+  test("ticketed future event microdata: itemprop=availability present and InStock", () => {
+    const futureEvent = getTomorrowEvent();
+    const html = renderPage(metadata, [futureEvent]);
+
+    expect(html).toContain('<meta itemprop="availability" content="https://schema.org/InStock">');
+  });
+
+  test("event with no price.amount omits microdata price+availability entirely", () => {
+    const noAmountEvent: Event = {
+      ...getTomorrowEvent(),
+      price: { type: 'with-ticket', currency: 'EUR' }, // no amount
+    };
+    const html = renderPage(metadata, [noAmountEvent]);
+
+    // No microdata price emission for amount-less ticketed events.
+    // Matches BOTH <span itemprop="price">…</span> and <meta itemprop="price" content="…">
+    expect(html).not.toMatch(/itemprop="price"/);
+    expect(html).not.toMatch(/itemprop="availability"/);
+  });
+
+  test("past event (EventCompleted) omits both microdata price and availability", () => {
+    // sampleConcert startDate 2025-11-15 — guaranteed past as of 2026
+    const html = renderPage(metadata, [sampleConcert]);
+
+    // Verify it's actually a past event (otherwise this test is meaningless)
+    expect(html).toContain('content="https://schema.org/EventCompleted"');
+
+    // Past events: omit both per availabilityForEventStatus omit_offer branch.
+    // Broad regex matches any itemprop="price" / itemprop="availability" form.
+    expect(html).not.toMatch(/itemprop="price"/);
+    expect(html).not.toMatch(/itemprop="availability"/);
+  });
+
+  test("hub JSON-LD Offer.availability uses availabilityForEventStatus, not hardcoded InStock", () => {
+    // Past event in hub JSON-LD: per helper, omit_offer kicks in → no offers block
+    const html = renderPage(metadata, [sampleConcert]);
+
+    const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
+    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    const firstItem = jsonLd.mainEntity.itemListElement[0].item;
+
+    // Past event → no offers block at all (helper returned omit_offer)
+    expect(firstItem.offers).toBeUndefined();
+
+    // Future event → offers present with availability emitted by helper
+    const futureHtml = renderPage(metadata, [getTomorrowEvent()]);
+    const futureMatch = futureHtml.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
+    const futureJsonLd = JSON.parse(futureMatch![1]);
+    const futureItem = futureJsonLd.mainEntity.itemListElement[0].item;
+
+    expect(futureItem.offers).toBeDefined();
+    expect(futureItem.offers.availability).toBe("https://schema.org/InStock");
   });
 });

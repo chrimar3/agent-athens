@@ -442,6 +442,73 @@ export function validateDataFeed(distDir: string): SchemaValidationResult {
 }
 
 /**
+ * Validate Schema.org microdata in hub-card markup (S101a-B).
+ *
+ * Per S101a-A audit: validateSchemaCompleteness only parses JSON-LD
+ * (script tag at line 86). Hub cards emit Schema.org as HTML microdata
+ * via <span itemprop="..."> + <meta itemprop="...">, which the JSON-LD
+ * scanner never sees. This function closes that parallel surface for
+ * the two FAIL rules Strategist greenlit 2026-04-29:
+ *
+ *   1. itemprop="price" content must be numeric (mirrors line 172 regex
+ *      for JSON-LD offers.price)
+ *   2. when itemprop="price" present, itemprop="availability" must be too
+ *
+ * Past-event cards (eventStatus=EventCompleted) legitimately omit both
+ * per availabilityForEventStatus omit_offer branch. Detection: per-card
+ * scan for the eventStatus meta within the same <article> block.
+ *
+ * Cards without itemprop="price" (e.g., card-variants plain text, no-amount
+ * events whose Offer block was omitted) are silently skipped — there's
+ * nothing to validate.
+ */
+export function validateMicrodata(html: string): { errors: string[]; warnings: string[] } {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  // Extract each <article> block — cards are discrete article elements.
+  // Non-greedy match handles back-to-back articles without bleeding across.
+  const articleRegex = /<article\b[^>]*>([\s\S]*?)<\/article>/g;
+  let cardIndex = 0;
+
+  for (const match of html.matchAll(articleRegex)) {
+    cardIndex++;
+    const card = match[1];
+
+    // Past-event short-circuit: EventCompleted cards legitimately omit
+    // price + availability. Skip the entire card from microdata checks.
+    if (/itemprop="eventStatus"\s+content="https:\/\/schema\.org\/EventCompleted"/.test(card)) {
+      continue;
+    }
+
+    // Find itemprop="price" in either <span> or <meta> form.
+    const spanPriceMatch = card.match(/<span\s+itemprop="price"[^>]*>([^<]*)<\/span>/);
+    const metaPriceMatch = card.match(/<meta\s+itemprop="price"\s+content="([^"]*)"/);
+
+    let priceValue: string | null = null;
+    if (spanPriceMatch) priceValue = spanPriceMatch[1].trim();
+    else if (metaPriceMatch) priceValue = metaPriceMatch[1].trim();
+
+    // No price microdata at all: card has no Offer to validate. Skip silently.
+    if (priceValue === null) continue;
+
+    // Rule 1: numeric only (mirror JSON-LD offers.price rule at line 172).
+    if (/[€$£¥]/.test(priceValue) || (priceValue !== '' && isNaN(Number(priceValue)))) {
+      errors.push(`Card ${cardIndex}: itemprop="price" must be numeric, got "${priceValue}"`);
+    }
+
+    // Rule 2: when price is present, availability must also be present.
+    // Schema.org Offer requires both for valid markup.
+    const hasAvailability = /itemprop="availability"/.test(card);
+    if (!hasAvailability) {
+      errors.push(`Card ${cardIndex}: itemprop="price" present but itemprop="availability" missing`);
+    }
+  }
+
+  return { errors, warnings };
+}
+
+/**
  * Validate all generated event pages in a dist directory.
  *
  * `sameAsSeverity` is decided once at build start by generate-site.ts based on
@@ -493,7 +560,12 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     const htmlPath = join(distDir, `${slug}.html`);
     if (!existsSync(htmlPath)) continue;
     const html = readFileSync(htmlPath, 'utf-8');
-    details.push(validateHubSchema(html, slug));
+    const hubResult = validateHubSchema(html, slug);
+    // S101a-B: also scan microdata on hub cards (parallel emission surface).
+    const microResult = validateMicrodata(html);
+    hubResult.errors.push(...microResult.errors);
+    hubResult.warnings.push(...microResult.warnings);
+    details.push(hubResult);
   }
   // English hub pages (dist/en/{slug}/index.html) — only validate known hub slugs
   const enDir = join(distDir, 'en');
@@ -506,7 +578,11 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       const htmlPath = join(enDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateHubSchema(html, `en/${slug}`));
+      const hubResult = validateHubSchema(html, `en/${slug}`);
+      const microResult = validateMicrodata(html);
+      hubResult.errors.push(...microResult.errors);
+      hubResult.warnings.push(...microResult.warnings);
+      details.push(hubResult);
     }
   }
 

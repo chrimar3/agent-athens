@@ -720,3 +720,125 @@ describe('validateSchemaCompleteness — location.sameAs (Q-B1 + Q-B5 + Q-B7)', 
     expect((result.info ?? []).some(i => i.includes('location.sameAs'))).toBe(false);
   });
 });
+
+// ── validateMicrodata: hub-card itemprop scanner (S101a-B) ────────────
+//
+// Per S101a-A audit: validateSchemaCompleteness only parses JSON-LD. Hub
+// cards emit Schema.org as HTML microdata via <span itemprop="..."> +
+// <meta itemprop="...">. validateMicrodata closes the parallel surface:
+//   1. itemprop="price" content must be numeric (mirror line 172 regex)
+//   2. when itemprop="price" present, itemprop="availability" must be too
+//   3. cards without microdata price (e.g., card-variants plain text,
+//      no-amount events, past events) are silently skipped
+import { validateMicrodata } from '../schema-completeness';
+
+function wrapInHubHtml(cardsHtml: string): string {
+  return `<!DOCTYPE html><html><head></head><body>
+    <main>${cardsHtml}</main>
+  </body></html>`;
+}
+
+function makeCard(opts: {
+  price?: { kind: 'span-symbol' | 'span-numeric' | 'meta-numeric' | 'omit'; value?: string };
+  availability?: 'present' | 'omit';
+  eventStatus?: 'EventScheduled' | 'EventCompleted';
+} = {}): string {
+  const { price = { kind: 'meta-numeric', value: '15' }, availability = 'present', eventStatus = 'EventScheduled' } = opts;
+
+  let priceMarkup = '';
+  if (price.kind === 'span-symbol') {
+    priceMarkup = `<span itemprop="price">€${price.value ?? '15'}</span>`;
+  } else if (price.kind === 'span-numeric') {
+    priceMarkup = `<span itemprop="price">${price.value ?? '15'}</span>`;
+  } else if (price.kind === 'meta-numeric') {
+    priceMarkup = `<meta itemprop="price" content="${price.value ?? '15'}">`;
+  }
+
+  const availMarkup = availability === 'present'
+    ? `<meta itemprop="availability" content="https://schema.org/InStock">`
+    : '';
+
+  return `
+    <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+      <h3 itemprop="name">Sample Event</h3>
+      <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        ${priceMarkup}
+        <meta itemprop="priceCurrency" content="EUR">
+        ${availMarkup}
+      </span>
+      <meta itemprop="eventStatus" content="https://schema.org/${eventStatus}">
+    </article>`;
+}
+
+describe('validateMicrodata', () => {
+  test('Rule 1: <span itemprop="price">€16</span> → error "must be numeric"', () => {
+    const html = wrapInHubHtml(makeCard({ price: { kind: 'span-symbol', value: '16' } }));
+    const result = validateMicrodata(html);
+    expect(result.errors.some(e => e.includes('must be numeric'))).toBe(true);
+  });
+
+  test('Rule 1: <span itemprop="price">16</span> (numeric) passes', () => {
+    const html = wrapInHubHtml(makeCard({ price: { kind: 'span-numeric', value: '16' } }));
+    const result = validateMicrodata(html);
+    expect(result.errors.filter(e => e.includes('must be numeric'))).toHaveLength(0);
+  });
+
+  test('Rule 1: <meta itemprop="price" content="16"> (canonical post-fix shape) passes', () => {
+    const html = wrapInHubHtml(makeCard({ price: { kind: 'meta-numeric', value: '16' } }));
+    const result = validateMicrodata(html);
+    expect(result.errors.filter(e => e.includes('must be numeric'))).toHaveLength(0);
+  });
+
+  test('Card without itemprop="price" (card-variants plain text) is silently skipped', () => {
+    const html = wrapInHubHtml(`
+      <article class="event-card-list">
+        <span class="card-price">€15</span>
+      </article>`);
+    const result = validateMicrodata(html);
+    expect(result.errors).toHaveLength(0);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  test('Hub page with N cards, M containing € symbol → reports M errors', () => {
+    const violatingCards = [
+      makeCard({ price: { kind: 'span-symbol', value: '10' } }),
+      makeCard({ price: { kind: 'span-symbol', value: '20' } }),
+      makeCard({ price: { kind: 'span-symbol', value: '30' } }),
+    ];
+    const cleanCards = [
+      makeCard({ price: { kind: 'meta-numeric', value: '40' } }),
+      makeCard({ price: { kind: 'meta-numeric', value: '50' } }),
+    ];
+    const html = wrapInHubHtml([...violatingCards, ...cleanCards].join('\n'));
+    const result = validateMicrodata(html);
+    expect(result.errors.filter(e => e.includes('must be numeric'))).toHaveLength(3);
+  });
+
+  test('Rule 2: itemprop="price" present + itemprop="availability" missing → error', () => {
+    const html = wrapInHubHtml(makeCard({
+      price: { kind: 'meta-numeric', value: '15' },
+      availability: 'omit',
+    }));
+    const result = validateMicrodata(html);
+    expect(result.errors.some(e => e.includes('availability'))).toBe(true);
+  });
+
+  test('Rule 2: itemprop="price" + itemprop="availability" both present → passes', () => {
+    const html = wrapInHubHtml(makeCard({
+      price: { kind: 'meta-numeric', value: '15' },
+      availability: 'present',
+    }));
+    const result = validateMicrodata(html);
+    expect(result.errors.filter(e => e.includes('availability'))).toHaveLength(0);
+  });
+
+  test('Past event card (EventCompleted) legitimately omits both → no error', () => {
+    const html = wrapInHubHtml(makeCard({
+      price: { kind: 'omit' },
+      availability: 'omit',
+      eventStatus: 'EventCompleted',
+    }));
+    const result = validateMicrodata(html);
+    expect(result.errors).toHaveLength(0);
+  });
+});

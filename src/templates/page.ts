@@ -9,7 +9,7 @@ import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, availabilityForEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -222,6 +222,11 @@ export interface CardData {
   numericPrice: number;
   exhibitionIsOpen: boolean;
   schemaType: string;
+  // S101a-B: schema-only values, separated from priceText (display).
+  // null = omit microdata price/availability entirely (no amount, or omit_offer
+  // branch from availabilityForEventStatus on past events).
+  numericPriceForSchema: string | null;
+  availabilityForSchema: string | null;
 }
 
 export function prepareCardData(event: Event): CardData {
@@ -277,13 +282,47 @@ export function prepareCardData(event: Event): CardData {
   // Numeric price for data attribute (sort-by-price)
   const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
 
-  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType };
+  // S101a-B: derive schema-only values via the canonical helper (mirrors
+  // event-page.ts:227 behavior). availabilityForEventStatus returns
+  // omit_offer for EventCompleted → null both fields so renderEventCard
+  // emits no microdata price/availability for past events.
+  const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
+  const availability = availabilityForEventStatus(eventStatus);
+  let numericPriceForSchema: string | null;
+  let availabilityForSchema: string | null;
+  if (availability.kind === 'omit_offer') {
+    numericPriceForSchema = null;
+    availabilityForSchema = null;
+  } else if (event.price.type === 'open') {
+    // Free events: numeric "0" + InStock per Strategist 2026-04-29 spec
+    numericPriceForSchema = '0';
+    availabilityForSchema = availability.value;
+  } else if (event.price.amount && event.price.amount > 0) {
+    numericPriceForSchema = String(event.price.amount);
+    availabilityForSchema = availability.value;
+  } else {
+    // No-amount with-ticket event: omit BOTH price and availability.
+    // Schema.org Offer requires price; emitting availability alone
+    // creates a malformed Offer. The 114 fallback events fall here.
+    numericPriceForSchema = null;
+    availabilityForSchema = null;
+  }
+
+  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType, numericPriceForSchema, availabilityForSchema };
 }
 
 export function renderEventCard(event: Event): string {
-  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType } = prepareCardData(event);
+  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType, numericPriceForSchema, availabilityForSchema } = prepareCardData(event);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+
+  // S101a-B: split visible display from machine-readable schema.
+  // Visible <span> shows €15 (display); <meta itemprop="price"> carries
+  // the numeric value Google's rich-results parser needs. Past events
+  // (omit_offer) emit no Offer block at all.
+  const offerMicrodata = numericPriceForSchema !== null
+    ? `<span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span>${priceText}</span><meta itemprop="price" content="${numericPriceForSchema}"><meta itemprop="priceCurrency" content="${event.price.currency || 'EUR'}">${availabilityForSchema ? `<meta itemprop="availability" content="${availabilityForSchema}">` : ''}</span>`
+    : `<span class="card-price"><span>${priceText}</span></span>`;
 
   return `
   <article class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
@@ -298,7 +337,7 @@ export function renderEventCard(event: Event): string {
       <h3 class="card-title" itemprop="name"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${event.type === 'exhibition' && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
       <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
-      <span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${priceText}</span>${event.price.currency ? `<meta itemprop="priceCurrency" content="${event.price.currency}">` : ''}</span>
+      ${offerMicrodata}
     </div>
     <meta itemprop="eventStatus" content="${resolveEventStatus(event.startDate, event.endDate, event.type)}">
     <meta itemprop="description" content="${shortDesc}">
@@ -396,17 +435,22 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
   // CRITICAL: Schema.org must ALWAYS be in English for AI agent parsing
   // Even though content is Greek, Schema.org is the universal standard
 
-  const itemListElements = events.map((event, index) => ({
-    "@type": "ListItem",
-    "position": index + 1,
-    "item": {
+  const itemListElements = events.map((event, index) => {
+    // S101a-B: align hub Offer with detail-page emitter. Use the canonical
+    // helper instead of hardcoded InStock. Past events get omit_offer → drop
+    // the entire offers field (matches buildEventSchemaObject behavior +
+    // schema-completeness.ts:148 "EventCompleted legitimately have no Offer").
+    const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
+    const availability = availabilityForEventStatus(eventStatus);
+
+    const item: Record<string, unknown> = {
       "@type": event['@type'],
       "@id": `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${generateEventSlug(event)}/`,
       "name": event.title,
       "description": `${event.type} event in Athens`,
       "startDate": normalizeStartDate(event.startDate),
       "endDate": resolveSchemaEndDate(event),
-      "eventStatus": resolveEventStatus(event.startDate, event.endDate, event.type),
+      "eventStatus": eventStatus,
       "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
       "location": {
         "@type": VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
@@ -419,17 +463,26 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
           "addressCountry": getCountryCode()
         },
         "containedInPlace": buildContainedInPlace(event.venue.neighborhood)
-      },
-      "offers": {
+      }
+    };
+
+    if (availability.kind === 'emit') {
+      item.offers = {
         "@type": "Offer",
         ...((event.price.type === 'open' || event.price.type === 'donation')
           ? { "price": "0" }
           : (event.price.amount ? { "price": event.price.amount.toString() } : {})),
         "priceCurrency": event.price.currency || getCurrencyCode(),
-        "availability": "https://schema.org/InStock"
-      }
+        "availability": availability.value
+      };
     }
-  }));
+
+    return {
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": item
+    };
+  });
 
   const schema = {
     "@context": "https://schema.org",
