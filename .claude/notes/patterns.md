@@ -2870,3 +2870,40 @@ branch). Test coverage: `src/generators/__tests__/hub-page.test.ts` —
 5 tests verifying 4-cell default, 5-cell with hasPick, cornerstone
 header rendering (Greek + English aria-label), and non-cornerstone
 column absence.
+
+## Helper-call parity across multi-emitter Schema.org surfaces (S101a-B)
+
+When two or more emitters produce the same Schema.org property from the
+same data shape, route every emitter through the same helper — never
+hardcode the value at one site and helper-call at another. The drift
+shows up as silent multi-surface inconsistency the validator can't see
+unless its rules cover every surface.
+
+**The Agent Athens canonical example: `availabilityForEventStatus(resolveEventStatus(event))`.**
+
+Three emit surfaces all produce `Schema.org/Offer.availability`:
+1. Detail page JSON-LD: `buildEventSchemaObject` (`src/generators/event-page.ts`) — already used the helper.
+2. Hub JSON-LD: `generateSchemaMarkup` (`src/templates/page.ts:444`) — was hardcoding `'https://schema.org/InStock'` until S101a-B replaced it with the helper.
+3. Hub microdata: `renderEventCard` (`src/templates/page.ts:324`) — was emitting no availability at all until S101a-B added the helper-driven `<meta itemprop="availability">`.
+
+The helper's `omit_offer` branch (returned for past events / `EventCompleted`) must be honored by **all three** sites; in S101a-B the hub JSON-LD path was changed to drop the entire `Offer` block when the helper returns `omit_offer`, mirroring detail-page behavior at `event-page.ts:227`.
+
+**How to apply:**
+- When adding a new Schema.org-emitting surface, grep for the helper functions of any property you're emitting; do not let yourself write a literal `"https://schema.org/..."` string in template code.
+- When adding a new validator rule, enumerate every emit surface for the property and ensure the rule applies to all of them. The pre-S101a-B JSON-LD-only validator is the cautionary tale.
+- Helpers that return discriminated-union shapes (`{kind:'emit',value} \| {kind:'omit_offer'}`) are the right primitive: they encode "don't emit anything" as a first-class outcome, so callers can't accidentally emit a default.
+
+**Origin:** S101a-B (commit `d7003668b`), 11,217 microdata violations cleared by routing the hub microdata + hub JSON-LD through `availabilityForEventStatus`.
+
+## Stage by path even when build evidence looks complete (S101a-B)
+
+A successful local build (dist verified, zero violations, helpful counts in the right places) is not evidence that work is shipped. Until the working-tree changes are committed and pushed, the work exists only on one machine, and the next pipeline auto-commit can swallow it via `git add -A` (or, after S111, simply leave it dangling on the next push).
+
+In S101a-B, all five source files plus two specs were modified locally and the dist had been rebuilt — looking complete. But `git status` showed all seven files as ` M`/`??` and there was no S101a-B commit in the log. "Working tree green" ≠ "session closed."
+
+**How to apply:**
+- Always end a session with explicit `git add <path>` for each file, then `git status` confirmation, then `git commit`. Stage by path per [feedback_stage_precisely.md](feedback_stage_precisely.md) — never `git add -A`/`git add .`.
+- Treat `git status --short` as the session-closure check. If the output is non-empty, the session is not closed regardless of how good the dist looks.
+- Specs (`specs/*.md`) are session deliverables, not local-only scratch. Future planners reference them. Stage and commit them with the implementation that closes them.
+
+**Origin:** S101a-B (commit `d7003668b`). Sub-pattern reinforces [S111 explicit-path staging](https://github.com/chrimar3/agent-athens/commit/8bae1d2e5).

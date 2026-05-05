@@ -2682,3 +2682,35 @@ as a pure rank emitter.
 
 **Connects to:** `src/generators/hub-page.ts:32-36`,
 `src/utils/editorial-content.ts:105-130` (getFeaturedPickRank).
+
+## S101a closed in two sub-sessions: A audit, B implement (2026-05-05)
+
+**Decision:** Split S101a into S101a-A (audit + implementation spec) and S101a-B (TDD execution + deploy). No S101a-C was needed — the emitter-side fix self-propagates through the next nightly build, and DB content was clean from the start.
+
+**Why:** The original violation count of 11,217 microdata price errors *sounded* like it required a back-validation campaign — sweep DB, fix bad records, re-emit. Audit revealed the opposite: the database is clean (numeric `price.amount` integers throughout), and the bug lived entirely in the emitter (`renderEventCard` interpolated the user-visible `priceText` string with `€` prefix into the microdata span). One emitter change fixes every record at the next build.
+
+This is the **emitter-side-fix-zero-backlog pattern**: when stored data is clean and the bug is purely in the formatting layer, the next full rebuild eliminates the entire backlog with no per-record migration. Splitting the work into audit + execute lets the audit confirm the data shape before commit decisions are made.
+
+**How to apply:**
+- For any large violation count, ask "is the DB dirty or is the emitter dirty?" *before* scoping. The answer changes the work shape from "migrate N records" to "ship one fix."
+- The audit is the cheap precursor: a small spec session that establishes data state, enumerates emit sites, and lists any deferred Q&A. Implementation lands as a single TDD commit.
+- Test coverage for emitter-only fixes can target the emit boundary directly (golden-output tests on `renderEventCard` / hub JSON-LD), without staging fixture-DB rows. The next nightly build is the integration test.
+
+**Connects to:** S101a-B commit `d7003668b`, `specs/s101a-implementation.md` (audit deliverable), `src/templates/page.ts:228-324, 440-453` (emitter changes), `src/validators/schema-completeness.ts:465-565` (validator extended to microdata so the next regression can't pass build).
+
+## Q4 (`generateSchemaOrg` removal) deferred from S101a-B (2026-05-05)
+
+**Decision:** Keep `generateSchemaOrg` (`src/enrichment/quality-gates.ts:930`) in place. Did not remove it as part of S101a-B despite spec §Q4 framing it as "no production callers, safe to remove."
+
+**Why:** Step-0 verification grep at repo scope (not just `src/`) found two active production consumers in `scripts/`:
+- `scripts/run-enrichment-pipeline.ts:45` (import) and `:335` (call)
+- `scripts/generate-schema.ts:18` (import) and `:74` (call)
+
+The spec's `src/`-scoped grep missed them. Removing the function would have broken the next enrichment pipeline tick. Per the plan's own contingency clause ("If Step 0 found any non-test consumer: skip this step"), Q4 was deferred and documented in the commit message body.
+
+**How to apply:**
+- Future maintenance batch can revisit removal once `scripts/run-enrichment-pipeline.ts` and `scripts/generate-schema.ts` are migrated to use `buildEventSchemaObject` (the same helper the detail-page emitter uses) or its successor.
+- Until then, treat `generateSchemaOrg` as live API. It still receives `EventForEnrichment` and produces `SchemaOrgEvent`; the SCHEMA_TYPE_MAP it depends on (now including `dance`) must stay in sync with `EventType` additions.
+- More general lesson: when a spec asserts dead-code status, run the verification grep at repo scope (`grep -rn 'symbolName' . --include='*.ts' ...`), not just `src/`. The cost is identical; the safety upside is large.
+
+**Connects to:** `.claude/notes/mistakes.md` S101a-B entry (the underlying spec-vs-reality mismatch), commit `d7003668b` body (deferral documented).
