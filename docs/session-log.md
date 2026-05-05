@@ -4302,3 +4302,36 @@ new migration + 4 test files + 2 spec files. Migration already applied
 to `data/events.db`; rolling back requires a manual `ALTER TABLE events
 DROP COLUMN editorial_pick_rank` + `DROP INDEX idx_editorial_pick_rank`
 before any restoration of the unmodified pre-S101a-picks state.
+
+### Session 115 — S101a-B Microdata + Availability Emitter Fix (closes S101a-microdata; implements S113 audit) — 2026-05-05
+
+**Plan:** Fix microdata price emission (numeric only), unify availability mapping across all 3 emit sites via the existing `availabilityForEventStatus` helper, extend `schema-completeness.ts` to scan microdata. TDD throughout. Closes S101a fully — no S101a-C needed.
+
+**What happened:**
+1. **Step 0 verification** — spec present, working tree had earlier in-progress mods from a prior unfinished session. Q4 grep at repo scope (not just `src/`) found 2 live consumers of `generateSchemaOrg` in `scripts/` → Q4 deferred per the plan's contingency.
+2. **TDD red** — added 12 failing tests across `src/validators/__tests__/schema-completeness.test.ts` (7 microdata-validator tests) and `src/templates/__tests__/page.test.ts` (5 emitter tests including the past-event omit_offer case).
+3. **Emitter changes (`src/templates/page.ts`)** — added `numericPriceForSchema` field to `prepareCardData` (additive, no breaking changes to `card-variants` consumers); rewrote `renderEventCard` microdata block to emit `<meta itemprop="price">` (numeric) + conditional `<meta itemprop="availability">` derived from `availabilityForEventStatus(resolveEventStatus(event))`; replaced hardcoded `https://schema.org/InStock` in `generateSchemaMarkup` with the same helper, with `omit_offer` dropping the entire `Offer` block on past events.
+4. **Validator extension (`src/validators/schema-completeness.ts`)** — new `validateMicrodata` function (~80 lines) wired into `validateAllPages` for hub pages. Mirrors the JSON-LD numeric-price regex; checks for `<meta itemprop="availability">` presence on cards that emit `<span itemprop="price">`.
+5. **`SCHEMA_TYPE_MAP`** — added `dance: 'DanceEvent'` (Q5).
+6. **Type check + full test suite** — `bunx tsc --noEmit` clean; `bun test` 1917 pass / 1 skip / 0 fail.
+7. **Build + dist verification** — `bun run src/generate-site.ts` 14.2s, 7071/7328 pages valid (96%), 0 errors. Local dist: 0 `<span itemprop="price">€` matches, 16/24/10 `<meta itemprop="availability">` on theater/this-weekend/today hubs.
+8. **Two-commit closeout** — explicit-path staging per [feedback_stage_precisely.md](memory) (no `git add -A`); fix commit + closeout commit pushed to origin/main.
+9. **CLI deploy** — `netlify deploy --prod --dir=dist` (per `agent_athens_deploy_workflow.md` — git push does NOT auto-deploy). Deploy ID `69f9a7e93b4cd106fc72f68d`, 3m 25.6s, live at agentathens.com.
+
+**Tests delta:** 1905 → **1917 pass** (+12 new), 1 skip, 0 fail across 76 files. `bunx tsc --noEmit` clean.
+
+**Production verification (curl agentathens.com):**
+- `/theater/` `<span itemprop="price">€` count = **0** ✅
+- `/this-weekend/` `itemprop="availability"` count = **24** ✅
+- `/api/events.json` unique availability values = **only `https://schema.org/InStock`** ✅
+
+**Commits:**
+- `d7003668b` — fix(schema): microdata price numeric + availability unification (S101a-B)
+- `51a98bcb0` — S101a-B closeout: mistakes + patterns + decisions
+
+**Deferrals:**
+- **Q4** — `generateSchemaOrg` removal punted. Spec §Q4 claimed "no production callers" but a repo-scope grep (vs. the spec's `src/`-only grep) found 2 live consumers: `scripts/run-enrichment-pipeline.ts:45,335` and `scripts/generate-schema.ts:18,74`. Removal blocked until those scripts migrate to `buildEventSchemaObject` or successor. Logged in `decisions.md` and `mistakes.md` (S101a-B section + audit-scope row).
+
+**Cross-project signal:** **Editorial Director unblocked.** S101a closed in 2 sub-sessions (S113 audit + S115 implement). Rewrite work for the 11,217 microdata-violation corpus can proceed — emitter-side fix self-propagates at the next nightly build, no per-record back-validation needed.
+
+**Open items:** None for S101a-microdata. Per `decisions.md`, the `emitter-side-fix-zero-backlog` pattern is documented for future sessions facing similar formatting-layer-only bugs with clean stored data.
