@@ -615,7 +615,7 @@ describe("rowToEvent", () => {
       tech: "EducationEvent",
       show: "Event",
       festival: "Festival",
-      performance: "DanceEvent",
+      performance: "PerformingArtsEvent",
     };
 
     for (const [type, expectedSchemaType] of Object.entries(typeMap)) {

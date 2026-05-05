@@ -840,7 +840,14 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   tech: 'EducationEvent',
   show: 'Event',
   festival: 'Festival',
-  performance: 'DanceEvent',
+  // `performance` is a heterogeneous catch-all DB type. Per 2026-05-04 audit,
+  // 71% of rows are performing-arts-shaped (children's theater, ballet, tango,
+  // cabaret, dance gatherings); 29% are music/workshop/visual-arts that get
+  // a wrong-lineage-parent typing. PerformingArtsEvent is the canonical
+  // schema.org parent-when-uncertain pattern.
+  // Deferred: normalizer split — trigger 100+ rows globally or 50+ per city
+  // per quarter. Currently 31 rows globally.
+  performance: 'PerformingArtsEvent',
   dance: 'DanceEvent',
   sports: 'SportsEvent',
   other: 'Event',
