@@ -4459,3 +4459,98 @@ own briefs from a clean baseline.
 **Commits:** `eeeee8aea` (b-2d mechanical), `b56bceb0f` (Αγγέλων Βήμα).
 Tier 1 sameAs effectively shipped via `ae0f0d5f1` (concurrent commit,
 not Session 116-authored). Production deployed.
+
+### Session 117 — Sprint 2 retrospective ship (formal close) — 2026-05-06
+
+**Plan:** Replace the 98-line stub at `specs/sprint-2-retrospective.md`
+with the canonical retrospective; revise patterns.md Pattern #3 anchor
+to match the documented S112 case-folded incident; add a durable
+trigger-gate one-liner to `printSchemaSummary` so future ratchet
+activations surface during builds.
+
+**What happened:**
+
+- **Step 0 baseline.** Ratchet `populated:3, total:244, severity:info`
+  ✓ — trigger condition confirmed fired. Origin/main caught up. Tests
+  1941 pass / 0 fail / 1 skip. tsc clean.
+
+- **S110b verification gate: PENDING.** Investigation+results
+  documentation landed at `8455932af` but `temp-descriptions/` still has
+  18 entries (Mar/May files mixed) and `specs/s110b-investigation.md`
+  exists. Cleanup didn't ship — open items list has 5 entries (S110b
+  cleanup is the 5th).
+
+- **Brief-vs-reality drift surfaced in plan mode.** The brief described
+  a 250-300 line draft with "7 drift catches" and inline Pattern #3 body
+  that didn't exist in my 98-line stub. Stopped, reported to user,
+  received the canonical draft directly. Saved wholesale per user
+  direction (option b from earlier ask).
+
+- **Retrospective replaced wholesale.** 98 lines → ~370 lines. The
+  canonical version has 10 cross-sprint patterns (4 with full content,
+  3 stub-pointers to patterns.md, 3 with full content lifted to
+  patterns.md), 6+1 drift catches (the +1 surfaced post-Sprint-2
+  closeout per B-2d count drift), Q-lock cadence table, S105
+  calibration miss, Session 116 cross-stream contamination incident,
+  5 open items, Sprint 3 readiness signals.
+
+- **Pattern #3 anchor revised.** `.claude/notes/patterns.md`
+  "Diagnostic-vs-system metric divergence" entry's anchor reframed
+  from earlier S116 B-2c+B-2d 59→57 framing back to the documented
+  S112 incident (case-folded uppercase ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ + ΘΕΑΤΡΟ
+  ΠΑΛΛΑΣ duplicates per `mistakes.md:363`). Generalization paragraph
+  preserved; anchor + how-to-apply rewritten. The B-2c
+  numerator-subsets-denominator finding noted as separate (will get
+  its own future entry, not bundled).
+
+- **Trigger-gate one-liner shipped.** `src/validators/schema-completeness.ts`
+  `printSchemaSummary` (line 627) gained a 12-line block at end that
+  reads `data/build-completeness.json`, surfaces `🎯 venueSameAs
+  ratchet active: N/M populated (severity=X)` when populated≥1.
+  Try/catch handles initial-build edge case (silent skip if file
+  missing). Verified at build: line emits cleanly between the "Top
+  INFO findings" block and the per-EventType breakdown.
+
+- **Bonus discovery (post-retro-ship):** between Session 116 and
+  Session 117, the parallel S2 taxonomy session committed
+  `c0aa81a0d "fix(venues): land neighborhood_aliases + Ampelokipoi +
+  Athens Riviera (per ae0f0d5f1 intent)"`. The orphan stash@{0} from
+  Session 116 is now resolved — `neighborhood_aliases` content shipped
+  per the original `ae0f0d5f1` commit message's claim. The
+  retrospective documents the orphan-stash state at moment of authoring
+  ("remains structurally unfulfilled"); session-log here captures the
+  resolution. Standard retrospective archival — historical document
+  stays as-shipped.
+
+**Tests:** 1941 pass / 0 fail / 1 skip (no test count change from
+trigger-gate addition; no snapshot updates needed).
+
+**Verification:**
+- `bunx tsc --noEmit` clean.
+- `bun test` 1941/0/1 (unchanged from Session 116 baseline).
+- `bun run build` 0 errors. New ratchet line `🎯 venueSameAs ratchet
+  active: 3/244 populated (severity=info)` emits at expected position
+  in build summary.
+- Commit `3328d4bdb` shipped 3 files (retrospective, patterns.md,
+  schema-completeness.ts) cleanly per Sprint 2 staging discipline.
+  Build artifacts (`data/build-completeness.json`,
+  `data/event-set-hashes.json`) left unstaged per discipline.
+
+**Open items:**
+- All 5 retrospective open items routed past the sprint boundary
+  (Pireos 138 Wikidata, Tier 2 sameAs scoping, Benaki Koumpari naming,
+  interactive-session staging discipline, S110b temp-descriptions
+  cleanup).
+- The orphan stash item (#4 sub-component re: `c0aa81a0d` claim
+  remaining unfulfilled) is now resolved by `c0aa81a0d` landing.
+  Retrospective captures pre-resolution state intentionally;
+  session-log here captures post-resolution state.
+
+**Cross-project signal:** **Sprint 2 formally closed.** Retrospective
+shipped at `3328d4bdb`. Trigger-gate operational on every future
+build. Sprint 3 brief-drafting picks up the retrospective in
+pre-flight reading per readiness signal.
+
+**Commit:** `3328d4bdb` (retrospective + Pattern #3 anchor +
+trigger-gate). Plus this session-log entry + decisions.md "Sprint 2
+formal close" entry shipping in a follow-up commit.

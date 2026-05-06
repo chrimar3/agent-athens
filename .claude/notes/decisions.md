@@ -2851,3 +2851,44 @@ mitigation.
 institution-entity for venue Place sameAs" pattern;
 `config/athens-venues.json` rev `b56bceb0f` snapshot;
 `data/build-completeness.json` `place.ratchet.venueSameAs`.
+
+## S117 — Sprint 2 formally closed (retrospective shipped) (2026-05-06)
+
+**Decision:** Sprint 2 (GEO Citability Foundations) is formally closed.
+Retrospective shipped at commit `3328d4bdb`. Components D, A, C, B-1,
+B-2, B-2c, B-2d landed; pipeline staging hygiene shipped adjacent
+(Session 111).
+
+**Why:** The `venueSameAs` ratchet trip (`populated: 0 → 3, severity:
+info`) at Session 116 fired the retrospective trigger. Editorial Tier 1
+sameAs delivery (Megaron Q582203, Onassis Q43064509, Benaki Πολιτισμού
+Q816669) is the empirical signal that Sprint 2's measurement
+architecture works end-to-end. Sprint 3 brief-drafting now has a
+retrospective to pull into pre-flight reading.
+
+**What shipped (formal-close artifacts):**
+- `specs/sprint-2-retrospective.md` — canonical retrospective (~370
+  lines): outcome summary table, 10 cross-sprint patterns, 6+1 drift
+  catches, Q-lock cadence, S105 calibration miss, Session 116 cross-
+  stream contamination incident, 5 open items, Sprint 3 readiness
+  signals.
+- `.claude/notes/patterns.md` — Pattern #3 anchor revised to S112
+  case-folded incident.
+- `src/validators/schema-completeness.ts` — durable trigger-gate
+  one-liner in `printSchemaSummary`. Surfaces `🎯 venueSameAs ratchet
+  active: N/M populated (severity=X)` on every build going forward.
+
+**Open items routed past sprint boundary (5):** Pireos 138 Wikidata-
+entry workstream, Tier 2 sameAs scoping, Benaki Koumpari naming
+convention, interactive-session staging discipline, S110b temp-
+descriptions cleanup (PENDING per S110b verification gate).
+
+**How to apply:** Sprint 3+ briefs reference the retrospective in
+their pre-flight reading. New ratchet definitions can copy the
+trigger-gate pattern (in `printSchemaSummary` near end) for their own
+surfacing — generic by design, multi-ratchet-friendly.
+
+**Connects to:** `specs/sprint-2-retrospective.md`, commit `3328d4bdb`,
+`.claude/notes/patterns.md` "Diagnostic-vs-system metric divergence"
+(revised anchor),
+`src/validators/schema-completeness.ts:709+` (trigger-gate block).
