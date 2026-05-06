@@ -178,13 +178,6 @@
     {
       "canonical_name": "Cantina Social",
       "variations": [
-        "Cantina"
-      ],
-      "neighborhood": "Exarchia"
-    },
-    {
-      "canonical_name": "Cantina Social",
-      "variations": [
         "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece"
       ],
       "neighborhood": "Psyrri"
@@ -234,13 +227,6 @@
     {
       "canonical_name": "Smut",
       "variations": [
-        "SMUT"
-      ],
-      "neighborhood": "Metaxourgeio"
-    },
-    {
-      "canonical_name": "Smut",
-      "variations": [
         "Smut, Βατσαξή 4, 10438, Αθήνα, Greece"
       ],
       "neighborhood": "Central Athens"
@@ -280,13 +266,6 @@
     {
       "canonical_name": "Wild Poppies",
       "variations": [
-        "WildPoppies"
-      ],
-      "neighborhood": "Koukaki"
-    },
-    {
-      "canonical_name": "Wild Poppies",
-      "variations": [
         "Wild Poppies, Σταδίου 7, Αθήνα, 10562, Greece"
       ],
       "neighborhood": "Syntagma"
@@ -319,13 +298,6 @@
         "Bolivar, Ακτή Ηλίου, Άλιμος, Αθήνα, Greece"
       ],
       "neighborhood": "Alimos"
-    },
-    {
-      "canonical_name": "Burger Disco Club",
-      "variations": [
-        "Burger Disco"
-      ],
-      "neighborhood": "Gazi"
     },
     {
       "canonical_name": "Burger Disco Club",
@@ -369,13 +341,6 @@
         "provider": "halfnote.gr",
         "url": "https://www.halfnote.gr/programma/"
       }
-    },
-    {
-      "canonical_name": "IT Athens",
-      "variations": [
-        "IT"
-      ],
-      "neighborhood": "Gazi"
     },
     {
       "canonical_name": "IT Athens",
