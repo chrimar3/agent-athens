@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-06T05:30:03.082Z"
+    "lastUpdate": "2026-05-06T05:38:58.451Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,38 +13,38 @@
     "byType": [
       {
         "type": "concert",
-        "total": 1116,
-        "pass": 1074,
+        "total": 1118,
+        "pass": 1076,
         "warn": 42,
         "fail": 0,
-        "info": 1116,
+        "info": 1118,
         "passRate": 96
       },
       {
         "type": "dj_set",
-        "total": 439,
-        "pass": 383,
+        "total": 440,
+        "pass": 384,
         "warn": 56,
         "fail": 0,
-        "info": 439,
+        "info": 440,
         "passRate": 87
       },
       {
         "type": "exhibition",
-        "total": 25,
+        "total": 26,
         "pass": 13,
-        "warn": 12,
+        "warn": 13,
         "fail": 0,
-        "info": 25,
-        "passRate": 52
+        "info": 26,
+        "passRate": 50
       },
       {
         "type": "theater",
-        "total": 5479,
-        "pass": 5335,
+        "total": 5480,
+        "pass": 5336,
         "warn": 144,
         "fail": 0,
-        "info": 5479,
+        "info": 5480,
         "passRate": 97
       },
       {
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 7201,
-      "pass": 6943,
-      "warn": 258,
+      "total": 7206,
+      "pass": 6947,
+      "warn": 259,
       "fail": 0,
-      "info": 7201,
+      "info": 7206,
       "passRate": 96
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 46
     },
     "event_template": {
-      "total": 7201,
-      "pass": 6943,
-      "warn": 258,
+      "total": 7206,
+      "pass": 6947,
+      "warn": 259,
       "fail": 0,
-      "info": 7201
+      "info": 7206
     },
     "byVenue": [
       {
@@ -345,11 +345,11 @@
       },
       {
         "venue": "bolivar",
-        "total": 45,
-        "pass": 42,
+        "total": 46,
+        "pass": 43,
         "warn": 3,
         "fail": 0,
-        "info": 45,
+        "info": 46,
         "passRate": 93,
         "sameAsState": "missing"
       },
@@ -835,12 +835,12 @@
       },
       {
         "venue": "onassis stegi",
-        "total": 70,
+        "total": 71,
         "pass": 61,
-        "warn": 9,
+        "warn": 10,
         "fail": 0,
-        "info": 70,
-        "passRate": 87,
+        "info": 71,
+        "passRate": 86,
         "sameAsState": "missing"
       },
       {
@@ -1425,12 +1425,12 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 13,
-        "pass": 12,
+        "total": 14,
+        "pass": 13,
         "warn": 1,
         "fail": 0,
-        "info": 13,
-        "passRate": 92,
+        "info": 14,
+        "passRate": 93,
         "sameAsState": "missing"
       },
       {
@@ -1485,11 +1485,11 @@
       },
       {
         "venue": "εθνικο θεατρο",
-        "total": 38,
-        "pass": 37,
+        "total": 39,
+        "pass": 38,
         "warn": 1,
         "fail": 0,
-        "info": 38,
+        "info": 39,
         "passRate": 97,
         "sameAsState": "missing"
       },
@@ -2055,11 +2055,11 @@
       },
       {
         "venue": "μεγαρο μουσικης αθηνων",
-        "total": 284,
-        "pass": 256,
+        "total": 285,
+        "pass": 257,
         "warn": 28,
         "fail": 0,
-        "info": 284,
+        "info": 285,
         "passRate": 90,
         "sameAsState": "missing"
       },
