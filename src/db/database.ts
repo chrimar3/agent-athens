@@ -7,6 +7,7 @@ import { join } from "path";
 import { isAthensEvent } from "../utils/athens-filter";
 import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
 import { normalizeDateField } from "../utils/date-format";
+import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -73,7 +74,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $end_date: event.endDate ? normalizeDateField(event.endDate) : null,
     $type: event.type,
     $genres: JSON.stringify(event.genres),
-    $tags: JSON.stringify(event.tags),
+    $tags: JSON.stringify(filterEntityTags(event.tags, loadDefaultExclusionSet())),
     $venue_name: event.venue.name,
     $venue_address: event.venue.address,
     $venue_neighborhood: event.venue.neighborhood || null,

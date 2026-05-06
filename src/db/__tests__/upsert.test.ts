@@ -1,7 +1,7 @@
 // Database tests for upsert operations
 import { describe, test, expect, beforeEach, afterEach } from "bun:test";
 import type { Database } from "bun:sqlite";
-import { upsertEvent } from "../database";
+import { upsertEvent, updateEvent } from "../database";
 import { sampleConcert, sampleFreeExhibition } from "../../../tests/fixtures/events";
 import {
   createTestDB,
@@ -150,5 +150,40 @@ describe("upsertEvent", () => {
 
     expect(firstEvent.created_at).toBe(secondEvent.created_at); // Should not change
     // updated_at should change (but we can't reliably test this in fast tests)
+  });
+
+  // S2 taxonomy hygiene: integration tests confirming the entity-tag filter
+  // fires at the DB write barrier (sites 1 + 2 in specs/s2-taxonomy-touchpoints.md).
+  // Entity names used here MUST match the real athens-venues.json + city-geodata.json
+  // — these tests run against the production exclusion set, not hermetic fixtures.
+  test("upsertEvent: drops entity-name tags (venue variation + neighborhood + city) before DB write", () => {
+    const dirtyEvent: Event = {
+      ...sampleConcert,
+      tags: ["Athens Concert Hall", "jazz", "Plaka", "rebetiko", "Athens"],
+    };
+
+    upsertEvent(dirtyEvent, db);
+    const stored = JSON.parse(getEventById(db, dirtyEvent.id).tags);
+
+    expect(stored).toEqual(["jazz", "rebetiko"]);
+    expect(stored).not.toContain("Athens Concert Hall");
+    expect(stored).not.toContain("Plaka");
+    expect(stored).not.toContain("Athens");
+  });
+
+  test("updateEvent: drops entity-name tags before DB write", () => {
+    upsertEvent(sampleConcert, db);
+
+    const dirtyUpdate: Event = {
+      ...sampleConcert,
+      tags: ["Gazi", "Πλάκα", "techno", "Megaro Mousikis"],
+    };
+    updateEvent(dirtyUpdate, db);
+
+    const stored = JSON.parse(getEventById(db, sampleConcert.id).tags);
+    expect(stored).toEqual(["techno"]);
+    expect(stored).not.toContain("Gazi");
+    expect(stored).not.toContain("Πλάκα");
+    expect(stored).not.toContain("Megaro Mousikis");
   });
 });

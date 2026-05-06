@@ -2933,3 +2933,84 @@ unrelated changes; explicit `netlify deploy --prod --dir=dist` gives clean
 deploy-ID attribution and immediate citability impact.
 
 Source: recurring across S77, S101a-B, performance reclassification.
+
+## structural-parity-via-shared-helper
+
+JSON-LD emission (`src/generators/event-page.ts:162`) and microdata emission
+(`src/templates/page.ts:289, 342`) both flow through `resolveEventStatus()` and
+`availabilityForEventStatus()` post-S101a-B. `eventStatus` and
+`offers.availability` parity between the two surfaces is therefore structurally
+guaranteed at the helper layer — no runtime parity validator needed. A single
+regression test exercising the shared path is sufficient to catch drift if a
+future change introduces a renderer that bypasses the helpers. Informs S110
+coverage-manifest scoping (parity is one less coverage cell to track).
+
+The S101a-B comment at `page.ts:285` makes this explicit: "derive schema-only
+values via the canonical helper (mirrors event-page.ts:227 behavior)."
+
+**Caveat (value vs emission):** the helper-layer guarantee covers the *value*
+of `eventStatus` and `availability` — both surfaces compute the same string.
+It does NOT cover the *emission decision* (whether to render the field at
+all). The "no-amount with-ticket" fallback path at `page.ts:304-308` nulls
+both microdata price and availability ("Schema.org Offer requires price;
+emitting availability alone creates a malformed Offer"), while the JSON-LD
+path at `event-page.ts:275-288` still emits an Offer with `availability`
+present and `price` omitted. For the ~114 affected events, value-parity holds
+but emission-parity does not. Out of scope for the regression test; flag if
+S110 manifest scope reaches into emission decisions.
+
+**Origin:** S101b diagnostic side-finding, 2026-05-06. S101b deferred per GEO
+Strategist Sequencing Addendum; this finding emerged during pre-stop reading
+of `event-page.ts` and `page.ts` and reduces S101b's reactivation scope when
+scraper signal lands.
+
+## Hermetic-Fixture Blindness (2026-05-06, S2)
+
+Unit tests written against hermetic fixtures with self-consistent canonical
+spelling can pass a 100% green suite while failing against the real corpus —
+because the real corpus carries historical drift the fixtures don't model.
+
+**Concrete S2 instance:** `src/utils/__tests__/tag-filter.test.ts` had 18
+tests using a synthetic `ATHENS_VENUES_FIXTURE` with neighborhoods like
+"Plaka", "Gazi", "Ampelokipoi". Each test passed and the 2 integration
+tests against `upsertEvent`/`updateEvent` also passed. First backfill
+caught 8 of 11 Step 0c neighborhoods (256 row updates, 73% catch rate);
+3 missed entirely (Ampelokipoi/Psiri/Neos-Kosmos = 95 occurrences) plus
+2 below-horizon (Pagrati/Athens-Riviera = 9 occurrences).
+
+The misses came from a parallel lineage of pollution:
+`TAG_TAXONOMY.neighborhood` (in `description-generator.ts`, removed in
+Step 5) had 20 entries with different transliterations than
+`athens-venues.json` `.neighborhoods` (88 entries). The fixtures used
+config-canonical names; the corpus had taxonomy names. Both were "right"
+from each source's perspective; the divergence made the filter look
+correct and the corpus look polluted simultaneously.
+
+**Pattern signal:** if a unit-tested rule is meant to apply to a real
+corpus, pair the hermetic suite with at least one **real-config integration
+test** that asserts on production data shape. For S2 this would have been:
+"build the exclusion set from the actual `athens-venues.json` and
+`city-geodata.json`, then assert that all 11 historically-polluting
+neighborhoods are dropped." That test would have failed Phase 1, before
+the backfill burned a real corpus run.
+
+**Generalization:** when a pure-function filter or validator is hermetically
+tested AND deployed against a corpus with historical drift, the hermetic
+suite is necessary but not sufficient. The corpus has taxonomic memory the
+fixtures don't share. Detection: if the production corpus has accumulated
+data via multiple lineages of canonical names (TAG_TAXONOMY history,
+NEIGHBORHOOD_GREEK aliases, scraper variations), the test surface must
+include an integration probe that exercises the real source.
+
+**Detection mechanism that worked:** the user-specified pre/post top-50
+SQL diff with explicit "0 of the N tracked entries should have non-zero
+count" assertion. This functions as a real-config integration test
+delivered after-the-fact via verification rather than baked into the test
+suite. For future filter sessions, prefer baking the assertion into the
+suite (`tests/tag-filter-corpus-integration.test.ts`) so it fires in CI
+rather than relying on session-time SQL diffing.
+
+**Origin (S101b context retained):** S101b deferred per GEO Strategist
+Sequencing Addendum; the S101b finding emerged during pre-stop reading
+of `event-page.ts` and `page.ts` and reduces S101b's reactivation scope
+when scraper signal lands.

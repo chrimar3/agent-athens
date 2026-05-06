@@ -2714,3 +2714,83 @@ The spec's `src/`-scoped grep missed them. Removing the function would have brok
 - More general lesson: when a spec asserts dead-code status, run the verification grep at repo scope (`grep -rn 'symbolName' . --include='*.ts' ...`), not just `src/`. The cost is identical; the safety upside is large.
 
 **Connects to:** `.claude/notes/mistakes.md` S101a-B entry (the underlying spec-vs-reality mismatch), commit `d7003668b` body (deferral documented).
+
+## 2026-05-06 — S101b Validator Parity Rule: Structural Guarantee Found
+
+Diagnostic side-finding during S101b stop. JSON-LD and microdata emission
+both flow through `resolveEventStatus()` and `availabilityForEventStatus()`
+post-S101a-B. Parity between the two surfaces is structurally guaranteed
+at the helper layer; no runtime validator needed. A single regression test
+exercising the shared path is sufficient.
+
+Implication for S110 coverage manifest: parity-rule scope reduces from
+"validate JSON-LD↔microdata agreement per page" to "verify shared-helper
+path is exercised by at least one test." One less coverage cell to track.
+
+Implication for S101b reactivation: when scraper signal lands, the
+validator parity rule originally specced for S101b is already satisfied
+structurally. S101b reactivation scope shrinks accordingly — the rule
+doesn't need to be added to the validator at all; the regression test
+suffices.
+
+See `.claude/notes/patterns.md` → `structural-parity-via-shared-helper`.
+
+## 2026-05-06 — S2 Taxonomy Hygiene: Entity Tag Filter
+
+Tags shipping with venue/neighborhood/city names polluted the corpus across
+~362 row updates. Three-layer remediation chosen: structural fix at the
+prompt source (`TAG_TAXONOMY.neighborhood` removed), runtime filter at the
+DB write barrier (`src/utils/tag-filter.ts` applied at all 4 write sites
+via `eventToRow()` + 2 script call sites), and corpus backfill.
+
+**Key schema decision: `neighborhood_aliases` sibling map** in
+`config/athens-venues.json`. Chosen over two alternatives:
+
+1. *Flat-string parallel entries in `.neighborhoods`* (e.g., adding "Psiri"
+   alongside "Psyrri" as if both are distinct neighborhoods) — rejected:
+   encodes the variant-as-distinct-neighborhood taxonomy bug into the
+   source of truth, has to be reversed later.
+2. *`.neighborhoods` → object promotion* (e.g.,
+   `{ canonical: "Psyrri", aliases: ["Psiri"] }`) — rejected: 5 existing
+   consumers iterate `.neighborhoods` as a flat string array; promotion is
+   a breaking change.
+
+**Sibling map** (`{ canonical: [variant, ...] }`) is additive, leaves
+existing consumers untouched, and gets the taxonomy right today: variants
+are variants, not distinct neighborhoods. Schema invariant: every key in
+`.neighborhood_aliases` MUST also exist in `.neighborhoods`. Empty arrays
+valid (slot reserved for canonical with no current variants — e.g., Athens
+Riviera's "Athens-Riviera" hyphen variant is caught by hyphen-as-space
+normalization, not listed here).
+
+**Variant sourcing rule:** entries sourced from existing NEIGHBORHOOD_GREEK
+same-Greek-value siblings (verifiable audit trail — e.g., Kerameikos and
+Keramikos already both map to Κεραμεικός in
+`src/utils/neighborhoods.ts`). Speculative transliteration variants (Tier 2:
+Marousi/Maroussi, Glyfada/Glifada, etc.) NOT added preemptively — caught at
+runtime by the top-50 SQL diff when they appear in production. Avoids
+polluting the source-of-truth audit trail with speculation.
+
+**Defensive update:** `scripts/fix-venue-whitelist.ts:88-95` rebuilds
+`athens-venues.json` from explicit fields and would have silently dropped
+`.neighborhood_aliases` on next run. Added explicit pass-through. Lesson
+generalizes: any script that round-trips a config file must preserve
+unknown sibling keys, or be updated whenever the schema gains a sibling.
+
+**Hyphen-as-space normalization** in `src/utils/tag-filter.ts:normalize()`
+(replaces `[-\s]+` with single space) — catches "Neos-Kosmos" ↔
+"Neos Kosmos" and any future Foo-Bar ↔ Foo Bar transliteration variant via
+the existing canonical entry. No new config entry needed for hyphen
+variants.
+
+**Defense-in-depth upgrade beyond original brief:** Step 5a expanded from
+"remove neighborhood from `suggestTagOptions()`" (turned out to be dead code
+with 0 callers) to "remove `TAG_TAXONOMY.neighborhood` entirely" — the real
+source feeding `quality-gates.ts:773` validation. Three layers now: invalid
+at gate, removed from suggestion, filtered at DB barrier.
+
+**Known structural gap (deferred):** `scripts/run-enrichment-pipeline.ts`
+Site 3 builds tags via legacy `extractTags(description)` — a `**Tags:**`
+prose parser separate from `suggestTagOptions()`. Step 5a's structural fix
+does NOT touch this prose-parser path; the runtime filter at Site 3 catches
+any leak. Follow-up candidate: replace or filter `extractTags()`.

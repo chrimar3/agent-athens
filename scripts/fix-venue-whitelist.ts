@@ -84,13 +84,16 @@ for (const addition of additions) {
 // Convert back to array
 const consolidatedVenues = Array.from(venueMap.values());
 
-// Create new config
+// Create new config — preserve sibling fields added by other workstreams
+// (e.g., neighborhood_aliases per S2 taxonomy hygiene). Explicit pass-through
+// keeps field-order conventions intact while preventing silent data loss.
 const newConfig = {
   version: "1.1",
   last_updated: new Date().toISOString().split('T')[0],
   notes: "Consolidated venue whitelist with proper canonical_name format",
   venues: consolidatedVenues,
   neighborhoods: config.neighborhoods,
+  neighborhood_aliases: config.neighborhood_aliases,
   pass_through_venues: config.pass_through_venues
 };
 

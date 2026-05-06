@@ -63,6 +63,12 @@ export interface EnrichedContent {
 // Tag Taxonomy (from Master Template v2.0)
 // ============================================================================
 
+// S2 taxonomy hygiene (2026-05-06): `neighborhood` removed from TAG_TAXONOMY.
+// Neighborhoods belong in venue.neighborhood / address blocks / description
+// prose, not as facet chips. Quality-gates and validation derive "valid tags"
+// from this taxonomy via Object.values().flat(); removing the category here
+// means any neighborhood emitted as a tag now flags as INVALID_TAGS at the
+// gate, in addition to being filtered at the DB write barrier (src/utils/tag-filter.ts).
 export const TAG_TAXONOMY = {
   genre: [
     'Jazz', 'Electronic', 'Techno', 'House', 'Hard-techno', 'Melodic-techno',
@@ -72,12 +78,6 @@ export const TAG_TAXONOMY = {
     'Mediterranean-Fusion', 'DJ-set', 'Live-band', 'Live-act',
     'Comedy', 'Opera', 'Theater', 'Dance', 'Shadow-Theater',
     'Photography', 'Contemporary-Art'
-  ],
-  neighborhood: [
-    'Gazi', 'Exarchia', 'Psiri', 'Koukaki', 'Monastiraki', 'Metaxourgeio',
-    'Kolonaki', 'Piraeus', 'Neos-Kosmos', 'Mets', 'Petralona', 'Kypseli',
-    'Tavros', 'Athens-Riviera', 'Pagrati', 'Ampelokipoi', 'Kallithea',
-    'Ellinikon', 'Galatsi', 'Marousi'
   ],
   atmosphere: [
     'Industrial-chic', 'Intimate', 'Underground', 'Mainstream', 'Tourist-friendly',
@@ -291,6 +291,7 @@ ${artistContext}
 - At least 2 sentences that could be quoted standalone by an AI (citability test)
 - Include the Details table inline
 - PURE NARRATIVE ONLY — tags and timestamps are handled separately in the database
+- IF you list tags anywhere (e.g., in a tags: ... line), they MUST be genre, mood, audience, or descriptor categories — not venue names, neighborhood names, or city names. Valid tag examples: jazz, rebetiko, indie, family-friendly, late-night. INVALID tag examples: Megaron, Plaka, Athens, Gazi, Onassis. Use venue and neighborhood names in description prose, never as tags.
 
 ${buildBannedPhrasesSection('en')}
 
@@ -492,31 +493,17 @@ export function buildVenueContextForPrompt(venueData: VenueEnrichment | null): s
 /**
  * Suggest relevant tags based on event data
  */
-function suggestTagOptions(event: EventForEnrichment): string {
-  const suggestions: string[] = [];
-
-  // Genre tags
-  suggestions.push(`Genre: ${TAG_TAXONOMY.genre.join(', ')}`);
-
-  // Neighborhood
-  if (event.neighborhood) {
-    suggestions.push(`Neighborhood: ${event.neighborhood}`);
-  } else {
-    suggestions.push(`Neighborhood: ${TAG_TAXONOMY.neighborhood.join(', ')}`);
-  }
-
-  // Atmosphere
-  suggestions.push(`Atmosphere: ${TAG_TAXONOMY.atmosphere.join(', ')}`);
-
-  // Crowd
-  suggestions.push(`Crowd: ${TAG_TAXONOMY.crowd.join(', ')}`);
-
-  // Experience
-  suggestions.push(`Experience: ${TAG_TAXONOMY.experience.join(', ')}`);
-
-  // Practical
-  suggestions.push(`Practical: ${TAG_TAXONOMY.practical.join(', ')}`);
-
+function suggestTagOptions(_event: EventForEnrichment): string {
+  // S2 taxonomy hygiene: neighborhoods removed as tag suggestions. Tags carry
+  // genre/mood/audience/descriptor signal only — venue and neighborhood names
+  // belong in the venue field, address block, or description prose, never as facet chips.
+  const suggestions: string[] = [
+    `Genre: ${TAG_TAXONOMY.genre.join(', ')}`,
+    `Atmosphere: ${TAG_TAXONOMY.atmosphere.join(', ')}`,
+    `Crowd: ${TAG_TAXONOMY.crowd.join(', ')}`,
+    `Experience: ${TAG_TAXONOMY.experience.join(', ')}`,
+    `Practical: ${TAG_TAXONOMY.practical.join(', ')}`,
+  ];
   return suggestions.join('\n');
 }
 

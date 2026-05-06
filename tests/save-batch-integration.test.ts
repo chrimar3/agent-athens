@@ -277,6 +277,20 @@ describe('save-batch', () => {
     expect(missing!.success).toBe(false);
     expect(missing!.error).toContain('file not found');
   });
+
+  // S2 taxonomy hygiene: smoke test for site 4 (save-batch tag-write barrier).
+  // Confirms .tags.json content is filtered through filterEntityTags() before
+  // persistence. Entity names match real athens-venues.json + city-geodata.json.
+  test('drops entity-name tags from .tags.json before persisting', () => {
+    writeTestTags('test-save-001', ['Plaka', 'Athens', 'jazz', 'Athens Concert Hall', 'rebetiko']);
+
+    const { results } = saveBatch(db, ['test-save-001'], 'test-session', 1, false);
+    expect(results[0].success).toBe(true);
+
+    const row = db.prepare('SELECT tags FROM events WHERE id = ?').get('test-save-001') as any;
+    const stored = JSON.parse(row.tags);
+    expect(stored).toEqual(['jazz', 'rebetiko']);
+  });
 });
 
 // ============================================================================

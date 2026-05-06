@@ -19,6 +19,7 @@
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
+import { filterEntityTags, loadDefaultExclusionSet } from '../src/utils/tag-filter';
 import { validateQualityGates, validateEnglishDescription } from '../src/enrichment/quality-gates';
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
@@ -287,7 +288,11 @@ export function saveBatch(
     const tier = structureToTier(target.structure);
     const gateResult = validateQualityGates(event, description, tier);
 
-    const tagsJson = tags ? JSON.stringify(tags) : current?.tags || null;
+    // S2 taxonomy hygiene: drop venue/neighborhood/city entity names from tags
+    // before persistence. Preserves original fallback semantics: presence of
+    // input determines write-vs-fallback; the filter only changes the content.
+    const filteredTags = tags ? filterEntityTags(tags, loadDefaultExclusionSet()) : null;
+    const tagsJson = filteredTags ? JSON.stringify(filteredTags) : current?.tags || null;
 
     // Session 98 observability. Read RUN_ID once per event so each log row is
     // tagged with the wrapper-generated identifier; NULL for ad-hoc invocations.

@@ -1,6 +1,7 @@
 {
   "municipality": {
     "name": "Municipality of Athens",
+    "name_forms": ["Athens", "Athina", "Αθήνα", "Αθηνά"],
     "qid": "Q1524",
     "lat": 37.9838,
     "lng": 23.7275

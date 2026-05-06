@@ -23,7 +23,8 @@
       "ticketing": {
         "provider": "megaron.gr",
         "search_pattern": "https://www.megaron.gr/event-search/?keyword={title}"
-      }
+      },
+      "sameAs": ["https://www.wikidata.org/wiki/Q582203"]
     },
     {
       "canonical_name": "Gazarte",
@@ -790,7 +791,8 @@
       "ticketing": {
         "provider": "onassis.org",
         "search_pattern": "https://www.onassis.org/el/calendar?search={title}"
-      }
+      },
+      "sameAs": ["https://www.wikidata.org/wiki/Q43064509"]
     },
     {
       "canonical_name": "GREEK NATIONAL OPERA - SNFCC",
@@ -1218,7 +1220,8 @@
         "Benaki Museum",
         "Μουσείο Μπενάκη"
       ],
-      "neighborhood": "Syntagma"
+      "neighborhood": "Syntagma",
+      "sameAs": ["https://www.wikidata.org/wiki/Q816669"]
     },
     {
       "canonical_name": "Zelus",

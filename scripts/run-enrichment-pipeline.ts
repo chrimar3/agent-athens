@@ -20,6 +20,7 @@
  */
 
 import Database from 'bun:sqlite';
+import { filterEntityTags, loadDefaultExclusionSet } from '../src/utils/tag-filter';
 import {
   syncQueueFromEvents,
   getNextBatch,
@@ -259,8 +260,8 @@ async function saveDescription(db: Database, eventId: string): Promise<void> {
     }
   }
 
-  // Extract tags if present
-  const tags = extractTags(description);
+  // Extract tags if present, then drop entity-name leaks (S2 taxonomy hygiene)
+  const tags = filterEntityTags(extractTags(description), loadDefaultExclusionSet());
 
   // Save to database
   const now = new Date().toISOString();
