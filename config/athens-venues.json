@@ -1414,13 +1414,11 @@
     },
     {
       "canonical_name": "Αγγέλων Βήμα",
-      "variations": [],
-      "neighborhood": "Psyrri"
-    },
-    {
-      "canonical_name": "Αγγέλων Βήμα",
-      "variations": [],
-      "neighborhood": "Central Athens"
+      "variations": ["Σατωβριάνδου 36, Αθήνα"],
+      "neighborhood": "Psyrri",
+      "website": "https://aggelonvima.com",
+      "ticketing": null,
+      "sameAs": []
     },
     {
       "canonical_name": "Αίθουσα Διδασκαλίας Μεγάρου Μουσικής",
