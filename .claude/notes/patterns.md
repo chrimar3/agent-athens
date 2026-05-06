@@ -3014,3 +3014,127 @@ rather than relying on session-time SQL diffing.
 Sequencing Addendum; the S101b finding emerged during pre-stop reading
 of `event-page.ts` and `page.ts` and reduces S101b's reactivation scope
 when scraper signal lands.
+
+## Diagnostic-vs-system metric divergence
+
+Established 2026-05-06 (S116 / Sprint 2 closeout). Anchor: B-2c
+(numerator subsets denominator) and B-2d (collision count drift 59 →
+57 between diagnostic and execution).
+
+Diagnostic counts captured ahead of a decision describe a *snapshot*;
+the system's metrics reflect *current state* and may have drifted.
+Don't anchor commit messages, decision locks, or planning numbers to
+diagnostic snapshots without re-baselining at execution time.
+
+**How to apply:**
+- Pre-flight Step 0 should always include a baseline-check that
+  re-anchors counts. If the diagnostic was authored ≥1h before
+  execution, treat its counts as advisory.
+- Commit messages should reflect execution-time numbers. "Collisions:
+  59 → 0" is a lie if the count was 57 by the time the commit ran.
+- For metrics with running denominators (e.g., ratchets): the
+  denominator is computed by the current build pipeline, not the
+  config file's record count. They DON'T have to match — and shouldn't
+  surprise the operator when they don't.
+
+**Origin:** S116 closeout, B-2d hold count 6 (matched expected) but
+B-2d initial 59 → 57 drift carried in mistakes.md row at line 362.
+
+## Address-record-wins for canonical_name collision resolution
+
+Established 2026-05-06 (S116 / Sprint 2 closeout). Anchor: B-2d
+mechanical merges (5 cases — Cantina Social, Smut, Wild Poppies,
+Burger Disco Club, IT Athens).
+
+When two registry records share a canonical_name and one has a
+parseable street address in `variations[]` (street name + number) while
+the other has only a short label or alias, the address-bearing record
+is canonical and the stub is deleted. Pattern is ONLY mechanical when:
+
+1. Both records have the same canonical_name (hash collision, not
+   intent collision)
+2. One record's variations[] contains an address pattern matching the
+   project's address regex (street + number + city/postcode)
+3. The other record's variations[] is empty or contains only
+   short-label aliases (no street/number)
+4. Neighborhood difference between the two is consistent with the
+   address — the address-record's neighborhood maps to the building's
+   actual location; the stub's neighborhood is informational/wrong.
+
+**Cases requiring Editorial verification (not mechanical):**
+- Both records are stubs (no address in either)
+- Both records have addresses (different buildings, possibly different
+  venues with same name)
+- The neighborhood difference doesn't reconcile with the address (one
+  record says Gazi, address parses to Syntagma — but is the address
+  reliable?)
+
+**How to apply:** when adding a B-2d-shape collision-resolution
+session, separate cases into "mechanical address-record-wins" (commit
+together with this rationale) vs "Editorial verification needed"
+(separate commit with external sources cited). Don't mix the two in
+one commit — the resolution-method grouping matters for reverts and
+audit.
+
+**Origin:** S116 closeout, `commit eeeee8aea`. B-2d hold analysis
+(2026-05-04 brief) provided the rule; S116 was first execution.
+
+## Wikidata building-entity vs institution-entity for venue Place sameAs
+
+Established 2026-05-06 (S116 / Sprint 2 closeout). Anchor: Onassis
+Stegi sameAs decision — Q43064509 (building) chosen over Q109297692
+(institution variant).
+
+When attaching `sameAs` Wikidata QIDs to venue records (Schema.org
+`Place` entities), prefer the **building entity** over the
+**institution entity** when both exist. Reason: Schema.org Place
+semantics describe a physical location with coordinates, capacity,
+opening hours; the institution entity is an organizational concept
+that may have multiple buildings or be venue-less.
+
+**Examples:**
+- Onassis Stegi: Q43064509 (the Συγγρού Avenue building) ✓
+  Q109297692 (the Onassis Foundation as an organization) ✗
+- Megaron Mousikis: Q582203 (the Athens Concert Hall building) ✓
+- Benaki Πολιτισμού: Q816669 (the Koumpari main building) ✓
+  (the broader Benaki Foundation umbrella has separate QIDs for
+  Πινακοθήκη Γουλανδρή, Πειραιώς 138, etc.)
+
+**How to apply:** when researching a sameAs candidate, check Wikidata
+for both shapes. If only an institution entity exists (no building
+QID), defer the sameAs rather than attach the wrong shape — same
+discipline as S116's Pireos 138 deferral. The institution-entity
+sameAs would be valid for `Organization` Schema.org type but not for
+the `Place` (venue) we emit.
+
+**Origin:** S116 closeout, Tier 1 sameAs landing. Inherited convention
+from prior Strategist locks (Q-B7, Q-B8a) but not previously documented
+as a pattern.
+
+## Archival-vs-operational threshold (180-day vs 45-day)
+
+Established 2026-05-06 (S116 / Sprint 2 closeout). Anchor: Q-B9
+status quo (180-day revisit threshold accepted vs 45-day operational
+cadence).
+
+The same metric can be measured against multiple thresholds depending
+on whether the consumer is operational (daily decisions) or archival
+(quarterly reviews). When choosing a threshold for a new policy
+question, classify the consumer first:
+
+- **Operational** (45-day, weekly, etc.): the metric drives an
+  imminent action. Threshold should track typical operational signal
+  decay.
+- **Archival** (180-day, quarterly, annual): the metric drives a
+  retrospective review. Threshold should be long enough that
+  short-term fluctuations don't surface as false positives.
+
+**How to apply:** when defining a new "stale" / "fresh" policy in
+config or code, name the consumer in the comment. e.g.
+`STALE_VENUE_DAYS = 180  // archival — quarterly registry review` vs
+`STALE_ENRICHMENT_HOURS = 36  // operational — pages oncall`.
+
+**Origin:** S116 closeout, Q-B9 lock. Status quo accepted at 180-day
+revisit; the operational 45-day window for enrichment data had been a
+red herring in earlier discussion (different consumer, different
+purpose).

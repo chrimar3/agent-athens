@@ -4335,3 +4335,127 @@ before any restoration of the unmodified pre-S101a-picks state.
 **Cross-project signal:** **Editorial Director unblocked.** S101a closed in 2 sub-sessions (S113 audit + S115 implement). Rewrite work for the 11,217 microdata-violation corpus can proceed — emitter-side fix self-propagates at the next nightly build, no per-record back-validation needed.
 
 **Open items:** None for S101a-microdata. Per `decisions.md`, the `emitter-side-fix-zero-backlog` pattern is documented for future sessions facing similar formatting-layer-only bugs with clean stored data.
+
+### Session 116 — Sprint 2 closeout (3 commits, retrospective trigger fired) — 2026-05-06
+
+**Plan:** Land 3 commits in strict 1→2→3 order on `config/athens-venues.json`:
+(1) Tier 1 sameAs additions (3 records — Megaron Mousikis Q582203,
+Onassis Stegi Q43064509, Benaki Πολιτισμού Q816669); (2) B-2d mechanical
+merges (5 cases via address-record-wins); (3) B-2d Editorial-resolved
+merge (Αγγέλων Βήμα). Fire the Sprint 2 retrospective trigger when
+ratchet `venueSameAs.populated: 0 → 3`.
+
+**What happened:**
+
+- **Step 0 baseline.** Venue count 353 ✓, collisions 6 ✓ (Burger Disco
+  Club, Cantina Social, IT Athens, Smut, Wild Poppies, Αγγέλων Βήμα),
+  ratchet pre-trigger ✓, tests 1938 baseline (brief expected 1881 —
+  drifted forward via S101a-B and other landed work, no breakage).
+
+- **Brief drift resolved via AskUserQuestion (plan mode).** Brief
+  specified canonical_name targets that didn't match the actual
+  registry: Onassis is `"Onassis Stegi"` (Latin), not `"Στέγη Ιδρύματος
+  Ωνάση"` (which is in `variations[]`). The Benaki Κουμπάρη/Πολιτισμού
+  consolidation was already done — only one Koumpari record exists
+  (`"Μουσείο Μπενάκη Ελληνικού Πολιτισμού"`), so brief Step 3b had no
+  applicable target. User confirmed: skip Commit 3b, attach Q816669 to
+  the existing record, file Benaki naming convention as retrospective
+  open item.
+
+- **Cross-stream `git add -A` contamination recurrence (S111 antipattern).**
+  Mid-session, after I edited the file with 3 Tier 1 sameAs additions
+  and ran `git add config/athens-venues.json`, a concurrent commit on
+  `main` (`ae0f0d5f1` "S2: taxonomy hygiene") swept up my staged sameAs
+  additions along with that workstream's 16 files. Detected at Step 4
+  when `git diff --cached --stat` showed 16 files staged after a
+  single-path `git add`. By detection time, `ae0f0d5f1` was already
+  pushed to origin — destructive unwind no longer safe. Per user
+  approval, accepted bundling and continued with Commits 2 and 3
+  cleanly. Net result: my Commit 1 was effectively shipped inside
+  `ae0f0d5f1` (with the audit-trail blemish that the commit message
+  doesn't mention sameAs); Commits 2 and 3 landed as planned.
+
+- **Two-way drift in `ae0f0d5f1`'s commit message.** Message claims
+  "Added neighborhood_aliases sibling map to athens-venues.json" but
+  the actual commit has zero neighborhood_aliases hunks (that work is
+  in stash@{0} from an earlier mid-session stash). Message also
+  doesn't mention the 3 sameAs additions that ARE in the commit. Both
+  drifts logged in mistakes.md S116 entry.
+
+- **Commit 2 (`eeeee8aea`) — B-2d mechanical merges (5 cases).** Five
+  duplicate canonical_name pairs resolved by deleting the
+  neighborhood-only stub and keeping the address-bearing canonical:
+  Cantina Social (kept Λεωκορίου 6-8 / Psyrri), Smut (kept Βατσαξή 4 /
+  Metaxourgeio), Wild Poppies (kept Σταδίου 7 / Syntagma), Burger
+  Disco Club (kept Νίκης 11 / Syntagma), IT Athens (kept Σολωμού 30 &
+  Μπόταση 9 / Exarchia). Records: 353 → 348. Collisions: 6 → 1.
+
+- **Commit 3 (`b56bceb0f`) — Αγγέλων Βήμα merge + enrichment.** Two
+  stub records merged into one canonical record with Editorial-
+  verified address (Σατωβριάνδου 36, Αθήνα), neighborhood Psyrri (per
+  Editorial: polygon-edge location, Psyrri canonical), website
+  https://aggelonvima.com. Records: 348 → 347. Collisions: 1 → 0.
+
+**Tests:** 1941 pass / 0 fail / 1 skip (4070 expects, 77 files; baseline
+drifted from 1938 to 1941 between Step 0 and Step 4 due to the
+concurrent commit's S2 taxonomy hygiene tests landing).
+
+**Verification:**
+- `bunx tsc --noEmit` clean.
+- `bun run build` succeeded with 0 errors / 262 warnings (pre-existing
+  data gaps unrelated to this work). 7015 pages pass.
+- Ratchet `place.ratchet.venueSameAs`: `populated: 3, coverage:
+  0.012295, total: 244, threshold: 0.5, currentSeverity: "info"`. **🎯
+  RETROSPECTIVE TRIGGER FIRED.** Sprint 2 retrospective at
+  `specs/sprint-2-retrospective.md` (created this session).
+- Production deploy live at https://agentathens.com via
+  `netlify deploy --prod`. Deploy URL:
+  https://69fb3e84370b135e29e2b03c--agentathens.netlify.app
+- 0 canonical_name collisions in registry (all 6 B-2d holds resolved).
+- 3 sameAs records on origin/main: Megaron Q582203, Onassis Stegi
+  Q43064509, Benaki Πολιτισμού Q816669.
+
+**Brief-vs-reality mismatches encountered:**
+- Brief expected HEAD `9f0228a38`. Reality: HEAD had moved forward to
+  `c5c4bffaf` (and beyond during session). Tests baseline grew from
+  1881 to 1938+. Drift in safe direction.
+- Brief expected canonical_name `"Στέγη Ιδρύματος Ωνάση"` for Onassis;
+  actual is `"Onassis Stegi"` (Latin canonical, Greek in variations).
+- Brief expected separate `"Μουσείο Μπενάκη — Κεντρικό (Κουμπάρη)"` and
+  `"Μουσείο Μπενάκη — Μουσείο Ελληνικού Πολιτισμού"` records to merge.
+  Reality: only one Koumpari record exists (named `"Μουσείο Μπενάκη
+  Ελληνικού Πολιτισμού"`). Step 3b deleted from plan.
+- Brief expected post-Commit-3 record count 346. Reality: 347 (Step 3b
+  removal accounts for the +1 vs brief).
+
+**Open items:**
+- **Orphan stash@{0}** carries the neighborhood_aliases sibling map +
+  Ampelokipoi/Athens Riviera array additions that `ae0f0d5f1`'s
+  commit message claimed to ship but didn't actually include. Stash
+  also contains duplicate sameAs hunks (now in HEAD) — `git stash pop`
+  will conflict on those. Recovery path documented in
+  sprint-2-retrospective.md: targeted patch-extraction of the
+  bottom-of-file hunks only.
+- **Benaki Koumpari canonical_name** retro question: keep current
+  brand-as-displayed (`Μουσείο Μπενάκη Ελληνικού Πολιτισμού`) or
+  rename to building-as-physical-location (`Μουσείο Μπενάκη — Κεντρικό
+  (Κουμπάρη)`). Filed in sprint-2-retrospective.md.
+- **Sprint 2 retrospective writeup** (TODO in next session). Anchors
+  for the retro doc are now in patterns.md (4 new patterns this
+  session) and decisions.md (3 new decisions).
+- **Trigger-gate one-liner** in `printSchemaSummary` deferred — the
+  brief flagged this as small-and-foldable but context constraints
+  pushed it to the retrospective session.
+- **S110b verification gate** — confirmed shipped (`8455932af`
+  "docs(specs): land S110b investigation + S110c results"); strike from
+  retro open items.
+
+**Cross-project signal:** **Sprint 2 substantively closed.**
+Retrospective trigger has fired; the closeout discipline (3 commits
+by resolution method, despite mid-session contamination) held. Tier 2
+sameAs work and Q-B10 address-extraction can each be scoped as their
+own briefs from a clean baseline.
+
+**Commits:** `eeeee8aea` (b-2d mechanical), `b56bceb0f` (Αγγέλων Βήμα).
+Tier 1 sameAs effectively shipped via `ae0f0d5f1` (concurrent commit,
+not Session 116-authored). Production deployed.

@@ -2794,3 +2794,60 @@ Site 3 builds tags via legacy `extractTags(description)` — a `**Tags:**`
 prose parser separate from `suggestTagOptions()`. Step 5a's structural fix
 does NOT touch this prose-parser path; the runtime filter at Site 3 catches
 any leak. Follow-up candidate: replace or filter `extractTags()`.
+
+## S116 — Q-B9 status quo (180-day venue revisit threshold) (2026-05-06)
+
+**Decision:** Path 1 — accept the existing 180-day venue-record revisit
+threshold as-is. No change.
+
+**Why:** the operational 45-day window applies to enrichment data
+(stale = pages oncall); the archival 180-day window applies to venue
+registry hygiene (stale = quarterly registry sweep). Different
+consumers, different purposes. Conflating them was an earlier
+discussion red herring.
+
+**Connects to:** patterns.md "Archival-vs-operational threshold (180-day
+vs 45-day)" pattern.
+
+## S116 — Q-B10 Path 2 lock; address-extraction implementation deferred to brief (2026-05-06)
+
+**Decision:** Path 2 (split-on-first-comma + venue-canonical-prefix
+match) accepted as the strategic direction for address extraction.
+Implementation deferred to a separate brief at
+`specs/dev-planner-brief-address-extraction.md` rather than folding
+into Sprint 2 closeout.
+
+**Why:** Q-B10 implementation is N venue records' worth of address
+parsing — a significant standalone workstream. Don't fold strategic
+locks into closeout sessions even if they "feel related" — the
+closeout discipline matters for retrospective clarity.
+
+## S116 — Tier 1 sameAs landing (3 venues; Pireos 138 deferred) (2026-05-06)
+
+**Decision:** 3 Tier 1 venue records get `sameAs` Wikidata QIDs:
+
+| Venue | QID | Entity |
+|---|---|---|
+| Μέγαρο Μουσικής Αθηνών | Q582203 | Athens Concert Hall (building) |
+| Onassis Stegi | Q43064509 | Στέγη Συγγρού (building) |
+| Μουσείο Μπενάκη Ελληνικού Πολιτισμού | Q816669 | Koumpari main building |
+
+Pireos 138 deferred — no distinct Wikidata QID was found that
+specifically describes the building. Q-creating a Wikidata entry is a
+separate workstream from registry sameAs attachment.
+
+**Effect:** ratchet `venueSameAs` populated 0 → 3, coverage 0 → 0.012
+(3/244), severity remains "info" until threshold 0.5 reached. This
+trips the Sprint 2 retrospective trigger.
+
+**Audit-trail caveat:** the sameAs additions landed in a concurrent
+commit `ae0f0d5f1` (S2 taxonomy hygiene) rather than in their own
+commit per the original 1→2→3 plan. See mistakes.md S116 entry on
+the cross-stream `git add -A` contamination recurrence and
+sprint-2-retrospective.md for the retro question on tooling
+mitigation.
+
+**Connects to:** patterns.md "Wikidata building-entity vs
+institution-entity for venue Place sameAs" pattern;
+`config/athens-venues.json` rev `b56bceb0f` snapshot;
+`data/build-completeness.json` `place.ratchet.venueSameAs`.
