@@ -706,4 +706,21 @@ export function printSchemaSummary(summary: SchemaValidationSummary): void {
       }
     }
   }
+
+  // venueSameAs ratchet status — surfaces ratchet population on every build.
+  // Per Sprint 2 retrospective trigger gate (Strategist 2026-05-04 operational
+  // form). Generic by design; future sprints' ratchets can add their own
+  // surfacing alongside. Silent skip if build-completeness.json hasn't been
+  // written yet (initial build) or the path has moved.
+  try {
+    const buildCompleteness = JSON.parse(
+      readFileSync(join(import.meta.dir, '../../data/build-completeness.json'), 'utf-8')
+    );
+    const ratchet = buildCompleteness.place?.ratchet?.venueSameAs;
+    if (ratchet?.populated >= 1) {
+      console.log(`\n🎯 venueSameAs ratchet active: ${ratchet.populated}/${ratchet.total} populated (severity=${ratchet.currentSeverity})`);
+    }
+  } catch {
+    // build-completeness.json not yet written, or path moved — silent skip
+  }
 }

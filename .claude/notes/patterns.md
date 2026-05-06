@@ -3017,28 +3017,42 @@ when scraper signal lands.
 
 ## Diagnostic-vs-system metric divergence
 
-Established 2026-05-06 (S116 / Sprint 2 closeout). Anchor: B-2c
-(numerator subsets denominator) and B-2d (collision count drift 59 →
-57 between diagnostic and execution).
+The metric used for diagnostics MUST match the metric the system uses
+for behavior. If they differ, drift between the two is invisible until
+execution.
 
-Diagnostic counts captured ahead of a decision describe a *snapshot*;
-the system's metrics reflect *current state* and may have drifted.
-Don't anchor commit messages, decision locks, or planning numbers to
-diagnostic snapshots without re-baselining at execution time.
+**Anchor (B-2d, Session 112):** Strategist Q-B8a Path 3 anchored on 57
+collisions via `group_by(canonical_name)` in jq. The system resolves
+venue identity via `normalizeVenueKey()`, which case-folds + diacritic-
+strips + whitespace-collapses. Two case-folded uppercase duplicates
+(ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ, ΘΕΑΤΡΟ ΠΑΛΛΑΣ) escaped the script's classifier
+because the diagnostic aggregation differed from the runtime
+aggregation. Surfaced at Step 4's normalized-key check; required
+surgical jq fixes mid-session.
 
-**How to apply:**
-- Pre-flight Step 0 should always include a baseline-check that
-  re-anchors counts. If the diagnostic was authored ≥1h before
-  execution, treat its counts as advisory.
-- Commit messages should reflect execution-time numbers. "Collisions:
-  59 → 0" is a lie if the count was 57 by the time the commit ran.
-- For metrics with running denominators (e.g., ratchets): the
-  denominator is computed by the current build pipeline, not the
-  config file's record count. They DON'T have to match — and shouldn't
-  surprise the operator when they don't.
+**Generalization:** future diagnostics that inform Strategist decisions
+should aggregate via the same canonicalization the system uses for
+behavior. This is a stricter form of "diagnostic counts are pre-
+decision; operate against current state" — not just that counts can
+drift in time, but that counts can drift in method if the diagnostic
+doesn't match the runtime.
 
-**Origin:** S116 closeout, B-2d hold count 6 (matched expected) but
-B-2d initial 59 → 57 drift carried in mistakes.md row at line 362.
+**Application:**
+- Pre-flight diagnostics that count instances of X should use the same
+  normalization the runtime uses to resolve X.
+- If a Strategist routing question references a count, the count should
+  be derived through the runtime's canonical aggregation, not through
+  whatever jq one-liner is convenient.
+- When a Strategist lock anchors on a number, the diagnostic that
+  produced that number should be preserved (script, query, or method)
+  so re-derivation at execution is reproducible.
+
+**Origin:** B-2d (Session 112), 2026-05-04. See
+`specs/sprint-2-retrospective.md` Pattern #3 for the Sprint 2 instance
+context. Anchor revised in Session 117 from earlier B-2c numerator-
+subsets-denominator framing (a separate finding, not bundled here)
+back to the documented S112 case-folded-uppercase incident — see
+`.claude/notes/mistakes.md:363`.
 
 ## Address-record-wins for canonical_name collision resolution
 
