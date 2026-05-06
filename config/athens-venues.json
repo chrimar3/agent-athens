@@ -2662,8 +2662,20 @@
     "Γλυφάδα",
     "Glyfada",
     "Ελληνικό",
-    "Ellinikon"
+    "Ellinikon",
+    "Ampelokipoi",
+    "Athens Riviera"
   ],
+  "neighborhood_aliases": {
+    "Psyrri": ["Psiri"],
+    "Pangrati": ["Pagrati"],
+    "Athens Riviera": [],
+    "Kerameikos": ["Keramikos"],
+    "Omonoia": ["Omonia"],
+    "Thiseio": ["Thissio"],
+    "Victoria": ["Viktoria"],
+    "Ampelokipoi": ["Ambelokipi", "Ambelokipoi"]
+  },
   "pass_through_venues": [
     "Πολλαπλοί Χώροι",
     "Πολλαπλοι χωροι",
