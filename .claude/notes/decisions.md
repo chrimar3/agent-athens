@@ -2892,3 +2892,66 @@ surfacing — generic by design, multi-ratchet-friendly.
 `.claude/notes/patterns.md` "Diagnostic-vs-system metric divergence"
 (revised anchor),
 `src/validators/schema-completeness.ts:709+` (trigger-gate block).
+
+## S118 — S110g priority: STDOUT_IDLE_CAP recalibration (2026-05-07)
+
+S110f Step 6 verification fire (2026-05-07 02:23:35 → 02:31:08, ~7.5
+min wrapper-elapsed) reproduced two `KILL_CAUSE: stdout-idle exit 125`
+kills at the 130s threshold (batch-1 elapsed=452s idle=130s; batch-2
+elapsed=302s idle=130s). 0 events saved. Identical proximate cause to
+the pre-S110f baseline at 01:00 (`elapsed=468s idle=122s`), confirming
+the kill mechanism is wrapper-level and unaffected by brief revisions
+(S110f §3/§4/§6 never engaged because the agent never reached
+save-decision phase).
+
+**Decision:** S110g promotes STDOUT_IDLE_CAP recalibration (parked
+from S110c) to active priority. Empirical-first methodology — no
+pre-tuning of the threshold; collect real silence durations from
+preserved BATCH_OUT logs (S110e infrastructure), then choose threshold
+based on observed p99 + buffer.
+
+**Rationale:**
+- Five sessions of agent-layer iteration (S110, S110a, S110b, S110c,
+  S110e, S110f) didn't restore throughput because none addressed the
+  wrapper-layer kill criterion. See `mistakes.md` "S110 series
+  diagnostic discipline" for the full meta-lesson.
+- The diagnostic clarity is sharpest now (immediately post-Step-6);
+  deferring loses the framing.
+- S110f infrastructure stays in working tree (uncommitted, soft-hold)
+  — its value crystallizes the moment S110g restores throughput. No
+  revert; no re-execution of S110f.
+- Empirical-first prevents another wrong-layer fix: a guess-tuned
+  threshold could pass one fire and fail the next; an evidence-based
+  threshold derived from the longest legitimate thinking blocks is
+  robust.
+
+**S110g plan location:** `/Users/chrism/.claude/plans/s110g-stdout-idle-cap-recalibration.md`
+(system-level plans dir, alongside the S110f plan).
+
+**Sibling parked items deliberately not bundled with S110g:**
+- S111-lock-hygiene (duplicate `auto-enrich.sh` shells from racy lock
+  check-then-create at `scripts/auto-enrich.sh:140-172` — see
+  `specs/duplicate-shell-investigation.md`)
+- Brief generator line 552 staleness ("10 confirmed mistakes" should
+  be 14)
+- Upstream date-leak (Giannis Parios @ Pallas: 2026-05-21 DB date for
+  Jan-Feb 2025 actual performances) — see `docs/operational-todos.md`
+
+**Audit checkpoint scheduling deferred:** the S110f audit was
+originally planned for now+3d after S110f's commit. Per soft-hold
+discipline confirmed end-of-S118, audit schedules off the *first
+verification fire that exercises the validator with real concerns*,
+which is S110g's Step 4 outcome. No premature schedule; no auditing
+all-zero data.
+
+**Commit plan:** S110f + S110g land together once S110g Step 4 passes
+(≥3 saves, no dangling refs). Two paired commits or single squash —
+operator choice at commit time.
+
+**Connects to:** `specs/duplicate-shell-investigation.md`,
+`docs/operational-todos.md`, S110f plan at
+`/Users/chrism/.claude/plans/here-is-the-complete-parsed-micali.md`,
+S110c (parked finding promoted), `mistakes.md` "S110 series diagnostic
+discipline", `patterns.md` "Infrastructure value is independent of
+behavior change", prior decision on chokepoint architecture (Option β
+locked).

@@ -393,3 +393,89 @@ Six user-reported events (3 specific ids — 2 H Hotels basketball tickets, 1 th
 | Concurrent commit `ae0f0d5f1` ("S2: taxonomy hygiene") swept up Sprint 2 sameAs additions while they were staged-but-not-committed in Session 116 | Mid-session, after I edited `config/athens-venues.json` with 3 Tier 1 sameAs additions and ran `git add config/athens-venues.json`, a concurrent commit landed on `main` that included my staged sameAs along with the taxonomy hygiene workstream's files. The commit message did NOT mention sameAs (claimed only neighborhood_aliases + entity-tag filter work). The neighborhood_aliases content the message DID claim was actually in a stash, not the working tree at commit time. Two-way drift: commit content includes things the message doesn't mention (sameAs), AND the message claims things the commit doesn't include (neighborhood_aliases). Detected at Step 4 verification when `git diff --cached --stat` showed 16 files staged after a single-path `git add`. By the time detection happened, the bundling commit was already pushed to origin — destructive unwind no longer safe. Same shape as S111 contamination from the daily pipeline; this recurrence proves the pattern persists across non-pipeline workstreams too. | Accept-bundling-and-continue was the only safe option once pushed. Sprint 2 still closed substantively (origin/main went from `ae0f0d5f1` to `b56bceb0f` — bundled commit + 2 of mine landed cleanly afterward). The audit trail has a flagged-in-retrospective blemish but the end state is correct. **Lesson — the stage-precisely preference is necessary but not sufficient.** Even staging by exact path doesn't protect against another stream's `git add -A` running concurrently. Real fix is at the tooling layer: the daily pipeline (and any concurrent commit producer) needs a guard that detects "files modified by another process within last N minutes" and refuses to stage them. Filed in `specs/sprint-2-retrospective.md` for retro consideration. |
 | `ae0f0d5f1` commit message describes content that isn't in the commit (claims `neighborhood_aliases` was added; actual diff has zero such hunks) | `git stash push -- config/athens-venues.json` was run mid-session to isolate pre-existing working-tree modifications. The stash captured the neighborhood_aliases additions. The subsequent concurrent `git add -A` + commit captured what was in the working tree at commit time — which did NOT include the stashed content. The commit message was authored against intent, not against actual diff. | Always inspect the actual diff before authoring a commit message — `git diff --cached` once just before `git commit` catches this. For automated commit-producers (daily pipeline), generate the message FROM the diff, not from a pre-baked plan. The stash content should be flagged as orphaned in stash list and surfaced in next-session pre-flight (running `git stash list` is now part of session-start verification). Recovery path: `git stash show -p stash@{0}` to inspect, then targeted patch-extraction for the desired hunks. |
 
+### Discipline rule — covers two failure layers, not one (added 2026-05-06 post-c0aa81a0d recovery)
+
+The "stage precisely" / "no `git add -A`" preference addresses Layer 1
+only. The S2 → `ae0f0d5f1` → `c0aa81a0d` arc proved a second layer
+exists.
+
+**Layer 1 (staging-time blob mismatch):** `git add` of specific paths
+is necessary but not sufficient. The staged blob =
+working-tree-at-staging-time, which may differ from
+working-tree-at-edit-time if concurrent processes mutated the tree in
+between. Mitigation: `git diff <path>` immediately before `git add`,
+`git diff --staged` immediately before `git commit`. Both diffs verify
+staging matches intent.
+
+**Layer 2 (verification-time memory/disk mismatch):** in-process tests
+verify the in-memory state of the running process, not the on-disk
+state of the committed files. After a config edit + commit, run a
+fresh-process test invocation to verify the on-disk state matches
+intent. Mitigation: separate `bun test` invocation post-commit,
+reading the freshly-committed file with no inherited state. See
+`patterns.md` → "Memory-Resident State Can Mask On-Disk Divergence
+Indefinitely" for the detailed pattern.
+
+The S116 recurrence above involved Layer 1 contamination (`git add -A`
+sweep). The c0aa81a0d recovery surfaced Layer 2 (corpus backfill
+operating on cached in-memory exclusion set while the on-disk source
+had been stripped by an interleaved stash). Both layers need explicit
+defenses; precise staging alone leaves Layer 2 unaddressed.
+
+## S110 series diagnostic discipline (2026-05-07, S118)
+
+Five sessions iterated on brief-layer fixes for what turned out to be
+a wrapper-layer failure. S110f Step 6 verification fire produced the
+empirically clean diagnosis: `KILL_CAUSE: stdout-idle exit 125` at
+130s threshold, both batches killed during agent thinking blocks
+before save-decision phase ever reached. Two distinct mistakes worth
+recording.
+
+**Mistake 1 — Logical-layer fixes cannot address transport-layer kill
+mechanisms.** The S101 series chain was: S110 (BATCH_OUT preservation)
+→ S110a (lock cleanup) → S110b (config drift) → S110c (parked
+IDLE_CAP) → S110e (BATCH_OUT-zero-saves diagnostic) → S110f (brief
+revision). Each was correct at its layer. None addressed the
+wrapper's `STDOUT_IDLE_CAP` at 130s, which kills the agent during
+legitimate thinking blocks regardless of brief content. The agent's
+deliberations produce no stdout; the wrapper sees silence; the
+wrapper kills. The brief revision in S110f was a logical-layer (agent
+reasoning) fix for what is actually a transport-layer (wrapper stdout
+cap) problem.
+
+*Diagnostic discipline going forward:* when a kill happens, distinguish
+(a) the proximate kill signal (`KILL_CAUSE`, exit code) from (b) the
+system layer that owns the kill criterion. Fix at the layer that owns
+it. If the agent's reasoning shape is the *symptom* but the wrapper's
+threshold is the *criterion*, recalibration is the fix — not brief
+revision. This is the meta-lesson that explains why we shipped S101 →
+S101a → S110 → S110b → S110c → S110e → S110f and still don't have
+throughput restored. Each fix was correct at its layer. None of them
+addressed the layer that actually owned the failure.
+
+**Mistake 2 — Bundled architectural + behavioral scope produces wrong
+verification gates.** S110f was framed as "throughput restoration"
+because the brief revision was the proximate trigger and the relay
+chain was: "S110e diagnosed question-stall → S110f revises the brief
+→ therefore S110f restores throughput." This framing determined the
+verification gate ("≥3 saves"), which is the gate for *behavioral*
+work. But S110f's actual scope was *citation-correctness governance*
+— validator + chokepoint filter + monitoring + kill switch + override
+path. The right gate for governance work is "infrastructure passes
+its own self-tests + dangling-ref scan + monitoring renders cleanly,"
+all of which S110f passed.
+
+*Discipline going forward:* when a session bundles architectural work
+with behavioral fixes, the verification gate must distinguish them.
+Specifically:
+- *Architectural success* = self-tests pass + invariants hold +
+  monitoring renders + dangling-ref clean
+- *Behavioral success* = the system metric the change was supposed to
+  move actually moves
+
+A session can succeed on (a) and fail on (b); these are independent.
+The Dev Planner is responsible for naming both gates explicitly in
+the plan, not folding (a) into (b). Future sessions will face this
+same shape — bundling architectural work with behavioral fixes — and
+the failure to gate them separately will produce the same confusion.
+

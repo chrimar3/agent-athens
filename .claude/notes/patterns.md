@@ -3152,3 +3152,165 @@ config or code, name the consumer in the comment. e.g.
 revisit; the operational 45-day window for enrichment data had been a
 red herring in earlier discussion (different consumer, different
 purpose).
+
+## Memory-Resident State Can Mask On-Disk Divergence Indefinitely (2026-05-06, S2 → c0aa81a0d recovery)
+
+Process-internal state (loaded config, computed exclusion sets,
+in-memory snapshots) outlives the disk state that produced it. A test
+or verification step running in the same process as a config Edit is
+NOT evidence that the on-disk file is correct — it's evidence that the
+in-memory state used by that process is correct. Those can diverge
+silently if any concurrent process mutates the disk between load and
+end-of-process.
+
+**Concrete S2 instance:** during the S2 → `ae0f0d5f1` session, I ran
+the Edit tool to add `neighborhood_aliases` to
+`config/athens-venues.json`. The corpus backfill subsequently ran in
+the same process — `loadDefaultExclusionSet()` read the on-disk file
+once, cached the resulting Set in module memory, and the backfill
+applied the cached Set to all 256+106 row updates. Tests, build, and
+production verification all ran clean.
+
+What I didn't observe: an interleaved `git stash push` from a
+concurrent Sprint-2-closeout flow had stripped `neighborhood_aliases`
+from the on-disk file between my Edit and my `git add`. The in-memory
+exclusion set used by backfill / tests / build still had aliases (it
+was loaded from a working tree that briefly contained them). The
+on-disk file did not. My subsequent `git add config/athens-venues.json`
+captured the post-stash blob — without aliases. Commit `ae0f0d5f1`
+shipped without the field; corpus stayed clean only because the
+backfill had already completed.
+
+The bug would have surfaced silently on the next daily pipeline run,
+when a fresh process called `loadDefaultExclusionSet()` against the
+on-disk config without aliases — at that point any new event with
+"Psiri" / "Pagrati" / "Ampelokipoi" tags would have under-filtered
+straight into the corpus.
+
+**Defensive contract** for any session that edits a config file
+consumed by the same session's tests: add a fresh-process verification
+step. After commit, run a separate `bun test` invocation in a NEW
+process, reading the freshly-committed file. If in-process tests pass
+but fresh-process tests fail, on-disk state diverged from the
+in-memory state earlier tests ran against.
+
+**Detection mechanism that worked (post-hoc):** a subsequent session's
+plan-mode audit included `jq 'keys' config/athens-venues.json` and
+`jq '.neighborhood_aliases'`, both run in fresh processes against the
+on-disk file. The divergence surfaced immediately. The lesson is to
+bake that fresh-process audit into the SAME session as the edit, not
+the next one.
+
+**Generalization:** any pure-function utility that loads JSON config
+at module init (mirroring the `src/utils/schema-geo.ts` pattern) is
+vulnerable to this. The fix isn't in the utility — it's in the
+session protocol: edit → commit → run a fresh-process verification
+that reads the committed file from scratch.
+
+## Infrastructure value is independent of behavior change (2026-05-07, S118 from S110f)
+
+S110f shipped citation-correctness governance (validator + chokepoint
+filter + monitoring + kill switch + override path) bundled with a
+brief revision intended to restore throughput. The brief revision
+didn't restore throughput (root cause was wrapper-layer, not
+brief-layer — see `mistakes.md` "S110 series diagnostic discipline").
+But the governance infrastructure passed every architectural
+verification gate it had: 20/20 loader unit tests + 37/37 query tests,
+end-to-end filter test (62 dist refs → 0 on a single tier-A0 concern
+insertion), `printHardStopSummary` renders cleanly with empty
+operational data, build succeeds.
+
+**The pattern:** validator + filter + monitoring infrastructure ships
+value independently of the behavior change it was framed alongside.
+Three properties make this work:
+
+1. **Graceful degradation when operational state is unsupported.** The
+   chokepoint filter (`getHardStopExcludeIds` in `src/db/database.ts`)
+   and the monitoring report (`printHardStopSummary` in
+   `src/validators/completeness-reporter.ts`) both check
+   `sqlite_master` for the `event_concerns` table before querying it.
+   Test fixtures use base schema (no migrations), so without this
+   guard, every test invoking these paths would crash. The same guard
+   makes the infrastructure run cleanly when there's no operational
+   data yet (0 concerns flagged → all-zero monitoring output, no
+   filter applied, all events ship).
+
+2. **Idempotent migration.** `011-event-concerns.sql` adds a table
+   with `IF NOT EXISTS` clauses on table + 2 indexes. Re-applying is
+   harmless. The migration can land before the rest of the
+   infrastructure does.
+
+3. **Chokepoint architecture (Option β over γ).** Filter at one read
+   site (`getAllEvents()`), not at N consumers. One edit, 62 surfaces
+   protected. Verified empirically by inserting one concern and
+   grepping `dist/` for dangling refs after a fresh build.
+
+**Generalization (standing rule):** any new query path that reads
+from a table introduced by a migration needs an existence guard via
+`sqlite_master`. This pattern lives in `database.ts:getHardStopExcludeIds`
+and `completeness-reporter.ts:printHardStopSummary` and should be the
+standing approach for similar future work. Cost: ~3 lines + one extra
+SELECT per call. Benefit (load-bearing): test fixtures don't crash;
+infrastructure code can ship before operational state arrives.
+
+**Deeper governance lesson:** when planning a session that bundles
+infrastructure + behavior change, scope-name the infrastructure
+separately. Its value crystallizes the moment the behavior layer
+works, regardless of when that is. Don't fold the architectural gate
+into the behavioral gate — see `mistakes.md` "Bundled architectural +
+behavioral scope produces wrong verification gates."
+
+## Soft-hold for cross-session bundling (2026-05-07, S118 from S110f)
+
+When a session ships verified architectural work whose end-to-end
+verification gate fails for reasons exogenous to the session's actual
+scope (e.g., a transport-layer issue blocks a logical-layer fix from
+being exercised), preserve the working tree rather than reverting or
+force-committing. Three preconditions:
+
+(a) failure is documented as exogenous;
+(b) tests pass on the held state;
+(c) the next session has a defined trigger that resolves the held
+    work — commit if the exogenous issue clears and verification
+    passes, revert if it reveals a defect under load.
+
+The git working tree becomes a session-spanning carrier; future
+sessions inherit the diff via `specs/sNNN-soft-held.md` documentation
+that names what's held and what triggers each resolution path.
+
+**S110f → S110g instance:** S110f shipped governance infrastructure
+(validator + chokepoint filter + monitoring + kill switch + override
+path); verification fire failed via wrapper-layer `STDOUT_IDLE_CAP`
+(exogenous to S110f's scope). Tests pass on the held state (20/20
+loader + 37/37 queries; one-off filter test 62→0 dist refs).
+S110g's Step 4 verification fire is the defined trigger:
+
+- ≥3 saves with no dangling refs → commit S110f + S110g together
+- persistent IDLE_CAP kills with same failure class → iterate S110g
+  fix; S110f stays held
+- new failure class → diagnose separately; do not commit S110g; S110f
+  stays held
+- ≥3 saves but Guard 6 dangling refs → revert *only*
+  `src/db/database.ts`; rest of S110f + S110g stay
+
+Plan at `/Users/chrism/.claude/plans/s110g-stdout-idle-cap-recalibration.md`.
+
+**Why this beats the alternatives:**
+
+- **Hard revert** destroys verified architectural work to return to a
+  baseline that's also broken; doubles total effort if the next
+  session re-implements.
+- **Force-commit unverified** ships infrastructure without empirical
+  evidence the surrounding system is healthy enough to use it; the
+  audit checkpoint has no real data to audit.
+- **Soft-hold** preserves the verified work, defers the commit to the
+  moment the exogenous issue clears, and lets the next session run
+  into a primed environment with infrastructure already in place.
+
+**Connects to:** `mistakes.md` "S110 series diagnostic discipline"
+(why the exogenous-scope distinction matters); `mistakes.md`
+"Bundled architectural + behavioral scope produces wrong verification
+gates" (the framing-vs-gate gap that necessitated soft-hold);
+`patterns.md` "Infrastructure value is independent of behavior change"
+(the architectural-value claim that justifies preserving rather than
+reverting).

@@ -4554,3 +4554,145 @@ pre-flight reading per readiness signal.
 **Commit:** `3328d4bdb` (retrospective + Pattern #3 anchor +
 trigger-gate). Plus this session-log entry + decisions.md "Sprint 2
 formal close" entry shipping in a follow-up commit.
+
+### Session 118 — S110f governance ship (soft-hold) + S110g plan (post-verification diagnosis) — 2026-05-07
+
+**Plan:** Execute S110f (citation-correctness governance: validator +
+chokepoint filter + monitoring + kill switch + override path)
+end-to-end, including verification fire. Brief revision (§3
+deterministic save / §4 concern taxonomy / §6 incomplete-write Rule
+25 / §7 stall-triggering anti-pattern) framed as candidate fix for
+S110e's diagnosed question-stall failure mode.
+
+**What happened:**
+
+- **Steps 1–5 landed cleanly.** Loader + tests (20/20), migration 011
+  applied, chokepoint filter at `database.ts:getAllEvents()` with
+  `sqlite_master` graceful-degradation guard, brief revisions across
+  §3/§4/§6/§7, save-batch concerns ingestion (per-batch scope, after
+  the loop), `printHardStopSummary` wired into
+  `generate-site.ts:1110` after `printBucketSummary`. All baseline
+  tests still green (37/37 queries + 20/20 loader). One-off filter
+  test confirmed 62 dist refs → 0 on tier-A0 concern insertion. Build
+  succeeds; `printHardStopSummary` renders cleanly with empty data.
+
+- **Step 0 surfaced two pre-existing items.** (1) Three of four
+  "net-new" Step 1+2 files (`config/enrichment-gate-rules.yml`,
+  `config/enrichment-overrides.yml`, `src/utils/load-gate-rules.ts`,
+  `src/utils/__tests__/load-gate-rules.test.ts`) already existed
+  untracked from a prior aborted session. Tests pass against
+  pre-existing implementation; reviewed and added one missing rule
+  (`greek-requested-policy-paused`) to the YAML to restore plan
+  parity. (2) Live enrichment run was in flight when Step 0 ran
+  (PID 26685 et al, RUN_ID 1778104817-26522); waited for natural
+  death (468s, exit 143, IDLE_CAP).
+
+- **Step 0 also surfaced the duplicate-shell race.** PIDs 31604 and
+  31660 (both `auto-enrich.sh`) acquired the lock simultaneously.
+  `scripts/auto-enrich.sh:140-172` uses non-atomic check-then-create.
+  Eleven enrichment-related launchd slots are loaded. Parked to
+  `specs/duplicate-shell-investigation.md` as `S111-lock-hygiene`.
+
+- **§5 deferral confirmed empirically.** `language_preference` column
+  is 100% `'both'` across 12,560 events; the
+  `greek-requested-policy-paused` concern_type stays in YAML as inert
+  vocabulary, brief instruction deferred. Step 0.5 check ran in ~50ms.
+
+- **Two Step 4 issues caught via brief preview** (`bun run
+  scripts/generate-enrichment-brief.ts --count=1 --batch=999`): §3
+  lost the save-batch CLI bash block (plan-faithful but
+  interface-broken — agent told to "call save-batch.ts" without the
+  command); §4 leading-blank produced double-blank-line before
+  `## Concerns`. Both fixed; brief regenerated to confirm. The
+  "regenerate one brief and inspect" verification step (proposed at
+  the start of Step 4) was load-bearing — both issues were invisible
+  in the diff but obvious in the rendered output.
+
+- **Step 6 verification fire failed identically to baseline.** Run
+  1778109815-31604 (02:23:35 → 02:31:08, 453s wrapper-elapsed): both
+  batches killed by `KILL_CAUSE: stdout-idle exit 125 idle=130s`
+  (batch-1 elapsed=452s, batch-2 elapsed=302s). 0 events saved, 0
+  concerns flagged. Matches pre-S110f baseline kill at 01:00
+  (`elapsed=468s idle=122s`). The brief revisions never engaged
+  because the agent never reached the save-decision phase — kills
+  came during thinking blocks, before any §3/§4 logic could activate.
+
+- **Diagnosis: wrapper-level kill mechanism, not agent-reasoning
+  shape.** `STDOUT_IDLE_CAP=130s` fires during legitimate agent
+  thinking on hard events. S110c parked this as "STDOUT_IDLE_CAP
+  recalibration with un-truncated samples"; S110f Step 6 promoted it
+  to active priority via empirical evidence.
+
+- **Soft-hold confirmed.** S110f working tree stays as-is (untracked
+  + modified files preserved, migration 011 stays applied, audit
+  checkpoint NOT scheduled — schedules off the first verification
+  fire that exercises the validator with real concerns). Plan S110g
+  written now while diagnosis is sharp; execute next operator session.
+
+**Verified:**
+- Migration 011 applied; `event_concerns` table + 2 indexes;
+  `_migrations` row at id 11
+- 20/20 loader tests + 37/37 query tests pass after all edits
+- Chokepoint filter end-to-end (62 dist refs → 0 on test concern
+  insert; cleanup verified)
+- Build succeeds; `printHardStopSummary` renders kill-switch state,
+  drift section, threshold flags, per-source breakdown
+- Brief regeneration confirms §3 with bash block, §4 single-blank,
+  Rule 25, §7 reference all render correctly (10 fence lines, 5
+  paired pairs)
+- Verification fire reproduces the same `KILL_CAUSE: stdout-idle` as
+  pre-S110f baseline (independent confirmation that S110f did not
+  regress the failure mode)
+
+**Learnings:**
+- *Brief-vs-reality drift in Step 0:* I claimed all four "net-new"
+  files didn't exist when three of them did. Caught on second read.
+  Re-confirmed `feedback_verify_paths_in_briefs.md` rule pays off.
+- *Markdown nested-fence rendering:* an inner ` ``` ` inside an
+  outer fenced quote consumes the outer terminator, so previews of
+  brief-with-bash-block can look unclosed even when source is
+  correct. Verify with explicit grep for fence count, not visual
+  inspection of nested rendering.
+- *The duplicate-shell race fires on every `launchctl start`.*
+  Production impact is real: 2x API spend, doubled IDLE_CAP exposure.
+  Not S110f scope; parked as S111-lock-hygiene.
+- *Plan hedge as permission:* the plan's "if save-batch is per-event
+  scope filter to current eventId; if whole-batch scope drop the
+  check" gave permission to read actual control flow and choose.
+  save-batch is per-batch (loop opens 224, closes 400). Insertion at
+  line 401 (after loop, before return) avoids running the file-read
+  N times.
+- *Test fixtures use base schema, not migrated schema.* Any new query
+  path that reads from a migration-introduced table needs
+  `sqlite_master` existence guard. This pattern now lives in two
+  places (chokepoint filter + monitoring report) and is recorded as a
+  standing rule in `patterns.md` "Infrastructure value is independent
+  of behavior change."
+
+**Open items:**
+- **S110g — STDOUT_IDLE_CAP recalibration** is the next session. Plan
+  at `/Users/chrism/.claude/plans/s110g-stdout-idle-cap-recalibration.md`.
+  Diagnostic phase before any threshold change. Soft-hold S110f
+  working tree carries forward.
+- *S110f working tree preserved uncommitted;* commit alongside S110g
+  if Step 4 of that plan passes (≥3 saves, no dangling refs).
+- *S111-lock-hygiene* parked at `specs/duplicate-shell-investigation.md`.
+  Suggested 30-45 min standalone session.
+- `docs/operational-todos.md` created with three parked items (line
+  552 staleness, lock-hygiene reference, upstream date-leak).
+- Audit checkpoint NOT scheduled. Triggers off S110g's first ≥3-saves
+  verification fire.
+
+**Cross-project signal:** **S110 series diagnostic clarity at peak.**
+The relay chain explanation (S110 → S110a → S110b → S110c → S110e →
+S110f, each correct at its layer, none addressing the wrapper) is
+recorded in `mistakes.md` "S110 series diagnostic discipline." The
+framing-vs-verification-gate distinction is also recorded —
+architectural success and behavioral success are independent gates;
+bundling them produces the wrong verification criterion. These two
+meta-lessons are the most institutionally-valuable output of S118.
+
+**Commits:** None this session. Soft-hold across 6 modified + 7
+untracked files. Working tree carries S110f's full diff into S110g.
+Memory entries (mistakes/patterns/decisions/session-log) committed
+in a follow-up session alongside S110f + S110g feat commits.
