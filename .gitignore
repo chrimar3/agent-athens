@@ -59,6 +59,7 @@ data/banned-phrase-matches.csv
 # Pipeline lock files (runtime state)
 .pipeline-*.lock
 .auto-enrich.lock
+.auto-enrich.lock.d/
 
 # Parsed email artifacts (not source code)
 data/emails-to-parse/
