@@ -3404,3 +3404,105 @@ interleave.
 (the data-flow trace discipline this generalizes);
 `docs/operational-todos.md` "S110f calibration audit" (where the
 audit timing depends on knowing which fires produced which data).
+
+## Atomic mkdir as portable lock primitive (2026-05-08, S111)
+
+When `flock(1)` is unavailable (macOS without Homebrew flock package,
+or any environment where the binary isn't on PATH) and the
+filesystem is local APFS/HFS+/ext4, `mkdir` is atomic by POSIX spec
+and serves as a drop-in lock idiom. The directory IS the lock;
+metadata (PID, etc.) goes inside the directory as a regular file,
+not as the lock itself.
+
+**Three discipline points:**
+
+1. The trap that removes the lock directory must be set ONLY inside
+   the success branch of `mkdir`, never before. If the trap is armed
+   before the acquisition outcome is known, an interrupt during
+   acquisition could destroy a lock owned by another shell.
+
+2. Stale-lock recovery (after detecting a dead-PID or aged-out lock)
+   must be **single-shot retry**, not a while-loop. After `rm -rf`,
+   call `mkdir` once: if it fails, another shell beat you to it —
+   exit 0 and let them work. While-loops in this position can spin
+   under pathological churn (rapid stale-lock turnover from a
+   broken upstream).
+
+3. Verify the filesystem is local before relying on mkdir atomicity.
+   `mount` should show `apfs, local` or equivalent. Sync folders
+   (iCloud, Dropbox, OneDrive) and network filesystems (NFS, SMB,
+   AFP) do not guarantee the same atomicity semantics; APFS, HFS+,
+   ext4, btrfs all do.
+
+**Why prefer mkdir over flock(1) on macOS:** stock macOS does not
+ship the `flock(1)` userspace tool — Apple's BSD heritage provides
+`flock(2)` (the syscall) and `lockf` (a different API) but not the
+GNU userspace utility. Homebrew has no `flock` package by default;
+some users install via custom formula but it's not reliable. Even
+if launchd's effective PATH includes Homebrew bins (worth verifying
+per-plist via the `EnvironmentVariables` block), the binary itself
+might not be installed. mkdir is POSIX, present everywhere, and
+atomic on every local filesystem you'd reasonably ship to.
+
+**S111 instance:** `scripts/auto-enrich.sh` lock at lines 140–169
+replaced check-then-create file lock with mkdir-based directory
+lock. PID stored at `$LOCK_DIR/pid` for stale-lock recovery; EXIT
+trap removes the directory. Race simulation (12/12 trials, 3
+surfaces) confirmed exactly one winner per trial.
+
+**Connects to:** `decisions.md` "S111 — Atomic lock acquisition"
+(trace results that ruled out flock(1) and confirmed APFS as the
+atomicity-supporting filesystem); `patterns.md` "Race simulation:
+classify by log content, not by liveness at sleep N" (the
+verification methodology used).
+
+## Race simulation: classify by log content, not by liveness at sleep N (2026-05-08, S111)
+
+Verifying concurrency fixes by spawning N processes and counting
+"survivors" via `ps` after a fixed sleep is fragile. The metric
+only works if winners stay alive for the full sleep duration; if
+a winner's post-acquisition path is short (e.g., dry-run mode that
+short-circuits within ~1s), survivor count drops to zero and the
+test reports false failure even though the race resolved correctly.
+
+**The robust metric:** classify each process's outcome by the log
+lines its branch emits. Every branch in a well-instrumented lock
+acquisition emits a distinct log message:
+
+- Winner → `=== Auto-enrichment starting ===` (or whatever the
+  post-acquisition first-action message is)
+- Loser via alive-PID branch → `Another enrichment already running`
+- Loser via stale-PID recovery → `Lock recovered by another shell
+  during stale-PID recovery`
+- Loser via aged-out recovery → `Lock recovered by another shell
+  during force-remove`
+
+Counting `won` vs `lost-*` classifications across both spawned
+shells is independent of race-resolution timing. As long as both
+shells flush their logs before the test inspects them, the
+classification is deterministic.
+
+**Bonus:** the loser's specific log line tells you which branch
+fired, which lets a single test simultaneously verify both the
+race-resolution outcome (exactly one winner) AND the branch
+coverage (loser exercised the expected recovery path). With the
+survivor-count metric, branch coverage is unobservable.
+
+**S111 instance:** First-pass simulation reported 0 survivors at
+sleep=2s on Class A trials. Inspection revealed both shells had
+exited cleanly within the sleep window — the winner via dry-run
+short-circuit, the loser via "Already running" skip. Switching to
+log-content classification produced 12/12 clean trials across 3
+surfaces (5 Class A + 5 Class B-dead + 2 Class B-aged) with
+verified branch coverage.
+
+**Generalization:** any concurrency fix where each branch emits a
+distinct log line can use this metric. If the implementation logs
+opaquely (one generic "Skipping" message regardless of which branch
+fired), add branch-specific log strings as part of the fix — they
+cost nothing at runtime and pay back as test-grain.
+
+**Connects to:** `patterns.md` "Atomic mkdir as portable lock
+primitive" (the fix this verified); `decisions.md` "S111 — Atomic
+lock acquisition" (full trace results including the 0-survivor
+diagnostic episode).

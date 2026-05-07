@@ -3006,3 +3006,70 @@ lesson recorded during plan revision); `patterns.md` "Empirical-first
 calibration for transport-layer thresholds"; `patterns.md` "Scheduled
 fires confound verification"; `docs/operational-todos.md` S110f
 calibration audit + S110h.
+
+## S111 — Atomic lock acquisition (2026-05-08)
+
+`scripts/auto-enrich.sh` lock acquisition replaced check-then-create
+file lock with atomic `mkdir` on a directory. Closes both Class A
+(TOCTOU between `[[ -f "$LOCK_FILE" ]]` and `echo $$ > "$LOCK_FILE"`)
+and Class B (stale-lock-recovery race where two shells both `rm -f`
+and write PID) surfaces. Both fired on 2026-05-07 (PIDs 26522/26686
+in spec's recorded `ps` snapshot).
+
+**Classification refined from spec.** The parked spec
+`specs/duplicate-shell-investigation.md` (written at S118) classified
+the race as Class A only. Source-trace at S111 Step 1 found the same
+code carries Class B on parallel branches at lines 159 and 165 —
+both `rm -f` followed by fall-through to `echo $$ > "$LOCK_FILE"`.
+Spec/source divergence; trace-discipline caught it. The fix family
+doesn't bifurcate (atomic acquisition closes both A and B in one
+change), but Step 5's verification expanded to cover both surfaces.
+
+**flock(1) ruled out by trace, sharply.** The spec noted "macOS
+doesn't ship flock by default" — correct, but the actual blocking
+detail was sharper. Launchd plist
+(`com.agentathens.auto-enrich.plist`) sets `PATH` including
+`/opt/homebrew/bin` and `/usr/local/bin` (Homebrew-reachable), so
+PATH was not the issue. The flock binary is absent at every checked
+path on this machine — Homebrew has no `flock` package installed.
+Even installing it would create a runtime dependency the wrapper
+would have to assert; mkdir has zero dependencies and identical
+atomicity guarantees on local APFS.
+
+**Fix shape:** mkdir-based directory lock at
+`$PROJECT_DIR/.auto-enrich.lock.d`. PID stored at `$LOCK_DIR/pid`
+for stale-lock recovery; directory mtime drives the age check (same
+semantics as before, different storage). EXIT trap removes the
+directory and is set ONLY inside `acquire_lock`'s success branch —
+never before, because an interrupt during acquisition must not
+destroy a lock owned by another shell. Recovery branches use
+single-shot retry (`rm -rf` + `acquire_lock || exit 0`), no
+while-loop — pathological churn cannot spin.
+
+**Verification:** race simulation, 12/12 trials across 3 surfaces:
+- Class A (no lockfile, TOCTOU): 5/5 — loser hits alive-PID branch
+- Class B-dead (stale lockfile + dead PID 99999): 5/5 — loser hits
+  stale-PID recovery + retry-mkdir loss
+- Class B-aged (aged-out lockfile + dead PID 99998 + Jan 2024 mtime):
+  2/2 — loser hits force-remove branch + retry-mkdir loss
+
+EXIT trap cleanly removes lock dir after every winner exit; lock
+dir absent and no leftover wrapper processes after final cleanup.
+
+**Honest accounting on threshold edge case:** B-aged simulation
+exercised LOCK_AGE ≈ 858 days (Jan 2024 mtime touched into a May
+2026 test run), well over the 7200s threshold. Near-threshold edge
+cases at exactly 7200s ± a few seconds are NOT covered by this
+verification. Acceptable for correctness — atomicity doesn't depend
+on the threshold value — but flag for future re-test if
+threshold-comparison logic changes.
+
+**Commit:** `af2a1d508` (single commit, scripts/auto-enrich.sh
+only, +35/-14 lines).
+
+**Connects to:** `patterns.md` "Atomic mkdir as portable lock
+primitive" (the standing rule); `patterns.md` "Race simulation:
+classify by log content, not by liveness at sleep N" (the
+methodology lesson); `specs/duplicate-shell-investigation.md` (the
+parked spec, now obsoleted by closure); `docs/operational-todos.md`
+(S111 entry removed from pending list).

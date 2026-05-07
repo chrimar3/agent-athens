@@ -4819,3 +4819,100 @@ in plan files is the structural defense that prevented a fourth
 mechanism-misunderstanding this session.
 
 **Commits:** four this session, all on `main`, fast-forward push.
+
+### Session 120 — S111 lock-mechanism race closed — 2026-05-08
+
+**Plan:** Replace check-then-create file lock at
+`scripts/auto-enrich.sh:140-169` with atomic acquisition, so
+tomorrow's scheduled fires give unambiguous signal on whether
+S110g's STDOUT_IDLE_CAP fix held. Plan at
+`/Users/chrism/.claude/plans/s110g-closed-at-commit-woolly-biscuit.md`.
+
+**What happened:**
+
+*Step 1 spec/source divergence.* Parked spec
+`specs/duplicate-shell-investigation.md` (written at S118 from one
+observation) classified the race as Class A only — TOCTOU between
+`[[ -f "$LOCK_FILE" ]]` and `echo $$ > "$LOCK_FILE"`. Source-trace
+at S111 found the same lock section also carries Class B (stale-
+lock-recovery race) on parallel branches at lines 159 and 165 —
+both `rm -f` followed by fall-through to the non-atomic write.
+Spec/source divergence; trace-discipline (the same gate S110g
+installed) caught it. Fix family doesn't bifurcate but Step 5's
+verification expanded to cover both surfaces.
+
+*Step 3 trace ruled out flock(1) sharply.* User flagged the spec's
+"macOS lacks flock by default" claim might be more nuanced than
+just PATH. Trace found the launchd plist's effective PATH DOES
+include Homebrew (`/opt/homebrew/bin`, `/usr/local/bin`), so PATH
+was not the blocker. The flock binary is simply absent at every
+checked path — Homebrew has no flock package installed on this
+machine. Same conclusion as the spec, sharper reason. Atomic mkdir
+picked as primary, not fallback.
+
+*Step 5 testing methodology catch.* First-pass race simulation
+reported 0 survivors at sleep=2s on Class A trials — looked like
+over-locking (revert signal). Inspection of trial logs revealed
+both shells had cleanly exited within the sleep window: winner via
+dry-run short-circuit, loser via "Already running" skip. The
+metric was wrong, not the fix. Switched to log-content
+classification (winner emits `=== Auto-enrichment starting ===`,
+loser emits one of three branch-specific skip messages) — 12/12
+trials clean across 3 surfaces. Captured as patterns.md entry; not
+a mistake (per "don't force-fit" discipline — methodology lessons
+fit patterns.md, not mistakes.md).
+
+**Verified:**
+- bash -n syntax check clean post-edit
+- Zero `LOCK_FILE` residual references after edit; all `LOCK_DIR`
+  references in expected places
+- Race simulation: 5 Class A + 5 Class B-dead + 2 Class B-aged
+  trials, all produce exactly 1 winner with loser branch correctly
+  identified via log content
+- EXIT trap cleanly removes `$LOCK_DIR` after every winner exit
+- Lock dir absent and no leftover wrapper processes after final
+  trial cleanup
+
+**Commits:**
+- `af2a1d508` fix(wrapper): atomic lock acquisition (S111) —
+  scripts/auto-enrich.sh only, +35/-14 lines
+- (this session) docs(notes): institutional memory for S111 —
+  decisions, patterns ×2, operational-todos cleanup, session-log
+
+**Learnings:**
+
+- *Atomic mkdir as portable lock primitive.* Captured as
+  patterns.md entry. Three discipline points: trap inside success
+  branch only, single-shot retry on recovery, verify local
+  filesystem before relying on mkdir atomicity.
+- *Race simulation: classify by log content, not by liveness at
+  sleep N.* Captured as patterns.md entry. The 0-survivor finding
+  was test methodology, not fix bug — fits patterns.md, not
+  mistakes.md.
+- *Spec/source divergence under hypothesis-only specs.* Parked
+  specs written from one observation are hypotheses, not verified
+  classifications. Source-trace at fix time is non-negotiable.
+  Same trace-status discipline S110g installed, reused cleanly here.
+
+**Open items:**
+- *Class C (launchd parallel-fire)* — 11 loaded plists with
+  overlapping schedules is real but separate from S111's wrapper
+  fix. The atomic lock now correctly handles overlapping fires by
+  skipping cleanly instead of dual-acquiring, but underlying
+  plist-config hygiene (consolidating slots) remains a separate
+  parked item not yet specced.
+- *B-aged near-threshold edge cases* — race simulation exercised
+  LOCK_AGE ≈ 858 days, well over the 7200s threshold. Edge cases
+  at exactly 7200s ± a few seconds are not covered. Flag for
+  future re-test if threshold-comparison logic changes.
+
+**Cross-project signal:** S111 closes a sibling parked item to
+S110g — same wrapper file, different code path. Tomorrow's
+scheduled enrichment fires now produce unambiguous signal on
+whether S110g's STDOUT_IDLE_CAP recalibration held; duplicate
+shells from racy lock acquisition can no longer confound the
+run-summaries. The trace-status discipline that S110g installed in
+plan files held under reuse this session — caught spec/source
+divergence at Step 1 and methodology-vs-bug confusion at Step 5.
+
+**Commits:** two this session, both on `main`, fast-forward push.
