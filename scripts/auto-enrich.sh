@@ -116,7 +116,7 @@ fi
 # was on battery during every enrichment window. Zero events enriched.
 #
 # Why removal is safe: the other 5 defense layers handle clamshell adequately:
-#   1. .auto-enrich.lock — prevents overlapping runs
+#   1. .auto-enrich.lock.d — prevents overlapping runs (atomic via mkdir, S111)
 #   2. Lock mtime guard (LOCK_MAX_AGE) — auto-recovers stuck processes
 #   3. Orphan cleanup on startup — kills zombie claude processes
 #   4. Wall-clock watchdog (S89) — `date +%s` advances through system sleep,
@@ -134,39 +134,60 @@ fi
 # ============================================================================
 
 # ============================================================================
-# Lock file — prevent overlapping runs
+# Lock directory — prevent overlapping runs (atomic via mkdir, S111)
 # ============================================================================
+#
+# mkdir is atomic on local filesystems (APFS/HFS+): EXACTLY one concurrent
+# caller succeeds, all others fail with EEXIST. The directory itself IS the
+# lock; PID is stored as metadata at $LOCK_DIR/pid for stale-lock recovery.
+# Replaces the prior check-then-create file lock which carried both
+# Class A (TOCTOU on file existence) and Class B (stale-lock-recovery)
+# race surfaces — both observed firing 2026-05-07.
 
-LOCK_FILE="$PROJECT_DIR/.auto-enrich.lock"
+LOCK_DIR="$PROJECT_DIR/.auto-enrich.lock.d"
 # Maximum age (in seconds) before a lock is considered stuck regardless of PID liveness.
 # Set higher than MAX_BATCHES * BATCH_TIMEOUT + warmup overhead. Default: 2 hours.
 LOCK_MAX_AGE=7200
-if [[ -f "$LOCK_FILE" ]]; then
-    LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+
+# Single-shot atomic acquisition. Sets EXIT trap and writes pid ONLY on success.
+# Returns 0 if acquired, 1 if directory already exists.
+acquire_lock() {
+    if mkdir "$LOCK_DIR" 2>/dev/null; then
+        trap 'rm -rf "$LOCK_DIR"' EXIT
+        echo $$ > "$LOCK_DIR/pid"
+        return 0
+    fi
+    return 1
+}
+
+if ! acquire_lock; then
+    LOCK_PID=$(cat "$LOCK_DIR/pid" 2>/dev/null)
     # Check lock age first — a stuck-but-alive process is no better than a crashed one.
-    # macOS stat: -f %m gives mtime as seconds since epoch.
-    LOCK_MTIME=$(stat -f %m "$LOCK_FILE" 2>/dev/null || echo 0)
+    # macOS stat: -f %m gives mtime as seconds since epoch. Directory mtime, not pid file's.
+    LOCK_MTIME=$(stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0)
     NOW=$(date +%s)
     LOCK_AGE=$((NOW - LOCK_MTIME))
 
     if [[ "$LOCK_AGE" -gt "$LOCK_MAX_AGE" ]]; then
-        log "Lock file is ${LOCK_AGE}s old (>${LOCK_MAX_AGE}s max), holder PID $LOCK_PID is stuck. Force-removing and killing tree."
+        log "Lock is ${LOCK_AGE}s old (>${LOCK_MAX_AGE}s max), holder PID $LOCK_PID is stuck. Force-removing and killing tree."
         # Best-effort kill of the stuck process tree
         if [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
             pkill -9 -P "$LOCK_PID" 2>/dev/null || true
             kill -9 "$LOCK_PID" 2>/dev/null || true
         fi
-        rm -f "$LOCK_FILE"
+        rm -rf "$LOCK_DIR"
+        # Single-shot retry. If another shell won the recovery race, exit cleanly — no spin.
+        acquire_lock || { log "Lock recovered by another shell during force-remove. Skipping."; exit 0; }
     elif kill -0 "$LOCK_PID" 2>/dev/null; then
         log "Another enrichment already running (PID $LOCK_PID, age ${LOCK_AGE}s). Skipping."
         exit 0
     else
-        log "Stale lock file found (PID $LOCK_PID dead). Removing."
-        rm -f "$LOCK_FILE"
+        log "Stale lock found (PID $LOCK_PID dead). Removing and retrying."
+        rm -rf "$LOCK_DIR"
+        # Single-shot retry. If another shell won the recovery race, exit cleanly — no spin.
+        acquire_lock || { log "Lock recovered by another shell during stale-PID recovery. Skipping."; exit 0; }
     fi
 fi
-echo $$ > "$LOCK_FILE"
-trap 'rm -f "$LOCK_FILE"' EXIT
 
 # ============================================================================
 # Parse Arguments
