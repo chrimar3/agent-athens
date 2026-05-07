@@ -45,7 +45,7 @@ MIN_QUEUE=3
 # 900s wall-clock is the outer fence — anything taking longer than 15min is
 # already failing some inner gate. plist EnvironmentVariables can override.
 BATCH_TIMEOUT=${BATCH_TIMEOUT:-900}
-STDOUT_IDLE_CAP=${STDOUT_IDLE_CAP:-120}  # S99: kill batch if its stdout mtime hasn't advanced in N seconds.
+STDOUT_IDLE_CAP=${STDOUT_IDLE_CAP:-600}  # S110g (2026-05-07): raised from 120 → 600 based on n=90 right-censored kills (mode 122s, max 404s); 600 = max × 1.5 buffer. See specs/s110g-stdout-idle-samples.md.
 
 # S99: Server-side stream watchdog (Claude Code v2.1.105+). CLAUDE_STREAM_IDLE_TIMEOUT_MS
 # kills mid-stream stalls at 5min idle. CLAUDE_ENABLE_BYTE_WATCHDOG enables
@@ -341,6 +341,9 @@ for brief in "${BATCH_FILES[@]}"; do
     # other batches' output, masking a stalled batch.
     BATCH_OUT="$LOG_DIR/.batch-${BATCH_NAME}-${RUN_ID}.out"
     rm -f "$BATCH_OUT" && touch "$BATCH_OUT"
+    # S110g: clean per-batch dir so Fix C-revised mtime check sees only this-run files.
+    rm -rf "temp-descriptions/${BATCH_NAME}"
+    mkdir -p "temp-descriptions/${BATCH_NAME}"
 
     # Run claude in background, output to per-batch file.
     # S101a: stream-json + --verbose + --include-partial-messages required so
@@ -387,6 +390,12 @@ for brief in "${BATCH_FILES[@]}"; do
         fi
         # Stdout-mtime idle check (NOTE: stat -f %m is BSD/macOS; use -c %Y on Linux)
         MTIME=$(stat -f %m "$BATCH_OUT" 2>/dev/null || echo "$NOW")
+        # S110g: also consider any file in temp-descriptions/${BATCH_NAME}/ written this run
+        # as alive signal — defense-in-depth for edge cases where file mtime leads stream events
+        # (subprocess-delay windows, parallel tool orderings, future decoupled refactors).
+        DESC_LATEST=$(find "temp-descriptions/${BATCH_NAME}" -type f -newer "$BATCH_OUT" 2>/dev/null \
+          -exec stat -f %m {} + 2>/dev/null | sort -rn | head -1)
+        [ -n "$DESC_LATEST" ] && [ "$DESC_LATEST" -gt "$MTIME" ] && MTIME=$DESC_LATEST
         IDLE=$(( NOW - MTIME ))
         if [ "$IDLE" -ge "$STDOUT_IDLE_CAP" ]; then
           ELAPSED=$(( NOW - START_TIME ))

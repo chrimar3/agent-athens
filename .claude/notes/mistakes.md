@@ -479,3 +479,40 @@ the plan, not folding (a) into (b). Future sessions will face this
 same shape — bundling architectural work with behavioral fixes — and
 the failure to gate them separately will produce the same confusion.
 
+**Mistake 3 — Trace the actual data flow through the invocation line
+before designing transport-layer fixes.** S110g Step 1 surfaced the
+third mechanism-misunderstanding in the S110 series. The original
+plan's Fix B framing assumed the wrapper parses stream-json events
+from stdout. Phase 1 exploration corrected that to "wrapper polls
+`BATCH_OUT` mtime" — already a one-step trace correction. But the
+revised Fix B1 then assumed `save-batch.ts` is a streaming consumer
+of the agent's events, which would emit a heartbeat to `BATCH_OUT`.
+Step 1's source read corrected that too: `auto-enrich.sh:360`
+redirects Claude's stdout *directly* to `BATCH_OUT` with `> "$BATCH_OUT" 2>&1` —
+no streaming consumer in the path — and `save-batch.ts` is invoked
+*by the agent itself at the end of its session* (per
+`generate-enrichment-brief.ts:716`) as a post-batch reader of
+`temp-descriptions/<id>.md` files. There is no streaming process to
+add a heartbeat to; the heartbeat target was imaginary.
+
+*Diagnostic discipline going forward:* before designing any
+transport-layer fix (heartbeat, watchdog, filter, mtime tracker),
+read the exact invocation line that produces the signal in question.
+Trace stdout → stderr → file-write paths empirically. Identify each
+process in the data flow as one of: (a) streaming producer, (b)
+streaming consumer, (c) post-batch reader, (d) polling observer.
+Match the fix to the role. A heartbeat must be inserted in a process
+that is alive during the silence; a watchdog must observe a signal
+that the alive process is producing; a filter must sit on the actual
+byte path. Do not infer process roles from intuition about how the
+system "should" work.
+
+The compounding pattern: each S110-series session took *one* trace
+step from intuition toward source. The fix-design phases consistently
+failed to take the *next* trace step on the heartbeat-target side.
+**Two trace steps per fix is the minimum:** one to locate the kill
+mechanism, one to locate the heartbeat / filter / observer insertion
+point. Both must be source-verified before the fix is designed. A
+plan whose fix taxonomy hasn't been data-flow-traced is a plan that
+will produce architecturally-inert "fixes."
+
