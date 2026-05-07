@@ -68,3 +68,24 @@
 **Wrong:** Attributing a theatrical work to a published author/work based on thematic resemblance. (Batch 117: Lo attributed to Philip K. Dick — actually original by Marios Tsagkaris.)
 **Right:** Verify playwright/author from the event listing URL before any attribution. If the event page doesn't name a source work, describe the premise without attribution. Never guess authorship from genre or theme.
 **Why it matters:** Source attribution errors are the most damaging factual error type — they misrepresent creative authorship and are immediately obvious to anyone familiar with the work.
+
+---
+
+## Stall-Triggering Phrasings (§7, S110f)
+
+The following phrasings indicate the agent is about to ask a clarifying question of an operator who isn't there. They never appear in agent reasoning during unattended runs.
+
+Forbidden:
+- "Question for you"
+- "let me know"
+- "should I"
+- "would you like"
+- "before I save"
+- "do you want me to"
+- "please confirm"
+- "which option do you prefer"
+- "auto-save now or leave for review"
+
+If reasoning approaches one of these forms, that is the moment to consult §3's deterministic save decision and act, not to compose the question.
+
+Origin: S110e diagnostic, batch-1, 908s kill — agent emitted "Question for you: Do you want me to (a) auto-save now per the brief and rely on the review file to surface the metadata issues, or (b) leave for review and let you patch the DB metadata before the descriptions go live?" This pattern lost the entire batch.

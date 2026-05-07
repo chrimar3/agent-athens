@@ -535,6 +535,32 @@ export function buildBrief(
   lines.push('22. **TIMELINESS SIGNAL REQUIRED**: Every description must answer "why now?" Tier 1 (preferred): anniversary, milestone, comeback, premiere, album release. Tier 2: season position, limited run, Athens premiere. Tier 3 (always available): seasonal fit, calendar position, programming context. See per-event timeliness hint below.');
   lines.push('23. **TIMELINESS STALENESS FLAG**: After writing, add `<!-- timeliness-expires: YYYY-MM-DD -->` at the end of the description. Date = when the timeliness claim becomes stale (closing date, +90 days for album hooks, series end date for recurring).');
   lines.push('24. **VENUE-SPECIFIC INSIDER DETAIL**: Every enrichment must contain at least one concrete, venue-or-event-specific detail not derivable from structured fields (address, metro, price, capacity, event time) or from the venue profile\'s standing character. Qualifying: door/arrival timing, terrace or smoking policy, late-night atmosphere shifts, sightline or acoustic notes, seasonal operation changes, crowd-by-hour patterns, walking quirks between transit and venue, seating or standing dynamics. Woven into narrative prose — never a header, bullet list, or "Practical info" coda. Required for hybrid (201–400w) and full (400w+) — absence is a fail. Attempted for three-part blocks (≤200w) — may be omitted if topical load is heavy (log as "insider omitted: topical load"). If venue is not in the Enrichment Knowledge Base and no insider detail is verifiable, lead with genre-prototypical experience (Safe Inferences) and flag the gap to the ED for KB expansion. Never fabricate insider detail.');
+  lines.push('25. **INCOMPLETE WRITES**: If you cannot complete a description body — corrupt input, conflicting required fields, event type missing from matrix, unrecoverable Master Template violation — do not stall. Write the minimum schema description: "[Event name] is a [event type] at [venue name] in [neighborhood], Athens[, on [date]]. [Admission language]." Save via save-batch.ts. Append concern with concern_type="incomplete-write" and one-sentence concern_text describing what blocked the full write. Continue to next event.');
+  lines.push('');
+
+  // Concerns taxonomy (S110f)
+  lines.push('## Concerns');
+  lines.push('');
+  lines.push('When you flag a concern, append a JSONL line to');
+  lines.push(`temp-descriptions/batch-${batchNumber}/concerns.jsonl with shape:`);
+  lines.push('  {"event_id": "...", "concern_type": "...", "concern_text": "...", "timestamp": "..."}');
+  lines.push('');
+  lines.push('Valid concern_type values (use exactly one per concern entry):');
+  lines.push('- entity-resolution-uncertain');
+  lines.push('- venue-mismatch-or-unknown');
+  lines.push('- date-conflict-or-unparseable');
+  lines.push('- neighborhood-mismatch');
+  lines.push('- ticket-merchant-unverified');
+  lines.push('- venue-change-suspected');
+  lines.push('- timeliness-stale-risk');
+  lines.push('- credential-redirect-applied');
+  lines.push('- word-count-overshoot');
+  lines.push('- thin-context');
+  lines.push('- fabrication-temptation-resisted');
+  lines.push('- incomplete-write');
+  lines.push('');
+  lines.push('If none fit, do not flag a concern. Do not invent a concern_type — the');
+  lines.push('validator config will flag unknown types as drift.');
   lines.push('');
 
   // Exemplar references
@@ -679,14 +705,19 @@ export function buildBrief(
   lines.push('   ```bash');
   lines.push(`   bun run scripts/write-tags.ts <event-id> --batch-dir=${batchDir} Tag1 Tag2 Tag3...`);
   lines.push('   ```');
-  lines.push('5. **Save decision** (after completing ALL events in this batch):');
-  lines.push('   - If ALL gate scores are >= 80 AND all have 0 errors: auto-save to database:');
+  lines.push('5. **Save decision** (deterministic, no operator branch):');
+  lines.push('   - When all gate scores ≥ 80, the description is complete. If you have any');
+  lines.push(`     concerns, append a JSONL line to temp-descriptions/batch-${batchNumber}/concerns.jsonl.`);
+  lines.push('     Both the description and any concerns are produced; neither is contingent');
+  lines.push('     on the other.');
+  lines.push('   - When any gate score < 80, append a concern to concerns.jsonl describing the');
+  lines.push('     failure. The description file (already written in step 2) stays — the concern');
+  lines.push('     is the signal for the post-save validator. Continue to next event.');
+  lines.push('   - After all events in the batch are processed, run save-batch.ts:');
   lines.push('   ```bash');
   lines.push(`   bun run scripts/save-batch.ts --manifest=temp-briefs/batch-${batchNumber}.manifest.json --session=batch-${batchNumber} --batch=${batchNumber} --clean`);
   lines.push('   ```');
-  lines.push(`   Note "AUTO-SAVED" at the top of batch-${batchNumber}-review.md.`);
-  lines.push('   - If ANY score is < 80 OR any have errors: do NOT run save-batch.ts.');
-  lines.push(`     Note "LEFT FOR REVIEW" at the top of batch-${batchNumber}-review.md with reasons.`);
+  lines.push('   There is no operator-input branch. Do not ask whether to save.');
   lines.push('');
 
   // Per-event gate check commands with full metadata flags

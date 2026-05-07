@@ -8,6 +8,7 @@ import { isAthensEvent } from "../utils/athens-filter";
 import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
 import { normalizeDateField } from "../utils/date-format";
 import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
+import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -256,11 +257,64 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
 }
 
 /**
- * Get all events ordered by start date
+ * Returns event IDs to exclude from public reads — events with a tier-A0
+ * concern flagged in event_concerns and no matching override. Falls through
+ * to empty when hardstop_enabled=false, no A0 rules, or event_concerns is
+ * missing (the chokepoint must not crash the public read path; tests using
+ * unmigrated fixtures rely on this).
+ */
+function getHardStopExcludeIds(database: Database): Set<string> {
+  const rules = loadGateRules();
+  if (!rules.hardstop_enabled) return new Set();
+
+  const hardStopTypes = rules.rules.filter(r => r.tier === 'A0').map(r => r.concern_type);
+  if (hardStopTypes.length === 0) return new Set();
+
+  const tableExists = database.prepare(
+    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='event_concerns'",
+  ).get();
+  if (!tableExists) return new Set();
+
+  const placeholders = hardStopTypes.map(() => '?').join(',');
+  const concernRows = database.prepare(
+    `SELECT event_id, concern_type FROM event_concerns WHERE concern_type IN (${placeholders})`,
+  ).all(...hardStopTypes) as Array<{ event_id: string; concern_type: string }>;
+
+  if (concernRows.length === 0) return new Set();
+
+  const overrides = loadOverrides();
+  const excludeIds = new Set<string>();
+  for (const row of concernRows) {
+    const overridden = overrides.some(
+      o => o.event_id === row.event_id && o.concern_types.includes(row.concern_type),
+    );
+    if (!overridden) excludeIds.add(row.event_id);
+  }
+  return excludeIds;
+}
+
+/**
+ * Get all events ordered by start date. Public-output chokepoint: applies
+ * the S110f hard-stop filter to suppress tier-A0 events from public surfaces
+ * (event pages, sitemap, datafeed, schema). Filtered events stay in the
+ * table and remain enrichment-eligible.
  */
 export function getAllEvents(db?: Database): Event[] {
   const database = db || getDatabase();
-  const rows = database.prepare("SELECT * FROM events WHERE is_cancelled = 0 ORDER BY start_date ASC").all();
+  const excludeIds = getHardStopExcludeIds(database);
+
+  if (excludeIds.size === 0) {
+    const rows = database.prepare(
+      "SELECT * FROM events WHERE is_cancelled = 0 ORDER BY start_date ASC",
+    ).all();
+    return rows.map(rowToEvent);
+  }
+
+  const idArr = [...excludeIds];
+  const idPlaceholders = idArr.map(() => '?').join(',');
+  const rows = database.prepare(
+    `SELECT * FROM events WHERE is_cancelled = 0 AND id NOT IN (${idPlaceholders}) ORDER BY start_date ASC`,
+  ).all(...idArr);
   return rows.map(rowToEvent);
 }
 

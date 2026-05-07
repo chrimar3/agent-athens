@@ -1,0 +1,19 @@
+# config/enrichment-overrides.yml
+# Owned by GEO Strategist. Per-event hard-stop bypass list. Append-only.
+#
+# An event listed here ships even if it has hard-stop concerns flagged.
+# The agent's concern flag is preserved in event_concerns; only the *filter*
+# is bypassed. Match is per (event_id, concern_type) tuple — an event can
+# be overridden for some concerns but still hard-stop on others.
+#
+# If this file grows past ~50 entries, that's a signal the rules in
+# enrichment-gate-rules.yml are wrong, not that overrides are wrong.
+
+version: 1
+overrides: []
+# Example entry:
+# - event_id: abc123
+#   concern_types: [venue-mismatch-or-unknown]
+#   reason: Venue ΣΝΦΚΧ correctly resolves to Stavros Niarchos Foundation; agent flag is transliteration false-positive
+#   approved_by: christos
+#   approved_at: 2026-05-XX

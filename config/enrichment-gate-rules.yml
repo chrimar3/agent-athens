@@ -1,0 +1,80 @@
+# config/enrichment-gate-rules.yml
+# Owned by GEO Strategist. Defines tier classification for enrichment concerns.
+# Read by the post-save validator (S110f) to determine which events are
+# filtered from the public build at the DB chokepoint.
+#
+# Tier A0: events with this concern flagged are filtered from the public
+# build. Description remains in events table; not visible on any public
+# surface (event page, hub, sitemap, datafeed, OG, search index).
+# Tier B: events save and ship normally; concern lives in metadata for
+# build-report aggregation and post-hoc human review.
+#
+# Adding/removing rules: requires GEO sign-off. If firing rate sustains >10%
+# on any single rule, that rule is over-tuned (per S110f decision) — fix the
+# rule, not the page-shape policy.
+#
+# Unknown concern_type emitted by the agent: validator logs as build-report
+# warning under "validator config drift"; event ships normally. Operator
+# triages at audit checkpoint.
+
+version: 1
+
+rules:
+  # Tier A0 — hard-stop. Filtered from public surfaces.
+  - concern_type: entity-resolution-uncertain
+    tier: A0
+    rationale: Artist or venue match is low-confidence; citation anchor potentially fabricated. Anchor lives in sentence 1, where AI engines weight disproportionately.
+
+  - concern_type: venue-mismatch-or-unknown
+    tier: A0
+    rationale: Venue name in source does not resolve to reference DB, or capacity/neighborhood from profile conflicts with source data.
+
+  - concern_type: date-conflict-or-unparseable
+    tier: A0
+    rationale: Date fields conflict, fail to parse, or recurrence pattern is ambiguous in a way that affects the citation anchor.
+
+  - concern_type: neighborhood-mismatch
+    tier: A0
+    rationale: Neighborhood claim conflicts with venue's actual neighborhood per reference DB.
+
+  - concern_type: ticket-merchant-unverified
+    tier: A0
+    rationale: Description names a ticket merchant (more.com, RA, ticketmaster) not confirmed in source data. Substitution ladder produces "tickets required" without merchant naming; if a merchant has been named and is unverified, hard-stop.
+
+  # Tier B — soft flag. Saved + shipped; surfaces in build report.
+  - concern_type: venue-change-suspected
+    tier: B
+    rationale: Programming or hours appear shifted vs venue profile, but the description does not depend on the shift. Flag to ED, save.
+
+  - concern_type: timeliness-stale-risk
+    tier: B
+    rationale: Tier 1 timeliness hook used; description is true at firing, may be false at re-firing. Handled by timeliness_expiry metadata.
+
+  - concern_type: credential-redirect-applied
+    tier: B
+    rationale: Substitution ladder fired correctly; fabricated credential redirected to genre-grounded expression. Telemetry only.
+
+  - concern_type: word-count-overshoot
+    tier: B
+    rationale: Description exceeded matrix ceiling by ≤10%. Editorial concern, not factual.
+
+  - concern_type: thin-context
+    tier: B
+    rationale: Source data was thin; description is honest about what was available and leans venue-and-genre.
+
+  - concern_type: fabrication-temptation-resisted
+    tier: B
+    rationale: Telemetry only. Useful for tracking which event types produce the most fabrication pressure.
+
+  - concern_type: greek-requested-policy-paused
+    tier: B
+    rationale: Event input requested Greek output; English-only policy currently paused at project level. Inert vocabulary — §5 brief instruction deferred.
+
+  - concern_type: incomplete-write
+    tier: B
+    rationale: Agent could not complete full description; minimum-schema fallback used. Flagged for editorial review.
+
+# Kill switch — flip to false to disable hard-stop filtering system-wide.
+# When false, all events save and ship regardless of concern type. Logged in
+# build report so we don't lose track of when filtering was off.
+hardstop_enabled: true

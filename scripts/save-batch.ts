@@ -399,6 +399,34 @@ export function saveBatch(
     });
   }
 
+  // S110f: ingest agent-emitted concerns into event_concerns table.
+  // Per-batch scope (loop above has closed) — concerns.jsonl was appended
+  // by the agent during its per-event work, so ingest the whole file once.
+  if (!dryRun) {
+    const concernsPath = join(descDir, 'concerns.jsonl');
+    if (existsSync(concernsPath)) {
+      const insertConcern = db.prepare(
+        'INSERT OR REPLACE INTO event_concerns (event_id, concern_type, concern_text) VALUES (?, ?, ?)',
+      );
+      const concernLines = readFileSync(concernsPath, 'utf-8').split('\n').filter(Boolean);
+      let ingested = 0;
+      for (const line of concernLines) {
+        try {
+          const parsed = JSON.parse(line);
+          if (parsed.event_id && parsed.concern_type) {
+            insertConcern.run(parsed.event_id, parsed.concern_type, parsed.concern_text || null);
+            ingested++;
+          }
+        } catch {
+          console.warn(`  ! S110f: skipping malformed concerns line: ${line.slice(0, 100)}`);
+        }
+      }
+      if (ingested > 0) {
+        console.log(`  + S110f: ingested ${ingested} concern(s) from ${concernsPath}`);
+      }
+    }
+  }
+
   return { results, openings };
 }
 

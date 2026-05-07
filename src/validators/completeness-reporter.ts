@@ -17,6 +17,9 @@ import type { Event, EventType } from '../types';
 import { generateEventSlug } from '../generators/event-page';
 import { normalizeVenueKey } from '../ticketing/venue-registry';
 import { writeJsonApiIfChangedSync } from '../utils/write-if-changed';
+import { Database } from 'bun:sqlite';
+import { getDatabase } from '../db/database';
+import { loadGateRules, loadOverrides, getUnknownConcernTypes } from '../utils/load-gate-rules';
 
 // Declaration order must mirror types.ts:69-81. The `satisfies` clause makes
 // TypeScript fail compile if the EventType union evolves and BUCKET_ORDER
@@ -334,5 +337,139 @@ export function printBucketSummary(report: CompletenessReport): void {
     const sample = orphanSlugs.slice(0, 5).join(', ');
     const more = orphanSlugs.length > 5 ? ` (+${orphanSlugs.length - 5} more)` : '';
     console.log(`   ⚠️  ${orphanSlugs.length} orphan slug(s) — validated pages without matching event: ${sample}${more}`);
+  }
+}
+
+/**
+ * S110f hard-stop firing report. Reads gate-rules YAML + event_concerns
+ * table, prints per-concern-type firing rates, per-source breakdowns,
+ * drift detection, and threshold/kill-switch warnings.
+ *
+ * Skips gracefully if event_concerns isn't migrated yet — same philosophy
+ * as the chokepoint filter in database.ts:getAllEvents().
+ */
+export function printHardStopSummary(db?: Database): void {
+  const database = db || getDatabase();
+  const rules = loadGateRules();
+  const overrides = loadOverrides();
+
+  console.log('\n=== Hard-stop firing (S110f) ===');
+
+  const tableExists = database.prepare(
+    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='event_concerns'",
+  ).get();
+  if (!tableExists) {
+    console.log('event_concerns table not present — migration 011 not yet applied.');
+    return;
+  }
+
+  const A0_TYPES = rules.rules.filter(r => r.tier === 'A0').map(r => r.concern_type);
+  const B_TYPES = rules.rules.filter(r => r.tier === 'B').map(r => r.concern_type);
+
+  const last24h = database.prepare(
+    "SELECT COUNT(*) as c FROM events WHERE enriched_at >= datetime('now', '-1 day')",
+  ).get() as { c: number };
+  const totalProcessed = last24h.c;
+
+  const concernRows = database.prepare(
+    "SELECT event_id, concern_type FROM event_concerns",
+  ).all() as Array<{ event_id: string; concern_type: string }>;
+
+  const concernsByType = new Map<string, Set<string>>();
+  for (const row of concernRows) {
+    if (!concernsByType.has(row.concern_type)) concernsByType.set(row.concern_type, new Set());
+    concernsByType.get(row.concern_type)!.add(row.event_id);
+  }
+
+  // Hard-stopped events: any A0 concern flagged AND no override for that (event_id, concern_type) tuple.
+  const hardStoppedEvents = new Set<string>();
+  for (const t of A0_TYPES) {
+    const ids = concernsByType.get(t);
+    if (!ids) continue;
+    for (const id of ids) {
+      const overridden = overrides.some(o => o.event_id === id && o.concern_types.includes(t));
+      if (!overridden) hardStoppedEvents.add(id);
+    }
+  }
+
+  const overallPct = totalProcessed > 0
+    ? ((hardStoppedEvents.size / totalProcessed) * 100).toFixed(1)
+    : '0.0';
+  console.log(`Total events processed last 24h: ${totalProcessed}`);
+  console.log(`Hard-stopped events (lifetime): ${hardStoppedEvents.size} (${overallPct}% of last-24h)`);
+
+  const exceededRules: string[] = [];
+  console.log('\nBy concern_type (tier A0):');
+  for (const t of A0_TYPES) {
+    const count = concernsByType.get(t)?.size ?? 0;
+    const pct = totalProcessed > 0 ? ((count / totalProcessed) * 100).toFixed(1) : '0.0';
+    const exceeds = totalProcessed > 0 && count / totalProcessed > 0.10;
+    const status = exceeds ? '[⚠ exceeds 10% threshold]' : '[threshold 10%, OK]';
+    console.log(`  ${t}: ${count} (${pct}%)  ${status}`);
+    if (exceeds) exceededRules.push(t);
+  }
+
+  const softFlagsWithCounts = B_TYPES
+    .map(t => ({ type: t, count: concernsByType.get(t)?.size ?? 0 }))
+    .filter(s => s.count > 0);
+  if (softFlagsWithCounts.length > 0) {
+    console.log('\nSoft flags by concern_type (tier B):');
+    for (const s of softFlagsWithCounts) {
+      console.log(`  ${s.type}: ${s.count}`);
+    }
+  }
+
+  // Per-source breakdown for last-24h events. Hard-stops are lifetime; the
+  // intersection (recent events that happen to be hard-stopped) is the metric
+  // that matters operationally — "how often is this scraper feeding us
+  // citation-poison events?"
+  const eventsBySource = database.prepare(`
+    SELECT source, COUNT(*) as total
+    FROM events
+    WHERE enriched_at >= datetime('now', '-1 day')
+    GROUP BY source
+    ORDER BY total DESC
+  `).all() as Array<{ source: string; total: number }>;
+
+  const hardStopBySource = new Map<string, number>();
+  if (hardStoppedEvents.size > 0) {
+    const ids = [...hardStoppedEvents];
+    const placeholders = ids.map(() => '?').join(',');
+    const rows = database.prepare(`
+      SELECT source, COUNT(*) as c FROM events
+      WHERE id IN (${placeholders}) AND enriched_at >= datetime('now', '-1 day')
+      GROUP BY source
+    `).all(...ids) as Array<{ source: string; c: number }>;
+    for (const r of rows) hardStopBySource.set(r.source, r.c);
+  }
+
+  if (eventsBySource.length > 0) {
+    console.log('\nBy source (last 24h):');
+    for (const e of eventsBySource) {
+      const hs = hardStopBySource.get(e.source) ?? 0;
+      const pct = e.total > 0 ? ((hs / e.total) * 100).toFixed(1) : '0.0';
+      console.log(`  ${e.source}: ${hs} hard-stops / ${e.total} events (${pct}%)`);
+    }
+  }
+
+  // Drift detection: agent emitted concern_type values not declared in YAML.
+  const emittedTypes = [...concernsByType.keys()];
+  const unknownTypes = getUnknownConcernTypes(emittedTypes, rules);
+  console.log('');
+  console.log(`Validator config drift: ${unknownTypes.length === 0 ? '(none)' : `${unknownTypes.length} unknown — ${unknownTypes.join(', ')}`}`);
+  console.log(`Kill switch: ${rules.hardstop_enabled ? 'ENABLED' : 'DISABLED'}`);
+  console.log(`Active overrides: ${overrides.length}`);
+
+  // Conditional warnings (printed at the bottom per plan).
+  for (const t of exceededRules) {
+    const count = concernsByType.get(t)?.size ?? 0;
+    const pct = ((count / totalProcessed) * 100).toFixed(1);
+    console.log(`⚠ HARDSTOP_FIRING_RATE_EXCEEDED: ${t} at ${pct}% — rules likely over-tuned, see decisions.md S110f`);
+  }
+  if (!rules.hardstop_enabled) {
+    console.log('⚠ HARDSTOP_DISABLED: kill switch is OFF — events shipping regardless of A0 concerns');
+  }
+  if (unknownTypes.length > 0) {
+    console.log(`⚠ VALIDATOR_CONFIG_DRIFT: agent emitted ${unknownTypes.length} unknown concern_type value(s): ${unknownTypes.join(', ')}. Audit before next session.`);
   }
 }

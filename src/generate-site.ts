@@ -30,7 +30,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
 import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
-import { buildCompletenessReport, printBucketSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
+import { buildCompletenessReport, printBucketSummary, printHardStopSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
 import { buildDataFeed, writeDataFeed } from './generators/datafeed';
 import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
@@ -1104,6 +1104,9 @@ async function main() {
     completenessReport,
     join(import.meta.dir, '../data/build-completeness.json'),
   );
+
+  // S110f hard-stop firing report
+  printHardStopSummary();
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
