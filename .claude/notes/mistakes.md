@@ -516,3 +516,34 @@ point. Both must be source-verified before the fix is designed. A
 plan whose fix taxonomy hasn't been data-flow-traced is a plan that
 will produce architecturally-inert "fixes."
 
+**Mistake 4 — Empirical observation: when the kill-idle mode clusters
+at the cap, the cap is killing the median not the tail.** S110g's
+calibration of `STDOUT_IDLE_CAP` revealed 76/90 stdout-idle kills
+landed at idle 120-134s (cap was 120; polling-overshoot window
+120-135). Mode was 122s. This is the empirical signature of "cap is
+set at the median of natural distribution" — every event that thinks
+slightly above average gets killed. The fix at 600s (max-observed-
+real-silence 404s × 1.5 buffer) eliminated the failure mode binary-
+cleanly: 0 stdout-idle kills in the verification fire (run_id
+1778180428-57709, 2026-05-07 22:00).
+
+*Diagnostic discipline going forward:* when a kill-idle mode is
+suspiciously close to the cap (within polling-overshoot window),
+that's evidence the cap is too tight, not that the population is
+unusually slow. The sanity check is "where would the kill-idle mode
+be if the cap were doubled?" — if the answer is "much further from
+the new cap," the original cap was killing natural distribution; if
+it's "still right at the new cap," the system has a real
+catastrophic-stall behavior that's symptom-not-cap.
+
+**Vindication of Fix C-revised's honest accounting:** in the same
+verification fire, Fix C-revised was in place but didn't have to fire
+— the 4 mid-run cases from prior log analysis that I initially
+claimed it would catch were actually too tightly-coupled to BATCH_OUT
+mtime to need separate observation (Write-tool stream events advance
+BATCH_OUT mtime in the same wall-clock second as the file write, so
+`find -newer "$BATCH_OUT"` returns nothing in that flow). The
+"probably 0 today, kept as defense-in-depth" prediction held cleanly.
+The decisions.md entry reflects this truthfully rather than over-
+crediting C-revised's coverage.
+

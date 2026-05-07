@@ -3307,6 +3307,22 @@ Plan at `/Users/chrism/.claude/plans/s110g-stdout-idle-cap-recalibration.md`.
   moment the exogenous issue clears, and lets the next session run
   into a primed environment with infrastructure already in place.
 
+### Soft-hold + pull --rebase incompatibility
+
+When committing files outside the held bundle during a soft-hold
+(e.g., memory updates while feature code is held), the standard
+`git pull --rebase` step will fail with exit 128 because pull-rebase
+requires a clean working tree and held files are unstaged. The push
+that follows will succeed if the remote hasn't diverged (fast-forward
+case), which is the common case for fast-turnaround operator commits.
+If divergence is suspected, the workaround is
+`git stash --include-untracked` → `git pull --rebase` → `git stash pop`.
+The defensive check before pushing is `git fetch && git log HEAD..origin/main`
+— read-only, doesn't disturb the working tree, confirms no divergence.
+
+*Discovered during S118 `c37255c4d` memory-only commit (pull-rebase
+exit 128, push succeeded fast-forward).*
+
 **Connects to:** `mistakes.md` "S110 series diagnostic discipline"
 (why the exogenous-scope distinction matters); `mistakes.md`
 "Bundled architectural + behavioral scope produces wrong verification
@@ -3314,3 +3330,77 @@ gates" (the framing-vs-gate gap that necessitated soft-hold);
 `patterns.md` "Infrastructure value is independent of behavior change"
 (the architectural-value claim that justifies preserving rather than
 reverting).
+
+## Empirical-first calibration for transport-layer thresholds (2026-05-07, S110g)
+
+Don't tune transport-layer thresholds (timeouts, idle caps, retry
+budgets) from intuition; tune from observed real durations. The wrong
+threshold is invisible until it kills — by definition, an idle cap
+that's correctly set produces no kills, so until you have kill data
+you don't know whether the cap is too tight, too loose, or right.
+
+S110g's empirical reframe of `STDOUT_IDLE_CAP=120`: five sessions of
+brief-revision iteration treated repeated `KILL_CAUSE: stdout-idle
+exit=125` as evidence of unproductively long agent thinking. Step 2's
+mining of n=98 kills across all preserved logs revealed the actual
+story: 76/90 (84%) of real kills landed at idle 120-134s — the agent
+commonly thinks for 120-130s before producing first
+`content_block_delta`, hitting the cap right at the edge of natural
+distribution. **The cap was killing the median, not the tail.**
+
+**The discipline:**
+
+1. Treat every kill log line as a calibration data point. Right-censored
+   lower bounds are still data.
+2. Segment the kill distribution before recommending a threshold. Rule
+   of thumb: if mode of kill-idle ≈ cap, the cap is killing natural
+   distribution and needs to rise; if mode of kill-idle = 2×–3× cap,
+   the cap is right and rare tail events are real.
+3. Verify the methodology against the artifact format before designing
+   the diagnostic pipeline. The original S110g plan's awk pipeline
+   assumed wrapper line prefixes wrap each stream-json event; the
+   actual `cat $BATCH_OUT >> $LOG_FILE` after batch completion produces
+   unprefixed events. Methodology assumptions need trace-status
+   discipline same as fix designs (see `mistakes.md` Mistake 3 from
+   the S110 series section).
+
+**Connects to:** `mistakes.md` "S110 series diagnostic discipline"
+(why the wrong-layer fix kept happening); `specs/s110g-stdout-idle-samples.md`
+(the empirical dataset).
+
+## Scheduled fires confound verification (2026-05-07, S110g)
+
+When working on a system with auto-triggers (launchd, cron, scheduled
+jobs, GitHub Actions cron), check the schedule before assuming a
+fire's timing maps to your action. The disciplined version: enumerate
+the next N scheduled fires before any wrapper edit so that observed
+fire timestamps can be correctly attributed.
+
+**S110g instance:** the apparent verification fire at 19:21:27 killed
+both batches at idle≈124s — only possible under the *old*
+`STDOUT_IDLE_CAP=120`, not the new 600 just edited in. Reading the
+file mtime (21:36) against the fire timestamp (19:21) revealed the
+fire was actually `com.agentathens.enrichment-19.plist`'s 19:00
+scheduled auto-fire, which ran the OLD wrapper (the manual edit
+hadn't landed yet at 19:00). The actual S110g verification was the
+next scheduled fire at 22:00 (`enrichment-22.plist`), which ran the
+new wrapper and produced clean signal.
+
+**The pattern:** scheduled triggers don't announce themselves. A fire
+that looks like the verification you're waiting for might be a
+scheduler doing its job. Always cross-check (a) which plist label
+triggered, (b) what wrapper version was on disk at fire time, (c)
+whether the result is consistent with the post-edit configuration. If
+any of these are mismatched, you're reading the wrong fire.
+
+**Operational corollary:** a system with N daily auto-fires has N
+opportunities for verification confusion per day. Sessions that touch
+the wrapper should either pause the relevant launchd labels
+(`launchctl unload`) for the session's duration or explicitly own the
+fire timing via manual `launchctl start` and ignore auto-fires that
+interleave.
+
+**Connects to:** `mistakes.md` "S110 series diagnostic discipline"
+(the data-flow trace discipline this generalizes);
+`docs/operational-todos.md` "S110f calibration audit" (where the
+audit timing depends on knowing which fires produced which data).

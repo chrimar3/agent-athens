@@ -4696,3 +4696,126 @@ meta-lessons are the most institutionally-valuable output of S118.
 untracked files. Working tree carries S110f's full diff into S110g.
 Memory entries (mistakes/patterns/decisions/session-log) committed
 in a follow-up session alongside S110f + S110g feat commits.
+
+### Session 119 — S110f + S110g land (drought ends, 4-commit chain) — 2026-05-07
+
+**Plan:** Verify S110g's wrapper edits via Step 4 fire, commit S110f
++ S110g together per soft-hold trigger, schedule audit per Step 6,
+ship memory updates. Plan at `/Users/chrism/.claude/plans/s110g-stdout-idle-cap-fizzy-lobster.md`.
+
+**What happened:**
+
+*Plan-execution discoveries* — three architectural corrections
+surfaced mid-execution that invalidated parts of the approved plan:
+
+1. **Step 1 source-trace** revealed (a) the wrapper polls `BATCH_OUT`
+   mtime via `stat -f %m`, doesn't parse stream-json; (b) three kill
+   paths layered (wrapper-wall-clock / stdout-idle / server-stream-
+   idle); (c) `save-batch.ts` is a post-batch file reader, NOT a
+   streaming consumer (the wrapper redirects Claude's stdout
+   *directly* to `BATCH_OUT` at `auto-enrich.sh:360`; the agent
+   itself invokes save-batch.ts at end of session). Original Fix B1
+   ("heartbeat in save-batch.ts") was architecturally inert. Plan
+   revision mid-flight; Mistake 3 in mistakes.md captures the
+   "two trace steps per fix is the minimum" lesson.
+
+2. **Step 2 methodology gap** — stream-json events appear in
+   `LOG_FILE` *without* per-event timestamps (cat-on-completion
+   model at `auto-enrich.sh:437`). The original plan's awk pipeline
+   was unworkable. Pivoted to right-censored kill data: n=98
+   stdout-idle kills, segmented into 76 at-cap (idle 120-134s) +
+   14 mid-cap real (143-404s) + 8 suspected laptop-sleep artifacts
+   (555-893s, `elapsed==idle`). The 84% at-cap clustering was the
+   load-bearing diagnostic signal — cap was killing the median.
+
+3. **Step 3 honest-accounting refinement** on Fix C-revised: when
+   the agent saves via Write tool, the `tool_use` stream event hits
+   `BATCH_OUT` at the same wall-clock second as the file write —
+   `find -newer "$BATCH_OUT"` returns nothing in that tightly-
+   coupled flow. C-revised's actual marginal coverage is narrow
+   (subprocess-delay windows, parallel tool orderings, future
+   decoupled refactors), not the 4 mid-run cases as initially
+   claimed. Locked Fix A=600s + Fix C-revised, with C-revised as
+   cheap defense-in-depth not coverage of the dominant failure mode.
+
+*Verification* — the 22:00 scheduled `com.agentathens.enrichment-22.plist`
+auto-fire ran the new wrapper (file mtime 21:36 < fire start 22:00:06).
+A prior 19:21 fire from `enrichment-19.plist` ran the OLD wrapper and
+killed at idle=124s — caught by reading file mtime against fire
+timestamp; new patterns.md "Scheduled fires confound verification"
+captures the discipline. The 22:00 fire produced clean signal:
+- **0 stdout-idle kills** (the failure mode this session fixed)
+- batch-1: 5 events saved in 737s, avg quality 92.2
+- batch-2: wrapper-wall-clock at elapsed=904s — 4-second margin over
+  `BATCH_TIMEOUT=900` (parked as S110h)
+- 4 of 5 saves correctly filtered as hard-stops by S110f's chokepoint
+- 0 dangling refs in `dist/`
+- Build report fired `HARDSTOP_FIRING_RATE_EXCEEDED` on
+  `venue-mismatch-or-unknown` at 50% of last-24h hard-stops — exactly
+  the over-tuning safety net S110f's monitoring was built to provide
+
+*Four-commit chain:*
+- `a1a0e7b67` feat(enrichment): hard-stop tier validator + chokepoint filter + monitoring (S110f) — 13 files, +1041/-8
+- `e72971e50` fix(wrapper): recalibrate STDOUT_IDLE_CAP + watchdog second alive signal (S110g) — 3 files
+- `97d8a8062` docs(operational-todos): schedule S110f audit + capture S110h + update Pallas entry — 1 file
+- (this session) docs(notes): patterns + decisions + post-execution mistakes + session-log — 4 files
+
+**Verified:** all four commits land cleanly; pre-push divergence
+check empty; tests still green (20/20 + 37/37 from S110f loader +
+queries baseline); generate-site builds without regression.
+
+**Learnings:**
+
+- *Scheduled fires confound verification.* Captured as patterns.md
+  entry. The 19:21 fire was `enrichment-19.plist` running OLD wrapper
+  before mtime 21:36 edits; the 22:00 fire was the actual verification.
+  File-mtime-vs-fire-timestamp cross-check is the disciplined
+  attribution; sessions that touch wrappers should either pause
+  relevant launchd labels or explicitly own fire timing.
+- *Empirical-first calibration for transport-layer thresholds.*
+  Captured as patterns.md entry. The 84% kill-cluster at cap was the
+  load-bearing diagnostic signal; intuition would have raised the cap
+  incrementally and missed the median-killing structural fact.
+- *Methodology assumptions need trace-status discipline same as fix
+  designs.* The Step 2 awk pipeline's "wrapper line prefixes wrap
+  each event" was a methodology assumption that needed verification
+  against the cat-on-completion model; trace-flow discipline
+  generalizes to pipeline assumptions, not just code-design
+  assumptions. Folded into Mistake 3 framing rather than a separate
+  Mistake entry per operator instruction.
+- *Honest-accounting predictions held.* Fix C-revised was kept as
+  cheap defense-in-depth with the explicit prediction "probably 0
+  marginal coverage today." Verification fire produced exactly that
+  shape — C-revised in place, didn't have to fire. Recording this
+  truthfully in decisions.md prevents over-crediting in future
+  retrospectives.
+
+**Open items:**
+- *S110f calibration audit* — sample-driven trigger (30 hard-stops OR
+  7 days, due 2026-05-14), not the originally-planned +3d.
+  Re-evaluate `venue-mismatch-or-unknown` first.
+- *S110h: BATCH_TIMEOUT 900 → 1200s* — deferred until post-audit unless
+  multiple wall-clock kills in next 3 fires. Single-line wrapper edit
+  at `scripts/auto-enrich.sh:47`.
+- *Pallas/Parios upstream date-leak* — S110f's
+  `date-conflict-or-unparseable` rule has empirically-confirmed gap
+  on syntactically-valid-but-wrong dates (sample event id
+  `6bf991c139208a42`). Fix is upstream extractor; chokepoint
+  tightening is the temporary path.
+- *S111 lock-mechanism race* — still parked from S110f Step 0
+  (`scripts/auto-enrich.sh:140-172` non-atomic check-then-create).
+- *Real reminder system* entry for the audit per "operational-todos
+  is the floor, not the ceiling" rule.
+
+**Cross-project signal:** **S110-series throughput drought ended.**
+Five sessions of brief-layer iteration (S110 → S110a → S110b → S110c
+→ S110e → S110f) followed by one wrapper-layer recalibration with
+empirical justification. The relay chain is recorded in mistakes.md
+"S110 series diagnostic discipline" with three named meta-lessons:
+(1) layer-distinction discipline; (2) bundled architectural +
+behavioral scope produces wrong verification gates; (3) two trace
+steps per fix is the minimum. The trace-status flag as adoption gate
+in plan files is the structural defense that prevented a fourth
+mechanism-misunderstanding this session.
+
+**Commits:** four this session, all on `main`, fast-forward push.

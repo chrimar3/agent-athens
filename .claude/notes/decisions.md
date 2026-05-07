@@ -2955,3 +2955,54 @@ S110c (parked finding promoted), `mistakes.md` "S110 series diagnostic
 discipline", `patterns.md` "Infrastructure value is independent of
 behavior change", prior decision on chokepoint architecture (Option β
 locked).
+
+## S110g — STDOUT_IDLE_CAP recalibration + watchdog second alive signal (2026-05-07)
+
+`STDOUT_IDLE_CAP` raised from 120 to 600s. **Load-bearing fix is the
+cap raise; it handles 100% of observed real kills** (n=90 right-
+censored intra-event silence observations after excluding 8 suspected
+laptop-sleep artifacts: mode 122s, p95 133s, max 404s; 600s = max ×
+1.5 buffer). Plus Fix C-revised as cheap defense-in-depth: watchdog
+augmented to track `temp-descriptions/${BATCH_NAME}` mtime as second
+alive signal, with auto-clean of per-batch dir at launch.
+
+**Honest accounting on Fix C-revised's coverage:** when the agent
+saves via Write tool, the `tool_use` stream event hits `BATCH_OUT` at
+the same wall-clock second as the file write — `find -newer "$BATCH_OUT"`
+returns nothing in that tightly-coupled flow. C-revised's actual
+marginal coverage is narrow: subprocess-delay windows, parallel
+tool-call orderings, future refactors that decouple file writes from
+stream events. Empirically probably 0 today, but ~5 lines and no
+maintenance burden, kept as defense-in-depth and future-proofing.
+**Vindicated cleanly in the S110g verification fire — in place but
+didn't have to fire.** Exactly the prediction the plan recorded.
+
+**Verification (run_id `1778180428-57709`, 2026-05-07 22:00):** 0
+stdout-idle kills (the failure mode this commit fixes); batch-1 saved
+5 events in 737s with avg quality 92.2; batch-2 wrapper-wall-clock at
+elapsed=904s (separate failure, parked as S110h candidate at 4-second
+margin over `BATCH_TIMEOUT=900`). 4 of 5 saves correctly filtered as
+hard-stops by S110f's chokepoint; build report fired
+`HARDSTOP_FIRING_RATE_EXCEEDED` on `venue-mismatch-or-unknown` at 50%
+of last-24h hard-stops — exactly the over-tuning safety net S110f's
+monitoring was built to provide. No dangling refs in `dist/`.
+
+**Source:** `specs/s110g-stdout-idle-samples.md`. Fix B1 (heartbeat in
+`save-batch.ts`) was dropped post-Step-1 as architecturally inert —
+`save-batch.ts` is a post-batch file reader, not a streaming consumer.
+Fix B-tee held as escalation if 600s + C-revised still kills with
+`elapsed >> idle`. Fix D (agent-emitted heartbeat) rejected as a
+logical-layer fix to a transport-layer problem, the exact failure
+pattern Mistake 1 of the S110-series names.
+
+**Audit trigger:** sample-driven (30 hard-stops OR 7 days, whichever
+first), not the originally-planned +3d. Per S110g Step 6 refinement,
+the +3d window was sized for a ~50-hard-stop dataset; verification
+fire produced 4 hard-stops, so the right trigger is accumulation-
+based.
+
+**Connects to:** `mistakes.md` Mistake 3 (the trace-step-discipline
+lesson recorded during plan revision); `patterns.md` "Empirical-first
+calibration for transport-layer thresholds"; `patterns.md` "Scheduled
+fires confound verification"; `docs/operational-todos.md` S110f
+calibration audit + S110h.
