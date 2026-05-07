@@ -3414,7 +3414,7 @@ and serves as a drop-in lock idiom. The directory IS the lock;
 metadata (PID, etc.) goes inside the directory as a regular file,
 not as the lock itself.
 
-**Three discipline points:**
+**Four discipline points:**
 
 1. The trap that removes the lock directory must be set ONLY inside
    the success branch of `mkdir`, never before. If the trap is armed
@@ -3433,6 +3433,17 @@ not as the lock itself.
    (iCloud, Dropbox, OneDrive) and network filesystems (NFS, SMB,
    AFP) do not guarantee the same atomicity semantics; APFS, HFS+,
    ext4, btrfs all do.
+
+4. When renaming a lock path or any path tracked by external tooling
+   (gitignore, monitoring, log rotation, backup-exclusion lists),
+   grep ALL tracked files for the old path string before commit, not
+   just the file being edited. Step 1 trace discipline extends
+   beyond the file under change. *S111 instance:* the wrapper edit
+   updated 9 in-script `LOCK_FILE` references but missed the
+   `.gitignore` line 61 entry — surfaced post-push when the first
+   live launchd fire after deploy left the new `.auto-enrich.lock.d/`
+   directory showing as untracked in `git status`. Closed in a
+   single-line follow-up commit.
 
 **Why prefer mkdir over flock(1) on macOS:** stock macOS does not
 ship the `flock(1)` userspace tool — Apple's BSD heritage provides
