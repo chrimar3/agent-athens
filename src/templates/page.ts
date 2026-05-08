@@ -74,7 +74,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   }
 
   return `<!DOCTYPE html>
-<html lang="el">
+<html lang="${locale}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
