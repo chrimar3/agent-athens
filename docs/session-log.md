@@ -5036,6 +5036,52 @@ the realized chain.
 
 ---
 
+### Session 123 — Imageless Events Diagnostic
+
+**Plan:** Read-only diagnostic across DB, schema output, and pipeline source
+to quantify imageless events and locate where in the rendering chain the
+gap is visible. Zero code changes. Output: single spec file for cross-project
+decision (GEO Strategist + Design Navigator).
+
+**What happened:**
+- 397 visible events on site, 144 imageless (36.3%)
+- 88.2% concentration in athinorama.gr (127/144). Manually verified via
+  source page fetch: athinorama.gr does NOT carry event hero images. This
+  is a source-content gap, NOT a scraper extraction bug. Ruled out scraper
+  repair as a lever.
+- D11 Satori OG plumbing covers 144/144 imageless events at 100% in:
+  `schema.image` (event-page.ts:295), `og:image` meta, `twitter:image` meta,
+  detail-page hero background.
+- Visible-UI gap isolated to card grid: `event-page.ts:625-630` uses
+  `imageLocal || imageUrl || venueImage` with no Satori fallback. Only the
+  card grid is missing the cascade.
+- Exhibition imageless rate at 88.9% (n=9) is directionally consistent with
+  the open Sprint 2 D pass-rate hypothesis (63% vs 97%) — flagged for GEO
+  Strategist confirmation before triggering exhibition-completeness session.
+- Storage drift surfaced: 1017 OG files in dist/images/og/events/ vs 515
+  active cache entries vs 144 needed → ~500 orphan PNGs from past events.
+  Not a coverage problem; deferred to maintenance batch.
+
+**Surprises:**
+- Schema verification (`.schema events`) said slug ✅ and source_url ✅;
+  both failed at runtime — slug is computed (event-page.ts:110), URL column
+  is `url` not `source_url`. Logged to patterns.md as 6th case.
+
+**Learnings:**
+- The original framing ("damage to citability?") inverted: schema layer is
+  fine because D11 already covers it. The actual problem is user-facing UX
+  in the card grid, not GEO. Different priority lane than expected.
+- Source-content gaps cannot be solved by scraper improvements — must be
+  decided at the fallback-strategy layer.
+
+**Status:** Diagnostic complete. spec at `specs/imageless-events-diagnostic.md`.
+Cross-project briefs queued for GEO Strategist (Satori-as-permanent
+strategy + exhibition hypothesis confirmation) and Design Navigator (card
+grid fallback strategy). No implementation session scheduled until both
+return.
+
+---
+
 ### Session 124 — S101a-1 cornerstone foundation — 2026-05-08
 
 **Plan:** Land foundation for cornerstone schema work — `editorial_picks`

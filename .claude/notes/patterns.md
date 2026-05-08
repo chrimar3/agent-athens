@@ -3580,3 +3580,33 @@ decisions this pattern fills the gap for);
 `specs/s90-recovery-baseline-2026-05-08.md` (the canonical
 instance); `specs/s100-kpi-baseline-2026-04-28.md` (a sibling KPI
 capture that established the date-stamped spec precedent).
+
+### Schema verification: `.schema` is not enough — run a SELECT
+
+**Pattern:** Verifying column names by reading `.schema` output is incomplete.
+Joins, computed values, aliases, and naming-convention drift (slug vs id,
+source_url vs url) hide. Briefs that pass `.schema`-only verification can
+still fail at runtime with `no such column: X`.
+
+**Rule:** When a brief asserts that column `X` exists in table `T`, the
+verification step is:
+
+```sql
+SELECT X FROM T LIMIT 1;
+```
+
+— not `.schema T | grep X`. The SELECT either succeeds (column exists with
+that exact name) or errors immediately.
+
+**Why this matters here:** During the imageless-events diagnostic session
+(2026-05-08), the brief verification asserted `slug ✅` and `source_url ✅`
+for the events table. Both failed at execution: `slug` is a computed value
+from `generateEventSlug()` at event-page.ts:110 (not stored), and the URL
+column is `url`, not `source_url`. 6th case of this pattern across recent
+sessions.
+
+**Applies to:** any brief verification that touches DB columns, JSON keys,
+or named TypeScript fields. The principle generalizes: verification asserts
+existence, so the verification step must be the same operation as the
+intended use.
+
