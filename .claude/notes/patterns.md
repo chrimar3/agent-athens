@@ -3517,3 +3517,66 @@ cost nothing at runtime and pay back as test-grain.
 primitive" (the fix this verified); `decisions.md` "S111 — Atomic
 lock acquisition" (full trace results including the 0-survivor
 diagnostic episode).
+
+## Snapshot capture: write to spec file when automation cannot yet reach the source (2026-05-08, S122)
+
+When an external system holds ground-truth that the project's
+automation cannot yet pull (dashboards behind auth, APIs not yet
+integrated, manual-research tasks), and the numbers are
+time-sensitive (shifting hourly, needed as a baseline anchor for a
+deadline), bypass the automation gap and write directly to a
+date-stamped spec file in `specs/`. This is the fallback when
+CSV-row updating, DB writing, or any other automated path is blocked.
+
+**Shape of a snapshot spec:**
+
+- Date in the filename: `specs/<descriptor>-baseline-YYYY-MM-DD.md`
+- Frontmatter section with `**Captured:**` (timestamp),
+  `**Days since X:**` (delta context if applicable),
+  `**Deadline anchor:**` (why this matters)
+- Snapshot table: metric × prior-baseline × current × delta — the
+  comparison view is the load-bearing element
+- Sources: dashboard names, query strings, inspection date, enough
+  that someone re-running this in 6 months can re-find the data
+- Open items routed elsewhere: what this snapshot does *not* cover
+  and where those items live (other agents, follow-up sessions,
+  deferred work)
+
+**Why a spec file, not a CSV row, when both could exist.** The CSV
+is trend-signal — many low-detail observations to draw a slope
+line. A snapshot spec is anchor-event — single high-detail capture
+meant to be re-read in context (e.g., "what did we look like
+pre-I/O before that launch?"). Compressing an anchor into a CSV row
+loses the interpretation, sources, and routing-to-elsewhere — which
+are the whole point. Both can coexist; the CSV gets the numbers,
+the spec gets the story.
+
+**S122 instance:** GSC + Bing Webmaster Tools indexed counts,
+gathered manually 17 days after the S90 cascade-failure pipeline
+fix. The project's automation
+(`scripts/monitor-search-visibility.ts`) was designed to record
+these as CSV columns but lacks an `--update` mode to retrofit the
+day's existing launchd-written row. Rather than block on the
+missing feature, the recovery numbers were captured in
+`specs/s90-recovery-baseline-2026-05-08.md` with full sources, the
+known-issues entry was downgraded against this snapshot, and
+`--update` mode was deferred to next session with its design
+decisions pre-ratified (`decisions.md` "S122 — `--update` mode").
+The deadline anchor (2026-05-19 Google I/O comparison) was
+preserved without compromise.
+
+**Generalization:** any time the response to "we don't have
+automation for this yet" is "skip this measurement window," the
+data is gone. A spec-file snapshot gives a third option: capture
+now, automate later, and the historical record is preserved either
+way. Especially valuable when (a) the window is irreproducible
+(e.g., pre-launch baselines, post-incident state, time-bound
+external events) or (b) the gap-to-automation is non-trivial and
+shouldn't bottleneck the capture.
+
+**Connects to:** `decisions.md` "S122 — `--update` mode for
+monitor-search-visibility.ts" (the deferred-implementation
+decisions this pattern fills the gap for);
+`specs/s90-recovery-baseline-2026-05-08.md` (the canonical
+instance); `specs/s100-kpi-baseline-2026-04-28.md` (a sibling KPI
+capture that established the date-stamped spec precedent).

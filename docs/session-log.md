@@ -4916,3 +4916,119 @@ plan files held under reuse this session — caught spec/source
 divergence at Step 1 and methodology-vs-bug confusion at Step 5.
 
 **Commits:** two this session, both on `main`, fast-forward push.
+
+### Session 121 — S110h: raise BATCH_TIMEOUT 900 → 1200s — 2026-05-08
+
+**Plan:** Single-line wrapper edit at `scripts/auto-enrich.sh:47`
+raising `BATCH_TIMEOUT` 900 → 1200s after two consecutive cap-edge
+wall-clock kills (904s S110g verification batch-2 on 2026-05-07
+22:00; 905s on 2026-05-08 01:00 batch-1; both <1% under the 900s
+fence). Plan at
+`/Users/chrism/.claude/plans/s111-closed-at-f47b94e05-shiny-twilight.md`.
+
+**What happened:**
+
+*Boundary widened at Step 0 review.* Brief specified "line 47 ONLY"
+but Step 0 found that lines 43–46 (block comment narrating S99's
+1800→900 tighten and asserting "900s wall-clock is the outer
+fence") would become self-contradictory with the line directly
+below. Surfaced via AskUserQuestion; user approved boundary
+extension. Final wrapper edit covered lines 43–47 (block comment
+rewrite + value+trailing-comment swap on line 47) — +9/-5 line
+diff, no incidental whitespace.
+
+*Trigger-vs-rationale deviation.* The parked S110h entry's literal
+defer trigger required "multiple wall-clock kills observed in next
+3 fires." Only 2 observed at session start. Session fired on the
+brief's compounding-risk argument (1-line fix, low-risk, ~20%
+throughput hit per kill), not the literal numeric trigger.
+Documented in plan, not silent.
+
+*Comment-rot deferral over compulsive sweep.* Line 393's
+`(default 900s, was 1800)` becomes doubly stale post-S110h, but
+the brief explicitly excluded the watchdog block (lines 388–397)
+from scope. Booked as a parked entry in operational-todos.md
+attached to the next wrapper-touch, not swept here.
+
+**Verified:**
+- `bash -n scripts/auto-enrich.sh` clean post-edit
+- `git diff` showed only intended scope: 4-line block comment
+  replaced by 8-line version + line 47 value+trailing-comment swap;
+  no incidental edits
+- Pre-flight Step 0 confirmed: no `.auto-enrich.lock.d`, no active
+  enrichment processes, none of the brief's three STOP conditions
+  triggered
+
+**Commits:**
+- `fb1b46cfb` fix(wrapper): raise BATCH_TIMEOUT 900→1200s (S110h)
+  — scripts/auto-enrich.sh only, +9/-5 lines
+- (this session) docs(notes): institutional memory for S110h —
+  operational-todos.md (S110h closed + new `:393` sweep parked),
+  session-log.md (Session 121)
+
+**Learnings:**
+
+- *Verify-assumptions guard payoff.* Step 0 caught two silent
+  staleness risks the brief had missed: off-by-one session number
+  ("122" vs CLAUDE.md last+1=121) AND falsified block comment
+  lines 43–46. Both surfaced via AskUserQuestion before any edit.
+  Same trace-discipline pattern S110g installed and S111 re-used.
+- *Boundary-induced staleness is a real cost of "ONLY" framing.*
+  When a brief scopes "line N ONLY" but neighboring prose
+  comments narrate the value being changed, the literal boundary
+  creates a self-contradicting source file. Cheap to detect at
+  review, expensive if shipped. Not a methodology lesson worth a
+  patterns.md entry — just a Step 0 review item.
+
+**Open items:**
+- *Post-fire watch (10:33 Athens fire).* Confirm `BATCH_TIMEOUT=1200`
+  shows in run-summary AND no wall-clock kill at the new 1200s cap.
+  Tracked but NOT a session done-criterion per user. Recurrence at
+  the new cap would mean S110h didn't fix the underlying issue
+  (event-difficulty distribution shift, model-output verbosity
+  creep, etc.) and would warrant a separate session, not a
+  re-tighten.
+
+**Footer note for trace:** Brief specified "Session 122"; this entry
+uses **121** per CLAUDE.md "Session number = last + 1." Last logged
+was Session 120 (S111 close, 2026-05-08), so this is 121 — the
+brief's count was a miscount, not a hidden Session 121 elsewhere.
+
+---
+
+### Session 122 — S90 Recovery Baseline Capture (docs-only) — 2026-05-08
+
+**Plan:** Capture S90+17d search visibility recovery numbers into a spec file and downgrade the known-issues entry, sealing pre-I/O baseline before the May 19 deadline. Triggered by first manual measurement sweep yielding non-zero results (GSC 7, Bing 390) after 17 days of pipeline-fix wait time.
+
+**What happened:**
+- Step 0 verification: pre-existing baseline file located, known-issues entry confirmed at 🔴 with "awaiting search engine re-crawl" status — preconditions met.
+- Step 1: created `specs/s90-recovery-baseline-2026-05-08.md` (52 lines, 2965 bytes). Content includes 7-row metrics table (S90 → S90+17d delta), GSC not-indexed breakdown (3 pages, 2 reasons), trailing-slash redirect hypothesis flagged for GEO Strategist diagnostic, Bing-vs-Google asymmetry interpretation (mechanical: IndexNow is Microsoft-only).
+- Step 2: in-place block replacement on "Zero Indexed Pages" known-issues entry. Severity 🔴 → 🟡, status changed from "Fixed at pipeline level, awaiting re-crawl" to "Partial Recovery (Bing channel restored, Google low-coverage residual)". Link to new spec file added.
+- Step 3: appended new known-issue "Google Indexing Low Coverage" 🟡 — 7/8,475 sitemap URLs indexed at 17d post-fix = 0.08% coverage. Routed to GEO Strategist for patience-vs-diagnostic decision. Re-measure cadence: S90+30d, S90+45d.
+- Step 4: severity scan + diff math verification. `git stat` showed +20/-9 on known-issues.md, exactly matching expected (Step 2 block: -9/+10, Step 3 append: +10/0).
+
+**Verified:**
+- `specs/s90-recovery-baseline-2026-05-08.md` exists, non-zero size.
+- `docs/known-issues.md` Zero Indexed Pages entry now 🟡 Partial Recovery.
+- `docs/known-issues.md` Google Indexing Low Coverage 🟡 entry present.
+- Boundary check via `git status`: only 2 intended files modified. No code, test, config, or CSV touched.
+- No build, no deploy, no test run — pure docs session by design.
+
+**Surprises:**
+- "Venue-Lock Type Mismatches" entry (lines 187-193) uses pre-current schema (`**Resolution:**` instead of `**Workaround:**`/`**Fix plan:**`/`**Status:**`). Not touched — Tier 1 institutional-memory rule (no retroactive normalization) applied correctly. Flagged in executor insight as architectural-evolution signal.
+- Concurrent S121 collision: brief paste used "Session 116" estimate. First session-number lookup showed last entry was S120, so this entry was drafted as S121. Between drafting decisions.md/patterns.md (both written with `S121` references) and writing the session-log entry, a parallel session shipped its own S121 ("S110h: BATCH_TIMEOUT 900→1200s"). Caught at session-log Edit attempt via `File has been modified since read` error. Resolved by renumbering this session to S122 and patching the `S121` refs in `decisions.md` (1 hit) and `patterns.md` (4 hits) before writing the session-log entry. Reinforces the brief-vs-reality verification rule: numbers can race even within a single working day.
+
+**Learnings:**
+- `patterns.md`: snapshot-capture pattern — when external dashboards hold ground-truth that automation cannot yet reach, write directly to spec file with full sources and date-stamped delta. Recovery-from-cascade-failure case documented this way on 2026-05-08.
+- `decisions.md`: 3 design decisions for next session's `--update` mode ratified before implementation — (a) strict (returns 'no-row' if today's row missing, refuses to insert), (b) clobber-protected (overwrites existing manual values only with `--force`), (c) atomic write (`.tmp` + `renameSync`, matching `migrateCsvIfNeeded` pattern at line 173-175).
+- Diff-math audit (+20/-9 expected, +20/-9 actual) caught zero issues but is the exact discipline that catches sneaky duplicates from `replace_all` operations. Worth keeping as standard verification step in docs sessions.
+- Session-number races are real: when multiple sessions land on the same day, `last + 1` becomes a moving target. Re-check the highest session number immediately before the session-log append, not at session start. Concurrent appends to other notes files (decisions.md, patterns.md) need patching too if the number shifts.
+
+**Open items:**
+- **Next session:** `--update` mode for `monitor-search-visibility.ts` — draft plan ready (planner thread, 2026-05-08). Triggers when operator returns with confirmed manual numbers. ETA: same week.
+- **GEO Strategist diagnostic:** Google low-coverage gap — patience-vs-structural-issue decision. Re-measure scheduled S90+30d (~2026-05-21).
+- **AI citation aggregate:** P1-P5 × 4 engines structured logging in `kpi.db` scheduled for Friday GEO Strategist routine (Greek text round-trip already verified S100). Today's quick check (Option A in planner thread) optional pre-Friday.
+- **Post-I/O retro anchor:** `specs/s90-recovery-baseline-2026-05-08.md` is the comparison anchor. Trigger ~2026-05-26.
+
+---
+

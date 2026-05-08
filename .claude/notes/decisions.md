@@ -3073,3 +3073,63 @@ classify by log content, not by liveness at sleep N" (the
 methodology lesson); `specs/duplicate-shell-investigation.md` (the
 parked spec, now obsoleted by closure); `docs/operational-todos.md`
 (S111 entry removed from pending list).
+
+## S122 — `--update` mode for monitor-search-visibility.ts: 3 ratified decisions before implementation (2026-05-08)
+
+The S91 search-visibility monitor uses `appendFileSync` unconditionally
+(`scripts/monitor-search-visibility.ts:382`) — it cannot update an
+existing daily row, only append a new one. Today's docs-capture session
+exposed the gap: launchd had already written today's automated-metrics
+row at 07:35 Athens, but manual GSC/Bing/AI-citation numbers had to be
+gathered from external dashboards later. Re-running the script would
+have produced a duplicate row for the same date and risked the
+wrapper-discrepancy "consecutive days" logic at
+`scripts/monitor-search-visibility.ts:251-258` seeing a doubled-date
+artifact. The fix is a new `--update` mode, deferred to next session
+to keep today's docs-capture clean of mixed code work.
+
+**Three design decisions ratified ahead of implementation, so next
+session's work is execution-only, not deliberation:**
+
+**(a) Strict, not upsert.** If `--update` is invoked and no row for
+today exists in the CSV, return `'no-row'` and refuse to insert. Don't
+silently fall back to append — that would mask a launchd failure (a
+real signal that automation broke). Append behavior is what the
+script already does *without* `--update`; the two modes have
+different intent and shouldn't merge. *Cost:* operator who runs
+`--update` on a missing-row day gets an error and has to retry without
+the flag. *Benefit:* "row missing" stays a visible failure mode rather
+than being silently papered over.
+
+**(b) Clobber-protected with `--force` escape hatch.** If today's row
+already has manual values set (operator ran `--update` earlier, returns
+later with revised numbers), refuse to overwrite without `--force`.
+*Why this default:* a typo or wrong-dashboard read silently
+overwriting good data is the worst failure shape — silent corruption
+in an append-only history that would be painful to reconstruct. *Why
+an escape hatch:* trend-signal metrics are best when the most recent
+measurement is used (corrections should win). Default-protect, opt-in
+to overwrite.
+
+**(c) Atomic write via `.tmp` + `renameSync`.** Same pattern as
+`migrateCsvIfNeeded` at `scripts/monitor-search-visibility.ts:173-175`.
+A crash mid-write on a multi-row CSV would corrupt the historical
+record. The rename is atomic on local APFS; readers either see the
+old file or the new file, never a partial state. *No new dependency*:
+the pattern is already in-tree, already understood.
+
+**Why ratify now, not at implementation time:** writing the script
+and choosing the design in one session conflates architecture and
+execution. Pre-ratifying with the problem context fresh and
+constraints visible means next session leans on this entry instead
+of re-deliberating. The decisions are small enough to record in
+advance; larger architectural choices would warrant their own spec
+file.
+
+**Connects to:** `specs/s90-recovery-baseline-2026-05-08.md` (the
+docs capture that exposed the gap);
+`scripts/monitor-search-visibility.ts:173-175` (the atomic-write
+reference implementation in `migrateCsvIfNeeded`);
+`scripts/monitor-search-visibility.ts:382` (the `appendFileSync` call
+that needs the new mode); `patterns.md` "Snapshot capture pattern"
+(today's workaround while `--update` is pending).
