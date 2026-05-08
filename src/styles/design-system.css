@@ -358,66 +358,59 @@ div#main-content {
   overflow: hidden;
 }
 
-/* ── Per-type fallback gradients (shared across all card variants) ── */
+/* ── Tier 1 image fallback (S124 — Design Navigator spec) ──
+   Used when an event has no imageLocal/imageUrl/venueImage.
+   Markup: <div class="card-image card-image--fallback" data-event-type="..."><span class="card-image__fallback-text" aria-hidden="true">{title}</span></div>
+   Per-type tints cover concert/theater/exhibition/cinema/performance/workshop;
+   other types fall through to the default yellow tint via the base rule's CSS variable fallback.
+*/
 
-.card-image-wrapper[data-type="concert"],
-.hero-card-image-wrapper[data-type="concert"],
-.hero-pick-image[data-type="concert"],
-.card-image-wrapper[data-type="comedy"],
-.hero-card-image-wrapper[data-type="comedy"],
-.hero-pick-image[data-type="comedy"],
-.card-image-wrapper[data-type="festival"],
-.hero-card-image-wrapper[data-type="festival"],
-.hero-pick-image[data-type="festival"] {
-  background: linear-gradient(135deg, #2a2400, #1a1800);
-}
-.card-image-wrapper[data-type="dj_set"],
-.hero-card-image-wrapper[data-type="dj_set"],
-.hero-pick-image[data-type="dj_set"],
-.card-image-wrapper[data-type="performance"],
-.hero-card-image-wrapper[data-type="performance"],
-.hero-pick-image[data-type="performance"] {
-  background: linear-gradient(135deg, #1a0a2a, #120818);
-}
-.card-image-wrapper[data-type="exhibition"],
-.hero-card-image-wrapper[data-type="exhibition"],
-.hero-pick-image[data-type="exhibition"],
-.card-image-wrapper[data-type="conference"],
-.hero-card-image-wrapper[data-type="conference"],
-.hero-pick-image[data-type="conference"],
-.card-image-wrapper[data-type="meetup"],
-.hero-card-image-wrapper[data-type="meetup"],
-.hero-pick-image[data-type="meetup"] {
-  background: linear-gradient(135deg, #0a2a1a, #081812);
-}
-.card-image-wrapper[data-type="theater"],
-.hero-card-image-wrapper[data-type="theater"],
-.hero-pick-image[data-type="theater"],
-.card-image-wrapper[data-type="show"],
-.hero-card-image-wrapper[data-type="show"],
-.hero-pick-image[data-type="show"] {
-  background: linear-gradient(135deg, #2a1a00, #1a1200);
-}
-.card-image-wrapper[data-type="cinema"],
-.hero-card-image-wrapper[data-type="cinema"],
-.hero-pick-image[data-type="cinema"],
-.card-image-wrapper[data-type="screening"],
-.hero-card-image-wrapper[data-type="screening"],
-.hero-pick-image[data-type="screening"] {
-  background: linear-gradient(135deg, #2a0a0a, #1a0808);
-}
-.card-image-wrapper[data-type="dance"],
-.hero-card-image-wrapper[data-type="dance"],
-.hero-pick-image[data-type="dance"] {
-  background: linear-gradient(135deg, #2a0a1a, #1a0812);
-}
-.card-image-wrapper[data-type="workshop"],
-.hero-card-image-wrapper[data-type="workshop"],
-.hero-pick-image[data-type="workshop"] {
-  background: linear-gradient(135deg, #0a1a2a, #081218);
+.card-image--fallback {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(
+    135deg,
+    var(--type-tint, rgba(245, 230, 66, 0.15)) 0%,
+    var(--bg-elevated) 70%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  isolation: isolate;
+  overflow: hidden;
 }
 
-.card-image {
+.card-image__fallback-text {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: clamp(18px, 3.2vw, 24px);
+  line-height: 1.15;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: -0.2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-image--fallback.card-image--list {
+  aspect-ratio: 16 / 9;
+}
+.card-image--fallback.card-image--list .card-image__fallback-text {
+  font-size: clamp(14px, 1.6vw, 18px);
+  -webkit-line-clamp: 3;
+}
+
+.card-image--fallback[data-event-type="concert"]     { --type-tint: rgba(245, 230, 66, 0.15); }
+.card-image--fallback[data-event-type="theater"]     { --type-tint: rgba(239, 44, 70, 0.15); }
+.card-image--fallback[data-event-type="exhibition"]  { --type-tint: rgba(126, 184, 247, 0.15); }
+.card-image--fallback[data-event-type="cinema"]      { --type-tint: rgba(184, 126, 247, 0.15); }
+.card-image--fallback[data-event-type="performance"] { --type-tint: rgba(245, 167, 66, 0.15); }
+.card-image--fallback[data-event-type="workshop"]    { --type-tint: rgba(126, 247, 184, 0.15); }
+
+.card-image:not(.card-image--fallback) {
   position: absolute;
   inset: 0;
   width: 100%;

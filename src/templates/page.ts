@@ -326,13 +326,20 @@ export function renderEventCard(event: Event): string {
 
   return `
   <article class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
-    <div class="card-image-wrapper" data-type="${event.type}">
-      ${imgSrc ? `<img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">` : ''}
-      <span class="card-placeholder-icon" aria-hidden="true"${imgSrc ? ' style="display:none"' : ''}>${icon}</span>
+    ${imgSrc
+      ? `<div class="card-image-wrapper" data-type="${event.type}">
+      <img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
       ${renderCardSaveButton(event.id, slug, event.title)}
-    </div>
+    </div>`
+      : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
+      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
+      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
+      ${renderCardSaveButton(event.id, slug, event.title)}
+    </div>`}
     <div class="card-body">
       <h3 class="card-title" itemprop="name"><a href="${href}" class="card-link">${event.title}</a></h3>
       <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${event.type === 'exhibition' && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>

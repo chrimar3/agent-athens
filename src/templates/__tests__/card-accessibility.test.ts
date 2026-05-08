@@ -119,8 +119,12 @@ describe("Card accessibility — featured editorial card", () => {
     expect(html).toContain(vignette);
   });
 
-  test("uses 16:9 image wrapper", () => {
-    expect(html).toContain('class="featured-editorial-image"');
+  test("uses 16:9 image wrapper when image is present", () => {
+    const htmlWithImage = renderFeaturedEventCard(
+      { ...sampleConcert, imageUrl: "https://example.com/img.jpg" },
+      vignette
+    );
+    expect(htmlWithImage).toContain('class="featured-editorial-image"');
   });
 
   test("closes with </article>", () => {

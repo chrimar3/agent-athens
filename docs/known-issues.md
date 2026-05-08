@@ -70,6 +70,15 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+### Tier 2 Fallback Drift (Card-Image Wrapper Per-Type Gradients vs Spec)
+**Severity:** 🟢
+**First seen:** 2026-05-08 (S124 plan-phase verification)
+**Frequency:** Every imageless card-grid render (~36.3% of visible events; 144/397).
+**Symptoms:** Production fallback at `src/styles/design-system.css:363-417` renders per-type gradients on `.card-image-wrapper[data-type=*]` (plus `.hero-card-image-wrapper`, `.hero-pick-image` siblings) and a `.card-placeholder-icon` span (TYPE_ICONS as inline content). The Design Navigator brief described Tier 2 as "bg-elevated + 32px icon at 8% opacity" — the actual production state had already drifted toward per-type gradients without the typographic event-name layer that defines Tier 1. Spec premise was outdated when Tier 1 brief was written; surfaced during S124 plan-phase verification.
+**Workaround:** N/A — being replaced this session.
+**Fix plan:** S124 ships Tier 1 (`.card-image--fallback` + `.card-image__fallback-text`) across 7 render sites, deletes the per-type wrapper gradients at `design-system.css:363-417`, appends Tier 1 CSS block per Design Navigator spec.
+**Status:** 🟢 Open — replacement in progress (S124 same session). Status will be flipped to ✅ Closed after deploy completes.
+
 ### Content-Hash Snapshots Accumulate ~1.1MB/day in `data/content-hash-snapshots/`
 **Severity:** 🟢
 **First seen:** 2026-05-02 (S101b — directory created with first snapshot)
