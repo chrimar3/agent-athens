@@ -44,3 +44,20 @@ S101a-1 surfaced two distinct brief-vs-reality assumption classes within a singl
 Both classes are the same root pattern: brief authoring assumed shape/uniformity that the codebase doesn't have. Audit task: review the GEO Strategist Template B authoring routine for any "audit and fix" or "FK shape" steps that don't include an explicit codebase-state verification or per-item classification step. Extends the brief-vs-reality discipline already documented in `feedback_verify_paths_in_briefs.md` (5 mismatches: S71, S82, S95, S100b, S101a).
 
 Trigger: post-S101a-1 ship (now). Estimated ~30 min for Template B review pass with GEO Strategist.
+
+### STOP-condition shape assumption: concurrent-session detection (parked from S101a-1)
+S101a-1 Step 0 surfaced a third brief-vs-reality assumption class, structurally distinct from the FK-type/uniform-fix audit:
+3. **STOP-condition shape assumption.** v4 brief Step 0 specified "STOP if anything in src/, tests/, scripts/, config/, docs/ is unstaged" — assuming interrupted-session semantics. Reality at fire time: 6 src/ + 2 docs/ files unstaged from concurrent Design Navigator session (Tier 1 image fallback work, different subsystems, clean test baseline). Resolved ad hoc with three guardrails (subsystem separation verification, test-baseline timestamp confirmation, hunk-level git add -p discipline). Root pattern: brief author modeled session-state as binary (active/interrupted), reality has tertiary state (concurrent-different-subsystem).
+
+Audit task: review GEO Strategist Template B authoring routine for STOP conditions. Distinguish:
+- Interrupted-session signals (test failures, partial commits, mid-edit state)
+- Concurrent-session signals (clean tests, additive edits in different subsystems)
+
+Add concurrent-session carve-out language with the three-guardrail pattern that worked in S101a-1 (subsystem separation + test baseline + hunk-level staging).
+
+Connects to:
+- "Brief-family assumption audit: FK-type + uniform-fix" (sibling parked entry; same surfacing event but different root pattern)
+- patterns.md candidate (post-S101a-2): three-tool staging discipline for concurrent sessions
+- patterns.md candidate (post-S101a-2): in-flight reservations as race-prevention
+
+Trigger: post-S101a-1 ship (now). Estimated ~20 min for STOP-condition pass with GEO Strategist; can batch with FK-type + uniform-fix audit if scheduled together (combined ~45 min).
