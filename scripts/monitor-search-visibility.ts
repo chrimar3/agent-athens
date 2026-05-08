@@ -178,6 +178,51 @@ export function migrateCsvIfNeeded(csvPath: string = CSV_PATH): void {
   }
 }
 
+// ── Manual-metrics in-place patch ────────────────────────────
+// Patches today's existing row's manual columns (gsc_indexed,
+// bing_indexed, ai_citations_count). Strict: refuses to insert when
+// today's row is missing — surfaces launchd failure rather than
+// papering over it. Clobber-protected: requires force=true to
+// overwrite already-populated manual values. Atomic: read → modify
+// in memory → write .tmp → renameSync, mirroring migrateCsvIfNeeded.
+
+export function updateTodayRowManualMetrics(
+  today: string,
+  manual: { gscIndexed: string; bingIndexed: string; aiCitations: string },
+  force: boolean,
+  csvPath: string = CSV_PATH,
+): 'updated' | 'no-row' | 'clobber-blocked' {
+  const content = readFileSync(csvPath, 'utf8');
+  const lines = content.split('\n');
+  const headerCols = lines[0].split(',');
+  const gscIdx = headerCols.indexOf('gsc_indexed');
+  const bingIdx = headerCols.indexOf('bing_indexed');
+  const aiIdx = headerCols.indexOf('ai_citations_count');
+
+  let rowIdx = -1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].startsWith(today + ',')) {
+      rowIdx = i;
+      break;
+    }
+  }
+  if (rowIdx === -1) return 'no-row';
+
+  const row = lines[rowIdx].split(',');
+  const populated = row[gscIdx] || row[bingIdx] || row[aiIdx];
+  if (populated && !force) return 'clobber-blocked';
+
+  row[gscIdx] = manual.gscIndexed;
+  row[bingIdx] = manual.bingIndexed;
+  row[aiIdx] = manual.aiCitations;
+  lines[rowIdx] = row.join(',');
+
+  const tmpPath = csvPath + '.tmp';
+  writeFileSync(tmpPath, lines.join('\n'));
+  renameSync(tmpPath, csvPath);
+  return 'updated';
+}
+
 // ── Wrapper-reconciliation discrepancy signal (Session 98) ───
 // Counts auto-enrich log lines where the subprocess exited non-zero but saves
 // happened anyway — the stream-idle-misreport class Session 98 was built to
@@ -315,6 +360,14 @@ function athensDate(): string {
 // ── Main ─────────────────────────────────────────────────────
 
 async function main() {
+  const argv = process.argv.slice(2);
+  if (argv.includes('--update')) {
+    const today = athensDate();
+    const result = updateTodayRowManualMetrics(today, parseManualMetrics(), argv.includes('--force'));
+    console.log(`[update] today=${today} result=${result}`);
+    return;
+  }
+
   console.log('📊 Search Visibility Monitor\n');
 
   const manual = parseManualMetrics();

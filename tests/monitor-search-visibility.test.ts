@@ -21,6 +21,7 @@ import {
   lastTwoRowsBefore,
   yesterdayAthensDate,
   countMisreportsInLog,
+  updateTodayRowManualMetrics,
 } from '../scripts/monitor-search-visibility';
 
 const TMP_DIR = join(import.meta.dir, 'tmp/monitor-search-visibility');
@@ -397,5 +398,77 @@ describe('getWrapperDiscrepancyStats', () => {
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
     const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
     expect(stats.wrapperDiscrepancyLast24h).toBe(1);
+  });
+});
+
+describe('updateTodayRowManualMetrics', () => {
+  const MANUAL = { gscIndexed: '7', bingIndexed: '390', aiCitations: '0' };
+
+  test('returns no-row when CSV has no row for today (does not insert)', () => {
+    const before =
+      CSV_HEADER +
+      '\n' +
+      '2026-05-06,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n' +
+      '2026-05-07,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n';
+    writeFileSync(TMP_CSV, before);
+    const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
+    expect(result).toBe('no-row');
+    expect(readFileSync(TMP_CSV, 'utf8')).toBe(before);
+  });
+
+  test('returns updated and writes values when manual columns are empty', () => {
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,15,0,\n',
+    );
+    const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
+    expect(result).toBe('updated');
+    const row = readFileSync(TMP_CSV, 'utf8').split('\n')[1].split(',');
+    expect(row[14]).toBe('7');
+    expect(row[15]).toBe('390');
+    expect(row[16]).toBe('0');
+  });
+
+  test('returns clobber-blocked when manual columns populated and force=false', () => {
+    const before =
+      CSV_HEADER +
+      '\n' +
+      '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,1,2,3,15,0,\n';
+    writeFileSync(TMP_CSV, before);
+    const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
+    expect(result).toBe('clobber-blocked');
+    expect(readFileSync(TMP_CSV, 'utf8')).toBe(before);
+  });
+
+  test('returns updated when manual columns populated and force=true', () => {
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,1,2,3,15,0,\n',
+    );
+    const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, true, TMP_CSV);
+    expect(result).toBe('updated');
+    const row = readFileSync(TMP_CSV, 'utf8').split('\n')[1].split(',');
+    expect(row[14]).toBe('7');
+    expect(row[15]).toBe('390');
+    expect(row[16]).toBe('0');
+  });
+
+  test('atomic write hygiene: no .tmp leftover and row count unchanged', () => {
+    writeFileSync(
+      TMP_CSV,
+      CSV_HEADER +
+        '\n' +
+        '2026-05-06,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n' +
+        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,15,0,\n',
+    );
+    const beforeLines = readFileSync(TMP_CSV, 'utf8').split('\n').length;
+    const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
+    expect(result).toBe('updated');
+    expect(existsSync(TMP_CSV + '.tmp')).toBe(false);
+    expect(readFileSync(TMP_CSV, 'utf8').split('\n').length).toBe(beforeLines);
   });
 });
