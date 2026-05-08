@@ -40,11 +40,15 @@ ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=2
 EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. Architectural target: 10 events × 6 slots = 60 events/day (2 batches × 5 events × 6 daily triggers). S89 (2026-04-20): overnight slots 01:00 + 22:00 unloaded — laptop lid closed; effective throughput is 40/day until always-on hardware available.
 MIN_QUEUE=3
-# S99 (2026-04-28): tightened BATCH_TIMEOUT from 1800→900. v2.1.105+ ships a
-# server-side stream-idle watchdog at 5min; the wrapper's stdout-idle is 2min.
-# 900s wall-clock is the outer fence — anything taking longer than 15min is
-# already failing some inner gate. plist EnvironmentVariables can override.
-BATCH_TIMEOUT=${BATCH_TIMEOUT:-900}
+# S99 (2026-04-28): tightened BATCH_TIMEOUT from 1800→900 on the
+# theory that server-side stream-watchdog (5min) + wrapper stdout-idle
+# (2min) would catch real stalls before the outer fence. S110h
+# (2026-05-08) raised back to 1200 after empirical cap-edge kills
+# (904s, 905s) showed legitimate slow-batches were tripping the fence.
+# 1200s is the new outer fence — anything taking longer than 20min
+# is already failing some inner gate. plist EnvironmentVariables can
+# override.
+BATCH_TIMEOUT=${BATCH_TIMEOUT:-1200}  # S110h (2026-05-08): raised from 900 → 1200 after consecutive cap-edge wall-clock kills (904s S110g verification batch-2, 905s 2026-05-08 01:00 batch-1; consistent <1% margin across observations).
 STDOUT_IDLE_CAP=${STDOUT_IDLE_CAP:-600}  # S110g (2026-05-07): raised from 120 → 600 based on n=90 right-censored kills (mode 122s, max 404s); 600 = max × 1.5 buffer. See specs/s110g-stdout-idle-samples.md.
 
 # S99: Server-side stream watchdog (Claude Code v2.1.105+). CLAUDE_STREAM_IDLE_TIMEOUT_MS
