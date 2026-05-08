@@ -3610,3 +3610,35 @@ or named TypeScript fields. The principle generalizes: verification asserts
 existence, so the verification step must be the same operation as the
 intended use.
 
+### Atomic CSV mutation: read → modify in memory → tmp → renameSync
+
+**Pattern:** When patching an existing row in a CSV that other processes may
+read (or that a launchd-style scheduler may overwrite later in the day), the
+mutation must be atomic at the filesystem level. The recipe:
+
+```typescript
+const lines = readFileSync(csvPath, 'utf8').split('\n');
+// ... mutate `lines` in memory (find target row, splice values)
+const tmpPath = csvPath + '.tmp';
+writeFileSync(tmpPath, lines.join('\n'));
+renameSync(tmpPath, csvPath);
+```
+
+**Why this works:** `rename(2)` on the same filesystem is atomic at the OS
+level — concurrent readers either see the old file or the new file, never
+a partial write. Crash mid-write only orphans the `.tmp`, leaving the
+original CSV untouched. No half-written state is reachable.
+
+**Why this matters here:** `data/search-visibility-log.csv` is written by
+launchd and read by `lastRowBefore()` / `getEnrichmentStats()` /
+`getWrapperDiscrepancyStats()` from the same script. Without atomicity, a
+manual `--update` run racing the daily launchd append could land a torn
+row that breaks downstream `row.split(',')` invariants.
+
+**Used in:**
+- `migrateCsvIfNeeded` (scripts/monitor-search-visibility.ts:173-175) — schema migration
+- `updateTodayRowManualMetrics` (scripts/monitor-search-visibility.ts:189+) — manual-metrics patch (Session 125)
+
+**Applies to:** any in-place mutation of a flat-file artifact under `data/`
+or `logs/` where readers run concurrently or the file is the source of
+truth for an automated monitor.

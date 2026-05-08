@@ -5207,3 +5207,70 @@ as needed.
 
 ---
 
+### Session 125 — Add `--update` mode for manual GSC/Bing/AI numbers — 2026-05-08
+
+**Plan:** Land first manual S90+17d numbers (gsc=7, bing=390, ai=0) into
+today's CSV row without breaking the one-row-per-date invariant. Pre-ratified
+design from S122: strict (no insert), clobber-protected (`--force` to
+overwrite), atomic write.
+
+**What happened:**
+- Step 0: Re-verified CSV state — exactly 1 row for 2026-05-08, manual
+  cols 14-16 empty (`,,,` between `10,10` and `15,0,`).
+- Step 1: Added 5 failing tests in `tests/monitor-search-visibility.test.ts`
+  (no-row, updated, clobber-blocked, force overwrite, atomic-write hygiene).
+  Confirmed failure at import stage: "Export named
+  'updateTodayRowManualMetrics' not found".
+- Step 2: Added `updateTodayRowManualMetrics` after `migrateCsvIfNeeded`
+  (scripts/monitor-search-visibility.ts:189+) and CLI `--update` / `--force`
+  branch at top of `main()`. Reused existing `parseManualMetrics()`
+  (lines 32-43) and `athensDate()` (line 311-313) — no new helpers added.
+- Step 3 smoke: `bun run scripts/monitor-search-visibility.ts --update
+  --gsc-indexed=7 --bing-indexed=390 --ai-citations=0` → `result=updated`.
+  CSV row patched to `7,390,0`. Re-run without `--force` correctly returned
+  `clobber-blocked` and left CSV byte-identical.
+- Step 4 regression: `bun test` 1982 pass / 1 skip / 0 fail (1983 across
+  81 files, well above S122 baseline of 1773+). `bunx tsc --noEmit` exit 0.
+
+**Verified:**
+- Today's CSV row: `2026-05-08,7203,48,1224,8475,7276,7276,1,...,10,10,7,390,0,15,0,`
+- Exactly 1 row for today (no duplicate inserted)
+- No `.tmp` leftover after success
+- Clobber-blocked path returns CSV byte-identical to before
+- Backup of pre-update CSV at `/tmp/search-visibility-log.csv.bak.1778235776`
+
+**Surprises:**
+- The plan assumed no `todayAthensDate()` helper existed; in fact
+  `athensDate()` already lived at line 311-313. Different name, same
+  semantics. Used the existing helper instead of duplicating the inline
+  expression — second caller now exists.
+- Test file already existed (401 lines) for this exact script; the brief's
+  "create new test file" instruction was stale. Added a new `describe`
+  block instead, preserving the one-test-file-per-script convention.
+- One transient test run showed 20 fails with EINVAL on `rename`/`open`
+  in the temp-fixture cleanup; reproducibly clean on every subsequent run.
+  Likely FS state from the prior failed-import test run still being
+  reclaimed. Not investigated further — flaky-FS, not flaky-code.
+
+**Learnings:**
+- Discriminated union return type (`'updated' | 'no-row' | 'clobber-blocked'`)
+  carries diagnostic signal a boolean would collapse. The launchd-vs-manual
+  diagnostic depends on `'no-row'` being distinguishable from
+  `'clobber-blocked'`.
+- Atomic CSV mutation is now used twice in this script (`migrateCsvIfNeeded`,
+  `updateTodayRowManualMetrics`) — pattern documented in
+  `.claude/notes/patterns.md` for re-use.
+
+**Open items:**
+- patterns.md and session-log.md additions in this session are appended on
+  top of session-123 unstaged content. User decides whether to bundle them
+  with the diagnostic-session commit or split.
+- `--update` not yet wired into any launchd or cron — invocation is fully
+  manual by design, per S122 ratification.
+
+**Status:** Code change committed (script + test). Notes additions left
+unstaged for user disposition. Pre-I/O baseline now has automated +
+manual columns populated for 2026-05-08.
+
+---
+
