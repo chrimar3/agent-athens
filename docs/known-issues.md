@@ -165,15 +165,26 @@ Recommend a `bun run src/generate-site.ts` then `find dist/en -name 'index.html'
 Belongs in a dedicated session. Verification command for that session is at the bottom of `specs/sweep-orphans-deferred.md`.
 **Status:** 🔴 Open — fix deferred from S97a Step 6
 
-### Zero Indexed Pages Across Search Engines (Citation Baseline)
-**Severity:** 🔴 (CRITICAL — blocks primary success metric)
-**First seen:** Session 90 (baseline discovery)
-**Frequency:** Constant — 84 sessions of work invisible to AI search engines
-**Symptoms:** GSC 0 indexed, Bing 0 indexed, `site:agentathens.com` returns only GoDaddy parking page. AI citations: 0/4 engines across 5 queries (ChatGPT, Perplexity, Gemini tested zero; Copilot not tested).
-**Root causes (S90 diagnosis):** (1) Netlify deploy failing 6 days → IndexNow cascade-failed, (2) ping-indexnow.ts silently hit 10K API cap without batching, (3) Domain migration (agentathens.netlify.app → agentathens.com, Session 84) reset indexing state.
-**Workaround:** None — invisibility is total until indexing catches up.
-**Fix plan:** Phase A/B/C/D complete in S90. 10,150 URLs submitted to IndexNow. Pipeline decoupled so IndexNow runs on build success regardless of deploy. Monitoring script next session (S91). Verification at +48h, +1 week, +2 weeks.
-**Status:** Fixed at pipeline level (S90), awaiting search engine re-crawl
+### Zero Indexed Pages Across Search Engines (Citation Baseline) — Partial Recovery
+**Severity:** 🟡 (downgraded from 🔴 on 2026-05-08)
+**First seen:** Session 90 (baseline discovery, 2026-04-21)
+**Frequency:** Was: constant invisibility. Now: Bing recovered, Google low-coverage.
+**Symptoms (S90):** GSC 0 indexed, Bing 0 indexed, `site:agentathens.com` returned only GoDaddy parking page. AI citations 0/4 engines × 5 queries.
+**Symptoms (S90+17d, 2026-05-08):** GSC 7 indexed (3 not-indexed: 2× canonical-alt, 1× redirect). Bing 390 indexed, 1 impression. Google `site:` shows multiple Greek hubs + events. Bing `site:` shows 31 results. AI citations not yet remeasured.
+**Root causes (S90 diagnosis):** (1) Netlify deploy failing 6 days → IndexNow cascade-failed, (2) ping-indexnow.ts silently hit 10K API cap without batching, (3) Domain migration (agentathens.netlify.app → agentathens.com, S84) reset indexing state.
+**Workaround:** None — partial visibility holds.
+**Fix plan:** S90 pipeline fix shipped (Phase A/B/C/D). 17-day delta confirms recovery on Bing channel. Google low-coverage (7/8,475 = 0.08%) is the residual gap, routed to GEO Strategist diagnostic vs patience decision. Full snapshot in `specs/s90-recovery-baseline-2026-05-08.md`.
+**Status:** Partial recovery confirmed (2026-05-08). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below).
+
+### Google Indexing Low Coverage
+**Severity:** 🟡
+**First seen:** S90+17d capture (2026-05-08)
+**Frequency:** 7 of 8,475 sitemap URLs indexed by Google = 0.08% coverage at 17 days post-fix
+**Symptoms:** GSC indexed count grew slowly (0 → 7 over 17 days). Bing comparison: 390 indexed in same window via IndexNow (Microsoft-only protocol). Google ignores IndexNow; relies on crawl scheduling + sitemap discovery. 3 explicit not-indexed reasons in GSC (2× "Alternative page with proper canonical tag", 1× "Page with redirect") — likely trailing-slash redirect interaction, but explains only 3 of 8,468 missing URLs.
+**Root causes:** Pending GEO Strategist diagnostic. Hypotheses: (1) slow new-domain crawl scheduling — patience case, (2) sitemap discovery issue, (3) structural canonical/redirect pattern at scale.
+**Workaround:** None — Bing-channel signal (BWT AI Performance, Copilot) is the active surface for KPI tracking until Google catches up.
+**Fix plan:** GEO Strategist owns next step — patience vs structural diagnostic decision. Re-measure at S90+30d (~2026-05-21) and S90+45d (~2026-06-05) to determine slope.
+**Status:** Open, queued for GEO Strategist
 
 ### Bilingual Coverage Gap
 **Severity:** 🟢 (downgraded from 🟡)
