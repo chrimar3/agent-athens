@@ -2,6 +2,13 @@
 
 Parked follow-ups discovered during sessions but deliberately not in scope for the originating session. Each entry should name the source session and a clear unblock condition.
 
+## In-flight reservations
+
+Active session-number reservations to prevent concurrent-session collision. Removed when session closes.
+
+### Session 124 — S101a-1 cornerstone foundation
+Session 124 reserved for S101a-1 foundation work — start: 2026-05-08 13:08 Athens, executor: Claude Code, expected window: ~45-60 min.
+
 ## Pending follow-ups
 
 ### Brief generator line 552 staleness (parked from S110f)
