@@ -4989,10 +4989,14 @@ attached to the next wrapper-touch, not swept here.
   creep, etc.) and would warrant a separate session, not a
   re-tighten.
 
-**Footer note for trace:** Brief specified "Session 122"; this entry
-uses **121** per CLAUDE.md "Session number = last + 1." Last logged
-was Session 120 (S111 close, 2026-05-08), so this is 121 — the
-brief's count was a miscount, not a hidden Session 121 elsewhere.
+**Footer note for trace:** Brief specified "Session 122" anticipating
+that the parallel S121 work (search-visibility `--update` mode +
+snapshot capture) would land first. Race resolved inversely —
+parallel session race-detected this entry's 121 append and self-
+bumped to 122. Final committed order: 120 (S111) → 121 (S110h, this
+entry) → 122 (S90 Recovery). CLAUDE.md "last+1" rule and file state
+are aligned; the brief's "122" reflected a sequencing forecast, not
+the realized chain.
 
 ---
 

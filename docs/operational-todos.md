@@ -24,7 +24,5 @@ Calibration thresholds (from S110f original plan):
 
 Estimated time: ~1 operator-hour. Do not skip.
 
-### S110h: raise BATCH_TIMEOUT 900 → 1200s (parked from S110g verification fire)
-Triggered by `batch-2 wrapper-wall-clock at elapsed=904s` in S110g verification fire (run_id `1778180428-57709`, 2026-05-07 22:00). The 4-second margin over the 900s cap is unsafe; with 5 fires/day, even a small uptick in batch difficulty means routine wall-clock losses. Single-line wrapper edit at `scripts/auto-enrich.sh:47`.
-
-**Defer trigger:** until post-audit unless multiple wall-clock kills observed in next 3 fires.
+### scripts/auto-enrich.sh:393 doubly-stale comment sweep (parked from S110h)
+`scripts/auto-enrich.sh:393` stale comment — `(default 900s, was 1800)` will be doubly stale post-S110h (commit `fb1b46cfb`, 2026-05-08, raised default 900 → 1200). Sweep on next wrapper-touch session, not now. Explicit boundary deferral: S110h's plan kept lines 388–397 out of scope; one-line annotation update doesn't justify a dedicated session, but it should land on the next wrapper edit.
