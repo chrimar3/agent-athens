@@ -3126,10 +3126,25 @@ of re-deliberating. The decisions are small enough to record in
 advance; larger architectural choices would warrant their own spec
 file.
 
+**Open follow-up (logged 2026-05-08, no action yet):** S122 surfaced
+an adjacent workflow concern — multiple Claude sessions sharing the
+same working tree on `main` create a shared push surface. Any
+`git push` from any session pushes all unpushed ancestor commits
+regardless of which session authored them; today this published
+`b93bff7f1` to origin before authorization (see `mistakes.md`
+"S122 — Shared-tree `git push`" for the gotcha and immediate
+mitigation). Branch-per-session workflow (PR-based merges via
+`claude/<topic>` feature branches) is the structural-fix candidate,
+but the change touches all 6 projects + Claude Code conventions —
+warrants a dedicated planner sync, not a unilateral decision in
+this entry. Logged here for visibility; deferred to planner-review.
+
 **Connects to:** `specs/s90-recovery-baseline-2026-05-08.md` (the
 docs capture that exposed the gap);
 `scripts/monitor-search-visibility.ts:173-175` (the atomic-write
 reference implementation in `migrateCsvIfNeeded`);
 `scripts/monitor-search-visibility.ts:382` (the `appendFileSync` call
 that needs the new mode); `patterns.md` "Snapshot capture pattern"
-(today's workaround while `--update` is pending).
+(today's workaround while `--update` is pending);
+`mistakes.md` "S122 — Shared-tree `git push`" (the open follow-up's
+immediate-mitigation reference).

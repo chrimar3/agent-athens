@@ -547,3 +547,9 @@ BATCH_OUT mtime in the same wall-clock second as the file write, so
 The decisions.md entry reflects this truthfully rather than over-
 crediting C-revised's coverage.
 
+## S122 — Shared-tree `git push` from parallel session published our commit before authorization (2026-05-08)
+
+| Mistake | What Happened | Correct Approach |
+|---------|---------------|------------------|
+| Parallel session's `git push` swept up our unpushed local commit (`b93bff7f1`) and made it public before we authorized it | `git push` pushes the current branch including all ancestor commits between `origin/main` and `HEAD` — does not filter by which session authored which commit. Shared working tree on `main` = shared push surface. | Before ANY `git push` from a session that may run concurrently with others: `git log origin/main..HEAD --oneline` to enumerate what will go public. If unexpected commits appear, decide explicitly before pushing. Long-term: consider `claude/<topic>` feature branches per session — pushed via PR, never directly. (S122, 2026-05-08) |
+
