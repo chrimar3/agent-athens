@@ -5312,3 +5312,43 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### Session 127 — Generalize content-hash gating from /this-weekend to all actual cornerstones
+
+**Plan:** Generalize the S101a `/this-weekend` JSON-LD `dateModified` content-hash gating pattern to the remaining cornerstone hubs, eliminating daily false-update drift before the Google I/O 2026 comparison cycle (2026-05-19, 9 days out).
+
+**What happened:**
+- Phase 1 reconnaissance materially reframed the work. Brief assumed 7 cornerstones; only **4** actually exist as hub pages with `cornerstone: true` in `config/hub-pages.json`: `this-weekend` (already gated in S101a), `today`, `this-month`, `open`. The other 3 (`/tomorrow`, `/this-week`, `/next-month`) are template-string and sitemap-changefreq references — no hub config, no built `dist/` directories. Scope dropped from "6 remaining" to "3 remaining."
+- Brief's "Class A vs Class B" decision gate (filter-shape determines hash function shape) was based on a wrong mental model. `hashEventSet(events)` operates on the filtered `Event[]`, not on filter logic — so `/open`'s price-type filter feeds the same hash function as `/this-weekend`'s date-window filter. False stop-rule averted.
+- Brief's specific touch-site claims partially wrong: `hub-page.ts:325 new Date()` is for month/year token substitution and `:589 lastUpdate` is for the hub JSON API endpoint — neither feeds JSON-LD `dateModified`. Actual default `dateModified` source: `src/utils/urls.ts:109` in `buildPageMetadata()` (`new Date().toISOString()`), overridden via `metadata.lastUpdate = override` at `hub-page.ts:298-299`. Final emission at `src/templates/page.ts:516`.
+- Implementation: extracted `gateCornerstoneHashes(inputs, manifest) → {el, en}` to `src/utils/gate-cornerstones.ts` for testability (9 unit tests covering 8 distinct invariants). Replaced inline weekend-only block in `src/generate-site.ts:464-489` with `GATED_CORNERSTONES` flatMap + helper call. Refactored English path at `:504` from `config.slug === 'this-weekend' ? weekendDateEn : undefined` to `lastUpdateOverridesEn[config.slug]` dict lookup.
+- Manifest grew from 2 → 8 entries. Greek/English pairs share hash, may diverge on `lastModified` if previously-cached.
+
+**Surprises:**
+- **CLI-only deploy convention forgotten in plan-writing.** Plan committed to `git push origin main` as the deploy mechanism. Push succeeded; production didn't update for 5+ minutes. Memory `agent_athens_deploy_workflow.md` was loaded into session context at start but plan-writing pulled the standard "push to origin/main" sequence from the brief without cross-checking. Resolved by running `netlify deploy --prod --dir=dist`. Logged as a `mistakes.md` entry — class of failure: project-specific infrastructure conventions need explicit cross-check during plan-writing, not just session-execution.
+- **`writeHtmlIfChangedSync` strips `dateModified` before comparing old vs new HTML.** A build that only changed `dateModified` (clock advance, no content change) doesn't rewrite the file — preserves old on-disk artifact. Diagnosis subtlety: the `/en/open` artifact appeared "still drifting" in build 1 because the file was stale (mtime 08:27, pre-S127). Forced rewrite by deleting before build 2; subsequent builds confirmed correct date-only output. The on-disk artifact is intermediate state; the **manifest** is the canonical record of gating decisions, and the **production HTTP response** is the deployed truth.
+- **/this-weekend hash genuinely advanced** from `b5fcea71f87f34d1` (pre-build state) to `a9a171e1423fe9a5` (post-build) — meaning the weekend's underlying events legitimately changed today (probably new scrapes overnight). `lastModified` correctly advanced to `2026-05-10`. This is the *whole point* of content-hash gating — when content changed, date moves; when it didn't, date holds.
+- Discovered new drift sites not in the S126 audit: `src/generate-site.ts:1136, 1183` (datafeed/search-index), `src/generators/datafeed.ts:34`, `src/generators/search-index.ts:133-154`, plus 6 static info-page sites at lines 648, 685, 725, 778, 834, 879 (about/editorial/corrections × 2 locales) using `todayIso = DateTime.now().setZone('Europe/Athens').toISODate()` — date-only Athens-TZ drift, lower-impact than sub-second cornerstone drift. All logged in `specs/s127-residual.md`.
+
+**Verified:**
+- All 8 cornerstone surfaces (4 cornerstones × Greek + English) emit `"dateModified": "2026-05-10"` (date-only) on production after CLI deploy.
+- Byte-identical across two consecutive local builds with no DB change (CORE INVARIANT).
+- Hash manifest grew from 2 → 8 keys; each Greek/English pair shares the same 16-char hash.
+- 2001 tests pass / 0 fail / 1 skip. 0 type errors.
+- Production HTTP confirms gating live: pre-S127 timestamps `T05:27:02.XXXZ` replaced with date-only `2026-05-10` for /today, /this-month, /open and their /en/ counterparts.
+
+**Tests:** 1992 baseline → 2001 (9 new). 0 fail.
+
+**Status:** Shipped via `netlify deploy --prod --dir=dist` to https://agentathens.com (commit `d7840dec0`, deploy `6a00a7745b8d4fb911190616`). Production HTTP responses match local `dist/` for all 8 surfaces.
+
+**Learnings (full entries in cross-referenced files):**
+- `mistakes.md`: brief-vs-reality verification (cornerstone count); function-signature-before-classification (Class A/B reframe); deploy-memory cross-check during plan-writing.
+- `patterns.md`: multi-repo git-toplevel preamble assertion; sibling-project CLAUDE.md pollution defense; brief-prediction verification; canonical content-hash gating shape (now generalized).
+- `decisions.md`: `event-page.ts:498` deferred; missing 3 cornerstones deferred to residual doc not silently shipped; `GATED_CORNERSTONES` hardcoded (opt-in) not config-derived (auto-enrolled); helper extraction for testability over inline simplicity.
+
+**Open items:**
+- `specs/s127-residual.md` lists 4 deferred items: (1) unbuilt cornerstone references (/tomorrow, /this-week, /next-month) — would need hub configs + filter fix + tests + opt-in to GATED_CORNERSTONES; (2) **filter-correctness gap (Tier 1 — possible silent exhibition omissions in production combinatorial pages)** — also mirrored to `docs/known-issues.md` as 🟡; (3) datafeed/search-index drift (gate DataFeed schema, skip private search-index); (4) per-event `dateModified` (different test surface, future session).
+- Architectural follow-up: `GATED_CORNERSTONES` list duplicates `config/hub-pages.json#cornerstone:true`. Promote to `src/config/cornerstones.ts` if a third use case emerges.
+- KPI: re-evaluate post-Google-I/O 2026 (~2026-05-26) whether cornerstone gating moved BWT citation signals.
+
+---
+

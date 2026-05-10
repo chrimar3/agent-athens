@@ -3674,3 +3674,55 @@ Defense:
 - Numbering is assigned at session close, not session start
 - Diagnostic-only work (audits, state checks) does not consume a session number — log as a dated `### Audit — YYYY-MM-DD` entry instead
 - Before assigning N, grep `docs/session-log.md` for that number and check `git log --since="N days ago"` for parallel-session indicators
+
+### Pattern: Multi-repo environment requires explicit git-toplevel assertion before any git operation (S127, 2026-05-10)
+First observed: Recurring across S122 + earlier sibling-project leak incidents.
+Symptom: A `git push` from inside `agent-athens/` operated on a parent-directory `.git/` (the IoT project's repo at `~/.git/`) instead of agent-athens's repo, sweeping unintended commits to the wrong remote. Or: `git status` shows files from a sibling project as "modified" because the inherited git context is wrong.
+Cause: `~/` (or any ancestor of multiple project subdirectories) hosts a `.git/` that masquerades as the active repo for any subdirectory that doesn't have its own `.git/` higher in its parent chain. CWD is not enough; git walks up.
+Defense — preamble pattern:
+```bash
+test "$(git rev-parse --show-toplevel)" = "<expected absolute path>" \
+  || { echo "ABORT: wrong git root — likely upstream ~/.git/ leak"; exit 1; }
+test "$(git rev-parse --abbrev-ref HEAD)" = "<expected branch>" \
+  || { echo "ABORT: not on <branch>"; exit 1; }
+test -z "$(git status --porcelain)" \
+  || { echo "ABORT: working tree not clean"; git status -sb; exit 1; }
+git fetch origin <branch> --quiet
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/<branch>)" \
+  || { echo "ABORT: out of sync"; exit 1; }
+```
+Run this **before** any session-work that includes git commands. Sequential `&&` short-circuits to surface the first failure. Failure → STOP, do not run session steps from a contaminated environment.
+
+### Pattern: Briefs make falsifiable predictions; verification includes the brief's own predictions (S127, 2026-05-10)
+First observed: Recurring across S71, S82, S95, S100b, S101a, S127.
+Symptom: A brief asserts "the audit found X cornerstones, Y is gated, Z drift sites at lines L1-L2." The executor takes those as given, plans against them, and only at implementation time discovers the assertion was wrong. Plan invalidates mid-execution. S127 specifically: brief said 7 cornerstones, only 4 existed; brief said gating-block at lines 474-493, actual was 464-489; brief said `hub-page.ts:325/589` were drift sources, actual function was `buildPageMetadata` in `urls.ts:109`.
+Cause: Briefs are written from a snapshot — Phase 1 reconnaissance ran sometime before, code changed since, or the brief author misread the source. Treating predictions as facts creates a build on a foundation that may have shifted.
+Defense:
+- For every load-bearing claim a brief makes (file path, line number, function name, count of N things, slug list, type signature), spend a parallel Phase 1 verifying it against current code BEFORE writing the implementation plan.
+- Specifically: re-grep file:line references; cross-reference slug lists against canonical configs; verify type signatures by reading the function body.
+- The cost of verifying the brief's predictions is small (a few minutes of `Read`/`grep`); the cost of building on wrong predictions is rework + plan thrash + sometimes reverted commits.
+- This pattern earns its slot when a brief's framing would have triggered a false stop-rule or sent the implementation in a wrong direction. S127 hit both (false Class B stop, scope assumed 7 not 4).
+
+### Pattern: Sibling-project CLAUDE.md pollution via permissive un-ignore rules (S127, 2026-05-10 — earned earlier, formalized in this session's post-session updates)
+First observed: Earlier sibling-leak incidents (pre-S127); earned during today's pre-session triage.
+Symptom: A parent repo (e.g., a top-level workspace `.git/` covering multiple project subdirectories) has `.gitignore` rules like `!CLAUDE.md` (un-ignore CLAUDE.md). Every sibling project's CLAUDE.md becomes git-tracked from the parent repo's perspective. Modifications in any sibling propagate as "uncommitted changes" to the parent. Cross-session work in one project bleeds into another's git status.
+Cause: Permissive un-ignore rules don't scope to a single project — they apply recursively. `!CLAUDE.md` in the workspace root un-ignores every CLAUDE.md anywhere below it, including in sibling project subdirectories.
+Defense:
+- For workspace-style repos covering multiple projects, prefer explicit per-project includes (e.g., `!project-a/CLAUDE.md`, `!project-b/CLAUDE.md`) over global un-ignores (`!CLAUDE.md`).
+- When initializing a new project under an existing workspace, run `git status` from the workspace root and scan for unintended sibling-leak entries before committing anything.
+- The git-toplevel assertion preamble (above) is a runtime defense; the per-project un-ignore is a structural defense. Use both.
+
+### Pattern: Content-hash gating shape — canonical seam for cornerstone JSON-LD dateModified stability (S127, 2026-05-10)
+First observed: S101a (this-weekend gating); generalized in S127 (today, this-month, open).
+Use when: A surface emits a JSON-LD `dateModified` (or analogous "last updated" timestamp) that an external index consumes, and the surface's underlying content is stable across most builds but may change daily. Default `new Date().toISOString()` makes the timestamp advance every build, regardless of content change — index sees daily false-update signals.
+Canonical seam:
+1. **Hash function** — pure function over the surface's stable content. For event-driven hubs: `hashEventSet(events)` at `src/utils/event-set-hash.ts` (sorted SHA-256 of `id|title|startDate|endDate|venue.name`, 16 hex chars). Sort before hash so order doesn't affect the digest.
+2. **Resolver** — `resolveLastModified(urlPath, currentHash, manifest)` at `src/sitemap/content-hasher.ts`. Returns the previous `lastModified` if the hash matches the manifest's stored hash for that URL, else returns today's date in the appropriate timezone (`DateTime.now().setZone('Europe/Athens').toISODate()`).
+3. **Manifest** — `data/event-set-hashes.json`, persistent across builds. Per-URL entries: `{ hash, lastModified }`. Locale-paired surfaces (`/foo` and `/en/foo`) share the same hash (events are the same, only copy differs) but get separate manifest entries (locales can drift independently if one was previously seen and the other is new).
+4. **Wiring** — populate a `lastUpdateOverrides[slug]` dict at the build's main entry point. Pass through to the renderer (e.g., `renderHubPage(..., lastUpdateOverrides[slug])`). Renderer applies via `metadata.lastUpdate = override` before the HTML emission. Final emission at `src/templates/page.ts:516` reads `metadata.lastUpdate`.
+5. **Helper extraction** — for testability and to avoid duplication when adding more cornerstones, extract the loop-over-slugs-build-input-call-resolver block into a pure helper. S127 example: `gateCornerstoneHashes(inputs: {slug, events}[], manifest)` at `src/utils/gate-cornerstones.ts`. Test surface: 9 unit tests covering populate, preserve, advance, manifest write, locale-shared hash, sort independence, empty input, unrelated-entry preservation, independent locale drift.
+6. **Opt-in slug list** — `GATED_CORNERSTONES = [...] as const` in the build entry point. Hardcoded, not derived from `config.cornerstone === true`. Adding a cornerstone is a deliberate edit here, preventing accidental enrollment when a new hub is added to config.
+Defense — verify after wiring:
+- Two consecutive builds with no DB change must produce byte-identical `dateModified` for every gated surface (CORE INVARIANT).
+- Caveat: `writeHtmlIfChangedSync` strips `dateModified` before comparing old vs new HTML. If only `dateModified` changed, the file isn't rewritten — so observing the on-disk artifact is unreliable. The manifest is the canonical record; production HTTP response is the deployed truth.
+Connects to: `decisions.md` S101a (original /this-weekend gating decision); S127 helper-extraction-for-testability decision; `specs/s127-residual.md` (4 deferred items: unbuilt cornerstone references, filter-correctness gap, datafeed/search-index drift, per-event meta).

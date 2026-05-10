@@ -3187,3 +3187,37 @@ Date: 2026-05-08
 Source: Design Navigator response on imageless events brief
 Rationale: v1.1 trigger fired pre-launch — empirical numbers (36.3% imageless / 88.2% single-source athinorama.gr / permanent baseline) exceed the documented 26% threshold. Tier 2 (faint icon) produced visible runs of 3-5 identical near-black tiles per page on athinorama-heavy days; Tier 1 (category gradient + event-name typography) breaks that monotony.
 Implementation note: Class collision between `.card-image` (img-role) and new `.card-image card-image--fallback` (wrapper-role) resolved via `:not(.card-image--fallback)` selector — Option A of three considered.
+
+### Decision: `event-page.ts:498` per-event meta date drift deferred from S127 scope
+Date: 2026-05-10
+Source: S127 plan, original brief Step 2 scope decision
+Rationale: `<meta name="date" content="${new Date().toISOString().split('T')[0]}">` on every event page (~5,000+ pages) is per-event drift across a much larger surface than cornerstone hubs. Different test surface (per-event integration tests vs. hub-level unit + integration). Touching it would require designing a per-event hash strategy (over title, startDate, description, venue, price), per-event manifest keys with locale, and a much larger test matrix. Conflating it with the cornerstone-gating session would have at least doubled the scope and risked partial completion under the 9-day Google I/O deadline. Single-session boundary respected.
+Revisit triggers:
+1. KPI evidence that AI engines are downweighting event pages because of daily `dateModified` advance (would need BWT or PerplexityBot fetch-pattern data showing this)
+2. A separate session is funded for per-event content-hash gating, with its own test contract and manifest design
+Until then: out of scope, no action.
+
+### Decision: `/tomorrow`, `/this-week`, `/next-month` deferred to specs/s127-residual.md rather than silently shipped half-formed
+Date: 2026-05-10
+Source: S127 Phase 1 reconnaissance + user scope decision (Option 3 from plan-phase question)
+Rationale: These three slugs are referenced in `src/generate-site.ts` template strings, `src/sitemap/generate-sitemaps.ts:30` `dailyPrefixes` changefreq classifier, and `src/scripts/ping-indexnow.ts` checklists — but they have **no entry in `config/hub-pages.json`** and **no built directories under `dist/`**. The original brief's "7 cornerstones" framing assumed they were live; reality is 4. Three options were considered: (1) gate the 3 actual remaining (today, this-month, open); (2) build out the missing 3 hub configs first, then gate all 6; (3) gate the 3, file a residual doc for the missing 3. Option 3 was chosen.
+Why not Option 2 (build the missing hubs in the same session): each new hub requires hub config (with `answerCapsuleEl`, `answerCapsuleEn`, `faqs`, etc.), a fix to `src/utils/filters.ts` for the exhibition `end_date` filter bug (currently affects `/tomorrow` and `/next-month` predicates), tests, and verification. Almost certainly overflows single-session boundary.
+Why not Option 1 alone (gate 3, no residual doc): the unbuilt cornerstones aren't a "small TODO," they're a meaningful gap with a Tier 1 invariant violation (filter-correctness gap → possible silent exhibition omissions on combinatorial pages). Documenting them in `specs/s127-residual.md` + mirroring the filter-correctness gap to `docs/known-issues.md` (🟡) ensures they aren't lost.
+
+### Decision: GATED_CORNERSTONES is hardcoded, not derived from `config.cornerstone === true`
+Date: 2026-05-10
+Source: S127 implementation
+Rationale: Two reasonable shapes for the cornerstone list in the gating block:
+  (A) Derive at runtime from `hubPagesConfig.hubs.filter(h => h.cornerstone === true).map(h => h.slug)` — automatic enrollment, no maintenance.
+  (B) Hardcode `GATED_CORNERSTONES = ['this-weekend', 'today', 'this-month', 'open'] as const` — opt-in, deliberate edit per cornerstone.
+Chose (B). Reason: gating couples a slug to manifest persistence + downstream override wiring + Tier 1 invariants (exhibitions via `end_date`, Athens TZ in filters, locale-shared hash). Auto-enrolling a new cornerstone before its filter is correct, before its content is stable, and before its tests exist — that's how silent invariant violations land in production. Forcing a deliberate edit creates a checkpoint where the engineer adding the cornerstone has to think about: does this hub's filter handle exhibitions correctly? does its event-set hash stably across builds? does the hub render under both locales? An automatic list would skip those checkpoints.
+Tradeoff: the cornerstone list now appears in two places — `config/hub-pages.json` (with `cornerstone: true`) and `src/generate-site.ts` (`GATED_CORNERSTONES`). If a third place ever needs the list (e.g., a sitemap priority bumper, a separate audit tool), promote to `src/config/cornerstones.ts` as a single source of truth. Not a problem at 4 cornerstones; revisit at 6+ or when the third use case appears. Logged in `specs/s127-residual.md` as a follow-up architectural cleanup.
+
+### Decision: Helper extraction (`gateCornerstoneHashes` in `src/utils/gate-cornerstones.ts`) for testability over inline-loop simplicity
+Date: 2026-05-10
+Source: S127 implementation, test-strategy phase
+Rationale: The original S101a wiring inlined the gating logic in `src/generate-site.ts` (~25 lines for the weekend-only case). Generalizing to N cornerstones would inflate that to ~50+ lines inline, and there was no test surface for the wiring itself — only the generic `resolveLastModified` resolver tests in `src/sitemap/__tests__/content-hasher.test.ts` covered the contract. Two options:
+  (A) Inline the new loop in `generate-site.ts`, no extraction. Simpler, but no unit-test surface for the gating wiring; integration-only verification via the byte-equality build invariant.
+  (B) Extract a pure helper `gateCornerstoneHashes(inputs, manifest) → {el, en}` into `src/utils/gate-cornerstones.ts`. The caller pre-resolves `{slug, events}[]` (caller knows about `HubConfig` and `getHubEvents`); the helper is generic over those. Unit-testable with hand-crafted Event[] arrays, no `HubConfig` mocking needed.
+Chose (B). The 9-test contract surfaced 8 distinct invariants (populate, preserve, advance, manifest write, locale-shared hash, sort independence, empty input, unrelated-entry preservation, independent locale drift) — enough behavior surface that "trust the byte-equality invariant" alone would have been weak verification. The extraction also leaves `generate-site.ts` simpler (the gating block dropped from ~25 inline lines to ~12 lines: a slug list, a flatMap, a single helper call).
+Connects to: `patterns.md` "Content-hash gating shape — canonical seam".

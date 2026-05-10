@@ -70,6 +70,15 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+### Filter-Correctness Gap — `/tomorrow` and `/next-month` Skip Running Exhibitions
+**Severity:** 🟡
+**First seen:** 2026-05-10 (S127 Phase 1 reconnaissance)
+**Frequency:** Unknown until audit. Affects every render of combinatorial pages using the `tomorrow` or `next-month` time filters (`/concerts-tomorrow.html`, `/exhibitions-next-month.html`, etc.).
+**Symptoms:** Running exhibitions whose `start_date` precedes the filter window but whose `end_date` extends into it may be silently absent from the rendered card grid. Tier 1 invariant violation per `.claude/CLAUDE.md`: "Exhibitions use end_date, not start_date." `src/utils/filters.ts:50` (`tomorrow` predicate) and `:91` (`next-month` predicate) filter on `start_date` only — they do not apply the `COALESCE(end_date, start_date)` pattern that `/today`, `/this-week`, `/this-month` correctly implement.
+**Workaround:** None yet. Cornerstone hubs `/tomorrow` and `/next-month` don't exist as built directories so no cornerstone JSON-LD is affected; the same primitive feeds combinatorial pages where the impact lives.
+**Fix plan:** (1) Audit combinatorial-page exhibition coverage on production — spot-check `/exhibitions-next-month.html` and `/exhibitions-tomorrow.html` against the DB for known-running exhibitions. (2) If audit shows missing exhibitions, patch `src/utils/filters.ts:50` and `:91` to mirror the `today`/`this-week`/`this-month` `COALESCE` shape. (3) Add filter-level tests for the exhibition-end-date case across all five date predicates.
+**Status:** 🟡 Open, watch-only — surfaced during S127 reconnaissance, deferred to a follow-up session per S127 scope. Mirror entry in `specs/s127-residual.md` § 2.
+
 ### Tier 2 Fallback Drift (Card-Image Wrapper Per-Type Gradients vs Spec)
 **Severity:** 🟢
 **First seen:** 2026-05-08 (S124 plan-phase verification)
