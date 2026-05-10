@@ -2377,6 +2377,17 @@
     "geocoded_confidence": "high",
     "geocoded_at": "2026-04-15"
   },
+  "Mona Athens": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Mona, Κακουργιοδικείου",
+    "lat": 37.977639,
+    "lng": 23.726054,
+    "type": "tourism",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "high",
+    "geocoded_at": "2026-05-08"
+  },
   "Myrtillo Cafe": {
     "name_en": "Myrtillo Cafe",
     "neighborhood": "Ambelokipoi",
