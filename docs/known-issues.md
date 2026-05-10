@@ -560,6 +560,33 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Resolution:** Session 60: 5 behavioral differences implemented — (1) event pages link to contextually relevant cornerstone hubs, (2) non-cornerstone hubs cross-link to cornerstone hubs, (3) 8 FAQs per cornerstone (vs 4 standard), (4) entity-dense meta description overrides, (5) seasonal narratives in both languages. 1,410 tests pass.
 **Status:** Fixed (Session 60)
 
+### athinorama.gr Scraper Image Extraction Concentration
+**Severity:** 🟡 (open)
+**First seen:** Session 123 (2026-05-08, imageless events diagnostic)
+**Frequency:** 92% of athinorama.gr events imageless (127 of 138); accounts for 88.2% of all 144 imageless events on the visible site.
+**Symptoms:** Disproportionate imageless concentration in a single source — pattern matches the >60% extraction-bug rule. Five representative URLs sampled in `specs/imageless-events-diagnostic.md` lines 90–94 await manual classification.
+**Workaround:** D11 Satori OG covers Schema.org/`og:image`/`twitter:image`/hero (100% coverage); Tier 1 gradient+typography covers the card grid (Session 126). User-visible impact already mitigated.
+**Fix plan:** Christos to manually check the 5 sampled athinorama.gr URLs to classify as scraper-bug vs source-gap. If scraper-bug: one Pipeline session removes ~88% of imageless count (force multiplier). If source-gap: image-coverage problem is genuine and the S126 audit's reframing ("schema validity → image coverage") stands.
+**Status:** Open — awaiting Christos manual classification.
+
+### 90-Day Citation-Gap Measurement for Satori-OG Decision
+**Severity:** 🟢 (open, scheduled)
+**First seen:** Session 123 / `decisions.md` entry "Satori-generated typographic OG = permanent strategy for Schema.org image" (2026-05-08).
+**Frequency:** One-time deferred measurement.
+**Symptoms:** The Satori-OG decision committed to revisit only if "Bing Webmaster Tools AI Performance shows >15pp citation gap between imageless and image-rich events after 90 days post-launch." No automated forcing function exists; risks silent expiration without a calendar trigger.
+**Workaround:** None — the measurement is the action.
+**Fix plan:** Trigger date ~2026-08-06 (90 days post Tier-1 ship 2026-05-08). Owner: GEO Strategist. Run Bing Webmaster Tools AI Performance citation comparison between imageless and image-rich events; compare against the >15pp threshold; if exceeded, revisit the Satori-OG-as-permanent decision.
+**Status:** Open — scheduled for 2026-08-06.
+
+### Sample-Sufficiency Acknowledgment for Tier-1 Imageless Promotion
+**Severity:** 🟢 (open, documentation hygiene)
+**First seen:** Session 126 (Tier-1 Image Fallback) cross-referenced with S126 audit (2026-05-08).
+**Frequency:** One-time.
+**Symptoms:** Tier-1 fallback was promoted from v1.1 to v1 on n=9 future-exhibition sample (88.9% imageless rate). The `decisions.md` entry cites trigger metrics (36.3% imageless, 88.2% athinorama concentration) but doesn't formally acknowledge the sample size or address sample-sufficiency for the exhibition-specific 88.9% rate.
+**Workaround:** None — Tier-1 has shipped and is not blocked by this gap.
+**Fix plan:** GEO Strategist appends a brief paragraph to `decisions.md` acknowledging the sample basis for the Tier-1 promotion (n=9 exhibitions, directional-signal vs. statistically-sufficient framing).
+**Status:** Open — low-stakes documentation hygiene.
+
 ---
 
 ## Patterns to Watch
