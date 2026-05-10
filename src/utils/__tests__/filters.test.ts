@@ -302,6 +302,36 @@ describe("Exhibition Tier 1: running exhibitions in time filters", () => {
     expect(filtered.length).toBe(1);
   });
 
+  test("tomorrow filter includes running exhibitions (started weeks ago, still open)", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 30);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "tomorrow" });
+    expect(filtered.length).toBe(1);
+  });
+
+  test("next-month filter includes running exhibitions that span into next month", () => {
+    const now = new Date();
+    const pastStart = new Date(now);
+    pastStart.setDate(pastStart.getDate() - 30);
+    const futureEnd = new Date(now);
+    futureEnd.setDate(futureEnd.getDate() + 60);
+
+    const runningExhibition = makeExhibition({
+      startDate: pastStart.toISOString(),
+      endDate: futureEnd.toISOString(),
+    });
+    const filtered = filterEvents([runningExhibition], { time: "next-month" });
+    expect(filtered.length).toBe(1);
+  });
+
   test("non-exhibition events with endDate are NOT affected by exhibition logic", () => {
     const now = new Date();
     const pastStart = new Date(now);

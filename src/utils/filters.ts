@@ -52,6 +52,11 @@ function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
       tomorrowStart.setDate(tomorrowStart.getDate() + 1);
       const tomorrowEnd = new Date(now);
       tomorrowEnd.setDate(tomorrowEnd.getDate() + 2);
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate < tomorrowEnd && endDate >= tomorrowStart;
+      }
       return eventDate >= tomorrowStart && eventDate < tomorrowEnd;
 
     case 'this-week':
@@ -91,6 +96,11 @@ function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
     case 'next-month':
       const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
       const nextMonthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+      if (event.type === 'exhibition' && event.endDate) {
+        const endDate = new Date(event.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        return eventDate <= nextMonthEnd && endDate >= nextMonthStart;
+      }
       return eventDate >= nextMonthStart && eventDate <= nextMonthEnd;
 
     case 'all-events':
