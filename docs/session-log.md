@@ -5274,3 +5274,41 @@ manual columns populated for 2026-05-08.
 
 ---
 
+### Session 126 — Tier 1 Image Fallback (Card Grid)
+
+**Plan:** Implement Design Navigator Tier 1 spec — category gradient + event-name typography fallback for imageless cards in the card grid. Cross-project decision (GEO + Design Navigator) from Session 123 diagnostic unblocked this work.
+
+**What happened:**
+- 7 render sites updated to emit `<div class="card-image card-image--fallback" data-event-type>` + decorative `<span aria-hidden>` containing event title, when `imgSrc` is empty
+- CSS: deleted dead per-type gradients on `.card-image-wrapper[data-type=*]` (lines 363-417), appended Tier 1 block (base + list modifier + 6 per-type tints)
+- TDD: 5 new tests in `src/templates/__tests__/card-fallback.test.ts`, all green
+- Class collision discovered during browser visual verification: existing `.card-image` rule (line 413) was authored for `<img>` element with `position: absolute; inset: 0`, leaked onto new wrapper-div role. Resolved with `:not(.card-image--fallback)` selector tightening (Option A of three).
+- Greek title overflow at 28px clamp ceiling: tightened to 24px per plan-defined Bug 2 fix.
+- D11 Satori OG behavior unchanged — still populates `schema.image`, `og:image`, `twitter:image`, detail-page hero. Card grid is the only surface that switched to Tier 1.
+
+**Surprises:**
+- file:// path resolution false alarm — first browser inspection showed completely unstyled page; root cause was `<link href="/styles/...">` absolute path failing under file://. Pre-existing emitter behavior, not our regression. Logged as new patterns.md entry.
+- Class collision not caught by tests — markup assertions and snapshot tests were correct; only browser visual surfaced the cascade conflict. Logged as new patterns.md entry.
+- Session-number race: planned as Session 124, but parallel agents had already landed Session 124 (S101a-1 cornerstone) and Session 125 (`--update` mode for monitor-search-visibility) by the time the post-session bundle was written. Renumbered to Session 126 at append time. Reinforces the prior Session 122 lesson: re-check the highest session number immediately before the session-log append, not at session start.
+
+**Tests:** 1982 pass / 1 skip / 0 fail. Build clean, type check clean.
+
+**Status:** Shipped to Netlify https://agentathens.com/this-week (commit `a257ac034`, deploy `69fdbb926c3eef01b8a7f5b4`). Production visual matches local.
+
+**Queued for follow-up:**
+- 5 doc updates pending in `specs/tier1-fallback-doc-updates-pending.md` — blocked on doc-naming resolution with Design Navigator
+- Tints for 5 missing event types (dance, dj_set, festival, show, tech) — separate Design Navigator brief
+- Token alignment: hardcoded rgba → `--color-{type}` vars
+- Visible title redundancy on imageless cards (poster + H3) — Design Navigator refinement question, logged in pending spec
+- Hero variant aspect-ratio question (if surfaced) — logged in pending spec
+- Exhibition completeness investigation (GEO Strategist Q3) — separate diagnostic
+- Orphan PNG cleanup (~500 stale OG files) — Pattern G maintenance batch
+
+---
+
+### Audit — 2026-05-08 (state audit, not a session)
+
+Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-state-audit-2026-05-08.md`. Re-prioritization input for S127. No source/test/schema changes.
+
+---
+

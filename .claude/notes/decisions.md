@@ -3148,3 +3148,42 @@ that needs the new mode); `patterns.md` "Snapshot capture pattern"
 (today's workaround while `--update` is pending);
 `mistakes.md` "S122 — Shared-tree `git push`" (the open follow-up's
 immediate-mitigation reference).
+
+## S125 — Verify State Before Reporting: Guard 1 extends to diagnosis (2026-05-08)
+
+2026-05-08 (S125): The "verify before declaring" discipline applies to
+DIAGNOSIS, not just implementation. Guard 1 (Verify Assumptions Before
+Building) extends to "Verify State Before Reporting." Two failures in
+one day (S122 push surprise + S125 "lost content" misdiagnosis) cluster
+around the same root cause: single-signal conclusions in shared-repo
+environments. Connects to: mistakes.md S122 entry + new S125 entry.
+
+**Operational rule:** Before declaring any working-tree-state anomaly
+("content lost", "file reset", "commit missing"), cross-check at least
+three of: `git diff HEAD -- <path>`, `git log -- <path>`, `git status
+--short`, `git stash list`, `git reflog HEAD`, `git fsck --lost-found`.
+A single grep return that disagrees with prior memory is not evidence —
+it's one data point that may have been captured during another session's
+transient state (stash window, mid-rebase, ongoing checkout).
+
+**Connects to:** `mistakes.md` "S125 — Diagnosed 'lost content' from a
+transient grep" (the failure this decision codifies);
+`mistakes.md` "S122 — Shared-tree `git push`" (the sibling failure
+sharing the assumption-from-snapshot root cause);
+this file's "S122 — `--update` mode" entry (the open follow-up
+that prompted the work where this misdiagnosis occurred).
+
+### Decision: Satori-generated typographic OG = permanent strategy for Schema.org image
+Date: 2026-05-08
+Source: GEO Strategist response on imageless events brief
+Rationale: Config-driven, language-agnostic, multi-city replicable. Schema.org spec permits typographic Event.image. The athinorama.gr source-content gap is permanent — any non-Satori solution would require inventing imagery (venue photo as proxy, curated library) which introduces correctness risk.
+Revisit triggers (only these fire a re-evaluation):
+1. Bing Webmaster Tools AI Performance shows >15pp citation gap between imageless and image-rich events after 90 days post-launch
+2. Tier A AI engine publishes guidance explicitly downweighting non-photographic schema.image
+Until then: not technical debt, not interim — permanent.
+
+### Decision: Tier 1 image fallback promoted from v1.1 to v1
+Date: 2026-05-08
+Source: Design Navigator response on imageless events brief
+Rationale: v1.1 trigger fired pre-launch — empirical numbers (36.3% imageless / 88.2% single-source athinorama.gr / permanent baseline) exceed the documented 26% threshold. Tier 2 (faint icon) produced visible runs of 3-5 identical near-black tiles per page on athinorama-heavy days; Tier 1 (category gradient + event-name typography) breaks that monotony.
+Implementation note: Class collision between `.card-image` (img-role) and new `.card-image card-image--fallback` (wrapper-role) resolved via `:not(.card-image--fallback)` selector — Option A of three considered.

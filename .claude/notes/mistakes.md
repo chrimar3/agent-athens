@@ -553,3 +553,11 @@ crediting C-revised's coverage.
 |---------|---------------|------------------|
 | Parallel session's `git push` swept up our unpushed local commit (`b93bff7f1`) and made it public before we authorized it | `git push` pushes the current branch including all ancestor commits between `origin/main` and `HEAD` — does not filter by which session authored which commit. Shared working tree on `main` = shared push surface. | Before ANY `git push` from a session that may run concurrently with others: `git log origin/main..HEAD --oneline` to enumerate what will go public. If unexpected commits appear, decide explicitly before pushing. Long-term: consider `claude/<topic>` feature branches per session — pushed via PR, never directly. (S122, 2026-05-08) |
 
+## S125 — Diagnosed "lost content" from a transient grep without cross-checking multiple signals (2026-05-08)
+
+| What went wrong | Why | Correct approach |
+|---|---|---|
+| Diagnosed "session-log content lost" from a transient grep that returned empty during another session's stash window | Conclusion drawn from single observation without verifying with multiple data sources (git diff, git log, fsck output cross-reference). Assumed snapshot represented persistent state. | When working-tree state appears anomalous in a shared repo: cross-check via git diff HEAD, git stash list, and git reflog HEAD before declaring content lost. Single grep of a working tree mid-multi-session-day is insufficient evidence. (S125, 2026-05-08) |
+
+**Pattern (third occurrence today):** S122 push-surprise + this entry are the same root cause — assumption-from-snapshot in a shared-repo environment without verifying with multiple signals. Connects to `decisions.md` S125 entry "Verify State Before Reporting".
+

@@ -3642,3 +3642,35 @@ row that breaks downstream `row.split(',')` invariants.
 **Applies to:** any in-place mutation of a flat-file artifact under `data/`
 or `logs/` where readers run concurrently or the file is the source of
 truth for an automated monitor.
+
+### Pattern: Local file:// inspection of static-site output requires HTTP serving when CSS hrefs use absolute paths
+First observed: Session 126
+Symptom: Tests pass + markup correct + browser shows unstyled page (default fonts, raw underlines, no layout). Looks like total CSS load failure.
+Cause: dist/*.html emits `<link rel="stylesheet" href="/styles/...">` with absolute path. file:// resolves `/` to filesystem root, not site root → CSS doesn't load.
+Diagnosis before assuming bug:
+1. Check `<link>` href in HTML — if starts with `/`, suspect path resolution
+2. Run `cd dist && python3 -m http.server 8080` and inspect via http://localhost:8080
+3. Only after HTTP serving still shows unstyled, suspect actual CSS bug
+Cost saved: ~18 min diagnostic time the first time we hit this; future hits cost ~30 sec.
+
+### Pattern: Class-name collisions across semantic roles are invisible in tests but catastrophic in cascade
+First observed: Session 126
+Symptom: Markup correct per spec, tests pass, but visual layout broken — elements overlap, content z-stacks, ghosts bleed through.
+Cause: A class name reused with different semantic intent (e.g., `.card-image` for both `<img>` element AND wrapper `<div>`). Cascade resolves by file order at equal specificity, not by intent. Old rule's properties (e.g., `position: absolute; inset: 0`) leak onto the new wrapper role.
+Diagnosis path:
+1. Grep for ALL rules matching the disputed class: `grep -B 2 -A 10 '\.classname' design-system.css`
+2. Check browser DevTools Computed panel — properties applied vs declared
+3. Identify if the conflicting rule was authored for a different element/role than the new usage
+Resolution preference (minimal-change ethic):
+- Option A: tighten existing rule's selector with `:not()` — surgical, no markup or test change
+- Option B: increase new rule's specificity + override conflicting properties — verbose
+- Option C: rename in markup — cleanest but breaks spec compliance if spec mandates verbatim class names
+
+### Pattern: Concurrent-session race on session numbering (S126, 2026-05-10)
+First observed: Recurring failure mode (≥8 occurrences S100–S126).
+Symptom: Two parallel Claude Code sessions claim the same Session-N number, producing an "Nb vs N+1" question at closeout time. Most recent: Tier-1 Image Fallback claimed Session 126 while the state audit was planned-but-unnumbered — produced a 126b/127 numbering question two days after the audit ran.
+Cause: Numbers assigned (or "reserved") at session start. Parallel sessions can't see each other's reservations until a commit lands, so both end up claiming the same N.
+Defense:
+- Numbering is assigned at session close, not session start
+- Diagnostic-only work (audits, state checks) does not consume a session number — log as a dated `### Audit — YYYY-MM-DD` entry instead
+- Before assigning N, grep `docs/session-log.md` for that number and check `git log --since="N days ago"` for parallel-session indicators
