@@ -461,32 +461,26 @@ async function main() {
   generatedUrls.push(...categoryUrls);
   pagesGenerated += categoryUrls.length;
 
-  // Pre-compute event-set hash for /this-weekend cornerstone — gates JSON-LD
+  // Pre-compute event-set hashes for cornerstone hubs — gates JSON-LD
   // datePublished/dateModified via resolveLastModified so timestamps reflect
-  // actual content changes, not build cron (Editorial Pushback 2). Other hubs
-  // continue using build time; pattern can extend to them later.
-  const { hashEventSet } = await import('./utils/event-set-hash');
-  const {
-    loadManifest: loadEventSetManifest,
-    resolveLastModified: resolveEventSetLastMod,
-    saveManifest: saveEventSetManifest,
-  } = await import('./sitemap/content-hasher');
+  // actual content changes, not build cron. Cornerstones are explicitly
+  // listed (opt-in), not derived from config.cornerstone === true, so adding
+  // a cornerstone here is a deliberate edit.
+  const { loadManifest: loadEventSetManifest, saveManifest: saveEventSetManifest } =
+    await import('./sitemap/content-hasher');
+  const { gateCornerstoneHashes } = await import('./utils/gate-cornerstones');
   const eventSetManifestPath = join(import.meta.dir, '../data/event-set-hashes.json');
   const eventSetManifest = loadEventSetManifest(eventSetManifestPath);
-  const lastUpdateOverrides: Record<string, string> = {};
-  let weekendDateEn: string | undefined;
-  const weekendConfig = hubPagesConfig.hubs.find(h => h.slug === 'this-weekend');
-  if (weekendConfig) {
-    const weekendEvents = getHubEvents(weekendConfig, events);
-    if (weekendEvents.length > 0) {
-      const weekendHash = hashEventSet(weekendEvents);
-      const weekendDate = resolveEventSetLastMod('this-weekend', weekendHash, eventSetManifest);
-      eventSetManifest.entries['this-weekend'] = { hash: weekendHash, lastModified: weekendDate };
-      lastUpdateOverrides['this-weekend'] = weekendDate;
-      weekendDateEn = resolveEventSetLastMod('en/this-weekend', weekendHash, eventSetManifest);
-      eventSetManifest.entries['en/this-weekend'] = { hash: weekendHash, lastModified: weekendDateEn };
-    }
-  }
+  const GATED_CORNERSTONES = ['this-weekend', 'today', 'this-month', 'open'] as const;
+  const cornerstoneInputs = GATED_CORNERSTONES.flatMap(slug => {
+    const config = hubPagesConfig.hubs.find(h => h.slug === slug);
+    if (!config) return [];
+    const cornerstoneEvents = getHubEvents(config, events);
+    if (cornerstoneEvents.length === 0) return [];
+    return [{ slug, events: cornerstoneEvents }];
+  });
+  const { el: lastUpdateOverrides, en: lastUpdateOverridesEn } =
+    gateCornerstoneHashes(cornerstoneInputs, eventSetManifest);
 
   // Generate hub pages (enhanced versions of existing listing pages)
   console.log('\n📄 Generating hub pages...');
@@ -501,7 +495,7 @@ async function main() {
     if (!config.answerCapsuleEn) continue;
     const filteredEvents = getHubEvents(config, events);
     if (filteredEvents.length < 3) continue;
-    const enLastUpdate = config.slug === 'this-weekend' ? weekendDateEn : undefined;
+    const enLastUpdate = lastUpdateOverridesEn[config.slug];
     const html = renderHubPage(config, filteredEvents, events, undefined, 'en', enLastUpdate);
     if (!html) continue;
     mkdirSync(join(DIST_DIR, 'en', config.slug), { recursive: true });

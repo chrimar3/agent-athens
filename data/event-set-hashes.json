@@ -1,13 +1,37 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T08:27:02.160+03:00",
+  "generatedAt": "2026-05-10T18:33:20.260+03:00",
   "entries": {
     "this-weekend": {
-      "hash": "b5fcea71f87f34d1",
+      "hash": "a9a171e1423fe9a5",
       "lastModified": "2026-05-10"
     },
     "en/this-weekend": {
-      "hash": "b5fcea71f87f34d1",
+      "hash": "a9a171e1423fe9a5",
+      "lastModified": "2026-05-10"
+    },
+    "today": {
+      "hash": "a422336e801a83ce",
+      "lastModified": "2026-05-10"
+    },
+    "en/today": {
+      "hash": "a422336e801a83ce",
+      "lastModified": "2026-05-10"
+    },
+    "this-month": {
+      "hash": "598b4716b57d19b9",
+      "lastModified": "2026-05-10"
+    },
+    "en/this-month": {
+      "hash": "598b4716b57d19b9",
+      "lastModified": "2026-05-10"
+    },
+    "open": {
+      "hash": "3a2fb98c6c3028b2",
+      "lastModified": "2026-05-10"
+    },
+    "en/open": {
+      "hash": "3a2fb98c6c3028b2",
       "lastModified": "2026-05-10"
     }
   }
