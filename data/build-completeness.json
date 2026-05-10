@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-10T05:11:06.962Z"
+    "lastUpdate": "2026-05-10T05:27:08.769Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,11 +13,11 @@
     "byType": [
       {
         "type": "concert",
-        "total": 1054,
-        "pass": 1036,
+        "total": 1056,
+        "pass": 1038,
         "warn": 18,
         "fail": 0,
-        "info": 838,
+        "info": 840,
         "passRate": 98
       },
       {
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 6275,
-      "pass": 6241,
+      "total": 6277,
+      "pass": 6243,
       "warn": 34,
       "fail": 0,
-      "info": 5942,
+      "info": 5944,
       "passRate": 99
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 48
     },
     "event_template": {
-      "total": 6275,
-      "pass": 6241,
+      "total": 6277,
+      "pass": 6243,
       "warn": 34,
       "fail": 0,
-      "info": 5942
+      "info": 5944
     },
     "byVenue": [
       {
@@ -265,11 +265,11 @@
       },
       {
         "venue": "astron",
-        "total": 35,
-        "pass": 35,
+        "total": 36,
+        "pass": 36,
         "warn": 0,
         "fail": 0,
-        "info": 35,
+        "info": 36,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -445,11 +445,11 @@
       },
       {
         "venue": "concert #1 baumstrasse",
-        "total": 10,
-        "pass": 10,
+        "total": 11,
+        "pass": 11,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 11,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -685,11 +685,11 @@
       },
       {
         "venue": "half note jazz club",
-        "total": 76,
-        "pass": 74,
+        "total": 77,
+        "pass": 75,
         "warn": 2,
         "fail": 0,
-        "info": 76,
+        "info": 77,
         "passRate": 97,
         "sameAsState": "missing"
       },
@@ -875,11 +875,11 @@
       },
       {
         "venue": "patision65",
-        "total": 15,
-        "pass": 15,
+        "total": 14,
+        "pass": 14,
         "warn": 0,
         "fail": 0,
-        "info": 15,
+        "info": 14,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1425,11 +1425,11 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 15,
-        "pass": 15,
+        "total": 16,
+        "pass": 16,
         "warn": 0,
         "fail": 0,
-        "info": 15,
+        "info": 16,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1995,11 +1995,11 @@
       },
       {
         "venue": "κπισν",
-        "total": 40,
-        "pass": 40,
+        "total": 39,
+        "pass": 39,
         "warn": 0,
         "fail": 0,
-        "info": 40,
+        "info": 39,
         "passRate": 100,
         "sameAsState": "missing"
       },
