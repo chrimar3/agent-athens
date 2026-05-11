@@ -88,3 +88,32 @@
   to = "/en/today"
   status = 302
   force = true
+
+# S132: collapse singular/plural hub cannibalization to a single canonical form.
+# Singular forms (/concert, /theater, /exhibition, /performance) used to duplicate
+# the curated category pages (/concerts, /theatre, /exhibitions, /performances)
+# with identical Greek titles. Singulars are no longer built; redirect any
+# remaining external links to the canonical plural form.
+[[redirects]]
+  from = "/concert"
+  to = "/concerts"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/theater"
+  to = "/theatre"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/exhibition"
+  to = "/exhibitions"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/performance"
+  to = "/performances"
+  status = 301
+  force = true

@@ -5426,3 +5426,46 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### Session 132 — Ship S131 🔴 defects to production (2026-05-11)
+
+**Plan:** Strip ~3,858 broken `/neighborhoods/*` internal links (defect A) and resolve `/concert`⇄`/concerts` (and theater/theatre/exhibition/performance) cannibalization (defect C). TDD red phase before source edits; full suite + dist-verify before deploy; `netlify deploy --prod --dir=dist` (NOT git push).
+
+**What happened:**
+- **Defect (A):** single-line fix at `src/generators/event-page.ts:388` — dropped the `<a href="/neighborhoods/{slug}/">` entry from `navLinks`. Display text in venue section (line 562) preserved; schema-chain `containedInPlace` at line 176 untouched.
+- **Defect (C):** three distinct fixes — `curatedBareTypes` skip-set in `src/generate-site.ts` (filter loop) + `continue on time === 'all-events'` guard in the same loop (eliminated a pre-existing duplicate emission); slug rename `theater → theatre` in `config/hub-pages.json` so the rich hub-page content writes to the same flat-file path as the thin curated category and wins via build order.
+- **`netlify.toml`:** 4 × 301 redirects added (`/concert → /concerts`, `/theater → /theatre`, `/exhibition → /exhibitions`, `/performance → /performances`).
+- **Stale dist/ artifacts removed manually:** the deprecated singular `.html` files + their `dist/api/*.json` counterparts + `dist/en/theater/` directory. The build only STOPS emitting; it doesn't clean past artifacts.
+
+**Surprises:**
+- **Diagnostic predicted 2 generators; actual count was 3.** S131 source-grep found `generate-site.ts` filter loop + curated category generator. The third (`src/generators/hub-page.ts:568`, config-driven from `hub-pages.json`) was discovered when the TDD red phase failed on `dist/theater.html` after the first two were fixed. Output-layer test as discovery mechanism — pattern earned and logged.
+- **Canonical direction for theater inverted mid-implementation.** Initial plan was "plural is canonical" across all 4 pairs. Investigation revealed `hub-pages.json`'s `theater` entry held the RICHER content (with `answerCapsule`, covers both theater + performance) while `categories.json`'s `theatre` entry was THIN. Resolved by renaming the rich entry's slug from `theater` to `theatre` so the plural-canonical decision preserved the richer content.
+- **Inner-loop `time === 'all-events'` was double-emitting bare-type URLs.** `buildURL({type: 'X', time: 'all-events'})` produces URL `X` (the `all-events` suffix is stripped by `buildURL`), duplicating the bare-type emission from earlier in the loop. Surgical `continue` removed the duplicate; sitemap-editorial dropped from **1217 → 1205** as a side benefit (within-step delta — see Verified below for full session delta; this fix removed 12 cross-type duplicates, one per `EVENT_TYPES` member).
+
+**Verified:**
+- Production curl checks: 0 `/neighborhoods/` href occurrences in sampled event page (`c3fe4ec6-gazarte-telenova-live-in-athens`); all 4 deprecated singulars return `301` with correct `Location:` header to their plural; all 4 plural canonicals return `200`.
+- `dist/sitemap-editorial.xml`: **1226 → 1205 URLs total (full session delta, -21)**. Breakdown by step: -9 from `curatedBareTypes` skip-set (outer-loop bare emission removed for the 9 curated bare types: concert, theater, exhibition, performance, dj_set, show, workshop, cinema, tech) → 1217; then -12 from `continue on time === 'all-events'` (inner-loop all-events emission removed for all 12 `EVENT_TYPES`) → 1205. The `/en/theater` URL was REPLACED by `/en/theatre` via the `hub-pages.json` slug rename (net 0 from rename alone).
+- TypeScript clean (`bunx tsc --noEmit` zero output).
+
+**Tests:** 2008 pass / 1 skip / 0 fail (was 2003 / 1 / 0). +5 new:
+- `src/generators/__tests__/event-page.test.ts`: 1 new test asserting no `href="/neighborhoods/` in rendered event HTML.
+- `tests/build/canonical-hub-forms.test.ts` (new file): 4 tests, one per collision pair, asserting exactly one of `{singular.html, plural.html}` exists in `dist/`. Skips when `dist/` is absent (CI portability).
+
+**Status:** Shipped via `netlify deploy --prod --dir=dist` at deploy URL `https://6a01c3bea54a18c911b7cc0d--agentathens.netlify.app`. Production at `https://agentathens.com` confirmed via the curl checks above. Source-control commit pending in this session (S132 banking session).
+
+**Learnings (full entries in cross-referenced files):**
+- `mistakes.md` S132 ×2: (a) link emission outlives destination namespace; (b) multi-generator slug collision missed in source-grep — defense via dist-grep + output-layer test.
+- `patterns.md` S132 ×3: diagnostic-first/TDD-second/dist-verify-third cycle; output-layer tests as discovery mechanism; grep-target completeness check for Guard 6.
+- `decisions.md` S132 ×1: canonical hub-form is plural; singulars are redirects.
+
+**Open items:**
+- **S131 J1/J2/J3 — schema dual-emission defect (top priority next session, S132').** Every event page emits 2 Event JSON-LD blocks; one is broken (missing `location`, no timezone offset, leaks `Περιγραφή στα Αγγλικά` label). Internal validator measures 100/100; Google measures 1 critical + 6 non-critical per page. Validator-depth gap. Surfaced during S131 manual GSC inspection pass.
+- S131 (B) — 29 visible-in-DB events missing from `dist/` build (~7.9% miss rate). Root cause not investigated this session. Candidate for a future bounded session.
+- S131 (D) — `dist/contemporary-dance-dance.html` duplicate-word build bug. Probably a one-liner in hub-name composition; isolated.
+- S131 (H minor) — 7 currently-visible events carry `noindex`. Check whether the "is this event past?" predicate has a corner case.
+- S130 — sitemap-editorial GSC fetch error: closed as "transient GSC fetcher issue, recommend remove + re-add in GSC UI." User action pending.
+- Manual GSC inspection list (`specs/s131-gsc-inspection-list.md`) still unfilled — 11-URL checklist for URL Inspection results. Christos task.
+- **Build pipeline detection-class fact for future maintenance batch:** the generator STOPS emitting but doesn't CLEAN past `dist/` artifacts. S132 had to manually `rm` deprecated singular `.html` + `dist/api/*.json` + `dist/en/theater/` after the fix. Candidate for an "orphan-sweep" pass at end of build, or a mistakes.md entry of its own.
+- Institutional-memory backfill: S130 and S131 ran but were never logged in this file. Out of scope here; surfacing for visibility.
+
+---
+

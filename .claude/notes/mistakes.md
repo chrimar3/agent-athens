@@ -577,3 +577,17 @@ crediting C-revised's coverage.
 
 **Pattern (second occurrence in 24 hours):** S127 + S129 are the same mistake — text-based defenses don't survive the cross-project muscle memory of `git push origin main` as the deploy step. The pipeline's daily `netlify deploy` ate the cost both times; the underlying defense gap remains. Connects to the open question in S129's session-log: promote to a `PreToolUse` hook?
 
+## S132 — Link emission outlives destination namespace (2026-05-11)
+
+| What went wrong | Why | Correct approach |
+|---|---|---|
+| `src/generators/event-page.ts:388` emitted `<a href="/neighborhoods/{slug}/">` while no `/neighborhoods/*` namespace existed in `dist/`. ~3,858 dead internal links across ~67% of the event corpus, surfaced by S131 diagnostic. | Feature stub left behind from earlier scaffolding — neighborhood hub pages were never built. The anchor wrapping was stale; the schema-chain `containedInPlace` QID usage at line 176 was correct and unrelated. The generator template wasn't pruned when the destination namespace was abandoned. | Before emitting an internal anchor in any template, verify the destination namespace actually exists in `dist/`. Detection one-liner: `grep -rln 'href="/neighborhoods/' dist/ --include='*.html' \| wc -l` should return 0; any positive value means every link in the count is a live 404. Run as a build-output assertion when adding new anchor patterns. (S132, 2026-05-11) |
+
+## S132 — Multi-generator slug collision missed in source-grep diagnostic (2026-05-11)
+
+| What went wrong | Why | Correct approach |
+|---|---|---|
+| S131 diagnostic enumerated TWO generators emitting hub pages (`generate-site.ts` filter loop + `generateCategoryPages` from `categories.json`). The S132 fix targeted both. After build + test, the TDD red phase failed at the dist-verify layer: `dist/theater.html` was still being regenerated. Discovery: a third generator — `src/generators/hub-page.ts:568` reading `config/hub-pages.json` — was emitting flat `${slug}.html` files at the same top-level namespace. Source-grep had missed it because the grep targets focused on `generate-site.ts` and `templates/`. | Three independent generators emit to the same flat top-level `/xxx.html` namespace without coordination. Source-only grep returned 2 sites; the actual count was 3. The diagnostic in S131 framed the search around "filter-based vs curated-category" generators and didn't look for a third axis (config-driven hub pages). | When applying Guard 6 (shotgun surgery — enumerate every touch point), grep BOTH source AND build outputs: `grep -rn 'pattern' src/` for what code says, `grep dist/ … or grep dist/sitemap-*.xml` for what shipped. If source-grep returns N hits but build artifacts include forms not explained by those N, there's a missing generator. TDD red phase at the OUTPUT layer (not source layer) catches this if the diagnostic missed it. (S132, 2026-05-11) |
+
+**Pattern (S132 specific):** Both mistakes share root cause with S122 / S125 / S127's "assumption-from-snapshot" theme — diagnostic conclusions drawn from one signal (source-grep) without cross-checking a second signal (build output / sitemap). The new defense (dist-grep + output-layer test) generalizes the S127 "cross-reference against the canonical config" rule to include the BUILD OUTPUT as a canonical source.
+

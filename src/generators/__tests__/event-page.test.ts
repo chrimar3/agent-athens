@@ -164,6 +164,12 @@ describe("Event Detail Page — Venue section", () => {
     expect(html).toContain(sampleConcert.venue.neighborhood!);
   });
 
+  // S132: /neighborhoods/* hubs don't exist, so emitting hrefs to them produces 404s at scale.
+  test("no anchor links to non-existent /neighborhoods/* hub", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).not.toContain('href="/neighborhoods/');
+  });
+
   test("Maps link uses coordinates when available", () => {
     const html = renderEventDetailPage(sampleConcert, []);
     expect(html).toContain("Άνοιγμα στον Χάρτη");

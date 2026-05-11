@@ -391,13 +391,31 @@ async function main() {
 
   // Generate type pages
   console.log('📄 Generating type pages...');
+  // S132: Skip bare {type: X} pages whose filter is already covered by a curated
+  // category page (e.g., /concert duplicates /concerts with identical title).
+  // Time/price/genre variants don't collide and are still emitted below.
+  const curatedBareTypes = new Set<string>(
+    CATEGORIES_CONFIG.categories
+      .filter(c => {
+        const f = (c as { filter?: Record<string, unknown> }).filter ?? {};
+        return typeof f.type === 'string' && !('genresInclude' in f) && Object.keys(f).length === 1;
+      })
+      .map(c => (c as { filter: { type: string } }).filter.type)
+  );
+
   for (const type of EVENT_TYPES) {
-    // Type only (all time)
-    generatedUrls.push(await generatePage({ type }, events));
-    pagesGenerated++;
+    // Type only (all time) — skip if a curated category covers the same filter
+    if (!curatedBareTypes.has(type)) {
+      generatedUrls.push(await generatePage({ type }, events));
+      pagesGenerated++;
+    }
 
     // Type × Time
     for (const time of TIME_RANGES) {
+      // 'all-events' produces the same URL as bare type (buildURL strips the
+      // 'all-events' suffix) — re-emitting it duplicates the bare-type entry,
+      // and for curated types would re-introduce the deprecated singular slug.
+      if (time === 'all-events') continue;
       generatedUrls.push(await generatePage({ type, time }, events));
       pagesGenerated++;
     }

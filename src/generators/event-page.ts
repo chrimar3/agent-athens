@@ -380,12 +380,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   // Internal navigation links
   const venueSlug = slugify(event.venue.name);
-  const neighborhoodSlug = event.venue.neighborhood ? slugify(event.venue.neighborhood) : '';
 
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
-    `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>`,
-    neighborhoodSlug ? `<a href="/neighborhoods/${neighborhoodSlug}/">${t.eventsInArea} ${displayNeighborhood(event.venue.neighborhood!)}</a>` : ''
+    `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>`
   ].filter(Boolean);
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
