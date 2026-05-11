@@ -10,6 +10,7 @@ import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, availabilityForEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
+import { classifyTicketSource } from '../utils/ticket-source-classifier';
 import { generateEventSlug } from '../generators/event-page';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -286,11 +287,16 @@ export function prepareCardData(event: Event): CardData {
   // event-page.ts:227 behavior). availabilityForEventStatus returns
   // omit_offer for EventCompleted → null both fields so renderEventCard
   // emits no microdata price/availability for past events.
+  // S134: also omit Offer microdata when classifier says omit (listing_aggregator
+  // / unclassified / null-URL) — keeps the single emission gate consistent
+  // across event-detail JSON-LD, hub-card JSON-LD, and hub-card microdata.
   const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
   const availability = availabilityForEventStatus(eventStatus);
+  const classifierOmits = event.price.type === 'with-ticket'
+    && 'omit_offer' in classifyTicketSource(event);
   let numericPriceForSchema: string | null;
   let availabilityForSchema: string | null;
-  if (availability.kind === 'omit_offer') {
+  if (availability.kind === 'omit_offer' || classifierOmits) {
     numericPriceForSchema = null;
     availabilityForSchema = null;
   } else if (event.price.type === 'open') {
@@ -473,7 +479,13 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
       }
     };
 
-    if (availability.kind === 'emit') {
+    // S134: classifier-gated Offer emission. Hub list-item Offer stays minimal
+    // (no seller — preserves Sprint 1 hub pattern), but omits entirely when
+    // classifier says omit for with-ticket events (listing_aggregator /
+    // unclassified / null-URL). Open events emit minimal Offer regardless.
+    const classifierOmits = event.price.type === 'with-ticket'
+      && 'omit_offer' in classifyTicketSource(event);
+    if (availability.kind === 'emit' && !classifierOmits) {
       item.offers = {
         "@type": "Offer",
         ...((event.price.type === 'open' || event.price.type === 'donation')

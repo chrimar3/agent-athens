@@ -3242,3 +3242,122 @@ Reactivation trigger (ALL THREE must be true):
   (c) Sprint 1 Offers + Παναθήναια + subgenre consolidation have all shipped (these workstreams will deposit new file shapes in dist/ — flipping the default before they're stable risks deleting their outputs).
 Tradeoff: Continued accumulation of stale non-event files in dist/. Manual `rm` is institutional practice. Acceptable while the three conditions remain unmet.
 Connects to: `patterns.md` S133 "Irreversibility ≠ safety in default-flip decisions for destructive ops"; `src/generators/orphan-sweep.ts:42-83` (the registered allowlist); S132 manual-cleanup precedent.
+
+## 2026-05-11 — Unclassifiable-Merchant Ticket Sources: Omit Offer (Classifier as Single Emission Gate)
+
+**Context:** Sprint 1 closed 2026-04-30 (commits 749de0fd5, 5d49315a1,
+3eaec15df, 8021646d1). The Session 0 diagnostic surfaced ~80 with-ticket
+events emitting athinorama.gr URLs as `offers.url` — athinorama is a
+listings aggregator, not a merchant. Smaller parallel clusters: manual-
+source events without outbound ticket links, residentadvisor events
+lacking outbound merchant URLs, megaron events redirecting to unclassified
+Greek payment portals. The post-Sprint-1 offers emission refactor already
+specified config-driven `ticket-source-classification.json`, inline
+Organization seller emission, and eventStatus→availability mapping (omit
+Offer on EventCompleted; Discontinued on EventCancelled; InStock on
+Scheduled/Postponed/Rescheduled). Policy gap: what happens when a with-
+ticket event's only ticket URL is neither a merchant nor classifiable as
+one. Three options framed:
+A) drop `offers.url` and `seller`, keep Offer block;
+B) drop entire Offer block;
+C) emit aggregator as generic seller without Wikidata grounding.
+
+**Decision:** Option B. When a with-ticket event's only ticket URL is
+not in the classifier's known-merchant set, the classifier emits no
+Offer. Event-level `isAccessibleForFree: false` carries the ticketing
+signal independently. Policy is general — applies to athinorama and all
+future unclassifiable ticket-source cases (Παναθήναια, new aggregators,
+unmapped payment portals). The classifier is the single source of truth
+for Offer emission gating; no special-case code paths for "unclassifiable"
+branches outside the config layer.
+
+**Reasoning:** Options A and C are structurally foreclosed by the
+2026-04-28 Offers Implementation Spec FAIL rules — A drops `url` and
+`seller` (both required when Offer emits); C inlines an aggregator as
+`seller` that cannot resolve to a marked-up Organization in the entity
+graph (orphan-seller FAIL). Adopting either means rewriting locked
+validator rules, not extending them.
+
+Option B is consistent with three existing precedents: pure-informational
+open-events with no venue info page ("omit `offers` entirely and rely on
+`isAccessibleForFree`" — 2026-04-28); EventCompleted lifecycle (Offer
+omitted for past events — 2026-02-20); EventCancelled emission policy
+(S101b — Offer DOES emit there because the seller relationship is still
+honestly grounded; the unclassifiable-merchant case differs precisely
+because seller grounding is unavailable).
+
+The 18-point partial-schema penalty (Schema Quality Over Presence,
+2026-03-02) operates at event level, not Offer level — partial Offer
+risks degrading the entire event's citation posture, while omitted Offer
+leaves the event clean. Tier A protection (89.4% of bot traffic, per
+"Schema.org Offers Implementation Spec") is better served by honest
+absence than by partial merchant claims that train models toward broken
+booking surfaces.
+
+The coverage-hit counter-argument is acknowledged (~84 with-ticket events
+lose Offer presence at deploy). Mitigated by the nightly URL resolver
+already on the roadmap (Sprint 2 scope) which populates
+`ticket_url_resolved` for aggregator sources — events transition out of
+the Offer-less state without per-event content work as resolver hits
+land. Deliberately Deferred Register entry tracks the deferral state.
+
+**Implementation:**
+1. Classifier (`ticket-source-classification.json`): unclassifiable URL
+   → `omit_offer: true`. No special-case code paths; classifier output
+   is the single emission gate.
+2. Emission layer: when classifier returns `omit_offer`, skip the entire
+   `offers` block. Event still emits `isAccessibleForFree: false` and
+   all other Schema Completeness Checklist fields.
+3. **Validator rule scoping (required for this decision to ship cleanly):**
+   Re-scope the existing FAIL rule from *"Any with-ticket event missing
+   `url`, `price`, `priceCurrency`, `availability`, `validFrom`, or
+   `seller`"* to *"Any **emitted Offer** missing `url`, `price`,
+   `priceCurrency`, `availability`, `validFrom`, or `seller`."* This
+   separates emission policy (classifier-driven) from validation policy
+   (Offer-shape correctness when emitted). Aligns the spec with already-
+   established behavior for EventCompleted Offer omission. Schema
+   Completeness floor (`offers ... OR isAccessibleForFree`) covers the
+   new state unchanged.
+4. Build-time telemetry: log count of unclassifiable-merchant Offer
+   omissions, broken down by source (athinorama, manual-source, ra,
+   other). Becomes the measurable baseline against which the nightly
+   URL resolver's coverage is later evaluated.
+5. Deliberately Deferred Register entry added to
+   `current-infrastructure-v2.md` — reactivation trigger: nightly URL
+   resolver populating `ticket_url_resolved`.
+
+**Validation:** Post-deployment, confirm build-time omission count
+matches expected baseline (~84). Confirm validator no longer flags
+these events as FAIL. Confirm `isAccessibleForFree: false` present on
+all affected events. Schema.org Validator + Google Rich Results Test
+parse the Offer-less with-ticket events cleanly. Quarterly: omission
+count should trend down as resolver coverage expands; rising count
+indicates scraper regression or aggregator drift.
+
+**Replicability:** Fully replicable. SPEC universal — "classifier is
+single source of truth for Offer emission gating; unclassifiable
+merchant URLs trigger omission; event-level `isAccessibleForFree`
+carries ticketing signal independently of Offer presence." DATA per-city
+— each city's `ticket-source-classification.json` lists its own known
+merchants and aggregators. Barcelona will hit this with its own
+aggregator set (timeout.es scenarios, ticketmaster.es edge cases);
+Berlin similarly. Policy precedent transfers; merchant lists differ.
+
+**Connects to:**
+- "Schema.org Offers Implementation Spec" (2026-04-28) — this decision
+  scopes the FAIL rule from event-property to Offer-property.
+- Pure-informational open-events policy within the Offers Spec — direct
+  precedent for omit-Offer + rely-on-`isAccessibleForFree`.
+- "Cancelled Events: Emit With EventCancelled + Discontinued Rather
+  Than Filter" (S101b) — contrasting case (Offer emits because seller
+  is still honestly grounded).
+- "Schema Quality Over Presence" (2026-03-02) — 18-point partial-vs-no
+  penalty is the underlying citation evidence.
+- Nightly URL resolver (Sprint 2 scope) — documented recovery path.
+
+**Status:** Decided — implements concurrent with the post-Sprint-1
+offers emission refactor; validator scoping update lands in same change;
+Deliberately Deferred Register entry added to
+`current-infrastructure-v2.md` in same commit.
+
+**Dev Planner footnote (2026-05-12, S134 launch):** Step 0 verification found the live affected count is 38 upcoming events (30 athinorama + 8 manual-source-no-URL), not the ~84 cited in Strategist's text above. The ~84 figure reflected total with-ticket events affected including past-active; 4,335 past-active events also lack honest merchant grounding but carry noindex per S133 lifecycle work and are out of citation surface. Strategist's decision reasoning is unchanged by the corrected figure; the count is illustrative, not decisional. Recording here so the decision-log preserves both the authored figure (the snapshot of analysis as Strategist made it) and the empirical baseline (what shipping S134 actually affected).

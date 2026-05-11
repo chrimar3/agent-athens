@@ -49,8 +49,11 @@ describe('buildDataFeed', () => {
     expect(feed.dataFeedElement[0]).toHaveProperty('location');
   });
 
-  test('three-lane seller preserved: venue_direct_only emits dual-type seller inside dataFeedElement', () => {
+  test('venue_direct_only emits scalar Organization seller inside dataFeedElement (S134 simplification)', () => {
     // benaki.org is in the venue_direct_only classifier per Sprint 1 Canonical Entity Graph spec.
+    // S134 simplifies seller from dual-type ['Place', 'Organization'] to scalar 'Organization'
+    // per Strategist's 2026-05-11 verbatim contract. Dual-type was a Sprint 1 acknowledged-interim
+    // detail not preserved in the consolidated S134 rewrite.
     const venueDirectEvent: Event = {
       ...sampleConcertWithTicket,
       startDate: new Date(Date.now() + 86400000 * 14).toISOString(),
@@ -62,7 +65,7 @@ describe('buildDataFeed', () => {
     };
     const feed = buildDataFeed([venueDirectEvent], 'el');
     const wrappedEvent = feed.dataFeedElement[0];
-    expect(wrappedEvent.offers.seller['@type']).toEqual(['Place', 'Organization']);
+    expect(wrappedEvent.offers.seller['@type']).toBe('Organization');
     expect(wrappedEvent.offers.seller.name).toBe(venueDirectEvent.venue.name);
     expect(wrappedEvent.offers.url).toBeUndefined();
   });

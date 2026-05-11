@@ -17,6 +17,7 @@ import {
 } from './templates/category-page';
 import { generateEventPages, generateEventSlug, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { sweepOrphans } from './generators/orphan-sweep';
+import { snapshotOfferOmissions, resetOfferOmissionsCounter } from './ticketing/offer-builder';
 import { generateVenuePages } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
@@ -100,6 +101,7 @@ const CATEGORIES_CONFIG = JSON.parse(
 async function main() {
   const buildStartTime = Date.now();
   resetWriteStats();
+  resetOfferOmissionsCounter();
   console.log('🚀 Starting site generation...\n');
 
   // Create dist directory
@@ -1041,6 +1043,27 @@ async function main() {
     buildStartTime,
     armNonEvent: process.env.SWEEP_ORPHANS === '1',
   });
+
+  // S134 — Offer-omission telemetry.
+  // Records build-time counts of Offer blocks omitted by buildOfferOrOmit,
+  // broken down by source domain (athinorama.gr, manual-source-no-url,
+  // past-event, etc.). Becomes the measurable baseline against which Sprint 2's
+  // URL resolver coverage is later evaluated. Schema mirrors logs/indexnow-latest.json
+  // for "stable machine-readable contract" pattern.
+  const omissionsBySource = snapshotOfferOmissions();
+  const totalOmitted = Object.values(omissionsBySource).reduce((a, b) => a + b, 0);
+  const offerOmissionsLog = {
+    build_timestamp: new Date(buildStartTime).toISOString(),
+    total_omitted: totalOmitted,
+    by_source: omissionsBySource,
+  };
+  const logsDir = join(import.meta.dir, '../logs');
+  if (!existsSync(logsDir)) mkdirSync(logsDir, { recursive: true });
+  writeFileIfChangedSync(
+    join(logsDir, 'offer-omissions-latest.json'),
+    JSON.stringify(offerOmissionsLog, null, 2),
+  );
+  console.log(`📊 offer-omissions-latest.json: ${totalOmitted} total Offer blocks omitted (${Object.keys(omissionsBySource).length} sources)`);
 
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');

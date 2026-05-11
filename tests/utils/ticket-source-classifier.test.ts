@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { classifySource, extractHost } from '../../src/utils/ticket-source-classifier';
+import { classifySource, extractHost, classifyTicketSource } from '../../src/utils/ticket-source-classifier';
 
 describe('classifySource', () => {
   test('viva.gr is a known_merchant', () => {
@@ -52,6 +52,113 @@ describe('classifySource', () => {
 
   test('empty string is unclassified', () => {
     expect(classifySource('')).toBe('unclassified');
+  });
+});
+
+describe('classifyTicketSource (S134 — emit-or-omit decision wrapper)', () => {
+  // Minimal event shape — the wrapper only reads ticketUrl/ticketUrlResolved + venue.{name, website}.
+  const baseEvent = {
+    ticketUrl: undefined as string | null | undefined,
+    ticketUrlResolved: null as string | null | undefined,
+    venue: { name: 'Some Venue', website: undefined as string | undefined },
+  };
+
+  test('known_merchant → emit with host-derived Organization seller', () => {
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.viva.gr/gr-el/tickets/music/foo/',
+    });
+    expect(decision).toEqual({
+      merchant: { '@type': 'Organization', name: 'Viva.gr', url: 'https://viva.gr/' },
+    });
+  });
+
+  test('venue_direct_only → emit with venue-derived Organization seller (url populated)', () => {
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.halfnote.gr/en/calendar/',
+      venue: { name: 'Half Note Jazz Club', website: 'https://halfnote.gr/' },
+    });
+    expect(decision).toEqual({
+      merchant: {
+        '@type': 'Organization',
+        name: 'Half Note Jazz Club',
+        url: 'https://halfnote.gr/',
+      },
+    });
+  });
+
+  test('venue_direct_only without venue.website → url omitted from seller', () => {
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.halfnote.gr/x',
+      venue: { name: 'Half Note Jazz Club', website: undefined },
+    });
+    expect(decision).toEqual({
+      merchant: { '@type': 'Organization', name: 'Half Note Jazz Club' },
+    });
+  });
+
+  test('listing_aggregator → omit Offer', () => {
+    expect(
+      classifyTicketSource({
+        ...baseEvent,
+        ticketUrl: 'https://www.athinorama.gr/music/gig/some-event/',
+      }),
+    ).toEqual({ omit_offer: true });
+  });
+
+  test('unclassified → omit Offer (S134 behavior change from Sprint 1)', () => {
+    // Sprint 1 behavior: emit URL as-is + log warning.
+    // S134: omit the entire Offer block; isAccessibleForFree:false carries the signal.
+    expect(
+      classifyTicketSource({
+        ...baseEvent,
+        ticketUrl: 'https://unknown-host.example.com/tickets/foo',
+      }),
+    ).toEqual({ omit_offer: true });
+  });
+
+  test('null/undefined/empty ticketUrl → omit Offer', () => {
+    expect(classifyTicketSource({ ...baseEvent, ticketUrl: undefined })).toEqual({ omit_offer: true });
+    expect(classifyTicketSource({ ...baseEvent, ticketUrl: null })).toEqual({ omit_offer: true });
+    expect(classifyTicketSource({ ...baseEvent, ticketUrl: '' })).toEqual({ omit_offer: true });
+  });
+
+  test('ticketUrlResolved takes precedence over ticketUrl', () => {
+    // Aggregator ticketUrl, resolver populated with merchant URL → emit with merchant.
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.athinorama.gr/music/gig/some-event/',
+      ticketUrlResolved: 'https://www.viva.gr/tickets/event/123',
+    });
+    expect(decision).toEqual({
+      merchant: { '@type': 'Organization', name: 'Viva.gr', url: 'https://viva.gr/' },
+    });
+  });
+
+  test('ticketUrlResolved precedence applies even when classifier would omit on raw URL', () => {
+    // Aggregator raw + venue-direct resolved → emit with venue seller.
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.athinorama.gr/x',
+      ticketUrlResolved: 'https://www.halfnote.gr/y',
+      venue: { name: 'Half Note', website: 'https://halfnote.gr/' },
+    });
+    expect(decision).toEqual({
+      merchant: { '@type': 'Organization', name: 'Half Note', url: 'https://halfnote.gr/' },
+    });
+  });
+
+  test('null ticketUrlResolved falls back to ticketUrl', () => {
+    const decision = classifyTicketSource({
+      ...baseEvent,
+      ticketUrl: 'https://www.viva.gr/x',
+      ticketUrlResolved: null,
+    });
+    expect(decision).toEqual({
+      merchant: { '@type': 'Organization', name: 'Viva.gr', url: 'https://viva.gr/' },
+    });
   });
 });
 

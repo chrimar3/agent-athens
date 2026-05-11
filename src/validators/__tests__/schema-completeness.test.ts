@@ -108,11 +108,21 @@ describe('validateSchemaCompleteness', () => {
       expect(result.errors.some(e => e.includes('location.name'))).toBe(true);
     });
 
-    test('missing offers → ERROR', () => {
+    test('missing offers + isAccessibleForFree:false → PASS (S134 reshape: with-ticket signal carried by isAccessibleForFree)', () => {
       const schema = makeValidSchema();
       delete schema['offers'];
-      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-offers');
-      expect(result.errors.some(e => e.includes('offers'))).toBe(true);
+      // isAccessibleForFree stays false (default in makeValidSchema) — this is the new floor.
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-offers-with-floor');
+      expect(result.errors.some(e => e.toLowerCase().includes('offers'))).toBe(false);
+    });
+
+    test('missing offers + isAccessibleForFree undefined → ERROR (no ticketing signal at all)', () => {
+      const schema = makeValidSchema();
+      delete schema['offers'];
+      delete schema['isAccessibleForFree'];
+      const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-offers-no-signal');
+      // The missing-isAccessibleForFree rule fires; the validator surfaces SOME error.
+      expect(result.errors.length).toBeGreaterThan(0);
     });
 
     test('missing isAccessibleForFree → ERROR', () => {
@@ -228,11 +238,18 @@ describe('validateSchemaCompleteness', () => {
       expect(result.errors.some(e => e === 'offers is missing')).toBe(false);
     });
 
-    test('EventScheduled with NO offers DOES flag offers as missing (regression-guard)', () => {
-      const schema = makeValidSchema({ eventStatus: 'https://schema.org/EventScheduled' });
+    test('EventScheduled with NO offers + isAccessibleForFree:false → PASS (S134 reshape)', () => {
+      // S134 (2026-05-11 Unclassifiable-Merchant decision): offers is optional
+      // when classifier omits. With-ticket signal carried by isAccessibleForFree:false.
+      // Sprint 1 regression-guard rewritten — the "offers is missing" rule was
+      // removed per the rule reshape.
+      const schema = makeValidSchema({
+        eventStatus: 'https://schema.org/EventScheduled',
+        isAccessibleForFree: false,
+      });
       delete schema.offers;
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'future-event');
-      expect(result.errors).toContain('offers is missing');
+      expect(result.errors.some(e => e.toLowerCase().includes('offers'))).toBe(false);
     });
 
     test('offers present but missing seller → ERROR', () => {
@@ -888,5 +905,71 @@ describe("validateSchemaCompleteness — multi-block extraction (S132')", () => 
     const result = validateSchemaCompleteness(html, 'no-event-block', 'info');
     expect(result.errors.some(e => e.toLowerCase().includes('no event json-ld'))).toBe(true);
     expect(result.errors.some(e => e.includes('not a valid Schema.org event type'))).toBe(false);
+  });
+});
+
+// =====================================================================
+// S134 — Offer-presence rule reshape (price_type-conditional + isAccessibleForFree floor)
+// =====================================================================
+
+describe('validateSchemaCompleteness — S134 offer-presence rule reshape', () => {
+  test('with-ticket pattern (isAccessibleForFree:false) + no offers → PASS (new floor)', () => {
+    const schema = makeValidSchema({ isAccessibleForFree: false });
+    delete schema['offers'];
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-with-ticket-no-offers');
+    expect(result.errors.some(e => e.toLowerCase().includes('offers'))).toBe(false);
+  });
+
+  test('open pattern (isAccessibleForFree:true) + no offers → PASS', () => {
+    const schema = makeValidSchema({ isAccessibleForFree: true });
+    delete schema['offers'];
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-open-no-offers');
+    expect(result.errors.some(e => e.toLowerCase().includes('offers'))).toBe(false);
+  });
+
+  test('EventCompleted + no offers → PASS (past-event precedent preserved)', () => {
+    const schema = makeValidSchema({
+      eventStatus: 'https://schema.org/EventCompleted',
+      isAccessibleForFree: false,
+    });
+    delete schema['offers'];
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-completed-no-offers');
+    expect(result.errors.some(e => e.toLowerCase().includes('offers'))).toBe(false);
+  });
+
+  test('offers present but missing seller → FAIL (Offer-property check; shape-agnostic)', () => {
+    const schema = makeValidSchema({
+      offers: {
+        '@type': 'Offer',
+        price: '15',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        // seller intentionally omitted
+      },
+    });
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-no-seller');
+    expect(result.errors.some(e => e.toLowerCase().includes('seller'))).toBe(true);
+  });
+
+  test('offers present but missing priceCurrency → FAIL (Offer-property check)', () => {
+    const schema = makeValidSchema({
+      offers: {
+        '@type': 'Offer',
+        price: '15',
+        availability: 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'X' },
+      },
+    });
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-no-currency');
+    expect(result.errors.some(e => e.toLowerCase().includes('pricecurrency') || e.toLowerCase().includes('price'))).toBe(true);
+  });
+
+  test('offers present without offers.url → still PASS (url is INFO-level, not FAIL)', () => {
+    const schema = makeValidSchema();
+    const offers = schema.offers as Record<string, unknown>;
+    delete offers.url;
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-no-offers-url');
+    // url is INFO-level per existing line 238; no FAIL
+    expect(result.errors.some(e => e.includes('offers.url'))).toBe(false);
   });
 });

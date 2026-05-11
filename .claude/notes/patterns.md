@@ -3937,3 +3937,80 @@ Defense — at session-log time:
 Earned from: S133 maintenance batch was framed as ~50 minutes on 5 bounded items. Landed at ~75 minutes on 5 items, 3 of which reframed (Items 2/3/5 all "working as designed"). The reframing time was not waste — it produced 3 specs that prevent future sessions from re-running the same investigations. Without reframing, the session would have applied "fixes" to non-bugs.
 
 Connects to: `mistakes.md` S133 "Brief inflation" (the upstream failure mode this pattern is the institutional acceptance of); `mistakes.md` S132' (the planner-side pre-flight protocol that, when paid, drives the reframing rate down).
+
+### Pattern: Cross-project authored content + empirical drift (S134, 2026-05-12)
+
+First observed: S134 Step 6 footnote pattern for the Strategist's "~84 events" figure (actual was 38 upcoming + 4,335 past-active noindex'd).
+Use when: A specialist project (GEO Strategist, Editorial Director, Design Navigator) authors decision text the implementing project (Dev Planner) is committing to disk, and verification at implementation time finds the authored figures or facts have drifted from current reality.
+
+Canonical insight: When a specialist project authors decision text that cites specific figures, and the implementing session finds the figures have drifted, the resolution is: **(a)** preserve the authored text unedited, **(b)** add a Dev-Planner-authored footnote with the empirical baseline, **(c)** verify the decision's reasoning is figure-illustrative not figure-decisional before proceeding without round-trip.
+
+The footnote pattern preserves authorship boundaries while keeping the decision-log empirically honest. Edits to specialist-authored text — even small ones, even annotated ones — corrode the cross-project trust model. The future reader who sees a Strategist-authored block can trust it represents Strategist's analysis as Strategist made it; a Dev Planner-authored footnote alongside the block adds empirical context without obscuring whose reasoning is whose.
+
+Three-location pattern (S134 reference instance):
+1. **Step 0 spec file** (`specs/<session>-step-0-verifications.md`) — actual numbers as empirical baseline. Where executing-session finds drift.
+2. **The decision-log entry itself** — Dev-Planner-authored footnote AFTER Strategist's `**Status:** Decided` line. NOT an edit; a separately attributed block. Preserves authorship.
+3. **Build-time telemetry** (`logs/<metric>-latest.json` or equivalent) — schema persists the live count. The implicit reconciliation between authored figure and production count lives in the data itself; no additional note needed.
+
+When to round-trip instead of footnote:
+- Figure is decisional, not illustrative — the reasoning would change if the corrected number were used.
+- Order-of-magnitude divergence with downstream implications (e.g., ~84 vs ~9,427 would warrant round-trip; ~84 vs ~38 with same OOM stays footnote).
+- Specialist explicitly asked for confirmation, not just blessing.
+
+Edits to specialist-authored text — even small ones, even annotated ones — corrode the cross-project trust model. Only round-trip the specialist if the figure is decisional.
+
+Applies forward to: GEO Strategist, Editorial Director, Design Navigator, Growth, Enrichment — any project authoring decisions that the Dev Planner project implements.
+
+Earned from: S134 Strategist authored "~84 with-ticket events lose Offer presence." S134 Step 0e verification found live count is 38 upcoming + 4,335 past-active (noindex'd, out of citation surface). Order of magnitude matches; reasoning rests on five non-figure anchors. Footnote pattern applied at three locations; Strategist text preserved verbatim everywhere.
+
+Connects to: `mistakes.md` S134 "Planner-side spec hallucination" (cross-project memory drift); `.claude/notes/decisions.md` 2026-05-11 Unclassifiable-Merchant entry (the reference instance); `specs/s134-step-0-verifications.md` (the empirical baseline file); `docs/current-infrastructure-v2.md` (the parallel application to the Deferred Register entry).
+
+### Pattern: Spec-phrase ambiguity around structural Schema.org decisions (S134, 2026-05-12)
+
+First observed: S134 Step 0a — Dev Planner memory's "inline Organization seller emission" phrasing was misread of the locked spec's "seller Organization materialized inline" (which intended `@graph`-sibling with `@id` reference).
+Use when: Writing or reading spec prose around structural choices in nested data (JSON-LD construction, microdata composition, GraphQL type unions, protobuf field placement).
+
+Canonical insight: When a spec's prose uses a structurally-loaded word ("inline," "nested," "embedded," "reference," "containing") to mean one specific construction, future readers will misread it as the other plausible construction roughly half the time. The misread rate doesn't decay with familiarity; it can lock in across multiple readers if the partial reading is propagated forward (memory hallucination, second-hand brief authoring).
+
+Mitigation: spec phrasing should name the construction concretely, not figuratively.
+
+Example trap: 2026-04-28 Offers Implementation Spec phrase *"seller Organization materialized inline"* was intended as *"as a sibling `@graph` entry, referenced from `seller` via `@id`"* — and was misread by Dev Planner memory as *"as a literal nested Organization object inside `seller`."* The latter violates the locked `seller.@id` reference requirement. Same English, two opposite constructions.
+
+When you catch a spec-phrase trap, fix it at the source AND log the trap here so the next misread costs minutes (re-read against this catalog), not a session (full Step-0-reframing cycle).
+
+Defense — when authoring specs:
+- Don't use "inline" if you mean "by-reference." Don't use "nested" if you mean "sibling-with-reference."
+- Pair structural words with example code blocks the first time they appear; readers map the prose to the code, not to their priors.
+- If a word's natural reading could go either way, write both readings and pick one explicitly: *"Materialized inline (literal nested object) — NOT as `@graph` reference"* or *"Materialized as `@graph` sibling referenced from this field — NOT as literal nested object."*
+
+Defense — when reading specs:
+- When a spec says "inline" or "nested" or "reference," ask "which construction concretely?" before forming a memory of the choice.
+- If memory tells you the answer without verification, treat that memory as a suspect. Grep the spec for an example code block; let the code disambiguate the prose.
+
+Earned from: S134 prep cycle had two parallel spec hallucinations across two projects (Dev Planner cited inline-not-@id; Strategist confirmed b-is-locked without checking acknowledged-interim). Both rooted in the same spec's ambiguous "inline" phrasing. Single phrase, two-project failure mode.
+
+Connects to: `mistakes.md` S134 "Planner-side spec hallucination" (the worked instance); the Pattern below (Sprint-boundary acknowledged interims) which addresses the time-axis dimension that compounds this pattern.
+
+### Pattern: Sprint-boundary acknowledged interims aren't drift (S134, 2026-05-12)
+
+First observed: S134 — Sprint 1 closure authorized shape (a) inline seller emission as deliberate interim; subsequent briefs read spec language as production state, missing the closure's authorization of the interim.
+Use when: Reasoning about whether production "matches" or "diverges from" a locked spec, especially across sprint boundaries.
+
+Canonical insight: When a sprint closes with a deliberate sequencing decision that leaves spec and production temporarily out of alignment (validator rules at WARN instead of FAIL, partial implementations of a locked spec, deferred shape migrations), **the closure decision authorizing the interim is the canonical state — not the spec.** The spec describes the target; the closure describes what was deliberately shipped. Both are canonical; they describe different time points.
+
+Before claiming "production must conform to spec," search the closure decisions of the relevant sprints for any authorized divergence. Spec citations are valid; spec-as-production-state assertions are not, especially across sprint boundaries.
+
+Defense — when writing briefs:
+- When citing a locked spec as authority for what production should be, also cite: (a) which sprint closed the implementation, (b) whether the closure authorized any interim divergence, (c) where the closure decision lives.
+- "Locked spec says X" → valid claim about the target.
+- "Production must be X because locked spec says X" → invalid claim without closure-state verification.
+
+Defense — when implementing briefs:
+- Before applying a "production must conform" amendment, search the relevant sprint's closure for authorized interims that would make the brief's premise wrong.
+- Treat memory of "the spec says X" as suspect; treat memory of "the sprint closed with X authorized" as equally suspect. Verify both.
+
+Earned from: S134 Step 0a found production at shape (a) inline; brief framed (a) as "STOP and ping Strategist" assuming spec (b) was canonical state. Sprint 1 closure (2026-04-30, commits 749de0fd5 et al.) had authorized (a) as interim; the migration to (b) was deferred to Sprint 3 by deliberate sequencing decision. Both planner memory and Strategist memory had flattened the time axis. Resolution: S134 stays in shape (a) per Sprint 1 closure; (a)→(b) migration consolidated into Sprint 3 envelope work.
+
+Applies forward to all cross-project briefs that cite locked specs as if they describe shipping state. Memory and brief-writing should both flag this distinction explicitly.
+
+Connects to: `mistakes.md` S134 "Planner-side spec hallucination" (the worked instance); the Pattern above (Spec-phrase ambiguity) which addresses the textual dimension that compounds this pattern; `decisions.md` 2026-05-11 entry's "Connects to" list of related Sprint decisions.

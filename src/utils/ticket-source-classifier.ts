@@ -79,3 +79,94 @@ export function hostToName(host: string): string {
   if (host.length === 0) return host;
   return host.charAt(0).toUpperCase() + host.slice(1);
 }
+
+// ============================================================================
+// S134 — Decision wrapper: classifyTicketSource(event)
+// ============================================================================
+
+/**
+ * Organization seller shape returned by `classifyTicketSource`.
+ *
+ * Shape (a) inline nested per Sprint 1 acknowledged interim. Sprint 3 envelope
+ * migration moves this to `@id`-referenced; this contract is the call-site
+ * abstraction that protects emitters from that future change.
+ *
+ * `url` is optional: venue_direct_only events whose venue lacks a `website`
+ * legitimately have no URL to advertise (no-fabrication rule from CLAUDE.md).
+ */
+export interface OfferSellerOrganization {
+  '@type': 'Organization';
+  name: string;
+  url?: string;
+}
+
+/**
+ * Decision returned by `classifyTicketSource`. Strict two-member union per
+ * the 2026-05-11 Strategist contract:
+ *   - `{ omit_offer: true }` → caller emits no Offer block; isAccessibleForFree:false
+ *     carries the with-ticket signal independently.
+ *   - `{ merchant: Organization }` → caller emits Offer with the returned Organization
+ *     as `seller`.
+ */
+export type TicketSourceDecision =
+  | { omit_offer: true }
+  | { merchant: OfferSellerOrganization };
+
+/**
+ * Minimal event shape consumed by `classifyTicketSource`. Only the four fields
+ * below are read; the rest of the Event type is irrelevant to this decision.
+ */
+export interface TicketSourceEvent {
+  ticketUrl?: string | null;
+  ticketUrlResolved?: string | null;
+  venue: {
+    name: string;
+    website?: string;
+  };
+}
+
+/**
+ * S134 emit-or-omit decision wrapper. Resolves the effective ticket URL
+ * (`ticketUrlResolved` preferred over `ticketUrl`), classifies it via
+ * `classifySource`, and translates the lane into the emit-or-omit decision:
+ *
+ *   - `known_merchant`     → emit with host-derived Organization seller
+ *   - `venue_direct_only`  → emit with venue-derived Organization seller
+ *   - `listing_aggregator` → omit Offer (S134 behavior change from Sprint 1)
+ *   - `unclassified`       → omit Offer (S134 behavior change from Sprint 1)
+ *
+ * Open events do NOT reach this wrapper — `offer-builder` handles them
+ * separately (open events always emit with venue seller, price 0).
+ */
+export function classifyTicketSource(event: TicketSourceEvent): TicketSourceDecision {
+  const url = event.ticketUrlResolved ?? event.ticketUrl;
+  const lane = classifySource(url);
+
+  if (lane === 'known_merchant') {
+    const host = extractHost(url);
+    // `host` is guaranteed non-null because classifySource returned a lane
+    // that requires a parseable URL.
+    if (!host) return { omit_offer: true };
+    return {
+      merchant: {
+        '@type': 'Organization',
+        name: hostToName(host),
+        url: `https://${host}/`,
+      },
+    };
+  }
+
+  if (lane === 'venue_direct_only') {
+    const merchant: OfferSellerOrganization = {
+      '@type': 'Organization',
+      name: event.venue.name,
+    };
+    if (event.venue.website) {
+      merchant.url = event.venue.website;
+    }
+    return { merchant };
+  }
+
+  // listing_aggregator and unclassified both omit.
+  return { omit_offer: true };
+}

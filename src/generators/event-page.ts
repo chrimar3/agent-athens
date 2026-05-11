@@ -22,8 +22,8 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, getCountryCode, getCurrencyCode, getRegionName, availabilityForEventStatus } from '../utils/schema-geo';
-import { classifySource, extractHost, hostToName } from '../utils/ticket-source-classifier';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName } from '../utils/schema-geo';
+import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
@@ -203,91 +203,26 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     };
   }
 
-  // Add pricing — isAccessibleForFree + complete offers per Strategist 2026-04-29
-  if (event.price.type === 'open' || event.price.type === 'donation') {
-    // Free / donation events: self-canonical event page is the only "buy" link.
-    // Venue is the responsible Organization for the Offer (Strategist Q3 Option D
-    // principle applied: venue is the de-facto provider when there's no merchant).
-    schema.isAccessibleForFree = true;
-    schema.offers = {
-      '@type': 'Offer',
-      'price': '0',
-      'priceCurrency': getCurrencyCode(),
-      'availability': 'https://schema.org/InStock',
-      'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
-      'seller': {
-        '@type': 'Organization',
-        'name': event.venue.name,
-        ...(event.venue.website ? { url: event.venue.website } : {})
-      }
-    };
-  } else {
-    // with-ticket
-    schema.isAccessibleForFree = false;
-    const availability = availabilityForEventStatus(schema.eventStatus);
+  // S134 — single emission gate: classifier-gated Offer (with-ticket) +
+  // venue-seller Offer (open/donation) + EventCompleted omission, all routed
+  // through buildOfferOrOmit. Unclassifiable-merchant URLs trigger Offer
+  // omission per the 2026-05-11 Strategist decision; isAccessibleForFree
+  // continues to carry the with-ticket signal independently of Offer presence.
+  schema.isAccessibleForFree = event.price.type === 'open' || event.price.type === 'donation';
 
-    if (availability.kind === 'omit_offer') {
-      // Past event (EventCompleted) — emit no offers block at all.
-      // Per Strategist 2026-04-29, the offer is gone (not Discontinued).
-    } else {
-      // Prefer the resolver-produced URL when available. Sprint 2.5's nightly
-      // resolver populates ticketUrlResolved by dereferencing aggregator and
-      // intermediate links. Until that runs (or for sources the resolver
-      // cannot dereference), fall back to the as-scraped ticketUrl. Both the
-      // classifier and the emitted offers.url operate on the same effective URL.
-      const effectiveTicketUrl = event.ticketUrlResolved ?? event.ticketUrl;
-      const classification = classifySource(effectiveTicketUrl);
+  const offerDecision = buildOfferOrOmit({
+    price: event.price,
+    ticketUrl: event.ticketUrl,
+    ticketUrlResolved: event.ticketUrlResolved,
+    venue: { name: event.venue.name, website: event.venue.website },
+    eventStatus: schema.eventStatus,
+    selfCanonicalUrl: `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
+  });
 
-      let offersUrl: string | undefined;
-      let sellerHost: string | null = null;
-
-      if (classification === 'known_merchant') {
-        offersUrl = effectiveTicketUrl;
-        sellerHost = extractHost(effectiveTicketUrl);
-      } else if (classification === 'listing_aggregator' || classification === 'venue_direct_only') {
-        // Host is not a merchant — omit offers.url; venue becomes the seller.
-        offersUrl = undefined;
-      } else {
-        // 'unclassified' — emit URL as-is and warn for next audit pass.
-        offersUrl = effectiveTicketUrl;
-        const host = extractHost(effectiveTicketUrl);
-        if (host) {
-          console.warn(`[offers.url] unclassified ticket source: ${host} (event ${event.id})`);
-        }
-      }
-
-      // Inline seller (no @id, no @graph — that's Sprint 3+).
-      // venue_direct_only flips to dual-type ['Place', 'Organization'] (venue is self-merchant).
-      const sellerTypeForVenue: 'Organization' | ['Place', 'Organization'] =
-        classification === 'venue_direct_only' ? ['Place', 'Organization'] : 'Organization';
-      const seller: Record<string, any> = sellerHost
-        ? {
-            '@type': 'Organization',
-            'name': hostToName(sellerHost),
-            'url': `https://${sellerHost}/`
-          }
-        : {
-            '@type': sellerTypeForVenue,
-            'name': event.venue.name,
-            ...(event.venue.website ? { url: event.venue.website } : {})
-          };
-
-      const offerObj: Record<string, any> = {
-        '@type': 'Offer',
-        'priceCurrency': event.price.currency || getCurrencyCode(),
-        'availability': availability.value,
-        'seller': seller
-      };
-      if (offersUrl) {
-        offerObj.url = offersUrl;
-      }
-      const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
-      if (priceStr !== '') {
-        offerObj.price = priceStr;
-      }
-      schema.offers = offerObj;
-    }
+  if ('offer' in offerDecision) {
+    schema.offers = offerDecision.offer;
   }
+  // omit → no schema.offers; isAccessibleForFree:false (already set above) carries the with-ticket signal.
 
   // Add image if available
   const ogImage = getOgImage(event);

@@ -175,12 +175,17 @@ export function validateSchemaCompleteness(
     }
   }
 
-  // Conditional offers presence: required UNLESS event is completed.
-  // Per Strategist 2026-04-29, EventCompleted events legitimately have no Offer.
-  const isCompleted = schema.eventStatus === 'https://schema.org/EventCompleted';
-  if (!schema.offers && !isCompleted) {
-    errors.push('offers is missing');
-  }
+  // S134 — Offer-presence rule reshape (2026-05-11 Unclassifiable-Merchant decision):
+  // The offers block is OPTIONAL — emission is gated by the classifier (see
+  // src/utils/ticket-source-classifier.ts → classifyTicketSource). When omitted,
+  // the with-ticket ticketing signal is carried by isAccessibleForFree:false at
+  // event level. The validator no longer requires offers presence; it validates
+  // Offer-property shape when offers IS present (see Offers structural checks below).
+  //
+  // Floor: with-ticket-shaped events (isAccessibleForFree:false) without an Offer
+  // must still emit isAccessibleForFree explicitly — covered by the next check
+  // (isAccessibleForFree must be a boolean). EventCompleted, open, and donation
+  // events legitimately have no Offer for distinct reasons; all paths pass.
 
   if (typeof schema.isAccessibleForFree !== 'boolean') {
     errors.push('isAccessibleForFree is missing or not boolean');

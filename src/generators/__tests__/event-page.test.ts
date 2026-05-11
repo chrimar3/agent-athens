@@ -491,8 +491,10 @@ describe("Event Detail Page — offers emission", () => {
     expect(schema.isAccessibleForFree).toBe(false);
   });
 
-  // Fixture B — listing_aggregator (athinorama.gr): offers WITHOUT url, venue is seller
-  test("with-ticket future event on listing_aggregator host: omits offers.url, venue is seller", () => {
+  // Fixture B — listing_aggregator (athinorama.gr): S134 omits entire Offer
+  // (Sprint 1 behavior was emit Offer-without-URL with venue seller; S134 changed
+  // this per the 2026-05-11 Unclassifiable-Merchant decision.)
+  test("with-ticket future event on listing_aggregator host: NO Offer block (S134)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
@@ -503,19 +505,12 @@ describe("Event Detail Page — offers emission", () => {
       },
     };
     const schema = parse(event);
-    expect(schema.offers).toBeDefined();
-    expect(schema.offers.url).toBeUndefined();
-    expect(schema.offers.availability).toBe('https://schema.org/InStock');
-    expect(schema.offers.priceCurrency).toBe('EUR');
-    expect(schema.offers.seller).toEqual({
-      '@type': 'Organization',
-      name: event.venue.name,
-      url: 'https://halfnote.gr/',
-    });
+    expect(schema.offers).toBeUndefined();
+    expect(schema.isAccessibleForFree).toBe(false);
   });
 
-  // Fixture B variant — venue lacks website: seller has name only
-  test("with-ticket on listing_aggregator with venue lacking website: seller has name only", () => {
+  // Fixture B variant — venue lacks website: still no Offer
+  test("with-ticket on listing_aggregator with venue lacking website: NO Offer block (S134)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
@@ -526,11 +521,8 @@ describe("Event Detail Page — offers emission", () => {
       },
     };
     const schema = parse(event);
-    expect(schema.offers.seller).toEqual({
-      '@type': 'Organization',
-      name: event.venue.name,
-    });
-    expect(schema.offers.seller.url).toBeUndefined();
+    expect(schema.offers).toBeUndefined();
+    expect(schema.isAccessibleForFree).toBe(false);
   });
 
   // Fixture C — known_merchant (more.com): offers.url + Organization seller from host
@@ -568,9 +560,11 @@ describe("Event Detail Page — offers emission", () => {
     expect(schema.offers.seller.name).toBe(event.venue.name);
   });
 
-  // venue_direct_only seller emits dual-type ["Place", "Organization"] per
-  // Canonical Entity Graph spec (2026-04-28): venue is self-merchant.
-  test("venue_direct_only host: seller emits dual-type ['Place', 'Organization']", () => {
+  // venue_direct_only seller emits scalar 'Organization' (S134 simplification
+  // from Sprint 1's dual-type ['Place', 'Organization']). Strategist's verbatim
+  // 2026-05-11 contract used scalar; S134 aligns. Dual-type was a Sprint 1
+  // acknowledged-interim detail not preserved in the consolidated rewrite.
+  test("venue_direct_only host: seller is scalar 'Organization' (S134 simplification)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
@@ -581,26 +575,26 @@ describe("Event Detail Page — offers emission", () => {
       },
     };
     const schema = parse(event);
-    expect(schema.offers.seller['@type']).toEqual(['Place', 'Organization']);
+    expect(schema.offers.seller['@type']).toBe('Organization');
     expect(schema.offers.seller.name).toBe(event.venue.name);
     expect(schema.offers.seller.url).toBe('https://www.benaki.org/');
     expect(schema.offers.url).toBeUndefined();
   });
 
-  // Regression-guard: listing_aggregator must STAY scalar 'Organization'.
-  // Only venue_direct_only flips to dual-type; aggregator + unclassified + free unchanged.
-  test("listing_aggregator host: seller stays scalar 'Organization' (regression-guard)", () => {
+  // Regression-guard: listing_aggregator omits entire Offer in S134 (Sprint 1
+  // emitted a scalar-Organization Offer-without-URL; S134 omits the block).
+  test("listing_aggregator host: NO Offer block (S134 omission)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
       ticketUrl: 'https://www.athinorama.gr/x/y/',
     };
     const schema = parse(event);
-    expect(schema.offers.seller['@type']).toBe('Organization');
+    expect(schema.offers).toBeUndefined();
   });
 
-  // Fixture D — unclassified host: emits offers.url + console.warn
-  test("with-ticket on unclassified host: emits offers.url + console.warn", () => {
+  // Fixture D — unclassified host: S134 omits Offer (Sprint 1 emitted with warn).
+  test("with-ticket on unclassified host: NO Offer block + no warn (S134)", () => {
     const warnings: string[] = [];
     const originalWarn = console.warn;
     console.warn = (msg: string) => warnings.push(msg);
@@ -611,10 +605,9 @@ describe("Event Detail Page — offers emission", () => {
         ticketUrl: 'https://example-not-in-config.com/event/123',
       };
       const schema = parse(event);
-      expect(schema.offers.url).toBe('https://example-not-in-config.com/event/123');
-      expect(warnings.some(w => w.includes('[offers.url] unclassified ticket source'))).toBe(true);
-      expect(warnings.some(w => w.includes('example-not-in-config.com'))).toBe(true);
-      expect(warnings.some(w => w.includes(event.id))).toBe(true);
+      expect(schema.offers).toBeUndefined();
+      // S134 no longer emits the per-event warning (omission is the intentional path).
+      expect(warnings.some(w => w.includes('[offers.url] unclassified'))).toBe(false);
     } finally {
       console.warn = originalWarn;
     }
@@ -699,7 +692,7 @@ describe("Event Detail Page — offers emission", () => {
     expect(schema.offers.url).toBe('https://www.viva.gr/tickets/event-x/');
   });
 
-  test("offers.url omitted when ticketUrlResolved is null and ticketUrl host is listing_aggregator (regression-guard)", () => {
+  test("ticketUrlResolved null + ticketUrl listing_aggregator: NO Offer block (S134)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
@@ -707,7 +700,7 @@ describe("Event Detail Page — offers emission", () => {
       ticketUrlResolved: null,
     };
     const schema = parse(event);
-    expect(schema.offers.url).toBeUndefined();
+    expect(schema.offers).toBeUndefined();
   });
 });
 
@@ -740,4 +733,115 @@ describe("Event schema — object/string equivalence", () => {
       expect(parsed).toEqual(objectForm);
     });
   }
+});
+
+// =====================================================================
+// S134 — classifier-gated Offer emission integration tests
+// =====================================================================
+
+describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
+  const upcomingDate = new Date(Date.now() + 86400000 * 14).toISOString();
+
+  test("with-ticket + known-merchant ticketUrl → Offer block with merchant seller", () => {
+    const event: Event = {
+      ...sampleConcert,
+      startDate: upcomingDate,
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://www.viva.gr/tickets/foo",
+      ticketUrlResolved: null,
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers["@type"]).toBe("Offer");
+    expect(schema.offers.seller).toEqual(
+      expect.objectContaining({
+        "@type": "Organization",
+        name: "Viva.gr",
+        url: "https://viva.gr/",
+      }),
+    );
+    expect(schema.offers.url).toBe("https://www.viva.gr/tickets/foo");
+    expect(schema.isAccessibleForFree).toBe(false);
+  });
+
+  test("with-ticket + listing-aggregator ticketUrl → NO Offer block; isAccessibleForFree:false preserved", () => {
+    const event: Event = {
+      ...sampleConcert,
+      startDate: upcomingDate,
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://www.athinorama.gr/music/gig/abc/",
+      ticketUrlResolved: null,
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeUndefined();
+    expect(schema.isAccessibleForFree).toBe(false);
+  });
+
+  test("with-ticket + unclassified ticketUrl → NO Offer block (S134 change from Sprint 1 emit-as-is behavior)", () => {
+    const event: Event = {
+      ...sampleConcert,
+      startDate: upcomingDate,
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://unknown-host-not-in-config.example/x",
+      ticketUrlResolved: null,
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeUndefined();
+    expect(schema.isAccessibleForFree).toBe(false);
+  });
+
+  test("with-ticket + EventCompleted → no Offer (precedent preserved)", () => {
+    const pastDate = new Date(Date.now() - 86400000 * 5).toISOString();
+    const event: Event = {
+      ...sampleConcert,
+      startDate: pastDate,
+      endDate: new Date(Date.now() - 86400000 * 5 + 3600000).toISOString(),
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://www.viva.gr/tickets/foo",
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeUndefined();
+  });
+
+  test("with-ticket + venue_direct_only → Offer with venue seller, no offers.url", () => {
+    const event: Event = {
+      ...sampleConcert,
+      startDate: upcomingDate,
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://www.halfnote.gr/en/calendar/",
+      ticketUrlResolved: null,
+      venue: { ...sampleConcert.venue, name: "Half Note Jazz Club", website: "https://halfnote.gr/" },
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.seller.name).toBe("Half Note Jazz Club");
+    expect(schema.offers.url).toBeUndefined();
+  });
+
+  test("open event → Offer with venue seller, price 0, self-canonical URL (unchanged)", () => {
+    const futureOpenExhibition: Event = {
+      ...sampleFreeExhibition,
+      startDate: upcomingDate,
+      endDate: new Date(Date.now() + 86400000 * 60).toISOString(),
+    };
+    const schema = buildEventSchemaObject(futureOpenExhibition);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.price).toBe("0");
+    expect(schema.isAccessibleForFree).toBe(true);
+    expect(schema.offers.seller.name).toBe(futureOpenExhibition.venue.name);
+  });
+
+  test("ticketUrlResolved precedence: aggregator raw + merchant resolved → emit with merchant", () => {
+    const event: Event = {
+      ...sampleConcert,
+      startDate: upcomingDate,
+      price: { type: "with-ticket", amount: 15, currency: "EUR" },
+      ticketUrl: "https://www.athinorama.gr/x",
+      ticketUrlResolved: "https://www.viva.gr/y",
+    };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.offers).toBeDefined();
+    expect(schema.offers.url).toBe("https://www.viva.gr/y");
+    expect(schema.offers.seller.name).toBe("Viva.gr");
+  });
 });

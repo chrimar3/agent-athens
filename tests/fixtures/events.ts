@@ -209,6 +209,11 @@ export function getTomorrowEvent(): Event {
       amount: 15,
       currency: "EUR"
     },
+    // S134: ticketUrl required for Offer emission (classifier-gated).
+    // viva.gr is a known_merchant → emit path. Sprint-1-era fixtures used no
+    // ticketUrl, which under S134 triggers omission; tests that rely on Offer
+    // emission need a classifiable URL on the fixture.
+    ticketUrl: "https://www.viva.gr/tickets/tomorrow-play/",
     url: "https://example.com/tomorrow-play",
     source: "more.com",
     createdAt: new Date().toISOString(),
