@@ -4032,3 +4032,27 @@ plus the hub-emission fan-out; production baseline is 11,522 across
 5 sources. Telemetry shape was correct; planner expectation was
 incomplete. Mitigation: increment semantics are a required field in
 any plan that prescribes a counter.
+
+### Pattern: Repro-grep the fix surface, not just the defect premise (S135, 2026-05-11)
+
+First observed: S135 pre-plan brief prescribed editing `config/athens-venues.json` for `lat/lng/streetAddress` fields. Verification phase grepped the schema and found those fields don't live in `athens-venues.json` (it's a location whitelist), don't live in `venue_context` (no geo columns), and aren't populated by anything in the seed path. They live on `events.venue_lat / venue_lng / venue_address` and depend on an enrichment populator whose web-search path is a TODO. Seventh recorded instance of a plan that names an edit target without grep-verifying the target holds the data.
+Use when: Authoring or reviewing any session plan that names a specific file, table, column, or function as the surface where a fix will be applied.
+
+Canonical insight: The S132' protocol established "repro-grep the defect premise" — verify the bug exists by reproducing it from the actual codebase before planning. This extends the protocol with a second verification axis: **repro-grep the proposed fix surface** before locking in an approach. The defect can be real AND the proposed fix surface can be wrong. The wrong-surface plan looks correct on the page (it names plausible files; it cites plausible columns) but evaporates on first contact with the codebase, costing the session 20–40 minutes of mid-stream re-planning and producing a smaller deliverable than the original scope promised.
+
+This pattern also extends to suspected-broken functions: **run the function before assuming it's silent.** S135 Step 3 was framed around fixing "silence" in `printHardStopSummary()`. Exploration noted the function "outputs nothing if table missing or rules disabled" — true as worst-case-under-degraded-inputs, false as current-state. Running the build showed the function emits the full content goal already (S110f shipped it). Reading code paths describes possible behaviors; only running them reveals state.
+
+Defense — when authoring a plan:
+- Before naming `path/to/file.ext` as the edit target, grep for the field/function/data the fix needs. If grep shows the target doesn't hold what the plan assumes, the plan is wrong before it leaves draft.
+- Before naming a function as "needs to be added / needs to emit X," check whether it already exists and what it currently emits. The build output (or test output, or runtime trace) answers this — code-read does not.
+- When the plan brief was authored by an upstream planner project, **the executor still owes this verification** — the upstream may be operating from stale memory or correct-but-out-of-date docs.
+
+Defense — when reviewing a plan:
+- Treat any plan that names a specific file/function as the edit target with suspicion proportional to how confidently the plan asserts the surface. "Edit `config/athens-venues.json`" deserves the same verification as "the bug is on line 42 of foo.ts."
+- Ask: did the author run the suspected-broken thing? Did they grep for the field they're about to add? If unclear, those are the first two acts of execution.
+
+Earned from: S135 pre-plan brief prescribed `config/athens-venues.json` as the fix surface for geo/streetAddress warnings; reality is event-level columns populated by enrichment. Same session, Step 3 prescribed adding emission for a function that already emits the full content goal. Both errors caught in the verification phase, before locking the plan; net cost was ~30 minutes of mid-plan reframing and produced two specs (`s135-geo-coverage-spec.md`, `s135-step-0-verifications.md`) that route the real fix correctly.
+
+Sprint count: seventh recorded instance of wrong-surface plans. The S132' "repro-grep the defect premise" protocol catches premise errors but does not catch fix-surface errors. This extension closes the gap.
+
+Connects to: `mistakes.md` S132' (the upstream pre-flight protocol this extends); `mistakes.md` S133 "Brief inflation" (a related failure mode where the brief sized the work wrong); `specs/s135-step-0-verifications.md` (the worked S135 instance with the Megaron pattern and the `printHardStopSummary` triage).
