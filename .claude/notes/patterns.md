@@ -4014,3 +4014,21 @@ Earned from: S134 Step 0a found production at shape (a) inline; brief framed (a)
 Applies forward to all cross-project briefs that cite locked specs as if they describe shipping state. Memory and brief-writing should both flag this distinction explicitly.
 
 Connects to: `mistakes.md` S134 "Planner-side spec hallucination" (the worked instance); the Pattern above (Spec-phrase ambiguity) which addresses the textual dimension that compounds this pattern; `decisions.md` 2026-05-11 entry's "Connects to" list of related Sprint decisions.
+
+### Telemetry counter increment semantics (S134 follow-up)
+
+When prescribing a counter or metric in a session plan, name the
+increment trigger explicitly: "once per event," "once per emission
+site," "once per build," or similar. S134's plan described the
+offer-omission counter as "keyed by source domain" without specifying
+when it increments. The plan reader (and the planner authoring it)
+assumed once-per-event. The implementation correctly increments once
+per emission site — each of the 3 emission sites (event-page JSON-LD,
+hub JSON-LD, hub microdata) records its omission decision independently,
+which is the structurally correct choice (each site can omit
+independently, so each site is its own measurement surface). The plan's
+"~4,373 expected" projection was therefore wrong by a 3× multiplier
+plus the hub-emission fan-out; production baseline is 11,522 across
+5 sources. Telemetry shape was correct; planner expectation was
+incomplete. Mitigation: increment semantics are a required field in
+any plan that prescribes a counter.
