@@ -5580,3 +5580,27 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### 2026-05-12 — Institutional cleanup: S130/S131 spec backfill
+
+Three specs produced during S130 (sitemap-editorial GSC fetch diagnostic)
+and S131 (Google discoverability diagnostic + GSC inspection checklist)
+were never staged before their originating sessions' commits landed.
+Carried as untracked across S132, S132', S133, S134, and the post-S134
+institutional follow-up. Inspected 2026-05-12 and resolved:
+
+- specs/s130-editorial-sitemap-diagnostic.md → committed (reachability
+  matrix + branch reasoning is institutional baseline for any future
+  GSC sitemap fetch error recurrence)
+- specs/s131-google-discoverability-diagnostic.md → committed
+  (.claude/notes/decisions.md already references this path; the spec
+  is the input artifact for S133's brief-inflation mistake entry)
+- specs/s131-gsc-inspection-list.md → committed (sampling rationale
+  and re-purposed-slot findings are reusable for any future GSC pass)
+
+Pattern note: untracked specs at session-end are institutional drift.
+Future session commit phases should include `git status` review for
+unstaged spec files as a standard step before commit. To be added
+to patterns.md when next institutional batch lands.
+
+---
+
