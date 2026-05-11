@@ -38,6 +38,50 @@ const PROTECTED_SUBDIRS_RELATIVE = [
   join('api', 'categories'),
 ];
 
+// KNOWN_NON_BUILD_ARTIFACTS — files in dist/ that legitimately exist outside the
+// build's generation surface. NOT YET WIRED into the sweep logic — this is a
+// registry that must be wired in BEFORE `armNonEvent` (SWEEP_ORPHANS=1) becomes
+// the default. See decisions.md (S133) for the three-condition reactivation trigger.
+//
+// Each entry needs a one-line provenance + a removal trigger (when this file
+// would become obsolete and could be moved into the build pipeline instead).
+export const KNOWN_NON_BUILD_ARTIFACTS: ReadonlyArray<{
+  path: string;
+  provenance: string;
+  removalTrigger: string;
+}> = [
+  {
+    path: 'a2f6526d99faa4a216d36574c34694a0.txt',
+    provenance: 'GSC site verification token (S81-era)',
+    removalTrigger: 'Move verification file emission into build pipeline',
+  },
+  {
+    path: 'robots.txt',
+    provenance: 'SEO crawl directives; hand-edited, not regenerated',
+    removalTrigger: 'Generate robots.txt from build (read sitemap list, emit conditionally)',
+  },
+  {
+    path: '.og-cache.json',
+    provenance: 'OG image generation cache; preserved across builds',
+    removalTrigger: 'Cache lives elsewhere (e.g., data/) or is regenerated each build',
+  },
+  {
+    path: 'apple-touch-icon.png',
+    provenance: 'Favicon set; generated each build but `writeIfChanged` keeps mtime stable when bytes match',
+    removalTrigger: 'Favicon generation step touches mtime unconditionally (or use slug-membership for static assets)',
+  },
+  {
+    path: 'favicon.svg',
+    provenance: 'Same as apple-touch-icon.png',
+    removalTrigger: 'Same as apple-touch-icon.png',
+  },
+  {
+    path: 'favicon-32x32.png',
+    provenance: 'Same as apple-touch-icon.png',
+    removalTrigger: 'Same as apple-touch-icon.png',
+  },
+];
+
 const PROTECTED_ROOTS_RELATIVE = [
   '',
   'events',

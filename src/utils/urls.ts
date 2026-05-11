@@ -8,7 +8,12 @@ export function buildURL(filters: Filters): string {
 
   if (filters.price && filters.price !== 'all') parts.push(filters.price);
   if (filters.genre) parts.push(filters.genre.toLowerCase().replace(/\s+/g, '-'));
-  if (filters.type) parts.push(filters.type);
+  if (filters.type) {
+    // Dedupe trailing-token overlap between genre slug and type
+    // (e.g. genre="Contemporary Dance" + type="dance" → contemporary-dance, not contemporary-dance-dance)
+    const lastToken = parts[parts.length - 1]?.split('-').pop();
+    if (lastToken !== filters.type) parts.push(filters.type);
+  }
   if (filters.time && filters.time !== 'all-events') parts.push(filters.time);
 
   return parts.length > 0 ? parts.join('-') : 'index';

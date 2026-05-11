@@ -3840,3 +3840,100 @@ Defense — periodic external calibration:
 Earned from: S132' diagnostic surfaced that the brief's "every event page emits two Event JSON-LD blocks, one broken" premise was not reproducible in current dist (0 / 5762 pages had ≥2 blocks). But the validator-depth gap that would have masked such an emission **if it ever occurred** was real and shippable as institutional infrastructure. The fix landed with 3 in-validator unit tests + 2 output-layer regression guards in `tests/build/`, all green against current dist; the guards protect a property that holds today and must keep holding.
 
 Connects to: this file's "Diagnostic-first, TDD-second, dist-verify-third" cycle (the validator-depth fix is the institutional sibling of dist-verify); `mistakes.md` S132' entry on Dev-Planner pre-flight protocol (the brief-authoring failure this validator fix incidentally surfaces); the parallel `extractAllJsonLd` (line 257) which existed before S132' and proved the multi-block pattern was already in-house — just not applied where it was needed.
+
+### Pattern: Predicate divergence between independent gates over the same conceptual set (S133, 2026-05-11)
+
+First observed: S133 Item 2 investigation, generalized from the visibility-filter / lifecycle-classifier pairing.
+Use when: A conceptual set ("visible events", "publishable users", "shippable orders") is gated by more than one predicate, each maintained in a different file. The set is defined by the intersection of all gates, but each gate evolves under its own pressures.
+
+Canonical insight: When two predicates over the same conceptual set live in different files (different generators, different validators, different SQL queries), they will drift. Drift becomes visible when one predicate says SHOW and another says HIDE for the same row — but it's often invisible until someone runs a query that crosses the boundary.
+
+In S133, three different "is this event visible?" predicates coexist:
+- The brief author's **interactive SQL** for diagnostics: `WHERE (type != 'exhibition' OR end_date IS NULL OR end_date >= date('now')) AND (type = 'exhibition' OR start_date >= date('now'))`
+- The production **upcomingEvents filter** in `src/generate-site.ts:174-186`: falls back to `startDate >= today` when `event.endDate` is falsy
+- The production **classifyEventLifecycle** in `src/utils/event-lifecycle.ts:50`: same fallback shape (Tier 1 compliant)
+
+The interactive SQL diverged from production by treating `end_date IS NULL` as "always visible." The production predicates agreed with each other but not with the SQL. The brief's "noindex on visible events" diagnostic was actually a divergence between the *measurement* (the brief's SQL) and the *production behavior* (the code's predicates) — not between two production behaviors.
+
+The pattern generalizes beyond visibility:
+- Validators vs build code (does the validator check the same thing the build emits?)
+- Filters vs sorters (does the listing sort match the filter's notion of "current"?)
+- Sitemap vs RSS vs hub-listing (do all three surfaces agree on "publishable"?)
+- DB constraint vs application validation (does the DB allow what the app rejects, or vice versa?)
+
+Defense — at diagnostic time:
+- When investigating a discrepancy ("X says visible, Y says hidden"), list ALL predicates over the same conceptual set, not just the two named. There may be a third or fourth.
+- Treat hand-written diagnostic SQL as a suspect, not an authority. The production predicate is the truth; SQL approximations are convenience.
+- For exhibitions specifically (Tier 1): `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) < date('now')` — and JS code paths must match: `(isExhibition && event.endDate) ? event.endDate : event.startDate`. Empty string ≠ NULL at the SQL layer but truthy-checks treat them the same; this asymmetry is itself a drift surface.
+
+Defense — at design time:
+- When a conceptual set has more than one gate, extract the predicate into a shared module (function or view). The two production predicates in S133 could share a single helper `isCurrentlyVisible(event): boolean`. The shared helper makes drift impossible by construction.
+- If extraction isn't done, add a property-based test that exercises EVERY predicate pair over a shared dataset and asserts they agree on the same row classifications. The test fails when drift opens, not when someone notices.
+
+Earned from: S133 spent significant verification time tracing what turned out to be a measurement-vs-reality mismatch. The production code was self-consistent; the brief's SQL was the outlier. The cost: most of one maintenance slot. The fix: never coded — the divergence was external to production. The defense (extract a shared helper) would have prevented even the *possibility* of this kind of drift between the two production predicates.
+
+Connects to: `mistakes.md` S133 "Brief inflation" (the planner-side failure mode that surfaced this); `decisions.md` Tier 1 rule (`.claude/CLAUDE.md` exhibition end_date convention); `specs/s133-noindex-visibility-divergence.md` for the worked example.
+
+### Pattern: Irreversibility ≠ safety in default-flip decisions for destructive ops (S133, 2026-05-11)
+
+First observed: S133 Item 5 orphan-sweep default decision.
+Use when: Evaluating whether a destructive default (delete, overwrite, force-publish) should be flipped from opt-in to default-on, or vice versa.
+
+Canonical insight: "Safer" is symmetric framing — every default has a "safer" reading from one direction and a "less safe" reading from the other. The actual axis is asymmetric: **recoverability on false positive**.
+
+- A destructive op that's opt-in: false positive cost = nothing happens (you have to opt in to trigger), correct activation cost = manual `rm` (cheap, recoverable from git/backup).
+- A destructive op that's default-on: false positive cost = silent deletion of a file that should have been kept, no signal until someone notices it's missing. Correct activation cost = the op happens automatically.
+
+The right question isn't "which is safer?" — both are "safer" against different failure modes. The right question is: "if this is wrong, how do we find out, and how much work is the recovery?"
+
+For the orphan-sweep specifically (`src/generators/orphan-sweep.ts`):
+- `SWEEP_ORPHANS=1` default would silently delete files in `dist/` that aren't generated by the current build.
+- False-positive failure mode: a hand-edited file (GSC verification token, `_redirects`, `.og-cache.json`) gets deleted without warning. Detection: only when GSC verification fails on next check, or when Netlify routing breaks. Recovery: locate the original, re-add it, push redeploy.
+- Opt-in failure mode: stale files accumulate. Detection: any time someone notices. Recovery: manual `rm`, or one-time `SWEEP_ORPHANS=1` run.
+- The recovery cost asymmetry is the deciding factor — accumulation is observable and reversible; silent deletion is neither.
+
+The pattern generalizes:
+- Force-push defaults
+- Cache-invalidation defaults
+- Auto-merge defaults
+- Schema-migration "drop column" defaults
+- Cleanup-on-build defaults (the orphan-sweep family)
+
+Defense — when proposing a default flip on a destructive op:
+- Don't ask "which is safer?" Ask "if this default is wrong, what's the detection latency, and what's the recovery work?"
+- Compare the two failure-mode recovery profiles. Symmetric "safety" framings smuggle in a preference that should be made explicit.
+- Apply the "register the un-swept surface" pattern from S133: when the destructive op has a known-good carve-out (legitimate non-build artifacts in `dist/`), explicit allowlist beats implicit trust. Allowlist entries should carry provenance + removal trigger so they don't accumulate into bit rot.
+
+Defense — when proposing reactivation triggers:
+- Don't say "later" or "when we're ready." Specify the conditions whose joint truth means activation: (a) allowlist stable for N days, (b) upstream dependency migrated, (c) related workstreams shipped. The trigger should be checkable without re-debating the original decision.
+
+Earned from: S133 Item 5's brief presented A/B/C options framed as "simplest / preserves incrementals / defer." The user's reframe surfaced that "preserves incrementals" was symmetric framing for "less likely to silently delete." The actual decision: keep opt-in, register the carve-out explicitly, set a three-condition reactivation trigger. Connects to S122 / S125 / S127's "assumption-from-snapshot" theme — defaults are assumptions made permanent; their costs are paid by future operations.
+
+Connects to: `decisions.md` S133 "Orphan-sweep `SWEEP_ORPHANS` remains opt-in" (the worked instance); `src/generators/orphan-sweep.ts:42-83` (`KNOWN_NON_BUILD_ARTIFACTS` allowlist); S132 "manual cleanup precedent" (institutional behavior this pattern is now formalizing).
+
+### Pattern: Maintenance batches reframe ~30–40% of items under verification — budget for it (S133, 2026-05-11)
+
+First observed: S133 (3 of 5 items reframed under verification: Items 2, 3, 5).
+Use when: Planning multi-item maintenance batches where each item came from a different observation source (GSC report, CI signal, user-reported bug, audit finding).
+
+Canonical insight: Maintenance items aggregate observations from multiple snapshots in time. Each observation was true when made; some are no longer true. Verification will find this. Budget for reframing as a session feature, not a session bug.
+
+Empirical rate (one data point, but consistent with prior briefs):
+- S132 brief: 1 of 3 defects reframed under verification (defect-D was correctly diagnosed; defects-A and -C had partial verification but the fix scopes survived).
+- S132' brief: 1 of 1 reframed (dual-emission premise didn't reproduce; the validator-depth fix that came out of the investigation was the actual ship-worthy work).
+- S133 brief: 3 of 5 reframed (Items 2/3/5 working as designed; Items 1 and 4 had real work).
+
+Aggregate: roughly a third to a half of maintenance items reframe. The cost of verification is the cost of catching this — and it's lower than the cost of executing against a misframed premise.
+
+Defense — at planning time:
+- Don't tighten time estimates to compensate for past overruns. The overrun came from reframing, not from execution. Reframing is the *correct* response when reality has moved; cutting verification budget defeats the protocol.
+- Add an explicit "verification phase" to maintenance plans, sized at ~20% of total session budget. The verification phase outputs may be (a) "premise holds, proceed" or (b) "premise refuted, reframe." The plan should be ready for both.
+- Frame the session deliverable as "items closed OR items reframed with specs." A reframed item is a closed maintenance item — just with the close being "no fix needed; here's why" instead of "fix landed."
+
+Defense — at session-log time:
+- Record both kinds of closure with equal status. "Reframed" should not look like "failed." Reframings prevent waste; they're observably valuable.
+- Track the reframing rate over time. If it drops, briefs are getting more reliable; if it climbs, the planner-side pre-flight protocol needs strengthening.
+
+Earned from: S133 maintenance batch was framed as ~50 minutes on 5 bounded items. Landed at ~75 minutes on 5 items, 3 of which reframed (Items 2/3/5 all "working as designed"). The reframing time was not waste — it produced 3 specs that prevent future sessions from re-running the same investigations. Without reframing, the session would have applied "fixes" to non-bugs.
+
+Connects to: `mistakes.md` S133 "Brief inflation" (the upstream failure mode this pattern is the institutional acceptance of); `mistakes.md` S132' (the planner-side pre-flight protocol that, when paid, drives the reframing rate down).

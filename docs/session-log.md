@@ -5502,3 +5502,39 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### Session 133 — Maintenance batch: close five bounded items (2026-05-11)
+
+**Plan:** Close five 🟡 items inherited from S131/S132 in one session: (Item 1) `dist/contemporary-dance-dance.html` duplicate-word bug; (Item 2) 7 visible events carrying noindex; (Item 3) 29 events missing from `dist/`; (Item 4) 40 pre-existing schema warnings to classify; (Item 5) build-pipeline orphan-sweep decision. Pre-flight verification per S132' protocol: each premise checked against actual repo state before planning. Plan file: `/Users/chrism/.claude/plans/session-goal-close-five-imperative-turtle.md`.
+
+**What happened:**
+- **Premise verification reframed 3 of 5 items.** Item 2 ("7 noindex on visible") → 3 events, all working-as-designed under 45-day retention (page exists with noindex, excluded from listings). Item 3 ("29 missing") → 0 events missing in error; the 36-event DB↔build gap is `getHardStopExcludeIds()` at `src/db/database.ts:266-298` correctly excluding events with A0-tier `event_concerns` (entity-resolution-uncertain, venue-mismatch, date-conflict, ticket-merchant-unverified). 12605 DB − 12569 build = 36 (exact match). Item 5 ("orphan-sweep A/B/C") → sweep already implemented at `src/generators/orphan-sweep.ts`; decision narrowed to "keep `SWEEP_ORPHANS` opt-in + register the un-swept legitimate-file surface."
+- **Items 1 and 4 had real work.** Item 1: `src/utils/urls.ts:10-11` joined `genre.toLowerCase()` + `type` without dedup. Guard 6 sweep widened scope from 1 file (`contemporary-dance-dance.html`) to 28 files (added `outdoor-cinema-cinema-*` family across base/time-variant/price-prefix combinations). Fix at `src/utils/urls.ts:11-15` adds a trailing-token comparison: skip the type push if it equals the last token of the genre slug. 8 unit tests in `tests/utils/urls.test.ts` cover both vocabulary pairs + known-limit case (non-trailing overlap not deduped). Manual `rm` of all 28 stale files. Item 4: 42 warnings (slight uptick from 40 due to new events) classified from `logs/pipeline-2026-05-11.log` and `/tmp/s133-build.log`: location.geo missing (40), streetAddress empty (23), CollectionPage.itemListElement empty (2), FAQPage JSON-LD missing (2). By event type: concert 19, dj_set 19, theater 2, rest 100%. Distribution matches GSC's "6 non-critical" — validator-depth gap closure from S132' is paying dividends.
+- **Three reframed-item specs written** so the next session inherits diagnostic work instead of redoing it: `specs/s133-pipeline-9day-gap.md` (the "outage" that wasn't), `specs/s133-noindex-visibility-divergence.md` (the predicate divergence between brief's SQL and production code), `specs/s133-schema-warnings-inventory.md` (the 4-category warning classification with bundle suggestion).
+- **Allowlist registered**: 6 known legitimate non-build artifacts (GSC verification token, `robots.txt`, `.og-cache.json`, three favicons) added as `KNOWN_NON_BUILD_ARTIFACTS` at `src/generators/orphan-sweep.ts:42-83`. Documentation form — not yet wired into sweep logic; wiring is part of reactivation work. Each entry carries provenance + removal trigger.
+
+**Verified:**
+- `bun test tests/utils/urls.test.ts` → 8 pass / 0 fail.
+- `bun test tests/generators/orphan-sweep.test.ts` → 14 pass / 0 fail (after allowlist addition).
+- `bunx tsc --noEmit` → zero output (urls.ts, urls.test.ts, orphan-sweep.ts all clean).
+- `ls dist/ | grep -E 'contemporary-dance-dance|outdoor-cinema-cinema'` → empty (all 28 stale files removed).
+- `bun run build` → 6304/6346 pages valid (99%), 42 warnings, 0 errors. 5762 pageable events (334 upcoming + 5428 past-active).
+- DB-vs-build gap confirmed: `sqlite3 data/events.db "SELECT COUNT(DISTINCT event_id) FROM event_concerns WHERE concern_type IN ('entity-resolution-uncertain','venue-mismatch-or-unknown','date-conflict-or-unparseable','ticket-merchant-unverified');"` → 36 (matches DB - build gap exactly).
+
+**Tests:** +8 net (8 new unit tests in `tests/utils/urls.test.ts`). No deletions.
+
+**Status:** Not deployed. The Item 1 fix is a buildtime change that takes effect on next pipeline run; daily-automated.sh `netlify deploy --prod --dir=dist` will pick it up. No critical-path production change in this session.
+
+**Learnings (full entries in cross-referenced files):**
+- `mistakes.md` S133 ×2: (a) brief inflation pattern — 12.5× on missing-events count (29→364 reported, actually 0), 2.3× on noindex count (7→3, all working-as-designed); 7th occurrence in the verify-the-premise series (S71, S82, S95, S100b, S101a, S132', S133). Adds three concrete reproductions for any maintenance brief touching dist/ or DB-vs-build counts. (b) Guard 6 mid-flight scope expansion on composition bugs — vocabulary-overlap bugs have as many manifestations as overlapping pairs exist.
+- `patterns.md` S133 ×3: (1) Predicate divergence between independent gates over the same conceptual set — generalized from visibility-filter / lifecycle-classifier pairing, with extract-a-shared-helper as the structural defense. (2) Irreversibility ≠ safety in default-flip decisions for destructive ops — "recoverable on false positive?" is the actual axis, not "which is safer?". (3) Maintenance batches reframe ~30–40% of items under verification (S132: 1/3, S132': 1/1, S133: 3/5) — budget verification phase as session feature, not bug.
+- `decisions.md` S133 ×1: orphan-sweep `SWEEP_ORPHANS` remains opt-in. Three-condition reactivation trigger: (a) allowlist stable 30 days, (b) GSC verification moved to build pipeline, (c) Sprint 1 Offers + Παναθήναια + subgenre consolidation shipped.
+
+**Open items:**
+- **Build-freshness active alert** (>24h since last successful deploy). Triggered by S133's investigation revealing that `dist/` mtime is unreliable for outage detection (`writeIfChanged` keeps mtimes stable when content doesn't change). Owner: Dev Planner. No deadline; size estimated at one session. Not deferred — open work.
+- **Empty-string end_date normalization** (data hygiene). All 3 of the noindex-investigation events have `end_date = ''` rather than SQL NULL. Predicates that use `IS NULL` and predicates that use truthy/falsy treat them differently. Either normalize at write time or update all predicates. Logged as future cleanup; not blocking anything today.
+- **Hard-stop summary in build log** (visibility). Currently 36 events are silently excluded by `getHardStopExcludeIds()` with no summary in the build output. A one-line summary near "Loaded N events from SQLite" would prevent the next "missing events" investigation. One-liner change at `src/generate-site.ts:156-160`. Small, but not for this session.
+- **Dev-Planner pre-flight protocol structural enforcement** still open from S132'. Now 7× pattern occurrence with S133. Same text-based defenses; structural defense (brief template, hook, or planner role change) remains the open question.
+- **Schema-warnings follow-up sessions** (from `specs/s133-schema-warnings-inventory.md`): Session A — venue data backfill (40 geo + 23 address, likely overlapping). Session B — hub template fixes (4 hubs: 2 empty CollectionPage + 2 missing FAQPage).
+
+---
+
