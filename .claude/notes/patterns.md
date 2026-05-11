@@ -4033,26 +4033,26 @@ plus the hub-emission fan-out; production baseline is 11,522 across
 incomplete. Mitigation: increment semantics are a required field in
 any plan that prescribes a counter.
 
-### Pattern: Repro-grep the fix surface, not just the defect premise (S135, 2026-05-11)
+### Verify-the-premise protocol — two-shape split (S135)
 
-First observed: S135 pre-plan brief prescribed editing `config/athens-venues.json` for `lat/lng/streetAddress` fields. Verification phase grepped the schema and found those fields don't live in `athens-venues.json` (it's a location whitelist), don't live in `venue_context` (no geo columns), and aren't populated by anything in the seed path. They live on `events.venue_lat / venue_lng / venue_address` and depend on an enrichment populator whose web-search path is a TODO. Seventh recorded instance of a plan that names an edit target without grep-verifying the target holds the data.
-Use when: Authoring or reviewing any session plan that names a specific file, table, column, or function as the surface where a fix will be applied.
+The "repro-grep the defect premise" protocol (banked S132') and the "repro-grep the proposed fix surface" extension (banked S135) cover two adjacent failure modes that have distinct triggers, distinct mitigations, and distinct evidence shapes. Treating them as one pattern produces wider checks than needed in some cases and narrower checks than needed in others. Split into two named patterns:
 
-Canonical insight: The S132' protocol established "repro-grep the defect premise" — verify the bug exists by reproducing it from the actual codebase before planning. This extends the protocol with a second verification axis: **repro-grep the proposed fix surface** before locking in an approach. The defect can be real AND the proposed fix surface can be wrong. The wrong-surface plan looks correct on the page (it names plausible files; it cites plausible columns) but evaporates on first contact with the codebase, costing the session 20–40 minutes of mid-stream re-planning and producing a smaller deliverable than the original scope promised.
+**Pattern A: Wrong-edit-surface verification.**
+- *Trigger:* Plan names a specific file, function, table, or config key as the edit target.
+- *Failure mode:* The named target exists, but the data/code being modified actually lives elsewhere. Plan looks coherent; execution would touch the wrong place.
+- *Mitigation:* `grep` for the actual data or code location before locking the edit target. Confirm the named target is in the read-write path for the property being changed.
+- *Evidence shape:* Static — a grep against `src/`, `scripts/`, and `config/` will reveal whether the named target is in scope.
+- *Cost:* 30 seconds.
+- *Instances:* S71, S82, S95, S100b, S101a, S132', S135 geo-coverage path. Seven instances pre-S135.
 
-This pattern also extends to suspected-broken functions: **run the function before assuming it's silent.** S135 Step 3 was framed around fixing "silence" in `printHardStopSummary()`. Exploration noted the function "outputs nothing if table missing or rules disabled" — true as worst-case-under-degraded-inputs, false as current-state. Running the build showed the function emits the full content goal already (S110f shipped it). Reading code paths describes possible behaviors; only running them reveals state.
+**Pattern B: Stale-premise verification.**
+- *Trigger:* Plan describes a current bug, missing behavior, or absent capability — "X doesn't emit Y," "Z is silent," "W needs to be added."
+- *Failure mode:* The described state was true at premise-capture time but no longer holds. A successor session shipped the fix silently. Plan asks the executor to build a thing that already exists.
+- *Mitigation:* Run the suspected-broken function, or observe the suspected-absent behavior, before prescribing the fix. Execution probe, not grep — the bug may be in the runtime path, not the source.
+- *Evidence shape:* Dynamic — requires invoking the code path and observing actual output, not just reading source.
+- *Cost:* 30–60 seconds (one build run, one query, one curl).
+- *Instances:* S135 hard-stop summary path. First named instance; previously bundled under Pattern A.
 
-Defense — when authoring a plan:
-- Before naming `path/to/file.ext` as the edit target, grep for the field/function/data the fix needs. If grep shows the target doesn't hold what the plan assumes, the plan is wrong before it leaves draft.
-- Before naming a function as "needs to be added / needs to emit X," check whether it already exists and what it currently emits. The build output (or test output, or runtime trace) answers this — code-read does not.
-- When the plan brief was authored by an upstream planner project, **the executor still owes this verification** — the upstream may be operating from stale memory or correct-but-out-of-date docs.
+**When both apply.** A brief that names a specific edit target *and* describes a current bug needs both checks. Pattern A first (cheaper, static), then Pattern B (more expensive, dynamic). If Pattern A's grep reveals the named target doesn't exist or isn't in the read-write path, Pattern B becomes moot — the premise is misframed, not stale.
 
-Defense — when reviewing a plan:
-- Treat any plan that names a specific file/function as the edit target with suspicion proportional to how confidently the plan asserts the surface. "Edit `config/athens-venues.json`" deserves the same verification as "the bug is on line 42 of foo.ts."
-- Ask: did the author run the suspected-broken thing? Did they grep for the field they're about to add? If unclear, those are the first two acts of execution.
-
-Earned from: S135 pre-plan brief prescribed `config/athens-venues.json` as the fix surface for geo/streetAddress warnings; reality is event-level columns populated by enrichment. Same session, Step 3 prescribed adding emission for a function that already emits the full content goal. Both errors caught in the verification phase, before locking the plan; net cost was ~30 minutes of mid-plan reframing and produced two specs (`s135-geo-coverage-spec.md`, `s135-step-0-verifications.md`) that route the real fix correctly.
-
-Sprint count: seventh recorded instance of wrong-surface plans. The S132' "repro-grep the defect premise" protocol catches premise errors but does not catch fix-surface errors. This extension closes the gap.
-
-Connects to: `mistakes.md` S132' (the upstream pre-flight protocol this extends); `mistakes.md` S133 "Brief inflation" (a related failure mode where the brief sized the work wrong); `specs/s135-step-0-verifications.md` (the worked S135 instance with the Megaron pattern and the `printHardStopSummary` triage).
+**Recurrence count.** Pre-S135, the combined pattern fired 7 times (all Pattern A shape). S135 added one Pattern A instance and one Pattern B instance, bringing the verify-the-premise series to 9 total. Pattern B is the rarer shape; Pattern A is the dominant recurrence and is the one driving the workflow-side mitigation in the Dev Planner pre-brief checklist.

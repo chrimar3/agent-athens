@@ -5604,41 +5604,38 @@ to patterns.md when next institutional batch lands.
 
 ---
 
-### Session 135 — Schema warnings triage + hard-stop summary (already shipped) + freshness alert spec (2026-05-11)
+### Session 135 — S133 Queue Triage: Geo Coverage Spec + Hard-Stop Verification + Freshness Alert Spec
 
-**Plan:** Close three items inherited from S133's open queue: (Item A) classify the geo + streetAddress schema-warning gaps and route them; (Item B) ship a hard-stop summary so future "missing events" investigations don't re-derive the `event_concerns` discovery; (Item C) file a build-freshness alert spec preventing a recurrence of the S133 9-day silent outage. Maintenance batch. Per the new S132'-extension protocol, the verification phase grep'd the proposed fix surfaces before locking the plan — and both Item A and Item B's premises evaporated under contact with the repo. Plan file: `/Users/chrism/.claude/plans/session-goal-close-idempotent-backus.md`.
+**Plan:** Close three S133-queue items (schema warnings A+D inventory, hard-stop summary B, build-freshness alert C) as a Minor-stream maintenance batch ahead of Παναθήναια ingestion S136.
 
 **What happened:**
-- **Pre-plan brief carried two wrong-fix-surface assumptions; verification caught both before execution.** Item A's brief prescribed editing `config/athens-venues.json` for lat/lng/streetAddress. Schema check showed those fields don't live there (`athens-venues.json` is a location whitelist, not a geo source), don't live in `venue_context` (no geo columns), and aren't populated by the seed path. They live on `events.venue_lat / venue_lng / venue_address`, populated by enrichment, where the web-search populator at `src/enrichment/venue-context.ts:95-103` is a TODO. Item B's brief framed `printHardStopSummary()` as silent — running the build showed it already emits the S133 Insight 2 content goal in full (the S110f section: total + per-concern-type + per-source + drift + threshold warnings). Both errors caught in Phase 1; plan reframed via AskUserQuestion before locking. Net cost ~30 minutes mid-plan; produced sharper specs as a side effect.
-- **Item A reframed to diagnostic-only + spec.** Corrected SQL diagnostic ran against `events` table with Tier-1 exhibition-aware date filter (`COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`). Findings: 84 events missing `venue_lat` (DB view) vs 40 in build summary (pageable+indexable subset); 70 missing `venue_address` vs 23 in build. **streetAddress is a strict subset of geo at the field level** — 70 missing both, 14 missing geo only (mostly Megaron), 0 missing address only. Classification: MIXED, head-heavy. Top 5 venues = 29/84 (35%); Megaron Mousikis alone = 14/84 (17%). Long tail of 24+ singleton venues; one unfixable case (`TBA`, 4 events); one venue-name dedup signal (`Θέατρο Βράχων Μελίνα Μερκούρη` vs `VRACHON THEATRE - MELINA MERKOURI`). **Megaron coverage-bug observation:** same venue has populated AND unpopulated event rows for identical address text — this is not data-availability but a populator-coverage bug; resolving it would close ~17% of the gap before any backfill.
-- **Item B closed as no-op; function works as designed.** `src/validators/completeness-reporter.ts:351 printHardStopSummary()` reads `event_concerns`, computes hard-stopped events from A0-tier YAML rules minus overrides, prints by-concern-type with threshold warnings, by-source breakdown for last-24h events, soft-flag breakdown, drift detection, kill-switch state. All of S133 Insight 2's content goal (excluded count + concern-type breakdown) is already in stdout. None of the plan's triage branches (3a migration-011 guard / 3b zero rows / 3c print path broken) fired. S135 makes zero edits to `completeness-reporter.ts`. Step 3 closes empty.
-- **Item C delivered as spec.** Three signals evaluated: (i) `origin/main` commit timestamp — wrong target, detects dev activity not pipeline; (ii) Netlify API last-successful-deploy timestamp — production-truth, the primary signal; (iii) wrapper-written success timestamp — wrapper-success signal, complements (ii). Recommended: layer (ii)+(iii), both >24h = real outage; either-alone reveals which half failed. Mechanism options listed without picking (launchd + webhook + Notification Center is tentative). Explicit non-coverage statement: alert does NOT detect partial deploys, stale-data-with-fresh-deploy, log-success-on-failure, or paused-scheduler scenarios. Reactivation trigger: next silent outage observed, or end of Sprint 3.
-- **Pattern banked: repro-grep the fix surface (S132' extension).** S132' protocol established "repro-grep the defect premise"; S135's two wrong-fix-surface assumptions show the protocol also needs to cover proposed edit targets and suspected-broken functions. Seventh recorded instance of wrong-surface plans. Pattern entry appended to `.claude/notes/patterns.md` with defenses for plan authors and reviewers.
-- **Split-out item resolved.** S135 plan referenced a "telemetry counter increment semantics" pattern from a bundled instruction; verification showed the entry already exists in `.claude/notes/patterns.md` (added in S134 follow-up). The accompanying `.claude/notes/decisions.md` 11,522 footnote is also already in place per S134's three-location pattern. No S135 work needed for the split-out item; the planner concern was about wording integrity, and the wording is already on disk.
+- Step 0 inventory verification: 40 geo / 23 streetAddress (vs S133 baseline 40/23 — no drift). CollectionPage and FAQPage warnings unchanged. Proceeded.
+- Step 1 geo diagnostic surfaced unexpected shape: Megaron has both populated AND unpopulated rows for the same venue. Not a simple coverage gap. Classification deferred to a successor diagnostic session.
+- Step 2 `specs/s135-geo-coverage-spec.md` filed. Routes three successor paths: Megaron coverage-bug diagnostic, top-venue SQL backfill (~10 venues), Enrichment Writer brief for `src/enrichment/venue-context.ts:95-103` web-search TODO.
+- Step 3 (hard-stop summary) **resolved as no-op.** `printHardStopSummary()` already shipped by S110f at `src/validators/completeness-reporter.ts:351` and already emits the full S133 Insight 2 content (excluded-event count + concern-type breakdown). The brief's "silence" premise was stale-knowledge.
+- Step 4 `specs/s135-build-freshness-alert-spec.md` filed. Layered (Netlify-API + wrapper-timestamp) signals recommended; alert mechanism options surfaced without picking.
+- Step 5 commit `c37764c00`. 5 files, 588 insertions, 0 code changes, 0 data writes. 2061 pass / 1 skip / 0 fail. Typecheck clean.
 
-**Verified:**
-- `bun run build` → 5762 pageable, 0 errors, 67 warnings across 4 categories matching S133 baseline exactly (40 geo / 23 address / 2 itemListElement / 2 FAQPage). Zero drift.
-- `sqlite3 data/events.db ".schema events"` → confirmed actual columns (`venue_lat`, `venue_lng`, `venue_address`); plan's `venue_street_address` and `venue` were invented names, caught before query execution.
-- DB gap query → 84 geo / 70 address with concentrated head (Megaron 14, top-5 = 29) and long tail of singletons.
-- Build output → `=== Hard-stop firing (S110f) ===` block present with: Hard-stopped events (lifetime): 39; by concern_type breakdown with threshold warnings for all 4 A0 types; per-source breakdown; soft-flags (timeliness-stale-risk, credential-redirect-applied, thin-context, fabrication-temptation-resisted, incomplete-write); validator config drift (none); kill switch ENABLED.
-- Spec files: `specs/s135-step-0-verifications.md` (Step 0 + Step 1 + Step 3 triage), `specs/s135-geo-coverage-spec.md` (architectural reality + classification + routing), `specs/s135-build-freshness-alert-spec.md` (5-section design doc) all readable and complete.
+**Surprises:**
+- **Two distinct verification failures caught at plan-write time, neither at execution time.** (1) Geo wrong-edit-surface: brief named `config/athens-venues.json`, reality is `events.venue_lat / venue_lng / venue_street_address` populated by enrichment; `venue_context` table has no lat/lng/address columns at all. (2) Hard-stop stale-premise: brief asked to fix a function that already ships with the requested behavior.
+- Megaron's mixed-coverage shape (populated AND unpopulated for the same venue name) implies a different bug class than "enrichment-never-ran." Diagnostic-shaped problem, not backfill-shaped. Reframes the cheapest 17%-gap close.
+- 4× HARDSTOP_FIRING_RATE_EXCEEDED warnings surfaced during build. Per-S110f over-tuning. Surface to gate-rule calibration owner — out of scope for this session.
 
-**Tests:** 0 net. No code changes this session; existing test suite untouched.
-
-**Status:** Documentation-only session. Three specs filed; one institutional pattern banked. No code or data writes. No deploy required.
-
-**Learnings (full entries in cross-referenced files):**
-- `patterns.md` S135 ×1: Repro-grep the fix surface (S132' extension). Plan-authoring discipline: before naming a file/function/column as the edit target, grep for the field/data the fix needs; before declaring a function silent, run it. Seventh wrong-surface plan in the verify-the-premise series.
-- The continuing trend from S133 (3/5 reframing) and S134 (6/6 reframing): S135 had 2/3 items reframed at the verification phase. The "verification-bottlenecked, not brief-bottlenecked" framing holds. The S132' protocol's structural enforcement remains the open lever.
+**Learnings:**
+- **Two adjacent verification failure modes, distinct mitigations.** Wrong-edit-surface (file exists, fix path wrong) is caught by grep. Stale-premise (problem already resolved) is caught by execution probe. Banked as separate patterns — see `patterns.md`.
+- **Eighth instance of the verify-the-premise series.** Pattern alone is no longer sufficient; the recurrence has structural shape. Workflow-side mitigation needed — see new Dev Planner pre-brief checklist.
+- **Successor sessions sometimes obsolete brief items silently.** S110f shipped Step 3's exact deliverable; the S133 inventory item wasn't updated to reflect it. Inventory items captured in one session and consumed in another need an execution probe at consumption time, not just at capture time.
 
 **Open items:**
-- **Megaron coverage-bug diagnostic** — why do some events for seeded venues fall through `venue_lat/lng` population? Cheapest first session if any geo backfill is prioritized; would close ~17% of the gap. See `specs/s135-geo-coverage-spec.md` §4 + Routing (A).
-- **Top-venue geo backfill** — SQL UPDATE on `events` rows for top concrete venues (excluding `TBA` and pending venue-name dedup). Manual coord lookup, ~30 sec/venue. See spec Routing (B).
-- **Enrichment Writer — implement `venue-context.ts:95-103` web-search TODO** — only path that closes the long tail systematically. Out of maintenance scope; needs its own session. See spec Routing (C).
-- **Venue-name deduplication** — `Θέατρο Βράχων Μελίνα Μερκούρη` vs `VRACHON THEATRE - MELINA MERKOURI` (and likely others). Affects multiple gap counts; surfaces as its own session.
-- **Build-freshness alert implementation** — `specs/s135-build-freshness-alert-spec.md` in queue. Reactivation: next silent outage observed, or end of Sprint 3.
-- **HARDSTOP_FIRING_RATE_EXCEEDED warnings** — build emits 4 over-tuned-rate warnings (entity-resolution-uncertain 22.2%, venue-mismatch-or-unknown 51.9%, date-conflict-or-unparseable 59.3%, ticket-merchant-unverified 22.2%). Pointer at `decisions.md S110f`. Not in S135 scope; surface to whoever owns gate-rule calibration.
-- **Dev-Planner pre-flight protocol structural enforcement** — still open from S132'. Now 8× pattern occurrence with S135. Same text-based defenses; structural defense remains the open question.
+- Megaron coverage-bug diagnostic (next-session candidate — most interesting unresolved problem)
+- Top-venue SQL backfill (~10 venues × 30 sec) — gated on Megaron generalizing or not
+- Enrichment Writer brief for `venue-context.ts:95-103` web-search TODO
+- Venue dedup: Θέατρο Βράχων Μελίνα Μερκούρη vs VRACHON THEATRE - MELINA MERKOURI (maintenance-item-sized)
+- 4× HARDSTOP_FIRING_RATE_EXCEEDED — surface to gate-rule calibration owner
+- Build-freshness alert implementation — reactivation-triggered, not queued for time
+- Telemetry items split out of S135 (instruction text not visible at plan time) — banking action pending
+
+**Commit:** `c37764c00` — pushed to origin/main, daily pipeline picks up on next run.
 
 ---
 
