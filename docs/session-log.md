@@ -5352,3 +5352,77 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### Session 128 — Triple diagnostic audit (dual after pre-flight): filter-correctness, indexing state, exhibition completeness
+
+**Plan:** Read-only triple audit. (A) Confirm or refute filter-correctness Tier 1 suspicion logged in S127 residuals. (B) Calibrate post-S90 indexing state ahead of May 18 spot-check. (C) Classify exhibition schema 34-pt completeness gap (63% → batch fix / systemic / architectural). Output `specs/s128-triple-audit.md` with classifications determining next-session shape.
+
+**What happened:**
+- **Audit C dropped at pre-flight.** Explore pass against current `data/build-completeness.json` showed exhibitions at `{total:24, pass:24, info:10, passRate:100}`. The brief's "63% / 34-pt gap" was stale. User decision: skip Audit C this session (running it would produce a tautological all-green report); INFO-tier findings queued for GEO Strategist prioritization brief; output renamed `s128-dual-audit.md`.
+- **Audit A re-framed at pre-flight.** Brief said the bug was "SQL `COALESCE` missing" at `filters.ts:50,91`. Actual code is TypeScript (`matchesTimeRange` on `Event` objects via `event.startDate` / `event.endDate`) — no `COALESCE` in `filters.ts`. SQL queries in the audit still served as quantification (database-level count of would-be-included exhibitions), only the fix-path label changed from "SQL" to "TypeScript end-date branch, mirror lines 43–46".
+- **Preamble caught dirty `data/build-completeness.json`** (post-build regeneration). Resolved via targeted `git stash push data/build-completeness.json`, popped at session end. Pattern earned and validated this session.
+- **Audit B (indexing):** IndexNow latest 2026-05-10T05:27Z, all 6 spot-check URLs HTTP 200, sitemap counts (events 6280, editorial 1226, venues 44) consistent. Manual fields `gsc_indexed` / `bing_indexed` empty for 2026-05-09 and 2026-05-10 — manual-update lag, not system failure. CSV's `sitemap_events=6570` vs file count `6280` = 290-row gap = CSV captured pre-build snapshot, not a fault.
+- **Audit A (filter-correctness):** Confirmed Tier 1. `dist/sitemap-editorial.xml` contains `/exhibition-tomorrow` and `/exhibition-next-month` (indexed surfaces, not just UI). Quantification: tomorrow window 0 buggy / 3 correct (3 silently dropped); next-month window 1 buggy / 2 correct (1 silently dropped). Total visible exhibitions = 9; 3/9 = 33% silent loss on tomorrow surface, 1/9 = 11% on next-month.
+
+**Surprises:**
+- **Stale-premise rescue.** The Audit C drop validated S128's pre-flight verification — without it, the audit would have run a tautological report against a number (63%) that had been resolved since the brief was drafted. Pattern candidate logged: "Stale-premise pre-flight rescue" (specialization of S127's "Briefs make falsifiable predictions" pattern, numeric-premise variant).
+- **Asymmetric bug pattern visible in source structure.** `today` branch (lines 43–48) does a typed dispatch — exhibitions use both `startDate` and `endDate`, non-exhibitions use only `startDate`. 4 of 6 branches do this correctly. Only `tomorrow` (50) and `next-month` (91) miss the exhibition path. The fix is two copy-pastes from sibling branches. Pattern candidate logged.
+- **Targeted-stash pattern earned.** Preamble's strict "working tree clean" assertion caught a derived build artifact. Permissive workaround would erode the guard's value over time; `git stash push <path>` preserved both strict-state assertion and working changes (popped at session end).
+
+**Verified:**
+- 0 source-code changes this session. `git status --porcelain` showed only `specs/s128-dual-audit.md` as added.
+- All classifications point to concrete next actions: A=🔴 Tier 1 confirmed (fix next session — bounded TypeScript edit), B=🟢 system healthy with manual-update lag flag (manual GSC/Bing reads needed before May 18 spot-check), C=closed no-longer-applicable.
+- Drift snapshot at top of audit doc documents both pre-flight drifts plus the dirty-tree preamble incident.
+
+**Tests:** N/A (read-only session).
+
+**Status:** Audit doc shipped as commit `7fc098498` (S129's S128-closeout batch). Output: `specs/s128-dual-audit.md`. Three pattern candidates queued for `patterns.md` (promoted in S129 post-session batch).
+
+**Open items:**
+- Audit A → bounded TypeScript fix session (S129).
+- Audit B → manual GSC/Bing UI reads + AI citation spot-checks before 2026-05-18 spot-check.
+- Audit C → INFO-tier findings (n=10) routed to GEO Strategist prioritization brief.
+- Institutional memory cleanup: `docs/known-issues.md` filter-correctness entry status refresh + Zero Indexed Pages refresh (deferred from this session's post-session batch, landed in S129's post-session batch).
+
+---
+
+### Session 129 — Fix Audit A confirmed Tier 1 (filter-correctness, exhibition endDate in tomorrow/next-month)
+
+**Plan:** Add the exhibition typed-dispatch to `src/utils/filters.ts:50` (`tomorrow`) and `:91` (`next-month`), mirroring the pattern at lines 43–46 (`today`). +2 regression tests in `src/utils/__tests__/filters.test.ts` covering running-exhibition × `tomorrow` and running-exhibition × `next-month` combinations. TDD: tests must fail on current `main` before the source edit.
+
+**What happened:**
+- **S128 closeout commit first.** S128's audit doc (`specs/s128-dual-audit.md`) was untracked at S129 preamble. Targeted-stash pattern doesn't fit (decisional output, not derivative artifact). User decision: commit as own S128 closeout commit before starting S129 — keeps history attribution clean. Commit `7fc098498`.
+- **Preamble's S128-pattern played out cleanly.** `data/build-completeness.json` dirty (post-S128 regeneration). Targeted stash push, popped at session end. Pattern validated on second application same week.
+- **Step 0b line numbers held** with no drift from S128's audit doc. `filters.ts:50` (`case 'tomorrow'`), `:91` (`case 'next-month'`), reference branches at 43–46 / 60–63 / 67–80 / 84–87 all as documented.
+- **Tests added first (TDD gate).** Two tests in the existing `Exhibition Tier 1` describe block (lines 215–303 had today / this-weekend / this-week / this-month + control). Inserted tomorrow + next-month in source-file order. Initial run: 2 fail (`Expected: 1, Received: 0`) — bug exercise confirmed. 25 prior tests pass.
+- **Fix applied via two surgical Edits.** `tomorrow` branch (lines 50–55): added 5-line `if (event.type === 'exhibition' && event.endDate) {...}` clause, returns `eventDate < tomorrowEnd && endDate >= tomorrowStart`. `next-month` branch (lines 91–94): mirror, returns `eventDate <= nextMonthEnd && endDate >= nextMonthStart` (closed window operator preserved). Both preserve their own comparison-operator style; `endDate.setHours(23, 59, 59, 999)` end-of-day extension matches sibling branches.
+- **Shotgun-surgery check (Guard 6).** Surfaced `src/generate-site.ts:178` as a parallel exhibition+endDate location — investigated: it's the *upcoming-events visibility gateway* filter, separate concern from `matchesTimeRange`, already correct, no scope expansion. Two-layer architecture: outer gateway admits running exhibitions, inner predicate (now fixed) decides per-time-window visibility.
+- **Post-fix verification:** filters.test.ts 27/27 pass; full suite 2003/2003 pass (1 skip); `bunx tsc --noEmit` clean. Local `dist/exhibition-tomorrow.html` shows 3 cards (was 0 pre-fix), `dist/exhibition-next-month.html` shows 1 (matches S128's predicted +3 and +1 deltas exactly).
+
+**Surprises:**
+- **S127 deploy-mechanism mistake recurred.** Brief specified `git push origin main` as the deploy step. Both `agent_athens_deploy_workflow.md` (in MEMORY.md) and `mistakes.md` S127 entry document "CLI-only deploys; git push does NOT auto-deploy" (`netlify.toml: command = "echo 'Deploy via CLI - no build needed'"`). Push succeeded; production stayed at 0 cards. Ran `netlify deploy --prod --dir=dist` after diagnosis. Logged as fresh mistakes.md entry (recurrence of S127's third mistake) — the defense documented in S127 ("cross-check deploy memory during plan-writing") failed at the brief-writing stage *and* at the plan-mode review stage. Both me and the user echoed `git push` without re-cross-checking.
+- **Daily pipeline ate the deploy-mistake cost.** Between session push and my redundant `netlify deploy --prod`, the daily pipeline (commits `f11c9cf92`, `706aab521` on 2026-05-11) ran, pulled the fix, built fresh dist/, and deployed itself. My subsequent `netlify deploy --prod --dir=dist` reported "CDN requesting 0 files" — local dist/ was byte-identical to what the pipeline had already shipped. The S127-recurrence cost no production downtime this time; the daily pipeline was the safety net.
+- **Date crossover during session.** Wall-clock advanced from 2026-05-10 to 2026-05-11 mid-session. Local dist/ was built against `tomorrow=2026-05-11`; post-deploy production resolves `tomorrow` to `2026-05-12` (daily pipeline rebuilt). Production card counts reflect a different "tomorrow" than the dist/ I built. Verification used non-zero-delta as the gate (robust to date drift) rather than specific counts (which would not have been).
+- **S31 historical context surfaced.** `known-issues.md:554–555` documents Session 31 as the original `matchesTimeRange` exhibition-endDate fix — applied to today / this-weekend / this-week / this-month, **missing tomorrow and next-month**. ~98 sessions between S31 and S129 silently dropped running exhibitions from those two windows. Strong evidence for the "asymmetric typed-dispatch = finishing-step gap" pattern; the original fix landed an incomplete copy-paste.
+
+**Verified:**
+- Pre-deploy production card counts (curl, 2026-05-10): `/exhibition-tomorrow`=0, `/exhibition-next-month`=0, `/tomorrow`=1, `/next-month`=63.
+- Post-deploy production card counts (curl, 2026-05-11): `/exhibition-tomorrow`=4, `/exhibition-next-month`=1, `/tomorrow`=4, `/next-month`=64. All target surfaces serve non-zero exhibitions; silent loss closed.
+- Test suite 2001 → 2003 pass (+2), 0 fail, 1 skip. `tsc --noEmit` clean. Single fix commit + single audit-doc commit on origin/main.
+
+**Tests:** 2003 pass / 1 skip / 0 fail.
+
+**Status:** Shipped. Commits `7fc098498` (S128 closeout) + `a009df2bc` (S129 fix). Production deploy confirmed via daily pipeline's own `netlify deploy` + redundant manual `netlify deploy --prod --dir=dist`. Production HTTP responses on all 4 target URLs match expected post-fix shape.
+
+**Learnings (full entries in cross-referenced files):**
+- `mistakes.md` S129: deploy-mechanism brief-vs-memory recurrence (the S127 defense failed at plan-writing AND at plan-mode review, both me and user echoed `git push` without cross-check).
+- `patterns.md` S129: (a) Targeted stash for build-artifact preamble trips — validated on second application; (b) Asymmetric typed-dispatch bug = finishing-step gap — with S31→S129 ~98-session silent-loss evidence as canonical instance.
+- `patterns.md` update to existing "Briefs make falsifiable predictions" entry — added "numeric-premise sub-rule" via Stale-Premise Pre-flight Rescue (S128's Audit C drop).
+
+**Open items:**
+- Defense gap for brief-vs-memory deploy mechanism is now twice-documented (S127, S129). Promotion question for the user: is this a hook candidate (PreToolUse / UserPromptSubmit) that flags `git push origin main` when `netlify.toml` declares CLI-only? Filed as user-decision, not implemented.
+- Future refactor candidate (not S129 scope): the `if (event.type === 'exhibition' && event.endDate)` pattern now appears in 6 sibling branches of `matchesTimeRange` + the gateway in `generate-site.ts:178`. Extract to `isExhibitionRunningInWindow(event, start, end)` helper if a third use case emerges or if a different bug surfaces in one of the six.
+- Refresh `docs/known-issues.md` "Zero Indexed Pages" with S128 Audit B finding (Bing channel restored, manual GSC reads still needed). Done in this post-session batch.
+- Close `docs/known-issues.md` filter-correctness entry with S129 resolution. Done in this post-session batch.
+
+---
+

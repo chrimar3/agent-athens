@@ -3693,8 +3693,8 @@ test "$(git rev-parse HEAD)" = "$(git rev-parse origin/<branch>)" \
 ```
 Run this **before** any session-work that includes git commands. Sequential `&&` short-circuits to surface the first failure. Failure → STOP, do not run session steps from a contaminated environment.
 
-### Pattern: Briefs make falsifiable predictions; verification includes the brief's own predictions (S127, 2026-05-10)
-First observed: Recurring across S71, S82, S95, S100b, S101a, S127.
+### Pattern: Briefs make falsifiable predictions; verification includes the brief's own predictions (S127, 2026-05-10; numeric-premise sub-rule added S128, 2026-05-10)
+First observed: Recurring across S71, S82, S95, S100b, S101a, S127, S128.
 Symptom: A brief asserts "the audit found X cornerstones, Y is gated, Z drift sites at lines L1-L2." The executor takes those as given, plans against them, and only at implementation time discovers the assertion was wrong. Plan invalidates mid-execution. S127 specifically: brief said 7 cornerstones, only 4 existed; brief said gating-block at lines 474-493, actual was 464-489; brief said `hub-page.ts:325/589` were drift sources, actual function was `buildPageMetadata` in `urls.ts:109`.
 Cause: Briefs are written from a snapshot — Phase 1 reconnaissance ran sometime before, code changed since, or the brief author misread the source. Treating predictions as facts creates a build on a foundation that may have shifted.
 Defense:
@@ -3702,6 +3702,8 @@ Defense:
 - Specifically: re-grep file:line references; cross-reference slug lists against canonical configs; verify type signatures by reading the function body.
 - The cost of verifying the brief's predictions is small (a few minutes of `Read`/`grep`); the cost of building on wrong predictions is rework + plan thrash + sometimes reverted commits.
 - This pattern earns its slot when a brief's framing would have triggered a false stop-rule or sent the implementation in a wrong direction. S127 hit both (false Class B stop, scope assumed 7 not 4).
+
+**Numeric-premise sub-rule (S128, 2026-05-10 — Stale-Premise Pre-flight Rescue):** When a brief's premise is a *number* drawn from project memory — "63% pass rate", "n=9 sample", "34-point gap", "still failing at X events/day" — the verification has higher leverage than usual. A drifted file:line just causes re-grep; a drifted *premise* number can make the entire session tautological. S128 caught this at pre-flight: the brief's "63% pass rate / 34-pt gap" cited exhibition completeness from a prior audit, but `data/build-completeness.json` showed `passRate: 100`. Running the audit anyway would have produced an "all green" report against a question that no longer existed. **Rule:** every audit-style session whose premise is a numeric claim from project memory must verify the number in Step 0, before any diagnostic SQL or grep runs against it. The check is one `jq`/`grep`/`sqlite3` call. If the number has moved, ask the user whether the session still has a purpose before continuing — don't just adjust the methodology.
 
 ### Pattern: Sibling-project CLAUDE.md pollution via permissive un-ignore rules (S127, 2026-05-10 — earned earlier, formalized in this session's post-session updates)
 First observed: Earlier sibling-leak incidents (pre-S127); earned during today's pre-session triage.
@@ -3726,3 +3728,44 @@ Defense — verify after wiring:
 - Two consecutive builds with no DB change must produce byte-identical `dateModified` for every gated surface (CORE INVARIANT).
 - Caveat: `writeHtmlIfChangedSync` strips `dateModified` before comparing old vs new HTML. If only `dateModified` changed, the file isn't rewritten — so observing the on-disk artifact is unreliable. The manifest is the canonical record; production HTTP response is the deployed truth.
 Connects to: `decisions.md` S101a (original /this-weekend gating decision); S127 helper-extraction-for-testability decision; `specs/s127-residual.md` (4 deferred items: unbuilt cornerstone references, filter-correctness gap, datafeed/search-index drift, per-event meta).
+
+### Pattern: Targeted stash for build-artifact preamble trips (S128, 2026-05-10; validated S129, 2026-05-11)
+First observed: S128 pre-flight; second application S129 preamble.
+Symptom: The defensive preamble (the "Multi-repo git-toplevel assertion" pattern above) requires `test -z "$(git status --porcelain)"` before any session work begins. A regenerated build artifact — `data/build-completeness.json`, `data/event-set-hashes.json`, sitemap snapshots, etc. — sitting dirty in the working tree trips this assertion even though it represents no decisional intent. The session can't proceed without resolving the dirty state.
+Cause: Some artifacts in this repo are checked-in snapshots that are also produced by `bun run src/generate-site.ts`. Any prior session that ran a build will leave them dirty until the next commit (often the next daily-pipeline commit). The preamble doesn't and shouldn't distinguish derived from authored content — that distinction belongs to humans, not bash predicates.
+Defense — targeted stash:
+```bash
+git stash push -m "<sessionN>-preamble: <file> regeneration" <path-to-artifact>
+test -z "$(git status --porcelain)" || { echo "still dirty"; exit 1; }
+echo "PREAMBLE OK"
+# ... run session work ...
+# At session end (before any post-session commits if the stash matters), one of:
+#   git stash pop                 # restore for next session
+#   git stash drop "stash@{0}"    # discard (working tree's newer build supersedes it)
+```
+- Pop, drop, or leave-parked the stash according to whether the artifact's pre-session state matters. S128 popped (pre-fix snapshot needed for closeout). S129 dropped (post-fix build had since regenerated the same file with newer content; pre-session version was stale and unwanted).
+- The targeted form (`stash push <path>`) is critical. A bare `git stash push` would scoop up genuine in-progress source edits if any existed.
+- Two stronger temptations to refuse:
+  - **Carving an exception into the preamble** ("skip dirty-tree assertion when the only dirty file is `data/build-completeness.json`"). Every exception erodes the guard. The preamble's value comes from being strict; permissiveness defeats it. The right defense is a per-incident decision, not a permanent rule.
+  - **Reactive commit of the artifact** to clean the tree. Treats build outputs as decisional content. Pollutes git history with non-decisional noise and creates a precedent that build artifacts get committed whenever a guard trips.
+Connects to: "Multi-repo environment requires explicit git-toplevel assertion" pattern above (this is the resolution path when that guard trips on a derived file).
+
+### Pattern: Asymmetric typed-dispatch bug = finishing-step gap (S128 diagnostic, S129 fix, with S31 historical evidence)
+First observed: S31 (the original `matchesTimeRange` exhibition-endDate fix) added a typed exhibition branch to 4 of 6 sibling time-window cases (today / this-week / this-weekend / this-month) but missed `tomorrow` and `next-month`. ~98 sessions of silent loss between S31 and S129 (the eventual catch + fix). S128 audit quantified the loss; S129 fix shipped.
+Symptom: A function dispatches on event/object type via `if (event.type === 'X' && event.someField) { ... }` inside multiple sibling branches of a `switch` or `case`-chain. Most branches have the dispatch correctly. A subset — usually 1 or 2 — are missing it. The buggy branches silently produce wrong results for the dispatched type, while non-dispatched types continue to work. Tests for the type-of-thing-being-dispatched-on exist for the *correct* branches but were never written for the *missing* branches. Bug is invisible to:
+- Unit tests on the buggy type+value combination (none exist for that case)
+- Unit tests on non-dispatched types (they're unaffected)
+- Schema completeness reporters (the dispatched type still passes its schema rules; only its *visibility* is wrong)
+- Smoke tests of the file as a whole (the file is mostly correct)
+Cause: Incomplete copy-paste at the time a sibling case was added. The case-author copied the structure of a working sibling but missed the typed-dispatch block. Or: the typed-dispatch was added to most siblings via a deliberate fix pass that missed some. Either way, the failure mode is **finishing-step** — not a knowledge gap, not a wrong mental model, but an incomplete iteration that left siblings out of sync.
+Diagnostic signature:
+- N siblings have a multi-line typed-dispatch block at the head of each case.
+- M < N siblings of the same shape are missing the block.
+- The buggy siblings have only the non-dispatched return path; the correct siblings have both the dispatch and the fallthrough.
+- Often: the corresponding test fixture *also* exercises N-M siblings but not the M buggy ones. The asymmetry mirrors on both sides — production code and test code drifted in lockstep, both incomplete.
+Defense:
+- When adding or modifying a `case`/sibling block, before committing run a diff of *all* sibling blocks against each other. If most siblings share a structural element your new/modified one doesn't, ask why.
+- When fixing a `case`/sibling block bug, the search isn't "does my fix work?" — it's "does every sibling of the same shape have this fix?" Grep for the dispatch pattern across all sibling branches. If coverage is asymmetric, you have more fixes to land.
+- For tests: ensure that every `case`/branch is exercised by at least one regression test against each type the function dispatches on. The S129 test gap was: `getTomorrowEvent()` was referenced ~7 times in `page.test.ts` (so tomorrow-window tests existed), but never against a *running exhibition* (a fixture combining `type === 'exhibition'` with `startDate < tomorrow < endDate`). The test fixture matrix had the same 4-of-6 asymmetry as the production code.
+Strong evidence for the pattern: known-issues.md:554–555 documents Session 31 as the original fix for this bug class — applied to today/this-weekend/this-week/this-month, missing tomorrow/next-month. ~98 sessions of latent silent loss in production until S128 caught it. The pattern's defense (audit every sibling, every type combination) would have caught the gap at S31 if it had existed then.
+Connects to: `mistakes.md` Session-31-era "Filtering out current exhibitions" entry (which documents the original bug class but not the asymmetric finishing-step nature); S129 fix commit `a009df2bc`.

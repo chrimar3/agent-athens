@@ -71,13 +71,12 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 ## Active Issues
 
 ### Filter-Correctness Gap — `/tomorrow` and `/next-month` Skip Running Exhibitions
-**Severity:** 🟡
+**Severity:** ✅ Closed
 **First seen:** 2026-05-10 (S127 Phase 1 reconnaissance)
-**Frequency:** Unknown until audit. Affects every render of combinatorial pages using the `tomorrow` or `next-month` time filters (`/concerts-tomorrow.html`, `/exhibitions-next-month.html`, etc.).
-**Symptoms:** Running exhibitions whose `start_date` precedes the filter window but whose `end_date` extends into it may be silently absent from the rendered card grid. Tier 1 invariant violation per `.claude/CLAUDE.md`: "Exhibitions use end_date, not start_date." `src/utils/filters.ts:50` (`tomorrow` predicate) and `:91` (`next-month` predicate) filter on `start_date` only — they do not apply the `COALESCE(end_date, start_date)` pattern that `/today`, `/this-week`, `/this-month` correctly implement.
-**Workaround:** None yet. Cornerstone hubs `/tomorrow` and `/next-month` don't exist as built directories so no cornerstone JSON-LD is affected; the same primitive feeds combinatorial pages where the impact lives.
-**Fix plan:** (1) Audit combinatorial-page exhibition coverage on production — spot-check `/exhibitions-next-month.html` and `/exhibitions-tomorrow.html` against the DB for known-running exhibitions. (2) If audit shows missing exhibitions, patch `src/utils/filters.ts:50` and `:91` to mirror the `today`/`this-week`/`this-month` `COALESCE` shape. (3) Add filter-level tests for the exhibition-end-date case across all five date predicates.
-**Status:** 🟡 Open, watch-only — surfaced during S127 reconnaissance, deferred to a follow-up session per S127 scope. Mirror entry in `specs/s127-residual.md` § 2.
+**Frequency (historical):** Affected every render of combinatorial pages using the `tomorrow` or `next-month` time filters from approximately Session 31 (when S31 introduced typed-dispatch for today/this-week/this-weekend/this-month but missed tomorrow/next-month) through S129's fix — roughly 98 sessions of latent silent loss.
+**Symptoms (historical):** Running exhibitions whose `start_date` preceded the filter window but whose `end_date` extended into it were silently absent from the rendered card grid. `src/utils/filters.ts:50` (`tomorrow`) and `:91` (`next-month`) compared `event.startDate` only and ignored `event.endDate`. Tier 1 invariant violation per `.claude/CLAUDE.md` ("Exhibitions use end_date, not start_date").
+**Resolution:** S128 audit quantified the silent loss (3 exhibitions dropped from `/exhibition-tomorrow`, 1 from `/exhibition-next-month` on 2026-05-10 against n=9 total visible exhibitions). S129 added the typed-dispatch block to both branches mirroring the existing correct shape at lines 43–48 (`today`) and 82–89 (`this-month`), plus 2 regression tests in `src/utils/__tests__/filters.test.ts`. Production verified: `/exhibition-tomorrow` 0 → 4 cards, `/exhibition-next-month` 0 → 1 card post-deploy.
+**Status:** ✅ Closed (2026-05-11) — S129 shipped via commit `a009df2bc`. The asymmetric-typed-dispatch failure mode is captured in `.claude/notes/patterns.md` § "Asymmetric typed-dispatch bug = finishing-step gap" with S31→S129 as the canonical evidence chain.
 
 ### Tier 2 Fallback Drift (Card-Image Wrapper Per-Type Gradients vs Spec)
 **Severity:** 🟢
@@ -189,10 +188,11 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Frequency:** Was: constant invisibility. Now: Bing recovered, Google low-coverage.
 **Symptoms (S90):** GSC 0 indexed, Bing 0 indexed, `site:agentathens.com` returned only GoDaddy parking page. AI citations 0/4 engines × 5 queries.
 **Symptoms (S90+17d, 2026-05-08):** GSC 7 indexed (3 not-indexed: 2× canonical-alt, 1× redirect). Bing 390 indexed, 1 impression. Google `site:` shows multiple Greek hubs + events. Bing `site:` shows 31 results. AI citations not yet remeasured.
+**Pipeline check-in (S128, 2026-05-10):** Audit B confirmed pipeline still emitting daily — IndexNow latest 2026-05-10T05:27Z (success 6346/6346, single batch, 0 failures), all 6 spot-check URLs HTTP 200, no STALE_ENRICHMENT markers in last 5 days of the visibility log. CSV manual fields `gsc_indexed`, `bing_indexed`, `ai_citations_count` empty for 2026-05-09 and 2026-05-10 — manual-update lag from Christos, not a system failure. Full Audit B section in `specs/s128-dual-audit.md`.
 **Root causes (S90 diagnosis):** (1) Netlify deploy failing 6 days → IndexNow cascade-failed, (2) ping-indexnow.ts silently hit 10K API cap without batching, (3) Domain migration (agentathens.netlify.app → agentathens.com, S84) reset indexing state.
 **Workaround:** None — partial visibility holds.
 **Fix plan:** S90 pipeline fix shipped (Phase A/B/C/D). 17-day delta confirms recovery on Bing channel. Google low-coverage (7/8,475 = 0.08%) is the residual gap, routed to GEO Strategist diagnostic vs patience decision. Full snapshot in `specs/s90-recovery-baseline-2026-05-08.md`.
-**Status:** Partial recovery confirmed (2026-05-08). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below).
+**Status:** Partial recovery confirmed (2026-05-08), pipeline still healthy at S128 check-in (2026-05-10). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below). May 18 spot-check needs Christos to read `gsc_indexed` / `bing_indexed` / `ai_citations_count` from the respective UIs and backfill the CSV columns for 2026-05-09 onward — comparison against the 2026-05-08 baseline requires the manual fields populated.
 
 ### Google Indexing Low Coverage
 **Severity:** 🟡
