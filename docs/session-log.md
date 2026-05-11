@@ -5469,3 +5469,36 @@ Read-only diagnostic across 7 work-tracking dimensions. Output: `specs/s126-stat
 
 ---
 
+### Session 132' — Validator-Depth Gap Closure (Multi-Block JSON-LD)
+
+**Plan:** Close the schema validator's first-match-only gap surfaced in S131's GSC inspection. Original brief framed this as fixing a dual Event JSON-LD emission ("every event page emits two blocks, one green and one broken with missing `location` + `Περιγραφή στα Αγγλικά` description leak"). Plan-mode diagnostic verification before code change pivoted the scope: dual emission was not reproducible in current dist, prod, or source. The validator-depth gap behind the GSC ↔ internal-validator disagreement was real and shippable as institutional infrastructure. Final plan: TDD red phase (3 in-validator unit tests + 2 output-layer regression guards), then patch `validateSchemaCompleteness` (line 86) and `validateVenueSchema` (line 362) to enumerate all JSON-LD blocks via the existing module-private `extractAllJsonLd` helper, then locate the Event-typed (or LocalBusiness-typed) block. Plan file: `/Users/chrism/.claude/plans/context-s132-banked-moments-declarative-koala.md`.
+
+**What happened:**
+- **Phase 1 diagnostic reconciliation** (Explore agents + dist grep + prod curl): 0 / 5762 local event pages had ≥2 JSON-LD blocks; production agentathens.com Royksopp page also served 1 block; `Περιγραφή στα Αγγλικά` did appear on 467 / 5762 pages, but in `<p class="edp-lang-notice">` body element, NOT inside JSON-LD. The brief's premise was inheriting an observation that no longer held. Surfaced to user via AskUserQuestion; user selected the "institutional fix only" path and added the framing direction for the mistakes.md entry as a Dev-Planner protocol change.
+- **Validator gap concretely confirmed**: `src/validators/schema-completeness.ts:86` (event pages) and `:362` (venue pages) both used `htmlContent.match(/<script…>/)` — JavaScript regex without the `g` flag returns the first match only. A parallel helper `extractAllJsonLd` (line 257) already existed and was used by `validateHubSchema`; the fix could reuse it without new infrastructure.
+- **TDD red phase**: 3 new unit tests in `src/validators/__tests__/schema-completeness.test.ts` under `describe("validateSchemaCompleteness — multi-block extraction (S132')")`: (a) two Event blocks → structural multi-Event error, (b) WebSite block first + Event second → validator locates the Event, (c) multiple non-Event blocks with no Event → clear "No Event JSON-LD found" error. All three failed against pre-fix code. Also added 2 output-layer regression guards in `tests/build/single-event-schema.test.ts` and `tests/build/no-bilingual-label-in-jsonld.test.ts` (skip-if-no-dist; pass today against clean dist; protect properties that must keep holding).
+- **Implementation**: `validateSchemaCompleteness` now uses `extractAllJsonLd` + filters for `VALID_SCHEMA_TYPES` membership, with three preserved pre-fix error paths (no script tag, parse failure on existing script tag, single-block fall-through for invalid `@type`). `validateVenueSchema` got the parallel treatment for `LocalBusiness`. All 3 new in-validator tests + 2 output-layer guards green.
+
+**Verified:**
+- Targeted: `bun test src/validators/__tests__/schema-completeness.test.ts tests/build/single-event-schema.test.ts tests/build/no-bilingual-label-in-jsonld.test.ts` → 79 pass / 0 fail.
+- Full suite: 2017 pass / 1 skip / 0 fail (was 2008 / 1 / 0 pre-session; +9 reflects 5 multi-block tests + Royksopp/Telenova/Christmas Theater × 2 output-layer guard combinations, with the build smoke run counted toward overall fixture coverage).
+- Typecheck: `bunx tsc --noEmit` zero output.
+- Build smoke: `bun run src/generate-site.ts` completed; schema-completeness summary "6298/6338 pages fully valid (99%), ✅ 6298 pass ⚠️ 40 warnings ❌ 0 errors". Zero "multiple Event JSON-LD blocks" or "No Event JSON-LD found" errors fired across the corpus — empirically confirms the brief's headline premise was not silently present anywhere in production output.
+
+**Tests:** +5 net (3 in-validator multi-block + 2 output-layer regression guards). No deletions.
+
+**Status:** Not deployed. This is a validator + test change with no production HTML output changes. Commits pending; deploys go via `netlify deploy --prod --dir=dist` (per `agent_athens_deploy_workflow.md`), but no deploy is needed specifically for this fix — the next scheduled pipeline build will pick it up.
+
+**Learnings (full entries in cross-referenced files):**
+- `mistakes.md` S132' ×2: (a) sixth defect-brief written against an unverified premise — escalated from instance log to a Dev-Planner pre-flight protocol change (rule: any defect premise from external-tool inspection must be checked against current dist/prod before the plan is written); (b) internal validator ↔ external validator disagreement is the diagnostic signal, and the internal validator is wrong by default in that disagreement.
+- `patterns.md` S132' ×1: validator-depth calibration against external ground-truth — enumerate all matching elements, distinguish "no member of asserted type" from "no JSON-LD at all", periodically cross-reference internal scores against Google Rich Results Test or equivalent.
+- `known-issues.md`: new 🟡 entry for `<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>` HTML body element on 467 Greek-locale event pages — separate concern from the validator fix, tracked for a future session.
+
+**Open items:**
+- The `<p class="edp-lang-notice">` Greek scaffolding notice on 467 event pages (known-issues.md entry above). Three candidate paths documented; decision deferred.
+- S131 dependent items from prior session-log entry remain open: (B) 29 visible-in-DB events missing from `dist/` build; (D) `dist/contemporary-dance-dance.html` duplicate-word bug; (H minor) 7 currently-visible events carrying `noindex`.
+- Dead-code cleanup candidate: unused `extractJsonLd` helper at `src/validators/schema-completeness.ts:43-51` — superseded by `extractAllJsonLd` after S132'. Out of scope for this session; surface for a future hygiene pass.
+- Dev-Planner pre-flight protocol change (mistakes.md S132' entry) is documented but enforcement mechanism is open — text-based defenses have failed 6× now; structural defense (a brief-authoring template that forces the verification step) is the candidate for next iteration. User-facing decision.
+
+---
+

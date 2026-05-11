@@ -842,3 +842,51 @@ describe('validateMicrodata', () => {
     expect(result.errors).toHaveLength(0);
   });
 });
+
+// ── validateSchemaCompleteness: multi-block extraction (S132' validator-depth fix) ────────────
+//
+// Before S132' the validator extracted only the first <script type="application/ld+json">
+// block per page (htmlContent.match). When a page emitted multiple blocks — e.g. a valid
+// Event followed by a broken Event, or a WebSite block before the Event block — the
+// validator missed the second block's structural problems and reported PASS while Google
+// reported critical issues. The institutional fix: enumerate all blocks, locate the
+// Event-typed one(s), validate that, and report "multiple Event JSON-LD blocks present"
+// as a structural error.
+
+function wrapMultiBlockHtml(...schemas: Array<Record<string, unknown>>): string {
+  const tags = schemas
+    .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
+    .join('\n');
+  return `<!DOCTYPE html><html><head>${tags}</head><body></body></html>`;
+}
+
+describe("validateSchemaCompleteness — multi-block extraction (S132')", () => {
+  test('two Event blocks: validator reports the structural multi-Event error', () => {
+    const valid = makeValidSchema();
+    const broken = makeValidSchema();
+    delete (broken as Record<string, unknown>).location;
+    const html = wrapMultiBlockHtml(valid, broken);
+    const result = validateSchemaCompleteness(html, 'dual-event', 'info');
+    expect(result.errors.some(e => e.toLowerCase().includes('multiple') && e.toLowerCase().includes('event'))).toBe(true);
+  });
+
+  test('WebSite block first, Event block second: validator locates and validates the Event', () => {
+    const website = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Agent Athens', url: 'https://agentathens.com/' };
+    const event = makeValidSchema();
+    delete (event as Record<string, unknown>).image;
+    const html = wrapMultiBlockHtml(website, event);
+    const result = validateSchemaCompleteness(html, 'website-then-event', 'info');
+    expect(result.errors.some(e => e.includes('WebSite'))).toBe(false);
+    expect(result.errors.some(e => e.includes('not a valid Schema.org event type'))).toBe(false);
+    expect(result.warnings.some(w => w.toLowerCase().includes('image'))).toBe(true);
+  });
+
+  test('multiple non-Event blocks, no Event among them: returns clear "No Event JSON-LD" error and does not cascade WebSite-as-Event errors', () => {
+    const website = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'x', url: 'https://x/' };
+    const breadcrumb = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [] };
+    const html = wrapMultiBlockHtml(website, breadcrumb);
+    const result = validateSchemaCompleteness(html, 'no-event-block', 'info');
+    expect(result.errors.some(e => e.toLowerCase().includes('no event json-ld'))).toBe(true);
+    expect(result.errors.some(e => e.includes('not a valid Schema.org event type'))).toBe(false);
+  });
+});

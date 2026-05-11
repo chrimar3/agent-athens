@@ -82,18 +82,51 @@ export function validateSchemaCompleteness(
   const warnings: string[] = [];
   const info: string[] = [];
 
-  // Extract JSON-LD
-  const match = htmlContent.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
-  if (!match) {
+  // S132' validator-depth fix: enumerate all JSON-LD blocks (not first-match),
+  // locate the Event-typed one, validate it. Surfaces dual-Event emission as
+  // a structural error so a future regression cannot ship silently with the
+  // green emitter masking a broken second emitter.
+  //
+  // Preserves three pre-fix error paths so existing diagnostics still surface:
+  //   - empty page → "No JSON-LD script tag found"
+  //   - script tag(s) present but unparseable → "Failed to parse JSON-LD"
+  //   - single block with invalid @type → falls through to the per-field
+  //     "@type is not a valid Schema.org event type" error
+  const rawScriptCount = [...htmlContent.matchAll(/<script\s+type="application\/ld\+json">/g)].length;
+  const blocks = extractAllJsonLd(htmlContent);
+
+  if (rawScriptCount === 0) {
     return { slug: eventSlug, errors: ['No JSON-LD script tag found'], warnings: [], info: [] };
   }
-
-  let schema: Record<string, any>;
-  try {
-    schema = JSON.parse(match[1]);
-  } catch {
+  if (blocks.length === 0) {
     return { slug: eventSlug, errors: ['Failed to parse JSON-LD'], warnings: [], info: [] };
   }
+
+  const eventBlocks = blocks.filter(b => {
+    const t = b['@type'];
+    return typeof t === 'string' && VALID_SCHEMA_TYPES.has(t);
+  });
+
+  // Zero Event blocks: two sub-cases.
+  //   - exactly one block → fall through and validate it (yields the existing
+  //     specific "@type is not a valid Schema.org event type" error path)
+  //   - multiple blocks, none Event-typed → emit the new structural error
+  if (eventBlocks.length === 0 && blocks.length > 1) {
+    return {
+      slug: eventSlug,
+      errors: [`No Event JSON-LD found on event page (${blocks.length} non-Event block(s) present)`],
+      warnings: [],
+      info: [],
+    };
+  }
+
+  if (eventBlocks.length > 1) {
+    errors.push(
+      `multiple Event JSON-LD blocks present (count: ${eventBlocks.length}) — schema.org expects one Event per page`,
+    );
+  }
+
+  const schema = eventBlocks[0] ?? blocks[0];
 
   // ── Mandatory fields (ERROR if missing) ──────────────────────────
 
@@ -359,15 +392,20 @@ export function validateVenueSchema(
   const warnings: string[] = [];
   const info: string[] = [];
 
-  const match = htmlContent.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/);
-  if (!match) return { slug: `venue:${venueSlug}`, errors: [], warnings: [], info: [] };
+  // S132' validator-depth fix (parallel to validateSchemaCompleteness): scan
+  // all JSON-LD blocks, locate the LocalBusiness one, validate it. Silent skip
+  // remains for pages with no JSON-LD at all (existing behavior — venue page
+  // without JSON-LD is not currently an error).
+  const blocks = extractAllJsonLd(htmlContent);
+  if (blocks.length === 0) return { slug: `venue:${venueSlug}`, errors: [], warnings: [], info: [] };
 
-  let schema: Record<string, any>;
-  try {
-    schema = JSON.parse(match[1]);
-  } catch {
-    return { slug: `venue:${venueSlug}`, errors: ['Failed to parse JSON-LD'], warnings: [], info: [] };
+  const localBusinessBlocks = blocks.filter(b => b['@type'] === 'LocalBusiness');
+  if (localBusinessBlocks.length > 1) {
+    errors.push(
+      `multiple LocalBusiness JSON-LD blocks present (count: ${localBusinessBlocks.length}) — schema.org expects one LocalBusiness per venue page`,
+    );
   }
+  const schema = localBusinessBlocks[0] ?? blocks[0];
 
   // Mandatory for LocalBusiness
   if (schema['@type'] !== 'LocalBusiness') errors.push(`@type is "${schema['@type']}", expected LocalBusiness`);

@@ -3818,3 +3818,25 @@ Defense — at diagnostic time (Phase 1, before implementation):
 Earned from: S132's brief specified `grep -rn ... src/ templates/ --include='*.ts'` for defect (C). That returned 2 generators. The third generator (`src/generators/hub-page.ts:568`) ALSO lived under `src/`, so a wider source-grep would have caught it — but the brief's filter-loop-vs-categories-loop framing primed the diagnostic to stop at 2. Output-layer test exposed the gap. Defense: at diagnostic time, also grep `dist/` and `dist/sitemap-*.xml` for the deprecated-form names — if any appear, count vs. source-grep emitters.
 
 Connects to: this file's "Diagnostic-first, TDD-second, dist-verify-third" cycle (where this pattern is the Phase 1 specialization); this file's "Briefs make falsifiable predictions" S127 entry (broader theme that this is a specialization of for grep-target completeness).
+
+### Pattern: Validator-depth calibration against external ground-truth (S132', 2026-05-11)
+
+First observed: S132' validator-depth gap closure.
+Use when: Designing or auditing an internal validator that scores the same artifact an external tool also inspects (Google Search Console, Lighthouse, browser dev tools, real crawlers).
+
+Canonical insight: When an internal validator says PASS and an external validator says FAIL on the same artifact, the internal validator is wrong by default. External validators (Google, browsers, real crawlers) see exactly what production ships. Internal validators see what we think production ships. The disagreement is the diagnostic signal — read the validator's **extraction step** before its **assertion step**.
+
+S132' specific instance: `src/validators/schema-completeness.ts:86` used `htmlContent.match(/<script…>/)` — JavaScript regex without the `g` flag returns the first match only. Every event page got scored as 100/100 because the validator extracted only the first JSON-LD block. If a second Event JSON-LD block had ever been emitted (broken or otherwise), the validator would not have seen it. Google's crawler would. The same shape existed at line 362 (`validateVenueSchema`). The fix: enumerate all blocks via the existing module-private `extractAllJsonLd` helper (already used by `validateHubSchema` for the same reason), then locate the block of the asserted `@type` family and validate it.
+
+Defense — when writing a validator:
+- Enumerate all matching elements; don't single-match. If the surface can emit more than one, the validator must inspect more than one.
+- For JSON-LD, microdata, meta tags, link tags, og:* tags: each can legitimately appear multiple times per page. Validators that single-match are blind to dual emission.
+- When the validator narrows to a specific `@type` family, identify members and reject "no member found among N blocks" with an error distinct from "no blocks at all" — the failure mode is different and operators need to tell them apart.
+
+Defense — periodic external calibration:
+- Once a sprint (or before any release that ships structured-data changes), pick one URL from production and run it through Google's Rich Results Test (or Lighthouse, or browser dev tools). Cross-reference against the internal validator's score for the same URL.
+- If they disagree, the internal validator is the suspect first, the production output the suspect second. Read the validator's extraction step first.
+
+Earned from: S132' diagnostic surfaced that the brief's "every event page emits two Event JSON-LD blocks, one broken" premise was not reproducible in current dist (0 / 5762 pages had ≥2 blocks). But the validator-depth gap that would have masked such an emission **if it ever occurred** was real and shippable as institutional infrastructure. The fix landed with 3 in-validator unit tests + 2 output-layer regression guards in `tests/build/`, all green against current dist; the guards protect a property that holds today and must keep holding.
+
+Connects to: this file's "Diagnostic-first, TDD-second, dist-verify-third" cycle (the validator-depth fix is the institutional sibling of dist-verify); `mistakes.md` S132' entry on Dev-Planner pre-flight protocol (the brief-authoring failure this validator fix incidentally surfaces); the parallel `extractAllJsonLd` (line 257) which existed before S132' and proved the multi-block pattern was already in-house — just not applied where it was needed.

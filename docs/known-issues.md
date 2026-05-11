@@ -70,6 +70,15 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+### Bilingual Scaffolding Notice Visible on Greek-Locale Event Pages with English-Fallback Description
+**Severity:** 🟡
+**First seen:** 2026-05-11 (S132' diagnostic)
+**Frequency:** 467 / 5762 built event pages (~8.1%) — the subset where Greek description is unavailable and English description is shown as fallback.
+**Symptoms:** Built HTML emits `<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>` (line ~285 of affected event pages) above the description body. This is the enrichment-template section label leaking out of the rendering pipeline as a visible scaffolding artifact. NOT a JSON-LD field — the leak is confined to HTML body, confirmed by `tests/build/no-bilingual-label-in-jsonld.test.ts`. Visible to Greek-locale users encountering an English-fallback description.
+**Workaround:** None currently — the string is rendered to end users.
+**Fix plan:** Three candidate paths, decision deferred to a future session: (a) translate to a softer Greek-native phrasing (e.g., "Διαθέσιμη μόνο στα Αγγλικά"); (b) move behind a hidden expand/collapse so the language switch is opt-in; (c) strip the notice entirely once the broader Greek-coverage backlog is resolved. Root surface is the enrichment-pipeline's English-fallback notice generator (`src/generators/event-page.ts:370` per S132' Explore agent finding); the cleanup also intersects the Greek-description coverage gap tracked elsewhere.
+**Status:** 🟡 Open — surfaced during S132' diagnostic reconciliation. Out of scope for the validator-depth fix that S132' shipped; tracked here for a future session.
+
 ### Filter-Correctness Gap — `/tomorrow` and `/next-month` Skip Running Exhibitions
 **Severity:** ✅ Closed
 **First seen:** 2026-05-10 (S127 Phase 1 reconnaissance)
