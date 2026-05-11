@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-11T06:46:17.739Z"
+    "lastUpdate": "2026-05-11T07:07:15.685Z"
   },
   "layers": {
     "event_level": "measured",
@@ -22,11 +22,11 @@
       },
       {
         "type": "dj_set",
-        "total": 451,
-        "pass": 432,
-        "warn": 19,
+        "total": 449,
+        "pass": 431,
+        "warn": 18,
         "fail": 0,
-        "info": 451,
+        "info": 449,
         "passRate": 96
       },
       {
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 6265,
-      "pass": 6226,
-      "warn": 39,
+      "total": 6263,
+      "pass": 6225,
+      "warn": 38,
       "fail": 0,
-      "info": 5936,
+      "info": 5934,
       "passRate": 99
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 48
     },
     "event_template": {
-      "total": 6265,
-      "pass": 6226,
-      "warn": 39,
+      "total": 6263,
+      "pass": 6225,
+      "warn": 38,
       "fail": 0,
-      "info": 5936
+      "info": 5934
     },
     "byVenue": [
       {
@@ -285,21 +285,21 @@
       },
       {
         "venue": "aux club",
-        "total": 33,
-        "pass": 33,
+        "total": 32,
+        "pass": 32,
         "warn": 0,
         "fail": 0,
-        "info": 33,
+        "info": 32,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "b side athens",
-        "total": 39,
-        "pass": 39,
+        "total": 38,
+        "pass": 38,
         "warn": 0,
         "fail": 0,
-        "info": 39,
+        "info": 38,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -325,11 +325,11 @@
       },
       {
         "venue": "bios ρομαντσο",
-        "total": 28,
-        "pass": 28,
+        "total": 29,
+        "pass": 29,
         "warn": 0,
         "fail": 0,
-        "info": 28,
+        "info": 29,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -405,12 +405,12 @@
       },
       {
         "venue": "cantina social",
-        "total": 23,
+        "total": 22,
         "pass": 20,
-        "warn": 3,
+        "warn": 2,
         "fail": 0,
-        "info": 23,
-        "passRate": 87,
+        "info": 22,
+        "passRate": 91,
         "sameAsState": "missing"
       },
       {
@@ -685,12 +685,12 @@
       },
       {
         "venue": "half note jazz club",
-        "total": 81,
+        "total": 82,
         "pass": 78,
-        "warn": 3,
+        "warn": 4,
         "fail": 0,
-        "info": 81,
-        "passRate": 96,
+        "info": 82,
+        "passRate": 95,
         "sameAsState": "missing"
       },
       {
@@ -2036,8 +2036,8 @@
       {
         "venue": "μεγαρο μουσικης αθηνων",
         "total": 268,
-        "pass": 251,
-        "warn": 17,
+        "pass": 252,
+        "warn": 16,
         "fail": 0,
         "info": 2,
         "passRate": 94,
@@ -2255,11 +2255,11 @@
       },
       {
         "venue": "πλυφα",
-        "total": 80,
-        "pass": 80,
+        "total": 79,
+        "pass": 79,
         "warn": 0,
         "fail": 0,
-        "info": 80,
+        "info": 79,
         "passRate": 100,
         "sameAsState": "missing"
       },
