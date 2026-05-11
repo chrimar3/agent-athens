@@ -5617,7 +5617,7 @@ to patterns.md when next institutional batch lands.
 - Step 5 commit `c37764c00`. 5 files, 588 insertions, 0 code changes, 0 data writes. 2061 pass / 1 skip / 0 fail. Typecheck clean.
 
 **Surprises:**
-- **Two distinct verification failures caught at plan-write time, neither at execution time.** (1) Geo wrong-edit-surface: brief named `config/athens-venues.json`, reality is `events.venue_lat / venue_lng / venue_street_address` populated by enrichment; `venue_context` table has no lat/lng/address columns at all. (2) Hard-stop stale-premise: brief asked to fix a function that already ships with the requested behavior.
+- **Two distinct verification failures caught at plan-write time, neither at execution time.** (1) Geo wrong-edit-surface: brief named `config/athens-venues.json`, reality is `events.venue_lat / venue_lng / venue_address` (DB columns) which emit to Schema.org as `geo.latitude/longitude` and `streetAddress` respectively; `venue_context` table has no lat/lng/address columns at all. Plan-write also invented column names `venue_street_address` and `venue` — caught before query execution. (2) Hard-stop stale-premise: brief asked to fix a function that already ships with the requested behavior.
 - Megaron's mixed-coverage shape (populated AND unpopulated for the same venue name) implies a different bug class than "enrichment-never-ran." Diagnostic-shaped problem, not backfill-shaped. Reframes the cheapest 17%-gap close.
 - 4× HARDSTOP_FIRING_RATE_EXCEEDED warnings surfaced during build. Per-S110f over-tuning. Surface to gate-rule calibration owner — out of scope for this session.
 
