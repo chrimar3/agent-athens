@@ -169,9 +169,13 @@ export function buildOfferOrOmit(event: OfferBuilderEvent): OfferDecision {
   }
 
   const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
-  if (priceStr !== '') {
-    offer.price = priceStr;
+  if (priceStr === '') {
+    // Schema.org Offer without a price field is malformed. Omit the whole
+    // Offer block rather than emit a price-less merchant Offer.
+    incrementOmission('no-price-amount');
+    return { omit: true };
   }
+  offer.price = priceStr;
 
   return { offer };
 }

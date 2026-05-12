@@ -189,15 +189,15 @@ describe('buildOfferOrOmit', () => {
   });
 
   describe('price handling', () => {
-    test('with-ticket without amount → omit price field but still emit Offer', () => {
+    test('with-ticket without amount → omit entire Offer (Schema.org requires price on merchant Offer)', () => {
       const decision = buildOfferOrOmit({
         ...baseEvent,
         price: { type: 'with-ticket', currency: 'EUR' },
         ticketUrl: 'https://www.viva.gr/x',
       });
-      if (!('offer' in decision)) throw new Error('expected emit');
-      expect(decision.offer.price).toBeUndefined();
-      expect(decision.offer.priceCurrency).toBe('EUR');
+      // Prior behavior emitted a price-less Offer block, which is Schema.org-invalid.
+      // Fix (2026-05-12, s-tba-resolution): omit the whole Offer + record telemetry.
+      expect(decision).toEqual({ omit: true });
     });
 
     test('with-ticket with numeric amount → price as string', () => {

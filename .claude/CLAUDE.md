@@ -18,7 +18,11 @@ WHERE COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_da
 
 ### Use "open" not "free"
 ```typescript
-price: "open" | "with-ticket"  // ✅ CORRECT
+price: "open" | "with-ticket" | "donation"  // ✅ CORRECT (canonical)
+// 'donation' is supported by active code paths (i18n labels +
+// branching in offer-builder, cta, resolver, page templates) but
+// currently has no scraper writers. Reintroduce removal only after
+// confirming all i18n + branching code is also removed.
 price: "free" | "paid"         // ❌ WRONG — project terminology
 ```
 
@@ -128,7 +132,7 @@ Site shows: `verified_athens` + `pass_through` only.
 ```typescript
 type EventType = "concert" | "dj_set" | "exhibition" | "cinema" | "theater" | "festival" | "performance" | "show" | "workshop" | "tech" | "dance" | "other";
 type LocationStatus = "verified_athens" | "pass_through" | "unverified" | "rejected_non_athens" | "problematic";
-type Price = "open" | "with-ticket";
+type Price = "open" | "with-ticket" | "donation";
 ```
 
 ---

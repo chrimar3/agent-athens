@@ -3363,3 +3363,24 @@ Deliberately Deferred Register entry added to
 **Dev Planner footnote (2026-05-12, S134 launch):** Step 0 verification found the live affected count is 38 upcoming events (30 athinorama + 8 manual-source-no-URL), not the ~84 cited in Strategist's text above. The ~84 figure reflected total with-ticket events affected including past-active; 4,335 past-active events also lack honest merchant grounding but carry noindex per S133 lifecycle work and are out of citation surface. Strategist's decision reasoning is unchanged by the corrected figure; the count is illustrative, not decisional. Recording here so the decision-log preserves both the authored figure (the snapshot of analysis as Strategist made it) and the empirical baseline (what shipping S134 actually affected).
 
 **Dev Planner follow-up footnote (2026-05-12, post-S134 deploy):** S134 deploy actual baseline: 11,522 omission events across 5 sources. Counter increments per emission site (event-page JSON-LD + hub JSON-LD + hub microdata × hub appearances), not per event. The ~4,373 projection in the S134 plan was incomplete — production accounting is per-emission, not per-event. Live citation surface impact (38 upcoming events on indexable pages) is unchanged. The 11,522 figure is the correct telemetry baseline for quarterly review trending.
+
+---
+
+## 2026-05-12 — price_type Tier 1 rule reconciliation (S136)
+
+**Decision:** Canonical `price.type` union is `'open' | 'with-ticket' | 'donation'` (TypeScript-enforced at canonical site `src/types.ts:97`). 2-value narrows in `src/enrichment/*` and `src/ingest/*` are intentional stage-local subtype declarations and stay.
+
+**Resolved:** 1,155 'tba' rows migrated to 'with-ticket' across 5 sources (athinorama.gr, residentadvisor, ticketservices, more.com, halfnote — all classified as paid-ticket merchants). Single transaction, single commit. Zero remaining 'tba' rows in DB.
+
+**Donation handling:** Kept as dormant-but-wired third value. 23 code references including 8 active branches treating donation identically to 'open' (free / no-ticket semantics), 2 user-facing i18n labels (Greek 'Ελεύθερη συνεισφορά' + English 'Free (donations welcome)'), 1 dedicated test. No writer currently emits 'donation', but the code path is live for a future scraper that detects donation-welcome cultural events. Remove only via explicit code-paths sweep + i18n removal + decisions-log entry.
+
+**Inputs:**
+- Diagnostic: `specs/s-tba-diagnostic-2026-05-12.md` (commit 17d4fe7a3)
+- Resolution session report: `specs/s-tba-resolution-2026-05-12.md`
+- Drift caught mid-planning: more.com + halfnote in historical 'tba' rows (not in diagnostic's 3-source breakdown). Verify-assumptions guard fired; both classified as `known_merchant` / `venue_direct_only` before migration ran.
+
+**Side fix:** residentadvisor malformed-Offer emission resolved. `src/ticketing/offer-builder.ts:171-178` — when `price.amount` is null on a merchant-classified Offer, now omits the entire Offer block + records `incrementOmission('no-price-amount')` telemetry, rather than emitting a Schema.org-invalid Offer without a price field. 10–16 events affected.
+
+**Deferred:** Validator coverage gap. `isPlaceholder()` at `src/validators/schema-completeness.ts:63-66, 275-287` doesn't check `price_type` or Offer-shape. Scheduled for separate session.
+
+**Status:** Shipped. Test suite 2061/2062 pass (1 skip, 0 fail). Schema validity 5960/6005 = 99.25% (absolute pass count +7 vs diagnostic baseline). Zero remaining 'tba' rows in DB.

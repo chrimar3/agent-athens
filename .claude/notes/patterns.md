@@ -4056,3 +4056,29 @@ The "repro-grep the defect premise" protocol (banked S132') and the "repro-grep 
 **When both apply.** A brief that names a specific edit target *and* describes a current bug needs both checks. Pattern A first (cheaper, static), then Pattern B (more expensive, dynamic). If Pattern A's grep reveals the named target doesn't exist or isn't in the read-write path, Pattern B becomes moot — the premise is misframed, not stale.
 
 **Recurrence count.** Pre-S135, the combined pattern fired 7 times (all Pattern A shape). S135 added one Pattern A instance and one Pattern B instance, bringing the verify-the-premise series to 9 total. Pattern B is the rarer shape; Pattern A is the dominant recurrence and is the one driving the workflow-side mitigation in the Dev Planner pre-brief checklist.
+
+### Type-union reconciliation across CLAUDE.md, code comments, and TypeScript declarations (S136)
+
+When a constitutional rule lives in three places (rule doc, code comment, type system), drift between them is inevitable unless one is canonical. The S136 'tba' resolution found CLAUDE.md saying 2-value (`'open' | 'with-ticket'`), `src/db/database.ts:56` comment saying 4-value (`'open' | 'with-ticket' | 'tba' | 'donation'`), `src/db/schema.sql:29` saying pre-rename 3-value (`free|paid|donation`), and `src/types.ts:97` saying current 3-value (`'open' | 'with-ticket' | 'donation'`). Four sites, four different unions.
+
+Mitigation: promote *code* as the source of truth; CLAUDE.md mirrors. New rules should be expressed as TypeScript literal unions *before* being added to CLAUDE.md, and the canonical type declaration should carry JSDoc pointing back at the Tier 1 rule. When reconciling drift, update CLAUDE.md and comments to match the canonical type, not the other way around.
+
+### Data migration inside a transaction with explicit source list (S136)
+
+When backfilling a column across many rows, wrap in `BEGIN TRANSACTION` / `COMMIT` so the migration is revertable as a unit. Never use a blanket `WHERE column = legacy_value`; enumerate sources/keys explicitly so unclassified writers can't be silently swept in. S136's 'tba' resolution would have miscoerced `more.com` and `halfnote` rows (not covered in the diagnostic's source breakdown) into 'with-ticket' without verification if a blanket WHERE had been used — those sources turned out to be safe to migrate, but the verification work that confirmed safety only happened because the explicit-source-list rule forced it.
+
+Always back up the DB file before the transaction in case rollback isn't enough (e.g., if `COMMIT` runs before `remaining_rows = 0` is checked). Backup path: `data/events.db.pre-<migration-tag>-YYYYMMDD-HHMMSS.bak`.
+
+### Domain-concept liveness check during type reconciliation (S136)
+
+A type value's liveness is determined by union: `(data rows) ∨ (code references) ∨ (i18n strings) ∨ (branch logic)`. Zero on any single dimension is not sufficient for deletion.
+
+S136 case study: the diagnostic found 0 DB rows with `price_type='donation'` and recommended deferring/removing the value. Pre-execution exploration revealed 23 code references, including 8 active branches (`if (price.type === 'open' || price.type === 'donation')`), 2 user-facing i18n labels (Greek + English), and a dedicated test asserting donation behavior. Count-based reasoning ("0 rows → deletable") would have removed ~25 lines of working code modeling a real Athens cultural pattern (donation-welcome cultural events) that just hadn't been wired to a scraper yet. The correct framing was "dormant-but-wired" — feature awaiting a writer, not orphaned code.
+
+Before treating a type value as deletable, sweep all four dimensions. If any is nonzero, the value is live; deletion requires removing that surface area first.
+
+### Subtype narrowing at stage boundaries is not drift (S136)
+
+Pipeline stages legitimately operate on narrower subtypes of the canonical model. S136's enrichment and ingest stages declared `'open' | 'with-ticket'` (2-value) against a canonical `'open' | 'with-ticket' | 'donation'` (3-value). A naive reconciliation would have expanded the narrows to match the canonical "for consistency." That would have been wrong: enrichment never sees `'donation'` events (donations don't get enriched in the current pipeline design); ingest never sees post-normalization values (it operates on raw scraper rows before `normalizePriceType()`).
+
+When reconciling type-union drift, distinguish (a) intentional stage-local narrows from (b) accidental declarations that fell out of sync. Test: does the narrow site have a meaningful invariant that holds at that boundary? Yes → intentional, leave alone. No → drift, align to canonical. The test forces explicit reasoning about why a narrow exists, which preserves the architectural distinction rather than steamrolling it.

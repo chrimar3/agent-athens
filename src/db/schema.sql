@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS events (
   venue_capacity INTEGER,
 
   -- Pricing
-  price_type TEXT NOT NULL,               -- free|paid|donation
+  price_type TEXT NOT NULL,               -- 'open' | 'with-ticket' | 'donation' (canonical; see database.ts normalizer)
   price_amount REAL,
   price_currency TEXT DEFAULT 'EUR',
   price_range TEXT,                       -- e.g., "€10-€20"

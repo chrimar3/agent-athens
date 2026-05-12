@@ -93,6 +93,17 @@ export interface Venue {
   sameAs?: string[];  // Identity links emitted as Schema.org sameAs; populated from VenueRecord via generate-site.ts attach.
 }
 
+/**
+ * Canonical price model (Tier 1 rule per CLAUDE.md).
+ * Union: 'open' | 'with-ticket' | 'donation'.
+ *   - 'open':        free entry, no ticket needed
+ *   - 'with-ticket': paid or RSVP-required entry
+ *   - 'donation':    free entry, donations welcome (dormant — no scraper writer
+ *                    yet, but active i18n + branching across offer-builder, cta,
+ *                    resolver, page templates, i18n.ts)
+ * Legacy 'tba' values are normalized at the write boundary by
+ * normalizePriceType() in src/db/database.ts; 'tba' never reaches the DB.
+ */
 export interface Price {
   type: 'open' | 'with-ticket' | 'donation';
   amount?: number;

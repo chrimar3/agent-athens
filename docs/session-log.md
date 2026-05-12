@@ -5639,3 +5639,48 @@ to patterns.md when next institutional batch lands.
 
 ---
 
+
+### Session 136 — 'tba' Tier 1 Resolution (price_type type-system + writer + data reconciliation) — 2026-05-12
+
+**Plan:**
+- Resolve `price_type='tba'` Tier 1 violation diagnosed in `specs/s-tba-diagnostic-2026-05-12.md` (commit 17d4fe7a3) before S137.
+- Tighten canonical type, extend write-boundary normalizer, fix residentadvisor malformed-Offer emission, migrate 1,155 'tba' rows to 'with-ticket' across 5 sources in a transaction, reconcile rule doc + constitution comments to canonical 3-value, defer validator coverage gap.
+- Cross-project async unblock: extract 5 verbatim code spans for Design Navigator before starting (read-only).
+
+**What happened:**
+- Step -1 (Design Navigator spans): 5 spans extracted verbatim from `src/templates/action-bar.ts` (full), `src/generate-site.ts:951-960`, `src/generators/event-page.ts:466-468`, `src/i18n/strings.ts:185-195` (Greek), `:296-306` (English). Read-only, relayed.
+- Step 0 (reconfirm): No drift on counts. 1,155 total 'tba' (154 current/future-dated), 0 donation rows. DISTINCT 'tba' sources surfaced more.com + halfnote beyond the diagnostic's 3 — both classified mid-planning as paid-ticket merchants.
+- Step 1 (type-union decision): Canonical 3-value `'open' | 'with-ticket' | 'donation'`. 'donation' kept as dormant-but-wired (23 refs, 8 branches, 2 i18n labels, 1 dedicated test); count-based reasoning ("0 rows → deletable") would have removed working code modeling a real Athens cultural pattern.
+- Step 2: JSDoc added on canonical `Price` interface at `src/types.ts:96-110`. Stage-local 2-value narrows in enrichment/ingest left as intentional subtypes.
+- Step 3: `normalizePriceType()` extended at `src/db/database.ts:58-65` with `case 'tba' → 'with-ticket'`. Belt-and-suspenders catch-all for any future writer.
+- Step 4: Residentadvisor malformed Offer fixed at `src/ticketing/offer-builder.ts:171-178`. Telemetry-naming-convention grep first (kebab-case literals); new key `'no-price-amount'` follows convention. Old test asserting the malformed contract updated to assert correct omit-entirely behavior.
+- Step 5: Three sites reconciled — `.claude/CLAUDE.md` Tier 1 + Data Model `type Price`, `src/db/database.ts:51-63` constitution comment, `src/db/schema.sql:29` inline comment. All now agree on 3-value.
+- Step 6: DB backed up (`data/events.db.pre-tba-migration-20260512-153845.bak`, 55 MB). Transactional UPDATE: 1,155 rows updated, 0 remaining 'tba'.
+- Step 7: Validator coverage gap (`isPlaceholder` doesn't check price_type / Offer shape) documented as deferred.
+- Step 8: typecheck clean; `bun test` → 2061 pass / 1 skip / 0 fail; `bun run build` → 5960 pass / 45 warnings / 0 errors (schema validity 5960/6005 = 99.25%; +7 absolute pass vs diagnostic baseline); zero remaining 'tba' rows.
+
+**Verified:**
+- `bunx tsc --noEmit` clean
+- `bun test` 2061 pass / 1 skip / 0 fail (matches S135 baseline)
+- `bun run build` 5960 pass / 45 warnings / 0 errors
+- `sqlite3 data/events.db "SELECT COUNT(*) FROM events WHERE price_type='tba';"` → 0
+- 14/6005 INFO entries for "offers.url omitted (legitimate for non-merchant ticket sources)" — clean conversion from malformed-emit to legitimate-omit.
+
+**Surprises:**
+- Diagnostic's "0 donation rows" finding was correct but **insufficient signal** for the deletion decision. 23 code references, 8 active branches, 2 i18n labels, and a dedicated test were live — domain liveness ≠ data presence. Banked as pattern (`patterns.md`).
+- DISTINCT 'tba' source list surfaced more.com + halfnote not in diagnostic's source breakdown. Verify-assumptions guard fired; both classified mid-planning as paid-ticket merchants and folded into migration WHERE clause. Plan's "STOP on new sources" escape valve worked as designed.
+- One test (`buildOfferOrOmit > price handling > with-ticket without amount → omit price field but still emit Offer`) codified the malformed contract verbatim. Updating the test was part of the fix, not test-massaging. Same risk class as comment drift: tests can encode bugs if the bug ships before the test does.
+
+**Learnings:**
+- **Four new patterns banked** (S136 entries): type-union reconciliation across rule doc + comments + types; data migration inside a transaction with explicit source list; domain-concept liveness check during type reconciliation; subtype narrowing at stage boundaries is not drift.
+- **Pre-brief checklist recurrence ledger: still 9.** Step 0's verify-assumptions guard caught drift (more.com + halfnote sources) before it became a wrong-edit-surface or stale-premise instance. Intended outcome of the checklist.
+- **Test-as-bug-codification.** When a fix changes Schema.org-validity contract, the existing test asserting the prior (broken) contract is itself part of the bug surface. Update assertion + name; the test should always document the correct contract.
+
+**Open items:**
+- Validator coverage gap (`isPlaceholder()` extension + Offer-shape check) — scheduled for separate session.
+- S137 (Sprint 1 Session 2 offers refactor) — now unblocked; clean type/writer/data state confirmed.
+- Design Navigator's gate audit pending receipt of spans (Step -1 output).
+
+**Commit:** _(pending — single commit, pushed to origin/main)_
+
+---

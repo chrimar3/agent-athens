@@ -52,13 +52,20 @@ export function closeDatabase(): void {
  * Belt-and-suspenders normalizer for legacy price_type values.
  * Primary fix is at scraper boundary (scripts/scrape-all.ts); this catches
  * any leftover paths (enrichment, tests, ad-hoc scripts) that could emit
- * legacy vocab despite Event.price.type typing. Constitution: 'open' |
- * 'with-ticket' | 'tba' | 'donation'.
+ * legacy vocab despite Event.price.type typing.
+ * Constitution: 'open' | 'with-ticket' | 'donation' (Tier 1 rule per CLAUDE.md).
+ * Historical note: 'tba' values were resolved 2026-05-12 via migration to
+ * 'with-ticket' (5 sources: athinorama.gr, residentadvisor, ticketservices,
+ * more.com, halfnote — all classified as paid-ticket merchants). 'donation'
+ * is a valid value with active code paths (i18n labels, branching logic in
+ * i18n.ts, offer-builder.ts, cta.ts, resolver.ts, page.ts) but no current
+ * writer producing it.
  */
 function normalizePriceType(value: string): string {
   if (value === 'paid') return 'with-ticket';
   if (value === 'free') return 'open';
   if (value === 'door') return 'with-ticket';
+  if (value === 'tba') return 'with-ticket';  // legacy; never reaches DB post-migration
   return value;
 }
 
