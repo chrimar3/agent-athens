@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-12T05:15:01.286Z"
+    "lastUpdate": "2026-05-12T05:37:03.030Z"
   },
   "layers": {
     "event_level": "measured",
@@ -14,19 +14,19 @@
       {
         "type": "concert",
         "total": 1003,
-        "pass": 983,
-        "warn": 20,
+        "pass": 984,
+        "warn": 19,
         "fail": 0,
         "info": 794,
         "passRate": 98
       },
       {
         "type": "dj_set",
-        "total": 448,
-        "pass": 426,
-        "warn": 22,
+        "total": 450,
+        "pass": 427,
+        "warn": 23,
         "fail": 0,
-        "info": 448,
+        "info": 450,
         "passRate": 95
       },
       {
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 5924,
-      "pass": 5880,
+      "total": 5926,
+      "pass": 5882,
       "warn": 44,
       "fail": 0,
-      "info": 5601,
+      "info": 5603,
       "passRate": 99
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 49
     },
     "event_template": {
-      "total": 5924,
-      "pass": 5880,
+      "total": 5926,
+      "pass": 5882,
       "warn": 44,
       "fail": 0,
-      "info": 5601
+      "info": 5603
     },
     "byVenue": [
       {
@@ -265,11 +265,11 @@
       },
       {
         "venue": "astron",
-        "total": 38,
-        "pass": 38,
+        "total": 39,
+        "pass": 39,
         "warn": 0,
         "fail": 0,
-        "info": 38,
+        "info": 39,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -375,12 +375,12 @@
       },
       {
         "venue": "burger disco club",
-        "total": 18,
+        "total": 19,
         "pass": 17,
-        "warn": 1,
+        "warn": 2,
         "fail": 0,
-        "info": 18,
-        "passRate": 94,
+        "info": 19,
+        "passRate": 89,
         "sameAsState": "missing"
       },
       {
@@ -495,22 +495,22 @@
       },
       {
         "venue": "daddy's all day bar",
-        "total": 2,
+        "total": 1,
         "pass": 1,
-        "warn": 1,
+        "warn": 0,
         "fail": 0,
-        "info": 2,
-        "passRate": 50,
+        "info": 1,
+        "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "death disco",
-        "total": 15,
+        "total": 16,
         "pass": 14,
-        "warn": 1,
+        "warn": 2,
         "fail": 0,
-        "info": 15,
-        "passRate": 93,
+        "info": 16,
+        "passRate": 88,
         "sameAsState": "missing"
       },
       {
@@ -1115,11 +1115,11 @@
       },
       {
         "venue": "universe",
-        "total": 25,
-        "pass": 25,
+        "total": 26,
+        "pass": 26,
         "warn": 0,
         "fail": 0,
-        "info": 25,
+        "info": 26,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -2006,8 +2006,8 @@
       {
         "venue": "μεγαρο μουσικης αθηνων",
         "total": 261,
-        "pass": 243,
-        "warn": 18,
+        "pass": 244,
+        "warn": 17,
         "fail": 0,
         "info": 0,
         "passRate": 93,
@@ -2575,11 +2575,11 @@
       },
       {
         "venue": "ωδειο αθηνων",
-        "total": 39,
-        "pass": 39,
+        "total": 38,
+        "pass": 38,
         "warn": 0,
         "fail": 0,
-        "info": 39,
+        "info": 38,
         "passRate": 100,
         "sameAsState": "missing"
       }
