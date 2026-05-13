@@ -65,6 +65,43 @@ function isPlaceholder(value: unknown): boolean {
   return PLACEHOLDER_VALUES.includes(value.trim().toLowerCase());
 }
 
+// Canonical Price.type vocabulary per CLAUDE.md Tier 1. 'donation' is dormant
+// but wired (i18n labels + branches in offer-builder/resolver/cta/templates);
+// remove only after confirming all referencing code is also removed (S136 note).
+const ALLOWED_PRICE_TYPES: ReadonlySet<string> = new Set(['open', 'with-ticket', 'donation']);
+
+/**
+ * Detective control paired with normalizePriceType() at the write boundary.
+ * Single-call-site normalizers in multi-writer codebases fail silently when
+ * a parallel writer is added without adopting the normalizer (S136 → 42-row
+ * regression from scripts/scrape-all.ts within 24h of the migration).
+ * This rule fails the build if any in-scope event row carries an out-of-
+ * vocabulary price_type value, so the next bypass produces a CI failure
+ * rather than a silent production violation.
+ *
+ * `null`/`undefined` are accepted: pre-enrichment rows legitimately carry
+ * null price_type before scrapers populate it.
+ */
+export function validatePriceTypeVocabulary(event: {
+  id?: string;
+  price_type?: string | null;
+  source?: string;
+}): SchemaValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const value = event.price_type;
+
+  if (value !== null && value !== undefined && !ALLOWED_PRICE_TYPES.has(value)) {
+    const id = event.id ?? '(unknown id)';
+    errors.push(
+      `price_type out of vocabulary on event ${id}: "${value}" ` +
+      `(allowed: open, with-ticket, donation)`
+    );
+  }
+
+  return { slug: event.id ?? '', errors, warnings };
+}
+
 /**
  * Validate a single page's JSON-LD schema completeness.
  *

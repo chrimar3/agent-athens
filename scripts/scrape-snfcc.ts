@@ -19,6 +19,7 @@ import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
+import { normalizePriceType } from '../src/db/database';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -603,7 +604,7 @@ function saveEvents(events: ScrapedExhibition[], dryRun: boolean): number {
         $genres: e.genres,
         $venue_name: e.venue_name,
         $url: e.url,
-        $price_type: e.price_type,
+        $price_type: normalizePriceType(e.price_type),
         $price_amount: e.price_amount,
         $price_range: e.price_range,
         $source: e.source,

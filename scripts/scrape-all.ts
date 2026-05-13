@@ -24,6 +24,7 @@
 
 import { Database } from 'bun:sqlite';
 import { normalizeDateField } from '../src/utils/date-format';
+import { normalizePriceType } from '../src/db/database';
 import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
@@ -1404,7 +1405,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         $genres: e.genres,
         $venue_name: e.venue_name,
         $url: e.url,
-        $price_type: e.price_type,
+        $price_type: normalizePriceType(e.price_type),
         $price_amount: e.price_amount,
         $price_range: e.price_range,
         $source: e.source,

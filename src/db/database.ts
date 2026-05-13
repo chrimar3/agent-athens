@@ -61,11 +61,11 @@ export function closeDatabase(): void {
  * i18n.ts, offer-builder.ts, cta.ts, resolver.ts, page.ts) but no current
  * writer producing it.
  */
-function normalizePriceType(value: string): string {
+export function normalizePriceType(value: string): string {
   if (value === 'paid') return 'with-ticket';
   if (value === 'free') return 'open';
   if (value === 'door') return 'with-ticket';
-  if (value === 'tba') return 'with-ticket';  // legacy; never reaches DB post-migration
+  if (value === 'tba') return 'with-ticket';  // sentinel from scraper-side price-discovery failure; resolves to with-ticket at write boundary
   return value;
 }
 

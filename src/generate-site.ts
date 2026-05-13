@@ -168,6 +168,34 @@ async function main() {
     return PUBLISHABLE_STATUSES.includes(status);
   });
 
+  // Pre-build Tier 1 vocabulary guard (s-tba-bypass session, 2026-05-13):
+  // detective control for any future writer that bypasses normalizePriceType().
+  // Single-call-site normalizers in multi-writer codebases fail silently; this
+  // pass fails the build before emission if any publishable row carries an
+  // out-of-vocabulary price_type. Add new normalize sites at all writers; never
+  // weaken this check to make a bypassed row publishable.
+  {
+    const { validatePriceTypeVocabulary } = await import('./validators/schema-completeness');
+    const vocabErrors: string[] = [];
+    for (const event of locationFiltered) {
+      const result = validatePriceTypeVocabulary({
+        id: event.id,
+        price_type: event.price?.type ?? null,
+        source: event.source,
+      });
+      if (result.errors.length > 0) vocabErrors.push(...result.errors);
+    }
+    if (vocabErrors.length > 0) {
+      console.error(`\n❌ Tier 1 price_type vocabulary violations (${vocabErrors.length}):`);
+      for (const e of vocabErrors.slice(0, 20)) console.error(`   - ${e}`);
+      if (vocabErrors.length > 20) console.error(`   ... and ${vocabErrors.length - 20} more`);
+      throw new Error(
+        `Build aborted: ${vocabErrors.length} event(s) have out-of-vocabulary price_type. ` +
+        `A writer is bypassing normalizePriceType(). See specs/s-tba-bypass-diagnostic.md.`
+      );
+    }
+  }
+
   // Split events into two arrays:
   // 1. upcomingEvents — for listings, hubs, search index, counts (current/future only)
   // 2. pageableEvents — for event page generation (upcoming + past-active ≤45d)

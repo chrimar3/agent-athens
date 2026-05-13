@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -971,5 +971,65 @@ describe('validateSchemaCompleteness — S134 offer-presence rule reshape', () =
     const result = validateSchemaCompleteness(wrapInHtml(schema), 's134-no-offers-url');
     // url is INFO-level per existing line 238; no FAIL
     expect(result.errors.some(e => e.includes('offers.url'))).toBe(false);
+  });
+});
+
+describe('validatePriceTypeVocabulary — Tier 1 vocabulary guard (B-03)', () => {
+  test("price_type='tba' → FAIL", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-tba', price_type: 'tba', source: 'residentadvisor' });
+    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors[0].toLowerCase()).toContain('price_type');
+    expect(result.errors[0]).toContain('tba');
+  });
+
+  test("price_type='unknown' → FAIL", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-unknown', price_type: 'unknown' });
+    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors[0]).toContain('unknown');
+  });
+
+  test("price_type='free' (legacy non-canonical) → FAIL", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-free', price_type: 'free' });
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  test("price_type='paid' (legacy non-canonical) → FAIL", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-paid', price_type: 'paid' });
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  test("price_type='open' → PASS", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-open', price_type: 'open' });
+    expect(result.errors).toEqual([]);
+  });
+
+  test("price_type='with-ticket' → PASS", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-wt', price_type: 'with-ticket' });
+    expect(result.errors).toEqual([]);
+  });
+
+  test("price_type='donation' → PASS (dormant-but-wired per S136 / CLAUDE.md)", () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-don', price_type: 'donation' });
+    expect(result.errors).toEqual([]);
+  });
+
+  test('price_type=null → PASS (unenriched events legitimately have null price_type)', () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-null', price_type: null });
+    expect(result.errors).toEqual([]);
+  });
+
+  test('price_type=undefined → PASS (same as null — pre-enrichment state)', () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-undef' });
+    expect(result.errors).toEqual([]);
+  });
+
+  test('error message includes the event id for traceability', () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-abc123', price_type: 'tba' });
+    expect(result.errors[0]).toContain('evt-abc123');
+  });
+
+  test('result.slug carries the event id', () => {
+    const result = validatePriceTypeVocabulary({ id: 'evt-abc123', price_type: 'tba' });
+    expect(result.slug).toBe('evt-abc123');
   });
 });

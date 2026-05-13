@@ -23,6 +23,7 @@ import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
+import { normalizePriceType } from '../src/db/database';
 
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
@@ -1055,7 +1056,7 @@ async function main() {
           $genres: JSON.stringify(['AI', 'Tech']),
           $venue_name: e.venue_name,
           $url: e.url,
-          $price_type: e.price_type,
+          $price_type: normalizePriceType(e.price_type),
           $price_amount: e.price_amount,
           $source: e.source,
           $location_status: 'unverified'
