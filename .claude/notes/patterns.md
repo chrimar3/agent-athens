@@ -4082,3 +4082,204 @@ Before treating a type value as deletable, sweep all four dimensions. If any is 
 Pipeline stages legitimately operate on narrower subtypes of the canonical model. S136's enrichment and ingest stages declared `'open' | 'with-ticket'` (2-value) against a canonical `'open' | 'with-ticket' | 'donation'` (3-value). A naive reconciliation would have expanded the narrows to match the canonical "for consistency." That would have been wrong: enrichment never sees `'donation'` events (donations don't get enriched in the current pipeline design); ingest never sees post-normalization values (it operates on raw scraper rows before `normalizePriceType()`).
 
 When reconciling type-union drift, distinguish (a) intentional stage-local narrows from (b) accidental declarations that fell out of sync. Test: does the narrow site have a meaningful invariant that holds at that boundary? Yes → intentional, leave alone. No → drift, align to canonical. The test forces explicit reasoning about why a narrow exists, which preserves the architectural distinction rather than steamrolling it.
+
+---
+## Pattern A — Assembly-time content access
+**Banked:** 2026-05-12 (action-layer audit loop)
+**Sibling of:** fix-rot guard
+**Recurrence:** 3 instances in single audit loop (2026-05-12)
+
+Briefs requiring content from disk, external systems, or unrecoverable prior
+context must be assembled with content in-hand, or sent with explicit fetch
+path. Never send `[paste here]` placeholders for content the planner doesn't
+have. If content is unrecoverable, send skeletal — name the slot, don't fabricate
+the slot's contents.
+
+**Instances:**
+1. Design Navigator brief — five code-span placeholders (`[paste X here]`)
+   when source files were on disk, accessible via fetch path
+2. Design Navigator close — `getComputedStyle` block placeholder when output
+   was in prior chat, unrecoverable from current context
+3. Design Navigator close (gate fabrication) — sub-case: planner had PASS
+   verdicts + polish-flag names from end-of-session brief but not gate
+   *definitions*. Filled in plausible dev-side framings (scope/contract/
+   tests/a11y) instead of asking or sending skeletal. Wrong domain entirely
+   — DN ran design-side (token/ceiling/receding/share). Gate definitions
+   were content; plausibility is not sourcing.
+
+**Mitigation:**
+- If content exists on disk → fetch path in brief
+- If content exists in current context → quote directly (see Pattern B)
+- If content is unrecoverable → skeletal brief, name the missing slot
+- Never: invent the slot's contents from plausible inference
+
+**Detection:** Any `[paste X here]` token in a drafted brief, OR any sentence
+in a close-message that describes specifics the planner cannot point to a source for.
+
+---
+## Pattern B — Relay-vs-self-quote
+**Banked:** 2026-05-12 (action-layer audit loop)
+**Sibling of:** Pattern A, fix-rot guard
+
+If content is in the planner's own context window, quote directly. Don't ask
+the relay (Christos) to copy from earlier in the thread. Relay is for content
+outside context, not for content inside.
+
+**Instance:** `getComputedStyle` block — placeholder asked Christos to paste
+content that, if present anywhere, was in the prior chat (i.e., not in
+planner's current context). Correct routing: either quote from current
+context, or treat as Pattern A (unrecoverable → skeletal).
+
+**Mitigation:**
+- Content in current context → quote inline, no relay step
+- Content in prior chat / outside context → Pattern A applies (fetch path
+  or skeletal)
+- Relay's job is human-side artifact retrieval, not in-thread copy-paste
+
+---
+## Routing-gap retrospective — action-layer audit (dev-side filing)
+**Date:** 2026-05-12
+**Counterpart entry:** Design Navigator's `design-decisions.md` (design-side)
+
+**Routing gap:** Christos confirmed "action layer is MVP scope" to Dev Planner.
+Confirmation didn't reach Design Navigator. Result: parallel audits, no shared
+gate framework, near-miss on merged-ledger contamination (Option B in DN
+close exchange).
+
+**Resolution:** Option A — two-side framing. Each ledger captures its own
+audit. No merge.
+
+**Pattern surfaced:** When a scope claim crosses project territory, route
+before sequencing. The cross-project deliverable claim is its own routing
+event, distinct from the work it enables.
+
+**Mitigation candidate (not yet a pattern):** Scope confirmations that name
+a deliverable owned by multiple projects should trigger a routing check
+before downstream work begins. One instance is not a pattern; flag on second
+occurrence.
+
+---
+## Pattern C — Verify-the-premise of deferral decisions
+**Banked:** 2026-05-12
+**Sibling of:** Pattern A (assembly-time content access), Pattern B 
+(relay-vs-self-quote), pre-brief checklist (brief-assembly verification)
+
+Deferral decisions assume a current state. The assumed state must be 
+probed against the deployed artifact, not inferred from prior 
+decisions-log entries. Status fields in decisions-log drift from 
+reality — entries marked "Status: Pending" may correspond to work 
+that shipped and was never re-logged. Reading log-status as a 
+state proxy is the failure mode.
+
+The fix isn't "think harder about current state." It's "probe the 
+deployed artifact, don't infer from log entries." That distinction 
+is load-bearing; generic verify-the-premise advice collapses into 
+Pattern A/B coverage.
+
+**Applies whenever:** a decision is being formed against an assumed 
+state, by anyone, in any artifact — decisions-log entries, briefs, 
+session plans, cross-project routing.
+
+**Instance:** May 8 bilingual-subset decision (decisions-log entry). 
+Deferred 4 work items — hreflang tags, /en/ URL prefix scheme, 
+sitemap per-locale split, canonical-link template restructure — 
+based on assumed-absent bilingual state. Assumption was inferred 
+from Feb 19 (hreflang Pending), Feb 20 (x-default reversal Pending), 
+Feb 24 (inLanguage Pending) log entries. CC probe 2026-05-12 
+confirmed: all four shipped, status fields never updated. The 
+inference was wrong because the proxy was stale.
+
+**Detection signal:** any decision sentence of the form "defer X 
+because Y is absent/partial," where Y's state is sourced from 
+"log entry says Y is pending" rather than "I just probed Y and 
+observed its current state."
+
+**Mitigation:**
+- Before logging a deferral, probe the deployed artifact directly 
+  (curl, grep dist/, sqlite query, GSC reading — whatever surface 
+  the deferral concerns)
+- Inline the probe result in the decision: "Deferred X. Probed 
+  state 2026-MM-DD: [verbatim probe output]. Defer because [reason 
+  grounded in probed state, not log inference]."
+- If the deferral is being formed without access to probe the 
+  artifact, the deferral is not ready to log. Either acquire probe 
+  access or hand off to whoever has it.
+- Status fields in prior log entries are not state evidence. They 
+  are decision-time snapshots that may or may not match reality at 
+  decision-N+K read time.
+
+**Why not Pattern A/B coverage:** A and B are content-sourcing 
+patterns (what's in the brief; what's quoted vs relayed). C is a 
+decision-formation pattern (what state grounds the decision). 
+Different abstraction layer.
+
+**Why not pre-brief checklist:** the pre-brief checklist's six items 
+are brief-assembly hygiene — what the brief tells the executor to 
+do. Pattern C applies to decision formation at decisions-log entry 
+time, often outside any brief. Checklist scope is too narrow.
+
+**S137 instance (2026-05-13) — commit-message-as-state-proxy.** S136's
+commit message asserted "DB: 0 remaining 'tba' rows post-migration."
+That sentence was true at commit time and false 24 hours later. The
+2026-05-13 audit's Step 1 took the commit message as a state claim
+("S136 closed the regression") rather than probing the deployed
+artifact. CC probe found 42 new tba rows from the next daily-pipeline
+tick. Same failure mode as the May 8 bilingual instance, different
+proxy: commit messages drift from production state on any schedule
+where post-commit pipelines write to the same surface. The mitigation
+extends cleanly: "Status fields in prior log entries are not state
+evidence" → "Commit-message claims about deployed state are not
+state evidence." Probe the artifact in both cases.
+
+## Pattern D — Single-call-site normalizer fragility (export + detective control as a pair)
+**Banked:** 2026-05-13
+**Sibling of:** Guard 6 (shotgun-surgery), Pattern C (verify deployed artifact)
+
+When introducing a normalizer at one write site, ship its detective
+control in the same commit. A single un-exported normalizer with one
+call site is a single-belt design despite the "belt-and-suspenders"
+mental model — the metaphor obscures the topology because parallel
+writers can't call what isn't exported, and silent bypass leaves no
+test or build signal when both behaviors emit shape-valid output.
+
+**Failure shape:** S136 added `normalizePriceType()` at
+`src/db/database.ts:92` and migrated 1,155 'tba' rows in one
+transaction. Function was un-exported; only the canonical
+`upsertEvent` invoked it. `scripts/scrape-all.ts` is a parallel
+writer that binds `$price_type: e.price_type` raw at line 1407
+and never adopted the normalizer. Within 24 hours the next daily
+pipeline regenerated 42 'tba' rows. The validator inspects only
+emitted JSON-LD, where `'tba'` and `'with-ticket'-without-price`
+produce identical output — no test failed, no build error fired.
+
+**Why not just export and grep:** export alone fixes the symptom
+but leaves the detective gap. Without a vocabulary check in the
+build, the next un-routed writer (added by anyone, including future
+sessions) reproduces the same regression silently. The pair is
+load-bearing — neither half is sufficient.
+
+**Mitigation (S137 implementation pattern):**
+1. **Export** the normalizer so parallel writers CAN call it.
+2. **Grep every writer** for the column (not the table): for
+   price_type that's `grep -rn "price_type\s*[=:]" src/ scripts/`.
+   Route each match through the normalizer.
+3. **Detective control in build:** add a validator that fails on
+   out-of-vocabulary data BEFORE emission. For S137 this was
+   `validatePriceTypeVocabulary()` invoked over `locationFiltered`
+   in `src/generate-site.ts` immediately after the publishable-set
+   filter. Any future bypass aborts the build with a clear message
+   naming the bypassed event ids.
+4. **Test the normalizer's contract directly** (not just integration).
+   `src/db/__tests__/normalize-price-type.test.ts` pins all 5 input
+   shapes (canonical pass-through ×3, legacy mapping ×2). Any change
+   to the contract requires updating these tests.
+
+**Detection signal:** a normalizer with exactly one call site is the
+red flag. `grep -rn "function normalizePriceType\|normalizePriceType("`
+returning 2 lines (definition + 1 call) means parallel writers exist
+or will exist; both must be addressed in the same commit.
+
+**Why not pre-brief checklist:** pre-brief checklist is brief
+hygiene; this is a design-pattern decision at fix time. The trigger
+is "I am about to add a normalizer," not "I am about to write a
+brief." Different surface.

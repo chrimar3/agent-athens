@@ -5681,6 +5681,47 @@ to patterns.md when next institutional batch lands.
 - S137 (Sprint 1 Session 2 offers refactor) — now unblocked; clean type/writer/data state confirmed.
 - Design Navigator's gate audit pending receipt of spans (Step -1 output).
 
-**Commit:** _(pending — single commit, pushed to origin/main)_
+**Commit:** `f702e01a6` — pushed to origin/main, daily pipeline picks up on next run.
+
+---
+
+### Session 137 — 'tba' bypass writer routing + Tier 1 vocabulary guard (S136 regression closure) — 2026-05-13
+
+**Plan:** Resolve the `price_type='tba'` regression diagnosed in the 2026-05-13 audit (42 rows from `residentadvisor`, all written by the daily pipeline 24h after S136's migration claimed 0 remaining). Locate every events-table writer bypassing `normalizePriceType()`, route them all through the canonical normalizer, add a build-time vocabulary guard, re-migrate the 42 rows, deploy. Diagnostic spec at `specs/s-tba-bypass-diagnostic.md`.
+
+**What happened:**
+- Step 0 baseline reconfirmed: 42 rows, all `residentadvisor`, `updated_at` window 05:09–05:22 UTC (matches daily pipeline run).
+- Step 1 writer enumeration corrected two audit hypotheses. `src/ingest/email-ingestion.ts:322` writes a dead `price` column (commented as schema-divergence dead code), not `price_type`. `src/images/image-pipeline.ts:34` writes only `image_local`. The actual bypass surface was `scripts/scrape-all.ts:1407` + `scripts/scrape-ai-tech.ts:1059` + `scripts/scrape-snfcc.ts:607` — three parallel scraper-side raw-SQL writers, none of which import the normalizer. Diagnostic written to `specs/s-tba-bypass-diagnostic.md` (read-only trace).
+- Step 2 (reproduction against /tmp DB copy) skipped per user direction — static trace conclusive given the exact match between residentadvisor adapter's sentinel-`'tba'` design at line 1091 and the 42-row shape.
+- Step 3 + 4 red: added `validatePriceTypeVocabulary()` import to `src/validators/__tests__/schema-completeness.test.ts` (11 tests) and `normalizePriceType` import to new `src/db/__tests__/normalize-price-type.test.ts` (5 tests). Both failed at import (symbols un-exported).
+- Step 5 green: implemented `validatePriceTypeVocabulary(event)` in `src/validators/schema-completeness.ts`. Allowed set per CLAUDE.md: `{open, with-ticket, donation}`. `null`/`undefined` accepted (pre-enrichment rows legitimately carry null). FAIL severity with event-id in the message for traceability.
+- Step 6 green: exported `normalizePriceType` from `src/db/database.ts` (was function-local) and patched the three scraper bindings to wrap `e.price_type` in `normalizePriceType(...)`. Shotgun coverage verified: `grep -rn '\$price_type:' src/ scripts/ --include='*.ts' | grep -v normalizePriceType | grep -v test` → 0 production matches (3 remaining in `scripts/_archive/` are out of scope).
+- Step 7 migrated 42 rows in a single transaction; backup at `data/events.db.pre-tba-bypass-20260513-125114.bak` (53 MB). Post-migration: 0 'tba' rows DB-wide; with-ticket count 11525 → 11565 (in-scope), open 49 unchanged.
+- Step 8 build wired: added the validator into the pre-emission pass in `src/generate-site.ts` immediately after `locationFiltered` is computed. Any future bypass aborts the build with a clear error listing offending event ids — no chance of silent regression.
+- Step 9 deploy: commit `a9596b1cb` pushed to origin/main + `netlify deploy --prod --dir=dist` → live. Post-deploy probe `curl -sL https://agentathens.com/api/events.json | grep -oE '"priceType":"tba"' | wc -l` → **0**. Spot-checked a residentadvisor event page: now emits `isAccessibleForFree: false` with offers omitted (correct classifier-gated shape per S134).
+
+**Verified:**
+- `bun test` → 2077 pass / 1 skip / 0 fail (was 2061 baseline; +16 = 11 validator + 5 normalizer).
+- `bunx tsc --noEmit` → clean.
+- `bun run build` → 5602/5656 fully valid (99%), 0 errors. Vocabulary guard runs against `locationFiltered` (publishable set) before page generation.
+- DB: `SELECT COUNT(*) FROM events WHERE price_type='tba'` → 0.
+- Shotgun coverage: 0 raw `$price_type:` bindings in production code.
+- Production: 0 `"priceType":"tba"` occurrences in `api/events.json`.
+- Spot-check residentadvisor event detail page → `isAccessibleForFree: false`, offers correctly omitted (classifier-gated by S134; no Schema.org-invalid Offer emission).
+
+**Surprises:**
+- The audit named two src/ writers as bypass candidates (`email-ingestion.ts`, `image-pipeline.ts`). Neither writes `price_type`. The audit's reasoning (single-call-site normalizers in multi-writer codebases are fragile) was correct; its candidate list was over-eager. Column-specific bypass diagnosis needs column-grep, not table-grep. Banked as new mistakes.md S137 entry alongside the primary failure mode.
+- The residentadvisor adapter's `let priceType = 'tba'` at `scripts/scrape-all.ts:1091` is an internal sentinel — "needs price discovery." It survives to the INSERT only when the detail-page price-fetch fails. That's exactly the 42-row population. S136's belt-and-suspenders normalizer was *designed* to absorb this case at the write boundary; the defect is that scrape-all.ts is a parallel writer that never imported the normalizer.
+
+**Learnings:**
+- `mistakes.md` S137 ×2: (a) single un-exported normalizer is a single-belt design despite the metaphor — parallel writers can't call what isn't exported. Detective control must ship with normalizer. (b) Column-bypass diagnosis needs column-grep evidence, not table-grep — audit's coarse enumeration produced two false leads before static trace narrowed to the actual writers.
+- `patterns.md` S137 ×2: (1) Concrete Pattern C instance appended — commit-message-as-state-proxy is the same failure mode as decisions-log-status-as-state-proxy, on a 24h timescale. (2) New Pattern D banked — single-call-site normalizer fragility + the export+detective-control pairing mitigation (S137 implementation pattern: export, grep-every-writer, build-pass vocabulary check, contract-test the normalizer directly).
+
+**Open items:**
+- Sprint 3 envelope migration (B-05 in audit-2026-05-13) still pending — `@graph` envelope, `@id` scheme, canonical-page sequencing, orphan-seller validator → FAIL across Place/Performer/Org/Organizer. Not blocked by anything in this session.
+- Offers refactor (B-04 in audit-2026-05-13, "Sprint 1 Session 2") — now unblocked; clean type/writer/data state confirmed. **Naming collision note:** the audit referenced this as a future "S137" before the session-log assigned 137 to this bypass closure. Successor session can either rename to S138 or keep the existing B-04 ID.
+- 4 dormant `'tba'` producers remain in `scripts/scrape-all.ts` at lines 330, 598, 832, 1019 (adapters other than residentadvisor). Writer fix at line 1407 covers all of them — sentinel `'tba'` is normalized to `'with-ticket'` at write time regardless of which adapter produced it. No follow-up needed unless the sentinel design is later refactored.
+
+**Commit:** `a9596b1cb` — pushed to origin/main, deployed via `netlify deploy --prod --dir=dist`. Production confirmed 0 tba.
 
 ---
