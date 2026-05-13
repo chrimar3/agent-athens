@@ -1241,10 +1241,26 @@ div#main-content {
 
 .card-save-btn.is-saved {
   opacity: 1;
-  color: var(--accent-primary);
 }
 
-.card-save-btn.is-saved svg { fill: var(--accent-primary); }
+.card-save-btn__icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.card-save-btn__icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill var(--t-fast);
+}
+
+.card-save-btn.is-saved .card-save-btn__icon path {
+  fill: currentColor;
+}
 
 .card-save-btn:focus-visible {
   outline: 2px solid var(--focus-ring);

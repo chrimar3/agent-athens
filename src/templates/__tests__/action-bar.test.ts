@@ -85,7 +85,9 @@ describe("renderCardSaveButton", () => {
   });
 
   test("uses 16px icon", () => {
-    expect(html).toContain('<svg width="16" height="16"');
+    expect(html).toContain('width="16"');
+    expect(html).toContain('height="16"');
+    expect(html).toContain('class="card-save-btn__icon"');
   });
 });
 

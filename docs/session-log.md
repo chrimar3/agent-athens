@@ -5725,3 +5725,42 @@ to patterns.md when next institutional batch lands.
 **Commit:** `a9596b1cb` — pushed to origin/main, deployed via `netlify deploy --prod --dir=dist`. Production confirmed 0 tba.
 
 ---
+
+### Session 138 (Minor — Design Navigator audit close-out) — Shape-based saved-state for `.card-save-btn` (Option 2) — 2026-05-13
+
+**Plan:** Ship Option 2 (shape-based saved-state) per Design Navigator's 2026-05-13 implementation spec. Replace color-based state on `.card-save-btn` (`var(--accent-primary)`) with shape-based state (outline → solid fill at `--text-primary` via `currentColor`). Closes yellow accent budget violation that surfaced when Gate 1's template-layer PASS was re-evaluated against the deferred central-CSS surface. Brief at session-prompt; spec authored by Design Navigator. **Stream:** Minor — small CSS/SVG change unblocking audit close-out.
+
+**What happened:**
+- Pre-flight Explore agent verified brief assumptions against repo. One material deviation found: `var(--accent-primary)` appears in **two** `.card-save-btn` rules (lines 1244 + 1247), not one as the brief anticipated. Both removed. Without the verify-assumptions step the second rule would have shipped intact and the yellow budget violation would have remained.
+- `BOOKMARK_ICON_16` at `src/templates/action-bar.ts:9` — added `class="card-save-btn__icon"` to the SVG element; removed inline `fill="none"`, `stroke="currentColor"`, `stroke-width="2"`, `stroke-linecap="round"`, `stroke-linejoin="round"` (now driven by CSS path rule). Width/height/viewBox/path/aria-hidden carried verbatim. `BOOKMARK_ICON_20` (detail-page glyph) untouched.
+- `src/styles/design-system.css:1242–1247` — removed both `--accent-primary` references; added three new rules: `.card-save-btn__icon` (sizing), `.card-save-btn__icon path` (default outline at `currentColor`, stroke-width 1.75), `.card-save-btn.is-saved .card-save-btn__icon path` (state flip to `fill: currentColor`).
+- `aria-pressed` wiring verified intact at `action-bar.ts:37` (`renderCardSaveButton`) + `:115–116` (`renderCardSaveScript`). No JS handler changes.
+- Test update at `src/templates/__tests__/action-bar.test.ts:87–91` — assertion `'<svg width="16" height="16"'` was brittle to attribute order; broken when the new `class` attribute landed before `width`. Decoupled to three independent presence checks (`width="16"`, `height="16"`, `class="card-save-btn__icon"`). Intent preserved.
+
+**Verified:**
+- `bun test` → 2086 pass / 1 skip / 0 fail (was 2061 in brief's expected; +25 new tests landed between brief authoring and execution, including the new `tests/build/og-url-canonical-parity.test.ts` cornerstone-parity suite).
+- `bunx tsc --noEmit` → clean.
+- `bun run src/generate-site.ts` → completed.
+- Grep verification: `grep -n "card-save-btn\|--accent-primary" src/styles/design-system.css | grep -B1 -A1 "card-save-btn"` → zero `--accent-primary` references on any `.card-save-btn` selector. Yellow-budget closure confirmed.
+- **NOT verified (flagged honestly):** visual smoke check (browser confirmation of outline → solid transition on save toggle, reload hydration, unsave transition, `(hover: none)` behavior). Executor is CLI-only, no browser access. User should perform visual smoke after pulling; revert if any state-transition or hydration issue surfaces.
+
+**Surprises:**
+- Brief anticipated a single `--accent-primary` reference; production has two (color on `.is-saved` + nested svg fill on `.is-saved svg`). Literal execution of the brief would have left line 1247 intact and the violation unclosed. Verify-assumptions pre-flight caught it. Banks alongside the existing five-precedent feedback entry (`memory/feedback_verify_paths_in_briefs.md`).
+- Intermittent test failure during the verify pass — `tests/build/og-url-canonical-parity.test.ts` failed with 8 cases citing missing `dist/<hub>/index.html` paths, then passed cleanly after a single test file edit (by user, in parallel) restructured the Greek branch to read `dist/<hub>.html` instead of `dist/<hub>/index.html`. The intermittency was real, the cause was not mine. Detection signal: pre-existing WIP files in working tree at session start mean any test-failure baseline is suspect until stashed-and-reverified.
+- `.edp-save-btn.is-saved svg { fill: var(--accent-primary); }` at `src/styles/design-system.css:1214` still uses `--accent-primary` for the detail-page save button (which uses `BOOKMARK_ICON_20`). Out of scope for this commit (spec scoped to `.card-save-btn` only). Banked as follow-up in open items.
+
+**Learnings:**
+- `patterns.md` Audit Methodology section created with **Deferred-Gate Provisionality (DGP)** entry. When an audit gate defers enforcement to another layer ("style-agnostic at A; centrally at B"), the verdict is provisional — re-check against the deferred surface before audit-loop closeout. Today's instance: Gate 1's template PASS was correct as scoped but didn't lock the layer-overall verdict; closure required reading the CSS and finding the two `--accent-primary` references.
+- `decisions.md` 2026-05-13 entry filed for the shape-based mechanism, DICE precedent, WCAG 1.4.1 (Use of Color) PASS, v1.1 polish flags (mobile hit target, hover: none) deferred.
+- Audit-loop closure protocol validated against this deferred-gate scenario: planner-side guard (verify-assumptions) caught the brief's single-rule assumption; pattern owner (Design Navigator) gets the methodology entry; relay-layer (Dev Planner patterns A/B) gets cross-reference, not a new entry.
+
+**Open items:**
+- **Visual smoke** unverified by executor; user to confirm outline → solid transition on save click, reload hydration, unsave transition, `(hover: none)` always-visible behavior. If any regresses, primary suspect is CSS specificity on the new `.card-save-btn.is-saved .card-save-btn__icon path` rule against any later override in the cascade.
+- `design-decisions.md` retro entry rewrite + `design-system.md §5` entry — Design Navigator's next batch doc pass. Not in this commit.
+- v1.1 polish flags bundled separately: mobile 44×44 hit target (WCAG 2.5.8 — current 32×32 is below minimum) + `(hover: none)` opacity tradeoff.
+- `.edp-save-btn.is-saved svg { fill: var(--accent-primary); }` at `design-system.css:1214` is a candidate for Option 2 extension to the detail-page save button. Same mechanism applies. Banked, not in scope.
+- **Naming collision note:** S137's own open items flagged that "successor session can either rename to S138 or keep the existing B-04 ID" for the offers refactor. This entry takes S138 as the chronologically next minor stream; the offers refactor can cleanly become S139 or keep B-04.
+
+**Commit:** `<pending>` — pushed to origin/main per brief Step 5. (Hash to be filled at commit time.)
+
+---

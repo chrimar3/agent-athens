@@ -3384,3 +3384,25 @@ Deliberately Deferred Register entry added to
 **Deferred:** Validator coverage gap. `isPlaceholder()` at `src/validators/schema-completeness.ts:63-66, 275-287` doesn't check `price_type` or Offer-shape. Scheduled for separate session.
 
 **Status:** Shipped. Test suite 2061/2062 pass (1 skip, 0 fail). Schema validity 5960/6005 = 99.25% (absolute pass count +7 vs diagnostic baseline). Zero remaining 'tba' rows in DB.
+
+---
+
+## 2026-05-13 — `.card-save-btn` saved-state mechanism (Option 2: shape-based)
+
+**Decision:** Shape-based saved-state on `.card-save-btn` (outline → solid fill at `--text-primary` via `currentColor`), not color-based. Option 2 per Design Navigator audit close-out.
+
+**Why:** Yellow accent budget held at 5 contexts. The original `.card-save-btn.is-saved { color: var(--accent-primary); }` + `svg { fill: var(--accent-primary); }` rules pushed the budget to 6. Design Navigator's Gate 1 was a provisional PASS at the template layer ("style-agnostic at template; enforced centrally in CSS") and locked retroactively to clean PASS only when the central CSS rule was evaluated against the same constraint.
+
+**Mechanism:** SVG-level `fill`/`stroke` removed from `BOOKMARK_ICON_16`; stroke/fill driven by CSS path rules at `.card-save-btn__icon path`. State transition is fill-flip on the path (`fill: none` → `fill: currentColor`), inheriting from the button's existing `color: var(--text-primary)`. Glyph and 16×16 dimensions carried verbatim from production per spec Section 8 glyph-agnostic principle. Stroke-width refined 2 → 1.75 (deliberate, sub-glyph polish).
+
+**Precedent:** DICE saved-state pattern (same shape-flip mechanism, currentColor-driven).
+
+**Accessibility:** WCAG 1.4.1 (Use of Color) PASS via shape signal. State is conveyed by glyph shape (outline vs solid), not by hue. `aria-pressed` already wired at `src/templates/action-bar.ts:37` (`renderCardSaveButton`) + `:115–116` (`renderCardSaveScript`) — unchanged.
+
+**Deferred:** v1.1 polish flags (separate change):
+- Mobile 44×44 hit target (current button is 32×32 — below WCAG 2.5.8 minimum).
+- `(hover: none)` opacity tradeoff (currently always-visible on touch; consider alternate reveal).
+
+**Out of scope (banked):** `.edp-save-btn.is-saved svg { fill: var(--accent-primary); }` at `src/styles/design-system.css:1214` still uses `--accent-primary`. Same Option 2 mechanism could extend to the detail-page save button. Not in this commit — spec scoped only to `.card-save-btn`. Re-check before adding any new yellow-accent context elsewhere.
+
+**Status:** Shipped. Test suite 2086 pass / 1 skip / 0 fail. `bunx tsc --noEmit` clean. Zero `--accent-primary` references on `.card-save-btn` selectors (grep-confirmed). Closes Gate 1 deferred-enforcement provisional PASS → clean PASS.

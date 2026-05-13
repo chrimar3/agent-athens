@@ -4283,3 +4283,45 @@ or will exist; both must be addressed in the same commit.
 hygiene; this is a design-pattern decision at fix time. The trigger
 is "I am about to add a normalizer," not "I am about to write a
 brief." Different surface.
+
+---
+
+## Audit Methodology
+
+### Deferred-Gate Provisionality (DGP) (2026-05-13, S138)
+
+When an audit gate explicitly defers enforcement to a different
+layer (e.g. "style-agnostic at template; enforced centrally in
+CSS"), the verdict is **provisional** until the deferred surface
+is evaluated against the same constraint.
+
+**Today's instance:** Gate 1's yellow accent budget PASS on
+`src/templates/action-bar.ts` (template layer) was correct as
+scoped — the template emits no color tokens, only structural
+markup. But that PASS didn't lock the verdict for the action
+layer overall. The deferred surface was the central CSS at
+`src/styles/design-system.css:1242–1247`, where
+`.card-save-btn.is-saved { color: var(--accent-primary); }` plus
+`.card-save-btn.is-saved svg { fill: var(--accent-primary); }`
+pushed the yellow budget from 5 contexts to 6 — a violation
+invisible to the template-layer check.
+
+The gate only closed cleanly once the deferred surface was read
+and the two `--accent-primary` references were either removed or
+substituted (Option 2: shape-based saved-state, see
+`decisions.md` 2026-05-13).
+
+**Closure rule:** re-check the gate against the deferred surface
+before audit-loop closeout. A provisional PASS with deferred
+enforcement is a deferred closure, not a closure.
+
+**Detection signal:** if the audit verdict on layer A reads
+"X is enforced at layer B" or "style-agnostic at A; centrally
+at B," do not close the audit loop until layer B has been
+independently verified against the same constraint X. The
+deferral is meta-evidence that the gate spans both layers.
+
+**Cross-references:** Pattern owned by Design Navigator (audit
+methodology surface). Dev Planner patterns A and B (planner-side,
+relay-layer) are downstream consumers — both rely on this closure
+rule to avoid relaying provisional PASS verdicts as final.
