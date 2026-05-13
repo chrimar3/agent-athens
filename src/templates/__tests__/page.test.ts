@@ -70,6 +70,24 @@ describe("renderPage", () => {
     expect(html).toContain('property="og:site_name" content="agent-athens"');
   });
 
+  // Bug surfaced via D11 sweep 2026-05-12: English hub pages emitted og:url
+  // without the /en/ locale prefix while canonical was post-fixed in the hub
+  // generator. JSON-LD CollectionPage.url had the same defect. Lock parity
+  // at the template level so canonical, og:url, and JSON-LD url all agree
+  // when locale='en'.
+  test("og:url, canonical, and JSON-LD CollectionPage.url all use /en/ prefix when locale='en'", () => {
+    const html = renderPage(sampleMetadata, [sampleConcert], undefined, undefined, 'en');
+
+    expect(html).toContain('rel="canonical" href="https://agentathens.com/en/jazz-concert-this-week"');
+    expect(html).toContain('property="og:url" content="https://agentathens.com/en/jazz-concert-this-week"');
+
+    const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
+    expect(jsonLdMatch).toBeTruthy();
+    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    expect(jsonLd.url).toBe("https://agentathens.com/en/jazz-concert-this-week");
+    expect(jsonLd.inLanguage).toBe("en");
+  });
+
   test("should include Schema.org JSON-LD", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
