@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-13T05:14:09.684Z"
+    "lastUpdate": "2026-05-13T05:23:51.041Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,21 +13,21 @@
     "byType": [
       {
         "type": "concert",
-        "total": 969,
-        "pass": 951,
+        "total": 971,
+        "pass": 953,
         "warn": 18,
         "fail": 0,
-        "info": 771,
+        "info": 773,
         "passRate": 98
       },
       {
         "type": "dj_set",
-        "total": 437,
+        "total": 441,
         "pass": 409,
-        "warn": 28,
+        "warn": 32,
         "fail": 0,
-        "info": 437,
-        "passRate": 94
+        "info": 441,
+        "passRate": 93
       },
       {
         "type": "exhibition",
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 5572,
-      "pass": 5524,
-      "warn": 48,
+      "total": 5578,
+      "pass": 5526,
+      "warn": 52,
       "fail": 0,
-      "info": 5263,
+      "info": 5269,
       "passRate": 99
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 48
     },
     "event_template": {
-      "total": 5572,
-      "pass": 5524,
-      "warn": 48,
+      "total": 5578,
+      "pass": 5526,
+      "warn": 52,
       "fail": 0,
-      "info": 5263
+      "info": 5269
     },
     "byVenue": [
       {
@@ -295,12 +295,12 @@
       },
       {
         "venue": "b side athens",
-        "total": 38,
+        "total": 40,
         "pass": 36,
-        "warn": 2,
+        "warn": 4,
         "fail": 0,
-        "info": 38,
-        "passRate": 95,
+        "info": 40,
+        "passRate": 90,
         "sameAsState": "missing"
       },
       {
@@ -505,11 +505,11 @@
       },
       {
         "venue": "don't be a dick",
-        "total": 9,
+        "total": 10,
         "pass": 0,
-        "warn": 9,
+        "warn": 10,
         "fail": 0,
-        "info": 9,
+        "info": 10,
         "passRate": 0,
         "sameAsState": "missing"
       },
@@ -545,12 +545,12 @@
       },
       {
         "venue": "el chapo",
-        "total": 6,
+        "total": 7,
         "pass": 5,
-        "warn": 1,
+        "warn": 2,
         "fail": 0,
-        "info": 6,
-        "passRate": 83,
+        "info": 7,
+        "passRate": 71,
         "sameAsState": "missing"
       },
       {
@@ -605,11 +605,11 @@
       },
       {
         "venue": "floyd",
-        "total": 16,
-        "pass": 16,
+        "total": 17,
+        "pass": 17,
         "warn": 0,
         "fail": 0,
-        "info": 16,
+        "info": 17,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -865,11 +865,11 @@
       },
       {
         "venue": "piraeus club academy",
-        "total": 5,
-        "pass": 5,
+        "total": 4,
+        "pass": 4,
         "warn": 0,
         "fail": 0,
-        "info": 5,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1935,11 +1935,11 @@
       },
       {
         "venue": "κυτταρο",
-        "total": 26,
-        "pass": 26,
+        "total": 27,
+        "pass": 27,
         "warn": 0,
         "fail": 0,
-        "info": 26,
+        "info": 27,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -2395,11 +2395,11 @@
       },
       {
         "venue": "τεχνοπολη",
-        "total": 18,
-        "pass": 18,
+        "total": 19,
+        "pass": 19,
         "warn": 0,
         "fail": 0,
-        "info": 18,
+        "info": 19,
         "passRate": 100,
         "sameAsState": "missing"
       },
