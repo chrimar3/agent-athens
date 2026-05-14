@@ -54,6 +54,7 @@ Accumulated decisions made during Agent Athens development.
 | Generate combinatorial static pages | AI answer engines prefer direct URL hits | Initial |
 | Category pages with curated slugs | User-friendly URLs like /concerts, /exhibitions | 2026-02 |
 | Only show verified_athens + pass_through | Quality gate: reject unverified venues | Initial |
+| Locale-aware URL emission at the template, not via downstream regex-patch | After fixing og:url/canonical/JSON-LD drift on English cornerstones, the post-hoc canonical override in `hub-page.ts:376-378` was left in place. It became a no-op once the template emits the same locale-aware value, but removing it is a separate dead-code cleanup. Keeping it minimizes blast radius for the hotfix; cleanup can land independently once a "no downstream URL patching" guard is in place. See patterns.md "Locale-Aware URL Emission Pattern". | 2026-05-13 |
 
 ## Click Tracking
 
@@ -3406,3 +3407,74 @@ Deliberately Deferred Register entry added to
 **Out of scope (banked):** `.edp-save-btn.is-saved svg { fill: var(--accent-primary); }` at `src/styles/design-system.css:1214` still uses `--accent-primary`. Same Option 2 mechanism could extend to the detail-page save button. Not in this commit — spec scoped only to `.card-save-btn`. Re-check before adding any new yellow-accent context elsewhere.
 
 **Status:** Shipped. Test suite 2086 pass / 1 skip / 0 fail. `bunx tsc --noEmit` clean. Zero `--accent-primary` references on `.card-save-btn` selectors (grep-confirmed). Closes Gate 1 deferred-enforcement provisional PASS → clean PASS.
+
+---
+
+## 2026-05-14 — Session B Decisions
+
+### Save Affordance: Shape-Based Saved State (Option 2, multi-site application)
+
+**Decision**: The shape-flip mechanism for the saved-state save-affordance applies uniformly to BOTH save-affordance sites. The icon-shape-flip pattern from d1cee688a (`.card-save-btn`) extends to `.edp-save-btn` (detail-page action bar) in Session B (today).
+
+**Mechanism (mechanism-portable, per Design Navigator spec)**:
+- Default (unsaved) state: outline glyph via `<path stroke="currentColor" fill="none">`.
+- `.is-saved` state: solid glyph via `path { fill: currentColor }` — `currentColor` resolves to `--text-primary` from the button's base styling.
+- The button itself toggles `.is-saved` class (already wired in `renderSaveButtonScript` for `.edp-save-btn` and `renderCardSaveScript` for `.card-save-btn`).
+
+**Container chrome differences PRESERVED per Design Navigator spec** (not copied between sites):
+- `.card-save-btn` is hover-revealed (default `opacity: 0`, fades in on `.event-card:hover` or focus-visible). It's a secondary affordance — present but unobtrusive.
+- `.edp-save-btn` is always visible (no opacity fade). It's the primary save CTA on the detail page.
+- `.card-save-btn` has dark-glass chip chrome (rgba bg + blur). `.edp-save-btn` has action-bar chrome (button-style with border).
+- `.edp-save-btn` includes a text label that swaps `Save` ↔ `Saved` (Greek: `Αποθήκευση` ↔ `Αφαίρεση από αποθηκευμένα`) via `data-save-label`/`data-unsave-label` data attrs.
+
+**Three independent state signals on .edp-save-btn**: class toggle (`.is-saved`), label swap (data-attr-driven), icon shape flip (CSS). No yellow color needed; three signals are sufficient state communication.
+
+**Constant rename (Q1 Candidate B, use-encoded)**:
+- `BOOKMARK_ICON_16` → `CARD_BOOKMARK_ICON` (consumer: `renderCardSaveButton`)
+- `BOOKMARK_ICON_20` → `ACTIONBAR_BOOKMARK_ICON` (consumer: `renderActionBarHtml`)
+
+Encodes use context (which button) rather than pixel dimensions. Aligns with Design Navigator's criterion (a) "encodes use, not size" as the higher-stakes naming signal. Introduces `<USE>_<DOMAIN>_ICON` as a new icon-domain convention in the codebase (no prior precedent for use-encoded icons; existing SHARE_ICON, CALENDAR_ICON are single-instance so didn't need a use prefix).
+
+**Q4 single-commit grouping** (rename + extension): the rename and extension ship together. Q4's rationale eliminated the Gate 4 cross-commit retroactive-touch concern — instead of "rename now, extend later" (which would create a window where the rename's icon-domain rationalization is incomplete) or "extend now, rename later" (which would commit the extension while the constant names still encode size), both land in one commit.
+
+**Yellow accent budget delta**: pre-Session-B count 41 → post-Session-B 38. Three occurrences eliminated (lines 1210, 1211, 1214 of design-system.css). Q6 semantic-context audit on the remaining 38 occurrences (4 save-affordance-adjacent / 4 unclear-fallback / 30 non-save-affordance) detached to Design Navigator's queue.
+
+**Status**: Shipped this commit. Test suite 2162 pass / 1 skip / 0 fail; tsc clean; build clean. Yellow count 41 → 38 grep-confirmed. SSR confirms ACTIONBAR_BOOKMARK_ICON renders with `class="edp-save-btn__icon"` on detail pages; CARD_BOOKMARK_ICON still renders with `class="card-save-btn__icon"` on cards (rename did not disturb card emission). Visual 4-state walk deferred to Christos post-deploy (no browser env in execution).
+
+**Cross-references**: bookmark-icon-rename-proposal-2026-05-14.md (Design Navigator's reviewed proposal); d1cee688a (S138, the multi-site application's first site); S139 verification batch that surfaced `.edp-save-btn` as the third yellow-budget violation site.
+
+### SCO (State-Cycle Observation) — process pattern
+
+**Pattern** (decisions-only per Q7; no grep-verifiable current production instance):
+
+Before computing styles for a multi-state component (saved/unsaved, active/inactive, expanded/collapsed, hover/no-hover, focus/blur), cycle through every state in mind and verify the style computation is correct in each. Default-render observation alone is insufficient — state-overrides that only apply in non-default states can drift silently because the default render never exercises them.
+
+**Today's relevance**: the yellow-flip on `.edp-save-btn.is-saved` was visible only when the button was in the saved state. A reviewer or auditor inspecting the default `.edp-save-btn` rendering would never see the yellow accent — the violation lived in the state-override at lines 1210-1211 and 1214 (which only activated when `.is-saved` class was present on the button). The original Gate 1 audit's "5 named contexts" enumeration apparently never cycled through state-override blocks; that's how `.edp-save-btn.is-saved` escaped the count.
+
+**Closure rule**: When auditing a design surface against a constraint (color budget, contrast requirement, accessibility heuristic), explicitly walk every state in every component's state machine before declaring the audit complete. State enumeration is part of audit scope; default-render observation is not sufficient evidence.
+
+**Why decisions.md only and not patterns.md**: SCO is a methodology, not a code-surface pattern. No grep can verify "did the auditor cycle through states." This belongs as a banked decision-of-process, not a grep-anchored pattern.
+
+**No reverse-reference to patterns.md** (per Q7 fix-rot guard for unidirectional process patterns).
+
+### Pattern A sub-pattern — narrative
+
+**Pattern** (decisions.md narrative; patterns.md anchor entry at 2026-05-14 with grep evidence): when grep-verifying a fix surface, count *all* matches in the affordance family, not just whether ≥1 exists. Search-exhaustiveness across parallel selectors is a precondition for declaring a fix complete.
+
+**Chain narrative**:
+
+1. **d1cee688a (2026-05-13, S138)** — fix shipped on `.card-save-btn` removing two `--accent-primary` rules (color + svg fill). The original audit brief (Option 2 spec) anticipated one rule; verification surfaced both. Pattern A first instance: a single-grep approach finding one match would have missed the second.
+
+2. **S138 commit message** documented the second-instance finding as a footnote, banking the audit-exhaustiveness lesson but not generalizing it.
+
+3. **S139 verification batch (2026-05-13)** — Dev Planner ran a verification pass on the parallel `.edp-save-btn` selector. Found three rules with `--accent-primary` (color, border-color, svg fill — three-rule family, not two). Banked `.edp-save-btn` as out-of-scope for S139's canonical-to-root work; routed as the next emission arm's target.
+
+4. **bookmark-icon-rename-proposal-2026-05-14.md (Session B planning)** — Pattern A pre-classification correctly identified the three-rule family on `.edp-save-btn` as the third grep-anchored instance. Routed Pattern A as grep-anchored (patterns.md) + narrative (decisions.md, this entry).
+
+5. **Session B (2026-05-14, this commit)** — closes Pattern A's third instance by removing all three `.edp-save-btn` yellow rules + adding the shape-flip mechanism. Post-fix grep `grep -nE '\.(card|edp)-save-btn.*accent-primary' src/styles/design-system.css` returns zero matches.
+
+**Three-instance recurrence locks the pattern class**. Sibling-selector exhaustiveness is a recurring search-discipline failure mode, not a one-off oversight on any individual audit. Engineering response: extend the parity verifier's coverage assertions to count all rules in the same class family for any class that has a state-override, not just spot-check one rule per family.
+
+**Reverse-reference**: see patterns.md 2026-05-14 entry "Pattern A sub-pattern (search-exhaustiveness) — locked at three instances" for the grep anchor + post-fix traceability. Bidirectional cross-reference per Q7 fix-rot guard.
+
+**Closure for Pattern A as a class**: three-instance recurrence is enough to commit engineering-discipline change (verifier coverage expansion) rather than session-by-session re-discovery. S140 brief's parity verifier extension carries that change forward to description-field siblings.

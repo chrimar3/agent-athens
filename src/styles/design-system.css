@@ -1206,12 +1206,24 @@ div#main-content {
   outline-offset: 2px;
 }
 
-.edp-save-btn.is-saved {
-  color: var(--accent-primary);
-  border-color: var(--accent-primary);
+.edp-save-btn__icon {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
-.edp-save-btn.is-saved svg { fill: var(--accent-primary); }
+.edp-save-btn__icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill var(--t-fast);
+}
+
+.edp-save-btn.is-saved .edp-save-btn__icon path {
+  fill: currentColor;
+}
 
 /* ── Card Save Button ──────────────────────────── */
 

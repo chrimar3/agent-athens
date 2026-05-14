@@ -5,8 +5,8 @@ export function escapeAttr(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-const BOOKMARK_ICON_20 = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
-const BOOKMARK_ICON_16 = '<svg class="card-save-btn__icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+const ACTIONBAR_BOOKMARK_ICON = '<svg class="edp-save-btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+const CARD_BOOKMARK_ICON = '<svg class="card-save-btn__icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
 const SHARE_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
 const CALENDAR_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
 
@@ -23,7 +23,7 @@ export function renderActionBarHtml(
   const safeTitle = escapeAttr(title);
   return `<div class="edp-action-bar">
           <button class="edp-save-btn" data-save-event data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}" data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
-            ${BOOKMARK_ICON_20}
+            ${ACTIONBAR_BOOKMARK_ICON}
             <span class="edp-save-label">${t.saveEvent}</span>
           </button>
           <button class="edp-share-btn" data-share-url="${canonicalUrl}" data-toast-text="${escapeAttr(t.linkCopied)}" type="button" aria-label="${t.shareEvent}">
@@ -34,7 +34,7 @@ export function renderActionBarHtml(
 }
 
 export function renderCardSaveButton(eventId: string, slug: string, title: string): string {
-  return `<button class="card-save-btn" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(title)}" type="button" aria-pressed="false" aria-label="Save">${BOOKMARK_ICON_16}</button>`;
+  return `<button class="card-save-btn" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(title)}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
 }
 
 export function renderSavedEventsScript(): string {

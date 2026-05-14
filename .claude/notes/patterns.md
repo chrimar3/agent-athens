@@ -4468,3 +4468,52 @@ constructs `param` with locale, that's the actual locale boundary.
 (precedent count now 7 with S139). Brief-vs-reality verification
 typically focuses on file existence and structure; this pattern
 extends it to data-flow shape between template and caller.
+
+---
+
+## 2026-05-14 — Session B Pattern Banking
+
+### DGP (Deferred-Gate Provisionality) — third concrete instance
+
+When an audit gate verdict explicitly defers enforcement to another layer ("style-agnostic at A; enforced centrally at B"), the verdict is **provisional** until layer B has been independently checked against the same constraint — AND until every parallel selector implementing the same affordance at layer B has also been checked.
+
+**Today's grep anchor (pre-removal evidence, cite by commit hash for post-fix traceability):**
+
+```
+grep -n '\.edp-save-btn.*is-saved' src/styles/design-system.css  # at HEAD pre-Session-B (82aa4fd7d)
+1209:.edp-save-btn.is-saved {
+1214:.edp-save-btn.is-saved svg { fill: var(--accent-primary); }
+```
+
+These two lines were the third yellow-budget violation site (after the two `.card-save-btn` lines that d1cee688a removed). The original Gate 1 audit closed cleanly on `.card-save-btn` (S138) but the parallel selector `.edp-save-btn` — implementing the *same* save-affordance — was banked as out-of-scope. The bank held for ~24 hours; Session B closes it.
+
+**The DGP instance specifically**: Gate 1's "yellow budget held at 5 named contexts" verdict deferred enforcement to "central CSS." S138 found the CSS surface for `.card-save-btn`; S139 ran the verification batch and surfaced `.edp-save-btn` at line 1214 as a residual; Session B closes the residual. Gate 1's verdict reached clean PASS only after all three save-affordance sites (card color, card svg fill, edp svg fill + container color + container border-color) were addressed — a 24-hour deferred-enforcement loop with three commits.
+
+**Closure rule reaffirmed**: A gate that defers enforcement to a different layer must verify the deferred layer's coverage across *all* affordance instances, not just the first found. Parallel-selector enumeration is part of layer-B verification, not a separate concern.
+
+**Cross-commit grep anchor for post-fix traceability**:
+- d1cee688a: removed `.card-save-btn` yellow (S138)
+- Session B (`<hash>`): removes `.edp-save-btn` yellow (today)
+- Post-fix grep `grep -nE '\.(card|edp)-save-btn.*accent-primary' src/styles/design-system.css` returns zero matches.
+
+### Pattern A sub-pattern (search-exhaustiveness) — locked at three instances
+
+When grep-verifying a fix surface, count *all* matches, not just whether ≥1 exists. The search must enumerate every selector in the same class family / affordance family / emission block.
+
+**Today's grep anchor (pre-removal evidence)**:
+
+```
+grep -nE '\.edp-save-btn.*is-saved' src/styles/design-system.css  # at HEAD pre-Session-B
+1209:.edp-save-btn.is-saved {
+1214:.edp-save-btn.is-saved svg { fill: var(--accent-primary); }
+```
+
+Two matches in the same class family. S138's earlier verification finding identified the same shape on `.card-save-btn.is-saved` (color rule + svg fill rule = two matches in the same family). Three instances confirmed across:
+
+1. S138 — `.card-save-btn.is-saved` color + svg fill (two-rule family)
+2. S139 verification — `.edp-save-btn.is-saved` color + border-color + svg fill (three-rule family — the third had been silently overlooked because Gate 1's grep mechanism never matched the parent `.is-saved` block on the `.edp-save-btn` selector)
+3. Session B — closure across the entire save-affordance surface
+
+**Three-instance recurrence locks the pattern class**. Sibling-selector exhaustiveness is recurrent, not coincidence.
+
+**Cross-reference**: see decisions.md 2026-05-14 entry "Pattern A sub-pattern narrative" for full d1cee688a / S138 / S139 / Session B chain narrative + rationale. Bidirectional cross-reference is non-optional per Q7 fix-rot guard.
