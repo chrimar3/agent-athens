@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-14T09:09:01.821Z"
+    "lastUpdate": "2026-05-14T09:27:40.778Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,21 +13,21 @@
     "byType": [
       {
         "type": "concert",
-        "total": 956,
-        "pass": 938,
+        "total": 954,
+        "pass": 936,
         "warn": 18,
         "fail": 0,
-        "info": 758,
+        "info": 757,
         "passRate": 98
       },
       {
         "type": "dj_set",
-        "total": 443,
+        "total": 447,
         "pass": 403,
-        "warn": 40,
+        "warn": 44,
         "fail": 0,
-        "info": 443,
-        "passRate": 91
+        "info": 447,
+        "passRate": 90
       },
       {
         "type": "exhibition",
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 5563,
-      "pass": 5503,
-      "warn": 60,
+      "total": 5565,
+      "pass": 5501,
+      "warn": 64,
       "fail": 0,
-      "info": 5255,
+      "info": 5258,
       "passRate": 99
     },
     "orphanSlugs": []
@@ -156,11 +156,11 @@
       "info": 48
     },
     "event_template": {
-      "total": 5563,
-      "pass": 5503,
-      "warn": 60,
+      "total": 5565,
+      "pass": 5501,
+      "warn": 64,
       "fail": 0,
-      "info": 5255
+      "info": 5258
     },
     "byVenue": [
       {
@@ -295,12 +295,12 @@
       },
       {
         "venue": "b side athens",
-        "total": 40,
+        "total": 41,
         "pass": 35,
-        "warn": 5,
+        "warn": 6,
         "fail": 0,
-        "info": 40,
-        "passRate": 88,
+        "info": 41,
+        "passRate": 85,
         "sameAsState": "missing"
       },
       {
@@ -645,12 +645,12 @@
       },
       {
         "venue": "gazi view",
-        "total": 6,
+        "total": 7,
         "pass": 5,
-        "warn": 1,
+        "warn": 2,
         "fail": 0,
-        "info": 6,
-        "passRate": 83,
+        "info": 7,
+        "passRate": 71,
         "sameAsState": "missing"
       },
       {
@@ -705,12 +705,12 @@
       },
       {
         "venue": "it athens",
-        "total": 30,
+        "total": 32,
         "pass": 28,
-        "warn": 2,
+        "warn": 4,
         "fail": 0,
-        "info": 30,
-        "passRate": 93,
+        "info": 32,
+        "passRate": 88,
         "sameAsState": "missing"
       },
       {
@@ -755,11 +755,11 @@
       },
       {
         "venue": "newman cinema",
-        "total": 2,
-        "pass": 2,
+        "total": 1,
+        "pass": 1,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -805,8 +805,8 @@
       },
       {
         "venue": "onassis stegi",
-        "total": 59,
-        "pass": 59,
+        "total": 58,
+        "pass": 58,
         "warn": 0,
         "fail": 0,
         "info": 0,
