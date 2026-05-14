@@ -3492,3 +3492,144 @@ When two or more specialists each need stable diagnostic artifacts to unblock th
 **Economy comparison:** today closed work that would have taken five CC sessions a week ago using diagnostic-per-specialist or in-session synchronous handoff patterns. Three CC sessions covered: mini-session bundle (`97c201d73`), tier-band clarification (`7cc4fde99`), Session B rename+extension (`02dcc7c71`).
 
 **Classification:** process pattern, no current grep instance — narrative only. Decisions home per Q7 fix-rot rule (Design Navigator 2026-05-13).
+
+### A0 Hard-Stop Calibration: Substitution-Ladder Deference (2026-05-14)
+
+**Context:** Sub-problem A from the 2026-05-14 A0 calibration audit identified 4/10 representative inspections where a hard-stop fired alongside a substitution ladder that had already produced clean output (no fabrication, careful fallback wording, unreliable field omitted). All 4 events would render correctly if published. The hard-stop suppression is redundant with the substitution ladder's safety work. Audit anchors: HEB SED, Santouri, Mayans, NBZ. Concern types involved: entity-resolution-uncertain and ticket-merchant-unverified. Full-cohort entity-resolution + ticket-merchant population is 22 events; full-population FP rate unknown but trajectory suggests significant share. Planner recommended Option 1 (sub-problem A rule-side fix) with Option 3 fallback if cross-project coordination slips past T-10.
+
+**Decision:**
+
+1. **Hard-stop semantics: last-resort, not defense-in-depth.** When the substitution ladder produces structured signal that it fired and handled the concern cleanly, the hard-stop defers and the event publishes. Applies to entity-resolution-uncertain and ticket-merchant-unverified only — sub-problem B concerns (date-conflict-or-unparseable, venue-mismatch-or-unknown for non-sub-location cases) continue to fire as before because those catch real upstream data corruption.
+
+2. **Telemetry: append-only JSONL at exemption chokepoint.** `logs/hardstop-would-have-fired.jsonl` fires one record per exempted event per build. Matches the existing banned-phrase-matches.csv pattern (decoupled from data model, maximally reversible, queryable). Provides post-deploy signal for the future FP-rate-among-firings warning (separate decision; see "S110f Calibration Metric: FP-Rate-Among-Firings").
+
+3. **Implementation requires cross-project coordination.** Substitution ladder is implicit (lives in agent brief template, Enrichment Writer scope), not a code module. Structured `substitution_applied` + `substitution_summary` fields require coordinated change: Enrichment Writer updates brief template to emit fields in `temp-descriptions/concerns.jsonl`; Dev Planner adds ingest, schema, exemption gate, and JSONL telemetry. Cross-project contract spec (GEO Strategist) defines field shape before either sub-session starts.
+
+4. **Text-extract-at-ingest alternative rejected on rubric grounds.** Same brittleness as the branch-(i) text-prefix coupling rejected for the exemption mechanism. Per-city regex maintenance is not SPEC-universal; agent-barcelona's brief template phrasing emits its own structured fields cleanly.
+
+5. **Slip-gate: completed-by-T-10 or abort to Option 3.** If both sub-sessions (Dev Planner + Enrichment Writer) have not landed and verified by EOD May 19, abort to deferred-execution posture. Brief drafts ship as scoped specs for post-Παναθήναια execution; demo story shifts to "audit complete, fixes scoped, cross-project execution post-demo." Cornerstone polish takes precedence in the May 19 → May 29 window.
+
+**Reasoning:**
+
+*On last-resort semantics:* A0 hard-stops exist to protect Tier A training data and Tier B/C citation accuracy from corrupt signal. When the substitution ladder produces output with no fabrication, careful fallback wording, and omitted unreliable fields, that output does not damage Tier A — it's honest discovery-layer behavior (event + venue + date known; ticket vendor not verified, so omitted). Suppressing it costs a citation surface and an inventory data point for zero protective benefit. The 4 audited events would render correctly if published; n=4 is directional rather than conclusive, but the reversibility of the rule-side exemption combined with telemetry monitoring is the correct shape for the confidence level. Aligns with 2026-04-16 phantom penalty precedent — gates that fire when the system already handled the issue elsewhere measure the wrong thing.
+
+*On JSONL telemetry over event_concerns extension:* JSONL is a runtime artifact decoupled from the data model. Adding an exempted_at_build_ts tier to event_concerns would tightly couple telemetry to schema migrations and complicate the future FP-rate-among-firings computation. Append-only JSONL is queryable, auditable, and skippable; if the exemption ever needs to revert, the JSONL becomes the record of what would-have-happened during the exemption window.
+
+*On cross-project coordination over single-stream text-extraction:* The single-stream alternative (save-batch.ts extracts substitution_summary from concern_text prose via regex) is faster — one Dev Planner session vs. two parallel sub-sessions. It is also brittle: agent prompt phrasing drift silently regresses the extraction; per-city regex maintenance is not SPEC-universal. The rubric established for the exemption mechanism (structured signal over text-prefix coupling) applies equally to the write-time decision. Accepting Option 2 here would mean the rubric was discipline-flexible, which has downstream implications for the future FP-rate-among-firings warning spec and for agent-barcelona/agent-berlin replicability.
+
+*On the named ladder as mechanism, not documentation:* Enrichment Writer's pre-flight verification surfaced that the substitution ladder, as observed by the audit, was not four agent-recognizable runtime steps — it was a mix of uniform policy (ticket-merchant: merchants are never named in prose), adjacent-rule scaffolding (entity-resolution: handled implicitly by credential-fabrication and thin-context policies), upstream pipeline normalization plus qualitative fallback (venue-mismatch: parent-venue resolution runs upstream of agent, agent-side handles only the qualitative-description case), and not-applicable-by-design (date-conflict: no agent-time substitution). The audit's output observation was correct; the discrete-step inference was overspecified. Addition A (named ladder steps in the agent brief) is therefore not documentation of existing behavior but the mechanism that makes structured self-reporting possible at all. The agent cannot self-report on a step it's currently taking implicitly without first being given the vocabulary to recognize that step. This upgrades the Enrichment Writer sub-session from parallel-nice-to-have to load-bearing for fix correctness — the slip-gate at T-10 retains its position and gains importance, because incomplete Addition A means Addition B emits nothing useful.
+
+*On slip-gate over open-ended optimism:* Cross-project sub-session coordination has historically taken longer than per-session estimates suggest; the T-14 to T-12 estimate has buffer but compounding small slips can exhaust it. Demo-window protection is the structural priority — both Option 1 ship and Option 3 defer produce credible demo stories; the deciding factor is execution risk against cornerstone polish, not narrative. Hard gate at T-10 forces the decision rather than letting drift collapse cornerstone work.
+
+**Implementation:**
+
+Contract spec (artifact at `specs/a0-substitution-contract-2026-05-14.md`, commit `82aa4fd7d`):
+
+Surface: `temp-descriptions/concerns.jsonl` — line-delimited JSON, one record per concern emitted by the agent brief.
+
+New fields added to each concern record:
+
+| Field | Type | Required | Null semantics |
+|---|---|---|---|
+| `substitution_applied` | boolean | Required | If the substitution ladder did not fire for this concern, emit `false`. Never omit. |
+| `substitution_summary` | string \| null | Required when `substitution_applied=true`; null otherwise | Concise human-readable summary of what the ladder did (≤200 chars). Examples: `"ticket merchant omitted — unverified URL"`, `"venue described qualitatively — no usable identifier in source"`. Null is the only acceptable value when `substitution_applied=false`. |
+
+Ingest contract (`save-batch.ts`):
+
+- Both fields must be present in incoming JSON; missing field → ingest fails loudly (not silently defaults). Forces brief-template compliance.
+- `substitution_applied=true` with `substitution_summary=null` → ingest fails. Forces meaningful pairing.
+- `substitution_applied=false` with non-null `substitution_summary` → ingest warns but accepts (defensive; agent may overemit; not a correctness violation).
+
+Database shape (migration 013):
+
+- `event_concerns.substitution_applied INTEGER NOT NULL DEFAULT 0` (boolean-as-int per SQLite convention)
+- `event_concerns.substitution_summary TEXT NULL`
+- CHECK constraint: `(substitution_applied = 0 AND substitution_summary IS NULL) OR (substitution_applied = 1 AND substitution_summary IS NOT NULL)`
+
+Exemption gate (`getHardStopExcludeIds` chokepoint):
+
+- Exemption applies when `substitution_applied=1` AND `concern_type IN ('entity-resolution-uncertain', 'ticket-merchant-unverified')`
+- Other concern types NOT exempted — sub-problem B catches via current rules; sub-problem C handled structurally in Component B
+- Telemetry JSONL fires at exemption decision point (one record per exempted event per build)
+
+JSONL telemetry shape (`logs/hardstop-would-have-fired.jsonl`):
+
+```json
+{
+  "build_ts": "2026-05-20T03:14:22Z",
+  "event_id": "...",
+  "rule": "entity-resolution-uncertain",
+  "concern_text": "...",
+  "substitution_summary": "..."
+}
+```
+
+Example concern record (post-contract):
+
+```json
+{"event_id":"...","concern_type":"ticket-merchant-unverified","concern_text":"...","substitution_applied":true,"substitution_summary":"ticket merchant omitted — URL not in classifier registry"}
+```
+
+Sub-session sequencing:
+
+1. Contract spec lands (this entry's artifact; commit `82aa4fd7d`)
+2. Migration 013 (schema add) runs
+3. Backfill script runs (see Anchor backfill protocol below)
+4. Dev Planner sub-session: ingest validation + exemption gate + JSONL telemetry
+5. Enrichment Writer sub-session: brief template update
+6. Verify both sub-sessions independently
+7. Deploy
+
+Steps 3 and 5 do not interact. Backfill corrects historical rows that brief-template-going-forward cannot reach. New emissions post-step-5 carry fields organically; backfilled rows already carry them. Single coherent state at deploy.
+
+**Anchor backfill protocol.** Audit-identified historical anchors (4 events at Athens audit time: HEB SED, Santouri, Mayans, NBZ) receive structured exemption via post-migration script (`scripts/backfill-a0-audit-anchors-2026-05-14.ts`), not via natural re-enrichment cycle. Backfill is one-time data correction:
+
+```sql
+UPDATE event_concerns
+SET substitution_applied = 1,
+    substitution_summary = '[verbatim from audit per-rep inspection]'
+WHERE event_id IN (...)
+  AND concern_type IN ('entity-resolution-uncertain', 'ticket-merchant-unverified');
+```
+
+Lives in `scripts/`, not in migration file (schema files SPEC-universal; data corrections per-city). Backfilled rows do NOT emit JSONL telemetry (one-time correction ≠ runtime exemption; future FP-rate-among-firings warning computes against runtime exemptions only). Pattern transfers to agent-barcelona/agent-berlin: each city's audit produces its own dated backfill script.
+
+**Validation:**
+
+*Pre-deploy:*
+
+- Contract spec verified by both sub-sessions before either commits (field names, types, CHECK constraint shape)
+- Migration 013 runs cleanly on production database snapshot
+- Backfill script runs against migration 013 schema; 4 anchor rows verified updated; row count matches expected
+- Ingest validation unit tests: missing field fails loudly; `applied=true + summary=null` fails; `applied=false + summary≠null` warns
+- Exemption gate unit tests: `applied=1 + matching concern_type` exempts; `applied=1 + non-matching concern_type` does NOT exempt; `applied=0` does NOT exempt regardless of concern_type
+- JSONL emits one record per exempted event per build, schema validated against documented shape
+- Schema.org Validator and Google Rich Results Test clean on the 4 anchor events post-exemption
+
+*Post-deploy (first 14 days):*
+
+- The 4 anchor events appear in production `dist/` and render with substitution-ladder fallback content
+- JSONL log accumulates exemption records (expected: runtime exemptions from new agent emissions; backfilled rows do NOT emit)
+- Spot-check: 4–12 events from the full-cohort entity-resolution + ticket-merchant population (22 events total) become exempted as natural re-enrichment cycles complete
+- No regression in Sub-problem B catches (date-conflict and venue-mismatch hard-stops continue firing on real data corruption)
+- **L3 fixture verification.** Row 3 (venue-mismatch-or-unknown, agent-side qualitative-fallback case) had no anchor coverage in the audit's 10-rep fixture set. If Enrichment Writer's Addition A test fixtures use a synthesized L3 case rather than a real-data case, validate the synthetic shape against real-world shape in the first 14 days post-deploy: JSONL telemetry captures real L3 exemptions as they accumulate; if their shape diverges materially from the synthesized fixture, brief template's L3 vocabulary receives a v2 revision via a separate Enrichment Writer session.
+
+*Post-deploy (30+ days):*
+
+- JSONL log provides denominator for future FP-rate-among-firings warning computation
+- If JSONL surfaces exempted events that render with materially wrong content (rather than honest field-omission), the rule-side exemption is revisited or scoped narrower
+
+**Replicability:**
+
+SPEC universal. Last-resort hard-stop semantics, substitution-ladder-deference principle, JSONL telemetry pattern, contract-spec field shape (`substitution_applied` + `substitution_summary`), ingest validation rules, CHECK constraint, exemption-gate concern_type scoping, sub-session sequencing pattern, slip-gate discipline — all city-agnostic. The cross-project coordination hinge (GEO Strategist drafts contract spec before parallel sub-sessions) is itself a SPEC-universal coordination pattern.
+
+DATA per-city. Each city's agent brief template emits its own `substitution_summary` phrasing in its own language. Each city's audit produces its own dated backfill script naming city-specific event_ids. The 22-event full-cohort count is Athens-specific; agent-barcelona and agent-berlin will surface their own cohort sizes at their respective audit moments.
+
+**Connects to:**
+
+- 2026-04-16 "Quality Gate Suppression" — same precedent (gates that fire when the system already handled the issue measure the wrong thing)
+- Future entry "S110f Calibration Metric: FP-Rate-Among-Firings" — JSONL telemetry from this decision provides the denominator
+- Future entry "Sub-Location Handling Scoped Into Component B" — handles sub-problem C structurally; Verdi-class FPs resolve via venue registry + containedInPlace rather than rule exemption
+- Sub-problem B (upstream scraper/normalizer data quality) — explicitly out of scope; correct hard-stop catches preserved
+
+**Status:** Decided — contract spec v1 at `specs/a0-substitution-contract-2026-05-14.md` (commit `82aa4fd7d`); audit spec at `specs/a0-calibration-audit-2026-05-14.md` (commit `b1d1960af`); sub-session sequencing locked; T-10 slip-gate active; backfill protocol documented.
