@@ -315,3 +315,98 @@ Coverage is **not random**. It tracks source-level enrichment policy. Per-source
 ### Methodology note
 
 Probe executed via `sqlite3 data/events.db` with read-only `SELECT` queries. No data writes. Schema confirmed: `events` table has `type`, `source`, `full_description_en`, `language_preference`, `start_date`. No `original_language` column (deferred field never added). Counts taken at execution time 2026-05-14; subject to small drift on subsequent daily-pipeline runs.
+
+---
+
+## §7 Content-Language Probe — Root-Only Events (2026-05-14)
+
+Probe scope: three root-only event samples from distinct source tiers per §6's coverage classification (Tier 1: 100% English coverage; Tier 3: 25%; Tier 4: 0% or near-0% English coverage). Evidence-only — Dev Planner does NOT classify language. Classification routes to GEO Strategist for Item #1 closure.
+
+### Sampling methodology
+
+The `events` table has no `slug` column. Slugs are derived client-side via `generateEventSlug(event)` at `src/generators/event-page.ts:111-116`:
+
+```typescript
+export function generateEventSlug(event: Event): string {
+  const idPrefix = event.id.substring(0, 8);
+  const venueSlug = slugify(event.venue.name);
+  const titleSlug = slugify(event.title);
+  return `${idPrefix}-${venueSlug}-${titleSlug}`;
+}
+```
+
+Adaptation for this probe:
+
+1. Build the root-only slug set: `comm -23 <(ls dist/events/ | sort) <(ls dist/en/events/ | sort) > /tmp/root-only-slugs.txt`. Population: **4449 root-only events** (no /en/ counterpart).
+2. For each tier's source pattern, query `events` for matching ids ordered by id, then derive the 8-char prefix for each candidate and `grep "^${prefix}-"` against the root-only slug list. First hit wins per tier.
+3. Inspect the matched event's `dist/events/<slug>/index.html` for prose inside `<section class="edp-description" itemprop="description">`. Sample 2–3 paragraphs verbatim.
+
+This avoids requiring a schema change and gives GEO Strategist a fully-auditable derivation rule (id-prefix is the slug's stable seed; venue/title segments may drift if the underlying event data changes, but the id-prefix is fixed).
+
+### Source-column shape (no LIKE-pattern adaptation needed)
+
+Distinct values of `source`: `athinorama.gr`, `benaki`, `clubber.gr`, `devoxx.gr`, `eventbrite`, `greeksin.ai`, `hackathongreece.ai`, `halfnote`, `manual`, `meetup`, `megaron.gr`, `more.com`, `onassis`, `residentadvisor`, `snfcc`, `ticketservices`. Mix of FQDN and bare-name. LIKE patterns with `%megaron%`, `%halfnote%`, `%onassis%`, `%athinorama%` match the FQDN variants cleanly.
+
+### Samples + tier gaps
+
+#### Tier 1 (megaron / halfnote / onassis — 100% English coverage per §6) — **GAP**
+
+**No root-only event with prose found** across all candidates for all three Tier 1 sources (iterated full source-id-set, no LIMIT).
+
+**Structural finding**: Spot-check on megaron event-rows reveals a strict correlation in the DB:
+
+```
+SELECT id, full_description IS NOT NULL, full_description_en IS NOT NULL FROM events WHERE source LIKE '%megaron%' LIMIT 20;
+```
+
+Every row returned has `full_description` and `full_description_en` either BOTH set (1,1) or BOTH null (0,0). The schema/policy ties description-presence to bilingual-presence for Tier 1 sources. Consequence: any megaron event that lacks `full_description_en` (= root-only event, by definition) also lacks `full_description` (= no prose to sample). Same observed for halfnote and onassis.
+
+**This is a structural reason, not a sampling miss**: Tier 1 root-only events have empty `<section class="edp-description"><p></p></section>` blocks in HTML output because the underlying DB rows have no description at all.
+
+This is meaningful signal for GEO Strategist's Item #1: Tier 1's "100% English coverage" rate from §6 is achieved by NEVER having a description-without-translation. The enrichment pipeline produces both or neither.
+
+#### Tier 3 (athinorama — 25% English coverage per §6) — **GAP**
+
+**No root-only event with prose found** across all candidates for athinorama (iterated full source-id-set, no LIMIT).
+
+The same structural correlation appears to hold: athinorama root-only events lack description content. Whether the correlation is identical to Tier 1 (description-presence ⇔ bilingual-presence) or weaker (some root-only events have Greek-only descriptions) was not exhaustively probed — but the prose-sample search returned zero. GEO Strategist's call whether to investigate further.
+
+#### Tier 4 (Greek-only source — 0% or near-0% English coverage) — **SAMPLE FOUND**
+
+Iterated Tier 4 candidates in order: `clubber`, `meetup`, `eventbrite`, `manual`, `snfcc` (all gaps — no root-only events with prose found); first match landed on `benaki`.
+
+| Field | Value |
+|---|---|
+| Slug | `8787e304-138-20` |
+| Source | `benaki` |
+| Type | `exhibition` |
+| Title (verbatim) | `Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα` |
+| Path | `dist/events/8787e304-138-20/index.html` |
+
+**Prose sample** (verbatim from `<section class="edp-description">` first paragraph; text content extracted via tag-stripping):
+
+> "More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture."
+
+(No further paragraphs with substantive content in this event's description section.)
+
+**Observation (not classification)**: The title is rendered in Greek script (`Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα`). The prose body uses Latin script and English-language vocabulary. The event is from a Greek-only source (`benaki`) and has no /en/ counterpart. Title-language and prose-language differ on this event.
+
+### Classification deferred — GEO Strategist call
+
+Dev Planner does NOT classify the prose language. GEO Strategist reads the Tier 4 sample (and notes the Tier 1 / Tier 3 structural gap) and decides:
+
+1. Is the Tier 4 prose English, Greek transliterated to Latin, machine-translated, or something else?
+2. Does the Tier 1 / Tier 3 description-presence ⇔ bilingual-presence correlation match her model of the enrichment pipeline?
+3. Does the title-vs-prose language divergence on the Tier 4 sample (Greek title, English-script prose) match her model of content-language posture, or surface drift?
+
+Cross-reference: §6 source tiers + §4 disambiguation note that both /en/ and root pages serve identical English prose where prose exists. §7's Tier 4 sample reinforces §4: a root-only event from a Greek-only source still emits prose in English-script text, consistent with the "metadata-only locale distinction" finding.
+
+### Done state of probe
+
+| Tier | Outcome |
+|---|---|
+| Tier 1 | Structural gap documented |
+| Tier 3 | Structural gap documented |
+| Tier 4 | One sample with prose + observation |
+
+Total: 1 of 3 tiers yielded a samplable prose body. The gap on Tiers 1 + 3 is itself signal, not a probe failure. Routed to GEO Strategist for Item #1 closure.
