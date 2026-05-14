@@ -295,6 +295,22 @@ All page types must include 3 hreflang tags:
 
 Applied in: `page.ts` (filter pages), `event-page.ts` (event detail), `venue-page.ts` (individual + index).
 
+## Locale-Aware URL Emission Pattern
+
+URL-bearing meta fields (canonical, og:url, JSON-LD `url` / `@id`) must be derived **locale-aware at the emission point**, not patched post-render. Reference shape (used by `event-page.ts:411` and `templates/page.ts:461,511`):
+
+```typescript
+const urlPrefix = locale === 'en' ? 'en/' : '';
+// then:
+`${BASE_URL}/${urlPrefix}${slug}`
+```
+
+**Why:** post-render regex-patches (like the old `hub-page.ts:376-378` canonical override) only fix the field they target; sibling fields in the same template silently drift. Patching downstream is a one-field operation; emitting locale-aware is template-wide. The D11 sweep on 2026-05-12 caught a 3-month drift between canonical (patched) and og:url + JSON-LD `CollectionPage.url` (unpatched) — see mistakes.md.
+
+**Greek is the unprefixed default.** Never prepend `/el/`. The hreflang=el alternate always points at the bare path. Only `locale === 'en'` produces a prefix.
+
+**Do not switch to `src/utils/locale-url.ts`** for these emission sites unless you also touch every Greek caller. The helper returns trailing-slashed paths (`/en/this-weekend/`), while the existing templates produce no-trailing-slash URLs (`https://agentathens.com/this-weekend`); a wholesale switch would change Greek-side output (shotgun surgery).
+
 ## Test Sweep Pattern
 
 When quality gate terminology changes (e.g., `FILLER_PHRASES` → `LAZY_ADJECTIVES`, error message "filler" → "lazy adjectives"), **sweep all tests in the same commit**. Check:
@@ -4325,3 +4341,130 @@ deferral is meta-evidence that the gate spans both layers.
 methodology surface). Dev Planner patterns A and B (planner-side,
 relay-layer) are downstream consumers — both rely on this closure
 rule to avoid relaying provisional PASS verdicts as final.
+
+---
+
+### Sibling-Field Drift Detection (2026-05-14, S139)
+
+When one metadata field in an Open Graph / Schema.org / `<head>` block
+is locale-aware or state-aware, **every sibling field in the same
+block must be asserted in the parity verifier**. Sibling absence from
+the verifier = drift surface.
+
+**Today's mechanism (concrete):** `src/templates/page.ts` lines
+109–113 emit five OG fields back-to-back: `og:description`, `og:url`,
+`og:type`, `og:locale`, `og:locale:alternate`. S138's parity verifier
+asserted on `og:url` + canonical + JSON-LD url (caught D11's drift on
+those). It did NOT assert on `og:locale` or `og:locale:alternate`.
+Result: `og:locale` could be post-patched in hub-page.ts (silent
+correction) and `og:locale:alternate` could be hardcoded `en_US`
+on /en/ pages (silent wrong) — neither failing any test. The 2026-
+05-13 audit close-out found both via SSR grep, not via test failure.
+
+Additional confirmed sibling-drift instances surfaced same-day, out
+of scope for S139, banked for next emission arm:
+- `og:description` (page.ts:109) hardcoded Greek prose for both
+  locales.
+- `twitter:description` (page.ts:120) same hardcoded Greek.
+
+**Closure rule:** before shipping any new locale/state-aware emission,
+extend the parity verifier to assert *every* sibling in the same
+block. Three checks minimum:
+1. Locale-aware fields → assert correct value per locale across the
+   page-family pair.
+2. State-aware fields (e.g. is-saved, paginated) → assert correct
+   value per state.
+3. Symmetric-presence/absence fields (e.g. `og:locale:alternate`
+   when alternate exists vs not) → assert presence on the right
+   side and absence on the other.
+
+**Detection signal:** if a parity verifier asserts on ≥1 field from a
+block but not on the other fields in the same block, the unasserted
+fields are drift candidates. Run a column-wise audit per block.
+
+**Cross-reference:** Builds on **Deferred-Gate Provisionality (DGP)**
+above — DGP catches gate-deferral-across-layers; Sibling-Field Drift
+Detection catches gate-coverage-within-a-layer. Distinct surfaces,
+complementary closure rules.
+
+---
+
+### Post-Ship Strategic-Decision Shock Absorber (2026-05-14, S139, meta-pattern)
+
+Post-ship strategic decisions can retroactively narrow just-shipped
+emission scope. Plan the parity verifier extension *before* shipping
+the emission, not after the strategic re-decision.
+
+**Today's mechanism:** Commit `7966e4455` (2026-05-13) shipped /en/
+self-canonical posture for hubs (canonical + og:url + JSON-LD url
+all locale-aware, /en/ → /en/ URL). Within 24 hours, GEO Strategist's
+canonical-to-root decision walked it back: /en/ should canonicalize
+to root counterparts (consolidation move for partial-coverage state
+per §4 of `specs/en-deployment-state-2026-05-13.md`). S139 had to
+re-touch the same template lines (page.ts:94/110/513) plus extend
+to event-page.ts:165/403/411 plus revert two hub-page.ts post-patches.
+
+**Why it happened:** S138's verifier was scoped to lock the existing
+emission shape (locale-aware /en/ self-canonical) and ship green.
+That locked the shape *as shipped* without leaving room for the
+shape to flip without a verifier update. When Strategist decided the
+shape should be different, the verifier needed (a) shape-update for
+the new contract + (b) coverage extension to lock against further
+drift. Both in the same session as the source fix.
+
+**Closure rule (preventive):** when shipping locale/state-aware
+emission for the first time, the parity verifier should be authored
+to be *contract-flexible* — i.e., parameterize the expected URL
+shape rather than hardcoding. So when the contract flips, only the
+parameterization changes, not the entire test rewrite.
+
+**Closure rule (reactive, when re-decision lands):** package three
+things in the same commit:
+1. Source fix to the new contract.
+2. Verifier rewrite to the new contract (delete old assertions, add
+   new ones).
+3. Coverage extension if Session A surfaced gaps (e.g. content hubs
+   beyond cornerstones).
+
+Doing (1) without (2) ships the verifier asserting the old contract
+against the new emission — silent green-by-stale-test.
+
+**Detection signal:** a strategic decision document arriving within
+the cache TTL window (24h) of a prior shipping commit's title
+matching the same surface. If the decision says "actually, X should
+be Y instead," check whether the X-locking verifier needs rewrite.
+
+---
+
+### Caller-Side Composition Blind Spot (2026-05-14, S139)
+
+When probing emission, also probe callers — the field value lives in
+the composition, not just the template.
+
+**Today's mechanism (concrete):** `src/templates/content-page.ts:61`
+emits canonical as `${BASE_URL}/${slug}/`. Probe-by-grep on
+content-page.ts alone reported "no urlPrefix, always root URL." True
+— but `src/generate-site.ts:715` passes `slug: 'en/about'` for /en/
+content pages. The locale prefix was baked into the slug parameter
+upstream, so /en/about/ shipped canonical = `/en/about/`
+(self-canonical, not root). Bug invisible to per-template probe.
+
+**Closure rule:** Emission-site probes must include caller-side
+composition. For any template emitting URL fields, grep for the
+template's invocations and inspect the parameter shape. Specifically:
+1. If a template accepts `slug: string`, grep callers for `slug:`
+   and verify whether locale prefix is in the slug or separate.
+2. If a template accepts `url: string`, ditto for any URL-encoding
+   conventions.
+3. If a template's URL-field emission depends only on a parameter
+   (no internal locale flag), the locale-awareness lives upstream
+   in the caller.
+
+**Detection signal:** template emits `${BASE_URL}/${param}/` with no
+internal locale conditional. Trace `param` to the caller; if caller
+constructs `param` with locale, that's the actual locale boundary.
+
+**Cross-reference:** Variant of `feedback_verify_paths_in_briefs.md`
+(precedent count now 7 with S139). Brief-vs-reality verification
+typically focuses on file existence and structure; this pattern
+extends it to data-flow shape between template and caller.

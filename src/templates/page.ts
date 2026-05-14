@@ -61,7 +61,6 @@ export const TYPE_ICONS: Record<string, string> = {
 
 export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
-  const urlPrefix = locale === 'en' ? 'en/' : '';
 
   const schemaMarkup = generateSchemaMarkup(events, metadata, locale);
   const eventListHTML = renderDateGroupedEvents(events);
@@ -91,7 +90,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="keywords" content="${keywords}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
 
   <!-- Canonical URL (English slug for international SEO) -->
-  <link rel="canonical" href="${BASE_URL}/${urlPrefix}${url}">
+  <link rel="canonical" href="${BASE_URL}/${url}">
 
   <!-- Language Alternates -->
   <link rel="alternate" hreflang="el" href="${BASE_URL}/${url}">
@@ -107,10 +106,10 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- OpenGraph: Greek Primary, English Secondary -->
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
-  <meta property="og:url" content="${BASE_URL}/${urlPrefix}${url}">
+  <meta property="og:url" content="${BASE_URL}/${url}">
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="el_GR">
-  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale" content="${locale === 'en' ? 'en_US' : 'el_GR'}">
+  <!-- og:locale:alternate omitted: availableLanguage single-element per 2026-05-14 GEO canonical-to-root decision -->
   <meta property="og:site_name" content="agent-athens">
   <meta property="og:image" content="${BASE_URL}${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
   <meta property="og:image:width" content="1200">
@@ -459,7 +458,7 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
 
     const item: Record<string, unknown> = {
       "@type": event['@type'],
-      "@id": `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${generateEventSlug(event)}/`,
+      "@id": `${BASE_URL}/events/${generateEventSlug(event)}/`,
       "name": event.title,
       "description": `${event.type} event in Athens`,
       "startDate": normalizeStartDate(event.startDate),
@@ -504,13 +503,12 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
     };
   });
 
-  const urlPrefix = locale === 'en' ? 'en/' : '';
   const schema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": `${metadata.title} | Cultural Events in Athens`,  // Add English context
     "description": `${events.length} cultural events in Athens, Greece`,  // English
-    "url": `${BASE_URL}/${urlPrefix}${metadata.url}`,
+    "url": `${BASE_URL}/${metadata.url}`,
     "inLanguage": locale === 'en' ? 'en' : 'el',
     "about": {
       "@type": "Place",

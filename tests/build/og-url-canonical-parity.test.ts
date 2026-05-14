@@ -1,18 +1,47 @@
 // D11 sweep 2026-05-12 surfaced og:url/canonical drift on English cornerstone
-// pages: canonical had /en/ prefix (post-fixed by hub generator regex-replace),
-// og:url and JSON-LD CollectionPage.url did not (template-level emission was
-// not locale-aware). Root fix applied at template level; this assertion locks
-// build-output parity on the four cornerstone hubs in both locales.
+// pages. Initial fix (7966e4455) emitted /en/ self-canonical at template level.
+// 2026-05-14: GEO Strategist's canonical-to-root decision for Case B partial-
+// coverage state. /en/ pages canonicalize to root counterparts (canonical + og:url
+// + JSON-LD url all point to root URL). og:locale:alternate emission removed
+// entirely while availableLanguage is single-element. og:locale primary emitted
+// locale-correctly at template source.
+//
+// Rules locked by this verifier:
+//   (a) canonical-to-root: for every (root, /en/) pair, all three URL fields
+//       (canonical, og:url, JSON-LD `url`) point to the SAME root URL.
+//   (b) og:locale:alternate symmetric-absence: not emitted on any page.
+//   (c) og:locale primary parity: root pages emit `el_GR`, /en/ pages emit `en_US`.
+//
+// Coverage: 4 cornerstone hubs + 9 content hubs (13 pairs) + 1 event pair.
 //
 // Build-output assertion. Skipped when dist/ is not built —
-// run `bun run build` (or src/generate-site.ts) first to populate dist/.
+// run `bun run build` first to populate dist/.
 
 import { describe, test, expect } from "bun:test";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 
 const DIST = join(import.meta.dir, "..", "..", "dist");
-const CORNERSTONES = ["this-weekend", "today", "this-month", "open"] as const;
+const BASE_URL = "https://agentathens.com";
+
+const CORNERSTONE_HUBS = ["this-weekend", "today", "this-month", "open"] as const;
+const CONTENT_HUBS = [
+  "concerts",
+  "theatre",
+  "comedy",
+  "festivals",
+  "classical-music",
+  "greek-music",
+  "kids",
+  "nightlife",
+  "with-ticket",
+] as const;
+const ALL_HUBS = [...CORNERSTONE_HUBS, ...CONTENT_HUBS] as const;
+
+// Event slug with confirmed presence in both `dist/events/<slug>/` and
+// `dist/en/events/<slug>/` (verified via Probe 4 in
+// specs/en-deployment-state-2026-05-13.md §4).
+const EVENT_PAIR_SLUG = "00013a1f--phantom-spell";
 
 const distAvailable = existsSync(DIST) && existsSync(join(DIST, "index.html"));
 
@@ -28,6 +57,10 @@ function extractOgLocale(html: string): string | undefined {
   return html.match(/<meta property="og:locale" content="([^"]+)">/)?.[1];
 }
 
+function extractOgLocaleAlternate(html: string): string | undefined {
+  return html.match(/<meta property="og:locale:alternate" content="([^"]+)">/)?.[1];
+}
+
 function extractJsonLdUrl(html: string): string | undefined {
   const match = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
   if (!match) return undefined;
@@ -38,44 +71,127 @@ function extractJsonLdUrl(html: string): string | undefined {
   }
 }
 
-describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity on cornerstone hubs", () => {
-  for (const hub of CORNERSTONES) {
-    test(`English /en/${hub}/ — canonical, og:url, JSON-LD url all match with /en/ prefix`, () => {
-      const html = readFileSync(join(DIST, "en", hub, "index.html"), "utf8");
+// Greek hubs render as flat `dist/<hub>.html` files;
+// English hubs render as `dist/en/<hub>/index.html` subdirectories.
+// Event pages render as `dist/events/<slug>/index.html` (root) and
+// `dist/en/events/<slug>/index.html` (/en/) — both subdirectory shape.
+function rootHubPath(hub: string): string {
+  return join(DIST, `${hub}.html`);
+}
+function englishHubPath(hub: string): string {
+  return join(DIST, "en", hub, "index.html");
+}
+function rootEventPath(slug: string): string {
+  return join(DIST, "events", slug, "index.html");
+}
+function englishEventPath(slug: string): string {
+  return join(DIST, "en", "events", slug, "index.html");
+}
+
+describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — canonical-to-root posture", () => {
+  // Rule (a): canonical-to-root for hub pairs
+  for (const hub of ALL_HUBS) {
+    const rootUrl = `${BASE_URL}/${hub}`;
+
+    test(`Root hub /${hub} — canonical = og:url = JSON-LD url = root URL`, () => {
+      const html = readFileSync(rootHubPath(hub), "utf8");
       const canonical = extractCanonical(html);
       const ogUrl = extractOgUrl(html);
-      const ogLocale = extractOgLocale(html);
       const jsonLdUrl = extractJsonLdUrl(html);
 
-      expect(canonical).toBeDefined();
-      expect(canonical).toContain("/en/");
-      expect(ogUrl).toBe(canonical);
-      expect(jsonLdUrl).toBe(canonical);
-      expect(ogLocale).toBe("en_US");
+      expect(canonical).toBe(rootUrl);
+      expect(ogUrl).toBe(rootUrl);
+      expect(jsonLdUrl).toBe(rootUrl);
     });
-  }
 
-  // Greek cornerstones are emitted as flat dist/<hub>.html files (not subdirectories)
-  // — the English subdirectory shape is en-only. Verified 2026-05-13 against build output.
-  for (const hub of CORNERSTONES) {
-    test(`Greek /${hub} — canonical, og:url, JSON-LD url all match without /en/ prefix`, () => {
-      const html = readFileSync(join(DIST, `${hub}.html`), "utf8");
+    test(`English hub /en/${hub}/ — canonical = og:url = JSON-LD url = root URL (no /en/)`, () => {
+      const html = readFileSync(englishHubPath(hub), "utf8");
       const canonical = extractCanonical(html);
       const ogUrl = extractOgUrl(html);
-      const ogLocale = extractOgLocale(html);
       const jsonLdUrl = extractJsonLdUrl(html);
 
-      expect(canonical).toBeDefined();
+      expect(canonical).toBe(rootUrl);
       expect(canonical).not.toContain("/en/");
-      expect(ogUrl).toBe(canonical);
-      expect(jsonLdUrl).toBe(canonical);
-      expect(ogLocale).toBe("el_GR");
+      expect(ogUrl).toBe(rootUrl);
+      expect(jsonLdUrl).toBe(rootUrl);
     });
   }
+
+  // Rule (a): canonical-to-root for event pair
+  const eventRootUrl = `${BASE_URL}/events/${EVENT_PAIR_SLUG}/`;
+
+  test(`Root event /events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+    const canonical = extractCanonical(html);
+    const ogUrl = extractOgUrl(html);
+    const jsonLdUrl = extractJsonLdUrl(html);
+
+    expect(canonical).toBe(eventRootUrl);
+    expect(ogUrl).toBe(eventRootUrl);
+    expect(jsonLdUrl).toBe(eventRootUrl);
+  });
+
+  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL (no /en/)`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+    const canonical = extractCanonical(html);
+    const ogUrl = extractOgUrl(html);
+    const jsonLdUrl = extractJsonLdUrl(html);
+
+    expect(canonical).toBe(eventRootUrl);
+    expect(canonical).not.toContain("/en/");
+    expect(ogUrl).toBe(eventRootUrl);
+    expect(jsonLdUrl).toBe(eventRootUrl);
+  });
+
+  // Rule (b): og:locale:alternate symmetric-absence on all pages
+  for (const hub of ALL_HUBS) {
+    test(`Root hub /${hub} — no og:locale:alternate emitted`, () => {
+      const html = readFileSync(rootHubPath(hub), "utf8");
+      expect(extractOgLocaleAlternate(html)).toBeUndefined();
+    });
+
+    test(`English hub /en/${hub}/ — no og:locale:alternate emitted`, () => {
+      const html = readFileSync(englishHubPath(hub), "utf8");
+      expect(extractOgLocaleAlternate(html)).toBeUndefined();
+    });
+  }
+
+  test(`Root event /events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+    expect(extractOgLocaleAlternate(html)).toBeUndefined();
+  });
+
+  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+    expect(extractOgLocaleAlternate(html)).toBeUndefined();
+  });
+
+  // Rule (c): og:locale primary parity
+  for (const hub of ALL_HUBS) {
+    test(`Root hub /${hub} — og:locale = el_GR`, () => {
+      const html = readFileSync(rootHubPath(hub), "utf8");
+      expect(extractOgLocale(html)).toBe("el_GR");
+    });
+
+    test(`English hub /en/${hub}/ — og:locale = en_US`, () => {
+      const html = readFileSync(englishHubPath(hub), "utf8");
+      expect(extractOgLocale(html)).toBe("en_US");
+    });
+  }
+
+  test(`Root event /events/${EVENT_PAIR_SLUG}/ — og:locale = el_GR`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+    expect(extractOgLocale(html)).toBe("el_GR");
+  });
+
+  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — og:locale = en_US`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+    expect(extractOgLocale(html)).toBe("en_US");
+  });
 });
 
 if (!distAvailable) {
-  describe("og:url / canonical / JSON-LD parity on cornerstone hubs", () => {
+  describe("og:url / canonical / JSON-LD parity — canonical-to-root posture", () => {
     test.skip("dist/ not built — run `bun run build` then re-run this test", () => {});
   });
 }

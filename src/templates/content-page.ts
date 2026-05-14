@@ -38,6 +38,13 @@ export function renderContentPage(
     ? `\n  <script type="application/ld+json">\n  ${options.schemaJson}\n  </script>`
     : '';
 
+  // Canonical-to-root posture (2026-05-14 GEO decision): /en/<slug> content
+  // pages canonicalize to their root counterparts. Strip locale prefix from
+  // slug to derive root URL for canonical, og:url. Self/alt URLs for hreflang
+  // discovery keep the locale-specific paths (search engines reconcile).
+  const rootSlug = slug.replace(/^en\//, '');
+  const canonicalUrl = `${BASE_URL}/${rootSlug}/`;
+
   // Hreflang links between Greek ↔ English
   let hreflangHtml = '';
   if (options?.alternateSlug) {
@@ -58,10 +65,10 @@ export function renderContentPage(
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${title} | agent-athens</title>
   <meta name="description" content="${metaDesc}">
-  <link rel="canonical" href="${BASE_URL}/${slug}/">${options?.noindex ? '\n  <meta name="robots" content="noindex">' : ''}${hreflangHtml}
+  <link rel="canonical" href="${canonicalUrl}">${options?.noindex ? '\n  <meta name="robots" content="noindex">' : ''}${hreflangHtml}
   <meta property="og:title" content="${title} | agent-athens">
   <meta property="og:description" content="${metaDesc}">
-  <meta property="og:url" content="${BASE_URL}/${slug}/">
+  <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="${ogLocale}">
   <meta property="og:site_name" content="agent-athens">

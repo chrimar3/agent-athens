@@ -51,17 +51,22 @@ describe("English event page — og:locale", () => {
   });
 });
 
-describe("English event page — canonical URL", () => {
-  test("English canonical includes /en/ prefix", () => {
+describe("English event page — canonical URL (canonical-to-root posture)", () => {
+  // 2026-05-14 GEO canonical-to-root decision: /en/ event pages canonicalize
+  // to root counterparts. Both locale variants emit the same root URL as
+  // canonical. hreflang triples (next describe block) still emit /en/ for
+  // discovery — search engines reconcile via consistent cross-references.
+  test("English canonical points to root (no /en/ prefix)", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'en');
-    expect(html).toContain(`href="https://agentathens.com/en/events/${slug}/"`);
+    expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/">`);
+    expect(html).not.toContain(`<link rel="canonical" href="https://agentathens.com/en/events/${slug}/">`);
   });
 
-  test("Greek canonical has no /en/ prefix", () => {
+  test("Greek canonical points to root", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'el');
-    expect(html).toContain(`href="https://agentathens.com/events/${slug}/"`);
+    expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/">`);
   });
 });
 

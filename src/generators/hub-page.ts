@@ -295,6 +295,13 @@ export function renderHubPage(
       break;
   }
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
+  // Override filter-derived URL with user-facing hub slug. buildURL(filters)
+  // produces filter-tokens (e.g. nightlife filter type='dj_set' → 'dj_set');
+  // page.ts now emits canonical/og:url/JSON-LD url/hreflang-el/api-alternate
+  // from metadata.url, so this override aligns all five with the hub slug
+  // for the canonical-to-root posture (2026-05-14 GEO decision). Replaces
+  // the prior post-render regex-patches in this file.
+  metadata.url = config.slug;
   if (lastUpdateOverride) {
     metadata.lastUpdate = lastUpdateOverride;
   }
@@ -311,11 +318,8 @@ export function renderHubPage(
   // Set HTML lang attribute
   html = html.replace(/<html lang="[^"]*">/, `<html lang="${t.lang}">`);
 
-  // Set og:locale
-  html = html.replace(
-    /<meta property="og:locale" content="[^"]*">/,
-    `<meta property="og:locale" content="${t.ogLocale}">`
-  );
+  // og:locale primary now emitted locale-correctly at page.ts source
+  // (2026-05-14 canonical-to-root posture). Post-render regex-patch removed.
 
   // Override page title and description with hub-specific values
   const hubTitleText = locale === 'en' ? config.titleEn : config.titleEl;
@@ -371,12 +375,9 @@ export function renderHubPage(
     `<meta property="og:image" content="${BASE_URL}/images/og/hubs/${config.slug}.png">`
   );
 
-  // Canonical URL
-  const canonicalPath = locale === 'en' ? `en/${config.slug}` : config.slug;
-  html = html.replace(
-    /<link rel="canonical" href="[^"]*">/,
-    `<link rel="canonical" href="${BASE_URL}/${canonicalPath}">`
-  );
+  // Canonical URL now emitted as root-URL at page.ts source for both locales
+  // (2026-05-14 canonical-to-root posture). Post-render regex-patch removed —
+  // page.ts emits `${BASE_URL}/${url}` uniformly, achieving consolidation.
 
   // hreflang tags — bilingual hubs get el + en + x-default
   if (config.answerCapsuleEn) {
@@ -633,6 +634,10 @@ export function renderOverflowPage(
       break;
   }
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
+  // Overflow page canonicalizes to main hub root URL (pagination convention:
+  // paginated views point canonical to the un-paginated canonical surface).
+  // See note in renderHubPage above for the broader rationale.
+  metadata.url = config.slug;
 
   // Render with ALL events (no cap) — omit allEvents to skip filter bar
   const baseHtml = renderPage(metadata, filteredEvents, undefined, undefined, locale);

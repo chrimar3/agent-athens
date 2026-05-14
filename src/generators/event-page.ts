@@ -144,7 +144,6 @@ function getOgImage(event: Event): string {
 function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<string, any> {
   const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
   const eventSlug = generateEventSlug(event);
-  const urlPrefix = locale === 'en' ? 'en/' : '';
 
   // formatSchemaDate handles all inputs: date-only passthrough (no midnight
   // timestamp for all-day exhibitions), naive-ts + DST-aware offset, tz-aware
@@ -162,7 +161,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'inLanguage': locale === 'en' ? 'en' : 'el',
-    'url': `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
+    'url': `${BASE_URL}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
       'name': event.venue.name,
@@ -216,7 +215,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     ticketUrlResolved: event.ticketUrlResolved,
     venue: { name: event.venue.name, website: event.venue.website },
     eventStatus: schema.eventStatus,
-    selfCanonicalUrl: `${BASE_URL}/${urlPrefix}events/${eventSlug}/`,
+    selfCanonicalUrl: `${BASE_URL}/events/${eventSlug}/`,
   });
 
   if ('offer' in offerDecision) {
@@ -258,8 +257,7 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
 export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el'): string {
   const t = STRINGS[locale];
   const slug = generateEventSlug(event);
-  const urlPrefix = locale === 'en' ? 'en/' : '';
-  const canonicalUrl = `${BASE_URL}/${urlPrefix}events/${slug}/`;
+  const canonicalUrl = `${BASE_URL}/events/${slug}/`;
   const ogImage = getOgImage(event);
   const schemaJson = generateEventSchema(event, locale);
   const practicalBlock = generatePracticalBlock(event, null, locale);

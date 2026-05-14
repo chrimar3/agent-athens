@@ -72,19 +72,21 @@ describe("renderPage", () => {
 
   // Bug surfaced via D11 sweep 2026-05-12: English hub pages emitted og:url
   // without the /en/ locale prefix while canonical was post-fixed in the hub
-  // generator. JSON-LD CollectionPage.url had the same defect. Lock parity
-  // at the template level so canonical, og:url, and JSON-LD url all agree
-  // when locale='en'.
-  test("og:url, canonical, and JSON-LD CollectionPage.url all use /en/ prefix when locale='en'", () => {
+  // generator. JSON-LD CollectionPage.url had the same defect. 2026-05-14:
+  // GEO Strategist's canonical-to-root decision for Case B partial-coverage
+  // state — /en/ pages canonicalize to root counterparts (consolidation move).
+  // inLanguage stays locale-correct (page language declaration, separate from
+  // canonical SEO posture).
+  test("og:url, canonical, and JSON-LD CollectionPage.url all canonicalize to root when locale='en'", () => {
     const html = renderPage(sampleMetadata, [sampleConcert], undefined, undefined, 'en');
 
-    expect(html).toContain('rel="canonical" href="https://agentathens.com/en/jazz-concert-this-week"');
-    expect(html).toContain('property="og:url" content="https://agentathens.com/en/jazz-concert-this-week"');
+    expect(html).toContain('rel="canonical" href="https://agentathens.com/jazz-concert-this-week"');
+    expect(html).toContain('property="og:url" content="https://agentathens.com/jazz-concert-this-week"');
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
     expect(jsonLdMatch).toBeTruthy();
     const jsonLd = JSON.parse(jsonLdMatch![1]);
-    expect(jsonLd.url).toBe("https://agentathens.com/en/jazz-concert-this-week");
+    expect(jsonLd.url).toBe("https://agentathens.com/jazz-concert-this-week");
     expect(jsonLd.inLanguage).toBe("en");
   });
 
