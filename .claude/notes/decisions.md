@@ -3478,3 +3478,17 @@ Before computing styles for a multi-state component (saved/unsaved, active/inact
 **Reverse-reference**: see patterns.md 2026-05-14 entry "Pattern A sub-pattern (search-exhaustiveness) — locked at three instances" for the grep anchor + post-fix traceability. Bidirectional cross-reference per Q7 fix-rot guard.
 
 **Closure for Pattern A as a class**: three-instance recurrence is enough to commit engineering-discipline change (verifier coverage expansion) rather than session-by-session re-discovery. S140 brief's parity verifier extension carries that change forward to description-field siblings.
+
+### Mini-Session-as-Cross-Project-Unlock (2026-05-14)
+
+When a session has too many open shape decisions to draft a brief against, a read-only diagnostic mini-session shipped in parallel converts shape questions into decision inputs without committing to execution shape. This is "diagnostic before commitment."
+
+When two or more specialists each need stable diagnostic artifacts to unblock their next execution session, bundling the artifacts into one read-only mini-session is cheaper than two separate diagnostic sessions AND produces stronger artifacts than synchronous-handoff alternatives.
+
+**Important framing per Design Navigator (2026-05-14):** this is not new behavior, it's the surfacing of a behavior pattern that was running implicitly. The naming makes it deployable as an explicit move rather than an emergent one. It has shipped twice visibly — Session B today, and the audit→spec workflow running since the action-layer retro acceptance.
+
+**Today's instance:** GEO Strategist's content-language probe + Design Navigator's BOOKMARK_ICON rename diagnostic + the per-source coverage tracker creation bundled into commit `97c201d73` (single read-only mini-session, ~25 min wall-clock, three spec artifacts).
+
+**Economy comparison:** today closed work that would have taken five CC sessions a week ago using diagnostic-per-specialist or in-session synchronous handoff patterns. Three CC sessions covered: mini-session bundle (`97c201d73`), tier-band clarification (`7cc4fde99`), Session B rename+extension (`02dcc7c71`).
+
+**Classification:** process pattern, no current grep instance — narrative only. Decisions home per Q7 fix-rot rule (Design Navigator 2026-05-13).

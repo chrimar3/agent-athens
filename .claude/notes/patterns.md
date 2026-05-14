@@ -4073,6 +4073,8 @@ The "repro-grep the defect premise" protocol (banked S132') and the "repro-grep 
 
 **Recurrence count.** Pre-S135, the combined pattern fired 7 times (all Pattern A shape). S135 added one Pattern A instance and one Pattern B instance, bringing the verify-the-premise series to 9 total. Pattern B is the rarer shape; Pattern A is the dominant recurrence and is the one driving the workflow-side mitigation in the Dev Planner pre-brief checklist.
 
+**2026-05-14 update:** Recurrence ledger holds at 9 across the 2026-05-13/14 cycle (mini-session bundle + Session B). Pre-flight discipline and execution-time invariant checks (Q5 mechanism) caught all candidate recurrences before they shipped. Multiple opportunities to tick the counter (parallel-session HEAD drift on `02dcc7c71` pre-flight; yellow budget +36 finding; Probe B schema adaptation; Step 4a Path B option choice) all surfaced through structured guards rather than silently propagating. Mitigation working.
+
 ### Type-union reconciliation across CLAUDE.md, code comments, and TypeScript declarations (S136)
 
 When a constitutional rule lives in three places (rule doc, code comment, type system), drift between them is inevitable unless one is canonical. The S136 'tba' resolution found CLAUDE.md saying 2-value (`'open' | 'with-ticket'`), `src/db/database.ts:56` comment saying 4-value (`'open' | 'with-ticket' | 'tba' | 'donation'`), `src/db/schema.sql:29` saying pre-rename 3-value (`free|paid|donation`), and `src/types.ts:97` saying current 3-value (`'open' | 'with-ticket' | 'donation'`). Four sites, four different unions.
@@ -4517,3 +4519,47 @@ Two matches in the same class family. S138's earlier verification finding identi
 **Three-instance recurrence locks the pattern class**. Sibling-selector exhaustiveness is recurrent, not coincidence.
 
 **Cross-reference**: see decisions.md 2026-05-14 entry "Pattern A sub-pattern narrative" for full d1cee688a / S138 / S139 / Session B chain narrative + rationale. Bidirectional cross-reference is non-optional per Q7 fix-rot guard.
+
+---
+
+### Cross-Commit Retroactive-Touch Sequencing (2026-05-14)
+
+A "retroactive touch on prior commit X" framing implies the new change must risk-budget against X's stability. That risk is often a sequencing artifact, not intrinsic to the change. When the touch can ride into the SAME commit as the consuming change, the cross-commit framing collapses to single-commit refactor — strictly easier auditability.
+
+**Test (Gate 4 question, formalized):** can the touch be folded into the consuming commit's diff without adding scope? If yes, fold; the retroactive-touch concern dissolves. This is exactly what Gate 4 of Design Navigator's four-gate evaluation framework (sent on Session B greenlight, 2026-05-13) was probing — the pattern formalizes that gate's resolution path.
+
+**Counter-condition — when ride-in is NOT viable**, the cross-commit framing is correct and should NOT be dissolved by reflex:
+
+  (i) Rename touches reference sites outside the consuming commit's surface, requiring a wider scope than the consuming change can coherently absorb without adding semantic interpretation.
+
+  (ii) Rename has independent value that warrants standalone commit history — e.g., the rename is a deprecation step toward a different end-state than the consuming commit, or the rename needs its own bisection target for future regression hunting.
+
+  (iii) Consuming commit's surface is large enough that folding the rename obscures audit trail rather than collapsing it.
+
+Apply the pattern as: "test ride-in feasibility against (i)/(ii)/(iii) before defaulting to cross-commit framing OR to ride-in framing." Default to neither; the test decides.
+
+**Grep-anchored on commit `02dcc7c71`** — BOOKMARK_ICON rename rode into `.edp-save-btn` extension commit, collapsing Gate 4 retroactive-touch worry to single-commit pure refactor. Counter-conditions (i)/(ii)/(iii) all evaluated against today's surface: rename touched 4 lines in 1 file (no outside scope), had no independent value (no deprecation beyond the use-encoding fix), consuming commit was 141/8 line diff across 4 files (small enough that folding clarified rather than obscured). All three counter-conditions failed, ride-in was viable, pattern instantiated.
+
+Pattern source: Design Navigator closeout observation + counter-condition extension, 2026-05-14.
+
+---
+
+### Multi-Signal State Probe Architecture (2026-05-14)
+
+A visual or behavioral state change implemented through a single signal (class toggle alone, color flip alone, icon swap alone) passes test walks trivially — there's nothing for the walker to cross-check against. A multi-signal implementation, where state transitions through N independent signals at once, makes the walk a meaningful probe: the walker is checking that all N signals are in sync, and a silent regression in any one becomes detectable.
+
+**Three-signal pattern instantiated on `.edp-save-btn` after Session B** (commit `02dcc7c71`):
+
+  (a) Button class toggle (`.is-saved` on/off via JS click handler)
+
+  (b) Text label swap (`data-save-label` / `data-unsave-label` attr-driven)
+
+  (c) Icon shape flip (`.edp-save-btn__icon path` fill outline → solid)
+
+The 4-state walk on production verified all three signals fire on every transition (unsaved → saved → reload-persisted → unsaved). Yellow budget Gate 1 also held across the full state cycle, not just resting state — confirming the 38-occurrence post-extension count is robust across interactive states, not just inspect-element snapshots.
+
+**Rule:** when a state-bearing affordance ships, target N≥2 independent signals at the implementation layer. The cost is small (today's extension layered icon-shape-flip on top of pre-existing class+label signals — net cost was the CSS path-flip rules, ~12 lines). The benefit compounds: future regressions on any one signal surface during state-walk verification rather than silently in production.
+
+If save-affordance extends to a third surface, this multi-signal contract carries forward — it's the contract, not the implementation.
+
+Pattern source: Design Navigator visual-gate closeout observation, 2026-05-14.
