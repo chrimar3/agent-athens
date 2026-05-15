@@ -210,12 +210,17 @@ describe('Event Categorizer', () => {
       expect(result.type).toBe('festival');
     });
 
-    it('should prioritize concert over exhibition for jazz at museum', () => {
+    it('should skip exhibition (not classify as concert) when jazz override present without title-match keyword', () => {
+      // concert_override_keywords (jazz) suppress exhibition for "Jazz at Museum",
+      // but jazz is not a concert title_keyword — so no positive concert match either.
+      // Falls through to 'other' (review queue). Post-fallback-nudge semantics.
+      // Future taxonomy session should consider adding jazz as a concert title_keyword
+      // if a positive match is desired for this pattern.
       const result = categorizeEvent({
         title: 'Jazz Night at the Museum',
         venue: 'Some Museum'
       });
-      expect(result.type).toBe('concert');
+      expect(result.type).toBe('other');
     });
 
     it('should skip performance for social dance events', () => {
@@ -290,7 +295,7 @@ describe('Event Categorizer', () => {
         venue: 'Unknown Venue'
       });
       // Should reach fallback, not crash
-      expect(result.type).toBe('concert');
+      expect(result.type).toBe('other');
       expect(result.confidence).toBe('low');
     });
 
@@ -398,12 +403,12 @@ describe('Event Categorizer', () => {
       expect(result.confidence).toBe('low');
     });
 
-    it('should default to concert when no rules match and no current type', () => {
+    it('should default to other when no rules match and no current type (review-needed signal)', () => {
       const result = categorizeEvent({
         title: 'Mysterious Event',
         venue: 'Unknown Venue'
       });
-      expect(result.type).toBe('concert');
+      expect(result.type).toBe('other');
       expect(result.confidence).toBe('low');
     });
   });

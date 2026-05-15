@@ -9,7 +9,7 @@
 import { upsertEvent } from '../src/db/database';
 import { info, logError } from '../src/utils/logger';
 import { createHash } from 'crypto';
-import type { Event } from '../src/types';
+import type { Event, EventType } from '../src/types';
 
 const SOURCE_ID = 'megaron';
 const BASE_URL = 'https://www.megaron.gr';
@@ -21,7 +21,7 @@ interface ScrapedEvent {
   time: string;
   url: string;
   venue_name: string;
-  type: 'concert' | 'theater' | 'dance';
+  type: EventType;
   price_type: 'with-ticket';
 }
 
@@ -31,14 +31,31 @@ function generateEventId(title: string, startDate: string): string {
 }
 
 /**
- * Map Greek category text to event type
+ * Map megaron.gr listing `category-title` text to canonical EventType.
+ *
+ * Spike ground truth: specs/megaron-category-titles-spike.md (9 distinct strings observed 2026-05-14).
+ * Talk-class categories (Διάλεξη, Συζήτηση) route to 'other' as a stopgap until the
+ * taxonomy session adds a 'talk' EventType — see specs/categorizer-audit-2026-05-14.md.
+ * Unknown / empty / non-matching categories also route to 'other' (review queue signal).
  */
-function categoryToType(category: string): ScrapedEvent['type'] {
-  const lower = category.toLowerCase();
-  if (lower.includes('μουσικ')) return 'concert';
-  if (lower.includes('θέατρο') || lower.includes('θεατρ')) return 'theater';
-  if (lower.includes('χορό') || lower.includes('χορ') || lower.includes('dance') || lower.includes('ballet')) return 'dance';
-  return 'concert';
+export function categoryToType(rawCategory: string): EventType {
+  const c = rawCategory
+    .replace(/&amp;/g, '&')
+    .normalize('NFC')
+    .trim();
+
+  switch (c) {
+    case 'Μουσική':                return 'concert';
+    case 'Όπερα':                  return 'concert';
+    case 'Έκθεση':                 return 'exhibition';
+    case 'Θέατρο':                 return 'theater';
+    case 'Διάλεξη':                return 'other';
+    case 'Συζήτηση':               return 'other';
+    case 'Εκπαιδευτικά & Δράσεις': return 'workshop';
+    case 'Εκδηλώσεις Τρίτων':      return 'other';
+    case 'Online':                 return 'other';
+    default:                       return 'other';
+  }
 }
 
 export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
@@ -102,9 +119,10 @@ export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
         .trim();
       if (!rawTitle) continue;
 
-      // Extract category from category-title div
+      // Extract category from category-title div. Absent/unmatched categories fall through
+      // to 'other' as a review-needed signal (see specs/categorizer-audit-2026-05-14.md).
       const catMatch = card.match(/class="category-title"[^>]*>([^<]+)/i);
-      const type = catMatch ? categoryToType(catMatch[1].trim()) : 'concert';
+      const type = catMatch ? categoryToType(catMatch[1]) : 'other';
 
       events.push({
         title: rawTitle,
@@ -188,4 +206,6 @@ async function main() {
   console.log(`✅ Saved ${saved} events`);
 }
 
-main().catch(console.error);
+if (import.meta.main) {
+  main().catch(console.error);
+}

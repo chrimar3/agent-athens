@@ -433,9 +433,9 @@ export function categorizeEvent(event: EventInput): CategorizationResult {
   }
 
   return {
-    type: 'concert',
+    type: 'other',
     confidence: 'low',
-    reason: 'No matching rules, defaulted to concert'
+    reason: 'No matching rules, defaulted to other (review needed)'
   };
 }
 

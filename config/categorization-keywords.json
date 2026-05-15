@@ -312,7 +312,13 @@
         "tech talk",
         "devfest",
         "startup",
-        "AI meetup"
+        "AI meetup",
+        "συζήτηση",
+        "ομιλία",
+        "διάλεξη",
+        "ημερίδα",
+        "πάνελ",
+        "παρουσίαση βιβλίου"
       ],
       "description_keywords": [
         "tech community",
