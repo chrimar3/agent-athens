@@ -4563,3 +4563,92 @@ The 4-state walk on production verified all three signals fire on every transiti
 If save-affordance extends to a third surface, this multi-signal contract carries forward — it's the contract, not the implementation.
 
 Pattern source: Design Navigator visual-gate closeout observation, 2026-05-14.
+
+---
+
+### Code-Intent vs Implementation Divergence (2026-05-14)
+
+When code defines a **named set, enum, or map that implies a property of its members**, verify the implication holds against the actual values. A name conveys intent ("these are X"); the values must satisfy that intent. Naming alone is not a verifiable contract — and an unverified contract becomes a silent bug surface.
+
+**Pattern instantiated twice in two consecutive audits:**
+
+1. **`LIGHT_TEXT_BADGES` at `src/templates/page.ts:45`** — name implies "these badges have backgrounds dark enough to need light text." Audited: the three included values (`performance #f5a742`, `cinema #b87ef7`, `screening #ef5350`) are all mid-luminance oranges/lavenders/reds. None are dark. All three FAIL WCAG AA contrast with light text by 2-3x. The set's premise is the inverse of reality. Detected by `specs/event-type-badge-color-audit-2026-05-14.md`.
+
+2. **`tech.title_keywords` in `src/validators/event-categorizer.ts:73–79`** — name implies "these keywords identify tech/conference events." Actual contents include `'seminar'`, `'research talk'`, `'lecture series'`, `'συνέδριο'` — all talk-class indicators that are NOT semantically tech. The category became a catch-all for events lacking a proper bin (the missing `talk` EventType). Detected by `specs/categorizer-audit-2026-05-14.md`.
+
+**Why this hides:** the name is its own claim ("these are X"). Code review tends to verify the *name* against the *intent* (does the name make sense?), not the *values* against the *name* (do the values satisfy the implication?). Test coverage typically checks behavior in/out of the set, not whether the set's members have the property the name asserts. So the bug ships, the set name reads correctly, and the failure shows up only when the world looks at the actual rendered/computed output.
+
+**Rule:** for any named set/enum/map whose name implies a property of its members, write an assertion that **verifies the implication on every member**:
+- `LIGHT_TEXT_BADGES`: assert each member's `--color-<member>` has L < some threshold (or contrast against `#f0f0f0` ≥ 4.5).
+- Categorizer keyword categories: assert each keyword in a category's `title_keywords` actually describes an event of that category (harder — semantic, may need human review on each add).
+
+Without that assertion, the set name is a comment that lies whenever someone adds the wrong value.
+
+**Counter-condition:** purely descriptive names (`EVENT_TYPES_WITH_DESCRIPTIONS = …`, `PAYMENT_PROVIDERS = …`) are fine — they enumerate state, they don't claim a property holds. The pattern triggers only when the name asserts something true of every member.
+
+Pattern source: post-audit synthesis across `specs/categorizer-audit-2026-05-14.md` (LIGHT_TEXT_BADGES analog) and `specs/event-type-badge-color-audit-2026-05-14.md` (contrast math confirming 3 failures).
+
+---
+
+### Trace One Example End-to-End Through the Data Path (2026-05-14)
+
+Before naming a bug's location, trace one concrete example through the system end-to-end. The categorizer-audit session's brief named the categorizer's source-hint fallback as the proximate cause of Megaron talks being typed `'concert'`. The actual cause was upstream of the categorizer: the megaron.gr scraper's narrow `ScrapedEvent['type']` union + three `'concert'` defaults at `scripts/scrape-megaron.ts:38, 41, 107`. The categorizer never had a chance to disagree — by the time it ran, the row already had `type='concert'`.
+
+**Why this hides:** the surface symptom (an event with wrong type in the DB) is observable downstream from many possible causes. Without tracing, the most-recently-touched component (the categorizer) reads as the natural suspect. Source-side defaults are invisible in the symptom and easy to miss because the *production* type column doesn't carry provenance.
+
+**Rule:** when naming a bug's location in a brief, trace at least one specific example through the full data path — scraper → categorizer → DB → render. Quote the file:line where the value is *first set*, not where it's last seen. The first-set location is the root; everything downstream is propagation.
+
+**Brief application:** for any bug brief that names a transformation/normalization step as the cause, ask: "where does the value enter the system?" If that point isn't checked, the brief is naming a possible cause, not a confirmed one.
+
+Pattern source: `specs/categorizer-audit-2026-05-14.md` Section A.3 — the scraper's three concert defaults were the actual cause, not the categorizer's fallback. Brief assumed the categorizer; trace revealed the scraper. (S140-style audit, 2026-05-14.)
+
+---
+
+### Remembered Facts Count as Assumptions; Grep Them Anyway (2026-05-14)
+
+When a brief carries a fact forward from a prior session ("this column has X behavior", "this function is named Y", "this file lives at Z"), treat the fact as an *assumption*, not as canonical state — and verify it against the current repo before relying on it. The S140 session's brief carried "use `bun run scripts/import-events.ts --source=megaron`" forward — that command does not exist in the codebase (verified zero hits via grep). The correct command is `bun run scripts/scrape-megaron.ts`. Memory crystallized the wrong shape; the brief inherited it.
+
+Same shape in the same session: brief asserted `dedup_protected=1` would protect type from re-scrape overwrites. `upsertEvent` actually overwrites `type` unconditionally via `type = excluded.type` at `src/db/database.ts:236`; `dedup_protected` is only consulted by `src/quality/duplicate-detector.ts:52` and the `scripts/remove-duplicates.ts` / `scripts/merge-duplicates.ts` paths — none of which gate `upsertEvent`. Memory remembered the column exists; memory did NOT verify what the column actually gates.
+
+**Rule:** repository memory is a starting point, not an authority. Before citing in a brief or executing on:
+- File paths → `ls` or `find`
+- Function/script names → `grep -rn "<name>" src/ scripts/`
+- Column behavior → `grep -n "<column>" src/db/ src/quality/` to find every consumer
+- Config schema → read the file fresh
+
+The grep takes 30 seconds; an incorrect brief costs an hour of rework + an architecture decision made on wrong premise.
+
+**Counter-condition:** facts that are tautologically stable (the project name, the language, the runtime) don't need re-verification. Facts that *describe code behavior or file locations* do. The split: "what the system IS" (stable across sessions) vs "what the system DOES" (drifts with every commit).
+
+Pattern source: S140 session's two brief-vs-reality mismatches — non-existent import script + dedup_protected mis-modeled. Brief carried both facts forward from memory; pre-flight grep refuted both in <2 minutes. The `feedback_verify_paths_in_briefs.md` memory tracks this pattern across S71, S82, S95, S100b, S101a, S138, S140 — 7 instances and counting. (2026-05-14.)
+
+---
+
+### Pattern A'' — Wrong-Cardinality Assumption (2026-05-15)
+
+When a brief describes a logical concept ("generate an ID for an event", "validate a price type", "produce a slug", "render a card") as a singular function, **verify the cardinality before relying on it.** In solo-dev codebases that grow organically, a logical concept often becomes physically dispersed across N files as new scrapers / writers / generators are added — each copy-pasting the implementation with small variations (signature drift, algorithm drift, separator drift, normalization drift).
+
+The concept is still singular at the **contract level** but plural at the **site level**. A brief that says "we need to update the function" is implicitly asserting "there is one function." When there are 10, the brief is naming a contract dispersed across 10 sites — and the fix-session scope grows by 10×.
+
+**Mitigation — single grep before describing the concept as singular:**
+```bash
+grep -rn "function <name>\|<name>\s*=" src/ scripts/ --include='*.ts'
+```
+If multiple definitions surface, the brief describes a **contract dispersed across N sites**, not "a function." Then the brief should:
+- Cluster the sites by signature + algorithm + other distinguishing features
+- Note which clusters are vulnerable to which failure modes
+- Choose a fix vector that matches the dispersion shape (centralize? sympathy update across all sites? leave dispersion and fix downstream?)
+
+**Anchor case:** S141 ID-stability audit preflight surfaced **10 sites** for `generateEventId` with **3 distinct contracts** (sha256+dash+3-param vs md5+pipe+3-param vs md5+dash+2-param). The brief said "likely a single function." The 3-cluster dispersion materially changed the fix-vector comparison: Vector A's blast radius grew from "1 file change" to "10 files + migration tooling + staged rollout"; Vector B/C (dedup-layer fixes) became proportionally more attractive specifically because they operate downstream of the dispersion.
+
+**Pattern is a sub-case of Pattern A** (wrong path / wrong premise) — distinguished by the *logical-vs-physical cardinality* axis specifically. Pattern A covers "wrong file/function/mechanism named." Pattern A'' covers "right concept named, but cardinality (1 vs N) wrong." The mitigation is a single grep, but the failure mode hides because the brief's mental model of "the function" reads coherent until verification reveals the dispersion.
+
+**Counter-condition:** facts about **purely-singleton concepts** don't trigger — `BASE_URL`, `--bg-primary`, the schema migration runner at `scripts/run-migrations.ts`, `upsertEvent` (one definition in `src/db/database.ts`). The pattern triggers only when the concept describes an *operation* that scrapers / writers / generators might want to invoke locally rather than import. Greenfield codebases with strong import discipline rarely show this; codebases that grew via copy-paste-and-tweak scaffolding routinely show it.
+
+**Sibling examples worth checking with a single grep before naming as singular:**
+- `parseDate` / `parseGreekDate` (likely dispersed across scrapers — each source has its own date format)
+- Image extraction / Open Graph extraction (likely dispersed)
+- Venue normalization (likely dispersed)
+- Title slug generation (verified singular in this codebase via `slugify` at `src/generators/event-page.ts`, but worth re-verifying when next mentioned in a brief)
+
+Pattern source: S141 ID-stability audit preflight, 2026-05-15. Brief said "single function"; reality was 10 sites across 3 clusters. Pattern is itself a sub-case of Pattern A — distinguished by logical-vs-physical cardinality specifically.

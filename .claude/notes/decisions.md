@@ -3633,3 +3633,166 @@ DATA per-city. Each city's agent brief template emits its own `substitution_summ
 - Sub-problem B (upstream scraper/normalizer data quality) — explicitly out of scope; correct hard-stop catches preserved
 
 **Status:** Decided — contract spec v1 at `specs/a0-substitution-contract-2026-05-14.md` (commit `82aa4fd7d`); audit spec at `specs/a0-calibration-audit-2026-05-14.md` (commit `b1d1960af`); sub-session sequencing locked; T-10 slip-gate active; backfill protocol documented.
+
+---
+
+## 2026-05-14 — Categorizer Audit: Talk-Taxonomy Routing
+
+**Trigger:** Live event `15e395128b7b285b` (Pavlopoulos AI/Justice discussion at Megaron Plus) breadcrumbed as Συναυλία on agentathens.com, scheduled 2026-05-29 (Παναθήναια demo date). Audit deliverable: `specs/categorizer-audit-2026-05-14.md`.
+
+**Routed to downstream stakeholders (not decided here):**
+- **Editorial Director** — Typology: single `'talk'` type or split into `'talk'`/`'lecture'`/`'panel'`/`'book_presentation'`? Should existing `'tech'` be split, given its keyword list at `src/validators/event-categorizer.ts:73–79` already contains `'seminar'`/`'research talk'`/`'lecture series'`/`'συνέδριο'` (implicit recognition that there's no proper bin)?
+- **GEO Strategist** — Schema.org `@type` mapping for talk-class events: `EducationEvent` vs `Event` plain? Different per subtype if split?
+- **Design Navigator** — Filter-chip presence + hub-page existence + URL slug (`/talks/`?) once typology decision lands.
+
+**Held (Dev Planner judgments, not stakeholder calls):**
+- Two failure layers identified, not one. Proximate cause is `scripts/scrape-megaron.ts:24` declaring narrow `ScrapedEvent['type']: 'concert' | 'theater' | 'dance'` with three concert defaults at lines 38/41/107 — actively discards megaron.gr's `category-title` HTML metadata. Root cause is the `EventType` union taxonomy gap. Proximate cause is partially fixable before typology decision lands; root cause is not.
+- `_excluded_sources` in `config/url-category-patterns.json` is documentation-only — the categorizer code never reads it. Resolution deferred to implementation session: either delete or wire functional.
+- `src/validators/event-categorizer.ts` is effectively dead code — only `normalizeTheaterSpelling` is imported anywhere. Resolution deferred: delete the rest or wire `categorizeEvent` into a path. **Do not propagate fixes to dead code in the implementation session** — first decide its fate, then either skip it or update it once.
+- Categorizer's hardcoded literal `'concert'` fallback at `src/categorizer/categorize-event.ts:435–438` should be changed to `'other'`. Lowest-cost improvement of any prevention mechanism enumerated; surfaces review-needed signal without affecting rules-matched events.
+
+**Sequencing locked:**
+1. User decides D.1 (live-event handling for the Pavlopoulos event during fix-pending window: leave / unpublish / DB override).
+2. Implementation session 1 (~1–2 hours): broaden scraper type union + Greek talk-keyword pass routing to `'tech'` as stopgap + flip categorizer fallback to `'other'`. Cheap, immediate-recall on the 11–13 misclassifications, no taxonomy dependency.
+3. Editorial Director typology decision + GEO Strategist Schema.org mapping return.
+4. Implementation session 2 (~half-day): taxonomy expansion + retarget keywords to new `'talk'` type + shotgun surgery across audit Section E's 15–19 files (types.ts, CLAUDE.md, filter UI, Schema.org templates, hub routing, breadcrumb labels, URL slugs, migration script, tests).
+
+**Connects to:**
+- `docs/known-issues.md` "megaron.gr Mixed-Venue Misclassification" — sibling to S71 fix, not a regression. S71 addressed venue-locked misclassification; this residual is a scraper-side default that S71's mixed_venues bypass correctly defers to keywords/URL/source (none of which fire for megaron.gr).
+- `specs/categorization-audit.md` (S95, 2026-04-28) — system-wide source×type distribution at 483 events / 14 sources; this audit deep-dives one source surfaced there as outsized concert producer (megaron.gr: 27 concert / 3 theater at audit time, now 34 / 2).
+
+**Status:** Audit shipped. Awaiting D.1 + typology + Schema.org returns before implementation sessions scheduled.
+
+---
+
+## 2026-05-14 — Event Type Badge Color Audit: Gap-of-7 Premise Replaced With Actual State
+
+**Trigger:** Design Navigator's batch-document pass blocked on a per-EventType badge-color inventory. DN's framing: "spec the missing 7+ colors + Talks color." Audit deliverable: `specs/event-type-badge-color-audit-2026-05-14.md`.
+
+**Reframed via pre-flight verification:**
+- **11 of 12 EventType colors already exist** in `src/styles/design-system.css:41–59`. Only `tech` is missing canonically.
+- **8 ghost colors** for non-EventType subtypes (`conference`, `screening`, `opera`, `classical`, `comedy`, `meetup`, `hackathon`, `seminar`) exist as aspirational palette entries — mirroring the categorizer audit's "tech keyword list implicitly contains talks" finding (CSS implicitly recognizes subtypes the type system doesn't).
+- DN's gap is therefore: 1 canonical (`tech`) + 1 future (`talk` post-taxonomy) + 4 housekeeping questions (ghost-color disposition, festival-vs-concert color sharing, theater watchlist at 4.87:1, `.replace` vs `.replaceAll` future-proofing).
+
+**Audit surfaced 3 confirmed WCAG AA contrast failures** that were silently shipping in production:
+- `performance` (#f5a742) + light text: 1.76:1 (need 4.5)
+- `cinema` (#b87ef7) + light text: 2.44:1
+- `screening` (ghost, #ef5350) + light text: 3.07:1
+
+Root cause: `LIGHT_TEXT_BADGES = Set(['performance', 'cinema', 'screening'])` at `src/templates/page.ts:45` flips badge text to `#f0f0f0` for these types, but the hex values are mid-luminance (orange/lavender/red), not dark enough to warrant light text. The set's name asserts "these need light text"; the values contradict the assertion.
+
+**Routed (downstream stakeholders):**
+- **Design Navigator** — pick Fix Vector A (drop the 3 entries from `LIGHT_TEXT_BADGES`) or Fix Vector B (darken the colors); the audit recommends A. Also DN's call: `tech` color hex, ghost-color disposition, `festival` color differentiation.
+- **No GEO Strategist or Editorial Director routing** — this audit doesn't have typology dependencies.
+
+**Held (Dev Planner judgments):**
+- The naming-translation contract at `src/generators/event-page.ts:285` (`.replace('_', '-')`) **correctly handles `dj_set` → `dj-set`** — verified in production rendering samples. The brief's hypothesized latent bug is resolved as a positive. No remediation needed on that path.
+- The contrast remediation (Fix Vector A) is a single-file 1-line edit. Should ship in a maintenance batch independent of the post-demo taxonomy session, not bundled into it. Inflating taxonomy session scope for a cheap fix that's currently broken is wrong sequencing.
+- No automated WCAG check exists for badge contrast. The 3 failures sat undetected since the CSS shipped. Recommend a `bun:test` assertion against `LIGHT_TEXT_BADGES` × the corresponding `--color-*` vars as a follow-up session.
+
+**Connects to:**
+- `specs/categorizer-audit-2026-05-14.md` Section C — the taxonomy gap that will eventually require a `talk` color from DN.
+- `.claude/notes/patterns.md` "Code-Intent vs Implementation Divergence" — pattern instantiated by this audit and the categorizer audit consecutively.
+- `docs/known-issues.md` "Event Type Badge Contrast Failures" — 🟡 Open entry filed by this audit.
+
+**Status:** Audit shipped. Awaiting DN fix-vector pick + tech color hex + ghost-color disposition.
+
+---
+
+## 2026-05-14 — Megaron Scraper Broadening + Categorizer Fallback Nudge Shipped
+
+**Trigger:** Deadline pressure (Παναθήναια demo 2026-05-29). Pavlopoulos event `15e395128b7b285b` scheduled 2026-05-29 was breadcrumbed as Συναυλία on agentathens.com — flagged as credibility surface. Audit reference: `specs/categorizer-audit-2026-05-14.md`. Spike reference: `specs/megaron-category-titles-spike.md`.
+
+**What landed (live on production after `netlify deploy --prod --dir=dist`):**
+1. **`scripts/scrape-megaron.ts`** — broadened `ScrapedEvent['type']` from narrow `'concert' | 'theater' | 'dance'` to full `EventType` union. Rewrote `categoryToType()` as exact-match switch over 9 distinct `category-title` strings observed on megaron.gr listing (spike ground truth). Input normalization: `.replace(/&amp;/g, '&').normalize('NFC').trim()`. Default for unknown → `'other'`. Line 107 fallback also → `'other'`. Function exported for testing. Added `import.meta.main` guard to prevent main() from running on import.
+2. **`scripts/__tests__/scrape-megaron.test.ts`** — new test file. 15 tests covering all 9 mapped categories, HTML entity decoding, NFC normalization, whitespace trimming, unknown/empty fallback. All green.
+3. **`src/categorizer/categorize-event.ts:435–438`** — literal fallback changed from `'concert'` to `'other'`. Reason string updated to "No matching rules, defaulted to other (review needed)". Existing test expectations updated.
+4. **`config/categorization-keywords.json`** — added 6 Greek talk-keywords to `tech.title_keywords`: `συζήτηση`, `ομιλία`, `διάλεξη`, `ημερίδα`, `πάνελ`, `παρουσίαση βιβλίου`. (`συνέδριο` was already present.) Pre-flight confirmed zero current events have these keywords in title — Step 5 won't flip any existing events; it's insurance for future scrapes.
+5. **5 manual DB UPDATEs** (Pavlopoulos + 4 sibling events) — required because the dedup pipeline's "keep highest quality" logic preferred older `concert`-typed rows over newly-scraped correctly-typed rows when titles diverged between scrapes. User-approved via AskUserQuestion ("Targeted UPDATE on 5 known IDs (Recommended)").
+
+**Result on production (verified via curl):**
+- ✅ Pavlopoulos `15e395128b7b285b` — breadcrumb now `Εκδήλωση` (was Συναυλία). Live.
+- ✅ Tasios `293f2e89038f6ef8` — breadcrumb now `Εκδήλωση`. Live.
+- ➖ Mundus inversus `44a392bd4b3651c0` — not on live sitemap (pre-existing publish-filter issue, unrelated to this session).
+- ✅ 4 children's programs retyped from `concert` to `workshop`.
+- Megaron type distribution: concert 34→26, +4 other, +4 workshop, +1 cinema, +1 show, +2 theater = 38 total.
+
+**Held (Dev Planner judgments):**
+- **Greek talk-keyword routing target is `'tech'` as stopgap.** When Editorial Director's typology decision lands and `'talk'` joins the EventType union, retarget these 6 keywords from `tech.title_keywords` to `talk.title_keywords`. Don't forget. Commitment logged.
+- **megaron.gr's listing-page categorization is the new ground truth** for Megaron events. Where the audit's hand-classification disagrees (e.g., Mundus inversus → audit said talk, megaron says Μουσική; Vienna Phil Unitel → audit said cinema, megaron says Μουσική), the source wins under the new architecture. This is by design — fixing it requires either taxonomy expansion + a content-classifier pass (audit Section D Option 5) or per-event manual override.
+- **Bobos Arts Festival → `'other'`** is an interesting surprise: megaron.gr's listing labels it neither `Μουσική` nor `Festival`. Worth a re-spike when more festivals are programmed.
+- **Re-spike megaron.gr periodically.** The 9-string mapping is a snapshot of 2026-05-14. If megaron's CMS adds a category (e.g., `Φεστιβάλ`), `'other'` catches it via the `default:` branch but loses the precise type.
+- **`scripts/remove-duplicates.ts` "keep highest quality" logic biases toward older rows.** This is correct behavior for most dedup cases but produces undesired outcomes when newer rows have intentionally-better metadata (e.g., better type classification). A follow-up session could add a `--prefer-newest` flag or tie-break by `scraped_at`. Out of scope here; flagged for taxonomy session or post-demo.
+
+**Connects to:**
+- `specs/categorizer-audit-2026-05-14.md` — root-cause analysis this session executes against.
+- `specs/megaron-category-titles-spike.md` — ground-truth mapping for `categoryToType()`.
+- `docs/known-issues.md` "megaron.gr Mixed-Venue Misclassification" — Status will be updated to 🟢 Partially fixed (2026-05-14): scraper broadened + 2 of 3 named talks now correctly typed + 4 children retyped + Megaron-specific failure mode addressed. Remaining: source-side disagreements (Mundus inversus, cinema screenings, Bobos festival pre-dedup, Η μουσική χαρίζει — 4 events) and the broader long tail need taxonomy expansion or content-classifier pass.
+
+**Status:** Shipped 2026-05-14 (Athens time). Two of three named credibility events correctly displayed on production before May 29 demo. Mundus inversus's publish-filter absence is a separate pre-existing issue, not in this session's scope.
+
+---
+
+## Taxonomy session — DEFERRED at Step 0 prerequisite gate (decided post-shipping of scraper-fix)
+
+**Trigger:** Brief proposed full systemic landing — add `'talk'` as 13th `EventType` member, with `talk_format` subfield (panel/lecture/book_presentation/conversation/conference_session), EducationEvent/LiteraryEvent Schema.org emission, Greek/English labels, hub page, filter chip, breadcrumb, retagging migration. Estimated 16 files modified + 1 DB migration.
+
+**Decision:** STOP at Step 0 prerequisite gate. User chose "STOP — defer until both (a) and (e) clear (Recommended)" via AskUserQuestion. Audit-aligned outcome.
+
+**Step 0 verification results (cached for next attempt):**
+
+| # | Prerequisite | Status |
+|---|---|---|
+| (a) | DN batch pass closed | ❌ NOT MET — `--color-tech` and `--color-talk` missing from `src/styles/design-system.css`; `LIGHT_TEXT_BADGES` at `src/templates/page.ts:45` still has 3 contrast-failing entries (Fix Vector A from `specs/event-type-badge-color-audit-2026-05-14.md` Section E.5 not applied) |
+| (b) | GEO Rule 2 spec | ❓ Unverifiable in repo, but brief itself contains the rule (Step 10) — `EducationEvent` for non-book talk_formats, `LiteraryEvent` for book_presentation with `workFeatured` Book entity. User-asserted "(already received)" via parallel session. |
+| (c) | Editorial typology + display labels | ❓ Unverifiable in repo, but brief contains the values (talk_format enum + Ομιλία/Ομιλίες labels). Same — user-asserted. |
+| (d) | Spike output | ✅ MET — `specs/megaron-category-titles-spike.md` |
+| (e) | Demo May 29 cleared | ❌ NOT MET — Παναθήναια demo is in 14 days at decision time. Audit explicitly recommended this work happen *post-demo* in a maintenance batch. |
+
+**Other Step 0 findings (good news for the next attempt):**
+- EventType union still 12-member — no drift since 2026-05-14 audit
+- DB type distribution: 441 future events spanning 11 of 12 types (cinema 1, performance 2, tech 3, other 4, show 4, workshop 4, exhibition 5, festival 15, theater 22, dj_set 138, concert 243). One type (`other`) is the type that will need the most attention since Pavlopoulos + Tasios live here.
+- **`src/validators/event-categorizer.ts` confirmed dead** — only `normalizeTheaterSpelling` is imported anywhere (`scripts/scrape-all.ts:39`). The brief's Step 4 conditional ("if Step 0c showed validator is reachable, also update tech.keywords") evaluates FALSE — validator can be skipped in the next attempt. Cleanup of the dead `categorizeEvent` is a separate concern.
+- **Step 0d: only 3 tech-typed events in DB**, all genuine industry tech (Greeks in AI 2026, Getting Started with FiftyOne, Women in AI Meetup). **Step 12 migration sweep has zero retag candidates from the tech bucket.** When this session runs, the migration scope is just the existing `'other'` Megaron talks (Pavlopoulos, Tasios) plus whatever Mundus inversus does, plus any new `'other'` events accumulated by then.
+
+**What needs to happen before next attempt:**
+1. **DN batch pass:** add `--color-tech` (suggested family: conference green `#66bb6a` per audit) + `--color-talk` (DN's pick — current palette has no scholarly/discourse-coded hue per badge audit Section E.2). Plus apply Fix Vector A: `LIGHT_TEXT_BADGES = new Set<EventType>()` (empty) at `src/templates/page.ts:45` to fix the 3 confirmed AA contrast failures.
+2. **May 29 demo:** must complete and stabilize (audit's recommended quiescence period is 1-3 days post-demo to confirm no demo-day regressions need rollback).
+3. (b) and (c) — can rely on the brief's contents OR confirm fresh artifacts when next session starts. The brief's spec is sufficient unless GEO/Editorial revise.
+
+**Connects to:**
+- `specs/categorizer-audit-2026-05-14.md` Section D.2 sequencing — this gate-fail is consistent with the audit's own "Implementation session 2 (~half-day)" being explicitly post-typology-decision and post-demo.
+- `specs/event-type-badge-color-audit-2026-05-14.md` Section E.5 — Fix Vector A for the contrast failures is a 1-line single-file change; not part of taxonomy session, but should land before or with it so the new `'talk'` color ships into a clean LIGHT_TEXT_BADGES set.
+
+**Status:** Deferred. Re-attempt when (a) and (e) clear. Step 0 results above are the cached pre-flight; should be re-run at next attempt to detect drift but the decisions documented here will hold.
+
+---
+
+## 2026-05-15 — Event ID Stability Audit: Vector C (smart-dedup hybrid) recommended
+
+**Trigger:** S140 (2026-05-14) failure mode — title edit between scrapes → `generateEventId` hash mismatch → INSERT (not UPDATE) → dedup pipeline picks older wrong-typed row as winner via title-length tiebreaker. Required 5 manual SQL UPDATEs to recover. Audit deliverable: `specs/event-id-stability-audit-2026-05-15.md`.
+
+**Headline finding:** brief assumed `generateEventId` was a single function; reality is **10 implementation sites with 3 distinct contracts** (signature + algorithm + separator). Cluster 1 = email-ingestion (sha256, dash, 3-param, no trim). Cluster 2 = scrape-all family (md5, pipe, 3-param, trim). Cluster 3 = megaron/benaki/onassis (md5, dash, **2-param** — venue-less, source of S140 fragility).
+
+**Recommendation: Vector C (smart-dedup hybrid).** Modifies ~2 files (`scripts/remove-duplicates.ts` + sympathy update to `scripts/merge-duplicates.ts`). Adds a conditional rule: when two rows in a Pass-1 URL collision have different IDs (= title divergence), prefer the row with newer `scraped_at` timestamp. Targeted at S140 shape specifically; zero migration burden.
+
+**Vector A (URL+date hash, replaces 10 generateEventId sites) deferred to Phase 2.** Trigger for escalation: ≥3 title-edit URL collisions in a 30-day window after Vector C ships. Vector A's blast radius (12K+ URLs change, sitemap storm, Schema.org @id continuity break, localStorage migration IIFE, image file rename) is multi-session high-risk work — over-engineering at current evidence (1 known recurrence).
+
+**Vector B (--prefer-newest flag) rejected:** too blunt — would also flip cases where older row is correct (e.g., source typo correction shouldn't discard real enrichment work). Vector C's title-divergence conditional is the precise discriminator.
+
+**Sequencing locked:**
+1. Vector C scheduled **after** the post-demo taxonomy session lands. Reason: taxonomy session's Step 12 migration sweep can pick the re-scrape path with confidence ONLY if Vector C has shipped first; if dedup hasn't been fixed by then, the migration falls back to manual UPDATE just like S140. Vector C unblocks the cleaner taxonomy migration branch.
+2. Cluster 3 venue-collision sibling fragility (megaron/benaki/onassis 2-param scrapers) remains latent. Recommended mitigation = add venue-collision detection check at ingest (cheap, defensive, doesn't require rewriting the hash). Out of scope for Vector C; flagged as a follow-up.
+
+**Held (Dev Planner judgments, not stakeholder calls):**
+- Pass 1 vs Pass 7 tiebreaker order divergence (Section D.3) — Pass 1 is title-then-desc; Pass 7 is desc-then-title. Vector C implementation should harmonize: pick desc-then-title (description length is a stronger quality signal; title length tracks marketing copy bloat).
+- `merge-duplicates.ts` already implements "prefer newer on tie" via updated_at — Vector C is conceptually consistent, just at a different code path under a more specific trigger.
+- The 10-site dispersion is itself technical debt worth addressing eventually. Vector A would unify it; alternative is to keep dispersion but add a shared validation harness (cheaper, doesn't address the title-edit fragility).
+
+**Connects to:**
+- `.claude/notes/mistakes.md` S140 entry (third sub-item) — anchor case for the audit.
+- `docs/known-issues.md` "Dedup keep-decision favors older row…" — promoted from informal note to formal 🟡 Open entry by this audit.
+- `.claude/notes/patterns.md` "Pattern A'' — Wrong-Cardinality Assumption" — pattern instantiated by this audit's preflight (brief said "single function," reality is 10 sites).
+- `specs/categorizer-audit-2026-05-14.md` — the original audit whose Step 12 migration sweep gets unblocked when Vector C ships.
+
+**Status:** Audit shipped at `specs/event-id-stability-audit-2026-05-15.md`. Vector C scheduled for after post-demo taxonomy session lands.
