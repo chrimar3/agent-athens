@@ -3866,3 +3866,29 @@ ca/es/en → de/en).
 
 **Status:** Decided. S136 (Bing-only) shipped 2026-05-17 (commit `d951376a6`).
 S138 (GSC OAuth fallback) parked, not on Παναθήναια May 29 critical path.
+
+## 2026-05-18 — Pattern G Batch Shipped (3 items + opportunistic audit skipped)
+
+**Context:** Three independent maintenance items bundled as a Pattern G batch. Brief authored by planner with detailed Step 0a/0b/1/2/3 verification protocol. Phase 1 verification surfaced four brief-vs-reality mismatches, all corrected at plan time.
+
+**Items shipped:**
+1. **`temp-descriptions/batch-*/` cleanup hook** in `scripts/auto-enrich.sh:268-271` — addresses S110 throughput-regression top-blocker. Mechanism: `rm -rf` glob on subdirs (mirroring the timing but NOT the literal `rm -f` file-glob mechanism used for temp-briefs — structural reality forced the adaptation). Commit `3c3b41fa3`.
+2. **Reset 19 stuck `enrichment_queue` rows** (status='in_progress' AND updated_at < -1d). All 19 were stale; SQL UPDATE was idempotent + guarded. Backup at `data/events.db.pre-pattern-g-backup` (gitignored). Brief assumed ~11; actual was 19. Empty audit commit `18f293435`.
+3. **Version-controlled `com.agentathens.monitor-visibility.plist`** by copying from `~/Library/LaunchAgents/` to `config/launchd/`. Runtime plist untouched. Closes Session 139 (S136) audit-gap open item. Commit `20491f4c2`.
+
+**Step 5 (opportunistic /venues/ index JSON-LD audit): SKIPPED.** Two reasons: (a) context budget already substantial after the long S136 + Pattern G session, (b) Step 3's advisory diff surfaced a PATH structural divergence between daily.plist and monitor-visibility.plist — a real finding that violates the "no surprises" gate condition for opportunistic continuation. Brief's failure-mode said "skip if surprises"; honored.
+
+**Surprises:**
+- **Brief assumed `docs/known-issues.md` contained the queue-reset SQL fix-plan; it doesn't.** No entry for stuck enrichment_queue rows. SQL sourced from the brief verbatim (which is authoritative). Filing a known-issues entry is a follow-up.
+- **PATH divergence between daily.plist and monitor-visibility.plist.** daily uses `/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/Users/chrism/.bun/bin:/Users/chrism/.npm-global/bin`; monitor uses `/Users/chrism/.local/bin:/Users/chrism/.npm-global/bin:/Users/chrism/.bun/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin`. Both work as installed. Normalization is a separate session (launchd parity-test per Session 139 open items).
+- **Stuck-row count 73% higher than brief expected** (19 vs ~11). Within tolerance (brief stop-threshold was >>50). Indicates accumulating backlog over the past weeks; worth monitoring whether the rate keeps climbing.
+
+**Replicability:** SPEC-universal. The cleanup-hook pattern, queue-reset SQL guard, and plist version-control discipline all replicate identically for agent-barcelona and agent-berlin when those projects spin up.
+
+**Connects to:**
+- `.claude/notes/patterns.md` — Pattern I (Pattern G commit-splitting), Pattern J (temp-* accumulation as throughput tax), banked from this session
+- `docs/known-issues.md` — no entry yet for stuck enrichment_queue rows; filing one is a follow-up
+- `specs/s138-gsc-oauth-fallback.md` — Session 139 open item that surfaced the plist-version-control gap this batch closes
+- `scripts/auto-enrich.sh:151-171` (single-instance lock) — the safety net that makes start-of-run `rm -rf` safe
+
+**Status:** Shipped. Three commits on main (cleanup `3c3b41fa3`, queue `18f293435`, plist `20491f4c2`) plus the notes commit. No push. Daily pipeline handles cadence.

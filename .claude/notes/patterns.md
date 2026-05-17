@@ -4743,3 +4743,45 @@ else echo "BLOCKED: $FILE absent"
 fi
 ```
 The three-way split surfaces the right operator action for each state.
+
+## 2026-05-18 — Pattern G Batch Banking
+
+### Pattern I — Pattern G commit-splitting (one logical maintenance item per commit)
+
+A "Pattern G maintenance batch" is multiple unrelated cleanup items bundled into a single session for efficiency. The temptation is to ship all items in one commit ("docs/chore: Pattern G batch 2026-05-18"). Don't.
+
+**Rule:** one logical maintenance item per commit, even within a Pattern G batch. Audit-shape > commit-count economy.
+
+**Why audit-shape matters more than commit-count:**
+- Each commit's diff has a single audience: someone reviewing the cleanup hook doesn't care about the queue reset, and vice versa.
+- Future bisects fire cleanly on the specific item that introduced a regression.
+- Reverting one item doesn't require surgical re-staging of the others.
+- Commit messages stay focused (one purpose per message); the why is comprehensible without parsing multiple unrelated diff hunks.
+
+**The empty-commit subcase:** when an item is a data-only change (e.g., SQL UPDATE on a gitignored DB), `git commit --allow-empty` preserves the audit trail in git log without an artificial diff. Conservative tools that reject empty commits are rare in practice; the audit value outweighs the unusualness.
+
+**Anchor cases:**
+- S136 (2026-05-17): 3 commits — ship (`d951376a6`), notes (`16ebd4908`), session-log (`2b26cb555`). Each audience-targeted.
+- Pattern G 2026-05-18: 4 commits — cleanup hook (`3c3b41fa3`), queue reset --allow-empty (`18f293435`), plist version-control (`20491f4c2`), notes (this commit).
+
+**Counter-condition:** mechanical follow-on commits (typo fixes immediately following a feature commit, lockfile updates following a dep change) can bundle. The rule is "one logical item per commit," not "one file per commit."
+
+---
+
+### Pattern J — `temp-*` directory accumulation as silent throughput tax
+
+Pipelines that write partial state to `temp-*` directories during multi-step subprocess work (Claude Code-style agents writing per-event description files mid-batch) often don't clean up between runs. Each run starts with the prior run's partials still on disk.
+
+**Why this is a silent throughput tax:**
+- Agents discovering existing partials downshift from "write fresh" mode to "load partial + fact-check + complete" mode. Fact-check is slower than write-fresh, especially when the partial is from a prior version of the prompt/schema.
+- Stale partials confuse the "is this batch done?" heuristic — agents can mistake a 10-day-old `batch-999/` from a long-aborted run for current work, generating spurious activity.
+- The slowdown is invisible per-run (each individual call still completes); only aggregate throughput drops over weeks.
+
+**Mitigation pattern:**
+- Cleanup hooks belong at script **start** (before subprocess invocation), not at end. Reason: if the prior run crashed mid-execution (panic, OOM, manual kill), end-of-script cleanup didn't run and the next start-of-script cleanup is the only safety net.
+- Cleanup must be guarded by a single-instance lock so concurrent runs don't delete each other's working dirs. The auto-enrich.sh `.auto-enrich.lock.d` mkdir-based lock is the model.
+- Don't over-clean: scope to the specific subdirectory pattern (`batch-*/`), not the parent (`temp-descriptions/`). Loose stale files in the parent dir may have other curation needs.
+
+**Anchor case:** `scripts/auto-enrich.sh:268-271` (2026-05-18). Existing `temp-briefs/` cleanup (file-based, `rm -f` glob) at script start; new `temp-descriptions/batch-*/` cleanup (subdir-based, `rm -rf` glob) added in same block. Both gated by the single-instance lock at `:151-171`.
+
+**Cross-reference:** S110 throughput-regression diagnosis flagged stale partials as a suspect long before this session shipped the fix. The cleanup hook closes that S110-era loop.
