@@ -1,11 +1,14 @@
 /**
- * Tests for scripts/monitor-search-visibility.ts
+ * Tests for scripts/monitor-search-visibility.ts (post-S136 27-col shape)
  *
- * Covers the enrichment-throughput extension added in Session A (S91 follow-up):
- * - getEnrichmentStats() emits integer / STALE_ENRICHMENT / '' per contract
+ * Covers:
+ * - CSV_HEADER is 27 cols with gsc_*_7d at 16-19, bing_*_7d at 20-23
+ * - getEnrichmentStats() emits integer / STALE_ENRICHMENT / '' (ENRICHED_COL_INDEX=24)
  * - lastRowBefore() scans CSV backwards for most recent date != today
- * - migrateCsvIfNeeded() handles 18→19 column schema migration atomically
- * - Column count invariant: every row has exactly 19 fields after extension
+ * - getWrapperDiscrepancyStats() with WRAPPER_DISCREPANCY_COL_INDEX=25
+ * - updateTodayRowManualMetrics() patches gsc_indexed (14) + bing_indexed (15) only
+ * - getBingMetrics() reads logs/bing-latest.json with STALE / AUTH_FAIL semantics
+ * - migrateCsvIfNeeded() is a no-op on the current 27-col shape
  */
 
 import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
@@ -22,15 +25,34 @@ import {
   yesterdayAthensDate,
   countMisreportsInLog,
   updateTodayRowManualMetrics,
+  getBingMetrics,
 } from '../scripts/monitor-search-visibility';
 
 const TMP_DIR = join(import.meta.dir, 'tmp/monitor-search-visibility');
 const TMP_CSV = join(TMP_DIR, 'test.csv');
 const TMP_DB = join(TMP_DIR, 'test.db');
+const TMP_BING = join(TMP_DIR, 'bing-latest.json');
 const MISSING_DB = join(TMP_DIR, 'does-not-exist.db');
 
-const OLD_HEADER =
-  'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,ai_citations_count,notes';
+// Standard 27-col row template. Adjust trailing fields (enriched, wrapper, notes)
+// per test. Cols 16-23 are the new gsc/bing 7d aggregates (empty here unless test
+// explicitly populates them).
+function row27(date: string, opts: { enriched?: string | number; wrapper?: string | number; notes?: string } = {}): string {
+  const enriched = opts.enriched ?? '';
+  const wrapper = opts.wrapper ?? '';
+  const notes = opts.notes ?? '';
+  return [
+    date, 1, 2, 3, 6,           // 0-4
+    10, 10, 1, 't',              // 5-8
+    200, 200, 200,               // 9-11
+    10, 10,                      // 12-13
+    0, 0,                        // 14-15 gsc_indexed, bing_indexed
+    '', '', '', '',              // 16-19 gsc_*_7d
+    '', '', '', '',              // 20-23 bing_*_7d
+    enriched, wrapper,           // 24-25
+    notes,                       // 26
+  ].join(',');
+}
 
 function setupEventsDb(path: string, enrichedAtValues: (string | null)[]): void {
   if (existsSync(path)) unlinkSync(path);
@@ -46,6 +68,7 @@ beforeEach(() => {
   if (existsSync(TMP_CSV)) unlinkSync(TMP_CSV);
   if (existsSync(TMP_CSV + '.tmp')) unlinkSync(TMP_CSV + '.tmp');
   if (existsSync(TMP_DB)) unlinkSync(TMP_DB);
+  if (existsSync(TMP_BING)) unlinkSync(TMP_BING);
 });
 
 afterEach(() => {
@@ -53,12 +76,19 @@ afterEach(() => {
 });
 
 describe('CSV_HEADER', () => {
-  test('has 20 columns with observability fields before notes', () => {
+  test('is 27 cols with S136 shape (gsc_*_7d at 16-19, bing_*_7d at 20-23)', () => {
     const cols = CSV_HEADER.split(',');
-    expect(cols.length).toBe(20);
-    expect(cols[17]).toBe('enriched_last_24h');
-    expect(cols[18]).toBe('wrapper_discrepancy_last_24h');
-    expect(cols[19]).toBe('notes');
+    expect(cols.length).toBe(27);
+    expect(cols[14]).toBe('gsc_indexed');
+    expect(cols[15]).toBe('bing_indexed');
+    expect(cols[16]).toBe('gsc_impressions_7d');
+    expect(cols[19]).toBe('gsc_top10_count_7d');
+    expect(cols[20]).toBe('bing_impressions_7d');
+    expect(cols[23]).toBe('bing_top10_count_7d');
+    expect(cols[24]).toBe('enriched_last_24h');
+    expect(cols[25]).toBe('wrapper_discrepancy_last_24h');
+    expect(cols[26]).toBe('notes');
+    expect(cols).not.toContain('ai_citations_count');
   });
 });
 
@@ -75,23 +105,19 @@ describe('lastRowBefore', () => {
   test('returns the most recent row with date != today', () => {
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,5,\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n' +
-        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-04-21', { enriched: 5 }) + '\n' +
+        row27('2026-04-22', { enriched: 0 }) + '\n' +
+        row27('2026-04-23', { enriched: 0 }) + '\n',
     );
     const row = lastRowBefore('2026-04-23', TMP_CSV);
     expect(row).not.toBeNull();
     expect(row![0]).toBe('2026-04-22');
-    expect(row![17]).toBe('0');
+    expect(row![24]).toBe('0'); // enriched_last_24h at new idx 24
   });
 
   test('skips today even if only row', () => {
-    writeFileSync(
-      TMP_CSV,
-      CSV_HEADER + '\n' + '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n',
-    );
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n' + row27('2026-04-23') + '\n');
     expect(lastRowBefore('2026-04-23', TMP_CSV)).toBeNull();
   });
 });
@@ -99,9 +125,9 @@ describe('lastRowBefore', () => {
 describe('getEnrichmentStats', () => {
   test('returns integer count when DB has rows in last 24h', () => {
     setupEventsDb(TMP_DB, [
-      new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),  // 2h ago
-      new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(), // 10h ago
-      new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), // 48h ago — excluded
+      new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+      new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
+      new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), // excluded
     ]);
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
     const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
@@ -119,7 +145,7 @@ describe('getEnrichmentStats', () => {
     setupEventsDb(TMP_DB, []);
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n',
+      CSV_HEADER + '\n' + row27('2026-04-22', { enriched: 0 }) + '\n',
     );
     const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe('STALE_ENRICHMENT');
@@ -129,7 +155,7 @@ describe('getEnrichmentStats', () => {
     setupEventsDb(TMP_DB, []);
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,33,\n',
+      CSV_HEADER + '\n' + row27('2026-04-22', { enriched: 33 }) + '\n',
     );
     const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(0);
@@ -142,9 +168,6 @@ describe('getEnrichmentStats', () => {
   });
 
   test('works against a WAL-mode DB (regression — readonly:true breaks WAL open)', () => {
-    // Production DB is WAL mode. Prior implementation used readonly:true
-    // and hit SQLITE_CANTOPEN. This test creates a WAL-mode DB to prevent
-    // anyone re-adding that flag in a refactor.
     const db = new Database(TMP_DB);
     db.run(`PRAGMA journal_mode=WAL`);
     db.run(`CREATE TABLE events (id TEXT PRIMARY KEY, enriched_at TEXT)`);
@@ -155,108 +178,39 @@ describe('getEnrichmentStats', () => {
     const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(1);
   });
-
-  test('does not trigger STALE when prior row was in old 18-col format (no enriched_last_24h field)', () => {
-    // Prior row has 18 cols, index 17 is `notes` (empty), not an enriched_last_24h value.
-    // `notes` field is '' (empty), so priorEnrich === '' (not '0'); STALE must not fire.
-    setupEventsDb(TMP_DB, []);
-    writeFileSync(
-      TMP_CSV,
-      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n',
-    );
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
-    expect(stats.enrichedLast24h).toBe(0);
-  });
 });
 
 describe('migrateCsvIfNeeded', () => {
-  test('creates fresh CSV with new header when file missing', () => {
+  test('creates fresh CSV with new 27-col header when file missing', () => {
     migrateCsvIfNeeded(TMP_CSV);
     expect(existsSync(TMP_CSV)).toBe(true);
     expect(readFileSync(TMP_CSV, 'utf-8')).toBe(CSV_HEADER + '\n');
+    expect(CSV_HEADER.split(',').length).toBe(27);
   });
 
-  test('is a no-op when CSV already has new 20-col header', () => {
-    const content =
-      CSV_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,33,0,\n';
+  test('is a no-op when CSV already has new 27-col header', () => {
+    const content = CSV_HEADER + '\n' + row27('2026-04-22', { enriched: 33 }) + '\n';
     writeFileSync(TMP_CSV, content);
     migrateCsvIfNeeded(TMP_CSV);
     expect(readFileSync(TMP_CSV, 'utf-8')).toBe(content);
   });
 
-  test('migrates 18-col header → 20-col, inserts two empties before notes (skip one, skip two)', () => {
-    const oldContent =
-      OLD_HEADER +
-      '\n' +
-      '2026-04-20,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,hello\n' +
-      '2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n';
-    writeFileSync(TMP_CSV, oldContent);
-    migrateCsvIfNeeded(TMP_CSV);
-    const migrated = readFileSync(TMP_CSV, 'utf-8');
-    const lines = migrated.split('\n');
-    expect(lines[0]).toBe(CSV_HEADER);
-    expect(lines[1]).toBe('2026-04-20,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,,hello');
-    expect(lines[2]).toBe('2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,,,');
-    for (const line of lines) {
-      if (line.length === 0) continue;
-      expect(line.split(',').length).toBe(20);
-    }
-  });
-
-  test('migrates 19-col header → 20-col, inserts one empty before notes (S97 CSV → S98)', () => {
-    // Simulates a CSV that was already migrated to 19 cols during Session A
-    // and now needs a single additional column for Session 98.
-    const S97_HEADER =
-      'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,ai_citations_count,enriched_last_24h,notes';
-    const oldContent =
-      S97_HEADER +
-      '\n' +
-      '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,note-a\n' +
-      '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,\n';
-    writeFileSync(TMP_CSV, oldContent);
-    migrateCsvIfNeeded(TMP_CSV);
-    const migrated = readFileSync(TMP_CSV, 'utf-8');
-    const lines = migrated.split('\n');
-    expect(lines[0]).toBe(CSV_HEADER);
-    expect(lines[1]).toBe('2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,,note-a');
-    expect(lines[2]).toBe('2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,0,,');
-    for (const line of lines) {
-      if (line.length === 0) continue;
-      expect(line.split(',').length).toBe(20);
-    }
-  });
-
-  test('leaves tmp file removed after successful migration', () => {
-    writeFileSync(
-      TMP_CSV,
-      OLD_HEADER + '\n' + '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n',
-    );
+  test('leaves tmp file removed after no-op run', () => {
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n' + row27('2026-04-22') + '\n');
     migrateCsvIfNeeded(TMP_CSV);
     expect(existsSync(TMP_CSV + '.tmp')).toBe(false);
   });
 });
 
 describe('column count invariant', () => {
-  test('full migration + simulated append yields 20-col rows throughout', () => {
-    // Start with old 18-col CSV
-    writeFileSync(
-      TMP_CSV,
-      OLD_HEADER +
-        '\n' +
-        '2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,\n',
-    );
-    migrateCsvIfNeeded(TMP_CSV);
-    // Simulate appending today's row (20 fields)
-    const todayRow =
-      '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,0,';
-    const appended = readFileSync(TMP_CSV, 'utf-8') + todayRow + '\n';
+  test('appending a fresh row to header-only CSV yields 27 cols throughout', () => {
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n');
+    const appended = readFileSync(TMP_CSV, 'utf-8') + row27('2026-04-23', { enriched: 15, wrapper: 0 }) + '\n';
     writeFileSync(TMP_CSV, appended);
-
     const lines = readFileSync(TMP_CSV, 'utf-8').split('\n');
     for (const line of lines) {
       if (line.length === 0) continue;
-      expect(line.split(',').length).toBe(20);
+      expect(line.split(',').length).toBe(27);
     }
   });
 });
@@ -299,11 +253,10 @@ describe('lastTwoRowsBefore', () => {
   test('returns the two most recent rows before today', () => {
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-04-21,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,15,2,\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,1,\n' +
-        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,0,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-04-21', { enriched: 15, wrapper: 2 }) + '\n' +
+        row27('2026-04-22', { enriched: 20, wrapper: 1 }) + '\n' +
+        row27('2026-04-23', { enriched: 18, wrapper: 0 }) + '\n',
     );
     const [prior1, prior2] = lastTwoRowsBefore('2026-04-24', TMP_CSV);
     expect(prior1).not.toBeNull();
@@ -319,15 +272,12 @@ describe('lastTwoRowsBefore', () => {
   });
 
   test('skips duplicate-date rows (returns first seen per date)', () => {
-    // Monitor may write multiple rows on the same day (manual reruns). lastTwoRowsBefore
-    // collapses same-date rows by taking only the newest per date.
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
-        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,0,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-04-22', { enriched: 20 }) + '\n' +
+        row27('2026-04-22', { enriched: 20 }) + '\n' +
+        row27('2026-04-23', { enriched: 18 }) + '\n',
     );
     const [prior1, prior2] = lastTwoRowsBefore('2026-04-24', TMP_CSV);
     expect(prior1![0]).toBe('2026-04-23');
@@ -358,7 +308,7 @@ describe('getWrapperDiscrepancyStats', () => {
     });
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
     const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
-    expect(stats.wrapperDiscrepancyLast24h).toBe(3); // 1 from yesterday + 2 from today
+    expect(stats.wrapperDiscrepancyLast24h).toBe(3);
   });
 
   test('fires STALE_WRAPPER when count>0 AND prior 2 daily rows both had nonzero discrepancy', () => {
@@ -367,10 +317,9 @@ describe('getWrapperDiscrepancyStats', () => {
     });
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,3,\n' +
-        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,2,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-04-22', { enriched: 20, wrapper: 3 }) + '\n' +
+        row27('2026-04-23', { enriched: 18, wrapper: 2 }) + '\n',
     );
     const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
     expect(stats.wrapperDiscrepancyLast24h).toBe('STALE_WRAPPER');
@@ -382,16 +331,15 @@ describe('getWrapperDiscrepancyStats', () => {
     });
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-04-22,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,20,0,\n' +
-        '2026-04-23,1,2,3,6,10,10,1,t,200,200,200,10,10,0,0,0,18,2,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-04-22', { enriched: 20, wrapper: 0 }) + '\n' +
+        row27('2026-04-23', { enriched: 18, wrapper: 2 }) + '\n',
     );
     const stats = getWrapperDiscrepancyStats('2026-04-24', TMP_CSV, TMP_LOGS);
     expect(stats.wrapperDiscrepancyLast24h).toBe(1);
   });
 
-  test('returns 0 today (no STALE) when today has discrepancy but prior rows empty (new deployment)', () => {
+  test('returns count (not STALE) when prior rows empty (new deployment)', () => {
     setupLogs({
       'auto-enrich-2026-04-24.log': 'batch-1 WARN: subprocess exited 1 but 5 events saved successfully\n',
     });
@@ -402,14 +350,13 @@ describe('getWrapperDiscrepancyStats', () => {
 });
 
 describe('updateTodayRowManualMetrics', () => {
-  const MANUAL = { gscIndexed: '7', bingIndexed: '390', aiCitations: '0' };
+  const MANUAL = { gscIndexed: '7', bingIndexed: '390' };
 
   test('returns no-row when CSV has no row for today (does not insert)', () => {
     const before =
-      CSV_HEADER +
-      '\n' +
-      '2026-05-06,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n' +
-      '2026-05-07,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n';
+      CSV_HEADER + '\n' +
+      row27('2026-05-06', { enriched: 5, wrapper: 0 }) + '\n' +
+      row27('2026-05-07', { enriched: 5, wrapper: 0 }) + '\n';
     writeFileSync(TMP_CSV, before);
     const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
     expect(result).toBe('no-row');
@@ -417,25 +364,22 @@ describe('updateTodayRowManualMetrics', () => {
   });
 
   test('returns updated and writes values when manual columns are empty', () => {
-    writeFileSync(
-      TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,15,0,\n',
-    );
+    // Override row27's default gsc/bing values (0,0) with empties so populated=false
+    const emptyRow = row27('2026-05-08', { enriched: 15, wrapper: 0 })
+      .split(',')
+      .map((v, i) => (i === 14 || i === 15 ? '' : v))
+      .join(',');
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n' + emptyRow + '\n');
     const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
     expect(result).toBe('updated');
     const row = readFileSync(TMP_CSV, 'utf8').split('\n')[1].split(',');
     expect(row[14]).toBe('7');
     expect(row[15]).toBe('390');
-    expect(row[16]).toBe('0');
   });
 
   test('returns clobber-blocked when manual columns populated and force=false', () => {
-    const before =
-      CSV_HEADER +
-      '\n' +
-      '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,1,2,3,15,0,\n';
+    // row27 default: gsc=0, bing=0 — already populated
+    const before = CSV_HEADER + '\n' + row27('2026-05-08', { enriched: 15, wrapper: 0 }) + '\n';
     writeFileSync(TMP_CSV, before);
     const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
     expect(result).toBe('clobber-blocked');
@@ -443,32 +387,84 @@ describe('updateTodayRowManualMetrics', () => {
   });
 
   test('returns updated when manual columns populated and force=true', () => {
-    writeFileSync(
-      TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,1,2,3,15,0,\n',
-    );
+    writeFileSync(TMP_CSV, CSV_HEADER + '\n' + row27('2026-05-08', { enriched: 15, wrapper: 0 }) + '\n');
     const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, true, TMP_CSV);
     expect(result).toBe('updated');
     const row = readFileSync(TMP_CSV, 'utf8').split('\n')[1].split(',');
     expect(row[14]).toBe('7');
     expect(row[15]).toBe('390');
-    expect(row[16]).toBe('0');
   });
 
   test('atomic write hygiene: no .tmp leftover and row count unchanged', () => {
+    const emptyRow = row27('2026-05-08', { enriched: 15, wrapper: 0 })
+      .split(',')
+      .map((v, i) => (i === 14 || i === 15 ? '' : v))
+      .join(',');
     writeFileSync(
       TMP_CSV,
-      CSV_HEADER +
-        '\n' +
-        '2026-05-06,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,5,0,\n' +
-        '2026-05-08,1,2,3,6,10,10,1,t,200,200,200,10,10,,,,15,0,\n',
+      CSV_HEADER + '\n' +
+        row27('2026-05-06', { enriched: 5, wrapper: 0 }) + '\n' +
+        emptyRow + '\n',
     );
     const beforeLines = readFileSync(TMP_CSV, 'utf8').split('\n').length;
     const result = updateTodayRowManualMetrics('2026-05-08', MANUAL, false, TMP_CSV);
     expect(result).toBe('updated');
     expect(existsSync(TMP_CSV + '.tmp')).toBe(false);
     expect(readFileSync(TMP_CSV, 'utf8').split('\n').length).toBe(beforeLines);
+  });
+});
+
+describe('getBingMetrics', () => {
+  test('returns STALE for all 4 fields when JSON file missing', () => {
+    const result = getBingMetrics(join(TMP_DIR, 'absent.json'));
+    expect(result.impressions).toBe('STALE');
+    expect(result.clicks).toBe('STALE');
+    expect(result.avgPosition).toBe('STALE');
+    expect(result.top10).toBe('STALE');
+  });
+
+  test("status='ok' → 4 numeric values from aggregate", () => {
+    writeFileSync(TMP_BING, JSON.stringify({
+      timestamp: '2026-05-17T12:00:00+03:00',
+      status: 'ok',
+      aggregate: { impressions_7d: 142, clicks_7d: 8, avg_position_7d: 5.3, top10_count_7d: 4 },
+    }));
+    const result = getBingMetrics(TMP_BING);
+    expect(result.impressions).toBe(142);
+    expect(result.clicks).toBe(8);
+    expect(result.avgPosition).toBe(5.3);
+    expect(result.top10).toBe(4);
+  });
+
+  test("status='stale' → 4 STALE markers", () => {
+    writeFileSync(TMP_BING, JSON.stringify({
+      timestamp: '2026-05-17T12:00:00+03:00',
+      status: 'stale',
+      aggregate: { impressions_7d: 0, clicks_7d: 0, avg_position_7d: 0, top10_count_7d: 0 },
+    }));
+    const result = getBingMetrics(TMP_BING);
+    expect(result.impressions).toBe('STALE');
+    expect(result.clicks).toBe('STALE');
+    expect(result.avgPosition).toBe('STALE');
+    expect(result.top10).toBe('STALE');
+  });
+
+  test("status='auth_fail' → 4 AUTH_FAIL markers (distinct from stale)", () => {
+    writeFileSync(TMP_BING, JSON.stringify({
+      timestamp: '2026-05-17T12:00:00+03:00',
+      status: 'auth_fail',
+      aggregate: { impressions_7d: 0, clicks_7d: 0, avg_position_7d: 0, top10_count_7d: 0 },
+    }));
+    const result = getBingMetrics(TMP_BING);
+    expect(result.impressions).toBe('AUTH_FAIL');
+    expect(result.clicks).toBe('AUTH_FAIL');
+    expect(result.avgPosition).toBe('AUTH_FAIL');
+    expect(result.top10).toBe('AUTH_FAIL');
+  });
+
+  test('unparseable JSON → STALE markers', () => {
+    writeFileSync(TMP_BING, 'not json at all');
+    const result = getBingMetrics(TMP_BING);
+    expect(result.impressions).toBe('STALE');
   });
 });

@@ -201,7 +201,26 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Root causes (S90 diagnosis):** (1) Netlify deploy failing 6 days → IndexNow cascade-failed, (2) ping-indexnow.ts silently hit 10K API cap without batching, (3) Domain migration (agentathens.netlify.app → agentathens.com, S84) reset indexing state.
 **Workaround:** None — partial visibility holds.
 **Fix plan:** S90 pipeline fix shipped (Phase A/B/C/D). 17-day delta confirms recovery on Bing channel. Google low-coverage (7/8,475 = 0.08%) is the residual gap, routed to GEO Strategist diagnostic vs patience decision. Full snapshot in `specs/s90-recovery-baseline-2026-05-08.md`.
-**Status:** Partial recovery confirmed (2026-05-08), pipeline still healthy at S128 check-in (2026-05-10). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below). May 18 spot-check needs Christos to read `gsc_indexed` / `bing_indexed` / `ai_citations_count` from the respective UIs and backfill the CSV columns for 2026-05-09 onward — comparison against the 2026-05-08 baseline requires the manual fields populated.
+**Status:** Partial recovery confirmed (2026-05-08), pipeline still healthy at S128 check-in (2026-05-10). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below). Post-S136 (2026-05-17): `bing_*_7d` columns now auto-populate daily via `scripts/fetch-bing-metrics.ts`; `gsc_*_7d` columns ship as `STALE` pending S138 OAuth fallback (see "GSC Service Account Add-User Silent Fail" entry); `ai_citations_count` column dropped from the visibility log per GEO Strategist 2026-05-17 schema lock (moved to a future separate `data/ai-citations.csv`, Sprint 5 scope). May 18 spot-check still needs Christos to read `gsc_indexed` / `bing_indexed` from the respective UIs and backfill those manual indexed-page counters (CSV indices 14, 15) for 2026-05-09 onward — comparison against the 2026-05-08 baseline requires those manual fields populated.
+
+### GSC Service Account Add-User Silent Fail
+**Severity:** 🟡 (blocks GSC API automation; manual `gsc_indexed` workflow still functional)
+**First seen:** Session 136 (2026-05-17)
+**Frequency:** Reproducible — fails on every attempt to add a GCP service account to the property.
+**Symptoms:** Adding service-account email (`*@*.iam.gserviceaccount.com`) as a user on Search Console property fails silently. "Add user" dialog appears to accept, briefly shows in-progress state, then no row persists in the user list. No error surfaced in UI or browser console.
+**Reproduced on:**
+- URL-prefix property `https://agentathens.com/` with Full permission
+- Domain property `agentathens.com` with Full permission
+- Domain property `agentathens.com` with Restricted permission
+**Account state when reproduced:**
+- GCP and Search Console both signed in as `cmarag8@gmail.com`
+- Property Owner = same account
+- Service account `agentathens-kpi-reader@astute-encoder-452909-h6.iam.gserviceaccount.com` created and enabled
+- GCP project `astute-encoder-452909-h6` under personal Gmail (no Workspace org)
+**Root causes (suspected):** Personal-Gmail-owned Search Console properties appear to silently reject service-account user additions in this account configuration. Not formally documented by Google; reproduced across property types and permission tiers.
+**Workaround:** Use OAuth user credentials (authenticated as the property Owner) instead of service-account auth. Deferred to S138.
+**Fix plan:** S138 — OAuth fallback session. Service-account JSON at `~/.config/agentathens/gcp-kpi-reader.json` is retained for the eventual S138 attempt (or replacement OAuth client). Bing half of search visibility automation shipped in S136 as compensation; GSC half pending.
+**Status:** Open — workaround path identified, not yet implemented. The 4 `gsc_*_7d` columns in `data/search-visibility-log.csv` remain `STALE` indefinitely until S138 lands. Not on Παναθήναια May 29 critical path.
 
 ### Google Indexing Low Coverage
 **Severity:** 🟡
