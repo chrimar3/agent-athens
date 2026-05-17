@@ -4785,3 +4785,29 @@ Pipelines that write partial state to `temp-*` directories during multi-step sub
 **Anchor case:** `scripts/auto-enrich.sh:268-271` (2026-05-18). Existing `temp-briefs/` cleanup (file-based, `rm -f` glob) at script start; new `temp-descriptions/batch-*/` cleanup (subdir-based, `rm -rf` glob) added in same block. Both gated by the single-instance lock at `:151-171`.
 
 **Cross-reference:** S110 throughput-regression diagnosis flagged stale partials as a suspect long before this session shipped the fix. The cleanup hook closes that S110-era loop.
+
+## 2026-05-18 (PM) — Citability Audit Follow-Through Pattern Banking
+
+### Pattern K — Audit-driven planning loop is becoming load-bearing
+
+Three consecutive sessions (S136 brief, Pattern G brief, citability audit brief) had brief premises invalidated by Phase 1 verification:
+- S136: column name (`ai_citations` vs `ai_citations_count`), column count (28 vs 27), path (`/Users/chrism/dev/...` vs `/Users/chrism/Project with Claude/...`), 7 brief-vs-reality mismatches total
+- Pattern G: stuck-row count (11 vs 19), SQL location ("from known-issues.md" — doesn't exist), plist diff target (config/launchd/ vs project root), temp-briefs mechanism (rm -f on files vs rm -rf on subdirs)
+- citability audit: exhibition anomaly (100% pass, not 63%), 3 EN cornerstones (actually 4 true 404s + 3 redirects), build-completeness schema (different keys), dist/ paths missing
+- /venues/ + EN cornerstone session: hub CollectionPage reference at page.ts (not hub-page.ts), HUB_EVENT_LIMIT cap (30, not 20/50), EN routing gate (answerCapsuleEn presence, not "en:true" flag), 6 brief-vs-reality findings total
+
+The executor's Phase 1 verification has become the ground-truth oracle for whether briefs ship-as-stated or ship-with-corrections. Pre-session "verify-brief-premises" skill — escalated from post-May-29 to first-in-queue parked item.
+
+**Anchor:** `specs/citability-audit-2026-05-18.md` (commit `d1c22272d`) was itself produced by an audit that invalidated 4 of 5 candidate framings. The downstream implementation session inherited the corrected list and shipped cleanly.
+
+### Pattern L — Empty-array config fields trigger validator errors downstream
+
+When adding new entries to `config/hub-pages.json`, an empty `faqs: []` array passes JSON-validity and TypeScript compilation but produces a runtime error at the validator step: "FAQPage: mainEntity (Question array) is missing or empty." Two failure paths:
+1. Greek FAQ present but EN FAQ absent → EN page emits FAQPage with 0 Questions (the EN exhibitions case this session)
+2. FAQs array empty in both languages → both pages emit empty FAQPage (the `faqs: []` initial state this session)
+
+**Rule:** When a config schema accepts `faqs: []`, the generator/validator combo may emit a FAQPage shell that fails Schema.org structured-data validation. Either populate the FAQ list with at least 1 bilingual pair, OR guard the FAQPage emission to skip when faqs array is empty (template-side fix, out of scope for config-level Pattern G additions).
+
+### Pattern M — Branch-name drift hardened
+
+Repo uses `main`, not `master`. Planner-side templates referencing `master` cause executor-side adaptation overhead (10+ documented adaptations across recent sessions including S136, Pattern G, push session). Future planner templates use `main` verbatim. Mitigation banked here pending template revision.

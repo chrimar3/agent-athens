@@ -3892,3 +3892,34 @@ S138 (GSC OAuth fallback) parked, not on Παναθήναια May 29 critical pa
 - `scripts/auto-enrich.sh:151-171` (single-instance lock) — the safety net that makes start-of-run `rm -rf` safe
 
 **Status:** Shipped. Three commits on main (cleanup `3c3b41fa3`, queue `18f293435`, plist `20491f4c2`) plus the notes commit. No push. Daily pipeline handles cadence.
+
+## 2026-05-18 (PM) — Citability-Audit Follow-Through: /venues/ JSON-LD + 4 EN Cornerstones Shipped
+
+Implementation session for Items 3 and 4 from `specs/citability-audit-2026-05-18.md` (commit `d1c22272d`).
+
+**Items shipped:**
+1. **`/venues/` index JSON-LD emission** — `src/generators/venue-page.ts:318` now emits 1 CollectionPage + mainEntity ItemList of up to 30 Place items, mirroring the hub pattern at `src/templates/page.ts:451-529`. Commit `83a13a9c8`. Closes Item 4 (registry-index discoverability gap).
+2. **4 EN cornerstones (Mode B closure)** — `/en/tomorrow`, `/en/this-week`, `/en/next-month`, `/en/exhibitions` now build. Failure mode classified as B (config absent or incomplete); fix was 3 new full entries + exhibitions upgrade in `config/hub-pages.json`. Bilingual capsules + 2 FAQs each. Commit `92b9d3df5`. Closes Item 3 (narrowed to 4 true 404s from brief's 7).
+
+**Items deferred (out of scope):**
+- Item 2 (exhibition anomaly): dismissed at audit time — bucket is 100% pass.
+- dj_set 86% pass-rate (64 warnings on long-tail venue address/geo): operator data-curation track. Not blocking demo.
+- Meta description quality on EN hubs (current copy functional but generic): post-demo polish.
+- Trailing-slash asymmetry between Greek (/today, no slash) and EN (/en/today/, slash): documented in audit, no action recommended.
+
+**Surprises:**
+- One venue had an empty slug (data anomaly). New defensive guard in `generateVenueIndex` filters empty-slug entries and logs the count — surfaces 1 venue currently skipped. Was producing broken `/venues//` URL in both HTML and would have in JSON-LD.
+- Empty `faqs: []` arrays in new config entries triggered `FAQPage mainEntity empty` validator error on first rebuild. Fixed by populating each new entry with 2 bilingual FAQs. Also surfaced that exhibitions FAQ entries were Greek-only — populated EN translations for the 4 existing FAQs as part of the same scope.
+
+**Replicability:** SPEC-universal. /venues/ CollectionPage emission pattern + the hub-cornerstone-EN-routing-via-answerCapsuleEn convention both replicate identically for agent-barcelona and agent-berlin. DATA per-city: venue list, hub copy, FAQ content.
+
+**Test count delta:** +10 (2206 pass, was 2196). 6 from `tests/build/venue-index-jsonld.test.ts` + 4 from `tests/build/en-cornerstone-presence.test.ts`. Full suite 2206 pass / 0 fail. tsc clean. Build: 4439 pass / 92 warn / 0 error.
+
+**Connects to:**
+- `specs/citability-audit-2026-05-18.md` — authoritative audit findings; Items 3 + 4 closed by this session
+- `.claude/notes/patterns.md` — Pattern K (audit-driven planning loop), Pattern L (empty-array config validator drift), Pattern M (branch-name drift hardening) banked from this session
+- `src/templates/page.ts:451-529` — reference pattern reused; not modified
+- `src/generate-site.ts:538-555` — EN routing gate; not modified (just satisfied)
+- `src/sitemap/generate-sitemaps.ts` — sitemap auto-includes; not modified
+
+**Status:** Shipped. Two commits on `main` (`83a13a9c8` venues, `92b9d3df5` cornerstones) plus this notes commit. No push. Daily pipeline cadence handles deploy; manual `netlify deploy --prod --dir=dist` is a separate operator step.
