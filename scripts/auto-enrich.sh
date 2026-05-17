@@ -261,12 +261,13 @@ fi
 log "Will generate $BATCHES batch(es) of $EVENTS_PER_BATCH events"
 
 if [[ "$DRY_RUN" == "true" ]]; then
-    log "[DRY RUN] Would clean temp-briefs, generate $BATCHES batches, run claude -p on each"
+    log "[DRY RUN] Would clean temp-briefs and temp-descriptions, generate $BATCHES batches, run claude -p on each"
     exit 0
 fi
 
-# 4. Clean old batch files from temp-briefs/
+# 4. Clean old batch state from temp-briefs/ and temp-descriptions/
 rm -f "$BRIEFS_DIR"/batch-*.md "$BRIEFS_DIR"/batch-*.manifest.json 2>/dev/null || true
+rm -rf "$PROJECT_DIR"/temp-descriptions/batch-*/ 2>/dev/null || true
 log "Cleaned old batch files"
 
 # 5. Sync enrichment queue
