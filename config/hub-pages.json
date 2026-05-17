@@ -340,21 +340,33 @@
       "faqs": [
         {
           "questionEl": "Ποια είναι τα κύρια μουσεία τέχνης στην Αθήνα;",
-          "answerEl": "Τα σημαντικότερα μουσεία τέχνης περιλαμβάνουν το Μουσείο Μπενάκη στο Κολωνάκι, το Εθνικό Μουσείο Σύγχρονης Τέχνης (ΕΜΣΤ) στο Καλλιθέα, τη Στέγη Ωνάση στη Συγγρού, και τις εκθέσεις του NEON σε ιστορικά κτίρια. Γκαλερί στο Κολωνάκι και τα Εξάρχεια συμπληρώνουν τη σκηνή."
+          "answerEl": "Τα σημαντικότερα μουσεία τέχνης περιλαμβάνουν το Μουσείο Μπενάκη στο Κολωνάκι, το Εθνικό Μουσείο Σύγχρονης Τέχνης (ΕΜΣΤ) στο Καλλιθέα, τη Στέγη Ωνάση στη Συγγρού, και τις εκθέσεις του NEON σε ιστορικά κτίρια. Γκαλερί στο Κολωνάκι και τα Εξάρχεια συμπληρώνουν τη σκηνή.",
+          "questionEn": "What are the main art museums in Athens, Greece?",
+          "answerEn": "The major art museums include the Benaki Museum in Kolonaki, the National Museum of Contemporary Art (EMST) in Kallithea, the Onassis Stegi on Syngrou, and NEON Foundation exhibitions in historic buildings. Galleries in Kolonaki and Exarchia complete the contemporary art scene. The Acropolis Museum, while focused on antiquities, also hosts rotating temporary exhibitions."
         },
         {
           "questionEl": "Υπάρχουν μέρες ελεύθερης εισόδου στα μουσεία;",
-          "answerEl": "Ναι, αρκετά μουσεία προσφέρουν ελεύθερη είσοδο συγκεκριμένες μέρες. Τα κρατικά μουσεία έχουν ελεύθερη είσοδο κάθε πρώτη Κυριακή του μήνα (Νοέμβριος-Μάρτιος) και σε εθνικές αργίες. Πολλές γκαλερί έχουν πάντα ελεύθερη είσοδο."
+          "answerEl": "Ναι, αρκετά μουσεία προσφέρουν ελεύθερη είσοδο συγκεκριμένες μέρες. Τα κρατικά μουσεία έχουν ελεύθερη είσοδο κάθε πρώτη Κυριακή του μήνα (Νοέμβριος-Μάρτιος) και σε εθνικές αργίες. Πολλές γκαλερί έχουν πάντα ελεύθερη είσοδο.",
+          "questionEn": "Are there free-entry days at Athens museums?",
+          "answerEn": "Yes — state museums offer free entry on the first Sunday of each month from November through March, and on several national holidays (e.g., March 25, October 28). Many private galleries are free to visit year-round. The Acropolis and major archaeological sites also have specific free-entry dates published annually by the Ministry of Culture."
         },
         {
           "questionEl": "Επιτρέπεται η φωτογράφιση στα μουσεία;",
-          "answerEl": "Οι πολιτικές διαφέρουν ανά μουσείο. Τα περισσότερα επιτρέπουν φωτογραφίες χωρίς φλας, αλλά ορισμένες προσωρινές εκθέσεις απαγορεύουν τη φωτογράφιση. Ελέγξτε τη σελίδα κάθε εκδήλωσης ή ρωτήστε στην υποδοχή του μουσείου πριν φωτογραφίσετε."
+          "answerEl": "Οι πολιτικές διαφέρουν ανά μουσείο. Τα περισσότερα επιτρέπουν φωτογραφίες χωρίς φλας, αλλά ορισμένες προσωρινές εκθέσεις απαγορεύουν τη φωτογράφιση. Ελέγξτε τη σελίδα κάθε εκδήλωσης ή ρωτήστε στην υποδοχή του μουσείου πριν φωτογραφίσετε.",
+          "questionEn": "Is photography allowed in Athens museums?",
+          "answerEn": "Policies vary by venue. Most museums allow non-flash photography of permanent collections, but temporary or visiting exhibitions often prohibit photography due to copyright restrictions. Check the specific exhibition's listing or ask at the museum reception before photographing."
         },
         {
           "questionEl": "Ποιες εκθέσεις τρέχουν αυτή τη στιγμή στην Αθήνα;",
-          "answerEl": "Το ημερολόγιό μας ενημερώνεται καθημερινά με τρέχουσες εκθέσεις σε μουσεία και γκαλερί της Αθήνας. Οι εκθέσεις εμφανίζονται για όλη τη διάρκειά τους, από εγκαίνια ως λήξη. Φιλτράρετε τη λίστα κατά ημερομηνία για να δείτε τι μπορείτε να επισκεφθείτε σήμερα."
+          "answerEl": "Το ημερολόγιό μας ενημερώνεται καθημερινά με τρέχουσες εκθέσεις σε μουσεία και γκαλερί της Αθήνας. Οι εκθέσεις εμφανίζονται για όλη τη διάρκειά τους, από εγκαίνια ως λήξη. Φιλτράρετε τη λίστα κατά ημερομηνία για να δείτε τι μπορείτε να επισκεφθείτε σήμερα.",
+          "questionEn": "Which exhibitions are currently running in Athens?",
+          "answerEn": "Our listing is updated daily with currently-running exhibitions across Athens museums and galleries. Exhibitions appear for their full run, from opening to closing date. Filter by date to see what's open today, or browse the full list for what's coming up in the next weeks."
         }
-      ]
+      ],
+      "cornerstone": true,
+      "answerCapsuleEn": "Athens hosts exhibitions of contemporary art, photography and visual arts across museums and galleries — from the Benaki Museum and EMST to galleries in Kolonaki, Metaxourgeio and the Exarchia art scene. Listings are end-date filtered for currently-running shows, with venues, hours, and entry information.",
+      "metaDescriptionEl": "Τρέχουσες και επερχόμενες εκθέσεις στην Αθήνα: σύγχρονη τέχνη, φωτογραφία, εικαστικά. Μουσεία και γκαλερί με ωράρια και πληροφορίες εισόδου.",
+      "metaDescriptionEn": "Current and upcoming exhibitions in Athens: contemporary art, photography, visual arts. Museums and galleries with hours and entry information."
     },
     {
       "slug": "open",
@@ -735,6 +747,90 @@
           "answerEl": "Για δημοφιλή ρεμπέτικα στέκια, ιδιαίτερα Παρασκευή και Σάββατο, συνιστάται κράτηση τηλεφωνικά ή μέσω social media. Μικρότεροι χώροι σε εργάσιμες μέρες συνήθως δέχονται χωρίς κράτηση. Τα περισσότερα στέκια ξεκινούν μετά τις 22:00.",
           "questionEn": "Do I need to book in advance for rebetiko venues in Athens, Greece?",
           "answerEn": "For established rebetiko venues like Stoa Athanaton, a reservation is strongly recommended — especially for Sunday afternoon sessions, which fill with locals. Call ahead or ask your accommodation to book. For smaller neighborhood venues and newer rebetiko nights, walk-ins are usually fine on weekdays. Weekends at popular spots fill by late evening regardless of reservation."
+        }
+      ]
+    },
+    {
+      "slug": "tomorrow",
+      "cornerstone": true,
+      "titleEl": "Εκδηλώσεις Αύριο στην Αθήνα",
+      "titleEn": "Events in Athens Tomorrow",
+      "filter": {
+        "type": "date",
+        "value": "tomorrow"
+      },
+      "answerCapsuleEl": "Δείτε τι παίζει αύριο στην Αθήνα: συναυλίες, εκθέσεις, θεατρικές παραστάσεις, DJ sets και πολιτιστικές δράσεις σε χώρους από το Κολωνάκι ως το Γκάζι. Ενημερώνεται καθημερινά για να σχεδιάσετε από τώρα τη βραδιά σας.",
+      "answerCapsuleEn": "Plan ahead for tomorrow in Athens with this daily-updated guide to upcoming cultural events — concerts, exhibitions, theatre, DJ sets and family programming across the city. From Kolonaki galleries to Gazi clubs and SNFCC programming in Neos Kosmos, listings include venues, times, prices, and ticket availability.",
+      "metaDescriptionEl": "Εκδηλώσεις αύριο στην Αθήνα: συναυλίες, εκθέσεις, θέατρο, DJ sets. Σχεδιάστε από τώρα. Ενημερώνεται καθημερινά.",
+      "metaDescriptionEn": "Events in Athens tomorrow: concerts, exhibitions, theatre, DJ sets and free events. Plan ahead with verified listings updated daily.",
+      "faqs": [
+        {
+          "questionEl": "Τι παίζει αύριο στην Αθήνα;",
+          "answerEl": "Αύριο στην Αθήνα θα βρείτε συναυλίες, εκθέσεις, θεατρικές παραστάσεις, DJ sets και πολιτιστικές εκδηλώσεις σε χώρους από το Κολωνάκι ως το Γκάζι. Ελέγξτε την πλήρη λίστα παρακάτω για ώρες, τιμές και διαθεσιμότητα εισιτηρίων.",
+          "questionEn": "What's happening in Athens tomorrow?",
+          "answerEn": "Tomorrow's listings on this page cover concerts, exhibitions, theatre, DJ sets and family programming across Athens. Updated daily — Greek capital evenings start late (concerts typically 21:00–22:00, theatre 20:30–21:00), so use today to book ahead and tomorrow to enjoy."
+        },
+        {
+          "questionEl": "Πρέπει να κλείσω εισιτήρια από σήμερα;",
+          "answerEl": "Για δημοφιλείς συναυλίες και θεατρικές παραστάσεις, η προκράτηση μέσω more.com ή viva.gr συνιστάται. Μικρότεροι χώροι και εκδηλώσεις ελεύθερης εισόδου δεν χρειάζονται κράτηση.",
+          "questionEn": "Should I book tickets in advance for tomorrow?",
+          "answerEn": "For popular concerts and theatre, advance booking via more.com or viva.gr is recommended. Smaller venues and free-entry events generally need no reservation."
+        }
+      ]
+    },
+    {
+      "slug": "this-week",
+      "cornerstone": true,
+      "titleEl": "Εκδηλώσεις αυτή την Εβδομάδα στην Αθήνα",
+      "titleEn": "Events in Athens This Week",
+      "filter": {
+        "type": "date",
+        "value": "this-week"
+      },
+      "answerCapsuleEl": "Όλες οι εκδηλώσεις της εβδομάδας στην Αθήνα — συναυλίες, εκθέσεις, θεατρικές παραστάσεις, DJ sets και πολιτιστικές δράσεις από Δευτέρα ως Κυριακή. Σχεδιάστε τη βδομάδα σας με την πλήρη λίστα από επαληθευμένους χώρους σε όλες τις γειτονιές.",
+      "answerCapsuleEn": "Browse this week's full cultural agenda in Athens — concerts, exhibitions, theatre, DJ sets and family programming from Monday through Sunday. Listings span the whole city, from Kolonaki and Exarchia to Gazi and the SNFCC in Neos Kosmos, with venues, times, prices, and ticket availability across every night of the week.",
+      "metaDescriptionEl": "Εκδηλώσεις αυτή την εβδομάδα στην Αθήνα: συναυλίες, εκθέσεις, θέατρο, DJ sets. Ενημερώνεται καθημερινά.",
+      "metaDescriptionEn": "Events in Athens this week: concerts, exhibitions, theatre, DJ sets and free events. Updated daily with verified Monday-to-Sunday listings.",
+      "faqs": [
+        {
+          "questionEl": "Τι εκδηλώσεις γίνονται αυτή την εβδομάδα στην Αθήνα;",
+          "answerEl": "Αυτή την εβδομάδα στην Αθήνα γίνονται συναυλίες, εκθέσεις, θεατρικές παραστάσεις, DJ sets και πολιτιστικές δράσεις σε δεκάδες χώρους από Δευτέρα ως Κυριακή. Φιλτράρετε ανά ημέρα ή τύπο εκδήλωσης για να βρείτε αυτό που σας ενδιαφέρει.",
+          "questionEn": "What events are happening in Athens this week?",
+          "answerEn": "This week's listings span concerts, exhibitions, theatre, DJ sets and cultural programming across dozens of Athens venues from Monday through Sunday. Filter by day or event type to narrow down. Weekday evenings are quieter than weekends — Tuesdays and Wednesdays are good for theatre and jazz; Friday and Saturday are peak nightlife."
+        },
+        {
+          "questionEl": "Ποια μέρα έχει τις περισσότερες εκδηλώσεις;",
+          "answerEl": "Παρασκευή και Σάββατο συγκεντρώνουν τις περισσότερες βραδινές εκδηλώσεις — συναυλίες, DJ sets, θεατρικές πρεμιέρες. Οι Κυριακές είναι ιδανικές για εκθέσεις, οικογενειακές δράσεις και πρωινές παραστάσεις.",
+          "questionEn": "Which day of the week has the most events in Athens?",
+          "answerEn": "Friday and Saturday concentrate the most evening events — concerts, DJ sets, theatre premieres. Sundays are ideal for exhibitions, family activities and matinee shows. Weekdays still have plenty of theatre, jazz and small-venue programming."
+        }
+      ]
+    },
+    {
+      "slug": "next-month",
+      "cornerstone": true,
+      "titleEl": "Εκδηλώσεις τον Επόμενο Μήνα στην Αθήνα",
+      "titleEn": "Events in Athens Next Month",
+      "filter": {
+        "type": "date",
+        "value": "next-month"
+      },
+      "answerCapsuleEl": "Σχεδιάστε από νωρίς τις εκδηλώσεις του επόμενου μήνα στην Αθήνα — συναυλίες, εκθέσεις, θεατρικές παραστάσεις, φεστιβάλ και ειδικές προγραμματισμένες δράσεις. Ιδανικό για κρατήσεις εισιτηρίων εγκαίρως σε δημοφιλείς παραστάσεις και για επισκέπτες που σχεδιάζουν ταξίδι.",
+      "answerCapsuleEn": "Plan ahead for next month in Athens with this advance guide to confirmed cultural events — concerts, exhibitions, theatre, festivals and special programming. Useful for booking tickets early to popular shows and for visitors planning a trip. Listings update daily as new events are added and confirmed.",
+      "metaDescriptionEl": "Εκδηλώσεις τον επόμενο μήνα στην Αθήνα: συναυλίες, εκθέσεις, θέατρο, φεστιβάλ. Σχεδιάστε από νωρίς.",
+      "metaDescriptionEn": "Events in Athens next month: concerts, exhibitions, theatre, festivals and special programming. Plan ahead with advance listings.",
+      "faqs": [
+        {
+          "questionEl": "Πώς μπορώ να σχεδιάσω το επόμενο μήνα στην Αθήνα;",
+          "answerEl": "Δείτε την πλήρη λίστα των επιβεβαιωμένων εκδηλώσεων του επόμενου μήνα — συναυλίες, εκθέσεις, θεατρικές παραστάσεις, φεστιβάλ και ειδικές δράσεις. Για δημοφιλείς παραστάσεις, κλείστε εισιτήρια εγκαίρως μέσω more.com ή viva.gr.",
+          "questionEn": "How can I plan ahead for next month in Athens?",
+          "answerEn": "Browse the full list of confirmed events for next month — concerts, exhibitions, theatre, festivals and special programming. For popular shows, book tickets early via more.com or viva.gr. New events are added daily as they're confirmed, so check back regularly as the date approaches."
+        },
+        {
+          "questionEl": "Πότε ανακοινώνονται οι περισσότερες εκδηλώσεις;",
+          "answerEl": "Οι μεγάλες συναυλίες και θεατρικές πρεμιέρες ανακοινώνονται 4-8 εβδομάδες νωρίτερα. Εκθέσεις και φεστιβάλ μπορεί να ανακοινωθούν μήνες πριν. Μικρότερες εκδηλώσεις σε γκαλερί και κλαμπ ανακοινώνονται συχνά 1-2 εβδομάδες πριν.",
+          "questionEn": "When are most Athens events announced?",
+          "answerEn": "Major concerts and theatre premieres are typically announced 4–8 weeks ahead. Exhibitions and festivals may be announced months in advance. Smaller gallery and club events are often confirmed only 1–2 weeks ahead — this listing fills in as those announcements come through."
         }
       ]
     }
