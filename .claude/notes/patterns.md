@@ -4652,3 +4652,94 @@ If multiple definitions surface, the brief describes a **contract dispersed acro
 - Title slug generation (verified singular in this codebase via `slugify` at `src/generators/event-page.ts`, but worth re-verifying when next mentioned in a brief)
 
 Pattern source: S141 ID-stability audit preflight, 2026-05-15. Brief said "single function"; reality was 10 sites across 3 clusters. Pattern is itself a sub-case of Pattern A — distinguished by logical-vs-physical cardinality specifically.
+
+## 2026-05-17 — S136 (Bing pivot) Pattern Banking
+
+### Pattern E — Two-tier failure markers (STALE / AUTH_FAIL)
+
+Generalization of the single-tier `STALE` marker pattern banked in S91. Distinguishes **transient** failures (auto-recovers on next run) from **persistent** failures (needs human intervention).
+
+**Single-tier (S91):** any API failure → write `STALE` to the CSV column. After 6 days of unchanged data the operator notices and investigates. Works for the case the original pattern was designed for: ping-indexnow.ts hitting a quota or 5xx.
+
+**Two-tier (S136):** separate the two failure classes by signal:
+- `STALE` → 5xx, network timeout, quota exhaustion, request abort. Fetcher continues; preserves last-good data; status surfaces so monitor can re-attempt next run.
+- `AUTH_FAIL` → 401, 403, expired credentials, revoked property access, deleted-account. Fetcher continues (still exits 0 — observability cannot kill production), but the marker is loud and distinct so operator action is unambiguous.
+
+The two-tier semantics matter when authentication flows are fragile (OAuth token expiry, service-account permission revocation) and would otherwise sit silently as "stale" for weeks while the operator waited for the API to "recover."
+
+**Anchor case:** `scripts/fetch-bing-metrics.ts` emits `status: 'ok' | 'stale' | 'auth_fail'` to `logs/bing-latest.json`. `scripts/monitor-search-visibility.ts` reads the status field verbatim into the 4 bing_*_7d columns. Existing STALE markers at `scripts/monitor-search-visibility.ts:78, 136, 281` (`STALE`, `STALE_ENRICHMENT`, `STALE_WRAPPER`) remain single-tier — they don't have an authentication failure mode to distinguish, so two-tier would be over-engineering.
+
+**Rule:** add the `AUTH_FAIL` second tier when (and only when) the data source has an authentication boundary that can persistently fail. Local-only signals (enrichment counts, log misreports) don't warrant the second tier — there's no auth to fail.
+
+---
+
+### Pattern F — Fetcher writes JSON, monitor reads JSON (observability decoupling)
+
+The S91 IndexNow pattern (ping-indexnow.ts writes `logs/indexnow-latest.json`; monitor-search-visibility.ts reads it) generalized to a reusable shape:
+
+1. **Fetcher** is the side that talks to external APIs. It owns timeouts, retries, error classification, and status semantics. It writes a small JSON file (kilobytes) atomically (tmp + renameSync).
+2. **Monitor** is the side that talks to the CSV (or other observability sink). It reads the fetcher's JSON, projects the relevant fields into output columns, and translates status markers (STALE/AUTH_FAIL) into the column values. The monitor has zero knowledge of the external API.
+
+**Decoupling benefits:**
+- The fetcher can be scheduled independently (cron, plist, ad-hoc) without coupling to the monitor's daily cadence.
+- The fetcher can be re-run for a specific window (e.g., re-fetch yesterday's window if the morning run hit a 5xx) without re-running the monitor.
+- Testing the monitor doesn't require mocking the external API — fixture JSONs cover all the status states.
+- The fetcher and monitor can be written by different sessions / authors — the JSON file is the contract.
+
+**Anchor case S91:** `scripts/ping-indexnow.ts` writes `logs/indexnow-latest.json`; `scripts/monitor-search-visibility.ts:72-89` reads it via `getIndexNowStats()`.
+
+**Anchor case S136:** `scripts/fetch-bing-metrics.ts` writes `logs/bing-latest.json`; `scripts/monitor-search-visibility.ts:getBingMetrics()` reads it. Same shape, same atomic-write discipline, same try/catch envelope (S91 rule: observability never kills production).
+
+**Rule:** when integrating any new external API into the observability layer, default to this decoupling. Inlining the fetch call into the monitor couples cadence, blocks independent re-runs, and forces test-time mocking of the API into every monitor test.
+
+---
+
+### Pattern G — Drop-N-Add-K CSV migration (standalone, not in-place auto-migrator)
+
+Generalization of S98's N→N+K column-add migration pattern. The S98 pattern was "add columns before notes" — `migrateCsvIfNeeded()` in monitor-search-visibility.ts auto-inserts empty fields before the trailing `notes` column when the header expands. That works for pure adds.
+
+It does NOT work for DROP+ADD reshapes, because:
+- In-place auto-migrators can't safely DROP columns: the column being dropped might have meaningful historical data that downstream consumers still read; deciding to discard it is a design call, not a transform.
+- The transformation isn't reversible from header comparison alone — "this header has 27 cols and the file has 20 cols" doesn't tell the migrator whether index 16 should be dropped or whether 7 new cols should be inserted between indices 15 and 16.
+
+**Pattern: standalone one-shot script for DROP+ADD.**
+1. Hardcode the OLD and NEW header strings as constants. Idempotency check: if header == NEW, no-op.
+2. Validate OLD header matches exactly before transforming. Refuse to operate on unexpected shapes.
+3. Compute per-row transform: slice out the dropped column(s) by index, insert empties at the new positions, preserve trailing columns.
+4. Backup original to `<file>.pre-<session>-backup` before atomic write.
+5. Print row count + column count assertions ("rows unchanged, cols +N"); refuse to proceed if math doesn't match.
+6. Provide `--dry-run` that prints the plan and a sample first-row transform without writing.
+7. Delete the migration script after running successfully (or commit it as audit trail; depends on session size).
+
+**Why standalone, not in-place:**
+- Dry-run review is essential for DROP — operator should see the transformed sample row before committing the irreversible drop.
+- Backup file is the rollback path.
+- Audit trail (the script itself, post-deletion or committed) documents what shape was migrated to what.
+- In-place migrators silently re-run on every daemon tick; standalone runs once.
+
+**Anchor case:** `scripts/migrate-search-visibility-csv.ts` (S136, 2026-05-17). 20 → 27 cols (drop `ai_citations_count` at idx 16; insert 8 new cols at idx 16-23). Idempotent (re-run is no-op once migrated). The in-place `migrateCsvIfNeeded()` retains its S98 role for any future N→N+K addition.
+
+**Rule:** any CSV schema change that includes a DROP gets a standalone migration script; any schema change that's pure ADD-before-notes can extend the in-place auto-migrator.
+
+---
+
+### Pattern H — Empty-file as distinct BLOCKED state (verify with `[ -s ]`, not `[ -f ]`)
+
+Sub-case of `verify-assumptions`. When verifying the presence of a pre-staged credential file or any state-bearing file, distinguish three states, not two:
+
+1. **Absent** — file doesn't exist at the path. Surface: BLOCKED (operator needs to create file).
+2. **Present-but-empty** — file exists, mode is correct, but size is 0. Surface: BLOCKED (operator pre-staged the file but didn't populate it). The credential-handler downstream would receive empty input and either crash (good — fail loudly) or send the empty value to the API (bad — masquerades as auth failure).
+3. **Present-and-populated** — file exists with content. Surface: READY.
+
+Bare `[ -f ]` (file exists?) collapses states 2 and 3 into one. Operators commonly pre-stage credential files with `touch && chmod 600` to reserve the path with correct permissions before pasting the secret. The `[ -s ]` check (file is non-empty?) keeps the three states distinct.
+
+**Anchor case:** S136 Step 0a. The Bing API key file at `~/.config/agentathens/bing-api-key` was 0 bytes when verification ran. Bare `[ -f ]` would have passed; the fetcher would have hit Bing with `apikey=` (empty value), gotten back 401, written `status='auth_fail'`, and the operator would have read this as "GSC silent-fail is now hitting Bing too" — a misdiagnosis that would have triggered a credential-rotation cycle.
+
+**Rule for any credential-file or state-file presence check:**
+```bash
+if [ -s "$FILE" ]; then echo READY
+elif [ -f "$FILE" ]; then echo "BLOCKED: $FILE exists but is empty"
+else echo "BLOCKED: $FILE absent"
+fi
+```
+The three-way split surfaces the right operator action for each state.

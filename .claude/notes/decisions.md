@@ -3796,3 +3796,73 @@ Root cause: `LIGHT_TEXT_BADGES = Set(['performance', 'cinema', 'screening'])` at
 - `specs/categorizer-audit-2026-05-14.md` — the original audit whose Step 12 migration sweep gets unblocked when Vector C ships.
 
 **Status:** Audit shipped at `specs/event-id-stability-audit-2026-05-15.md`. Vector C scheduled for after post-demo taxonomy session lands.
+
+## 2026-05-17 — Search Visibility Log Schema Lock for S136 (GSC + Bing API Automation)
+
+Copied verbatim from `specs/s136-column-schema-lock-2026-05-17.md` (the GEO Strategist's response of record).
+
+**Context:** S136 wires automated population of GSC + Bing Webmaster API data into
+`data/search-visibility-log.csv`. Dev Planner asked for schema-lock confirmation
+on 5 proposed new columns before implementation runs. The `ai_citations` column
+has been gapping in manual entry, indicating structural mismatch.
+
+**Decision:**
+1. **Add 8 columns to `data/search-visibility-log.csv`** (3 beyond Dev Planner's
+   5-column proposal): `gsc_impressions_7d`, `gsc_clicks_7d`, `gsc_avg_position_7d`,
+   `gsc_top10_count_7d`, `bing_impressions_7d`, `bing_clicks_7d`,
+   `bing_avg_position_7d`, `bing_top10_count_7d`. 7-day rolling windows. Daily cadence.
+2. **Drop `ai_citations` column from `search-visibility-log.csv`.** Replace with
+   separate file `data/ai-citations.csv` (Sprint 5 scope) with schema:
+   `timestamp, engine, query, query_lang, query_type, cited_url, position_in_response, source`.
+   Weekly cadence.
+3. **Separate `data/top-queries.csv` for query-level data** (long format, not CSV columns):
+   `timestamp, engine, query, page, impressions_7d, clicks_7d, position_7d`. Daily append,
+   top 50 per engine.
+4. **API failure semantics:** `STALE` marker for transient failures (auto-recovers);
+   `AUTH_FAIL` marker for persistent failures (needs human). Both preserve row structure.
+
+**Reasoning:** Top-10 URL count tracks citation-eligible footprint directly; avg
+position is a noisy aggregate. Bing position symmetry matters more than Google
+position because Bing's index feeds Copilot and ChatGPT search. Single integer
+`ai_citations` measures the wrong thing — total count without query/page attribution
+can't drive content priorities. The Edward Sturm grounding-query workflow and the
+2026-03-02 grounding-query optimization decision both require per-query granularity,
+which a wide-format column can't carry. Daily cadence preserves anomaly detection;
+weekly snapshots would hide single-day drops. AUTH_FAIL/STALE split prevents silent
+multi-week auth expiry.
+
+**Implementation spec:** Per S136 brief, plus 3 additional columns and the
+`ai_citations` column drop. Sprint 5 picks up `data/ai-citations.csv` mechanism
+separately.
+
+**S136 pivot (2026-05-17, operator):** S136 ships Bing-only. GSC half deferred to
+S138 OAuth fallback session — Search Console silent-fails on Add user when adding
+GCP service account email to agentathens.com property (reproduced across
+URL-prefix + Domain property types, both Full and Restricted permissions, accounts
+verified matched). 4 GSC columns ship hardcoded as `STALE` until S138 lands.
+`top-queries.csv` deferred to S138 — Bing API doesn't return query+page jointly,
+shipping with Bing-only rows would advertise an empty column.
+
+**Validation:**
+- Post-S136: CSV contains 8 new mechanical columns; 4 Bing populated daily; 4 GSC = STALE;
+  `ai_citations` column removed; no migration cost (column was mostly empty).
+- 14-day check: STALE markers appear and auto-clear for Bing on transient failures;
+  AUTH_FAIL surfaces on any Bing token/auth issue.
+- 30-day check: bing_top10_count_7d produces non-zero values on at least cornerstone
+  pages; if still zero across the board, audit Bing indexing.
+- Post-S138: 4 GSC columns flip from STALE to real values; top-queries.csv ships
+  with both engine='gsc' and engine='bing' rows.
+
+**Replicability:** SPEC-universal. All column names city-agnostic. The
+`ai-citations.csv` separation pattern replicates identically for agent-barcelona
+and agent-berlin. DATA per-city: language codes in `query_lang` (el/en →
+ca/es/en → de/en).
+
+**Connects to:**
+- `specs/s136-column-schema-lock-2026-05-17.md` — full GEO Strategist response of record
+- `specs/s138-gsc-oauth-fallback.md` — placeholder for the deferred GSC half
+- `docs/known-issues.md` "GSC Service Account Add-User Silent Fail" — the failure mode that forced the pivot
+- `.claude/notes/patterns.md` Patterns E (two-tier STALE/AUTH_FAIL), F (fetcher/monitor decoupling), G (drop-N-add-K migration), H (empty-file BLOCKED state) — banked from this session
+
+**Status:** Decided. S136 (Bing-only) shipped 2026-05-17 (commit `d951376a6`).
+S138 (GSC OAuth fallback) parked, not on Παναθήναια May 29 critical path.
