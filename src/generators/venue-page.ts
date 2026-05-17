@@ -316,8 +316,17 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
  * Generate venue index page at /venues/
  */
 function generateVenueIndex(venues: VenueData[]): void {
+  // Defensive guard: filter out malformed venues with empty/missing slugs so
+  // neither the HTML link list (<a href="/venues/${slug}/">) nor the JSON-LD
+  // ItemList emit broken `/venues//` URLs. Data anomaly surfaced by the S136
+  // citability audit follow-through (venue-index-jsonld.test.ts).
+  const validVenues = venues.filter(v => v.slug && v.slug.length > 0);
+  const droppedCount = venues.length - validVenues.length;
+  if (droppedCount > 0) {
+    console.warn(`  ⚠ generateVenueIndex: skipped ${droppedCount} venue(s) with empty slug`);
+  }
   // Sort by event count (most active first)
-  const sortedVenues = [...venues].sort((a, b) => b.eventCount - a.eventCount);
+  const sortedVenues = [...validVenues].sort((a, b) => b.eventCount - a.eventCount);
 
   const venueListHtml = sortedVenues.map(venue => `
     <li>
@@ -326,6 +335,42 @@ function generateVenueIndex(venues: VenueData[]): void {
       ${venue.neighborhood ? `<span class="neighborhood">${displayNeighborhood(venue.neighborhood)}</span>` : ''}
     </li>
   `).join('\n');
+
+  // S136 citability audit Item 4: emit CollectionPage + ItemList JSON-LD.
+  // Cap matches HUB_EVENT_LIMIT convention (page.ts:42); numberOfItems
+  // reflects full venue count even when itemListElement is sliced.
+  const VENUES_INDEX_LIMIT = 30;
+  const venuesJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Χώροι Εκδηλώσεων Αθήνας | Event Venues in Athens',
+    description: `${sortedVenues.length} event venues in Athens with upcoming concerts, exhibitions, performances`,
+    inLanguage: 'el',
+    url: `${BASE_URL}/venues/`,
+    about: {
+      '@type': 'Place',
+      name: 'Athens',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Athens',
+        addressCountry: 'GR',
+      },
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: sortedVenues.length,
+      itemListElement: sortedVenues.slice(0, VENUES_INDEX_LIMIT).map((venue, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        item: {
+          '@type': 'Place',
+          name: venue.name,
+          url: `${BASE_URL}/venues/${venue.slug}/`,
+        },
+      })),
+    },
+  };
+  const venuesJsonLdScript = `<script type="application/ld+json">\n${JSON.stringify(venuesJsonLd, null, 2)}\n  </script>`;
 
   const html = `<!DOCTYPE html>
 <html lang="el">
@@ -339,6 +384,8 @@ function generateVenueIndex(venues: VenueData[]): void {
 
   <title>Χώροι Εκδηλώσεων Αθήνας | agent-athens</title>
   <meta name="description" content="${generateVenueIndexMetaDescription(venues.length)}">
+
+  ${venuesJsonLdScript}
 
   <link rel="canonical" href="${BASE_URL}/venues/">
 
