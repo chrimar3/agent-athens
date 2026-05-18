@@ -531,15 +531,91 @@ run_deploy() {
         fi
     fi
 
-    # Step 2: Deploy dist/ via Netlify CLI
-    log "Deploying dist/ to Netlify via CLI..."
-    if netlify deploy --prod --dir=dist --message "Daily deploy $(date +%Y-%m-%d)" >> "$LOG_FILE" 2>&1; then
-        log "Netlify CLI deploy completed"
-        return 0
-    else
-        log_error "Netlify CLI deploy failed"
+    # Step 2: Deploy dist/ via Netlify CLI + verify platform-side state.
+    #
+    # See .claude/notes/mistakes.md:622+ (gotcha banked 2026-05-14): CLI exit 0
+    # does not imply deploy success. The CLI surfaces transport-layer success
+    # (the bytes reached Netlify), not platform-layer success (the deploy was
+    # accepted and published). A canceled or errored deploy produces no CLI
+    # failure code — silent rollback is the failure mode. Mitigation: query
+    # `netlify api getSiteDeploy` and require state="ready".
+    #
+    # --no-build (S142, 2026-05-18): without it the CLI runs the site's
+    # configured build cmd (`bun run build` per build_settings) before
+    # deploying, which fails in the launchd-spawned environment — the actual
+    # recurring failure since 2026-04-10. dist/ is already built upstream.
+    local MAX_POLLS=36 POLL_INTERVAL=5  # 3 min total; raise POLL count if needed
+    local SITE_ID
+    SITE_ID=$(jq -r .siteId "$PROJECT_DIR/.netlify/state.json" 2>/dev/null) \
+        || { log_error "missing .netlify/state.json"; return 1; }
+
+    local deploy_tmp
+    deploy_tmp=$(mktemp) || { log_error "mktemp failed"; return 1; }
+    # shellcheck disable=SC2064  # capture $deploy_tmp value at trap-set time
+    trap "rm -f '$deploy_tmp'" RETURN
+
+    for attempt in 1 2; do
+        log "Deploying dist/ to Netlify via CLI (attempt $attempt)..."
+
+        # stdout -> tmpfile for jq; stderr -> $LOG_FILE for diagnostics.
+        netlify deploy --prod --no-build --dir=dist \
+            --message "Daily deploy $(date +%Y-%m-%d)" --json \
+            >"$deploy_tmp" 2>>"$LOG_FILE"
+        local cli_exit=$?
+        cat "$deploy_tmp" >> "$LOG_FILE"
+
+        # Netlify API responses occasionally embed ASCII control chars in
+        # description fields that break strict jq parsing — strip before parse.
+        local DEPLOY_ID
+        DEPLOY_ID=$(tr -d '\000-\010\013\014\016-\037' <"$deploy_tmp" \
+            | jq -r '.deploy_id // .id // empty' 2>/dev/null)
+
+        if [ -z "$DEPLOY_ID" ]; then
+            log_error "[deploy] could not parse deploy_id (cli_exit=$cli_exit); failing"
+            return 1
+        fi
+
+        # Single poll loop covering all non-terminal states. Polling alone
+        # does not retry; only the deploy+poll sequence retries (max 2 attempts).
+        local STATE="" ERR_MSG="" resp=""
+        for i in $(seq 1 "$MAX_POLLS"); do
+            resp=$(netlify api getSiteDeploy \
+                --data "{\"site_id\":\"$SITE_ID\",\"deploy_id\":\"$DEPLOY_ID\"}" 2>/dev/null \
+                | tr -d '\000-\010\013\014\016-\037')
+            STATE=$(echo "$resp" | jq -r '.state // "unknown"' 2>/dev/null)
+            ERR_MSG=$(echo "$resp" | jq -r '.error_message // ""' 2>/dev/null)
+            case "$STATE" in
+                ready|error) break ;;
+                *) sleep "$POLL_INTERVAL" ;;
+            esac
+        done
+
+        # Forensic log line. Future visibility-monitor (S91 ext) parses for this.
+        log "[deploy] id=$DEPLOY_ID state=$STATE error=${ERR_MSG:-none} cli_exit=$cli_exit attempt=$attempt"
+
+        [ "$STATE" = "ready" ] && return 0
+        [ "$attempt" = "2" ] && { log_error "[deploy] failed after retry; state=$STATE error=$ERR_MSG"; return 1; }
+
+        # Retry-gate (gotcha note verbatim): state=error AND msg='Deploy canceled'
+        # AND zero OTHER deploys currently in any non-terminal state.
+        # Count predicate, not time-compare — avoids clock-skew edge cases.
+        if [ "$STATE" = "error" ] && [ "$ERR_MSG" = "Deploy canceled" ]; then
+            local concurrent
+            concurrent=$(netlify api listSiteDeploys \
+                --data "{\"site_id\":\"$SITE_ID\",\"per_page\":10}" 2>/dev/null \
+                | tr -d '\000-\010\013\014\016-\037' \
+                | jq --arg id "$DEPLOY_ID" '[.[] | select(.id != $id) | select(.state == "uploading" or .state == "uploaded" or .state == "preparing" or .state == "building" or .state == "processing")] | length' 2>/dev/null)
+            if [ "$concurrent" = "0" ]; then
+                log "[deploy] gate passed (Deploy canceled + 0 concurrent non-terminal); retrying once"
+                continue
+            fi
+            log_error "[deploy] gate refused retry: $concurrent concurrent non-terminal deploys present"
+            return 1
+        fi
+
+        log_error "[deploy] gate refused retry: state=$STATE error=$ERR_MSG"
         return 1
-    fi
+    done
 }
 
 # Phase 6: IndexNow ping (notify search engines)
