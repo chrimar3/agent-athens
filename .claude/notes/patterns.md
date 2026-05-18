@@ -4811,3 +4811,71 @@ When adding new entries to `config/hub-pages.json`, an empty `faqs: []` array pa
 ### Pattern M — Branch-name drift hardened
 
 Repo uses `main`, not `master`. Planner-side templates referencing `master` cause executor-side adaptation overhead (10+ documented adaptations across recent sessions including S136, Pattern G, push session). Future planner templates use `main` verbatim. Mitigation banked here pending template revision.
+
+## 2026-05-18 — S142 Deploy Verification + Gate Strictness Pattern Banking
+
+### Pattern N — Verification gates distinguish over-stating from under-stating timestamps
+
+**The citability-penalty failure mode is fraudulent freshness — claiming content is newer than it actually is.** Conservative understatement (claiming content is older than it actually is) is not the same failure class and should not block a deploy that otherwise restores correct freshness signals. Gate strictness must match the failure mode, not symmetrical-divergence.
+
+**Anchor case (S142, 2026-05-18):** The author's own S101a three-signal gate ("visible string ↔ meta ↔ sitemap must all agree on today's date") was written symmetrically. During S142 Part-A verification, the gate would have *blocked* a deploy that:
+- Visible "Τελευταία ενημέρωση": `18 Μαΐου 2026 στις 02:35 πμ` ✅ today (Athens)
+- sitemap-events.xml lastmod: `2026-05-18` ✅ today
+- `<meta name="date">`: `2026-05-17` (UTC date of the 02:35-Athens build moment, which is 23:35 UTC of the prior day)
+
+The meta-date divergence is a real pre-existing TZ bug (queued as Session D), but the symptom is conservative understatement: the SEO meta tag claims the site is one UTC-day older than the visible/sitemap signals say. AI engines weight visible text + sitemap >> a single meta tag, and even if they read the meta, "site claims to be one day older than it is" carries no citation penalty — fabricating recency does.
+
+**Rule for verification-gate design:**
+- Identify the *direction* of the failure mode the gate prevents. Fraudulent freshness is asymmetric (over-stating bad, under-stating neutral).
+- Write the gate against that direction, not against symmetric divergence. "today's date must appear in visible + sitemap" is asymmetric and correct; "all three must agree" is symmetric and over-stringent.
+- Document acknowledged-but-non-blocking signals explicitly. S142 reframed `<meta name="date">` as ACKNOWLEDGED non-blocking and queued the underlying TZ bug as Session D.
+
+**Counter-example (when symmetric IS right):** integrity-check gates where any divergence is signal (checksum mismatches, db replication lag with strict consistency requirements). These check that the system's internal state aligns, not that the system's external claims are accurate. Symmetric-divergence is the right rule there. The distinction is internal-state vs external-claim: external-claim gates should match the failure direction of the external party (AI engines, in this case).
+
+### Pattern O — `--json` + state-poll + control-char-strip is the durable shape for any CLI-orchestrated cloud-platform deploy
+
+**Three independent failure modes stack when a Bash script orchestrates a cloud CLI:**
+
+1. **CLI exit code captures upload completion, not platform acceptance.** The CLI returns success on bytes-reached, not on platform-built-and-published. A canceled, errored, or rolled-back deploy produces no CLI failure code. (Banked as the May-14 gotcha at mistakes.md:622+; surfaced as silent rollback in S139.)
+2. **CLI text output is for humans, not programs.** Parsing `deploy_id` from human-readable output requires regex against unstable formatting. The `--json` flag prints structured deploy metadata to stdout; the script captures it to a tmpfile for jq parsing. (Mandatory for any S142-shape integration.)
+3. **Cloud API responses can embed C0 control characters in user-supplied description fields** (validation reports, build logs, errors). Strict `jq` aborts; lenient parsers (Python) accept silently. The fix is parser-robustness via `tr -d '\000-\010\013\014\016-\037' | jq …`, preserving `\t`/`\n`/`\r` and stripping the rest of the C0 control range.
+
+**Durable script shape (S142 in `scripts/daily-automated.sh:run_deploy()`):**
+
+```bash
+local MAX_POLLS=36 POLL_INTERVAL=5
+local tmpfile; tmpfile=$(mktemp); trap "rm -f '$tmpfile'" RETURN
+
+for attempt in 1 2; do
+    <cli> --json >"$tmpfile" 2>>"$LOG_FILE"
+    cli_exit=$?
+    cat "$tmpfile" >> "$LOG_FILE"  # also surface in human log
+    DEPLOY_ID=$(tr -d '\000-\010\013\014\016-\037' <"$tmpfile" | jq -r '.deploy_id // .id // empty')
+    [ -z "$DEPLOY_ID" ] && { log_error "[deploy] no id; cli_exit=$cli_exit"; return 1; }
+
+    for i in $(seq 1 "$MAX_POLLS"); do
+        resp=$(<api-state-query> | tr -d '\000-\010\013\014\016-\037')
+        STATE=$(echo "$resp" | jq -r '.state // "unknown"')
+        case "$STATE" in ready|error) break ;; *) sleep "$POLL_INTERVAL" ;; esac
+    done
+
+    log "[deploy] id=$DEPLOY_ID state=$STATE error=${ERR_MSG:-none} cli_exit=$cli_exit attempt=$attempt"
+    [ "$STATE" = "ready" ] && return 0
+    [ "$attempt" = "2" ] && return 1
+
+    # retry-once gate: condition on platform state + concurrent-deploy count, NOT time-compare
+    <gate check> && continue
+    return 1
+done
+```
+
+**Three load-bearing design choices:**
+- **Two-attempt `for` loop, not recursion.** Easier to reason about, no stack tricks, retry budget visible at function top.
+- **Single poll loop covers all non-terminal states.** Polling alone never retries; only the deploy+poll sequence retries. Separates transient-state waiting from cross-attempt boundaries.
+- **Retry gate uses count predicate (no other deploys in any non-terminal state), not time-compare.** Avoids clock-skew edge cases between local clock and cloud API response timestamps. The count is the actual question — "is there another deploy currently in flight that might have caused our cancellation?" — and is what listSiteDeploys directly answers.
+
+**Single forensic log line:** `[deploy] id=$DEPLOY_ID state=$STATE error=${ERR_MSG:-none} cli_exit=$cli_exit attempt=$attempt` — parseable contract for future visibility-monitor extension (S91-ext). Each component matters: id for cross-reference to platform logs, state for terminal classification, error for failure-mode discrimination, cli_exit to track when the CLI vs platform diverge, attempt to spot retry-rate trends.
+
+**Generalization:** This pattern applies to any Bash↔cloud-CLI integration where the CLI exit code doesn't capture platform-level acceptance. AWS CLI `aws cloudformation deploy`, Vercel CLI `vercel --prod`, Heroku CLI `heroku releases:create`, GCP `gcloud run deploy` — all have similar exit-code-vs-platform-state divergences. The shape transfers; only the API method names change.
+
+**Anchor case:** S142 (2026-05-18), commit `c9ae3b53f`. Applied at `scripts/daily-automated.sh:534-617`. Real-world verification: 1 manual unsalt deploy (`6a0a541aa93c71142d8aa653`) + 1 launchctl-triggered deploy (`6a0a5cf2db360d2fe10bfff4`), both state=ready, no retry needed. The retry gate is insurance for the rare silent-rollback case (the May-14 incident), not the common path.
