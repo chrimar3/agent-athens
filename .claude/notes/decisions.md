@@ -3923,3 +3923,38 @@ Implementation session for Items 3 and 4 from `specs/citability-audit-2026-05-18
 - `src/sitemap/generate-sitemaps.ts` — sitemap auto-includes; not modified
 
 **Status:** Shipped. Two commits on `main` (`83a13a9c8` venues, `92b9d3df5` cornerstones) plus this notes commit. No push. Daily pipeline cadence handles deploy; manual `netlify deploy --prod --dir=dist` is a separate operator step.
+
+---
+
+## S142 — Fix Vector A + tech/talk color tokens + WCAG safety net (2026-05-18)
+
+**Goal:** Remediate three production WCAG AA contrast failures (`performance` 1.76:1, `cinema` 2.50:1, `screening` ghost ref) caused by `LIGHT_TEXT_BADGES` inverting the text/background pairing for mid-luminance badge colors. Bundle: add two new design tokens (`--color-tech`, `--color-talk`), land a CI-enforced contrast regression guard, deploy.
+
+**Decisions locked (DN, 2026-05-15; executed 2026-05-18):**
+- **Fix Vector A over Vector B.** Empty the set rather than re-darken hex values. Preserves the existing brand palette (mid-luminance warm-orange / lavender intent) and encodes the contrast invariant at the set boundary rather than as per-color hex constraints. Single-line edit; cascading effect inert at all 3 call sites (page.ts:273, generators/event-page.ts:286 and :550 — ternaries collapse to false branch).
+- **`--color-tech: #29b6f6`** — cyan, EventType-aligned. Distinct from `--color-exhibition: #7eb8f7` (pastel sky) at thumbnail scale (~60° hue separation). Shares hex with existing `--color-hackathon` — intentional, both are tech/conference contexts.
+- **`--color-talk: #d4b896`** — warm parchment. First desaturated-warm token in the palette (existing types are saturated yellows/reds/pinks/cyans/blues + exhibition's lone pastel sky). Dormant until `talk` joins EventType post-demo. Contrast verified by hand-math (~10.6:1 vs `#0d0d0d`); automated assertion activates when EventType adds `talk`.
+- **WCAG safety net is TDD-ordered.** Test landed BEFORE the fix to lock the regression guard's birth event. FAIL <4.5:1, WARN at 4.5 ≤ ratio < 5.0. Theater currently fires WARN at 4.74:1 — *intentional drift signal*, not bug.
+
+**DN review flagged for next batch pass (DO NOT bundle into this fix):**
+1. **Theater drift — open.** `--color-theater: #ef2c46` at 4.74:1. Decision needed: re-tune hex to clear 5.0:1, or accept current value with WARN as living documentation. Theater is a high-frequency event type — visual weight changes cascade across many cards. Logged here so it doesn't fall through.
+2. **Desaturated-warm as new family direction.** `--color-talk` introduces a new tonal lane. Intentional, not incidental. Future new event types should trigger "saturated or desaturated-warm?" as an explicit design question rather than a guess.
+3. **Festival comment portability.** Original "music-dominant in Athens" baked city-specific rationale into the design system. Rephrased to "both are music/large-format performance contexts" — ports cleanly to agent-barcelona / agent-berlin forks.
+
+**Verification:** 12 contrast tests pass; full suite 2218 pass / 0 fail / 1 skip; tsc clean; build 4439 pass / 92 warn / 0 error. Production CSS confirmed live (`https://agentathens.com/styles/design-system.css` returned all 3 new declarations). Performance + Tech event pages re-rendered with `edp-type-badge` clean (no `--light-text` modifier).
+
+**Surprises:**
+- `LIGHT_TEXT_BADGES` had **3** usages, not 2 as the upstream brief stated (page.ts:273, event-page.ts:286 + :550). All collapsed cleanly; no code change. Worth flagging because briefs can drift from the actual call graph between write-time and exec-time.
+- Cinema verification deferred: only 1 future cinema event in DB (`7481fd1a657f60b0`, June 25), and it failed enrichment gates so isn't in dist. Template logic is deterministic and identical to performance — covered by symmetry, not by direct curl.
+- DN's "design-decisions.md" reference in their review doesn't correspond to a file in the repo. Interpreted as shorthand for this file (`.claude/notes/decisions.md`). Surfaces a small naming gap; not worth creating a new doc.
+- Stat-cache ghosts on `.claude/notes/mistakes.md`, `patterns.md`, `docs/session-log.md` between mid-session checks (no content diff). Likely a parallel-process touch. `git update-index --refresh` cleaned them.
+
+**Connects to:**
+- `specs/event-type-badge-color-audit-2026-05-14.md` — authoritative audit; all 3 failures math-derived; vector picks enumerated
+- `.claude/notes/patterns.md` — "Code-Intent vs Implementation Divergence" entry now has "Mitigation landed (instance 1)" appended. Instance 2 (categorizer `tech.title_keywords` semantic mismatch) remains open.
+- `docs/known-issues.md` — "Event Type Badge Contrast Failures" entry flipped 🟡 → 🟢 with commit reference
+- `src/templates/__tests__/badge-contrast.test.ts` — new file; reusable shape for analog audits (focus-ring × surface variants per DN's v1.1 queue)
+- `src/styles/design-system.css:45` — `--color-theater: #ef2c46` flagged for next batch pass
+- `src/types.ts:80` — `EventType` union currently lacks `talk`; addition will auto-activate `--color-talk` contrast assertion
+
+**Status:** Shipped. One commit on `main` (`9487388a0`) + production deploy live (`6a0ab001db360de87c0bffec--agentathens.netlify.app`). Three DN follow-ups logged above — do NOT silently absorb into next session without an explicit DN signoff trigger.

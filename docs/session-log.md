@@ -5861,3 +5861,45 @@ to patterns.md when next institutional batch lands.
 **Commit:** `c9ae3b53f` — fix(deploy): verify Netlify deploy state via API + add --no-build (1 file, +84/-8). Institutional memory follow-up commits to follow this session-log entry. **Footer: Files touched: 1 / out-of-scope deferrals: 4 (plist-deconflict, S100b clamshell, db-backup noise, dedup/IndexNow/email noise).**
 
 ---
+
+### Session 141 — S142 (Track 2): Fix Vector A + tech/talk color tokens + WCAG safety net — 2026-05-18
+
+**Plan:** Land DN-approved Fix Vector A for the three production WCAG AA contrast failures (performance 1.76:1, cinema 2.50:1, screening ghost) bundled with two new design tokens (`--color-tech: #29b6f6`, `--color-talk: #d4b896`) and a CI-enforced contrast regression guard. Single CSS file edit + single template file edit + one new test file. **Stream:** Minor — Code Development (Pattern G maintenance batch). DN review approved with one festival-comment rephrase before commit; three follow-ups flagged for next batch pass (theater retune, talk dormant, desaturated-warm family precedent).
+
+**What happened:**
+- TDD-ordered: failing test landed first at `src/templates/__tests__/badge-contrast.test.ts` (12 contrast assertions across EventType union, regex-extracted `--color-<type>` hex pairs, WCAG 2.x luminance helper). Pre-fix run: 2 fails (performance + cinema light-text pairings), 10 pass, theater fires WARN at 4.74:1.
+- Fix Vector A applied at `src/templates/page.ts:45` — `LIGHT_TEXT_BADGES` emptied to `new Set<EventType>()`; `EventType` added to the existing `../types` import. Three call sites collapsed cleanly (page.ts:273, generators/event-page.ts:286 and :550 — brief mentioned only line 550, missed two; bundled-cascading-effect was inert at all three).
+- CSS additions at `src/styles/design-system.css`: `--color-tech: #29b6f6` (cyan, EventType-aligned), `--color-talk: #d4b896` (warm parchment, dormant). Festival declaration comment rephrased per DN review from "music-dominant in Athens" to "both are music/large-format performance contexts" (city-agnostic for agent-* fork portability).
+- Pre-deploy git-status surfaced three "modifications" to `.claude/notes/mistakes.md`, `patterns.md`, `docs/session-log.md` that hadn't been touched. `git diff` returned empty for all three — stat-cache ghosts (mtime touched, bytes unchanged). `git update-index --refresh` cleaned them. Likely a parallel-process touch.
+- Deploy: `netlify deploy --prod --dir=dist` → state=ready at `6a0ab001db360de87c0bffec`. CDN deduped (0 files uploaded) — content hashes already in Netlify's global storage from a sibling preview build with identical output. Manifest still updated. Production CSS confirmed live; performance + tech event pages confirmed clean (no `--light-text` modifier).
+
+**Verified:**
+- `bun test src/templates/__tests__/badge-contrast.test.ts` post-fix: 12 pass, theater WARN logs as expected.
+- Full suite: 2218 pass / 0 fail / 1 skip / 12 new expect() calls.
+- `bunx tsc --noEmit` clean.
+- `bun run build`: 4439 pass / 92 warn / 0 error.
+- Production CSS curl: `--color-tech`, `--color-talk`, rephrased festival comment all live.
+- Performance event (`8c1e1c44-temple-flamecore`): `<span class="edp-type-badge">Παράσταση</span>` — clean, no light-text modifier.
+- Tech event (`4acf6b9d-eugenides-foundation-conference-centre-greeks-in-ai-2026`, the DN-cited "Greeks in AI 2026"): clean badge markup.
+- S111 staging discipline: only the 3 in-scope files committed (`9487388a0`). Pre-existing `data/parsed/newsletter-events.json` modification and 6 untracked specs/tests left alone.
+
+**Surprises:**
+- `LIGHT_TEXT_BADGES` had **3** call sites, not 2 as the upstream brief stated. Brief-vs-reality tally continues; same `[[feedback_verify_paths_in_briefs]]` pattern, this instance was harmless (extra inert collapse). Worth flagging.
+- Cinema verification deferred: the one future cinema in DB (`7481fd1a657f60b0`, June 25) didn't ship to dist (failed enrichment quality gate, unrelated to this work). Template logic is deterministic and identical to performance, so cinema covered by symmetry.
+- DN's "design-decisions.md" reference doesn't correspond to a real file in the repo — interpreted as shorthand for `.claude/notes/decisions.md` (canonical decisions tracker per CLAUDE.md). Small naming gap; not worth creating a new doc.
+- Netlify CDN dedup is global, not site-scoped. "0 files uploaded" doesn't mean "nothing changed" — manifest gets the new file refs; bytes already exist in CDN from elsewhere.
+
+**Learnings:**
+- `patterns.md` 2026-05-18: existing "Code-Intent vs Implementation Divergence" (2026-05-14) gets a "Mitigation landed (instance 1)" addendum. The reusable test shape (regex-extract `--color-<type>`, WCAG helper, `satisfies readonly EventType[]` compile-time drift guard) extends to focus-ring × surface variants, `--text-secondary` × `--bg-raised`, etc. — DN's v1.1 evaluation queue. **Instance 2 (categorizer `tech.title_keywords` semantic mismatch) remains open** — semantic-check assertions are harder than numeric-contrast assertions.
+- `decisions.md` 2026-05-18: full session entry filed with DN's 3 follow-ups embedded — theater 4.74:1 WARN-drift (do not bundle), talk dormant 10.6:1 hand-math (auto-activates when EventType adds talk), desaturated-warm as new family direction (intentional, not incidental).
+- `known-issues.md` 2026-05-18: "Event Type Badge Contrast Failures" entry flipped 🟡 → 🟢 with commit + test reference. Severity field updated; rest of historical body preserved per institutional-memory rule.
+
+**Open items:**
+- **Theater hex retune (4.74:1)** queued for next batch pass per DN — accept WARN as living documentation or darken hex to clear 5.0:1. Theater is high-frequency; cascade considerations real.
+- **`--color-talk` dormant** until EventType adds `talk` post-demo taxonomy session. Auto-activates contrast assertion at that moment; no action needed until then.
+- **v1.1 reusable-test-shape queue** per DN: focus-ring × surface variants, `--text-secondary` × `--bg-raised` (audit from S105), `--accent-primary` on cards.
+- **Categorizer pattern instance 2** (`tech.title_keywords` with talk-class indicators) remains open — gated on `talk` EventType landing.
+
+**Commit:** `9487388a0` — S142: Fix Vector A — WCAG AA contrast remediation + tech/talk color tokens (3 files, +148/-3). Production deploy `6a0ab001db360de87c0bffec` live on `https://agentathens.com`. **Footer: Files touched: 3 / out-of-scope deferrals: 4 (theater retune, talk dormant activation, v1.1 reusable-test-shape, categorizer instance 2).**
+
+---

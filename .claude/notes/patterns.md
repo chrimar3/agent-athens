@@ -4588,6 +4588,8 @@ Without that assertion, the set name is a comment that lies whenever someone add
 
 Pattern source: post-audit synthesis across `specs/categorizer-audit-2026-05-14.md` (LIGHT_TEXT_BADGES analog) and `specs/event-type-badge-color-audit-2026-05-14.md` (contrast math confirming 3 failures).
 
+**Mitigation landed (instance 1): 2026-05-18 (S142, commit `9487388a0`)** — `src/templates/__tests__/badge-contrast.test.ts` operationalizes the "verify the implication on every member" rule for `LIGHT_TEXT_BADGES`. CI-enforced: FAIL when ratio <4.5:1, WARN when 4.5 ≤ ratio < 5.0. Test iterates `EventType` union members with a `satisfies readonly EventType[]` compile-time drift guard, so adding a new EventType without adding it to the test fails tsc. Reusable shape — same regex-extraction + WCAG-helper pattern extends to focus-ring × surface variants, `--text-secondary` × `--bg-raised`, etc. (DN flagged these for v1.1 evaluation queue). **Instance 2 (`tech.title_keywords` semantic-mismatch) remains open** — semantic-check assertions are harder than numeric-contrast assertions; no obvious automated form.
+
 ---
 
 ### Trace One Example End-to-End Through the Data Path (2026-05-14)
