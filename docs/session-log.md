@@ -5814,7 +5814,7 @@ to patterns.md when next institutional batch lands.
 
 ---
 
-### Session 140 — S142: Diagnose stale agentathens.com (3-day staleness) — Netlify deploy verification + `--no-build` flag — 2026-05-18
+### Session 142 — Freshness Pipeline Deploy Fix (closes 3-day prod staleness) — 2026-05-18
 
 **Plan:** Diagnose why production agentathens.com was rendering `Τελευταία ενημέρωση: 15 Μαΐου 2026 στις 08:29 πμ` (Friday) on the Sunday/Monday of 2026-05-17/18. Classify root cause into one of (A)–(F), apply smallest viable fix, verify production current-date renders. Strict scope discipline: Layer 1 (deploy fix) ships alone; clamshell-sleep (S100b) and plist-deconflict explicitly out of scope. **Stream:** Major — Site Generation & Deployment.
 
