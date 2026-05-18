@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-18T00:25:59.897Z"
+    "lastUpdate": "2026-05-18T05:26:51.848Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,20 +13,20 @@
     "byType": [
       {
         "type": "concert",
-        "total": 834,
-        "pass": 820,
+        "total": 830,
+        "pass": 816,
         "warn": 14,
         "fail": 0,
-        "info": 673,
+        "info": 669,
         "passRate": 98
       },
       {
         "type": "dj_set",
-        "total": 478,
+        "total": 480,
         "pass": 406,
-        "warn": 72,
+        "warn": 74,
         "fail": 0,
-        "info": 478,
+        "info": 480,
         "passRate": 85
       },
       {
@@ -112,11 +112,11 @@
       }
     ],
     "totals": {
-      "total": 4460,
-      "pass": 4364,
-      "warn": 96,
+      "total": 4458,
+      "pass": 4360,
+      "warn": 98,
       "fail": 0,
-      "info": 4193,
+      "info": 4191,
       "passRate": 98
     },
     "orphanSlugs": []
@@ -165,11 +165,11 @@
       "info": 41
     },
     "event_template": {
-      "total": 4460,
-      "pass": 4364,
-      "warn": 96,
+      "total": 4458,
+      "pass": 4360,
+      "warn": 98,
       "fail": 0,
-      "info": 4193
+      "info": 4191
     },
     "byVenue": [
       {
@@ -294,12 +294,12 @@
       },
       {
         "venue": "b side athens",
-        "total": 43,
+        "total": 46,
         "pass": 34,
-        "warn": 9,
+        "warn": 12,
         "fail": 0,
-        "info": 43,
-        "passRate": 79,
+        "info": 46,
+        "passRate": 74,
         "sameAsState": "missing"
       },
       {
@@ -654,11 +654,11 @@
       },
       {
         "venue": "half note jazz club",
-        "total": 74,
-        "pass": 70,
+        "total": 73,
+        "pass": 69,
         "warn": 4,
         "fail": 0,
-        "info": 74,
+        "info": 73,
         "passRate": 95,
         "sameAsState": "missing"
       },
@@ -904,12 +904,12 @@
       },
       {
         "venue": "smut athens",
-        "total": 28,
+        "total": 27,
         "pass": 26,
-        "warn": 2,
+        "warn": 1,
         "fail": 0,
-        "info": 28,
-        "passRate": 93,
+        "info": 27,
+        "passRate": 96,
         "sameAsState": "missing"
       },
       {
@@ -1344,11 +1344,11 @@
       },
       {
         "venue": "εθνικη λυρικη σκηνη",
-        "total": 13,
-        "pass": 13,
+        "total": 12,
+        "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 13,
+        "info": 12,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1594,11 +1594,11 @@
       },
       {
         "venue": "θεατρο παλλας",
-        "total": 56,
-        "pass": 56,
+        "total": 55,
+        "pass": 55,
         "warn": 0,
         "fail": 0,
-        "info": 56,
+        "info": 55,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1804,11 +1804,11 @@
       },
       {
         "venue": "κεντρο ελεγχου τηλεορασεων",
-        "total": 17,
-        "pass": 17,
+        "total": 16,
+        "pass": 16,
         "warn": 0,
         "fail": 0,
-        "info": 17,
+        "info": 16,
         "passRate": 100,
         "sameAsState": "missing"
       },
