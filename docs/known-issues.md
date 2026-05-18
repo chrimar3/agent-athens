@@ -342,7 +342,7 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Status:** Open — awaiting Design Navigator ruling
 
 ### Event Type Badge Contrast Failures — LIGHT_TEXT_BADGES Set Premise Inverted
-**Severity:** 🟡
+**Severity:** 🟢
 **First seen:** 2026-05-14 (`specs/event-type-badge-color-audit-2026-05-14.md`). Live since the CSS color block + `LIGHT_TEXT_BADGES` constant shipped.
 **Frequency:** Every rendered card-badge and edp-type-badge for `performance` and `cinema` event types — both card grids (hub pages, today/this-week/next-month, search results) and event-detail pages. `screening` is a third member of `LIGHT_TEXT_BADGES` but doesn't ship on any real event (not an EventType union member).
 **Symptoms:** Badge text fails WCAG AA contrast. `performance` (#f5a742 + #f0f0f0 light text) = 1.76:1, `cinema` (#b87ef7 + #f0f0f0) = 2.44:1. AA requires 4.5:1 for 12px (normal text). The root cause is `LIGHT_TEXT_BADGES = Set(['performance', 'cinema', 'screening'])` at `src/templates/page.ts:45` — the set's name asserts "these badges have backgrounds dark enough to need light text," but the actual hex values are mid-luminance oranges/lavenders, not dark. Light text inverts what the colors need.
@@ -351,7 +351,7 @@ Belongs in a dedicated session. Verification command for that session is at the 
 - **Vector A (RECOMMENDED, cheap):** edit `src/templates/page.ts:45` to set `LIGHT_TEXT_BADGES = new Set<EventType>()` (empty). All three types fall through to default dark text (`--text-on-bright: #0d0d0d`). New contrast: performance 9.94:1, cinema 7.15:1 — both comfortably pass. Single-file 1-line edit. Also removes the `'screening'` ghost reference in the same change.
 - **Vector B (NOT RECOMMENDED, expensive):** darken `--color-performance` and `--color-cinema` enough to give light text 4.5:1. Requires ~2.5× darker; breaks the warm-orange / lavender brand intent.
 Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `--color-<type>` contrasts ≥4.5:1 with `--text-primary` — prevents recurrence.
-**Status:** 🟡 Open (2026-05-14) — awaiting Design Navigator fix-vector pick. Should ship in a maintenance batch independent of the post-demo taxonomy session.
+**Status:** 🟢 Resolved S142 (2026-05-18, commit `9487388a0`) — Fix Vector A landed per DN approval (locked 2026-05-15). `LIGHT_TEXT_BADGES` emptied at `src/templates/page.ts`; production now: performance 9.94:1, cinema 7.15:1 (both clear of 4.5:1 AA floor). Regression guard `src/templates/__tests__/badge-contrast.test.ts` — CI-enforced, FAIL <4.5:1, WARN <5.0:1, iterates EventType union with `satisfies` compile-time drift guard. Theater currently fires WARN at 4.74:1 — deferred to next batch pass per DN (logged in `docs/design-decisions.md`).
 
 ### Malformed Genres Field in DB
 **Severity:** 🟡
