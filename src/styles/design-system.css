@@ -52,10 +52,12 @@
   --color-opera: #ff7043;       /* theater family */
   --color-classical: #ffa726;   /* warm amber */
   --color-comedy: #ffca28;      /* bright yellow-amber */
-  --color-festival: #f5e642;    /* concert family */
+  --color-festival: #f5e642;    /* Festivals share --color-concert by design — both are music/large-format performance contexts */
   --color-meetup: #66bb6a;      /* conference family */
   --color-hackathon: #29b6f6;   /* workshop family */
   --color-seminar: #66bb6a;     /* conference family */
+  --color-tech: #29b6f6;        /* Cyan — EventType-aligned; distinct from exhibition pastel sky (#7eb8f7); contrast 8.75:1 vs #0d0d0d */
+  --color-talk: #d4b896;        /* Warm parchment — first desaturated-warm; contrast ~10.6:1 vs #0d0d0d (dormant until taxonomy lands) */
   --color-other: #78909c;       /* neutral */
 
   /* Typography */
@@ -177,6 +179,11 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  overflow-x: clip;
 }
 
 /* iOS zoom prevention — inputs below 16px trigger Safari auto-zoom */
@@ -2078,6 +2085,8 @@ div#main-content {
   .hero-picks {
     flex-direction: row;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
     gap: 16px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;

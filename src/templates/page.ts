@@ -3,7 +3,7 @@
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { Event, PageMetadata } from '../types';
+import type { Event, EventType, PageMetadata } from '../types';
 import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
@@ -42,7 +42,13 @@ export const BADGE_LABELS: Record<string, string> = {
   other: 'ΑΛΛΟ',
 };
 
-export const LIGHT_TEXT_BADGES = new Set(['performance', 'cinema', 'screening']);
+// Empty by default — all canonical EventType badge colors are mid-to-high luminance
+// and need dark text (#0d0d0d) for WCAG AA contrast. Re-add a type here only if its
+// --color-<type> hex has luminance below ~0.13 (see badge-contrast.test.ts).
+// History: Performance, Cinema, Screening were here in error and failed AA. Removed
+// 2026-05-18 after audit specs/event-type-badge-color-audit-2026-05-14.md (DN-approved
+// Fix Vector A, locked 2026-05-15).
+export const LIGHT_TEXT_BADGES = new Set<EventType>();
 
 export const TYPE_ICONS: Record<string, string> = {
   concert: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 6v24.4A7 7 0 1 0 22 37V18h12v-4H22V6h-4zM15 41a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
