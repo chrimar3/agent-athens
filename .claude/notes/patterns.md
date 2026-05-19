@@ -4881,3 +4881,89 @@ done
 **Generalization:** This pattern applies to any Bash↔cloud-CLI integration where the CLI exit code doesn't capture platform-level acceptance. AWS CLI `aws cloudformation deploy`, Vercel CLI `vercel --prod`, Heroku CLI `heroku releases:create`, GCP `gcloud run deploy` — all have similar exit-code-vs-platform-state divergences. The shape transfers; only the API method names change.
 
 **Anchor case:** S142 (2026-05-18), commit `c9ae3b53f`. Applied at `scripts/daily-automated.sh:534-617`. Real-world verification: 1 manual unsalt deploy (`6a0a541aa93c71142d8aa653`) + 1 launchctl-triggered deploy (`6a0a5cf2db360d2fe10bfff4`), both state=ready, no retry needed. The retry gate is insurance for the rare silent-rollback case (the May-14 incident), not the common path.
+
+### Pattern P — iOS `overscroll-behavior-x: contain` is the canonical rubber-band leak guard
+
+**Category:** CSS / Mobile / iOS WebKit
+**First documented:** 2026-05-14, QW-A
+
+Any `overflow-x: auto` or `overflow-x: scroll` container on iOS will, by default, propagate its rubber-band bounce to the nearest scrolling ancestor (typically `body`). The single-declaration fix is `overscroll-behavior-x: contain` on that container. Pair with `touch-action: pan-x` when the container is intended for horizontal touch scrolling only — this resolves WebKit's gesture-axis-arbitration ambiguity that users perceive as "jitter" or "resistance" during diagonal swipes.
+
+**Where this applies in our codebase today:**
+- `.hero-picks` (`src/styles/design-system.css:2081`) — fixed 2026-05-14 (QW-A).
+- `.filter-bar-scroll` (`:1382`) — not yet patched, no current symptom. Backstopped by QW-B for now.
+- `.table-scroll-wrapper` (`:2547`) — not yet patched, no current symptom. Backstopped by QW-B for now.
+
+Targeted fixes for the latter two are queued for a future preventive maintenance batch — document-level QW-B (`html, body { overflow-x: clip }`, see Pattern Q below) currently catches anything that leaks, but it's a backstop, not a substitute. Container-level declarations are still the correct primary fix because they also resolve the gesture-axis ambiguity that QW-B does not address.
+
+**When to reach for it:** any time you add or audit a horizontal-scrolling region on a page that will be touched on iOS. Add both declarations together (`overscroll-behavior-x: contain` + `touch-action: pan-x`) — they address two related but distinct WebKit behaviors and the cost of adding both is one line each.
+
+**Anchor case:** QW-A (2026-05-14). See [docs/known-issues.md](../../docs/known-issues.md) "iOS Mobile Horizontal Scroll / Touch Jitter on Hero Picks Carousel" for the user-visible symptoms and on-device verification matrix.
+
+### Pattern Q — `overflow-x: clip` vs `hidden`: choose `clip` when sticky descendants exist
+
+**Category:** CSS / Layout / Sticky
+**First documented:** 2026-05-14, QW-B
+
+`overflow-x: hidden` makes the element a scroll container, which disables `position: sticky` in **all** descendants — the sticky element silently degrades to non-sticky positioning. `overflow-x: clip` clips visible overflow **without** creating a scroll container, preserving sticky behavior throughout the descendant tree.
+
+**Where this matters in our codebase:** `html, body { overflow-x: clip }` (QW-B, 2026-05-14, applied in `src/styles/design-system.css`). Four sticky descendants depend on this remaining `clip`-not-`hidden`:
+- `.site-header` (`src/styles/design-system.css:584`) — `top: 0`; sitewide.
+- `.filter-bar` (`:1363`) — `top: 56px`; hub pages.
+- `.date-group-header` (`:528`) — `top: 64px`; hub pages with date-grouped lists.
+- `.hub-comparison-table th` (`:2561`) — `top: 0`; hub comparison tables.
+
+**When to reach for it:** any document-level horizontal-overflow guard. Never use `hidden` on `html` or `body` if `position: sticky` exists anywhere in the descendant tree — that's a silent regression with no console warning, only visible if someone scrolls a hub page long enough to notice the filter bar no longer sticks.
+
+**Rollback path if browser support for `clip` is insufficient** (iOS Safari <16): narrow the rule from `html, body` to `body` only (often suffices because most layout-level horizontal overflow originates at body), or remove the `html` selector. Do NOT swap to `hidden` as the rollback — that breaks all four sticky descendants above and trades one defect class for another.
+
+**Browser support note (as of 2026-05):** iOS Safari 16+, all modern Chrome/Edge/Firefox. iOS 15 falls back to no-clipping (acceptable — Pattern P handles the dominant source case-by-case anyway).
+
+**Anchor case:** QW-B (2026-05-14). Connected decision: [decisions.md](decisions.md) "2026-05-14 — Use `overflow-x: clip` over `overflow-x: hidden` on `html`/`body`".
+
+### Pattern R — Regex test anchoring: anchor on the target's distinguishing property, not surrounding structure
+
+**Category:** Testing / TDD
+**First documented:** 2026-05-14, QW-A executor correction
+
+When asserting a property of a CSS rule via regex, **anchor the match on a unique property inside the rule's body**, not on the surrounding `@media` query or parent selector. The Agent Athens stylesheet has multiple `@media (max-width: 1024px)` blocks; a regex anchored on the media query matched the **first** such block, not the `.hero-picks` body inside one of them. Anchor instead on the rule's unique identifier — for the QW-A test, `flex-direction: row` was unique to mobile `.hero-picks` and unambiguously located the correct block.
+
+Pre-edit sanity runs (where the test is expected to **fail** before the fix lands) catch this class of bug. If a TDD test passes before the fix is applied, the test is anchored to the wrong location — investigate the anchor before writing the fix. This is the dual of the "test passes when it shouldn't" failure mode: the test was technically valid CSS-regex but asserted against the wrong scope.
+
+**Generalization:** when a test reads built output to verify a code-or-CSS change, prefer **property-anchored** matching over **structure-anchored**. Property anchors are robust to refactors that move the surrounding structure (e.g., reorganizing media-query nesting). Structure anchors silently match the first occurrence and rot when the structure they assume changes.
+
+**Counter-example (when structure anchoring is right):** when the assertion is *about* structural placement — e.g., "this rule must be inside `@media (prefers-reduced-motion)`" — structure is the property under test. Anchor on it deliberately, not by accident.
+
+**Anchor case:** QW-A (2026-05-14). The pre-edit run revealed the false-pass; correcting the regex from media-query-anchored to `flex-direction: row`-anchored produced an honest red→green transition.
+
+### Pattern S — Dual-emission count signature for schema-defect diagnosis
+
+**Category:** Diagnostics / SEO-Schema
+**First documented:** 2026-05-19, S137 GSC defect classification
+
+When a site emits the same Schema.org entity through **two surfaces** (JSON-LD block + microdata `<article itemtype="…">`), Google Search Console defect counts carry a structural signature: a defect that affects both surfaces appears at **2N**; a defect that affects only one surface appears at **N**, where N is the unique-URL count for that shape.
+
+Agent Athens EDP pages emit Event-shaped data through both a `<script type="application/ld+json">` block (`src/generators/event-page.ts:144` builder) and a microdata `<article itemtype="https://schema.org/MusicEvent">` element (`event-page.ts:442`). For 128 unique EDPs in the May 19 GSC export:
+
+- `performer` and `organizer` each fire **256 times** at the EDP level (2N) → both JSON-LD AND microdata lack the field. Two emission surfaces to fix per defect.
+- `endDate`, `eventStatus`, `location`, `image` each fire **128 times** at the EDP level (N) → one surface lacks the field. JSON-LD passes; microdata is the gap (microdata only emits `itemprop="name"/"startDate"/"description"`).
+- `offers` fires **178 times** (~1.4N) → microdata always lacks it (128) + JSON-LD lacks it for the ~50 events S134's classifier omitted (intentional).
+
+The 2N vs N vs intermediate ratio is **load-bearing diagnostic evidence** before opening any source file. It tells you (a) how many surfaces a fix must touch, and (b) whether the defect is structural (uniform N or 2N) or data-conditional (non-integer multiple). The intermediate ratio is the strongest signal — it implies one always-fails surface + one conditional surface, narrowing the surface map without needing to grep.
+
+**When to apply:** any GSC/Bing/structured-data defect export where the page emits the same entity through multiple machine-readable surfaces (JSON-LD + microdata, JSON-LD + RDFa, two distinct JSON-LD blocks, etc.). Compute count ÷ unique-URL-count per defect; round-bucket to nearest 0.1×; classify as 1× / 2× / mixed before opening source.
+
+**Anchor case:** S137 specs/gsc-schema-defects-2026-05-19-diagnostic.md — 12 defects classified using count-ratio as the first pass, then per-surface code grep as confirmation.
+
+## Multi-tier denormalization storage surfaces
+
+When data is stored across multiple surfaces (source-of-truth / config / denormalized cache), brief authoring must enumerate ALL surfaces before scoping edits. Single-surface assumption is the failure mode.
+
+Current instance: venue address + geo data lives at three surfaces:
+- `data/venues-master.json` — geo source of truth (lat/lng/full address research)
+- `config/athens-venues.json` — registry with address only (no lat/lng), feeds Schema.org emission
+- `data/events.db` — denormalized cache, populated via `scripts/backfill-venue-geo.ts` propagation pass
+
+Brief authoring checklist: when modifying data that exists in multiple surfaces, explicitly enumerate the write surfaces and the propagation paths between them. Don't assume the data lives where the brief expects it; verify via `ls`/`grep`/`jq` before scoping the work.
+
+Promoted from mistakes.md after 4th instance of forward-looking-spec-scoping shape (S103 `ticket_url_resolved`, S138-pre Editorial config-payload omission, S140 venues-master.json, plus one earlier).
