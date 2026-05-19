@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-19T05:33:29.065Z"
+    "lastUpdate": "2026-05-19T05:46:35.483Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,21 +13,21 @@
     "byType": [
       {
         "type": "concert",
-        "total": 789,
-        "pass": 775,
+        "total": 787,
+        "pass": 773,
         "warn": 14,
         "fail": 0,
-        "info": 634,
+        "info": 632,
         "passRate": 98
       },
       {
         "type": "dj_set",
-        "total": 477,
+        "total": 481,
         "pass": 395,
-        "warn": 82,
+        "warn": 86,
         "fail": 0,
-        "info": 477,
-        "passRate": 83
+        "info": 481,
+        "passRate": 82
       },
       {
         "type": "exhibition",
@@ -112,11 +112,11 @@
       }
     ],
     "totals": {
-      "total": 4174,
-      "pass": 4068,
-      "warn": 106,
+      "total": 4176,
+      "pass": 4066,
+      "warn": 110,
       "fail": 0,
-      "info": 3918,
+      "info": 3920,
       "passRate": 97
     },
     "orphanSlugs": []
@@ -165,11 +165,11 @@
       "info": 41
     },
     "event_template": {
-      "total": 4174,
-      "pass": 4068,
-      "warn": 106,
+      "total": 4176,
+      "pass": 4066,
+      "warn": 110,
       "fail": 0,
-      "info": 3918
+      "info": 3920
     },
     "byVenue": [
       {
@@ -294,12 +294,12 @@
       },
       {
         "venue": "b side athens",
-        "total": 46,
+        "total": 47,
         "pass": 33,
-        "warn": 13,
+        "warn": 14,
         "fail": 0,
-        "info": 46,
-        "passRate": 72,
+        "info": 47,
+        "passRate": 70,
         "sameAsState": "missing"
       },
       {
@@ -324,12 +324,12 @@
       },
       {
         "venue": "bios ρομαντσο",
-        "total": 19,
+        "total": 22,
         "pass": 15,
-        "warn": 4,
+        "warn": 7,
         "fail": 0,
-        "info": 19,
-        "passRate": 79,
+        "info": 22,
+        "passRate": 68,
         "sameAsState": "missing"
       },
       {
@@ -654,11 +654,11 @@
       },
       {
         "venue": "half note jazz club",
-        "total": 71,
-        "pass": 67,
+        "total": 70,
+        "pass": 66,
         "warn": 4,
         "fail": 0,
-        "info": 71,
+        "info": 70,
         "passRate": 94,
         "sameAsState": "missing"
       },
@@ -1004,11 +1004,11 @@
       },
       {
         "venue": "theatre of the no",
-        "total": 55,
-        "pass": 55,
+        "total": 56,
+        "pass": 56,
         "warn": 0,
         "fail": 0,
-        "info": 55,
+        "info": 56,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1344,11 +1344,11 @@
       },
       {
         "venue": "εθνικη λυρικη σκηνη",
-        "total": 10,
-        "pass": 10,
+        "total": 9,
+        "pass": 9,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 9,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1824,11 +1824,11 @@
       },
       {
         "venue": "κυτταρο",
-        "total": 20,
-        "pass": 20,
+        "total": 19,
+        "pass": 19,
         "warn": 0,
         "fail": 0,
-        "info": 20,
+        "info": 19,
         "passRate": 100,
         "sameAsState": "missing"
       },
