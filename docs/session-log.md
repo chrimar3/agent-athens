@@ -5903,3 +5903,9 @@ to patterns.md when next institutional batch lands.
 **Commit:** `9487388a0` — S142: Fix Vector A — WCAG AA contrast remediation + tech/talk color tokens (3 files, +148/-3). Production deploy `6a0ab001db360de87c0bffec` live on `https://agentathens.com`. **Footer: Files touched: 3 / out-of-scope deferrals: 4 (theater retune, talk dormant activation, v1.1 reusable-test-shape, categorizer instance 2).**
 
 ---
+
+### Worktree Marker — 2026-05-19 (Path D deferred work, not part of S137)
+
+2026-05-19: Path D capsule-drift fix present in worktree (`src/generators/hub-page.ts`, `src/templates/category-page.ts`, `src/templates/page.ts`) with partner spec `specs/capsule-drift-audit-2026-05-18.md`. Adds a `preFilterBarHtml` slot to `renderPage` and replaces the prior `html.replace('</header>', …)` splice in both hub and category renderers. Origin: unconfirmed — Christos to identify session of origin. Pending: own commit + ship separate from S137 close-out. Filed here as a worktree-state marker, not a session entry — S137 close-out commit references this for traceability.
+
+---

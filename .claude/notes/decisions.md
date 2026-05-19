@@ -3958,3 +3958,77 @@ Implementation session for Items 3 and 4 from `specs/citability-audit-2026-05-18
 - `src/types.ts:80` — `EventType` union currently lacks `talk`; addition will auto-activate `--color-talk` contrast assertion
 
 **Status:** Shipped. One commit on `main` (`9487388a0`) + production deploy live (`6a0ab001db360de87c0bffec--agentathens.netlify.app`). Three DN follow-ups logged above — do NOT silently absorb into next session without an explicit DN signoff trigger.
+
+---
+
+## 2026-05-19 — Skills Extraction Infrastructure: Path Canonicalization + Notes-Doc Location
+
+Infrastructure-prep session before authoring the first user-wide skill (`pre-brief-verification`). Working brief proposed five steps: diagnose duplicate `claude-code-mastery` skill, move the skills-extraction-notes draft to its authoritative home, commit, symlink for user-scope discovery, cleanup. Read-only verification at the top of the session surfaced premise issues in the brief — applied corrections during plan-mode review before any execution.
+
+**Decisions locked:**
+
+- **(a) Canonical AA path is `/Users/chrism/Project with Claude/AgentAthens/agent-athens/`.** Future Dev Planner briefs must use this path verbatim. `~/agent-athens` does not exist as a directory or symlink; using the short path in this brief caused immediate failure at Step 0 verification. Recurrence cost when missed = entire brief re-write at execution time. Memory entry `agent_athens_project_path.md` already captures this; reinforcing here as the durable repo-side record.
+- **(b) Skills-extraction-notes spec has a single source of truth at `specs/skills-extraction-notes.md`** (under version control, committed `4412ff3b4`). Convenience symlink at `~/.claude/notes/skills-extraction-notes.md` resolves to the AA copy via filesystem symlink — NOT a duplicate file. Created with `ln -s` (not `-sf`) so any future collision errors loudly instead of silently overwriting. Decouple only if a second project (agent-barcelona / agent-berlin) needs to consume the doc independently — at which point it becomes a copy with explicit divergence rationale.
+- **(c) `claude-code-mastery` skill duplication resolution: pending diff review.** 1,616-line divergence captured at `/tmp/claude-code-mastery-diff.txt`. AA-scope copy is the newer (17,101 bytes; adds "agent teams"/"plugins"/"context management"/"compaction strategy"/"session architecture" to triggers; introduces a new "Context Management — The First-Class Concern" section; tightens prose throughout). User-scope copy (16,058 bytes) is the older slimmer original. Brief's Case A handler (delete AA-scope) was the wrong branch — would have discarded the newer content. Resolution branches available: **option (a)** promote AA-scope → user-scope (`cp -r` AA contents over user-scope, then `rm -rf` AA-scope directory); **option (c)** defer to a housekeeping session. Outcome to be appended to this entry once the diff review concludes.
+
+**Open question (filed, not yet a pattern):**
+
+- Do skill edits systematically land in AA repo rather than user-scope? One data point — AA-scope `claude-code-mastery/SKILL.md` is the newer of two diverged copies, by ~1,000 bytes of net new content — is not yet a pattern. Investigate during next skill-touching session: is this an editing-workflow truth, or a one-off artifact of where this particular skill was iterated? If true, user-scope skills will systematically rot; decide whether AA repo becomes the canonical edit location for user-wide skills (with publish-up via symlink/copy), or whether the user-scope copy should be treated as canonical and project copies are the ones that drift. One-data-point ≠ pattern — but worth keeping an eye on the next two or three skill edits.
+
+**Connects to:**
+
+- `specs/skills-extraction-notes.md` — the spec; covers four Tier B candidates (`pre-brief-verification`, `shotgun-surgery-protocol`, `post-session-institutional-memory`, `scheduled-automation-discipline`)
+- `~/.claude/notes/skills-extraction-notes.md` — convenience symlink for user-scope discovery (resolves to the AA copy)
+- `~/.claude/skills/claude-code-mastery/SKILL.md` — user-scope copy (older, 16,058 bytes)
+- `.claude/skills/claude-code-mastery/SKILL.md` — AA-scope copy (newer, 17,101 bytes)
+- `/tmp/claude-code-mastery-diff.txt` — captured divergence (1,616 lines)
+- Memory: `agent_athens_project_path.md` — user-side record of the canonical-path rule that this entry reinforces from the repo side
+
+**Status:** Partial. Decisions (a), (b), and the open question shipped in commit `4412ff3b4` (the notes-doc commit itself). Decision (c) — `claude-code-mastery` resolution — pending Christos's manual review of `/tmp/claude-code-mastery-diff.txt`. This entry will be amended and re-committed once the resolution lands.
+
+---
+
+## 2026-05-14 — Use `overflow-x: clip` over `overflow-x: hidden` on `html`/`body`
+
+**Context:** QW-B (mobile horizontal-overflow document-level backstop) needed a CSS property that prevents horizontal scrolling at the document root without creating a scroll container. The trigger was Christos's 2026-05-13 mobile report (horizontal sweep on homepage produced document-level drift; carousel rubber-band leaked into body scroll on iOS WebKit + Brave). QW-A had already addressed the dominant source (`.hero-picks` mobile carousel) with `overscroll-behavior-x: contain` + `touch-action: pan-x`; QW-B was the belt-and-suspenders document-level guard.
+
+**Decision:** `overflow-x: clip` applied to `html, body`. Rejected `overflow-x: hidden`.
+
+**Reasoning:** `overflow-x: hidden` disables `position: sticky` in **all** descendants by making the element a scroll container. We have four sticky descendants whose function depends on the document root remaining a non-scroll-container:
+- `.site-header` (`src/styles/design-system.css:584`) — `top: 0`; sitewide.
+- `.filter-bar` (`:1363`) — `top: 56px`; hub pages.
+- `.date-group-header` (`:528`) — `top: 64px`; hub pages with date-grouped lists.
+- `.hub-comparison-table th` (`:2561`) — `top: 0`; hub comparison tables.
+
+`clip` clips overflow without creating a scroll container, preserving all four. The regression that `hidden` would have caused is silent — no console warning, no test failure unless someone authored a specific scroll-and-assert-sticky-position test. Browser support: iOS Safari 16+, all modern Chrome/Edge/Firefox. iOS 15 falls back to no-clipping (acceptable — QW-A handles the dominant source case-by-case, so the backstop's absence on iOS 15 is not a regression relative to pre-QW state).
+
+**Alternatives considered:**
+- **(a) `overflow-x: hidden` only on `body`, not `html`** — preserves the html sticky chain in many cases. Kept as backup rollback path if `clip` browser support proves insufficient. Rejected as the primary because it doesn't preserve `html`-rooted sticky if any descendant chain ever depends on it; `clip` is the cleaner default.
+- **(b) Targeted `overflow-x: clip` on a wrapping `<main>` element** — more invasive (template-level change in `src/templates/site-chrome.ts`), no advantage over document-root application, and would miss any horizontal overflow originating outside `<main>` (e.g., header-rooted scroll containers, sibling content). Rejected as over-engineered.
+- **(c) Leave QW-A alone, no document-level guard** — relies on every future horizontal-scrolling region being correctly authored with `overscroll-behavior-x`. Defense-in-depth principle says no: the cost of one extra CSS line is trivial; the cost of catching every future regression at author time is high. Rejected.
+
+**Reversibility:** Trivial — single-line CSS change. If `clip` proves problematic on a browser we care about, narrow the rule to `body` only (alternative (a)) or remove the `html` selector. Do NOT swap to `hidden` as the rollback — see Pattern Q in `patterns.md` for the sticky-descendant inventory that constrains rollback choices.
+
+**Connects to:**
+- [patterns.md](patterns.md) — "Pattern Q — `overflow-x: clip` vs `hidden`: choose `clip` when sticky descendants exist" (canonical pattern with the same sticky-descendants inventory).
+- [patterns.md](patterns.md) — "Pattern P — iOS `overscroll-behavior-x: contain` is the canonical rubber-band leak guard" (QW-A, the container-level companion fix).
+- [../../docs/known-issues.md](../../docs/known-issues.md) — "iOS Mobile Horizontal Scroll / Touch Jitter on Hero Picks Carousel" (the defect entry this decision resolves alongside QW-A).
+- `tests/build/document-overflow-guard.test.ts` — 2 assertions verifying the QW-B rule lands in built CSS.
+
+**Status:** Shipped (QW-B, 2026-05-14 deploy). On-device verified 2026-05-15 (iPhone Chrome + Brave + Safari, 375 / 414 / 430px portrait). Sticky chain intact for all four descendants.
+
+## GSC defect classification — class-F assignment rule (2026-05-19, S137)
+
+**Decision:** Class F (RESOLVED-IN-PRODUCTION-POST-CRAWL) may be assigned to a GSC defect only when **Step 1 live HTML probe** confirms the field is currently present in production emission. Memory entries, S134 commit-message claims, or "I added this last week" recollection are **insufficient** evidence on their own.
+
+**Why:** The diagnostic class-F is the easiest class to over-assign — it's optimistic ("we already fixed it"), it requires no follow-up work, and any drift between the GSC crawl window and current production naturally accumulates as bug-fixes ship. The temptation is to mark every defect F whose recent commit history *mentions* the field. That replaces "evidence the fix is live" with "evidence the fix was committed." Those are not the same: a commit may have introduced the field on one surface (EDP JSON-LD) while leaving the GSC-observed surface (hub-card microdata) unchanged. Without the live probe, an F mis-assignment defers prioritization on a live defect indefinitely.
+
+**Mechanism:** For each candidate F-class defect, fetch the representative URL from the GSC export and parse the JSON-LD / microdata. If the field is present and well-formed → F. If absent or malformed → reclassify A/B/C/D/E. If the field is present on one surface but absent on another → split-class entry (per S137 spec's mixed-class rows).
+
+**Anchor case:** S137 defect #10 (description, 21 home + 24 ticket hub-level) was initially candidate-F because the live probe showed 24/24 home hub cards emit `itemprop="description"` — but the EDP-level component of the same defect (24 gr-EDPs) was probe-confirmed as still failing, so the row classified as **C (EDP) + F (hub)**, not pure F. The probe averted assigning blanket-F to a defect that's partially live.
+
+**Reversibility:** Trivial. If a future probe re-asserts F was wrong, reclassify in a follow-up diagnostic spec; nothing has been built or shipped on the basis of the classification.
+
+**Connects to:**
+- `specs/gsc-schema-defects-2026-05-19-diagnostic.md` — the inaugural application.
+- `patterns.md` — "Pattern B — live HTML JSON-LD probe" (the mechanism); "Pattern S — Dual-emission count signature" (the complementary count-based pre-screen).
