@@ -18,7 +18,7 @@ import { renderEventCardList } from '../templates/card-variants';
 import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, getCountryCode, getRegionName } from '../utils/schema-geo';
+import { buildContainedInPlace, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -54,15 +54,25 @@ function meetsMinimumThreshold(venue: VenueData): boolean {
 }
 
 /**
- * Generate Schema.org LocalBusiness markup for venue
- * Only if we have address data
+ * Generate Schema.org JSON-LD for a venue page (S139 stage 2).
+ *
+ * Emits a single @graph envelope per S138 Section 2.3 + Strategist Q2 ordering:
+ *   Member 1 (FIRST):  LocalBusiness venue entity, @id = `${BASE_URL}/venues/{slug}/#venue`
+ *   Member 2 (LAST):   Site-publisher Organization, @id = `${BASE_URL}/#organization`
+ *
+ * Upcoming-events listing stays nested under LocalBusiness.event as lightweight
+ * reference-only entries (per S138 Section 2.3 + user-confirmed minimal-diff path).
+ * containedInPlace chain stays inline within the LocalBusiness entity.
+ *
+ * Returns null if no address (no canonical venue page emitted — same gate
+ * preserved from pre-S139).
  */
 function generateVenueSchema(venue: VenueData): string | null {
   if (!venue.address) return null;
 
-  const schema: Record<string, any> = {
-    '@context': 'https://schema.org',
+  const venueEntity: Record<string, any> = {
     '@type': 'LocalBusiness',
+    '@id': `${BASE_URL}/venues/${venue.slug}/#venue`,
     'name': venue.name,
     'address': {
       '@type': 'PostalAddress',
@@ -82,7 +92,7 @@ function generateVenueSchema(venue: VenueData): string | null {
       Math.abs(venue.coordinates.lat - 37.9838) < 0.0001 &&
       Math.abs(venue.coordinates.lon - 23.7276) < 0.0001;
     if (!isGenericCoord) {
-      schema.geo = {
+      venueEntity.geo = {
         '@type': 'GeoCoordinates',
         'latitude': venue.coordinates.lat,
         'longitude': venue.coordinates.lon
@@ -90,10 +100,11 @@ function generateVenueSchema(venue: VenueData): string | null {
     }
   }
 
-  // Add upcoming events as part of schema. formatSchemaDate handles date-only
+  // Add upcoming events as nested lightweight references (per S138 Section 2.3
+  // + user-confirmed minimal-diff path). formatSchemaDate handles date-only
   // passthrough and DST-aware offset appending for naive-ts.
   if (venue.events.length > 0) {
-    schema.event = venue.events.slice(0, 10).map(event => ({
+    venueEntity.event = venue.events.slice(0, 10).map(event => ({
       '@type': SCHEMA_TYPE_MAP[event.type] || 'Event',
       'name': event.title,
       'startDate': formatSchemaDate(event.startDate),
@@ -101,7 +112,11 @@ function generateVenueSchema(venue: VenueData): string | null {
     }));
   }
 
-  return JSON.stringify(schema, null, 2);
+  const envelope = {
+    '@context': 'https://schema.org',
+    '@graph': [venueEntity, buildSiteOrganizationGraphMember()],
+  };
+  return JSON.stringify(envelope, null, 2);
 }
 
 /**
