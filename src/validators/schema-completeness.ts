@@ -130,7 +130,9 @@ export function validateSchemaCompleteness(
   //   - single block with invalid @type → falls through to the per-field
   //     "@type is not a valid Schema.org event type" error
   const rawScriptCount = [...htmlContent.matchAll(/<script\s+type="application\/ld\+json">/g)].length;
-  const blocks = extractAllJsonLd(htmlContent);
+  // S139: flatten @graph envelopes into entity-level blocks so flat-path
+  // field lookups continue to work post-migration.
+  const blocks = resolveSamePageReferences(flattenGraph(extractAllJsonLd(htmlContent)));
 
   if (rawScriptCount === 0) {
     return { slug: eventSlug, errors: ['No JSON-LD script tag found'], warnings: [], info: [] };
@@ -344,13 +346,90 @@ function extractAllJsonLd(html: string): Record<string, any>[] {
 }
 
 /**
+ * Flatten any `@graph` envelopes into their individual member entities.
+ *
+ * Per S138 Section 3.1: the validator's flat-path field lookups
+ * (MANDATORY_FIELDS, RECOMMENDED_FIELDS, INFO_FIELDS) continue to work
+ * against individual entities post-flattening. Members of an envelope
+ * inherit the envelope's `@context` (preserves the per-entity @context
+ * contract the validator's @context check expects).
+ *
+ * For blocks that have no `@graph`, returns them as-is (flat blocks
+ * survive the migration unchanged).
+ */
+/**
+ * Resolve same-page `{"@id": X}` references within each entity by inlining
+ * the referenced entity's properties (minus its own `@id`).
+ *
+ * Per S138 Section 2.4: when Event.location is emitted as `{"@id": ...}` and
+ * the venue entity is materialized as a separate @graph member with full
+ * address/geo data, same-page reference resolution must succeed for the
+ * validator's flat-path field lookups (location.name, location.address) to
+ * continue working.
+ *
+ * Orphan references (no matching `@id` in the same page) are left as-is —
+ * downstream orphan-reference validation (S141) detects them explicitly.
+ */
+export function resolveSamePageReferences(entities: Record<string, any>[]): Record<string, any>[] {
+  const byId = new Map<string, Record<string, any>>();
+  for (const e of entities) {
+    if (e && typeof e === 'object' && typeof e['@id'] === 'string') {
+      byId.set(e['@id'], e);
+    }
+  }
+
+  const visit = (node: any, depth: number): any => {
+    if (depth > 10) return node; // cycle guard
+    if (!node || typeof node !== 'object') return node;
+    if (Array.isArray(node)) return node.map(n => visit(n, depth + 1));
+
+    const keys = Object.keys(node);
+    if (keys.length === 1 && keys[0] === '@id') {
+      const target = byId.get(node['@id']);
+      if (!target) return node; // orphan ref — leave for S141 detection
+      const { '@id': _omit, ...rest } = target;
+      return visit(rest, depth + 1);
+    }
+
+    const out: Record<string, any> = {};
+    for (const k of keys) out[k] = visit(node[k], depth + 1);
+    return out;
+  };
+
+  return entities.map(e => visit(e, 0));
+}
+
+export function flattenGraph(blocks: Record<string, any>[]): Record<string, any>[] {
+  const out: Record<string, any>[] = [];
+  for (const block of blocks) {
+    if (!block || typeof block !== 'object') continue;
+    if (Array.isArray(block['@graph'])) {
+      const envelopeContext = block['@context'];
+      for (const member of block['@graph']) {
+        if (!member || typeof member !== 'object') continue;
+        if (envelopeContext != null && member['@context'] == null) {
+          out.push({ '@context': envelopeContext, ...member });
+        } else {
+          out.push(member);
+        }
+      }
+    } else {
+      out.push(block);
+    }
+  }
+  return out;
+}
+
+/**
  * Validate a hub page's JSON-LD schema (CollectionPage + FAQPage).
  */
 export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  const blocks = extractAllJsonLd(htmlContent);
+  // S139: flatten @graph envelopes so CollectionPage / FAQPage members surface
+  // for the per-type filter below.
+  const blocks = resolveSamePageReferences(flattenGraph(extractAllJsonLd(htmlContent)));
   if (blocks.length === 0) {
     return { slug: `hub:${hubSlug}`, errors: ['No JSON-LD script tag found'], warnings: [] };
   }
@@ -438,7 +517,8 @@ export function validateVenueSchema(
   // all JSON-LD blocks, locate the LocalBusiness one, validate it. Silent skip
   // remains for pages with no JSON-LD at all (existing behavior — venue page
   // without JSON-LD is not currently an error).
-  const blocks = extractAllJsonLd(htmlContent);
+  // S139: flatten @graph envelopes so LocalBusiness members surface.
+  const blocks = resolveSamePageReferences(flattenGraph(extractAllJsonLd(htmlContent)));
   if (blocks.length === 0) return { slug: `venue:${venueSlug}`, errors: [], warnings: [], info: [] };
 
   const localBusinessBlocks = blocks.filter(b => b['@type'] === 'LocalBusiness');

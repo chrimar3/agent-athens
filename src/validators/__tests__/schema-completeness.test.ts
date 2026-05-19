@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -1031,5 +1031,85 @@ describe('validatePriceTypeVocabulary — Tier 1 vocabulary guard (B-03)', () =>
   test('result.slug carries the event id', () => {
     const result = validatePriceTypeVocabulary({ id: 'evt-abc123', price_type: 'tba' });
     expect(result.slug).toBe('evt-abc123');
+  });
+});
+
+// ─── S139 — @graph-aware extraction helpers ────────────────────────
+
+describe('flattenGraph', () => {
+  test('returns empty array for empty input', () => {
+    expect(flattenGraph([])).toEqual([]);
+  });
+
+  test('returns single flat block unchanged', () => {
+    const block = { '@context': 'https://schema.org', '@type': 'Event', name: 'X' };
+    expect(flattenGraph([block])).toEqual([block]);
+  });
+
+  test('yields each @graph member, inheriting envelope @context', () => {
+    const envelope = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        { '@type': 'Event', '@id': '#event', name: 'E' },
+        { '@type': 'Organization', '@id': '#org', name: 'O' },
+      ],
+    };
+    const out = flattenGraph([envelope]);
+    expect(out).toHaveLength(2);
+    expect(out[0]).toMatchObject({ '@context': 'https://schema.org', '@type': 'Event', name: 'E' });
+    expect(out[1]).toMatchObject({ '@context': 'https://schema.org', '@type': 'Organization', name: 'O' });
+  });
+
+  test('handles mixed flat + envelope blocks', () => {
+    const flat = { '@context': 'https://schema.org', '@type': 'DataFeed', name: 'feed' };
+    const envelope = {
+      '@context': 'https://schema.org',
+      '@graph': [{ '@type': 'Event', name: 'E' }],
+    };
+    const out = flattenGraph([flat, envelope]);
+    expect(out).toHaveLength(2);
+    expect(out[0]['@type']).toBe('DataFeed');
+    expect(out[1]['@type']).toBe('Event');
+  });
+
+  test('preserves member-level @context if already present', () => {
+    const envelope = {
+      '@context': 'https://schema.org',
+      '@graph': [{ '@context': 'https://other.example/', '@type': 'X' }],
+    };
+    expect(flattenGraph([envelope])[0]['@context']).toBe('https://other.example/');
+  });
+});
+
+describe('resolveSamePageReferences', () => {
+  test('inlines {@id} reference with resolved entity', () => {
+    const entities = [
+      { '@id': '#event', '@type': 'Event', name: 'E', location: { '@id': '#venue' } },
+      { '@id': '#venue', '@type': 'MusicVenue', name: 'V', address: { streetAddress: 'X' } },
+    ];
+    const out = resolveSamePageReferences(entities);
+    expect(out[0].location).toEqual({ '@type': 'MusicVenue', name: 'V', address: { streetAddress: 'X' } });
+    expect(out[1]['@id']).toBe('#venue'); // top-level @id preserved
+  });
+
+  test('leaves orphan reference as-is', () => {
+    const entities = [{ '@id': '#event', '@type': 'Event', location: { '@id': '#missing' } }];
+    expect(resolveSamePageReferences(entities)[0].location).toEqual({ '@id': '#missing' });
+  });
+
+  test('resolves nested references inside Offer.seller', () => {
+    const entities = [
+      { '@id': '#event', '@type': 'Event', offers: { '@type': 'Offer', seller: { '@id': '#seller' } } },
+      { '@id': '#seller', '@type': 'Organization', name: 'Viva.gr', url: 'https://viva.gr/' },
+    ];
+    const out = resolveSamePageReferences(entities);
+    expect(out[0].offers.seller).toEqual({ '@type': 'Organization', name: 'Viva.gr', url: 'https://viva.gr/' });
+  });
+
+  test('does not infinite-loop on circular references (depth guard)', () => {
+    const a: any = { '@id': '#a', '@type': 'X' };
+    const b: any = { '@id': '#b', '@type': 'X', ref: { '@id': '#a' } };
+    a.ref = { '@id': '#b' };
+    expect(() => resolveSamePageReferences([a, b])).not.toThrow();
   });
 });

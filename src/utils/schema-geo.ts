@@ -182,6 +182,11 @@ export function getRegionName(): string {
 
 /**
  * Organization schema for the homepage JSON-LD block.
+ *
+ * Retained for any downstream consumer that imports the constant directly.
+ * Inside-`@graph` consumers should use `buildSiteOrganizationGraphMember()`
+ * which emits the same fields without `@context` (the envelope owns it) and
+ * with the canonical `#organization` `@id`.
  */
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
@@ -196,3 +201,27 @@ export const ORGANIZATION_SCHEMA = {
   },
   'knowsLanguage': ['el', 'en']
 };
+
+/**
+ * Site-publisher Organization as a `@graph` member.
+ *
+ * The canonical site-publisher entity used as the LAST member of every
+ * per-page `@graph` envelope per S138 Section 2.3 Q2 ordering ruling.
+ * Identity fixed at `${BASE_URL}/#organization` so cross-page consumers
+ * dereference to the same entity.
+ */
+export function buildSiteOrganizationGraphMember(): Record<string, any> {
+  return {
+    '@type': 'Organization',
+    '@id': `${BASE_URL}/#organization`,
+    'name': 'agent-athens',
+    'url': BASE_URL,
+    'description': 'AI-curated cultural events calendar for Athens, Greece. Daily updated listings for concerts, exhibitions, theater, and more.',
+    'areaServed': {
+      '@type': 'Place',
+      'name': 'Athens',
+      'sameAs': 'https://www.wikidata.org/wiki/Q1524'
+    },
+    'knowsLanguage': ['el', 'en']
+  };
+}

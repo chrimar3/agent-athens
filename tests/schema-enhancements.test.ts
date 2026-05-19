@@ -238,6 +238,13 @@ describe('availabilityForEventStatus', () => {
 // ── offers.validFrom removed ──────────────────────────────
 
 describe('offers.validFrom emission', () => {
+  // S139: generateEventSchema returns a @graph envelope; the Event entity is
+  // member 0 per Q2 ordering ruling. Extract it before asserting on offers.
+  const extractEvent = (jsonLd: string): any => {
+    const envelope = JSON.parse(jsonLd);
+    return envelope['@graph']?.[0] ?? envelope;
+  };
+
   test('paid event with ticket does NOT emit validFrom in offers (when offers is present)', () => {
     // sampleConcertWithTicket has 2025 dates → EventCompleted post-S3 → offers omitted entirely.
     // Force a future date so the offers block is emitted, then assert validFrom is absent.
@@ -246,16 +253,14 @@ describe('offers.validFrom emission', () => {
       startDate: '2099-11-15T21:30:00+03:00',
       endDate: '2099-11-16T00:00:00+03:00',
     };
-    const jsonLd = generateEventSchema(futureEvent, 'el');
-    const schema = JSON.parse(jsonLd);
+    const schema = extractEvent(generateEventSchema(futureEvent, 'el'));
     expect(schema.offers).toBeDefined();
     expect(schema.offers['@type']).toBe('Offer');
     expect(schema.offers.validFrom).toBeUndefined();
   });
 
   test('open-price event has no validFrom either (offers block has no temporal anchor)', () => {
-    const jsonLd = generateEventSchema(sampleFreeExhibition, 'el');
-    const schema = JSON.parse(jsonLd);
+    const schema = extractEvent(generateEventSchema(sampleFreeExhibition, 'el'));
     if (schema.offers) {
       expect(schema.offers.validFrom).toBeUndefined();
     }

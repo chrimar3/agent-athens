@@ -40,8 +40,25 @@ function extractAllJsonLd(html: string): Array<Record<string, unknown>> {
   return out;
 }
 
+// S139: post-envelope migration, the Event entity lives inside @graph rather
+// than at script-tag top level. Flatten any @graph envelopes before counting.
+function flattenGraph(blocks: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
+  const out: Array<Record<string, unknown>> = [];
+  for (const block of blocks) {
+    const graph = (block as any)["@graph"];
+    if (Array.isArray(graph)) {
+      for (const m of graph) {
+        if (m && typeof m === "object") out.push(m as Record<string, unknown>);
+      }
+    } else {
+      out.push(block);
+    }
+  }
+  return out;
+}
+
 function countEventBlocks(html: string): number {
-  return extractAllJsonLd(html).filter(b => {
+  return flattenGraph(extractAllJsonLd(html)).filter(b => {
     const t = b["@type"];
     return typeof t === "string" && VALID_EVENT_TYPES.has(t);
   }).length;

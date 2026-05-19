@@ -61,11 +61,20 @@ function extractOgLocaleAlternate(html: string): string | undefined {
   return html.match(/<meta property="og:locale:alternate" content="([^"]+)">/)?.[1];
 }
 
+// S139: post-envelope migration, the page-canonical entity (Event / CollectionPage)
+// lives inside @graph rather than at script-tag top level. Read .url from the
+// first @graph member that has a url field. Hub pages without @graph still work
+// through the .url top-level fallback (hubs migrate in stage 3).
 function extractJsonLdUrl(html: string): string | undefined {
   const match = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
   if (!match) return undefined;
   try {
-    return JSON.parse(match[1]).url;
+    const parsed = JSON.parse(match[1]);
+    if (Array.isArray(parsed['@graph'])) {
+      const pageCanonical = parsed['@graph'].find((m: any) => typeof m?.url === 'string');
+      return pageCanonical?.url;
+    }
+    return parsed.url;
   } catch {
     return undefined;
   }

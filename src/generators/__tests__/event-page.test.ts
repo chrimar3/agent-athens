@@ -1,5 +1,51 @@
 import { describe, test, expect } from "bun:test";
-import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema, buildEventSchemaObject } from "../event-page";
+import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema, buildEventSchemaObject, buildEventGraphEnvelope } from "../event-page";
+import { BASE_URL } from "../../config/site-url";
+
+// S139 stage 1 test helpers — extract entities from @graph envelope.
+// Per S138 Section 4.2: assert on entity properties, not @graph shape.
+// `findEntity` locates a member by @type or @id; `parseEventFromEnvelope`
+// returns the Event entity with @id-references resolved to inline entities
+// (minus their @id field) so existing property-assertion tests keep working
+// after the envelope migration without per-test rewrites.
+function findEntity(envelope: any, by: '@type' | '@id', value: string): any {
+  const graph: any[] = envelope?.['@graph'] ?? [];
+  return graph.find(m => m?.[by] === value);
+}
+
+function parseEventFromEnvelope(envelopeJson: string): any {
+  const envelope = JSON.parse(envelopeJson);
+  const graph: any[] = envelope['@graph'];
+  // Build an @id → entity map for reference resolution.
+  const byId = new Map<string, any>();
+  for (const m of graph) {
+    if (m['@id']) byId.set(m['@id'], m);
+  }
+  // Recursively replace pure `{"@id": x}` references with the target entity,
+  // stripping the resolved entity's own @id so test assertions using strict
+  // `toEqual` still match the pre-S139 inline shape.
+  const seen = new WeakSet<object>();
+  const resolve = (node: any): any => {
+    if (!node || typeof node !== 'object') return node;
+    if (Array.isArray(node)) return node.map(resolve);
+    if (seen.has(node)) return node;
+    seen.add(node);
+    const keys = Object.keys(node);
+    if (keys.length === 1 && keys[0] === '@id') {
+      const target = byId.get(node['@id']);
+      if (target) {
+        const { '@id': _omit, ...rest } = target;
+        return resolve(rest);
+      }
+      return node;
+    }
+    const out: any = {};
+    for (const k of keys) out[k] = resolve(node[k]);
+    return out;
+  };
+  // Return the Event entity (member 0 per Q2 ordering) with references resolved.
+  return resolve(graph[0]);
+}
 import {
   sampleConcert,
   sampleConcertWithTicket,
@@ -475,8 +521,12 @@ describe("Event Detail Page — Calendar (.ics) export button", () => {
 // ─── Offers emission (Sprint 1 Session 3 — Strategist 2026-04-29) ─────
 
 describe("Event Detail Page — offers emission", () => {
+  // S139 stage 1: generateEventSchema now returns a @graph envelope. The
+  // parse helper extracts the Event entity (member 0) and resolves @id
+  // references inline so existing assertions on `schema.offers.seller` etc.
+  // continue to work against the resolved entity properties.
   const parse = (event: Event, locale: 'el' | 'en' = 'el') =>
-    JSON.parse(generateEventSchema(event, locale));
+    parseEventFromEnvelope(generateEventSchema(event, locale));
 
   // Fixture A — past event (EventCompleted): NO offers key
   test("with-ticket past event: omits offers entirely", () => {
@@ -704,13 +754,15 @@ describe("Event Detail Page — offers emission", () => {
   });
 });
 
-// ─── buildEventSchemaObject / generateEventSchema equivalence (Sprint 2 Component A) ───
-// Refactor in S105 split the JSON-LD builder into an object form
-// (`buildEventSchemaObject`) and the original string form (`generateEventSchema`).
-// String output must remain byte-identical to the pre-refactor implementation,
-// and parsing the string must yield the same object the builder returns directly.
-// This is the contract DataFeed (`src/generators/datafeed.ts`) relies on.
-describe("Event schema — object/string equivalence", () => {
+// ─── @graph envelope contract (S139 stage 1) ──────────────────────────
+// Replaces the prior buildEventSchemaObject/generateEventSchema equivalence
+// suite. Post-S139, the two functions intentionally diverge: buildEventSchemaObject
+// returns the flat Event entity (preserved contract — DataFeed and the flat
+// schema validator continue to consume it directly) while generateEventSchema
+// wraps that entity into a single @graph envelope for HTML emission.
+//
+// Per S138 Section 4.2: tests assert on entity properties, NOT on @graph shape.
+describe("Event schema — @graph envelope contract (S139)", () => {
   const fixtures: ReadonlyArray<readonly [string, Event, 'el' | 'en']> = [
     ['concert (el)', sampleConcert, 'el'],
     ['concert (en)', sampleConcert, 'en'],
@@ -721,18 +773,67 @@ describe("Event schema — object/string equivalence", () => {
   ];
 
   for (const [label, event, locale] of fixtures) {
-    test(`generateEventSchema string === JSON.stringify(buildEventSchemaObject) for ${label}`, () => {
-      const stringForm = generateEventSchema(event, locale);
-      const objectForm = buildEventSchemaObject(event, locale);
-      expect(stringForm).toBe(JSON.stringify(objectForm, null, 2));
+    test(`generateEventSchema emits a single @graph envelope for ${label}`, () => {
+      const envelope = JSON.parse(generateEventSchema(event, locale));
+      expect(envelope['@context']).toBe('https://schema.org');
+      expect(Array.isArray(envelope['@graph'])).toBe(true);
+      expect(envelope['@graph'].length).toBeGreaterThanOrEqual(2);
     });
 
-    test(`buildEventSchemaObject deep-equals JSON.parse(generateEventSchema) for ${label}`, () => {
-      const parsed = JSON.parse(generateEventSchema(event, locale));
-      const objectForm = buildEventSchemaObject(event, locale);
-      expect(parsed).toEqual(objectForm);
+    test(`Event entity is first @graph member with @id and no @context for ${label}`, () => {
+      const envelope = JSON.parse(generateEventSchema(event, locale));
+      const eventEntity = envelope['@graph'][0];
+      const flatEvent = buildEventSchemaObject(event, locale);
+      expect(eventEntity['@type']).toBe(flatEvent['@type']);
+      expect(eventEntity.name).toBe(flatEvent.name);
+      expect(eventEntity.startDate).toBe(flatEvent.startDate);
+      expect(eventEntity['@id']).toBe(`${BASE_URL}/events/${generateEventSlug(event)}/#event`);
+      // @context lives at the envelope root, not on inner members.
+      expect(eventEntity['@context']).toBeUndefined();
+    });
+
+    test(`site-publisher Organization is last @graph member for ${label}`, () => {
+      const envelope = JSON.parse(generateEventSchema(event, locale));
+      const graph = envelope['@graph'];
+      const last = graph[graph.length - 1];
+      expect(last['@type']).toBe('Organization');
+      expect(last['@id']).toBe(`${BASE_URL}/#organization`);
     });
   }
+
+  test('venue is materialized as a separate @graph member with @id reference from Event.location when venue has address', () => {
+    const envelope = JSON.parse(generateEventSchema(sampleConcert, 'el'));
+    const eventEntity = envelope['@graph'][0];
+    expect(eventEntity.location['@id']).toMatch(/^https:\/\/agentathens\.com\/venues\/.+\/#venue$/);
+    const venueEntity = findEntity(envelope, '@id', eventEntity.location['@id']);
+    expect(venueEntity).toBeDefined();
+    expect(venueEntity.name).toBe(sampleConcert.venue.name);
+    expect(venueEntity.address).toBeDefined();
+  });
+
+  test('seller Organization is a separate @graph member with @id when seller URL host is parseable', () => {
+    const event: Event = {
+      ...sampleConcertWithTicket,
+      startDate: futureStartDate,
+      ticketUrl: 'https://www.more.com/gr-el/music/x/',
+    };
+    const envelope = JSON.parse(generateEventSchema(event, 'el'));
+    const eventEntity = envelope['@graph'][0];
+    expect(eventEntity.offers.seller['@id']).toBe('https://more.com/#organization');
+    const sellerOrg = findEntity(envelope, '@id', 'https://more.com/#organization');
+    expect(sellerOrg).toBeDefined();
+    expect(sellerOrg['@type']).toBe('Organization');
+    expect(sellerOrg.name).toBe('More.com');
+    expect(sellerOrg.url).toBe('https://more.com/');
+  });
+
+  test('buildEventSchemaObject still returns the flat Event entity (DataFeed contract preserved)', () => {
+    const flat = buildEventSchemaObject(sampleConcert);
+    expect(flat['@context']).toBe('https://schema.org');
+    expect(flat['@graph']).toBeUndefined();
+    expect(flat['@type']).toBeDefined();
+    expect(flat.location.name).toBe(sampleConcert.venue.name);
+  });
 });
 
 // =====================================================================

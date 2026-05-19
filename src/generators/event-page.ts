@@ -22,7 +22,8 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
+import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { classifyEventLifecycle } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
@@ -239,13 +240,112 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
 }
 
 /**
- * Generate Schema.org JSON-LD string for an individual event page.
+ * Build the `@graph` envelope for an event detail page (S139 stage 1).
  *
- * Thin wrapper around `buildEventSchemaObject`. Kept as the canonical
- * call site for HTML embedding (output is byte-identical to pre-refactor).
+ * Per S138 Section 2.3 + Strategist Q2/Q4/Q5 rulings (2026-05-19):
+ *   Member 1 (FIRST):  Event entity, `@id` = `${eventCanonicalUrl}#event`
+ *   Member 2:          Place/MusicVenue venue entity, `@id` = `${venueCanonicalUrl}#venue`
+ *                      (emitted only when venue has a canonical page; gated by
+ *                      `event.venue.address` — same gate as `venue-page.ts`)
+ *   Member 3:          (Offer stays nested inline on Event.offers — anonymous,
+ *                      event-scoped; no @id, so cross-reference is meaningless)
+ *   Member 4:          Seller `Organization`, `@id` = `https://{host}/#organization`
+ *                      (emitted only when Offer.seller has a parseable URL host)
+ *   Member 5:          (organizer slot — DEFERRED to S142)
+ *   Member 6 (LAST):   Site-publisher `Organization`,
+ *                      `@id` = `${BASE_URL}/#organization`
+ *
+ * Event.location becomes a `{"@id": ...}` reference to member 2 when the
+ * venue is materialized as a separate graph member; otherwise stays inline
+ * (Section 2.4 same-page-materialization rule). containedInPlace chain
+ * stays nested inline within the venue entity per Section 2.1.
+ *
+ * `buildEventSchemaObject` (used by DataFeed + validator) is preserved
+ * unchanged — its contract is the flat Event entity. This wrapper composes
+ * the @graph envelope around that entity for HTML emission only.
+ */
+function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<string, any> {
+  const eventSlug = generateEventSlug(event);
+  const eventCanonicalUrl = `${BASE_URL}/events/${eventSlug}/`;
+
+  // Shallow-copy the flat Event entity so we can replace @context with @id
+  // without mutating buildEventSchemaObject's return value (DataFeed reads it
+  // via a separate call, so cross-call safety is intact regardless; this is
+  // just defensive against future intra-call reuse).
+  const flatEvent = buildEventSchemaObject(event, locale);
+  const eventEntity: Record<string, any> = { ...flatEvent };
+  delete eventEntity['@context'];
+  eventEntity['@id'] = `${eventCanonicalUrl}#event`;
+
+  const graph: Record<string, any>[] = [eventEntity];
+
+  // Q4 ruling: venue @id derives from dist/venues/{slug}/ path. Gate is
+  // `event.venue.address` — same gate venue-page.ts uses for schema emission.
+  // When the gate passes, materialize venue as a separate graph member with
+  // duplicated address/geo/containedInPlace (Section 2.4 same-page rule) and
+  // replace Event.location with an @id reference.
+  if (event.venue.address) {
+    const venueSlug = slugify(event.venue.name);
+    const venueId = `${BASE_URL}/venues/${venueSlug}/#venue`;
+    const inlineLocation = eventEntity.location;
+
+    const venueEntity: Record<string, any> = {
+      '@type': inlineLocation['@type'],
+      '@id': venueId,
+      'name': inlineLocation.name,
+      'address': inlineLocation.address,
+      'containedInPlace': inlineLocation.containedInPlace,
+      'url': `${BASE_URL}/venues/${venueSlug}/`,
+    };
+    if (inlineLocation.geo) venueEntity.geo = inlineLocation.geo;
+    if (inlineLocation.sameAs) venueEntity.sameAs = inlineLocation.sameAs;
+
+    eventEntity.location = { '@id': venueId };
+    graph.push(venueEntity);
+  }
+
+  // Q5 ruling: seller @id = `https://{host}/#organization` where host comes
+  // from the seller URL produced by classifyTicketSource (reuse of S134
+  // classifier output, no parallel registry). When seller has no URL
+  // (venue_direct seller whose venue lacks a website), leave inline anonymous.
+  if (eventEntity.offers && eventEntity.offers.seller) {
+    const seller = eventEntity.offers.seller;
+    const sellerHost = extractHost(seller.url);
+    if (sellerHost) {
+      const sellerOrgId = `https://${sellerHost}/#organization`;
+      const sellerEntity: Record<string, any> = {
+        '@type': 'Organization',
+        '@id': sellerOrgId,
+        'name': seller.name,
+        'url': seller.url,
+      };
+      // Replace inline seller with @id reference (shallow-copy offers to avoid
+      // mutating the OfferDecision return).
+      eventEntity.offers = { ...eventEntity.offers, seller: { '@id': sellerOrgId } };
+      graph.push(sellerEntity);
+    }
+  }
+
+  // Member 6 (LAST): site-publisher Organization. Singleton per page; identity
+  // fixed at `${BASE_URL}/#organization` so cross-page resolution converges.
+  graph.push(buildSiteOrganizationGraphMember());
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph,
+  };
+}
+
+/**
+ * Generate Schema.org JSON-LD string for an individual event page HTML.
+ *
+ * S139 stage 1: returns the @graph envelope, not the flat Event entity.
+ * For consumers that need the flat Event entity (DataFeed at
+ * `src/generators/datafeed.ts`, schema-validator at `src/utils/schema-validator.ts`),
+ * call `buildEventSchemaObject` directly.
  */
 function generateEventSchema(event: Event, locale: Locale = 'el'): string {
-  return JSON.stringify(buildEventSchemaObject(event, locale), null, 2);
+  return JSON.stringify(buildEventGraphEnvelope(event, locale), null, 2);
 }
 
 /**
@@ -657,9 +757,12 @@ export async function generateEventPages(events: Event[]): Promise<{
     // Generate page HTML
     const html = renderEventDetailPage(event, relatedEvents);
 
-    // Validate schema JSON-LD
-    const schemaJson = generateEventSchema(event);
-    schemaValidationResults.push(validateEventSchema(schemaJson, urlPath));
+    // Validate schema JSON-LD against the flat Event entity. validateEventSchema
+    // operates on flat dot-paths (location.name, etc.); the @graph envelope used
+    // in HTML emission isn't validator-shaped until Stage 5 lands flattenGraph.
+    // Until then, validate the canonical Event entity directly.
+    const flatSchemaJson = JSON.stringify(buildEventSchemaObject(event), null, 2);
+    schemaValidationResults.push(validateEventSchema(flatSchemaJson, urlPath));
 
     // Create directory and write file
     const pageDir = join(eventsDir, slug);
@@ -740,4 +843,4 @@ export function generateRedirects(
 }
 
 // Exports for other modules
-export { getAthensTimezone, generateEventSchema, buildEventSchemaObject };
+export { getAthensTimezone, generateEventSchema, buildEventSchemaObject, buildEventGraphEnvelope };
