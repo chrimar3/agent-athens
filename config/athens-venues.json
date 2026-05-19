@@ -24,7 +24,7 @@
         "provider": "megaron.gr",
         "search_pattern": "https://www.megaron.gr/event-search/?keyword={title}"
       },
-      "sameAs": ["https://www.wikidata.org/wiki/Q582203"]
+      "sameAs": ["https://www.wikidata.org/wiki/Q582203", "https://en.wikipedia.org/wiki/Athens_Concert_Hall"]
     },
     {
       "canonical_name": "Gazarte",
@@ -757,7 +757,7 @@
         "provider": "onassis.org",
         "search_pattern": "https://www.onassis.org/el/calendar?search={title}"
       },
-      "sameAs": ["https://www.wikidata.org/wiki/Q43064509"]
+      "sameAs": ["https://www.wikidata.org/wiki/Q43064509", "https://en.wikipedia.org/wiki/Onassis_Stegi"]
     },
     {
       "canonical_name": "GREEK NATIONAL OPERA - SNFCC",
@@ -1044,7 +1044,8 @@
     {
       "canonical_name": "STAVROS NIARCHOS FOUNDATION CULTURAL CENTER",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "sameAs": ["https://www.wikidata.org/wiki/Q17511186", "https://en.wikipedia.org/wiki/Stavros_Niarchos_Foundation_Cultural_Center"]
     },
     {
       "canonical_name": "Red Jasper Cabaret Theatre",
@@ -1439,7 +1440,8 @@
         "Εθνική Λυρική Σκηνή - αίθουσα «Σταύρος Νιάρχος»",
         "Εθνική Λυρική Σκηνή - αίθουσα &#171;Σταύρος Νιάρχος&#187;"
       ],
-      "neighborhood": "Kallithea"
+      "neighborhood": "Kallithea",
+      "sameAs": ["https://www.wikidata.org/wiki/Q582625", "https://en.wikipedia.org/wiki/Greek_National_Opera"]
     },
     {
       "canonical_name": "Θέατρο Τζένη Καρέζη",
@@ -1498,7 +1500,8 @@
         "Technopolis",
         "Τεχνόπολις"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "sameAs": ["https://www.wikidata.org/wiki/Q174552", "https://en.wikipedia.org/wiki/Technopolis_(Gazi)"]
     },
     {
       "canonical_name": "Θέατρο Τέχνης",
@@ -1930,7 +1933,8 @@
         "National Theatre of Greece",
         "Εθνικό Θέατρο Rex"
       ],
-      "neighborhood": "Syntagma"
+      "neighborhood": "Syntagma",
+      "sameAs": ["https://www.wikidata.org/wiki/Q61650955", "https://en.wikipedia.org/wiki/National_Theatre_of_Greece"]
     },
     {
       "canonical_name": "Εθνική Γλυπτοθήκη",
@@ -2572,6 +2576,92 @@
       "canonical_name": "Ιωάννου Παπαρρηγοπούλου 1",
       "variations": [],
       "neighborhood": "Syntagma"
+    },
+    {
+      "canonical_name": "Acropolis Museum",
+      "variations": [
+        "Acropolis Museum",
+        "The Acropolis Museum",
+        "New Acropolis Museum",
+        "Acropolis Museum Athens",
+        "Athens Acropolis Museum",
+        "ACROPOLIS MUSEUM",
+        "Μουσείο Ακρόπολης",
+        "Μουσείο της Ακρόπολης",
+        "Μουσείο Ακροπόλεως",
+        "Νέο Μουσείο Ακρόπολης",
+        "ΜΟΥΣΕΙΟ ΑΚΡΟΠΟΛΗΣ",
+        "Mouseio Akropolis",
+        "Acropolis Musem",
+        "Akropolis Museum",
+        "Acropoli Museum"
+      ],
+      "neighborhood": "Koukaki",
+      "website": "https://www.theacropolismuseum.gr",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q421084",
+        "https://www.theacropolismuseum.gr",
+        "https://en.wikipedia.org/wiki/Acropolis_Museum"
+      ]
+    },
+    {
+      "canonical_name": "EMST",
+      "variations": [
+        "EMST",
+        "EMΣT",
+        "EMST Athens",
+        "EMΣT Athens",
+        "EMTS",
+        "EMTS Athens",
+        "ESMT",
+        "ESMT Athens",
+        "National Museum of Contemporary Art",
+        "National Museum of Contemporary Art Athens",
+        "National Museum of Contemporary Art, Athens",
+        "National Museum of Contemporary Art (Athens)",
+        "NATIONAL MUSEUM OF CONTEMPORARY ART",
+        "ΕΜΣΤ",
+        "Εθνικό Μουσείο Σύγχρονης Τέχνης",
+        "Εθνικό Μουσείο Σύγχρονης Τέχνης Αθήνας",
+        "Εθνικό Μουσείο Σύγχρονης Τέχνης Αθηνών",
+        "ΕΘΝΙΚΟ ΜΟΥΣΕΙΟ ΣΥΓΧΡΟΝΗΣ ΤΕΧΝΗΣ",
+        "Ethniko Mouseio Sygchronis Technis"
+      ],
+      "neighborhood": "Neos Kosmos",
+      "website": "https://www.emst.gr",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q3038298",
+        "https://www.emst.gr",
+        "https://en.wikipedia.org/wiki/National_Museum_of_Contemporary_Art,_Athens"
+      ]
+    },
+    {
+      "canonical_name": "Museum of Cycladic Art",
+      "variations": [
+        "Museum of Cycladic Art",
+        "Cycladic Museum",
+        "Cycladic Art Museum",
+        "Goulandris Museum of Cycladic Art",
+        "Nicholas P. Goulandris Foundation Museum of Cycladic Art",
+        "N.P. Goulandris Foundation - Museum of Cycladic Art",
+        "MUSEUM OF CYCLADIC ART",
+        "Μουσείο Κυκλαδικής Τέχνης",
+        "Μουσείο Κυκλαδικής Τέχνης Αθηνών",
+        "Ίδρυμα Ν.Π. Γουλανδρή - Μουσείο Κυκλαδικής Τέχνης",
+        "Ίδρυμα Νικολάου Π. Γουλανδρή",
+        "ΜΟΥΣΕΙΟ ΚΥΚΛΑΔΙΚΗΣ ΤΕΧΝΗΣ",
+        "Mouseio Kykladikis Technis",
+        "Cyclidic Art Museum",
+        "Cyclades Art Museum",
+        "Cycladic Art"
+      ],
+      "neighborhood": "Kolonaki",
+      "website": "https://cycladic.gr",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q1230253",
+        "https://cycladic.gr",
+        "https://en.wikipedia.org/wiki/Goulandris_Museum_of_Cycladic_Art"
+      ]
     }
   ],
   "neighborhoods": [
