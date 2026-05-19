@@ -307,7 +307,29 @@ export function renderHubPage(
   }
   const displayEvents = filteredEvents.slice(0, HUB_EVENT_LIMIT);
   const hasOverflow = filteredEvents.length > HUB_EVENT_LIMIT;
-  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale);
+
+  // Compose capsule + category-nav as preFilterBarHtml (Path D, 2026-05-19).
+  // Lands between page-header and filter-bar, inside .page-container, outside <main>.
+  // Replaces a prior post-render html.replace('</header>', …) splice that
+  // misanchored to site-header's </header>; see specs/capsule-drift-audit-2026-05-18.md.
+  const hubTitleText = locale === 'en' ? config.titleEn : config.titleEl;
+  const rawCapsule = locale === 'en' ? config.answerCapsuleEn! : config.answerCapsuleEl;
+  const now = new Date();
+  const monthNameEn = now.toLocaleString('en-US', { month: 'long' });
+  const monthNameEl = now.toLocaleString('el-GR', { month: 'long' });
+  const year = now.getFullYear();
+  const resolveTokens = (text: string): string =>
+    text
+      .replace(/\{\{MONTH_YEAR\}\}/g, `${monthNameEn} ${year}`)
+      .replace(/\{\{MONTH\}\}/g, locale === 'en' ? monthNameEn : monthNameEl);
+  const answerCapsule = resolveTokens(rawCapsule);
+  const capsuleHtml = `<section class="hub-answer-capsule">
+  <p class="answer-capsule-text">${answerCapsule}</p>
+  <p class="hub-stats">${filteredEvents.length} ${t.hubEventCount}</p>
+</section>`;
+  const preFilterBarContent = (categoryNav || '') + capsuleHtml;
+
+  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale, undefined, preFilterBarContent);
 
   let html = baseHtml;
 
@@ -322,20 +344,8 @@ export function renderHubPage(
   // (2026-05-14 canonical-to-root posture). Post-render regex-patch removed.
 
   // Override page title and description with hub-specific values
-  const hubTitleText = locale === 'en' ? config.titleEn : config.titleEl;
-  const rawCapsule = locale === 'en' ? config.answerCapsuleEn! : config.answerCapsuleEl;
-
-  // Dynamic month/year substitution for time-based hubs (e.g. this-month)
-  const now = new Date();
-  const monthNameEn = now.toLocaleString('en-US', { month: 'long' });
-  const monthNameEl = now.toLocaleString('el-GR', { month: 'long' });
-  const year = now.getFullYear();
-  const resolveTokens = (text: string): string =>
-    text
-      .replace(/\{\{MONTH_YEAR\}\}/g, `${monthNameEn} ${year}`)
-      .replace(/\{\{MONTH\}\}/g, locale === 'en' ? monthNameEn : monthNameEl);
-
-  const answerCapsule = resolveTokens(rawCapsule);
+  // (hubTitleText, rawCapsule, resolveTokens, answerCapsule are defined above
+  // the renderPage call where they're consumed for preFilterBarContent composition).
   const hubTitle = `${hubTitleText} | agent-athens`;
   const hubDescription = locale === 'en'
     ? (config.metaDescriptionEn ? resolveTokens(config.metaDescriptionEn).substring(0, 155) : answerCapsule.substring(0, 155))
@@ -389,18 +399,10 @@ export function renderHubPage(
     html = html.replace('</head>', `  ${hreflangHtml}\n</head>`);
   }
 
-  // Part 1: Answer Capsule (inject after </header>)
-  const capsuleHtml = `<section class="hub-answer-capsule">
-  <p class="answer-capsule-text">${answerCapsule}</p>
-  <p class="hub-stats">${filteredEvents.length} ${t.hubEventCount}</p>
-</section>`;
-
-  // If there's a category nav, inject it then the capsule
-  if (categoryNav) {
-    html = html.replace('</header>', `</header>\n${categoryNav}\n${capsuleHtml}`);
-  } else {
-    html = html.replace('</header>', `</header>\n${capsuleHtml}`);
-  }
+  // Part 1: Answer Capsule + category-nav now composed via preFilterBarContent
+  // and threaded into renderPage above (Path D, 2026-05-19). The old post-render
+  // html.replace('</header>', …) block was removed — see audit
+  // specs/capsule-drift-audit-2026-05-18.md for the wrong-anchor diagnosis.
 
   // Part 2: Comparison Table (inject after <main id="main-content">)
   const sortedEvents = [...filteredEvents].sort((a, b) =>

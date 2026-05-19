@@ -72,14 +72,12 @@ export function renderCategoryPage(
     filters: { type: category.filter.type as any }
   };
 
-  // Use the main page renderer for consistency
-  const html = renderPage(metadata, filteredEvents);
-
-  // Add navigation to other categories
+  // Build category nav and compose via renderPage's preFilterBarHtml slot
+  // (Path D, 2026-05-19). Lands inside .page-container, after page-header.
+  // Replaces a prior post-render html.replace('</header>', …) splice that
+  // misanchored to site-header's </header>; see specs/capsule-drift-audit-2026-05-18.md.
   const navHtml = renderCategoryNav(category, allCategories);
-
-  // Insert navigation after header
-  return html.replace('</header>', `</header>\n${navHtml}`);
+  return renderPage(metadata, filteredEvents, undefined, undefined, 'el', undefined, navHtml);
 }
 
 /**

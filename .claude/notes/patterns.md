@@ -4936,6 +4936,17 @@ Pre-edit sanity runs (where the test is expected to **fail** before the fix land
 
 **Anchor case:** QW-A (2026-05-14). The pre-edit run revealed the false-pass; correcting the regex from media-query-anchored to `flex-direction: row`-anchored produced an honest red→green transition.
 
+**Instance count: 3** (updated 2026-05-19, Session 1 Path D):
+1. **QW-A test regex (2026-05-14)** — media-query-anchored test caught pre-deploy by pre-edit sanity run.
+2. **Capsule injection regex (`src/generators/hub-page.ts:400-402`, audit 2026-05-18, fixed 2026-05-19)** — `html.replace('</header>', …)` matched site-header's `</header>`, not page-header's. Production-shipped for an unknown duration before audit catch. Closed via composition through new `preFilterBarHtml` slot in renderPage (Path D).
+3. **Category-page nav regex (`src/templates/category-page.ts:82`, fixed 2026-05-19)** — identical `html.replace('</header>', …)` pattern. Live in production for non-colliding category slugs (clubs, rebetiko, etc.). Closed in same session as instance 2 via same fix shape.
+
+**Two of three production-shipped before catch** (instances 2 + 3). Only instance 1 was caught at TDD time. The TDD discipline ("pre-edit run must FAIL on differentiating assertions") works only for code written under that discipline; pre-existing production code with the same defect class slips through unless audited explicitly.
+
+**Mitigation (refined):** prefer **composition** over post-render string-replace. If string-replace is unavoidable, anchor on a **uniquely identifying property** — an id, a class with a hash, or a value distinctive to the rule's body. **Never a bare tag name** that may appear multiple times in the document. The compose-via-renderPage-slot pattern (used by homepage and now by hubs + category pages) eliminates this defect class entirely at the source.
+
+**Still-open Pattern R instance:** `src/generators/hub-page.ts:664` — overflow back nav uses the same `html.replace('</header>', …)` pattern. Same fix shape applies (compose via preFilterBarHtml slot or threading); deferred to follow-up session.
+
 ### Pattern S — Dual-emission count signature for schema-defect diagnosis
 
 **Category:** Diagnostics / SEO-Schema
@@ -4967,3 +4978,25 @@ Current instance: venue address + geo data lives at three surfaces:
 Brief authoring checklist: when modifying data that exists in multiple surfaces, explicitly enumerate the write surfaces and the propagation paths between them. Don't assume the data lives where the brief expects it; verify via `ls`/`grep`/`jq` before scoping the work.
 
 Promoted from mistakes.md after 4th instance of forward-looking-spec-scoping shape (S103 `ticket_url_resolved`, S138-pre Editorial config-payload omission, S140 venues-master.json, plus one earlier).
+
+### Pattern T — Audit self-disclosure not enforced downstream (rule class)
+
+**Category:** Process / Specs / Briefs
+**Rule class first documented:** 2026-05-19 (Session 1 Path D)
+**Instance count:** 2
+
+When an audit, decision, or upstream document **discloses a constraint inline**, downstream consumers (specs, briefs, executors) must **propagate that constraint** into their own scope. The rule class fails when the downstream document references the source audit but doesn't carry forward the audit's self-disclosed conditions — readers cite the audit's TL;DR but skip the details, and the unenforced constraint silently rots.
+
+**Instance 1 — Q7 fix-rot guard (2026-05-13, Design Navigator process pattern).**
+Bidirectional cross-references between `patterns.md` and `decisions.md` are non-optional. Without them, related entries rot independently — a pattern updates and its decision-side counterpart doesn't, or vice versa. The constraint was self-disclosed by Design Navigator's 2026-05-13 process-pattern review; downstream enforcement requires every cross-referenced write to update both sides in the same session. See `patterns.md:4107`, `:4140`, `:4521` and `decisions.md:3458`, `:3478`, `:3494` for the live cross-reference machinery.
+
+**Instance 2 — Audit-flagged viewport constraints (2026-05-19, Session 1 Path D).**
+**Measurements taken at non-target viewport widths require re-measurement at the target viewport before entering specs. Audit-flagged viewport constraints are not advisory.** The capsule-drift audit (`specs/capsule-drift-audit-2026-05-18.md` §3) anchored its rendered-height measurements to iPhone SE 375×667 — the target mobile viewport. A measurement taken at a different viewport (e.g., a desktop snapshot at 1024px+) does not transfer to the target viewport without re-measurement. The audit self-disclosed the viewport in §3 ("Above-fold math: ... iPhone SE viewport height 667px"); downstream specs and briefs must re-measure at this width when consuming the audit's height claims, not assume the numbers transfer.
+
+**Shape of the rule class:** the source document discloses a constraint inline (cross-reference rule; viewport spec). Downstream consumers reference the source but trust its conclusions without carrying the constraint forward into their own scope. The shape generalizes beyond patterns.md/decisions.md and beyond viewport — any audit-derived constraint (date scope, sample size, measurement protocol, environment assumption) is at risk if the consuming document doesn't restate it.
+
+**Mitigation (uniform across instances):** when invoking an audit's findings in a downstream document, **restate the audit's self-disclosed constraints inline** in the consuming document. Don't rely on the reader following the citation. Cheap audit at brief-review time: every audit reference should be followed by a one-line "audit constraints: …" restating the audit's quantitative or scope-bounding conditions.
+
+**Detection:** a spec or brief that references an audit (`See specs/X.md`) but doesn't restate the audit's quantitative or viewport / sample / scope constraints inline is suspect. Cross-reference machinery (Q7 fix-rot guard) catches one sub-class; viewport-constraint restatement catches another; the rule class catches both.
+
+**When to apply:** any new spec, brief, or session document that references an existing audit, decision, or pattern. Make the source's constraints visible in the consuming document — citation is necessary but not sufficient.
