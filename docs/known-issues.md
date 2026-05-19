@@ -664,6 +664,24 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Fix plan:** GEO Strategist appends a brief paragraph to `decisions.md` acknowledging the sample basis for the Tier-1 promotion (n=9 exhibitions, directional-signal vs. statistically-sufficient framing).
 **Status:** Open — low-stakes documentation hygiene.
 
+### iOS Mobile Horizontal Scroll / Touch Jitter on Hero Picks Carousel
+**Severity:** 🟢 Resolved
+**First seen:** Christos report 2026-05-13 (iPhone Chrome + Brave).
+**Symptoms:** Horizontal sweep on homepage produced document-level drift; carousel rubber-band leaked into body scroll on iOS WebKit. Diagonal swipes registered as "jitter" / "resistance" — WebKit gesture-axis-arbitration ambiguity surfacing because the container didn't declare its intended scroll axis.
+**Root cause:** `.hero-picks` (mobile carousel, `src/styles/design-system.css:2081`) had `overflow-x: auto` + `-webkit-overflow-scrolling: touch` with no `overscroll-behavior-x` and no `touch-action`. Compounding: no document-level horizontal-overflow guard on `html`/`body`, so the rubber-band had a parent scroll container to leak into.
+**Resolution:**
+- **QW-A (2026-05-14):** `overscroll-behavior-x: contain` + `touch-action: pan-x` added to the `.hero-picks` mobile rule. Contains the rubber-band and disambiguates the gesture axis.
+- **QW-B (2026-05-14):** `html, body { overflow-x: clip }` added as document-level backstop. `clip` over `hidden` because `clip` preserves `position: sticky` in descendants (see [decisions.md](../.claude/notes/decisions.md) 2026-05-14 entry and [patterns.md](../.claude/notes/patterns.md) "overflow-x: clip vs hidden — choose clip when sticky descendants exist").
+- **Tests:** `tests/build/mobile-scroll-overflow.test.ts` (3 assertions, QW-A); `tests/build/document-overflow-guard.test.ts` (2 assertions, QW-B).
+- **Verified on device:** 2026-05-15, iPhone Chrome + Brave + Safari at 375 / 414 / 430px portrait. Sticky chain intact across `.site-header`, `.filter-bar`, `.date-group-header`, `.hub-comparison-table th`.
+**Sticky-descendants inventory (load-bearing on the `clip`-not-`hidden` choice):**
+- `.site-header` (`src/styles/design-system.css:584`) — `top: 0`; sitewide
+- `.filter-bar` (`:1363`) — `top: 56px`; hub pages
+- `.date-group-header` (`:528`) — `top: 64px`; hub pages with date-grouped lists
+- `.hub-comparison-table th` (`:2561`) — `top: 0`; hub comparison tables
+**Other horizontal-scrolling regions in the codebase** (not yet patched, no current symptom — document-level QW-B currently backstops them; targeted `overscroll-behavior-x` + `touch-action` patches queued for a future preventive maintenance batch): `.filter-bar-scroll` (`:1382`), `.table-scroll-wrapper` (`:2547`).
+**Status:** Fixed (QW-A: commit on 2026-05-14 deploy; QW-B: commit on 2026-05-14 deploy).
+
 ---
 
 ## Patterns to Watch
@@ -839,3 +857,16 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 - **Raw identifiers in data-* attributes, not paths:** When downstream consumers prepend paths (e.g., /saved/ + slug), emitters must store bare IDs, not full hrefs. prepareCardData was returning href "/events/id/" instead of slug "id" → double-prefixed 404 on /saved/ page (Session 92).
 - **Migration IIFEs for localStorage schema changes must be idempotent:** Safe to run on every page load forever. Strips legacy entries, no-ops on clean state. Include in any page that reads localStorage keys with changed formats (Session 92).
 - **/en/ redirect (302) > fake English page with Greek content:** Generating an English homepage with Greek event names + lang="en" is worse for hreflang integrity than a 302 to /en/today. Proper English homepage deferred until real translated content exists (Session 92).
+
+---
+
+## 🟡 S140 Bucket C Deferral — 35 Orphan Venues / 60 Events (2026-05-19)
+
+- **Severity:** 🟡 Degrades discovery — 60 events at venues not in `config/athens-venues.json` canonical/variations registry, currently hidden from site emission by `location_status` filter (unverified or problematic). Not GSC-error-affecting (since not emitted), but represents real lost event coverage.
+- **First seen:** S140 Phase 1 (2026-05-19)
+- **Frequency:** 35 venues / 60 events at scope time. Distribution per `specs/s140-scraper-hygiene-followups.md`: `more.com` (12 venues / 21 events) + `residentadvisor` (11/21) + `ticketservices` (8/12) + `athinorama.gr` (5/5) + `meetup` (1/2) + `clubber.gr` (1/1).
+- **Symptoms:** Events scraped into `data/events.db` with `venue_name` values that don't match any `canonical_name` or `variations[]` entry in `config/athens-venues.json`. `auto-verify-venues.ts` flags these as `unverified`; one ("TBA") is `problematic`. Three sub-classes by domain knowledge: (a) genuinely non-Athens — Larisa, Corfu, Heraklion, Tripoli, Farsala, Thessaloniki — ~10 venues / 15 events; (b) likely Athens but unverified — Manko, Ace Hotel, Moxy, Aura, Booze Cooperative, etc. — ~13 venues / 21 events; (c) duplicate canonical pairs/triplets — Vrachon×3, Katrakeio×2, Ioniko×2, TBA×3 — ~12 venues / ~20 events.
+- **Workaround:** None at site-emission time — events are hidden per location filter, which is correct behavior for unverified venues. The cost is invisible-to-users event coverage, not malformed JSON-LD.
+- **Fix plan:** Separate follow-up session combining (a) `auto-verify-venues.ts` diagnostic pass to surface each venue with current event count + sample titles, (b) Editorial Director REJECT/APPROVE rulings on the 35-venue list, (c) registry additions for verified-Athens entries via the S138-pre pattern, (d) location filter updates for verified-non-Athens entries, (e) duplicate-canonical normalization for sub-class (c). Pairs with scraper-hygiene structural mitigations from `specs/s140-scraper-hygiene-followups.md` (registry-lookup-then-write gate, city-filter gate for `ticketservices`, address-in-name parser fix for `clubber.gr`, TBA-prefix rejection, Greek-cities blacklist extension).
+- **Status:** Deferred — S140 Bucket B shipped (`aff3d7141`); Bucket C scheduled post-S141 or post-demo per scope discipline (Editorial-Director-gated work belongs in its own session). Re-evaluate when: (1) GSC inventory next surfaces fresh "Missing field location" errors that trace back to a Bucket-C venue graduating to `verified_athens`; or (2) Editorial bandwidth opens for the 35-venue triage.
+- **Cross-references:** `specs/s140-classification.md` (full bucket distribution), `specs/s140-scraper-hygiene-followups.md` (source × venue attribution + structural mitigations), commit `aff3d7141` (Bucket B ship).
