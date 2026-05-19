@@ -19,6 +19,7 @@
         "Megaron International Conference Centre"
       ],
       "neighborhood": "Ilisia",
+      "address": "Vassilissis Sofias Avenue & Kokkali 1, Athens 115 21",
       "website": "https://www.megaron.gr",
       "ticketing": {
         "provider": "megaron.gr",
@@ -180,7 +181,8 @@
       "variations": [
         "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyrri",
+      "address": "Leokoriou 6-8, Athens 105 54"
     },
     {
       "canonical_name": "Piraeus Club Academy",
@@ -237,7 +239,8 @@
         "Temple Athens",
         "TEMPLE"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Temple, Ιάκχου"
     },
     {
       "canonical_name": "AN Club",
@@ -277,7 +280,8 @@
         "Two Ten",
         "2ten, Ερμού 135, Θησείο, Αθήνα, Greece"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Ermou 135, Athina 105 55"
     },
     {
       "canonical_name": "Bios Ρομάντσο",
@@ -288,7 +292,8 @@
         "WAVVES Bios Ρομαντσο",
         "Bios Romantso"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyrri",
+      "address": "Anaxagora 3, Athina 105 52"
     },
     {
       "canonical_name": "Bolivar",
@@ -297,14 +302,16 @@
         "Bolivar Beach Bar",
         "Bolivar, Ακτή Ηλίου, Άλιμος, Αθήνα, Greece"
       ],
-      "neighborhood": "Alimos"
+      "neighborhood": "Alimos",
+      "address": "Leoforos Poseidonos, Alimos 174 55"
     },
     {
       "canonical_name": "Burger Disco Club",
       "variations": [
         "Burger Disco Club, Νίκης 11, Σύνταγμα, Αθήνα, 10557, Greece"
       ],
-      "neighborhood": "Syntagma"
+      "neighborhood": "Syntagma",
+      "address": "Nikis 11, Downtown 105 57, Greece"
     },
     {
       "canonical_name": "Doors",
@@ -336,6 +343,7 @@
         "HalfNote"
       ],
       "neighborhood": "Mets",
+      "address": "17 Trivonianou Street, Athens 116 36",
       "website": "https://www.halfnote.gr",
       "ticketing": {
         "provider": "halfnote.gr",
@@ -347,7 +355,8 @@
       "variations": [
         "IT Athens, Σολωμού 30 &amp; Μπόταση 9, Εξάρχεια, Αθήνα, Greece"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Solomou 30 & Botasi 9, Athens 106 82"
     },
     {
       "canonical_name": "N.A.O.S.",
@@ -681,7 +690,8 @@
     {
       "canonical_name": "SMUT Athens",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Vatsaxi 4, Athens 104 38"
     },
     {
       "canonical_name": "Oddity Club",
@@ -875,7 +885,8 @@
     {
       "canonical_name": "B side Athens",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Μπη Σάιντ, Μαυροκορδάτου"
     },
     {
       "canonical_name": "Athens Conservatoire - Ωδείον Αθηνών",
@@ -1087,7 +1098,8 @@
     {
       "canonical_name": "Couleur Locale",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Couleur Locale, Νορμανού"
     },
     {
       "canonical_name": "Concert #1 Baumstrasse",
@@ -1233,7 +1245,8 @@
       "variations": [
         "Plyfa"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Korytsas 39, Athens 104 47"
     },
     {
       "canonical_name": "Σταθμός Θέατρο",
@@ -1534,7 +1547,8 @@
       "variations": [
         "DEATH DISCO"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Ogygou 16, Psyrri, Athens 105 54"
     },
     {
       "canonical_name": "HolyWood Stage",
@@ -2440,7 +2454,8 @@
       "variations": [
         "GaziView"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Iakchou 22, Athina 118 54"
     },
     {
       "canonical_name": "Θέατρο Μικρό Χορν",
@@ -2496,7 +2511,8 @@
         "Island",
         "Island Club"
       ],
-      "neighborhood": "Vouliagmeni"
+      "neighborhood": "Vouliagmeni",
+      "address": "3 Vasileos Georgiou A, Pl. Sintagmatos Str"
     },
     {
       "canonical_name": "Piree",
