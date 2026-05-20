@@ -4882,6 +4882,14 @@ done
 
 **Anchor case:** S142 (2026-05-18), commit `c9ae3b53f`. Applied at `scripts/daily-automated.sh:534-617`. Real-world verification: 1 manual unsalt deploy (`6a0a541aa93c71142d8aa653`) + 1 launchctl-triggered deploy (`6a0a5cf2db360d2fe10bfff4`), both state=ready, no retry needed. The retry gate is insurance for the rare silent-rollback case (the May-14 incident), not the common path.
 
+**Interactive-CLI variant (Session 2b, 2026-05-20):** The script shape above is for `daily-automated.sh`. When the CLI is invoked **interactively** (an executor running `netlify deploy --prod --dir=dist` directly), the same exit-code-vs-platform-state divergence applies but the structured `--json` + state-poll machinery isn't present. Session 2b's first deploy returned exit code 0 from the CLI but the server-side deploy state was `error` / "Deploy canceled" (likely an upload interruption — the unique deploy URL `6a0d79fb5f8bfc9101d919a1--agentathens.netlify.app` was assigned but the deploy was not promoted). The executor caught it only because the **production live-CSS curl verification step** showed the old content still being served (CDN cache age 4756s on a path that should have been freshly invalidated by a successful deploy). Retry without any local change succeeded (`6a0d7cae68ed65a53443b00b`, state=ready).
+
+**Interactive-CLI verification protocol (Session 2b discipline):** After any interactive `netlify deploy --prod`, always (1) verify the live URL serves the new content via `curl -s` (not `curl -sf`, see below) against a known-changed asset; (2) if curl returns the OLD content with a `cache-status: hit` and high `age`, the deploy did NOT successfully invalidate — check `netlify api listSiteDeploys --data '{"site_id":"…","per_page":3}'` for state; (3) if `state=error` with `error_message="Deploy canceled"`, retry the deploy (the canceled case is retry-safe; the content wasn't rejected, the upload was interrupted).
+
+**Two operational gotchas adjacent to this pattern (Session 2b):**
+- **CDN cache-bypass via `?cb=$(date +%s)` query param does NOT bypass Netlify's edge cache.** Netlify edges key cached objects path-only by default — query strings are stripped from the cache key. Reliable cache-bypass for diagnostic curls: use the **unique deploy-preview URL** (returned by the CLI on success, e.g., `6a0d7cae68ed65a53443b00b--agentathens.netlify.app`), not query-param games on the production domain. For the production domain, the only real invalidation is the deploy's publish-time edge purge.
+- **`curl -sf` silently swallows non-200 responses.** `-f` causes curl to fail (exit non-zero, empty stdout) on any HTTP status ≥ 400 without printing the response body, which during diagnostic checks hides cache misses vs. genuine 404s vs. error pages. Use plain `curl -s` for diagnostics — accept the slightly noisier output to surface the actual response and status code. Reserve `-sf` for cases where you specifically want a silent fail on error and the body content is irrelevant (e.g., health-check exit-code probes).
+
 ### Pattern P — iOS `overscroll-behavior-x: contain` is the canonical rubber-band leak guard
 
 **Category:** CSS / Mobile / iOS WebKit
@@ -4891,10 +4899,13 @@ Any `overflow-x: auto` or `overflow-x: scroll` container on iOS will, by default
 
 **Where this applies in our codebase today:**
 - `.hero-picks` (`src/styles/design-system.css:2081`) — fixed 2026-05-14 (QW-A).
-- `.filter-bar-scroll` (`:1382`) — not yet patched, no current symptom. Backstopped by QW-B for now.
-- `.table-scroll-wrapper` (`:2547`) — not yet patched, no current symptom. Backstopped by QW-B for now.
+- `.filter-bar-scroll` (`:1382`) — fixed 2026-05-20 (Session 1.5, on-device complaint surfaced after Path D shipped). Both declarations at `:1389-1390`.
+- `.category-nav` (`:1473` after Session 2b extraction; was inline in `src/templates/category-page.ts` until 2026-05-20) — fixed 2026-05-20 (Session 1.5 added guards inline; Session 2b extracted to CSS file alongside `.filter-pill` and carried the guards through).
+- `.table-scroll-wrapper` (`:2547`) — not yet patched, no current symptom; only manifests on comparison-table touch. Backstopped by QW-B for now. Queued for a future preventive maintenance batch.
 
-Targeted fixes for the latter two are queued for a future preventive maintenance batch — document-level QW-B (`html, body { overflow-x: clip }`, see Pattern Q below) currently catches anything that leaks, but it's a backstop, not a substitute. Container-level declarations are still the correct primary fix because they also resolve the gesture-axis ambiguity that QW-B does not address.
+**Lesson reinforced across three fixes (QW-A → Session 1.5 → Session 2b extraction):** ANY `overflow-x: auto`/`scroll` container on iOS leaks rubber-band to the parent unless guarded. Audit new scroll containers for this **at creation time**, not after on-device complaints. The on-device complaint is a costly signal — Christos's filter-bar/category-nav report came 5 days after QW-A shipped and was the same defect class scoped out of QW-A because "not on homepage." If the audit at QW-A had enumerated ALL horizontal-scroll containers (not just the homepage one), the 1.5 fix would have shipped with QW-A.
+
+Document-level QW-B (`html, body { overflow-x: clip }`, see Pattern Q below) currently catches anything that leaks, but it's a backstop, not a substitute. Container-level declarations are still the correct primary fix because they also resolve the gesture-axis ambiguity (the `touch-action: pan-x` half of the pair) that QW-B does not address.
 
 **When to reach for it:** any time you add or audit a horizontal-scrolling region on a page that will be touched on iOS. Add both declarations together (`overscroll-behavior-x: contain` + `touch-action: pan-x`) — they address two related but distinct WebKit behaviors and the cost of adding both is one line each.
 
@@ -4983,7 +4994,7 @@ Promoted from mistakes.md after 4th instance of forward-looking-spec-scoping sha
 
 **Category:** Process / Specs / Briefs
 **Rule class first documented:** 2026-05-19 (Session 1 Path D)
-**Instance count:** 2
+**Instance count:** 4 (extended 2026-05-20 to cover the generalized "diagnose-from-source-not-output" rule)
 
 When an audit, decision, or upstream document **discloses a constraint inline**, downstream consumers (specs, briefs, executors) must **propagate that constraint** into their own scope. The rule class fails when the downstream document references the source audit but doesn't carry forward the audit's self-disclosed conditions — readers cite the audit's TL;DR but skip the details, and the unenforced constraint silently rots.
 
@@ -5000,3 +5011,77 @@ Bidirectional cross-references between `patterns.md` and `decisions.md` are non-
 **Detection:** a spec or brief that references an audit (`See specs/X.md`) but doesn't restate the audit's quantitative or viewport / sample / scope constraints inline is suspect. Cross-reference machinery (Q7 fix-rot guard) catches one sub-class; viewport-constraint restatement catches another; the rule class catches both.
 
 **When to apply:** any new spec, brief, or session document that references an existing audit, decision, or pattern. Make the source's constraints visible in the consuming document — citation is necessary but not sufficient.
+
+**Instance 3 — 595px capsule height: a measurement taken at the wrong viewport entered a spec as the right one (2026-05-18).**
+A capsule rendered-height measurement of 595px was taken at a 199px-wide viewport (a Chrome extension panel confound, not the iPhone SE target). It entered Design Navigator's spec as if it were the 375px figure. Re-measurement at the true 375px viewport yielded 316px — a 47% over-estimate. The audit had self-disclosed iPhone SE 375×667 as the target viewport (instance 2 above is the audit-constraint version of this rule); the spec consumed the audit's narrative but the snapshot it used to derive the number wasn't at the target condition. Diagnose-from-rendered-output failure mode: the measurement is "from the output," but only correct if the output was rendered under the target condition.
+
+**Instance 4 — Category-nav "circles": a screenshot drove a diagnosis that source disproved (2026-05-20).**
+Design Navigator diagnosed the category-nav pills as circles from a rendered screenshot on `/concerts`, and bundled a spec for "circles → capsules" rewrite (including transparent bg + 1px border + `aria-current="page"` markup migration as a coupled visual restyle). Production source showed the pills were already 20px-radius capsules — the actual bug was missing `flex: 0 0 auto` + `white-space: nowrap` on `.category-nav-item`. Two-property fix. The unruled visual restyle was bundled with the bug fix justified by the wrong diagnosis; Dev Planner refused to ship it, routed it back to DN, who withdrew it on re-ruling (failed Receding Interface Test — the restyle would have made the category-nav read like the filter bar, contradicting that they're distinct controls).
+
+**Generalized rule (covers all 4 instances + the viewport-measurement guard):**
+**Any premise that prescribes changing existing code — whether a Dev Planner brief or a specialist spec — must be grounded against the actual production source (the rule, the function, the file, the measurement at the target condition) BEFORE the brief/spec is finalized.** Never inferred from:
+- Rendered output / screenshots (instance 4)
+- An audit's snapshot taken at a non-target condition (instance 3)
+- Prior session documents or another agent's prior claim (instance 2: viewport restatement; the constraint was self-disclosed but downstream consumers trusted the narrative without restating it)
+- A cross-reference rule that wasn't enforced bidirectionally (instance 1: Q7 fix-rot guard — patterns.md and decisions.md must both update in the same session, or one rots independently of the other)
+
+Screenshots and audits are snapshots of OUTPUT; the source is the truth. Every premise that says "X is the case" about existing code must be verifiable against the file/measurement at the target condition.
+
+**Structural mitigation (Dev Planner practice change, 2026-05-20):**
+Briefs must stop **asserting** structural facts ("the pills are circles," "X is at line N," "homepage emits first-child-of-main") in their problem-framing. Instead, briefs must instruct the executor to **establish** these facts in an explicit recon step and report, then act on what's found. A brief that asserts a fact can be wrong (and silently propagate the wrongness into the executor's scope); a brief that says "locate X and report its current state before editing" cannot be wrong about X because it doesn't claim to know.
+
+**All 4 instances were caught at the executor's recon step**, not at brief-write time — the verify-assumptions mitigation fired late and cost a recon round each time. Moving the grounding to **brief-write time** (or removing the assertion entirely from the brief) is the structural fix. Detection at brief-write time: any sentence in a brief that says "the current code does X" must be paired with a source citation (file:line) that was verified at brief-write, or rewritten as "locate the current shape of X and report."
+
+**Cost ladder of this rule class (highest blast radius last):**
+- Instance 1: rotted bidirectional references → silent doc drift, caught only on cross-read
+- Instance 2: audit viewport constraint not restated → spec reasoned with a constraint that was correct upstream but mute downstream
+- Instance 3: 47% measurement over-estimate at wrong viewport → would have shipped if executor hadn't re-measured at recon
+- Instance 4: bundled visual restyle on top of misdiagnosed bug fix → would have shipped a permanent design change to 2,400+ pages days before demo, justified by the wrong diagnosis, if Dev Planner hadn't refused
+
+The trend is upward — each instance has higher blast radius if it slips. The structural mitigation (recon-first briefs, not assert-first briefs) is the only one that scales because it doesn't depend on the executor catching it.
+
+## Schema.org type-mapping tables — allowlist coupling, friction-as-feature
+
+**Rule:** Any module-level `Record<string, string>` (or similar) mapping internal categories to Schema.org `@type` strings MUST be coupled to a **vendored static allowlist** in its colocated test file. Every value of the map is asserted to be in the allowlist; a permanent negative-control assertion locks the historical defect shape (the bad value the allowlist would have caught). The allowlist is a literal `Set` declared in the test — **no network fetch** to schema.org, no live validator.schema.org call.
+
+Two principles, both load-bearing:
+
+1. **Build-as-invariant.** Tests must run offline (Bun sandboxes, CI runners that may not have egress). A live schema.org lookup at test time fails flaky-by-construction for reasons unrelated to the actual invariant. The allowlist is deterministic.
+2. **Friction-as-feature.** Adding a new mapping value requires a deliberate one-line allowlist update — the explicit human checkpoint that catches the next "is this a real Schema.org type?" miss. The whole S139-fix-2 defect happened because someone added `ExhibitionCenter` to `VENUE_TYPE_MAP` without checking it was real. The allowlist makes that check mandatory; it cannot be bypassed silently.
+
+**Negative-control discipline.** The historical defect value must remain in the test permanently as a `expect(allowlist.has('BadValue')).toBe(false)` assertion. This proves the test catches the **class** of defect, not just passes the current corpus. Without the negative control, a future refactor could broaden the allowlist in a way that allows the original bad value back in — the negative control fails loudly if that happens.
+
+**Canonical case:** `src/enrichment/__tests__/quality-gates.test.ts` → `describe('VENUE_TYPE_MAP — Schema.org type validity (S139-fix-2)')`. Seeded with `MusicVenue`, `PerformingArtsTheater`, `MovieTheater`, `EventVenue`, `Museum`, `ArtGallery`, `Place`. Negative control: `'ExhibitionCenter'`. Implicit-fallback lock: `'EventVenue'` (the `|| 'EventVenue'` fallback used at both call sites in `schema-graph-builders.ts:52` and `event-page.ts:167`).
+
+**Where this pattern applies:**
+- `VENUE_TYPE_MAP` (`src/enrichment/quality-gates.ts:858`) — venue location types ✓ coupled S139-fix-2.
+- `SCHEMA_TYPE_MAP` (sibling export in `quality-gates.ts`) — event-type → Schema.org type mapping. NOT yet coupled; same risk class. **Add coupling next time `SCHEMA_TYPE_MAP` changes** (carrying the pattern forward without a dedicated session is more important than a one-off prophylactic pass).
+- Any future type-mapping table — coupling required as part of the table's introduction, not as a follow-up.
+
+**Anti-pattern:** "the values are obvious / well-known Schema.org types, the test would be overkill." That's the exact reasoning that let `ExhibitionCenter` ship — the other map values were obviously correct, so the map looked obviously correct, and no one checked the one that wasn't.
+
+**Reference:** Strategist 2026-05-20 ruling (S139-fix-2). `docs/schema-coverage-manifest.md` discipline section codifies this rule project-wide.
+
+## Schema changes require validator.schema.org gating on every affected page class
+
+**Rule (elevated from session lesson to process invariant, 2026-05-20):** No Schema.org-affecting change ships to production without browser-checking **every affected page class** at https://validator.schema.org — homepage + hub + event-detail + venue + DataFeed as applicable, plus one sample of the **densest variant** within each class (densest-exhibition hub if the change touches exhibition typing, densest-paid hub if it touches Offer logic, etc.).
+
+**Why:** the in-build validator (`src/validators/schema-completeness.ts` + `validateMicrodata`) is a **structural-presence checker**, not a Schema.org **vocabulary / property-validity checker**. It asks "does field X exist?" and "is value Y a non-empty string?" — never "is type X a real Schema.org type?" or "does field Y belong on this entity?" Every external-caught defect this sprint (S137 organizer, S139 Stage 5 @graph-flatten, S139-fix-1 nested-Offer-price, S139-fix-2 map-value-vocabulary — see `mistakes.md` → "Validator-coverage gap") was a vocabulary-validity miss that the in-build validator was structurally blind to.
+
+validator.schema.org is the only external check that consistently catches this drift class:
+- **RRT (Google Rich Results Test)** is useful for entity-detection but has known-ignorable `@id`-resolution artifacts on `@graph` envelopes (S139 mistakes.md note); flags valid markup as broken, passes invalid markup as long as the entity is detectable.
+- **GSC reports** are useful for production-corpus surveys but arrive on a multi-day lag — too slow as a deploy-gate.
+- **validator.schema.org** is fast, accurate, non-cacheable, and doesn't carry the parser-literalism of RRT. Use it as the gate.
+
+**Constructive complement (the discipline part):** each external-caught defect MUST be paired with an **internal** check added in the same fix commit. The internal check can be:
+- A new FAIL rule in the relevant validator function (S139-fix-1: "price OR priceSpecification required").
+- A vendored static allowlist coupled to a type-mapping table (S139-fix-2: `VALID_SCHEMA_VENUE_TYPES`).
+- A new coverage-manifest entry registering an emission surface previously uncovered (S139-fix-1: ListItem Offer surface in `docs/schema-coverage-manifest.md`).
+
+The internal check closes the specific gap so the next regression of that shape fails the build instead of shipping. Without the paired internal check, validator.schema.org becomes a permanent crutch — catching the same class of defect at deploy time instead of at build time. The gap between in-build and external validation should narrow over time as each external catch is converted to an internal check.
+
+**Anti-pattern:** "validator.schema.org passed, ship it." That's correct as a deploy-gate but incomplete as a discipline. The next deploy with a different defect-shape will fail the gate again unless the internal coverage caught up.
+
+**Densest-variant sub-rule:** when the gate samples N pages of a page class, prefer the densest variant (most events, longest ItemList, most populated entities). A sparse-page pass + dense-page fail is a real failure mode — the rule that validator.schema.org caught happens to fire on a property that sparse pages don't emit. S139-fix-1's `concerts.html` (densest-paid hub) and S139-fix-2's `exhibitions.html` (densest-exhibition hub) were both deliberate densest-variant picks for this reason.
+
+**Reference:** Strategist 2026-05-20 ruling (S139-fix-2). `mistakes.md` → "Validator-coverage gap" cluster entry documents the four-instance evidence base.

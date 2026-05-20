@@ -727,3 +727,49 @@ Lesson: distinguish "field exists in some emitter and needs migration" from
 "field is absent entirely and needs new emission code." Brief authoring 
 should grep for actual emission presence, not assume from validator 
 references or session-log mentions.
+
+---
+
+## Diagnosing a defect from rendered appearance instead of source (4x this sprint)
+
+**Sessions:** S105 arc (2026-05-14 → 2026-05-20)
+
+Four times this sprint a defect or spec premise was diagnosed from rendered output (screenshot, audit snapshot taken at the wrong viewport, prior-doc claim) rather than the production source, and was wrong:
+
+1. **Homepage compose pattern** (Path D recon, 2026-05-19). An earlier audit claimed the homepage's first-child-of-main was the capsule; production source showed `preContentHtml` was emitted **outside** `<main>` via a separate slot. The "first-child-of-main" framing was an output-shape inference that source disproved at recon.
+2. **Category-page defect shape** (Path D, 2026-05-19). Asserted "same-as-hub" without inspection — turned out structurally same, but the assertion was unverified luck, not source-grounded reasoning. (A near-miss in this list, but the methodology was identical to instances 3 and 4.)
+3. **595px capsule height** (2026-05-18). A measurement taken at a 199px-wide viewport (Chrome extension panel confound) entered Design Navigator's spec as if it were the 375px iPhone SE figure. Re-measurement at the true 375px yielded 316px — a 47% over-estimate that would have shipped if the executor hadn't re-measured at recon.
+4. **Category-nav "circles"** (2026-05-20). Design Navigator diagnosed circular pills from a rendered screenshot; production source showed 20px-radius capsules already. Real bug was missing `flex: 0 0 auto` + `white-space: nowrap` (compression + wrap, not shape). DN also bundled an **unruled visual restyle** (transparent bg + 1px border + `aria-current="page"` migration) on top of the misdiagnosed bug fix — Dev Planner refused to ship it, routed it back to DN, who withdrew the restyle on re-ruling.
+
+**Each was caught at executor recon, not at brief-write time.** Worst was #4 — the bundled restyle would have shipped a permanent design change to 2,400+ pages days before demo if the executor had treated the brief's diagnosis as authoritative. The verify-assumptions guard fired correctly each time, but always **late** — after the brief had already framed the work around the wrong premise. The recon round each time costs ~15-30 min and forces a clarification cycle with the briefing agent.
+
+**Mitigation (uniform across all 4):** see `patterns.md` Pattern T's generalized grounding rule + structural mitigation. Practice change at brief-write time: briefs **establish** structural facts via recon instructions, not **assert** them. Any "the current code does X" sentence in a brief must be paired with a source citation (file:line) verified at brief-write, or rewritten as "locate the current shape of X and report." This moves the grounding from executor-recon (where it currently fires) to brief-write (where it can prevent the misframing entirely).
+
+**Why grouped as one entry, not four:** they're four instances of the same rule-class mistake — diagnose-from-output-instead-of-source. Listing them separately would obscure the shared mechanism. Pattern T is the rule class; this entry is the cross-instance accounting that justifies the structural mitigation.
+
+---
+
+## Validator-coverage gap — in-build validator checks presence, not Schema.org vocabulary validity (4x this sprint)
+
+**Sessions:** S137 (organizer) / S139 Stage 5 (@graph-flatten) / S139-fix-1 (nested-Offer-price) / S139-fix-2 (map-value-vocabulary). Cluster spans 2026-05-19 → 2026-05-20.
+
+Four times this sprint a Schema.org defect shipped through a clean in-build validator and was caught externally (validator.schema.org or GSC export):
+
+1. **S137 — organizer field gap.** EDP pages emit Event-shaped data through JSON-LD + microdata. The in-build validator checked `name`, `startDate`, `location.name`, etc. — but not `organizer` presence. GSC export flagged 256 instances. Two emission surfaces both lacked the field; the validator had no rule for it.
+2. **S139 Stage 5 — @graph-flatten.** Pre-Stage-1 fix: `extractAllJsonLd` iterated all `<script>` blocks but did NOT unwrap `@graph` envelopes. When the only HTML block was the envelope (post-migration), the validator fell back to validating the envelope itself as an Event entity → cascade of "missing field" errors (4153 failures observed pre-fix). The validator's presence checks were structurally correct but it couldn't reach the entities. Fix: `flattenGraph()` + `resolveSamePageReferences()` at the validator's extraction boundary, absorbed into Stage 1 commit `32bac9a0c`.
+3. **S139-fix-1 — nested-Offer-price.** validator.schema.org rejected 15 ListItem Offer instances with `priceCurrency` + `availability` but no `price`. The in-build emitted-Offer-shape rule covered event-page surface (top-level `Event.offers`) but never walked `CollectionPage.mainEntity.itemListElement[].item.offers`. Worse: the "price OR priceSpecification required" rule didn't exist anywhere — the existing rule validated price *format* if present, not price *presence*. Fix: extract `validateOfferShape` shared helper + extend `validateHubSchema` to walk ListItem tree + add the missing presence rule. Commit `7109ff809`.
+4. **S139-fix-2 — VENUE_TYPE_MAP type vocabulary.** validator.schema.org rejected `ExhibitionCenter` (not a Schema.org type) on three production surfaces. The single-source-of-truth map at `quality-gates.ts:862` had a fabricated value; no test asserted map values against the Schema.org vocabulary. The other map values (`MusicVenue`, `PerformingArtsTheater`, `MovieTheater`) happened to be real, masking the gap. Fix: swap to `EventVenue` + vendored static allowlist test asserting every `VENUE_TYPE_MAP` value is a real Schema.org venue type. Commit `b5e875b47`.
+
+### Meta-finding — the shared root
+
+All four share **one** root: the in-build validator at `src/validators/schema-completeness.ts` (and its `validateMicrodata` sibling) was built as a **structural-presence checker** — does field X exist? is value Y a non-empty string? does block Z parse? It was never built as a Schema.org **vocabulary / property-validity checker** — is type X a real Schema.org type? does field Y belong on this entity? does this `@type` accept this property?
+
+Both checks matter, but they catch different drift classes. Structural-presence catches "we forgot to emit field X." Vocabulary-validity catches "we emitted field X with a value Schema.org's parser will reject." The pattern this sprint: the structural-presence side was hardened progressively; the vocabulary-validity side was untouched. Every external-caught defect this sprint was a vocabulary-validity miss.
+
+### Process invariant (elevated from session lesson)
+
+**validator.schema.org as mandatory deploy-gate for any schema-affecting change is now a proven process invariant**, not a per-session decision. RRT remains useful for entity detection, GSC reports remain useful for production-corpus surveys, but validator.schema.org is the only external check that consistently catches the vocabulary-validity drift class that the in-build validator is structurally blind to. The constructive complement: each external-caught defect should be paired with an **internal** check — a new property-validity FAIL rule, a vocabulary allowlist, or a coverage-manifest entry — so the gap between in-build and external validation progressively closes. See `patterns.md` for the discipline rule.
+
+### Why grouped as one entry, not four
+
+The shared mechanism is the load-bearing institutional knowledge — listing each instance separately would obscure that they're all the same coverage-gap class. The meta-finding (presence vs vocabulary-validity) is what informs every future schema change: when adding a new schema field or type-mapping, ask "is the in-build validator structurally capable of catching the failure mode?" If the answer is "no" (the validator only checks presence, you're adding a vocabulary-validity question), the change requires a new internal check AND a validator.schema.org gate before deploy.

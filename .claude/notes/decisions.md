@@ -4032,3 +4032,95 @@ Infrastructure-prep session before authoring the first user-wide skill (`pre-bri
 **Connects to:**
 - `specs/gsc-schema-defects-2026-05-19-diagnostic.md` — the inaugural application.
 - `patterns.md` — "Pattern B — live HTML JSON-LD probe" (the mechanism); "Pattern S — Dual-emission count signature" (the complementary count-based pre-screen).
+
+## 2026-05-20 — Category-nav: ship minimal flex/nowrap fix, withdraw Design Navigator's bundled restyle
+
+**Context:** Design Navigator's 2026-05-20 v1 category-nav spec bundled three coupled changes justified by a single circle-diagnosis: (1) a bug fix (overflow/overlap on mobile), (2) a visual restyle (transparent bg + 1px border, replacing the `var(--bg-surface)` fill), and (3) a markup migration (`.active` class → `aria-current="page"`). The circle diagnosis itself proved wrong at executor recon — production source showed pills were already 20px-radius capsules; the actual bug was missing `flex: 0 0 auto` + `white-space: nowrap` on `.category-nav-item`. Pattern T instance 4.
+
+**Decision:** Ship only the two-property overflow fix + CSS extraction (inline `<style>` → `src/styles/design-system.css` alongside `.filter-pill`). Withdraw the visual restyle. Decouple the markup migration to Session 2a.
+
+**Reasoning:**
+- **Bug fix should not smuggle an unruled visual change.** The restyle was bundled with the bug fix and presented as part of "the fix." That packaging hid the design decision (transparent bg + border vs. filled bg) under an operational fix. Surfacing the question separately is the only way DN can rule on it on its own merits.
+- **Receding Interface Test (DN's re-ruling, 2026-05-20).** On re-evaluation with correct information (pills aren't circles, the bug is two missing properties), DN ruled the restyle would have made the category-nav read like the filter bar — same visual treatment for two distinct controls. Category-nav switches event-type pages; filter bar applies inline filters within a page. Different controls should read distinct, not unified. The restyle failed this test and was withdrawn — NOT shipped, NOT re-bundled with a future session, simply killed.
+- **aria-current migration is a standalone accessibility win.** It doesn't gate the overflow fix and doesn't depend on the visual restyle. Decoupling to Session 2a lets it stand or fall on its own accessibility merits, with its own test surface (likely a build test that asserts `aria-current="page"` on the current category's pill in built HTML).
+- **Days before demo (Παναθήναια 2026-05-29) is not the time to ship a sitewide visual restyle on a coupled diagnosis.** The category-nav renders at the top of every event-type hub and category page (2,400+ pages). A wrong restyle would have been visible everywhere, immediately. The bug fix alone is low blast radius (two-property addition + a CSS file move); the restyle was high blast radius (visual signature change across the site). Separating them is the right risk profile this close to demo.
+
+**What shipped (Session 2b, 2026-05-20):**
+- `flex: 0 0 auto` + `white-space: nowrap` added to `.category-nav-item`
+- Inline `<style>` block in `src/templates/category-page.ts:102-108` (5 rules: `.category-nav`, `.category-nav-container`, `.category-nav-item`, `:hover`, `.active`) removed
+- Same 5 rules added to `src/styles/design-system.css` immediately after the `.filter-pill` family
+- Session 1.5's `overscroll-behavior-x: contain` + `touch-action: pan-x` guards on `.category-nav` carried through the extraction
+- Background fill `var(--bg-surface)` kept (NOT changed to transparent + border)
+- Active state `.category-nav-item.active` kept (NOT migrated to `aria-current="page"`)
+- Active-state color `color: white` kept (NOT changed to `var(--bg-primary)`)
+
+**Tests:**
+- `tests/build/category-nav-readability.test.ts` (new, 8 assertions: extraction completed + the two new properties present + circle/aspect-ratio/fixed-width guards + overscroll guards intact)
+- `tests/build/scroll-container-overscroll.test.ts` Test 2 migrated from inline-HTML to design-system.css (both tests now single-surface)
+
+**Reversibility:** Trivial — re-bundle the restyle into a future session if DN routes it back with corrected reasoning; the CSS extraction has no rollback cost.
+
+**Connects to:**
+- `patterns.md` — Pattern T (instance 4); Pattern O (Session 2b interactive-CLI deploy verification instance).
+- `docs/known-issues.md` — "Category-Nav Label Overflow / Overlap on Mobile" (the 🟢 Resolved entry).
+- `mistakes.md` — "Diagnosing a defect from rendered appearance instead of source (4x this sprint)."
+
+## 2026-05-20 — Defer category-nav radius token swap
+
+**Context:** `.category-nav-item` hardcodes `border-radius: 20px`. `.filter-pill` (the unified pill family reference at `src/styles/design-system.css:1404-1453`) uses `var(--radius-full)` (= `999px`, defined at line 120 of design-system.css). The two render visually identical at the current pill height (CSS clamps `border-radius` to half the shorter side, so any value ≥ ~17px on a ~33px-tall pill produces fully-rounded capsule ends). Design Navigator's v1 spec proposed swapping the hardcoded value to the token for design-system consistency.
+
+**Decision:** Keep `20px` hardcoded this session. Do NOT swap to `var(--radius-full)`. Flag the token-vs-hardcode inconsistency as a cleanup candidate for a future design-system-consistency pass.
+
+**Reasoning:**
+- **A token swap is a deliberate design-system-consistency decision, not a side effect of an overflow fix.** Bundling it with Session 2b's two-property fix would smuggle a paint-affecting change (even if visually identical at current sizing) under an operational fix. The exact failure mode this sprint was correcting (Pattern T, instance 4 — coupled changes hidden under a bug-fix label).
+- **`--radius-full = 999px` produces a visually identical capsule TODAY, on the current pill dimensions.** The math: CSS clamps `border-radius` to half the shorter side. The pill is ~33px tall (8px+8px padding + 0.9rem line-height ≈ 17px). Half height ≈ 16.5px. Both 20px and 999px exceed that, so both render as a fully-round capsule. But if the pill's font-size, padding, or line-height ever change (a future design tweak), 20px and 999px diverge — 20px stays 20px (a literal half-circle radius until the pill grows past 40px tall), 999px stays "always fully round." That divergence would be a silent visual change at a future, unrelated edit. Hardcoded `20px` is the surprise-proof choice for now.
+- **Rendered-output equivalence is exactly the inference class this sprint failed on four times (Pattern T).** Even though the math is correct (and was verified at session-plan time: `--radius-full` resolves to `999px`, line 120 of design-system.css; both produce fully-round corners on the current pill height), trusting rendered-output equivalence as a swap-justification is the same shape that just failed in instance 4 (DN diagnosed pills as circles from rendered output; source said capsules). Discipline-consistent answer: don't swap; flag for future.
+- **The cleanup is a real candidate, not a non-decision.** `.filter-pill` uses the token; `.category-nav-item` doesn't. The unified pill family should converge on a single radius source (token preferred). But the resolution belongs to a focused design-system-consistency pass that audits all pill family members (`.filter-pill`, `.category-nav-item`, possibly others) together — not to a one-off swap inside an unrelated overflow fix.
+
+**What was deferred (specific items for the future cleanup pass):**
+- Swap `.category-nav-item`'s `border-radius: 20px` to `var(--radius-full)` (or whatever token the cleanup pass canonicalizes).
+- Audit all other pill-family members for hardcoded radii: `grep -nE 'border-radius:\s*\d+px' src/styles/design-system.css` then triage which should use the token.
+- If `--radius-full` is too aggressive a name (it currently means "fully round," not "pill radius"), the cleanup pass may rename or add a `--radius-pill` token. That's a token-naming decision; flagged as part of the same pass.
+
+**Reversibility:** Trivial — the deferred swap is a one-line change when the cleanup pass runs.
+
+**Connects to:**
+- `docs/known-issues.md` — "Category-Nav Label Overflow / Overlap on Mobile" (Cleanup candidate flagged section).
+- `patterns.md` — Pattern T (the diagnose-from-rendered-output rule class; this decision is its conservative-side discipline).
+
+---
+
+## 2026-05-20 — S139-fix Strategist rulings: Offer-shape coupling + type-mapping allowlist
+
+Two rulings on the same day, both fixing pre-existing schema defects surfaced by validator.schema.org after the S139 @graph migration completed and the gate ran for the first time. Rulings paired here because they share a root pattern (validator-coverage-gap on emission/validation-scope drift) and the same coupling shape (each external-caught defect adds an internal check so the gap closes progressively).
+
+### Ruling 1 — S139-fix-1 (price-less ListItem Offer)
+
+**Context:** validator.schema.org rejected 15 ListItem Offer instances across the hub layer. Bare Offer shape (`priceCurrency` + `availability`, no `price`). Pre-existing bug in `page.ts:459-512` Offer construction; extracted verbatim into `schema-graph-builders.ts buildItemListElements` during the S139 stage 3 migration, preserved. Event-page surface already routed through `buildOfferOrOmit` (`src/ticketing/offer-builder.ts:105`) which returns `{ omit: true }` for paid+no-price-amount (lines 171-177); the ListItem path constructed Offer inline, drifted, shipped silently because the build-time validator's emitted-Offer-shape rule covered the event-page surface only.
+
+**Decision:**
+1. **Shape:** omit Offer when `isAccessibleForFree:false` AND no `price.amount`. Schema.org parse-validity floor — bare Offer is malformed.
+2. **Validation coupling (non-negotiable, ships with fix):** extend the emitted-Offer-shape FAIL rule from event-page surface to the CollectionPage→ItemList→item.offers walk in `validateHubSchema`. Add "price OR priceSpecification required" as the explicit FAIL (the missing rule that let 15 instances past the build).
+3. **Path consolidation:** branch (b) — shared builder exists (`buildOfferOrOmit`); ListItem path swaps to it. Full unification, not a local guard. Branch (a) was the fallback if the shared builder hadn't existed — would have been a local omit-guard + Sprint 2.5/3 follow-up to unify. Branch (b) was the right call because the builder was already correct and already used by the event-page surface; the ListItem path was the outlier.
+
+**Recurrence-proofing:** new regression test in `src/validators/__tests__/schema-completeness.test.ts` — `describe('ListItem Offer-shape coupling (S139-fix)')` includes a fixture with the exact pre-fix shape, asserts it FAILs `validateHubSchema`. Plus `validateOfferShape` factored as a shared helper called from both surfaces (event-page Event.offers + hub CollectionPage.ListItem.item.offers). New `docs/schema-coverage-manifest.md` enumerates 6 emission surfaces with their validators and FAIL rules; documents 3 known coverage gaps (homepage validator, venue nested-events walk, DataFeed per-event Offer walk) with severity + follow-up triggers.
+
+**Ship:** commit `7109ff809`, deploy `6a0dacb5cac82b4235fee0f7`. Production diagnostic confirmed 0 OFFER_NO_PRICE across 3 sampled surfaces.
+
+### Ruling 2 — S139-fix-2 (ExhibitionCenter not a Schema.org type)
+
+**Context:** validator.schema.org's next surface check after S139-fix-1 deployed found a second pre-existing defect on event-page + venue + ListItem surfaces (3 production surfaces dispatching through one map). `VENUE_TYPE_MAP['ExhibitionEvent'] === 'ExhibitionCenter'` — but `ExhibitionCenter` is not a Schema.org type. Verified against Schema.org's vocabulary: Thing > Place > CivicStructure has `EventVenue`, `MusicVenue`, `PerformingArtsTheater`, `MovieTheater`, `Museum`, `ArtGallery` — `ExhibitionCenter` genuinely absent.
+
+**Decision:**
+1. **Shape:** swap to `EventVenue` (generic-valid). Defer specific exhibition-venue typing (Museum / ArtGallery) to Sprint 2 Component B (venue registry) where per-venue `schemaType` becomes a database-backed field. Event-type alone can't distinguish Μπενάκη-the-Museum from Τεχνόπολη-the-EventVenue.
+2. **Refinement 1 — keep the entry explicit with a deferral comment:** do NOT drop to the implicit `|| 'EventVenue'` fallback. The line stays explicit with a comment pointing at the future per-venue `schemaType` work. The explicit-with-comment form documents the deliberate generic-hold; a future reader seeing no entry would re-litigate "why not Museum?" or "fix" it with a wrong-specific type.
+3. **Refinement 2 — vendored static allowlist, NOT live schema.org lookup:** the regression test couples `VENUE_TYPE_MAP` values to a literal `Set` declared in the test file. NO network in tests. Build-as-invariant (offline + CI sandbox safe). Friction-as-feature: adding a new mapping requires a deliberate one-line allowlist update — the human checkpoint that catches the next "is this a real Schema.org type?" miss. The whole defect happened because someone added `ExhibitionCenter` without checking; the allowlist makes that check mandatory.
+4. **Permanent negative-control:** assertion that the literal `'ExhibitionCenter'` is NOT in the allowlist. Locks the test against the historical defect — re-introducing the bad value would fail the coverage assertion. Proves the test catches the class of defect, not just passes the current corpus.
+
+**Recurrence-proofing:** new `describe('VENUE_TYPE_MAP — Schema.org type validity (S139-fix-2)')` in `src/enrichment/__tests__/quality-gates.test.ts`. New "Per-Venue schemaType (Museum / ArtGallery)" entry in `docs/current-infrastructure-v2.md` Deliberately Deferred Register with reactivation trigger = Sprint 2 Component B. `docs/schema-coverage-manifest.md` discipline section codifies "every Schema.org type-mapping table must be allowlist-coupled at test time against a vendored static vocabulary."
+
+**Ship:** commit `b5e875b47`, deploy `6a0ddfcb7d32ab25e60ff660`. Production diagnostic confirmed 0 ExhibitionCenter hits across 4 sampled surfaces (homepage + today + exhibitions + the originally-flagged event-detail).
+
+### Shared meta-finding (both rulings)
+
+Both fixes share one root: the in-build validator (`src/validators/schema-completeness.ts`) checks **presence**, not Schema.org **property / type / vocabulary validity**. The validator was a structural-presence checker; the rulings extend it toward vocabulary-validity. validator.schema.org as mandatory deploy-gate is now a **proven process invariant**, not a session-by-session lesson — see `patterns.md` → "Schema changes require validator.schema.org gating on every affected page class." Each external-caught defect adds an internal check so the gap between in-build and external validation progressively closes.
