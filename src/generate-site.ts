@@ -393,6 +393,7 @@ async function main() {
 
   // Bypass generatePage — render directly without filter bar (no allEvents)
   const homeMetadata = buildPageMetadata({}, homepageEvents.length);
+  homeMetadata.pageType = 'homepage';
   const homeHtml = renderPage(homeMetadata, homepageEvents, undefined, homepagePreContent, 'el', homepagePostContent);
   const homeFilepath = join(DIST_DIR, 'index.html');
   writeHtmlIfChangedSync(homeFilepath, homeHtml);

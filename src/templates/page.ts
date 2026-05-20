@@ -8,10 +8,10 @@ import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { resolveEventStatus, availabilityForEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
+import { resolveEventStatus, availabilityForEventStatus } from '../utils/schema-geo';
 import { classifyTicketSource } from '../utils/ticket-source-classifier';
 import { generateEventSlug } from '../generators/event-page';
-import { buildCollectionPageMember } from '../utils/schema-graph-builders';
+import { buildCollectionPageMember, buildHomepageGraph } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
@@ -137,9 +137,6 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- Schema.org JSON-LD -->
   ${schemaMarkup ? `<script type="application/ld+json">
   ${schemaMarkup}
-  </script>` : ''}
-  ${url === 'index' ? `<script type="application/ld+json">
-  ${JSON.stringify(ORGANIZATION_SCHEMA, null, 2)}
   </script>` : ''}
 
   <!-- Design system -->
@@ -443,6 +440,14 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
   // envelope before </head>). Returning empty here suppresses the page.ts
   // schemaMarkup script tag — see the conditional wrapper in renderPage.
   if (metadata.pageType === 'hub') return '';
+
+  // S139 stage 4: homepage emits a single @graph envelope here. WebSite +
+  // CollectionPage + Organization. Replaces the prior two flat blocks
+  // (CollectionPage from this function + separate Organization in the
+  // url === 'index' branch — now deleted).
+  if (metadata.pageType === 'homepage') {
+    return JSON.stringify(buildHomepageGraph({ events, metadata, locale }), null, 2);
+  }
 
   // Default: flat CollectionPage block for category / all-events / saved /
   // overflow pages. Routed through buildCollectionPageMember so the per-event

@@ -116,14 +116,19 @@ describe('Organization schema', () => {
   });
 
   test('homepage includes Organization JSON-LD', () => {
+    // S139 stage 4: homepage detection switched from url==='index' to
+    // metadata.pageType==='homepage'. Organization is now a @graph member
+    // of the homepage envelope rather than a separate flat block, but the
+    // rendered HTML still contains the "@type": "Organization" substring.
     const metadata: PageMetadata = {
       title: 'Test',
       description: 'Test page',
       keywords: 'test',
-      url: 'index',  // homepage
+      url: 'index',
       eventCount: 1,
       lastUpdate: '2026-03-02T10:00:00Z',
-      filters: {}
+      filters: {},
+      pageType: 'homepage',
     };
     const html = renderPage(metadata, [sampleConcert]);
     expect(html).toContain('"@type": "Organization"');

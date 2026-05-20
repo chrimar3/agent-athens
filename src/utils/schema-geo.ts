@@ -181,6 +181,24 @@ export function getRegionName(): string {
 }
 
 /**
+ * Shared site-publisher constants. Extracted in S139 stage 4 so the
+ * Organization schema, the @graph Organization member, and the @graph
+ * WebSite member all reference the same string/array literals — no
+ * accidental drift between the three surfaces. Not exported as part of
+ * the public module API beyond the schema builders themselves; cross-
+ * module consumers should pull the assembled objects (ORGANIZATION_SCHEMA
+ * / buildSiteOrganizationGraphMember / buildHomepageWebSiteMember).
+ */
+export const ORG_NAME = 'agent-athens';
+export const ORG_DESCRIPTION = 'AI-curated cultural events calendar for Athens, Greece. Daily updated listings for concerts, exhibitions, theater, and more.';
+export const ORG_LANGUAGES: readonly string[] = ['el', 'en'];
+const ORG_AREA_SERVED = {
+  '@type': 'Place',
+  'name': 'Athens',
+  'sameAs': 'https://www.wikidata.org/wiki/Q1524'
+};
+
+/**
  * Organization schema for the homepage JSON-LD block.
  *
  * Retained for any downstream consumer that imports the constant directly.
@@ -191,15 +209,11 @@ export function getRegionName(): string {
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  'name': 'agent-athens',
+  'name': ORG_NAME,
   'url': BASE_URL,
-  'description': 'AI-curated cultural events calendar for Athens, Greece. Daily updated listings for concerts, exhibitions, theater, and more.',
-  'areaServed': {
-    '@type': 'Place',
-    'name': 'Athens',
-    'sameAs': 'https://www.wikidata.org/wiki/Q1524'
-  },
-  'knowsLanguage': ['el', 'en']
+  'description': ORG_DESCRIPTION,
+  'areaServed': ORG_AREA_SERVED,
+  'knowsLanguage': [...ORG_LANGUAGES]
 };
 
 /**
@@ -214,14 +228,10 @@ export function buildSiteOrganizationGraphMember(): Record<string, any> {
   return {
     '@type': 'Organization',
     '@id': `${BASE_URL}/#organization`,
-    'name': 'agent-athens',
+    'name': ORG_NAME,
     'url': BASE_URL,
-    'description': 'AI-curated cultural events calendar for Athens, Greece. Daily updated listings for concerts, exhibitions, theater, and more.',
-    'areaServed': {
-      '@type': 'Place',
-      'name': 'Athens',
-      'sameAs': 'https://www.wikidata.org/wiki/Q1524'
-    },
-    'knowsLanguage': ['el', 'en']
+    'description': ORG_DESCRIPTION,
+    'areaServed': ORG_AREA_SERVED,
+    'knowsLanguage': [...ORG_LANGUAGES]
   };
 }

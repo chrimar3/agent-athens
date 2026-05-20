@@ -24,6 +24,9 @@ import {
   getCountryCode,
   getCurrencyCode,
   buildSiteOrganizationGraphMember,
+  ORG_NAME,
+  ORG_DESCRIPTION,
+  ORG_LANGUAGES,
 } from './schema-geo';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { generateEventSlug } from '../generators/event-page';
@@ -176,6 +179,27 @@ export function buildEditorPicksItemList(params: {
   };
 }
 
+// --- WebSite member (homepage) ---
+// Reuses ORG_NAME / ORG_DESCRIPTION / ORG_LANGUAGES from schema-geo so the
+// homepage WebSite, the page Organization, and the canonical ORGANIZATION_SCHEMA
+// const cannot drift apart. publisher.@id cross-references the Organization
+// member in the same envelope; resolveSamePageReferences (validator-side, Stage 1)
+// dereferences it. potentialAction omitted: no server-side search query
+// endpoint exists (search-overlay.ts fetches a static /search-index.json;
+// SearchAction needs a real query URL — verified absent).
+
+export function buildHomepageWebSiteMember(): Record<string, any> {
+  return {
+    '@type': 'WebSite',
+    '@id': `${BASE_URL}/#website`,
+    name: ORG_NAME,
+    url: BASE_URL,
+    description: ORG_DESCRIPTION,
+    inLanguage: [...ORG_LANGUAGES],
+    publisher: { '@id': `${BASE_URL}/#organization` },
+  };
+}
+
 // --- Hub envelope ---
 
 export function buildHubGraph(params: {
@@ -205,4 +229,31 @@ export function buildHubGraph(params: {
   }
   graph.push(buildSiteOrganizationGraphMember());
   return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+// --- Homepage envelope ---
+// WebSite FIRST (page-canonical entity), CollectionPage SECOND, Organization
+// LAST (site-publisher singleton). Same canonical-to-root posture as hubs:
+// CollectionPage @id is the canonical site root + #collectionpage fragment.
+
+export function buildHomepageGraph(params: {
+  metadata: PageMetadata;
+  locale: Locale;
+  events: Event[];
+}): { '@context': string; '@graph': Record<string, any>[] } {
+  const { metadata, locale, events } = params;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      buildHomepageWebSiteMember(),
+      buildCollectionPageMember({
+        events,
+        metadata,
+        locale,
+        url: `${BASE_URL}/${metadata.url}`,
+        atId: `${BASE_URL}/#collectionpage`,
+      }),
+      buildSiteOrganizationGraphMember(),
+    ],
+  };
 }
