@@ -291,3 +291,41 @@ Out of scope (queued):
 ```
 
 (Status / Christos authorization to be confirmed post-action; this entry is pre-drafted.)
+
+---
+
+## Session-log entry (pending merge)
+
+> Parked here because `docs/session-log.md` was STAGED (`M ` in git status) by a parallel session at the time of this commit — already in their index, presumably mid-commit. Writing into it would either be overwritten by their commit or race with their staging. Christos lands this entry into `docs/session-log.md` once the parallel session's commit settles and the file is safe to write.
+
+```markdown
+### Session — Deploy pipeline stabilization (fallback + deconflict + WIP hold) — 2026-05-20
+
+Deploy-reliability arc, three landed actions:
+- b13712b6e: listSiteDeploys fallback at parse-or-fail boundary. Makes S142
+  retry gate reachable when CLI exits non-zero before emitting parseable
+  deploy_id. Autonomous recovery for "Deploy canceled" from any source.
+- ad1f5608e: disabled com.agentathens.freshness plist PERMANENTLY (Fork A —
+  full mode is strict superset of freshness; both fired 08:00, both reached
+  run_deploy, collision = root cause). Preserved as .disabled-2026-05-20.
+- TEMPORARY (operational, not in git): disabled com.agentathens.daily plist
+  to stop the 2026-05-21 08:00 fire from building+deploying mid-iteration
+  parallel-session WIP. Auto-commit allowlist is safe (narrow, guarded — main
+  history not at risk), but the BUILD phase reads the working tree, so dist/
+  would have shipped WIP. Preserved as .disabled-2026-05-20.
+
+⚠️ ACTION REQUIRED: daily plist is OFFLINE. No auto-deploy until re-enabled.
+Re-enable when dist/ reflects a deliberate committed state:
+  mv ~/Library/LaunchAgents/com.agentathens.daily.plist.disabled-2026-05-20 \
+     ~/Library/LaunchAgents/com.agentathens.daily.plist
+  launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist
+freshness stays disabled permanently (deconflict). Only daily needs re-enabling.
+
+Production: 6a0d7cae (S139 stages 1+2+5 + scroll fix; hub envelope NOT live).
+Specs: 2026-05-20-deploy-pipeline-diagnostic.md, 2026-05-20-plist-deconflict.md.
+
+Patterns banked (parked for .claude/notes/patterns.md when clean): gate-
+reachability-vs-gate-scope, lock-at-wrong-abstraction-layer, triple-collinearity
+trap, CLI-internal-retry-masks-timing, cutoff-as-safety-bound, reliability-
+removes-implicit-operator-confirmation.
+```
