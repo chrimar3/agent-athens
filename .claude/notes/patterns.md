@@ -5085,3 +5085,21 @@ The internal check closes the specific gap so the next regression of that shape 
 **Densest-variant sub-rule:** when the gate samples N pages of a page class, prefer the densest variant (most events, longest ItemList, most populated entities). A sparse-page pass + dense-page fail is a real failure mode — the rule that validator.schema.org caught happens to fire on a property that sparse pages don't emit. S139-fix-1's `concerts.html` (densest-paid hub) and S139-fix-2's `exhibitions.html` (densest-exhibition hub) were both deliberate densest-variant picks for this reason.
 
 **Reference:** Strategist 2026-05-20 ruling (S139-fix-2). `mistakes.md` → "Validator-coverage gap" cluster entry documents the four-instance evidence base.
+
+### Pattern U — Deferred-on-pivot items decay unless held by a durable artifact
+
+**The shape:** A session plans changes A, B, C. The plan-mode discussion pivots to A only (B and C "deferred to a follow-on"). The follow-on session never happens; B and C live only in the session-log narrative ("we chose to ship A; the safe halves B and C are deferred"). The session-log isn't a tracker — it's a chronicle. Items mentioned only there evaporate from active tracking. A future session rediscovers them as if greenfield, sometimes weeks later. By then the original rationale, scope, and risk assessment are gone or stale.
+
+**Two instances in this codebase:**
+
+1. **S2a-impl filter-URL Clear gap (2026-05-20).** The hub-identity work shipped at `5623fc503` left a known dormant code path: `generate-site.ts:1176 generatePage()` doesn't pass `hubIdentity`, so filter-URL pages (e.g. `/open-concert.html`) still Clear→`/`. This was logged at deferral time in `docs/known-issues.md` as 🟡 with a fix plan, status, and cross-references. Survived; can be picked up cleanly. **Correct application of Pattern U.**
+
+2. **Pre-S2a-impl "two safe halves" (filter-bar fade-mask + category-nav aria-current).** The earlier plan-mode session considered shipping these two CSS-/template-level fixes alongside the hub-identity work. The session pivoted to "ship the locked-pill model only; defer the safe halves." But the safe halves were NOT logged as a known-issues entry — only mentioned in plan-mode chatter. They evaporated. Today's session rediscovered them only because a user-driven verify-prior-fixes grep surfaced them ("did these ship?" — answer: no). **Failure of Pattern U:** rediscovered as if greenfield, the original "safe half" rationale was lost, and ~24h of decoupled-but-coupled risk sat in the codebase silently (the inflight CSS-move of category-nav rules from inline `<style>` to central CSS was sitting unstaged, and could easily have been overwritten or re-done by a parallel session).
+
+**The rule:** when a session pivots away from a planned change, log the deferred change AT DEFERRAL TIME with a durable artifact — `docs/known-issues.md` entry (severity tier + fix plan + cross-references) OR `specs/<topic>-deferred.md` IF it's a multi-page scope. NOT the session-log narrative. The session-log is for "what happened in this session"; the deferred item is "what needs to happen in a future session" — different consumer, different home.
+
+**Adjacent fix-rot anti-pattern:** the "we'll get to it later" mention in a plan-mode chat is the rot vector. Plan-mode discussion is ephemeral; durable tracking is a `docs/` or `specs/` file. When in doubt during plan mode: "if we shipped this plan and a future session asked 'what's left here?', would the answer be findable via grep?" If not, the deferral needs a durable artifact.
+
+**Counterpart:** Pattern N (verification gates distinguish over-stating from under-stating). Pattern U is the bookkeeping side of the same discipline — both ask "is the claim about what's done / what's left findable later in a non-narrative artifact?"
+
+**Reference:** S2a-impl session-log entry (good); the pre-S2a "safe halves" deferral (bad — required user-driven verify-prior-fixes grep to rediscover); this session's recovery (2026-05-20) which itself logs the meta-lesson in `mistakes.md`.

@@ -5960,3 +5960,77 @@ The S139 @graph envelope migration spanned three working sessions across two day
 **Commits:** `32bac9a0c` (Stages 1+5), `6ea0b264d` (Stage 2), `1472fbc52` (Stage 3), `d4d62b1dd` (Stage 4), `7109ff809` (S139-fix-1), `b5e875b47` (S139-fix-2). Production deploys: `bead0b152` daily-pipeline (Stages 1+2+5), `6a0d817f06b5c2aa432cf849` (Stages 3+4), `6a0dacb5cac82b4235fee0f7` (S139-fix-1), `6a0ddfcb7d32ab25e60ff660` (S139-fix-2). **Footer: 4 page classes migrated / 2 pre-existing defects surfaced + permanently-recurrence-proofed / 1 new coverage-manifest artifact / 3 coverage-gap follow-ups documented.**
 
 ---
+
+### Session S2a-impl — Hub-identity model (filter-bar Καθαρισμός uniformity + identity-pill suppression) — 2026-05-20
+
+**Plan:** Implement the hub-identity model in the filter-bar after three plan-mode recon passes refuted DN's locked-pill premise. Single insertion point (`hubIdentity` param) threaded `hub-page.ts → page.ts → renderFilterBar` carries three behaviors at once: exclude hub-identity dimension from `hasActiveFilters`, suppress the identity-dimension pill, and point Καθαρισμός at the hub canonical URL instead of `/`. TDD (Pattern C). Boundary: `src/utils/hub-identity.ts` (new), `src/templates/filter-bar.ts`, `src/templates/page.ts`, `src/generators/hub-page.ts`, plus 2 new test files.
+
+**What happened:**
+- **Step 0 — path-shape grounding:** EL flat (`dist/<slug>.html`) vs EN dir (`dist/en/<slug>/index.html`). Grounded before any Step 3 grep was trusted (Pre-Brief #5 guard).
+- **Step 1 prologue — locale routing:** confirmed **World B** (Καθαρισμός is a hardcoded Greek literal at `filter-bar.ts:182`, renders verbatim on EN hubs today, no locale parameter on `renderFilterBar`). EN test assertions downgraded to "same Καθαρισμός string as EL"; localization gap logged for follow-up.
+- **Step 1 — failing tests first:** 5 unit cases (`hubFilterToExcludedDimension`) + 10 render cases (`renderFilterBar` × 5 hub types × {bare, +user-filter}). Pre-impl baseline: 3 pass / 8 fail / 1 error — failures all for the right reason (helper doesn't exist; new param not accepted).
+- **Step 2 — implementation:**
+  - `src/utils/hub-identity.ts` (new): `ExcludedDimension`, `HubIdentity`, `hubFilterToExcludedDimension`. Imports `HubFilter` from `types.ts` only — clean dependency direction.
+  - `renderFilterBar` gained 4th optional param `hubIdentity?: HubIdentity`. Gate at `:122` excludes `excludeDimension` from the active-filter calculation. Each of date/type/price pill blocks emits empty string when its dimension matches `excluded`. Καθαρισμός href resolves to `'/' + hubIdentity.canonicalUrl` when defined, else `'/'`.
+  - `renderPage` gained 8th optional param `hubIdentity?: HubIdentity` (after `preFilterBarHtml`). Threaded to `renderFilterBar` at `page.ts:79`.
+  - `renderHubPage` computes `hubIdentity = { canonicalUrl: metadata.url, excludeDimension: hubFilterToExcludedDimension(config.filter) }` and passes through. `metadata.url` is `config.slug` (plural canonical, no redirect hop).
+  - Overflow-page `renderPage` call at `hub-page.ts:663` left unchanged (no filter bar — `allEvents` undefined).
+- **Step 3 — validate:** `tsc --noEmit` clean. Full suite **2308 pass / 1 skip / 0 fail** (baseline pre-session was 2276; +32 pass — the diff includes the 15 new tests plus drift from the categorizer track that committed mid-session). Build green; schema validator green.
+
+**Verified (production https://agentathens.com):**
+- Bare `filter-clear-all` absent across all 8 hubs in EL + EN (uniformity gate ACHIEVED — `/kids` no longer an outlier).
+- Identity-pill suppression: `data-filter="type"` absent on `/concerts` (EL+EN); `data-filter="date"` absent on `/today`; `data-filter="price"` absent on `/open`. `/kids` retains all 4 pills (tag hub → null excludeDimension).
+- Category-page regression: filter-URL pages (e.g. `/open-concert.html`) Clear href = `/` unchanged (no `hubIdentity` in scope on those callers — by boundary).
+
+**Learnings:**
+- **DN's locked-pill premise was a markup-vs-source mismatch** (Pattern T #5). Three plan-mode recon passes refuted the spec before code was written. Filed under feedback/verify-paths-in-briefs.
+- **`Filters` and `HubFilter` are deliberately different shapes.** `Filters` is user-runtime narrow (`type/time/price/genre`); `HubFilter` is config-time wide (discriminated union with `tag` and `event_types`). The shape gap is what makes type-level (dimension-level) exclusion structurally sufficient — value-level collision is impossible because `tag` has no user-input path and same-dimension user input REPLACES rather than composes.
+- **The hub-identity context unifies three behaviors at one insertion point.** A single `hubIdentity` param threaded through the renderPage signature carries the gate-exclusion, pill-suppression, and Clear-canonical changes. Worth budgeting "one new param" on `renderPage` (now 8 positional args) deliberately rather than as scope creep.
+- **Clear-canonical is architecturally dormant** in production via current URL routing — every filter-panel option on a hub navigates the user OFF the hub (filter-combo URL or different hub), so `hasActiveFilters=true` is never reachable on a hub page. The change ships as defensive code; the demo-visible win is bare-hub uniformity + identity-pill suppression.
+- **`Καθαρισμός` is hardcoded Greek across both EL and EN.** Pre-existing localization gap, not introduced by this work, not fixed by this work. Logged.
+
+**Open items:**
+- **Filter-URL Clear→`/` gap** (`generate-site.ts:1176 generatePage()`). Outside this brief's boundary. Logged in `known-issues.md` as 🟡. Fix = teach `generatePage()` to detect hub-matching filter sets and compute `hubIdentity`; its own recon needed (singular↔plural slug fragility lives in that lookup).
+- **EN `Καθαρισμός` localization** — hardcoded Greek on EN pages. Logged for a future i18n pass.
+- **`hasActiveFilters` ignores `Filters.genre`** — latent, no production trigger today. 🟢.
+- **Slug singular↔plural fragility** — 4 hand-written `netlify.toml` redirects (S132) bridge `buildURL` singular output to plural hub canonicals. 🟢, latent.
+
+**Files changed:** `src/utils/hub-identity.ts` (new), `src/utils/__tests__/hub-identity.test.ts` (new), `src/templates/__tests__/filter-bar-hub-identity.test.ts` (new), `src/templates/filter-bar.ts`, `src/templates/page.ts`, `src/generators/hub-page.ts`. Plus `docs/known-issues.md` + `docs/session-log.md` (this entry).
+
+**Deploy:** `netlify deploy --prod --dir=dist` — live at https://agentathens.com. Unique deploy: `6a0de2f51ed04e0ed7aacd2c--agentathens.netlify.app`. Pattern O verified against live URL — bare-hub `filter-clear-all` count is 0/0/0/0/0/0/0/0 EL and 0/0/0/0/0/0/0/0 EN; identity pills suppressed per hub type.
+
+---
+
+### Session S2a-followon — Safe-half recovery: filter-bar fade-mask + category-nav aria-current — 2026-05-20
+
+**Plan:** Pattern G maintenance batch. Two deferred safe-half fixes from the pre-S2a-impl plan-mode session that never landed because they were tracked only in plan-mode narrative (no `known-issues.md` entry at deferral time). Today's session rediscovered them via a user-driven `grep` ("did these ship?") and recovered them. Plus a read-only action-layer sanction recon for the calendar disclosure spec gate.
+
+**What happened:**
+- **Step 0 — state check:** confirmed parallel-track files (categorizer, venue-registry, schema-completeness) outside boundary. Detected an inflight CSS-move sitting unstaged in `src/styles/design-system.css` + `src/templates/category-page.ts` — moving category-nav rules from inline `<style>` block to central CSS. Compatible with this session's aria-current migration; layered the aria-current change directly into that inflight refactor for one cohesive ship.
+- **Step 1 — fade-mask:** added `mask-image` + `-webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%)` to the `.filter-bar-scroll` rule in `design-system.css:1384`. 1.5 overscroll guards (`overscroll-behavior-x: contain`, `touch-action: pan-x`) untouched.
+- **Step 2 — aria-current migration:** template (`category-page.ts:92,93,99`) emits `aria-current="page"` instead of `class="...active..."`; CSS (`design-system.css:1496`) selector migrated from `.category-nav-item.active` to `.category-nav-item[aria-current="page"]`. Visual rule body (`background: var(--accent-primary); color: white;`) unchanged. Guard-6 surface: zero tests assert `.active` on category-nav anywhere in `src/` or `tests/`, so no test-side updates needed.
+- **Step 3 — action-layer sanction recon (read-only):** outcome = **SILENT**. No sanctioning decision entry exists for the `.edp-action-bar` (Save/Share/Calendar) component; no removal/deprecation/drift flag either. One indirect reference at `.claude/notes/decisions.md:3488` mentions "the action-layer retro acceptance" suggesting an informal retro happened but I can't find the retro entry itself. Calendar disclosure spec stays HOLD pending product-owner resolution.
+- **Step 4 — validate:** tsc clean. Full suite **2332 pass / 1 skip / 0 fail** (up from 2308 — categorizer/schema parallel-track tests committed in the interim). Build green; schema validator green.
+
+**Verified (production https://agentathens.com):**
+- `mask-image` + `-webkit-mask-image` shipped in `dist/styles/design-system.css:1395-1396` (inside `.filter-bar-scroll` rule).
+- `aria-current="page"` shipped on active category-nav items across 13 EL hub/category pages (`concerts`, `theatre`, `nightlife`, `festivals`, `cinema`, etc.). `/kids` and `/open` correctly emit 0 — they're tag and price_type hubs, line 579 of `hub-page.ts` only renders category-nav for `event_type` and `event_types` hubs (pre-existing behavior).
+- CSS selector migrated to `.category-nav-item[aria-current="page"]` at `dist/styles/design-system.css:1496`.
+- EN hub pages don't render category-nav at all (pre-existing — `hub-page.ts:589` passes `'el'` locale into renderHubPage for that path); no regression from this change.
+
+**Learnings:**
+- **Fix-rot lesson (META):** two deferrals from the same pre-S2a-impl session had opposite fates — the filter-URL Clear gap was logged correctly at deferral time as a `known-issues.md` entry, survived, can be picked up cleanly; the "two safe halves" (fade-mask + aria-current) were mentioned only in plan-mode chatter, evaporated, required user-driven `grep` to rediscover. The discipline is logged in `patterns.md` → Pattern U and `mistakes.md` (deferred-items-evaporate entry): durable-artifact-at-deferral-time, not session-log narrative.
+- **Inflight refactor co-existing in working tree:** a pre-existing unstaged CSS-move (category-nav inline → external) was sitting in `design-system.css` + `category-page.ts` for an unknown duration. Folded it into today's aria-current commit because it was structurally compatible. Worth a discipline note: working-tree files that span sessions are themselves a fix-rot vector — `git status` at session-start should flag stale unstaged changes for explicit decision (commit, stash, or fold).
+- **Action-layer SILENT outcome:** `.edp-action-bar` (Save/Share/Calendar) component has no sanctioning decision entry. It's been actively invested in (S94 Calendar add, S138/S139/Session B yellow-budget refactors), with one oblique reference to "action-layer retro acceptance" that I can't locate the source of. Calendar disclosure spec building atop it requires product-owner sanction first.
+
+**Open items:**
+- **Calendar disclosure spec gated by SILENT action-layer outcome.** Resolve sanction (find the retro entry the `decisions.md:3488` reference points to, or formally sanction now) before the disclosure spec proceeds.
+- **Filter-URL Clear→`/` gap** — still open, still tracked in `known-issues.md` (the well-logged deferral from S2a-impl, contrast example for Pattern U).
+
+**Files changed:** `src/styles/design-system.css` (fade-mask + aria-current selector + inflight CSS-move folded in), `src/templates/category-page.ts` (aria-current emission + inline `<style>` removal folded in from the inflight refactor). Plus `docs/session-log.md` (this entry), `.claude/notes/patterns.md` (Pattern U), `.claude/notes/mistakes.md` (deferred-items-evaporate entry).
+
+**Deploy:** standalone `netlify deploy --prod --dir=dist`. Pattern O verification: production grep against `https://agentathens.com/concerts/` and `https://agentathens.com/styles/design-system.css` confirms `aria-current="page"` and `mask-image` live.
+
+**Boundary:** my session touched only `src/styles/design-system.css`, `src/templates/category-page.ts`. Did NOT touch any of: `config/athens-venues.json` (venue track), `data/build-completeness.json` (build artifact), `data/event-set-hashes.json` (build artifact), `docs/current-infrastructure-v2.md` (staged by another track), `docs/schema-coverage-manifest.md` (schema track), `specs/s138-graph-envelope-spec.md` (S139 track), `src/generators/event-page.ts` (parallel track), `src/ticketing/venue-registry.ts`, `src/validators/schema-completeness.ts`, `tests/build/scroll-container-overscroll.test.ts` (prior session). Memory writes (`docs/session-log.md`, `.claude/notes/patterns.md`, `.claude/notes/mistakes.md`) committed in the same boundary commit per brief.
+
+---

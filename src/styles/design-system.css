@@ -1392,6 +1392,8 @@ div#main-content {
   scrollbar-width: none;
   flex: 1;
   min-width: 0;
+  mask-image: linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 24px), transparent 100%);
 }
 .filter-bar-scroll::-webkit-scrollbar { display: none; }
 
@@ -1459,6 +1461,41 @@ div#main-content {
 .filter-pill:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* ── Category Navigation ─────────────────────── */
+.category-nav {
+  margin: 20px 0;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+.category-nav-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.category-nav-item {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 8px 16px;
+  background: var(--bg-surface);
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all var(--t-fast) var(--ease-out);
+}
+.category-nav-item:hover {
+  background: var(--bg-elevated);
+  text-decoration: none;
+}
+.category-nav-item[aria-current="page"] {
+  background: var(--accent-primary);
+  color: white;
 }
 
 /* When a panel is open, lift filter-bar above backdrop (z:199)
