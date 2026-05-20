@@ -118,6 +118,31 @@ Before adding any new FAIL rule to any validator:
 2. Confirm the rule reaches each surface (via shared validator dispatch OR explicit walk).
 3. If a surface is uncovered, extend the validator to cover it in the same commit.
 
+### Schema.org type-mapping tables — allowlist coupling (S139-fix-2)
+
+Any module-level `Record<string, string>` mapping internal types to
+Schema.org `@type` strings — `src/enrichment/quality-gates.ts`
+`VENUE_TYPE_MAP` is the canonical case — MUST be coupled to a vendored
+static allowlist in its colocated test file:
+
+- The allowlist is a literal `Set` declared in the test. NO network
+  fetch (no live schema.org / validator.schema.org lookup at test
+  time). Build-as-invariant: tests must run offline + in CI sandboxes.
+- A coverage assertion iterates `Object.values(MAP)` and asserts each
+  is in the allowlist.
+- A permanent negative-control assertion locks the historical defect
+  shape (e.g. `'ExhibitionCenter'` not in the allowlist).
+
+The friction is the feature. Adding a new mapping requires a deliberate
+one-line allowlist addition; the explicit allowlist update is the
+human checkpoint that catches the next "is this a real Schema.org
+type?" miss. Pre-S139-fix-2: `VENUE_TYPE_MAP` shipped `'ExhibitionCenter'`
+(not a Schema.org type) on three production surfaces because no test
+asserted map values against the vocabulary.
+
+Reference: `src/enrichment/__tests__/quality-gates.test.ts` →
+`describe('VENUE_TYPE_MAP — Schema.org type validity (S139-fix-2)')`.
+
 The 2026-05-20 incident (15 price-less ListItem Offers shipping past clean
 build, caught only by validator.schema.org) is the canonical case study.
 The `buildOfferOrOmit` shared builder was correct; the validator-side

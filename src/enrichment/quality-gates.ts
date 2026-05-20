@@ -853,13 +853,25 @@ export const SCHEMA_TYPE_MAP: Record<string, SchemaOrgEvent['@type']> = {
   other: 'Event',
 };
 
-// Venue location type mapping based on Schema.org event type
+// Venue location type mapping based on Schema.org event type.
+// S139-fix-2 (Strategist 2026-05-20): every value MUST be a real Schema.org
+// venue type. Allowlist-validated at test time via
+// src/enrichment/__tests__/quality-gates.test.ts — adding a new mapping
+// requires a deliberate one-line allowlist update, which is the human
+// checkpoint that catches the next "is this a real Schema.org type?" miss.
+// Pre-fix history: ExhibitionEvent mapped to 'ExhibitionCenter' (not a
+// Schema.org type); rejected by validator.schema.org on 2026-05-20.
 export const VENUE_TYPE_MAP: Record<string, string> = {
   MusicEvent: 'MusicVenue',
   TheaterEvent: 'PerformingArtsTheater',
   DanceEvent: 'PerformingArtsTheater',
   ScreeningEvent: 'MovieTheater',
-  ExhibitionEvent: 'ExhibitionCenter',
+  // EventVenue is the generic-valid fallback. Specific exhibition-venue
+  // typing (Museum/ArtGallery) deferred to per-venue schemaType in the
+  // venue registry (Sprint 2 Component B) — event-type alone can't
+  // distinguish Μπενάκη-the-Museum from Τεχνόπολη-the-EventVenue. See
+  // docs/current-infrastructure-v2.md → Per-Venue schemaType.
+  ExhibitionEvent: 'EventVenue',
 };
 
 /**

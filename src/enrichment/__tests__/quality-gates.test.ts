@@ -19,6 +19,7 @@ import {
   validateEnglishDescription,
   validateGreekDescription,
   validateQualityGates,
+  VENUE_TYPE_MAP,
   type QualityIssue,
 } from '../quality-gates';
 import type { EventForEnrichment } from '../description-generator';
@@ -484,5 +485,74 @@ describe('English: Context-aware entity locking', () => {
     const lockIssue = result.issues.find(i =>
       i.code === 'EN_ENTITY_LOCK_VIOLATION' && i.message.includes('party spirit'));
     expect(lockIssue).toBeDefined();
+  });
+});
+
+// ============================================================================
+// VENUE_TYPE_MAP — Schema.org type-vocabulary coupling (S139-fix-2)
+// ============================================================================
+//
+// Strategist 2026-05-20 ruling. The pre-fix bug: VENUE_TYPE_MAP emitted
+// 'ExhibitionCenter' (not a Schema.org type) on three production surfaces.
+// validator.schema.org caught it post-deploy; the build was clean because
+// no test asserted map values against the Schema.org vocabulary.
+//
+// Approach: vendored static allowlist, NOT live schema.org lookup. Adding a
+// new VENUE_TYPE_MAP value requires a deliberate one-line allowlist update —
+// that friction is the feature. The whole defect happened because someone
+// added 'ExhibitionCenter' without checking it was real.
+//
+// Seeded from currently-emitted types + the implicit `|| 'EventVenue'`
+// fallback used at both call sites (schema-graph-builders.ts:52,
+// event-page.ts:167). Plus Museum / ArtGallery / Place as the documented
+// future expansion targets (Sprint 2 Component B per-venue schemaType).
+const VALID_SCHEMA_VENUE_TYPES = new Set([
+  'MusicVenue',
+  'PerformingArtsTheater',
+  'MovieTheater',
+  'EventVenue',
+  'Museum',
+  'ArtGallery',
+  'Place',
+  // Add others only when a new VENUE_TYPE_MAP mapping introduces them AND
+  // the value is verified against the Schema.org vocabulary.
+]);
+
+describe('VENUE_TYPE_MAP — Schema.org type validity (S139-fix-2)', () => {
+  test('every VENUE_TYPE_MAP value is a real Schema.org venue type', () => {
+    const offenders: Array<{ key: string; value: string }> = [];
+    for (const [key, value] of Object.entries(VENUE_TYPE_MAP)) {
+      if (!VALID_SCHEMA_VENUE_TYPES.has(value)) {
+        offenders.push({ key, value });
+      }
+    }
+    if (offenders.length > 0) {
+      const msg = offenders
+        .map(o => `  ${o.key} → "${o.value}" (not in Schema.org venue vocabulary)`)
+        .join('\n');
+      throw new Error(
+        `VENUE_TYPE_MAP has invalid Schema.org type(s):\n${msg}\n\n` +
+        'Either swap to a valid type (see VALID_SCHEMA_VENUE_TYPES above) or, ' +
+        'if the type is genuinely valid and missing from the allowlist, verify ' +
+        'it against the Schema.org vocabulary and add it deliberately.',
+      );
+    }
+  });
+
+  test('negative control: "ExhibitionCenter" (the pre-fix bug) would FAIL the allowlist', () => {
+    // Locks the test against the historical defect: if someone re-introduces
+    // 'ExhibitionCenter' to VENUE_TYPE_MAP, the coverage assertion above will
+    // fail. This assertion is the proof that the allowlist catches the CLASS
+    // of defect, not just passes the current corpus. Keep permanently.
+    expect(VALID_SCHEMA_VENUE_TYPES.has('ExhibitionCenter')).toBe(false);
+  });
+
+  test('implicit fallback "EventVenue" used by call sites IS in the allowlist', () => {
+    // src/utils/schema-graph-builders.ts:52 and src/generators/event-page.ts:167
+    // both fall through to `VENUE_TYPE_MAP[type] || 'EventVenue'`. If the
+    // fallback string ever drifted out of the Schema.org vocabulary, every
+    // unmapped event type would silently ship an invalid @type — the same
+    // class of bug as the original ExhibitionCenter defect. Lock the fallback.
+    expect(VALID_SCHEMA_VENUE_TYPES.has('EventVenue')).toBe(true);
   });
 });
