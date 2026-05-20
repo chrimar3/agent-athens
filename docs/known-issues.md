@@ -680,7 +680,7 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 - `.date-group-header` (`:528`) — `top: 64px`; hub pages with date-grouped lists
 - `.hub-comparison-table th` (`:2561`) — `top: 0`; hub comparison tables
 **Other horizontal-scrolling regions in the codebase:**
-- `.filter-bar-scroll` (`src/styles/design-system.css:1382`) — ✅ patched 2026-05-20. Added `overscroll-behavior-x: contain` + `touch-action: pan-x` at `:1389-1390`. Same fix shape extended to `.category-nav` (inline rule in `src/templates/category-page.ts:103`, a newly-surfaced horizontal-scroll region in the preventive sweep). Tests: `tests/build/scroll-container-overscroll.test.ts` (6 assertions, anchoring on CSS rule presence in built dist).
+- `.filter-bar-scroll` (`src/styles/design-system.css:1382`) — ✅ patched 2026-05-20 (Session 1.5). Added `overscroll-behavior-x: contain` + `touch-action: pan-x` at `:1389-1390`. Same fix shape extended to `.category-nav` — at 1.5 close it was still an inline rule in `src/templates/category-page.ts:103`; Session 2b (2026-05-20) extracted it to `src/styles/design-system.css` alongside `.filter-pill`, carrying the 1.5 guards across. Tests: `tests/build/scroll-container-overscroll.test.ts` (6 assertions, both rules now read from the same single CSS surface after the 2b migration — was two-surface at 1.5 close, deliberately migrated when the category-nav rule moved from inline-HTML to CSS file).
 - `.table-scroll-wrapper` (`src/styles/design-system.css:2547`) — not yet patched, no current symptom; document-level QW-B (`html, body { overflow-x: clip }`) currently backstops it. Queued for a future preventive maintenance batch.
 **Status:** Fixed (QW-A: commit on 2026-05-14 deploy; QW-B: commit on 2026-05-14 deploy).
 
@@ -697,6 +697,20 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 - **Trade-off documented (visual order over landmark hygiene):** capsule + category-nav land OUTSIDE `<main>` to preserve the visual order page-header → capsule → filter-bar → event listings. Landmark hygiene (capsule inside `<main>` for screen readers / GEO) was NOT achievable simultaneously without restructuring filter-bar position — the filter-bar is itself outside `<main>` (between `</header>` and `<main>`), so placing capsule inside `<main>` would have moved capsule below filter-bar visually, which contradicts the "filter-bar perception problem" motivation. Christos explicitly chose this trade-off at plan-phase via AskUserQuestion; Design Navigator may revisit on their own `decisions.md` 2026-05-18 entry amendment (NOT touched by this session — DN owns it).
 - **Same-class follow-up enumerated:** `src/generators/hub-page.ts:664` (overflow back nav, same `html.replace('</header>', …)` shape) — same fix shape applies, not bundled this session per scope discipline.
 **Status:** Fixed (Session 1 Path D, 2026-05-19, deploy `6a0caa34616b99ae4445573c`). Pattern R instance count now 3 (QW-A test regex 2026-05-14 + this session's two production fixes); see `patterns.md` Pattern R for refined mitigation guidance.
+
+### Category-Nav Label Overflow / Overlap on Mobile
+**Severity:** 🟢 Resolved
+**First seen:** Christos screenshot, `/concerts`, 2026-05-20.
+**Frequency:** Every hub + category page on narrow viewports (the category-nav renders sitewide at the top of every event-type hub and category page). Greek labels with multi-word strings (`Παραδοσιακή`, `Ρεμπέτικα`) wrapped/spilled first; shorter labels compressed without overflowing.
+**Symptoms:** Category-nav pill labels overflowed their pills and overlapped neighbors on narrow viewports. Visually unreadable on iPhone Safari/Chrome/Brave at 375px portrait.
+**Root cause:** `.category-nav-item` (then inline in `src/templates/category-page.ts:105`) lacked `flex: 0 0 auto` — pills compressed under flex on narrow viewports — and lacked `white-space: nowrap` on the pill itself (the parent `.category-nav-container` had it, but defense-in-depth on the pill matches the unified pill family). Note: original Design Navigator diagnosis framed this as a "circles → capsules" rewrite, but production source showed pills were already 20px-radius capsules (`padding: 8px 16px; border-radius: 20px`). The real bug was two missing properties — NOT a pill-shape problem. Diagnosis from rendered output without source grounding; corrected at Dev Planner re-ruling.
+**Resolution:**
+- **Session 2b (2026-05-20, deploy `6a0d7cae68ed65a53443b00b`):** Added `flex: 0 0 auto` + `white-space: nowrap` to `.category-nav-item`. Simultaneously extracted the inline `<style>` block (5 rules: `.category-nav`, `.category-nav-container`, `.category-nav-item`, `:hover`, `.active`) from `src/templates/category-page.ts:102-108` into `src/styles/design-system.css` immediately after the `.filter-pill` family. Session 1.5's `overscroll-behavior-x: contain` + `touch-action: pan-x` guards on `.category-nav` were carried through the extraction.
+- **Bundle de-scoping at Dev Planner re-ruling:** Design Navigator's v1 spec bundled the bug fix with a visual restyle (transparent bg + 1px border + `aria-current="page"` migration). After diagnosis was corrected, the restyle was withdrawn (failed Receding Interface Test — category-nav and filter bar are different controls, should read distinct) and the `aria-current` markup migration was decoupled to Session 2a (accessibility win, stands alone, doesn't gate the overflow fix). Shipped only the two-property fix + CSS extraction.
+- **Tests:** `tests/build/category-nav-readability.test.ts` (new, 8 assertions). `tests/build/scroll-container-overscroll.test.ts` (migrated Test 2 from inline-HTML to design-system.css now that the rule lives in CSS — single-surface across both tests).
+- **Verified on device:** 2026-05-20 (post-deploy curl confirms `flex: 0 0 auto` + `white-space: nowrap` + `border-radius: 20px` on `.category-nav-item` in production CSS; overscroll guards intact on `.category-nav`; zero inline `.category-nav-item` rules in built HTML).
+**Cleanup candidate flagged (deferred):** `.filter-pill` uses `var(--radius-full)` (= `999px`, line 120 of design-system.css); `.category-nav-item` uses hardcoded `20px`. Both render visually identical at current pill height (CSS clamps `border-radius` to half the shorter side, so any value ≥ ~17px gives a fully-rounded capsule on a ~33px-tall pill). The token-vs-hardcode inconsistency is real and should be resolved in a future design-system-consistency pass — NOT bundled with this overflow fix.
+**Status:** Fixed (Session 2b, 2026-05-20, deploy `6a0d7cae68ed65a53443b00b`). See `patterns.md` Pattern T (instance 4) for the diagnosis-from-rendered-output rule class.
 
 ---
 
@@ -899,3 +913,41 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Workaround:** None.
 **Fix plan:** Decide URL ownership. Either (a) `generateCategoryPages` skips slugs that have hub config, or (b) hubs explicitly replace categories at the orchestration layer, or (c) categories migrate to a different URL prefix. Requires reviewing both config files against each other.
 **Status:** Open — deferred. Not a demo blocker; flagged for follow-up.
+
+---
+
+### Filter-Bar Clear-Canonical Is Architecturally Dormant
+**Severity:** 🟡
+**First seen:** S2a-impl (2026-05-20) — hub-identity model ship
+**Frequency:** Every production hub-page render
+**Symptoms:** The S2a-impl hub-identity model ships Clear-canonical (`<a href="/{hub-slug}" class="filter-clear-all">Καθαρισμός</a>` instead of `href="/"`) on hub pages when `hasActiveFilters && hubIdentity` is true. **In production, that condition never holds.** Reason: every filter-panel option on a hub navigates the user to a non-hub URL (filter-combo page via `buildURL`, or another hub via `301`). Examples on `/concerts`: Date=Today → `/concert-today` (filter URL); Type=Theater → `/theater` → 301 → `/theatre` (different hub); Price=Open → `/open-concert` (filter URL). On `/kids`: every panel option leaves `/kids` because tags aren't in `Filters`. Net: hub pages are always bare in production, and the Clear-canonical branch never fires.
+**Impact:** The visible wins from S2a-impl (bare-hub `Καθαρισμός` uniformity across 8 hubs in EL+EN; identity-pill suppression on date/event_type/event_types/price_type hubs) are real and verified. The Clear-canonical change is dormant defensive code — correct and unit-tested, but unreachable until the URL routing or filter generator emits hub-derived pages with hub identity preserved.
+**Root cause:** `src/generate-site.ts:1176 generatePage()` is the generator for filter-combo URLs and was outside S2a-impl's boundary. Its `renderPage` call at `:1182` doesn't pass `hubIdentity`. So filter-URL pages like `/open-concert.html` Clear→`/` regardless. And hub pages themselves never reach `hasActiveFilters=true` because the only filter on them is hub identity, which is excluded by design.
+**Workaround:** None needed for demo — bare-hub uniformity is the demo-visible win.
+**Fix plan:** Teach `generatePage()` to detect a hub-matching filter set (lookup `config.slug` against `buildURL(filters)`, or store hub-membership in metadata at generation time), compute `hubIdentity` with `canonicalUrl = matchedHub.slug` and `excludeDimension = hubFilterToExcludedDimension(matchedHub.filter)`, and pass through. Requires its own recon — note the singular↔plural slug fragility (S132 redirects) when matching `buildURL` output against `config.slug`. Defensive Clear-canonical unit test (`src/templates/__tests__/filter-bar-hub-identity.test.ts`) stays as forward-coverage.
+**Status:** Open — defer to a scoped follow-on session. Prioritize ahead of calendar work IF the demo flow exercises user-applied filter narrowing on a hub; otherwise post-demo.
+**Cross-references:** `src/utils/hub-identity.ts` (the helper), `src/templates/filter-bar.ts` (the gate + pill + Clear-href), `src/generators/hub-page.ts:336` (the only call site that currently passes `hubIdentity`), `src/generate-site.ts:1176` (the gap).
+
+---
+
+### `hasActiveFilters` Ignores `Filters.genre` (Latent Clear-Blindness)
+**Severity:** 🟢
+**First seen:** S2a recon (2026-05-20)
+**Frequency:** Latent — no production trigger today
+**Symptoms:** `src/templates/filter-bar.ts:122` gate reads `{type, price, time}` from `currentFilters`. `Filters.genre` exists in the type (`src/types.ts:124`) and `buildURL` serializes it (`src/utils/urls.ts:10`), but the gate doesn't read it. If a future code path sets `currentFilters.genre` without one of the other three dimensions, `hasActiveFilters` returns `false` and `Καθαρισμός` is hidden even though a user-applied genre filter is active.
+**Impact:** Zero today — there's no UI for users to add a genre filter (filter-bar renders no genre pill). Genre is only injected when a hub config or pre-generated combo page sets it server-side, which happens for combo URLs like `/with-ticket-jazz-concert-this-month.html` — those always also have `type` or `price` set, so the gate fires correctly.
+**Workaround:** N/A.
+**Fix plan:** Add `genre` to the `hasActiveFilters` calculation if/when a genre input is added to the filter UI. Trivial one-liner; doesn't need its own session.
+**Status:** Defer-log. Re-evaluate only if genre user input is added.
+
+---
+
+### Slug Singular↔Plural Fragility (Pill-Dismiss Path)
+**Severity:** 🟢
+**First seen:** S2a recon (2026-05-20)
+**Frequency:** Latent — bridged today by 4 hand-written redirects
+**Symptoms:** `src/utils/urls.ts:6 buildURL()` emits singular event-type slugs (`/concert`, `/theater`, `/exhibition`, `/performance`). Hub canonical URLs are plural (`/concerts`, `/theatre`, `/exhibitions`, `/performances`). The gap is bridged by 4 hand-written redirects in `netlify.toml:93–122` (S132). Adding a new event_type hub (e.g. a hypothetical "/concerts-classical") without a corresponding singular→plural redirect would silently break filter-pill dismiss paths — the dismiss link would 404 (or route to the wrong place) instead of redirecting back to the hub.
+**Impact:** Zero today — all 4 current event_type hubs have their redirects in place. The hub-identity model (S2a-impl) bypasses this entirely for the Clear-canonical path (uses `metadata.url`/`config.slug` directly), but the individual pill-dismiss paths still depend on the redirects.
+**Workaround:** N/A.
+**Fix plan:** Generate the singular→plural redirects programmatically from `config/hub-pages.json` (any hub with `filter.type === 'event_type'` and a singular form of its value), and emit them into `netlify.toml` or `_redirects` at build time. Removes the hand-maintained list. ~10 LOC in `generate-site.ts` plus a build-output test.
+**Status:** Defer-log. Re-evaluate when adding the next event_type hub.

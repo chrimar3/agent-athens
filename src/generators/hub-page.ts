@@ -27,6 +27,7 @@ import { renderHubCrossLinks } from '../utils/cornerstone-links';
 import { getPullQuotes, getSectionEditorial, getFeaturedPickRank } from '../utils/editorial-content';
 import { BASE_URL } from '../config/site-url';
 import { buildHubGraph } from '../utils/schema-graph-builders';
+import { hubFilterToExcludedDimension } from '../utils/hub-identity';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -331,7 +332,11 @@ export function renderHubPage(
 </section>`;
   const preFilterBarContent = (categoryNav || '') + capsuleHtml;
 
-  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale, undefined, preFilterBarContent);
+  const hubIdentity = {
+    canonicalUrl: metadata.url,
+    excludeDimension: hubFilterToExcludedDimension(config.filter),
+  };
+  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale, undefined, preFilterBarContent, hubIdentity);
 
   let html = baseHtml;
 

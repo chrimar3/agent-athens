@@ -8,6 +8,7 @@
  */
 
 import type { Event, EventType, TimeRange, Filters, FilterCounts, FilterCountOption, PriceFilter } from '../types';
+import type { HubIdentity } from '../utils/hub-identity';
 import { filterEvents } from '../utils/filters';
 import { buildURL } from '../utils/urls';
 import { BADGE_LABELS } from './page';
@@ -117,9 +118,14 @@ function buildDismissUrl(filters: Filters, dimension: keyof Filters): string {
 export function renderFilterBar(
   currentFilters: Filters,
   counts: FilterCounts,
-  totalCount: number
+  totalCount: number,
+  hubIdentity?: HubIdentity
 ): string {
-  const hasActiveFilters = !!(currentFilters.type || currentFilters.price || (currentFilters.time && currentFilters.time !== 'all-events'));
+  const excluded = hubIdentity?.excludeDimension;
+  const typeActiveForGate  = excluded !== 'type'  && !!currentFilters.type;
+  const priceActiveForGate = excluded !== 'price' && !!currentFilters.price;
+  const timeActiveForGate  = excluded !== 'time'  && !!(currentFilters.time && currentFilters.time !== 'all-events');
+  const hasActiveFilters = typeActiveForGate || priceActiveForGate || timeActiveForGate;
 
   // ── Date pill ──
   const timeActive = currentFilters.time && currentFilters.time !== 'all-events'
@@ -129,14 +135,16 @@ export function renderFilterBar(
     ? TIME_OPTIONS.find(o => o.time === timeActive)?.label || timeActive
     : 'Ημερομηνία';
   const timeDismissUrl = timeActive ? buildDismissUrl(currentFilters, 'time') : '';
-  const datePill = timeActive
-    ? `<div class="filter-panel-anchor" data-filter="date">
-        <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου ημερομηνίας">&times;</a></span>
-      </div>`
-    : `<div class="filter-panel-anchor" data-filter="date">
-        <button class="filter-pill" data-panel="date">${timeLabel} ${CHEVRON_SVG}</button>
-        ${renderDatePanel(counts.timeRanges, currentFilters)}
-      </div>`;
+  const datePill = excluded === 'time'
+    ? ''
+    : timeActive
+      ? `<div class="filter-panel-anchor" data-filter="date">
+          <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου ημερομηνίας">&times;</a></span>
+        </div>`
+      : `<div class="filter-panel-anchor" data-filter="date">
+          <button class="filter-pill" data-panel="date">${timeLabel} ${CHEVRON_SVG}</button>
+          ${renderDatePanel(counts.timeRanges, currentFilters)}
+        </div>`;
 
   // ── Type pill ──
   const typeActive = currentFilters.type;
@@ -144,14 +152,16 @@ export function renderFilterBar(
     ? TYPE_OPTIONS.find(o => o.type === typeActive)?.label || typeActive
     : 'Τύπος';
   const typeDismissUrl = typeActive ? buildDismissUrl(currentFilters, 'type') : '';
-  const typePill = typeActive
-    ? `<div class="filter-panel-anchor" data-filter="type">
-        <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τύπου">&times;</a></span>
-      </div>`
-    : `<div class="filter-panel-anchor" data-filter="type">
-        <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
-        ${renderTypePanel(counts.types, currentFilters, totalCount)}
-      </div>`;
+  const typePill = excluded === 'type'
+    ? ''
+    : typeActive
+      ? `<div class="filter-panel-anchor" data-filter="type">
+          <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τύπου">&times;</a></span>
+        </div>`
+      : `<div class="filter-panel-anchor" data-filter="type">
+          <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
+          ${renderTypePanel(counts.types, currentFilters, totalCount)}
+        </div>`;
 
   // ── Price pill ──
   const priceActive = currentFilters.price && currentFilters.price !== 'all'
@@ -161,14 +171,16 @@ export function renderFilterBar(
     ? PRICE_OPTIONS.find(o => o.price === priceActive)?.label || priceActive
     : 'Τιμή';
   const priceDismissUrl = priceActive ? buildDismissUrl(currentFilters, 'price') : '';
-  const pricePill = priceActive
-    ? `<div class="filter-panel-anchor" data-filter="price">
-        <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τιμής">&times;</a></span>
-      </div>`
-    : `<div class="filter-panel-anchor" data-filter="price">
-        <button class="filter-pill" data-panel="price">${priceLabel} ${CHEVRON_SVG}</button>
-        ${renderPricePanel(counts.prices, currentFilters)}
-      </div>`;
+  const pricePill = excluded === 'price'
+    ? ''
+    : priceActive
+      ? `<div class="filter-panel-anchor" data-filter="price">
+          <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τιμής">&times;</a></span>
+        </div>`
+      : `<div class="filter-panel-anchor" data-filter="price">
+          <button class="filter-pill" data-panel="price">${priceLabel} ${CHEVRON_SVG}</button>
+          ${renderPricePanel(counts.prices, currentFilters)}
+        </div>`;
 
   // ── Sort pill ──
   const sortPill = `<div class="filter-panel-anchor" data-filter="sort">
@@ -177,9 +189,10 @@ export function renderFilterBar(
   </div>`;
 
   // ── Meta (result count + clear all) ──
+  const clearHref = hubIdentity ? '/' + hubIdentity.canonicalUrl : '/';
   const meta = `<div class="filter-bar-meta">
     <span class="filter-result-count">${totalCount} εκδηλώσεις</span>
-    ${hasActiveFilters ? `<a href="/" class="filter-clear-all">Καθαρισμός</a>` : ''}
+    ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">Καθαρισμός</a>` : ''}
   </div>`;
 
   return `<div class="filter-bar">

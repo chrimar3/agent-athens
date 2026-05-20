@@ -15,6 +15,7 @@ import { buildCollectionPageMember, buildHomepageGraph } from '../utils/schema-g
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
+import type { HubIdentity } from '../utils/hub-identity';
 import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript } from './action-bar';
 import { BASE_URL } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
@@ -65,7 +66,7 @@ export const TYPE_ICONS: Record<string, string> = {
   other: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24c1.1 0 2 .9 2 2v32c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm2 6v4h20v-4H14zm0 8v2h20v-2H14zm0 6v2h14v-2H14z"/></svg>',
 };
 
-export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string, preFilterBarHtml?: string): string {
+export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string, preFilterBarHtml?: string, hubIdentity?: HubIdentity): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
   const schemaMarkup = generateSchemaMarkup(events, metadata, locale);
@@ -76,7 +77,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   let filterBarScriptHTML = '';
   if (allEvents) {
     const counts = computeFilterCounts(filters, allEvents);
-    filterBarHTML = renderFilterBar(filters, counts, eventCount);
+    filterBarHTML = renderFilterBar(filters, counts, eventCount, hubIdentity);
     filterBarScriptHTML = renderFilterBarScript();
   }
 
