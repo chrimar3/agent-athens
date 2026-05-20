@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, type SchemaValidationResult, type PageClass } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -1290,5 +1290,340 @@ describe('resolveSamePageReferences', () => {
     const b: any = { '@id': '#b', '@type': 'X', ref: { '@id': '#a' } };
     a.ref = { '@id': '#b' };
     expect(() => resolveSamePageReferences([a, b])).not.toThrow();
+  });
+});
+
+// ─── S141: Orphan-@id-reference + member-ordering checks ─────────────────────
+
+/**
+ * Wrap an array of @graph members in a single envelope JSON-LD script.
+ * Matches the canonical Sprint-3 envelope shape that S139 emits.
+ */
+function wrapInGraph(members: Record<string, unknown>[]): string {
+  const envelope = { '@context': 'https://schema.org', '@graph': members };
+  return `<!DOCTYPE html><html><head>
+    <script type="application/ld+json">${JSON.stringify(envelope)}</script>
+  </head><body></body></html>`;
+}
+
+const TEST_BASE_URL = 'https://agentathens.com';
+const TEST_INTERNAL_HOST = 'agentathens.com';
+
+const SITE_ORGANIZATION = {
+  '@type': 'Organization',
+  '@id': 'https://agentathens.com/#organization',
+  name: 'agent-athens',
+  url: 'https://agentathens.com',
+};
+
+const VENUE_DEFINITION = {
+  '@type': 'MusicVenue',
+  '@id': 'https://agentathens.com/venues/half-note/#venue',
+  name: 'Half Note Jazz Club',
+  address: { '@type': 'PostalAddress', streetAddress: 'Trivonianou 17' },
+};
+
+const EVENT_DEFINITION = (overrides: Record<string, unknown> = {}) => ({
+  '@type': 'MusicEvent',
+  '@id': 'https://agentathens.com/events/jazz-night/#event',
+  name: 'Jazz Night',
+  location: {
+    '@type': 'MusicVenue',
+    '@id': 'https://agentathens.com/venues/half-note/#venue',
+    name: 'Half Note Jazz Club',
+    address: { '@type': 'PostalAddress', streetAddress: 'Trivonianou 17' },
+  },
+  ...overrides,
+});
+
+describe('checkOrphanReferences (S141 FAIL rule)', () => {
+  describe('positive cases (pass)', () => {
+    test('same-page-resolved venue ref → no error', () => {
+      const html = wrapInGraph([
+        EVENT_DEFINITION(),
+        VENUE_DEFINITION,
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('pure-reference {"@id": X} resolves to same-page definition → no error', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          location: { '@id': 'https://agentathens.com/venues/half-note/#venue' },
+        },
+        VENUE_DEFINITION,
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('cross-page canonical ref → no error when target page exists', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          location: { '@id': 'https://agentathens.com/venues/half-note/#venue' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const canonicalUrls = new Set(['https://agentathens.com/venues/half-note']);
+      const result = checkOrphanReferences(html, 'jazz-night', canonicalUrls, TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('external ref (Wikidata QID) → no error (out of internal scope)', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          performer: { '@id': 'https://www.wikidata.org/wiki/Q12345' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('out-of-scope fragment (#event, #offer, #website) → no error', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          referencedOffer: { '@id': 'https://agentathens.com/events/jazz-night/#offer' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('negative controls (FAIL)', () => {
+    test('orphan #venue ref (no on-page definition, no emitted page) → FAIL', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          location: { '@id': 'https://agentathens.com/venues/ghost-venue/#venue' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors.some(e => e.includes('orphan @id reference') && e.includes('ghost-venue'))).toBe(true);
+    });
+
+    test('orphan #organization ref (no on-page def, no emitted page) → FAIL', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          offers: {
+            '@type': 'Offer',
+            price: '15',
+            priceCurrency: 'EUR',
+            seller: { '@id': 'https://agentathens.com/orgs/ghost-merchant/#organization' },
+          },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors.some(e => e.includes('orphan @id reference') && e.includes('ghost-merchant'))).toBe(true);
+    });
+
+    test('orphan #organizer ref (forward-protective for S142) → FAIL', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          organizer: { '@id': 'https://agentathens.com/orgs/ghost/#organizer' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors.some(e => e.includes('orphan @id reference') && e.includes('#organizer'))).toBe(true);
+    });
+
+    test('multiple orphans on same page → multiple errors', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'MusicEvent',
+          '@id': 'https://agentathens.com/events/jazz-night/#event',
+          name: 'Jazz Night',
+          location: { '@id': 'https://agentathens.com/venues/ghost-venue/#venue' },
+          performer: { '@id': 'https://agentathens.com/performers/ghost/#performer' },
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'jazz-night', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('edge cases', () => {
+    test('page with no JSON-LD → no errors (silent skip)', () => {
+      const html = '<!DOCTYPE html><html><head></head><body></body></html>';
+      const result = checkOrphanReferences(html, 'empty', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('malformed URL in ref → no error (validator is not a URL-format gate)', () => {
+      const html = wrapInGraph([
+        EVENT_DEFINITION({ location: { '@id': 'not-a-url' } }),
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkOrphanReferences(html, 'malformed', new Set(), TEST_INTERNAL_HOST);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+});
+
+describe('checkMemberOrdering (S141 FAIL rule)', () => {
+  describe('positive cases (pass) — bookends correct', () => {
+    test('event page: first=MusicEvent, last=site Organization → pass', () => {
+      const html = wrapInGraph([EVENT_DEFINITION(), VENUE_DEFINITION, SITE_ORGANIZATION]);
+      const result = checkMemberOrdering(html, 'jazz-night', 'event', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('venue page: first=LocalBusiness, last=site Organization → pass', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'LocalBusiness',
+          '@id': 'https://agentathens.com/venues/half-note/#venue',
+          name: 'Half Note',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkMemberOrdering(html, 'venue:half-note', 'venue', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('hub page: first=CollectionPage, last=site Organization → pass', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://agentathens.com/concerts#collectionpage',
+          name: 'Concerts',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkMemberOrdering(html, 'hub:concerts', 'hub', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('homepage: first=WebSite, last=site Organization → pass', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'WebSite',
+          '@id': 'https://agentathens.com/#website',
+          name: 'agent-athens',
+        },
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://agentathens.com/#collectionpage',
+          name: 'Athens events',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkMemberOrdering(html, 'homepage', 'homepage', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('negative controls (FAIL) — shuffled order', () => {
+    test('event page with site Organization FIRST → FAIL on last-member check', () => {
+      const html = wrapInGraph([SITE_ORGANIZATION, VENUE_DEFINITION, EVENT_DEFINITION()]);
+      const result = checkMemberOrdering(html, 'jazz-night', 'event', TEST_BASE_URL);
+      expect(result.errors.length).toBeGreaterThanOrEqual(1);
+      expect(result.errors.some(e => e.includes('first member @type') || e.includes('last member @id'))).toBe(true);
+    });
+
+    test('venue page with non-LocalBusiness first → FAIL', () => {
+      const html = wrapInGraph([
+        { '@type': 'Place', name: 'Wrong type' },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkMemberOrdering(html, 'venue:bad', 'venue', TEST_BASE_URL);
+      expect(result.errors.some(e => e.includes('first member @type') && e.includes('LocalBusiness'))).toBe(true);
+    });
+
+    test('hub page missing site Organization last → FAIL', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://agentathens.com/concerts#collectionpage',
+          name: 'Concerts',
+        },
+        { '@type': 'FAQPage', mainEntity: [] },
+      ]);
+      const result = checkMemberOrdering(html, 'hub:concerts', 'hub', TEST_BASE_URL);
+      expect(result.errors.some(e => e.includes('last member @id'))).toBe(true);
+    });
+
+    test('homepage with WebSite NOT first → FAIL on first-member check', () => {
+      const html = wrapInGraph([
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://agentathens.com/#collectionpage',
+          name: 'Athens events',
+        },
+        {
+          '@type': 'WebSite',
+          '@id': 'https://agentathens.com/#website',
+          name: 'agent-athens',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      const result = checkMemberOrdering(html, 'homepage', 'homepage', TEST_BASE_URL);
+      expect(result.errors.some(e => e.includes('first member @type') && e.includes('WebSite'))).toBe(true);
+    });
+  });
+
+  describe('edge cases', () => {
+    test('single-member @graph → skip (no error)', () => {
+      const html = wrapInGraph([EVENT_DEFINITION()]);
+      const result = checkMemberOrdering(html, 'single', 'event', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('page with no JSON-LD → skip (no error)', () => {
+      const html = '<!DOCTYPE html><html><head></head><body></body></html>';
+      const result = checkMemberOrdering(html, 'empty', 'event', TEST_BASE_URL);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('all event subclasses accepted as first @type (TheaterEvent / Festival)', () => {
+      const theaterHtml = wrapInGraph([
+        {
+          '@type': 'TheaterEvent',
+          '@id': 'https://agentathens.com/events/macbeth/#event',
+          name: 'Macbeth',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      expect(checkMemberOrdering(theaterHtml, 't', 'event', TEST_BASE_URL).errors).toHaveLength(0);
+
+      const festivalHtml = wrapInGraph([
+        {
+          '@type': 'Festival',
+          '@id': 'https://agentathens.com/events/athens-festival/#event',
+          name: 'Athens Festival',
+        },
+        SITE_ORGANIZATION,
+      ]);
+      expect(checkMemberOrdering(festivalHtml, 'f', 'event', TEST_BASE_URL).errors).toHaveLength(0);
+    });
   });
 });

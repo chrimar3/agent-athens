@@ -11,6 +11,7 @@ import { join } from 'path';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { classifyDateFormat } from '../utils/date-format';
 import { getRegionName } from '../utils/schema-geo';
+import { BASE_URL } from '../config/site-url';
 
 // Valid @type values from our canonical type map
 const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
@@ -472,6 +473,249 @@ export function flattenGraph(blocks: Record<string, any>[]): Record<string, any>
   return out;
 }
 
+// ─── S141: Orphan-@id-reference + canonical-page member-ordering ─────────────
+
+/**
+ * S141 page-class taxonomy. Maps to the four surfaces that emit a canonical
+ * @graph envelope with a known first-entity / site-publisher-last contract.
+ */
+export type PageClass = 'event' | 'hub' | 'venue' | 'homepage';
+
+/**
+ * S134 §3 entity-type scope for the orphan-reference FAIL rule. URL-fragment
+ * detected — `#venue` and `#place` both map to Place. Performer and Organizer
+ * have no current emitter surface (Organizer arrives in S142); the scope is
+ * intentionally forward-protective for those types.
+ *
+ * Out of S141 scope (silently skipped): `#event`, `#offer`, `#website`,
+ * `#collectionpage`, `#faqpage`, `#editor-picks`. Extend this set only after a
+ * Strategist decision broadens the rule.
+ */
+const ORPHAN_SCOPED_FRAGMENTS: ReadonlySet<string> = new Set([
+  'venue', 'place', 'performer', 'organization', 'organizer',
+]);
+
+/**
+ * Recursively collect every pure-reference `{"@id": X}` object — a dict whose
+ * only key is `@id`. Objects with `@id` AND other fields are definitions, not
+ * references, and are skipped. Matches the convention enforced by
+ * `resolveSamePageReferences` (line ~438).
+ */
+function collectPureRefs(node: any, out: string[]): void {
+  if (!node || typeof node !== 'object') return;
+  if (Array.isArray(node)) {
+    for (const it of node) collectPureRefs(it, out);
+    return;
+  }
+  const keys = Object.keys(node);
+  if (keys.length === 1 && keys[0] === '@id' && typeof node['@id'] === 'string') {
+    out.push(node['@id']);
+    return;
+  }
+  for (const v of Object.values(node)) collectPureRefs(v, out);
+}
+
+/**
+ * Collect every `@id` defined on this page — any object with `@id` plus at
+ * least one other key. Walks the full tree (definitions can appear nested
+ * inside another entity, not only as top-level @graph members).
+ */
+function collectDefinedIds(flattened: Record<string, any>[]): Set<string> {
+  const out = new Set<string>();
+  const visit = (node: any): void => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { for (const it of node) visit(it); return; }
+    const keys = Object.keys(node);
+    if (typeof node['@id'] === 'string' && keys.length > 1) {
+      out.add(node['@id']);
+    }
+    for (const v of Object.values(node)) visit(v);
+  };
+  for (const e of flattened) visit(e);
+  return out;
+}
+
+/**
+ * S141 — Orphan-@id-reference FAIL rule.
+ *
+ * Asserts every internal pure-reference `{"@id": X}` in a page's JSON-LD
+ * resolves to either (a) a same-page entity definition or (b) the canonical
+ * URL of another emitted dist/ page. External refs (Wikidata QIDs etc.) are
+ * silently allowed.
+ *
+ * Per S134 §3, the FAIL scope is the four entity types Place / Performer /
+ * Organization / Organizer, detected by URL-fragment matching (see
+ * ORPHAN_SCOPED_FRAGMENTS). Refs outside that scope (`#event`, `#offer`, …)
+ * are silently skipped — they belong to a future rule, not this one.
+ *
+ * Designed to be called from validateAllPages after the global canonical URL
+ * set has been collected (Pass 1). Validator stays pure — accepts the set as
+ * a parameter, never reads dist/ itself.
+ *
+ * S141 Step 0c diagnostic confirmed 0 true orphans across the 5,126-page
+ * baseline corpus → severity is FAIL (errors[]) without ratchet wrapping.
+ */
+export function checkOrphanReferences(
+  html: string,
+  pageSlug: string,
+  canonicalUrls: ReadonlySet<string>,
+  internalHost: string,
+): SchemaValidationResult {
+  const flat = flattenGraph(extractAllJsonLd(html));
+  const defined = collectDefinedIds(flat);
+  const refs: string[] = [];
+  for (const e of flat) collectPureRefs(e, refs);
+
+  const errors: string[] = [];
+  for (const ref of refs) {
+    if (defined.has(ref)) continue; // same-page resolved
+
+    let host: string;
+    try { host = new URL(ref).host; }
+    catch { continue; } // malformed URL — silent skip (validator is not a URL-format gate)
+
+    if (host !== internalHost) continue; // external — out of scope (Wikidata, schema.org enums)
+
+    // Cross-page canonical: strip fragment, normalize trailing slash, check
+    // against the Pass-1 set. Whitelisting this category is forward-protective
+    // for S142+ (cross-page Organizer/Performer refs are valid by URL deref).
+    const base = ref.split('#')[0].replace(/\/$/, '');
+    if (canonicalUrls.has(base)) continue;
+
+    // In-scope filter: only Place/Performer/Organization/Organizer fragments
+    // FAIL the build per S134 §3. Other fragments are silently skipped.
+    const fragment = ref.includes('#') ? ref.split('#').pop()! : '';
+    if (!ORPHAN_SCOPED_FRAGMENTS.has(fragment)) continue;
+
+    errors.push(
+      `orphan @id reference: "${ref}" resolves to no same-page entity and no emitted page`,
+    );
+  }
+  return { slug: pageSlug, errors, warnings: [], info: [] };
+}
+
+/**
+ * S141 — Canonical-page @graph member-ordering FAIL rule.
+ *
+ * Enforces bookends only — middle reorders are stylistic and intentionally
+ * unchecked. Per page class:
+ *
+ *   - First member `@type`:
+ *       event     → any of VALID_SCHEMA_TYPES (event subclass set)
+ *       venue     → 'LocalBusiness'
+ *       hub       → 'CollectionPage'
+ *       homepage  → 'WebSite'
+ *
+ *   - Last member `@id` (all classes): `${BASE_URL}/#organization`
+ *
+ * Pages with fewer than 2 @graph members are skipped — the existing per-page
+ * validators handle their structural validation; ordering is undefined on a
+ * single member.
+ */
+export function checkMemberOrdering(
+  html: string,
+  pageSlug: string,
+  pageClass: PageClass,
+  baseUrl: string,
+): SchemaValidationResult {
+  const flat = flattenGraph(extractAllJsonLd(html));
+  if (flat.length < 2) return { slug: pageSlug, errors: [], warnings: [], info: [] };
+
+  const errors: string[] = [];
+  const first = flat[0];
+  const last = flat[flat.length - 1];
+  const firstType = first?.['@type'];
+
+  let expectedFirstDesc: string;
+  let firstOk: boolean;
+  switch (pageClass) {
+    case 'event':
+      expectedFirstDesc = 'an event subclass (Concert/MusicEvent/TheaterEvent/…)';
+      firstOk = typeof firstType === 'string' && VALID_SCHEMA_TYPES.has(firstType);
+      break;
+    case 'venue':
+      expectedFirstDesc = 'LocalBusiness';
+      firstOk = firstType === 'LocalBusiness';
+      break;
+    case 'hub':
+      expectedFirstDesc = 'CollectionPage';
+      firstOk = firstType === 'CollectionPage';
+      break;
+    case 'homepage':
+      expectedFirstDesc = 'WebSite';
+      firstOk = firstType === 'WebSite';
+      break;
+  }
+
+  if (!firstOk) {
+    errors.push(
+      `@graph member order: first member @type is "${firstType}", expected ${expectedFirstDesc} for ${pageClass} page`,
+    );
+  }
+
+  const expectedLastId = `${baseUrl.replace(/\/$/, '')}/#organization`;
+  if (last?.['@id'] !== expectedLastId) {
+    errors.push(
+      `@graph member order: last member @id is "${last?.['@id']}", expected "${expectedLastId}" (site-publisher Organization must be last)`,
+    );
+  }
+
+  return { slug: pageSlug, errors, warnings: [], info: [] };
+}
+
+/**
+ * Pass-1 helper for validateAllPages: walks dist/ once and extracts every
+ * page's canonical URL from the `<link rel="canonical">` tag. Fast regex
+ * scan (no JSON-LD parsing). The resulting set is the cross-page-valid
+ * whitelist consumed by checkOrphanReferences.
+ *
+ * Returned URLs have trailing slashes stripped so cross-page refs match
+ * regardless of trailing-slash style (Event canonical URLs end in `/`,
+ * hub canonicals do not — normalize both into the same shape).
+ */
+function collectCanonicalUrls(distDir: string): Set<string> {
+  const out = new Set<string>();
+  const canonicalRegex = /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i;
+
+  const walk = (dir: string): void => {
+    let entries;
+    try { entries = readdirSync(dir, { withFileTypes: true }); }
+    catch { return; }
+    for (const entry of entries) {
+      const p = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(p);
+      } else if (entry.name.endsWith('.html')) {
+        try {
+          const html = readFileSync(p, 'utf-8');
+          const m = html.match(canonicalRegex);
+          if (m) out.add(m[1].replace(/\/$/, ''));
+        } catch { /* unreadable — skip */ }
+      }
+    }
+  };
+  if (existsSync(distDir)) walk(distDir);
+  return out;
+}
+
+/**
+ * Merge a child SchemaValidationResult's findings into a parent result.
+ * Used by validateAllPages to fold the S141 orphan + ordering checks into
+ * the per-page validator's existing result.
+ */
+function mergeIntoResult(into: SchemaValidationResult, ...rest: SchemaValidationResult[]): void {
+  for (const r of rest) {
+    into.errors.push(...r.errors);
+    into.warnings.push(...r.warnings);
+    if (r.info && r.info.length > 0) {
+      if (!into.info) into.info = [];
+      into.info.push(...r.info);
+    }
+  }
+}
+
+// ─── End S141 ────────────────────────────────────────────────────────────────
+
 /**
  * Validate a hub page's JSON-LD schema (CollectionPage + FAQPage).
  */
@@ -759,6 +1003,14 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     return { total: 0, passCount: 0, warnCount: 0, failCount: 0, details: [] };
   }
 
+  // S141 Pass 1 — fast regex-only scan of every dist/ HTML page to collect
+  // canonical URLs. This is the cross-page-valid set used by
+  // checkOrphanReferences to whitelist internal refs that dereference to
+  // another emitted page. Done once per build; subsequent per-page validation
+  // (Pass 2) reuses the set.
+  const canonicalUrls = collectCanonicalUrls(distDir);
+  const internalHost = new URL(BASE_URL).host;
+
   const slugDirs = readdirSync(eventsDir, { withFileTypes: true })
     .filter(d => d.isDirectory())
     .map(d => d.name);
@@ -770,7 +1022,12 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     if (!existsSync(htmlPath)) continue;
 
     const html = readFileSync(htmlPath, 'utf-8');
-    details.push(validateSchemaCompleteness(html, slug, sameAsSeverity));
+    const eventResult = validateSchemaCompleteness(html, slug, sameAsSeverity);
+    mergeIntoResult(eventResult,
+      checkOrphanReferences(html, slug, canonicalUrls, internalHost),
+      checkMemberOrdering(html, slug, 'event', BASE_URL),
+    );
+    details.push(eventResult);
   }
 
   // Also scan English pages (dist/en/events/)
@@ -783,7 +1040,12 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       const htmlPath = join(enEventsDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateSchemaCompleteness(html, `en/${slug}`, sameAsSeverity));
+      const enResult = validateSchemaCompleteness(html, `en/${slug}`, sameAsSeverity);
+      mergeIntoResult(enResult,
+        checkOrphanReferences(html, `en/${slug}`, canonicalUrls, internalHost),
+        checkMemberOrdering(html, `en/${slug}`, 'event', BASE_URL),
+      );
+      details.push(enResult);
     }
   }
 
@@ -802,6 +1064,10 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     const microResult = validateMicrodata(html);
     hubResult.errors.push(...microResult.errors);
     hubResult.warnings.push(...microResult.warnings);
+    mergeIntoResult(hubResult,
+      checkOrphanReferences(html, `hub:${slug}`, canonicalUrls, internalHost),
+      checkMemberOrdering(html, `hub:${slug}`, 'hub', BASE_URL),
+    );
     details.push(hubResult);
   }
   // English hub pages (dist/en/{slug}/index.html) — only validate known hub slugs
@@ -819,6 +1085,10 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       const microResult = validateMicrodata(html);
       hubResult.errors.push(...microResult.errors);
       hubResult.warnings.push(...microResult.warnings);
+      mergeIntoResult(hubResult,
+        checkOrphanReferences(html, `hub:en/${slug}`, canonicalUrls, internalHost),
+        checkMemberOrdering(html, `hub:en/${slug}`, 'hub', BASE_URL),
+      );
       details.push(hubResult);
     }
   }
@@ -834,8 +1104,27 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       const htmlPath = join(venuesDir, slug, 'index.html');
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
-      details.push(validateVenueSchema(html, slug, expectedRegion, sameAsSeverity));
+      const venueResult = validateVenueSchema(html, slug, expectedRegion, sameAsSeverity);
+      mergeIntoResult(venueResult,
+        checkOrphanReferences(html, `venue:${slug}`, canonicalUrls, internalHost),
+        checkMemberOrdering(html, `venue:${slug}`, 'venue', BASE_URL),
+      );
+      details.push(venueResult);
     }
+  }
+
+  // S141: Homepage scan (dist/index.html). No existing per-page validator —
+  // homepage emission is currently a single envelope (WebSite → CollectionPage
+  // → site Organization). The S141 ordering rule enforces that bookend.
+  const homepagePath = join(distDir, 'index.html');
+  if (existsSync(homepagePath)) {
+    const html = readFileSync(homepagePath, 'utf-8');
+    const homeResult: SchemaValidationResult = { slug: 'homepage', errors: [], warnings: [], info: [] };
+    mergeIntoResult(homeResult,
+      checkOrphanReferences(html, 'homepage', canonicalUrls, internalHost),
+      checkMemberOrdering(html, 'homepage', 'homepage', BASE_URL),
+    );
+    details.push(homeResult);
   }
 
   // Scan Schema.org DataFeed at /api/events.json (Sprint 2 Component A)

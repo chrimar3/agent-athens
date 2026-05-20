@@ -66,3 +66,41 @@ This document tracks design decisions where production deliberately diverges fro
   map emitted `'ExhibitionCenter'` (not a Schema.org type); rejected by
   validator.schema.org. Allowlist-validated at test time via
   `src/enrichment/__tests__/quality-gates.test.ts`.
+
+---
+
+### Offer.validFrom Omission
+- **State:** Offer entities ship without `validFrom`; ~151 GSC
+  "Missing field 'validFrom' (optional)" warnings across event pages
+  (gsc-schema-defects diagnostic, 2026-05-18).
+- **Why deferred:** No structured on-sale timestamp source. Merchant
+  feeds (More.com, Viva, Ticketmaster, Ticketservices) expose price,
+  availability, and URL but not when tickets opened for sale.
+  Synthesizing a value (e.g. event creation date, scrape date) would
+  fabricate data with no grounding in actual merchant behavior.
+- **Strategist ruling (2026-05-18):** GSC "Missing validFrom" is a
+  cosmetic optional-field warning, not a ranking or rich-result
+  penalty. Registered known-cosmetic; baseline-and-monitor.
+- **Reactivation trigger:** Any of the four merchant feeds begins
+  exposing a structured on-sale timestamp in its API response or
+  sitemap-with-extensions output. Single-merchant coverage is enough
+  to begin emitting partial validFrom (per-offer field, not aggregate).
+- **Reactivation work (when triggered):** Plumb the timestamp through
+  the offer-builder; emit ISO-8601 `validFrom` per Offer where the
+  upstream feed provides it. Offer-shape validator
+  (`validateOfferShape` in `src/validators/schema-completeness.ts`)
+  treats the field as optional regardless — no validator change
+  required at reactivation.
+- **Quarterly review:** GSC schema-warnings dashboard. Re-evaluate if
+  validFrom warning count materially shifts (either direction) or if
+  Google reclassifies the field's importance (e.g. promotes from
+  optional to required for Event Offer rich results).
+- **Risk if held longer:** None expected — cosmetic warning, no rich-
+  result eligibility impact at present.
+- **NOT TO BE CONFLATED WITH:** `editorial-content.ts` `validFrom` (8
+  hits in `src/utils/editorial-content.ts`). That field is intentional
+  date-windowing for editorial content, live and correct. This DDR
+  entry covers **Offer.validFrom** only — the field that was removed
+  from emission in S134 (2026-05-11) when classifier-gated Offer
+  emission landed.
+- **Decision:** Strategist 2026-05-18, S141.
