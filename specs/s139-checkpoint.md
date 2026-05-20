@@ -1,8 +1,10 @@
 # S139 Checkpoint — 2026-05-20
 
-**Status:** Stage 1 + Stage 5 (absorbed) + Stage 2 committed on `main`. **Stages 1+2+5 DEPLOYED to production via daily-pipeline commit `bead0b152` (2026-05-20 10:32) — verified live @graph envelope on EDP + venue pages (probes 2026-05-20).** Stages 3-4 remain (NOT STARTED).
+**Status:** Stage 1 + Stage 5 (absorbed) + Stage 2 committed on `main`. **Stages 1+2+5 DEPLOYED to production (Netlify deploy `6a0d64ceaf7de0392246f4ad`, published 2026-05-20 10:38 Athens, `commit_ref: null` — manual `--no-build --dir=dist` fallback) — verified live @graph envelope on EDP + venue pages (probes 2026-05-20).** Stages 3-4 remain (NOT STARTED).
 
-**Deploy reconciliation (2026-05-20 post-checkpoint):** Deploy of stages 1+2+5 already occurred via daily pipeline; stage 3+4 resumption does NOT re-deploy 1+2+5. Step 7 (push + deploy) below applies only to stage 3+4 work; Option B has effectively occurred.
+**Deploy reconciliation (2026-05-20 post-checkpoint):** Deploy of stages 1+2+5 already occurred; stage 3+4 resumption does NOT re-deploy 1+2+5. Step 7 (push + deploy) below applies only to stage 3+4 work; Option B has effectively occurred.
+
+**Deploy attribution correction (2026-05-20 follow-on):** Prior checkpoint correction (`8ed86aad3`) cited git commit `bead0b152` as the deploy mechanism — conflating a git commit hash with a Netlify deploy ID (Pattern C, commit-message-as-state-proxy). Deploy log (`netlify api listSiteDeploys`) refutes the linkage: deploy `6a0d6385` titled "Daily deploy 2026-05-20" at 10:32 Athens ERRORED; the successful ship was `6a0d64ce` at 10:37 with `commit_ref: null` — a manual fallback 5 minutes later. `bead0b152` (git commit) and `6a0d64ce` (Netlify deploy) are not linked. Stages 1+2+5 verified live via HTML probe — the load-bearing fact regardless of which artifact triggered the ship.
 
 **Reason for checkpoint:** Plan's overflow protocol — past Stage 2 commit, context budget at risk. Per plan: "Completed stages are independently deployable. Partial-deploy of completed stages is preferable to context-saturated full pass."
 
