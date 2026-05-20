@@ -20,9 +20,7 @@ import { BASE_URL } from '../config/site-url';
 import {
   buildContainedInPlace,
   resolveEventStatus,
-  availabilityForEventStatus,
   getCountryCode,
-  getCurrencyCode,
   buildSiteOrganizationGraphMember,
   ORG_NAME,
   ORG_DESCRIPTION,
@@ -30,18 +28,18 @@ import {
 } from './schema-geo';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { generateEventSlug } from '../generators/event-page';
-import { classifyTicketSource } from './ticket-source-classifier';
+import { buildOfferOrOmit } from '../ticketing/offer-builder';
 
 // --- Per-event ListItem builder (extracted verbatim from page.ts:459-512) ---
 
 function buildItemListElements(events: Event[]): Array<Record<string, unknown>> {
   return events.map((event, index) => {
     const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
-    const availability = availabilityForEventStatus(eventStatus);
+    const selfCanonicalUrl = `${BASE_URL}/events/${generateEventSlug(event)}/`;
 
     const item: Record<string, unknown> = {
       '@type': event['@type'],
-      '@id': `${BASE_URL}/events/${generateEventSlug(event)}/`,
+      '@id': selfCanonicalUrl,
       name: event.title,
       description: `${event.type} event in Athens`,
       startDate: formatSchemaDate(event.startDate),
@@ -64,17 +62,25 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
       },
     };
 
-    const classifierOmits = event.price.type === 'with-ticket'
-      && 'omit_offer' in classifyTicketSource(event);
-    if (availability.kind === 'emit' && !classifierOmits) {
-      item.offers = {
-        '@type': 'Offer',
-        ...((event.price.type === 'open' || event.price.type === 'donation')
-          ? { price: '0' }
-          : (event.price.amount ? { price: event.price.amount.toString() } : {})),
-        priceCurrency: event.price.currency || getCurrencyCode(),
-        availability: availability.value,
-      };
+    // S139-fix (Strategist 2026-05-20): route ListItem Offer through the
+    // canonical S134-gated buildOfferOrOmit so the two surfaces (event-page
+    // detail + this CollectionPage list) cannot drift. The prior inline
+    // construction emitted price-less Offers for with-ticket events with no
+    // price.amount — validator.schema.org rejected 15 such instances in the
+    // ai-tech / today / concerts / this-weekend sample. buildOfferOrOmit
+    // returns { omit: true } in that case (offer-builder.ts:171-177);
+    // emit/omit decisions for past events + classifier-omit are also
+    // subsumed (previously gated separately in this site).
+    const offerDecision = buildOfferOrOmit({
+      price: event.price,
+      ticketUrl: event.ticketUrl,
+      ticketUrlResolved: event.ticketUrlResolved,
+      venue: event.venue,
+      eventStatus,
+      selfCanonicalUrl,
+    });
+    if ('offer' in offerDecision) {
+      item.offers = offerDecision.offer;
     }
 
     return {

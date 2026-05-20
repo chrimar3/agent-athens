@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, type SchemaValidationResult } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, type SchemaValidationResult } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -429,6 +429,185 @@ describe('validateHubSchema', () => {
     const html = wrapMultiJsonLd(cp, makeValidFAQPage());
     const result = validateHubSchema(html, 'concerts');
     expect(result.warnings.some(w => w.includes('inLanguage'))).toBe(true);
+  });
+
+  // S139-fix (Strategist 2026-05-20) — ListItem Offer-shape coupling regression tests.
+  // The drift class that produced 15 price-less ListItem Offers in the 2026-05-20
+  // production deploy. These tests prove the validator catches the pre-fix state.
+  describe('ListItem Offer-shape coupling (S139-fix)', () => {
+    function makeCpWithListItemOffer(offer: Record<string, any> | undefined): Record<string, unknown> {
+      const cp = makeValidCollectionPage();
+      const items = (cp.mainEntity as any).itemListElement as any[];
+      items[0].item.offers = offer;
+      if (offer === undefined) delete items[0].item.offers;
+      return cp;
+    }
+
+    test('price-less ListItem Offer (the pre-fix bug) → FAIL', () => {
+      // Exact shape from validator.schema.org rejection: priceCurrency + availability,
+      // no price field, no seller.
+      const cp = makeCpWithListItemOffer({
+        '@type': 'Offer',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+      });
+      const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      expect(result.errors.some(e =>
+        e.includes('CollectionPage.itemListElement[0].item.') &&
+        e.includes('price or priceSpecification'),
+      )).toBe(true);
+    });
+
+    test('Offer with price + priceCurrency + availability + seller passes', () => {
+      const cp = makeCpWithListItemOffer({
+        '@type': 'Offer',
+        price: '15',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'Test Venue' },
+      });
+      const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      const itemListErrors = result.errors.filter(e => e.includes('itemListElement'));
+      expect(itemListErrors).toHaveLength(0);
+    });
+
+    test('Offer with priceSpecification (instead of price) passes', () => {
+      // Schema.org allows priceSpecification as an alternative to price.
+      const cp = makeCpWithListItemOffer({
+        '@type': 'Offer',
+        priceSpecification: { '@type': 'PriceSpecification', price: 15, priceCurrency: 'EUR' },
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'Test Venue' },
+      });
+      const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      const priceErrors = result.errors.filter(e =>
+        e.includes('itemListElement') && e.includes('price or priceSpecification'),
+      );
+      expect(priceErrors).toHaveLength(0);
+    });
+
+    test('Omitted offers (no offers field at all) passes — legitimate omit', () => {
+      const cp = makeCpWithListItemOffer(undefined);
+      const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      const itemListErrors = result.errors.filter(e => e.includes('itemListElement'));
+      expect(itemListErrors).toHaveLength(0);
+    });
+
+    test('Multiple ListItems — only the malformed one FAILs (per-index error)', () => {
+      const cp = makeValidCollectionPage();
+      const items = (cp.mainEntity as any).itemListElement as any[];
+      // Replace with 3 items: [valid, malformed, valid]
+      items.length = 0;
+      items.push({
+        '@type': 'ListItem', position: 1,
+        item: { '@type': 'MusicEvent', name: 'Good 1', offers: { '@type': 'Offer', price: '10', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', seller: { '@type': 'Organization', name: 'V' } } },
+      });
+      items.push({
+        '@type': 'ListItem', position: 2,
+        item: { '@type': 'MusicEvent', name: 'Bad', offers: { '@type': 'Offer', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' } },
+      });
+      items.push({
+        '@type': 'ListItem', position: 3,
+        item: { '@type': 'MusicEvent', name: 'Good 2' },
+      });
+      const html = wrapMultiJsonLd(cp, makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      const priceErrors = result.errors.filter(e =>
+        e.includes('itemListElement') && e.includes('price or priceSpecification'),
+      );
+      expect(priceErrors).toHaveLength(1);
+      expect(priceErrors[0]).toContain('itemListElement[1]');
+    });
+
+    test('ListItem Offer rule walks @graph-wrapped CollectionPage', () => {
+      // Real production shape: CollectionPage inside @graph envelope.
+      // The validator's flattenGraph unwraps the envelope; the ListItem walk
+      // then descends into the nested item.offers and applies the FAIL rule.
+      const cp = makeCpWithListItemOffer({
+        '@type': 'Offer',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+      });
+      const envelope = { '@context': 'https://schema.org', '@graph': [cp, makeValidFAQPage()] };
+      const html = `<!DOCTYPE html><html><head><script type="application/ld+json">${JSON.stringify(envelope)}</script></head><body></body></html>`;
+      const result = validateHubSchema(html, 'concerts');
+      expect(result.errors.some(e =>
+        e.includes('itemListElement[0].item.') && e.includes('price or priceSpecification'),
+      )).toBe(true);
+    });
+  });
+});
+
+describe('validateOfferShape (S139-fix helper)', () => {
+  function validOffer(): Record<string, any> {
+    return {
+      '@type': 'Offer',
+      price: '15',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'Test Venue' },
+    };
+  }
+
+  test('valid Offer passes', () => {
+    const result = validateOfferShape(validOffer());
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('Offer with neither price nor priceSpecification → FAIL', () => {
+    const offer = validOffer();
+    delete offer.price;
+    const result = validateOfferShape(offer);
+    expect(result.errors.some(e => e.includes('price or priceSpecification'))).toBe(true);
+  });
+
+  test('Offer with priceSpecification (no price) passes', () => {
+    const offer = validOffer();
+    delete offer.price;
+    offer.priceSpecification = { '@type': 'PriceSpecification', price: 15, priceCurrency: 'EUR' };
+    const result = validateOfferShape(offer);
+    expect(result.errors.some(e => e.includes('price or priceSpecification'))).toBe(false);
+  });
+
+  test('contextPrefix prepends to errors', () => {
+    const offer = validOffer();
+    delete offer.price;
+    const result = validateOfferShape(offer, 'ListItem[7]: ');
+    expect(result.errors[0]).toStartWith('ListItem[7]: ');
+  });
+
+  test('seller as @id-only same-page reference accepted (shape b)', () => {
+    const offer = validOffer();
+    offer.seller = { '@id': 'https://agentathens.com/#organization' };
+    const result = validateOfferShape(offer);
+    const sellerErrors = result.errors.filter(e => e.includes('seller'));
+    expect(sellerErrors).toHaveLength(0);
+  });
+
+  test('price with currency symbol → FAIL', () => {
+    const offer = validOffer();
+    offer.price = '€15';
+    const result = validateOfferShape(offer);
+    expect(result.errors.some(e => e.includes('numeric'))).toBe(true);
+  });
+
+  test('missing priceCurrency → FAIL', () => {
+    const offer = validOffer();
+    delete offer.priceCurrency;
+    const result = validateOfferShape(offer);
+    expect(result.errors.some(e => e.includes('priceCurrency'))).toBe(true);
+  });
+
+  test('missing availability → FAIL', () => {
+    const offer = validOffer();
+    delete offer.availability;
+    const result = validateOfferShape(offer);
+    expect(result.errors.some(e => e.includes('availability'))).toBe(true);
   });
 });
 

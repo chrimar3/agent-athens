@@ -71,6 +71,94 @@ function isPlaceholder(value: unknown): boolean {
 const ALLOWED_PRICE_TYPES: ReadonlySet<string> = new Set(['open', 'with-ticket', 'donation']);
 
 /**
+ * Shared Offer-shape validator (S139-fix Strategist ruling 2026-05-20).
+ *
+ * Applied to every emitted Offer regardless of surface: event-page detail
+ * (Event.offers), hub CollectionPage ListItem (CollectionPage.mainEntity.
+ * itemListElement[].item.offers), and any future surface registered in the
+ * S110 Coverage Manifest. The "price OR priceSpecification required" rule
+ * closes the drift class that produced 15 price-less ListItem Offers in the
+ * 2026-05-20 deploy (validator.schema.org rejected them; the build was clean
+ * because this rule was missing).
+ *
+ * `contextPrefix` is prepended to every emitted error/warning so the caller
+ * can localize the surface (e.g. "ListItem[3]: " for a specific list index).
+ * Pass an empty string for the top-level Event.offers case.
+ */
+export function validateOfferShape(
+  offers: Record<string, any>,
+  contextPrefix: string = '',
+): { errors: string[]; warnings: string[]; info: string[] } {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const info: string[] = [];
+
+  // S139-fix FAIL rule: any emitted Offer must carry a price OR a
+  // priceSpecification. Bare Offer (priceCurrency + availability with no
+  // price) is malformed per Schema.org and rejected by validator.schema.org.
+  // Caller-side: buildOfferOrOmit returns { omit: true } in this state so
+  // the Offer never escapes; this rule is the build-time enforcement that
+  // catches any future caller that bypasses the canonical builder.
+  if (!isNonEmpty(offers.price) && !offers.priceSpecification) {
+    errors.push(`${contextPrefix}offers must have price or priceSpecification (got neither)`);
+  }
+
+  // Price format: must be numeric, not contain currency symbols.
+  if (isNonEmpty(offers.price)) {
+    const price = offers.price;
+    if (/[€$£¥]/.test(price) || (price !== '' && isNaN(Number(price)))) {
+      errors.push(`${contextPrefix}offers.price must be numeric, got "${price}"`);
+    }
+  }
+
+  // Empty price string is invalid — should be numeric or omitted entirely.
+  // (The bare-price rule above already FAILs in this case; keep the warning
+  // for explicit feedback when the value is present-but-empty.)
+  if (offers.price === '') {
+    warnings.push(`${contextPrefix}offers.price is empty (should be numeric or omitted)`);
+  }
+
+  if (!isNonEmpty(offers.priceCurrency)) {
+    errors.push(`${contextPrefix}offers.priceCurrency is missing`);
+  }
+
+  if (!isNonEmpty(offers.availability)) {
+    errors.push(`${contextPrefix}offers.availability is missing`);
+  }
+
+  // seller: must be Organization-typed object with non-empty name.
+  // Accepts dual-type ['Place', 'Organization'] for venue_direct_only
+  // (decisions.md 2026-05-02). Same-page @id references are also accepted
+  // (Sprint 3 envelope migration moves callers to shape (b)).
+  const seller = offers.seller;
+  if (seller && typeof seller === 'object' && '@id' in seller && !('@type' in seller)) {
+    // Shape (b) — same-page @id reference. Resolved by the validator's
+    // resolveSamePageReferences pass; if it didn't resolve to an
+    // Organization member, that's a separate coverage problem caught
+    // upstream. Treat as valid here.
+  } else {
+    const sellerType = seller && typeof seller === 'object' ? seller['@type'] : undefined;
+    const sellerTypeOk = sellerType === 'Organization' ||
+      (Array.isArray(sellerType) && sellerType.includes('Organization'));
+    const sellerIsValid =
+      seller !== null &&
+      typeof seller === 'object' &&
+      sellerTypeOk &&
+      isNonEmpty(seller.name);
+    if (!sellerIsValid) {
+      errors.push(`${contextPrefix}offers.seller is missing or not an Organization with name`);
+    }
+  }
+
+  // offers.url: INFO-level — surfaced for awareness, not blocking.
+  if (!isNonEmpty(offers.url)) {
+    info.push(`${contextPrefix}offers.url is omitted (legitimate for non-merchant ticket sources)`);
+  }
+
+  return { errors, warnings, info };
+}
+
+/**
  * Detective control paired with normalizePriceType() at the write boundary.
  * Single-call-site normalizers in multi-writer codebases fail silently when
  * a parallel writer is added without adopting the normalizer (S136 → 42-row
@@ -239,50 +327,14 @@ export function validateSchemaCompleteness(
   }
 
   // Offers structural checks (only when offers IS present).
-  // Sprint 1 Session 3 — Strategist 2026-04-29 spec.
+  // Sprint 1 Session 3 — Strategist 2026-04-29 spec; S139-fix Strategist
+  // 2026-05-20 extracted the rule body into validateOfferShape() so the
+  // ListItem surface in validateHubSchema applies the same checks.
   if (schema.offers && typeof schema.offers === 'object') {
-    const offers = schema.offers;
-
-    // Price format: must be numeric, not contain currency symbols
-    if (isNonEmpty(offers.price)) {
-      const price = offers.price;
-      if (/[€$£¥]/.test(price) || (price !== '' && isNaN(Number(price)))) {
-        errors.push(`offers.price must be numeric, got "${price}"`);
-      }
-    }
-
-    // Empty price string is invalid — should be numeric or omitted entirely
-    if (offers.price === '') {
-      warnings.push('offers.price is empty (should be numeric or omitted)');
-    }
-
-    if (!isNonEmpty(offers.priceCurrency)) {
-      errors.push('offers.priceCurrency is missing');
-    }
-
-    if (!isNonEmpty(offers.availability)) {
-      errors.push('offers.availability is missing');
-    }
-
-    // seller: must be Organization-typed object with non-empty name.
-    // Accepts dual-type ['Place', 'Organization'] for venue_direct_only (decisions.md 2026-05-02).
-    const seller = offers.seller;
-    const sellerType = seller && typeof seller === 'object' ? seller['@type'] : undefined;
-    const sellerTypeOk = sellerType === 'Organization' ||
-      (Array.isArray(sellerType) && sellerType.includes('Organization'));
-    const sellerIsValid =
-      seller !== null &&
-      typeof seller === 'object' &&
-      sellerTypeOk &&
-      isNonEmpty(seller.name);
-    if (!sellerIsValid) {
-      errors.push('offers.seller is missing or not an Organization with name');
-    }
-
-    // offers.url: INFO-level — surfaced for awareness, not blocking, not warning
-    if (!isNonEmpty(offers.url)) {
-      info.push('offers.url is omitted (legitimate for non-merchant ticket sources)');
-    }
+    const offerResult = validateOfferShape(schema.offers, '');
+    errors.push(...offerResult.errors);
+    warnings.push(...offerResult.warnings);
+    info.push(...offerResult.info);
   }
 
   // ── Data quality checks (WARNING if missing) ─────────────────────
@@ -426,12 +478,15 @@ export function flattenGraph(blocks: Record<string, any>[]): Record<string, any>
 export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
+  const info: string[] = [];
 
   // S139: flatten @graph envelopes so CollectionPage / FAQPage members surface
-  // for the per-type filter below.
+  // for the per-type filter below. Note: @graph envelopes do NOT unwrap nested
+  // entities like ListItem.item.offers — those are walked explicitly below by
+  // the ListItem-offer scan (S139-fix Strategist 2026-05-20).
   const blocks = resolveSamePageReferences(flattenGraph(extractAllJsonLd(htmlContent)));
   if (blocks.length === 0) {
-    return { slug: `hub:${hubSlug}`, errors: ['No JSON-LD script tag found'], warnings: [] };
+    return { slug: `hub:${hubSlug}`, errors: ['No JSON-LD script tag found'], warnings: [], info: [] };
   }
 
   const collectionPage = blocks.find(b => b['@type'] === 'CollectionPage');
@@ -456,6 +511,28 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
     }
     if (!isNonEmpty(collectionPage.inLanguage)) {
       warnings.push('CollectionPage: inLanguage is missing');
+    }
+
+    // S139-fix (Strategist 2026-05-20) — ListItem Offer-shape coupling.
+    // Walk CollectionPage.mainEntity.itemListElement[].item.offers and apply
+    // the canonical validateOfferShape rule. The "price OR priceSpecification
+    // required" rule closes the drift class that produced 15 price-less
+    // ListItem Offers in the 2026-05-20 deploy. S110 Coverage Manifest must
+    // register this surface so future emitters cannot bypass.
+    const items = collectionPage.mainEntity && Array.isArray(collectionPage.mainEntity.itemListElement)
+      ? collectionPage.mainEntity.itemListElement
+      : [];
+    for (let i = 0; i < items.length; i++) {
+      const li = items[i];
+      const event = li && typeof li === 'object' ? li.item : undefined;
+      const offers = event && typeof event === 'object' ? event.offers : undefined;
+      if (offers && typeof offers === 'object') {
+        const result = validateOfferShape(offers, `CollectionPage.itemListElement[${i}].item.`);
+        errors.push(...result.errors);
+        warnings.push(...result.warnings);
+        // Suppress per-ListItem offers.url INFO noise (we'd emit 30+ per page).
+        // The aggregate signal is captured by the event-page validator already.
+      }
     }
   }
 
@@ -486,7 +563,7 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
     }
   }
 
-  return { slug: `hub:${hubSlug}`, errors, warnings };
+  return { slug: `hub:${hubSlug}`, errors, warnings, info };
 }
 
 /**
