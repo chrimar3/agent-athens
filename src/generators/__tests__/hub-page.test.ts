@@ -11,6 +11,7 @@ import {
   injectPullQuotes,
 } from '../hub-page';
 import { sampleConcert, sampleFreeExhibition, getTodayEvent } from '../../../tests/fixtures/events';
+import { extractSingleJsonLdBlock, getGraph, findEntity, findEntityByType } from '../../../tests/helpers/graph-helpers';
 import type { Event, HubConfig, HubFaq } from '../../types';
 
 // --- Test fixtures ---
@@ -29,6 +30,7 @@ const todayHubConfig: HubConfig = {
   filter: { type: 'date', value: 'today' },
   answerCapsuleEl: 'Σήμερα στην Αθήνα θα βρείτε συναυλίες, εκθέσεις, θεατρικές παραστάσεις.',
   faqs: testFaqs,
+  cornerstone: true,
 };
 
 const concertsHubConfig: HubConfig = {
@@ -38,6 +40,17 @@ const concertsHubConfig: HubConfig = {
   filter: { type: 'event_type', value: 'concert' },
   answerCapsuleEl: 'Η Αθήνα φιλοξενεί ζωντανές συναυλίες κάθε βράδυ.',
   faqs: testFaqs,
+  cornerstone: true,
+};
+
+const nonCornerstoneHubConfig: HubConfig = {
+  slug: 'jazz',
+  titleEl: 'Τζαζ στην Αθήνα',
+  titleEn: 'Jazz in Athens',
+  filter: { type: 'tag', values: ['jazz'] },
+  answerCapsuleEl: 'Τζαζ βραδιές σε όλη την Αθήνα.',
+  faqs: [],
+  cornerstone: false,
 };
 
 function makeEvent(overrides: Partial<Event>): Event {
@@ -176,6 +189,108 @@ describe('FAQPage schema', () => {
   });
 });
 
+describe('Hub @graph envelope (S139)', () => {
+  test('Cornerstone hub emits exactly one JSON-LD block as a @graph envelope', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    expect(envelope['@context']).toBe('https://schema.org');
+    expect(Array.isArray(envelope['@graph'])).toBe(true);
+  });
+
+  test('Cornerstone @graph members appear in strategist Q2 order', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const types = getGraph(envelope).map((m: Record<string, any>) => m['@type']);
+    // CollectionPage FIRST, Organization LAST. FAQPage in between (faqs present).
+    expect(types[0]).toBe('CollectionPage');
+    expect(types[types.length - 1]).toBe('Organization');
+    expect(types).toContain('FAQPage');
+  });
+
+  test('Cornerstone CollectionPage has #collectionpage @id at hub canonical', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const collection = findEntityByType(envelope, 'CollectionPage');
+    expect(collection).toBeDefined();
+    expect(collection!['@id']).toBe('https://agentathens.com/today#collectionpage');
+  });
+
+  test('Cornerstone FAQPage has #faqpage @id at hub canonical', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const faq = findEntityByType(envelope, 'FAQPage');
+    expect(faq).toBeDefined();
+    expect(faq!['@id']).toBe('https://agentathens.com/today#faqpage');
+    expect(faq!.mainEntity.length).toBe(testFaqs.length);
+  });
+
+  test('Organization is the LAST member and uses the canonical site @id', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const graph = getGraph(envelope);
+    const last = graph[graph.length - 1];
+    expect(last['@type']).toBe('Organization');
+    expect(last['@id']).toBe('https://agentathens.com/#organization');
+  });
+
+  test('Editor-picks ItemList is absent until S101b wires real picks', () => {
+    // S101a infrastructure exists but has no production callers; hub-page
+    // passes editorPicks: []. buildEditorPicksItemList returns null on empty,
+    // so the ItemList member is omitted from the @graph entirely. When S101b
+    // lands and passes a populated picks array, the ItemList will auto-appear.
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(todayHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const editorPicks = findEntity(envelope, '@id', 'https://agentathens.com/today#editor-picks');
+    expect(editorPicks).toBeUndefined();
+  });
+
+  test('Non-cornerstone hub @graph contains only CollectionPage + Organization', () => {
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(nonCornerstoneHubConfig, events, events);
+    const envelope = extractSingleJsonLdBlock(html!);
+    const types = getGraph(envelope).map((m: Record<string, any>) => m['@type']);
+    expect(types).toEqual(['CollectionPage', 'Organization']);
+  });
+
+  test('English-locale hub with no English FAQ translations omits FAQPage', () => {
+    // testFaqs has no questionEn/answerEn fields, so renderFaqSchema's locale
+    // filter returns []. buildFaqPageMember returns null → FAQPage is dropped
+    // from the @graph (no empty FAQPage ships in production).
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens: concerts, exhibitions, theater.',
+    };
+    const events = makeTodayEvents(5);
+    const html = renderHubPage(englishHubConfig, events, events, undefined, 'en');
+    const envelope = extractSingleJsonLdBlock(html!);
+    const faq = findEntityByType(envelope, 'FAQPage');
+    expect(faq).toBeUndefined();
+  });
+
+  test('Hub canonical URL is locale-independent (canonical-to-root posture)', () => {
+    // Both el + en variants of a hub canonicalize to the Greek root URL
+    // (2026-05-14 GEO decision). The @graph @id values must match this
+    // posture: same #collectionpage @id regardless of locale.
+    const events = makeTodayEvents(5);
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens.',
+    };
+    const elHtml = renderHubPage(todayHubConfig, events, events);
+    const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
+    const elEnvelope = extractSingleJsonLdBlock(elHtml!);
+    const enEnvelope = extractSingleJsonLdBlock(enHtml!);
+    expect(findEntityByType(elEnvelope, 'CollectionPage')!['@id'])
+      .toBe(findEntityByType(enEnvelope, 'CollectionPage')!['@id']);
+  });
+});
+
 describe('Comparison table', () => {
   test('Table has correct Greek headers with scope="col"', () => {
     const events = makeTodayEvents(5);
@@ -188,7 +303,10 @@ describe('Comparison table', () => {
 
   test('All 4 table headers have scope="col" for WCAG 2.1', () => {
     const events = makeTodayEvents(5);
-    const html = renderHubPage(todayHubConfig, events, events);
+    // Use a non-cornerstone hub so the table has exactly 4 columns (cornerstones
+    // add a 5th ★ column). The WCAG intent is "every <th> has scope" — column
+    // count is incidental to that.
+    const html = renderHubPage(nonCornerstoneHubConfig, events, events);
     expect(html!).toContain('<th scope="col">');
     const scopeCount = (html!.match(/scope="col"/g) || []).length;
     expect(scopeCount).toBe(4);
@@ -253,7 +371,7 @@ describe('Comparison table', () => {
 
   test('Non-cornerstone hub does NOT render ★ column header', () => {
     const events = makeTodayEvents(5);
-    const html = renderHubPage(todayHubConfig, events, events);
+    const html = renderHubPage(nonCornerstoneHubConfig, events, events);
     const headerMatch = html!.match(/<thead><tr>(.*?)<\/tr><\/thead>/s);
     expect(headerMatch).not.toBeNull();
     const thCount = (headerMatch![1].match(/<th /g) || []).length;

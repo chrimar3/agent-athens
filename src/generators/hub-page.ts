@@ -26,6 +26,7 @@ import { formatDateOnly } from '../utils/i18n-date';
 import { renderHubCrossLinks } from '../utils/cornerstone-links';
 import { getPullQuotes, getSectionEditorial, getFeaturedPickRank } from '../utils/editorial-content';
 import { BASE_URL } from '../config/site-url';
+import { buildHubGraph } from '../utils/schema-graph-builders';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -302,6 +303,7 @@ export function renderHubPage(
   // for the canonical-to-root posture (2026-05-14 GEO decision). Replaces
   // the prior post-render regex-patches in this file.
   metadata.url = config.slug;
+  metadata.pageType = 'hub';
   if (lastUpdateOverride) {
     metadata.lastUpdate = lastUpdateOverride;
   }
@@ -518,9 +520,24 @@ export function renderHubPage(
     html = html.replace('</main>', `${injection}\n</main>`);
   }
 
-  // FAQPage Schema (inject before </head>)
-  const faqSchemaBlock = renderFaqSchema(resolvedFaqs, locale);
-  html = html.replace('</head>', `${faqSchemaBlock}\n</head>`);
+  // S139: per-page @graph envelope (replaces prior separate CollectionPage +
+  // FAQPage blocks). buildHubGraph composes CollectionPage → FAQPage (if
+  // faqs render) → editor-picks ItemList (if picks.length > 0, deferred to
+  // S101b) → site-publisher Organization, per Strategist Q2 ordering.
+  // Canonical URL follows the canonical-to-root posture: same Greek-root
+  // URL for both el/en variants (2026-05-14 GEO decision).
+  const hubCanonicalUrl = `${BASE_URL}/${config.slug}`;
+  const graphEnvelope = buildHubGraph({
+    metadata,
+    locale,
+    events: displayEvents,
+    faqs: resolvedFaqs,
+    editorPicks: [],
+    isCornerstone: config.cornerstone === true,
+    hubCanonicalUrl,
+  });
+  const graphBlock = `<script type="application/ld+json">\n${JSON.stringify(graphEnvelope)}\n</script>`;
+  html = html.replace('</head>', `${graphBlock}\n</head>`);
 
   return html;
 }
@@ -640,6 +657,7 @@ export function renderOverflowPage(
   // paginated views point canonical to the un-paginated canonical surface).
   // See note in renderHubPage above for the broader rationale.
   metadata.url = config.slug;
+  metadata.pageType = 'hub';
 
   // Render with ALL events (no cap) — omit allEvents to skip filter bar
   const baseHtml = renderPage(metadata, filteredEvents, undefined, undefined, locale);
@@ -662,6 +680,24 @@ export function renderOverflowPage(
   const backHref = locale === 'en' ? `/en/${config.slug}/` : `/${config.slug}`;
   const backText = locale === 'en' ? `← ${config.titleEn}` : `← ${config.titleEl}`;
   html = html.replace('</header>', `</header>\n<nav class="overflow-back"><a href="${backHref}">${backText}</a></nav>`);
+
+  // S139: overflow page also emits the hub @graph envelope. metadata.pageType
+  // is 'hub' (suppresses page.ts's flat CollectionPage), so without this
+  // injection the overflow page would emit zero JSON-LD. FAQ + editor-picks
+  // pass empty — FAQ doesn't render on the overflow surface and picks aren't
+  // wired anywhere yet (S101b). Result: CollectionPage + Organization.
+  const hubCanonicalUrl = `${BASE_URL}/${config.slug}`;
+  const overflowGraph = buildHubGraph({
+    metadata,
+    locale,
+    events: filteredEvents,
+    faqs: [],
+    editorPicks: [],
+    isCornerstone: config.cornerstone === true,
+    hubCanonicalUrl,
+  });
+  const overflowGraphBlock = `<script type="application/ld+json">\n${JSON.stringify(overflowGraph)}\n</script>`;
+  html = html.replace('</head>', `${overflowGraphBlock}\n</head>`);
 
   return html;
 }

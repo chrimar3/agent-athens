@@ -135,6 +135,12 @@ export interface PageMetadata {
   eventCount: number;
   lastUpdate: string;
   filters: Filters;
+  // S139: per-page @graph emission discriminator. Set by the generator
+  // (hub-page, homepage) so page.ts's schema dispatcher knows which envelope
+  // to emit (or to defer emission to the caller when the caller owns it).
+  // Absent for category / all-events / saved pages — those fall through to
+  // the flat CollectionPage path.
+  pageType?: 'hub' | 'homepage';
 }
 
 export interface FilterCountOption {

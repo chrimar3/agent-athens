@@ -6,12 +6,12 @@ import { join } from 'path';
 import type { Event, EventType, PageMetadata } from '../types';
 import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
-import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, availabilityForEventStatus, ORGANIZATION_SCHEMA, getCountryCode, getCurrencyCode } from '../utils/schema-geo';
+import { resolveEventStatus, availabilityForEventStatus, ORGANIZATION_SCHEMA } from '../utils/schema-geo';
 import { classifyTicketSource } from '../utils/ticket-source-classifier';
 import { generateEventSlug } from '../generators/event-page';
+import { buildCollectionPageMember } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
@@ -135,9 +135,9 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   ${url === 'index' ? `<link rel="alternate" type="application/ld+json" href="/api/events.json">` : ''}
 
   <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
+  ${schemaMarkup ? `<script type="application/ld+json">
   ${schemaMarkup}
-  </script>
+  </script>` : ''}
   ${url === 'index' ? `<script type="application/ld+json">
   ${JSON.stringify(ORGANIZATION_SCHEMA, null, 2)}
   </script>` : ''}
@@ -438,104 +438,23 @@ function renderRelatedPages(filters: any): string {
   </aside>`;
 }
 
-function normalizeStartDate(isoDate: string): string {
-  // Delegates to the canonical Schema.org date formatter: date-only passthrough
-  // (no midnight timestamp), naive-ts + DST offset, tz-aware passthrough.
-  return formatSchemaDate(isoDate);
-}
-
-function resolveSchemaEndDate(event: Event): string {
-  // Tier 1: exhibitions use endDate (run-end); other events fall back to startDate if endDate missing.
-  if (event.type === 'exhibition' && event.endDate) {
-    return formatSchemaDate(event.endDate);
-  }
-  return formatSchemaDate(event.endDate ?? event.startDate);
-}
-
 function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: Locale = 'el'): string {
-  // CRITICAL: Schema.org must ALWAYS be in English for AI agent parsing
-  // Even though content is Greek, Schema.org is the universal standard
+  // S139: hub pages own their own @graph injection (hub-page.ts splices the
+  // envelope before </head>). Returning empty here suppresses the page.ts
+  // schemaMarkup script tag — see the conditional wrapper in renderPage.
+  if (metadata.pageType === 'hub') return '';
 
-  const itemListElements = events.map((event, index) => {
-    // S101a-B: align hub Offer with detail-page emitter. Use the canonical
-    // helper instead of hardcoded InStock. Past events get omit_offer → drop
-    // the entire offers field (matches buildEventSchemaObject behavior +
-    // schema-completeness.ts:148 "EventCompleted legitimately have no Offer").
-    const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
-    const availability = availabilityForEventStatus(eventStatus);
-
-    const item: Record<string, unknown> = {
-      "@type": event['@type'],
-      "@id": `${BASE_URL}/events/${generateEventSlug(event)}/`,
-      "name": event.title,
-      "description": `${event.type} event in Athens`,
-      "startDate": normalizeStartDate(event.startDate),
-      "endDate": resolveSchemaEndDate(event),
-      "eventStatus": eventStatus,
-      "isAccessibleForFree": event.price.type === 'open' || event.price.type === 'donation',
-      "location": {
-        "@type": VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
-        "name": event.venue.name,
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": event.venue.address || "",
-          "addressLocality": "Athens",
-          "addressRegion": "Attica",
-          "addressCountry": getCountryCode()
-        },
-        "containedInPlace": buildContainedInPlace(event.venue.neighborhood)
-      }
-    };
-
-    // S134: classifier-gated Offer emission. Hub list-item Offer stays minimal
-    // (no seller — preserves Sprint 1 hub pattern), but omits entirely when
-    // classifier says omit for with-ticket events (listing_aggregator /
-    // unclassified / null-URL). Open events emit minimal Offer regardless.
-    const classifierOmits = event.price.type === 'with-ticket'
-      && 'omit_offer' in classifyTicketSource(event);
-    if (availability.kind === 'emit' && !classifierOmits) {
-      item.offers = {
-        "@type": "Offer",
-        ...((event.price.type === 'open' || event.price.type === 'donation')
-          ? { "price": "0" }
-          : (event.price.amount ? { "price": event.price.amount.toString() } : {})),
-        "priceCurrency": event.price.currency || getCurrencyCode(),
-        "availability": availability.value
-      };
-    }
-
-    return {
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": item
-    };
+  // Default: flat CollectionPage block for category / all-events / saved /
+  // overflow pages. Routed through buildCollectionPageMember so the per-event
+  // Offer/availability/location logic stays in one place (shared with the
+  // hub + homepage @graph envelopes). No `@id` is passed, so the output is
+  // byte-equivalent to the prior inline schema for the fall-through path.
+  const member = buildCollectionPageMember({
+    events,
+    metadata,
+    locale,
+    url: `${BASE_URL}/${metadata.url}`,
   });
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": `${metadata.title} | Cultural Events in Athens`,  // Add English context
-    "description": `${events.length} cultural events in Athens, Greece`,  // English
-    "url": `${BASE_URL}/${metadata.url}`,
-    "inLanguage": locale === 'en' ? 'en' : 'el',
-    "about": {
-      "@type": "Place",
-      "name": "Athens",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": getCountryCode(),
-        "addressLocality": "Athens"
-      }
-    },
-    "mainEntity": {
-      "@type": "ItemList",
-      "numberOfItems": events.length,
-      "itemListElement": itemListElements
-    },
-    "datePublished": metadata.lastUpdate,
-    "dateModified": metadata.lastUpdate
-  };
-
-  return JSON.stringify(schema, null, 2);
+  return JSON.stringify({ '@context': 'https://schema.org', ...member }, null, 2);
 }
 
