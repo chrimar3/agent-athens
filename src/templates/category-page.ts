@@ -100,7 +100,7 @@ export function renderCategoryNav(
       ${navItems.join('\n      ')}
     </div>
     <style>
-      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
+      .category-nav { margin: 20px 0; padding: 15px 0; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; overscroll-behavior-x: contain; touch-action: pan-x; }
       .category-nav-container { display: flex; gap: 15px; flex-wrap: nowrap; white-space: nowrap; }
       .category-nav-item { padding: 8px 16px; background: var(--bg-surface); border-radius: 20px; text-decoration: none; color: var(--text-primary); font-size: 0.9rem; transition: all var(--t-fast) var(--ease-out); }
       .category-nav-item:hover { background: var(--bg-elevated); text-decoration: none; }

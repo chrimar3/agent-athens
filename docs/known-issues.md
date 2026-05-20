@@ -679,7 +679,9 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 - `.filter-bar` (`:1363`) — `top: 56px`; hub pages
 - `.date-group-header` (`:528`) — `top: 64px`; hub pages with date-grouped lists
 - `.hub-comparison-table th` (`:2561`) — `top: 0`; hub comparison tables
-**Other horizontal-scrolling regions in the codebase** (not yet patched, no current symptom — document-level QW-B currently backstops them; targeted `overscroll-behavior-x` + `touch-action` patches queued for a future preventive maintenance batch): `.filter-bar-scroll` (`:1382`), `.table-scroll-wrapper` (`:2547`).
+**Other horizontal-scrolling regions in the codebase:**
+- `.filter-bar-scroll` (`src/styles/design-system.css:1382`) — ✅ patched 2026-05-20. Added `overscroll-behavior-x: contain` + `touch-action: pan-x` at `:1389-1390`. Same fix shape extended to `.category-nav` (inline rule in `src/templates/category-page.ts:103`, a newly-surfaced horizontal-scroll region in the preventive sweep). Tests: `tests/build/scroll-container-overscroll.test.ts` (6 assertions, anchoring on CSS rule presence in built dist).
+- `.table-scroll-wrapper` (`src/styles/design-system.css:2547`) — not yet patched, no current symptom; document-level QW-B (`html, body { overflow-x: clip }`) currently backstops it. Queued for a future preventive maintenance batch.
 **Status:** Fixed (QW-A: commit on 2026-05-14 deploy; QW-B: commit on 2026-05-14 deploy).
 
 ### Hub Page Capsule + Category-Page Nav Body-Level Mis-Placement (Wrong-Anchor Regex)
