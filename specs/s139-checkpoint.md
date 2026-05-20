@@ -1,6 +1,8 @@
 # S139 Checkpoint — 2026-05-20
 
-**Status:** Stage 1 + Stage 5 (absorbed) + Stage 2 committed on `main`. Not yet pushed/deployed. Stages 3-4 remain.
+**Status:** Stage 1 + Stage 5 (absorbed) + Stage 2 committed on `main`. **Stages 1+2+5 DEPLOYED to production via daily-pipeline commit `bead0b152` (2026-05-20 10:32) — verified live @graph envelope on EDP + venue pages (probes 2026-05-20).** Stages 3-4 remain (NOT STARTED).
+
+**Deploy reconciliation (2026-05-20 post-checkpoint):** Deploy of stages 1+2+5 already occurred via daily pipeline; stage 3+4 resumption does NOT re-deploy 1+2+5. Step 7 (push + deploy) below applies only to stage 3+4 work; Option B has effectively occurred.
 
 **Reason for checkpoint:** Plan's overflow protocol — past Stage 2 commit, context budget at risk. Per plan: "Completed stages are independently deployable. Partial-deploy of completed stages is preferable to context-saturated full pass."
 
