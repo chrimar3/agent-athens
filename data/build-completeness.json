@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-20T07:32:13.646Z"
+    "lastUpdate": "2026-05-20T09:44:16.795Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,30 +13,30 @@
     "byType": [
       {
         "type": "concert",
-        "total": 739,
-        "pass": 739,
+        "total": 743,
+        "pass": 743,
         "warn": 0,
         "fail": 0,
-        "info": 567,
+        "info": 571,
         "passRate": 100
       },
       {
         "type": "dj_set",
-        "total": 463,
-        "pass": 445,
-        "warn": 18,
+        "total": 465,
+        "pass": 443,
+        "warn": 22,
         "fail": 0,
-        "info": 463,
-        "passRate": 96
+        "info": 465,
+        "passRate": 95
       },
       {
         "type": "exhibition",
-        "total": 19,
+        "total": 20,
         "pass": 19,
-        "warn": 0,
+        "warn": 1,
         "fail": 0,
         "info": 9,
-        "passRate": 100
+        "passRate": 95
       },
       {
         "type": "theater",
@@ -112,25 +112,25 @@
       }
     ],
     "totals": {
-      "total": 3866,
-      "pass": 3848,
-      "warn": 18,
+      "total": 3873,
+      "pass": 3850,
+      "warn": 23,
       "fail": 0,
-      "info": 3571,
-      "passRate": 100
+      "info": 3577,
+      "passRate": 99
     },
     "orphanSlugs": []
   },
   "hubs": {
     "total": 28,
-    "pass": 26,
-    "warn": 2,
+    "pass": 10,
+    "warn": 18,
     "fail": 0,
     "info": 0
   },
   "venues": {
-    "total": 47,
-    "pass": 47,
+    "total": 48,
+    "pass": 48,
     "warn": 0,
     "fail": 0,
     "info": 43
@@ -158,18 +158,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 47,
-      "pass": 47,
+      "total": 48,
+      "pass": 48,
       "warn": 0,
       "fail": 0,
       "info": 43
     },
     "event_template": {
-      "total": 3866,
-      "pass": 3848,
-      "warn": 18,
+      "total": 3873,
+      "pass": 3850,
+      "warn": 23,
       "fail": 0,
-      "info": 3571
+      "info": 3577
     },
     "byVenue": [
       {
@@ -394,12 +394,12 @@
       },
       {
         "venue": "cantina social",
-        "total": 22,
+        "total": 23,
         "pass": 22,
-        "warn": 0,
+        "warn": 1,
         "fail": 0,
-        "info": 22,
-        "passRate": 100,
+        "info": 23,
+        "passRate": 96,
         "sameAsState": "missing"
       },
       {
@@ -454,12 +454,12 @@
       },
       {
         "venue": "crust",
-        "total": 14,
+        "total": 16,
         "pass": 14,
-        "warn": 0,
+        "warn": 2,
         "fail": 0,
-        "info": 14,
-        "passRate": 100,
+        "info": 16,
+        "passRate": 88,
         "sameAsState": "missing"
       },
       {
@@ -594,11 +594,11 @@
       },
       {
         "venue": "fuzz club",
-        "total": 9,
-        "pass": 9,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 9,
+        "info": 10,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -764,12 +764,12 @@
       },
       {
         "venue": "onassis stegi",
-        "total": 46,
+        "total": 47,
         "pass": 46,
-        "warn": 0,
+        "warn": 1,
         "fail": 0,
         "info": 0,
-        "passRate": 100,
+        "passRate": 98,
         "sameAsState": "present"
       },
       {
@@ -854,11 +854,11 @@
       },
       {
         "venue": "rohas athens live stage",
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1014,11 +1014,11 @@
       },
       {
         "venue": "underflow",
-        "total": 10,
-        "pass": 10,
+        "total": 11,
+        "pass": 11,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 11,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1224,11 +1224,11 @@
       },
       {
         "venue": "γυαλινο μουσικο θεατρο",
-        "total": 7,
-        "pass": 7,
+        "total": 8,
+        "pass": 8,
         "warn": 0,
         "fail": 0,
-        "info": 7,
+        "info": 8,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1894,12 +1894,12 @@
       },
       {
         "venue": "πλυφα",
-        "total": 58,
-        "pass": 58,
-        "warn": 0,
+        "total": 57,
+        "pass": 56,
+        "warn": 1,
         "fail": 0,
-        "info": 58,
-        "passRate": 100,
+        "info": 57,
+        "passRate": 98,
         "sameAsState": "missing"
       },
       {
