@@ -571,8 +571,30 @@ run_deploy() {
             | jq -r '.deploy_id // .id // empty' 2>/dev/null)
 
         if [ -z "$DEPLOY_ID" ]; then
-            log_error "[deploy] could not parse deploy_id (cli_exit=$cli_exit); failing"
-            return 1
+            # PARSE-OR-FAIL FALLBACK (2026-05-21 follow-on to S142):
+            # When the CLI errors with an HTTP error (e.g., JSONHTTPError on
+            # concurrent-deploy cancellation), --json stdout is empty so
+            # .deploy_id can't be parsed and the S142 retry-gate at line ~602
+            # is unreachable. Recover the server-side deploy artifact by
+            # matching --message title within a 10-min window, then fall
+            # through to the existing state-poll + retry gate, which already
+            # handles "Deploy canceled" correctly once reachable.
+            # Diagnostic: specs/2026-05-20-deploy-pipeline-diagnostic.md
+            log "[deploy] CLI parse failed (cli_exit=$cli_exit); querying listSiteDeploys for server-side artifact"
+            local cutoff
+            cutoff=$(date -u -v-10M +%Y-%m-%dT%H:%M:%SZ)
+            DEPLOY_ID=$(netlify api listSiteDeploys \
+                --data "{\"site_id\":\"$SITE_ID\",\"per_page\":10}" 2>/dev/null \
+                | tr -d '\000-\010\013\014\016-\037' \
+                | jq -r --arg msg "Daily deploy $(date +%Y-%m-%d)" \
+                    --arg cutoff "$cutoff" \
+                    '[.[] | select(.title == $msg and .created_at > $cutoff)] | sort_by(.created_at) | last | .id // empty' 2>/dev/null)
+
+            if [ -z "$DEPLOY_ID" ]; then
+                log_error "[deploy] could not parse deploy_id AND no server-side artifact within 10-min window matching message (cli_exit=$cli_exit); failing"
+                return 1
+            fi
+            log "[deploy] recovered DEPLOY_ID=$DEPLOY_ID via listSiteDeploys; entering state-poll"
         fi
 
         # Single poll loop covering all non-terminal states. Polling alone
@@ -609,7 +631,7 @@ run_deploy() {
                 log "[deploy] gate passed (Deploy canceled + 0 concurrent non-terminal); retrying once"
                 continue
             fi
-            log_error "[deploy] gate refused retry: $concurrent concurrent non-terminal deploys present"
+            log_error "[deploy] gate refused retry: $concurrent concurrent non-terminal deploy(s) present. Manual: netlify deploy --prod --no-build --dir=dist"
             return 1
         fi
 
