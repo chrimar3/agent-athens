@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-19T21:27:14.268Z"
+    "lastUpdate": "2026-05-20T07:32:13.646Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,11 +13,11 @@
     "byType": [
       {
         "type": "concert",
-        "total": 743,
-        "pass": 743,
+        "total": 739,
+        "pass": 739,
         "warn": 0,
         "fail": 0,
-        "info": 571,
+        "info": 567,
         "passRate": 100
       },
       {
@@ -112,11 +112,11 @@
       }
     ],
     "totals": {
-      "total": 3870,
-      "pass": 3852,
+      "total": 3866,
+      "pass": 3848,
       "warn": 18,
       "fail": 0,
-      "info": 3575,
+      "info": 3571,
       "passRate": 100
     },
     "orphanSlugs": []
@@ -165,11 +165,11 @@
       "info": 43
     },
     "event_template": {
-      "total": 3870,
-      "pass": 3852,
+      "total": 3866,
+      "pass": 3848,
       "warn": 18,
       "fail": 0,
-      "info": 3575
+      "info": 3571
     },
     "byVenue": [
       {
@@ -224,11 +224,11 @@
       },
       {
         "venue": "an club",
-        "total": 17,
-        "pass": 17,
+        "total": 16,
+        "pass": 16,
         "warn": 0,
         "fail": 0,
-        "info": 17,
+        "info": 16,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -924,11 +924,11 @@
       },
       {
         "venue": "stage 7",
-        "total": 3,
-        "pass": 3,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1864,11 +1864,11 @@
       },
       {
         "venue": "παρνασσος",
-        "total": 11,
-        "pass": 11,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 11,
+        "info": 10,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1964,11 +1964,11 @@
       },
       {
         "venue": "ρεκτιφιε",
-        "total": 21,
-        "pass": 21,
+        "total": 20,
+        "pass": 20,
         "warn": 0,
         "fail": 0,
-        "info": 21,
+        "info": 20,
         "passRate": 100,
         "sameAsState": "missing"
       },
