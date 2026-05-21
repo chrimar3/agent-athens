@@ -4124,3 +4124,13 @@ Two rulings on the same day, both fixing pre-existing schema defects surfaced by
 ### Shared meta-finding (both rulings)
 
 Both fixes share one root: the in-build validator (`src/validators/schema-completeness.ts`) checks **presence**, not Schema.org **property / type / vocabulary validity**. The validator was a structural-presence checker; the rulings extend it toward vocabulary-validity. validator.schema.org as mandatory deploy-gate is now a **proven process invariant**, not a session-by-session lesson — see `patterns.md` → "Schema changes require validator.schema.org gating on every affected page class." Each external-caught defect adds an internal check so the gap between in-build and external validation progressively closes.
+
+### S141: orphan + ordering at FAIL severity, no ratchet (2026-05-20)
+
+Step 0c diagnostic returned 0 true orphans across 4142 refs / 5126 pages → orphan rule landed directly at FAIL, no `completeness-ratchets.json` entry. Ordering rule at FAIL across all 4 page classes (Event / Venue / Hub / Homepage). Decision authority: diagnostic result + Strategist scoping (S134 §3 — Place/Performer/Organization/Organizer).
+
+**Validation surface note (S143 follow-up, GEO 2026-05-20):** geo-presence check scoped to canonical venue node, not inline Event.location projection (3857→~23; residual = venue-data geo gaps, routed to Component B sameAs/geo backfill). Surface registered in `docs/schema-coverage-manifest.md` so it cannot silently re-drift.
+
+### Offer.validFrom — Deliberately Deferred (Strategist 2026-05-18, filed S141)
+
+`Offer.validFrom` registered in the Deliberately Deferred Register (`docs/current-infrastructure-v2.md`). ~151 cosmetic GSC optional-field warnings; no structured on-sale timestamp source exists, synthesizing would be fabricated data. Reactivation trigger: a merchant feed exposes a structured on-sale timestamp. **NOT to be conflated with `editorial-content.ts` validFrom** (intentional date-windowing, live + correct).

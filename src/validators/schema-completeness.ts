@@ -378,14 +378,24 @@ export function validateSchemaCompleteness(
     }
   }
 
-  // S143 (Strategist 2026-05-20): Event.location is the inline rich-result
-  // projection — required-inline set is {@type, @id, name, address}. geo is
-  // recommended-on-canonical, lives on the separate MusicVenue @graph member
-  // (reached via @id merge for graph consumers). Demoting Event.location.geo
-  // from WARN → INFO acknowledges this — venue-page LocalBusiness.geo check
-  // at :903 continues to enforce geo on the canonical surface.
-  if (!location?.geo) {
-    info.push('location.geo coordinates missing on Event-inline projection (geo carried on canonical venue node via @id)');
+  // S143 (Strategist 2026-05-20, GEO-refined): Geo is specced on the canonical
+  // venue node (separate @graph member). Under the inline-with-@id
+  // Event.location form, resolveSamePageReferences() does NOT inline geo onto
+  // Event.location (it inlines only bare-@id refs with exactly one key — see
+  // :474). Scope the geo-presence check to the canonical venue node by @id
+  // lookup. This keeps the geo-gap WARN signal visible for real venue-data
+  // gaps (routed to Component B sameAs/geo backfill) without building merge-
+  // resolution into the validator and matches "geo is a venue-entity property."
+  // Fall back to location.geo for legacy/fully-inline forms with no @id ref.
+  const locationId = (location && typeof location === 'object')
+    ? (location as Record<string, unknown>)['@id']
+    : undefined;
+  const canonicalVenueNode = (typeof locationId === 'string')
+    ? rawFlatBlocks.find(b => b?.['@id'] === locationId)
+    : null;
+  const venueGeo = canonicalVenueNode?.geo ?? location?.geo;
+  if (!venueGeo) {
+    warnings.push('location.geo coordinates missing');
   }
 
   if (!isNonEmpty(schema.image)) {

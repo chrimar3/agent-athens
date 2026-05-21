@@ -267,15 +267,98 @@ describe('validateSchemaCompleteness', () => {
       expect(result.warnings.some(w => w.includes('streetAddress'))).toBe(true);
     });
 
-    test('missing location.geo → INFO (S143: geo carried on canonical venue node via @id merge, not required-inline on Event)', () => {
+    test('missing location.geo (no canonical @id, fully-inline) → WARNING (scope-to-canonical falls back to inline geo when no @id ref)', () => {
       const schema = makeValidSchema();
       delete (schema.location as Record<string, any>).geo;
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-geo');
-      // S143 demotion: Event.location.geo missing → INFO (orthogonal to pass/warn/fail
-      // per Component B-2). Canonical-venue LocalBusiness.geo check at validateVenueSchema
-      // remains WARN — the recommended-on-canonical contract is enforced on that surface.
-      expect(result.warnings.some(w => w.includes('geo'))).toBe(false);
-      expect((result.info ?? []).some(i => i.includes('geo'))).toBe(true);
+      // S143 GEO-refined (2026-05-20): geo check scoped to canonical venue node
+      // by @id lookup; for fully-inline events without an @id ref, falls back
+      // to location.geo. Either way, truly missing geo → WARN (preserves the
+      // venue-data-gap signal routed to Component B sameAs/geo backfill).
+      expect(result.warnings.some(w => w.includes('location.geo coordinates missing'))).toBe(true);
+    });
+
+    test('missing location.geo on inline-with-@id Event.location but canonical venue node HAS geo → PASS (scope-to-canonical lookup succeeds)', () => {
+      const venueId = 'https://agentathens.com/venues/half-note/#venue';
+      const eventEntity = makeValidSchema({
+        '@id': 'https://agentathens.com/events/abc/#event',
+        location: {
+          '@type': 'MusicVenue',
+          '@id': venueId,
+          name: 'Half Note Jazz Club',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Trivonianou 17',
+            addressLocality: 'Athens',
+            addressRegion: 'Attica',
+            addressCountry: 'GR',
+          },
+          // NOTE: no geo on the inline projection — this is exactly the S143 inline shape
+        },
+      });
+      delete (eventEntity as any)['@context'];
+      const envelope = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          eventEntity,
+          {
+            '@type': 'MusicVenue',
+            '@id': venueId,
+            name: 'Half Note Jazz Club',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: 'Trivonianou 17',
+              addressLocality: 'Athens',
+              addressRegion: 'Attica',
+              addressCountry: 'GR',
+            },
+            geo: { '@type': 'GeoCoordinates', latitude: 37.9688, longitude: 23.7375 },
+          },
+        ],
+      };
+      const result = validateSchemaCompleteness(wrapInHtml(envelope), 'inline-geo-on-canonical');
+      expect(result.warnings.some(w => w.includes('location.geo coordinates missing'))).toBe(false);
+    });
+
+    test('inline-with-@id Event.location AND canonical venue node both lack geo → WARNING (real venue-data gap surfaces)', () => {
+      const venueId = 'https://agentathens.com/venues/crust/#venue';
+      const eventEntity = makeValidSchema({
+        '@id': 'https://agentathens.com/events/abc/#event',
+        location: {
+          '@type': 'MusicVenue',
+          '@id': venueId,
+          name: 'Crust',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Πρωτογένους 13, Αθήνα 105 54',
+            addressLocality: 'Athens',
+            addressRegion: 'Attica',
+            addressCountry: 'GR',
+          },
+        },
+      });
+      delete (eventEntity as any)['@context'];
+      const envelope = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          eventEntity,
+          {
+            '@type': 'MusicVenue',
+            '@id': venueId,
+            name: 'Crust',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: 'Πρωτογένους 13, Αθήνα 105 54',
+              addressLocality: 'Athens',
+              addressRegion: 'Attica',
+              addressCountry: 'GR',
+            },
+            // NOTE: no geo on canonical either — represents the ~25 real venue-data gaps
+          },
+        ],
+      };
+      const result = validateSchemaCompleteness(wrapInHtml(envelope), 'no-geo-anywhere');
+      expect(result.warnings.some(w => w.includes('location.geo coordinates missing'))).toBe(true);
     });
 
     test('missing image → WARNING', () => {

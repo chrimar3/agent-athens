@@ -41,6 +41,13 @@ require a row added to this manifest.
   `containedInPlace` stay on the canonical venue node (separate @graph member,
   same @id) and reach graph consumers via @id merge. Negative-control fixture
   is permanent at `src/validators/__tests__/schema-completeness.test.ts`.
+- **Geo-presence check surface (GEO 2026-05-20):** `location.geo` WARN reads
+  off the canonical venue node by `@id` lookup, NOT off the inline
+  `Event.location` projection (which carries only the rich-result-required
+  set: `@type` + `@id` + `name` + `address`). Registered here so the surface
+  cannot silently re-drift when future required-nested rules ship. Residual
+  geo WARNs are real venue-data gaps and route to Component B sameAs/geo
+  backfill, not to the validator.
 
 ### 2. Event detail page — microdata Event element
 
