@@ -25,7 +25,7 @@ import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
-import { classifyEventLifecycle } from '../utils/event-lifecycle';
+import { classifyEventLifecycle, shouldNoindexEvent } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { resolveCtaForEvent } from '../ticketing/cta';
@@ -163,7 +163,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'inLanguage': locale === 'en' ? 'en' : 'el',
-    'url': `${BASE_URL}/events/${eventSlug}/`,
+    'url': `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
       'name': event.venue.name,
@@ -370,7 +370,14 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
 export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el'): string {
   const t = STRINGS[locale];
   const slug = generateEventSlug(event);
-  const canonicalUrl = `${BASE_URL}/events/${slug}/`;
+  // S144 (GEO 2026-05-21): canonical is locale-aware self.
+  // /en/ pages canonicalize to /en/events/{slug}/; bare-root pages to /events/{slug}/.
+  // Previously bare-root-only canonical was a cross-locale violation that excluded
+  // /en/ from GSC eligibility. Locale prefix should source from city config when
+  // Constitution Rule 6 city-agnostic refactor lands (Sprint 3/4); inline literal
+  // here is the cleanup path.
+  const localePrefix = locale === 'en' ? '/en' : '';
+  const canonicalUrl = `${BASE_URL}${localePrefix}/events/${slug}/`;
   const ogImage = getOgImage(event);
   const schemaJson = generateEventSchema(event, locale);
   const practicalBlock = generatePracticalBlock(event, null, locale);
@@ -379,9 +386,12 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
-  // Lifecycle: past events get banner, noindex, hidden CTAs
+  // Lifecycle: past events get banner + hidden CTAs (isPast).
+  // S144: noindex now phase-keyed (cooling/archive only) — NOT tied to isPast.
+  // Just-passed (Day 1-14) events are still indexable per GEO 45-Day Lifecycle.
   const lifecycle = classifyEventLifecycle(event);
   const isPast = lifecycle !== 'upcoming';
+  const shouldNoindex = shouldNoindexEvent(event);
 
   // Date display — locale-aware
   const timeStr = event.startDate.includes('T')
@@ -486,15 +496,13 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   </div>`
     : '';
 
-  // hreflang block: bidirectional only when English description exists
-  const greekUrl = `${BASE_URL}/events/${slug}/`;
-  const englishUrl = `${BASE_URL}/en/events/${slug}/`;
-  const hasBilingual = Boolean(event.fullDescriptionEn);
-  const hreflangHtml = hasBilingual
-    ? `<link rel="alternate" hreflang="el" href="${greekUrl}">
-  <link rel="alternate" hreflang="en" href="${englishUrl}">
-  <link rel="alternate" hreflang="x-default" href="${englishUrl}">`
-    : `<link rel="alternate" hreflang="el" href="${greekUrl}">`;
+  // S144 (GEO 2026-05-21): hreflang DROPPED until Greek launches as a real product.
+  // GEO ruling: hreflang trigger is published + indexable + quality-gated, not
+  // "Greek bytes exist." Dormant-Greek bare-root pages don't qualify; emitting
+  // alternates to a noindex Greek alternate builds an inconsistent cluster
+  // (Google may down-rank /en/ from associating with a noindex alternate).
+  // Re-emit per decisions.md 2026-05-21 when Greek-as-product ships.
+  const hreflangHtml = '';
 
   return `<!DOCTYPE html>
 <html lang="${t.lang}">
@@ -508,12 +516,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   <title>${event.title} | ${event.venue.name} | agent-athens</title>
   <meta name="description" content="${generateEventMetaDescription(event)}">
-  ${isPast ? '<meta name="robots" content="noindex">' : ''}
+  ${shouldNoindex ? '<meta name="robots" content="noindex">' : ''}
 
-  <!-- Canonical URL (single source of truth) -->
+  <!-- Canonical URL (single source of truth, locale-aware self per S144) -->
   <link rel="canonical" href="${canonicalUrl}">
-
-  <!-- Language alternates -->
   ${hreflangHtml}
 
   <!-- Open Graph -->

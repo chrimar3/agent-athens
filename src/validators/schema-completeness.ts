@@ -12,6 +12,7 @@ import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { classifyDateFormat } from '../utils/date-format';
 import { getRegionName } from '../utils/schema-geo';
 import { BASE_URL } from '../config/site-url';
+import { getLifecyclePhase } from '../utils/event-lifecycle';
 
 // Valid @type values from our canonical type map
 const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
@@ -966,6 +967,95 @@ export function validateDataFeed(distDir: string): SchemaValidationResult {
   return { slug, errors, warnings, info: [] };
 }
 
+// ─── S144: locale-canonical + phase-keyed noindex guards ────────────────────
+
+/**
+ * Detect /en/ locale from a path or URL by anchoring on the `/en/` path-prefix
+ * segment (NOT bare substring match — that would false-positive on slugs
+ * containing `en` literally, e.g. a venue slug `en-route` or similar).
+ *
+ * Matches:
+ *   /en/events/x/, /en/concerts/, /en/today, https://agentathens.com/en/about/
+ *
+ * Does NOT match:
+ *   /events/athens-en-route/ (no /en/ path-prefix; `-en-` is dash-prefixed)
+ *   /venues/something/ (no `/en/`)
+ */
+export function isEnLocalePath(urlOrPath: string): boolean {
+  if (!urlOrPath) return false;
+  return /(?:^|\/)en\//.test(urlOrPath);
+}
+
+/**
+ * S144 Rule 1 — CROSS_LOCALE_CANONICAL (universal, all phases, both locales).
+ *
+ * Asserts that a page's `<link rel="canonical">` URL has the same locale prefix
+ * as the page itself. Catches the regression where /en/ pages canonicalized to
+ * bare-root (cross-locale violation that excluded /en/ from GSC eligibility),
+ * AND the reverse (bare-root canonicalizing to /en/).
+ *
+ * Per GEO Strategist ruling 2026-05-21.
+ */
+export function checkCrossLocaleCanonical(htmlContent: string, pagePath: string): SchemaValidationResult {
+  const errors: string[] = [];
+  const canonicalMatch = htmlContent.match(/<link rel="canonical" href="([^"]+)"/);
+  if (!canonicalMatch) return { slug: pagePath, errors, warnings: [], info: [] };
+  const canonical = canonicalMatch[1];
+  const pageIsEn = isEnLocalePath(pagePath);
+  const canonicalIsEn = isEnLocalePath(canonical);
+  if (pageIsEn !== canonicalIsEn) {
+    errors.push(
+      `CROSS_LOCALE_CANONICAL: page locale (${pageIsEn ? 'en' : 'el'}) does not match canonical (${canonicalIsEn ? 'en' : 'el'}) — page: ${pagePath}, canonical: ${canonical}`,
+    );
+  }
+  return { slug: pagePath, errors, warnings: [], info: [] };
+}
+
+/**
+ * S144 Rule 2 — NOINDEX_ON_INDEXABLE_PHASE (phase-keyed, Event-bearing pages).
+ *
+ * Reads the page's Event JSON-LD (startDate/endDate) and computes lifecycle
+ * phase via the SAME `getLifecyclePhase` function the emitter uses (single
+ * source of truth — no parallel phase classifier in the validator). If phase
+ * is Active or Just-passed AND HTML emits noindex → FAIL.
+ *
+ * Cooling-phase noindex is lifecycle-correct (per GEO 45-Day Lifecycle ruling)
+ * and skipped by this guard. Archive pages aren't generated at all.
+ *
+ * Per GEO Strategist ruling 2026-05-21.
+ */
+export function checkPhaseKeyedNoindex(htmlContent: string, pagePath: string): SchemaValidationResult {
+  const errors: string[] = [];
+  const empty: SchemaValidationResult = { slug: pagePath, errors, warnings: [], info: [] };
+  const robotsMatch = htmlContent.match(/<meta name="robots" content="([^"]*)"/);
+  if (!robotsMatch || !robotsMatch[1].includes('noindex')) return empty;
+
+  // Extract Event entity from JSON-LD (may be inside @graph envelope).
+  const jsonLdBlocks = extractAllJsonLd(htmlContent);
+  const entities = flattenGraph(jsonLdBlocks);
+  const eventEntity = entities.find(e => {
+    const t = e?.['@type'];
+    return typeof t === 'string' && VALID_SCHEMA_TYPES.has(t);
+  });
+  if (!eventEntity) return empty; // not an Event-bearing page
+
+  const startDate = typeof eventEntity.startDate === 'string' ? eventEntity.startDate : '';
+  const endDateRaw = eventEntity.endDate;
+  const endDate = typeof endDateRaw === 'string' ? endDateRaw : undefined;
+  const typeStr = typeof eventEntity['@type'] === 'string' ? eventEntity['@type'] : undefined;
+  const eventType = typeStr === 'ExhibitionEvent' ? 'exhibition' : typeStr;
+
+  if (!startDate) return empty;
+
+  const phase = getLifecyclePhase({ startDate, endDate, type: eventType });
+  if (phase === 'active' || phase === 'just-passed') {
+    errors.push(
+      `NOINDEX_ON_INDEXABLE_PHASE: page emits noindex but lifecycle phase is "${phase}" — must be index + self-canonical per GEO 45-Day Lifecycle ruling 2026-05-21 (page: ${pagePath})`,
+    );
+  }
+  return { slug: pagePath, errors, warnings: [], info: [] };
+}
+
 /**
  * Validate Schema.org microdata in hub-card markup (S101a-B).
  *
@@ -1070,6 +1160,8 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     mergeIntoResult(eventResult,
       checkOrphanReferences(html, slug, canonicalUrls, internalHost),
       checkMemberOrdering(html, slug, 'event', BASE_URL),
+      checkCrossLocaleCanonical(html, `events/${slug}/`),
+      checkPhaseKeyedNoindex(html, `events/${slug}/`),
     );
     details.push(eventResult);
   }
@@ -1088,6 +1180,8 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       mergeIntoResult(enResult,
         checkOrphanReferences(html, `en/${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `en/${slug}`, 'event', BASE_URL),
+        checkCrossLocaleCanonical(html, `en/events/${slug}/`),
+        checkPhaseKeyedNoindex(html, `en/events/${slug}/`),
       );
       details.push(enResult);
     }
@@ -1111,6 +1205,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     mergeIntoResult(hubResult,
       checkOrphanReferences(html, `hub:${slug}`, canonicalUrls, internalHost),
       checkMemberOrdering(html, `hub:${slug}`, 'hub', BASE_URL),
+      checkCrossLocaleCanonical(html, `${slug}.html`),
     );
     details.push(hubResult);
   }
@@ -1132,6 +1227,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       mergeIntoResult(hubResult,
         checkOrphanReferences(html, `hub:en/${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `hub:en/${slug}`, 'hub', BASE_URL),
+        checkCrossLocaleCanonical(html, `en/${slug}/`),
       );
       details.push(hubResult);
     }
@@ -1152,6 +1248,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       mergeIntoResult(venueResult,
         checkOrphanReferences(html, `venue:${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `venue:${slug}`, 'venue', BASE_URL),
+        checkCrossLocaleCanonical(html, `venues/${slug}/`),
       );
       details.push(venueResult);
     }

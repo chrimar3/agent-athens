@@ -273,10 +273,11 @@ describe('Hub @graph envelope (S139)', () => {
     expect(faq).toBeUndefined();
   });
 
-  test('Hub canonical URL is locale-independent (canonical-to-root posture)', () => {
-    // Both el + en variants of a hub canonicalize to the Greek root URL
-    // (2026-05-14 GEO decision). The @graph @id values must match this
-    // posture: same #collectionpage @id regardless of locale.
+  test('Hub canonical URL is locale-aware self (S144 GEO 2026-05-21)', () => {
+    // S144 supersedes the 2026-05-14 canonical-to-root posture. /en/ hubs now
+    // self-canonical to /en/<slug>; bare-root hubs to <slug>. CollectionPage
+    // @id reflects the canonical URL of its page, so el + en variants now have
+    // DIFFERENT @id values (each pointing at their own surface).
     const events = makeTodayEvents(5);
     const englishHubConfig: HubConfig = {
       ...todayHubConfig,
@@ -286,8 +287,12 @@ describe('Hub @graph envelope (S139)', () => {
     const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
     const elEnvelope = extractSingleJsonLdBlock(elHtml!);
     const enEnvelope = extractSingleJsonLdBlock(enHtml!);
-    expect(findEntityByType(elEnvelope, 'CollectionPage')!['@id'])
-      .toBe(findEntityByType(enEnvelope, 'CollectionPage')!['@id']);
+    const elId = findEntityByType(elEnvelope, 'CollectionPage')!['@id'];
+    const enId = findEntityByType(enEnvelope, 'CollectionPage')!['@id'];
+    expect(elId).toContain('/today#collectionpage');
+    expect(elId).not.toContain('/en/');
+    expect(enId).toContain('/en/today#collectionpage');
+    expect(elId).not.toBe(enId);
   });
 });
 

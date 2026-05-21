@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, type SchemaValidationResult, type PageClass } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, checkCrossLocaleCanonical, checkPhaseKeyedNoindex, isEnLocalePath, type SchemaValidationResult, type PageClass } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -1791,6 +1791,115 @@ describe('checkMemberOrdering (S141 FAIL rule)', () => {
         SITE_ORGANIZATION,
       ]);
       expect(checkMemberOrdering(festivalHtml, 'f', 'event', TEST_BASE_URL).errors).toHaveLength(0);
+    });
+  });
+});
+
+// S144 (GEO 2026-05-21): /en/ noindex + cross-locale-canonical regression
+// guards. Two rules — universal CROSS_LOCALE_CANONICAL + phase-keyed
+// NOINDEX_ON_INDEXABLE_PHASE. Phase predicate reads getLifecyclePhase (single
+// source of truth with the emitter).
+describe('S144 — locale-canonical + phase-keyed noindex guards', () => {
+  describe('isEnLocalePath — path-prefix anchoring', () => {
+    test('matches /en/<route> paths', () => {
+      expect(isEnLocalePath('/en/events/abc/')).toBe(true);
+      expect(isEnLocalePath('/en/concerts/')).toBe(true);
+      expect(isEnLocalePath('en/today')).toBe(true);
+      expect(isEnLocalePath('https://agentathens.com/en/about/')).toBe(true);
+    });
+    test('does NOT match slugs containing en literally (no path-prefix)', () => {
+      expect(isEnLocalePath('/venues/athens-en-route/')).toBe(false);
+      expect(isEnLocalePath('/events/12345-encore-tour/')).toBe(false);
+      expect(isEnLocalePath('endings')).toBe(false);
+    });
+    test('does NOT match bare-root paths', () => {
+      expect(isEnLocalePath('/events/abc/')).toBe(false);
+      expect(isEnLocalePath('/concerts/')).toBe(false);
+      expect(isEnLocalePath('https://agentathens.com/events/abc/')).toBe(false);
+    });
+  });
+
+  describe('checkCrossLocaleCanonical', () => {
+    function wrapWithCanonical(canonical: string): string {
+      return `<!DOCTYPE html><html><head><link rel="canonical" href="${canonical}"></head><body></body></html>`;
+    }
+    test('FAIL: /en/ page canonical → bare-root', () => {
+      const html = wrapWithCanonical('https://agentathens.com/events/abc/');
+      const result = checkCrossLocaleCanonical(html, 'en/events/abc/');
+      expect(result.errors.some(e => e.includes('CROSS_LOCALE_CANONICAL'))).toBe(true);
+    });
+    test('FAIL: bare-root page canonical → /en/', () => {
+      const html = wrapWithCanonical('https://agentathens.com/en/events/abc/');
+      const result = checkCrossLocaleCanonical(html, 'events/abc/');
+      expect(result.errors.some(e => e.includes('CROSS_LOCALE_CANONICAL'))).toBe(true);
+    });
+    test('PASS: /en/ page canonical → /en/ self', () => {
+      const html = wrapWithCanonical('https://agentathens.com/en/events/abc/');
+      const result = checkCrossLocaleCanonical(html, 'en/events/abc/');
+      expect(result.errors).toHaveLength(0);
+    });
+    test('PASS: bare-root page canonical → bare-root self', () => {
+      const html = wrapWithCanonical('https://agentathens.com/events/abc/');
+      const result = checkCrossLocaleCanonical(html, 'events/abc/');
+      expect(result.errors).toHaveLength(0);
+    });
+    test('PASS: no canonical at all (silently skip)', () => {
+      const html = '<!DOCTYPE html><html><head></head><body></body></html>';
+      const result = checkCrossLocaleCanonical(html, 'en/events/abc/');
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('checkPhaseKeyedNoindex', () => {
+    // Today = Athens timezone "now"; the classifier in event-lifecycle.ts reads
+    // current date. Tests use dates relative to "today" via offsets.
+    function makeEventHtml(startDate: string, endDate: string | undefined, type: string, withNoindex: boolean): string {
+      const event: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': type,
+        'name': 'Test Event',
+        'startDate': startDate,
+      };
+      if (endDate) event.endDate = endDate;
+      const noindexTag = withNoindex ? '<meta name="robots" content="noindex">' : '';
+      return `<!DOCTYPE html><html><head>${noindexTag}<script type="application/ld+json">${JSON.stringify(event)}</script></head><body></body></html>`;
+    }
+    function isoOffset(daysFromToday: number): string {
+      const d = new Date();
+      d.setDate(d.getDate() + daysFromToday);
+      return d.toISOString().substring(0, 10);
+    }
+    test('FAIL: Active event (future) with noindex', () => {
+      const html = makeEventHtml(isoOffset(7) + 'T20:00:00+03:00', undefined, 'MusicEvent', true);
+      const result = checkPhaseKeyedNoindex(html, 'en/events/active/');
+      expect(result.errors.some(e => e.includes('NOINDEX_ON_INDEXABLE_PHASE'))).toBe(true);
+    });
+    test('FAIL: Just-passed event (Day 4) with noindex', () => {
+      const html = makeEventHtml(isoOffset(-4) + 'T20:00:00+03:00', undefined, 'MusicEvent', true);
+      const result = checkPhaseKeyedNoindex(html, 'en/events/just-passed/');
+      expect(result.errors.some(e => e.includes('NOINDEX_ON_INDEXABLE_PHASE'))).toBe(true);
+      expect(result.errors[0]).toContain('just-passed');
+    });
+    test('PASS: Cooling event (Day 30) with noindex (lifecycle-correct)', () => {
+      const html = makeEventHtml(isoOffset(-30) + 'T20:00:00+03:00', undefined, 'MusicEvent', true);
+      const result = checkPhaseKeyedNoindex(html, 'en/events/cooling/');
+      expect(result.errors).toHaveLength(0);
+    });
+    test('PASS: Active event without noindex', () => {
+      const html = makeEventHtml(isoOffset(7) + 'T20:00:00+03:00', undefined, 'MusicEvent', false);
+      const result = checkPhaseKeyedNoindex(html, 'en/events/active-indexable/');
+      expect(result.errors).toHaveLength(0);
+    });
+    test('PASS: exhibition with future endDate + noindex (still Active, FAIL — guard fires)', () => {
+      // Exhibition uses endDate for phase. End in 30 days → active.
+      const html = makeEventHtml(isoOffset(-5) + 'T11:00:00+03:00', isoOffset(30), 'ExhibitionEvent', true);
+      const result = checkPhaseKeyedNoindex(html, 'en/events/active-exhibition/');
+      expect(result.errors.some(e => e.includes('NOINDEX_ON_INDEXABLE_PHASE'))).toBe(true);
+    });
+    test('PASS: non-Event page (no JSON-LD Event) with noindex (silently skip)', () => {
+      const html = '<!DOCTYPE html><html><head><meta name="robots" content="noindex"></head><body></body></html>';
+      const result = checkPhaseKeyedNoindex(html, 'en/about/');
+      expect(result.errors).toHaveLength(0);
     });
   });
 });

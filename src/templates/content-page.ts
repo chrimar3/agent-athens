@@ -38,25 +38,16 @@ export function renderContentPage(
     ? `\n  <script type="application/ld+json">\n  ${options.schemaJson}\n  </script>`
     : '';
 
-  // Canonical-to-root posture (2026-05-14 GEO decision): /en/<slug> content
-  // pages canonicalize to their root counterparts. Strip locale prefix from
-  // slug to derive root URL for canonical, og:url. Self/alt URLs for hreflang
-  // discovery keep the locale-specific paths (search engines reconcile).
-  const rootSlug = slug.replace(/^en\//, '');
-  const canonicalUrl = `${BASE_URL}/${rootSlug}/`;
+  // S144 (GEO 2026-05-21): canonical is locale-aware self. Supersedes the
+  // 2026-05-14 "canonicalize to root" posture — that produced cross-locale
+  // canonical violations that excluded /en/ from GSC eligibility (same class
+  // as the event-page regression). /en/ content pages now self-canonical.
+  const canonicalUrl = `${BASE_URL}/${slug}/`;
 
-  // Hreflang links between Greek ↔ English
-  let hreflangHtml = '';
-  if (options?.alternateSlug) {
-    const altLocale = locale === 'el' ? 'en' : 'el';
-    const selfUrl = `${BASE_URL}/${slug}/`;
-    const altUrl = `${BASE_URL}/${options.alternateSlug}/`;
-    const enUrl = locale === 'en' ? selfUrl : altUrl;
-    hreflangHtml = `
-  <link rel="alternate" hreflang="el" href="${locale === 'el' ? selfUrl : altUrl}">
-  <link rel="alternate" hreflang="en" href="${locale === 'en' ? selfUrl : altUrl}">
-  <link rel="alternate" hreflang="x-default" href="${enUrl}">`;
-  }
+  // S144: hreflang DROPPED until Greek launches as a published+indexable+
+  // quality-gated product (GEO 2026-05-21 ruling). Re-emit then per
+  // decisions.md 2026-05-21.
+  const hreflangHtml = '';
 
   return `<!DOCTYPE html>
 <html lang="${locale}">

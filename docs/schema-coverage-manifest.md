@@ -41,6 +41,22 @@ require a row added to this manifest.
   `containedInPlace` stay on the canonical venue node (separate @graph member,
   same @id) and reach graph consumers via @id merge. Negative-control fixture
   is permanent at `src/validators/__tests__/schema-completeness.test.ts`.
+- **S144 CROSS_LOCALE_CANONICAL (GEO 2026-05-21, universal):** Every dist page
+  (event, hub, venue, homepage) must have `<link rel="canonical">` matching the
+  page's own locale. /en/ pages MUST canonicalize to `/en/...`; bare-root pages
+  MUST canonicalize to bare-root. Locale detection via `isEnLocalePath` anchors
+  on the `/en/` path-prefix segment (NOT bare substring — avoids false-positives
+  on slugs like `athens-en-route`). Fires on ANY phase (active/just-passed/
+  cooling). Closes the regression class where /en/ pages canonicalized to
+  bare-root, excluding /en/ from GSC eligibility.
+- **S144 NOINDEX_ON_INDEXABLE_PHASE (GEO 2026-05-21, phase-keyed, Event pages):**
+  Event-bearing pages whose lifecycle phase is `active` or `just-passed` (Day
+  1-14 past per 45-Day Lifecycle) MUST NOT emit `<meta name="robots" content=
+  "noindex">`. Phase computed via `getLifecyclePhase` (`src/utils/event-lifecycle.ts`),
+  the SAME classifier the emitter uses — single source of truth, no parallel
+  phase predicate. Cooling-phase noindex is lifecycle-correct and skipped by
+  this guard. Locale-agnostic predicate; dormant-Greek noindex is a separate
+  policy layer (Sprint 3/4, out of scope here).
 - **Geo-presence check surface (GEO 2026-05-20):** `location.geo` WARN reads
   off the canonical venue node by `@id` lookup, NOT off the inline
   `Event.location` projection (which carries only the rich-result-required

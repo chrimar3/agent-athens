@@ -51,39 +51,38 @@ describe("English event page — og:locale", () => {
   });
 });
 
-describe("English event page — canonical URL (canonical-to-root posture)", () => {
-  // 2026-05-14 GEO canonical-to-root decision: /en/ event pages canonicalize
-  // to root counterparts. Both locale variants emit the same root URL as
-  // canonical. hreflang triples (next describe block) still emit /en/ for
-  // discovery — search engines reconcile via consistent cross-references.
-  test("English canonical points to root (no /en/ prefix)", () => {
+describe("English event page — canonical URL (locale-aware self per S144 GEO 2026-05-21)", () => {
+  // S144 supersedes the 2026-05-14 canonical-to-root posture. /en/ event pages
+  // now self-canonical to /en/<slug>; bare-root pages self-canonical to root.
+  // Closes the cross-locale-canonical regression that excluded /en/ from GSC
+  // eligibility. See decisions.md 2026-05-21.
+  test("English canonical points to /en/ self (S144)", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'en');
-    expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/">`);
-    expect(html).not.toContain(`<link rel="canonical" href="https://agentathens.com/en/events/${slug}/">`);
+    expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/en/events/${slug}/">`);
+    expect(html).not.toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/">`);
   });
 
-  test("Greek canonical points to root", () => {
+  test("Greek canonical points to root self", () => {
     const slug = generateEventSlug(bilingualEvent);
     const html = renderEventDetailPage(bilingualEvent, [], 'el');
     expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/">`);
   });
 });
 
-describe("English event page — hreflang tags", () => {
-  test("bilingual event has el + en + x-default hreflang", () => {
-    const slug = generateEventSlug(bilingualEvent);
+describe("English event page — hreflang dropped (S144 GEO 2026-05-21)", () => {
+  // Per GEO ruling: hreflang trigger is published + indexable + quality-gated,
+  // not "Greek bytes exist." Dormant-Greek bare-root pages don't qualify;
+  // emitting alternates to a noindex Greek alternate builds an inconsistent
+  // cluster. Re-emit when Greek launches as a real product.
+  test("bilingual event emits NO hreflang alternate links", () => {
     const html = renderEventDetailPage(bilingualEvent, [], 'en');
-    expect(html).toContain(`hreflang="el" href="https://agentathens.com/events/${slug}/"`);
-    expect(html).toContain(`hreflang="en" href="https://agentathens.com/en/events/${slug}/"`);
-    expect(html).toContain(`hreflang="x-default" href="https://agentathens.com/en/events/${slug}/"`);
+    expect(html).not.toContain('rel="alternate" hreflang=');
   });
 
-  test("Greek-only event has only el hreflang", () => {
+  test("Greek-only event emits NO hreflang alternate links", () => {
     const html = renderEventDetailPage(greekOnlyEvent, [], 'el');
-    expect(html).toContain('hreflang="el"');
-    expect(html).not.toContain('hreflang="en"');
-    expect(html).not.toContain('hreflang="x-default"');
+    expect(html).not.toContain('rel="alternate" hreflang=');
   });
 });
 

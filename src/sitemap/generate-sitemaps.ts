@@ -66,45 +66,13 @@ function buildUrlEntry(
   const lastmod = entry?.lastModified ?? new Date().toISOString().split('T')[0];
   const priority = priorityOverrides?.get(urlPath) ?? getPriority(urlPath);
 
-  let hreflangXml = '';
-  if (bilingualSlugs) {
-    const slug = extractEventSlug(urlPath);
-    if (slug && bilingualSlugs.has(slug)) {
-      const elUrl = `${BASE_URL}/events/${slug}/`;
-      const enUrl = `${BASE_URL}/en/events/${slug}/`;
-      hreflangXml = `
-    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
-    }
-  }
-  // Hub hreflang: match both Greek (e.g. "today") and English (e.g. "en/today") hub URLs
-  if (bilingualHubSlugs && !hreflangXml) {
-    const enHubMatch = urlPath.match(/^en\/(.+)$/);
-    const hubSlug = enHubMatch ? enHubMatch[1] : urlPath;
-    if (bilingualHubSlugs.has(hubSlug)) {
-      const elUrl = `${BASE_URL}/${hubSlug}`;
-      const enUrl = `${BASE_URL}/en/${hubSlug}`;
-      hreflangXml = `
-    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
-    }
-  }
-  // Content page hreflang: about/ ↔ en/about/, editorial/ ↔ en/editorial/, corrections/ ↔ en/corrections/
-  const BILINGUAL_CONTENT_SLUGS = ['about/', 'editorial/', 'corrections/'];
-  if (!hreflangXml) {
-    const enContentMatch = urlPath.match(/^en\/(.+)$/);
-    const baseSlug = enContentMatch ? enContentMatch[1] : urlPath;
-    if (BILINGUAL_CONTENT_SLUGS.includes(baseSlug)) {
-      const elUrl = `${BASE_URL}/${baseSlug}`;
-      const enUrl = `${BASE_URL}/en/${baseSlug}`;
-      hreflangXml = `
-    <xhtml:link rel="alternate" hreflang="el" href="${elUrl}"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
-    }
-  }
+  // S144 (GEO 2026-05-21): hreflang DROPPED from sitemap until Greek launches
+  // as a published+indexable+quality-gated product. Same rationale as the
+  // template-level hreflang drop (event-page.ts, content-page.ts, page.ts).
+  // Emitting hreflang to a noindex Greek alternate builds an inconsistent
+  // cluster (Google may down-rank /en/ from associating with a noindex alt).
+  // Re-emit per decisions.md 2026-05-21 when Greek-as-product ships.
+  const hreflangXml = '';
 
   return `  <url>
     <loc>${fullUrl}</loc>
@@ -152,13 +120,37 @@ export function generateSplitSitemaps(
   bilingualSlugs?: Set<string>,
   bilingualHubSlugs?: Set<string>
 ): number {
+  // S144 (GEO 2026-05-21): drop bare-root entries when an /en/ equivalent exists.
+  // Sitemap = /en/-only for bilingual content; Greek-only / inherently-single-locale
+  // URLs (homepage, llms.txt-style content) stay. Per GEO ruling, hreflang trigger
+  // is published+indexable+quality-gated — dormant Greek alternates pollute the
+  // crawl signal. Re-add bare-root + hreflang per decisions.md when Greek launches.
+  const BILINGUAL_CONTENT_SLUGS = new Set(['about/', 'editorial/', 'corrections/']);
+  const generatedUrlSet = new Set(generatedUrls);
+  const filteredUrls = generatedUrls.filter(url => {
+    // Bare-root event with /en/ equivalent → drop
+    if (url.startsWith('events/') && bilingualSlugs) {
+      const slug = url.replace(/^events\//, '').replace(/\/$/, '');
+      if (bilingualSlugs.has(slug)) return false;
+    }
+    // Bare-root hub with /en/ equivalent → drop (use bilingualHubSlugs set)
+    if (bilingualHubSlugs && !url.startsWith('en/') && bilingualHubSlugs.has(url)) {
+      return false;
+    }
+    // Bare-root content page with /en/ equivalent → drop
+    if (BILINGUAL_CONTENT_SLUGS.has(url) && generatedUrlSet.has('en/' + url)) {
+      return false;
+    }
+    return true;
+  });
+
   const buckets: Record<SitemapBucket, string[]> = {
     events: [],
     venues: [],
     editorial: [],
   };
 
-  for (const url of generatedUrls) {
+  for (const url of filteredUrls) {
     buckets[classifyUrl(url)].push(url);
   }
 

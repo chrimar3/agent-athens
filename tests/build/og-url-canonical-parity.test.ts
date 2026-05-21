@@ -97,12 +97,16 @@ function englishEventPath(slug: string): string {
   return join(DIST, "en", "events", slug, "index.html");
 }
 
-describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — canonical-to-root posture", () => {
-  // Rule (a): canonical-to-root for hub pairs
+describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-aware self posture (S144 GEO 2026-05-21)", () => {
+  // S144 supersedes the 2026-05-14 canonical-to-root decision. /en/ pages now
+  // self-canonical to /en/<slug>; bare-root pages self-canonical to bare-root.
+  // Closes the cross-locale-canonical regression that excluded /en/ from GSC
+  // eligibility. See decisions.md 2026-05-21.
   for (const hub of ALL_HUBS) {
     const rootUrl = `${BASE_URL}/${hub}`;
+    const enUrl = `${BASE_URL}/en/${hub}`;
 
-    test(`Root hub /${hub} — canonical = og:url = JSON-LD url = root URL`, () => {
+    test(`Root hub /${hub} — canonical = og:url = JSON-LD url = root URL (self)`, () => {
       const html = readFileSync(rootHubPath(hub), "utf8");
       const canonical = extractCanonical(html);
       const ogUrl = extractOgUrl(html);
@@ -113,23 +117,24 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — canonic
       expect(jsonLdUrl).toBe(rootUrl);
     });
 
-    test(`English hub /en/${hub}/ — canonical = og:url = JSON-LD url = root URL (no /en/)`, () => {
+    test(`English hub /en/${hub}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
       const html = readFileSync(englishHubPath(hub), "utf8");
       const canonical = extractCanonical(html);
       const ogUrl = extractOgUrl(html);
       const jsonLdUrl = extractJsonLdUrl(html);
 
-      expect(canonical).toBe(rootUrl);
-      expect(canonical).not.toContain("/en/");
-      expect(ogUrl).toBe(rootUrl);
-      expect(jsonLdUrl).toBe(rootUrl);
+      expect(canonical).toBe(enUrl);
+      expect(canonical).toContain("/en/");
+      expect(ogUrl).toBe(enUrl);
+      expect(jsonLdUrl).toBe(enUrl);
     });
   }
 
-  // Rule (a): canonical-to-root for event pair
+  // /en/ event pair: self-canonical to /en/...
   const eventRootUrl = `${BASE_URL}/events/${EVENT_PAIR_SLUG}/`;
+  const eventEnUrl = `${BASE_URL}/en/events/${EVENT_PAIR_SLUG}/`;
 
-  test(`Root event /events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL`, () => {
+  test(`Root event /events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL (self)`, () => {
     const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
     const canonical = extractCanonical(html);
     const ogUrl = extractOgUrl(html);
@@ -140,16 +145,16 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — canonic
     expect(jsonLdUrl).toBe(eventRootUrl);
   });
 
-  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL (no /en/)`, () => {
+  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
     const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
     const canonical = extractCanonical(html);
     const ogUrl = extractOgUrl(html);
     const jsonLdUrl = extractJsonLdUrl(html);
 
-    expect(canonical).toBe(eventRootUrl);
-    expect(canonical).not.toContain("/en/");
-    expect(ogUrl).toBe(eventRootUrl);
-    expect(jsonLdUrl).toBe(eventRootUrl);
+    expect(canonical).toBe(eventEnUrl);
+    expect(canonical).toContain("/en/");
+    expect(ogUrl).toBe(eventEnUrl);
+    expect(jsonLdUrl).toBe(eventEnUrl);
   });
 
   // Rule (b): og:locale:alternate symmetric-absence on all pages

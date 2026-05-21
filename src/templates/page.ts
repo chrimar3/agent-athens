@@ -99,8 +99,8 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- Canonical URL (English slug for international SEO) -->
   <link rel="canonical" href="${BASE_URL}/${url}">
 
-  <!-- Language Alternates -->
-  <link rel="alternate" hreflang="el" href="${BASE_URL}/${url}">
+  <!-- S144 (GEO 2026-05-21): hreflang dropped until Greek launches as a real
+       published+indexable+quality-gated product. See decisions.md 2026-05-21. -->
 
   <!-- GEO: Freshness signals -->
   <meta name="date" content="${new Date().toISOString().split('T')[0]}">

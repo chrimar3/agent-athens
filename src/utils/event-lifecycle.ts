@@ -89,3 +89,57 @@ export function isPastEvent(event: {
 }): boolean {
   return classifyEventLifecycle(event) !== 'upcoming';
 }
+
+/**
+ * 4-way lifecycle phase used by S144 indexability + canonical decisions
+ * (GEO Strategist 2026-05-21, 45-Day Lifecycle ruling).
+ *
+ * - active:      event hasn't happened yet → index + self-canonical
+ * - just-passed: ended within last 14 days → index + self-canonical
+ *                (recently-passed content still discoverable; eligibility-window)
+ * - cooling:     ended 15-44 days ago      → noindex (suppress stale content)
+ * - archive:     ended 45+ days ago        → page not generated (out of retention)
+ *
+ * Single source of truth for the noindex predicate at event-page.ts:511
+ * AND the NOINDEX_ON_INDEXABLE_PHASE build-guard in schema-completeness.ts.
+ * Do not introduce parallel phase classifiers.
+ */
+export type LifecyclePhase = 'active' | 'just-passed' | 'cooling' | 'archive';
+
+const JUST_PASSED_DAYS = 14;
+
+export function getLifecyclePhase(event: {
+  startDate: string;
+  endDate?: string | null;
+  type?: string;
+}): LifecyclePhase {
+  const status = classifyEventLifecycle(event);
+  if (status === 'upcoming') return 'active';
+  if (status === 'past-expired') return 'archive';
+
+  // past-active: split into just-passed (≤14 days) vs cooling (15-44 days)
+  const isExhibition = event.type === 'exhibition';
+  const relevantDate = (isExhibition && event.endDate) ? event.endDate : event.startDate;
+  const dateOnly = relevantDate.substring(0, 10);
+  const todayStr = getAthensTodayStr();
+  const eventDate = new Date(dateOnly + 'T00:00:00Z');
+  const todayDate = new Date(todayStr + 'T00:00:00Z');
+  const daysPast = Math.floor((todayDate.getTime() - eventDate.getTime()) / (86400 * 1000));
+
+  return daysPast <= JUST_PASSED_DAYS ? 'just-passed' : 'cooling';
+}
+
+/**
+ * S144 noindex predicate: true when the event's lifecycle phase is cooling or
+ * archive (page suppressed from index). Locale-agnostic — same predicate for
+ * bare-root and /en/. Per GEO ruling, the dormant-Greek noindex policy is a
+ * SEPARATE layer (Sprint 3/4); this function is the lifecycle-only signal.
+ */
+export function shouldNoindexEvent(event: {
+  startDate: string;
+  endDate?: string | null;
+  type?: string;
+}): boolean {
+  const phase = getLifecyclePhase(event);
+  return phase === 'cooling' || phase === 'archive';
+}

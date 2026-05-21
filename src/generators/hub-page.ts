@@ -299,11 +299,11 @@ export function renderHubPage(
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
   // Override filter-derived URL with user-facing hub slug. buildURL(filters)
   // produces filter-tokens (e.g. nightlife filter type='dj_set' → 'dj_set');
-  // page.ts now emits canonical/og:url/JSON-LD url/hreflang-el/api-alternate
-  // from metadata.url, so this override aligns all five with the hub slug
-  // for the canonical-to-root posture (2026-05-14 GEO decision). Replaces
-  // the prior post-render regex-patches in this file.
-  metadata.url = config.slug;
+  // page.ts emits canonical/og:url/JSON-LD url from metadata.url, so this
+  // override aligns those with the hub slug. S144 (GEO 2026-05-21) supersedes
+  // the 2026-05-14 canonical-to-root posture: /en/ hubs now self-canonical to
+  // /en/<slug> (locale-aware self), closing the cross-locale-canonical bug.
+  metadata.url = locale === 'en' ? `en/${config.slug}` : config.slug;
   metadata.pageType = 'hub';
   if (lastUpdateOverride) {
     metadata.lastUpdate = lastUpdateOverride;
@@ -529,9 +529,10 @@ export function renderHubPage(
   // FAQPage blocks). buildHubGraph composes CollectionPage → FAQPage (if
   // faqs render) → editor-picks ItemList (if picks.length > 0, deferred to
   // S101b) → site-publisher Organization, per Strategist Q2 ordering.
-  // Canonical URL follows the canonical-to-root posture: same Greek-root
-  // URL for both el/en variants (2026-05-14 GEO decision).
-  const hubCanonicalUrl = `${BASE_URL}/${config.slug}`;
+  // S144 (GEO 2026-05-21): locale-aware self-canonical — /en/ hubs canonical
+  // to /en/<slug>; bare-root hubs to <slug>. Supersedes 2026-05-14 canonical-
+  // to-root posture (which produced the cross-locale-canonical regression).
+  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? '/en' : ''}/${config.slug}`;
   const graphEnvelope = buildHubGraph({
     metadata,
     locale,
@@ -660,8 +661,8 @@ export function renderOverflowPage(
   const metadata = buildPageMetadata(metadataFilters, filteredEvents.length);
   // Overflow page canonicalizes to main hub root URL (pagination convention:
   // paginated views point canonical to the un-paginated canonical surface).
-  // See note in renderHubPage above for the broader rationale.
-  metadata.url = config.slug;
+  // S144: locale-aware self per renderHubPage above.
+  metadata.url = locale === 'en' ? `en/${config.slug}` : config.slug;
   metadata.pageType = 'hub';
 
   // Render with ALL events (no cap) — omit allEvents to skip filter bar
@@ -691,7 +692,8 @@ export function renderOverflowPage(
   // injection the overflow page would emit zero JSON-LD. FAQ + editor-picks
   // pass empty — FAQ doesn't render on the overflow surface and picks aren't
   // wired anywhere yet (S101b). Result: CollectionPage + Organization.
-  const hubCanonicalUrl = `${BASE_URL}/${config.slug}`;
+  // S144: locale-aware self per the main hub generator above.
+  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? '/en' : ''}/${config.slug}`;
   const overflowGraph = buildHubGraph({
     metadata,
     locale,
