@@ -5103,3 +5103,50 @@ The internal check closes the specific gap so the next regression of that shape 
 **Counterpart:** Pattern N (verification gates distinguish over-stating from under-stating). Pattern U is the bookkeeping side of the same discipline — both ask "is the claim about what's done / what's left findable later in a non-narrative artifact?"
 
 **Reference:** S2a-impl session-log entry (good); the pre-S2a "safe halves" deferral (bad — required user-driven verify-prior-fixes grep to rediscover); this session's recovery (2026-05-20) which itself logs the meta-lesson in `mistakes.md`.
+
+### Orphan-reference + member-ordering as enforced cross-entity validation (S141, 2026-05-20)
+
+Two new FAIL rules in `schema-completeness.ts`, both operating on the flattened @graph across entities (not single-entity field presence):
+
+- **checkOrphanReferences** — two-pass: Pass 1 builds the global canonical-URL set across all dist/ pages; Pass 2 computes `refs − definitions − whitelist` per page. Whitelist = external hosts + internal URLs matching a canonical-set member by origin+path. Scoped to Place/Performer/Organization/Organizer via @id fragment (`#venue`/`#place`/`#performer`/`#organization`/`#organizer`). Other fragments skipped.
+- **checkMemberOrdering** — bookend-only: `flattened[0]['@type']` must match the page-class first type; `flattened[-1]['@id']` must equal `{BASE_URL}/#organization`. Middle order stylistic, unenforced.
+
+Both forward-protective: Performer + Organizer have 0 emitter surface today, so the rules gate S142 (Organizer) and future Performer work the moment they emit. This is the constructive pattern — shrink the gap between what the in-build validator catches and what GSC/validator.schema.org catch, by adding internal cross-entity checks.
+
+**Diagnostic-first paid off:** writing `specs/s141-orphan-diagnostic.md` BEFORE coding made the FAIL-vs-WARN-ratchet branch empirical (0 true orphans / 4142 refs / 5126 pages → FAIL directly, no ratchet config). Saved the ratchet-wiring step.
+
+### verify-the-premise recurrence count
+
+S141 introduced no new verify-the-premise failures. The edit-surface relocation in the parallel S143 brief (`schema-graph-builders.ts` → `event-page.ts`) was caught by Phase-1 verification PRE-implementation — STOP-gated, not asserted. **Count holds at 9.** If it climbs, the planner-side checklist is insufficient and mitigation escalates to executor-side brief-premise validation.
+
+### verify-the-premise climbs to 10 (S143 finish-forward, 2026-05-21) — planner ledger
+
+The S143 finish-forward plan's Step 6 added a `git add -p` patch-extraction procedure based on the stale tree-state model from yesterday's stop-report (which showed S141 hunks STAGED alongside A2 in `schema-completeness.ts`). Reality at session entry today: S141 had committed between sessions at `6be053b2b`, the staged-mixing model was no longer accurate, the patch-extraction was solving a non-problem. Caught by executor's Phase-1 `git log --oneline -5` + `git diff --cached --stat` + `git diff --stat` verification; plan rewritten BEFORE Step 6 ran. **Count climbs from 9 to 10.**
+
+The S141-patch-extraction was ASSERTED in the planner's procedural step (not merely mentioned in chatter and STOP-gated like the S143 edit-surface case), so it counts toward the ledger.
+
+**Mitigation now in place (planner-side):** re-run `git log --oneline -5` + `git diff --cached --stat` + `git diff --stat` at session entry, BEFORE any commit-step procedure locks. Treat any prior session's stop-report as a snapshot, not a model — verify against current HEAD. The cost is three read-only commands; the prevented near-miss is patch-extraction operating on a hallucinated tree.
+
+**Ledger scope:** planner-side only. Tracks "premise assumed in the plan vs. actual tree state at execution." Distinct from the executor-side brief-vs-reality/vocabulary-misframe ledger (counted separately, currently 8 occurrences).
+
+### Executor ledger — brief-vs-reality / vocabulary-misframe (8th occurrence, 2026-05-21)
+
+Today's S143 finish-forward brief framed the geo-cascade as "the cascade promoted geo/sameAs to WARN universally" / "revert any geo/sameAs INFO→WARN promotion that the parallel edit introduced." On read: `schema-completeness.ts:382`'s `warnings.push('location.geo coordinates missing')` was already WARN in the prior baseline (`git log -p -S 'location.geo coordinates missing'` confirms — first appearance pre-S143, no recent severity bump). The cascade was real, but the **mechanism framing was off** — it came from the S143 emitter's inline-with-@id shape interacting with `resolveSamePageReferences`'s single-key-merge limitation, not from a severity bump.
+
+Action was identical regardless (demote to INFO, restore build-green). But the framing-vs-reality gap is the recurrence signal: every brief that says "X was Y before edit Z" needs `git log -p -S 'string'` verification before treating it as a revert action.
+
+**Ledger scope:** executor-side only. Tracks "framing in the brief vs. baseline reality" gaps — vocabulary, severity claims, scope estimates. Distinct from the planner-side verify-the-premise ledger (counted separately, currently 10). Do NOT conflate counts: the two failure modes have different escalation paths.
+
+**Mitigation extension:** for any brief assertion of the form "X was Y before edit Z" or "the parallel edit introduced Q", spot-check via `git log -p -S 'X'` or `git log --oneline --follow path` against the baseline before acting. Cheap to verify; expensive if the framing turns into a wrong-direction fix.
+
+### Parallel-session collision protocol that worked (S141 / S138 streetAddress / S143, 2026-05-20 → 2026-05-21)
+
+Three sessions over two days touched one tree on overlapping concerns (S141 validator orphan/ordering, S138 streetAddress data+migration, S143 emitter+validator+spec). All three shared `schema-completeness.ts` as a write surface; S143 + streetAddress also overlapped on `config/athens-venues.json` / `venue-registry.ts`. Yesterday's S143 executor stopped committing when staging surfaced unclear ownership (S141 hunks staged in front of S143 A2 in the same validator file). Planner sequenced: S141 commits first separately (lands `6be053b2b`), today's finish-forward picks up the rest as two clean separate commits (`b0b24fb64` streetAddress, `369dfe905` S143).
+
+**The `git add -p` patch-extraction escape hatch from yesterday's plan turned out unnecessary.** The natural commit-sequencing (each owner commits in turn, isolating their changes into history) made it moot — by the time the finish-forward ran, S141 was already in HEAD~ and the working tree contained only A2 + Step 2 demote in `schema-completeness.ts`. Whole-file `git add` was safe.
+
+**Lesson:** when shared-file ownership is unclear, **stop-and-route** is the right reflex, not patch-extract. Patch-extraction is last-resort — reserved for cases where the other owner can't or won't commit independently. The natural-sequencing pattern is the cleanest path; sessions coordinate via commit order without inter-session protocols beyond stop-and-route.
+
+**The S141-committed-between-sessions case is now the canonical example.** Two-day windows are forgiving — yesterday's executor stop bought 12+ hours during which S141's owner committed independently, dissolving the staging-collision problem before today's session resumed.
+
+**Connects to:** `mistakes.md` → validator-coverage-drift entry (the technical defect S141/S143 were jointly closing); planner verify-the-premise ledger (the patch-extraction-on-stale-tree near-miss was a consequence of treating yesterday's tree-state report as a static model rather than a snapshot).

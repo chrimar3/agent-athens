@@ -6066,3 +6066,53 @@ trap, CLI-internal-retry-masks-timing, cutoff-as-safety-bound, reliability-
 removes-implicit-operator-confirmation.
 
 ---
+
+### Session S141 + S138 streetAddress + S143 arc — 2026-05-20 → 2026-05-21 (orphan/ordering FAIL rules + venue-address backfill + Event.location inline-with-@id)
+
+**Plan:** Three coupled deliverables across two days, all touching the schema validator and event-page emitter surfaces. Bundled in one log entry because they ship together (three sequential commits, one Netlify deploy run). S141 = new orphan-`@id`-reference + member-ordering FAIL rules in `schema-completeness.ts` (committed first by its own session). S138 streetAddress = `venue.address` backfill into config + DB via canonical-write-path migration script (Commit A in today's finish-forward). S143 = `Event.location` emitter shape change to inline-with-@id + companion `LOCATION_NOT_INLINE` pre-resolution rule + `§2.4 v2` spec amendment + `location.geo` WARN→INFO surface scoping (Commit B).
+
+**What happened:**
+- **S141 (committed `6be053b2b`, 2026-05-20):** added `checkOrphanReferences` + `checkMemberOrdering` to `schema-completeness.ts`. Two-pass orphan check (global canonical-URL set across `dist/`; per-page `refs − definitions − whitelist`). Bookend ordering (first/last `@graph` member fixed per page class). Both at FAIL severity (no ratchet — Step 0c diagnostic returned 0 true orphans across 4142 refs / 5126 pages). Forward-protective for Performer + Organizer (0 emitter surface today; rules gate S142 the moment Organizer emits).
+- **S138 streetAddress (committed `b0b24fb64`, 2026-05-21):** added `address` field to CRUST, Onassis Stegi, Don't Be A Dick in `config/athens-venues.json` (venue-site-confirmed provenance). New `scripts/migrate-venue-address-backfill.ts` upserts 16 DB rows via `upsertEvent` (canonical write path, S137-lesson-compliant — no raw UPDATE). Type-only `VenueRecord.address?: string` addition. Rows already banked in DB pre-commit per yesterday's user note; commit memorializes the code.
+- **S143 (committed `369dfe905`, 2026-05-21):** Event.location emitter at `event-page.ts:303` changed from bare-`@id` (`{ '@id': venueId }`) to inline-with-@id (`{ '@type', '@id', 'name', 'address' }`); canonical venue node unchanged. Validator: pre-resolution `LOCATION_NOT_INLINE` rule asserts required nested Event fields inline-present on the raw entity (BEFORE `resolveSamePageReferences` runs — closes literal-vs-graph blind spot). Companion demote: `location.geo` event-page check WARN → INFO (geo lives on canonical, `validateVenueSchema` is the load-bearing surface). Spec `§2.4` → v2. Manifest Surface 1 entry. Negative + positive control fixtures permanent.
+- **Build state through the arc:** baseline 2308 tests → 2332 tests (S141 + S143 added 24 collectively). Build pass-rate: 99% → 0% (post-S143 emitter pre-validator-fix, universal `location.geo` WARN cascade) → 100% (post INFO demote). 0 fail / 0 type errors at every commit boundary.
+
+**Verified:**
+- `bun test`: 2332 pass / 1 skip / 0 fail. `bunx tsc --noEmit`: 0 errors.
+- `jq '.events.totals' data/build-completeness.json`: `pass: 3853, warn: 4, fail: 0, passRate: 100`.
+- Dist sample (`dist/events/00013a1f--phantom-spell/index.html`): inline `Event.location` keys = exactly `[@id, @type, address, name]`; canonical venue node present with geo; addresses byte-identical; `addressRegion = "Attica"`; NO inline geo.
+- S141-leak grep on S143's cached diff: CLEAN (no `checkOrphanReferences`/`checkMemberOrdering`/`ORPHAN_SCOPED_FRAGMENTS`/`PageClass`/`validFrom` — S141 lives in `6be053b2b`, not Commit B).
+
+**Learnings (logged in `.claude/notes/` this session):**
+- **Validator-coverage-drift root cause CORRECTED** (`mistakes.md` amendment, S143 finish-forward 2026-05-21): true cause is `resolveSamePageReferences`'s single-key-merge shape predicate (`if (keys.length === 1 && keys[0] === '@id')`), not "checks pinned to the wrong node." When S143's emitter made `Event.location` multi-key inline-with-@id, the resolver silently no-oped the merge, and the geo check fired WARN universally because geo was genuinely absent from the inline projection. Lesson: when emitters change shape, audit resolution-function predicates as carefully as check sites.
+- **Parallel-session collision protocol that worked** (`patterns.md` new entry): three sessions touched one tree on overlapping concerns; stop-and-route + natural commit-sequencing dissolved the staging-collision problem without patch-extraction. The `git add -p` escape hatch in yesterday's plan turned out unnecessary — by the time today's session ran, S141 was in HEAD~ and the working tree contained only A2 + Step 2 demote in `schema-completeness.ts`. Lesson: patch-extraction is last-resort, not first.
+- **Planner verify-the-premise climbs to 10** (`patterns.md` planner ledger): S143 finish-forward plan's Step 6 patch-extraction was based on stale tree-state (yesterday's stop-report). Executor's Phase-1 `git log` + `git diff --cached --stat` + `git diff --stat` caught it pre-Step-6-execution; plan rewritten. Mitigation: planner re-verifies tree state at session entry.
+- **Executor brief-vs-reality 8th occurrence** (`patterns.md` executor ledger): brief framed geo-cascade as a parallel-edit WARN-promotion; line `:382` was already WARN in the prior baseline. Vocabulary-reverify: `git log -p -S 'string'` before treating "X was Y" as a revert.
+- **streetAddress premise misframe** (`mistakes.md` new entry): prior brief premise "~126 URLs/location gap"; reality 23 warns / 16 rows patched. Quantitative premises in briefs need source-of-record reverification before sizing implementation.
+- **GEO 2026-05-20 ruling structured in `decisions.md`** — required-inline / optional-bare-ref envelope rule with @id-merge rationale, validator coupling non-negotiable, Tier-3 deploy gate is GSC URL Inspection (distinct from validator.schema.org).
+
+**Open items:**
+- **GSC URL Inspection (Tier-3 deploy gate)** — manual step pending after deploy: verify a Component-B `/en/` event shows Events-eligible (no "Missing field location" critical). This is the actual eligibility bar S143 exists to pass. Verdict to come back here as an addendum.
+- **S142 organizer emission** — queued for Sprint 3 closeout, NOT in this arc. ~46 Component-B events would emit `organizer: {@id: venue#venue}` (bare-`@id` per ruling) once landed. S141's orphan/ordering rules already gate it.
+- **S141.5 obsolete — discarded.** Drift fully diagnosed (resolver shape-assumption) and fixed (surface scoping) in this finish-forward.
+
+**Files changed (3 commits):**
+- `6be053b2b` (S141): `src/validators/schema-completeness.ts` + tests + manifest entries + `docs/current-infrastructure-v2.md` (`Offer.validFrom` Deliberately Deferred Register entry).
+- `b0b24fb64` (streetAddress): `config/athens-venues.json` (+address on 3 venues), `scripts/migrate-venue-address-backfill.ts` (NEW), `src/ticketing/venue-registry.ts` (+`address?: string`).
+- `369dfe905` (S143): `src/generators/event-page.ts` (inline-with-@id), `src/validators/schema-completeness.ts` (`LOCATION_NOT_INLINE` rule + geo WARN→INFO demote), `specs/s138-graph-envelope-spec.md` (`§2.4 v2`), `docs/schema-coverage-manifest.md` (Surface 1 entry), `src/validators/__tests__/schema-completeness.test.ts` (S143 describe block).
+- Memory commit (this entry): `.claude/notes/mistakes.md` (AMEND validator-coverage-drift entry + NEW streetAddress premise-misframe entry), `.claude/notes/patterns.md` (3 NEW entries: planner verify-the-premise→10, executor 8th brief-vs-reality, parallel-session-collision-protocol), `.claude/notes/decisions.md` (GEO 2026-05-20 ruling structured), this session-log entry.
+
+**Deploy:** CLI-only `netlify deploy --prod --no-build --dir=dist`. Carries S141 + streetAddress + S143 + memory in one run. No `git push` (Netlify git-connected; push to main bypasses `--no-build` per documented incident pattern).
+
+**Boundary (today's finish-forward, 2026-05-21):**
+- A1 emitter: `src/generators/event-page.ts:303`
+- A2 validator rule: `src/validators/schema-completeness.ts:222-252`
+- Step 2 validator demote: `src/validators/schema-completeness.ts:381-389`
+- A3 spec: `specs/s138-graph-envelope-spec.md:126-136`
+- A4 manifest: `docs/schema-coverage-manifest.md` Surface 1 entry
+- A6 tests: `src/validators/__tests__/schema-completeness.test.ts` (S143 describe block)
+- Memory: `.claude/notes/mistakes.md`, `.claude/notes/patterns.md`, `.claude/notes/decisions.md`, this entry.
+
+Did NOT touch (left for their owners): pre-existing `tests/build/scroll-container-overscroll.test.ts`, 7 untracked `specs/*-recon.md` / `*-diagnosis-*.md` / `*-trace-*.md`, `tests/build/category-nav-readability.test.ts`, `data/search-visibility-log.csv.pre-s136-backup`.
+
+---

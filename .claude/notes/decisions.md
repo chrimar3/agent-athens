@@ -4134,3 +4134,28 @@ Step 0c diagnostic returned 0 true orphans across 4142 refs / 5126 pages → orp
 ### Offer.validFrom — Deliberately Deferred (Strategist 2026-05-18, filed S141)
 
 `Offer.validFrom` registered in the Deliberately Deferred Register (`docs/current-infrastructure-v2.md`). ~151 cosmetic GSC optional-field warnings; no structured on-sale timestamp source exists, synthesizing would be fabricated data. Reactivation trigger: a merchant feed exposes a structured on-sale timestamp. **NOT to be conflated with `editorial-content.ts` validFrom** (intentional date-windowing, live + correct).
+
+## 2026-05-20 — GEO Strategist ruling: Event.location envelope shape (S143)
+
+**Prompt:** GSC URL Inspection on a fresh crawl of `/en/` event pages reported "Missing field location" critical — events were not Events-rich-result-eligible. Cause: bare-`@id` `Event.location` referencing a same-page canonical venue node. validator.schema.org passed (its parser resolves same-page `@id` for field-coverage); Google's rich-result eligibility parser does NOT resolve same-page `@id` for required nested fields.
+
+**Ruling (encoded as `§2.4 v2` of `specs/s138-graph-envelope-spec.md:126-136`):**
+
+When an event page references a venue that has a canonical page:
+
+- **Always** include the venue as a full `@graph` member with `@id` matching the canonical venue page URL (`{venueCanonicalUrl}#venue`). The canonical node carries `name`, full `address` (PostalAddress), `containedInPlace`, `url`, and (when available) `geo` and `sameAs`.
+- **Required** nested Event properties (currently: `location`) materialize **inline-with-@id** on the Event entity: the inline projection retains `@id` (so graph consumers still see the same identity) and additionally carries the rich-result-required set — `@type` + `name` + full `PostalAddress`. **NOT inlined:** `geo`, `sameAs`, `containedInPlace`, `url` — those stay on the canonical node and reach graph consumers via @id merge.
+- **Optional** nested properties (`organizer`, `seller`) MAY remain bare-`@id` references — for optional fields, an unresolved or unresolved-by-parser `@id` is cosmetic (validFrom-class), not eligibility-breaking.
+- Inline + canonical-node addresses MUST be byte-identical (single source — the same venue-record field feeds both, no parallel construction). Same-`@id` nodes with conflicting properties create an ambiguous-merge risk and MUST NOT occur.
+
+**Rationale:** Two parsers, two resolution behaviors. validator.schema.org resolves `{"@id": "..."}` same-page references when computing field coverage; Google's rich-result eligibility parser (visible via GSC URL Inspection) does NOT resolve same-page `@id` for required nested fields. The build validator must enforce the stricter shape (required-inline pre-resolution rule); the spec must codify the stricter shape. Required-inline satisfies both gates. Minimal inline (rich-result-required set only — name + address) keeps duplication cheap and preserves the canonical node as the authoritative store for the rest.
+
+**Validator coupling (non-negotiable, shipped with the fix):**
+- New pre-resolution rule `LOCATION_NOT_INLINE` in `schema-completeness.ts` — asserts `location.name` + `location.address` inline-present on the raw Event entity (BEFORE `resolveSamePageReferences` runs, so the @id-merge silent-pass blind spot is closed). Negative-control fixture is permanent at `src/validators/__tests__/schema-completeness.test.ts` (proves the rule catches the class, not just current state).
+- `location.geo` event-page check demoted to INFO. Per ruling, geo lives on the canonical venue node; `validateVenueSchema` is the load-bearing geo gate on the canonical surface. Event-page surface acknowledges the @id-merge model: geo absence on the inline projection is not actionable on the event-page surface.
+
+**Ship:** S143 commit `369dfe905` (emitter at `event-page.ts:303` + validator at `schema-completeness.ts:222-252,381-389` + spec `§2.4 v2` + manifest Surface 1 entry + tests). Companion fix S138 streetAddress at `b0b24fb64` (canonical-venue address backfill — config + migration script + DB upsert, 16 rows).
+
+**Deploy gate:** Tier 3 = GSC URL Inspection on a Component-B `/en/` event must show Events-eligible (no "Missing field location" critical). validator.schema.org alone is necessary but insufficient (its parser resolves @id; GSC's rich-result parser doesn't — that gap is what S143 exists to close). Verdict to land here post-deploy.
+
+**Connects to:** `patterns.md` → "Schema changes require validator.schema.org gating on every affected page class" (extended: GSC URL Inspection is the rich-result-eligibility gate, distinct from Schema.org-validity); `mistakes.md` → validator-coverage-drift (resolution-function shape-assumption corrected 2026-05-21).
