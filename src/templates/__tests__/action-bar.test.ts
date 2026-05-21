@@ -7,10 +7,41 @@ import {
   renderCardSaveScript,
   renderShareButtonScript,
   renderSavedPageScript,
-  renderCalendarScript,
   escapeAttr,
   CALENDAR_ICON,
 } from "../action-bar";
+import {
+  generateIcs,
+  buildGCalUrl,
+  buildOutlookUrl,
+  resolveEventTimes,
+} from "../../utils/calendar-times";
+import type { Event } from "../../types";
+
+function makeCalEvent(overrides: Partial<Event>): Event {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    id: "evt-123",
+    title: "Test Event",
+    description: "desc",
+    hasNativeGreek: false,
+    startDate: "2026-06-15T20:00:00",
+    type: "concert",
+    genres: [],
+    tags: [],
+    venue: { name: "Test Venue", address: "Test Address 1" },
+    price: "open",
+    ticketUrlResolved: null,
+    source: "test",
+    createdAt: "2026-01-01",
+    updatedAt: "2026-01-01",
+    language: "el",
+    ...overrides,
+  } as Event;
+}
+
+const CANONICAL = "https://agentathens.com/events/test-event/";
 
 describe("escapeAttr", () => {
   test("escapes quotes and angle brackets", () => {
@@ -232,87 +263,257 @@ describe("renderSavedPageScript", () => {
   });
 });
 
-describe("renderCalendarScript", () => {
-  const script = renderCalendarScript();
-
-  test("is wrapped in script tags", () => {
-    expect(script).toContain("<script>");
-    expect(script).toContain("</script>");
-  });
-
-  test("queries data-calendar-event selector", () => {
-    expect(script).toContain("[data-calendar-event]");
-  });
-
-  test("emits RFC 5545 envelope markers", () => {
-    expect(script).toContain("BEGIN:VCALENDAR");
-    expect(script).toContain("END:VCALENDAR");
-    expect(script).toContain("BEGIN:VEVENT");
-    expect(script).toContain("END:VEVENT");
+describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts)", () => {
+  test("emits envelope markers", () => {
+    const ics = generateIcs(makeCalEvent({}), CANONICAL);
+    expect(ics).toContain("BEGIN:VCALENDAR");
+    expect(ics).toContain("END:VCALENDAR");
+    expect(ics).toContain("BEGIN:VEVENT");
+    expect(ics).toContain("END:VEVENT");
   });
 
   test("uses TZID=Europe/Athens for DTSTART and DTEND", () => {
-    expect(script).toContain("DTSTART;TZID=Europe/Athens:");
-    expect(script).toContain("DTEND;TZID=Europe/Athens:");
+    const ics = generateIcs(makeCalEvent({}), CANONICAL);
+    expect(ics).toMatch(/DTSTART;TZID=Europe\/Athens:\d{8}T\d{6}/);
+    expect(ics).toMatch(/DTEND;TZID=Europe\/Athens:\d{8}T\d{6}/);
   });
 
-  test("builds UID with agentathens.com domain", () => {
-    expect(script).toContain("@agentathens.com");
+  test("UID uses event.id with @agentathens.com domain", () => {
+    const ics = generateIcs(makeCalEvent({ id: "evt-abc-123" }), CANONICAL);
+    expect(ics).toContain("UID:evt-abc-123@agentathens.com");
   });
 
   test("declares Agent Athens PRODID", () => {
-    expect(script).toContain("PRODID:-//Agent Athens//agentathens.com//EN");
+    const ics = generateIcs(makeCalEvent({}), CANONICAL);
+    expect(ics).toContain("PRODID:-//Agent Athens//agentathens.com//EN");
   });
 
-  test("includes DTSTAMP in UTC", () => {
-    expect(script).toContain("DTSTAMP:");
-    expect(script).toContain("nowUtcStamp");
+  test("DTSTAMP is UTC basic format ending in Z", () => {
+    const ics = generateIcs(makeCalEvent({}), CANONICAL);
+    expect(ics).toMatch(/DTSTAMP:\d{8}T\d{6}Z/);
   });
 
-  test("branches on exhibition eventType for end_date", () => {
-    expect(script).toContain("data.eventType === 'exhibition'");
-    expect(script).toContain("data.eventEnd");
+  test("exhibition with date-only endDate: DTEND uses 23:59:00 of that date (TZID-local)", () => {
+    const ics = generateIcs(
+      makeCalEvent({
+        type: "exhibition",
+        startDate: "2026-06-01T10:00:00",
+        endDate: "2026-09-30",
+      }),
+      CANONICAL,
+    );
+    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260930T235900");
   });
 
-  test("falls back to +3h when no exhibition end_date", () => {
-    expect(script).toContain("addHours(startParts, 3)");
+  test("non-exhibition: DTEND falls back to start + 3h", () => {
+    const ics = generateIcs(
+      makeCalEvent({ type: "concert", startDate: "2026-06-15T20:00:00" }),
+      CANONICAL,
+    );
+    expect(ics).toContain("DTSTART;TZID=Europe/Athens:20260615T200000");
+    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260615T230000");
   });
 
-  test("applies timePeak override via regex guard", () => {
-    expect(script).toContain("data.eventPeak");
-    expect(script).toContain("\\d{2}:\\d{2}");
+  test("timePeak overrides startDate's time component in DTSTART", () => {
+    const ics = generateIcs(
+      makeCalEvent({
+        type: "concert",
+        startDate: "2026-06-15T20:00:00",
+        timePeak: "22:30",
+      }),
+      CANONICAL,
+    );
+    expect(ics).toContain("DTSTART;TZID=Europe/Athens:20260615T223000");
   });
 
-  test("performs RFC 5545 text escaping", () => {
-    // backslash-first ordering, semicolon, comma
-    expect(script).toContain("BSLASH");
-    expect(script).toContain("split(';')");
-    expect(script).toContain("split(',')");
+  test("escapes RFC 5545 special chars in SUMMARY (backslash first, then ;,)", () => {
+    const ics = generateIcs(
+      makeCalEvent({ title: "Title; with, comma\\back" }),
+      CANONICAL,
+    );
+    // \ → \\, ; → \;, , → \,
+    expect(ics).toContain("SUMMARY:Title\\; with\\, comma\\\\back");
   });
 
-  test("folds long lines at 75 octets with CRLF + space", () => {
-    expect(script).toContain("75");
-    expect(script).toContain("TextEncoder");
-    // Multi-byte UTF-8 continuation guard
-    expect(script).toContain("0xC0");
+  test("folds lines > 75 octets with CRLF + leading space", () => {
+    const longTitle =
+      "A" + "x".repeat(120); // 121 chars, > 75 octets for ASCII
+    const ics = generateIcs(makeCalEvent({ title: longTitle }), CANONICAL);
+    // Fold continuation is "\r\n " (CRLF + space) per RFC 5545 §3.1
+    expect(ics).toMatch(/SUMMARY:Axxx[^\r\n]*\r\n /);
+  });
+});
+
+describe("buildGCalUrl", () => {
+  test("starts with calendar.google.com/calendar/render?action=TEMPLATE", () => {
+    const url = buildGCalUrl(makeCalEvent({}), CANONICAL);
+    expect(url).toMatch(/^https:\/\/calendar\.google\.com\/calendar\/render\?action=TEMPLATE/);
   });
 
-  test("uses text/calendar Blob MIME with utf-8", () => {
-    expect(script).toContain("text/calendar;charset=utf-8");
+  test("timed event: dates= uses UTC YYYYMMDDTHHMMSSZ/YYYYMMDDTHHMMSSZ", () => {
+    // 2026-06-15T20:00:00 Athens (summer, +03:00) → 17:00:00 UTC start; +3h end → 20:00:00 UTC
+    const url = buildGCalUrl(
+      makeCalEvent({ type: "concert", startDate: "2026-06-15T20:00:00" }),
+      CANONICAL,
+    );
+    expect(url).toContain("dates=20260615T170000Z%2F20260615T200000Z");
   });
 
-  test("triggers .ics download via createObjectURL", () => {
-    expect(script).toContain("URL.createObjectURL");
-    expect(script).toContain("a.download");
-    expect(script).toContain("agentathens-");
+  test("exhibition with date-only endDate: dates= uses YYYYMMDD/YYYYMMDD (end-EXCLUSIVE)", () => {
+    // Exhibition Jun 1 → Sep 30 → GCal dates 20260601/20261001 (Oct 1 = day after, end-exclusive)
+    const url = buildGCalUrl(
+      makeCalEvent({
+        type: "exhibition",
+        startDate: "2026-06-01T10:00:00",
+        endDate: "2026-09-30",
+      }),
+      CANONICAL,
+    );
+    expect(url).toContain("dates=20260601%2F20261001");
   });
 
-  test("revokes object URL after download", () => {
-    expect(script).toContain("URL.revokeObjectURL");
+  test("text param contains URL-encoded title", () => {
+    const url = buildGCalUrl(makeCalEvent({ title: "Jazz & Soul" }), CANONICAL);
+    expect(url).toContain("text=Jazz%20%26%20Soul");
   });
 
-  test("sanitizes slug for filename", () => {
-    expect(script).toContain("[^a-zA-Z0-9-]");
+  test("location param contains URL-encoded venue name and address", () => {
+    const url = buildGCalUrl(
+      makeCalEvent({
+        venue: { name: "Stegi Onassis", address: "Syngrou 107" },
+      }),
+      CANONICAL,
+    );
+    expect(url).toContain("location=Stegi%20Onassis%2C%20Syngrou%20107");
+  });
+
+  test("details param contains the canonical URL", () => {
+    const url = buildGCalUrl(makeCalEvent({}), CANONICAL);
+    expect(url).toContain(`details=${encodeURIComponent(CANONICAL)}`);
+  });
+
+  test("Greek title round-trips through URL encoding", () => {
+    const greekTitle = "Στέγη Ιδρύματος Ωνάση";
+    const url = buildGCalUrl(makeCalEvent({ title: greekTitle }), CANONICAL);
+    // Should not contain raw Greek (URL must be ASCII-safe); should decode back
+    const params = new URL(url).searchParams;
+    expect(params.get("text")).toBe(greekTitle);
+  });
+});
+
+describe("buildOutlookUrl", () => {
+  test("URL path contains Outlook compose deeplink", () => {
+    const url = buildOutlookUrl(makeCalEvent({}), CANONICAL);
+    expect(url).toContain("deeplink/compose");
+  });
+
+  test("carries the standard compose query params", () => {
+    const url = buildOutlookUrl(makeCalEvent({}), CANONICAL);
+    expect(url).toContain("path=%2Fcalendar%2Faction%2Fcompose");
+    expect(url).toContain("rru=addevent");
+  });
+
+  test("timed event: startdt/enddt are Athens-offset ISO-8601", () => {
+    // 2026-06-15T20:00:00 Athens → +03:00 (summer DST)
+    const url = buildOutlookUrl(
+      makeCalEvent({ type: "concert", startDate: "2026-06-15T20:00:00" }),
+      CANONICAL,
+    );
+    expect(url).toContain(`startdt=${encodeURIComponent("2026-06-15T20:00:00+03:00")}`);
+    expect(url).toContain(`enddt=${encodeURIComponent("2026-06-15T23:00:00+03:00")}`);
+  });
+
+  test("winter event: startdt uses +02:00 offset (no DST)", () => {
+    const url = buildOutlookUrl(
+      makeCalEvent({ type: "concert", startDate: "2026-01-15T20:00:00" }),
+      CANONICAL,
+    );
+    expect(url).toContain(`startdt=${encodeURIComponent("2026-01-15T20:00:00+02:00")}`);
+  });
+
+  test("exhibition with date-only endDate: allday=true and date-only startdt/enddt", () => {
+    const url = buildOutlookUrl(
+      makeCalEvent({
+        type: "exhibition",
+        startDate: "2026-06-01T10:00:00",
+        endDate: "2026-09-30",
+      }),
+      CANONICAL,
+    );
+    expect(url).toContain("allday=true");
+    expect(url).toContain("startdt=2026-06-01");
+    expect(url).toContain("enddt=2026-09-30");
+  });
+
+  test("subject param contains URL-encoded title", () => {
+    const url = buildOutlookUrl(makeCalEvent({ title: "Jazz & Soul" }), CANONICAL);
+    expect(url).toContain("subject=Jazz%20%26%20Soul");
+  });
+
+  test("body param contains the canonical URL", () => {
+    const url = buildOutlookUrl(makeCalEvent({}), CANONICAL);
+    expect(url).toContain(`body=${encodeURIComponent(CANONICAL)}`);
+  });
+
+  test("location param contains venue name + address", () => {
+    const url = buildOutlookUrl(
+      makeCalEvent({ venue: { name: "Stegi Onassis", address: "Syngrou 107" } }),
+      CANONICAL,
+    );
+    expect(url).toContain("location=Stegi%20Onassis%2C%20Syngrou%20107");
+  });
+
+  test("Greek subject round-trips through URL encoding", () => {
+    const greekTitle = "Στέγη Ιδρύματος Ωνάση";
+    const url = buildOutlookUrl(makeCalEvent({ title: greekTitle }), CANONICAL);
+    const params = new URL(url).searchParams;
+    expect(params.get("subject")).toBe(greekTitle);
+  });
+});
+
+describe("date-agreement (anti-drift gate): all three calendar targets derive from resolveEventTimes", () => {
+  test("timed event: ICS DTEND, GCal dates= end, and resolver agree on the same instant", () => {
+    const event = makeCalEvent({
+      type: "concert",
+      startDate: "2026-06-15T20:00:00",
+    });
+    const resolved = resolveEventTimes(event)!;
+    // Resolver: end 23:00:00 Athens local (start + 3h)
+    expect(resolved.end).toEqual({ Y: 2026, M: 6, D: 15, H: 23, Mi: 0, S: 0 });
+
+    const ics = generateIcs(event, CANONICAL);
+    const gcal = buildGCalUrl(event, CANONICAL);
+    const outlook = buildOutlookUrl(event, CANONICAL);
+
+    // ICS keeps Athens TZID-local: 23:00:00
+    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260615T230000");
+    // GCal converts to UTC: summer +03:00 → 20:00:00 UTC
+    expect(gcal).toContain("T200000Z");
+    // Outlook carries Athens offset directly: 23:00:00+03:00
+    expect(outlook).toContain(encodeURIComponent("2026-06-15T23:00:00+03:00"));
+  });
+
+  test("exhibition with date-only end: all three targets derive from the same resolver end date", () => {
+    const event = makeCalEvent({
+      type: "exhibition",
+      startDate: "2026-06-01T10:00:00",
+      endDate: "2026-09-30",
+    });
+    const resolved = resolveEventTimes(event)!;
+    // Resolver: end is 23:59:00 on Sep 30 (date-only → end of day)
+    expect(resolved.end).toEqual({ Y: 2026, M: 9, D: 30, H: 23, Mi: 59, S: 0 });
+
+    const ics = generateIcs(event, CANONICAL);
+    const gcal = buildGCalUrl(event, CANONICAL);
+    const outlook = buildOutlookUrl(event, CANONICAL);
+
+    // ICS: 23:59 on resolver's end date
+    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260930T235900");
+    // GCal: end-exclusive next day (Oct 1) — different format, same source date
+    expect(gcal).toContain("20261001");
+    // Outlook: allday=true with date-only end matching the source date (Sep 30, inclusive)
+    expect(outlook).toContain("allday=true");
+    expect(outlook).toContain("enddt=2026-09-30");
   });
 });
 

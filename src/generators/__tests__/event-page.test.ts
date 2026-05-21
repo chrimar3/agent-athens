@@ -475,46 +475,35 @@ describe("Event Detail Page — No inline styles", () => {
   });
 });
 
-describe("Event Detail Page — Calendar (.ics) export button", () => {
-  test("renders calendar button inside action bar", () => {
+describe("Event Detail Page — Calendar disclosure (build-time static targets)", () => {
+  test("renders <details class=cal-disclosure> wrapper", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain('class="edp-calendar-btn"');
-    expect(html).toContain('data-calendar-event');
+    expect(html).toContain('<details class="cal-disclosure">');
   });
 
-  test("data-event-start carries ISO date with Athens offset", () => {
+  test("renders <summary> carrying both cal-disclosure__summary and edp-calendar-btn classes", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain(`data-event-start="${sampleConcert.startDate}"`);
+    expect(html).toContain('class="cal-disclosure__summary edp-calendar-btn"');
   });
 
-  test("data-event-type carries valid event type", () => {
-    const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain(`data-event-type="${sampleConcert.type}"`);
-  });
-
-  test("exhibition fixture produces non-empty data-event-end", () => {
-    const html = renderEventDetailPage(openExhibition, []);
-    // endDate is set on openExhibition fixture above
-    expect(html).toMatch(/data-event-end="\d{4}-\d{2}-\d{2}T/);
-  });
-
-  test("event without endDate produces empty data-event-end", () => {
-    const noEndEvent: Event = { ...sampleConcert, endDate: undefined };
-    const html = renderEventDetailPage(noEndEvent, []);
-    expect(html).toContain('data-event-end=""');
-  });
-
-  test("calendar script is appended to page", () => {
-    const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain('[data-calendar-event]');
-    expect(html).toContain('BEGIN:VCALENDAR');
-  });
-
-  test("button has accessible label from i18n", () => {
-    const html = renderEventDetailPage(sampleConcert, [], 'el');
-    expect(html).toContain('aria-label="Ημερολόγιο"');
+  test("summary has accessible label from i18n", () => {
+    const elHtml = renderEventDetailPage(sampleConcert, [], 'el');
+    expect(elHtml).toContain('aria-label="Προσθήκη στο ημερολόγιο"');
     const enHtml = renderEventDetailPage(sampleConcert, [], 'en');
-    expect(enHtml).toContain('aria-label="Calendar"');
+    expect(enHtml).toContain('aria-label="Add to calendar"');
+  });
+
+  test("panel contains three calendar option links (Google, .ics, Outlook)", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toContain('class="cal-disclosure__option"');
+    expect(html).toMatch(/href="https:\/\/calendar\.google\.com\/calendar\/render\?[^"]+"[^>]*>Google/);
+    expect(html).toMatch(/href="\/events\/[^"]+\/event\.ics" download/);
+    expect(html).toMatch(/href="https:\/\/outlook\.live\.com\/calendar\/0\/deeplink\/compose\?[^"]+"/);
+  });
+
+  test("GCal href carries a dates= param (format pinned in action-bar.test.ts)", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    expect(html).toMatch(/calendar\.google\.com[^"]*dates=/);
   });
 });
 

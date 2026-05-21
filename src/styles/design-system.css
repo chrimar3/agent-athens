@@ -1232,6 +1232,54 @@ div#main-content {
   fill: currentColor;
 }
 
+/* ── Calendar Disclosure (replaces .ics Blob button) ──────────────── */
+
+.cal-disclosure {
+  position: relative;
+  isolation: isolate;
+}
+
+.cal-disclosure__summary {
+  list-style: none;
+}
+
+.cal-disclosure__summary::-webkit-details-marker {
+  display: none;
+}
+
+.cal-disclosure__summary::marker {
+  display: none;
+}
+
+.cal-disclosure__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: max-content;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.cal-disclosure__option {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 6px;
+  white-space: nowrap;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--type-small);
+}
+
+.cal-disclosure__option:hover {
+  background: var(--bg-surface);
+}
+
 /* ── Card Save Button ──────────────────────────── */
 
 .card-save-btn {

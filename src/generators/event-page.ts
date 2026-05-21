@@ -32,11 +32,12 @@ import { resolveCtaForEvent } from '../ticketing/cta';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
-import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript, renderCalendarScript, escapeAttr, CALENDAR_ICON } from '../templates/action-bar';
+import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript, escapeAttr, CALENDAR_ICON } from '../templates/action-bar';
 import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 import { BASE_URL } from '../config/site-url';
+import { generateIcs, buildGCalUrl, buildOutlookUrl } from '../utils/calendar-times';
 import { renderAnalytics } from '../config/analytics';
 
 // Load IndexNow config for Bing WMT verification
@@ -573,11 +574,21 @@ ${renderAnalytics()}
           ${ctaHtml}
           ${(() => {
             const actionBar = renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale);
-            const calendarBtn = `<button class="edp-calendar-btn" data-calendar-event data-event-id="${event.id}" data-event-start="${event.startDate}" data-event-end="${event.endDate || ''}" data-event-peak="${event.timePeak || ''}" data-event-title="${escapeAttr(event.title)}" data-event-venue="${escapeAttr(event.venue.name || '')}" data-event-address="${escapeAttr(event.venue.address || '')}" data-event-slug="${slug}" data-event-url="${canonicalUrl}" data-event-type="${event.type}" type="button" aria-label="${t.addToCalendar}">
-            ${CALENDAR_ICON}
-            <span class="edp-calendar-label">${t.addToCalendar}</span>
-          </button>`;
-            return actionBar.replace('</div>', `${calendarBtn}</div>`);
+            const gcalUrl = buildGCalUrl(event, canonicalUrl);
+            const outlookUrl = buildOutlookUrl(event, canonicalUrl);
+            const icsHref = `/events/${slug}/event.ics`;
+            const calendarDisclosure = `<details class="cal-disclosure">
+            <summary class="cal-disclosure__summary edp-calendar-btn" aria-label="${t.addToCalendar}">
+              ${CALENDAR_ICON}
+              <span class="edp-calendar-label">${t.addToCalendar}</span>
+            </summary>
+            <div class="cal-disclosure__panel" role="group" aria-label="${t.addToCalendar}">
+              <a class="cal-disclosure__option" href="${escapeAttr(gcalUrl)}" target="_blank" rel="noopener">${t.calendarGoogle}</a>
+              <a class="cal-disclosure__option" href="${icsHref}" download>${t.calendarAppleIcs}</a>
+              <a class="cal-disclosure__option" href="${escapeAttr(outlookUrl)}" target="_blank" rel="noopener">${t.calendarOutlook}</a>
+            </div>
+          </details>`;
+            return actionBar.replace('</div>', `${calendarDisclosure}</div>`);
           })()}
         </header>
       </div>
@@ -629,7 +640,6 @@ ${renderAnalytics()}
   ${renderSaveButtonScript()}
   ${renderCardSaveScript()}
   ${renderShareButtonScript()}
-  ${renderCalendarScript()}
 </body>
 </html>`;
 }
@@ -782,6 +792,7 @@ export async function generateEventPages(events: Event[]): Promise<{
       mkdirSync(pageDir, { recursive: true });
     }
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
+    writeFileIfChangedSync(join(pageDir, 'event.ics'), generateIcs(event, `${BASE_URL}/events/${slug}/`));
 
     urls.push(urlPath);
   }
