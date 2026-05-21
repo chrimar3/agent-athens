@@ -210,7 +210,7 @@ describe('geocodeVenue', () => {
     // Athens coordinates should be rejected with Barcelona config
     mockFetchResponse(MEGARON_RESPONSE);
 
-    const result = await geocodeVenue('Μέγαρο Μουσικής', BARCELONA_CONFIG);
+    const result = await geocodeVenue('Μέγαρο Μουσικής', undefined, BARCELONA_CONFIG);
     expect(result).toBeNull();
   });
 
@@ -371,6 +371,85 @@ describe('Google fallback', () => {
 
     const result = await geocodeVenue('Error Venue');
     expect(result).toBeNull();
+  });
+});
+
+describe('addressHint (S151 — query-strategy extension)', () => {
+  beforeEach(() => {
+    _resetRateLimit();
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+    delete process.env.GOOGLE_GEOCODING_API_KEY;
+  });
+
+  test('uses address hint via Nominatim when name queries exhaust', async () => {
+    // 3 name queries return empty → first address query hits
+    mockFetchSequence([
+      { body: [] },                  // name: "Don't be a Dick, Athens, Greece"
+      { body: [] },                  // name: "Don't be a Dick, Αθήνα"
+      { body: [] },                  // name: "Don't be a Dick"
+      { body: STREET_RESPONSE },     // address: "Φειδίου 4, Athens, Greece" — hit
+    ]);
+
+    const result = await geocodeVenue("Don't be a Dick", 'Φειδίου 4, Αθήνα 106 78');
+    expect(result).not.toBeNull();
+    expect(result!.source).toBe('nominatim');
+    expect(result!.confidence).toBe('medium');
+    expect(result!.matchQuery).toContain('Φειδίου 4');
+  });
+
+  test('prefers address-driven Nominatim over name-driven Google fallback', async () => {
+    // Anti-false-positive: without the address-hint path, the code would Google "Don't be a Dick"
+    // and could match a different business (the Char. Trikoupi 52 case from spike).
+    process.env.GOOGLE_GEOCODING_API_KEY = 'test-key';
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },  // 3 name queries empty
+      { body: STREET_RESPONSE },                  // address query hits via Nominatim
+    ]);
+
+    const result = await geocodeVenue("Don't be a Dick", 'Φειδίου 4, Αθήνα 106 78');
+    expect(result!.source).toBe('nominatim');
+    // 4 fetch calls (3 name + 1 address). Should NOT have called Google (would be 5+).
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  test('falls through to Google when both name and address Nominatim queries fail', async () => {
+    process.env.GOOGLE_GEOCODING_API_KEY = 'test-key';
+    // 3 name + 3 address (city-suffixed / raw / venue+address) all empty, then Google hits.
+    // 6 Nominatim calls × 1.1s rate limit > default 5s test timeout — bump to 10s.
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },  // name x3
+      { body: [] }, { body: [] }, { body: [] },  // address x3
+      { body: GOOGLE_ROOFTOP_RESPONSE },         // Google fallback
+    ]);
+
+    const result = await geocodeVenue("Don't be a Dick", 'Φειδίου 4');
+    expect(result).not.toBeNull();
+    expect(result!.source as string).toBe('google');
+  }, 15000);
+
+  test('skips address-hint path when hint is empty/undefined (backward-compatible)', async () => {
+    // No addressHint passed — behaves exactly as before
+    mockFetchResponse(MEGARON_RESPONSE);
+
+    const result = await geocodeVenue('Μέγαρο Μουσικής Αθηνών');
+    expect(result).not.toBeNull();
+    expect(result!.source).toBe('nominatim');
+  });
+
+  test('skips address-hint path when hint is empty string', async () => {
+    process.env.GOOGLE_GEOCODING_API_KEY = 'test-key';
+    // empty hint should behave identically to no hint — go straight from name fail to Google
+    mockFetchSequence([
+      { body: [] }, { body: [] }, { body: [] },  // name x3 empty
+      { body: GOOGLE_ROOFTOP_RESPONSE },          // Google fallback (no address attempted)
+    ]);
+
+    const result = await geocodeVenue('Some Venue', '');
+    expect(result!.source as string).toBe('google');
+    expect(fetchMock).toHaveBeenCalledTimes(4);  // 3 name + 0 address + 1 Google
   });
 });
 

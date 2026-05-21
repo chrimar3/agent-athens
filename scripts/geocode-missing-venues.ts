@@ -59,10 +59,12 @@ for (const key of Object.keys(masterVenues)) {
 // ── Find Missing Venues ────────────────────────────
 
 const rows = db.query<
-  { venue_name: string; event_count: number },
+  { venue_name: string; event_count: number; venue_address: string | null },
   []
 >(`
-  SELECT venue_name, COUNT(*) as event_count
+  SELECT venue_name,
+         COUNT(*) as event_count,
+         MAX(NULLIF(venue_address, '')) as venue_address
   FROM events
   WHERE location_status IN ('verified_athens', 'pass_through')
     AND (venue_lat IS NULL OR venue_lat = 0)
@@ -106,10 +108,13 @@ const hasGoogleKey = !!process.env.GOOGLE_GEOCODING_API_KEY;
 console.log(`Geocoding venues via Nominatim${hasGoogleKey ? ' + Google fallback' : ''} (rate-limited)...\n`);
 
 for (let i = 0; i < toGeocode.length; i++) {
-  const { venue_name, event_count } = toGeocode[i];
+  const { venue_name, event_count, venue_address } = toGeocode[i];
   const progress = `[${i + 1}/${toGeocode.length}]`;
 
-  const result = await geocodeVenue(venue_name, ATHENS_CONFIG);
+  // S151: pass venue_address as hint so geocodeVenue can fall back to
+  // address-driven Nominatim queries when name-only queries fail. Closes the
+  // "indexed-as-street-but-not-as-POI" case (e.g. Don't be a Dick @ Φειδίου 4).
+  const result = await geocodeVenue(venue_name, venue_address ?? undefined, ATHENS_CONFIG);
 
   if (!result) {
     failed.push({ name: venue_name, events: event_count });

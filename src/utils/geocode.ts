@@ -262,6 +262,7 @@ async function queryNominatim(
  */
 export async function geocodeVenue(
   venueName: string,
+  addressHint?: string,
   config: GeocodeConfig = ATHENS_CONFIG
 ): Promise<GeocodeResult | null> {
   // Skip obviously non-geocodable names
@@ -299,7 +300,41 @@ export async function geocodeVenue(
     };
   }
 
-  // ── Google fallback (when Nominatim exhausted) ──
+  // ── Address-hint fallback (S151 — query-strategy gap fix) ──
+  // When name queries exhaust and an addressHint is available, try address-driven
+  // Nominatim queries BEFORE falling back to Google. Discovered via Component-B
+  // diagnostic (2026-05-21): name-only Google fallback risks false positives
+  // (matched "Don't be a Dick" to a different establishment at Char. Trikoupi 52
+  // instead of confirmed Φειδίου 4). Address-driven Nominatim resolves the actual
+  // street, even when the venue itself isn't OSM-indexed as a POI.
+  const hint = addressHint?.trim();
+  if (hint) {
+    const addressQueries = [
+      `${hint}, ${config.city}, ${config.country}`,  // most-reliable: matches spike-confirmed shape
+      hint,                                            // raw, in case the hint already includes locality
+      `${venueName} ${hint}`,                          // combined name+address (per brief)
+    ];
+    for (const query of addressQueries) {
+      const result = await queryNominatim(query, config);
+      if (!result) continue;
+
+      const confidence = assignConfidence(result);
+      if (confidence === 'low') continue;
+
+      return {
+        lat: parseFloat(result.lat),
+        lon: parseFloat(result.lon),
+        displayName: result.display_name,
+        confidence,
+        source: 'nominatim',
+        osmType: result.osm_type,
+        category: result.class,
+        matchQuery: query,
+      };
+    }
+  }
+
+  // ── Google fallback (when Nominatim — both name and address paths — exhausted) ──
   const googleResult = await queryGoogle(venueName, config);
   if (googleResult) {
     const confidence = assignGoogleConfidence(googleResult);
@@ -337,7 +372,7 @@ export async function geocodeVenues(
     const name = venueNames[i];
     onProgress?.(i + 1, venueNames.length);
 
-    const result = await geocodeVenue(name, config);
+    const result = await geocodeVenue(name, undefined, config);
     if (result) {
       if (minConfidence === 'high' && result.confidence !== 'high') continue;
       results.set(name, result);
