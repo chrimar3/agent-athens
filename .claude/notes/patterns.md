@@ -5154,3 +5154,19 @@ Three sessions over two days touched one tree on overlapping concerns (S141 vali
 ### Green by demote ≠ green by scope (S143 follow-up, 2026-05-21)
 
 The right green build surfaces the routable signal, not the one that silences it. S143 `369dfe905` demoted `location.geo` WARN→INFO (3857 events green, 4 WARN — signal hidden); `292e97aee` superseded it with the scope-to-canonical `@id` lookup per GEO's ruling (3832 green, 25 actionable WARN → Component-B backfill — signal preserved). Both pass build gates; only the second carries diagnostic value forward. When picking between a stopgap demote and a structural scope-fix, prefer the one whose residual WARN count routes to a follow-up owner.
+
+### Pattern T (spec-vs-source recon corrections, calendar disclosure / 2026-05-21)
+
+Three recon-shape assertions in the calendar-disclosure pre-brief diverged from current source at consumption — all caught by Step 0 re-grep before edit:
+
+1. **C1 — no grouped isolate list.** Pre-brief framing implied a grouped multi-selector `isolation` rule in `src/styles/design-system.css` that the new `.cal-disclosure` rule could join. Step 0 grep found **10 standalone `isolation` rules, NO grouped list** (lines 334, 387, 595, 687, 702, 839, 1374, 1860, 1910, 2242). Correct execution: add `.cal-disclosure { position:relative; isolation:isolate; }` as its OWN standalone rule, matching the 10-site pattern — NOT create a new grouped list.
+
+2. **C3 — Save/Share/Calendar baseline CSS home.** Pre-brief implied per-template CSS in `action-bar.ts`. Step 0 grep confirmed the multi-selector group `.edp-save-btn, .edp-share-btn, .edp-calendar-btn` at `design-system.css:1184–1186` (with companion `:hover` 1202–1207 and `:focus-visible` 1209–1214). Correct execution: the new `<summary>` carries BOTH `cal-disclosure__summary` AND `edp-calendar-btn` classes; the baseline inherits via the existing design-system.css group — no per-component CSS duplication, no per-template CSS.
+
+3. **`getAthensTimezone` path drift.** Pre-brief cited `src/utils/quality-gates.ts` as the home. Step 2 grep (`grep -rn 'getAthensTimezone' src/`) located it at `src/enrichment/quality-gates.ts:881`. Cross-directory drift, not just line-number drift. Import path corrected to `../enrichment/quality-gates` before the consumer was written.
+
+**Pattern T = recon-claimed-shape vs. actual-source-shape divergence**, caught at Step-0 consumption. In all three cases above, the recon's CONCLUSION (inherit-don't-relist; isolate-is-per-component; reuse-existing-TZ-math) was correct — the recon's IMPLEMENTATION SHAPE was off. Two-day windows of categorizer-track commits between recon and execution introduce this drift class regularly. Pattern T is distinct from the brief-vs-reality / vocabulary-misframe ledger above: that tracks VOCABULARY drift ("X was Y before edit Z"); Pattern T tracks STRUCTURAL drift (where code lives, what shape it has).
+
+**Mitigation in plan template:** Step 0 "Re-verify recon targets" block embedded in every brief that depends on line-anchored recon. **Trust the grep, not the recon's line numbers; if a target is GONE or refactored, STOP and report — parallel track may have touched it.** This pattern's three-instance signal in a single brief raised executor confidence enough to silently reconcile (correct call here — drift was small, the recon's conclusion preserved), but the boundary between silent-reconcile and stop-and-flag is "does the conclusion still hold". If the recon's CONCLUSION breaks under new shape, escalate; if only the path/line breaks, ground at consumption and proceed.
+
+**Connects to:** `decisions.md` → 2026-05-21 "Calendar disclosure: build-time static targets replace client-side .ics Blob" (the work where Pattern T was triple-caught); `patterns.md` above → "Executor ledger — brief-vs-reality / vocabulary-misframe" (sibling pattern, different drift class).

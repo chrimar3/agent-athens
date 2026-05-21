@@ -4159,3 +4159,27 @@ When an event page references a venue that has a canonical page:
 **Deploy gate:** Tier 3 = GSC URL Inspection on a Component-B `/en/` event must show Events-eligible (no "Missing field location" critical). validator.schema.org alone is necessary but insufficient (its parser resolves @id; GSC's rich-result parser doesn't — that gap is what S143 exists to close). Verdict to land here post-deploy.
 
 **Connects to:** `patterns.md` → "Schema changes require validator.schema.org gating on every affected page class" (extended: GSC URL Inspection is the rich-result-eligibility gate, distinct from Schema.org-validity); `mistakes.md` → validator-coverage-drift (resolution-function shape-assumption corrected 2026-05-21).
+
+## 2026-05-21 — Calendar disclosure: build-time static targets replace client-side .ics Blob
+
+**Prompt:** The `renderCalendarScript()` IIFE (118 lines, prior `src/templates/action-bar.ts:136–253`) ran client-side per click — constructing the .ics, creating a Blob, synthesizing a download anchor. Highest-variance smoothness liability on Android Chrome for the consumer-wow demo beat. DN spec called for a `<details>` disclosure offering three native integration targets.
+
+**Ruling:** Replace the button with `<details class="cal-disclosure">` containing three build-time-static targets — Google Calendar URL, `.ics` sidecar download, Outlook compose deeplink. Net result: zero runtime JS for this feature, three native integration paths, one source of truth for date logic. `renderCalendarScript()` deleted entirely (0 production refs).
+
+**Anti-drift architecture: one resolver, three consumers.** All three target builders (`generateIcs`, `buildGCalUrl`, `buildOutlookUrl` — all in `src/utils/calendar-times.ts`) consume the same `resolveEventTimes(event)` resolver. The resolver homes the +3h fallback, exhibition end-branch, and time-peak override logic ported verbatim from the deleted IIFE's L201–216 — NOT reconstructed from prose. **A "date-agreement test" gates the architecture:** for a timed fixture and an exhibition fixture, the test asserts GCal `dates=`, Outlook `startdt`/`enddt`, and .ics `DTSTART`/`DTEND` all derive from the same `resolveEventTimes` call — same instants in three different formats. This converts "do not re-derive dates" from a code comment into a green/red bit. Future refactors that accidentally re-derive will fail this test.
+
+**Endpoint choices encoded:**
+- **GCal:** `calendar.google.com/calendar/render?action=TEMPLATE`. Manual `encodeURIComponent` (RFC 3986 `%20`) — NOT `URLSearchParams` form-encoding (`+`). Defensive against downstream calendar parsers that reject `+` for spaces. Timed events use UTC `YYYYMMDDTHHMMSSZ` for `dates=`; exhibitions with date-only endDate use `YYYYMMDD/YYYYMMDD` end-EXCLUSIVE (the day AFTER the close — GCal convention for all-day events).
+- **Outlook:** `outlook.live.com/calendar/0/deeplink/compose` (consumer endpoint per DN §3c). `outlook.office.com` rejected — requires Microsoft-365 organizational tenant login, would misroute consumer users adding to personal calendar. `startdt`/`enddt` carry Athens-offset ISO-8601 (`+03:00` summer DST, `+02:00` winter) — NOT UTC-converted; Outlook honors the offset directly. Exhibitions get `allday=true` + date-only `startdt`/`enddt`.
+- **.ics:** RFC 5545 envelope, `TZID=Europe/Athens` (no UTC conversion), `UID@agentathens.com`, 75-octet line folding multi-byte-UTF-8 safe. `DTSTAMP` UTC.
+
+**.ics is shared across locales.** Per-event `.ics` written once at `dist/events/<slug>/event.ics`; both EL (`dist/events/<slug>/index.html`) and EN (`dist/en/events/<slug>/index.html`) reference the same file via the root-absolute href `/events/<slug>/event.ics`. RFC 5545 has no `lang:` attribute on text fields — the artifact is locale-agnostic. One source of truth across both locales prevents title-text drift between EL and EN `.ics` versions; 3280 events ↔ 3280 sidecars (1:1, no duplication).
+
+**Verification:** 2361 pass / 0 fail, tsc clean, schema validator green (no GCal/Outlook URL leakage into Event/Offer JSON-LD — anti-leak grep returns 0). Each event-page HTML produces 6 `cal-disclosure` substring matches (details + summary + panel + 3 options); each renders 1 `calendar.google` href + 1 `outlook.live` href.
+
+**Ship:** Commit `7afe53efd`, 8 files changed (+810 / -209 — net production reduction; the +801 is mostly new test infrastructure that pins the new architecture — date-agreement gate, RFC 5545 invariants on real output, GCal/Outlook URL contracts, encoding invariants).
+
+**Connects to:**
+- `patterns.md` → Pattern T spec-vs-source recon corrections (2026-05-21 entry)
+- `decisions.md` → 2026-04-21 "Calendar Export (.ics) — Action Layer Phase 1 Completion" (this supersedes the client-side IIFE shipped in that decision; the architectural goal — calendar export — survives unchanged, the implementation flips from runtime to build-time)
+- **FLAG (Pattern U — evaporation, needs writing):** the "action-layer retro acceptance" / "sanctioned-by-investment" framing referenced at this file's L3488 has NO anchoring decision entry. DN's calendar spec leaned on "sanctioned-by-investment" as a premise but the definitional entry is absent on broad grep (`action.layer|sanction|investment` returns the L3488 reference + unrelated hits, no anchor). Needs writing as its own decision entry.
