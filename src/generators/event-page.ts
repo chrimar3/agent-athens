@@ -22,7 +22,7 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
+import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { classifyEventLifecycle, shouldNoindexEvent } from '../utils/event-lifecycle';
@@ -170,7 +170,9 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
       'address': {
         '@type': 'PostalAddress',
         'streetAddress': event.venue.address || '',
-        'addressLocality': 'Athens',
+        // S145: locality now config-driven via getLocalityName() (was hardcoded 'Athens').
+        // Single source of truth shared with microdata block below (Constitution Rule 6).
+        'addressLocality': getLocalityName(),
         'addressRegion': getRegionName(),
         'addressCountry': getCountryCode()
       },
@@ -616,9 +618,16 @@ ${renderAnalytics()}
 
       ${inlineCtaHtml}
 
-      <section class="edp-venue-section">
-        <h2>${event.venue.name}</h2>
-        ${event.venue.address ? `<div class="edp-venue-address">${event.venue.address}</div>` : ''}
+      <section class="edp-venue-section" itemprop="location" itemscope itemtype="https://schema.org/${VENUE_TYPE_MAP[schemaType] || 'EventVenue'}">
+        <h2 itemprop="name">${event.venue.name}</h2>
+        <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          ${event.venue.address
+            ? `<div class="edp-venue-address"><span itemprop="streetAddress">${event.venue.address}</span></div>`
+            : `<meta itemprop="streetAddress" content="">`}
+          <meta itemprop="addressLocality" content="${getLocalityName()}">
+          <meta itemprop="addressRegion" content="${getRegionName()}">
+          <meta itemprop="addressCountry" content="${getCountryCode()}">
+        </div>
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
         <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
       </section>

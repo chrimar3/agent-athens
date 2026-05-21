@@ -1204,6 +1204,84 @@ describe('validateMicrodata', () => {
     const result = validateMicrodata(html);
     expect(result.errors).toHaveLength(0);
   });
+
+  // S145 (GEO 2026-05-22): Event-detail microdata MUST emit itemprop="location".
+  // GSC's Rich Results parser counts JSON-LD + microdata as separate items; an
+  // Event-detail page's microdata (article#main-content with itemtype="...Event")
+  // currently emits only name/startDate/description and gets flagged "Missing
+  // field location" for Active + Just-passed events. Rule scoped to
+  // article#main-content (the event-detail surface); hub-card microdata
+  // articles stay out of scope.
+  describe('S145 — Event-detail microdata location parity', () => {
+    function eventDetailArticle(itemtype: string, body: string): string {
+      return `<!DOCTYPE html><html><body><article id="main-content" itemscope itemtype="https://schema.org/${itemtype}">${body}</article></body></html>`;
+    }
+
+    test('FAIL: MusicEvent article (no itemprop=location) → EVENT_MICRODATA_MISSING_LOCATION', () => {
+      const body = `
+        <h1 itemprop="name">No More Fake Disco</h1>
+        <time itemprop="startDate" datetime="2026-05-22T20:00:00+03:00">May 22</time>
+        <p itemprop="description">An evening of disco</p>
+      `;
+      const html = eventDetailArticle('MusicEvent', body);
+      const result = validateMicrodata(html);
+      expect(result.errors.some(e => e.includes('EVENT_MICRODATA_MISSING_LOCATION'))).toBe(true);
+    });
+
+    test('PASS: MusicEvent article with nested location microdata + nested PostalAddress', () => {
+      const body = `
+        <h1 itemprop="name">No More Fake Disco</h1>
+        <time itemprop="startDate" datetime="2026-05-22T20:00:00+03:00">May 22</time>
+        <p itemprop="description">An evening of disco</p>
+        <div itemprop="location" itemscope itemtype="https://schema.org/MusicVenue">
+          <meta itemprop="name" content="Burger Disco Club">
+          <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+            <meta itemprop="streetAddress" content="Nikis 11">
+            <meta itemprop="addressLocality" content="Athens">
+            <meta itemprop="addressRegion" content="Attica">
+            <meta itemprop="addressCountry" content="GR">
+          </div>
+        </div>
+      `;
+      const html = eventDetailArticle('MusicEvent', body);
+      const result = validateMicrodata(html);
+      expect(result.errors.some(e => e.includes('EVENT_MICRODATA_MISSING_LOCATION'))).toBe(false);
+    });
+
+    test('PASS: ExhibitionEvent + EventCompleted (past) → location not required', () => {
+      const body = `
+        <h1 itemprop="name">Lanthimos: Photographs</h1>
+        <time itemprop="startDate" datetime="2026-03-07T11:00:00+03:00">Mar 7</time>
+        <meta itemprop="eventStatus" content="https://schema.org/EventCompleted">
+      `;
+      const html = eventDetailArticle('ExhibitionEvent', body);
+      const result = validateMicrodata(html);
+      expect(result.errors.some(e => e.includes('EVENT_MICRODATA_MISSING_LOCATION'))).toBe(false);
+    });
+
+    test('PASS: hub-card article (no id=main-content) without location → out of scope', () => {
+      // Hub-card surface uses article elements without id=main-content. The
+      // S145 rule fires only for the event-detail surface; hub cards stay as-is.
+      const html = `<!DOCTYPE html><html><body>
+        <article class="event-card" itemscope itemtype="https://schema.org/MusicEvent">
+          <h2 itemprop="name">Some Event</h2>
+          <time itemprop="startDate" datetime="2026-05-22T20:00:00+03:00">May 22</time>
+        </article>
+      </body></html>`;
+      const result = validateMicrodata(html);
+      expect(result.errors.some(e => e.includes('EVENT_MICRODATA_MISSING_LOCATION'))).toBe(false);
+    });
+
+    test('PASS: non-Event article (CollectionPage etc.) → rule does not fire', () => {
+      const html = `<!DOCTYPE html><html><body>
+        <article id="main-content" itemscope itemtype="https://schema.org/CollectionPage">
+          <h1 itemprop="name">Today in Athens</h1>
+        </article>
+      </body></html>`;
+      const result = validateMicrodata(html);
+      expect(result.errors.some(e => e.includes('EVENT_MICRODATA_MISSING_LOCATION'))).toBe(false);
+    });
+  });
 });
 
 // ── validateSchemaCompleteness: multi-block extraction (S132' validator-depth fix) ────────────

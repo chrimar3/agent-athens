@@ -1081,6 +1081,29 @@ export function validateMicrodata(html: string): { errors: string[]; warnings: s
   const errors: string[] = [];
   const warnings: string[] = [];
 
+  // S145 (GEO 2026-05-22): Event-detail microdata MUST emit itemprop="location".
+  // GSC's Rich Results parser counts JSON-LD + microdata as separate items; an
+  // event-detail page's microdata (article#main-content with Event itemtype)
+  // missing location triggers "Missing field location" on Active + Just-passed
+  // events. Rule scoped to article#main-content (the event-detail surface) so
+  // hub-card microdata articles stay out of scope. Past events (EventCompleted)
+  // are skipped — they're not rich-result-eligible anyway. Pre-extracted via a
+  // separate regex (the main per-card loop below only sees the <article>'s
+  // INNER HTML, which doesn't carry the id="main-content" attribute).
+  const eventDetailArticleRegex = /<article\b([^>]*?id="main-content"[^>]*?itemtype="https:\/\/schema\.org\/[A-Za-z]*Event"[^>]*)>([\s\S]*?)<\/article>/g;
+  for (const m of html.matchAll(eventDetailArticleRegex)) {
+    const inner = m[2];
+    if (/itemprop="eventStatus"\s+content="https:\/\/schema\.org\/EventCompleted"/.test(inner)) continue;
+    // Require nested itemprop="location" AND a nested itemprop="address"
+    // inside it. The location block must carry the rich-result-required set
+    // (parity with JSON-LD inline-with-@id per S143).
+    const hasLocationItemprop = /itemprop="location"\s+itemscope/.test(inner);
+    const hasAddressItemprop = /itemprop="address"\s+itemscope/.test(inner);
+    if (!hasLocationItemprop || !hasAddressItemprop) {
+      errors.push(`EVENT_MICRODATA_MISSING_LOCATION: event-detail article#main-content must emit nested itemprop="location" with nested itemprop="address" (parity with JSON-LD inline-with-@id per GEO 2026-05-22)`);
+    }
+  }
+
   // Extract each <article> block — cards are discrete article elements.
   // Non-greedy match handles back-to-back articles without bleeding across.
   const articleRegex = /<article\b[^>]*>([\s\S]*?)<\/article>/g;
@@ -1163,6 +1186,12 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       checkCrossLocaleCanonical(html, `events/${slug}/`),
       checkPhaseKeyedNoindex(html, `events/${slug}/`),
     );
+    // S145: extend event-detail surface with microdata coverage (was hub-only).
+    // The EVENT_MICRODATA_MISSING_LOCATION rule fires on article#main-content
+    // with Event itemtype missing nested location+address microdata.
+    const microResult = validateMicrodata(html);
+    eventResult.errors.push(...microResult.errors);
+    eventResult.warnings.push(...microResult.warnings);
     details.push(eventResult);
   }
 
@@ -1183,6 +1212,10 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
         checkCrossLocaleCanonical(html, `en/events/${slug}/`),
         checkPhaseKeyedNoindex(html, `en/events/${slug}/`),
       );
+      // S145: same event-detail microdata coverage on the /en/ surface.
+      const enMicroResult = validateMicrodata(html);
+      enResult.errors.push(...enMicroResult.errors);
+      enResult.warnings.push(...enMicroResult.warnings);
       details.push(enResult);
     }
   }

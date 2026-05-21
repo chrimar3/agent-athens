@@ -73,6 +73,14 @@ require a row added to this manifest.
 **FAIL rules applied:**
 - `itemprop="price"` numeric (mirror of JSON-LD `offers.price` format rule)
 - When `itemprop="price"` present, `itemprop="availability"` must also be present
+- **S145 EVENT_MICRODATA_MISSING_LOCATION (GEO 2026-05-22):** event-detail
+  `<article id="main-content">` with Event itemtype MUST emit nested
+  `itemprop="location"` + nested `itemprop="address"` (parity with JSON-LD
+  inline-with-@id per S143). Closes the "Missing field location" surface that
+  GSC counts JSON-LD + microdata as separate items and reports field-completeness
+  per item. `EventCompleted` (past) skipped — rich-result-eligibility relaxed.
+  Rule scoped to `id="main-content"` so hub-card articles stay out. `validateMicrodata`
+  now wired into `validateAllPages` for event pages (bare-root + /en/), was hub-only before.
 **Notes:** The microdata surface deliberately omits the bare Offer (no price+availability pair when no amount), preventing the S139-fix class on this surface by construction. The price-or-priceSpecification rule doesn't apply because microdata never emits a structured Offer object — it emits scalar itemprops.
 
 ### 3. Hub page — JSON-LD CollectionPage entity

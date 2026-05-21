@@ -181,6 +181,25 @@ export function getRegionName(): string {
 }
 
 /**
+ * Postal-form locality name for the configured city — the "city" line of a
+ * PostalAddress (e.g. "Athens" for Athens, "Barcelona" for Barcelona). Reads
+ * `municipality.name_forms[0]` (the canonical postal form, distinct from the
+ * administrative `municipality.name` which is "Municipality of Athens").
+ *
+ * Single source of truth for `addressLocality` in JSON-LD AND microdata
+ * address blocks. S145 (GEO 2026-05-22) introduces this helper to close the
+ * "Athens" literal hardcode that previously sat at event-page.ts:173, and to
+ * back the new microdata location emission with the same config-driven value
+ * (Constitution Rule 6 city-agnostic).
+ */
+export function getLocalityName(): string {
+  const forms = (cityGeodata.municipality as unknown as { name_forms?: string[] }).name_forms;
+  return (Array.isArray(forms) && forms.length > 0)
+    ? forms[0]
+    : cityGeodata.municipality.name;
+}
+
+/**
  * Shared site-publisher constants. Extracted in S139 stage 4 so the
  * Organization schema, the @graph Organization member, and the @graph
  * WebSite member all reference the same string/array literals — no
