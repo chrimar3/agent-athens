@@ -6034,3 +6034,35 @@ The S139 @graph envelope migration spanned three working sessions across two day
 **Boundary:** my session touched only `src/styles/design-system.css`, `src/templates/category-page.ts`. Did NOT touch any of: `config/athens-venues.json` (venue track), `data/build-completeness.json` (build artifact), `data/event-set-hashes.json` (build artifact), `docs/current-infrastructure-v2.md` (staged by another track), `docs/schema-coverage-manifest.md` (schema track), `specs/s138-graph-envelope-spec.md` (S139 track), `src/generators/event-page.ts` (parallel track), `src/ticketing/venue-registry.ts`, `src/validators/schema-completeness.ts`, `tests/build/scroll-container-overscroll.test.ts` (prior session). Memory writes (`docs/session-log.md`, `.claude/notes/patterns.md`, `.claude/notes/mistakes.md`) committed in the same boundary commit per brief.
 
 ---
+
+### Session — Deploy pipeline stabilization (fallback + deconflict + WIP hold) — 2026-05-20
+
+Deploy-reliability arc, three landed actions:
+- b13712b6e: listSiteDeploys fallback at parse-or-fail boundary. Makes S142
+  retry gate reachable when CLI exits non-zero before emitting parseable
+  deploy_id. Autonomous recovery for "Deploy canceled" from any source.
+- ad1f5608e: disabled com.agentathens.freshness plist PERMANENTLY (Fork A —
+  full mode is strict superset of freshness; both fired 08:00, both reached
+  run_deploy, collision = root cause). Preserved as .disabled-2026-05-20.
+- TEMPORARY (operational, not in git): disabled com.agentathens.daily plist
+  to stop the 2026-05-21 08:00 fire from building+deploying mid-iteration
+  parallel-session WIP. Auto-commit allowlist is safe (narrow, guarded — main
+  history not at risk), but the BUILD phase reads the working tree, so dist/
+  would have shipped WIP. Preserved as .disabled-2026-05-20.
+
+⚠️ ACTION REQUIRED: daily plist is OFFLINE. No auto-deploy until re-enabled.
+Re-enable when dist/ reflects a deliberate committed state:
+  mv ~/Library/LaunchAgents/com.agentathens.daily.plist.disabled-2026-05-20 \
+     ~/Library/LaunchAgents/com.agentathens.daily.plist
+  launchctl load ~/Library/LaunchAgents/com.agentathens.daily.plist
+freshness stays disabled permanently (deconflict). Only daily needs re-enabling.
+
+Production: 6a0d7cae (S139 stages 1+2+5 + scroll fix; hub envelope NOT live).
+Specs: 2026-05-20-deploy-pipeline-diagnostic.md, 2026-05-20-plist-deconflict.md.
+
+Patterns banked (parked for .claude/notes/patterns.md when clean): gate-
+reachability-vs-gate-scope, lock-at-wrong-abstraction-layer, triple-collinearity
+trap, CLI-internal-retry-masks-timing, cutoff-as-safety-bound, reliability-
+removes-implicit-operator-confirmation.
+
+---
