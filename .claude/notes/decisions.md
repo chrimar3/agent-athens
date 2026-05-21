@@ -4182,4 +4182,16 @@ When an event page references a venue that has a canonical page:
 **Connects to:**
 - `patterns.md` → Pattern T spec-vs-source recon corrections (2026-05-21 entry)
 - `decisions.md` → 2026-04-21 "Calendar Export (.ics) — Action Layer Phase 1 Completion" (this supersedes the client-side IIFE shipped in that decision; the architectural goal — calendar export — survives unchanged, the implementation flips from runtime to build-time)
-- **FLAG (Pattern U — evaporation, needs writing):** the "action-layer retro acceptance" / "sanctioned-by-investment" framing referenced at this file's L3488 has NO anchoring decision entry. DN's calendar spec leaned on "sanctioned-by-investment" as a premise but the definitional entry is absent on broad grep (`action.layer|sanction|investment` returns the L3488 reference + unrelated hits, no anchor). Needs writing as its own decision entry.
+- **FLAG (Pattern U — evaporation, needs writing):** the "action-layer retro acceptance" / "sanctioned-by-investment" framing referenced at this file's L3488 has NO anchoring decision entry. DN's calendar spec leaned on "sanctioned-by-investment" as a premise but the definitional entry is absent on broad grep (`action.layer|sanction|investment` returns the L3488 reference + unrelated hits, no anchor). Needs writing as its own decision entry. **[CLOSED 2026-05-21 by the entry below.]**
+
+## 2026-05-21 — Action-layer (`.edp-action-bar`) sanctioned-by-investment (Pattern U anchor for the L3488 retro-acceptance reference)
+
+Action-layer (`.edp-action-bar`) sanctioned-by-investment — **basis:** S94 calendar trifecta + S138 / S139 / Session B refactors, no removal flag. **Originating sanction never logged** (SILENT gap, found during the 2026-05-21 calendar-disclosure recon). **Anchor for the L3488 "retro acceptance" reference.**
+
+The trifecta (`.edp-save-btn` + `.edp-share-btn` + `.edp-calendar-btn` baseline group at `design-system.css:1184–1186`) has accumulated structural investment across multiple sessions without any pass raising a removal flag. By the "implicit-pattern-deployed-as-explicit-move" framework articulated in the 2026-05-14 Mini-Session entry at L3488, that accumulated investment IS the sanction. This entry retroactively logs the sanction status so downstream references (DN's calendar disclosure spec; the L3488 audit→spec workflow citation) have an upstream definitional anchor instead of pointing at a void.
+
+**Connects to:**
+- `decisions.md` L3488 → "the audit→spec workflow running since the action-layer retro acceptance" — the dangling reference this entry anchors
+- `decisions.md` → 2026-05-21 "Calendar disclosure: build-time static targets replace client-side .ics Blob" (the Pattern U flag that surfaced the gap, at L4185)
+- `decisions.md` → 2026-04-21 "Calendar Export (.ics) — Action Layer Phase 1 Completion" — S94 trifecta's earliest committed surface investment
+- Pattern U class (institutional-memory evaporation): downstream references with no upstream anchoring entry. Mitigation = every framework-leveraging entry must verify its premises have committed-entry anchors before publication.
