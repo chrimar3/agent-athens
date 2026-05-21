@@ -1253,7 +1253,7 @@ div#main-content {
 
 .cal-disclosure__panel {
   position: absolute;
-  top: calc(100% + 8px);
+  bottom: calc(100% + 8px);
   right: 0;
   z-index: 2;
   display: flex;

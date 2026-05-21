@@ -486,11 +486,11 @@ describe("Event Detail Page — Calendar disclosure (build-time static targets)"
     expect(html).toContain('class="cal-disclosure__summary edp-calendar-btn"');
   });
 
-  test("summary has accessible label from i18n", () => {
+  test("summary has accessible label from i18n (short form matches Save/Share parity)", () => {
     const elHtml = renderEventDetailPage(sampleConcert, [], 'el');
-    expect(elHtml).toContain('aria-label="Προσθήκη στο ημερολόγιο"');
+    expect(elHtml).toContain('aria-label="Ημερολόγιο"');
     const enHtml = renderEventDetailPage(sampleConcert, [], 'en');
-    expect(enHtml).toContain('aria-label="Add to calendar"');
+    expect(enHtml).toContain('aria-label="Calendar"');
   });
 
   test("panel contains three calendar option links (Google, .ics, Outlook)", () => {
