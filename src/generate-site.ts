@@ -39,6 +39,7 @@ import { BASE_URL } from './config/site-url';
 import { renderAnalytics } from './config/analytics';
 import { proofMetrics } from './utils/proof-metrics';
 import { renderProofBody } from './templates/proof-body';
+import { buildProofSchema } from './templates/proof-schema';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -961,54 +962,35 @@ async function main() {
     },
     {
       baseSlug: 'proof',
-      el: {
-        slug: 'proof',
-        title: 'Αποδείξεις',
-        metaDescription: 'Πώς δουλεύει το agent athens — αριθμοί από τα ζωντανά artifacts της τρέχουσας έκδοσης: σελίδες εκδηλώσεων, έλεγχοι, εγκυρότητα Schema.org.',
-        // GEO-PENDING D3: Schema.org type — provisional WebPage + Dataset mainEntity.
-        // Phase 2 ships buildProofSchema(); do not over-invest in this shape now.
-        schemaJson: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebPage',
-          '@id': `${BASE_URL}/proof/`,
-          'name': 'Αποδείξεις — agent athens',
-          'url': `${BASE_URL}/proof/`,
-          'description': 'Πώς δουλεύει το agent athens, με νούμερα από τα ζωντανά artifacts.',
-          'inLanguage': 'el',
-          'mainEntity': { '@type': 'Dataset', 'name': 'agent athens build artifacts' },
-          publisher,
-          'datePublished': '2026-05-22',
-          'dateModified': todayIso
-        }, null, 2),
-        bodyHtml: renderProofBody({ metrics, locale: 'el' })
-      },
+      // EN-only per D4. EL not generated until Greek launches as a
+      // published+indexable+quality-gated product (paired with S144 hreflang
+      // reactivation). availableLanguage:["en","el"] in the schema signals
+      // intrinsic coverage without committing to a published EL page.
+      // REACTIVATE: bilingual generation when Greek ships.
+      enOnly: true,
       en: {
         slug: 'en/proof',
         title: 'Proof',
-        metaDescription: 'How agent athens works — numbers from the current build\'s live artifacts: event pages, tests, Schema.org validity.',
-        schemaJson: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebPage',
-          '@id': `${BASE_URL}/en/proof/`,
-          'name': 'Proof — agent athens',
-          'url': `${BASE_URL}/en/proof/`,
-          'description': 'How agent athens works, in numbers pulled from the current build\'s live artifacts.',
-          'inLanguage': 'en',
-          'mainEntity': { '@type': 'Dataset', 'name': 'agent athens build artifacts' },
-          publisher,
-          'datePublished': '2026-05-22',
-          'dateModified': todayIso
-        }, null, 2),
+        metaDescription: 'How agent athens works — numbers from the current build\'s live artifacts: event pages, tests, Schema.org validity, search indexing.',
+        schemaJson: JSON.stringify(buildProofSchema({ metrics, dateModified: todayIso ?? '' }), null, 2),
         bodyHtml: renderProofBody({ metrics, locale: 'en' })
       },
     },
   ];
 
-  // Generate both Greek and English content pages
+  // Generate content pages. Bilingual entries emit both locales; enOnly entries
+  // (e.g. proof, where Greek is not yet quality-gated for indexing) emit EN only.
+  // altSlug is undefined for enOnly — content-page.ts:50 already drops hreflang
+  // globally per S144, so no hreflang annotation is emitted either way.
   for (const pair of contentPagePairs) {
+    const isEnOnly = 'enOnly' in pair && pair.enOnly === true;
     for (const locale of ['el', 'en'] as const) {
+      if (isEnOnly && locale === 'el') continue;
       const page = pair[locale];
-      const altSlug = locale === 'el' ? pair.en.slug : pair.el.slug;
+      if (!page) continue; // type-narrowing safety for enOnly entries
+      const altSlug = isEnOnly
+        ? undefined
+        : (locale === 'el' ? pair.en.slug : pair.el!.slug);
       const html = renderContentPage(page.slug, page.title, page.bodyHtml, {
         metaDescription: page.metaDescription,
         schemaJson: page.schemaJson,

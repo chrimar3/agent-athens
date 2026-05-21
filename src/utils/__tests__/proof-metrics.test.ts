@@ -167,7 +167,7 @@ describe('proofMetrics()', () => {
     expect(result.schema.passClean).toBe(true);
   });
 
-  test('reads bing 7d indexing row from search-visibility-log.csv', () => {
+  test('reads Bing 7d indexing row from search-visibility-log.csv (Bing-only nested shape per D2)', () => {
     const csv =
       'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
       '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,,,STALE,STALE,STALE,STALE,21,0,9.761904761904763,2,13,0,\n';
@@ -175,12 +175,30 @@ describe('proofMetrics()', () => {
     const result = proofMetrics({ pageableCount: 1, dataDir: dir });
     expect(result.indexing).not.toBe('—');
     if (result.indexing !== '—') {
-      expect(result.indexing.bing_impressions_7d).toBe(21);
-      expect(result.indexing.bing_clicks_7d).toBe(0);
-      expect(result.indexing.bing_avg_position_7d).toBeCloseTo(9.76, 1);
-      expect(result.indexing.bing_top10_count_7d).toBe(2);
-      expect(result.indexing.date).toBe('2026-05-21');
+      expect(result.indexing.bing.impressions7d).toBe(21);
+      expect(result.indexing.bing.avgPosition7d).toBeCloseTo(9.76, 1);
+      expect(result.indexing.bing.top10_7d).toBe(2);
+      expect(result.indexing.status).toBe('underway');
     }
+  });
+
+  test('D2 drift-guard: returned object contains no GSC keys or values anywhere', () => {
+    const csv =
+      'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
+      '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,7,390,STALE,STALE,STALE,STALE,21,0,9.761904761904763,2,13,0,\n';
+    const dir = mkFixtureDir({ 'search-visibility-log.csv': csv });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    expect(JSON.stringify(result).match(/gsc/i)).toBe(null);
+    expect(JSON.stringify(result).match(/search.console/i)).toBe(null);
+  });
+
+  test("honest-absence: empty Bing cells in last row → indexing is '—' (no fallback to prior row)", () => {
+    const csv =
+      'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
+      '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,,,STALE,STALE,STALE,STALE,,,,,13,0,\n';
+    const dir = mkFixtureDir({ 'search-visibility-log.csv': csv });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    expect(result.indexing).toBe('—');
   });
 
   test("honest-absence: missing search-visibility-log.csv → indexing is '—'", () => {

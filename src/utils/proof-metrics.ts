@@ -28,11 +28,12 @@ export interface TestSummary {
 }
 
 export interface IndexingSummary {
-  date: string;
-  bing_impressions_7d: number;
-  bing_clicks_7d: number;
-  bing_avg_position_7d: number;
-  bing_top10_count_7d: number;
+  bing: {
+    impressions7d: number;
+    avgPosition7d: number;
+    top10_7d: number;
+  };
+  status: 'underway';
 }
 
 export interface ProofMetrics {
@@ -97,6 +98,11 @@ function readSchemaCompleteness(path: string): { passClean: boolean | null; vali
   };
 }
 
+// Bing-only per D2 ruling. GSC indexed-count cols have been STALE since 2026-05-17;
+// quoting any GSC number would mislead. The reader reads ONLY the four Bing 7d
+// fields and emits a status sentinel of 'underway'. If any Bing cell is empty/NaN
+// or the file is missing, return '—' (honest-absence; never fall back to a prior
+// row). Drift-guard: nothing in the returned object should match /gsc/i.
 function readLatestIndexingRow(path: string): IndexingSummary | '—' {
   if (!existsSync(path)) return '—';
   const text = readFileSync(path, 'utf-8').trimEnd();
@@ -110,18 +116,26 @@ function readLatestIndexingRow(path: string): IndexingSummary | '—' {
     const i = header.indexOf(name);
     return i === -1 ? '' : (lastRow[i] ?? '');
   };
+  // Empty string must NOT coerce to 0 — Number("") === 0 in JS, which would let
+  // empty Bing cells silently render as valid zeros. Treat empty/whitespace as NaN.
   const numOrNaN = (s: string) => {
+    if (s.trim() === '') return NaN;
     const n = Number(s);
     return Number.isFinite(n) ? n : NaN;
   };
 
-  const summary: IndexingSummary = {
-    date: col('date'),
-    bing_impressions_7d: numOrNaN(col('bing_impressions_7d')),
-    bing_clicks_7d: numOrNaN(col('bing_clicks_7d')),
-    bing_avg_position_7d: numOrNaN(col('bing_avg_position_7d')),
-    bing_top10_count_7d: numOrNaN(col('bing_top10_count_7d')),
-  };
+  if (!col('date')) return '—';
 
-  return summary;
+  const impressions7d = numOrNaN(col('bing_impressions_7d'));
+  const avgPosition7d = numOrNaN(col('bing_avg_position_7d'));
+  const top10_7d = numOrNaN(col('bing_top10_count_7d'));
+
+  if (!Number.isFinite(impressions7d) || !Number.isFinite(avgPosition7d) || !Number.isFinite(top10_7d)) {
+    return '—';
+  }
+
+  return {
+    bing: { impressions7d, avgPosition7d, top10_7d },
+    status: 'underway',
+  };
 }
