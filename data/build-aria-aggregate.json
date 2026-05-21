@@ -1,14 +1,19 @@
 {
+  "meta": {
+    "lastUpdate": "2026-05-21T22:16:08.620Z"
+  },
   "hub_template": {
-    "total": 1168,
-    "pass": 1166,
+    "total": 1162,
+    "pass": 1162,
     "warn": 0,
-    "fail": 2
+    "fail": 0,
+    "info": 0
   },
   "event_template": {
-    "total": 490,
-    "pass": 490,
+    "total": 630,
+    "pass": 630,
     "warn": 0,
-    "fail": 0
+    "fail": 0,
+    "info": 0
   }
 }

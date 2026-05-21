@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'bun:test';
 import {
   buildCompletenessReport,
+  deriveAriaLevel,
   type CompletenessReport,
   type BucketReport,
   type AriaAggregate,
@@ -169,8 +170,12 @@ describe('buildCompletenessReport', () => {
     expect(cinema.passRate).toBe(25); // 1/4 = 25%
   });
 
-  test('layer flags: all five measured (post-Component-B-2)', () => {
-    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
+  test('layer flags: all five measured when aria aggregate carries fresh meta', () => {
+    const ariaFresh: AriaAggregate = {
+      ...emptyAria(),
+      meta: { lastUpdate: new Date().toISOString() },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], ariaFresh, emptyRatchet());
     expect(report.layers.event_level).toBe('measured');
     expect(report.layers.offer_level).toBe('measured');
     expect(report.layers.place_level).toBe('measured');
@@ -376,5 +381,81 @@ describe('buildCompletenessReport — place layer (Q-B2)', () => {
     const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), ratchet);
     expect(report.place.ratchet.venueSameAs.total).toBe(244);
     expect(report.place.ratchet).toBe(ratchet);
+  });
+});
+
+// Aria freshness gate. Stale aggregate data must not silently masquerade as
+// 'measured'. Threshold: 7 days. Counts always pass through unchanged — only
+// the layer flag flips. Zeroing counts would silent-wrong-flip proofMetrics
+// passClean (which reads .fail, not layers).
+describe('deriveAriaLevel', () => {
+  const NOW = new Date('2026-05-22T12:00:00.000Z');
+  const iso = (daysAgo: number) =>
+    new Date(NOW.getTime() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
+
+  test("undefined meta → 'not_measured'", () => {
+    expect(deriveAriaLevel(undefined, NOW)).toBe('not_measured');
+  });
+
+  test("meta with no lastUpdate → 'not_measured'", () => {
+    expect(deriveAriaLevel({}, NOW)).toBe('not_measured');
+  });
+
+  test("unparseable lastUpdate → 'not_measured'", () => {
+    expect(deriveAriaLevel({ lastUpdate: 'not-a-date' }, NOW)).toBe('not_measured');
+  });
+
+  test("aggregate from today → 'measured'", () => {
+    expect(deriveAriaLevel({ lastUpdate: iso(0) }, NOW)).toBe('measured');
+  });
+
+  test("aggregate from 6 days ago → 'measured' (still within 7d window)", () => {
+    expect(deriveAriaLevel({ lastUpdate: iso(6) }, NOW)).toBe('measured');
+  });
+
+  test("aggregate from 8 days ago → 'stale'", () => {
+    expect(deriveAriaLevel({ lastUpdate: iso(8) }, NOW)).toBe('stale');
+  });
+
+  test("aggregate from 18 days ago → 'stale' (the real-world case from 2026-05-22)", () => {
+    expect(deriveAriaLevel({ lastUpdate: iso(18) }, NOW)).toBe('stale');
+  });
+
+  test('future-skewed timestamp → measured (negative age tolerated)', () => {
+    expect(deriveAriaLevel({ lastUpdate: iso(-1) }, NOW)).toBe('measured');
+  });
+});
+
+describe('buildCompletenessReport — aria_level derivation', () => {
+  const NOW_MS = Date.now();
+  const daysAgo = (d: number) => new Date(NOW_MS - d * 86_400_000).toISOString();
+
+  test("fresh aria meta → layers.aria_level === 'measured', counts preserved", () => {
+    const aria: AriaAggregate = {
+      hub_template: { total: 1168, pass: 1166, warn: 0, fail: 2, info: 0 },
+      event_template: { total: 490, pass: 490, warn: 0, fail: 0, info: 0 },
+      meta: { lastUpdate: daysAgo(1) },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], aria, emptyRatchet());
+    expect(report.layers.aria_level).toBe('measured');
+    expect(report.aria.hub_template.fail).toBe(2); // counts unchanged
+  });
+
+  test("stale aria meta (18d) → layers.aria_level === 'stale', counts preserved", () => {
+    const aria: AriaAggregate = {
+      hub_template: { total: 1168, pass: 1166, warn: 0, fail: 2, info: 0 },
+      event_template: { total: 490, pass: 490, warn: 0, fail: 0, info: 0 },
+      meta: { lastUpdate: daysAgo(18) },
+    };
+    const report = buildCompletenessReport(makeSummary([]), [], aria, emptyRatchet());
+    expect(report.layers.aria_level).toBe('stale');
+    expect(report.aria.hub_template.fail).toBe(2); // counts unchanged — silent-wrong guard
+    expect(report.aria.hub_template.total).toBe(1168);
+  });
+
+  test("missing meta → layers.aria_level === 'not_measured', zero counts pass through", () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
+    expect(report.layers.aria_level).toBe('not_measured');
+    expect(report.aria.hub_template.fail).toBe(0);
   });
 });

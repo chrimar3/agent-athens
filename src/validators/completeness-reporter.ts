@@ -69,6 +69,29 @@ export interface PageGroupReport {
 export interface AriaAggregate {
   hub_template: PageGroupReport;
   event_template: PageGroupReport;
+  // Written by scripts/audit-aria.ts. Absence flags the aggregate as
+  // 'not_measured'; presence + freshness gates the 'measured' vs 'stale' choice
+  // (see deriveAriaLevel below).
+  meta?: { lastUpdate?: string };
+}
+
+// Aria freshness gate. 7-day threshold. Counts always pass through to the
+// report unchanged — only the layer flag flips. This is deliberate: zeroing
+// counts on stale would silent-wrong-flip proofMetrics.passClean (which reads
+// .fail aggregates, not layers). The honest signal is "the data is X days
+// old; the fail counts are what they were at that snapshot."
+const ARIA_FRESHNESS_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000;
+
+export function deriveAriaLevel(
+  meta: { lastUpdate?: string } | undefined,
+  now: Date = new Date(),
+): 'measured' | 'not_measured' | 'stale' {
+  if (!meta?.lastUpdate) return 'not_measured';
+  const ts = new Date(meta.lastUpdate).getTime();
+  if (Number.isNaN(ts)) return 'not_measured';
+  const ageMs = now.getTime() - ts;
+  if (ageMs < 0) return 'measured'; // future-skewed timestamp tolerated
+  return ageMs > ARIA_FRESHNESS_THRESHOLD_MS ? 'stale' : 'measured';
 }
 
 // Sprint 2 Component B-2 — per-venue aggregate. byType precedent (BucketReport[])
@@ -106,7 +129,7 @@ export interface CompletenessReport {
     event_level: 'measured' | 'not_measured';
     offer_level: 'measured' | 'not_measured';
     place_level: 'measured' | 'not_measured';
-    aria_level: 'measured' | 'not_measured';
+    aria_level: 'measured' | 'not_measured' | 'stale';
     datafeed_level: 'measured' | 'not_measured';
   };
   events: {
@@ -288,7 +311,7 @@ export function buildCompletenessReport(
       event_level: 'measured',
       offer_level: 'measured',
       place_level: 'measured',
-      aria_level: 'measured',
+      aria_level: deriveAriaLevel(ariaAggregate.meta),
       datafeed_level: 'measured',
     },
     events: {

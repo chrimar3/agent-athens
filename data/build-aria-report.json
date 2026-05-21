@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-05-03T00:03:12.958Z"
+    "lastUpdate": "2026-05-21T22:16:08.620Z"
   },
   "pages": [
     {
@@ -272,18 +272,9 @@
     {
       "url": "dist/educational-workshop-this-weekend.html",
       "template": "hub_template",
-      "verdict": "audit_error",
+      "verdict": "pass",
       "issueCount": 0,
-      "issues": [],
-      "errorMessage": "ProtocolError: Network.enable timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed.\n    at <instance_members_initializer> (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)\n    at new Callback (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppetee"
-    },
-    {
-      "url": "dist/dj_set.html",
-      "template": "hub_template",
-      "verdict": "audit_error",
-      "issueCount": 0,
-      "issues": [],
-      "errorMessage": "ProtocolError: Runtime.evaluate timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed.\n    at <instance_members_initializer> (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)\n    at new Callback (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppet"
+      "issues": []
     },
     {
       "url": "dist/with-ticket-swing-dance-this-weekend.html",
@@ -301,6 +292,13 @@
     },
     {
       "url": "dist/open-dj_set-this-weekend.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/outdoor-cinema-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -419,6 +417,13 @@
       "issues": []
     },
     {
+      "url": "dist/open-outdoor-cinema-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-techno-dj_set-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -511,13 +516,6 @@
     },
     {
       "url": "dist/with-ticket-pop-concert-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-today.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -699,6 +697,13 @@
       "issues": []
     },
     {
+      "url": "dist/outdoor-cinema.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-documentary-cinema-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -748,13 +753,6 @@
       "issues": []
     },
     {
-      "url": "dist/show.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-exhibition-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -784,13 +782,6 @@
     },
     {
       "url": "dist/film-festival-cinema-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/outdoor-cinema-cinema-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -924,13 +915,6 @@
     },
     {
       "url": "dist/open-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -1084,6 +1068,13 @@
       "issues": []
     },
     {
+      "url": "dist/contemporary-dance-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/variety-show.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -1175,13 +1166,6 @@
       "issues": []
     },
     {
-      "url": "dist/contemporary-dance-dance-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/drama-theater-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -1232,6 +1216,20 @@
     },
     {
       "url": "dist/open-educational-workshop-tomorrow.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/contemporary-dance-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/outdoor-cinema-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -1308,13 +1306,6 @@
       "issues": []
     },
     {
-      "url": "dist/theater.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-festival-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -1330,13 +1321,6 @@
     },
     {
       "url": "dist/with-ticket-multi-day-festival-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -1483,7 +1467,21 @@
       "issues": []
     },
     {
+      "url": "dist/with-ticket-contemporary-dance-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-jazz-concert-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/open-contemporary-dance-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -1763,13 +1761,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-contemporary-dance-dance-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-other-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -1799,6 +1790,13 @@
     },
     {
       "url": "dist/open-theater.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-contemporary-dance-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -1973,6 +1971,13 @@
       "issues": []
     },
     {
+      "url": "dist/with-ticket-contemporary-dance-this-weekend.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-cabaret-show-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -1995,6 +2000,13 @@
     },
     {
       "url": "dist/with-ticket-techno-dj_set-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-outdoor-cinema-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -2072,6 +2084,13 @@
     },
     {
       "url": "dist/film-premiere-cinema-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/contemporary-dance-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -2309,6 +2328,13 @@
       "issues": []
     },
     {
+      "url": "dist/contemporary-dance-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-multi-act-festival-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -2422,13 +2448,6 @@
     },
     {
       "url": "dist/with-ticket-dance.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/contemporary-dance-dance-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -2848,6 +2867,13 @@
       "issues": []
     },
     {
+      "url": "dist/with-ticket-contemporary-dance-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-jazz-concert-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -2856,6 +2882,13 @@
     },
     {
       "url": "dist/contemporary-art-exhibition-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/open-contemporary-dance-today.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -3121,13 +3154,6 @@
       "issues": []
     },
     {
-      "url": "dist/open-contemporary-dance-dance-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/devops-tech.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -3189,24 +3215,6 @@
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
-    },
-    {
-      "url": "dist/404.html",
-      "template": "hub_template",
-      "verdict": "fail",
-      "issueCount": 1,
-      "issues": [
-        {
-          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
-          "type": "error",
-          "typeCode": 1,
-          "message": "This link points to a named anchor \"main-content\" within the document, but no anchor exists with that name.",
-          "context": "<a href=\"#main-content\" class=\"skip-link\">Μετάβαση στο περιεχόμενο</a>",
-          "selector": "html > body > a",
-          "runner": "htmlcs",
-          "runnerExtras": {}
-        }
-      ]
     },
     {
       "url": "dist/latin-dance-next-month.html",
@@ -3300,13 +3308,6 @@
       "issues": []
     },
     {
-      "url": "dist/contemporary-dance-dance-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/open-drum-and-bass-dj_set-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -3328,13 +3329,6 @@
       "issues": []
     },
     {
-      "url": "dist/outdoor-cinema-cinema-today.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-synth-pop-concert-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -3343,13 +3337,6 @@
     },
     {
       "url": "dist/open-exhibition-tomorrow.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/performance.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -3384,6 +3371,20 @@
       "issues": []
     },
     {
+      "url": "dist/open-outdoor-cinema-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-contemporary-dance-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-swing-dance.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -3391,7 +3392,21 @@
       "issues": []
     },
     {
+      "url": "dist/contemporary-dance.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-workshop-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/open-contemporary-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -3455,6 +3470,13 @@
     },
     {
       "url": "dist/open-tango-performance-tomorrow.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/open-outdoor-cinema.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -3622,6 +3644,13 @@
       "issues": []
     },
     {
+      "url": "dist/outdoor-cinema-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-sculpture-exhibition-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -3686,6 +3715,13 @@
     },
     {
       "url": "dist/open-post-rock-concert-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-outdoor-cinema-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -3979,13 +4015,6 @@
       "issues": []
     },
     {
-      "url": "dist/outdoor-cinema-cinema-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-pop-concert-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -4119,13 +4148,6 @@
       "issues": []
     },
     {
-      "url": "dist/outdoor-cinema-cinema-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-trance-dj_set-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -4141,13 +4163,6 @@
     },
     {
       "url": "dist/film-festival-cinema-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -4225,13 +4240,6 @@
     },
     {
       "url": "dist/contemporary-dance-performance-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -4469,13 +4477,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-contemporary-dance-dance-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/house-dj_set-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -4547,6 +4548,20 @@
     },
     {
       "url": "dist/cloud-tech-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-outdoor-cinema-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-contemporary-dance.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -4735,13 +4750,6 @@
       "issues": []
     },
     {
-      "url": "dist/open-contemporary-dance-dance-today.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/data-science-tech-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -4833,6 +4841,13 @@
       "issues": []
     },
     {
+      "url": "dist/open-outdoor-cinema-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-theater-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -4883,13 +4898,6 @@
     },
     {
       "url": "dist/pop-concert-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5022,6 +5030,13 @@
       "issues": []
     },
     {
+      "url": "dist/contemporary-dance-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-show-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5071,13 +5086,6 @@
       "issues": []
     },
     {
-      "url": "dist/open-contemporary-dance-dance-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/drama-theater-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5100,13 +5108,6 @@
     },
     {
       "url": "dist/with-ticket-contemporary-dance-performance-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/outdoor-cinema-cinema-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5142,13 +5143,6 @@
     },
     {
       "url": "dist/clubs.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5274,13 +5268,6 @@
       "issues": []
     },
     {
-      "url": "dist/exhibition.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/theater-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5337,6 +5324,20 @@
       "issues": []
     },
     {
+      "url": "dist/open-outdoor-cinema-this-weekend.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-outdoor-cinema-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/workshop-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5345,13 +5346,6 @@
     },
     {
       "url": "dist/open-drama-theater-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/outdoor-cinema-cinema-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5407,13 +5401,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-contemporary-dance-dance-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/drum-and-bass-dj_set.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5428,14 +5415,14 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-tango-dance-next-month.html",
+      "url": "dist/outdoor-cinema-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-tomorrow.html",
+      "url": "dist/with-ticket-tango-dance-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5547,13 +5534,6 @@
       "issues": []
     },
     {
-      "url": "dist/contemporary-dance-dance.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/open-pop-concert-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5569,13 +5549,6 @@
     },
     {
       "url": "dist/with-ticket-documentary-cinema-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/contemporary-dance-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5604,6 +5577,13 @@
     },
     {
       "url": "dist/with-ticket-cabaret-show-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-contemporary-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -5743,6 +5723,13 @@
       "issues": []
     },
     {
+      "url": "dist/open-contemporary-dance-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-theater-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -5835,6 +5822,13 @@
     },
     {
       "url": "dist/dj_set-today.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/classical-music.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6135,39 +6129,12 @@
       "issues": []
     },
     {
-      "url": "dist/googled03df0efd969df1f.html",
-      "template": "hub_template",
-      "verdict": "fail",
-      "issueCount": 2,
-      "issues": [
-        {
-          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.1.NoTitleEl",
-          "type": "error",
-          "typeCode": 1,
-          "message": "A title should be provided for the document, using a non-empty title element in the head section.",
-          "context": "<head></head>",
-          "selector": "html > head",
-          "runner": "htmlcs",
-          "runnerExtras": {}
-        },
-        {
-          "code": "WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2",
-          "type": "error",
-          "typeCode": 1,
-          "message": "The html element should have a lang or xml:lang attribute which describes the language of the document.",
-          "context": "<html><head></head><body>google-site-...</html>",
-          "selector": "html",
-          "runner": "htmlcs",
-          "runnerExtras": {}
-        }
-      ]
-    },
-    {
       "url": "dist/contemporary-art-exhibition-tomorrow.html",
       "template": "hub_template",
-      "verdict": "pass",
+      "verdict": "audit_error",
       "issueCount": 0,
-      "issues": []
+      "issues": [],
+      "errorMessage": "ProtocolError: Runtime.evaluate timed out. Increase the 'protocolTimeout' setting in launch/connect calls for a higher timeout if needed.\n    at <instance_members_initializer> (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)\n    at new Callback (/Users/chrism/Project with Claude/AgentAthens/agent-athens/node_modules/pa11y/node_modules/puppeteer/node_modules/puppet"
     },
     {
       "url": "dist/with-ticket-drama-theater-tomorrow.html",
@@ -6254,14 +6221,14 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-outdoor-cinema-cinema.html",
+      "url": "dist/with-ticket-today.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/with-ticket-today.html",
+      "url": "dist/outdoor-cinema-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6429,7 +6396,21 @@
       "issues": []
     },
     {
+      "url": "dist/open-outdoor-cinema-tomorrow.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-variety-show.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/contemporary-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6451,13 +6432,6 @@
     },
     {
       "url": "dist/concert-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-contemporary-dance-dance-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6492,6 +6466,13 @@
       "issues": []
     },
     {
+      "url": "dist/with-ticket-outdoor-cinema.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/with-ticket-concert.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -6500,13 +6481,6 @@
     },
     {
       "url": "dist/with-ticket-ballet-performance-tomorrow.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-today.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6716,13 +6690,6 @@
       "issues": []
     },
     {
-      "url": "dist/open-contemporary-dance-dance.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-house-dj_set-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -6815,13 +6782,6 @@
     },
     {
       "url": "dist/open-swing-dance-next-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-contemporary-dance-dance-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -6940,21 +6900,7 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-this-week.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/drama-theater-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7081,6 +7027,13 @@
     },
     {
       "url": "dist/open-installation-exhibition-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/open-contemporary-dance-this-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7276,20 +7229,6 @@
       "issues": []
     },
     {
-      "url": "dist/contemporary-dance-dance-today.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/with-ticket-contemporary-dance-dance.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-devops-tech-today.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7298,13 +7237,6 @@
     },
     {
       "url": "dist/open-multi-day-festival-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/with-ticket-contemporary-dance-dance-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7395,6 +7327,13 @@
       "issues": []
     },
     {
+      "url": "dist/with-ticket-outdoor-cinema-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-festival-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7451,13 +7390,6 @@
       "issues": []
     },
     {
-      "url": "dist/outdoor-cinema-cinema.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/with-ticket-installation-exhibition-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7473,13 +7405,6 @@
     },
     {
       "url": "dist/with-ticket-multi-day-festival-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-contemporary-dance-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7508,6 +7433,13 @@
     },
     {
       "url": "dist/with-ticket-latin-dance-this-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/outdoor-cinema-today.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7550,13 +7482,6 @@
     },
     {
       "url": "dist/photography-exhibition-tomorrow.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/open-outdoor-cinema-cinema-next-month.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7626,13 +7551,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-contemporary-dance-dance-tomorrow.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/open-contemporary-art-exhibition-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7689,13 +7607,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-contemporary-dance-dance-today.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/open-sculpture-exhibition-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7704,13 +7615,6 @@
     },
     {
       "url": "dist/with-ticket-cabaret-show-tomorrow.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/concert.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7759,13 +7663,6 @@
       "issues": []
     },
     {
-      "url": "dist/contemporary-dance-dance-this-weekend.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/open-tango-dance-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7787,6 +7684,13 @@
       "issues": []
     },
     {
+      "url": "dist/open-contemporary-dance-this-weekend.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-data-science-tech-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7801,20 +7705,6 @@
       "issues": []
     },
     {
-      "url": "dist/with-ticket-outdoor-cinema-cinema-this-month.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/workshop.html",
-      "template": "hub_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/drama-theater-this-weekend.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7823,6 +7713,13 @@
     },
     {
       "url": "dist/open-cinema-this-week.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/greek-music.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -7934,6 +7831,13 @@
       "issues": []
     },
     {
+      "url": "dist/open-contemporary-dance.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/open-techno-dj_set-this-week.html",
       "template": "hub_template",
       "verdict": "pass",
@@ -7963,6 +7867,13 @@
     },
     {
       "url": "dist/machine-learning-tech.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/with-ticket-outdoor-cinema-tomorrow.html",
       "template": "hub_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8228,98 +8139,98 @@
       "issues": []
     },
     {
-      "url": "dist/events/33fde271--/index.html",
+      "url": "dist/open-outdoor-cinema-next-month.html",
+      "template": "hub_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/9ed12367--simon-zhu-camerata-junior/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/0e8f633d--/index.html",
+      "url": "dist/events/cc3e03f8-venue-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/71907e46--amp/index.html",
+      "url": "dist/events/fe2cd73c--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/c562e9de-bios-nora-the-hell-s-house/index.html",
+      "url": "dist/events/e3e49595--the-two-sides-of-the-atlantic-poetry-and-colour-in-music/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/1495381b--/index.html",
+      "url": "dist/events/f95f35b2--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/02cea575-island-athens-riviera-liva-k/index.html",
+      "url": "dist/events/b922f161-skull-bar-afterhours-with-bisu-nik-j-def-sarahnotmarah/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/28d005f9-astron-astron-club-night-with-oko-dj-alexis-le-tan-eiger-drums-prop/index.html",
+      "url": "dist/events/d1b3dcc8-bolivar-mind-against-i-fri-may-8/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/3aa2cbb8-skull-bar-you-are-what-you-dance/index.html",
+      "url": "dist/events/35f84b4f-island-athens-riviera-magnifik-athens/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/4436b5ac-astron-astron-club-night-with-claudio-prc-polar-inertia-live-fergus/index.html",
+      "url": "dist/events/0547786d-aux-club-keep-hush-x-bass-asylum-athens-figlio-boler-madam-x-dj-hotli/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/44190bcf-skullbar-afterhours-bonso-man-with-the-speaker-george-karmokolias/index.html",
+      "url": "dist/events/603e7a77-b-side-athens-suneater-rno/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/e0c03e2c--grand-tour/index.html",
+      "url": "dist/events/1b7ed35a-onassis-stegi-yorgos-lanthimos-photographs/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/4d931f3a--barbara-kruger-untitled-pride-and-contempt/index.html",
+      "url": "dist/events/5864d4f5-138-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/2b3e9206-onassis-stegi-by-heart-tiago-rodrigues/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/events/03494395--/index.html",
+      "url": "dist/events/f92abefd-onassis-stegi-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8333,70 +8244,84 @@
       "issues": []
     },
     {
-      "url": "dist/events/87bb4ae2--/index.html",
+      "url": "dist/events/4d931f3a--barbara-kruger-untitled-pride-and-contempt/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/d5e76c58--/index.html",
+      "url": "dist/events/2f9ad721-hood-art-space-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/17f578d1--/index.html",
+      "url": "dist/events/c6407ab2-104-radio-1/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/7173e84a-theatre-of-the-no-2/index.html",
+      "url": "dist/events/a263e588--cancel/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/21c90e63-studio-/index.html",
+      "url": "dist/events/31035714--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/56d0608f-gazarte-death-disco-indoor-festival-2026/index.html",
+      "url": "dist/events/e56b7105--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/0bdb262f--39/index.html",
+      "url": "dist/events/4fb6b551--ejekt-festival-2026-florence-the-machine/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/03e1246b-metron-stage-vocal-jazz-festival/index.html",
+      "url": "dist/events/cat-fest--cat-festival-2026/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/932bd97a--39/index.html",
+      "url": "dist/events/87031e28-metron-stage-vocal-jazz-festival/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/a1ec0307-universe-signal-festival-athens-2026/index.html",
+      "url": "dist/events/0ed4202c--3-greek-beer-festival/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/8fa3b804--engineering-the-world-2026/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/7da7740f-art-bar-live-experimental-electronics/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8410,14 +8335,14 @@
       "issues": []
     },
     {
-      "url": "dist/events/8c1e1c44-temple-flamecore/index.html",
+      "url": "dist/events/677b811c--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/75572d3d--/index.html",
+      "url": "dist/events/9e003491--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8431,56 +8356,35 @@
       "issues": []
     },
     {
-      "url": "dist/events/5c45bc01-gazarte-dj-koco-aka-shimokita-first-time-in-athens-special-guests-ti/index.html",
+      "url": "dist/events/d36e93a2-red-jasper-cabaret-theatre-snap-athens-queer-comedy-club/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/35eb62cd-eliart-athens-english-comedy-club/index.html",
+      "url": "dist/events/9c9bb11e-red-jasper-cabaret-theatre-snap-athens-queer-comedy-club/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/0d312ef5-red-jasper-cabaret-theatre-/index.html",
+      "url": "dist/events/dfcf9d5b-red-jasper-cabaret-theatre-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/759ef3d3-metron-stage-velvet-cabaret-ny-in-athens/index.html",
+      "url": "dist/events/a4319897-red-jasper-cabaret-theatre-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/events/9f02adad--/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/events/4780a548-red-jasper-cabaret-theatre-snap-athens-queer-comedy-club/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/events/d9580c74--/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/events/c9afc042--face-painting/index.html",
+      "url": "dist/events/e79f3f64-red-jasper-cabaret-theatre-snap-athens-queer-comedy-club/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8494,7 +8398,14 @@
       "issues": []
     },
     {
-      "url": "dist/events/5f6a9c35--/index.html",
+      "url": "dist/events/1fff7b96--animegaron-2026/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/50cff652--171-187/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8508,7 +8419,7 @@
       "issues": []
     },
     {
-      "url": "dist/events/e0abea86--devoxx-greece-2026/index.html",
+      "url": "dist/events/5f6a9c35--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8522,7 +8433,7 @@
       "issues": []
     },
     {
-      "url": "dist/events/8bc94f92-asteria-domus-glyfada-infraai-global-summit-2026/index.html",
+      "url": "dist/events/e0abea86--devoxx-greece-2026/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8543,7 +8454,49 @@
       "issues": []
     },
     {
+      "url": "dist/events/15e39512--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/dd7230a9--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/2fd46546--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/293f2e89--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/events/4637db0d--bobos-arts-festival/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/ea113b5c-dybbuk-dubfire-rezo/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9eca4178--rationalistas-texnopolis/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8571,7 +8524,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/8667bb9f-universe-stolen-mic/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/2fff54f7-gazi-view-303-rave-x-rooftop-open-air/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/a583cfdf--jamie-duffy/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/114584b9--10/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8592,6 +8566,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/33959f9f-temple-skullcrush-fest/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/2b73d070--release-athens-2026-x-snf-nostos-david-byrne-who-is-the-sky-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8600,6 +8581,13 @@
     },
     {
       "url": "dist/en/events/6bcf5382-olvio-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/2088aad6-bolivar-22-years-bolivar-bday-celebration-with-james-hype-i-sat-july/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8634,21 +8622,21 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/c9f2ea22--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/5e9311d5-coronet-theater-2/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/2ea58056--release-athens-2026-three-days-grace/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/ee8adbb2-olvio-/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/1e5812cd-an-club-catharsis-w-chronoboros-malignant-unmother/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8669,6 +8657,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/0eef5542--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/1239b09f-burger-disco-club-house-on-the-beach/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8676,7 +8671,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/eaee400d-patision65-tensile-gathering/index.html",
+      "url": "dist/en/events/4fe49f93--burger-project-volume-4/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8690,7 +8685,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/bb35da04-bios-kaizen-klub-with-chloe-robinson-madam-x-bday-spesh-poor-j-da/index.html",
+      "url": "dist/en/events/72a2ff6d-half-note-jazz-club-kontrafouris-stouraitis-invite-dayna-stephens-andre-sumelius/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8704,6 +8699,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/b922f161-skull-bar-afterhours-with-bisu-nik-j-def-sarahnotmarah/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/875f4154-universe-vlct-arena-w-cloudy-kuko-johannes-schuster/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8711,14 +8713,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/4668c249-universe-vlct-zero-w-dvs1-oscar-mulero-yanamaste/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/85e63b22-it-athens-underdogs-techno/index.html",
+      "url": "dist/en/events/6e9dc4ac-bolivar-mayans-with-mita-gami-i-magit-cacoon-i-thu-june-4/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8739,6 +8734,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/919d4dc1-stoa-athens-s-xy-r-ve/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/3052b228--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8746,7 +8748,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/5c45bc01-gazarte-dj-koco-aka-shimokita-first-time-in-athens-special-guests-ti/index.html",
+      "url": "dist/en/events/e50d43de--michelle-gurevich/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8761,6 +8763,13 @@
     },
     {
       "url": "dist/en/events/f95f35b2--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9eefd978-botoxe-2-stages-ajja-fatima-hajji-cltx/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8802,6 +8811,20 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/5e13cda8-astron-kera-s-name-day/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0e9e87c9-island-athens-riviera-jafari-presents-ameme/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/f1751684-red-jasper-cabaret-theatre-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8810,13 +8833,6 @@
     },
     {
       "url": "dist/en/events/1f4a179c-caja-de-musica-/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/b2299a9a-oddity-zona-mutante-iii-w-blame-the-mono/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8837,7 +8853,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/702e4b31-arroyo-theater-/index.html",
+      "url": "dist/en/events/103822f1--athens-all-star-party/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/bf32e0ca-smut-weeerdos-lolsnake-phase-fatale-juliana-huxtable/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8879,7 +8902,21 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/433f6dac-skull-bar-afterhours-with-kanedo-bcn-okalo-stratos-george-karmokolias/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/959bdb52-red-jasper-cabaret-theatre-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/01c53702-burger-disco-club-space-odyssey/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8894,6 +8931,13 @@
     },
     {
       "url": "dist/en/events/97c0249c--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/16082449-bios-extrasauce-002/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8935,6 +8979,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/e456f9e2-half-note-jazz-club-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/2c6ad9bc-104-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8943,13 +8994,6 @@
     },
     {
       "url": "dist/en/events/af028590-b-side-athens-zetaim-with-dj-tim-nikko-z/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/fe81327b--3-greek-beer-festival/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8970,7 +9014,42 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/293f2e89--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9c6778f2-bolivar-padre-guilherme-i-sat-may-9/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/001f8711-death-disco-bloody-pleasures/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/c4f9d1e4--fm-40-years-of-indiscreet-live-in-athens/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/7f0d7ecc-island-athens-riviera-mimi-x-fy/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/034c6105-half-note-jazz-club-cinema-paradiso-project/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -8984,6 +9063,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/45feaef3-b-side-athens-fro-rlct/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/87031e28-metron-stage-vocal-jazz-festival/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -8991,14 +9077,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/785c19de-gazi-view-synergy-showcase-rave/index.html",
+      "url": "dist/en/events/4c1b7f88-bolivar-mayans-with-themba-i-thu-july-2/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/9037ee8b--/index.html",
+      "url": "dist/en/events/785c19de-gazi-view-synergy-showcase-rave/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9013,13 +9099,6 @@
     },
     {
       "url": "dist/en/events/b667732b--astoria/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/2ca3f43c--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9061,6 +9140,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/e02e2e8c-concert-1-baumstrasse-rewind/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/47b03e95-bolivar-bolivar-seds-pres-oliver-huntemann-steve-sai-b2b-steph/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9075,6 +9161,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/cfdb039c-bless-me-father-block-party-karitsi-sq/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/a674e355-astron-kaos-london-x-astron-samuel-kerridge-live-sawf-choronzon/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9083,13 +9176,6 @@
     },
     {
       "url": "dist/en/events/889e1649--5/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/adaa6342--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9131,6 +9217,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/6bf991c1--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/fde223ae-b-side-athens-mama-athens-with-elias-yannka/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9138,14 +9231,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/e6dba1f8-smut-athens-primal-instinct-x-smut-with-chlar-x-hadone-x-vera-grace/index.html",
+      "url": "dist/en/events/f027d4dc--nayra/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/7a871a06-myrtillo-cafe-alcedo-folk-band/index.html",
+      "url": "dist/en/events/a9bcdda1-it-athens-untz-take-over/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/639a2481-live-up-the-hammers-xxi-2027/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9159,21 +9259,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/56d0608f-gazarte-death-disco-indoor-festival-2026/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/1ad51604-piraeus-club-academy-iotunn-piraeus-club-academy-athens/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/d1322ce7-aux-club-dj-guest-list-the-muffin-man/index.html",
+      "url": "dist/en/events/2fd46546--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9181,6 +9267,13 @@
     },
     {
       "url": "dist/en/events/de7ebf4f-olvio-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/595c7a69-bolivar-mayans-with-anna-i-thu-july-9/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9195,6 +9288,27 @@
     },
     {
       "url": "dist/en/events/97471539--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/d405a1db-temple-spank-party/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/6fe68adc-bolivar-camelphat-i-sat-july-25-i-bolivar/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/db37944f-dybbuk-closing-night-priku-jonn-always-late/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9229,6 +9343,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/bbf00105-plus-ambassade-live-ath/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/38c62b7b--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9236,14 +9357,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/db458e80-gazarte-the-69-eyes-fi-live-in-athens/index.html",
+      "url": "dist/en/events/a2a66698-patision65-kinetica-presents-motion-one/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/df5bfd7a-auditorium-171-187/index.html",
+      "url": "dist/en/events/80617b13--39/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/db458e80-gazarte-the-69-eyes-fi-live-in-athens/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9265,6 +9393,13 @@
     },
     {
       "url": "dist/en/events/c5edf176--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9fabcf3f-half-note-jazz-club-n/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9306,7 +9441,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/3b8828cb-christmas-theater-alban-skenderaj-motiv/index.html",
+      "url": "dist/en/events/05ba02df--live/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9321,6 +9456,13 @@
     },
     {
       "url": "dist/en/events/1bd49c4d-studio-taniko/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/4091049e--soooolllllsttiiiiceeee/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9348,6 +9490,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/75752910-patision65-phasma-collective-x-wrong-dimension/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/a9547926-an-club-nailstorm-charity-festival/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9362,14 +9511,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/6e59d319--guestzone-with-tina-mav/index.html",
+      "url": "dist/en/events/b489d3c6-bolivar-mayans-with-max-styler-i-thu-30-july/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/29137258-parnassos-literary-society-cgs/index.html",
+      "url": "dist/en/events/6e59d319--guestzone-with-tina-mav/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9397,14 +9546,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/4436b5ac-astron-astron-club-night-with-claudio-prc-polar-inertia-live-fergus/index.html",
+      "url": "dist/en/events/603e7a77-b-side-athens-suneater-rno/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/569f102a-astron-sakta-vol-4-pentti-igor-skyddsrum-sonic-gammadodeka-kera-vin/index.html",
+      "url": "dist/en/events/332eeaf8-bios-club-hovercraft/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9412,13 +9561,6 @@
     },
     {
       "url": "dist/en/events/1f89f6d3--/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/b3f70980-olvio-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9439,14 +9581,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/b7bf9a97-dybbuk-17-years-anniversary-party/index.html",
+      "url": "dist/en/events/e37b97d3--171-187/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/071a4e10-temple-rave-ritual/index.html",
+      "url": "dist/en/events/b7bf9a97-dybbuk-17-years-anniversary-party/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9509,14 +9651,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/1c610b48--/index.html",
+      "url": "dist/en/events/1d9465ec-gazi-view-rooftop-bass-party-by-555/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/1504103a--jazz-idylle-piano-trio-idylle-piano-trio/index.html",
+      "url": "dist/en/events/1c610b48--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9544,13 +9686,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/453f3524--full-circle-pres-styx-agency-mangata-projekt-man-with-the-sp/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/1495381b--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9565,7 +9700,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/ab61febb-theatre-of-the-no-amp/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/a0bb413a-smut-athens-smut-pride-love/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/53fd6789-art-63-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/65d3b366-half-note-jazz-club-aggeliki-psoni-dayramir-gonzalez/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9635,7 +9791,21 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/7c9f1df2--cleansed/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/09de98de-parnassos-literary-society-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/8941850c-cantina-social-salvi-k-x-metaman/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9656,7 +9826,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/523def07--dire-straits-legacy-live-in-greece/index.html",
+      "url": "dist/en/events/88e42ed4-gazarte-eden-live-presents-tonic-walter/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/35919dfb-bolivar-deborah-de-luca-i-fri-july-31/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9670,13 +9847,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/f9786873-an-club-friends/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/30cb44e0--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9684,7 +9854,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/8ec1384c-astron-tropism-w-legowelt-live/index.html",
+      "url": "dist/en/events/7394f2ae--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9698,14 +9868,28 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/22d378a5-smut-athens-purple-night-10-year-anniversary-x-smut/index.html",
+      "url": "dist/en/events/5c3d4270--the-gathering-nl-live-in-greece/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/5c3d4270--the-gathering-nl-live-in-greece/index.html",
+      "url": "dist/en/events/799165c9--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9575b2a5--k-pop-fever/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3e050ac5-cantina-social-lockbird/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9740,14 +9924,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/ec374fb3-astron-society-3000-invites-ben-pest-live/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/136f8040-aux-club-soundnow-pres-dj-guestlist-the-muffin-man-chex-nivk-jane-b2b/index.html",
+      "url": "dist/en/events/aee178ed-couleur-locale-ben-biron-day-to-night-white-party/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9762,6 +9939,20 @@
     },
     {
       "url": "dist/en/events/e344a237--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/ef00fd12-tba-atharea-the-cloud-tavern-revolt-s/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/b00148ab-onassis-stegi-onassis-stegi/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9796,6 +9987,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/ed8fb45d-astron-society-3000-season-closing/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/7ee75844--the-hotsteppaz/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9803,7 +10001,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/b6641168--/index.html",
+      "url": "dist/en/events/ed728142-bolivar-kas-st-i-anfisa-letyago-i-fri-july-24/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3b9459e1-arch-club-heated-rivalry-club-night/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9811,6 +10016,13 @@
     },
     {
       "url": "dist/en/events/6a759b62--alexandra-sieti/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/fe2cd73c--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9831,7 +10043,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/4e84d81c-plus-super-stereo/index.html",
+      "url": "dist/en/events/1fff7b96--animegaron-2026/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9845,7 +10057,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/b9490b9a-cozmo-athens-muzik-savez-pres-valeron-at-cozmo-22-march/index.html",
+      "url": "dist/en/events/7f216429-bolivar-mayans-with-guy-j-b2b-guy-mantzur-i-thu-21-may/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9859,7 +10071,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/119028d9-floyd-imminence/index.html",
+      "url": "dist/en/events/601f1fe7-astron-eros-live-regis-liam-andrews-boris-wilsdorf-einsturzende-neu/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9880,13 +10092,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/a1b4c0de--amp-rave/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/887e4eed-cantina-social-dora-mask/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9895,6 +10100,20 @@
     },
     {
       "url": "dist/en/events/8cd011f3-dybbuk-filippos-decoup-baby-jones/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/2d9df879-temple-hardvision-1-year-anniversary/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f58530f6-astron-ifm-x-tropism-with-i-f-intergalactic-gary/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9915,7 +10134,42 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/39352b29-it-athens-a-collective-of-rhythm/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/dfca518d-half-note-jazz-club-cinema-paradiso-project/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/8b10c338-olvio-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/639ce662-half-note-jazz-club-trio/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/74629d5b--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/d1929c53-half-note-jazz-club-cinema-paradiso-project/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9936,6 +10190,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/fea1438b-gustav-athens-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/186eb087--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9943,7 +10204,42 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/79b16fc7-island-athens-riviera-mathame-at-island-athens-riviera/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/07891f53-half-note-jazz-club-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/71d79419-don-t-be-a-dick-don-t-be-a-dick-mama-sunday-10-05/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/4637db0d--bobos-arts-festival/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/682ca60d-island-athens-riviera-liva-k/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/89d12e9f-smut-athens-mord-x-smut-x-bas-mooy-x-uvb-x-mathys-lenne/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9964,6 +10260,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/780882d3-underflow-ostomachion-sessions-xvi/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/dced7228-gazarte-death-disco-indoor-festival-2026/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9971,7 +10274,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/11a440a4-temple-unitechno-w-oguz/index.html",
+      "url": "dist/en/events/4ecfa776-cantina-social-petros-spatharos/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f87e0ef4-crust-clubkid-x-nikolas-gale/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/4b0ebf62-bolivar-mayans-with-red-axes-i-thu-july-23/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -9985,6 +10302,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/2bd7a1a8-island-athens-riviera-liva-k-at-island-athens-riviera/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/62de2b16--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -9992,14 +10316,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/13c8a305-onassis-stegi-ongoing-tilda-swinton/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/93d806de-wild-poppies-chris-child-d-tzere/index.html",
+      "url": "dist/en/events/00013a1f--phantom-spell/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10007,6 +10324,13 @@
     },
     {
       "url": "dist/en/events/aa4f0921--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/356d7f8f--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10041,13 +10365,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/f8034b36-wild-poppies-constantinos-dontas/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/b00d1e5d--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10055,7 +10372,28 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/44945e64-plus-falaines-mr-trickster-amp-glassvale/index.html",
+      "url": "dist/en/events/9f5498c2-b-side-athens-ritual-with-patso/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/fae27829-b-side-athens-volta-with-karanikas/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/98f094d7--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/2c4c82f0-el-chapo-tanison-inco-2delta-el-chapo/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10083,6 +10421,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/bcb90ea5-underflow-joanna-mattrey/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/0be3b1af-cantina-social-evripidis-and-his-tragedies/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10090,7 +10435,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/441535e0-piraeus-club-academy-deus-culpa-album-presentation-w-reversed-piraeus-club-academ/index.html",
+      "url": "dist/en/events/ebdfdf92--yako-trio/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3636471c-burger-disco-club-no-more-fake-disco/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3519c09f-half-note-jazz-club-dimitris-tsakas-trio-conversation-helps-new-compositions/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10105,6 +10464,13 @@
     },
     {
       "url": "dist/en/events/8404a1ce-oaka-olympic-tennis-center-foreigner-celebrating-50-years/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/aed0c002-bolivar-bolivar-minotaur-minotaur-pres-shimza-dino-mfu/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10132,6 +10498,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/4655e4a5-skull-bar-afterhours-with-vrede-extended-set-sirod-at-skullbar/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/c70d1912--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10146,14 +10519,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/8bc94f92-asteria-domus-glyfada-infraai-global-summit-2026/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/138fb233-astron-tiger-weeds-with-the-exaltics-live/index.html",
+      "url": "dist/en/events/4daa340a-temple-demonyx-ritual-vol-1/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10174,7 +10540,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/5f37e86f-olvio-/index.html",
+      "url": "dist/en/events/f2a46e77-bolivar-the-best-summer-party/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3e219623-botoxe-fatima-hajji-caravel-x-botoxe-athens-anagenesis-1-year-anniv/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10209,7 +10582,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/4a6e214f--2026/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/868eddb1-patision65-sfh-patision-65/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/7aab638f-bolivar-indira-paganotto-i-sat-june-13/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9d505a61-burger-disco-club-disco-cinema-week-6-scary-movie/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10237,6 +10631,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/32f14a52-smut-athens-smut-x-fjaak-x-henning-baer-x-sept/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/8907fa44--godsmack/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10251,6 +10652,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/ada150e1-island-athens-riviera-monolink-at-island-athens-riviera/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/be7785e9-coronet-theater-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10259,13 +10667,6 @@
     },
     {
       "url": "dist/en/events/8aa24510-burger-disco-club-clubkid-all-night-long/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/4c8ab467-plus-billie-kark-x-ody-icons/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10342,6 +10743,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/3f16dc34-it-athens-mountain-pirates-take-over/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/1fb407b2-arch-club-heated-rivalry-club-night/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10357,6 +10765,13 @@
     },
     {
       "url": "dist/en/events/22ba18d1-paraga-paraga/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/96d7720b-it-athens-zona-mutante-iii/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10384,14 +10799,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/1640bb3b-red-jasper-cabaret-theatre-/index.html",
+      "url": "dist/en/events/58538840-bolivar-kevin-de-vries-i-sat-aug-15/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/370905a8-arroyo-theater-/index.html",
+      "url": "dist/en/events/30fa1355--ensemble-agamemnon/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/1640bb3b-red-jasper-cabaret-theatre-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10419,14 +10841,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/e82b09c3--/index.html",
+      "url": "dist/en/events/000176e2-it-athens-rave-ritual/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/4e1bac9b--live/index.html",
+      "url": "dist/en/events/e82b09c3--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10440,7 +10862,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/1b6f7680-circus-entertainment-hub-geoff-tate-operation-mindcrime/index.html",
+      "url": "dist/en/events/6d6bd823-daddy-s-all-day-bar-sonic-sisters-festival/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/b2d4cc17--anser/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/af786758--na-ka-live-in-athens/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10454,7 +10890,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/9f3c3f6a-auditorium-/index.html",
+      "url": "dist/en/events/dd332d89--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10475,13 +10911,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/435044c6-wild-poppies-alex-kosh-aphrodite/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/3f31c42f--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10490,6 +10919,13 @@
     },
     {
       "url": "dist/en/events/cdf37687--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/a159a927-it-athens-phasma-collective/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10517,13 +10953,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/0820d442-fuzz-club-/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/56e115f5--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10545,13 +10974,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/df3f2054-smut-athens-eerste-communie-10yrs-x-smut/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/197105e8-underflow-kasimmavik/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10559,14 +10981,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/1da18e08-island-athens-riviera-koni-is-calling/index.html",
+      "url": "dist/en/events/9a5b3fd3-b-side-athens-volta-with-karanikas-fotini-galani/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/27437d2b--/index.html",
+      "url": "dist/en/events/1da18e08-island-athens-riviera-koni-is-calling/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10601,7 +11023,35 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/da362d4d-bolivar-mayans-with-enoo-napa-b2b-da-capo-i-thu-june-25/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/006bf4e8-bolivar-adam-beyer-i-bart-skils-i-sat-may-2/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/726c2c34--the-storyville-ragtimers-tribute-to-louis-armstrong-what-a-w/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/028319b5--opera-amore-maggio-musicale-fiorentino/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/b55387ce-b-side-athens-dj-problems-yorz-piece-of-kate/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10616,6 +11066,13 @@
     },
     {
       "url": "dist/en/events/5efa8db9-bios-club-5-irl-1-year-anniversary-w-pink-wav-aiel-miss-trouli-55/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/e005c824-bolivar-shimza-i-fri-may-22/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10657,6 +11114,20 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/47d84d92-bolivar-mayans-with-joezi-i-thu-aug-6/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f4dda268--171-187/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/bcda31af-temple-gans/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10671,7 +11142,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/7ff03bc6--wow-sounds-imany/index.html",
+      "url": "dist/en/events/a28aaf8d-bolivar-maceo-plex-i-marcel-dettmann-i-sat-july-18/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10727,7 +11198,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/balletto-christmas-theater-balletto-di-milano/index.html",
+      "url": "dist/en/events/8cc0e9d5-universe-12/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10748,6 +11219,48 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/413e0e1b-plus-voidtech/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/18e85446-half-note-jazz-club-la-boheme/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/6a3de18f-doors-amp/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/89b458f7-crust-djebbour-x-the-d-mood/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/1fc1f286-underflow-fred-frith-amp-dimos-vryzas-live-in-duo/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f55c1fa6-smut-athens-on-board-x-smut-with-laura-bcr-psyk-luigi-tozzi-live-iffie/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/ffa3d799-parnassos-literary-society-120/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10756,6 +11269,13 @@
     },
     {
       "url": "dist/en/events/2fdf5487-dybbuk-miroloja-useless-co/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/87f4cc7e--soul-madness/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10783,6 +11303,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/903a60a8-bios-apff-philosophy-in-the-boudoir/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/60899e3e-aux-club-bcco-x-velocity-aerea-live-ate-cirkle-mac-declos-salin/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10797,6 +11324,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/1850bdc8--2o/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/fbf319fd--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10804,7 +11338,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/0aad3635-smut-athens-smut-x-marr-n-x-ogazon-x-decoder/index.html",
+      "url": "dist/en/events/2219cd51-plus-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f7b22e11--99-2/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/e5c7f0f6-b-side-athens-rokfor-takeover/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10825,6 +11373,20 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/9ed12367--simon-zhu-camerata-junior/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/6b1d76d3-bolivar-mahmut-orhan-i-sat-may-30/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/7feded43--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10832,7 +11394,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/75572d3d--/index.html",
+      "url": "dist/en/events/6976340c-smut-athens-weeerdos-x-smut-with-lolsnake-x-phase-fatale-x-juliana-huxta/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10867,7 +11429,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/56dea65f-arroyo-theater-/index.html",
+      "url": "dist/en/events/ef8e950d-2ten-kollektiv-the-phase/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10888,6 +11450,20 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/8e477c0a-onassis-stegi-onx-showcase-athens-2026/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/54468d66-crust-mikele-x-marsha/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/7fdbe618-red-jasper-cabaret-theatre-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10902,6 +11478,27 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/2b3e9206-onassis-stegi-by-heart-tiago-rodrigues/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/46161085-half-note-jazz-club-harmonia-misturata-trio/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/958bdbe4-astron-akoe-x-art-bei-ton-8th-bday-with-mike-parker-hypnotic-black-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/47ebf66b--caveman/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -10910,6 +11507,13 @@
     },
     {
       "url": "dist/en/events/7db54fe5-rabbithole-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/1c73f90b-bolivar-mayans-with-david-morales-i-thu-aug-20/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10944,7 +11548,21 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/7821bdc3-theatre-of-the-no-encardia/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/8dddfbf7--coordinatas-old-souls-new-city-open-air-at-alsos-pagkratiou/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/5a1425bc-bolivar-bolivar-minotaur-minotaur-pres-meduza-dino-mfu/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -10986,14 +11604,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/0ea384d8--171-sacri-respiri-187/index.html",
+      "url": "dist/en/events/c26050fb--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
       "issues": []
     },
     {
-      "url": "dist/en/events/9eb7373f-fuzz-club-the-aristocrats-the-duck-tour-fuzz-05-04-2026/index.html",
+      "url": "dist/en/events/1bf3af13-bolivar-mayans-pres-tripolism-steph-b2b-rezo/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0ea384d8--171-sacri-respiri-187/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11042,6 +11667,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/02657984--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/b7cf9f6e--release-athens-2026-moby/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11050,6 +11682,13 @@
     },
     {
       "url": "dist/en/events/5f6a9c35--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0a35ca1b-b-side-athens-fragk-kalyjama/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11084,13 +11723,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/7f0deecd-oddity-4-years-exilium-with-eli-brown/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/d1c0418f-vox-amp/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11099,6 +11731,13 @@
     },
     {
       "url": "dist/en/events/8c27fd7e-coronet-theater-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0bb940c2-astron-sunday-outdoor-garden-with-reaktiv-kvadosh-supercub90/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11119,13 +11758,6 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/3aa2cbb8-skull-bar-you-are-what-you-dance/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
       "url": "dist/en/events/ddb3a46b-metron-stage-sapphire-blues-festival/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11134,6 +11766,13 @@
     },
     {
       "url": "dist/en/events/5a4b2779--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/2dfd7b30-half-note-jazz-club-/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11154,7 +11793,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/9be90ba3-olvio-/index.html",
+      "url": "dist/en/events/2d9f2883--ax-emanuel-cencic/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11162,6 +11801,20 @@
     },
     {
       "url": "dist/en/events/c3fe4ec6-gazarte-telenova-live-in-athens/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/a9261a3b-bolivar-mayans-with-nick-warren-i-thu-july-16/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/f415fb7e-half-note-jazz-club-miranda-verouli-quintet-feat-andreas-polyzogopoulos/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11182,7 +11835,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/ee84e73a-bolivar-mayans-pres-adam-ten-steph-b2b-rezo/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/ca0985b7-2ten-techno-underdogs/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/deep-pur--deep-purple-live/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/9239cf6f-floyd-the-sisters-of-mercy/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11197,6 +11871,13 @@
     },
     {
       "url": "dist/en/events/91190424-auditorium-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/598383e3-smut-athens-coma-x-smut-w-stef-mendesidis-live-beste-hira-jerm/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11224,6 +11905,27 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/2361031f-island-athens-riviera-valeron-at-island-athens-riviera/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/ce8b734d-tba-atharea-revolt-hosts-love-letters-from-oslo/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/40948c02--augustin-hadelich-gautier-capucon-christian-thielemann-unite/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/fc050745--/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11232,6 +11934,13 @@
     },
     {
       "url": "dist/en/events/53a80fa9-astron-digital-tsunami-astron/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/87130488-smut-athens-smut-x-alpha-tracks-x-anamorph-x-onur/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11252,6 +11961,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/08a1e77f-half-note-jazz-club-voodoo-groove/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/87905740-couleur-locale-deerislnd-from-silence-to-sound/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11259,7 +11975,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/19fb49e4-astron-astron-club-night-with-alienata-discos-atonicos-cultivated-e/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/effc72c7-sunel-arena-dani-gambino-live/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/12663b97-half-note-jazz-club-dimitria-kalantzis-quartet/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/dd7230a9--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11281,6 +12018,27 @@
     },
     {
       "url": "dist/en/events/184d3615-floyd-/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/d1c065c3-bios-apff-disobedient-dolls/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/066408b8--171-187/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/12317325-bolivar-mayans-with-ame-live-i-thu-aug-27/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11336,6 +12094,27 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/1b35794d-astron-acn-with-k-atou-yorz/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/c03634e8-half-note-jazz-club-srdjan-ivanovic-blazin-quartet/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0db89051-half-note-jazz-club-adedeji-friends-ancestral-rhythm/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/b9b88d4d--6daexit-improvisation-ensemble/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11364,6 +12143,13 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/8f8629bc-it-athens-psy-vibes-session-vol-8/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/7bb8fe15-auditorium-/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11372,6 +12158,13 @@
     },
     {
       "url": "dist/en/events/ac10b217-smut-4-10438-greece-anne-all-night-long/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/0fd0530d--uccelli-del-mare/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11392,7 +12185,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/fc3eb637-el-chapo-nikkolas-dashy-s-ant/index.html",
+      "url": "dist/en/events/62f4a237-rohas-athens-live-stage-rising-road-amp-deuxcadance/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/860005a5-dybbuk-season-closing-ae-ther-alessio-cristiano/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/3b6c7a1a-bios-7-years-slam/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11400,6 +12207,13 @@
     },
     {
       "url": "dist/en/events/2e48193f--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/2becff5d-aux-club-aux-clubnight/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11420,7 +12234,14 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/03494395--/index.html",
+      "url": "dist/en/events/2f5ea247-astron-acn-with-hamada-jim-ross-aka-mechanist-gammadodeka/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/7ddb4d9f-bios-apff-bacchic-night-balkan-brat-party/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11462,7 +12283,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/8f79c8ae--sir-john-eliot-gardiner-constellation-choir-and-orchestra/index.html",
+      "url": "dist/en/events/2451b2b8-smut-athens-smut-x-anfs-x-blue-hour-x-kwartz/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11476,7 +12297,35 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/82f681a2--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/15e39512--/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/46455c20-parnassos-literary-society-the-necks-athens-residency/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/29981d70-b-side-athens-dj-gus-liou/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/87bcb1d5--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11504,21 +12353,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/f320b3e6--171-187/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/576dad5f-parnassos-literary-society-nikolai-lugansky/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/4579f838--astoria/index.html",
+      "url": "dist/en/events/86438986-bolivar-royksopp-dj-set-i-fri-june-5/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11553,7 +12388,21 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/9098f810--thr3e/index.html",
+      "url": "dist/en/events/1e7e71ee-smut-athens-prncptl-xl-x-smut/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/87d657da-bolivar-miss-monique-i-sat-may-23/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/50cff652--171-187/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11567,7 +12416,28 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/d0852901-island-athens-riviera-the-gosha/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/d490ce5f-don-t-be-a-dick-street-party/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/5b80b55f-gazarte-a-place-to-bury-strangers-live-in-athens/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/dfd6e2e6--/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11602,6 +12472,41 @@
       "issues": []
     },
     {
+      "url": "dist/en/events/58c80f37-don-t-be-a-dick-flavours-with-okalo-ds/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/c16ee8d7-bolivar-lilly-palmer-gregor-tresher-i-sat-june-6/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/da5c8929-astron-acn-with-majdolen-maria-politi-loopa/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/e2b2fd17-skull-bar-afterhours-with-valm-elpy-at-skullbar/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
+      "url": "dist/en/events/5961ef4a-bolivar-mayans-with-enoo-napa-b2b-da-capo-i-thu-may-28/index.html",
+      "template": "event_template",
+      "verdict": "pass",
+      "issueCount": 0,
+      "issues": []
+    },
+    {
       "url": "dist/en/events/0878e121--170-moonwalk/index.html",
       "template": "event_template",
       "verdict": "pass",
@@ -11616,7 +12521,7 @@
       "issues": []
     },
     {
-      "url": "dist/en/events/5eb0304e-parnassos-literary-society-/index.html",
+      "url": "dist/en/events/2268bc45-fuzz-club-the-best-tribute-to-ac-dc/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,
@@ -11631,13 +12536,6 @@
     },
     {
       "url": "dist/en/events/33dd0091-universe-ivan-greko/index.html",
-      "template": "event_template",
-      "verdict": "pass",
-      "issueCount": 0,
-      "issues": []
-    },
-    {
-      "url": "dist/en/events/fccd7864-aux-club-gegen-athens-bill-sanders-ivra-luigi-di-venere-mar-us-samant/index.html",
       "template": "event_template",
       "verdict": "pass",
       "issueCount": 0,

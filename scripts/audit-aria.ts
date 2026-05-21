@@ -113,9 +113,22 @@ export function tallyAggregate(group: PageGroupReport, verdict: PageVerdict): vo
 
 // ─── Discovery ─────────────────────────────────────────────────────────
 
+// Exported for testing. Excludes error pages and 3rd-party verification stubs
+// (GSC/Bing site-ownership files) from the hub_template audit set — those files
+// either don't follow hub WCAG expectations (404) or are content we don't
+// control (verification stubs would break ownership verification if modified).
+export function isAuditableHubFile(name: string): boolean {
+  if (name === '404.html') return false;                       // error page
+  if (/^google[0-9a-f]+\.html$/i.test(name)) return false;     // GSC ownership stub
+  if (/^bing[0-9a-f]+\.html$/i.test(name)) return false;       // Bing ownership stub
+  if (/SiteAuth/i.test(name)) return false;                    // misc auth stubs
+  return true;
+}
+
 function discoverHubs(): string[] {
   return readdirSync(DIST_DIR)
     .filter((name) => name.endsWith('.html'))
+    .filter(isAuditableHubFile)
     .map((name) => join(DIST_DIR, name));
 }
 
@@ -291,7 +304,10 @@ export async function runAudit(opts: { full: boolean }): Promise<{
 
   const now = new Date().toISOString();
   const report: AriaReport = { meta: { lastUpdate: now }, pages };
+  // meta.lastUpdate also lives on the aggregate so consumers (the completeness
+  // reporter's freshness gate) don't need to read the sibling report file.
   const aggregate: AriaAggregate = {
+    meta: { lastUpdate: now },
     hub_template: hubAgg,
     event_template: eventAgg,
   };
