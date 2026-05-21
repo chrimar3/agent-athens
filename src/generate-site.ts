@@ -37,6 +37,8 @@ import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './te
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
 import { BASE_URL } from './config/site-url';
 import { renderAnalytics } from './config/analytics';
+import { proofMetrics } from './utils/proof-metrics';
+import { renderProofBody } from './templates/proof-body';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -671,6 +673,11 @@ async function main() {
     'url': ORGANIZATION_SCHEMA.url
   };
 
+  // proofMetrics: anti-drift reader. Numbers flow from live artifacts, not literals.
+  // pageableEvents.length is the only correct event-count denominator (the raw
+  // location_status SQL filter returns 11,643 — the historical count, not pageable).
+  const metrics = proofMetrics({ pageableCount: pageableEvents.length });
+
   // Bilingual content page pairs: { baseSlug, el: {...}, en: {...} }
   const contentPagePairs = [
     {
@@ -950,6 +957,49 @@ async function main() {
         <h2>Transparency</h2>
         <p>Every event page cites its data source. The code is open on <a href="https://github.com/chrimar3/agent-athens">GitHub</a> and quality rules are publicly available. We believe transparency is fundamental to trust.</p>
       `
+      },
+    },
+    {
+      baseSlug: 'proof',
+      el: {
+        slug: 'proof',
+        title: 'Αποδείξεις',
+        metaDescription: 'Πώς δουλεύει το agent athens — αριθμοί από τα ζωντανά artifacts της τρέχουσας έκδοσης: σελίδες εκδηλώσεων, έλεγχοι, εγκυρότητα Schema.org.',
+        // GEO-PENDING D3: Schema.org type — provisional WebPage + Dataset mainEntity.
+        // Phase 2 ships buildProofSchema(); do not over-invest in this shape now.
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          '@id': `${BASE_URL}/proof/`,
+          'name': 'Αποδείξεις — agent athens',
+          'url': `${BASE_URL}/proof/`,
+          'description': 'Πώς δουλεύει το agent athens, με νούμερα από τα ζωντανά artifacts.',
+          'inLanguage': 'el',
+          'mainEntity': { '@type': 'Dataset', 'name': 'agent athens build artifacts' },
+          publisher,
+          'datePublished': '2026-05-22',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: renderProofBody({ metrics, locale: 'el' })
+      },
+      en: {
+        slug: 'en/proof',
+        title: 'Proof',
+        metaDescription: 'How agent athens works — numbers from the current build\'s live artifacts: event pages, tests, Schema.org validity.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          '@id': `${BASE_URL}/en/proof/`,
+          'name': 'Proof — agent athens',
+          'url': `${BASE_URL}/en/proof/`,
+          'description': 'How agent athens works, in numbers pulled from the current build\'s live artifacts.',
+          'inLanguage': 'en',
+          'mainEntity': { '@type': 'Dataset', 'name': 'agent athens build artifacts' },
+          publisher,
+          'datePublished': '2026-05-22',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: renderProofBody({ metrics, locale: 'en' })
       },
     },
   ];
