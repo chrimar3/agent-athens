@@ -1996,6 +1996,17 @@
     "description": "Athens' New Wave hotspot specializing in darkwave, post-punk, and goth music in the heart of Psyrri nightlife district",
     "metro": "Monastiraki"
   },
+  "Don't be a Dick": {
+    "name_en": "",
+    "neighborhood": "",
+    "address": "Φειδίου, Εξάρχεια",
+    "lat": 37.983033,
+    "lng": 23.731787,
+    "type": "highway",
+    "geocoded_source": "nominatim",
+    "geocoded_confidence": "medium",
+    "geocoded_at": "2026-05-21"
+  },
   "Doors": {
     "name_en": "Doors Live Art",
     "neighborhood": "Kolonaki",
