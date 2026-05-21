@@ -25,6 +25,8 @@ export interface VenueRecord {
   canonical_name: string;
   variations: string[];
   neighborhood?: string;
+  /** Street address — feeds Schema.org Place.address.streetAddress when present. */
+  address?: string;
   /** Venue homepage; drives Tier 5 "Check venue website" CTA. */
   website?: string;
   /** Ticketing configuration; drives Tier 2 resolution. */

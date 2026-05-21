@@ -208,7 +208,8 @@
         "CRUST",
         "Crust, Πρωτογένους 13, Ψυρρή, Αθήνα, Greece"
       ],
-      "neighborhood": "Koukaki"
+      "neighborhood": "Koukaki",
+      "address": "Πρωτογένους 13, Αθήνα 105 54"
     },
     {
       "canonical_name": "Fuzz Club",
@@ -762,6 +763,7 @@
         "Onassis Foundation"
       ],
       "neighborhood": "Neos Kosmos",
+      "address": "Λεωφ. Συγγρού 107-109, Αθήνα 117 45",
       "website": "https://www.onassis.org",
       "ticketing": {
         "provider": "onassis.org",
@@ -1749,7 +1751,8 @@
         "Don't Be A Dick",
         "Don't be a Dick, Φειδίου 4, Εξάρχεια, Αθήνα, Greece"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Φειδίου 4, Αθήνα 106 78"
     },
     {
       "canonical_name": "Οικία Κατακουζηνού",
