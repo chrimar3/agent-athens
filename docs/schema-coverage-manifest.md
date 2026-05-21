@@ -32,6 +32,15 @@ require a row added to this manifest.
   required; availability required; seller required (Organization with name,
   or same-page @id reference).
 - Event-level structural rules: `@type` valid, mandatory fields, location.name, etc.
+- **S143 required-inline rule (Strategist 2026-05-20):** `Event.location` must
+  materialize `name` + `address` inline on the Event entity (bare-`@id` to a
+  same-page venue node FAILs as `LOCATION_NOT_INLINE`). Runs **pre-resolution**
+  — before `resolveSamePageReferences()` inlines `@id` refs — closing the
+  literal-vs-graph blind spot where bare-`@id` `Event.location` passed the
+  build but lost GSC Events-rich-result eligibility. `geo`/`sameAs`/
+  `containedInPlace` stay on the canonical venue node (separate @graph member,
+  same @id) and reach graph consumers via @id merge. Negative-control fixture
+  is permanent at `src/validators/__tests__/schema-completeness.test.ts`.
 
 ### 2. Event detail page — microdata Event element
 

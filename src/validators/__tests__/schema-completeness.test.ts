@@ -165,6 +165,86 @@ describe('validateSchemaCompleteness', () => {
     });
   });
 
+  // S143 (Strategist 2026-05-20): Pre-resolution required-inline rule for
+  // Event.location. Closes the literal-vs-graph blind spot where
+  // resolveSamePageReferences() silently inlines bare-@id refs from same-page
+  // venue nodes — making the post-resolution location.name check pass even
+  // though the rendered HTML's Event.location is bare-@id (not Events-rich-
+  // result-eligible per GSC URL Inspection). Same scope-drift class as
+  // S139-fix-1/-2. Negative control is permanent — proves the rule catches
+  // the class, not just current state.
+  describe('S143 — Event.location required-inline rule', () => {
+    test('bare-@id Event.location (with same-page venue node) → FAIL LOCATION_NOT_INLINE', () => {
+      const venueId = 'https://agentathens.com/venues/half-note/#venue';
+      const eventEntity = makeValidSchema({
+        '@id': 'https://agentathens.com/events/abc/#event',
+        location: { '@id': venueId },
+      });
+      delete (eventEntity as any)['@context'];
+      const envelope = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          eventEntity,
+          {
+            '@type': 'MusicVenue',
+            '@id': venueId,
+            name: 'Half Note Jazz Club',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: 'Trivonianou 17',
+              addressLocality: 'Athens',
+              addressRegion: 'Attica',
+              addressCountry: 'GR',
+            },
+          },
+        ],
+      };
+      const result = validateSchemaCompleteness(wrapInHtml(envelope), 'bare-id-location');
+      expect(result.errors.some(e => e.includes('LOCATION_NOT_INLINE'))).toBe(true);
+    });
+
+    test('inline-with-@id Event.location (name + address inline, @id retained) → PASS', () => {
+      const venueId = 'https://agentathens.com/venues/half-note/#venue';
+      const eventEntity = makeValidSchema({
+        '@id': 'https://agentathens.com/events/abc/#event',
+        location: {
+          '@type': 'MusicVenue',
+          '@id': venueId,
+          name: 'Half Note Jazz Club',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Trivonianou 17',
+            addressLocality: 'Athens',
+            addressRegion: 'Attica',
+            addressCountry: 'GR',
+          },
+        },
+      });
+      delete (eventEntity as any)['@context'];
+      const envelope = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          eventEntity,
+          {
+            '@type': 'MusicVenue',
+            '@id': venueId,
+            name: 'Half Note Jazz Club',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: 'Trivonianou 17',
+              addressLocality: 'Athens',
+              addressRegion: 'Attica',
+              addressCountry: 'GR',
+            },
+            geo: { '@type': 'GeoCoordinates', latitude: 37.9688, longitude: 23.7375 },
+          },
+        ],
+      };
+      const result = validateSchemaCompleteness(wrapInHtml(envelope), 'inline-with-id-location');
+      expect(result.errors.some(e => e.includes('LOCATION_NOT_INLINE'))).toBe(false);
+    });
+  });
+
   describe('data quality warnings', () => {
     test('empty description → WARNING', () => {
       const schema = makeValidSchema({ description: '' });
@@ -187,11 +267,15 @@ describe('validateSchemaCompleteness', () => {
       expect(result.warnings.some(w => w.includes('streetAddress'))).toBe(true);
     });
 
-    test('missing location.geo → WARNING', () => {
+    test('missing location.geo → INFO (S143: geo carried on canonical venue node via @id merge, not required-inline on Event)', () => {
       const schema = makeValidSchema();
       delete (schema.location as Record<string, any>).geo;
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-geo');
-      expect(result.warnings.some(w => w.includes('geo'))).toBe(true);
+      // S143 demotion: Event.location.geo missing → INFO (orthogonal to pass/warn/fail
+      // per Component B-2). Canonical-venue LocalBusiness.geo check at validateVenueSchema
+      // remains WARN — the recommended-on-canonical contract is enforced on that surface.
+      expect(result.warnings.some(w => w.includes('geo'))).toBe(false);
+      expect((result.info ?? []).some(i => i.includes('geo'))).toBe(true);
     });
 
     test('missing image → WARNING', () => {

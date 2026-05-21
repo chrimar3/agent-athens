@@ -300,7 +300,19 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
     if (inlineLocation.geo) venueEntity.geo = inlineLocation.geo;
     if (inlineLocation.sameAs) venueEntity.sameAs = inlineLocation.sameAs;
 
-    eventEntity.location = { '@id': venueId };
+    // S143 (Strategist 2026-05-20): Event.location materializes inline-with-@id —
+    // inline name + address (rich-result-required set), retain @id; geo/sameAs/
+    // containedInPlace/url stay on the canonical venue node and reach graph
+    // consumers via @id merge. validator.schema.org resolves @id same-page; GSC's
+    // rich-result parser does not, so required-inline satisfies both gates. Inline
+    // address reuses inlineLocation.address (single source — byte-identical to the
+    // canonical node's address at :296, avoiding ambiguous-merge risk).
+    eventEntity.location = {
+      '@type': inlineLocation['@type'],
+      '@id': venueId,
+      'name': inlineLocation.name,
+      'address': inlineLocation.address,
+    };
     graph.push(venueEntity);
   }
 

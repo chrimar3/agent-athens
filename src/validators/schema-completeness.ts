@@ -221,7 +221,35 @@ export function validateSchemaCompleteness(
   const rawScriptCount = [...htmlContent.matchAll(/<script\s+type="application\/ld\+json">/g)].length;
   // S139: flatten @graph envelopes into entity-level blocks so flat-path
   // field lookups continue to work post-migration.
-  const blocks = resolveSamePageReferences(flattenGraph(extractAllJsonLd(htmlContent)));
+  const rawFlatBlocks = flattenGraph(extractAllJsonLd(htmlContent));
+
+  // S143 (Strategist 2026-05-20): Pre-resolution required-inline rule.
+  // resolveSamePageReferences() below inlines bare-@id references from same-page
+  // nodes (the literal-vs-graph blind spot that let bare-@id Event.location ship
+  // and lose GSC Events-rich-result eligibility). For REQUIRED nested Event
+  // fields, this rule asserts inline presence on the raw entity — name + address
+  // must materialize on Event.location itself, not be merely @id-resolvable. The
+  // canonical venue node (separate @graph member, same @id) still carries
+  // geo/sameAs/containedInPlace via @id merge for graph consumers; the inline
+  // projection only requires the rich-result-required set. Same scope-drift class
+  // as S139-fix-1/-2 — pattern is reusable for future required-nested rules.
+  const rawEventEntity = rawFlatBlocks.find(b => {
+    const t = b?.['@type'];
+    return typeof t === 'string' && VALID_SCHEMA_TYPES.has(t);
+  });
+  if (rawEventEntity && rawEventEntity.location !== undefined && rawEventEntity.location !== null) {
+    const loc = rawEventEntity.location;
+    const isObj = typeof loc === 'object' && !Array.isArray(loc);
+    const hasInlineName = isObj && isNonEmpty(loc.name);
+    const hasInlineAddress = isObj && loc.address && typeof loc.address === 'object';
+    if (!hasInlineName || !hasInlineAddress) {
+      errors.push(
+        'LOCATION_NOT_INLINE: Event.location must materialize name + address inline (bare-@id reference is not Google-rich-result-eligible — validator.schema.org resolves @id same-page; GSC parser does not)',
+      );
+    }
+  }
+
+  const blocks = resolveSamePageReferences(rawFlatBlocks);
 
   if (rawScriptCount === 0) {
     return { slug: eventSlug, errors: ['No JSON-LD script tag found'], warnings: [], info: [] };
@@ -350,8 +378,14 @@ export function validateSchemaCompleteness(
     }
   }
 
+  // S143 (Strategist 2026-05-20): Event.location is the inline rich-result
+  // projection — required-inline set is {@type, @id, name, address}. geo is
+  // recommended-on-canonical, lives on the separate MusicVenue @graph member
+  // (reached via @id merge for graph consumers). Demoting Event.location.geo
+  // from WARN → INFO acknowledges this — venue-page LocalBusiness.geo check
+  // at :903 continues to enforce geo on the canonical surface.
   if (!location?.geo) {
-    warnings.push('location.geo coordinates missing');
+    info.push('location.geo coordinates missing on Event-inline projection (geo carried on canonical venue node via @id)');
   }
 
   if (!isNonEmpty(schema.image)) {

@@ -123,15 +123,17 @@ FAQPage:      {pageCanonicalUrl}#faqpage
 3. `CollectionPage` — homepage's existing CollectionPage block (becomes member). `@id: https://agentathens.com/#collectionpage`.
 4. DataFeed `<link rel="alternate">` stays as-is (HTML link element, not part of `@graph`).
 
-### 2.4 Same-page-materialization rule (cross-page references)
+### 2.4 Same-page-materialization rule (cross-page references) — v2 (S143, Strategist 2026-05-20)
 
 When an event page references a venue that has a canonical page:
-- **Always** include the venue as a full `@graph` member with `@id` matching the canonical venue page URL (`{venueCanonicalUrl}#venue`).
-- The `Event.location` field uses `{ "@id": "..." }` reference syntax (Schema.org-valid; resolves same-page).
-- The full venue entity is duplicated minimally (name, address, geo, containedInPlace) — this lets same-page resolution succeed without crawlers having to fetch the venue page.
+
+- **Always** include the venue as a full `@graph` member with `@id` matching the canonical venue page URL (`{venueCanonicalUrl}#venue`). The canonical node carries `name`, full `address` (PostalAddress), `containedInPlace`, `url`, and (when available) `geo` and `sameAs`.
+- **Required** nested Event properties (currently: `location`) materialize **inline-with-@id** on the Event entity: the inline projection retains `@id` (so graph consumers still see the same identity) and additionally carries the rich-result-required set — `@type` + `name` + full `PostalAddress`. **NOT inlined:** `geo`, `sameAs`, `containedInPlace`, `url` — those stay on the canonical node and reach graph consumers via `@id` merge.
+- **Optional** nested properties (`organizer`, `seller`) MAY remain bare-`@id` references — for optional fields, an unresolved or unresolved-by-parser `@id` is cosmetic (validFrom-class), not eligibility-breaking.
+- Inline + canonical-node addresses MUST be byte-identical (single source — the same venue-record field feeds both, no parallel construction). Same-`@id` nodes with conflicting properties create an ambiguous-merge risk and MUST NOT occur.
 - The canonical venue page's `@graph` is the authoritative source if a crawler does dereference.
 
-**Rationale:** Yoast same-page resolution + Schema.org cross-page resolution both succeed. Duplication is cheap (a few hundred bytes per event page) and resolves the entity-identity question unambiguously.
+**Rationale:** Two parsers, two resolution behaviors. validator.schema.org resolves `{"@id": "..."}` same-page references when computing field coverage — so a bare-`@id` `Event.location` with a co-present canonical venue node passes its required-fields gate. Google's rich-result eligibility parser (visible via GSC URL Inspection) does **not** resolve same-page `@id` references for required nested fields — it requires the required set to be present inline on the Event node itself. The build validator must enforce the stricter of the two (see §3 — required-inline pre-resolution rule); the spec must codify the stricter shape. Required-inline satisfies both gates. Minimal inline (the rich-result-required set only — name + address) keeps duplication cheap and preserves the canonical node as the authoritative store for the rest.
 
 ---
 
