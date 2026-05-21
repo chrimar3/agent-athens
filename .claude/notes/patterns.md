@@ -5150,3 +5150,7 @@ Three sessions over two days touched one tree on overlapping concerns (S141 vali
 **The S141-committed-between-sessions case is now the canonical example.** Two-day windows are forgiving — yesterday's executor stop bought 12+ hours during which S141's owner committed independently, dissolving the staging-collision problem before today's session resumed.
 
 **Connects to:** `mistakes.md` → validator-coverage-drift entry (the technical defect S141/S143 were jointly closing); planner verify-the-premise ledger (the patch-extraction-on-stale-tree near-miss was a consequence of treating yesterday's tree-state report as a static model rather than a snapshot).
+
+### Green by demote ≠ green by scope (S143 follow-up, 2026-05-21)
+
+The right green build surfaces the routable signal, not the one that silences it. S143 `369dfe905` demoted `location.geo` WARN→INFO (3857 events green, 4 WARN — signal hidden); `292e97aee` superseded it with the scope-to-canonical `@id` lookup per GEO's ruling (3832 green, 25 actionable WARN → Component-B backfill — signal preserved). Both pass build gates; only the second carries diagnostic value forward. When picking between a stopgap demote and a structural scope-fix, prefer the one whose residual WARN count routes to a follow-up owner.
