@@ -64,6 +64,31 @@ require a row added to this manifest.
   cannot silently re-drift when future required-nested rules ship. Residual
   geo WARNs are real venue-data gaps and route to Component B sameAs/geo
   backfill, not to the validator.
+- **S142 organizer bare-`@id` emission (Strategist 2026-05-22, validated:partial):**
+  `Event.organizer` emits as a bare-`@id` reference to the canonical venue
+  node (`${BASE_URL}/venues/<slug>/#venue` — member 2). Two-fold gate:
+  (a) `event.venue.sameAs?.length > 0` (Component-B identity-refs present),
+  AND (b) `venueSlug` non-empty. The second gate is the **S146 entity-graph
+  collision guard** — `slugify` on Greek-only canonical names returns ''
+  (`normalize-greek.ts` strips diacritics but does not transliterate), and
+  attaching organizer refs to `${BASE_URL}/venues//#venue` would converge
+  every Greek-named venue's Wikidata identity graph onto a single corrupted
+  node. The corresponding pre-existing corruption on the venueEntity push
+  itself (`event-page.ts:~297` — `@id` colliding when slug empty) is the
+  S146 cleanup target; S142 deliberately does not extend additional
+  references onto it. Current coverage: ~41 emissions on Onassis Stegi
+  events (the only Component-B venue with a Latin canonical name today);
+  Megaron, GNO, Τεχνόπολη unlock once S146 lands a config-driven slug.
+  S141 orphan-rule scope includes `'organizer'` in `ORPHAN_SCOPED_FRAGMENTS`,
+  so an unresolved `#venue` ref would FAIL the build — pointing at the
+  already-pushed canonical venue node sidesteps that. **Validator coverage
+  status: partial.** `validateEventSchema` (`schema-validator.ts`) runs on
+  `buildEventSchemaObject` (flat Event) and never sees @graph-only fields;
+  per-field tier-add for `organizer` is deferred to the Stage 5 `flattenGraph`
+  refactor (referenced in `event-page.ts:798-799` comment). Bare-`@id` is
+  intentional — organizer is OPTIONAL per Schema.org so an unresolved `@id`
+  would be cosmetic, not eligibility-breaking (the opposite side of the
+  inline-required line that `Event.location` sits on per S143).
 
 ### 2. Event detail page — microdata Event element
 
@@ -136,6 +161,7 @@ ListItem-nested Offers route through `buildOfferOrOmit` (S139-fix unification, 2
 | Homepage (#4) | No build-time validator iterates `dist/index.html` JSON-LD | 🟡 | Add a `validateHomepageSchema` next session; reuse `validateHubSchema`'s ListItem walk. |
 | Venue nested-events (#5) | `validateVenueSchema` doesn't walk `LocalBusiness.event[]` for nested Offers | 🟢 | Apply same walk pattern as #3 when next venue-page change lands. |
 | DataFeed nested-events (#6) | `validateDataFeed` doesn't walk per-event Offers | 🟢 | Apply same walk pattern as #3 if a DataFeed-Offer drift incident surfaces. |
+| Event JSON-LD (#1) — organizer field tiering | `validateEventSchema` cannot tier `organizer` (lives only in `@graph` envelope; validator reads flat `buildEventSchemaObject` output) | 🟢 | After Stage 5 `flattenGraph` refactor lands in `validateEventSchema`, add `organizer` to RECOMMENDED_FIELDS (warn-only). S142 emission already validated end-to-end via S141 orphan-rule (FAIL on unresolved `#venue` ref). |
 
 These are catalogued, not blockers. Each gap's risk is mitigated by the
 shared `buildOfferOrOmit` builder; the manifest exists so a future caller

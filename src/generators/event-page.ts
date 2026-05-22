@@ -254,7 +254,12 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
  *                      event-scoped; no @id, so cross-reference is meaningless)
  *   Member 4:          Seller `Organization`, `@id` = `https://{host}/#organization`
  *                      (emitted only when Offer.seller has a parseable URL host)
- *   Member 5:          (organizer slot — DEFERRED to S142)
+ *   Member 5:          organizer — bare-@id reference to the canonical venue node
+ *                      (member 2), emitted on the Event entity (not as a separate
+ *                      @graph member). Conditional on `event.venue.sameAs` being
+ *                      non-empty (Component-B venues); legitimate absence
+ *                      otherwise. Bare-@id is acceptable here because organizer
+ *                      is OPTIONAL per Schema.org (S142, Strategist 2026-05-22).
  *   Member 6 (LAST):   Site-publisher `Organization`,
  *                      `@id` = `${BASE_URL}/#organization`
  *
@@ -317,6 +322,28 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
       'address': inlineLocation.address,
     };
     graph.push(venueEntity);
+
+    // S142: organizer as bare-@id field reference to the canonical venue node
+    // (member 2 — already pushed). Component-B-gated: emit only when the venue
+    // has identity refs (sameAs populated); legitimate absence on latent venues.
+    // Bare-@id is intentional — organizer is OPTIONAL per Schema.org, so an
+    // unresolved @id would be cosmetic, not eligibility-breaking (opposite side
+    // of the inline-required line that Event.location sits on per S143). The
+    // referenced #venue fragment is already in @graph above, so S141's orphan
+    // rule (ORPHAN_SCOPED_FRAGMENTS includes 'organizer') passes by construction.
+    //
+    // Slug-non-empty guard (S142 Strategist 2026-05-22, GEO ruling): `slugify`
+    // on Greek-only names returns '' because `normalize-greek.ts` strips
+    // diacritics but does NOT transliterate. Without this guard, organizer
+    // would attach to ${BASE_URL}/venues//#venue — colliding all Greek-named
+    // venue identity graphs onto a single corrupted node (Component-B's
+    // citability thesis cannot form on a colliding @id). The same corruption
+    // already exists on the venueEntity push above (line ~297) but is a
+    // PRE-EXISTING gap addressed in S146; S142 explicitly does not extend new
+    // references onto it.
+    if (venueSlug && event.venue.sameAs && event.venue.sameAs.length > 0) {
+      eventEntity.organizer = { '@id': venueId };
+    }
   }
 
   // Q5 ruling: seller @id = `https://{host}/#organization` where host comes
