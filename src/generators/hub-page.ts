@@ -28,6 +28,11 @@ import { getPullQuotes, getSectionEditorial, getFeaturedPickRank } from '../util
 import { BASE_URL } from '../config/site-url';
 import { buildHubGraph } from '../utils/schema-graph-builders';
 import { hubFilterToExcludedDimension } from '../utils/hub-identity';
+import { buildWeekendCapsule } from '../templates/weekend-capsule';
+
+// TODO(D3-city_descriptor): replace with config read once home is picked
+// (config/site.json vs schema-geo ORG_*). Value is final-locked; only the home is open.
+const WEEKEND_CITY_DESCRIPTOR = 'central Athens';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 const CONFIG_PATH = join(import.meta.dir, '../../config/hub-pages.json');
@@ -325,7 +330,26 @@ export function renderHubPage(
     text
       .replace(/\{\{MONTH_YEAR\}\}/g, `${monthNameEn} ${year}`)
       .replace(/\{\{MONTH\}\}/g, locale === 'en' ? monthNameEn : monthNameEl);
-  const answerCapsule = resolveTokens(rawCapsule);
+
+  // Slug-scoped override seam: /en/this-weekend renders a computed capsule with
+  // literal-string + token substitution from the Event[] (S101a/S144). Greek path
+  // and all other hubs fall through to the existing token-resolution path.
+  // editorPicks: hardcoded [] until S101b wires real picks (matches the buildHubGraph
+  // call below at the cornerstone branch).
+  let answerCapsule: string;
+  if (config.slug === 'this-weekend' && locale === 'en') {
+    const computed = buildWeekendCapsule(
+      filteredEvents,
+      locale,
+      /* editorPicks */ [],
+      WEEKEND_CITY_DESCRIPTOR,
+      t,
+    );
+    answerCapsule = computed ?? resolveTokens(rawCapsule);
+  } else {
+    answerCapsule = resolveTokens(rawCapsule);
+  }
+
   const capsuleHtml = `<section class="hub-answer-capsule">
   <p class="answer-capsule-text">${answerCapsule}</p>
   <p class="hub-stats">${filteredEvents.length} ${t.hubEventCount}</p>
@@ -336,7 +360,23 @@ export function renderHubPage(
     canonicalUrl: metadata.url,
     excludeDimension: hubFilterToExcludedDimension(config.filter),
   };
-  const baseHtml = renderPage(metadata, displayEvents, allEvents, undefined, locale, undefined, preFilterBarContent, hubIdentity);
+  // Step 3b: H1 override for /en/this-weekend — pre-existing buildPageTitle gap
+  // makes EN-hub H1s render Greek. Slug-gated, locale-gated minimal patch; broader
+  // EN-hub H1 localization is queued as a known-issue.
+  const h1Override = (config.slug === 'this-weekend' && locale === 'en')
+    ? 'Athens Events This Weekend'
+    : undefined;
+  const baseHtml = renderPage(
+    metadata,
+    displayEvents,
+    allEvents,
+    undefined,
+    locale,
+    undefined,
+    preFilterBarContent,
+    hubIdentity,
+    h1Override,
+  );
 
   let html = baseHtml;
 

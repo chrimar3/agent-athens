@@ -66,7 +66,7 @@ export const TYPE_ICONS: Record<string, string> = {
   other: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24c1.1 0 2 .9 2 2v32c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm2 6v4h20v-4H14zm0 8v2h20v-2H14zm0 6v2h14v-2H14z"/></svg>',
 };
 
-export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string, preFilterBarHtml?: string, hubIdentity?: HubIdentity): string {
+export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string, preFilterBarHtml?: string, hubIdentity?: HubIdentity, h1Override?: string): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
 
   const schemaMarkup = generateSchemaMarkup(events, metadata, locale);
@@ -156,7 +156,7 @@ ${renderAnalytics()}
   <div class="page-container">
     <header class="page-header">
       <div class="page-header-row">
-        <h1>${title}</h1>
+        <h1>${h1Override ?? title}</h1>
         <span class="last-update">Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
           month: 'long',
           day: 'numeric',
