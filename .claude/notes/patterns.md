@@ -5170,3 +5170,35 @@ Three recon-shape assertions in the calendar-disclosure pre-brief diverged from 
 **Mitigation in plan template:** Step 0 "Re-verify recon targets" block embedded in every brief that depends on line-anchored recon. **Trust the grep, not the recon's line numbers; if a target is GONE or refactored, STOP and report — parallel track may have touched it.** This pattern's three-instance signal in a single brief raised executor confidence enough to silently reconcile (correct call here — drift was small, the recon's conclusion preserved), but the boundary between silent-reconcile and stop-and-flag is "does the conclusion still hold". If the recon's CONCLUSION breaks under new shape, escalate; if only the path/line breaks, ground at consumption and proceed.
 
 **Connects to:** `decisions.md` → 2026-05-21 "Calendar disclosure: build-time static targets replace client-side .ics Blob" (the work where Pattern T was triple-caught); `patterns.md` above → "Executor ledger — brief-vs-reality / vocabulary-misframe" (sibling pattern, different drift class).
+
+### Slug-keyed override seam at the hub-page capsule render site (S151, 2026-05-23)
+
+**First slug-keyed branch in `src/generators/hub-page.ts`.** Cornerstone variation in this codebase had been **config/data-driven, not strategy-driven** — a single `cornerstone: boolean` flag in `HubConfig` toggles 3 surfaces (Editor's Pick column at L423, cross-links at L498, `@graph` envelope at L542). No `switch (config.slug)`, no slug-keyed dispatcher, no renderer registry. All cornerstones (`today`, `this-weekend`, `concerts`, `theater`, `exhibitions`, `classical-music`, `kids`, etc.) shared one render path with variation expressed entirely through config fields plus pure data.
+
+S151 introduced the first slug-gated branch — a tight `if (config.slug === 'this-weekend' && locale === 'en')` at the capsule render site (~L319) that swaps the `resolveTokens(rawCapsule)` text for a computed `buildWeekendCapsule(...)` output. All other slugs and the EL path fall through unchanged.
+
+**Why the branch, not a registry:** demo-week scope. A registry refactor (mapping slugs → renderer functions) is the right abstraction once 2+ cornerstones need overrides; one cornerstone with a literal-string capsule doesn't justify the abstraction overhead. Three-similar-lines is still better than premature abstraction. When the second cornerstone needs an override (next sprint, candidate: `today` or `concerts`), promote the branch to a registry — but only then.
+
+**Connects to:** `decisions.md` → 2026-05-23 "Weekend capsule architecture" (the consumer of this pattern); recon trace in plan `/Users/chrism/.claude/plans/session-goal-shiny-candy.md` Step 0 (Recon-1 surfaced the absent seam).
+
+### Event-vs-raw-row selector — sort directly on Event camelCase fields (S151, 2026-05-23)
+
+GEO's "raw rows" framing in the S151 brief was an instruction NOT to build a `scoreRichness`-style scorer on `Event[]`. The codebase has two distinct scoring axes that don't compose: **editorial rank** (hand-authored in `config/editorial-content.json`, queried via `getFeaturedPickRank(eventId, currentDate)` at `src/utils/editorial-content.ts:116-134`, date-windowed; drives the ★ comparison-table column on cornerstone hubs) vs. **algorithmic richness** (`scoreRichness(row)` at `src/quality/richness-scorer.ts:49`; operates on RAW DB ROWS in snake_case, used by dedup to pick "winners"). The renderer sees the typed `Event` (camelCase: `startDate`, `id`, `title`) — calling `scoreRichness` from `hub-page.ts` would need a row-shape adapter for no good reason.
+
+For `buildWeekendCapsule`'s example selector ("first two by chronological order"), the correct shape is a total-order sort directly on Event fields: `[...events].sort((a,b) => a.startDate.localeCompare(b.startDate) || a.title.localeCompare(b.title) || a.id.localeCompare(b.id))`. Three-key total order makes the example selection **reproducible across builds with the same event set** — same `startDate` ties broken by title, same title broken by id (unique). No randomness, no time-of-build skew. Important for cache-invalidation hashing (`data/event-set-hashes.json`).
+
+**Lesson:** when a brief uses framing that implies a particular code shape ("raw rows scorer"), Step 0 verification on the surface that consumes it tells you what the brief actually wants. The S151 selector spec `start_date ASC → title ASC → id ASC` was in DB-column-name form; the consumer was the typed `Event[]` — 1:1 translation to camelCase, no scorer needed. Pattern-T-class divergence between the brief's *frame* and the consumer's *type shape*.
+
+**Connects to:** `decisions.md` → 2026-05-23 "Weekend capsule architecture"; `patterns.md` → Pattern T (same drift class — recon-frame vs. consumer-shape).
+
+### Path-D h1Override — param-threading over html.replace splice (S151, 2026-05-23)
+
+S151 added an optional 9th positional param `h1Override?: string` to `renderPage` (`src/templates/page.ts:69`), consumed at the `<h1>` emission site (`:159` → `${h1Override ?? title}`). Threaded from `hub-page.ts:339` only when `config.slug === 'this-weekend' && locale === 'en'`; everywhere else falls through to the `metadata.title` path (which is itself `buildPageTitle(filters)` — Greek-only today, see open known-issue).
+
+**Why a param, not an html.replace splice.** The capsule itself uses `html.replace(/<title>[^<]*<\/title>/, ...)` at `hub-page.ts:360` to override `<title>` post-render. That's the legacy pattern the codebase is migrating *away from* — the "Path D, 2026-05-19" comment at `hub-page.ts:314-317` records the prior `html.replace('</header>', …)` capsule-splice as wrong-anchored (it matched site-header's `</header>` not page-header's). Path D = thread the override through `renderPage` as a typed param, consumed at the emission source.
+
+Adding a new `html.replace('<h1>...', ...)` splice for the H1 would have been faster but doubled-down on the deprecated pattern in the same file the migration is actively pulling away from. The 9th-positional-param shape matches existing precedent (`preFilterBarHtml`, `hubIdentity` already use this pattern); refactoring `renderPage` to an options-object signature is correct eventually but out of session scope.
+
+**The broader `buildPageTitle` localization gap is queued as a known-issue, not fixed here.** Every EN hub except `/en/this-weekend` (now patched via `h1Override`) renders a Greek H1 because `formatTimeRange` in `src/utils/urls.ts:22` only has Greek values. Full fix = thread `locale` into `buildPageTitle` and add an English map — larger blast radius (every EN hub).
+
+**Connects to:** `decisions.md` → 2026-05-23 "Weekend capsule architecture" (calls out h1Override as the minimal-patch decision); `patterns.md` → 2026-05-19 Path-D anchoring (the deprecated `html.replace` pattern this entry's choice avoided).

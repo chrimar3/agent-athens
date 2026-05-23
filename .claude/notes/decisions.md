@@ -4195,3 +4195,53 @@ The trifecta (`.edp-save-btn` + `.edp-share-btn` + `.edp-calendar-btn` baseline 
 - `decisions.md` → 2026-05-21 "Calendar disclosure: build-time static targets replace client-side .ics Blob" (the Pattern U flag that surfaced the gap, at L4185)
 - `decisions.md` → 2026-04-21 "Calendar Export (.ics) — Action Layer Phase 1 Completion" — S94 trifecta's earliest committed surface investment
 - Pattern U class (institutional-memory evaporation): downstream references with no upstream anchoring entry. Mitigation = every framework-leveraging entry must verify its premises have committed-entry anchors before publication.
+
+## 2026-05-23 — Weekend capsule architecture (S151 /this-weekend EN override)
+
+**Prompt:** `/en/this-weekend` is on the GEO demo critical path as the surface judged for the query "Athens events this weekend." Pre-session, four GEO-locked surfacing slots (answer-capsule, `<title>`, `<meta name="description">`, `<h1>`) were filled by generic content; the H1 was actually rendering Greek on the EN page due to a pre-existing `buildPageTitle` localization gap. Editorial delivered verbatim copy for the title + meta; the capsule needed a literal-string opener with computed tokens that vary with the live event set.
+
+**Ruling:** Slug-scoped, locale-gated override seam at the capsule render site in `src/generators/hub-page.ts` (~L319). When `config.slug === 'this-weekend' && locale === 'en'`, render a computed capsule from `buildWeekendCapsule(events, locale, editorPicks, cityDescriptor, t)` in `src/templates/weekend-capsule.ts`; everywhere else (every other slug, the EL path), fall through to the existing `resolveTokens(rawCapsule)` path. EL byte-identical to pre-session. Greek capsule is a separate workstream.
+
+**Capsule shape — literal S1 + S2 with computed tokens:**
+- **S1 (locked literal):** `"Athens events this weekend span {count} cultural events across {category_summary}, Friday to Sunday — from {example_1} to {example_2}."`
+- **S2 empty-picks (demo default, Editorial verbatim):** `"This weekend guide covers {open_count} open events and {with_ticket_count} with-ticket events across {venue_count} venues in {city_descriptor}, refreshed daily with dates, prices, and editorial context for every listing."`
+- **S2 populated branch** (when `editorPicks.length > 0`) — NOT implemented; deferred to S101b when real picks land.
+
+**Token resolutions:**
+- `{count}` = `events.length`
+- `{category_summary}` = top 3 `event.type` by count, mapped via `STRINGS.en.typeLabels[type]`, joined with `", "` and `" and "` (hardcoded EN-only — `Intl.ListFormat` rejected as over-engineering for the EN-only branch).
+- `{date_range}` = static `"Friday to Sunday"` (per GEO ruling). The true `passesTimeFilter` window is **Fri 00:00 → Mon 00:00** (3-day window, see `src/utils/filters.ts:72-85`), but Editorial calls it "Friday to Sunday" — title-only framing.
+- `{example_1}` / `{example_2}` = total-order sort by `startDate ASC → title ASC → id ASC`; titles of `[0]` and `[1]`. Reproducible across builds with the same event set (no randomness).
+- `{open_count}` = `events.filter(e => e.price.type === 'open').length`. Note: `Price` is an object (`{ type, amount?, currency?, range? }`), NOT a string — the brief's `e.price === 'open'` would have been a runtime bug; caught at Step 0 by reading the fixture pattern at `src/generators/__tests__/hub-page.test.ts:67`. `'donation'` falls into the non-open bucket (test pins this).
+- `{with_ticket_count}` = `events.length - open_count`.
+- `{venue_count}` = `new Set(events.map(e => e.venue.name)).size`. **The `"Πολλαπλοί Χώροι"` sentinel counts as 1** — natural Set behavior, no special case. The codebase has no pipe-split logic anywhere (multi-venue is modeled via the sentinel name with `location_status: 'pass_through'` — see `src/quality/location-filter.ts:23`).
+- `{city_descriptor}` = `"central Athens"` (per GEO ruling). Country disambiguation lives in `<title>` + meta only, not the capsule body.
+
+**Degradation paths:**
+- `count === 0` → `buildWeekendCapsule` returns `null`; caller falls through to existing `MIN_EVENTS_THRESHOLD` handling at `hub-page.ts:268`.
+- `count < 2` → S1 drops the `" — from {ex1} to {ex2}"` tail; literal "Athens events this weekend" still leads.
+- `open_count === 0` → S2 drops the open clause; `with_ticket_count === 0` → S2 drops the with-ticket clause. Both clauses zero is unreachable when `count > 0` but defended with a fallback string.
+
+**Title/Meta config (`config/hub-pages.json`, slug:this-weekend entry):**
+- `titleEn`: `"Athens events this weekend: concerts, theatre & open exhibitions in Athens, Greece"` — **WITHOUT** the trailing ` | agent-athens`. The codebase auto-appends ` | agent-athens` at `hub-page.ts:356` (`const hubTitle = \`${hubTitleText} | agent-athens\`;`); storing the suffix in the config value would double-render it (`… in Athens, Greece | agent-athens | agent-athens`). Editorial's deliverable arrived with the suffix; stripped before storage.
+- `metaDescriptionEn`: `"Athens events this weekend: concerts, theatre, open exhibitions & nightlife across Athens, Greece. Curated picks, dates, prices — refreshed daily."` (146 chars verbatim).
+
+**H1 = `h1Override` minimal patch, not `buildPageTitle` refactor.** The Greek-H1-on-EN-page bug stems from `src/utils/urls.ts:22` `formatTimeRange` being Greek-only. Full fix = thread `locale` into `buildPageTitle` and add an English map — every EN hub affected, larger blast radius. S151 patched **only `/en/this-weekend`** via a new optional `h1Override?: string` 9th positional param on `renderPage`, gated to `slug === 'this-weekend' && locale === 'en'`. Broader EN-hub H1 localization queued post-demo as a known-issue.
+
+**`city_descriptor` ships as a const (`WEEKEND_CITY_DESCRIPTOR = 'central Athens'`)** in `src/generators/hub-page.ts` with a `TODO(D3-city_descriptor)` comment pointing at the open config-home decision (`config/site.json` with `cityDescriptorEn`/`El` keys, vs. extending `schema-geo` `ORG_*` constants). Value is final-locked; only the home is open. Const ships correct copy; non-blocking.
+
+**Verification — verbatim-counted with `grep -o … | wc -l` (NOT `grep -c`).** `grep -c` counts matching lines, not occurrences — false-fails if SSR collapses three slots onto one line. The plan's first verification draft used `-c` (would have under-counted); corrected to `-o … | wc -l` before execution. Final live-prod numbers: `<title>` has exactly one ` | agent-athens` suffix; literal `"Athens events this weekend"` appears 8× in `https://agentathens.com/en/this-weekend/` (title, og:title, twitter:title, meta description, keywords, capsule, schema-related slots); `<h1>` is `Athens Events This Weekend`; EL `<h1>` byte-identical to pre-session (Greek).
+
+**EL bilingual-keywords leak is by design, not regression.** `<meta name="keywords">` is intentionally bilingual at `hub-page.ts:366` (`${config.titleEl}, ${config.titleEn}, ...`). The new English titleEn (Editorial verbatim) appears once on the EL page's keywords meta — same pattern was already in effect pre-session with the old `"Weekend Events in Athens"` titleEn. User-facing EL surfaces (H1, `<title>`, capsule body, meta description) all stay Greek.
+
+**Ship:** Commit `664d21ae4`, 5 files (+327 / -6 — `src/templates/weekend-capsule.ts` new, `src/templates/__tests__/weekend-capsule.test.ts` new, `src/generators/hub-page.ts` modified, `src/templates/page.ts` modified, `config/hub-pages.json` modified). Deployed prod `6a10dfa630b6ee1655b667a6` (Netlify CLI, 10m 27.6s). IndexNow ping 200 OK for `/this-weekend/` + `/en/this-weekend/`. Bing/Yandex re-crawl prompted before the GEO demo target window.
+
+**Connects to:**
+- `patterns.md` → 2026-05-23 "Slug-keyed override seam at the hub-page capsule render site" (the seam this decision installed)
+- `patterns.md` → 2026-05-23 "Event-vs-raw-row selector — sort directly on Event camelCase fields" (the selector this decision uses)
+- `patterns.md` → 2026-05-23 "Path-D h1Override — param-threading over html.replace splice" (the H1 patch shape this decision chose)
+- `decisions.md` → 2026-05-19 Path D capsule placement (the parent pattern threading capsule HTML via `renderPage` params, extended here to `h1Override`)
+- **Open / known-issues (carried in `docs/session-log.md` S151 entry — `docs/known-issues.md` write blocked by collaborator WIP):**
+  - 🟡 EN-hub H1 localization: `buildPageTitle` Greek-only `formatTimeRange` makes every EN hub except `/en/this-weekend` render a Greek H1. Fix = thread `locale` into `buildPageTitle` + add English map.
+  - 🟢 GEO locality follow-on: verify "central Athens" actually holds across the live weekend venue set (SNFCC is Kallithea, Gazarte is Gazi-central, Half Note is Mets-central). If frequently false, swap to `"Athens"` or `"the Attica region"`.
+  - 🟢 D3 `city_descriptor` config home: pick between `config/site.json` and extending `schema-geo` `ORG_*` constants. Const carries correct value pending decision.
