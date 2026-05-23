@@ -1077,6 +1077,51 @@ export function checkPhaseKeyedNoindex(htmlContent: string, pagePath: string): S
  * events whose Offer block was omitted) are silently skipped — there's
  * nothing to validate.
  */
+
+/**
+ * S146 — Layer-2 defense-in-depth: scan emitted JSON-LD for venue/organizer
+ * @id fragments containing an empty slug segment.
+ *
+ * The class of bug:  "@id": "https://agentathens.com/venues//#venue"
+ *                                                       ^^ EMPTY SLUG
+ *
+ * Layer 1 (in venue-identity.ts) makes the helper-output guarantee non-empty
+ * by construction. This layer catches sites that bypass the helper and call
+ * raw slugify — a future bug-class containment net.
+ *
+ * Dry-run completed 2026-05-23: 3,808 event pages validated, 0 violations.
+ * Flipped from WARN to FAIL — any future regression that introduces an
+ * empty-slug @id will now hard-fail the build per S110-class invariants.
+ *
+ * Regex strategy: match `@id` values whose path segment contains `//` after
+ * at least one path char (so `https://` scheme is NOT matched). The empty
+ * segment can be mid-path (`/foo//bar/`) or terminal-before-frag (`/foo//#bar`).
+ */
+export function validateVenueIdAndSlug(html: string, slug: string): SchemaValidationResult {
+  const result: SchemaValidationResult = { slug, errors: [], warnings: [] };
+
+  // Find any @id whose value contains `//` AFTER the host segment. Match shape:
+  //   "@id": "<scheme>://<host><path-with-empty-segment>..."
+  // The `https://` scheme `//` is excluded by requiring at least one path
+  // character ([^/"]) before the captured `//`.
+  const idPattern = /"@id"\s*:\s*"https?:\/\/[^"/]+\/[^"]*?[^/"]\/\/[^"]*"/g;
+  const matches = html.match(idPattern) ?? [];
+  for (const m of matches) {
+    result.errors.push(`venue-id-empty-slug: ${m}`);
+  }
+
+  // Additional explicit check: the /venues// literal pattern (the exact
+  // pre-S146 collision symptom). Belt-and-braces — catches the case even
+  // if the regex above somehow misses it.
+  const venuesDoubleSlash = html.match(/"@id"\s*:\s*"[^"]*\/venues\/\/[^"]*"/g) ?? [];
+  for (const m of venuesDoubleSlash) {
+    const msg = `venue-id-empty-slug (venues//): ${m}`;
+    if (!result.errors.includes(msg)) result.errors.push(msg);
+  }
+
+  return result;
+}
+
 export function validateMicrodata(html: string): { errors: string[]; warnings: string[] } {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -1185,6 +1230,10 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       checkMemberOrdering(html, slug, 'event', BASE_URL),
       checkCrossLocaleCanonical(html, `events/${slug}/`),
       checkPhaseKeyedNoindex(html, `events/${slug}/`),
+      // S146 Layer-2 defense-in-depth — FAIL on `@id` containing empty slug
+      // segment. Dry-run 2026-05-23 confirmed 0 violations across 3,808 pages
+      // before the WARN→FAIL flip.
+      validateVenueIdAndSlug(html, slug),
     );
     // S145: extend event-detail surface with microdata coverage (was hub-only).
     // The EVENT_MICRODATA_MISSING_LOCATION rule fires on article#main-content

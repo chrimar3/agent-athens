@@ -14,6 +14,8 @@ import { writeHtmlIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
 import { slugify, generateEventSlug } from './event-page';
+import { getVenueIdentity } from '../utils/venue-identity';
+import { findVenueConfig } from '../quality/location-filter';
 import { renderEventCardList } from '../templates/card-variants';
 import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
@@ -51,6 +53,79 @@ function meetsMinimumThreshold(venue: VenueData): boolean {
   if (venue.events.length >= 2) return true;
   if (venue.address && venue.neighborhood) return true;
   return false;
+}
+
+/**
+ * S146 — Group events by venue identity slug. Shared between generateVenuePages
+ * and computePagedVenueSlugs so the two cannot drift on grouping semantics.
+ *
+ * Slug source is `getVenueIdentity(event.venue).slug` — same cascade used at
+ * every identity emission site. This is what heals the empty-slug collision:
+ * pre-S146, all Greek venues collapsed into one venueMap entry with key=''.
+ */
+function buildVenueMap(events: Event[]): Map<string, VenueData> {
+  const venueMap = new Map<string, VenueData>();
+  for (const event of events) {
+    const { slug } = getVenueIdentity(event.venue);
+    let venueData = venueMap.get(slug);
+    if (!venueData) {
+      venueData = {
+        name: event.venue.name,
+        slug,
+        address: event.venue.address,
+        neighborhood: event.venue.neighborhood,
+        coordinates: event.venue.coordinates,
+        sameAs: event.venue.sameAs,
+        events: [],
+        eventCount: 0,
+      };
+      venueMap.set(slug, venueData);
+    }
+    if (!venueData.address && event.venue.address) venueData.address = event.venue.address;
+    if (!venueData.neighborhood && event.venue.neighborhood) venueData.neighborhood = event.venue.neighborhood;
+    if (!venueData.coordinates && event.venue.coordinates) venueData.coordinates = event.venue.coordinates;
+    venueData.events.push(event);
+    venueData.eventCount++;
+  }
+  for (const venue of venueMap.values()) {
+    venue.events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+  }
+  return venueMap;
+}
+
+/**
+ * S146 — "Will a venue page exist at /venues/{slug}/?"
+ *
+ * Two gates (AND):
+ *   1. Name-eligibility: identity slug came from config.slug OR already-latin
+ *      slugify(name). Transliterated-only Greek venues are identity-only this
+ *      session — no page. Hash-fallback degenerate venues also excluded.
+ *   2. Threshold: events.length >= 2 OR (address && neighborhood).
+ *
+ * Shared so event-page.ts's url/href emission decisions cannot drift from
+ * venue-page.ts's actual generation decisions. Drift = dangling links.
+ *
+ * @see plans/s146-venue-purring-fox.md §1 + §3
+ */
+export function computePagedVenueSlugs(events: Event[]): Set<string> {
+  const venueMap = buildVenueMap(events);
+  const paged = new Set<string>();
+  for (const venue of venueMap.values()) {
+    if (!isPageEligibleByName(venue.name)) continue;
+    if (!meetsMinimumThreshold(venue)) continue;
+    paged.add(venue.slug);
+  }
+  return paged;
+}
+
+/**
+ * Name-only page eligibility (gate 1 of computePagedVenueSlugs).
+ * True iff getVenueIdentity would produce the slug via config.slug or latin
+ * slugify (the first two cascade stages — see venue-identity.ts).
+ */
+function isPageEligibleByName(name: string): boolean {
+  if (findVenueConfig(name)?.slug) return true;
+  return slugify(name).length > 0;
 }
 
 /**
@@ -256,74 +331,44 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
     mkdirSync(venuesDir, { recursive: true });
   }
 
-  // Group events by venue
-  const venueMap = new Map<string, VenueData>();
-
-  for (const event of events) {
-    const slug = slugify(event.venue.name);
-    let venueData = venueMap.get(slug);
-
-    if (!venueData) {
-      venueData = {
-        name: event.venue.name,
-        slug,
-        address: event.venue.address,
-        neighborhood: event.venue.neighborhood,
-        coordinates: event.venue.coordinates,
-        sameAs: event.venue.sameAs,
-        events: [],
-        eventCount: 0
-      };
-      venueMap.set(slug, venueData);
-    }
-
-    // Update with better data if available
-    if (!venueData.address && event.venue.address) {
-      venueData.address = event.venue.address;
-    }
-    if (!venueData.neighborhood && event.venue.neighborhood) {
-      venueData.neighborhood = event.venue.neighborhood;
-    }
-    if (!venueData.coordinates && event.venue.coordinates) {
-      venueData.coordinates = event.venue.coordinates;
-    }
-
-    venueData.events.push(event);
-    venueData.eventCount++;
-  }
-
-  // Sort events by date within each venue
-  for (const venue of venueMap.values()) {
-    venue.events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  }
+  // S146: shared grouping helper — slug source is getVenueIdentity, not raw
+  // slugify. Heals the empty-Greek-slug collision (all Greek venues used to
+  // collapse into one venueMap entry with key='').
+  const venueMap = buildVenueMap(events);
 
   const urls: string[] = [];
   let skipped = 0;
 
   for (const venue of venueMap.values()) {
-    // Check minimum threshold
+    // S146 gate 1: name-eligibility (curated slug OR already-latin). Excludes
+    // transliterated-only Greek venues and hash-fallback degenerates — they
+    // are identity-only this session per Fork 4 resolution in the plan.
+    if (!isPageEligibleByName(venue.name)) {
+      skipped++;
+      continue;
+    }
+    // S146 gate 2: existing minimum-threshold gate (unchanged).
     if (!meetsMinimumThreshold(venue)) {
       skipped++;
       continue;
     }
 
-    // Generate page HTML
     const html = renderVenuePage(venue, venueImageMap);
-
-    // Create directory and write file
     const pageDir = join(venuesDir, venue.slug);
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
     }
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
-
     urls.push(`venues/${venue.slug}`);
   }
 
-  // Generate venue index page
-  generateVenueIndex(Array.from(venueMap.values()).filter(meetsMinimumThreshold));
+  // Generate venue index page — same combined gate as the page loop above so
+  // index never lists a venue that didn't generate.
+  generateVenueIndex(
+    Array.from(venueMap.values()).filter(v => isPageEligibleByName(v.name) && meetsMinimumThreshold(v))
+  );
 
-  console.log(`  ✓ Generated ${urls.length} venue pages (${skipped} skipped - below threshold)`);
+  console.log(`  ✓ Generated ${urls.length} venue pages (${skipped} skipped - below threshold or identity-only)`);
   return urls;
 }
 

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, checkCrossLocaleCanonical, checkPhaseKeyedNoindex, isEnLocalePath, type SchemaValidationResult, type PageClass } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, checkCrossLocaleCanonical, checkPhaseKeyedNoindex, isEnLocalePath, validateVenueIdAndSlug, type SchemaValidationResult, type PageClass } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -61,7 +61,7 @@ describe('validateSchemaCompleteness', () => {
       const html = wrapInHtml(makeValidSchema());
       const result = validateSchemaCompleteness(html, 'test-event');
       expect(result.errors).toHaveLength(0);
-      expect(result.warnings).toHaveLength(0);
+      expect(result.errors).toHaveLength(0);
       expect(result.slug).toBe('test-event');
     });
   });
@@ -535,7 +535,7 @@ describe('validateHubSchema', () => {
     const html = wrapMultiJsonLd(makeValidCollectionPage(), makeValidFAQPage());
     const result = validateHubSchema(html, 'concerts');
     expect(result.errors).toHaveLength(0);
-    expect(result.warnings).toHaveLength(0);
+    expect(result.errors).toHaveLength(0);
     expect(result.slug).toBe('hub:concerts');
   });
 
@@ -1159,7 +1159,7 @@ describe('validateMicrodata', () => {
       </article>`);
     const result = validateMicrodata(html);
     expect(result.errors).toHaveLength(0);
-    expect(result.warnings).toHaveLength(0);
+    expect(result.errors).toHaveLength(0);
   });
 
   test('Hub page with N cards, M containing € symbol → reports M errors', () => {
@@ -1979,5 +1979,76 @@ describe('S144 — locale-canonical + phase-keyed noindex guards', () => {
       const result = checkPhaseKeyedNoindex(html, 'en/about/');
       expect(result.errors).toHaveLength(0);
     });
+  });
+});
+
+// =============================================================================
+// S146 — validateVenueIdAndSlug (Layer-2 defense-in-depth)
+//
+// Per plan §4 dry-run protocol: currently in WARN mode. Negative-control tests
+// assert the validator FIRES (push to warnings[]) on synthetic bad input,
+// confirming detection works before flipping to errors[]. After full-dist
+// dry-run confirms 0 violations in production HTML, the function flips.
+// =============================================================================
+
+describe('S146 — validateVenueIdAndSlug', () => {
+  test('T17/T16: FIRES on synthetic empty-slug venue @id (/venues//#venue)', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues//#venue"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors.some(e => e.includes('venue-id-empty-slug'))).toBe(true);
+  });
+
+  test('T18: passes on healthy single-slash @id (/venues/megaron/#venue)', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues/megaron/#venue"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('T19a: does NOT false-positive on legitimate venue-{hash} fallback (/venues/venue-a3f1b27c/#venue)', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues/venue-a3f1b27c/#venue"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('T19b: does NOT false-positive on collision-suffix slug (/venues/megaron-2/#venue)', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues/megaron-2/#venue"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('regex guard: does NOT false-positive on https:// scheme double-slash', () => {
+    // The // after https: must NOT trigger the validator. This was the bug
+    // class that made naive regexes match 15k+ legitimate URLs in dry-run.
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/events/abc-foo/#event"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('catches mid-path double-slash (defensive — not the primary bug class)', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues/foo//bar/#venue"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  test('catches multiple distinct violations in one page', () => {
+    const html = `<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues//#venue"}</script>
+      <script type="application/ld+json">{"@id": "https://agentathens.com/venues//#venue2"}</script>
+    </head><body></body></html>`;
+    const result = validateVenueIdAndSlug(html, 'test-page');
+    expect(result.errors.length).toBeGreaterThanOrEqual(1);
   });
 });

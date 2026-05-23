@@ -158,20 +158,31 @@ describe('S142 — Event.organizer emission', () => {
     ]);
   });
 
-  test('Greek-only venue name (empty slug) does NOT emit organizer (S146 entity-graph collision guard)', () => {
-    // `slugify('Εθνική Λυρική Σκηνή')` returns '' because `normalize-greek.ts`
-    // strips diacritics but does not transliterate Greek characters to Latin.
-    // Without a slug-non-empty guard, organizer would attach to /venues//#venue
-    // — a collision node that breaks the Component-B entity-graph thesis (every
-    // Greek-named venue's Wikidata refs would converge on a single corrupted
-    // node). S142 explicitly suppresses these emissions until S146 lands a
-    // config-driven slug field on athens-venues.json. The corresponding
-    // venueEntity push above (event-page.ts:~297) still exhibits this gap —
-    // that's the pre-existing surface S146 cleans up.
+  test('Greek-named venue (post-S146): emits organizer with config-curated slug', () => {
+    // Pre-S146 (S142 era): slugify('Εθνική Λυρική Σκηνή') returned '' because
+    // normalize-greek.ts strips diacritics but does not transliterate. The
+    // S142 organizer guard suppressed emission to avoid attaching to a
+    // colliding /venues//#venue node.
+    //
+    // S146 routes venue identity through getVenueIdentity which resolves Greek
+    // canonical names to their config-curated slug ('greek-national-opera').
+    // The slug-non-empty guard is now mathematically satisfied (hash fallback
+    // ensures non-empty by construction), AND the resulting @id is distinct
+    // per-venue. Component-B's sameAs/Wikidata identity strategy can now form
+    // on this node — the original moat-fix premise.
     const envelope = buildEventGraphEnvelope(gnoGreekFormEvent());
     const eventEntity = getEventEntity(envelope);
 
-    expect(eventEntity.organizer).toBeUndefined();
+    expect(eventEntity.organizer).toBeDefined();
+    expect(eventEntity.organizer['@id']).toBe(
+      'https://agentathens.com/venues/greek-national-opera/#venue'
+    );
+    // The referenced @id must resolve in the @graph (no dangling refs).
+    const venueNode = envelope['@graph'].find(
+      (m: any) => m['@id'] === eventEntity.organizer['@id']
+    );
+    expect(venueNode).toBeDefined();
+    expect(venueNode.sameAs).toContain('https://www.wikidata.org/wiki/Q582625');
   });
 
 

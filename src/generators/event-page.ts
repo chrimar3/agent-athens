@@ -21,6 +21,7 @@ import { getAthensTimezone, formatSchemaDate, SCHEMA_TYPE_MAP, VENUE_TYPE_MAP } 
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
+import { getVenueIdentity } from '../utils/venue-identity';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
@@ -96,18 +97,35 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
 };
 
 /**
- * Generate a URL-safe slug from text
+ * Slugify — moved to src/utils/normalize-greek.ts during S146 to break a
+ * venue-identity ↔ event-page circular import. Re-exported here for back-compat
+ * with callers (venue-page.ts, search-index.ts) that already import from this
+ * module. Internal uses below also resolve to the same binding.
  */
-export function slugify(text: string): string {
-  return normalizeGreek(text)
-    .replace(/[^a-z0-9]+/g, '-')       // Replace non-alphanumeric with dashes
-    .replace(/^-+|-+$/g, '')           // Remove leading/trailing dashes
-    .substring(0, 60);                 // Cap length
-}
+import { slugify } from '../utils/normalize-greek';
+export { slugify };
 
 /**
  * Generate a stable slug for an event
  * Format: [id-prefix]-[venue-slug]-[title-slug]
+ *
+ * S146 / GEO ruling 2026-05-22: INTENTIONAL DIVERGENCE.
+ *
+ * This function uses raw `slugify(venue.name)` for backwards compatibility —
+ * event URLs like `4fe49f93--burger-project-volume-4` are LIVE indexed-
+ * eligible URLs (~280 Megaron events alone). Changing this slug rewrites
+ * every Greek-venue event URL, which is a separate "axis 3" live-URL
+ * migration outside S146's scope (additive-only).
+ *
+ * All other venue-identity sites (@id, organizer, venue page route, HTML
+ * hrefs, search-index venue records) use getVenueIdentity() which returns
+ * curated config.slug, latin slugify, Greek transliteration, or a hash
+ * fallback — see src/utils/venue-identity.ts and plans/s146-venue-purring-fox.md §3.
+ *
+ * DO NOT "unify" these two slug computations without a live-URL migration
+ * plan. The `--` (double dash) in event URLs for Greek venues is COSMETIC;
+ * the empty `@id` segment was IDENTITY-BREAKING. S146 fixed identity,
+ * deferred cosmetics.
  */
 export function generateEventSlug(event: Event): string {
   const idPrefix = event.id.substring(0, 8);
@@ -272,7 +290,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
  * unchanged — its contract is the flat Event entity. This wrapper composes
  * the @graph envelope around that entity for HTML emission only.
  */
-function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<string, any> {
+function buildEventGraphEnvelope(event: Event, locale: Locale = 'el', pagedVenueSlugs?: Set<string>): Record<string, any> {
   const eventSlug = generateEventSlug(event);
   const eventCanonicalUrl = `${BASE_URL}/events/${eventSlug}/`;
 
@@ -293,8 +311,18 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
   // duplicated address/geo/containedInPlace (Section 2.4 same-page rule) and
   // replace Event.location with an @id reference.
   if (event.venue.address) {
-    const venueSlug = slugify(event.venue.name);
+    // S146: venue identity slug routes through getVenueIdentity (single source
+    // of truth) — config.slug → latin slugify → Greek transliteration → hash
+    // fallback. Always non-empty by construction; the empty-@id collision
+    // class is mathematically impossible at this point.
+    const venueSlug = getVenueIdentity(event.venue).slug;
     const venueId = `${BASE_URL}/venues/${venueSlug}/#venue`;
+    // S146 page-existence gate. url field is OPTIONAL per Schema.org — when
+    // the venue has no page (transliterated-only Greek venues, hash-fallback
+    // degenerates), omit url rather than emit a dangling link. pagedVenueSlugs
+    // undefined → permissive default (test convenience). Production orchestrator
+    // ALWAYS threads the set; validator (§4) catches any forgotten wiring.
+    const hasPage = pagedVenueSlugs ? pagedVenueSlugs.has(venueSlug) : true;
     const inlineLocation = eventEntity.location;
 
     const venueEntity: Record<string, any> = {
@@ -303,8 +331,8 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
       'name': inlineLocation.name,
       'address': inlineLocation.address,
       'containedInPlace': inlineLocation.containedInPlace,
-      'url': `${BASE_URL}/venues/${venueSlug}/`,
     };
+    if (hasPage) venueEntity.url = `${BASE_URL}/venues/${venueSlug}/`;
     if (inlineLocation.geo) venueEntity.geo = inlineLocation.geo;
     if (inlineLocation.sameAs) venueEntity.sameAs = inlineLocation.sameAs;
 
@@ -332,15 +360,15 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
     // referenced #venue fragment is already in @graph above, so S141's orphan
     // rule (ORPHAN_SCOPED_FRAGMENTS includes 'organizer') passes by construction.
     //
-    // Slug-non-empty guard (S142 Strategist 2026-05-22, GEO ruling): `slugify`
-    // on Greek-only names returns '' because `normalize-greek.ts` strips
-    // diacritics but does NOT transliterate. Without this guard, organizer
-    // would attach to ${BASE_URL}/venues//#venue — colliding all Greek-named
-    // venue identity graphs onto a single corrupted node (Component-B's
-    // citability thesis cannot form on a colliding @id). The same corruption
-    // already exists on the venueEntity push above (line ~297) but is a
-    // PRE-EXISTING gap addressed in S146; S142 explicitly does not extend new
-    // references onto it.
+    // S146: the slug-non-empty guard added by S142 is now mathematically
+    // satisfied by getVenueIdentity (hash fallback ensures non-empty by
+    // construction). Kept as defensive belt-and-braces. Organizer remains a
+    // bare-@id reference (NOT a navigable href) — valid against identity-only
+    // nodes (transliterated Greek venues), since Component-B's sameAs/identity
+    // moat thesis attaches to the venue node regardless of page existence.
+    // DO NOT gate this on pagedVenueSlugs — bare-@id references are valid
+    // even when no page exists for the referenced @id (S142 comment block
+    // above explains the inline-required vs optional-bare-@id distinction).
     if (venueSlug && event.venue.sameAs && event.venue.sameAs.length > 0) {
       eventEntity.organizer = { '@id': venueId };
     }
@@ -386,8 +414,8 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el'): Record<st
  * `src/generators/datafeed.ts`, schema-validator at `src/utils/schema-validator.ts`),
  * call `buildEventSchemaObject` directly.
  */
-function generateEventSchema(event: Event, locale: Locale = 'el'): string {
-  return JSON.stringify(buildEventGraphEnvelope(event, locale), null, 2);
+function generateEventSchema(event: Event, locale: Locale = 'el', pagedVenueSlugs?: Set<string>): string {
+  return JSON.stringify(buildEventGraphEnvelope(event, locale, pagedVenueSlugs), null, 2);
 }
 
 /**
@@ -396,7 +424,7 @@ function generateEventSchema(event: Event, locale: Locale = 'el'): string {
  * Structure: full-bleed hero with type-colored gradient, 800px content column,
  * card-grid related events, mobile sticky CTA bar.
  */
-export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el'): string {
+export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el', pagedVenueSlugs?: Set<string>): string {
   const t = STRINGS[locale];
   const slug = generateEventSlug(event);
   // S144 (GEO 2026-05-21): canonical is locale-aware self.
@@ -408,7 +436,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const localePrefix = locale === 'en' ? '/en' : '';
   const canonicalUrl = `${BASE_URL}${localePrefix}/events/${slug}/`;
   const ogImage = getOgImage(event);
-  const schemaJson = generateEventSchema(event, locale);
+  const schemaJson = generateEventSchema(event, locale, pagedVenueSlugs);
   const practicalBlock = generatePracticalBlock(event, null, locale);
   const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
 
@@ -463,12 +491,16 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const descriptionText = hasFullDescription ? String(descriptionSource) : event.description;
   const needsReadMore = descriptionText.length > 400;
 
-  // Internal navigation links
-  const venueSlug = slugify(event.venue.name);
+  // S146: venue identity routes through getVenueIdentity. HTML hrefs gated on
+  // pagedVenueSlugs — emit anchor only when the venue page actually exists,
+  // else drop the "More events at X" navLink entry (filter(Boolean) below
+  // already strips empty strings).
+  const venueSlug = getVenueIdentity(event.venue).slug;
+  const venueHasPage = pagedVenueSlugs ? pagedVenueSlugs.has(venueSlug) : true;
 
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
-    `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>`
+    venueHasPage ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>` : ''
   ].filter(Boolean);
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
@@ -603,7 +635,7 @@ ${renderAnalytics()}
           <h1 class="edp-title" itemprop="name">${event.title}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time></span>
-            · <a href="/venues/${venueSlug}/">${event.venue.name}</a>
+            · ${venueHasPage ? `<a href="/venues/${venueSlug}/">${event.venue.name}</a>` : event.venue.name}
             · ${priceDisplay}
           </div>
           ${ctaHtml}
@@ -776,7 +808,7 @@ export function renderEventDetailScript(): string {
  * Generate all individual event pages
  * Returns list of generated URLs for sitemap
  */
-export async function generateEventPages(events: Event[]): Promise<{
+export async function generateEventPages(events: Event[], pagedVenueSlugs?: Set<string>): Promise<{
   urls: string[];
   slugMap: Map<string, string>;  // eventId -> current slug
   pastEventUrls: Set<string>;    // URLs of past-active events (for sitemap priority)
@@ -819,7 +851,7 @@ export async function generateEventPages(events: Event[]): Promise<{
       .slice(0, 6);
 
     // Generate page HTML
-    const html = renderEventDetailPage(event, relatedEvents);
+    const html = renderEventDetailPage(event, relatedEvents, 'el', pagedVenueSlugs);
 
     // Validate schema JSON-LD against the flat Event entity. validateEventSchema
     // operates on flat dot-paths (location.name, etc.); the @graph envelope used

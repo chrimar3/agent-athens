@@ -16,6 +16,7 @@ import type { Event } from '../types';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug, slugify } from './event-page';
+import { getVenueIdentity } from '../utils/venue-identity';
 import { filterEventsByCategory, type CategoryConfig } from '../templates/category-page';
 import { GREEK_MONTHS_SHORT, parseISODate } from '../utils/format-date';
 
@@ -94,9 +95,13 @@ export function generateSearchIndex(events: Event[]): void {
   }));
 
   // Build venue records (deduplicated by slug)
+  // S146: slug source is getVenueIdentity, not raw slugify — heals empty-slug
+  // collision for Greek venues in the search index. Pre-S146, all Greek-named
+  // venues collapsed into a single venueMap entry with key='', appearing in
+  // dist/search-index.json as one corrupted record consumed by search-overlay.ts.
   const venueMap = new Map<string, VenueRecord>();
   for (const event of events) {
-    const slug = slugify(event.venue.name);
+    const slug = getVenueIdentity(event.venue).slug;
     const existing = venueMap.get(slug);
     if (existing) {
       existing.eventCount++;

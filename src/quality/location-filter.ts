@@ -46,10 +46,16 @@ export interface EventLocation {
 // Config Types
 // ============================================================================
 
-interface VenueConfig {
+export interface VenueConfig {
   canonical_name: string;
   variations: string[];
   neighborhood?: string;
+  /**
+   * S146 — Tier-1 curated permanent slug for venue @id. Optional.
+   * When present, getVenueIdentity uses this verbatim (Tier-A-locked once published).
+   * When absent, falls through to slugify(canonical_name) or Greek transliteration.
+   */
+  slug?: string;
 }
 
 interface AthensVenuesConfig {
@@ -127,6 +133,51 @@ function normalize(text: string | undefined | null): string {
  * e.g., "AN" matches in "rANdom"
  */
 const MIN_SUBSTRING_MATCH_LENGTH = 5;
+
+/**
+ * S146 — Resolve a free-text venue name to its config record.
+ *
+ * Extracted from checkLocation's whitelist loop so getVenueIdentity (in
+ * src/utils/venue-identity.ts) can access the full record — including the
+ * optional `slug` field — not just the canonical_name. checkLocation now
+ * delegates to this; behavior is unchanged.
+ *
+ * Returns null when the input is empty or does not match any whitelist entry
+ * (exact canonical/variation match, or substring match guarded by length +
+ * 40%-overlap heuristic).
+ */
+export function findVenueConfig(venueName: string | undefined | null): VenueConfig | null {
+  loadConfigs();
+  if (!venueName || !athensConfig?.venues) return null;
+  const normalizedVenue = normalize(venueName);
+  if (!normalizedVenue) return null;
+
+  for (const venueConfig of athensConfig.venues) {
+    const canonicalNorm = normalize(venueConfig.canonical_name);
+
+    if (normalizedVenue === canonicalNorm) return venueConfig;
+
+    if (canonicalNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
+      if (normalizedVenue.includes(canonicalNorm)) return venueConfig;
+      if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
+          normalizedVenue.length >= canonicalNorm.length * 0.4 &&
+          canonicalNorm.includes(normalizedVenue)) return venueConfig;
+    }
+
+    for (const variation of venueConfig.variations) {
+      const variationNorm = normalize(variation);
+      if (normalizedVenue === variationNorm) return venueConfig;
+      if (variationNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
+        if (normalizedVenue.includes(variationNorm)) return venueConfig;
+        if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
+            normalizedVenue.length >= variationNorm.length * 0.4 &&
+            variationNorm.includes(normalizedVenue)) return venueConfig;
+      }
+    }
+  }
+
+  return null;
+}
 
 /**
  * Check if text contains any of the search terms
@@ -298,77 +349,16 @@ export function checkLocation(event: EventLocation): LocationResult {
   // -------------------------------------------------------------------------
   // Step 2: Whitelist check (approve + auto-merge to canonical name)
   // -------------------------------------------------------------------------
-  if (venueName && athensConfig?.venues) {
-    for (const venueConfig of athensConfig.venues) {
-      const canonicalNorm = normalize(venueConfig.canonical_name);
-
-      // Check canonical name - exact match always allowed
-      if (normalizedVenue === canonicalNorm) {
-        return {
-          status: 'verified_athens',
-          matched_venue: venueConfig.canonical_name,
-          original_venue: venueName,
-        };
-      }
-
-      // Substring matching only for longer names (avoid "AN" matching in "random")
-      if (canonicalNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
-        // Venue name contains the canonical name (safe: "Θέατρο Κάρολος Κουν Αθήνα" includes "κάρολος κουν")
-        if (normalizedVenue.includes(canonicalNorm)) {
-          return {
-            status: 'verified_athens',
-            matched_venue: venueConfig.canonical_name,
-            original_venue: venueName,
-          };
-        }
-        // Canonical contains venue name (risky: require venue to be >40% of canonical length)
-        if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
-            normalizedVenue.length >= canonicalNorm.length * 0.4 &&
-            canonicalNorm.includes(normalizedVenue)) {
-          return {
-            status: 'verified_athens',
-            matched_venue: venueConfig.canonical_name,
-            original_venue: venueName,
-          };
-        }
-      }
-
-      // Check variations
-      for (const variation of venueConfig.variations) {
-        const variationNorm = normalize(variation);
-
-        // Exact match always allowed
-        if (normalizedVenue === variationNorm) {
-          return {
-            status: 'verified_athens',
-            matched_venue: venueConfig.canonical_name, // Auto-merge to canonical
-            original_venue: venueName,
-          };
-        }
-
-        // Substring matching only for longer variations
-        if (variationNorm.length >= MIN_SUBSTRING_MATCH_LENGTH) {
-          // Venue name contains the variation (safe direction)
-          if (normalizedVenue.includes(variationNorm)) {
-            return {
-              status: 'verified_athens',
-              matched_venue: venueConfig.canonical_name,
-              original_venue: venueName,
-            };
-          }
-          // Variation contains venue name (risky: require venue to be >40% of variation length)
-          if (normalizedVenue.length >= MIN_SUBSTRING_MATCH_LENGTH &&
-              normalizedVenue.length >= variationNorm.length * 0.4 &&
-              variationNorm.includes(normalizedVenue)) {
-            return {
-              status: 'verified_athens',
-              matched_venue: venueConfig.canonical_name,
-              original_venue: venueName,
-            };
-          }
-        }
-      }
-    }
+  // S146: extracted into findVenueConfig so getVenueIdentity can access the
+  // full config record (including the optional `slug` field), not just the
+  // canonical_name. Behavior here is identical to the prior inlined loop.
+  const matched = findVenueConfig(venueName);
+  if (matched) {
+    return {
+      status: 'verified_athens',
+      matched_venue: matched.canonical_name,
+      original_venue: venueName,
+    };
   }
 
   // -------------------------------------------------------------------------

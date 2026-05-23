@@ -5,6 +5,7 @@
   "venues": [
     {
       "canonical_name": "Μέγαρο Μουσικής Αθηνών",
+      "slug": "megaron",
       "variations": [
         "Μέγαρο Μουσικής",
         "Megaro Mousikis",
@@ -53,6 +54,7 @@
     },
     {
       "canonical_name": "ΚΠΙΣΝ",
+      "slug": "snfcc",
       "variations": [
         "SNFCC",
         "Stavros Niarchos Foundation Cultural Center",
@@ -756,6 +758,7 @@
     },
     {
       "canonical_name": "Onassis Stegi",
+      "slug": "onassis-stegi",
       "variations": [
         "Στέγη Ιδρύματος Ωνάση",
         "Στέγη",
@@ -1450,6 +1453,7 @@
     },
     {
       "canonical_name": "Εθνική Λυρική Σκηνή",
+      "slug": "greek-national-opera",
       "variations": [
         "Εθνική Λυρική Σκηνή - Εναλλακτική Σκηνή",
         "Εθνική Λυρική Σκηνή - αίθουσα «Σταύρος Νιάρχος»",
@@ -1510,6 +1514,7 @@
     },
     {
       "canonical_name": "Τεχνόπολη",
+      "slug": "technopolis",
       "variations": [
         "Τεχνόπολη Δήμου Αθηναίων",
         "Technopolis",

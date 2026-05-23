@@ -89,6 +89,21 @@ require a row added to this manifest.
   intentional — organizer is OPTIONAL per Schema.org so an unresolved `@id`
   would be cosmetic, not eligibility-breaking (the opposite side of the
   inline-required line that `Event.location` sits on per S143).
+- **S146 venue-id-empty-slug rule (GEO 2026-05-22, FAIL):** Every emitted
+  `@id` in dist HTML must have a non-empty slug segment. The class of bug
+  this catches: `"@id": "https://agentathens.com/venues//#venue"` — empty
+  slug between adjacent `//`. Pre-S146, ~172 Greek-named venues emitted
+  this shape (slugify on Greek-only names returned `''`), collapsing every
+  Greek venue's identity onto one corrupted graph node and breaking
+  Component-B's `sameAs`→Wikidata identity strategy. Layer-1 fix (in
+  `src/utils/venue-identity.ts`) makes empty slugs mathematically impossible
+  at the helper output (cascade: config.slug → latin slugify → Greek
+  transliteration → `venue-{hash}` fallback). Layer-2 (`validateVenueIdAndSlug`,
+  `schema-completeness.ts`) is the build-time net catching any future site
+  that bypasses the helper. Regex matches `//` AFTER the host segment only,
+  so `https://` scheme `//` does NOT false-positive. Dry-run 2026-05-23
+  validated 0 violations across 3,808 event pages before WARN→FAIL flip.
+  Negative-control tests permanent in `schema-completeness.test.ts`.
 
 ### 2. Event detail page — microdata Event element
 

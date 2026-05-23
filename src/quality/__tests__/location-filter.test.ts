@@ -366,3 +366,53 @@ describe('LocationResult Structure', () => {
     expect(result.rejection_reason).toBeDefined();
   });
 });
+
+// =============================================================================
+// S146 — findVenueConfig (extracted from checkLocation whitelist loop)
+//
+// findVenueConfig is the matcher logic extracted into a standalone export so
+// getVenueIdentity (src/utils/venue-identity.ts) can access the full config
+// record (with the new `slug` field), not just the canonical_name.
+//
+// checkLocation's behavior must be UNCHANGED by the extraction — the existing
+// tests above cover that. These tests cover the new export's contract.
+//
+// @see plans/s146-venue-purring-fox.md §0 + §1
+// =============================================================================
+
+import { findVenueConfig } from '../location-filter';
+
+describe('findVenueConfig — S146 extracted matcher (full config record access)', () => {
+  test('Greek canonical name resolves to full config record (load-bearing for S146)', () => {
+    // This is the load-bearing premise the curated-slug table rests on.
+    // If matcher returns null here, every Tier-1 Greek slug is dead config
+    // (falls through to transliteration, ignores the lock).
+    const cfg = findVenueConfig('Μέγαρο Μουσικής Αθηνών');
+    expect(cfg).not.toBeNull();
+    expect(cfg?.canonical_name).toBe('Μέγαρο Μουσικής Αθηνών');
+  });
+
+  test('Latin variation resolves to same config record as canonical', () => {
+    const greekCfg = findVenueConfig('Μέγαρο Μουσικής Αθηνών');
+    const latinCfg = findVenueConfig('Athens Concert Hall');
+    expect(latinCfg?.canonical_name).toBe(greekCfg?.canonical_name);
+  });
+
+  test('Returns null for non-matching input (so getVenueIdentity falls through)', () => {
+    expect(findVenueConfig('Some Completely Made Up Venue 12345')).toBeNull();
+  });
+
+  test('Returns null for empty/undefined input', () => {
+    expect(findVenueConfig('')).toBeNull();
+    expect(findVenueConfig(undefined as any)).toBeNull();
+  });
+
+  test('Config record exposes slug field when present (Tier-1 venues, added in §2)', () => {
+    // Post-§2: config entries for Megaron etc. have a `slug` field. The matcher
+    // must expose it on the returned record (not just canonical_name + variations).
+    const cfg = findVenueConfig('Μέγαρο Μουσικής Αθηνών');
+    expect(cfg).not.toBeNull();
+    expect(cfg).toHaveProperty('slug');
+    // Exact slug value tested in venue-identity.test.ts T1 (one-source-of-truth assertion).
+  });
+});

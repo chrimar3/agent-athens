@@ -18,7 +18,7 @@ import {
 import { generateEventPages, generateEventSlug, loadSlugHistory, saveSlugHistory, generateRedirects } from './generators/event-page';
 import { sweepOrphans } from './generators/orphan-sweep';
 import { snapshotOfferOmissions, resetOfferOmissionsCounter } from './ticketing/offer-builder';
-import { generateVenuePages } from './generators/venue-page';
+import { generateVenuePages, computePagedVenueSlugs } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
 import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
@@ -590,7 +590,11 @@ async function main() {
   // Uses pageableEvents: upcoming + past-active events (≤45 days) get pages
   console.log('\n📄 Generating individual event pages...');
   const previousSlugHistory = loadSlugHistory();
-  const { urls: eventPageUrls, slugMap: currentSlugs, pastEventUrls } = await generateEventPages(pageableEvents);
+  // S146: shared page-existence predicate. Computed from the FULL events array
+  // (same input venue-page.ts uses), so url/href emission in event pages stays
+  // in lockstep with which venue pages actually generate. Drift = dangling links.
+  const pagedVenueSlugs = computePagedVenueSlugs(events);
+  const { urls: eventPageUrls, slugMap: currentSlugs, pastEventUrls } = await generateEventPages(pageableEvents, pagedVenueSlugs);
   generatedUrls.push(...eventPageUrls);
   pagesGenerated += eventPageUrls.length;
 
@@ -623,7 +627,7 @@ async function main() {
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
       .slice(0, 6);
 
-    const html = renderEventDetailPage(event, relatedEvents, 'en');
+    const html = renderEventDetailPage(event, relatedEvents, 'en', pagedVenueSlugs);
     const pageDir = join(enEventsDir, slug);
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
