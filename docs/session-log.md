@@ -6196,3 +6196,15 @@ Did NOT touch (left for their owners): pre-existing `tests/build/scroll-containe
 5. ⚠️ **`git push origin main` deferred — Netlify-git-rebuild concern carries from 2026-05-22 closeout.** S151's two commits (`664d21ae4` source + the notes commit this entry is part of) remain local until the user resolves whether push is safe given the git-connected Netlify auto-deploy behavior, OR explicitly accepts the rebuild trade. The 2026-05-22 closeout explicitly avoided push for this reason; brief proposed push, executor stopped at Step 3 to surface.
 
 ---
+
+### Session 146 — Venue @id Slug-Collision Fix (2026-05-23)
+
+**Plan:** Fix ~172 Greek-named venues emitting `@id = /venues//#venue` (all colliding on one empty node → Component-B sameAs entity-graph can't form). Axes 1+2 only; axis 3 (event-URL `--` cleanup) deferred. Config `slug` field for Tier-1 + ELOT-743-derived transliteration fallback for long-tail + build invariant FAILing on empty slug.
+
+**What happened:** Step 0 surfaced 4 corrections (slugify in event-page.ts not normalize-greek.ts; ~25-line drift; 8 shotgun sites not 3; matcher resolves Greek-names confirmed). GEO ruling locked ELOT-743 single-letter + mandatory ου/αυ/ευ digraph pre-pass (ου→ou floor — "moyseio" bug). Two spec-vs-reality gaps resolved mid-session: Venue has no `id` field → degenerate fallback uses `venue-{stableHash(name)}` (FNV-1a/sha256, not V8 hash); no script-locale config exists → `VENUE_NAME_SCRIPT_LOCALE='el'` named constant feeds `idNormalizer[locale]` seam (NOT page-render locale, which would emit two @ids per venue). Two predicates: identity (all 172) vs page-existence (`computePagedVenueSlugs`, threshold-gated). Organizer = bare-@id, not page-gated. 15 files, 21 new tests, phased TDD (RED-per-phase).
+
+**Verified:** Validator FAIL-mode 0 errors across 3808 pages; 2479 pass / 0 fail / tsc clean; `/venues//`=0, `@id`-with-`//`=0, no oy/ay/ey artifacts. Commit cb89d3795. Deploy 6a116ed069fad73d0ced9d6f. Live: Megaron serves `/venues/megaron/#venue` on production. Tier-3 GSC URL Inspection pending (manual).
+
+**Learnings:** eligibility ≠ validity (arc root, S139→S146); empty-slug lived silently since venueEntity push — no invariant asserted non-emptiness (S110-class, closed by Layer-1 throw + Layer-2 validator). Brief-vs-reality ledger +1 → 9 (Pattern A, caught by Explore).
+
+**Open items:** Tier-3 GSC verification on benchmark Greek venue; deferred bucket (decisions.md divergence + scheme + seam; mistakes.md empty-slug + S141 amend; ledger). GEO refine: αυ/ευ context rules, consonant clusters, promotion-export, axis-3 event-URL cleanup (post-demo).
