@@ -615,7 +615,13 @@ run_deploy() {
         # Forensic log line. Future visibility-monitor (S91 ext) parses for this.
         log "[deploy] id=$DEPLOY_ID state=$STATE error=${ERR_MSG:-none} cli_exit=$cli_exit attempt=$attempt"
 
-        [ "$STATE" = "ready" ] && return 0
+        if [ "$STATE" = "ready" ]; then
+            # UTC-stored for monotonic cadence math (no EET/EEST DST artifact).
+            # Locale-convert at display time only. Divergence from CLAUDE.md's
+            # Athens-time rule is deliberate: machine-parsed by check-deploy-cadence.ts.
+            echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) deploy-success" >> logs/deploy-cadence.log
+            return 0
+        fi
         [ "$attempt" = "2" ] && { log_error "[deploy] failed after retry; state=$STATE error=$ERR_MSG"; return 1; }
 
         # Retry-gate (gotcha note verbatim): state=error AND msg='Deploy canceled'

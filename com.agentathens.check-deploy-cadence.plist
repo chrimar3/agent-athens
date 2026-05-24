@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/Users/chrism/.local/bin:/Users/chrism/.npm-global/bin:/Users/chrism/.bun/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>TZ</key>
+		<string>Europe/Athens</string>
+	</dict>
+	<key>KeepAlive</key>
+	<false/>
+	<key>Label</key>
+	<string>com.agentathens.check-deploy-cadence</string>
+	<key>Nice</key>
+	<integer>5</integer>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>-c</string>
+		<string>/Users/chrism/.bun/bin/bun run "/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/check-deploy-cadence.ts"</string>
+	</array>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>StandardErrorPath</key>
+	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/check-cadence-stderr.log</string>
+	<key>StandardOutPath</key>
+	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/check-cadence-stdout.log</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>11</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>ThrottleInterval</key>
+	<integer>300</integer>
+	<key>WorkingDirectory</key>
+	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens</string>
+</dict>
+</plist>
