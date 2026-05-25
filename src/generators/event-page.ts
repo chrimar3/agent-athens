@@ -9,6 +9,7 @@
  */
 
 import { mkdirSync, existsSync, readFileSync } from 'fs';
+import he from 'he';
 import { writeFileIfChangedSync, writeHtmlIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
@@ -546,6 +547,15 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // Re-emit per decisions.md 2026-05-21 when Greek-as-product ships.
   const hreflangHtml = '';
 
+  // 1.5a: meta/title attributes carry event-derived free text that can contain raw
+  // double-quotes (which truncate the HTML attribute at the first ") and, on
+  // pre-S154 DB rows, undecoded entities. Normalize via he.decode (idempotent
+  // on already-decoded text) then escapeAttr so emission is uniformly correct
+  // regardless of the row's encoding state. Composer stays plain-text.
+  const metaDescription = escapeAttr(he.decode(generateEventMetaDescription(event)));
+  const safeMetaTitle = escapeAttr(he.decode(event.title));
+  const safeVenueName = escapeAttr(he.decode(event.venue.name));
+
   return `<!DOCTYPE html>
 <html lang="${t.lang}">
 <head>
@@ -556,8 +566,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   ${renderFontLinks()}
   ${renderCssLink()}
 
-  <title>${event.title} | ${event.venue.name} | agent-athens</title>
-  <meta name="description" content="${generateEventMetaDescription(event)}">
+  <title>${safeMetaTitle} | ${safeVenueName} | agent-athens</title>
+  <meta name="description" content="${metaDescription}">
   ${shouldNoindex ? '<meta name="robots" content="noindex">' : ''}
 
   <!-- Canonical URL (single source of truth, locale-aware self per S144) -->
@@ -565,8 +575,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   ${hreflangHtml}
 
   <!-- Open Graph -->
-  <meta property="og:title" content="${event.title}">
-  <meta property="og:description" content="${generateEventMetaDescription(event)}">
+  <meta property="og:title" content="${safeMetaTitle}">
+  <meta property="og:description" content="${metaDescription}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="event">
   <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
@@ -577,8 +587,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${event.title}">
-  <meta name="twitter:description" content="${generateEventMetaDescription(event)}">
+  <meta name="twitter:title" content="${safeMetaTitle}">
+  <meta name="twitter:description" content="${metaDescription}">
   <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
 
   <!-- GEO: Location metadata -->
@@ -597,7 +607,7 @@ ${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav(locale)}
-  ${renderHamburgerMenu()}
+  ${renderHamburgerMenu(locale)}
   ${renderSearchOverlay()}
 
   <main>
@@ -682,7 +692,7 @@ ${renderAnalytics()}
 
   ${mobileBarHtml}
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
   ${renderEventDetailScript()}

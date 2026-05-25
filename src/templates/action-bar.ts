@@ -1,3 +1,4 @@
+import he from 'he';
 import type { Locale } from '../i18n/strings';
 import { STRINGS } from '../i18n/strings';
 
@@ -20,7 +21,10 @@ export function renderActionBarHtml(
   locale: Locale = 'el'
 ): string {
   const t = STRINGS[locale];
-  const safeTitle = escapeAttr(title);
+  // decode-then-escape: pre-S154 DB rows carry HTML entities; bare escapeAttr
+  // would double-escape (&amp; → &amp;amp;). he.decode is idempotent on already-
+  // decoded text. Same pattern as the meta-attr seam in event-page.ts.
+  const safeTitle = escapeAttr(he.decode(title));
   return `<div class="edp-action-bar">
           <button class="edp-save-btn" data-save-event data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}" data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
             ${ACTIONBAR_BOOKMARK_ICON}
@@ -34,7 +38,7 @@ export function renderActionBarHtml(
 }
 
 export function renderCardSaveButton(eventId: string, slug: string, title: string): string {
-  return `<button class="card-save-btn" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(title)}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
+  return `<button class="card-save-btn" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(he.decode(title))}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
 }
 
 export function renderSavedEventsScript(): string {

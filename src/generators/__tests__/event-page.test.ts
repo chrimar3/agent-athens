@@ -105,6 +105,48 @@ const openExhibition: Event = {
   endDate: new Date(Date.now() + 86400000 * 30).toISOString(),
 };
 
+describe("Event Detail Page — Meta attribute escaping (1.5a)", () => {
+  const metaFutureStart = new Date(Date.now() + 86400000 * 14).toISOString();
+
+  test("escapes double-quotes in the composed meta description (no attribute truncation)", () => {
+    const ev: Event = {
+      ...sampleConcert,
+      startDate: metaFutureStart,
+      title: 'A Night of Sarah Kane',
+      fullDescription:
+        'A bold staging of "Cleansed" by Sarah Kane returns to the Athens stage this autumn for a limited run of intense, unmissable performances.',
+    };
+    const html = renderEventDetailPage(ev, []);
+    // the quoted play title must be entity-escaped, not raw (raw " truncates the attribute)
+    expect(html).toContain("&quot;Cleansed&quot;");
+    // the description content value must contain no raw double-quote
+    const descTag = html.match(/<meta name="description" content="([^>]*?)">/)?.[1] ?? "";
+    expect(descTag).not.toContain('"');
+    expect(descTag.length).toBeGreaterThan(50); // not collapsed to a fragment
+  });
+
+  test("escapes quotes and ampersands in og:title and twitter:title", () => {
+    const ev: Event = { ...sampleConcert, startDate: metaFutureStart, title: 'Rock "Live" & Loud' };
+    const html = renderEventDetailPage(ev, []);
+    expect(html).toContain('<meta property="og:title" content="Rock &quot;Live&quot; &amp; Loud">');
+    expect(html).toContain('<meta name="twitter:title" content="Rock &quot;Live&quot; &amp; Loud">');
+  });
+
+  test("does not double-escape pre-encoded entities across meta + action-bar surfaces (post-S154 transitional DB rows)", () => {
+    // Pre-S154 rows still carry HTML entities; decode-then-escape must normalize, not double-escape.
+    // Same root-cause fix on all three surfaces: meta tags, <title>, and the action-bar data attrs.
+    const ev: Event = { ...sampleConcert, startDate: metaFutureStart, title: "Jazz &amp; Soul &#171;Live&#187;" };
+    const html = renderEventDetailPage(ev, []);
+    // & single-escaped; numeric guillemot entities decoded to literal chars then left intact
+    expect(html).toContain('<meta property="og:title" content="Jazz &amp; Soul «Live»">');
+    expect(html).toContain('<meta name="twitter:title" content="Jazz &amp; Soul «Live»">');
+    // action-bar (#2): data-event-title shares the decode-then-escape fix — no &amp;amp;
+    expect(html).toContain('data-event-title="Jazz &amp; Soul «Live»"');
+    // nothing on the page double-escapes anymore (meta + title + action-bar all clean)
+    expect(html).not.toContain("&amp;amp;");
+  });
+});
+
 describe("Event Detail Page — Hero section", () => {
   test("renders edp-hero with type color CSS variable", () => {
     const html = renderEventDetailPage(sampleConcert, []);
