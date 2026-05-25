@@ -801,3 +801,97 @@ The shared mechanism is the load-bearing institutional knowledge — listing eac
 **Class:** brief-vs-reality / vocabulary-misframe (executor ledger). Action was correct regardless (config + migration + DB upsert), but the scope framing was off — an executor reading "~126 URLs" might've over-engineered the migration (batching, idempotency hooks, progress reporting) when 16-row scope didn't require it.
 
 **Lesson:** quantitative premises in briefs ("~N rows", "X% of pages", "thousands of events") need source-of-record reverification (DB query, `jq` on `build-completeness.json`, `git log -S 'string'`) before sizing the implementation. The reverification is cheap; the over-engineering it prevents is expensive.
+
+### Thessaloniki filter gap — 3rd recurrence because the documented fix plan was never applied (2026-05-21)
+
+**Recurrence:** WE Πολυχώρος (3 Thessaloniki events leaking as `verified_athens`) is the third instance of `docs/known-issues.md` "Thessaloniki Event Location Filter Gap" since Session 7. Each recurrence has a different venue name (Skiadareses → Eightball Club → WE Πολυχώρος); the class is identical.
+
+**Why it recurred:** The Session 7 entry's documented Fix plan was: "Add Eightball Club and broader Thessaloniki venue patterns to rejected-locations.json." That fix was NEVER applied — Eightball Club is still not in `config/rejected-locations.json` at the time of writing. The `known-issues.md` entry had Status:Open plus a "subagent safety net is reliable" workaround note, which discouraged anyone from touching it for ~10+ sessions. When WE Πολυχώρος arrived from a new path (more.com via `athens-venues.json` whitelist with empty `address` field), the safety net assumption failed — this venue doesn't reach enrichment (it's deleted at filter time after being rejected, never enriched), so no subagent ever caught it. It rendered as a Thessaloniki event on agentathens.com for the entire pre-demo window.
+
+**Root cause topology (the recurring class):**
+1. New venue lands in `config/athens-venues.json` whitelist without verified address.
+2. Scraper writes events with `venue_name = canonical_name`; `venue_address` often empty.
+3. `src/quality/location-filter.ts` Step 1 blacklist greps title/venue_address/description for "Θεσσαλονίκη" / "Thessaloniki" — finds nothing in empty fields.
+4. Step 2 whitelist matches the venue name → returns `verified_athens`.
+5. Site renders it as Athens.
+
+Both safety nets (city-string in event text + enrichment-time subagent rejection) fail when (a) event text doesn't mention the city and (b) the event never reaches enrichment.
+
+**Class:** documented-fix-plan-decay. The `known-issues.md` "Fix plan" field is not a task tracker — nothing routinely scans it and routes work. Entries with Severity:🟢, Status:Open, and a stable workaround drift into "permanent paper cut" territory; the next recurrence catches the team flat-footed because the workaround framing implies "no action needed."
+
+**Lesson:** when a `known-issues.md` Fix plan is small and concrete (single config file addition), promote it to a tracked task with an owner at the moment of documenting — don't trust future-self to grep `known-issues.md` for outstanding fixes. Recurring-class entries (Severity:🟢 + Status:Open + Frequency:Rare-but-recurring) need a re-evaluation trigger registered with a consumer: pre-demo checklist, quarterly grep, or hooks-based reminder. The opposite is documentation theater — writing the fix but never shipping it.
+
+**Cross-reference:** `feedback_verify_paths_in_briefs.md` series (verify premises) is the executor-side discipline; this entry is the planner-side counterpart (verify outstanding `known-issues.md` fix-plans before each demo or release). Both are forms of "documentation-as-tracker fails when no one scans the documentation."
+
+### Sitemap no-slash push shipped silently for unknown duration (S153, 2026-05-23)
+
+**The bug.** `src/generators/event-page.ts:841` pushed `events/${slug}` (no trailing slash) into the URL list that becomes sitemap `<loc>` entries. `src/generators/venue-page.ts:362` did the same with `venues/${venue.slug}`. The on-disk layout for both is `dist/<events|venues>/<slug>/index.html` (directory) → Netlify serves at `/events/<slug>/` and `/venues/<slug>/` (slash) → declared sitemap form 301'd from no-slash to slash. **3146 event entries + 35 venue entries** were declared as 301-source URLs in production sitemaps for an unknown duration prior to S153.
+
+**Class:** latent declared-vs-served drift, undetected because nothing validated parity at build time until S153's `dist-canonical-parity` invariant was wired in. Canonical-in-HTML for these pages was already slash-form (event-page.ts:437, venue-page.ts:201) — both eyeball checks and code review on those surfaces would pass. The sitemap inflow lived in a different file (the URL push at the bottom of the page generator, feeding `generatedUrls` aggregated at `generate-site.ts:598/669`) and was never scrutinized for form-parity. **The bug existed in a code path that recon-by-grep does not reach** unless someone greps for `urls.push` *across the codebase* with a sense of which forms should be slash vs no-slash — and nobody did, because nobody knew there was a class-wide problem until the invariant fired.
+
+**Production impact.** Bing's URL Inspection rejects "canonical points at a redirect" — and a sitemap `<loc>` that returns 301 is the same shape of rejection. Pre-S153, Bing was being told via sitemap that essentially *every* event page and *every* venue page had a 301 source. The cornerstone-only investigation (`/en/this-weekend`) missed this entirely; the bug existed long before S153 and would have continued shipping indefinitely without the build-side invariant.
+
+**Why it shipped silently:**
+1. No unit test exercised the sitemap `<loc>` URL form against on-disk layout.
+2. The canonical-in-HTML for events/venues was correct, so any *manual* check of an event page would look fine.
+3. Sitemap `<loc>` is "infrastructure," not "content" — code review attention naturally goes to the latter.
+4. Search engine feedback (Bing URL Inspection) only ever showed one URL at a time; nobody traced the rejection upstream to "this is class-wide."
+
+**Class:** declared-vs-served drift on infrastructure-level emitters. Distinct from content/copy bugs because the emitter sits in a low-attention code path (URL aggregation for sitemap) and the failure mode (search engine rejection) lags by days and surfaces per-URL, not per-class.
+
+**Lesson:** when fixing a URL-form bug, **write the build invariant first, then fix what it surfaces**. Recon enumerates emitters you can name; the invariant enumerates emitters that exist. The two diverge — and the diverge is exactly where the class-wide bug lives. The S153 brief scoped to "EN hub only" because Step 0 grep verified event/venue canonical was correct; the invariant added in Step 3 unmasked 3181 violations across surfaces Step 0 had implicitly cleared. The pattern: trust grep to find what you ask for, trust the walker to find what you didn't think to ask for.
+
+**Cross-references:**
+- `patterns.md` → 2026-05-23 "Infrastructure invariant unmasked sitewide defect — canonical-must-be-200" (the pattern this entry instances)
+- `decisions.md` → 2026-05-23 "Per-URL declared-equals-served parity" (the rule that codifies the fix)
+- Permanent mitigation: `src/utils/dist-canonical-parity.ts` invariant (Tier 1 build-fail). Any future regression of this class fails the build before deploy.
+
+### Edit tool brittleness — multi-line old_string spanning Greek + escape sequences (S154, 2026-05-24)
+
+| What | Why | Fix |
+|---|---|---|
+| Edit tool kept rejecting an old_string that visibly matched the file content, even after the tool reported "tried swapping \uXXXX escapes and their characters; neither form matched" | The old_string spanned three lines including `<kbd class="search-kbd">⌘K</kbd>` (literal escape in source TS, rendered to ⌘K at runtime) AND `aria-label="Μενού"` (Greek). Some subtle byte-level mismatch in the multi-line spec (likely whitespace or a character normalization the tool didn't try) prevented match. | Shrink the old_string to the smallest unique snippet around the insertion point. Two lines was too much; one line `</button>\n      <button class="hamburger-btn"` matched immediately. |
+
+**Lesson:** when Edit reports a no-match despite the visible text appearing to match, *shrink before re-reading*. The tool's "tried swapping escape forms" hint is helpful but not exhaustive — Unicode normalization, line endings, or other invisible factors can still cause mismatches. Time wasted on 3 retry-Reads ≈ 5 minutes; the eventual fix was a one-line target.
+
+**Class:** tool ergonomics around multi-byte / escape-sequence content. Bug is in the executor's mental model ("if I can read the bytes back, Edit can match them"), not in Edit itself.
+
+**Cross-references:** none in code (this is a tooling note, not a code defect).
+
+### HTML-entity decode at ingest was symptom-patched ≥1 prior session, never root-caused (S154, 2026-05-25)
+
+**The bug class.** `athinorama.gr` (and historically `more.com`) ship venue names with undecoded HTML entities — `&#171;` (`«`), `&#187;` (`»`), `&#39;` (`'`), `&apos;`, `&amp;` — that flow through `scripts/scrape-all.ts` and land in `events.venue_name` as the entity-encoded string. The location filter (`src/quality/location-filter.ts`) compares against `config/athens-venues.json` and fails to match because `Νέο Θέατρο &#171;Κατερίνα...&#187;` ≠ the decoded canonical `Νέο Θέατρο «Κατερίνα...»`. Same Athens venue, different bytes, no match. Result: 99 events stayed in `location_status='unverified'` (hidden from the site) purely because of an encoding mismatch.
+
+**The recurrence — what makes this a `mistakes.md` entry and not just a `fixed-it.md` note.** The whitelist at `config/athens-venues.json` *literally contained* the entity-encoded form: line 68, `"Κέντρο Πολιτισμού – Ίδρυμα &#171;Σταύρος Νιάρχος&#187;"`. Someone in a prior session noticed an entity-encoded venue failing to match, traced the failure to "the canonical form isn't a variation," and added the encoded form as a variation. **Symptom patch.** That fix worked for SNFCC specifically — but did nothing for the 99 other venues that arrived encoded with different roots, and the root cause (no decode at ingest) kept producing new encoded rows every scrape. The variations-list got an entity-encoded entry that's now dead code post-S154, but only because a SECOND session traced the same failure mode and decided to root-cause it. The first session had the fix in hand and stopped at the symptom.
+
+**This is the documentation-health tripwire firing correctly.** The criterion from `.claude/CLAUDE.md`'s "After Every Session" section: "Update `mistakes.md` with bugs found" — the bug isn't "encoded variations broke matching" (that was the SYMPTOM that got patched); the bug is "the team's instinct on a class-wide encoding bug was to widen the variations list rather than ask why encoded forms reach the variations list at all." When you find yourself adding a `&#171;`-bearing string to a config file, you're inside a symptom-patch and the fix is upstream.
+
+**Root cause (S154).** Decode HTML entities at `src/db/database.ts:197 upsertEvent` entry, before `isAthensEvent` runs. Single chokepoint covering all `scripts/scrape-all.ts` sources (more.com, athinorama.gr, clubber.gr, ticketservices.gr, halfnote.gr, residentadvisor, snfcc, onassis, benaki, megaron). Pure function `decodeEventFields` at `src/utils/decode-html-entities.ts` using `he.decode` (full HTML5 entity table). Idempotent — safe on every re-scrape, fixed point on already-decoded text.
+
+**Why this took a second session to surface.** The first symptom-patch left no trace pointing at the root cause. The whitelist variation `"Κέντρο Πολιτισμού – Ίδρυμα &#171;Σταύρος Νιάρχος&#187;"` looks like a legitimate alt-spelling, not like evidence of a decode bug. A future executor reading the file sees a venue with many variations; they don't see "an upstream scraper isn't HTML-decoding." The symptom-patch obscured the cause. **Lesson:** when adding a config entry that contains HTML entities, URL-encoding, double-escaping, or any form of pre-decoded artifact, the addition is itself a smoke signal. Either fix it upstream, or leave a comment in the config explaining why the encoded form is the canonical form (and update `mistakes.md`). Don't silently fork the canonical-form definition between "the human-readable string" and "what the scraper sends."
+
+**Honest done-criteria (per S154 brief constraint 2).** Decoding does NOT clear the 99 entity-encoded events automatically — only ~2 of them have decoded forms already (or now) in the whitelist (SNFCC via the new `(Φάρος)`-suffix variation added this session; Daddy's All Day Bar via a variation that already existed and matches the decoded apostrophe form). The other ~95 decoded forms are still genuinely unknown to the whitelist — they're in the ~970-event Fix B queue, deferred post-demo. The decode fix's real value is **future cleanliness** (no new entity-encoded rows ever again) + **correct matching going forward** (when Fix B adds the missing venues, their decoded forms will match) + **closing the recurrence**.
+
+**Class:** documentation-health tripwire — config entries containing pre-decoded artifacts. Distinct from the prior `documented-fix-plan-decay` class (Thessaloniki filter gap entry) — that was "we wrote the fix plan and didn't ship it." This is "we shipped a fix and it was the wrong fix; the right fix was upstream."
+
+**Cross-references:**
+- `patterns.md` → 2026-05-25 "Decode at the chokepoint, not at every entry" (the pattern this entry instances)
+- `config/athens-venues.json` line 68 — entity-encoded variation, now historically motivated dead code; do not remove without re-scraping the affected events (some existing DB rows still carry the encoded form until next scrape).
+- `src/utils/decode-html-entities.ts` (the decoder), `src/db/database.ts:197 upsertEvent` (the wire-in)
+- Deferred (per brief): existing-DB-row entity migration via re-scrape (post-demo).
+
+### Nav locale-awareness — five reusable lessons (S155, 2026-05-25)
+
+Task: make the shared nav chrome locale-aware so English pages stop rendering Greek labels/links. Brief assumed (a) the saved-events link was missing, (b) an inert language toggle existed to wire, (c) the hreflang counterpart URL was reusable. **All three premises were stale** — the toggle was removed a prior session (a test guards its absence), hreflang was globally dropped in S144, and the saved link already existed. The real defect was narrower: locale-threading gaps. Five lessons:
+
+1. **Locale-threading gap (shotgun-surgery).** `renderSiteNav` was made locale-aware but its siblings `renderHamburgerMenu`/`renderSiteFooter` were not, and most call sites invoked all three bare (defaulting `'el'`). Result: English pages silently rendered Greek nav. **Fix pattern:** when a shared renderer gains a `locale` param, ALL sibling renderers AND ALL call sites must be updated the same session. Verify with `grep` → 0 bare calls.
+
+2. **Built ≠ correct.** The saved-events link existed (assumed missing) — but was locale-broken (English pages linked to Greek `/saved/`). "The link is present" is not "the link is correct." Check the *target*, not just existence.
+
+3. **Dead-but-inverted helper.** `src/utils/locale-url.ts` is fully-tested and canonically-named but encodes an abandoned English-first routing posture (English prefix-less, Greek `/el/`) — the inverse of production (Greek bare-root, English `/en/`). Its green tests assert the *inverted* behavior, giving false confidence. Using it would have emitted `/el/` 404s. **Trace imports, don't trust names** (it turned out import-dead — referenced only by its own test).
+
+4. **Stale-artifact verification (3rd instance — recurrence).** Verified `/en/today/` as the EN home target against (a) the incremental `dist/` and (b) a green hreflang test fixture. Both encoded stale reality — `/en/today/` is no longer built. Only a clean `rm -rf dist && build` exposed it. **Verify user-facing targets against a clean rebuild, never incremental dist or test fixtures.** (Cousins: lesson 3 above; the canonical-must-be-200 class.)
+
+5. **Date-conditional hubs are not valid nav targets.** `today`/`tomorrow` hubs only build when events fall on that date → they 404 on empty days. Never point evergreen nav (logo, persistent links) at them; point evergreen surfaces at evergreen hubs (`this-week`, categories). Now confirmed in a 2nd component (`cornerstone-links.ts` → known-issues).
+
+**Cross-references:** `patterns.md` 2026-05-25 "Locale-threading reaches all siblings + call sites"; `decisions.md` 2026-05-25 "Nav locale routing"; `src/templates/site-chrome.ts` (the fix); `src/utils/locale-url.ts` (the inverted helper); `specs/en-nav-copy-checkpoint.md` + `specs/lang-toggle-checkpoint.md` (routed deferrals).

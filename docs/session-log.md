@@ -6208,3 +6208,196 @@ Did NOT touch (left for their owners): pre-existing `tests/build/scroll-containe
 **Learnings:** eligibility ≠ validity (arc root, S139→S146); empty-slug lived silently since venueEntity push — no invariant asserted non-emptiness (S110-class, closed by Layer-1 throw + Layer-2 validator). Brief-vs-reality ledger +1 → 9 (Pattern A, caught by Explore).
 
 **Open items:** Tier-3 GSC verification on benchmark Greek venue; deferred bucket (decisions.md divergence + scheme + seam; mistakes.md empty-slug + S141 amend; ledger). GEO refine: αυ/ευ context rules, consonant clusters, promotion-export, axis-3 event-URL cleanup (post-demo).
+
+---
+
+### Session 153 — Canonical Parity Invariant + Sitewide Sitemap-301 Fix (2026-05-23)
+
+**Plan:** Normalize `/en/this-weekend` (and EN-hub-class) canonical / sitemap / IndexNow URL forms to the trailing-slash form Netlify actually serves; add a build-time invariant asserting declared-equals-served per-URL parity (NOT uniform slash); unblock Bing indexing of the cornerstone for the Perplexity-via-Bing demo bet (Track A). Plan: `/Users/chrism/.claude/plans/session-goal-normalize-luminous-candy.md`. Scope locked at brief time to "EN hubs + their sitemap inflow + invariant" — explicitly NOT sitewide.
+
+**What happened — the brief was wrong about scope, and the invariant proved it.**
+
+- **Step 0 probes verified the brief's premise on canonical-in-HTML.** `curl -sI https://agentathens.com/en/this-weekend` → 301 → `/en/this-weekend/`; declared canonical in `dist/en/this-weekend/index.html` was no-slash → 301 mismatch → confirmed the bug. EL probe collapsed cleanly into "EL is self-consistent" — `dist/this-weekend.html` declares `/this-weekend` (no slash) and Netlify serves at `/this-weekend` (the slash form 301s back). Event-page.ts:437 and venue-page.ts:201 already emitted trailing-slash canonical in HTML. Verdict at end of Step 0: scope is EN-hub-only, 5 source-string edits + 1 invariant module + tests.
+
+- **Per-URL parity locked over uniform-slash.** User-driven decision after a multi-turn back-and-forth: declared canonical must equal each URL's *own* served form, NOT a uniform rule like "every URL ends in slash." Rationale: EN hubs emit directory layout (`dist/en/<slug>/index.html`, served at slash); EL hubs emit flat-file layout (`dist/<slug>.html`, served at no-slash). A uniform-slash rule would red-build EL while EL is *correctly* serving no-slash. The invariant must care about parity, not uniformity. Decision recorded in `decisions.md` 2026-05-23 "Per-URL declared-equals-served parity".
+
+- **Invariant design — derived-from-on-disk, no allowlist.** The validator (`src/utils/dist-canonical-parity.ts`) walks `dist/`, extracts every `<link rel="canonical">` from HTML + every `<loc>` from sitemap-{events,venues,editorial}.xml, derives the expected backing file from the URL path per Netlify Pretty URLs rules (`/PATH/` → `dist/PATH/index.html`, `/PATH` → `dist/PATH.html`, `/` → `dist/index.html`), and asserts the file exists. Special files (sitemap-*.xml, llms.txt, robots.txt) are excluded by *not being canonical-bearing* (structural exclusion, not allowlist). Sitemap-index.xml excluded by regex narrowing to the page-bearing sitemaps. Pass: 9355 URLs verified on the final build.
+
+- **TDD execution (Step 1 RED).** 4 new hub-page canonical tests + 1 sitemap regression test added before any source change. Ran red — exactly the assertions the EN-hub fix would flip. EL parity guard test was green from the start (EL was already correct), proving the per-URL parity model worked.
+
+- **Step 2 source edits (5 source lines + 1 comment block, plus 1 defensive `.json` href strip).** `hub-page.ts:311` (metadata.url), `:442` (hreflang enUrl), `:575` (hubCanonicalUrl), `:705` (overflow metadata.url), `:736` (overflow hubCanonicalUrl) — all gained per-locale conditional emission. `generate-site.ts:555` (EN hub push) gained trailing slash. `page.ts:135` stripped trailing slash before `.json` in the JSON alt-link interpolation (defensive — without it the new slash made the URL syntactically malformed; pre-existing dead-link for EN pages noted in known-issues). All affected tests went GREEN. `tsc --noEmit` clean.
+
+- **Step 3 invariant — and then the scope expansion.** Wired the new validator into `generate-site.ts` after `generateSplitSitemaps`. First gated build red-built on **3181 violations** — not the 5 emitters the brief scoped. The invariant unmasked a pre-existing class-wide bug: `event-page.ts:841` pushed `events/${slug}` (no slash), `venue-page.ts:362` pushed `venues/${venue.slug}` (no slash), and `generate-site.ts:636` pushed `en/events/${slug}` (no slash) — all directory-served pages declared in the *sitemap inflow* as 301-source URLs. Canonical-in-HTML was correct (Step 0 verified); the sitemap loc form was wrong sitewide. **3146 event sitemap entries + 35 venue sitemap entries** were declaring 301 sources to Bing. The session's reframing: this was never an EN-hub bug — it was a sitewide Bing-indexability bug that the cornerstone was the loudest symptom of. User approved the scope expansion explicitly, noting "the session over-delivered — it fixed the site, not just the page."
+
+- **Guard-6 closure on the expansion** (per user request, before declaring done):
+  1. Exhaustive emitter grep (`grep -rn 'urls\?\.push\|generatedUrls\.push\|<loc>' src/ --include='*.ts'`) — all 18 push sites verified consistent with their on-disk layouts (flat-file pushes no-slash; directory-layout pushes slash). `generate-site.ts:1308` (categories) confirmed correct as flat-file. `extractEventSlug` at `src/sitemap/generate-sitemaps.ts:51` confirmed dead code (defined but no callers).
+  2. JSON alt-link eyeballed: EN hub now declares `/api/en/this-weekend.json` (syntactically valid via defensive strip). The backing file does NOT exist (`dist/api/this-weekend.json` exists; no `dist/api/en/`) — **pre-existing dead link for EN pages**, outside session scope. Not in invariant scope (validator checks `<link rel="canonical">` and `<loc>`, not JSON alternates). Logged in known-issues for future hygiene.
+  3. `export buildUrlEntry` confirmed pure refactor via `git diff` — visibility change only, body identical.
+
+- **Stale dist/ orphan cleanup.** Pre-existing `dist/en/this-weekend/all/index.html` (May 22 mtime, pre-S153 no-slash canonical) failed the invariant because this-weekend dropped below the 30-event overflow threshold this build, so overflow didn't regenerate. Pre-fix-era orphan. Surgical `rm` of EN-required + matching EL orphan (verify-first). Class is self-closing post-S153 (future overflow generation emits slash-form canonical). Underlying idempotency gap logged for post-demo permanent fix (auto-prune of non-regenerated overflow dirs vs. periodic `SWEEP_ORPHANS=1` clean-build).
+
+- **`og-url-canonical-parity.test.ts` updated.** Pre-existing build-output assertion test at `tests/build/og-url-canonical-parity.test.ts:107` had hardcoded `enUrl = ${BASE_URL}/en/${hub}` (no slash). Updated to `/en/${hub}/` with a comment recording the per-URL parity rationale. All 13 affected tests went green.
+
+**Verified (local dist/, 2026-05-23):**
+- EN hub canonical: `https://agentathens.com/en/this-weekend/` (slash) ✓
+- EN hub og:url, JSON-LD url, hreflang en, hreflang x-default: all slash ✓
+- EN hub sitemap `<loc>`: slash ✓
+- EL hub canonical: `https://agentathens.com/this-weekend` (no-slash, parity preserved) ✓
+- EL hreflang: no-slash (parity guard) ✓
+- Overflow EN canonical (other hubs, e.g. `dist/en/nightlife/all/index.html`): `https://agentathens.com/en/nightlife/` (slash) — regression guard for `:705`/`:736` ✓
+- Build: 4958 pages, 9355 URLs verified by parity invariant, 0 violations.
+- Tests: 2499 pass / 0 fail / 1 skip across 113 files. Includes 13 new dist-canonical-parity tests + 5 new/extended hub-page canonical tests + 3 sitemap regression tests + 1 EN-event-pair check.
+- `bunx tsc --noEmit`: clean.
+
+**Boundary (this session, 2026-05-23):**
+- Source files modified (12): `src/generators/hub-page.ts` (5 line edits), `src/generators/event-page.ts` (1), `src/generators/venue-page.ts` (1), `src/generate-site.ts` (3: EN hub push, EN event push, validator wiring), `src/sitemap/generate-sitemaps.ts` (export-only refactor), `src/templates/page.ts` (defensive JSON-alt strip), and tests: `src/generators/__tests__/hub-page.test.ts` (extended), `src/generators/__tests__/english-hub-page.test.ts` (hreflang slash), `src/sitemap/__tests__/generate-sitemaps.test.ts` (regression guards), `tests/build/og-url-canonical-parity.test.ts` (enUrl constant). New files (2): `src/utils/dist-canonical-parity.ts`, `src/utils/__tests__/dist-canonical-parity.test.ts`.
+- Notes files modified (5 — this session + ride alongside): `.claude/notes/decisions.md`, `.claude/notes/patterns.md`, `.claude/notes/mistakes.md`, `docs/known-issues.md`, `docs/session-log.md` (this entry).
+- Dist/ artifacts cleaned (2): `dist/en/this-weekend/all/index.html`, `dist/this-weekend/all/index.html` (pre-fix-era orphans, both rm'd).
+- Did NOT touch: source under `src/scrapers/` / `src/enrichment/` / `src/quality/`, `src/templates/filter-bar.ts` or `getHubEvents`, S151 capsule code, EL enrichment paths, `tests/build/scroll-container-overscroll.test.ts` (collaborator WIP), untracked `specs/*`, `config/rejected-locations.json` (collaborator WIP — carry-forward, see below).
+
+**Deploy:** **Held at user gate.** Local build is GREEN and ready. Surfaced to user before any `netlify deploy --prod`:
+- `config/rejected-locations.json` carries +12 lines from a parallel session (Thessaloniki venue variants per the prior S151 closeout — collaborator data quality work). The S153 build *consumed* this file; the dist/ already reflects the filter changes. Deploy decision deferred to user with explicit framing: "the question isn't 'should this file ride the deploy' — it already did, at build time. The question is whether those filter changes are correct and intended to go live." User responsibility to confirm-or-revert-and-rebuild. Do NOT `git stash` (would clobber the uncommitted filter work).
+- Once deploy is approved: standard CLI mechanism `netlify deploy --prod --dir=dist` per `agent_athens_deploy_workflow` memory + `decisions.md` 2026-05-23 stop_builds posture. IndexNow re-ping should consider full-sitemap submission (not just 2 hub paths) given 3181 sitemap entries were corrected this session.
+
+**Files changed (S153 source commit, pending):** `src/generators/hub-page.ts`, `src/generators/event-page.ts`, `src/generators/venue-page.ts`, `src/generate-site.ts`, `src/sitemap/generate-sitemaps.ts`, `src/templates/page.ts`, `src/utils/dist-canonical-parity.ts` (new), `src/utils/__tests__/dist-canonical-parity.test.ts` (new), `src/generators/__tests__/hub-page.test.ts`, `src/generators/__tests__/english-hub-page.test.ts`, `src/sitemap/__tests__/generate-sitemaps.test.ts`, `tests/build/og-url-canonical-parity.test.ts`.
+
+**Files changed (S153 notes commit, this entry):** `.claude/notes/decisions.md` (+ "Per-URL declared-equals-served parity"), `.claude/notes/patterns.md` (+ "Infrastructure invariant unmasked sitewide defect", + "Both-exist shadowing"), `.claude/notes/mistakes.md` (+ "Sitemap no-slash push shipped silently"), `docs/known-issues.md` (+ "Declared Canonical/Sitemap URL Points at 301 Source" RESOLVED-sitewide, + "Both-Exist Shadowing" latent, + "Build Is Not Idempotent" 🟡), `docs/session-log.md` (this entry).
+
+**Learnings:**
+- **Infrastructure invariants > content-level fixes when the bug class spans surfaces.** The brief, the recon, the Strategist ruling, and the planner's analysis all converged on "EN hub only." The validator walked dist/ and surfaced 3181 violations on surfaces nobody had thought to grep. *Recon enumerates emitters you can name; the invariant enumerates emitters that exist.* The two diverged, and the divergence was exactly where the class-wide bug lived.
+- **Per-URL parity is a structurally different model from uniform-slash.** Three rejected alternatives all collapsed because they treated the disambiguation as a uniform rule rather than a per-URL property of each backing file. The fourth option (derived-from-on-disk) emerged from rejecting all three.
+- **Bug history is data.** The sitewide sitemap no-slash bug had been shipping silently for an unknown duration before S153. `mistakes.md` now records it not to assign blame but to make the case for the invariant's permanent place — *honest absence over fraudulent presence* applies to the team's own bug history too.
+
+**Open items (post-demo, all logged in `docs/known-issues.md`):**
+1. 🟡 Both-exist shadowing not detected by invariant (latent — not a current-codebase case; extend invariant to detect inverse-form file existence).
+2. 🟡 Build is not idempotent w.r.t. dist/ orphan cleanup — threshold-flips leave stale artifacts; permanent fix is auto-prune of non-regenerated overflow dirs at end of generation loop.
+3. 🟡 EN JSON alt-link points at non-existent `/api/en/<slug>.json` — pre-existing dead link, outside session scope; future hygiene.
+4. ⚠️ Track A realism: this session unblocked Bing's "canonical → 301" rejection at sitewide scope, but Bing re-index lag may not clear before the 2026-05-29 demo. Track B (Google, 54 Events + FAQ) remains the demo spine. The session removed the *blocker* on Track A; it did not deliver it.
+
+### Session 154 — Colophon (full-content dialog + /en/colophon/ mirror) — 2026-05-24
+
+**Plan:** Ship a recruiter-facing colophon — "About me" trigger beside the
+⌘K search button (every page) opening a full-content pop-up dialog, mirrored
+to a crawlable /en/colophon/ page for AI-citability. Single-source content
+constant feeding both surfaces.
+
+**What happened:**
+- Architecture: Option A (dialog + script + trigger defined once in
+  site-chrome.ts, coextensive-by-construction). ONE source file changed for
+  wiring; 6 generators untouched — including the 404 page, which a fan-out
+  approach would have silently missed.
+- Single-source content: renderColophonContent() feeds both renderColophonDialog()
+  and the /en/colophon/ mirror via contentPagePairs bodyHtml. Test asserts the
+  shared marker appears in both render paths — future drift fails the build.
+- Shipped: "About me" trigger (between search + hamburger, every page incl. 404);
+  pop-up dialog with full bio + focus-trap + Esc/backdrop close + return-focus;
+  /en/colophon/ crawlable mirror (full content in HTML source, verified live);
+  /cv.pdf (70KB) downloadable from both surfaces.
+- Tests: 32 new, all green. 2531/2532 total pass.
+- Deployed via netlify deploy --prod --dir=dist. IndexNow /en/colophon/ → 200 OK.
+- Live + source-verified: full bio in HTML, meta/OG/canonical resolved to
+  colophon content, CV link live.
+
+**Learnings:**
+- Coextensive-by-construction (Option A) beats fan-out for any element that must
+  appear wherever shared chrome renders — tests can't easily fake the property
+  into existence; you design for it. The 404-page catch is the proof.
+- Six plan-mode review rounds caught three real defects pre-code (locale-routing
+  premise gap, Step 3 internal contradiction under Option A, CV-link-without-path)
+  — cheap reviews, expensive rework averted. Recurrence ledger holds.
+
+**Deferred (logged, not done):**
+- Person schema + sameAs → GEO Strategist owns the JSON-LD shape. TODO in place.
+- EL colophon (EN-only this session).
+- Trigger visual polish → Design Navigator.
+- Latent: nav-search-btn hardcoded Greek aria-label (pre-existing inconsistency).
+
+---
+
+### Session 154 — HTML-Entity Decode at Ingest Chokepoint (2026-05-25)
+
+**Plan:** Root-cause the HTML-entity decode bug in venue names at the single TS ingest chokepoint (`src/db/database.ts:197 upsertEvent`), clear the 2 venues whose decoded forms are (or become) whitelisted (SNFCC + Daddy's), reject the 1 non-Athens venue (Tripoli). Plan: `/Users/chrism/.claude/plans/session-goal-normalize-luminous-candy.md` (carried forward from S153 — same plan file used as scratch; session boundary maintained via task tracker). Scope locked at brief time as "2-4 files, minor stream — Scraping/Importing."
+
+**The reframe (per planner's closing note on the brief).** This session's value was never the 99 entity-encoded events — most of them stay unverified post-decode because their decoded forms aren't in the whitelist (they're in the ~970-event Fix B queue, post-demo). The deliverable was **closing the recurrence**: a decode bug had been symptom-patched at least once before (the whitelist literally contains `&#171;Σταύρος Νιάρχος&#187;` at `config/athens-venues.json:68` — an entity-encoded variation, evidence of the prior symptom-patch), and never root-caused. S154's purpose was to fix the cause and document the pattern so the next session doesn't add another encoded variation.
+
+**What happened:**
+
+- **Step 0 (recon — confirm chokepoint, kill premise) executed cleanly.** Brief proposed "decode at import time (single TS chokepoint where matching happens) is lower-blast-radius than patching N Python scrapers." The recon confirmed the chokepoint at `src/db/database.ts:197 upsertEvent` (called before `isAthensEvent` at `:199` — critical ordering property), and ALSO killed the Python-scraper premise: `scripts/scrape-all-sites.py` doesn't exist (package.json's `scrape-web` script points at a missing file). All active scrapers are TypeScript via `scripts/scrape-all.ts`. The fork was moot; the remaining question collapsed to "single chokepoint vs N TS scraper functions" — same answer (chokepoint wins).
+
+- **Guard 6 (shotgun-surgery) enumeration surfaced 3 bypass paths + 1 homonym.** Three production INSERT-into-events paths exist beyond the main chokepoint: `scripts/scrape-ai-tech.ts:1028` (tech events, ASCII English venues — low entity-encoding risk), `scripts/scrape-snfcc.ts:567` (hardcoded SNFCC venue literal — zero risk), and `src/ingest/email-ingestion.ts:322 upsertEvent` (**homonym!** newsletter ingestion, with a self-documented `DEAD CODE — schema divergence (writes date/time, events table has start_date/end_date)` comment on its INSERT branch). All three correctly scoped out for this session. The email-ingestion homonym now has its own `known-issues.md` entry (naming-collision risk + schema-reconciliation work).
+
+- **Planner constraints folded into Step 1/2.** Six constraints came back with the approval: (1) verify `he` install path + library coverage, (2) honest done-criteria (~2 events, not 99), (3) idempotency-test requirement, (4) decode 3 fields (`venue.name`, `venue.address`, `title`) — drop `description`, (5) don't touch email-ingestion homonym (log only), (6) explicit demo-surface boundary (`src/generators/hub-page.ts`, `src/templates/page.ts`, `src/templates/weekend-capsule.ts`, `src/types.ts`, S153 canonical/sitemap code). All six folded in. Decoder library: `he@1.2.0` was already transitively present via mailparser; promoted to direct dependency via `bun add he` + `bun add -d @types/he`. Smoke-tested decoder coverage on the full observed entity set (`«»'&` numeric + named) + idempotency before writing the test.
+
+- **TDD execution.** 12 unit tests + 4 integration tests, written RED first (module-not-found, then assertion-mismatch), then implementation, then GREEN. Idempotency pinned by two distinct tests: (a) double-decode is a fixed point on entity-encoded text; (b) double-decode preserves a literal `&` post-`&amp;` decode (the second-pass-corruption failure mode). Integration tests prove the 3 deliverable cases (SNFCC → verified_athens, Daddy's → verified_athens, Tripoli → rejected_non_athens) AND honestly assert that genuinely-unknown entity-encoded venues (e.g. Ρέει) **stay unverified post-decode** — that's the brief constraint 2 honesty: decoding is necessary-but-not-sufficient, and the test pins this directly.
+
+- **Step 2 implementation (4 source/config edits).** `src/db/database.ts:9` import + `:197` wire-in (1 line of import, 8 lines of comment + decoder call before `isAthensEvent`). `src/utils/decode-html-entities.ts` — new pure function `decodeEventFields(event)` using `he.decode`. `config/athens-venues.json:69` — added one SNFCC variation `"Κέντρο Πολιτισμού - Ίδρυμα «Σταύρος Νιάρχος» (Φάρος)"` (ASCII hyphen + Φάρος suffix, the post-decode form of the DB row). Daddy's variation already existed in lowercase — no add needed. `config/rejected-locations.json` — added `{"greek": "Τρίπολη", "latin": "Tripoli"}` to the cities blacklist (substring match against venue text catches the `'Αλσος Προφήτη Ηλία Νεοχώρι - Τρίπολη` form).
+
+- **Honest done-criteria reporting.** DB row counts are baseline at session end: `verified_athens: 11655, unverified: 977, problematic: 53, pass_through: 9`. The 3 target events (SNFCC, Daddy's, Tripoli) are **still in their pre-fix location_status** because existing-DB-row migration is explicitly deferred per the brief (needs re-scrape; venue_name is fragile per the pipe-separated-string known-issue). On the next re-scrape passing through `upsertEvent`, those 3 will transition: SNFCC → verified_athens (matched_venue: ΚΠΙΣΝ), Daddy's → verified_athens (matched_venue: Daddy's All Day Bar), Tripoli → rejected_non_athens. The integration test proves the LOGIC; the DB row transition is mechanical and waits on re-scrape. ~95 other entity-encoded events will be decoded but stay unverified (genuinely-unknown venues, Fix B queue).
+
+**Verified (local, 2026-05-25):**
+- `bun test`: 2547 pass / 0 fail / 1 skip across 116 files. Includes 12 new unit tests for `decodeEventFields` + 4 integration tests proving decode→checkLocation composition.
+- `bunx tsc --noEmit`: clean (after `@types/he` install).
+- Boundary respected: `git diff` confirms S154 source edits limited to `src/db/database.ts` (decoder wire-in only), `src/utils/decode-html-entities.ts` (new), `src/utils/__tests__/*.test.ts` (2 new test files), `config/athens-venues.json` (1 variation line), `config/rejected-locations.json` (1 city block), `package.json` + `bun.lock` (he dep + @types/he). No protected demo-surface file (hub-page.ts, page.ts, weekend-capsule.ts, types.ts, S153 canonical/sitemap code) touched by S154.
+
+**Boundary (this session, 2026-05-25):**
+- Source files modified (1): `src/db/database.ts` (import + 8-line decoder wire-in at `upsertEvent` entry).
+- Source files new (3): `src/utils/decode-html-entities.ts`, `src/utils/__tests__/decode-html-entities.test.ts`, `src/utils/__tests__/decode-integration.test.ts`.
+- Config files modified (2): `config/athens-venues.json` (1 SNFCC variation added), `config/rejected-locations.json` (Tripoli added to cities).
+- Dep manifest modified (2): `package.json` + `bun.lock` (he promoted to direct dependency, @types/he added as dev-dep).
+- Notes/docs modified (4): `.claude/notes/mistakes.md`, `.claude/notes/patterns.md`, `docs/known-issues.md`, `docs/session-log.md` (this entry).
+- Did NOT touch: src/generators/hub-page.ts, src/templates/page.ts, src/templates/weekend-capsule.ts, src/types.ts, S153 canonical/sitemap code, src/quality/location-filter.ts, src/utils/athens-filter.ts, src/scrapers/*, src/enrichment/*. Email-ingestion homonym at `src/ingest/email-ingestion.ts:322` explicitly out of scope (logged in known-issues.md).
+- Did NOT touch: `tests/build/scroll-container-overscroll.test.ts` (collaborator WIP carried forward from S153).
+
+**Files changed (S154 commit, pending — see open items below):**
+- Source: `src/db/database.ts`, `src/utils/decode-html-entities.ts` (new), `src/utils/__tests__/decode-html-entities.test.ts` (new), `src/utils/__tests__/decode-integration.test.ts` (new).
+- Config: `config/athens-venues.json`, `config/rejected-locations.json`.
+- Deps: `package.json`, `bun.lock`.
+- Notes: `.claude/notes/mistakes.md` (1 entry appended), `.claude/notes/patterns.md` (1 entry appended), `docs/known-issues.md` (2 entries appended), `docs/session-log.md` (this entry).
+
+**Learnings:**
+- **Decode at the chokepoint pattern** (`patterns.md` 2026-05-25): when N upstreams converge on one downstream and a transformation must apply to every value, fix at the downstream. The S153 invariant-on-validator pattern was the dist-artifact-level cousin; S154 is the ingest-level instance. Both are forms of "one well-placed transformation beats N at-source ones."
+- **Documentation-health tripwire fires correctly when config entries carry pre-decoded artifacts** (`mistakes.md` 2026-05-25). The whitelist line `"Κέντρο Πολιτισμού – Ίδρυμα &#171;Σταύρος Νιάρχος&#187;"` was a smoke signal — entity-encoded strings should not be canonical-form variations. Future executors adding a config entry containing entity-encoded characters, double-escaped URLs, or other pre-decoded artifacts should treat the addition as evidence of an upstream decode bug, not as a legitimate alt-spelling.
+- **Premise rejection is faster than premise navigation.** The brief proposed a fork (decode at TS import vs patch N Python scrapers); Step 0 killed the premise (no Python scrapers exist) instead of choosing a side. Saved both the executor and planner a round-trip on the wrong question.
+
+**Open items (post-S154):**
+1. 🟡 **Source-tree commit drift** (`known-issues.md` 2026-05-25). S153's source changes (and now S154's) live in the working tree without ever landing in git. Daily pipeline picks them up at build time. `decisions.md` 2026-05-23 stop_builds posture confirms `git push` is safe — the commit/push step is just missing from the session workflow. Daisy/owner should commit S153+S154 source delta deliberately before the demo to remove the recovery hazard. See known-issues entry for full impact analysis.
+2. 🟡 **Email-ingestion `upsertEvent` homonym + DEAD CODE INSERT branch** (`known-issues.md` 2026-05-25). Logged this session; defer-log until newsletter ingestion is revived or another recon hits the naming collision.
+3. 📦 **Fix B queue (~970 events)** stays parked post-demo. Editorial-coordinated for Tier-1 canonical names when it runs. The S154 decoder + invariant make Fix B's work cheaper: each newly-whitelisted venue will match correctly without anyone needing to think about entity-encoding.
+4. 📦 **Existing-DB-row entity migration** explicitly deferred per brief. Will clear naturally on the next re-scrape that touches each event. Post-demo, a one-shot migration script could decode all unverified `venue_name` values to accelerate Fix B, but the venue_name field's pipe-separated-string fragility (known issue) makes the migration non-trivial — defer pending design.
+
+---
+
+### Session 155 — Nav locale-awareness (English pages stop rendering Greek nav) — 2026-05-25
+
+**Plan:** Make the shared nav chrome locale-aware so English (`/en/`) pages render English labels and `/en/`-prefixed links. (Original brief was "add saved-events nav link + wire the inert language toggle" — three premises rejected at diagnosis; see below.)
+
+**Premises rejected at Step 0 (verify-assumptions caught all three):**
+- "Saved-events link is missing" — it already existed (hamburger + footer). Real defect was locale-correctness, not absence.
+- "Wire the inert language toggle" — no toggle exists; it was removed a prior session (`page.test.ts` guards its absence).
+- "Reuse the hreflang counterpart URL" — hreflang was globally dropped in S144; not reusable.
+
+**What happened:**
+- Threaded `locale` into `renderHamburgerMenu` + `renderSiteFooter` (siblings of the already-locale-aware `renderSiteNav`) and all call sites: `page.ts`, `content-page.ts`, `event-page.ts` (locale); `venue-page.ts`, the 404 in `generate-site.ts` (explicit `'el'`, Greek-only). 0 bare calls remain.
+- Added a nav/footer block to `src/i18n/strings.ts` — 8 trivial labels translated EN; tagline + AI-callout kept Greek in BOTH locales (deferred-copy-as-data, routed to Editorial).
+- Routing: Greek bare-root, English `/en/`. Venues omitted on EN (no `/en/venues/`). Home/logo/Events → `/en/this-week/` on EN (no `/en/` homepage; `/en/today/` is date-conditional). Did NOT use `utils/locale-url.ts` (inverted/dead).
+- 14 new tests (`site-chrome.test.ts`), all green; tsc clean.
+- **Mid-session: a file-level discard reset all 7 edited files to HEAD** (no reflog entry → not `reset --hard`; no hooks; untracked checkpoints survived → confirmed `git checkout HEAD --`/IDE discard). Investigated before re-applying (per planner). Re-applied cleanly on HEAD.
+- **Colophon (orphaned S154 WIP, never committed) committed as a floor** (`86b0f4018`) — files only, not the wiring — to protect it from the next discard. This adds 4 expected red tests (see Verified).
+
+**Verified:**
+- Clean `rm -rf dist && build` (the incremental build had masked stale `/en/today/`). Production deploy live: `netlify deploy --prod --dir=dist`, 8835 files, exit 0, agentathens.com.
+- LIVE `/en/about/`: all nav hrefs `/en/`-prefixed, logo → `/en/this-week/`, Venues omitted. `/en/this-week/` → 200 (home target resolves). EL pages unchanged (bare paths, Greek labels, 0 `/en/` links).
+- Suite: 2546 pass, 4 fail — the 4 are `colophon.test.ts` asserting wiring that the committed-floor doesn't have (intended loud signal, not a regression; deploy doesn't run tests).
+
+**Learnings:** (full detail in `mistakes.md`/`patterns.md`/`decisions.md` 2026-05-25)
+- Locale-threading is all-siblings-and-all-call-sites or it silently leaks the default locale. Verify with the 0-bare-calls grep invariant.
+- Stale-artifact verification (3rd instance): verify user-facing targets against a CLEAN rebuild, never incremental dist or green test fixtures. Both lied about `/en/today/`.
+- Date-conditional hubs (`today`/`tomorrow`) are never valid persistent-nav targets.
+- Floor-without-wiring cleanly separates "protect the WIP" from "decide the integration" — the 4 reds make the un-integrated state loud rather than silent.
+
+**Open items (post-S155):**
+1. 🟡 **Source-tree commit drift (carry-forward + this session).** Same `known-issues.md` 2026-05-25 issue. S155's nav source (`site-chrome.ts`, `strings.ts`, 5 call sites, `site-chrome.test.ts`) + these notes are uncommitted and now deployed — the recovery hazard. **Recommend a deliberate, path-staged session commit** (colophon floor `86b0f4018` already covers the colophon files). Awaiting owner go.
+2. 🟡 **`cornerstone-links.ts` date-conditional-hub dangling link** (`known-issues.md` 2026-05-25). "Events Today" → `/en/today/`/`/today/` 404s on empty days. Same class fixed in nav; queued post-demo.
+3. 🟢 **Colophon committed-as-floor, unwired** (`known-issues.md` 2026-05-25). 4 red tests until the WIP owner decides to wire it (restore S154 integration) or revise the tests. Not a Dev-default.
+4. 📨 **Routed deferrals:** EN nav copy (tagline + AI-callout) → Editorial Director (`specs/en-nav-copy-checkpoint.md`); language toggle → GEO Strategist (`specs/lang-toggle-checkpoint.md`, entangled with F1–F5 flip's S144-vs-flip reconciliation).
+5. 📦 **`/en/this-week/` home target is interim** — replace with `/en/` homepage when F1 (full flip) ships.

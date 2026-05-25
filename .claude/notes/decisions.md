@@ -4245,3 +4245,90 @@ The trifecta (`.edp-save-btn` + `.edp-share-btn` + `.edp-calendar-btn` baseline 
   - 🟡 EN-hub H1 localization: `buildPageTitle` Greek-only `formatTimeRange` makes every EN hub except `/en/this-weekend` render a Greek H1. Fix = thread `locale` into `buildPageTitle` + add English map.
   - 🟢 GEO locality follow-on: verify "central Athens" actually holds across the live weekend venue set (SNFCC is Kallithea, Gazarte is Gazi-central, Half Note is Mets-central). If frequently false, swap to `"Athens"` or `"the Attica region"`.
   - 🟢 D3 `city_descriptor` config home: pick between `config/site.json` and extending `schema-geo` `ORG_*` constants. Const carries correct value pending decision.
+
+## 2026-05-23 — Netlify deploy posture: stop_builds: true (push ≠ deploy)
+
+**Decision/Finding:** Netlify site has `stop_builds: true` active. `git push origin main` syncs origin but does NOT trigger a build or deploy. Verified empirically during S146 push (commits cb89d3795 + 20f095bd9): push landed on GitHub, no rebuild fired, production stayed on CLI deploy 6a116ed069fad73d0ced9d6f, Megaron @id and /venues// collision count unchanged.
+
+**Supersedes:** The push-vs-deploy deferral reasoning in the 2026-05-22 closeout, which deferred `git push` out of concern that git-connected Netlify would auto-publish a fresh build on push. That scenario is prevented by the current config — the deferral was guarding against a state that isn't live.
+
+**Standing rule:**
+- `git push origin main` is safe to sync origin freely WHILE `stop_builds: true` holds.
+- Deploy mechanism remains `netlify deploy --prod --no-build --dir=dist` (CLI-only). This is unchanged and still correct — `--no-build` uploads the locally-tested dist/ exactly; it is the deploy *mechanism*, not a guard against push-deploys (push can't deploy while stop_builds holds).
+- ⚠️ CONDITIONAL: This safety is tied to the toggle. If `stop_builds` is ever flipped to start builds, push-triggered auto-deploy returns and this note is STALE. Re-verify the toggle state before assuming push is deploy-safe. Do not treat "push is safe" as unconditional.
+
+**Matches existing memory:** `agent-athens-deploy-workflow — CLI-only deploys; git push does NOT auto-deploy`. This entry adds the *why* (stop_builds) and the staleness condition.
+
+## 2026-05-23 — Per-URL declared-equals-served parity (NOT uniform slash)
+
+**Decision/Finding:** Every page's declared canonical / `og:url` / JSON-LD `url` / sitemap `<loc>` / IndexNow URL MUST equal its 200-served form on Netlify, **per URL** — NOT uniform. Different locales emit different on-disk layouts:
+- EN hubs → `dist/en/<slug>/index.html` → served at `/en/<slug>/` (Netlify Pretty URLs directory) → declared form MUST end in `/`
+- EL hubs → `dist/<slug>.html` → served at `/<slug>` (flat-file Pretty URLs) → declared form MUST NOT end in `/`
+- Same applies to events (`/events/<slug>/`), venues (`/venues/<slug>/`), content (`/about/`) — all directory layout → all slash
+- Category & filter pages → flat-file layout → no slash
+
+A uniform "every canonical ends in `/`" rule was explicitly rejected — it would red-build the EL flat-file surfaces which are *correctly* serving no-slash. Parity is per-URL.
+
+**Why:** Bing's URL Inspection rejects "canonical points at a redirect" — the page declares one form, Netlify serves a 301 from that form to another, indexing refused. Pre-S153, EN hubs declared `/en/this-weekend` which 301'd to `/en/this-weekend/`. The invariant unmasked the same bug-class on 3146 event sitemap entries + 35 venue sitemap entries — every directory-served page was being declared in the sitemap as the 301-source form.
+
+**Standing rule:**
+- New page surfaces: if the backing file is `dist/PATH/index.html`, declared form is `/PATH/`; if `dist/PATH.html`, declared form is `/PATH`. If `dist/index.html`, declared form is `/`.
+- `dist-canonical-parity` invariant at `src/utils/dist-canonical-parity.ts` enforces this at build time (Tier 1 build-fail). It walks `dist/` and validates every `<link rel="canonical">` and every `<loc>` against the on-disk layout.
+- The invariant is **unconditional** — no allowlists, no exception lists. Special files (sitemap-*.xml, llms.txt, robots.txt) are excluded by *not being canonical-bearing* (they don't enter the input loop), not by exception. `sitemap-index.xml` is excluded because it references other sitemap files, not pages.
+
+**Rejected alternatives:**
+- Uniform-slash rule (Option 1): false-positives on EL flat-file surfaces.
+- Parse `_redirects` to model Netlify behavior (Option 2): `_redirects` holds explicit redirects, not implicit directory→slash 301s. Wrong target plus circular.
+- Network probe (Option 3): violates synthetic-only constraint.
+- Skip noindex pages from invariant: hole-punch in the one tool whose value is having no holes.
+
+**Latent gaps (documented, intentionally not closed this session):**
+- 🟡 Both-exist shadowing: validator passes if backing file exists, but a co-existing flat file `dist/PATH.html` can still win over `dist/PATH/index.html` in Netlify's disambiguation, 301'ing `/PATH/` → `/PATH`. Not a current-codebase case. See `src/utils/dist-canonical-parity.ts` LATENT comment + `patterns.md`.
+- 🟡 Build idempotency on `dist/`: orphan files from prior builds (when thresholds change, e.g. overflow page below HUB_EVENT_LIMIT) persist with stale canonical forms. Manual `rm` cleaned the S153 pre-fix-era orphan; permanent fix queued post-demo via auto-prune of non-regenerated overflow dirs (rejected this session as scope expansion).
+
+**Cross-references:**
+- `patterns.md` → 2026-05-23 "Infrastructure invariant unmasked sitewide defect" (the discovery pattern)
+- `mistakes.md` → 2026-05-23 "Sitemap no-slash push shipped silently" (the latent bug class)
+- `docs/known-issues.md` → "declared canonical points at 301 source" (now RESOLVED at sitewide scope)
+- Existing memory `agent_athens_deploy_workflow.md`: per-URL parity does not change the deploy mechanism (still `netlify deploy --prod --dir=dist`); IndexNow re-submission for class-wide fixes should consider full-sitemap ping vs targeted-paths ping.
+
+### Colophon emit strategy (S154, 2026-05-24)
+
+**Decision/Finding:**
+
+1. **Locale.** Colophon ships EN-only at `/en/colophon/`, registered as an `enOnly: true` entry in `contentPagePairs` (mirrors the `proof` precedent). No `/colophon/` at root. Rationale: site convention is "English content lives under `/en/`." A bare-root colophon would be the only convention-breaker, complicating sitemap / canonical / future hreflang logic for marginal share-URL gain.
+
+2. **Render coextensiveness.** Colophon dialog lives inside `site-chrome.ts` (Option A, see `patterns.md` "Coextensive-chrome pattern"). NOT fanned out across the 5 generators. Includes the 404 page automatically (which already consumes `renderSiteNav` + `renderSearchOverlay`).
+
+3. **Single source of content.** `src/templates/colophon.ts` exports `renderColophonContent()` (and the shared `COLOPHON_CONTENT` constant). The dialog AND the `/en/colophon/` mirror page consume this same function — no drift possible. The "over 3,800 static pages" figure has exactly one definition.
+
+4. **Schema.** Mirror page emits standard `AboutPage` JSON-LD (existing content-page.ts template). **Person schema with `sameAs` → GitHub/LinkedIn is DEFERRED to a GEO Strategist pass.** TODO comment inline at the `contentPagePairs` entry in `generate-site.ts`. The JSON-LD shape (Person vs AboutPage with creator nesting, properties to include) is a Strategist call, not a Dev-Planner call.
+
+5. **Progressive enhancement.** Trigger renders as a `<button>` with `data-colophon-href="/en/colophon/"` and a `<noscript>` fallback `<a href="/en/colophon/">` immediately after. JS off → button hidden by `.colophon-trigger-noscript { display: none }` default flip via the noscript wrapper, fallback link shown. Button never dead — clicking it (JS on) opens the dialog, with-JS-off users see the link to the mirror page.
+
+6. **CV asset path.** PDF dropped at `static/root-files/cv.pdf`, auto-copied to `dist/cv.pdf` by the existing `copyStaticRootFiles()` function in `generate-site.ts`. `cv.pdf` is not in the RESERVED-names set; no special build wiring needed. Link href is `/cv.pdf`. Rationale: matches the existing static-asset convention (favicons, robots.txt, etc.). Build fails (well, ships dead-link) only if the file is removed from `static/root-files/` before a build — the dialog's "Download CV" link is in `COLOPHON_CONTENT`, not gated on file existence. Stale-cv risk is low (the file is checked in, not regenerated).
+
+**Why this matters:** the recruiter-facing surface needs to be permanent, AI-citable, and impossible to silently drift. Three properties are now structurally enforced — locale convention, content single-sourcing, build-time fan-out — rather than relying on convention.
+
+**Standing rule:** future single-locale content pages follow the `enOnly: true` pattern. Future site-wide UI features (announcement banners, etc.) default to Option A coextensiveness; reach for fan-out only when the weight is large enough to justify per-generator opt-in.
+
+**Cross-references:**
+- `patterns.md` → 2026-05-24 "Coextensive-chrome pattern" (the architectural rule)
+- `src/templates/colophon.ts` (the implementation; single source of `COLOPHON_CONTENT`)
+- `src/generate-site.ts` contentPagePairs entry for `colophon` (the mirror-page registration; carries the deferred Person-schema TODO)
+
+### Nav locale routing — interim EN home, Venues-omit, deferred-copy-as-data (S155, 2026-05-25)
+
+Decisions made while making `site-chrome.ts` nav locale-aware:
+
+1. **Routing source of truth = `locale === 'en' ? '/en' : ''`** (Greek bare-root, English `/en/`), matching `event-page.ts` + the dist tree. **Explicitly NOT `utils/locale-url.ts`** — that helper inverts the convention (abandoned English-first posture) and is import-dead; left in place (out of scope to delete) but flagged in `mistakes.md`.
+
+2. **English home/logo/"Events" → `/en/this-week/` (interim).** There is no `/en/` homepage and `/en/today/` is date-conditional (404s on empty days). `/en/this-week/` is the most homepage-like evergreen hub that always builds. **This is a placeholder until the `/en/` homepage ships (F1, post-demo flip)** — coded with an inline comment so it's revisited, not fossilized. Greek home unchanged → `/`.
+
+3. **Venues omitted from English nav.** No `/en/venues/` is generated. Rather than 404 or route an English label to Greek `/venues/` (the GEO "no Greek-under-English-label" rule), the Venues `<li>` is conditionally dropped when `locale === 'en'`. Re-add when `/en/venues/` exists. Same hide-where-no-counterpart rule the deferred language toggle would need.
+
+4. **Deferred copy encoded as data, not a code branch.** The footer tagline + AI-callout are voice-sensitive (Editorial Director's domain). Rather than invent English copy, the Greek value is stored in BOTH `STRINGS.el` and `STRINGS.en` for those three keys, so the template reads `STRINGS[locale]` uniformly. Unblocking = a one-line `STRINGS.en` edit when Editorial returns copy (`specs/en-nav-copy-checkpoint.md`). The 8 dictionary-trivial labels (Events, Venues, About, Search, Editorial, Corrections, Explore, For AI Agents) + aria labels were translated directly.
+
+5. **Language toggle: not rebuilt.** Removed a prior session; hreflang counterparts dropped in S144; rebuilding would recompute slug→URL (forbidden) and collide with the S144 GEO ruling. Routed to GEO Strategist as a decision, not queued as Dev (`specs/lang-toggle-checkpoint.md`). Entangled with the F1–F5 flip's GEO-vs-S144 reconciliation.
+
+**Cross-references:** `mistakes.md` + `patterns.md` 2026-05-25 (same session); `src/templates/site-chrome.ts`; `src/i18n/strings.ts` (nav block); `specs/en-nav-copy-checkpoint.md`, `specs/lang-toggle-checkpoint.md`.

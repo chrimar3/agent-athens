@@ -5202,3 +5202,93 @@ Adding a new `html.replace('<h1>...', ...)` splice for the H1 would have been fa
 **The broader `buildPageTitle` localization gap is queued as a known-issue, not fixed here.** Every EN hub except `/en/this-weekend` (now patched via `h1Override`) renders a Greek H1 because `formatTimeRange` in `src/utils/urls.ts:22` only has Greek values. Full fix = thread `locale` into `buildPageTitle` and add an English map — larger blast radius (every EN hub).
 
 **Connects to:** `decisions.md` → 2026-05-23 "Weekend capsule architecture" (calls out h1Override as the minimal-patch decision); `patterns.md` → 2026-05-19 Path-D anchoring (the deprecated `html.replace` pattern this entry's choice avoided).
+
+### Infrastructure invariant unmasked sitewide defect — canonical-must-be-200 (S153, 2026-05-23)
+
+**The discovery.** S153's brief was scoped to **one URL** (`/en/this-weekend`): canonical declared the no-slash form, Netlify served a 301 to the slash form, Bing refused to index. Fix the cornerstone, unblock the Perplexity-via-Bing demo bet. Step 0 verification confirmed event pages and venue pages already emitted slash-form *canonical in HTML* (`event-page.ts:437`, `venue-page.ts:201`), so scope locked to "hub-only + sitemap + IndexNow normalization."
+
+When the new `dist-canonical-parity` invariant was wired into `generate-site.ts` after `generateSplitSitemaps`, it red-built on **3181 violations**: 3146 event sitemap entries + 35 venue sitemap entries, all directory-served pages declared in the *sitemap* as the no-slash 301-source form. The canonical-in-HTML was already correct (Step 0 verified); the **sitemap inflow** was wrong everywhere. `event-page.ts:841` pushed `events/${slug}` (no slash), `venue-page.ts:362` pushed `venues/${venue.slug}` (no slash) — both pages serve at directory layout (`dist/events/${slug}/index.html`, `dist/venues/${slug}/index.html`), so the sitemap was declaring 3181 URL forms that Netlify 301s. Bing was being told "canonical → 301" for essentially the entire site, not just the cornerstone.
+
+**The pattern.** **Content-level fixes catch one URL; infrastructure-level invariants catch the class.** The brief, the recon agents, the GEO Strategist's ruling, and the planner's analysis all converged on "EN hub only — event/venue pages are clean." Three rounds of human verification all missed the sitemap-inflow path because the bug was on a *different surface* than the one being investigated (sitemap loc, not canonical HTML). Only the unconditional, walks-every-file validator surfaced it.
+
+**Why this works structurally.** The invariant doesn't care about *which* surface emits the URL — it walks `dist/`, extracts every declared canonical from HTML and every `<loc>` from sitemaps, and asserts the declared form matches the backing file's on-disk layout. Whether the wrong form came from hub-page.ts, event-page.ts, venue-page.ts, or a future emitter not yet written, the validator catches it. The bug class is *declared ≠ served*; the invariant codifies the class, not any particular instance.
+
+**Why the brief missed it.** Step 0 grep was `grep -rn "canonical\|og:url" src/generators/event-page.ts src/generators/*sitemap*` — focused on the *canonical/og:url* axis. Event canonical was slash; verdict "clean." But the *sitemap inflow* (where event URLs become sitemap `<loc>`s) lives in `generate-site.ts:598 generatedUrls.push(...eventPageUrls)` and the upstream `urls.push(urlPath)` at `event-page.ts:871` — none matched the Step 0 grep pattern. Pattern-recognition-by-keyword cannot enumerate every emitter; only walking the artifact (dist/) can.
+
+**Standing rule.** When fixing a URL-form bug, write the **build invariant first**, let it red-build, then fix what it surfaces. Don't pre-scope the blast radius from recon alone — recon enumerates the emitters you can name, the invariant enumerates the emitters that *exist*. The two diverge.
+
+**Cousin patterns:**
+- Schema validator (Tier 1 in `.claude/CLAUDE.md`) is the same shape on a different axis (JSON-LD field completeness). Both walk every page; both fail the build on any violation; both have no allowlist.
+- Pattern T (recon-frame vs. consumer-shape, 2026-05-23 weekend-capsule entry) is the *instance* version of this same drift class: recon spoke about "raw rows" but the consumer was typed `Event[]`. Here recon spoke about "canonical" but the latent surface was "sitemap loc."
+
+**Connects to:** `decisions.md` → 2026-05-23 "Per-URL declared-equals-served parity" (the rule the invariant codifies); `mistakes.md` → 2026-05-23 "Sitemap no-slash push shipped silently for unknown duration" (the latent bug history this caught); existing memory `feedback_verify_paths_in_briefs.md` series (the executor-side discipline — the invariant is the build-side counterpart).
+
+### Both-exist shadowing — Netlify Pretty URLs disambiguation (S153, 2026-05-23)
+
+When both `dist/PATH/index.html` AND `dist/PATH.html` exist on disk, **Netlify serves the flat-file at `/PATH` (200) and 301s `/PATH/` → `/PATH`** — flat file wins. Empirically confirmed during S153 probes: `dist/this-weekend.html` and `dist/this-weekend/all/index.html` both exist; `curl https://agentathens.com/this-weekend` → 200, `curl https://agentathens.com/this-weekend/` → 301.
+
+The `dist-canonical-parity` invariant does NOT detect this case. It checks whether the *expected* backing file exists, not whether a *shadowing* file wins over it. If a future page declares `/PATH/` while a `dist/PATH.html` shadow exists, the validator passes (PATH/index.html exists), but Netlify will 301 `/PATH/` → `/PATH`. Same bug class the invariant was built to catch, latent in the edge case.
+
+**Not a current-codebase case.** No EN hub or directory-served surface has a shadowing flat file today (the EN-side and EL-side use disjoint path namespaces — EN under `dist/en/`, EL at `dist/` root). The class is latent, documented in `dist-canonical-parity.ts` with a `// LATENT:` inline comment.
+
+**Mitigation paths (post-demo, not closed):**
+- Extend the invariant to also check for inverse-form file existence and fail when both forms exist.
+- Build-time prune: enforce mutual exclusion at write time (last-writer-wins detection in `writeHtmlIfChangedSync`).
+
+**Connects to:** `decisions.md` → 2026-05-23 "Per-URL declared-equals-served parity" (Latent gaps section); `dist-canonical-parity.ts` source LATENT comment.
+
+### Coextensive-chrome pattern — feature lives where the nav lives (S154, 2026-05-24)
+
+**Context.** Adding a feature (the colophon "About me" dialog) that must reach every page in the site, including the 404. Two architectural options:
+
+- **Option B (fan-out):** identify every generator that emits a page (5 in this codebase: page.ts, content-page.ts, event-page.ts, venue-page.ts ×2 sites), import the new feature into each, and call it at each injection point. Cheaper if the feature is heavy and only some pages should pay the weight.
+- **Option A (coextensive):** put the feature inside `src/templates/site-chrome.ts` itself, riding with the existing `renderSiteNav` and `renderHamburgerScript` returns. The fan-out happens by construction — every caller of site-chrome (6 in this codebase, including the 404 page) gets the feature automatically.
+
+**Standing rule.** When a feature must reach *every* nav-bearing page and the weight is small, default to Option A. The "single edit, automatic fan-out" property is structurally stronger than "five edits, manually maintained list" — the latter has a hidden assumption (the set of generators is closed) that the former does not. New page types added later automatically inherit. Test exists at `src/templates/__tests__/colophon.test.ts` asserting `renderSiteNav()` output contains both the trigger and the dialog markers; if a future refactor accidentally pulls the dialog out of site-chrome, the test red-builds before deploy.
+
+**Why this beats the obvious "renderColophonChrome() called by every caller" sibling.** That sibling looks like Option A but is actually Option B in disguise — it requires every generator to opt-in. The genuine Option A appends to `renderSiteNav`'s and `renderHamburgerScript`'s return values, so callers don't change at all and the coextensiveness is enforced by string concatenation, not by convention.
+
+**Concrete shape used this session:**
+- Trigger HTML inserts inline inside `renderSiteNav()` between the search button and the hamburger button.
+- Dialog markup appends to `renderSiteNav()`'s return string after `</header>` (sibling of the header, in body).
+- Behavior script appends to `renderHamburgerScript()`'s return string after its own `</script>` (two adjacent script tags, end of body).
+- Net edits: one file (`site-chrome.ts`), four edits inside it (import, trigger insert, dialog append, script append). Six generators unchanged.
+
+**Cousin pattern (single-source content fanning to multiple surfaces):** `src/templates/colophon.ts` exports one `renderColophonContent()` consumed by BOTH the dialog (via `renderColophonDialog()`) AND the mirror page (via `contentPagePairs` entry in `generate-site.ts`). Editing the "over 3,800 static pages" figure once updates the dialog on every page AND the `/en/colophon/` page atomically — no drift possible. Tests assert the floor-claim marker appears in both render paths.
+
+**Connects to:** `decisions.md` 2026-05-24 "Colophon emit strategy"; `src/templates/colophon.ts` source.
+
+### Decode at the chokepoint, not at every entry (S154, 2026-05-25)
+
+**The pattern.** When a transformation must apply to every value of a class (every venue name, every URL, every monetary amount), there are two valid placements: at every entry where the value originates (N scrapers, N importers), or at the next downstream chokepoint they all flow through (1 ingest function, 1 normalizer, 1 DB insert path). The chokepoint placement is almost always lower-blast-radius — *unless* there are multiple chokepoints, in which case Guard 6 forces an honest count.
+
+**S154 instance.** Eight TypeScript scraper functions in `scripts/scrape-all.ts` (more.com, athinorama.gr, clubber.gr, ticketservices.gr, halfnote.gr, residentadvisor, snfcc internal, plus benaki/onassis/megaron via their own helpers) all converge on `src/db/database.ts:197 upsertEvent` as their write path. Decoding HTML entities at the upsertEvent entry — one function, one edit, one comment block — covers all 8+ scrapers transitively. The alternative (8+ per-scraper decoders) would have been 8× the surface, 8× the test coverage, and 8× the risk of a future scraper forgetting to call the decoder.
+
+**Why this beat the obvious alternative.** The naive "fix it at the scraper" instinct comes from the principle "fix bugs at their source." That principle applies when there's *one source*. When there are N sources sharing one downstream — and the downstream is the ground truth (the DB) — fix at the downstream and the N sources become irrelevant. The DB is authoritative; everything before it is input data.
+
+**Critical property: the chokepoint must be BEFORE any consumer that depends on the transformation.** In S154, `isAthensEvent` (the location-filter call inside upsertEvent at `:199`) reads `event.venue.name`. If the decoder ran AFTER isAthensEvent, the filter would receive the entity-encoded form and fail to match. Decoder placement at function-entry line `:197` (before `:199`) is load-bearing — not just "somewhere in upsertEvent."
+
+**Guard 6 (shotgun-surgery) enumeration.** Three production INSERT paths exist:
+1. `src/db/database.ts:197 upsertEvent` — main chokepoint (this is where the decoder lives)
+2. `scripts/scrape-ai-tech.ts:1028` — bypass, but venue names are ASCII English (low entity-encoding risk by domain)
+3. `scripts/scrape-snfcc.ts:567` — bypass, but venue name is hardcoded literal (zero entity risk)
+
+Plus one homonym: `src/ingest/email-ingestion.ts:322` *also* named `upsertEvent`, partial-dead code, schema-divergent. Out of scope, logged in `known-issues.md`.
+
+**When the chokepoint pattern fails.** If two chokepoints exist and they're both load-bearing (both must apply the transformation), you've fragmented the canonical form. S154 escaped this because the bypass paths carry no real entity-encoding risk by data shape — so "decode at the main chokepoint, skip bypasses" is honest. If athinorama events ever route through scrape-ai-tech (a hypothetical bypass) the decode would miss them. The mitigation isn't an allowlist; it's *the invariant on the dist artifact* (which S153's `dist-canonical-parity` invariant doesn't catch this class — venue-name validity isn't URL-shape validity — but the same principle applies: any downstream validator that checks decoded-form-equals-served-form would catch it).
+
+**Cousin patterns:**
+- `decisions.md` 2026-05-23 "Per-URL declared-equals-served parity" — same chokepoint logic at the dist-artifact validation level rather than the ingest level.
+- `patterns.md` "Infrastructure invariant unmasked sitewide defect — canonical-must-be-200" (2026-05-23) — when content-level scoping misses class-wide bugs; chokepoint-at-validator is the cousin discovery mechanism.
+
+**Connects to:** `mistakes.md` 2026-05-25 "HTML-entity decode at ingest was symptom-patched ≥1 prior session" (the recurrence that motivated this entry); `src/utils/decode-html-entities.ts` (the implementation); `src/db/database.ts:197` (the chokepoint).
+
+### Locale-threading reaches all siblings + all call sites (S155, 2026-05-25)
+
+**Pattern.** A shared renderer split across sibling functions (`renderSiteNav` / `renderHamburgerMenu` / `renderSiteFooter` in `site-chrome.ts`) only becomes locale-correct when the `locale` param is threaded into **every sibling AND every call site** in one pass. Partial application is worse than none: `renderSiteNav` had `locale` but the siblings didn't, and call sites invoked them bare (defaulting `'el'`) — so English pages rendered Greek nav with *no error*, just silent wrong output. This is the dual of the coextensive-chrome pattern (S154): there the property was "the element appears wherever chrome renders"; here it's "the locale flows wherever chrome renders."
+
+**Mechanics that made the fix bounded.** Every English page funnels nav through exactly two forwarding points — `renderPage` (page.ts) and `renderContentPage` (content-page.ts) — both of which already *held* `locale` but dropped it when calling chrome. Hubs route through `renderPage` (hub-page.ts:721 passes locale); content pages through `renderContentPage`; event pages directly. So the whole class was fixable at: 2 sibling signatures + ~5 call-site files. **Verification invariant:** `grep -rn 'renderSiteNav()\|renderHamburgerMenu()\|renderSiteFooter()' src/` → 0 bare (argument-less) calls.
+
+**Counterpart-aware link emission.** Where an English counterpart page does not exist, the locale-aware nav must *hide* the link, never point an English label at Greek content and never link a path that 404s. Applied here: Venues omitted on EN (no `/en/venues/`); home → evergreen `/en/this-week/` (no `/en/` homepage, `/en/today/` date-conditional). Same hide-where-absent rule a future language toggle would need.
+
+**Cross-references:** `mistakes.md` 2026-05-25 "Nav locale-awareness — five reusable lessons"; `patterns.md` 2026-05-24 "Coextensive-chrome pattern" (the sibling pattern); `decisions.md` 2026-05-25 "Nav locale routing"; `src/templates/site-chrome.ts`.

@@ -5,23 +5,41 @@
  * 3-column footer, and hamburger toggle script.
  * Injected by all page templates for consistent site framing.
  */
+import { STRINGS, type Locale } from '../i18n/strings';
 
-export function renderSiteNav(locale: 'el' | 'en' = 'el'): string {
-  const skipText = locale === 'en' ? 'Skip to content' : 'Μετάβαση στο περιεχόμενο';
-  return `<a href="#main-content" class="skip-link">${skipText}</a>
+// Routing: Greek renders at the bare root (/saved/, /about/), English under /en/.
+// (Do NOT use utils/locale-url.ts — it encodes an abandoned English-first posture
+// and would emit /el/ 404s. The localePrefix pattern below matches production,
+// per event-page.ts and the dist/ tree.)
+// English has no /en/ homepage and no /en/venues/ yet:
+//   - home/logo target → /en/this-week/ (evergreen, always-built hub).
+//     NOT /en/today/ — today/tomorrow are date-conditional hubs that only
+//     build when events fall on that date, so they 404 on empty days.
+//   - Venues link is omitted on English nav until /en/venues/ exists.
+function localePrefix(locale: Locale): string {
+  return locale === 'en' ? '/en' : '';
+}
+function homeHref(locale: Locale): string {
+  // interim: /en/this-week/ until /en/ homepage ships (F1) — see specs/lang-toggle-checkpoint.md
+  return locale === 'en' ? '/en/this-week/' : '/';
+}
+
+export function renderSiteNav(locale: Locale = 'el'): string {
+  const s = STRINGS[locale];
+  return `<a href="#main-content" class="skip-link">${s.navSkipToContent}</a>
 <header class="site-header" role="banner">
   <div class="site-header-inner">
     <div class="site-header-left">
-      <a href="/" class="site-logo">agent athens</a>
+      <a href="${homeHref(locale)}" class="site-logo">agent athens</a>
     </div>
     <div class="site-header-right">
-      <button class="nav-search-btn" aria-label="Αναζήτηση" type="button">
+      <button class="nav-search-btn" aria-label="${s.navSearch}" type="button">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
         </svg>
         <kbd class="search-kbd">\u2318K</kbd>
       </button>
-      <button class="hamburger-btn" aria-label="Μενού" aria-expanded="false" type="button">
+      <button class="hamburger-btn" aria-label="${s.navMenu}" aria-expanded="false" type="button">
         <span class="hamburger-icon"></span>
       </button>
     </div>
@@ -29,52 +47,59 @@ export function renderSiteNav(locale: 'el' | 'en' = 'el'): string {
 </header>`;
 }
 
-export function renderHamburgerMenu(): string {
+export function renderHamburgerMenu(locale: Locale = 'el'): string {
+  const s = STRINGS[locale];
+  const prefix = localePrefix(locale);
+  // Venues has no /en/ counterpart yet — omit on English rather than 404 or
+  // route an English label to Greek content.
+  const venuesItem = locale === 'en' ? '' : `\n    <li><a href="/venues/">${s.navVenues}</a></li>`;
   return `<div class="mobile-overlay" aria-hidden="true"></div>
-<nav class="mobile-menu" aria-label="Κύρια πλοήγηση" aria-hidden="true">
-  <button class="mobile-menu-close" aria-label="Κλείσιμο μενού">\u00d7</button>
+<nav class="mobile-menu" aria-label="${s.navMainNav}" aria-hidden="true">
+  <button class="mobile-menu-close" aria-label="${s.navCloseMenu}">\u00d7</button>
   <ul class="mobile-menu-items">
-    <li><button class="mobile-menu-search" type="button">Αναζήτηση</button></li>
-    <li><a href="/">Εκδηλώσεις</a></li>
-    <li><a href="/venues/">Χώροι</a></li>
-    <li><a href="/saved/">Αποθηκευμένα</a></li>
-    <li><a href="/about/">Σχετικά</a></li>
-    <li><a href="/llms.txt">Για AI Agents</a></li>
+    <li><button class="mobile-menu-search" type="button">${s.navSearch}</button></li>
+    <li><a href="${homeHref(locale)}">${s.navEvents}</a></li>${venuesItem}
+    <li><a href="${prefix}/saved/">${s.savedEvents}</a></li>
+    <li><a href="${prefix}/about/">${s.navAbout}</a></li>
+    <li><a href="/llms.txt">${s.navForAiAgents}</a></li>
   </ul>
 </nav>`;
 }
 
-export function renderSiteFooter(): string {
+export function renderSiteFooter(locale: Locale = 'el'): string {
+  const s = STRINGS[locale];
+  const prefix = localePrefix(locale);
+  // Venues has no /en/ counterpart yet — omit on English (see renderHamburgerMenu).
+  const venuesItem = locale === 'en' ? '' : `\n          <li><a href="/venues/">${s.navVenues}</a></li>`;
   return `<footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
-        <a href="/" class="site-logo">agent athens</a>
-        <p class="footer-tagline">Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη</p>
+        <a href="${homeHref(locale)}" class="site-logo">agent athens</a>
+        <p class="footer-tagline">${s.footerTagline}</p>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Εξερεύνηση</h3>
+        <h3 class="footer-heading">${s.footerExplore}</h3>
         <ul class="footer-links">
-          <li><a href="/">Εκδηλώσεις</a></li>
-          <li><a href="/venues/">Χώροι</a></li>
-          <li><a href="/saved/">Αποθηκευμένα</a></li>
+          <li><a href="${homeHref(locale)}">${s.navEvents}</a></li>${venuesItem}
+          <li><a href="${prefix}/saved/">${s.savedEvents}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Σχετικά</h3>
+        <h3 class="footer-heading">${s.footerAboutHeading}</h3>
         <ul class="footer-links">
-          <li><a href="/about/">Σχετικά</a></li>
-          <li><a href="/editorial/">Σύνταξη</a></li>
-          <li><a href="/corrections/">Διορθώσεις</a></li>
-          <li><a href="/llms.txt">Για AI Agents</a></li>
+          <li><a href="${prefix}/about/">${s.navAbout}</a></li>
+          <li><a href="${prefix}/editorial/">${s.footerEditorial}</a></li>
+          <li><a href="${prefix}/corrections/">${s.footerCorrections}</a></li>
+          <li><a href="/llms.txt">${s.navForAiAgents}</a></li>
           <li><a href="https://github.com/chrimar3/agent-athens">GitHub</a></li>
         </ul>
       </div>
     </div>
 
     <div class="footer-ai-callout">
-      <p class="footer-ai-title">Για AI Agents & LLMs:</p>
-      <p>Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.
+      <p class="footer-ai-title">${s.footerAiCalloutTitle}</p>
+      <p>${s.footerAiCalloutBody}
         <a href="/llms.txt">llms.txt</a>
       </p>
     </div>

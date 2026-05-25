@@ -276,6 +276,8 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Fix plan:** Add Eightball Club and broader Thessaloniki venue patterns to rejected-locations.json. Consider excluding `rejected_non_athens` events from enrichment queue sync to avoid wasting enrichment slots.
 **Status:** Open — low priority, subagent safety net is reliable
 
+**2026-05-21 update — third recurrence (WE Πολυχώρος / weskg.gr):** Thessaloniki venue "WE Πολυχώρος" (Πολυχώρος Πολιτισμού & Αθλητισμού WE, 3ης Σεπτεμβρίου & Γρ. Λαμπράκη — confirmed via weskg.gr and Thessaloniki municipality listing) was leaking 3 more.com-sourced events as `verified_athens`. Root cause: venue was in `config/athens-venues.json` whitelist (line 2584) without an `address` field; no Thessaloniki city string in title/venue_address fields → location filter Step 1 blacklist found nothing to match; Step 2 whitelist matched it as Athens. Identical mechanism to the Session 7 / 17 recurrences (this is the 3rd). Pre-demo discovery (S138-diagnostic 2026-05-20). Fix applied this session: added 3 variants (`WE Πολυχώρος`, `WE Polyxwros`, `WE, Πολυχώρος Πολιτισμού & Αθλητισμού`) to `config/rejected-locations.json` venues array; reclassified 3 existing rows (1 upcoming via `filter-athens-only.ts`, 2 past via targeted SQL mirroring the canonical INSERT-rejected_events + DELETE pattern). Verified 0 occurrences in `dist/` post-rebuild. The recurring class is unchanged: athens-venues.json entries get added without venue-side address verification, so name-collision Thessaloniki venues with the same root word (Πολυχώρος) sneak in. **Mechanism not yet addressed:** the address-empty signal on a whitelisted venue should be a soft flag for reverification, not silent acceptance.
+
 ### Flaky Network Timeout Test
 **Severity:** 🟢
 **First seen:** Session 6
@@ -952,3 +954,140 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Workaround:** N/A.
 **Fix plan:** Generate the singular→plural redirects programmatically from `config/hub-pages.json` (any hub with `filter.type === 'event_type'` and a singular form of its value), and emit them into `netlify.toml` or `_redirects` at build time. Removes the hand-maintained list. ~10 LOC in `generate-site.ts` plus a build-output test.
 **Status:** Defer-log. Re-evaluate when adding the next event_type hub.
+
+---
+
+### Declared Canonical/Sitemap URL Points at 301 Source (Canonical-Must-Be-200 Bug Class) — RESOLVED at sitewide scope
+**Severity:** 🟢 (was 🔴 pre-S153, now mitigated permanently)
+**First seen:** S153 recon (2026-05-23). Pre-existing for unknown duration prior.
+**Frequency:** Class-wide — affected 1 EN hub canonical + 3146 event sitemap entries + 35 venue sitemap entries + EN hub hreflang at time of discovery.
+**Symptoms:** Page declares `<link rel="canonical">` (or sitemap `<loc>`, hreflang href, IndexNow URL) pointing at a URL form that Netlify Pretty URLs will 301-redirect away from. Bing URL Inspection rejects the page as "canonical points at a redirect," refusing to index. Pre-S153 the cornerstone `/en/this-weekend/` was rejected on this basis; investigation revealed event/venue sitemap entries were also 301-source URLs across the entire site.
+**Impact (pre-S153):** Bing index blocked at the cornerstone (Track A Perplexity-via-Bing demo bet); 3181 event+venue sitemap entries also declaring 301 sources, dragging on Bing crawl efficiency sitewide. Google appeared more tolerant in observed behavior but is not specified to be.
+**Workaround (pre-S153):** None viable — search engine indexing decisions are not user-overridable.
+**Fix plan (executed in S153):**
+1. Normalize the 5 hub URL emitters in `src/generators/hub-page.ts` (canonical, hreflang en + x-default, overflow canonical, overflow @id) + 1 sitemap inflow in `src/generate-site.ts` to declare the trailing-slash form (matches Netlify directory-served form for EN hubs).
+2. Add `src/utils/dist-canonical-parity.ts` build-time invariant: walks `dist/`, asserts every declared canonical / sitemap `<loc>` matches its on-disk-derived served form (per-URL parity, NOT uniform-slash; EN slash / EL no-slash both green by construction).
+3. Invariant unmasked the sitemap-inflow drift on `event-page.ts:841` and `venue-page.ts:362`. Fixed both — `urls.push(...)` now appends `/` for directory-served pages.
+4. Wired invariant into `generate-site.ts` after `generateSplitSitemaps` with Tier-1 build-fail discipline (`process.exit(1)` on any violation).
+
+**Status:** RESOLVED at sitewide scope. Permanent mitigation: `dist-canonical-parity` invariant fails the build on any future regression of this class, on any URL surface (any new emitter, any new directory-served page type). The invariant is unconditional — no allowlist, no exception list.
+
+**Verified:**
+- Build (S153, 2026-05-23): 9355 URLs verified by the invariant, 0 violations.
+- Tests: 2499 pass / 0 fail / 1 skip across 113 files, including 13 new dist-canonical-parity tests + 5 hub-page canonical tests + 3 sitemap regression tests.
+- Production deploy: pending user decision on `config/rejected-locations.json` carry-forward.
+
+**Cross-references:** `src/utils/dist-canonical-parity.ts` (the invariant), `decisions.md` 2026-05-23 "Per-URL declared-equals-served parity", `patterns.md` 2026-05-23 "Infrastructure invariant unmasked sitewide defect", `mistakes.md` 2026-05-23 "Sitemap no-slash push shipped silently".
+
+---
+
+### Both-Exist Shadowing — Latent Validator Gap
+**Severity:** 🟡 (latent — not a current-codebase case)
+**First seen:** S153 (2026-05-23)
+**Frequency:** Latent — class is not present in current dist/ layout, documented as a future hazard.
+**Symptoms:** When both `dist/PATH/index.html` AND `dist/PATH.html` exist on disk, Netlify Pretty URLs serves the flat-file at `/PATH` (200) and 301s `/PATH/` → `/PATH`. The `dist-canonical-parity` invariant does NOT detect this — it checks expected-backing-file existence, not shadow-file presence. A future page declaring `/PATH/` while a `dist/PATH.html` shadow exists would pass the validator but produce a 301-canonical at runtime — the exact bug class the invariant was built to catch, in the edge case the invariant misses.
+**Impact:** Zero today — EN-side and EL-side use disjoint path namespaces (EN under `dist/en/`, EL at `dist/` root), so no `dist/PATH/index.html` + `dist/PATH.html` collisions exist. Empirically confirmed during S153 probes: `dist/this-weekend.html` (EL flat) and `dist/this-weekend/all/index.html` (overflow directory) DO co-exist, but for *different paths* (`/this-weekend` vs `/this-weekend/all/`) — not a shadow.
+**Workaround:** N/A.
+**Fix plan:** Extend `validateDistCanonicalParity` to also check for inverse-form file existence and fail when both forms exist for the same path. ~10 LOC + 1 test. Alternatively, enforce mutual exclusion at write time (last-writer-wins detection in `writeHtmlIfChangedSync`).
+**Status:** Defer-log. Re-evaluate if dist/ ever introduces a flat-file + directory shadow.
+**Cross-references:** `src/utils/dist-canonical-parity.ts` inline `// LATENT:` comment; `patterns.md` 2026-05-23 "Both-exist shadowing".
+
+---
+
+### Build Is Not Idempotent w.r.t. dist/ Orphan Cleanup
+**Severity:** 🟡
+**First seen:** S153 (2026-05-23) — pre-existing class, surfaced by the new invariant.
+**Frequency:** Recurring — any page-type whose generation gate flips (overflow `> HUB_EVENT_LIMIT`, time-windowed pages aging out, hubs falling below `MIN_EVENTS_THRESHOLD`) leaves stale `dist/` artifacts. Orphan-sweep at `src/generators/orphan-sweep.ts` flags but does not delete (`armed=false`; `SWEEP_ORPHANS=1` arms). S153 build flagged 2331 orphans without acting.
+**Symptoms:** A stale `dist/PATH/index.html` from a previous build with different gating outcomes persists and rides to deploy. If the stale file's canonical form matches its on-disk layout, no SEO harm. If the stale file was generated by a pre-fix version of the codebase, its canonical may be wrong — which the `dist-canonical-parity` invariant now catches at build (fail-the-build), but only if the stale file's declared form differs from its on-disk-derived served form.
+**Impact:** Active during S153 — the stale `dist/en/this-weekend/all/index.html` (May 22 mtime, pre-S153 no-slash canonical) failed the invariant because this-weekend now has 15 events (below the 30-event overflow threshold), so overflow doesn't regenerate. Resolved via surgical `rm` of the EN file + matching EL orphan. Pre-fix-era orphan class is self-closing post-S153 (any *future* overflow generation will emit slash-form canonical and pass the invariant), but the underlying idempotency gap persists.
+**Workaround:** Manual `rm` for surfaced orphans. Or `SWEEP_ORPHANS=1 bun run build` to arm bulk cleanup (broad blast radius — 2331 files; not recommended ad-hoc).
+**Fix plan:** Build-step that prunes overflow directories not regenerated this build — at end of overflow loop, `rm -r dist/<slug>/all/` and `dist/en/<slug>/all/` for any hub whose `filteredEvents.length <= HUB_EVENT_LIMIT`. ~10 LOC in `generate-site.ts`. Generalize: same approach for any threshold-gated page type. Risk: accidentally deleting other content sharing a path namespace — needs careful surface scoping.
+**Status:** Defer-log. Post-demo evaluation of permanent auto-prune vs periodic `SWEEP_ORPHANS=1` clean-build cadence.
+**Cross-references:** `src/generators/orphan-sweep.ts` (the existing flag-only mechanism); `decisions.md` 2026-05-23 "Per-URL declared-equals-served parity" (Latent gaps section).
+
+---
+
+### Email-Ingestion `upsertEvent` Homonym with Dead INSERT Branch + Schema Divergence
+**Severity:** 🟡 (latent — INSERT branch self-marked dead; UPDATE branch active but schema-divergent)
+**First seen:** S154 (2026-05-25), surfaced during decode-chokepoint recon
+**Frequency:** Latent — code path is currently exercised only when email-ingested events are UPDATED (not inserted); future re-enablement of newsletter pipeline would re-expose it.
+**Symptoms:** Two functions named `upsertEvent` exist with different signatures, different field shapes, in different modules:
+1. `src/db/database.ts:197 upsertEvent(event: Event, ...)` — main events INSERT path. All `scripts/scrape-all.ts` events flow through this. Schema: `events.venue_name`, `events.start_date`, `events.end_date`, etc. (current canonical schema).
+2. `src/ingest/email-ingestion.ts:322 upsertEvent(event: ParsedEvent)` — newsletter ingestion path. Schema-divergent: writes to columns named `date`, `time`, `venue` — none of which exist in the current `events` table. Its INSERT branch carries a self-documented comment: `"DEAD CODE — schema divergence (writes date/time, events table has start_date/end_date). See specs/session-C-email-ingestion.md. Do not restore without schema reconciliation."` The UPDATE branch is active (also writes to the divergent columns, but UPDATE on a non-existent column may silently no-op or error depending on driver behavior).
+
+**Impact:** Today, zero — email-ingestion is rarely exercised, and when it is, only the UPDATE branch runs (against rows that already exist from another source). If the INSERT branch is ever restored or newsletter ingestion becomes primary for some source, events will fail to insert or insert with corrupted data.
+
+**Naming collision risk:** A future executor performing recon (as S154 did) can mistakenly target the wrong `upsertEvent` for modifications. S154 added a decoder at `src/db/database.ts:197 upsertEvent`; the email-ingestion homonym was correctly identified as out-of-scope, but only because the recon explicitly enumerated both. Without that enumeration, a "fix upsertEvent to decode entities" instruction is genuinely ambiguous.
+
+**Workaround:** N/A — code path is partial-dead by design.
+
+**Fix plan:** Either (a) rename `src/ingest/email-ingestion.ts:322` to `upsertEmailParsedEvent` to eliminate the name collision, or (b) schema-reconcile email-ingestion to write through the main `src/db/database.ts:197 upsertEvent` (which would require a `ParsedEvent → Event` adapter, ~30 LOC). Option (a) is cheaper and unblocks the immediate naming risk; (b) is the correct long-term fix per `specs/session-C-email-ingestion.md`.
+
+**Status:** Defer-log. Re-evaluate when newsletter ingestion is revived or if a future session encounters the naming collision during recon.
+
+**Cross-references:** `src/db/database.ts:197` (the main chokepoint, the one to use); `src/ingest/email-ingestion.ts:322` (the dead-INSERT homonym); `specs/session-C-email-ingestion.md` (the schema-divergence write-up); `mistakes.md` 2026-05-25 "HTML-entity decode at ingest" (the session that surfaced this).
+
+---
+
+### Source Tree Drift — Uncommitted Source Changes Survive in Working Tree but Never Land in Git
+**Severity:** 🟡 (active, recurring, no data loss observed yet)
+**First seen:** Surfaced during S154 (2026-05-25); pattern predates S154.
+**Frequency:** Continuous since at least S153 (2026-05-23). At time of S154 there are ~20+ `M`-status source/test files in `git status --short` that the daily pipeline picks up at build time but `git log` does not record. Includes the entire S153 source delta (`src/generators/hub-page.ts`, `src/generators/event-page.ts`, `src/generators/venue-page.ts`, `src/generate-site.ts`, `src/sitemap/generate-sitemaps.ts`, `src/templates/page.ts`, several test files, the new `src/utils/dist-canonical-parity.ts`).
+
+**Symptoms:** `git status --short` shows persistent modified source files. `git log` shows only `chore: daily pipeline update YYYY-MM-DD` commits touching `data/build-completeness.json` + `data/event-set-hashes.json` (generated artifacts). The actual source changes ride to production via `scripts/daily-automated.sh` building from the working tree, then `netlify deploy --prod --dir=dist` shipping the built `dist/`. Production has the S153 fixes (verified: `<link rel="canonical" href="https://agentathens.com/en/this-weekend/">` is the slash form on production), but the code that emits the slash form is uncommitted.
+
+**Impact:**
+1. **Recovery hazard.** If the working tree is reset (`git checkout .`, `git stash drop`, accidental `rm`, machine failure, fresh clone), the uncommitted source changes are lost and the daily pipeline starts deploying the pre-S153 state again. Production silently regresses on the next build. No alarm fires.
+2. **Audit hazard.** `git log` does not answer "what's deployed." Anyone reading the git history sees only data-file churn and assumes no code has changed. The lived state of the codebase is in the filesystem, not in git.
+3. **Collaboration hazard.** A new session sees ~20 `M` entries in `git status` and cannot distinguish "this session's work" from "carry-forward from prior sessions" without reading every diff. S154 had to manually classify each M entry against the session boundary; that audit cost time and is error-prone.
+4. **Daily-pipeline commit pollution.** The pipeline commits ONLY data files, accidentally suggesting the source is stable while it is in fact drifting. The `chore:` prefix obscures that source-level work was ALSO baked into the deploy.
+
+**Workaround:** Manual `git add` + `git commit` of session-boundary source files at end of each session. Risk: catching unintended files; needs careful staging.
+
+**Fix plan:** Two-part.
+- **(a) Immediate hygiene.** Each session ends with a deliberate source-commit (separate from the daily-pipeline data commit). S151's session-log already noted "git push deferred — Netlify-git-rebuild concern" but `decisions.md` 2026-05-23 confirmed `stop_builds: true` means push is safe. So the workflow gap is no longer "push is risky," it's "the executor never commits." Add a Step 6 to every session plan: stage session-source-files, commit with session-tag message, push.
+- **(b) Pipeline enforcement.** `scripts/daily-automated.sh` could refuse to build/deploy when `git status --porcelain` shows un-tagged source modifications (allow data + dist edits, refuse source unless explicitly tagged "deploy pending"). Tier-1 safety; needs design. Post-demo.
+
+**Status:** Open — needs a hygiene-discipline correction this week, not a tooling fix. Daisy/owner should commit S153's source delta deliberately before the demo to remove the recovery hazard.
+
+**Cross-references:** `decisions.md` 2026-05-23 "Netlify deploy posture: stop_builds: true (push ≠ deploy)" (clarifies push is safe — removes the prior reason for deferring commits); `docs/session-log.md` S151 entry's "Push decision deferred to user — see Open Items" (the deferral that started the drift); `scripts/daily-automated.sh` (the build/deploy chain that picks up the uncommitted tree).
+
+---
+
+### 🟡 Evergreen surfaces link date-conditional hubs (`/en/today/`, `/today/`) — 404 on empty days
+
+**First seen:** S155 (2026-05-25), in `cornerstone-links.ts` (`<a href="/en/today/">Events Today`). Same 404 class fixed in the nav this session, now confirmed in a 2nd component — graduates from one-off to known-issue.
+
+**Frequency:** Intermittent — dangles only on days with no events dated today/tomorrow. `today`/`tomorrow` hubs are date-conditional: the build only emits `/today/` and `/en/today/` when events fall on that date. On empty days, any persistent link to them is a 404. Confirmed `/en/today/` and `/today/` both absent in the clean build of 2026-05-25.
+
+**Symptoms:** A "Events Today" / "Εκδηλώσεις Σήμερα" cornerstone link rendered on event pages (both locales) points at a hub that may not exist. `cornerstone-links.ts:18` maps `today` → label; the URL is emitted regardless of whether the hub built.
+
+**Impact:** Intermittent dead link in the cornerstone/related-links block on event-detail pages. Low individually, but it's on every event page, so on an empty-today day every EDP carries a 404 link. SEO crawl-waste + UX.
+
+**Workaround:** None in place. (Nav itself is now safe — it points evergreen surfaces at `/en/this-week/` / `/` and evergreen hubs.)
+
+**Fix plan:** `cornerstone-links.ts` should emit `today`/`tomorrow` links only when those hubs are in the built set (or fall back to an evergreen hub like `this-week`). General rule (from S155 mistakes.md): **evergreen surfaces point at evergreen hubs; date-conditional hubs are never persistent link targets.** Queued post-demo.
+
+**Status:** Open — pre-existing, out of scope for the S155 nav fix that surfaced it. Queued.
+
+**Cross-references:** `mistakes.md` 2026-05-25 "Nav locale-awareness" lesson 5; `src/utils/cornerstone-links.ts:18`; `config/hub-pages.json` (`today`/`tomorrow` hub defs).
+
+---
+
+### 🟢 Colophon committed as floor but unwired — `colophon.test.ts` asserts integration that doesn't exist (4 red tests)
+
+**First seen:** S155 (2026-05-25). `colophon.ts` + `colophon.test.ts` were S154 work, deployed but never committed (an instance of the "Source Tree Drift" issue above). During S155 a file-level discard reset the in-progress `site-chrome.ts` colophon wiring back to HEAD, orphaning the colophon files. They were committed as a floor (`86b0f4018`) — **files only, NOT the wiring** (re-wiring is an integration decision the WIP owner must make, deliberately kept separate from the nav-locale fix).
+
+**Frequency:** Constant — 4 tests in `src/templates/__tests__/colophon.test.ts` fail on every run until colophon is either wired into `site-chrome.ts` or the tests are revised. The failing tests assert: `renderSiteNav` contains the colophon-trigger; `renderSiteNav` contains the colophon-dialog; trigger renders between search-btn and hamburger-btn; `renderHamburgerScript` includes the colophon behavior script.
+
+**Symptoms:** `bun test` → `4 fail` (all under "site-chrome integration (Option A — coextensive by construction)"). `tsc` clean; the failures are assertion-only (the wiring functions the test expects don't exist in the committed `site-chrome.ts`).
+
+**Impact:** Suite is red (4/2550). Deploy is unaffected (`netlify deploy --prod --dir=dist` doesn't run tests). Risk is a future session seeing 4 reds with no context and either "fixing" them by wiring colophon (an integration decision nobody sanctioned) or wasting time rediscovering why.
+
+**Workaround:** None needed for deploy. The reds are the *intended* loud signal of un-integrated WIP (floor-without-wiring by design).
+
+**Fix plan:** Owner decision — either (a) wire colophon into `site-chrome.ts` (restores S154's intended integration: trigger between search+hamburger, dialog after `</header>`, colophon script in `renderHamburgerScript`), or (b) revise/skip the integration tests if colophon is being reconsidered. Not a Dev-default; the integration was never re-sanctioned after the discard.
+
+**Status:** Open — owner decision pending. **colophon committed as floor (`86b0f4018`), unwired by design, tests assert wiring.**
+
+**Cross-references:** `docs/session-log.md` S154 (colophon shipped) + S155 (floor commit); `src/templates/colophon.ts`, `src/templates/__tests__/colophon.test.ts`; `src/templates/site-chrome.ts` (HEAD version, no colophon wiring); "Source Tree Drift" issue above (why colophon was uncommitted in the first place).

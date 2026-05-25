@@ -1540,8 +1540,8 @@ function generate404Page(): void {
 ${renderAnalytics()}
 </head>
 <body>
-  ${renderSiteNav()}
-  ${renderHamburgerMenu()}
+  ${renderSiteNav('el')}
+  ${renderHamburgerMenu('el')}
   ${renderSearchOverlay()}
 
   <main class="error-page">
@@ -1551,7 +1551,7 @@ ${renderAnalytics()}
     <a href="/" class="error-home-link">Αρχική σελίδα</a>
   </main>
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter('el')}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
 </body>

@@ -147,8 +147,8 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 ${renderAnalytics()}
 </head>
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
-  ${renderSiteNav()}
-  ${renderHamburgerMenu()}
+  ${renderSiteNav(locale)}
+  ${renderHamburgerMenu(locale)}
   ${renderSearchOverlay()}
 
   <div class="page-container">
@@ -186,7 +186,7 @@ ${renderAnalytics()}
     </main>
   </div>
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
   ${filterBarScriptHTML}

@@ -79,6 +79,26 @@ export interface UIStrings {
   calendarGoogle: string;
   calendarAppleIcs: string;
   calendarOutlook: string;
+
+  // Site chrome — nav + footer (shared across all page templates via site-chrome.ts)
+  navEvents: string;        // nav link → home/listing
+  navVenues: string;        // nav link → venues (Greek-only; omitted on /en/ until /en/venues/ exists)
+  navAbout: string;
+  navForAiAgents: string;   // → /llms.txt (shared root file, not locale-prefixed)
+  navSearch: string;        // search trigger label + aria-label
+  navMenu: string;          // hamburger aria-label
+  navMainNav: string;       // mobile-menu aria-label
+  navCloseMenu: string;     // mobile-menu close aria-label
+  navSkipToContent: string; // skip-link text
+  footerExplore: string;    // footer column heading
+  footerAboutHeading: string;
+  footerEditorial: string;
+  footerCorrections: string;
+  // DEFERRED to Editorial Director — EN copy pending review (specs/en-nav-copy-checkpoint.md).
+  // Greek value is intentionally used for BOTH locales until approved; do not invent EN copy here.
+  footerTagline: string;
+  footerAiCalloutTitle: string;
+  footerAiCalloutBody: string;
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -194,6 +214,23 @@ export const STRINGS: Record<Locale, UIStrings> = {
     calendarGoogle: 'Google Ημερολόγιο',
     calendarAppleIcs: 'Apple / .ics',
     calendarOutlook: 'Outlook',
+
+    navEvents: 'Εκδηλώσεις',
+    navVenues: 'Χώροι',
+    navAbout: 'Σχετικά',
+    navForAiAgents: 'Για AI Agents',
+    navSearch: 'Αναζήτηση',
+    navMenu: 'Μενού',
+    navMainNav: 'Κύρια πλοήγηση',
+    navCloseMenu: 'Κλείσιμο μενού',
+    navSkipToContent: 'Μετάβαση στο περιεχόμενο',
+    footerExplore: 'Εξερεύνηση',
+    footerAboutHeading: 'Σχετικά',
+    footerEditorial: 'Σύνταξη',
+    footerCorrections: 'Διορθώσεις',
+    footerTagline: 'Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη',
+    footerAiCalloutTitle: 'Για AI Agents & LLMs:',
+    footerAiCalloutBody: 'Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.',
   },
 
   en: {
@@ -308,5 +345,24 @@ export const STRINGS: Record<Locale, UIStrings> = {
     calendarGoogle: 'Google Calendar',
     calendarAppleIcs: 'Apple / .ics',
     calendarOutlook: 'Outlook',
+
+    navEvents: 'Events',
+    navVenues: 'Venues',
+    navAbout: 'About',
+    navForAiAgents: 'For AI Agents',
+    navSearch: 'Search',
+    navMenu: 'Menu',
+    navMainNav: 'Main navigation',
+    navCloseMenu: 'Close menu',
+    navSkipToContent: 'Skip to content',
+    footerExplore: 'Explore',
+    footerAboutHeading: 'About',
+    footerEditorial: 'Editorial',
+    footerCorrections: 'Corrections',
+    // EN copy pending Editorial Director review — Greek retained intentionally.
+    // See specs/en-nav-copy-checkpoint.md. Do NOT replace with an unreviewed guess.
+    footerTagline: 'Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη',
+    footerAiCalloutTitle: 'Για AI Agents & LLMs:',
+    footerAiCalloutBody: 'Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.',
   },
 };

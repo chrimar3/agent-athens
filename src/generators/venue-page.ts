@@ -271,8 +271,8 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
 ${renderAnalytics()}
 </head>
 <body>
-  ${renderSiteNav()}
-  ${renderHamburgerMenu()}
+  ${renderSiteNav('el')}
+  ${renderHamburgerMenu('el')}
   ${renderSearchOverlay()}
 
   <main class="venue-page-content" id="main-content" tabindex="-1">
@@ -314,7 +314,7 @@ ${renderAnalytics()}
     </section>
   </main>
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter('el')}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
 </body>
@@ -473,8 +473,8 @@ function generateVenueIndex(venues: VenueData[]): void {
 ${renderAnalytics()}
 </head>
 <body>
-  ${renderSiteNav()}
-  ${renderHamburgerMenu()}
+  ${renderSiteNav('el')}
+  ${renderHamburgerMenu('el')}
   ${renderSearchOverlay()}
 
   <main class="venue-index-content">
@@ -488,7 +488,7 @@ ${renderAnalytics()}
     </ul>
   </main>
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter('el')}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
 </body>

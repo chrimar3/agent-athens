@@ -77,15 +77,15 @@ export function renderContentPage(
 ${renderAnalytics()}
 </head>
 <body>
-  ${renderSiteNav()}
-  ${renderHamburgerMenu()}
+  ${renderSiteNav(locale)}
+  ${renderHamburgerMenu(locale)}
   ${renderSearchOverlay()}
 
   <main class="content-page-body" id="main-content" tabindex="-1">
     ${bodyHtml}
   </main>
 
-  ${renderSiteFooter()}
+  ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
   ${options?.extraScripts || ''}
