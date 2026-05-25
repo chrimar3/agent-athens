@@ -2,6 +2,7 @@
 import { describe, test, expect } from 'bun:test';
 import {
   renderHubPage,
+  renderOverflowPage,
   getHubEvents,
   extractExcerpt,
   renderComparisonRow,
@@ -278,6 +279,10 @@ describe('Hub @graph envelope (S139)', () => {
     // self-canonical to /en/<slug>; bare-root hubs to <slug>. CollectionPage
     // @id reflects the canonical URL of its page, so el + en variants now have
     // DIFFERENT @id values (each pointing at their own surface).
+    //
+    // Trailing-slash axis (separate from S144): EN /en/<slug>/ matches Netlify's
+    // directory-served form; EL /<slug> matches its flat-file-served form. Per-URL
+    // parity, not uniform. See decisions.md.
     const events = makeTodayEvents(5);
     const englishHubConfig: HubConfig = {
       ...todayHubConfig,
@@ -291,8 +296,60 @@ describe('Hub @graph envelope (S139)', () => {
     const enId = findEntityByType(enEnvelope, 'CollectionPage')!['@id'];
     expect(elId).toContain('/today#collectionpage');
     expect(elId).not.toContain('/en/');
-    expect(enId).toContain('/en/today#collectionpage');
+    expect(enId).toContain('/en/today/#collectionpage');
     expect(elId).not.toBe(enId);
+  });
+
+  test('EN hub canonical link in HTML emits trailing-slash form', () => {
+    // Per-URL parity: EN serves at /en/<slug>/ (directory), so declared canonical
+    // must match. EL parity (no-slash) covered separately below.
+    const events = makeTodayEvents(5);
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens.',
+    };
+    const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
+    expect(enHtml!).toContain('<link rel="canonical" href="https://agentathens.com/en/today/">');
+    expect(enHtml!).toContain('<meta property="og:url" content="https://agentathens.com/en/today/">');
+  });
+
+  test('EL hub canonical link stays no-slash (per-URL parity guard)', () => {
+    // EL serves at /<slug> (flat file dist/<slug>.html). Declared no-slash
+    // must NOT regress to slash form, or we re-introduce the 301-canonical bug
+    // on the EL side.
+    const events = makeTodayEvents(5);
+    const elHtml = renderHubPage(todayHubConfig, events, events);
+    expect(elHtml!).toContain('<link rel="canonical" href="https://agentathens.com/today">');
+    expect(elHtml!).not.toContain('<link rel="canonical" href="https://agentathens.com/today/">');
+  });
+
+  test('Hreflang en + x-default emit trailing-slash; el stays no-slash', () => {
+    // Hub-page.ts post-render-injects hreflang for bilingual hubs (Guard 6:
+    // 6th URL emitter, hand-rolled, independent of metadata.url). Per-URL parity
+    // applies here too — EN slash, EL no-slash.
+    const events = makeTodayEvents(5);
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens.',
+    };
+    const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
+    expect(enHtml!).toContain('<link rel="alternate" hreflang="en" href="https://agentathens.com/en/today/">');
+    expect(enHtml!).toContain('<link rel="alternate" hreflang="x-default" href="https://agentathens.com/en/today/">');
+    expect(enHtml!).toContain('<link rel="alternate" hreflang="el" href="https://agentathens.com/today">');
+  });
+
+  test('Overflow page canonical (EN) is trailing-slash form', () => {
+    // Pagination convention: overflow canonicalizes to the main hub root URL.
+    // That root is /en/<slug>/ (slash) per the served-form rule, so overflow's
+    // declared canonical must match — even though overflow itself is noindex,
+    // the inline canonical 301-source would violate the build invariant.
+    const events = makeTodayEvents(35);  // > HUB_EVENT_LIMIT so overflow triggers
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens.',
+    };
+    const overflowHtml = renderOverflowPage(englishHubConfig, events, events, 'en');
+    expect(overflowHtml).toContain('<link rel="canonical" href="https://agentathens.com/en/today/">');
   });
 });
 

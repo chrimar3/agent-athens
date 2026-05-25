@@ -53,7 +53,7 @@ function extractEventSlug(urlPath: string): string | null {
   return match ? match[1] : null;
 }
 
-function buildUrlEntry(
+export function buildUrlEntry(
   urlPath: string,
   manifest: ContentHashManifest,
   priorityOverrides?: Map<string, string>,

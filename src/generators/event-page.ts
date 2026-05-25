@@ -814,7 +814,9 @@ export async function generateEventPages(events: Event[], pagedVenueSlugs?: Set<
 
     // Track past-active events for sitemap priority override
     const lifecycle = classifyEventLifecycle(event);
-    const urlPath = `events/${slug}`;
+    // Per-URL parity: event pages are dist/events/SLUG/index.html (directory),
+    // served at /events/SLUG/ — sitemap declared form must match.
+    const urlPath = `events/${slug}/`;
     if (lifecycle !== 'upcoming') {
       pastEventUrls.add(urlPath);
     }

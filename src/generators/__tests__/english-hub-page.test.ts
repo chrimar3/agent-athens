@@ -179,9 +179,12 @@ describe("English hub page — FAQ schema", () => {
 describe("English hub page — hreflang", () => {
   test("bilingual hub emits el + en + x-default hreflang", () => {
     const html = renderHubPage(bilingualHub, testEvents, testEvents, undefined, "en");
+    // Per-URL parity (canonical-must-equal-served-form): EN /en/today/ matches
+    // Netlify's directory-served form (dist/en/today/index.html); EL /today
+    // matches its flat-file-served form (dist/today.html). x-default = en.
     expect(html!).toContain('hreflang="el" href="https://agentathens.com/today"');
-    expect(html!).toContain('hreflang="en" href="https://agentathens.com/en/today"');
-    expect(html!).toContain('hreflang="x-default" href="https://agentathens.com/en/today"');
+    expect(html!).toContain('hreflang="en" href="https://agentathens.com/en/today/"');
+    expect(html!).toContain('hreflang="x-default" href="https://agentathens.com/en/today/"');
   });
 
   test("Greek version of bilingual hub also has hreflang", () => {

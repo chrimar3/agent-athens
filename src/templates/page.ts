@@ -130,7 +130,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="geo.position" content="37.9838;23.7276">
 
   <!-- For AI agents: alternate formats -->
-  <link rel="alternate" type="application/json" href="/api/${url}.json">
+  <link rel="alternate" type="application/json" href="/api/${url.replace(/\/$/, '')}.json">
   ${url === 'index' ? `<link rel="alternate" type="application/ld+json" href="/api/events.json">` : ''}
 
   <!-- Schema.org JSON-LD -->

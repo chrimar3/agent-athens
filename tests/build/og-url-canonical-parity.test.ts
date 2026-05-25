@@ -103,8 +103,12 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
   // Closes the cross-locale-canonical regression that excluded /en/ from GSC
   // eligibility. See decisions.md 2026-05-21.
   for (const hub of ALL_HUBS) {
+    // Per-URL parity (S153 2026-05-23): EL hubs serve at /<hub> (flat-file
+    // dist/<hub>.html), EN hubs serve at /en/<hub>/ (directory
+    // dist/en/<hub>/index.html). Declared canonical/og:url/JSON-LD url MUST
+    // match each surface's 200-served form per the dist-canonical-parity invariant.
     const rootUrl = `${BASE_URL}/${hub}`;
-    const enUrl = `${BASE_URL}/en/${hub}`;
+    const enUrl = `${BASE_URL}/en/${hub}/`;
 
     test(`Root hub /${hub} — canonical = og:url = JSON-LD url = root URL (self)`, () => {
       const html = readFileSync(rootHubPath(hub), "utf8");

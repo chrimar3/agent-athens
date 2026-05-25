@@ -308,7 +308,13 @@ export function renderHubPage(
   // override aligns those with the hub slug. S144 (GEO 2026-05-21) supersedes
   // the 2026-05-14 canonical-to-root posture: /en/ hubs now self-canonical to
   // /en/<slug> (locale-aware self), closing the cross-locale-canonical bug.
-  metadata.url = locale === 'en' ? `en/${config.slug}` : config.slug;
+  //
+  // Trailing-slash axis (orthogonal to S144): EN emits /en/<slug>/ because the
+  // backing file is dist/en/<slug>/index.html (Netlify serves the slash form,
+  // 301s the no-slash). EL stays at /<slug> because dist/<slug>.html serves at
+  // no-slash. Per-URL parity, NOT uniform slash. dist-canonical-parity
+  // invariant enforces this.
+  metadata.url = locale === 'en' ? `en/${config.slug}/` : config.slug;
   metadata.pageType = 'hub';
   if (lastUpdateOverride) {
     metadata.lastUpdate = lastUpdateOverride;
@@ -436,10 +442,13 @@ export function renderHubPage(
   // (2026-05-14 canonical-to-root posture). Post-render regex-patch removed —
   // page.ts emits `${BASE_URL}/${url}` uniformly, achieving consolidation.
 
-  // hreflang tags — bilingual hubs get el + en + x-default
+  // hreflang tags — bilingual hubs get el + en + x-default.
+  // Per-URL parity: EN emits slash (directory-served), EL emits no-slash
+  // (flat-file-served). x-default uses enUrl. See :311 comment for the
+  // per-URL parity rationale.
   if (config.answerCapsuleEn) {
     const elUrl = `${BASE_URL}/${config.slug}`;
-    const enUrl = `${BASE_URL}/en/${config.slug}`;
+    const enUrl = `${BASE_URL}/en/${config.slug}/`;
     const hreflangHtml = `<link rel="alternate" hreflang="el" href="${elUrl}">
   <link rel="alternate" hreflang="en" href="${enUrl}">
   <link rel="alternate" hreflang="x-default" href="${enUrl}">`;
@@ -572,7 +581,9 @@ export function renderHubPage(
   // S144 (GEO 2026-05-21): locale-aware self-canonical — /en/ hubs canonical
   // to /en/<slug>; bare-root hubs to <slug>. Supersedes 2026-05-14 canonical-
   // to-root posture (which produced the cross-locale-canonical regression).
-  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? '/en' : ''}/${config.slug}`;
+  // Per-URL parity (orthogonal to S144): EN appends trailing slash to match
+  // its directory-served form; EL stays no-slash (flat-file-served).
+  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? `/en/${config.slug}/` : `/${config.slug}`}`;
   const graphEnvelope = buildHubGraph({
     metadata,
     locale,
@@ -702,7 +713,8 @@ export function renderOverflowPage(
   // Overflow page canonicalizes to main hub root URL (pagination convention:
   // paginated views point canonical to the un-paginated canonical surface).
   // S144: locale-aware self per renderHubPage above.
-  metadata.url = locale === 'en' ? `en/${config.slug}` : config.slug;
+  // Per-URL parity: matches the main hub's form (EN slash, EL no-slash).
+  metadata.url = locale === 'en' ? `en/${config.slug}/` : config.slug;
   metadata.pageType = 'hub';
 
   // Render with ALL events (no cap) — omit allEvents to skip filter bar
@@ -733,7 +745,8 @@ export function renderOverflowPage(
   // pass empty — FAQ doesn't render on the overflow surface and picks aren't
   // wired anywhere yet (S101b). Result: CollectionPage + Organization.
   // S144: locale-aware self per the main hub generator above.
-  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? '/en' : ''}/${config.slug}`;
+  // Per-URL parity: EN slash, EL no-slash (matches main hub form).
+  const hubCanonicalUrl = `${BASE_URL}${locale === 'en' ? `/en/${config.slug}/` : `/${config.slug}`}`;
   const overflowGraph = buildHubGraph({
     metadata,
     locale,

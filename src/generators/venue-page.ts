@@ -359,7 +359,9 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
       mkdirSync(pageDir, { recursive: true });
     }
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
-    urls.push(`venues/${venue.slug}`);
+    // Per-URL parity: venue pages are dist/venues/SLUG/index.html (directory),
+    // served at /venues/SLUG/ — declared sitemap form must match.
+    urls.push(`venues/${venue.slug}/`);
   }
 
   // Generate venue index page — same combined gate as the page loop above so
