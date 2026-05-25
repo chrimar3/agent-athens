@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tonight in Athens — agent-athens</title>
+  <meta name="description" content="Tonight in Athens — AI-curated cultural events. Reads the same daily-generated data feed that powers agentathens.com.">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/styles/design-system.css">
+  <style>
+    /* Page layout */
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-primary);
+      margin: 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .tonight-page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 2.5rem) clamp(3rem, 8vw, 6rem);
+    }
+
+    /* Hero */
+    .tonight-hero {
+      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+      animation: heroFadeIn 400ms ease-out;
+    }
+    .tonight-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin: 0 0 1.25rem;
+    }
+    .tonight-headline {
+      /* Mobile clamp: prevents 375px wrap on both EN labels. At 375px:
+         9vw = 33.75px clamps to min 2.5rem = 40px. Caps at 4rem on wide screens. */
+      font-size: clamp(2.5rem, 9vw, 4rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0 0 1rem;
+    }
+    /* Emphasis via WEIGHT+CONTRAST, not color. No yellow in hero (yellow budget locked
+       at 5 contexts; hero accent would be 6th — rejected per design ruling). */
+    .hero-em { font-weight: 700; color: var(--text-primary); }
+    .hero-de { font-weight: 500; color: var(--text-secondary); }
+    .tonight-sub {
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
+      margin: 0;
+      font-weight: 400;
+    }
+
+    /* Card grid */
+    .tonight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .tonight-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    }
+    @media (min-width: 1024px) {
+      .tonight-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 1280px) {
+      .tonight-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Card (matches live-site .event-card image-bearing variant) */
+    .event-card {
+      background: var(--bg-elevated);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: cardFadeIn 400ms ease-out forwards;
+      animation-delay: calc(var(--i, 0) * 50ms);
+      border: 1px solid var(--border-whisper);
+    }
+    .card-image-wrapper {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-surface);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-placeholder-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--text-tertiary);
+      opacity: 0.4;
+    }
+    .card-placeholder-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+    .card-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      color: var(--text-on-bright);
+      text-transform: uppercase;
+    }
+    .card-body {
+      padding: 1rem 1.125rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .card-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0 0 0.15rem;
+      color: var(--text-primary);
+    }
+    /* Recede anchor: real navigable link, inherits color, no default underline.
+       Hover/focus surfaces it. Title text is the click target — no whole-card fill. */
+    .card-title-recede {
+      color: inherit;
+      text-decoration: none;
+    }
+    .card-title-recede:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--text-tertiary);
+    }
+    .card-title-recede:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    .card-date,
+    .card-venue,
+    .card-price {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .card-date time { color: inherit; }
+    .card-price { color: var(--text-tertiary); margin-top: 0.15rem; }
+
+    /* Footer CTA — the ONE yellow accent on this page (locked context) */
+    .tonight-footer {
+      margin-top: clamp(3rem, 8vw, 5rem);
+      text-align: center;
+    }
+    .tonight-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--accent-primary);
+      transition: gap 200ms ease-out;
+    }
+    .tonight-cta:hover { gap: 0.75rem; }
+    .tonight-cta:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    .tonight-cta-arrow {
+      display: inline-block;
+      transition: transform 200ms ease-out;
+    }
+    .tonight-cta:hover .tonight-cta-arrow { transform: translateX(2px); }
+
+    /* Empty state */
+    .tonight-empty {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      padding: 4rem 1rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Motion */
+    @keyframes heroFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tonight-hero { animation: none; }
+      .event-card { animation: none; opacity: 1; transform: none; }
+      .tonight-cta, .tonight-cta-arrow { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="tonight-page">
+    <header class="tonight-hero">
+      <p class="tonight-eyebrow">AGENTATHENS.COM</p>
+      <h1 class="tonight-headline" id="hero-headline">Tonight in Athens</h1>
+      <p class="tonight-sub" id="hero-sub"></p>
+    </header>
+
+    <section class="tonight-grid" id="grid" aria-label="Events"></section>
+
+    <p class="tonight-empty" id="empty" hidden>
+      Tonight is quiet in Athens. The curator is regenerated daily &mdash; check back tomorrow.
+    </p>
+
+    <footer class="tonight-footer">
+      <a class="tonight-cta" href="/en/this-weekend/">
+        See the full curated set <span class="tonight-cta-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var ATHENS_TZ = 'Europe/Athens';
+
+      // English type labels (S155 design ruling)
+      var TYPE_LABEL = {
+        concert: 'CONCERT',
+        dj_set: 'DJ SET',
+        exhibition: 'EXHIBITION',
+        theater: 'THEATER',
+        workshop: 'WORKSHOP',
+        show: 'SHOW',
+        festival: 'FESTIVAL',
+        performance: 'PERFORMANCE',
+        dance: 'DANCE',
+        cinema: 'CINEMA',
+        screening: 'SCREENING',
+        tech: 'TECH',
+        talk: 'TALK',
+        other: 'EVENT'
+      };
+
+      // Type icons — sourced from src/templates/page.ts TYPE_ICONS (live site parity)
+      var TYPE_ICON = {
+        concert: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 6v24.4A7 7 0 1 0 22 37V18h12v-4H22V6h-4zM15 41a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
+        dj_set: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4C15 4 8 8 8 14v4c0 2.2 1.8 4 4 4v8c0 2.2 1.8 4 4 4h2v-8h4v8h4v-8h4v8h2c2.2 0 4-1.8 4-4v-8c2.2 0 4-1.8 4-4v-4c0-6-7-10-16-10zm-8 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm16 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
+        exhibition: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 6h36v36H6V6zm4 4v28h28V10H10zm4 4h20v20H14V14zm4 4v12h12V18H18z"/></svg>',
+        cinema: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 8h32v32H8V8zm4 4v6h6v-6H12zm18 0v6h6v-6H30zM16 16h16v16H16V16zM12 34v-6h6v6H12zm18 0v-6h6v6H30z"/></svg>',
+        screening: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 8h32v32H8V8zm4 4v6h6v-6H12zm18 0v6h6v-6H30zM16 16h16v16H16V16zM12 34v-6h6v6H12zm18 0v-6h6v6H30z"/></svg>',
+        theater: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8c-4 0-8 4-8 10s4 12 8 12c2 0 4-1 5-3-1-2-1-4-1-5 0-6 4-10 4-14 0-2-3.6 0-8 0zm20 0c-4.4 0-8 2-8 0 0 4 4 8 4 14 0 1 0 3-1 5 1 2 3 3 5 3 4 0 8-6 8-12s-4-10-8-10z"/></svg>',
+        festival: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4L8 20v4h4v16h8V30h8v10h8V24h4v-4L24 4zm0 6l12 12H12L24 10z"/></svg>',
+        performance: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4a4 4 0 0 0-4 4v2l-8 14h4l4-7v23a2 2 0 0 0 4 0V30h0v10a2 2 0 0 0 4 0V17l4 7h4L28 10V8a4 4 0 0 0-4-4z"/></svg>',
+        show: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.5 13.2L44 18.8l-10 9.2 2.8 14L24 35.2 11.2 42 14 28l-10-9.2 14.5-1.6z"/></svg>',
+        workshop: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M30.4 7.6a8 8 0 0 0-11.3 0L7.6 19.1a8 8 0 0 0 0 11.3L19.1 42a8 8 0 0 0 11.3 0L42 30.4a8 8 0 0 0 0-11.3L30.4 7.6zM24 18a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>',
+        tech: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 16l-8 8 8 8 3-3-5-5 5-5-3-3zm20 0l-3 3 5 5-5 5 3 3 8-8-8-8zM20 36l4-24h4l-4 24h-4z"/></svg>',
+        other: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h24c1.1 0 2 .9 2 2v32c0 1.1-.9 2-2 2H12c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm2 6v4h20v-4H14zm0 8v2h20v-2H14zm0 6v2h14v-2H14z"/></svg>'
+      };
+
+      // Escape all dynamic string values from JSON before inserting into HTML.
+      // Data is same-origin from our own build pipeline, but defensive escaping
+      // closes XSS even if a scraped venue/title carries unsafe chars.
+      function escapeHtml(s) {
+        s = (s == null) ? '' : String(s);
+        return s.replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+
+      // CSS variable for type color. design-system.css uses hyphen (--color-dj-set)
+      // while the type field uses underscore (dj_set) — convert.
+      function typeColorVar(type) {
+        return 'var(--color-' + type.replace(/_/g, '-') + ')';
+      }
+
+      function priceLabel(price) {
+        if (!price) return '';
+        if (price.type === 'open') return 'Free';
+        if (price.type === 'donation') return 'Donation';
+        if (price.range && /^€/.test(price.range)) return price.range;
+        return 'Ticketed';
+      }
+
+      function formatDateTimeEnglish(iso) {
+        if (!iso || typeof iso !== 'string') return '';
+        var hasTime = iso.indexOf('T') !== -1;
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return '';
+        var dateStr = d.toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'long', year: 'numeric', timeZone: ATHENS_TZ
+        });
+        if (!hasTime) return dateStr;
+        var timeStr = d.toLocaleTimeString('en-GB', {
+          hour: '2-digit', minute: '2-digit', hour12: false, timeZone: ATHENS_TZ
+        });
+        return dateStr + ' · ' + timeStr;
+      }
+
+      function formatDateRangeEnglish(events) {
+        var seen = {};
+        events.forEach(function (e) {
+          var d = (e.startDate || '').slice(0, 10);
+          if (d) seen[d] = true;
+        });
+        var dates = Object.keys(seen).sort();
+        if (dates.length === 0) return '';
+        if (dates.length === 1) return formatDateTimeEnglish(dates[0]);
+        return formatDateTimeEnglish(dates[0]) + ' – ' + formatDateTimeEnglish(dates[dates.length - 1]);
+      }
+
+      // Build a card by creating DOM nodes with textContent + setAttribute.
+      // Avoids innerHTML on dynamic data (defense-in-depth even though everything
+      // is escaped). Only static SVG icon strings touch innerHTML, and those
+      // are hardcoded constants from TYPE_ICON.
+      function renderCard(event, index) {
+        var type = String(event.type || 'other').toLowerCase();
+        var label = TYPE_LABEL[type] || 'EVENT';
+        var bg = typeColorVar(type);
+        var img = event.imageLocal || event.imageUrl || '';
+        var icon = TYPE_ICON[type] || TYPE_ICON.other;
+        var url = event.url || '#';
+        var title = event.title || '';
+        var venue = (event.venue && event.venue.name) ? event.venue.name : '';
+        var price = priceLabel(event.price);
+        var datetime = event.startDate || '';
+        var datetimeDisplay = formatDateTimeEnglish(datetime);
+
+        var article = document.createElement('article');
+        article.className = 'event-card';
+        article.style.setProperty('--i', String(index));
+
+        var wrap = document.createElement('div');
+        wrap.className = 'card-image-wrapper';
+        wrap.setAttribute('data-type', type);
+
+        if (img) {
+          var image = document.createElement('img');
+          image.className = 'card-image';
+          image.src = img;
+          image.alt = title;
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          image.referrerPolicy = 'no-referrer';
+          image.setAttribute('onerror', "this.style.display='none';this.nextElementSibling.style.display='flex'");
+          wrap.appendChild(image);
+        }
+
+        var placeholder = document.createElement('span');
+        placeholder.className = 'card-placeholder-icon';
+        placeholder.setAttribute('aria-hidden', 'true');
+        if (img) placeholder.style.display = 'none';
+        // Static SVG string from hardcoded TYPE_ICON map — no user input touches this.
+        placeholder.innerHTML = icon;
+        wrap.appendChild(placeholder);
+
+        var badge = document.createElement('span');
+        badge.className = 'card-badge';
+        badge.style.background = bg;
+        badge.textContent = label;
+        wrap.appendChild(badge);
+
+        article.appendChild(wrap);
+
+        var body = document.createElement('div');
+        body.className = 'card-body';
+
+        var h3 = document.createElement('h3');
+        h3.className = 'card-title';
+        var a = document.createElement('a');
+        a.className = 'card-title-recede';
+        a.href = url;
+        a.rel = 'noopener';
+        a.textContent = title;
+        h3.appendChild(a);
+        body.appendChild(h3);
+
+        if (datetimeDisplay) {
+          var dateEl = document.createElement('span');
+          dateEl.className = 'card-date';
+          var timeEl = document.createElement('time');
+          timeEl.setAttribute('datetime', datetime);
+          timeEl.textContent = datetimeDisplay;
+          dateEl.appendChild(timeEl);
+          body.appendChild(dateEl);
+        }
+
+        if (venue) {
+          var venueEl = document.createElement('span');
+          venueEl.className = 'card-venue';
+          venueEl.textContent = venue;
+          body.appendChild(venueEl);
+        }
+
+        if (price) {
+          var priceEl = document.createElement('span');
+          priceEl.className = 'card-price';
+          priceEl.textContent = price;
+          body.appendChild(priceEl);
+        }
+
+        article.appendChild(body);
+        return article;
+      }
+
+      function applyHero(label, dateLabel, count) {
+        var headline = document.getElementById('hero-headline');
+        var sub = document.getElementById('hero-sub');
+
+        // Weight+contrast emphasis split at " in " (matches both "Tonight in Athens"
+        // and "This weekend in Athens"). textContent-only assembly, no innerHTML.
+        var parts = label.split(/\s+in\s+/);
+        while (headline.firstChild) headline.removeChild(headline.firstChild);
+        if (parts.length === 2) {
+          var em = document.createElement('span');
+          em.className = 'hero-em';
+          em.textContent = parts[0];
+          var de = document.createElement('span');
+          de.className = 'hero-de';
+          de.textContent = ' in ' + parts[1];
+          headline.appendChild(em);
+          headline.appendChild(de);
+        } else {
+          headline.textContent = label;
+        }
+
+        if (count > 0 && dateLabel) {
+          sub.textContent = dateLabel + ' · ' + count + ' event' + (count === 1 ? '' : 's') + ' curated by AI';
+        } else {
+          sub.textContent = '';
+        }
+      }
+
+      async function fetchBucket(path) {
+        var r = await fetch(path);
+        if (!r.ok) throw new Error('fetch ' + path + ': ' + r.status);
+        var data = await r.json();
+        return Array.isArray(data.events) ? data.events : [];
+      }
+
+      async function main() {
+        var grid = document.getElementById('grid');
+        var empty = document.getElementById('empty');
+
+        // Today's date label in Athens TZ
+        var todayLabel = new Date().toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'long', year: 'numeric', timeZone: ATHENS_TZ
+        });
+
+        var events = [];
+        var heroLabel = 'Tonight in Athens';
+        var dateLabel = todayLabel;
+
+        try {
+          events = await fetchBucket('/api/today.json');
+        } catch (err) {
+          console.error('today.json fetch failed:', err);
+        }
+
+        // Fallback to this-weekend if today is thin (rehearsal-day safety;
+        // demo-day has 6+ events so fallback won't trigger then)
+        if (events.length < 4) {
+          try {
+            var weekendEvents = await fetchBucket('/api/this-weekend.json');
+            if (weekendEvents.length > 0) {
+              events = weekendEvents;
+              heroLabel = 'This weekend in Athens';
+              dateLabel = formatDateRangeEnglish(weekendEvents);
+            }
+          } catch (err) {
+            console.error('this-weekend.json fetch failed:', err);
+          }
+        }
+
+        applyHero(heroLabel, dateLabel, events.length);
+
+        if (events.length === 0) {
+          grid.hidden = true;
+          empty.hidden = false;
+          return;
+        }
+
+        // DOM construction: append nodes (no innerHTML on dynamic data)
+        var fragment = document.createDocumentFragment();
+        events.forEach(function (e, i) { fragment.appendChild(renderCard(e, i)); });
+        while (grid.firstChild) grid.removeChild(grid.firstChild);
+        grid.appendChild(fragment);
+      }
+
+      main();
+    })();
+  </script>
+</body>
+</html>
