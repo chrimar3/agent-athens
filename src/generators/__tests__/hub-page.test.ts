@@ -351,6 +351,28 @@ describe('Hub @graph envelope (S139)', () => {
     const overflowHtml = renderOverflowPage(englishHubConfig, events, events, 'en');
     expect(overflowHtml).toContain('<link rel="canonical" href="https://agentathens.com/en/today/">');
   });
+
+  test('EN hub title drops the " | agent-athens" suffix (S155 GEO ruling)', () => {
+    // GEO ruled on the EN cornerstone Bing title-length flag: drop the suffix
+    // on EN hubs only. Locked Editorial titleEn copy stays untouched. EL keeps
+    // the suffix pending separate GEO scope.
+    const events = makeTodayEvents(5);
+    const englishHubConfig: HubConfig = {
+      ...todayHubConfig,
+      answerCapsuleEn: 'Today in Athens.',
+    };
+    const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
+    expect(enHtml!).toContain('<title>Events in Athens Today</title>');
+    expect(enHtml!).not.toContain('<title>Events in Athens Today | agent-athens</title>');
+  });
+
+  test('EL hub title STILL has the " | agent-athens" suffix (locale-conditional strip integrity)', () => {
+    // GEO ruled on EN only. The locale-conditional strip must NOT widen to EL.
+    // If this fails, the strip implementation cascaded beyond GEO's ruling.
+    const events = makeTodayEvents(5);
+    const elHtml = renderHubPage(todayHubConfig, events, events);
+    expect(elHtml!).toContain('<title>Εκδηλώσεις Σήμερα στην Αθήνα | agent-athens</title>');
+  });
 });
 
 describe('Comparison table', () => {

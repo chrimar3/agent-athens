@@ -399,7 +399,14 @@ export function renderHubPage(
   // Override page title and description with hub-specific values
   // (hubTitleText, rawCapsule, resolveTokens, answerCapsule are defined above
   // the renderPage call where they're consumed for preFilterBarContent composition).
-  const hubTitle = `${hubTitleText} | agent-athens`;
+  //
+  // S155 (2026-05-25): drop the ` | agent-athens` suffix on EN hubs per GEO
+  // ruling — Bing title-length flag on /en/this-weekend/ (112ch → ~97ch). The
+  // GEO-locked Editorial titleEn copy stays untouched. EN-only: EL keeps its
+  // suffix (GEO ruled on the EN cornerstone, did not bless an EL strip — don't
+  // silently widen). EDPs/venues/content/overflow keep their suffixes pending
+  // separate GEO scope.
+  const hubTitle = locale === 'en' ? hubTitleText : `${hubTitleText} | agent-athens`;
   const hubDescription = locale === 'en'
     ? (config.metaDescriptionEn ? resolveTokens(config.metaDescriptionEn).substring(0, 155) : answerCapsule.substring(0, 155))
     : (config.metaDescriptionEl ? resolveTokens(config.metaDescriptionEl).substring(0, 155) : rawCapsule.substring(0, 155));

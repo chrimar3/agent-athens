@@ -15,8 +15,14 @@
  * aria-labelledby on the dialog targets a heading defined ONLY in the dialog wrapper.
  */
 
+// S155 (2026-05-25): name heading is <h2>, NOT <h1>. The colophon dialog rides
+// into every page via site-chrome.ts → renderSiteNav, so an <h1> here makes
+// every page emit two H1s — Bing flagged this on /en/this-weekend/ (the demo
+// cornerstone) as "Duplicate H1." Single-H1 semantic-uniqueness rule. The
+// dialog's heading hierarchy starts at <h2> below the page's own <h1>.
+// Coordination note for the colophon owner: specs/colophon-h1-handoff-2026-05-25.md.
 export const COLOPHON_CONTENT = `<header class="colophon-content-header">
-  <h1 class="colophon-name">Christos Maragkoudakis</h1>
+  <h2 class="colophon-name">Christos Maragkoudakis</h2>
   <p class="colophon-tagline">AI systems, built end to end · Economics + LLMs · Athens</p>
   <p class="colophon-one-liner">I study by building. This site is one of the builds.</p>
 </header>
