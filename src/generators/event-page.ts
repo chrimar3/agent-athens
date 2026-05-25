@@ -28,6 +28,7 @@ import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { classifyEventLifecycle, shouldNoindexEvent } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
+import { getOgImage } from '../utils/og-image-fallback';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { resolveCtaForEvent } from '../ticketing/cta';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
@@ -132,26 +133,6 @@ export function generateEventSlug(event: Event): string {
   const venueSlug = slugify(event.venue.name);
   const titleSlug = slugify(event.title);
   return `${idPrefix}-${venueSlug}-${titleSlug}`;
-}
-
-/**
- * Get the OG image URL for an event
- * Fallback chain: event image → venue default → per-event OG → type default → site default
- *
- * Events without any photo get a branded per-event OG image (title/venue/date)
- * instead of the generic type default. Per-event OG images are generated
- * by generateEventOgImages() in og-image.ts during the build.
- */
-function getOgImage(event: Event): string {
-  // Prefer self-hosted image, then hotlinked source image
-  if (event.imageLocal) return event.imageLocal;
-  if (event.imageUrl) return event.imageUrl;
-
-  // Fall back to venue image if available
-  if (event.venueImage) return event.venueImage;
-
-  // Per-event branded OG image (generated for imageless events)
-  return `/images/og/events/${generateEventSlug(event)}.png`;
 }
 
 /**
@@ -620,7 +601,7 @@ ${renderAnalytics()}
   ${renderSearchOverlay()}
 
   <main>
-  <article id="main-content" tabindex="-1" itemscope itemtype="https://schema.org/${schemaType}"${isPast ? ' data-past="true"' : ''}>
+  <article id="main-content" tabindex="-1"${isPast ? ' data-past="true"' : ''}>
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
       <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
       <div class="edp-hero-inner">
@@ -632,9 +613,9 @@ ${renderAnalytics()}
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
         ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
         <header>
-          <h1 class="edp-title" itemprop="name">${event.title}</h1>
+          <h1 class="edp-title">${event.title}</h1>
           <div class="edp-meta">
-            <span class="edp-meta-date"><time itemprop="startDate" datetime="${event.startDate}">${dateDisplay}</time></span>
+            <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
             · ${venueHasPage ? `<a href="/venues/${venueSlug}/">${event.venue.name}</a>` : event.venue.name}
             · ${priceDisplay}
           </div>
@@ -668,7 +649,7 @@ ${renderAnalytics()}
     <div class="edp-content">
       ${practicalBlock}
 
-      <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}" itemprop="description">
+      <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}">
         ${descriptionHtml}
         ${hasFullDescription ? '<div class="edp-enriched-badge">AI-enriched content</div>' : ''}
       </section>
@@ -677,16 +658,11 @@ ${renderAnalytics()}
 
       ${inlineCtaHtml}
 
-      <section class="edp-venue-section" itemprop="location" itemscope itemtype="https://schema.org/${VENUE_TYPE_MAP[schemaType] || 'EventVenue'}">
-        <h2 itemprop="name">${event.venue.name}</h2>
-        <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-          ${event.venue.address
-            ? `<div class="edp-venue-address"><span itemprop="streetAddress">${event.venue.address}</span></div>`
-            : `<meta itemprop="streetAddress" content="">`}
-          <meta itemprop="addressLocality" content="${getLocalityName()}">
-          <meta itemprop="addressRegion" content="${getRegionName()}">
-          <meta itemprop="addressCountry" content="${getCountryCode()}">
-        </div>
+      <section class="edp-venue-section">
+        <h2>${event.venue.name}</h2>
+        ${event.venue.address
+          ? `<div class="edp-venue-address">${event.venue.address}</div>`
+          : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
         <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
       </section>

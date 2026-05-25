@@ -112,15 +112,17 @@ describe("Event Detail Page — Hero section", () => {
     expect(html).toContain("--edp-type-color: var(--color-concert)");
   });
 
-  test("title has edp-title class and itemprop=name", () => {
+  test("title has edp-title class (no microdata itemprop post-strip)", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain('class="edp-title" itemprop="name"');
+    expect(html).toContain('class="edp-title"');
     expect(html).toContain(sampleConcert.title);
+    expect(html).not.toContain('itemprop="name"');
   });
 
-  test("date has itemprop=startDate with correct datetime", () => {
+  test("date has datetime attribute (no microdata itemprop post-strip)", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain(`itemprop="startDate" datetime="${sampleConcert.startDate}"`);
+    expect(html).toContain(`datetime="${sampleConcert.startDate}"`);
+    expect(html).not.toContain('itemprop="startDate"');
   });
 
   test("type badge renders with correct label", () => {
@@ -309,14 +311,28 @@ describe("Event Detail Page — Schema.org / SEO", () => {
     expect(html).toContain(`<link rel="canonical" href="https://agentathens.com/events/${slug}/"`);
   });
 
-  test("uses SCHEMA_TYPE_MAP for itemtype", () => {
+  test("uses SCHEMA_TYPE_MAP for JSON-LD @type (concert → MusicEvent)", () => {
     const html = renderEventDetailPage(sampleConcert, []);
-    expect(html).toContain('itemtype="https://schema.org/MusicEvent"');
+    // Post-microdata-strip: itemtype on <article> is gone. JSON-LD carries @type.
+    expect(html).not.toContain('itemtype="https://schema.org/MusicEvent"');
+    expect(html).toMatch(/"@type"\s*:\s*"MusicEvent"/);
   });
 
-  test("exhibition uses ExhibitionEvent schema type", () => {
+  test("exhibition uses ExhibitionEvent JSON-LD @type", () => {
     const html = renderEventDetailPage(sampleFreeExhibition, []);
-    expect(html).toContain('itemtype="https://schema.org/ExhibitionEvent"');
+    expect(html).not.toContain('itemtype="https://schema.org/ExhibitionEvent"');
+    expect(html).toMatch(/"@type"\s*:\s*"ExhibitionEvent"/);
+  });
+
+  test("EDP article carries no microdata itemscope/itemprop/itemtype post-strip", () => {
+    const html = renderEventDetailPage(sampleConcert, []);
+    // EDP article should still be present with id="main-content" + tabindex.
+    expect(html).toContain('id="main-content"');
+    expect(html).toContain('tabindex="-1"');
+    // But all microdata attributes are gone.
+    expect(html).not.toMatch(/itemscope/);
+    expect(html).not.toMatch(/itemprop=/);
+    expect(html).not.toMatch(/itemtype=/);
   });
 });
 

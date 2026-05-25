@@ -8,8 +8,6 @@ import type { Locale } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
-import { resolveEventStatus, availabilityForEventStatus } from '../utils/schema-geo';
-import { classifyTicketSource } from '../utils/ticket-source-classifier';
 import { generateEventSlug } from '../generators/event-page';
 import { buildCollectionPageMember, buildHomepageGraph } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
@@ -175,7 +173,7 @@ ${renderAnalytics()}
 
     <main id="main-content" tabindex="-1">
       ${eventCount > 0 ? `
-      <section class="card-grid" itemscope itemtype="https://schema.org/ItemList">
+      <section class="card-grid">
         ${eventListHTML}
       </section>
       ` : `
@@ -228,12 +226,6 @@ export interface CardData {
   shortDesc: string;
   numericPrice: number;
   exhibitionIsOpen: boolean;
-  schemaType: string;
-  // S101a-B: schema-only values, separated from priceText (display).
-  // null = omit microdata price/availability entirely (no amount, or omit_offer
-  // branch from availabilityForEventStatus on past events).
-  numericPriceForSchema: string | null;
-  availabilityForSchema: string | null;
 }
 
 export function prepareCardData(event: Event): CardData {
@@ -275,9 +267,6 @@ export function prepareCardData(event: Event): CardData {
   // Placeholder icon
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
 
-  // Schema.org type
-  const schemaType = isExhibition ? 'ExhibitionEvent' : event['@type'];
-
   // Venue display
   const venueText = event.venue.neighborhood
     ? `${event.venue.name} · ${displayNeighborhood(event.venue.neighborhood)}`
@@ -289,55 +278,22 @@ export function prepareCardData(event: Event): CardData {
   // Numeric price for data attribute (sort-by-price)
   const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
 
-  // S101a-B: derive schema-only values via the canonical helper (mirrors
-  // event-page.ts:227 behavior). availabilityForEventStatus returns
-  // omit_offer for EventCompleted → null both fields so renderEventCard
-  // emits no microdata price/availability for past events.
-  // S134: also omit Offer microdata when classifier says omit (listing_aggregator
-  // / unclassified / null-URL) — keeps the single emission gate consistent
-  // across event-detail JSON-LD, hub-card JSON-LD, and hub-card microdata.
-  const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
-  const availability = availabilityForEventStatus(eventStatus);
-  const classifierOmits = event.price.type === 'with-ticket'
-    && 'omit_offer' in classifyTicketSource(event);
-  let numericPriceForSchema: string | null;
-  let availabilityForSchema: string | null;
-  if (availability.kind === 'omit_offer' || classifierOmits) {
-    numericPriceForSchema = null;
-    availabilityForSchema = null;
-  } else if (event.price.type === 'open') {
-    // Free events: numeric "0" + InStock per Strategist 2026-04-29 spec
-    numericPriceForSchema = '0';
-    availabilityForSchema = availability.value;
-  } else if (event.price.amount && event.price.amount > 0) {
-    numericPriceForSchema = String(event.price.amount);
-    availabilityForSchema = availability.value;
-  } else {
-    // No-amount with-ticket event: omit BOTH price and availability.
-    // Schema.org Offer requires price; emitting availability alone
-    // creates a malformed Offer. The 114 fallback events fall here.
-    numericPriceForSchema = null;
-    availabilityForSchema = null;
-  }
-
-  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType, numericPriceForSchema, availabilityForSchema };
+  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen };
 }
 
 export function renderEventCard(event: Event): string {
-  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen, schemaType, numericPriceForSchema, availabilityForSchema } = prepareCardData(event);
+  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, numericPrice, exhibitionIsOpen } = prepareCardData(event);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
-  // S101a-B: split visible display from machine-readable schema.
-  // Visible <span> shows €15 (display); <meta itemprop="price"> carries
-  // the numeric value Google's rich-results parser needs. Past events
-  // (omit_offer) emit no Offer block at all.
-  const offerMicrodata = numericPriceForSchema !== null
-    ? `<span class="card-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span>${priceText}</span><meta itemprop="price" content="${numericPriceForSchema}"><meta itemprop="priceCurrency" content="${event.price.currency || 'EUR'}">${availabilityForSchema ? `<meta itemprop="availability" content="${availabilityForSchema}">` : ''}</span>`
-    : `<span class="card-price"><span>${priceText}</span></span>`;
+  // 2026-05-25 microdata strip: JSON-LD ItemList (schema-graph-builders.ts)
+  // is the authoritative emission surface. The visible price span carries
+  // display text only; numeric price + availability live on the JSON-LD
+  // item.offers object (built via buildOfferOrOmit, same gating logic).
+  const priceHtml = `<span class="card-price"><span>${priceText}</span></span>`;
 
   return `
-  <article class="event-card" data-price="${numericPrice}" itemscope itemtype="https://schema.org/${schemaType}">
+  <article class="event-card" data-price="${numericPrice}">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
       <img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
@@ -353,13 +309,11 @@ export function renderEventCard(event: Event): string {
       ${renderCardSaveButton(event.id, slug, event.title)}
     </div>`}
     <div class="card-body">
-      <h3 class="card-title" itemprop="name"><a href="${href}" class="card-link">${event.title}</a></h3>
-      <span class="card-date"><time itemprop="startDate" datetime="${event.startDate}">${dateStr}</time>${event.type === 'exhibition' && event.endDate ? `<meta itemprop="endDate" content="${event.endDate}">` : ''}</span>
-      <span class="card-venue" itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">${venueText}</span></span>
-      ${offerMicrodata}
+      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
+      <span class="card-venue">${venueText}</span>
+      ${priceHtml}
     </div>
-    <meta itemprop="eventStatus" content="${resolveEventStatus(event.startDate, event.endDate, event.type)}">
-    <meta itemprop="description" content="${shortDesc}">
   </article>`;
 }
 

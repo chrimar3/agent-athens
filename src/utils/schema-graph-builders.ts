@@ -29,6 +29,7 @@ import {
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { generateEventSlug } from '../generators/event-page';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
+import { getOgImage } from './og-image-fallback';
 
 // --- Per-event ListItem builder (extracted verbatim from page.ts:459-512) ---
 
@@ -81,6 +82,16 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
     });
     if ('offer' in offerDecision) {
       item.offers = offerDecision.offer;
+    }
+
+    // Hub-item image (2026-05-25 strip + image-add): mirror EDP JSON-LD
+    // image emission (buildEventSchemaObject:248-252) so hub ItemList items
+    // and EDP Event entities cannot drift on image presence. Omit on empty
+    // (omit-beats-fabricate): the helper always returns a non-empty path,
+    // but the absolute-URL guard keeps the contract explicit.
+    const ogImage = getOgImage(event);
+    if (ogImage) {
+      item.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
     }
 
     return {

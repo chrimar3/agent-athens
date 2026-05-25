@@ -1122,75 +1122,6 @@ export function validateVenueIdAndSlug(html: string, slug: string): SchemaValida
   return result;
 }
 
-export function validateMicrodata(html: string): { errors: string[]; warnings: string[] } {
-  const errors: string[] = [];
-  const warnings: string[] = [];
-
-  // S145 (GEO 2026-05-22): Event-detail microdata MUST emit itemprop="location".
-  // GSC's Rich Results parser counts JSON-LD + microdata as separate items; an
-  // event-detail page's microdata (article#main-content with Event itemtype)
-  // missing location triggers "Missing field location" on Active + Just-passed
-  // events. Rule scoped to article#main-content (the event-detail surface) so
-  // hub-card microdata articles stay out of scope. Past events (EventCompleted)
-  // are skipped — they're not rich-result-eligible anyway. Pre-extracted via a
-  // separate regex (the main per-card loop below only sees the <article>'s
-  // INNER HTML, which doesn't carry the id="main-content" attribute).
-  const eventDetailArticleRegex = /<article\b([^>]*?id="main-content"[^>]*?itemtype="https:\/\/schema\.org\/[A-Za-z]*Event"[^>]*)>([\s\S]*?)<\/article>/g;
-  for (const m of html.matchAll(eventDetailArticleRegex)) {
-    const inner = m[2];
-    if (/itemprop="eventStatus"\s+content="https:\/\/schema\.org\/EventCompleted"/.test(inner)) continue;
-    // Require nested itemprop="location" AND a nested itemprop="address"
-    // inside it. The location block must carry the rich-result-required set
-    // (parity with JSON-LD inline-with-@id per S143).
-    const hasLocationItemprop = /itemprop="location"\s+itemscope/.test(inner);
-    const hasAddressItemprop = /itemprop="address"\s+itemscope/.test(inner);
-    if (!hasLocationItemprop || !hasAddressItemprop) {
-      errors.push(`EVENT_MICRODATA_MISSING_LOCATION: event-detail article#main-content must emit nested itemprop="location" with nested itemprop="address" (parity with JSON-LD inline-with-@id per GEO 2026-05-22)`);
-    }
-  }
-
-  // Extract each <article> block — cards are discrete article elements.
-  // Non-greedy match handles back-to-back articles without bleeding across.
-  const articleRegex = /<article\b[^>]*>([\s\S]*?)<\/article>/g;
-  let cardIndex = 0;
-
-  for (const match of html.matchAll(articleRegex)) {
-    cardIndex++;
-    const card = match[1];
-
-    // Past-event short-circuit: EventCompleted cards legitimately omit
-    // price + availability. Skip the entire card from microdata checks.
-    if (/itemprop="eventStatus"\s+content="https:\/\/schema\.org\/EventCompleted"/.test(card)) {
-      continue;
-    }
-
-    // Find itemprop="price" in either <span> or <meta> form.
-    const spanPriceMatch = card.match(/<span\s+itemprop="price"[^>]*>([^<]*)<\/span>/);
-    const metaPriceMatch = card.match(/<meta\s+itemprop="price"\s+content="([^"]*)"/);
-
-    let priceValue: string | null = null;
-    if (spanPriceMatch) priceValue = spanPriceMatch[1].trim();
-    else if (metaPriceMatch) priceValue = metaPriceMatch[1].trim();
-
-    // No price microdata at all: card has no Offer to validate. Skip silently.
-    if (priceValue === null) continue;
-
-    // Rule 1: numeric only (mirror JSON-LD offers.price rule at line 172).
-    if (/[€$£¥]/.test(priceValue) || (priceValue !== '' && isNaN(Number(priceValue)))) {
-      errors.push(`Card ${cardIndex}: itemprop="price" must be numeric, got "${priceValue}"`);
-    }
-
-    // Rule 2: when price is present, availability must also be present.
-    // Schema.org Offer requires both for valid markup.
-    const hasAvailability = /itemprop="availability"/.test(card);
-    if (!hasAvailability) {
-      errors.push(`Card ${cardIndex}: itemprop="price" present but itemprop="availability" missing`);
-    }
-  }
-
-  return { errors, warnings };
-}
-
 /**
  * Validate all generated event pages in a dist directory.
  *
@@ -1235,12 +1166,6 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       // before the WARN→FAIL flip.
       validateVenueIdAndSlug(html, slug),
     );
-    // S145: extend event-detail surface with microdata coverage (was hub-only).
-    // The EVENT_MICRODATA_MISSING_LOCATION rule fires on article#main-content
-    // with Event itemtype missing nested location+address microdata.
-    const microResult = validateMicrodata(html);
-    eventResult.errors.push(...microResult.errors);
-    eventResult.warnings.push(...microResult.warnings);
     details.push(eventResult);
   }
 
@@ -1261,10 +1186,6 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
         checkCrossLocaleCanonical(html, `en/events/${slug}/`),
         checkPhaseKeyedNoindex(html, `en/events/${slug}/`),
       );
-      // S145: same event-detail microdata coverage on the /en/ surface.
-      const enMicroResult = validateMicrodata(html);
-      enResult.errors.push(...enMicroResult.errors);
-      enResult.warnings.push(...enMicroResult.warnings);
       details.push(enResult);
     }
   }
@@ -1280,10 +1201,6 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
     if (!existsSync(htmlPath)) continue;
     const html = readFileSync(htmlPath, 'utf-8');
     const hubResult = validateHubSchema(html, slug);
-    // S101a-B: also scan microdata on hub cards (parallel emission surface).
-    const microResult = validateMicrodata(html);
-    hubResult.errors.push(...microResult.errors);
-    hubResult.warnings.push(...microResult.warnings);
     mergeIntoResult(hubResult,
       checkOrphanReferences(html, `hub:${slug}`, canonicalUrls, internalHost),
       checkMemberOrdering(html, `hub:${slug}`, 'hub', BASE_URL),
@@ -1303,9 +1220,6 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       if (!existsSync(htmlPath)) continue;
       const html = readFileSync(htmlPath, 'utf-8');
       const hubResult = validateHubSchema(html, `en/${slug}`);
-      const microResult = validateMicrodata(html);
-      hubResult.errors.push(...microResult.errors);
-      hubResult.warnings.push(...microResult.warnings);
       mergeIntoResult(hubResult,
         checkOrphanReferences(html, `hub:en/${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `hub:en/${slug}`, 'hub', BASE_URL),

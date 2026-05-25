@@ -117,7 +117,9 @@ describe("renderPage", () => {
     const html = renderPage(sampleMetadata, [sampleConcert]);
 
     expect(html).toContain('class="card-grid"');
-    expect(html).toContain('itemscope itemtype="https://schema.org/ItemList"');
+    // Post-microdata-strip: card-grid is no longer itemscope'd.
+    // JSON-LD ItemList in <script type="application/ld+json"> is authoritative.
+    expect(html).not.toContain('itemscope itemtype="https://schema.org/ItemList"');
   });
 
   test("should render empty state when no events", () => {
@@ -290,17 +292,20 @@ describe("renderEventCard (via renderPage)", () => {
   test("should render event date and time", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain('<time itemprop="startDate"');
+    expect(html).toContain('<time');
     expect(html).toContain(`datetime="${sampleConcert.startDate}"`);
+    expect(html).not.toContain('itemprop="startDate"');
   });
 
-  test("should render venue with Schema.org markup", () => {
+  test("should render venue with visible markup (no microdata post-strip)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain('itemprop="location"');
-    expect(html).toContain('itemscope itemtype="https://schema.org/Place"');
-    // Venue name includes Greek neighborhood via displayNeighborhood()
-    expect(html).toContain(`<span itemprop="name">${sampleConcert.venue.name} · Μετς</span>`);
+    expect(html).toContain('class="card-venue"');
+    // Visible venue text intact with Greek neighborhood via displayNeighborhood()
+    expect(html).toContain(`${sampleConcert.venue.name} · Μετς`);
+    expect(html).not.toContain('itemprop="location"');
+    expect(html).not.toContain('itemscope itemtype="https://schema.org/Place"');
+    expect(html).not.toContain('itemprop="name"');
   });
 
   test("should render venue neighborhood if present", () => {
@@ -316,28 +321,33 @@ describe("renderEventCard (via renderPage)", () => {
     expect(html).toContain("ΣΥΝΑΥΛΙΑ"); // Greek uppercase for "concert"
   });
 
-  test("should render price with Schema.org offer markup", () => {
+  test("should render visible price (no microdata Offer markup post-strip)", () => {
     // Use a future-dated event: per S101a-B, past events legitimately
     // omit the Offer block via availabilityForEventStatus omit_offer.
-    const html = renderPage(metadata, [getTomorrowEvent()]);
+    const futureEvent = getTomorrowEvent();
+    const html = renderPage(metadata, [futureEvent]);
 
-    expect(html).toContain('itemprop="offers"');
-    expect(html).toContain('itemscope itemtype="https://schema.org/Offer"');
-    expect(html).toContain('itemprop="price"');
-    expect(html).toContain('itemprop="priceCurrency"');
+    expect(html).toContain('class="card-price"');
+    expect(html).toContain(`€${futureEvent.price.amount}`);
+    expect(html).not.toContain('itemprop="offers"');
+    expect(html).not.toContain('itemscope itemtype="https://schema.org/Offer"');
+    expect(html).not.toContain('itemprop="price"');
+    expect(html).not.toContain('itemprop="priceCurrency"');
   });
 
-  test("should render event with proper Schema.org type", () => {
+  test("article element has no Schema.org itemtype post-strip", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain(`itemtype="https://schema.org/${sampleConcert['@type']}"`);
+    expect(html).toContain('class="event-card"');
+    expect(html).not.toContain(`itemtype="https://schema.org/${sampleConcert['@type']}"`);
+    expect(html).not.toContain('itemscope itemtype');
   });
 
-  test("should include event status metadata", () => {
+  test("event status carried by JSON-LD only (no microdata meta post-strip)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain('itemprop="eventStatus"');
-    // sampleConcert is in the past, so status is dynamic
+    expect(html).not.toContain('itemprop="eventStatus"');
+    // Status still emitted in JSON-LD itemListElement[].item.eventStatus.
     expect(html).toMatch(/https:\/\/schema\.org\/Event(Scheduled|Completed)/);
   });
 
@@ -666,66 +676,19 @@ describe("Site chrome accessibility (via renderPage)", () => {
   });
 });
 
-// ── S101a-B microdata price + availability fix ─────────────────────────
+// ── Hub JSON-LD Offer.availability — post-microdata-strip ───────────────
 //
-// Per Strategist 2026-04-29 spec + S101a-A audit:
-//   1. <span itemprop="price"> microdata must be numeric (no €/$/£/¥)
-//   2. <meta itemprop="availability"> must be present on with-ticket cards
-//   3. Past events (EventCompleted) omit both — mirrors detail-page omit_offer branch
-//   4. Hub JSON-LD Offer.availability must call availabilityForEventStatus(),
-//      not hardcode InStock
-describe("S101a-B microdata price + availability", () => {
+// Microdata price/availability tests retired with the strip (2026-05-25).
+// The remaining JSON-LD invariant: Offer.availability uses
+// availabilityForEventStatus(), not hardcoded InStock — past events omit
+// the offers block, future events get availability from the helper.
+describe("Hub JSON-LD Offer.availability via availabilityForEventStatus", () => {
   const metadata: PageMetadata = {
     title: "Test", description: "Test", keywords: "test",
     url: "test", eventCount: 1, lastUpdate: "2025-11-01T10:00:00Z", filters: {}
   };
 
-  test("ticketed future event microdata: itemprop=price emits numeric, no currency symbol", () => {
-    const futureEvent = getTomorrowEvent();
-    const html = renderPage(metadata, [futureEvent]);
-
-    // Numeric price reaches microdata via <meta itemprop="price">
-    expect(html).toContain(`<meta itemprop="price" content="${futureEvent.price.amount}">`);
-
-    // Bug regression guard: no €-prefixed value inside any itemprop="price" span/meta
-    expect(html).not.toMatch(/itemprop="price"[^>]*>\s*€/);
-    expect(html).not.toMatch(/itemprop="price"\s+content="€/);
-  });
-
-  test("ticketed future event microdata: itemprop=availability present and InStock", () => {
-    const futureEvent = getTomorrowEvent();
-    const html = renderPage(metadata, [futureEvent]);
-
-    expect(html).toContain('<meta itemprop="availability" content="https://schema.org/InStock">');
-  });
-
-  test("event with no price.amount omits microdata price+availability entirely", () => {
-    const noAmountEvent: Event = {
-      ...getTomorrowEvent(),
-      price: { type: 'with-ticket', currency: 'EUR' }, // no amount
-    };
-    const html = renderPage(metadata, [noAmountEvent]);
-
-    // No microdata price emission for amount-less ticketed events.
-    // Matches BOTH <span itemprop="price">…</span> and <meta itemprop="price" content="…">
-    expect(html).not.toMatch(/itemprop="price"/);
-    expect(html).not.toMatch(/itemprop="availability"/);
-  });
-
-  test("past event (EventCompleted) omits both microdata price and availability", () => {
-    // sampleConcert startDate 2025-11-15 — guaranteed past as of 2026
-    const html = renderPage(metadata, [sampleConcert]);
-
-    // Verify it's actually a past event (otherwise this test is meaningless)
-    expect(html).toContain('content="https://schema.org/EventCompleted"');
-
-    // Past events: omit both per availabilityForEventStatus omit_offer branch.
-    // Broad regex matches any itemprop="price" / itemprop="availability" form.
-    expect(html).not.toMatch(/itemprop="price"/);
-    expect(html).not.toMatch(/itemprop="availability"/);
-  });
-
-  test("hub JSON-LD Offer.availability uses availabilityForEventStatus, not hardcoded InStock", () => {
+  test("past event omits offers block; future event carries availability from helper", () => {
     // Past event in hub JSON-LD: per helper, omit_offer kicks in → no offers block
     const html = renderPage(metadata, [sampleConcert]);
 
@@ -744,5 +707,45 @@ describe("S101a-B microdata price + availability", () => {
 
     expect(futureItem.offers).toBeDefined();
     expect(futureItem.offers.availability).toBe("https://schema.org/InStock");
+  });
+});
+
+// ── Post-strip invariant: zero hub-card microdata anywhere ──────────────
+describe("Post-microdata-strip: hub HTML carries zero itemscope/itemprop", () => {
+  const metadata: PageMetadata = {
+    title: "Test", description: "Test", keywords: "test",
+    url: "test", eventCount: 2, lastUpdate: "2025-11-01T10:00:00Z", filters: {}
+  };
+
+  test("rendered hub HTML contains no itemscope and no itemprop", () => {
+    const html = renderPage(metadata, [sampleConcert, sampleFreeExhibition, getTomorrowEvent()]);
+
+    // Belt-and-braces: any microdata residue across past+future, ticketed+open events.
+    expect(html).not.toMatch(/itemscope/);
+    expect(html).not.toMatch(/itemprop=/);
+  });
+});
+
+// ── Hub ItemList JSON-LD items carry image (post-strip image-add) ───────
+describe("Hub ItemList JSON-LD items carry image field", () => {
+  const metadata: PageMetadata = {
+    title: "Test", description: "Test", keywords: "test",
+    url: "test", eventCount: 1, lastUpdate: "2025-11-01T10:00:00Z", filters: {}
+  };
+
+  test("each itemListElement[].item has a non-empty absolute-URL image", () => {
+    const html = renderPage(metadata, [sampleConcert, sampleFreeExhibition]);
+
+    const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
+    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    const items = jsonLd.mainEntity.itemListElement;
+
+    expect(items.length).toBeGreaterThan(0);
+    for (const li of items) {
+      expect(typeof li.item.image).toBe('string');
+      expect(li.item.image.length).toBeGreaterThan(0);
+      // Absolute URL — either http(s):// or BASE_URL-prefixed path
+      expect(li.item.image).toMatch(/^https?:\/\//);
+    }
   });
 });

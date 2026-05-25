@@ -105,29 +105,24 @@ require a row added to this manifest.
   validated 0 violations across 3,808 event pages before WARN→FAIL flip.
   Negative-control tests permanent in `schema-completeness.test.ts`.
 
-### 2. Event detail page — microdata Event element
+### 2. Event detail page — microdata Event element  ⛔ `removed:2026-05-25:strip-post-s139`
 
-**Emitter:** `src/templates/page.ts` `renderEventMicrodata` (lines ~268-303).
-**HTML location:** `dist/events/<slug>/index.html` `<article itemtype="https://schema.org/MusicEvent">` and similar.
-**Validator:** `validateMicrodata` (`schema-completeness.ts:625`).
-**FAIL rules applied:**
-- `itemprop="price"` numeric (mirror of JSON-LD `offers.price` format rule)
-- When `itemprop="price"` present, `itemprop="availability"` must also be present
-- **S145 EVENT_MICRODATA_MISSING_LOCATION (GEO 2026-05-22):** event-detail
-  `<article id="main-content">` with Event itemtype MUST emit nested
-  `itemprop="location"` + nested `itemprop="address"` (parity with JSON-LD
-  inline-with-@id per S143). Closes the "Missing field location" surface that
-  GSC counts JSON-LD + microdata as separate items and reports field-completeness
-  per item. `EventCompleted` (past) skipped — rich-result-eligibility relaxed.
-  Rule scoped to `id="main-content"` so hub-card articles stay out. `validateMicrodata`
-  now wired into `validateAllPages` for event pages (bare-root + /en/), was hub-only before.
-**Notes:** The microdata surface deliberately omits the bare Offer (no price+availability pair when no amount), preventing the S139-fix class on this surface by construction. The price-or-priceSpecification rule doesn't apply because microdata never emits a structured Offer object — it emits scalar itemprops.
+**Status:** retired. Microdata stripped from both event-detail (`src/generators/event-page.ts`) and hub-card (`src/templates/page.ts`) surfaces on 2026-05-25 per GEO Strategist ruling. JSON-LD is authoritative on both surfaces post-S139. `validateMicrodata` retired in the same commit (function deleted from `src/validators/schema-completeness.ts`; 4 call sites removed; test block deleted).
+
+**Why retired:**
+- GSC counts JSON-LD + microdata as separate items, inflating field-completeness denominators and producing parallel-emission drift bugs (S101a price-vs-availability rules existed only because microdata had to mirror JSON-LD).
+- Post-S139, JSON-LD covers every rich-result-eligible field with stronger structural guarantees (`@graph` envelope, same-page `@id` references, S143 inline-required rule, S139-fix Offer shape).
+- The May EDP carve-out (which had left EDP microdata in place) was reversed by GEO Strategist 2026-05-25 ruling: strip both surfaces. Organizer/performer additions stay post-demo.
+
+**What replaced it:** Surface #1 (Event JSON-LD) and Surface #3 (hub CollectionPage JSON-LD) carry the full rich-result-required field set. The S145 EVENT_MICRODATA_MISSING_LOCATION rule is moot — `Event.location` inline-with-`@id` requirement on Surface #1 (S143) is the equivalent invariant on the surviving surface.
 
 ### 3. Hub page — JSON-LD CollectionPage entity
 
 **Emitter:** `src/utils/schema-graph-builders.ts buildCollectionPageMember` →
 `mainEntity.itemListElement[].item` event objects with optional `offers`.
 ListItem-nested Offers route through `buildOfferOrOmit` (S139-fix unification, 2026-05-20).
+Per-item `image` field added 2026-05-25 via `getOgImage` (`src/utils/og-image-fallback.ts`),
+mirroring the EDP JSON-LD image emission so hub items and EDP Event entities cannot drift on image presence (omit-on-empty: helper returns non-empty paths; absolute-URL guard kept explicit).
 **HTML location:** `dist/<hub-slug>.html` `@graph` envelope, CollectionPage member.
 **Validator:** `validateHubSchema` (`schema-completeness.ts:426`).
 **FAIL rules applied:**
@@ -138,6 +133,11 @@ ListItem-nested Offers route through `buildOfferOrOmit` (S139-fix unification, 2
   (`CollectionPage.itemListElement[N].item.`). Closes the drift that produced
   15 price-less ListItem Offers in the 2026-05-20 production deploy.
 - FAQPage structural (when present): `@context`, mainEntity Question array shape.
+- **Per-item `image`** (2026-05-25): emitted by `buildItemListElements` via
+  `getOgImage`. No FAIL rule on the validator side today — image is OPTIONAL
+  per Schema.org Event; the omit-beats-fabricate posture keeps it that way.
+  Test invariant in `page.test.ts` asserts non-empty absolute-URL string on
+  every item, so emitter regressions surface at unit-test time.
 
 ### 4. Homepage — JSON-LD CollectionPage entity (inside @graph with WebSite + Organization)
 

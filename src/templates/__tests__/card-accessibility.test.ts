@@ -44,8 +44,8 @@ describe("Card accessibility — grid card", () => {
     expect(html).toMatch(/<article[^>]*data-price="/);
   });
 
-  test("preserves schema.org itemscope on article", () => {
-    expect(html).toMatch(/<article[^>]*itemscope/);
+  test("no microdata itemscope on article (JSON-LD authoritative post-strip)", () => {
+    expect(html).not.toMatch(/<article[^>]*itemscope/);
   });
 });
 
