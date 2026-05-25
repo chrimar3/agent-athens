@@ -40,6 +40,7 @@ import { renderAnalytics } from './config/analytics';
 import { proofMetrics } from './utils/proof-metrics';
 import { renderProofBody } from './templates/proof-body';
 import { buildProofSchema } from './templates/proof-schema';
+import { renderColophonContent } from './templates/colophon';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -552,7 +553,7 @@ async function main() {
     if (!html) continue;
     mkdirSync(join(DIST_DIR, 'en', config.slug), { recursive: true });
     writeHtmlIfChangedSync(join(DIST_DIR, 'en', config.slug, 'index.html'), html);
-    generatedUrls.push(`en/${config.slug}`);
+    generatedUrls.push(`en/${config.slug}/`);
     bilingualHubSlugs.add(config.slug);
     pagesGenerated++;
   }
@@ -633,7 +634,7 @@ async function main() {
       mkdirSync(pageDir, { recursive: true });
     }
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
-    generatedUrls.push(`en/events/${slug}`);
+    generatedUrls.push(`en/events/${slug}/`);
   }
   pagesGenerated += englishEvents.length;
   console.log(`  ✓ Generated ${englishEvents.length} English event pages`);
@@ -980,6 +981,33 @@ async function main() {
         bodyHtml: renderProofBody({ metrics, locale: 'en' })
       },
     },
+    {
+      baseSlug: 'colophon',
+      // EN-only — the colophon is the recruiter-facing "about the maker" surface.
+      // The page mirrors the same content rendered in the colophon dialog (via
+      // src/templates/colophon.ts), so editing renderColophonContent() updates
+      // both surfaces atomically — no drift.
+      // TODO(geo-strategist): Person schema + sameAs → GitHub/LinkedIn on this
+      // page. Deferred — the JSON-LD shape is owned by the GEO Strategist pass.
+      enOnly: true,
+      en: {
+        slug: 'en/colophon',
+        title: 'About me — Christos Maragkoudakis',
+        metaDescription: 'Christos Maragkoudakis — AI systems, built end to end. About the maker of Agent Athens: how it was built, what it argues for, and what I\'m open to next.',
+        schemaJson: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          'name': 'About me — Christos Maragkoudakis',
+          'url': `${BASE_URL}/en/colophon/`,
+          'description': 'Christos Maragkoudakis — AI systems, built end to end. About the maker of Agent Athens.',
+          'inLanguage': 'en',
+          publisher,
+          'datePublished': '2026-05-23',
+          'dateModified': todayIso
+        }, null, 2),
+        bodyHtml: renderColophonContent()
+      },
+    },
   ];
 
   // Generate content pages. Bilingual entries emit both locales; enOnly entries
@@ -1156,6 +1184,23 @@ async function main() {
   }
   const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs);
   await generateIndexNowKeyFile();
+
+  // Build-time invariant: every declared canonical / sitemap <loc> must match
+  // its 200-served form on Netlify, per-URL. Catches "canonical points at a
+  // 301" bugs that break Bing/Google indexing (the bug class that blocked
+  // /en/this-weekend pre-S153). Tier 1 build-fail discipline.
+  const { validateDistCanonicalParity } = await import('./utils/dist-canonical-parity');
+  const parityReport = validateDistCanonicalParity(DIST_DIR);
+  if (parityReport.failures.length > 0) {
+    console.error(`\n❌ Canonical parity invariant FAILED: ${parityReport.failures.length} violation${parityReport.failures.length === 1 ? '' : 's'}`);
+    for (const f of parityReport.failures) {
+      console.error(`   ${f.source}: ${f.reason}`);
+      console.error(`     declared: ${f.declaredUrl}`);
+    }
+    console.error(`\nFix: align the declared URL form to its 200-served form. See docs/decisions.md (per-URL parity, 2026-05-23).`);
+    process.exit(1);
+  }
+  console.log(`  ✓ canonical parity invariant: ${parityReport.passed} URLs verified`);
 
   const buildDurationMs = Date.now() - buildStartTime;
 

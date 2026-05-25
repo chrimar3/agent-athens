@@ -9,6 +9,7 @@ import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
 import { normalizeDateField } from "../utils/date-format";
 import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
 import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
+import { decodeEventFields } from "../utils/decode-html-entities";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -195,6 +196,15 @@ export function rowToEvent(row: any): Event {
  * NOTE: Automatically filters out non-Athens events
  */
 export function upsertEvent(event: Event, db?: Database): { success: boolean; isNew: boolean } {
+  // S154 (2026-05-25): Decode HTML entities at ingest chokepoint, BEFORE
+  // isAthensEvent below. Pre-fix, athinorama.gr ships venue names like
+  // `Νέο Θέατρο &#171;Κατερίνα...&#187;` undecoded — they reached the DB
+  // entity-encoded and broke whitelist matching against athens-venues.json.
+  // Prior sessions symptom-patched by adding encoded variations; this is the
+  // root-cause fix. Idempotent (he.decode on already-decoded text is a fixed
+  // point), so safe on every re-scrape.
+  event = decodeEventFields(event);
+
   // Filter out non-Athens events
   if (!isAthensEvent({ venue_name: event.venue.name, venue_address: event.venue.address, title: event.title })) {
     console.log(`⚠️  Skipping non-Athens event: ${event.title}`);

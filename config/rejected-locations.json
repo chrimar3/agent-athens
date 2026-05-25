@@ -94,6 +94,10 @@
     {
       "greek": "Επίδαυρος",
       "latin": "Epidaurus"
+    },
+    {
+      "greek": "Τρίπολη",
+      "latin": "Tripoli"
     }
   ],
   "regions": [
@@ -150,6 +154,18 @@
     {
       "name": "Χαριλαου \"Κλεανθης Βικελιδης\"",
       "reason": "Thessaloniki (PAOK stadium)"
+    },
+    {
+      "name": "WE Πολυχώρος",
+      "reason": "Thessaloniki venue (Πολυχώρος Πολιτισμού & Αθλητισμού WE — weskg.gr, 3ης Σεπτεμβρίου & Γρ. Λαμπράκη)"
+    },
+    {
+      "name": "WE Polyxwros",
+      "reason": "Thessaloniki venue (Latin variant of WE Πολυχώρος)"
+    },
+    {
+      "name": "WE, Πολυχώρος Πολιτισμού & Αθλητισμού",
+      "reason": "Thessaloniki venue (full canonical form per Municipality of Thessaloniki listing)"
     },
     {
       "name": "Ε.Σ.Ι \"Οι Ζωσιμαδες\"",
