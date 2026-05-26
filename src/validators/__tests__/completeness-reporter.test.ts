@@ -83,6 +83,12 @@ describe('buildCompletenessReport', () => {
     expect(report.datafeed).toEqual({ total: 0, pass: 0, warn: 0, fail: 0, info: 0 });
   });
 
+  test('2.3: registers field-validation posture (location full/FAIL, endDate partial/WARN)', () => {
+    const report = buildCompletenessReport(makeSummary([]), [], emptyAria(), emptyRatchet());
+    expect(report.fieldValidation.location).toEqual({ coverage: 'full', severity: 'fail' });
+    expect(report.fieldValidation.endDate).toEqual({ coverage: 'partial', severity: 'warn' });
+  });
+
   test('only EventTypes present in input appear in byType (lean artifact)', () => {
     const concertEvent = makeEvent({ id: 'aaaa1111', title: 'Jazz Night', venueName: 'Half Note', type: 'concert' });
     const theaterEvent = makeEvent({ id: 'bbbb2222', title: 'Antigone', venueName: 'Megaron', type: 'theater' });

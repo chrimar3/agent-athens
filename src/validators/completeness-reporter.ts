@@ -152,6 +152,11 @@ export interface CompletenessReport {
     byVenue: VenueBucketReport[];
     ratchet: RatchetState;
   };
+  // S110 / 2.3: per-field validation posture, registered into the manifest so
+  // downstream readers (proof-metrics, anti-drift) can see how each field is
+  // gated without re-deriving it. `coverage:full` = asserted on every applicable
+  // node; `coverage:partial` = type-conditional. severity mirrors the gate.
+  fieldValidation: Record<string, { coverage: 'full' | 'partial'; severity: 'fail' | 'warn' | 'info' }>;
 }
 
 type Verdict = 'pass' | 'warn' | 'fail';
@@ -328,6 +333,13 @@ export function buildCompletenessReport(
       event_template: eventTemplate,
       byVenue,
       ratchet: ratchetState,
+    },
+    // 2.3: location is full-coverage / build-FAIL (every detail Event must carry
+    // location + address — 2.1′/2.2); endDate is partial-coverage / WARN
+    // (type-conditional, multi-day only — 1.3b).
+    fieldValidation: {
+      location: { coverage: 'full', severity: 'fail' },
+      endDate: { coverage: 'partial', severity: 'warn' },
     },
   };
 }
