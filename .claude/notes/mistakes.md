@@ -895,3 +895,13 @@ Task: make the shared nav chrome locale-aware so English pages stop rendering Gr
 5. **Date-conditional hubs are not valid nav targets.** `today`/`tomorrow` hubs only build when events fall on that date → they 404 on empty days. Never point evergreen nav (logo, persistent links) at them; point evergreen surfaces at evergreen hubs (`this-week`, categories). Now confirmed in a 2nd component (`cornerstone-links.ts` → known-issues).
 
 **Cross-references:** `patterns.md` 2026-05-25 "Locale-threading reaches all siblings + call sites"; `decisions.md` 2026-05-25 "Nav locale routing"; `src/templates/site-chrome.ts` (the fix); `src/utils/locale-url.ts` (the inverted helper); `specs/en-nav-copy-checkpoint.md` + `specs/lang-toggle-checkpoint.md` (routed deferrals).
+
+### "Locale-aware chrome" was not a complete set — filter-bar was the 4th surface, search-overlay the 5th (S156, 2026-05-25)
+
+The S155 nav sweep grepped for `renderSiteNav`/`renderHamburgerMenu`/`renderSiteFooter` and declared "chrome is locale-aware." But **chrome = everything that renders on every hub**, and the sweep's grep only caught the obvious trio. Two more locale-unaware surfaces were rendering Greek on `/en/`:
+1. **`filter-bar.ts`** (`renderFilterBar`) — hardcoded Greek labels (Τύπος/Τιμή/Ταξινόμηση/Ημερομηνία + actions + option labels). Fixed in S156 (labels only).
+2. **`search-overlay.ts`** (`search-clear-btn` aria-label `Καθαρισμός`) — found while verifying S156; still Greek on `/en/`. Logged, not yet fixed.
+
+**Lesson:** when making shared chrome locale-aware, enumerate ALL components injected into the page shell (nav, menu, footer, filter bar, search overlay, any banner) — don't grep for the function names you already know. The completeness check is "what renders on an `/en/` page that contains non-ASCII Greek?", verified against a built `/en/` page: `grep -oE '[Α-Ωα-ω]+' dist/en/<hub>/index.html` surfaces every leak regardless of which component emitted it.
+
+**Cross-references:** `decisions.md` 2026-05-25 "Filter-bar locale (labels now, behavior deferred)"; `patterns.md` 2026-05-25 "Enumerate chrome surfaces by output, not by name"; `src/templates/filter-bar.ts` (S156 fix); `specs/filter-bar-locale-checkpoint.md` (deferred chip behavior + the 5th-surface note).

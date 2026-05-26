@@ -12,6 +12,7 @@ import type { HubIdentity } from '../utils/hub-identity';
 import { filterEvents } from '../utils/filters';
 import { buildURL } from '../utils/urls';
 import { BADGE_LABELS } from './page';
+import { STRINGS, type Locale, type UIStrings } from '../i18n/strings';
 
 // ── Time range labels ────────────────────────────────
 
@@ -52,6 +53,15 @@ const SORT_OPTIONS = [
 // CSS variable name for each event type color
 function typeColorVar(type: EventType): string {
   return `var(--color-${type.replace('_', '-')})`;
+}
+
+// Price option display label — reuses the site-wide locked Tier-1 strings
+// (openEntry / ticketed). Never invents free/paid. The filter VALUE stays
+// open / with-ticket (unchanged); this is display text only.
+function priceOptionLabel(price: PriceFilter, s: UIStrings): string {
+  if (price === 'open') return s.openEntry;
+  if (price === 'with-ticket') return s.ticketed;
+  return price;
 }
 
 // ── Count Computation ────────────────────────────────
@@ -119,8 +129,10 @@ export function renderFilterBar(
   currentFilters: Filters,
   counts: FilterCounts,
   totalCount: number,
-  hubIdentity?: HubIdentity
+  hubIdentity?: HubIdentity,
+  locale: Locale = 'el'
 ): string {
+  const s = STRINGS[locale];
   const excluded = hubIdentity?.excludeDimension;
   const typeActiveForGate  = excluded !== 'type'  && !!currentFilters.type;
   const priceActiveForGate = excluded !== 'price' && !!currentFilters.price;
@@ -132,35 +144,35 @@ export function renderFilterBar(
     ? currentFilters.time
     : null;
   const timeLabel = timeActive
-    ? TIME_OPTIONS.find(o => o.time === timeActive)?.label || timeActive
-    : 'Ημερομηνία';
+    ? (s.filterTimeLabels[timeActive] || timeActive)
+    : s.filterDate;
   const timeDismissUrl = timeActive ? buildDismissUrl(currentFilters, 'time') : '';
   const datePill = excluded === 'time'
     ? ''
     : timeActive
       ? `<div class="filter-panel-anchor" data-filter="date">
-          <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου ημερομηνίας">&times;</a></span>
+          <span class="filter-pill is-active">${timeLabel}<a href="${timeDismissUrl}" class="filter-pill-dismiss" aria-label="${s.filterRemoveDate}">&times;</a></span>
         </div>`
       : `<div class="filter-panel-anchor" data-filter="date">
           <button class="filter-pill" data-panel="date">${timeLabel} ${CHEVRON_SVG}</button>
-          ${renderDatePanel(counts.timeRanges, currentFilters)}
+          ${renderDatePanel(counts.timeRanges, currentFilters, s)}
         </div>`;
 
   // ── Type pill ──
   const typeActive = currentFilters.type;
   const typeLabel = typeActive
-    ? TYPE_OPTIONS.find(o => o.type === typeActive)?.label || typeActive
-    : 'Τύπος';
+    ? (s.filterTypeLabels[typeActive] || typeActive)
+    : s.filterType;
   const typeDismissUrl = typeActive ? buildDismissUrl(currentFilters, 'type') : '';
   const typePill = excluded === 'type'
     ? ''
     : typeActive
       ? `<div class="filter-panel-anchor" data-filter="type">
-          <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τύπου">&times;</a></span>
+          <span class="filter-pill is-active">${typeLabel}<a href="${typeDismissUrl}" class="filter-pill-dismiss" aria-label="${s.filterRemoveType}">&times;</a></span>
         </div>`
       : `<div class="filter-panel-anchor" data-filter="type">
           <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
-          ${renderTypePanel(counts.types, currentFilters, totalCount)}
+          ${renderTypePanel(counts.types, currentFilters, totalCount, s)}
         </div>`;
 
   // ── Price pill ──
@@ -168,31 +180,31 @@ export function renderFilterBar(
     ? currentFilters.price
     : null;
   const priceLabel = priceActive
-    ? PRICE_OPTIONS.find(o => o.price === priceActive)?.label || priceActive
-    : 'Τιμή';
+    ? priceOptionLabel(priceActive, s)
+    : s.filterPrice;
   const priceDismissUrl = priceActive ? buildDismissUrl(currentFilters, 'price') : '';
   const pricePill = excluded === 'price'
     ? ''
     : priceActive
       ? `<div class="filter-panel-anchor" data-filter="price">
-          <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="Αφαίρεση φίλτρου τιμής">&times;</a></span>
+          <span class="filter-pill is-active">${priceLabel}<a href="${priceDismissUrl}" class="filter-pill-dismiss" aria-label="${s.filterRemovePrice}">&times;</a></span>
         </div>`
       : `<div class="filter-panel-anchor" data-filter="price">
           <button class="filter-pill" data-panel="price">${priceLabel} ${CHEVRON_SVG}</button>
-          ${renderPricePanel(counts.prices, currentFilters)}
+          ${renderPricePanel(counts.prices, currentFilters, s)}
         </div>`;
 
   // ── Sort pill ──
   const sortPill = `<div class="filter-panel-anchor" data-filter="sort">
-    <button class="filter-pill" data-panel="sort">Ταξινόμηση ${CHEVRON_SVG}</button>
-    ${renderSortPanel()}
+    <button class="filter-pill" data-panel="sort">${s.filterSort} ${CHEVRON_SVG}</button>
+    ${renderSortPanel(s)}
   </div>`;
 
   // ── Meta (result count + clear all) ──
   const clearHref = hubIdentity ? '/' + hubIdentity.canonicalUrl : '/';
   const meta = `<div class="filter-bar-meta">
-    <span class="filter-result-count">${totalCount} εκδηλώσεις</span>
-    ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">Καθαρισμός</a>` : ''}
+    <span class="filter-result-count">${totalCount} ${s.filterEventsWord}</span>
+    ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">${s.filterClear}</a>` : ''}
   </div>`;
 
   return `<div class="filter-bar">
@@ -209,33 +221,33 @@ export function renderFilterBar(
 
 // ── Panel Renderers ──────────────────────────────────
 
-function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filters): string {
+function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filters, s: UIStrings): string {
   const rows = timeRanges.map(opt => {
     const isSelected = currentFilters.time === opt.value;
     return `<a href="${opt.url}" class="filter-radio-row${isSelected ? ' is-selected' : ''}">
       <span class="filter-radio-circle"></span>
-      <span class="filter-radio-label">${opt.label}</span>
+      <span class="filter-radio-label">${s.filterTimeLabels[opt.value] || opt.value}</span>
       <span class="filter-radio-count">${opt.count}</span>
     </a>`;
   });
 
   return `<div class="filter-panel" data-panel-for="date">
-    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
+    <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
     <div class="filter-sheet-handle"></div>
-    <div class="filter-sheet-title">Ημερομηνία</div>
+    <div class="filter-sheet-title">${s.filterDate}</div>
     <div class="filter-radio-list">
       ${rows.join('\n      ')}
     </div>
   </div>`;
 }
 
-function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number): string {
+function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number, s: UIStrings): string {
   const tiles = types.map(opt => {
     const isSelected = currentFilters.type === opt.value;
     const colorVar = typeColorVar(opt.value as EventType);
     return `<a href="${opt.url}" class="filter-type-tile${isSelected ? ' is-selected' : ''}" style="--tile-color: ${colorVar}">
       <span class="filter-type-dot" style="background: ${colorVar}"></span>
-      <span class="filter-type-label">${opt.label}</span>
+      <span class="filter-type-label">${s.filterTypeLabels[opt.value] || opt.value}</span>
       <span class="filter-type-count">${opt.count}</span>
     </a>`;
   });
@@ -243,52 +255,52 @@ function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, to
   const resetUrl = buildDismissUrl(currentFilters, 'type');
 
   return `<div class="filter-panel" data-panel-for="type">
-    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
+    <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
     <div class="filter-sheet-handle"></div>
-    <div class="filter-sheet-title">Τύπος</div>
+    <div class="filter-sheet-title">${s.filterType}</div>
     <div class="filter-type-grid">
       ${tiles.join('\n      ')}
     </div>
     <div class="filter-panel-footer">
-      <a href="${resetUrl}" class="filter-reset">Επαναφορά</a>
-      <span class="filter-panel-footer-count">${totalCount} εκδηλώσεις</span>
+      <a href="${resetUrl}" class="filter-reset">${s.filterReset}</a>
+      <span class="filter-panel-footer-count">${totalCount} ${s.filterEventsWord}</span>
     </div>
   </div>`;
 }
 
-function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters): string {
+function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters, s: UIStrings): string {
   const rows = prices.map(opt => {
     const isSelected = currentFilters.price === opt.value;
     return `<a href="${opt.url}" class="filter-radio-row${isSelected ? ' is-selected' : ''}">
       <span class="filter-radio-circle"></span>
-      <span class="filter-radio-label">${opt.label}</span>
+      <span class="filter-radio-label">${priceOptionLabel(opt.value as PriceFilter, s)}</span>
       <span class="filter-radio-count">${opt.count}</span>
     </a>`;
   });
 
   return `<div class="filter-panel" data-panel-for="price">
-    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
+    <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
     <div class="filter-sheet-handle"></div>
-    <div class="filter-sheet-title">Τιμή</div>
+    <div class="filter-sheet-title">${s.filterPrice}</div>
     <div class="filter-radio-list">
       ${rows.join('\n      ')}
     </div>
   </div>`;
 }
 
-function renderSortPanel(): string {
+function renderSortPanel(s: UIStrings): string {
   return `<div class="filter-panel" data-panel-for="sort">
-    <button class="filter-panel-close" aria-label="Κλείσιμο">&times;</button>
+    <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
     <div class="filter-sheet-handle"></div>
-    <div class="filter-sheet-title">Ταξινόμηση</div>
+    <div class="filter-sheet-title">${s.filterSort}</div>
     <div class="filter-radio-list">
       <a href="#" class="filter-radio-row is-selected" data-sort="date">
         <span class="filter-radio-circle"></span>
-        <span class="filter-radio-label">Ημερομηνία</span>
+        <span class="filter-radio-label">${s.filterDate}</span>
       </a>
       <a href="#" class="filter-radio-row" data-sort="price">
         <span class="filter-radio-circle"></span>
-        <span class="filter-radio-label">Τιμή</span>
+        <span class="filter-radio-label">${s.filterPrice}</span>
       </a>
     </div>
   </div>`;

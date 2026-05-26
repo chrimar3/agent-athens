@@ -6401,3 +6401,27 @@ constant feeding both surfaces.
 3. 🟢 **Colophon committed-as-floor, unwired** (`known-issues.md` 2026-05-25). 4 red tests until the WIP owner decides to wire it (restore S154 integration) or revise the tests. Not a Dev-default.
 4. 📨 **Routed deferrals:** EN nav copy (tagline + AI-callout) → Editorial Director (`specs/en-nav-copy-checkpoint.md`); language toggle → GEO Strategist (`specs/lang-toggle-checkpoint.md`, entangled with F1–F5 flip's S144-vs-flip reconciliation).
 5. 📦 **`/en/this-week/` home target is interim** — replace with `/en/` homepage when F1 (full flip) ships.
+
+---
+
+### Session 156 — Filter-bar locale labels (English filter chrome on /en/) — 2026-05-25
+
+**Plan:** Make `filter-bar.ts` locale-aware. GEO reframed the chip-URL fork as hub-routing/in-page (not chip-removal). Empirical diagnosis showed hub-routing infeasible (inventory-gated `/en/` type hubs + no combos) → **user chose labels-only this session; chip behavior deferred.**
+
+**What happened:**
+- Threaded `locale` into `renderFilterBar` + 4 panel renderers (`renderDatePanel/Type/Price/Sort`); every label resolves via `STRINGS[locale]`. Added a filter block to `src/i18n/strings.ts` (dimension/action labels + `filterTimeLabels`/`filterTypeLabels` records). Price labels reuse locked `openEntry`/`ticketed` (Tier-1; not invented). `page.ts:78` passes `locale`. Chip `opt.url` untouched (deferred).
+- `renderFilterBarScript` not touched (no user-facing text). `buildURL` (urls.ts) not touched (drives Greek page generation).
+- 1 new test file (`filter-bar-locale.test.ts`, 9 tests); existing `filter-bar-hub-identity.test.ts` still green (4-arg calls default `'el'`).
+
+**Verified:**
+- tsc clean; 18/18 filter tests pass. Clean `rm -rf dist && build`. `/en/this-week/`: English filter labels (Type/Price/Sort/Date, Concerts/Theatre, Free entry/Ticketed, Reset), no Greek leak in filter bar. `dist/this-week.html` (EL, flat-file): Greek labels unchanged. Chip hrefs identical across locales (behavior deferred). Deployed `netlify deploy --prod --dir=dist`; committed + pushed to `main`.
+- Suite: 2555 pass, **9 fail — all pre-existing/non-mine**: 4 colophon (S155 floor-unwired), 5 inventory-gated `/en/today,tomorrow,exhibitions` existence/metadata (those EN hubs didn't build today — <3 events; Greek flat-files exist). Proven not-mine: session diff is label-only (strings/filter-bar/page.ts); none gates hub generation.
+
+**Learnings:**
+- "Locale-aware chrome" wasn't a complete set — filter-bar was the 4th surface, search-overlay (`Καθαρισμός` aria) the 5th. Enumerate chrome by rendered output (`grep Greek chars in dist/en/`), not by known function names.
+- Date/inventory-conditional `/en/` hub-existence tests are flaky by the day's inventory — went 4→9 suite reds with zero caused by this change. Per-change causal attribution (diff + reasoning) beats raw pass-count.
+
+**Open items (post-S156):**
+1. 📦 **Filter chip `/en/` navigation still leaks to Greek combos** — `specs/filter-bar-locale-checkpoint.md`. Fix = client-side in-page filtering (needs card `data-type`/`data-date` + new JS). Dev, post-demo.
+2. 🟡 **Search overlay (`search-overlay.ts`) hardcodes Greek `Καθαρισμός`** on `/en/` — 5th locale-unaware surface. Queue with a future locale pass.
+3. 🟡 **`/en/today,tomorrow,exhibitions` not building today** (inventory-gated) — surfaces as 5 flaky suite reds; relates to the date-conditional-hub known-issue. Demo note: EN site is missing those hubs on low-inventory days.

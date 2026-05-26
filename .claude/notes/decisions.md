@@ -4332,3 +4332,13 @@ Decisions made while making `site-chrome.ts` nav locale-aware:
 5. **Language toggle: not rebuilt.** Removed a prior session; hreflang counterparts dropped in S144; rebuilding would recompute slug→URL (forbidden) and collide with the S144 GEO ruling. Routed to GEO Strategist as a decision, not queued as Dev (`specs/lang-toggle-checkpoint.md`). Entangled with the F1–F5 flip's GEO-vs-S144 reconciliation.
 
 **Cross-references:** `mistakes.md` + `patterns.md` 2026-05-25 (same session); `src/templates/site-chrome.ts`; `src/i18n/strings.ts` (nav block); `specs/en-nav-copy-checkpoint.md`, `specs/lang-toggle-checkpoint.md`.
+
+### Filter-bar locale: labels now, chip behavior deferred (S156, 2026-05-25)
+
+1. **Split labels from behavior.** `filter-bar.ts` made locale-aware for **labels only** (threaded `locale` into `renderFilterBar` + the 4 panel renderers; resolve all strings via `STRINGS[locale]`). Chip `opt.url` left untouched — on `/en/` chips still navigate to bare-root Greek combos. Rationale: the URL/navigation fix is a much larger, separate problem (see #3), and the Greek *labels* were the visible demo defect; shipping labels alone is safe and de-risks the demo immediately.
+
+2. **Tier-1 price terms reused, not invented (GEO flag).** Price filter VALUES stay `open`/`with-ticket`. Display labels reuse the existing locked site-wide strings `STRINGS.openEntry` ("Free entry") / `STRINGS.ticketed` ("Ticketed") via a `priceOptionLabel()` helper — consistent with every event page; nothing guessed. ("Free entry" is the established EN display for `open`, not a free/paid value violation.) If GEO/Editorial wants filter-specific wording ("Open"), one-line swap.
+
+3. **Hub-routing rejected for the deferred behavior.** GEO offered "re-point chips to `/en/` hubs OR in-page filter." Empirically, **half the `/en/` type hubs don't build** (inventory-gated; `/en/exhibitions,cinema,tech,performances,workshops,dance` all MISSING on a normal build) and `/en/` has no combo pages to compose dimensions — so hub-routing 404s and can't satisfy GEO's "no missing options / no asymmetry." The correct fix is **client-side in-page filtering on `/en/`** (filter rendered `.event-card`s; needs `data-type`/`data-date` on cards + new JS). Deferred to a dedicated session — `specs/filter-bar-locale-checkpoint.md`.
+
+**Cross-references:** `mistakes.md`/`patterns.md` 2026-05-25 (S156 chrome-surface enumeration); `src/templates/filter-bar.ts`, `src/i18n/strings.ts` (filter block); `specs/filter-bar-locale-checkpoint.md`.

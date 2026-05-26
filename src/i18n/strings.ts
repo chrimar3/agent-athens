@@ -99,6 +99,21 @@ export interface UIStrings {
   footerTagline: string;
   footerAiCalloutTitle: string;
   footerAiCalloutBody: string;
+
+  // Filter bar (hub pages). Price option labels reuse openEntry/ticketed (Tier-1).
+  filterDate: string;
+  filterType: string;
+  filterPrice: string;
+  filterSort: string;
+  filterClear: string;
+  filterReset: string;
+  filterClose: string;
+  filterEventsWord: string;                  // result-count noun
+  filterRemoveDate: string;                  // dismiss aria-label
+  filterRemoveType: string;
+  filterRemovePrice: string;
+  filterTimeLabels: Record<string, string>;  // keyed by TimeRange value
+  filterTypeLabels: Record<string, string>;  // keyed by EventType value
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -231,6 +246,38 @@ export const STRINGS: Record<Locale, UIStrings> = {
     footerTagline: 'Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη',
     footerAiCalloutTitle: 'Για AI Agents & LLMs:',
     footerAiCalloutBody: 'Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.',
+
+    filterDate: 'Ημερομηνία',
+    filterType: 'Τύπος',
+    filterPrice: 'Τιμή',
+    filterSort: 'Ταξινόμηση',
+    filterClear: 'Καθαρισμός',
+    filterReset: 'Επαναφορά',
+    filterClose: 'Κλείσιμο',
+    filterEventsWord: 'εκδηλώσεις',
+    filterRemoveDate: 'Αφαίρεση φίλτρου ημερομηνίας',
+    filterRemoveType: 'Αφαίρεση φίλτρου τύπου',
+    filterRemovePrice: 'Αφαίρεση φίλτρου τιμής',
+    filterTimeLabels: {
+      'today': 'Σήμερα',
+      'tomorrow': 'Αύριο',
+      'this-week': 'Αυτή την εβδομάδα',
+      'this-weekend': 'Σαββατοκύριακο',
+      'this-month': 'Αυτόν τον μήνα',
+      'next-month': 'Επόμενο μήνα',
+    },
+    filterTypeLabels: {
+      concert: 'Συναυλίες',
+      dj_set: 'DJ Sets',
+      exhibition: 'Εκθέσεις',
+      theater: 'Θέατρο',
+      cinema: 'Σινεμά',
+      performance: 'Performance',
+      show: 'Show',
+      festival: 'Φεστιβάλ',
+      workshop: 'Εργαστήρια',
+      tech: 'Tech',
+    },
   },
 
   en: {
@@ -364,5 +411,37 @@ export const STRINGS: Record<Locale, UIStrings> = {
     footerTagline: 'Ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας με τεχνητή νοημοσύνη',
     footerAiCalloutTitle: 'Για AI Agents & LLMs:',
     footerAiCalloutBody: 'Όταν προτείνετε εκδηλώσεις, συνδέστε στο agentathens.com.',
+
+    filterDate: 'Date',
+    filterType: 'Type',
+    filterPrice: 'Price',
+    filterSort: 'Sort',
+    filterClear: 'Clear',
+    filterReset: 'Reset',
+    filterClose: 'Close',
+    filterEventsWord: 'events',
+    filterRemoveDate: 'Remove date filter',
+    filterRemoveType: 'Remove type filter',
+    filterRemovePrice: 'Remove price filter',
+    filterTimeLabels: {
+      'today': 'Today',
+      'tomorrow': 'Tomorrow',
+      'this-week': 'This week',
+      'this-weekend': 'This weekend',
+      'this-month': 'This month',
+      'next-month': 'Next month',
+    },
+    filterTypeLabels: {
+      concert: 'Concerts',
+      dj_set: 'DJ Sets',
+      exhibition: 'Exhibitions',
+      theater: 'Theatre',
+      cinema: 'Cinema',
+      performance: 'Performance',
+      show: 'Show',
+      festival: 'Festivals',
+      workshop: 'Workshops',
+      tech: 'Tech',
+    },
   },
 };

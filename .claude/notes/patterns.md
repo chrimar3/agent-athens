@@ -5292,3 +5292,11 @@ Plus one homonym: `src/ingest/email-ingestion.ts:322` *also* named `upsertEvent`
 **Counterpart-aware link emission.** Where an English counterpart page does not exist, the locale-aware nav must *hide* the link, never point an English label at Greek content and never link a path that 404s. Applied here: Venues omitted on EN (no `/en/venues/`); home → evergreen `/en/this-week/` (no `/en/` homepage, `/en/today/` date-conditional). Same hide-where-absent rule a future language toggle would need.
 
 **Cross-references:** `mistakes.md` 2026-05-25 "Nav locale-awareness — five reusable lessons"; `patterns.md` 2026-05-24 "Coextensive-chrome pattern" (the sibling pattern); `decisions.md` 2026-05-25 "Nav locale routing"; `src/templates/site-chrome.ts`.
+
+### Enumerate chrome surfaces by OUTPUT, not by name (S156, 2026-05-25)
+
+When localizing a shared shell, the failure mode is scoping the work to the components you can name. S155 fixed the nav trio; S156 found `filter-bar.ts` and `search-overlay.ts` still leaking Greek on `/en/` — same class, missed because the completeness check was "grep the known function names" instead of "grep the rendered output for the wrong-locale script."
+
+**The reliable completeness check:** build an `/en/` page and grep its HTML for Greek characters — `grep -oE '[Α-Ωα-ω]{2,}' dist/en/<hub>/index.html | sort -u`. Every hit is a leak, regardless of which component emitted it. This is component-agnostic and catches the surface you forgot exists. (The reciprocal — Latin labels on a Greek page — is rarer but the same idea.)
+
+**Connects to:** `mistakes.md` 2026-05-25 "Locale-aware chrome was not a complete set"; the coextensive-chrome pattern (S154) — anything coextensive with the shell must be locale-aware with it.

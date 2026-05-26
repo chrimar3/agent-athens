@@ -75,7 +75,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   let filterBarScriptHTML = '';
   if (allEvents) {
     const counts = computeFilterCounts(filters, allEvents);
-    filterBarHTML = renderFilterBar(filters, counts, eventCount, hubIdentity);
+    filterBarHTML = renderFilterBar(filters, counts, eventCount, hubIdentity, locale);
     filterBarScriptHTML = renderFilterBarScript();
   }
 
