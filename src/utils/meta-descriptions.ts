@@ -3,6 +3,7 @@
 
 import type { Event, EventType, Filters } from '../types';
 import { ENGLISH_MONTHS_SHORT, parseISODate } from './format-date';
+import { getLocalityName } from './schema-geo';
 
 export interface VenueMetaInput {
   name: string;
@@ -73,17 +74,51 @@ function enforceCharLimit(text: string, limit: number): string {
   return truncated + '...';
 }
 
+/**
+ * 1.5b: normalize enrichment prose for a single-line meta attribute — strip
+ * markdown markers and HTML comments, collapse newlines/whitespace runs. A
+ * leading newline in fullDescription is what produced multi-line, effectively-
+ * empty meta content; markdown leakage ("**Postponed") and headings come from
+ * the same surface. Composer works on this CLEAN text; escaping stays at the
+ * emission seam (event-page.ts, 1.5a).
+ */
+function cleanForMeta(text: string): string {
+  return text
+    .replace(/<!--[\s\S]*?-->/g, '') // drop HTML comments (e.g. timeliness-expires)
+    .replace(/[*_`]/g, '')           // drop bold/italic/code markers
+    .replace(/^#{1,6}\s+/gm, '')     // drop ATX headings
+    .replace(/\s+/g, ' ')            // collapse newlines/runs to single spaces
+    .trim();
+}
+
+/**
+ * 1.5b: final guard — collapse whitespace, then floor short output to >=120
+ * chars (Bing) with a config-driven city tagline. enforceCharLimit caps the
+ * padded result at META_CHAR_LIMIT so the tagline can't overrun the SERP limit.
+ */
+function padToFloor(result: string): string {
+  const out = result.replace(/\s+/g, ' ').trim();
+  if (out.length >= 120) return out;
+  const tail = ` Cultural events in ${getLocalityName()} on Agent Athens.`;
+  return enforceCharLimit(`${out}${tail}`, META_CHAR_LIMIT);
+}
+
 // --- Exported generators ---
 
 export function generateEventMetaDescription(event: Event): string {
   // Enriched override: prefer fullDescription when available
   if (event.fullDescription && event.fullDescription.length > 100) {
-    const truncated = truncateAtSentence(event.fullDescription, 140);
-    const withSuffix = `${truncated} Updated daily.`;
-    if (withSuffix.length <= META_CHAR_LIMIT) return withSuffix;
-    // Re-truncate to fit
-    const shorter = truncateAtSentence(event.fullDescription, META_CHAR_LIMIT - 16);
-    return `${shorter} Updated daily.`;
+    const clean = cleanForMeta(event.fullDescription);
+    let body = truncateAtSentence(clean, 140);
+    // Floor backstop: a sentence-boundary cut can land on an abbreviation
+    // ("Mr.", "Theodosis P.") and yield a fragment — prefer a hard word-boundary
+    // cut of the rich text over the tiny fragment.
+    if (body.length < 120) body = enforceCharLimit(clean, META_CHAR_LIMIT - 16);
+    let withSuffix = `${body} Updated daily.`;
+    if (withSuffix.length > META_CHAR_LIMIT) {
+      withSuffix = `${enforceCharLimit(clean, META_CHAR_LIMIT - 16)} Updated daily.`;
+    }
+    return padToFloor(withSuffix);
   }
 
   const SEP = ' \u2014 '; // en-dash with spaces
@@ -96,30 +131,18 @@ export function generateEventMetaDescription(event: Event): string {
   // Build full template: {Prefix}{Title} — {Venue}, {Neighborhood} — {Date} — {Price}
   const venuePart = neighborhood ? `${venue}, ${neighborhood}` : venue;
 
-  const parts = [
-    `${prefix}${event.title}`,
-    venuePart,
-    dateShort,
-    priceDisplay,
-  ];
+  const parts = [`${prefix}${event.title}`, venuePart, dateShort, priceDisplay];
 
+  // Progressive truncation: drop price, then date, then neighborhood, then
+  // hard-truncate the title — keep the longest variant that fits the SERP limit.
   let result = parts.join(SEP);
-  if (result.length <= META_CHAR_LIMIT) return result;
+  if (result.length > META_CHAR_LIMIT) result = [parts[0], parts[1], parts[2]].join(SEP);
+  if (result.length > META_CHAR_LIMIT) result = [parts[0], parts[1]].join(SEP);
+  if (result.length > META_CHAR_LIMIT) result = [parts[0], venue].join(SEP);
+  if (result.length > META_CHAR_LIMIT) result = enforceCharLimit(`${prefix}${event.title}`, META_CHAR_LIMIT);
 
-  // Progressive truncation: drop price
-  result = [parts[0], parts[1], parts[2]].join(SEP);
-  if (result.length <= META_CHAR_LIMIT) return result;
-
-  // Drop date
-  result = [parts[0], parts[1]].join(SEP);
-  if (result.length <= META_CHAR_LIMIT) return result;
-
-  // Drop neighborhood
-  result = [parts[0], venue].join(SEP);
-  if (result.length <= META_CHAR_LIMIT) return result;
-
-  // Truncate title
-  return enforceCharLimit(`${prefix}${event.title}`, META_CHAR_LIMIT);
+  // 1.5b: floor short unenriched composites toward 120 (Bing); whitespace-finalized.
+  return padToFloor(result);
 }
 
 function getPriceDisplay(event: Event): string {

@@ -148,6 +148,45 @@ describe('generateEventMetaDescription', () => {
     const result = generateEventMetaDescription(event);
     expect(result.length).toBeLessThanOrEqual(155);
   });
+
+  test('1.5b: abbreviation period does not truncate to a fragment', () => {
+    const event = makeEvent({
+      fullDescription:
+        'Theodosis P. Vrachoritis leads a quartet through an evening of contemporary jazz at the club, blending originals with reinterpreted standards across two full sets.',
+    });
+    const result = generateEventMetaDescription(event);
+    expect(result).not.toBe('Theodosis P. Updated daily.');
+    expect(result.length).toBeGreaterThanOrEqual(120);
+  });
+
+  test('1.5b: strips ** markdown markers', () => {
+    const event = makeEvent({
+      fullDescription:
+        '**Postponed.** The show has been rescheduled; new dates will be announced shortly and existing tickets remain valid for the upcoming performance.',
+    });
+    const result = generateEventMetaDescription(event);
+    expect(result).not.toContain('*');
+  });
+
+  test('1.5b: collapses leading/internal newlines (single-line content)', () => {
+    const event = makeEvent({
+      fullDescription:
+        '\nTwo guitars front the band at the club on Saturday night.\n\nDoors at 21:30, downbeat 22:30; tickets from twelve euro at the bar for the late set.',
+    });
+    const result = generateEventMetaDescription(event);
+    expect(result).not.toContain('\n');
+    expect(result.startsWith(' ')).toBe(false);
+    expect(result.length).toBeGreaterThanOrEqual(120);
+  });
+
+  test('1.5b: unenriched event floors to >=120 (and <=155) via city tagline', () => {
+    // Realistic unenriched event (normal title + venue + date + price); the
+    // tagline backstop carries it over the 120 floor without exceeding 155.
+    const event = makeEvent({ fullDescription: undefined });
+    const result = generateEventMetaDescription(event);
+    expect(result.length).toBeGreaterThanOrEqual(120);
+    expect(result.length).toBeLessThanOrEqual(155);
+  });
 });
 
 // ============================================================
