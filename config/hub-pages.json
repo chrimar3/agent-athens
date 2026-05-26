@@ -71,6 +71,7 @@
       "cornerstone": true,
       "titleEl": "Εκδηλώσεις Σαββατοκύριακο στην Αθήνα",
       "titleEn": "Athens events this weekend: concerts, theatre & open exhibitions in Athens, Greece",
+      "h1En": "Athens Events This Weekend",
       "filter": {
         "type": "date",
         "value": "this-weekend"

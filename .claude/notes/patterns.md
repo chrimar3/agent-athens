@@ -5300,3 +5300,13 @@ When localizing a shared shell, the failure mode is scoping the work to the comp
 **The reliable completeness check:** build an `/en/` page and grep its HTML for Greek characters — `grep -oE '[Α-Ωα-ω]{2,}' dist/en/<hub>/index.html | sort -u`. Every hit is a leak, regardless of which component emitted it. This is component-agnostic and catches the surface you forgot exists. (The reciprocal — Latin labels on a Greek page — is rarer but the same idea.)
 
 **Connects to:** `mistakes.md` 2026-05-25 "Locale-aware chrome was not a complete set"; the coextensive-chrome pattern (S154) — anything coextensive with the shell must be locale-aware with it.
+
+### In-page refinement vs navigation: which filter dimensions can filter client-side (S157, 2026-05-26)
+
+When a static hub renders a server-filtered window of events, **client-side filtering can only NARROW the rendered set, never broaden it.** So a dimension is in-page-filterable iff its options are always *subsets* of what's already in the DOM:
+- **Type, Price → in-page.** Pure refinements; every option narrows the current list. Equality match on `data-type` / `data-price-type` (use the canonical enum value, not a numeric proxy), composed with AND. Reuses the existing sort script's DOM pattern.
+- **Date → navigation.** Date *windows* can be broader than the hub's rendered window (e.g. "this-month" from a `this-week` hub — those events aren't in the DOM), and replicating server window-math client-side carries timezone/day-boundary risk (`filters.ts` uses naive `Date`). So date routes to the surviving `/en/{time}/` hub instead.
+
+**Locale-branched behavior in one static script:** the script reads `document.documentElement.lang` and only intercepts option clicks on `/en/`; EL keeps `<a href>` navigation untouched. Server emits `data-filter-dim`/`data-filter-value` only on `/en/` so the markup signals intent; the combo `href` stays as an (unreachable-without-JS) fallback.
+
+**Connects to:** `decisions.md` 2026-05-26 "/en/ in-page filtering"; `mistakes.md` 2026-05-26 "6th locale surface"; `src/templates/filter-bar.ts` (renderFilterBarScript).

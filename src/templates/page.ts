@@ -4,8 +4,9 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event, EventType, PageMetadata } from '../types';
-import type { Locale } from '../i18n/strings';
+import { STRINGS, type Locale, type UIStrings } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
+import { formatDateOnly } from '../utils/i18n-date';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
@@ -66,9 +67,10 @@ export const TYPE_ICONS: Record<string, string> = {
 
 export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: Event[], preContentHtml?: string, locale: Locale = 'el', postContentHtml?: string, preFilterBarHtml?: string, hubIdentity?: HubIdentity, h1Override?: string): string {
   const { title, description, keywords, url, eventCount, lastUpdate, filters } = metadata;
+  const t = STRINGS[locale];
 
   const schemaMarkup = generateSchemaMarkup(events, metadata, locale);
-  const eventListHTML = renderDateGroupedEvents(events);
+  const eventListHTML = renderDateGroupedEvents(events, locale);
 
   // Filter bar: only render when allEvents is provided (hub pages, not category/detail pages)
   let filterBarHTML = '';
@@ -176,13 +178,14 @@ ${renderAnalytics()}
       <section class="card-grid">
         ${eventListHTML}
       </section>
+      <p class="filter-empty-state" style="display:none">${t.filterNoResults}</p>
       ` : `
       <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
       <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
       `}
 
       ${postContentHtml || ''}
-      ${renderRelatedPages(filters)}
+      ${renderRelatedPages(filters, t)}
     </main>
   </div>
 
@@ -293,7 +296,7 @@ export function renderEventCard(event: Event): string {
   const priceHtml = `<span class="card-price"><span>${priceText}</span></span>`;
 
   return `
-  <article class="event-card" data-price="${numericPrice}">
+  <article class="event-card" data-price="${numericPrice}" data-type="${event.type}" data-price-type="${event.price.type}">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
       <img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
@@ -317,7 +320,7 @@ export function renderEventCard(event: Event): string {
   </article>`;
 }
 
-function renderDateGroupedEvents(events: Event[]): string {
+function renderDateGroupedEvents(events: Event[], locale: Locale): string {
   if (events.length === 0) return '';
 
   // Group events by date (YYYY-MM-DD from startDate)
@@ -338,7 +341,7 @@ function renderDateGroupedEvents(events: Event[]): string {
   const parts: string[] = [];
   for (const dateKey of sortedKeys) {
     const dateEvents = groups.get(dateKey)!;
-    const headerText = formatGreekDateOnly(dateKey);
+    const headerText = locale === 'en' ? formatDateOnly(dateKey, 'en') : formatGreekDateOnly(dateKey);
     parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
     parts.push(`<div class="date-group" data-count="${dateEvents.length}">`);
     for (const event of dateEvents) {
@@ -350,7 +353,7 @@ function renderDateGroupedEvents(events: Event[]): string {
   return parts.join('\n');
 }
 
-function renderRelatedPages(filters: any): string {
+function renderRelatedPages(filters: any, t: UIStrings): string {
   // Generate related page suggestions
   const links: string[] = [];
 
@@ -383,7 +386,7 @@ function renderRelatedPages(filters: any): string {
 
   return `
   <aside class="related-pages">
-    <h2>Σχετικές Σελίδες</h2>
+    <h2>${t.relatedPages}</h2>
     <ul>
       ${links.map(link => `<li>${link}</li>`).join('\n')}
     </ul>

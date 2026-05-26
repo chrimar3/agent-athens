@@ -4342,3 +4342,15 @@ Decisions made while making `site-chrome.ts` nav locale-aware:
 3. **Hub-routing rejected for the deferred behavior.** GEO offered "re-point chips to `/en/` hubs OR in-page filter." Empirically, **half the `/en/` type hubs don't build** (inventory-gated; `/en/exhibitions,cinema,tech,performances,workshops,dance` all MISSING on a normal build) and `/en/` has no combo pages to compose dimensions — so hub-routing 404s and can't satisfy GEO's "no missing options / no asymmetry." The correct fix is **client-side in-page filtering on `/en/`** (filter rendered `.event-card`s; needs `data-type`/`data-date` on cards + new JS). Deferred to a dedicated session — `specs/filter-bar-locale-checkpoint.md`.
 
 **Cross-references:** `mistakes.md`/`patterns.md` 2026-05-25 (S156 chrome-surface enumeration); `src/templates/filter-bar.ts`, `src/i18n/strings.ts` (filter block); `specs/filter-bar-locale-checkpoint.md`.
+
+### /en/ in-page filtering + heading localization (S157, 2026-05-26)
+
+1. **Type+price filter in-page; date navigates.** On `/en/`, type/price chips filter the rendered `.event-card`s client-side (compose AND on `data-type` + `data-price-type`; live count; `.filter-empty-state`). Date chips NAVIGATE to `/en/{time}/` hubs (re-pointed from bare-root Greek combos). Rationale: in-page filtering only narrows a hub's rendered window (date windows can be broader → not in DOM) + client-side date-window math has TZ risk (`filters.ts` naive `Date`). EL unchanged (combo navigation), guarded by `document.documentElement.lang === 'en'`.
+
+2. **Date inventory guard.** today/tomorrow `/en/` hubs are ≥3-event-gated → on `/en/`, omit those date options when `count<3` (avoids a 404). this-week/month/weekend/next-month always build.
+
+3. **EN hub H1 via config, not a title-builder rewrite.** `hub-page.ts` h1Override = `config.h1En ?? config.titleEn` for `/en/` (config already carried `titleEn` per hub). `h1En` added for hubs whose `titleEn` is a long SEO meta title (this-weekend). Avoids touching the Greek-only `buildPageTitle`. Date-group headers use `formatDateOnly` on en; "Related Pages" via `STRINGS.relatedPages`.
+
+4. **Known interim (deferred):** Related-Pages *link labels/URLs* stay Greek-combo (same leak class as the old chips; no `/en/` combos) — heading localized, links deferred. Search overlay still Greek. Live mobile click-test of the in-page filter pending (no headless browser in build env).
+
+**Cross-references:** `mistakes.md`/`patterns.md` 2026-05-26; `src/templates/filter-bar.ts`, `src/templates/page.ts`, `src/generators/hub-page.ts`, `config/hub-pages.json`; `specs/filter-bar-locale-checkpoint.md`.

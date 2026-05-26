@@ -905,3 +905,14 @@ The S155 nav sweep grepped for `renderSiteNav`/`renderHamburgerMenu`/`renderSite
 **Lesson:** when making shared chrome locale-aware, enumerate ALL components injected into the page shell (nav, menu, footer, filter bar, search overlay, any banner) — don't grep for the function names you already know. The completeness check is "what renders on an `/en/` page that contains non-ASCII Greek?", verified against a built `/en/` page: `grep -oE '[Α-Ωα-ω]+' dist/en/<hub>/index.html` surfaces every leak regardless of which component emitted it.
 
 **Cross-references:** `decisions.md` 2026-05-25 "Filter-bar locale (labels now, behavior deferred)"; `patterns.md` 2026-05-25 "Enumerate chrome surfaces by output, not by name"; `src/templates/filter-bar.ts` (S156 fix); `specs/filter-bar-locale-checkpoint.md` (deferred chip behavior + the 5th-surface note).
+
+### 6th locale surface: hub heading / date-group / Related-Pages (S157, 2026-05-26)
+
+Continuing the chrome-surface enumeration: S157 found the **hub heading layer** rendering Greek on `/en/`, three sub-surfaces:
+1. **H1** — `page.ts` `<h1>${h1Override ?? title}</h1>` fell back to `buildPageTitle` (Greek-only; only `/en/this-weekend` had a slug-gated override). Fixed: `hub-page.ts` h1Override = `config.h1En ?? config.titleEn` for all `/en/` hubs (config already had `titleEn`).
+2. **Date-group headers** — `formatGreekDateOnly` with no locale → Greek dates ("17 Απριλίου") on `/en/`. Fixed: `formatDateOnly(dateKey, 'en')` (already existed in `i18n-date.ts`).
+3. **"Σχετικές Σελίδες"** — hardcoded. Fixed: `STRINGS.relatedPages`.
+
+**The recurring tell:** each was a render path that *had* `locale` in scope (or one helper away) but never threaded it — `formatGreekDateOnly` instead of the locale-aware `formatDateOnly`, a hardcoded Greek string, a Greek-only title builder. The completeness check remains output-based: `grep -oE '[Α-Ωα-ω]{2,}' dist/en/<hub>/index.html | sort -u` surfaces every leak. **Still open after S157** (logged, same `grep`): Related-Pages *link labels/URLs* (Greek combo, deferred with the chip-combo work) and the search overlay (`Καθαρισμός`).
+
+**Cross-references:** `decisions.md` 2026-05-26 "/en/ in-page filtering + heading localization"; `src/templates/page.ts`, `src/generators/hub-page.ts`, `config/hub-pages.json` (h1En); `specs/filter-bar-locale-checkpoint.md`.

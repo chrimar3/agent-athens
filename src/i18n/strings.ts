@@ -114,6 +114,10 @@ export interface UIStrings {
   filterRemovePrice: string;
   filterTimeLabels: Record<string, string>;  // keyed by TimeRange value
   filterTypeLabels: Record<string, string>;  // keyed by EventType value
+
+  // Hub page surfaces
+  filterNoResults: string;   // in-page filter empty-state (/en/)
+  relatedPages: string;      // "Related Pages" section heading
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -278,6 +282,8 @@ export const STRINGS: Record<Locale, UIStrings> = {
       workshop: 'Εργαστήρια',
       tech: 'Tech',
     },
+    filterNoResults: 'Δεν βρέθηκαν εκδηλώσεις με αυτά τα φίλτρα.',
+    relatedPages: 'Σχετικές Σελίδες',
   },
 
   en: {
@@ -443,5 +449,7 @@ export const STRINGS: Record<Locale, UIStrings> = {
       workshop: 'Workshops',
       tech: 'Tech',
     },
+    filterNoResults: 'No events match these filters.',
+    relatedPages: 'Related Pages',
   },
 };

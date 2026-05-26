@@ -174,6 +174,7 @@ export interface HubConfig {
   slug: string;
   titleEl: string;
   titleEn: string;
+  h1En?: string;          // optional short EN H1 where titleEn is a long SEO meta title
   filter: HubFilter;
   answerCapsuleEl: string;
   answerCapsuleEn?: string;

@@ -155,7 +155,7 @@ export function renderFilterBar(
         </div>`
       : `<div class="filter-panel-anchor" data-filter="date">
           <button class="filter-pill" data-panel="date">${timeLabel} ${CHEVRON_SVG}</button>
-          ${renderDatePanel(counts.timeRanges, currentFilters, s)}
+          ${renderDatePanel(counts.timeRanges, currentFilters, s, locale)}
         </div>`;
 
   // ── Type pill ──
@@ -172,7 +172,7 @@ export function renderFilterBar(
         </div>`
       : `<div class="filter-panel-anchor" data-filter="type">
           <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
-          ${renderTypePanel(counts.types, currentFilters, totalCount, s)}
+          ${renderTypePanel(counts.types, currentFilters, totalCount, s, locale)}
         </div>`;
 
   // ── Price pill ──
@@ -191,7 +191,7 @@ export function renderFilterBar(
         </div>`
       : `<div class="filter-panel-anchor" data-filter="price">
           <button class="filter-pill" data-panel="price">${priceLabel} ${CHEVRON_SVG}</button>
-          ${renderPricePanel(counts.prices, currentFilters, s)}
+          ${renderPricePanel(counts.prices, currentFilters, s, locale)}
         </div>`;
 
   // ── Sort pill ──
@@ -203,11 +203,11 @@ export function renderFilterBar(
   // ── Meta (result count + clear all) ──
   const clearHref = hubIdentity ? '/' + hubIdentity.canonicalUrl : '/';
   const meta = `<div class="filter-bar-meta">
-    <span class="filter-result-count">${totalCount} ${s.filterEventsWord}</span>
+    <span class="filter-result-count" data-events-word="${s.filterEventsWord}">${totalCount} ${s.filterEventsWord}</span>
     ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">${s.filterClear}</a>` : ''}
   </div>`;
 
-  return `<div class="filter-bar">
+  return `<div class="filter-bar" data-locale="${locale}">
     <div class="filter-bar-scroll">
       ${datePill}
       ${typePill}
@@ -221,15 +221,21 @@ export function renderFilterBar(
 
 // ── Panel Renderers ──────────────────────────────────
 
-function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filters, s: UIStrings): string {
-  const rows = timeRanges.map(opt => {
-    const isSelected = currentFilters.time === opt.value;
-    return `<a href="${opt.url}" class="filter-radio-row${isSelected ? ' is-selected' : ''}">
+function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filters, s: UIStrings, locale: Locale): string {
+  // On /en/, date stays NAVIGATION (in-page date filtering can't broaden a hub's
+  // window) → re-point to the surviving /en/{time}/ hub. today/tomorrow are
+  // inventory-gated (≥3 events) — omit on /en/ when count<3 to avoid a 404.
+  const rows = timeRanges
+    .filter(opt => !(locale === 'en' && (opt.value === 'today' || opt.value === 'tomorrow') && opt.count < 3))
+    .map(opt => {
+      const isSelected = currentFilters.time === opt.value;
+      const href = locale === 'en' ? `/en/${opt.value}/` : opt.url;
+      return `<a href="${href}" class="filter-radio-row${isSelected ? ' is-selected' : ''}">
       <span class="filter-radio-circle"></span>
       <span class="filter-radio-label">${s.filterTimeLabels[opt.value] || opt.value}</span>
       <span class="filter-radio-count">${opt.count}</span>
     </a>`;
-  });
+    });
 
   return `<div class="filter-panel" data-panel-for="date">
     <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
@@ -241,11 +247,13 @@ function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filter
   </div>`;
 }
 
-function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number, s: UIStrings): string {
+function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number, s: UIStrings, locale: Locale): string {
   const tiles = types.map(opt => {
     const isSelected = currentFilters.type === opt.value;
     const colorVar = typeColorVar(opt.value as EventType);
-    return `<a href="${opt.url}" class="filter-type-tile${isSelected ? ' is-selected' : ''}" style="--tile-color: ${colorVar}">
+    // On /en/, options carry data-filter-* so the script filters in-page (preventDefault).
+    const enFilterAttrs = locale === 'en' ? ` data-filter-dim="type" data-filter-value="${opt.value}"` : '';
+    return `<a href="${opt.url}" class="filter-type-tile${isSelected ? ' is-selected' : ''}" style="--tile-color: ${colorVar}"${enFilterAttrs}>
       <span class="filter-type-dot" style="background: ${colorVar}"></span>
       <span class="filter-type-label">${s.filterTypeLabels[opt.value] || opt.value}</span>
       <span class="filter-type-count">${opt.count}</span>
@@ -268,10 +276,11 @@ function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, to
   </div>`;
 }
 
-function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters, s: UIStrings): string {
+function renderPricePanel(prices: FilterCountOption[], currentFilters: Filters, s: UIStrings, locale: Locale): string {
   const rows = prices.map(opt => {
     const isSelected = currentFilters.price === opt.value;
-    return `<a href="${opt.url}" class="filter-radio-row${isSelected ? ' is-selected' : ''}">
+    const enFilterAttrs = locale === 'en' ? ` data-filter-dim="price" data-filter-value="${opt.value}"` : '';
+    return `<a href="${opt.url}" class="filter-radio-row${isSelected ? ' is-selected' : ''}"${enFilterAttrs}>
       <span class="filter-radio-circle"></span>
       <span class="filter-radio-label">${priceOptionLabel(opt.value as PriceFilter, s)}</span>
       <span class="filter-radio-count">${opt.count}</span>
@@ -411,6 +420,78 @@ export function renderFilterBarScript(): string {
       }
     });
   });
+
+  // ── In-page filtering on /en/ (type + price). EL keeps combo navigation. ──
+  // Date dimension stays navigation (links re-pointed to /en/{time}/ server-side).
+  if (document.documentElement.lang === 'en') {
+    var grid = document.querySelector('.card-grid');
+    var emptyState = document.querySelector('.filter-empty-state');
+    var countEl = document.querySelector('.filter-result-count');
+    var eventsWord = countEl ? (countEl.getAttribute('data-events-word') || '') : '';
+    var active = { type: null, price: null };
+
+    // Capture default pill labels before any selection (chevron carries no text).
+    document.querySelectorAll('.filter-pill[data-panel="type"], .filter-pill[data-panel="price"]').forEach(function(p) {
+      p.setAttribute('data-default-label', p.textContent.trim());
+    });
+
+    function applyFilter() {
+      if (!grid) return;
+      var visible = 0;
+      grid.querySelectorAll('.event-card').forEach(function(card) {
+        var ok = (!active.type || card.getAttribute('data-type') === active.type) &&
+                 (!active.price || card.getAttribute('data-price-type') === active.price);
+        card.style.display = ok ? '' : 'none';
+        if (ok) visible++;
+      });
+      // Hide date-group headers + groups with no visible card.
+      grid.querySelectorAll('.date-group').forEach(function(group) {
+        var anyVisible = false;
+        group.querySelectorAll('.event-card').forEach(function(c) {
+          if (c.style.display !== 'none') anyVisible = true;
+        });
+        group.style.display = anyVisible ? '' : 'none';
+        var header = group.previousElementSibling;
+        if (header && header.classList.contains('date-group-header')) {
+          header.style.display = anyVisible ? '' : 'none';
+        }
+      });
+      if (countEl) countEl.textContent = visible + ' ' + eventsWord;
+      if (emptyState) emptyState.style.display = visible === 0 ? '' : 'none';
+    }
+
+    function updatePill(dim) {
+      var pill = document.querySelector('.filter-pill[data-panel="' + dim + '"]');
+      if (!pill) return;
+      var chev = pill.querySelector('.filter-pill-chevron');
+      var panel = document.querySelector('.filter-panel[data-panel-for="' + dim + '"]');
+      var sel = panel ? panel.querySelector('[data-filter-dim].is-selected .filter-type-label, [data-filter-dim].is-selected .filter-radio-label') : null;
+      var label = (active[dim] && sel) ? sel.textContent : (pill.getAttribute('data-default-label') || '');
+      pill.textContent = label + ' ';
+      if (chev) pill.appendChild(chev);
+      pill.classList.toggle('is-active', !!active[dim]);
+    }
+
+    document.querySelectorAll('[data-filter-dim]').forEach(function(opt) {
+      opt.addEventListener('click', function(e) {
+        e.preventDefault();
+        var dim = opt.getAttribute('data-filter-dim');
+        var val = opt.getAttribute('data-filter-value');
+        var panel = opt.closest('.filter-panel');
+        var wasActive = active[dim] === val;
+        if (panel) panel.querySelectorAll('[data-filter-dim]').forEach(function(o) { o.classList.remove('is-selected'); });
+        if (wasActive) {
+          active[dim] = null;
+        } else {
+          active[dim] = val;
+          opt.classList.add('is-selected');
+        }
+        updatePill(dim);
+        applyFilter();
+        closeAll();
+      });
+    });
+  }
 })();
 </script>`;
 }

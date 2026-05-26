@@ -366,12 +366,10 @@ export function renderHubPage(
     canonicalUrl: metadata.url,
     excludeDimension: hubFilterToExcludedDimension(config.filter),
   };
-  // Step 3b: H1 override for /en/this-weekend — pre-existing buildPageTitle gap
-  // makes EN-hub H1s render Greek. Slug-gated, locale-gated minimal patch; broader
-  // EN-hub H1 localization is queued as a known-issue.
-  const h1Override = (config.slug === 'this-weekend' && locale === 'en')
-    ? 'Athens Events This Weekend'
-    : undefined;
+  // S157: localize EN-hub H1s (buildPageTitle is Greek-only). titleEn is the
+  // per-hub English title from config; h1En overrides where titleEn is a long
+  // SEO meta title (e.g. this-weekend). EL: h1Override undefined → buildPageTitle.
+  const h1Override = locale === 'en' ? (config.h1En ?? config.titleEn) : undefined;
   const baseHtml = renderPage(
     metadata,
     displayEvents,

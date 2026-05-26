@@ -1,41 +1,17 @@
-# Filter-bar `/en/` chip behavior — checkpoint (deferred)
+# Filter-bar `/en/` locale — checkpoint
 
-## Status: labels DONE (S156); chip navigation behavior DEFERRED
+## Status
+- **S156:** labels localized (Type/Price/Sort/Date, options, Free entry/Ticketed, Clear/Reset/Close).
+- **S157:** chip **behavior** shipped — **type + price filter IN-PAGE** on `/en/` (client-side, compose, narrow, empty-state, live count); **date NAVIGATES** to `/en/{time}/` hubs (re-pointed from bare-root Greek combos). EL unchanged (combo navigation). Also S157: EN hub **H1 + date-group headers + "Related Pages" heading** localized.
 
-S156 made `filter-bar.ts` locale-aware for **labels only**. English hubs now render
-English filter labels (Type/Price/Sort/Date, Concerts/Theatre/…, Free entry/Ticketed,
-Clear/Reset/Close). EL unchanged.
+## How it works (S157)
+- `.event-card` root carries `data-type` + `data-price-type` (page.ts). `.filter-bar` carries `data-locale`; `.filter-result-count` carries `data-events-word`.
+- On `/en/`, type/price panel options get `data-filter-dim`/`data-filter-value`; the script (`renderFilterBarScript`, guarded `document.documentElement.lang === 'en'`) intercepts clicks → composes `(type AND price)` over `.event-card`s, updates count, toggles `.filter-empty-state`, hides empty date-groups. Date options re-point to `/en/{time}/` (today/tomorrow omitted on `/en/` when count<3 to avoid the inventory 404).
+- Date stays navigation because in-page date can only *narrow* a hub's rendered window (broader windows aren't in the DOM) + needs client-side TZ/window math.
 
-**Still broken (deferred):** on `/en/` hubs, clicking a filter chip navigates to a
-**bare-root Greek combo page** (`/concert-this-week`, `/open-this-week`, …) — `opt.url`
-was intentionally left untouched. So English users still get dumped into Greek content
-when they filter. Not a regression (was Greek-label→Greek-combo; now English-label→
-Greek-combo); just the half not yet fixed.
+## Remaining `/en/` leaks (NOT yet fixed — next locale pass)
+1. **Related-Pages LINKS** (`renderRelatedPages`, page.ts ~353): the section *heading* is localized (S157), but its **links are still Greek labels + bare-root Greek-combo URLs** (`/open-${type}`, `/this-week`, "Όλες οι …", "Ελεύθερη είσοδος …"). Same combo-leak class as the old filter chips — can't be cleanly `/en/`-fied (no `/en/` combos). Defer with the combo work. (Interim: English "Related Pages" heading over Greek links — mildly incoherent; flagged.)
+2. **Search overlay** (`search-overlay.ts`, `search-clear-btn` aria `Καθαρισμός`) — the 5th locale-unaware surface. Still Greek on `/en/`.
+3. **Live mobile click-test pending:** S157 verified markup + script-parse + logic; the actual in-page filter interaction was NOT browser-tested (no headless browser in the build env). Confirm on the live `/en/` site (mobile): Type→Concerts narrows, +Price composes, toggle clears, count/empty-state update.
 
-## Why deferred / why not hub-routing
-- **Half the `/en/` type hubs don't build** (inventory-gated: `answerCapsuleEn` + ≥3 events).
-  Empirically MISSING on a normal build: `/en/exhibitions/`, `/en/cinema/`, `/en/tech/`,
-  `/en/performances/`, `/en/workshops/`, `/en/dance/`. Pointing chips there = the same
-  404 class we're fixing, and GEO forbade hiding options.
-- **`/en/` has no combo pages** (GEO: don't generate them) → navigation can't compose
-  type+price+date the way Greek combos do.
-- So the only approach satisfying "no missing options / no 404 / no inventory asymmetry /
-  composition" is **client-side in-page filtering on `/en/`**.
-
-## The fix (next session, post-demo)
-On `locale==='en'`, chips filter the current hub's rendered events via JS (show/hide
-`.event-card` by type/price/date) instead of navigating. EL keeps combo-navigation.
-Requires:
-- Add `data-type` and `data-date` to `.event-card` root (currently `data-price` is on the
-  root; `data-type` is only on a child `.card-image-wrapper`; no `data-date` exists).
-- New filter JS (extend `renderFilterBarScript`, which already does client-side sort-by-price).
-- Empty-state + live count updates.
-
-## Owner: Dev, post-demo. Blocked on: dedicated session (new JS + card data-attrs).
-
-## Related
-- `docs/known-issues.md` — date-conditional-hub dangling links (`cornerstone-links.ts`);
-  inventory-gated `/en/` hubs.
-- Fifth locale-unaware surface found in S156: the **search overlay** (`search-overlay.ts`,
-  `search-clear-btn` aria-label `Καθαρισμός`) still hardcodes Greek on `/en/`. Out of S156
-  scope; log for a future locale pass.
+## Owner: Dev, post-demo (related-page links + search overlay = next locale pass).

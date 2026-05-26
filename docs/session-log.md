@@ -6425,3 +6425,30 @@ constant feeding both surfaces.
 1. 📦 **Filter chip `/en/` navigation still leaks to Greek combos** — `specs/filter-bar-locale-checkpoint.md`. Fix = client-side in-page filtering (needs card `data-type`/`data-date` + new JS). Dev, post-demo.
 2. 🟡 **Search overlay (`search-overlay.ts`) hardcodes Greek `Καθαρισμός`** on `/en/` — 5th locale-unaware surface. Queue with a future locale pass.
 3. 🟡 **`/en/today,tomorrow,exhibitions` not building today** (inventory-gated) — surfaces as 5 flaky suite reds; relates to the date-conditional-hub known-issue. Demo note: EN site is missing those hubs on low-inventory days.
+
+---
+
+### Session 157 — /en/ in-page filtering (type+price) + hub heading localization — 2026-05-26
+
+**Plan:** Deferred S156 follow-up. GEO ruling: `/en/` filtering = in-page / surviving-hub routing, no combos. User-confirmed: **type+price in-page, date navigates to `/en/{time}/`**; localize all 3 hub heading surfaces.
+
+**What happened:**
+- **A (in-page filtering):** `.event-card` root gained `data-type` + `data-price-type` (page.ts). `filter-bar.ts`: on `/en/`, type/price options carry `data-filter-dim`/`data-filter-value`; date options re-point to `/en/{time}/` (today/tomorrow omitted when count<3); `.filter-bar` gets `data-locale`, count gets `data-events-word`. `renderFilterBarScript` extended with an `/en/`-guarded block that composes type+price over cards, updates count, toggles `.filter-empty-state`, hides empty date-groups. EL untouched.
+- **B (headings):** H1 via `config.h1En ?? config.titleEn` for `/en/` (hub-page.ts; added `h1En` to this-weekend + `HubConfig` type); date-group headers via `formatDateOnly` on en; "Related Pages" via `STRINGS.relatedPages`. Added `filterNoResults` + `relatedPages` STRINGS.
+- Out of scope (decided): client-side date math/`data-date`; `/en/` combos; `buildURL`; EL behavior.
+
+**Verified:**
+- tsc clean; 29 filter tests pass (added `filter-bar-inpage.test.ts`; updated the S156 deferred-behavior test). Full suite: 2571 pass, 6 fail — all pre-existing (4 colophon + 2 inventory-gated `/en/` hub-existence); **0 from this change** (diff is filter-bar/page/hub-page/strings/types/config; none gates hub generation).
+- Clean `rm -rf dist && build`. `/en/this-week/`: `data-locale="en"`, 8 `data-filter-dim`, card `data-type`+`data-price-type`, `.filter-empty-state`, H1 "Events in Athens This Week", date-group "Friday 17 April" (English), "Related Pages". `/en/concerts/`: date options → `/en/this-week|this-month|this-weekend/`. EL `dist/this-week.html`: `data-locale="el"`, **0** `data-filter-dim`, Greek H1 — unchanged. Inline script parses (no syntax error).
+- **NOT verified:** live mobile click behavior (no headless browser in env) — confirm on live `/en/`.
+- Deployed `netlify deploy --prod --dir=dist`; committed path-staged + pushed `main` (verified `main == origin/main`).
+
+**Learnings:**
+- In-page filtering only narrows a server-rendered window → type/price fit (refinements), date doesn't (windows can broaden + TZ risk) → date stays navigation. (`patterns.md` 2026-05-26.)
+- 6th locale surface set: hub H1 / date-group headers / "Related Pages" — each had locale in scope but used a Greek-only helper/string. Output-based `grep` for Greek chars in `dist/en/` remains the completeness check.
+
+**Open items (post-S157):**
+1. 🟡 **Related-Pages LINKS** still Greek labels + Greek-combo URLs on `/en/` (heading localized; links deferred — same combo class as old chips). `specs/filter-bar-locale-checkpoint.md`.
+2. 🟡 **Search overlay** (`search-overlay.ts` `Καθαρισμός`) — 5th surface, still Greek.
+3. ✅ **Live mobile spot-check** of in-page filtering recommended (Type→Concerts narrows, +Price composes, count/empty-state).
+4. 📦 Any hub whose `titleEn` is a long SEO meta title should get an `h1En` (only this-weekend done).

@@ -77,13 +77,21 @@ describe('renderFilterBar — Greek unchanged (default + explicit)', () => {
   });
 });
 
-describe('renderFilterBar — chip URLs are locale-independent (behavior deferred)', () => {
-  test('option hrefs identical across locales (no /en/ prefixing this session)', () => {
+describe('renderFilterBar — S157: type/price combo-fallback hrefs; date navigates /en/', () => {
+  test('type/price option hrefs identical across locales (combo fallback; JS intercepts on en)', () => {
     const en = renderFilterBar({}, counts, 20, undefined, 'en');
     const el = renderFilterBar({}, counts, 20, undefined, 'el');
-    for (const href of ['href="/concert"', 'href="/open"', 'href="/today"']) {
+    for (const href of ['href="/concert"', 'href="/open"']) {
       expect(en).toContain(href);
       expect(el).toContain(href);
     }
+  });
+
+  test('date option href differs: el bare-root combo, en /en/{time}/', () => {
+    const en = renderFilterBar({}, counts, 20, undefined, 'en');
+    const el = renderFilterBar({}, counts, 20, undefined, 'el');
+    expect(el).toContain('href="/today"');
+    expect(en).toContain('href="/en/today/"');
+    expect(en).not.toContain('href="/today"');
   });
 });
