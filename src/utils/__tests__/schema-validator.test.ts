@@ -109,6 +109,13 @@ describe('validateEventSchema', () => {
     expect(result.warnings).not.toContain('endDate');
   });
 
+  test('2.2: empty streetAddress is a mandatory gap (address completeness, not just presence)', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema.location.address.streetAddress = '';
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.missing).toContain('location.address.streetAddress');
+  });
+
   test('invalid JSON returns INVALID_JSON in missing', () => {
     const result = validateEventSchema('not valid json {{{', '/events/broken/');
     expect(result.missing).toContain('INVALID_JSON');

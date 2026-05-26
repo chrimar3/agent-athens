@@ -260,11 +260,12 @@ describe('validateSchemaCompleteness', () => {
       expect(result.warnings.some(w => w.includes('description'))).toBe(true);
     });
 
-    test('empty streetAddress → WARNING', () => {
+    test('2.2: empty streetAddress → ERROR (location-prefixed, feeds the build halt)', () => {
       const schema = makeValidSchema();
       (schema.location as Record<string, any>).address.streetAddress = '';
       const result = validateSchemaCompleteness(wrapInHtml(schema), 'no-addr');
-      expect(result.warnings.some(w => w.includes('streetAddress'))).toBe(true);
+      expect(result.errors.some(e => e.includes('location.address.streetAddress'))).toBe(true);
+      expect(result.warnings.some(w => w.includes('streetAddress'))).toBe(false);
     });
 
     test('missing location.geo (no canonical @id, fully-inline) → WARNING (scope-to-canonical falls back to inline geo when no @id ref)', () => {

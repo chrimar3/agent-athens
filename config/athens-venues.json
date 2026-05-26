@@ -177,7 +177,8 @@
         "Aux",
         "Aux Club, Αγίου Όρους 15, Γκάζι, Αθήνα, Greece"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Agiou Orous 15, Athens 104 47"
     },
     {
       "canonical_name": "Cantina Social",
@@ -831,11 +832,6 @@
       "neighborhood": "Unknown"
     },
     {
-      "canonical_name": "στην Αθήνα TBA",
-      "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
       "canonical_name": "Παρνασσός",
       "variations": [],
       "neighborhood": "Unknown"
@@ -855,11 +851,6 @@
     },
     {
       "canonical_name": "ΕΞΑ - ΑΘΗΝΑ",
-      "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
-      "canonical_name": "TBA - Big Bar Athens",
       "variations": [],
       "neighborhood": "Unknown"
     },
@@ -1049,11 +1040,6 @@
       "neighborhood": "Unknown"
     },
     {
-      "canonical_name": "TBA - ATHarea",
-      "variations": [],
-      "neighborhood": "Unknown"
-    },
-    {
       "canonical_name": "STAVROS NIARCHOS FOUNDATION CULTURAL CENTER",
       "variations": [],
       "neighborhood": "Unknown",
@@ -1069,7 +1055,8 @@
     {
       "canonical_name": "Patision65",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "28is Oktovriou 65, Athina 104 33"
     },
     {
       "canonical_name": "OAKA - OLYMPIC TENNIS CENTER",

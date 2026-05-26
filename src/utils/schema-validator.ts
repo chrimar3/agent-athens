@@ -34,6 +34,7 @@ const MANDATORY_FIELDS = [
   'location.@type',
   'location.name',
   'location.address',
+  'location.address.streetAddress', // 2.2: address completeness, not just presence
   'isAccessibleForFree',
   'inLanguage',
 ];

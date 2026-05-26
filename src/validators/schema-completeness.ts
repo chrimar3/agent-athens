@@ -374,8 +374,13 @@ export function validateSchemaCompleteness(
   }
 
   if (location?.address) {
+    // 2.2: streetAddress completeness is a build-FAIL on event-detail pages
+    // (feeds the 2.1′ detail-scoped halt — message carries the 'location'
+    // prefix the halt filters on). The render reads the config address when the
+    // scraped DB value is empty (event-page.ts), so a remaining empty here is a
+    // genuine venue-data gap to backfill, not a cosmetic warning.
     if (!isNonEmpty(location.address.streetAddress)) {
-      warnings.push('streetAddress is empty');
+      errors.push('location.address.streetAddress is missing or empty');
     }
   }
 
