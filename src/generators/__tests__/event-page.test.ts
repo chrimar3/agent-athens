@@ -993,3 +993,25 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     expect(schema.offers.seller.name).toBe("Viva.gr");
   });
 });
+
+describe("Event schema — endDate proxy (1.3b: multi-day honest absence)", () => {
+  test("single-occurrence (concert) without endDate keeps endDate=startDate proxy", () => {
+    const event: Event = { ...sampleConcert, endDate: undefined };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.endDate).toBeDefined();
+    expect(schema.endDate).toBe(schema.startDate);
+  });
+
+  test("multi-day type (exhibition) without endDate leaves endDate ABSENT (no false 1-day span)", () => {
+    const event: Event = { ...sampleFreeExhibition, endDate: undefined };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.endDate).toBeUndefined();
+  });
+
+  test("exhibition WITH endDate emits the real span", () => {
+    const event: Event = { ...sampleFreeExhibition, endDate: "2026-09-28T20:00:00+03:00" };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.endDate).toBeDefined();
+    expect(schema.endDate).not.toBe(schema.startDate);
+  });
+});

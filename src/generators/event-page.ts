@@ -187,8 +187,13 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     schema.endDate = formatSchemaDate(event.endDate);
   }
 
-  // For single-day events without endDate, use startDate (Schema.org convention)
-  if (!schema.endDate) {
+  // 1.3b: endDate=startDate proxy is honest only for genuinely single-day
+  // events. Multi-day types (exhibition, festival) without a real end_date are
+  // NOT one-day — emitting the proxy would assert a false 1-day span. Leave
+  // endDate absent for those (honest absence); the validator surfaces a
+  // type-conditional WARN. Single-occurrence types keep the proxy (correct).
+  const MULTI_DAY_TYPES = new Set(['exhibition', 'festival']);
+  if (!schema.endDate && !MULTI_DAY_TYPES.has(event.type)) {
     schema.endDate = startDate;
   }
 

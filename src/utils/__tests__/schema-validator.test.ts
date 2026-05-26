@@ -86,11 +86,27 @@ describe('validateEventSchema', () => {
     expect(result.warnings).toContain('performer');
   });
 
-  test('missing endDate is flagged as recommended warning', () => {
+  test('1.3b: single-occurrence event (MusicEvent) missing endDate is NOT warned', () => {
+    // endDate is type-conditional, not generic-recommended: a concert is one day.
     const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
     delete schema.endDate;
     const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.warnings).not.toContain('endDate');
+  });
+
+  test('1.3b: multi-day type (ExhibitionEvent) missing endDate IS warned', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema['@type'] = 'ExhibitionEvent';
+    delete schema.endDate;
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
     expect(result.warnings).toContain('endDate');
+  });
+
+  test('1.3b: multi-day type (Festival) WITH endDate is not warned', () => {
+    const schema = JSON.parse(JSON.stringify(COMPLETE_SCHEMA));
+    schema['@type'] = 'Festival'; // keeps endDate from COMPLETE_SCHEMA
+    const result = validateEventSchema(JSON.stringify(schema), '/events/test/');
+    expect(result.warnings).not.toContain('endDate');
   });
 
   test('invalid JSON returns INVALID_JSON in missing', () => {

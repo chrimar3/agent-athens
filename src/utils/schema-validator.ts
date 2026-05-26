@@ -43,10 +43,17 @@ const MANDATORY_FIELDS = [
  */
 const RECOMMENDED_FIELDS = [
   'image',
-  'endDate',
+  // 'endDate' is NOT a generic recommended field — it is type-conditional.
+  // Single-occurrence events are genuinely one day, so a missing endDate is not
+  // a defect. Only multi-day types (exhibition, festival) warrant a WARN when
+  // endDate is absent — handled explicitly below (1.3b).
   'location.geo',
   'performer',
 ];
+
+// 1.3b: schema @types that represent genuinely multi-day events. A missing
+// endDate on these means the span was lost → visible WARN for backfill.
+const MULTI_DAY_SCHEMA_TYPES = new Set(['ExhibitionEvent', 'Festival']);
 
 /**
  * INFO-level fields — surfaced for awareness but not blocking and not warning.
@@ -132,6 +139,15 @@ export function validateEventSchema(jsonLd: string, url: string): SchemaValidati
     const value = getNestedValue(schema, field);
     if (value === undefined || value === null || value === '') {
       result.warnings.push(field);
+    }
+  }
+
+  // 1.3b: type-conditional endDate WARN. Multi-day event types missing an
+  // endDate lost their span; single-occurrence types stay silent.
+  if (MULTI_DAY_SCHEMA_TYPES.has(schema['@type'] as string)) {
+    const endDate = getNestedValue(schema, 'endDate');
+    if (endDate === undefined || endDate === null || endDate === '') {
+      result.warnings.push('endDate');
     }
   }
 
