@@ -277,6 +277,28 @@ export function checkLocation(event: EventLocation): LocationResult {
   const normalizedVenue = venueName ? normalize(venueName) : '';
 
   // -------------------------------------------------------------------------
+  // Step 0-pre: Class C pipe-separated multi-venue recovery
+  // -------------------------------------------------------------------------
+  // Some scrapers (e.g. ticketservices) concatenate a real venue with the
+  // generic "Multiple Venues" marker via a pipe, e.g.
+  // "ΚΥΤΤΑΡΟ LIVE|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ". Resolve each segment and prefer a known
+  // whitelist venue over the masking pass-through below, so the event keeps a
+  // real location + address instead of a thin pass_through. If no segment
+  // resolves, fall through to normal logic (pass_through / blacklist / etc.).
+  if (venueName && venueName.includes('|')) {
+    for (const segment of venueName.split('|')) {
+      const segMatch = findVenueConfig(segment.trim());
+      if (segMatch) {
+        return {
+          status: 'verified_athens',
+          matched_venue: segMatch.canonical_name,
+          original_venue: venueName,
+        };
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
   // Step 0: Pass-through venues (e.g., "Πολλαπλοί Χώροι")
   // -------------------------------------------------------------------------
   if (venueName && athensConfig?.pass_through_venues) {

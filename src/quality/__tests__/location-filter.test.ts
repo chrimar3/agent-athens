@@ -208,6 +208,29 @@ describe('Location Filter', () => {
   });
 
   // =========================================================================
+  // Class C: pipe-separated multi-venue recovery (split, don't pass-through)
+  // =========================================================================
+
+  describe('Pipe-separated multi-venue (Class C) recovery', () => {
+    test('recovers a real venue from "ΚΥΤΤΑΡΟ LIVE|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ" rather than pass-through', () => {
+      // Scraper (ticketservices) concatenated a real venue with the generic
+      // "Multiple Venues" marker via a pipe. Splitting must prefer the resolvable
+      // whitelist venue (Κύτταρο) over the masking pass-through match.
+      const event: EventLocation = { venue_name: 'ΚΥΤΤΑΡΟ LIVE|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ' };
+      const result = checkLocation(event);
+      expect(result.status).toBe('verified_athens');
+      expect(result.matched_venue).toBe('Κύτταρο');
+    });
+
+    test('pipe venue with no resolvable segment falls through (not falsely verified)', () => {
+      // Neither segment is a known Athens venue → no over-recovery; normal logic applies.
+      const event: EventLocation = { venue_name: 'Some Unknown Hall|Another Unknown Hall' };
+      const result = checkLocation(event);
+      expect(result.status).not.toBe('verified_athens');
+    });
+  });
+
+  // =========================================================================
   // Unknown Venue Tests
   // =========================================================================
 
