@@ -599,6 +599,49 @@ describe('validateHubSchema', () => {
     expect(result.warnings.some(w => w.includes('inLanguage'))).toBe(true);
   });
 
+  // Hub ListItem location.address.streetAddress parity guard (2026-05-27).
+  // The hub ListItem builder (schema-graph-builders.ts) emitted streetAddress:''
+  // for config-address venues whose DB venue_address was empty (237 nodes in the
+  // 2026-05-27 dist/ scan) because it lacked the findVenueConfig fallback the
+  // detail emitter (event-page.ts:176) has. validateHubSchema previously did not
+  // inspect ListItem location.address — build-completeness stayed fail:0 (blind
+  // spot). This guard mirrors the detail-page streetAddress check (line ~382),
+  // scoped to "address present" so honest location-less items stay clean.
+  describe('ListItem location.address.streetAddress (hub parity guard)', () => {
+    function makeCpWithItemLocation(location: Record<string, any> | undefined): Record<string, unknown> {
+      const cp = makeValidCollectionPage();
+      const items = (cp.mainEntity as any).itemListElement as any[];
+      if (location === undefined) delete items[0].item.location;
+      else items[0].item.location = location;
+      return cp;
+    }
+    const placeWith = (streetAddress: string) => ({
+      '@type': 'MusicVenue',
+      name: 'Cantina Social',
+      address: { '@type': 'PostalAddress', streetAddress, addressLocality: 'Athens', addressRegion: 'Attica', addressCountry: 'GR' },
+    });
+
+    test('ListItem with location.address but empty streetAddress → ERROR', () => {
+      const html = wrapMultiJsonLd(makeCpWithItemLocation(placeWith('')), makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      expect(result.errors.some(e =>
+        e.includes('itemListElement') && e.includes('location.address.streetAddress'),
+      )).toBe(true);
+    });
+
+    test('ListItem with a non-empty streetAddress passes', () => {
+      const html = wrapMultiJsonLd(makeCpWithItemLocation(placeWith('Leokoriou 6-8, Athens 105 54')), makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      expect(result.errors.filter(e => e.includes('location.address.streetAddress'))).toHaveLength(0);
+    });
+
+    test('ListItem with no location/address block → no streetAddress error (honest omission)', () => {
+      const html = wrapMultiJsonLd(makeCpWithItemLocation(undefined), makeValidFAQPage());
+      const result = validateHubSchema(html, 'concerts');
+      expect(result.errors.filter(e => e.includes('location.address.streetAddress'))).toHaveLength(0);
+    });
+  });
+
   // S139-fix (Strategist 2026-05-20) — ListItem Offer-shape coupling regression tests.
   // The drift class that produced 15 price-less ListItem Offers in the 2026-05-20
   // production deploy. These tests prove the validator catches the pre-fix state.

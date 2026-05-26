@@ -107,7 +107,7 @@ require a row added to this manifest.
 
 ### 2. Event detail page — microdata Event element  ⛔ `removed:2026-05-25:strip-post-s139`
 
-**Status:** retired. Microdata stripped from both event-detail (`src/generators/event-page.ts`) and hub-card (`src/templates/page.ts`) surfaces on 2026-05-25 per GEO Strategist ruling. JSON-LD is authoritative on both surfaces post-S139. `validateMicrodata` retired in the same commit (function deleted from `src/validators/schema-completeness.ts`; 4 call sites removed; test block deleted).
+**Status:** retired (commit `f02043922`, 2026-05-25). Microdata stripped from both event-detail (`src/generators/event-page.ts`) and hub-card (`src/templates/page.ts`) surfaces on 2026-05-25 per GEO Strategist ruling. JSON-LD is authoritative on both surfaces post-S139. `validateMicrodata` retired in the same commit (function deleted from `src/validators/schema-completeness.ts`; 4 call sites removed; test block deleted). Microdata is no longer emitted or validated on any surface; do not resurrect `validateMicrodata`.
 
 **Why retired:**
 - GSC counts JSON-LD + microdata as separate items, inflating field-completeness denominators and producing parallel-emission drift bugs (S101a price-vs-availability rules existed only because microdata had to mirror JSON-LD).

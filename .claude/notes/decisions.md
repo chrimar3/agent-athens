@@ -4354,3 +4354,23 @@ Decisions made while making `site-chrome.ts` nav locale-aware:
 4. **Known interim (deferred):** Related-Pages *link labels/URLs* stay Greek-combo (same leak class as the old chips; no `/en/` combos) — heading localized, links deferred. Search overlay still Greek. Live mobile click-test of the in-page filter pending (no headless browser in build env).
 
 **Cross-references:** `mistakes.md`/`patterns.md` 2026-05-26; `src/templates/filter-bar.ts`, `src/templates/page.ts`, `src/generators/hub-page.ts`, `config/hub-pages.json`; `specs/filter-bar-locale-checkpoint.md`.
+
+### Hub ListItem streetAddress parity + hub validator guard; JSON-LD remains sole surface (2026-05-27)
+
+Diagnostic-first reconciliation of "Event.location missing from JSON-LD." Findings + decisions:
+
+1. **GSC's "128 missing location" is confirmed crawl-lag, not a current JSON-LD defect.** It was an EDP *microdata* defect (`gsc-schema-defects-2026-05-19` #7); microdata was retired wholesale (`f02043922`, 2026-05-25); current `dist/` detail JSON-LD has 0 location misses (build-halt passes; `build-completeness.json` fail:0). No detail fix; no resurrection of microdata or `validateMicrodata`.
+
+2. **Real defect found on the HUB surface (new):** 237 ListItem `location.address.streetAddress:""` for 7 config-address venues — the hub builder (`schema-graph-builders.ts:57`) lacked the config-address fallback the detail emitter has (`event-page.ts:176`). **Decision: fix the parity (one-line `findVenueConfig` fallback) + add a hub-scoped `validateHubSchema` `streetAddress` guard** (close the validator blind spot). Verified 237→0, TDD. This is an empty *address subfield*, not missing `location`.
+
+3. **Hub guard is validator-only, NOT a build halt.** Deliberately did not extend the detail-scoped halt (`generate-site.ts:1256-1282`) to hub nodes — the node-keyed hub/venue halt stays the separate Session-2 decision (it would interact with the by-design venue nested-ref omissions). Detection now lands in `build-completeness.json`; halt-wiring deferred.
+
+4. **Venue nested-ref omission (class D) left as-is.** 110 nested `event[]` refs across 30 venue pages omit `location` by design (the page's `Place`/`LocalBusiness` carries the address). What `Place` shape (if any) belongs on nested refs is a GEO Strategist policy question — NOT expanded unilaterally. Hub ListItem geo/sameAs absence (recommended-field gap) likewise deferred.
+
+5. **Doc reconciliation = manifest only.** `schema-coverage-manifest.md` §2 already recorded microdata retirement (2026-05-25); added the commit hash `f02043922` + an explicit "no longer emitted/validated; do not resurrect" line. The brief's other two doc targets ("Microdata Price-Symbol Violations" in `known-issues.md`, "Microdata price-NUMBER-only" in `SYSTEM-REFERENCE.md`) do not exist — not fabricated.
+
+6. **No deploy / no IndexNow ping this session** (per the gate: hub class-B + venue class-D present ⇒ not lag-only-everywhere). Docs reconciled (location-independent); reindex nudge held until reviewed.
+
+7. **Mid-session cross-workstream collision — ΚΠΙΣΝ flood routed out.** The parallel genres-persistence commit `936cbf0d9` (un-dropping ~405 events) + an external ~02:00 build regenerated the shared `dist/` as a *halted* build (`build-completeness.json` fail:106). Post-collision diagnostic shows 24 detail + 198 hub misses, **100% ΚΠΙΣΝ** — a class-H1 data gap (config `address: null` + 2 duplicate addressless SNFCC entries), distinct from the emitter-parity gap fixed here. **Decision: leave it routed to the save-drop-flood workstream** (`save-drop-flood-schema-checkpoint.md`) — outside scope and collides with the active `config/athens-venues.json` whitelist audit; did NOT touch config. The shared `dist/` is therefore not deploy-safe pending that workstream — independent of this session's (verified, isolated, uncommitted) hub fix. Reaffirms the S158 "dist/tree-state is an unverified premise — re-probe at consumption time" lesson.
+
+**Cross-references:** `specs/missing-location-diagnostic.md`; `specs/save-drop-flood-schema-checkpoint.md`; commit `936cbf0d9`; `mistakes.md`/`patterns.md` 2026-05-27; `src/utils/schema-graph-builders.ts`, `src/validators/schema-completeness.ts`; `/Users/chrism/.claude/plans/session-goal-diagnose-why-melodic-neumann.md`.

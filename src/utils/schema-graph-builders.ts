@@ -30,6 +30,7 @@ import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { generateEventSlug } from '../generators/event-page';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { getOgImage } from './og-image-fallback';
+import { findVenueConfig } from '../quality/location-filter';
 
 // --- Per-event ListItem builder (extracted verbatim from page.ts:459-512) ---
 
@@ -54,7 +55,12 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
         name: event.venue.name,
         address: {
           '@type': 'PostalAddress',
-          streetAddress: event.venue.address || '',
+          // 2026-05-27: fall back to the whitelisted config address when the
+          // scraped DB venue_address is empty — parity with the detail emitter
+          // (event-page.ts:176). Without this, hub ListItems emitted
+          // streetAddress:'' for config-address venues (Cantina Social, Astron,
+          // Bolivar, 2ten, …) whose row carries no address (237 nodes pre-fix).
+          streetAddress: event.venue.address || findVenueConfig(event.venue.name)?.address || '',
           addressLocality: 'Athens',
           addressRegion: 'Attica',
           addressCountry: getCountryCode(),

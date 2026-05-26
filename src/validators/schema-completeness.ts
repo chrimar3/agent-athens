@@ -827,6 +827,22 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
         // Suppress per-ListItem offers.url INFO noise (we'd emit 30+ per page).
         // The aggregate signal is captured by the event-page validator already.
       }
+
+      // 2026-05-27: ListItem location.address.streetAddress parity guard. Mirrors
+      // the event-detail streetAddress check (~:382), scoped to "address present"
+      // so honest location-less items stay clean. Closes the blind spot that let
+      // the hub ListItem builder emit streetAddress:'' for config-address venues
+      // whose DB venue_address was empty (237 nodes, 2026-05-27 dist/ scan) — the
+      // detail emitter resolves these from config (event-page.ts:176); the hub
+      // builder previously did not. Hub slug → not in the detail-scoped build
+      // halt (generate-site.ts), so this surfaces in build-completeness without
+      // halting; halt-wiring stays the separate node-keyed Session-2 decision.
+      const itemLocation = event && typeof event === 'object' ? (event as Record<string, any>).location : undefined;
+      if (itemLocation && typeof itemLocation === 'object' && (itemLocation as Record<string, any>).address) {
+        if (!isNonEmpty((itemLocation as Record<string, any>).address.streetAddress)) {
+          errors.push(`CollectionPage.itemListElement[${i}].item.location.address.streetAddress is missing or empty`);
+        }
+      }
     }
   }
 

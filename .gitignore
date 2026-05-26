@@ -63,3 +63,6 @@ data/banned-phrase-matches.csv
 
 # Parsed email artifacts (not source code)
 data/emails-to-parse/
+
+# throwaway diagnostic (missing-location reconciliation session)
+scripts/diagnose-missing-location.ts
