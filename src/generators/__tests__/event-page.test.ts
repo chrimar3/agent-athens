@@ -1015,3 +1015,26 @@ describe("Event schema — endDate proxy (1.3b: multi-day honest absence)", () =
     expect(schema.endDate).not.toBe(schema.startDate);
   });
 });
+
+describe("Event schema — streetAddress config fallback (2.2)", () => {
+  test("empty DB venue address falls back to the config venue address", () => {
+    // Bolivar is whitelisted with a real address; the DB row's venue_address is
+    // empty for these club events. The schema must read the config address
+    // rather than emitting an empty streetAddress (GSC 'missing address').
+    const event: Event = { ...sampleConcert, venue: { ...sampleConcert.venue, name: "Bolivar", address: "" } };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.location.address.streetAddress).toBe("Leoforos Poseidonos, Alimos 174 55");
+  });
+
+  test("DB venue address is preferred when present (no override)", () => {
+    const event: Event = { ...sampleConcert, venue: { ...sampleConcert.venue, name: "Bolivar", address: "Real Scraped Address 1" } };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.location.address.streetAddress).toBe("Real Scraped Address 1");
+  });
+
+  test("unresolvable venue with empty address stays empty (no fabrication)", () => {
+    const event: Event = { ...sampleConcert, venue: { ...sampleConcert.venue, name: "Totally Unknown Venue XYZ", address: "" } };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.location.address.streetAddress).toBe("");
+  });
+});

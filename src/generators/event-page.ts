@@ -23,6 +23,7 @@ import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
+import { findVenueConfig } from '../quality/location-filter';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
@@ -169,7 +170,10 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
       'name': event.venue.name,
       'address': {
         '@type': 'PostalAddress',
-        'streetAddress': event.venue.address || '',
+        // 2.2: fall back to the whitelisted config address when the scraped DB
+        // venue_address is empty — closes GSC "missing address in location" for
+        // verified venues whose row carries no address (Bolivar, Cantina, etc.).
+        'streetAddress': event.venue.address || findVenueConfig(event.venue.name)?.address || '',
         // S145: locality now config-driven via getLocalityName() (was hardcoded 'Athens').
         // Single source of truth shared with microdata block below (Constitution Rule 6).
         'addressLocality': getLocalityName(),

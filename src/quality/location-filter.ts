@@ -50,6 +50,8 @@ export interface VenueConfig {
   canonical_name: string;
   variations: string[];
   neighborhood?: string;
+  /** Whitelisted street address; consumed by the schema streetAddress fallback (2.2). */
+  address?: string;
   /**
    * S146 — Tier-1 curated permanent slug for venue @id. Optional.
    * When present, getVenueIdentity uses this verbatim (Tier-A-locked once published).
