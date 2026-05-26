@@ -1252,6 +1252,34 @@ async function main() {
 
   // S110f hard-stop firing report
   printHardStopSummary();
+
+  // 2.1′: detail-page location is a build-FAIL, not a warning. The validators
+  // already classify a missing/incomplete location as an error; this wires
+  // those errors on EVENT-DETAIL pages to a non-zero build exit (mirrors the
+  // price-type-vocabulary hard-stop precedent above). DETAIL-SCOPED ONLY —
+  // hub/venue ListItem Event nodes are Session 2 (node-keyed), and a node-keyed
+  // halt today would break the 39 venue pages whose MusicEvent nodes omit inline
+  // location by design. Page class is read from the slug prefix (hub:/venue:/
+  // datafeed: are non-detail; event-detail pages carry a bare slug).
+  const isDetailPage = (slug: string): boolean =>
+    !slug.startsWith('hub:') &&
+    !slug.startsWith('venue:') &&
+    !slug.startsWith('datafeed:');
+  const locationHaltPages = schemaResults.details.filter(
+    (r) => isDetailPage(r.slug) && r.errors.some((e) => e.toLowerCase().includes('location')),
+  );
+  console.log('\n=== Location hard-stop (2.1′, detail-page-scoped) ===');
+  console.log(`   Event-detail pages missing required location: ${locationHaltPages.length}`);
+  if (locationHaltPages.length > 0) {
+    for (const p of locationHaltPages.slice(0, 20)) {
+      const locErrs = p.errors.filter((e) => e.toLowerCase().includes('location'));
+      console.error(`   ✗ ${p.slug}: ${locErrs.join('; ')}`);
+    }
+    throw new Error(
+      `Build halted: ${locationHaltPages.length} event-detail page(s) missing required location. ` +
+        'Backfill the venue in config/athens-venues.json or suppress the event (see location-filter).',
+    );
+  }
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
