@@ -71,6 +71,35 @@ export function normalizePriceType(value: string): string {
 }
 
 /**
+ * Normalize a scraper-emitted `genres` value so it satisfies the events table's
+ * only CHECK constraint: `CHECK (genres IS NULL OR json_valid(genres))`.
+ *
+ * Scrapers variously emit '' (empty string), bare strings ('visual-arts', 'film'),
+ * or already-valid JSON arrays ('["electronic"]'). `json_valid('')` and
+ * `json_valid('visual-arts')` are both 0, so those rows were silently rejected at
+ * INSERT and swallowed by the save-path catch (the ~75% save-drop). This is the
+ * write-boundary fix: it guarantees valid JSON-array output for every input while
+ * being a no-op for values that already pass (must not alter already-valid rows).
+ *
+ *   null / undefined / '' / whitespace  -> '[]'
+ *   bare non-JSON string 'visual-arts'  -> '["visual-arts"]'
+ *   JSON scalar/object '5' / '{...}'    -> wrapped: '[5]' / '[{...}]'
+ *   already-valid JSON array            -> returned verbatim (trimmed)
+ */
+export function normalizeGenres(value: string | null | undefined): string {
+  if (value == null) return '[]';
+  const trimmed = value.trim();
+  if (trimmed === '') return '[]';
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (Array.isArray(parsed)) return trimmed;   // already a JSON array — keep verbatim
+    return JSON.stringify([parsed]);             // valid JSON scalar/object — wrap into an array
+  } catch {
+    return JSON.stringify([trimmed]);            // bare non-JSON string — wrap as single-element array
+  }
+}
+
+/**
  * Convert Event object to database row
  */
 export function eventToRow(event: Event): Record<string, any> {

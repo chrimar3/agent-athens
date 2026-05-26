@@ -4,7 +4,7 @@
  *
  * Rule: every `INSERT INTO events` in non-test, non-archive production code
  * must be one of:
- *   (a) the canonical seam at src/db/database.ts line 186, or
+ *   (a) the canonical seam inside upsertEvent() at src/db/database.ts, or
  *   (b) a line inside one of the ALLOWED_BYPASSES ranges below.
  *
  * Each bypass writer is responsible for calling normalizeDateField() on
@@ -28,7 +28,7 @@ type Bypass = { file: string; lines: [number, number]; reason: string };
 // edits (e.g. adding the normalizeDateField call) don't break the guard.
 const CANONICAL_SEAM: Bypass = {
   file: 'src/db/database.ts',
-  lines: [170, 250],
+  lines: [170, 305],  // upsertEvent() body 227-303 (INSERT at 251); range bumped after adding normalizeGenres() above it (2026-05-27 save-drop fix)
   reason: 'Canonical seam: upsertEvent(). All non-bypass writes converge here.',
 };
 

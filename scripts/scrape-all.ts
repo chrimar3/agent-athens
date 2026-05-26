@@ -24,7 +24,7 @@
 
 import { Database } from 'bun:sqlite';
 import { normalizeDateField } from '../src/utils/date-format';
-import { normalizePriceType } from '../src/db/database';
+import { normalizePriceType, normalizeGenres } from '../src/db/database';
 import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
@@ -1316,12 +1316,16 @@ function recordScrapeStats(
   }
 }
 
-function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; outOfScope: number } {
-  if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0 };
+// `dbArg` lets tests inject an in-memory DB; in production it defaults to the prod file
+// and is owned/closed here. A caller-injected DB is left open for the caller to manage.
+export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Database): { saved: number; outOfScope: number; failed: number } {
+  if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0, failed: 0 };
 
-  const db = new Database(DB_PATH);
+  const db = dbArg ?? new Database(DB_PATH);
+  const ownsDb = !dbArg;
   let saved = 0;
   let outOfScope = 0;
+  let failed = 0;
 
   const stmt = db.prepare(`
     INSERT INTO events (
@@ -1402,7 +1406,7 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
         $time_doors: e.time || null,
         $time_source: timeSource,
         $type: eventType,
-        $genres: e.genres,
+        $genres: normalizeGenres(e.genres),
         $venue_name: e.venue_name,
         $url: e.url,
         $price_type: normalizePriceType(e.price_type),
@@ -1416,12 +1420,17 @@ function saveEvents(events: ScrapedEvent[], dryRun: boolean): { saved: number; o
       });
       saved++;
     } catch (err) {
-      // Silently skip duplicates
+      // NOT a duplicate path: the only unique index is `id`, handled by ON CONFLICT(id)
+      // DO UPDATE above — so a throw here is a real persistence failure (e.g. a CHECK or
+      // NOT NULL violation). Log it loudly instead of hiding it, and count it so the
+      // found-vs-persisted divergence is visible in the summary.
+      failed++;
+      log('ERROR', e.source, `save failed for ${e.id} (${e.title?.slice(0, 40)}): ${err}`);
     }
   }
 
-  db.close();
-  return { saved, outOfScope };
+  if (ownsDb) db.close();
+  return { saved, outOfScope, failed };
 }
 
 // ============================================================================
@@ -1633,9 +1642,13 @@ async function main() {
   // Save to database
   if (!dryRun && allEvents.length > 0) {
     console.log('\n💾 Saving to database...');
-    const { saved, outOfScope } = saveEvents(allEvents, dryRun);
-    log('INFO', 'system', `Saved ${saved} events to database (${outOfScope} out of scope)`);
-    console.log(`   ✅ Saved ${saved} events`);
+    const { saved, outOfScope, failed } = saveEvents(allEvents, dryRun);
+    // Measure health at row-creation, not scrape-report: surface found -> persisted divergence.
+    log('INFO', 'system', `Found ${allEvents.length} -> Saved ${saved} (${failed} failed, ${outOfScope} out of scope)`);
+    console.log(`   ✅ Found ${allEvents.length} → Saved ${saved} (${failed} failed, ${outOfScope} out-of-scope)`);
+    if (failed > 0) {
+      console.log(`   ❗ ${failed} events FAILED to persist — see ERROR logs above (was previously hidden)`);
+    }
     if (outOfScope > 0) {
       console.log(`   ⛔ Filtered ${outOfScope} out-of-scope events (sports, corporate, etc.)`);
     }
@@ -1653,4 +1666,7 @@ async function main() {
   console.log('\n✨ Done!\n');
 }
 
-main().catch(console.error);
+// Guard so importing this module (e.g. from tests) does not auto-run the scraper.
+if (import.meta.main) {
+  main().catch(console.error);
+}
