@@ -1091,3 +1091,47 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Status:** Open — owner decision pending. **colophon committed as floor (`86b0f4018`), unwired by design, tests assert wiring.**
 
 **Cross-references:** `docs/session-log.md` S154 (colophon shipped) + S155 (floor commit); `src/templates/colophon.ts`, `src/templates/__tests__/colophon.test.ts`; `src/templates/site-chrome.ts` (HEAD version, no colophon wiring); "Source Tree Drift" issue above (why colophon was uncommitted in the first place).
+
+---
+
+## 🟡 Config symptom-patch pollution in athens-venues.json (S158, 2026-05-26)
+
+**First seen:** S7/S17 (address-empty whitelist recurrences); crystallized as a distinct *pollution* class in S158.
+**Frequency:** ≥3 instances now — empty-address Thessaloniki venue (S138), pipe string `ΚΥΤΤΑΡΟ LIVE\|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ` (S158 1.2), three `TBA -` placeholders (S158 2.2). Likely more unfound.
+**Symptoms:** Auto-added canonical venues with empty `variations`, `"neighborhood":"Unknown"`, and no `address` field falsely resolve garbage venue strings to `verified_athens`, shipping broken `location` / empty `streetAddress` (GSC "missing location"/"missing address").
+**Workaround:** Remove the offending entry from config; recover the real venue (split-on-pipe → whitelist) or suppress the placeholder (→ unverified) + surgical DB `UPDATE`.
+**Fix plan:** Post-demo Pattern-G batch — audit the whole config: `python3 -c "import json; [print(e['canonical_name']) for e in json.load(open('config/athens-venues.json'))['venues'] if not e.get('variations') and e.get('neighborhood')=='Unknown' and 'address' not in e]"` → triage each (real venue → backfill address from scraped sibling-event data; placeholder → remove). Root cause is upstream: a verify-then-whitelist step adds entries without venue-side address verification.
+**Status:** Open — three instances fixed in S158; whole-config sweep deferred (not demo-blocking).
+
+---
+
+## 🟢 Eight hardcoded "Athens" string literals (Constitution #6) (S158, 2026-05-26)
+
+**First seen:** S158 Phase-0 exploration (incidental).
+**Frequency:** 8 sites — `geo.placename` meta (`page.ts`, `event-page.ts`, `venue-page.ts`); `addressLocality` (`schema-graph-builders.ts`, `venue-page.ts`); enrichment fallbacks.
+**Symptoms:** Latent multi-city violation — `getLocalityName()` (config-driven) exists but these sites hardcode "Athens". Zero production symptom while Athens-only.
+**Workaround:** None needed (correct-by-accident today).
+**Fix plan:** Single Pattern-G batch converging all 8 on `getLocalityName()`; verify `grep -rn '"Athens"' src/ --include='*.ts'` returns only config seeds/comments. NOT before the multi-city expansion.
+**Status:** Open — deferred, no demo impact.
+
+---
+
+## 🟡 ticketservices scraper concatenates venue with a marker via pipe (S158, 2026-05-26)
+
+**First seen:** S158 1.2 (event `639a2481`, "UP THE HAMMERS XXI").
+**Frequency:** 1 known live event; recurs with each ticketservices club-venue scrape.
+**Symptoms:** `venue_name` arrives as `"<real venue>|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ"`; the pass-through match masks the real venue → thin `pass_through` instead of `verified_athens`.
+**Workaround:** `checkLocation` now splits on `|` and prefers a resolvable whitelist segment (S158 1.2, durable).
+**Fix plan:** Scraper-side fix in the ticketservices ingest path to not concatenate — deferred (resolver split + the 2.1′ build-halt cover the symptom).
+**Status:** Mitigated at resolver; scraper fix deferred.
+
+---
+
+## 🟡 EN cornerstone hubs missing from build — /en/today, /en/tomorrow, /en/exhibitions (S158, 2026-05-26)
+
+**First seen:** S158 close-out full-suite run (6 test failures in `tests/build/en-cornerstone-presence.test.ts` + `og-url-canonical-parity.test.ts`).
+**Frequency:** 6 failing assertions; `dist/en/{today,tomorrow,exhibitions}/index.html` not generated.
+**Symptoms:** EN cornerstone hubs absent from `dist/`; og:url/canonical parity asserts on `/en/today/` fail. NOT caused by S158 schema/meta work (which never touches EN hub generation/routing); belongs to the concurrent S155/S157 EN-locale workstream (+ uncommitted colophon/site-chrome WIP).
+**Workaround:** None — generation gap.
+**Fix plan:** Owner of the EN-locale workstream to wire EN cornerstone hub generation/routing so these dist pages emit. Verify the 6 `tests/build/` assertions pass.
+**Status:** Open — concurrent-workstream surface, flagged for the EN-locale owner; not from S158.

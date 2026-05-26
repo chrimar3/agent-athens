@@ -5310,3 +5310,19 @@ When a static hub renders a server-filtered window of events, **client-side filt
 **Locale-branched behavior in one static script:** the script reads `document.documentElement.lang` and only intercepts option clicks on `/en/`; EL keeps `<a href>` navigation untouched. Server emits `data-filter-dim`/`data-filter-value` only on `/en/` so the markup signals intent; the combo `href` stays as an (unreachable-without-JS) fallback.
 
 **Connects to:** `decisions.md` 2026-05-26 "/en/ in-page filtering"; `mistakes.md` 2026-05-26 "6th locale surface"; `src/templates/filter-bar.ts` (renderFilterBarScript).
+
+---
+
+## S158 — Tree-state and diagnostic-command are both unverified premises (2026-05-26)
+
+Two distinct pre-flight disciplines, surfaced across a long GSC/Bing remediation run (commits 780e1f180 → c8c3ba535) with three working-tree surprises and one false-diagnostic.
+
+**Tree-state is an unverified premise.** On a shared / multi-workstream repo, `git status` + `git stash list` + a shared-file divergence check is mandatory pre-flight *before authorizing a commit* — same standing as the repro-grep on a defect premise. The tree is fast-changing state that can't be trusted from prior context: this run saw a `git stash` reset `event-page.ts` to HEAD mid-session (work recovered surgically from `stash@{1}`, not the whole file — it was tangled with a collaborator's locale hunks); ~10 WIP files appear between checks; S157 + a colophon workstream land across session boundaries. **Corollary — re-probe at consumption time, not planning time.** A multi-session solo tree self-resolves divergences across boundaries: a "commit notes / reconcile stash@{0}" plan written one session went fully moot the next because the work had already landed on `main`. Acting on a prior session's reconciliation plan without re-probing is acting on a stale premise.
+
+**A diagnostic command is itself a premise — verify the command, not just its output.** A grep returning `0` is ambiguous: "zero matches" vs "malformed pattern matched nothing" are indistinguishable from the result alone. Phase-0 ran `grep -rl '"streetAddress": ?""'` *without* `-E`, so `?` was a literal char that never matched; the clean `0` was trusted as "address-completeness has 0 backlog" and propagated through five plan revisions. Real count: **21**. Trusted form: `grep -rlE '"streetAddress":[[:space:]]*""'`. Rule: when a diagnostic's `0`/empty is load-bearing for a plan decision, prove the pattern matches a known-positive case first, or show the command (not just the count) for review.
+
+**Recurrence ledger → 10** (was 9). The false-`0` is logged as +1, **Pattern-B (false-diagnostic)** — a live wrong-premise that shaped five revisions. Caught before code, but *acted on in planning*, so it does NOT get "gate-caught, ledger holds" treatment; flattering the number is the exact failure the ledger exists to prevent. The three tree-state surprises WERE gate-caught (each surfaced by a re-probe before damage) and don't increment.
+
+**Technical patterns banked this run** (detail in commit messages): decode-then-escape at the *emission seam* for mixed-encoding text (`he.decode` idempotent-normalizes pre-S154 entity rows, then `escapeAttr` — bare escape would double-escape `&amp;`→`&amp;amp;`); the build-halt is **node-keyed in its final form but shipped detail-page-scoped** (node-keyed would break the 39 venue-page MusicEvents that omit inline location by design — Session 2); recover-don't-drop on broken venue data (split pipe → whitelist; suppress only genuine placeholders).
+
+**Connects to:** `mistakes.md` 2026-05-26 (location-WARN-tolerated; whitelist symptom-patch pollution; false-0 grep); `known-issues.md` 2026-05-26 (config symptom-patch-pollution audit; EN-hub generation gap).

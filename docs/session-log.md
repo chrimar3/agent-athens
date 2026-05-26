@@ -6452,3 +6452,28 @@ constant feeding both surfaces.
 2. 🟡 **Search overlay** (`search-overlay.ts` `Καθαρισμός`) — 5th surface, still Greek.
 3. ✅ **Live mobile spot-check** of in-page filtering recommended (Type→Concerts narrows, +Price composes, count/empty-state).
 4. 📦 Any hub whose `titleEn` is a long SEO meta title should get an `h1En` (only this-weekend done).
+
+### Session 158 — GSC/Bing schema + metadata remediation (Session 1) — 2026-05-26
+
+**Plan:** Close GSC/Bing schema/metadata defects. Diagnostic-first (Phase 0), then unconditional fixes + a build-halt guardrail. Per-step path-staging, TDD, do-not-touch the concurrent locale/chrome WIP (`design-system.css`, scroll test) + both `session-wip-pre-schema-deploy` stashes.
+
+**What happened (6 commits on `main`):**
+- **1.5a+#2+#3** (`780e1f180`): decode-then-escape event-derived text across meta / `<title>` / action-bar `data-event-title`. `escapeAttr(he.decode(x))` — `he.decode` idempotent-normalizes pre-S154 entity rows so bare-escape doesn't double-escape `&amp;`→`&amp;amp;`. Whole-build unescaped-quote-in-description pages **51→0**.
+- **1.2** (`964ee8af2`): `checkLocation` splits pipe-concatenated venue names, prefers a whitelist segment over the masking pass-through; removed the `ΚΥΤΤΑΡΟ LIVE|ΠΟΛΛΑΠΛΟΙ ΧΩΡΟΙ` config-pollution entry. Event `639a2481` → `verified_athens`/`Κύτταρο`.
+- **1.3b** (`e9b74ec55`): endDate proxy suppressed for multi-day types (exhibition/festival → honest absence); single-occurrence keeps `endDate=startDate` (factually correct). Explicit type-conditional WARN in `schema-validator.ts` (dropped endDate from generic RECOMMENDED).
+- **2.1′** (`8abc5b6e6`): detail-page-scoped location build-halt + halt-count in the build summary. NOT node-keyed (would break the 39 venue-page MusicEvents that omit inline location by design — Session 2). Mirrors the price-type-vocab `throw` precedent.
+- **2.2** (`6357a1e95` + `cbb832d38`): streetAddress config-address fallback in `event-page.ts` (render read empty DB `venue_address` instead of config) → empty-streetAddress **21→7**; then suppressed 4 `TBA - ATHarea` (removed 3 config-pollution entries + surgical DB `UPDATE`), backfilled Aux Club + Patision65 addresses (sourced from the project's own scraped sibling-event data, Athens-confirmed) → **7→0**; promoted streetAddress to a halt-error in both validator layers.
+- **2.3** (`5671a5826`): registered field-validation posture in the S110 manifest (`completeness-reporter.ts` → `build-completeness.json`): location=full/FAIL, endDate=partial/WARN.
+- **1.5b** (`c8c3ba535`): composer polish (`meta-descriptions.ts`) — `cleanForMeta` (strip `**`/HTML-comments, collapse newlines), abbreviation-aware floor (no more `Mr.`/`Theodosis P.` fragments), `padToFloor` city-tagline backstop. Compose-on-decoded; escaping stays at the emission seam.
+
+**Verified:** `bunx tsc --noEmit` 0 errors. Per-feature TDD all green. Whole-build: 51→0 unescaped quotes; empty-streetAddress 21→0; meta len-0 8→0; meta <120 chars 2491→1408 (residual = genuinely terse-title events — real fix is enrichment, not composer boilerplate); `bun run build` exits 0 with location-halt count 0. Both stashes intact + do-not-touch files untouched after every commit. Full suite: 2585 pass / **6 fail — all pre-existing** (the same 4 colophon + 2 EN-cornerstone-hub set S157 logged; provably 0 from this session — my files never touch EN hub generation or colophon).
+
+**Learnings:** (1) tree-state is an unverified premise — re-probe `git status`/`stash list`/divergence at consumption time (3 surprises this run, all gate-caught); (2) a diagnostic command is itself a premise — a false-`0` from a malformed grep (`?` not `-E`) propagated "2.2 has 0 backlog" through 5 revisions; real backlog was 21. Recurrence ledger **→ 10** (Pattern-B false-diagnostic; logged honestly, not flattered to 9). (`patterns.md` + `mistakes.md` 2026-05-26.)
+
+**Open items (post-S158):**
+1. 🟡 Whole-config symptom-patch-pollution audit (athens-venues.json empty-variation/"Unknown"/no-address junk) — Pattern-G, post-demo. (`known-issues.md`.)
+2. 🟢 8 hardcoded "Athens" literals (Constitution #6) — Pattern-G, pre-multi-city only. (`known-issues.md`.)
+3. 🟡 ticketservices venue-concat — scraper-side fix deferred (resolver split + halt cover the symptom).
+4. 🟡 EN cornerstone hubs (today/tomorrow/exhibitions) missing from build — concurrent S155/S157 EN-locale workstream's surface, flagged for that owner.
+5. ⏭️ **Session 2** (gated on GEO node-keyed ruling): widen the location halt from detail-scoped to node-keyed, landing atomically with venue-page MusicEvent inline-`location` across all 4 emission sites.
+6. 📦 Both `session-wip-pre-schema-deploy` stashes confirmed safe to drop (nothing lives only in them) — owner's call.
