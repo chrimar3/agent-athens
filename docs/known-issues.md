@@ -70,6 +70,37 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 ## Active Issues
 
+## S163 Reconciliation (2026-05-27)
+
+This Active section was last updated at S142 (2026-05-18); reconciled against live DB / `dist/` / logs at S163. All probes were read-only. The 7 entries in the table below were re-verified with a probe and carry a dated `S163 update` on their inline **Status** line. The other ~17 Active entries were **not** re-probed this session — absence of an S163 note means "not re-verified," not "confirmed still-open."
+
+**Organization note:** newer active issues (S153–S161) were appended *below* the Resolved / Patterns sections (≈ lines 997–1161 of this file), not into this Active section — so "Active Issues" understates what is actually open. Reorganizing the file is a user-policy decision (per `.claude/CLAUDE.md` historical-record rule) and was deliberately left undone.
+
+| Entry | Probe (2026-05-27) | Verdict |
+|-------|--------------------|---------|
+| Recovery Mechanism Asymmetry / Stream Idle (🔴) | auto-enrich **0 events today** (`server-stream-idle` + `wrapper-wall-clock` kills, batch-2); 10-day rate 0–9/day; watchdog fires even on `exit=0` successes; `enrichment_queue` = **10,842 pending / 0 other** | **CONFIRMED-OPEN** — escalated (see routing note) |
+| SWEEP_ORPHANS False-Positives (🔴) | empty-slug `dist/events/*--` dirs = **1264** (S97a cited 5,806 as a subset; magnitude changed, mechanism unchanged); sweeper still cannot be armed | **CONFIRMED-OPEN** |
+| Zero Indexed Pages (🟡) | last manual `gsc_indexed`=8 / `bing_indexed`=605 (2026-05-11); Bing 7d live: impressions 4, avg_pos 5.75, top10=3 (2026-05-27); manual indexed columns empty since 05-11 | **RECLASSIFY** → coverage-tracking, not a blocker; fresh manual GSC/Bing read still owed |
+| Venue-Index `/venues/` No JSON-LD (🟢) | `dist/venues/index.html` now emits **1** `application/ld+json` block | **CLOSED** |
+| Tier 2 Fallback Drift (🟢) | Tier 1 shipped: `card-image--fallback` + `card-image__fallback-text` present in `design-system.css` (per-type values now 15%-opacity `--type-tint` on the Tier-1 fallback, not the old wrapper gradients) | **CLOSED** (S124 as planned) |
+| EN Cornerstones 404 (🟢) | 6/7 EN cornerstone dirs now exist in `dist/en/`; only `/en/exhibitions/` remains 404 | **RECLASSIFY** — mostly resolved; residual = duplicate of the S158 entry "EN cornerstone hubs missing from build" (≈ line 1141) |
+| Bilingual Coverage Gap (🟢) | upcoming site-visible enrichment **293/533 = 55%**; **theater 12/128 = 9.4%** (116 of the 240-event gap), cinema 1/13; concert 72% / dj_set 82% are fine | **CONFIRMED-OPEN** — theater is *the* concentrated gap and ~10% is unchanged since the entry was filed; demo-relevant (severity glyph still 🟢 in header, but it's the live demo risk via the throughput stall) |
+
+**Brief premises corrected (verify-assumptions guard):** (1) `docs/session-log.md` is current at **S162**, not "40 sessions behind" as the brief assumed; (2) the indexing 🔴 was already downgraded to 🟡 on 2026-05-08 — there is no live indexing blocker; (3) the throughput cluster is **active**, not stale; (4) the brief's "empty-slug filed at 703" and "orphan-log filed at 942" figures match **no standalone entry** in this file — current counts are 1264 (`*--` dirs) and 1029 (orphan `enrichment_log` rows), the latter not tracked here at all.
+
+**Demo-critical reframe + routing:** with Παναθήναια ~2 days out, the live risk is **enrichment throughput**, not indexing. The honest demo denominator is **not** the raw 10,842-row queue (mostly past / unverified / non-visible) but the **533 upcoming site-visible events, 293 (55.0%) enriched**. The gap is worst exactly where the demo lands — coverage is *inverted* relative to demo need:
+
+| Window | Enriched / total | % |
+|--------|------------------|---|
+| Demo window (≤2026-05-29) | 8 / 137 | **5.8%** |
+| Next 7 days | 18 / 68 | 26.5% |
+| Next 30 days | 64 / 94 | 68.1% |
+| 30+ days out | 203 / 234 | 86.8% |
+
+So events a visitor clicks *during* the demo are ~94% unenriched, while far-future events are ~87% polished — a direct symptom of the entry-168 throughput stall (broken pipeline can't keep up with freshly-scraped near-term events). The 240-event gap is theater-dominated (116) then concert (70), matching the long-standing "Bilingual Coverage Gap" skew. `sitemap_events` fell 6570→2830 (May 10→27); `enriched_last_24h`=1. Per user decision (S163) this is flagged here and **routed to Planner** for a dedicated stream-idle / throughput fix session; the entry-168 forensic question (why kills land before vs after the save) remains the open root-cause thread. No fixes attempted this session.
+
+---
+
 ### Bilingual Scaffolding Notice Visible on Greek-Locale Event Pages with English-Fallback Description
 **Severity:** 🟡
 **First seen:** 2026-05-11 (S132' diagnostic)
@@ -95,6 +126,7 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 **Workaround:** N/A — being replaced this session.
 **Fix plan:** S124 ships Tier 1 (`.card-image--fallback` + `.card-image__fallback-text`) across 7 render sites, deletes the per-type wrapper gradients at `design-system.css:363-417`, appends Tier 1 CSS block per Design Navigator spec.
 **Status:** 🟢 Open — replacement in progress (S124 same session). Status will be flipped to ✅ Closed after deploy completes.
+**S163 update (2026-05-27):** ✅ Closed — Tier 1 confirmed shipped in `src/styles/design-system.css` (`card-image--fallback` + `card-image__fallback-text` present). Per-type values are now 15%-opacity `--type-tint` tokens on the Tier-1 fallback, not the old `.card-image-wrapper[data-type=*]` gradients. Replacement completed as planned.
 
 ### Content-Hash Snapshots Accumulate ~1.1MB/day in `data/content-hash-snapshots/`
 **Severity:** 🟢
@@ -149,6 +181,7 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 **Workaround:** None needed — venue detail pages have correct schema; only the index has the gap.
 **Fix plan:** One-line addition in the venue-index template (locate via `grep "venues/index" src/`): emit `CollectionPage` or `ItemList` schema enumerating venue detail URLs. Suitable for opportunistic fix in S101 or later; not blocking.
 **Status:** 🟢 Open — low priority
+**S163 update (2026-05-27):** ✅ Closed — `dist/venues/index.html` now emits 1 `application/ld+json` block (probe: `grep -c application/ld+json`). Gap resolved at some point between S100a and S163; current dist confirms present.
 
 ### EN Cornerstones (`/en/tomorrow`, `/en/this-week`, `/en/next-month`) Return HTTP 404
 **Severity:** 🟢
@@ -162,6 +195,7 @@ Findings + raw audit data: `specs/s100a-e3-audit-findings.md`. Reusable audit sc
 
 Recommend a `bun run src/generate-site.ts` then `find dist/en -name 'index.html'` cross-checked against `dist/sitemap-editorial.xml` URL list to localize. Suitable for opportunistic fix; not blocking citation work.
 **Status:** 🟢 Open — low priority
+**S163 update (2026-05-27):** Reclassified — 6 of 7 EN cornerstone dirs now exist in `dist/en/` (today, tomorrow, this-week, next-month, this-weekend, this-month all have `index.html`). Only `/en/exhibitions/` remains 404. The original three URLs this entry names (`/en/tomorrow`, `/en/this-week`, `/en/next-month`) are all resolved. Residual `/en/exhibitions/` is a duplicate of the newer S158 entry "EN cornerstone hubs missing from build" (this file, ≈ line 1141) — track there.
 
 ---
 
@@ -175,6 +209,7 @@ Recommend a `bun run src/generate-site.ts` then `find dist/en -name 'index.html'
 **Fix plan:** Dedicated diagnostic session — read auto-enrich.sh between-batch logic (specifically `claude -p` invocation flow at lines 6, 89, 214, 286-294 and the orphan-kill at line 65), reconstruct timeline of Apr 25-26 vs Apr 24/27, identify branching condition. Pattern E (Debugging), output `specs/stream-idle-recovery-diagnostic.md`.
 **Status:** 🔴 Open — investigation pending
 **S99 update (2026-04-28):** v2.1.105+ server-side stream watchdog (`CLAUDE_STREAM_IDLE_TIMEOUT_MS=300000`) and a local stdout-mtime watchdog wrapper (`STDOUT_IDLE_CAP=120`, T1 KILL_CAUSE tagging) landed in commits `050150ed6` (script) + `bc1a0c049` (8 plists). **This addresses the symptom (stalls) but NOT the recovery-asymmetry question.** The forensic question of why pipeline-level recovery worked on Apr 16/20/23/24/27 but failed Apr 25-26 specifically remains open. Re-evaluate after the watchdog-era observation window (`specs/s99-baseline-floor.md`, 2026-04-29 → 2026-05-12). If watchdog-era still shows zero-event days, recovery mechanism is independent of stream-idle and warrants its own forensic session.
+**S163 update (2026-05-27):** 🔴 Confirmed-open — the watchdog-era re-evaluation trigger has fired. Zero-event days persist well past the observation window: auto-enrich saved **0 events on 2026-05-27** (`server-stream-idle` + `wrapper-wall-clock` kills on batch-2) and **0 on 2026-05-20** (both batches `wrapper-wall-clock`). 10-day rate (May 18–27): 0–9 events/day, mostly single digits. The watchdog fires even on *successful* runs (2026-05-26: `server-stream-idle exit=0`, 1 saved) — confirming the recovery-asymmetry framing: the kill sometimes lands after the save, sometimes before. `enrichment_queue` holds **10,842 pending / 0 in any other status** (queue not draining) — but the demo-relevant slice is the **533 upcoming site-visible events, 55% enriched**, and the demo window (≤2026-05-29) is only **8/137 = 5.8%** enriched (vs 86.8% for 30+-days-out events). So the throughput stall lands hardest on exactly the events the demo will show. Per S99's own criterion, recovery is now independent of stream-idle and warrants its dedicated forensic session. **Routed to Planner (S163)** as the live demo risk ahead of Παναθήναια (~2026-05-29).
 
 ### SWEEP_ORPHANS Sweeper False-Positives on Hash-Preserved Pages
 **Severity:** 🟡 (blocks orphan cleanup, but no live-correctness impact today)
@@ -190,6 +225,7 @@ Recommend a `bun run src/generate-site.ts` then `find dist/en -name 'index.html'
 
 Belongs in a dedicated session. Verification command for that session is at the bottom of `specs/sweep-orphans-deferred.md`.
 **Status:** 🔴 Open — fix deferred from S97a Step 6
+**S163 update (2026-05-27):** 🔴 Confirmed-open — `find dist/events -maxdepth 1 -type d -name '*--'` = **1264** empty-slug dirs (S97a cited 5,806 as a subset of the broader sweep population; magnitude changed, mechanism unchanged). Sweeper still cannot be safely armed. NOTE: the brief's "empty-slug pages filed at 703" has no standalone entry — empty-slug dirs are a subset of this SWEEP_ORPHANS population, not a separately-tracked issue.
 
 ### Zero Indexed Pages Across Search Engines (Citation Baseline) — Partial Recovery
 **Severity:** 🟡 (downgraded from 🔴 on 2026-05-08)
@@ -202,6 +238,7 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Workaround:** None — partial visibility holds.
 **Fix plan:** S90 pipeline fix shipped (Phase A/B/C/D). 17-day delta confirms recovery on Bing channel. Google low-coverage (7/8,475 = 0.08%) is the residual gap, routed to GEO Strategist diagnostic vs patience decision. Full snapshot in `specs/s90-recovery-baseline-2026-05-08.md`.
 **Status:** Partial recovery confirmed (2026-05-08), pipeline still healthy at S128 check-in (2026-05-10). Bing channel restored. Google indexing coverage gap tracked separately (see new entry below). Post-S136 (2026-05-17): `bing_*_7d` columns now auto-populate daily via `scripts/fetch-bing-metrics.ts`; `gsc_*_7d` columns ship as `STALE` pending S138 OAuth fallback (see "GSC Service Account Add-User Silent Fail" entry); `ai_citations_count` column dropped from the visibility log per GEO Strategist 2026-05-17 schema lock (moved to a future separate `data/ai-citations.csv`, Sprint 5 scope). May 18 spot-check still needs Christos to read `gsc_indexed` / `bing_indexed` from the respective UIs and backfill those manual indexed-page counters (CSV indices 14, 15) for 2026-05-09 onward — comparison against the 2026-05-08 baseline requires those manual fields populated.
+**S163 update (2026-05-27):** Reclassified 🟡 → coverage-tracking (no longer a blocker; the brief's "demo-critical 🔴 indexing" premise is stale — this was already 🟡 as of 2026-05-08). Indexing is non-zero: last manual backfill `gsc_indexed`=8 / `bing_indexed`=605 (2026-05-11); auto-populated Bing 7d metrics are live as of 2026-05-27 (impressions 4, avg_pos 5.75, top10=3). The manual `gsc_indexed` / `bing_indexed` columns remain **empty since 2026-05-11** — a fresh manual GSC + Bing Webmaster read is still owed by Christos to refresh the absolute counters (Step 1 of the S163 brief; not performed this read-only session).
 
 ### GSC Service Account Add-User Silent Fail
 **Severity:** 🟡 (blocks GSC API automation; manual `gsc_indexed` workflow still functional)
@@ -240,6 +277,7 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Workaround:** Events without English descriptions still have Greek pages with English fallback for AI crawlers.
 **Fix plan:** Continue bilingual enrichment batches to scale coverage. Theater (53% of events, 10% enriched) is the dominant gap.
 **Status:** Infrastructure complete (Sessions 42-46). 11 English hubs live. 7-day enrichment coverage: 28.7% (S85, recovering from 6-day drought). 90 events/day target (S87: 6 runs × 3 batches × 5 events).
+**S163 update (2026-05-27):** Confirmed-open, now the demo-critical entry. Upcoming site-visible coverage = **293/533 (55%)**. By type: concert 180/250 (72%), dj_set 78/95 (82%), show 4/5 (80%) are fine; **theater is the concentrated gap at 12/128 (9.4%)** — 116 of the 240 missing events — essentially unchanged from this entry's original "Theater ~10% enriched, dominant gap." Cinema 1/13 (7.7%) is second-worst by % but tiny in absolute terms. Coverage is *inverted* vs demo need: demo window (≤2026-05-29) is 8/137 (5.8%), 30+-days-out is 86.8%. Remediation lever: a **theater-targeted enrichment batch** closes ~half the visible gap. Blocked by the entry-168 throughput stall (pipeline can't run). Severity glyph left 🟢 (header is historical record); the demo impact is captured here and in the S163 Reconciliation block.
 
 ### Venue-Lock Type Mismatches
 **Severity:** 🟢 (was 🟡)
