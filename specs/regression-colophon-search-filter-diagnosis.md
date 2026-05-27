@@ -35,10 +35,14 @@ exactly the 6 UI files staged, nothing under `src/db/` or `src/validators/`.
 
 ## Verification (post-recovery)
 - `colophon.test.ts`: 32 pass / 0 fail (the 4 previously-red integration tests now green).
-- Full suite: 2606 pass / 1 skip / 1 fail. The single fail is **pre-existing & unrelated**:
-  `en-cornerstone-presence` expects `dist/en/exhibitions/index.html`, which is not generated
-  (no `/en/exhibitions/` hub builds). Outside the 3 threads; not caused by this recovery.
-  (3 other failures in the first run were stale-`dist/` artifacts and pass after rebuild.)
+- Full suite at `bb96a3808`: 2606 pass / 1 skip / **4 fail** — 3 stale `.category-nav (inline in built HTML)`
+  assertions in `scroll-container-overscroll.test.ts` (HEAD asserted the rule inline in HTML; it lives in
+  `design-system.css`) + 1 pre-existing `en-cornerstone-presence` (`dist/en/exhibitions/index.html` not
+  generated, no `/en/exhibitions/` hub builds). The 3 stale assertions were fixed by recovering the S159
+  test version (suite → 2609 pass / 1 fail); `en-cornerstone` remains pre-existing, outside the 3 threads.
+  _(Correction: first reported as "1 fail (3 resolved by rebuild)" — I spot-checked a similarly-named passing
+  file, `category-nav-readability.test.ts`, instead of the failing one. The 3 were a stale assertion, not
+  stale-`dist/` artifacts.)_
 - Clean build: exit 0.
 - Puppeteer runtime (system Chrome, headless) — VISIBLE, not just DOM-present, 0 page errors:
   - Colophon: trigger 44×58 visible, left of search, dialog opens 640×757, Esc closes.
