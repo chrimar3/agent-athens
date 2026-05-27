@@ -1146,6 +1146,7 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Workaround:** None — generation gap.
 **Fix plan:** Owner of the EN-locale workstream to wire EN cornerstone hub generation/routing so these dist pages emit. Verify the 6 `tests/build/` assertions pass.
 **Status:** Open — concurrent-workstream surface, flagged for the EN-locale owner; not from S158.
+**Re-confirmed (S163, 2026-05-27):** `tests/build/en-cornerstone-presence.test.ts > dist/en/exhibitions/index.html exists` is the lone full-suite failure. Verified RED on a clean stashed base (working tree stashed → still fails) → **pre-existing EN-cornerstone dist gap, NOT introduced by S162** (ingestion change cannot affect EN hub generation; test is a pure `dist/` presence check). Do not re-investigate; closure is the EN-locale hub-generation fix above. (The other 3 cornerstones — tomorrow/this-week/next-month — now pass.)
 
 ## 🟡 Scraper-artifact rows published as events + Onassis exhibition date confusion (S161, 2026-05-27)
 
