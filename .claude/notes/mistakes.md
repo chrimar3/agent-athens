@@ -973,3 +973,12 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 | `type` hardcoded per scraper | `scrape-onassis.ts:223` sets `type:'exhibition'` for everything; theater ("By Heart \| Tiago Rodrigues") and showcases mis-typed. | Categorize from content, not from the scraper's source identity. Noted for the scraper-quality session. |
 
 **Cross-references:** `patterns.md`/`decisions.md` S162; `specs/onassis-ingestion-defects-S117.md`, `specs/onassis-dedup-S117-checkpoint.md`; `src/validators/scope-filter.ts`.
+
+## S165 — image upgrader (2026-05-27)
+
+| What | Why | Fix |
+|------|-----|-----|
+| HEAD shipped with a dangling import | The S164 commit (`c5f9a6d`) staged the `scrape-all.ts` wiring `import { upgradeAthinoramaImage } from '../src/utils/athinorama-image'` but the util file was never tracked (not in any branch or stash). A fresh checkout of HEAD imports a non-existent module → `scrape-all.ts` broken. Classic `git add -A` strand (see memory `feedback_stage_precisely`/`feedback_stash_strand_recovery`). | S165 created `src/utils/athinorama-image.ts` (the only implementation — confirmed absent everywhere), which both repairs HEAD and delivers the feature. Stage the new file by path; never `git add -A`. |
+| Brief's quality-floor gate would have deleted images, not added them | Captured athinorama images are 250×300 (short side < 300px floor). A strip-to-null gate as briefed would null the `image_url` of the 118 events that DO have an image → coverage *down*. | Upgrade-then-gate, never blanket-strip. Floor gate deferred (nothing to gate post-upgrade). See `specs/image-finder-S165.md`. |
+
+**Cross-references:** `patterns.md`/`decisions.md`/`session-log.md` S165; `specs/image-finder-S165.md`.

@@ -4414,3 +4414,19 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 5. **Dedup (Defect 3) still deferred** — `generateEventId` untouched; the two ONX Showcase dupes remain for that session.
 
 **Cross-references:** `specs/onassis-rewrite-S164.md`, `specs/onassis-dedup-S117-checkpoint.md`; `mistakes.md`/`patterns.md` S164.
+
+## S165 — Athinorama thumbnail upgrader wired at capture-time; floor gate deferred (2026-05-27)
+
+**Decision:** Ship a deterministic athinorama image-URL upgrader (`/p/250x300/` → `/p/1200x1440/`, `src/utils/athinorama-image.ts`) wired into the athinorama capture path (`scrape-all.ts`) + a one-time backfill (`scripts/upgrade-athinorama-images.ts`). Raised `optimize-image.ts` `MAX_WIDTH` 800→1200 so the self-hosted `image_local` clears the target on the GEO surfaces.
+
+**Why capture-time, not just backfill:** capture-time wiring is irreversible forward value — every future athinorama event self-hosts a 1200-class poster for free.
+
+**Refuted: the briefed capture finder** for the 174 missing concerts — genuine absence (5/5 spike), residual already on the Satori tile (D11). See `specs/image-finder-S165.md`.
+
+**Refuted: Option A (image_url-only).** `image_local` was below the *hard* floor (250 < 300), and the GEO surfaces read `image_local` not `image_url` — so a URL-only rewrite leaves og/JSON-LD failing. Chose full propagation (rewrite + image_local regen + MAX_WIDTH bump).
+
+**Deferred: build-time dimension floor gate.** Nothing to gate post-upgrade (118 are 1200×1440; 174 are on the tile). Constraint for any future gate session: **upgrade-then-gate, NEVER blanket-strip** — a strip gate would have deleted the 118.
+
+**Routed (not actioned): DN tile divergence** — `.card-image--fallback` gradient (S124) vs Satori OG PNG (D11) are two artifacts; the "one template, two render targets" ruling is unrealized. Observation only this session.
+
+**Cross-references:** `specs/image-finder-S165.md`; `patterns.md`/`session-log.md` S165.

@@ -65,7 +65,7 @@ describe('optimizeImage', () => {
 
     const metadata = await sharp(filePath).metadata();
     expect(metadata.format).toBe('webp');
-    expect(metadata.width).toBeLessThanOrEqual(800);
+    expect(metadata.width).toBeLessThanOrEqual(1200);
 
     unlinkSync(filePath);
   });
@@ -87,7 +87,7 @@ describe('optimizeImage', () => {
     unlinkSync(filePath);
   });
 
-  test('resizes large images to max 800px wide', async () => {
+  test('resizes large images to max 1200px wide', async () => {
     const sharp = (await import('sharp')).default;
     const testBuffer = await sharp({
       create: { width: 1600, height: 1200, channels: 3, background: { r: 0, g: 0, b: 255 } }
@@ -98,8 +98,8 @@ describe('optimizeImage', () => {
     const filePath = join(testDir, 'test-large-image.webp');
     const metadata = await sharp(filePath).metadata();
 
-    expect(metadata.width).toBe(800);
-    expect(metadata.height).toBe(600);
+    expect(metadata.width).toBe(1200);
+    expect(metadata.height).toBe(900);
 
     unlinkSync(filePath);
   });

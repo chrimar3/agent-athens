@@ -6591,3 +6591,27 @@ constant feeding both surfaces.
 **Learnings:** (1) A latent bug can sit in the *fallback* branch the happy path hides — the first exploration declared the date code "sound" by reading only the range branch; the actual bug was em-dash-miss → whole-string fallback grabbing the end date. (2) When a source exposes its own category label, map it; the shared keyword categorizer has no Greek terms and silently falls back to the mislabel. (3) "Onassis-bounded" wasn't enough — the genres defect lived one seam over in the scrape-all adapter (type self-corrected at `:1387`, genres didn't). (`mistakes.md`/`patterns.md`/`decisions.md` S164.)
 
 **Open items:** (1) **Defect 3 dedup** still checkpointed (`specs/onassis-dedup-S117-checkpoint.md`) — the 2 ONX Showcase dupes remain. (2) **Adjacent stale rows surfaced, not acted on:** the fabricated "Yorgos Lanthimos" row (`1b7ed35a…`, past-end/not-live) and "By Heart | Tiago Rodrigues" still typed `exhibition` (`2b3e9206…`, should be theater, past-end) — both candidates for cleanup/re-type; flagged for user. (3) **GEO Strategist:** is empty `genre` schema-safe on non-exhibition types, and what genre for theater/cinema/concert at Onassis? (4) Live save happens at the next daily build (commit+push only this session; no manual deploy — matches the S162 cadence).
+
+### Session 165 — Image finder refuted; athinorama thumbnail upgrader shipped
+
+**Plan:** Build the briefed og:image capture finder for 174 missing-image concerts (capture + build-time reachability/dimension gate + residual tile), gated by verify-the-gap-is-open FIRST.
+
+**What happened:**
+- **Gap-is-open gate refuted the finder.** 174 missing concerts are all `image_source='not_found'` (existing `enrich-images.ts` finder already exhausted them); 5/5 spike of source pages showed genuine absence (only footer logos). Capture finder closes ~0 — 3rd refutation in the S161→S165 arc (geo, endDate, image-capture).
+- **Diagnostic surfaced a different real gap:** 118 displayed events on sub-floor 250×300 athinorama thumbnails. Athinorama's image server serves `/p/1200x1440/` (HTTP 200, crawler UA, no Referer; spike 5/5).
+- **Shipped (Option B, full propagation):** `upgradeAthinoramaImage` util (TDD, 6 tests) + capture-time wiring in `scrape-all.ts` + `MAX_WIDTH` 800→1200 + one-time backfill (`upgrade-athinorama-images.ts`: 10,297 `image_url` rewritten, 118 `image_local` regenerated to 1200×1440).
+
+**Verified:**
+- 24 image/upgrader tests green; full suite 2643 pass (2 fails pre-existing/unrelated: EN cornerstone = 0 upcoming exhibitions; geocodeVenues = network flake). tsc clean in touched files.
+- Backfill: global athinorama 250×300 `image_url` → 0; 118 displayed rows 1200×1440 (image_url + image_local).
+- Build: upgraded event `1ede74a4` shows 1200×1440 in all four live surfaces (on-page hero, og:image, twitter:image, JSON-LD image); zero 250×300 on page.
+
+**Learnings:**
+- `not_found` ≠ untried — read the `image_source` segmentation before building a capture finder.
+- The brief's own quality floor would have backfired (strip-to-null deletes the 118) → upgrade-then-gate, never blanket-strip.
+- Self-hosted optimized images inherit the source's ceiling (`withoutEnlargement`); GEO surfaces read `image_local`, not the raw URL.
+
+**Open items:**
+- ROUTE TO DESIGN NAVIGATOR: `.card-image--fallback` gradient (S124) vs Satori OG PNG (D11) divergence — observe only, not converged.
+- DEFERRED: build-time dimension floor gate (nothing to gate post-upgrade; constraint = upgrade-then-gate, never blanket-strip).
+- 1 backfill event (`ab592cee`) initially timed out, retried successfully.
