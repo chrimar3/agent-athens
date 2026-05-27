@@ -1088,9 +1088,20 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 
 **Fix plan:** Owner decision — either (a) wire colophon into `site-chrome.ts` (restores S154's intended integration: trigger between search+hamburger, dialog after `</header>`, colophon script in `renderHamburgerScript`), or (b) revise/skip the integration tests if colophon is being reconsidered. Not a Dev-default; the integration was never re-sanctioned after the discard.
 
-**Status:** Open — owner decision pending. **colophon committed as floor (`86b0f4018`), unwired by design, tests assert wiring.**
+**Status:** ✅ Resolved S160 (2026-05-27) — the wiring was never never-built: it lived in `stash@{0}` (stranded S158c/S159 demo-hardening) and was recovered via selective `git checkout 79f4f9f1b -- src/templates/site-chrome.ts …`. Colophon now wired (trigger **left-of-search** per S159 — not the original "between search+hamburger"; dialog after `</header>`; script in `renderHamburgerScript`). `colophon.test.ts` 32/32 green (ordering assertion flipped to `colophonIdx < searchIdx`). Deployed `bb96a3808`. _(Historical: Open — owner decision pending; colophon committed as floor (`86b0f4018`), unwired by design, tests assert wiring.)_
 
 **Cross-references:** `docs/session-log.md` S154 (colophon shipped) + S155 (floor commit); `src/templates/colophon.ts`, `src/templates/__tests__/colophon.test.ts`; `src/templates/site-chrome.ts` (HEAD version, no colophon wiring); "Source Tree Drift" issue above (why colophon was uncommitted in the first place).
+
+---
+
+### Diagnostic prior: "filter + search + colophon broke together" is NEVER a cascade
+
+**Severity:** 🟢 (diagnostic discipline, not a bug)
+**Confirmed:** S159, S160 (2× — promoted from logged observation to named prior)
+**Rule:** These three surfaces are independent inline `<script>`s (search-overlay / filter-bar / site-chrome). A single shared-shell JS error cannot take all three down. When the symptom recurs, the cascade hypothesis is RULED OUT at brief-write time — do not plan a shared-cause fix or a blind revert.
+**Both prior occurrences were the same mechanism:** demo-hardening UI work stranded in a mixed stash, shipped-without by a daily rebuild. First check: `git stash list` + reflog, NOT git history at HEAD (lost working-tree work is indistinguishable from never-built at HEAD).
+
+**Cross-references:** `docs/session-log.md` S160; `specs/regression-colophon-search-filter-diagnosis.md`; the resolved colophon entry above (the S160 recovery instance).
 
 ---
 

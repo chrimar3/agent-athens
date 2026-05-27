@@ -6477,3 +6477,50 @@ constant feeding both surfaces.
 4. 🟡 EN cornerstone hubs (today/tomorrow/exhibitions) missing from build — concurrent S155/S157 EN-locale workstream's surface, flagged for that owner.
 5. ⏭️ **Session 2** (gated on GEO node-keyed ruling): widen the location halt from detail-scoped to node-keyed, landing atomically with venue-page MusicEvent inline-`location` across all 4 emission sites.
 6. 📦 Both `session-wip-pre-schema-deploy` stashes confirmed safe to drop (nothing lives only in them) — owner's call.
+
+### Session 159 — Demo hardening: colophon wiring + Urok dedup + filters/search clip-bug fixes — 2026-05-26
+
+> Recovered 2026-05-27 (S160) from `stash@{0}` — this entry was written during S159 but stranded uncommitted in the same stash as its code; back-filled so the record matches committed history. (S159 deployed live on 05-26; the work was then stashed 05-27 01:33 and the 05-27 daily rebuild shipped `dist/` without it — that re-disappearance is what S160 diagnosed and recovered.)
+
+**Plan:** brief premised a single regression cluster (filters + search overlay + colophon broke together, one root cause ~May 12/13). Diagnose-first, repair, resolve the Urok duplicate, verify AI surfaces, deploy. Demo tomorrow.
+
+**What happened:**
+- **Premise refuted (diagnostic).** No May 12/13 regression — the 3 suspect commits (`733ad3f87`/`7966e4455`/`d1cee688a`) don't touch client scripts. Colophon was never wired (created 2026-05-25 `86b0f4018` as explicit "orphaned floor"); filters + search were two *independent* long-standing clip bugs. "Broke together" = three unrelated issues. Dropped the brief's try/catch-IIFE refactor (scripts are already separate `<script>` tags + IIFEs → can't cascade).
+- **Colophon wired (recover, not rebuild)** via shared `site-chrome.ts` only (`renderSiteNav` + `renderHamburgerScript`) → every page, `page.ts`/OG untouched. Trigger LEFT of search (Christos's call); flipped the one ordering assertion in `colophon.test.ts`. Label "About me" → "About" (visible button + noscript only; aria-label/dialog heading/generate-site title kept).
+- **Urok dedup:** kept `27635738cfec4676` (rich, 2026-05-26, RA link); hid the 2 empty duplicates via `location_status='problematic'` (reversible). Visible Urok rows: 1.
+- **Search fix** (`search-overlay.ts` 385/393/401): `group.style.display = ''` → `'block'`. `''` reverted to stylesheet `.search-group{display:none}`. Broken since `75525d07b` (Feb 27) — never worked.
+- **Filter fix** (`design-system.css` `.has-open-panel` lift): added `mask-image:none; -webkit-mask-image:none`. The mask edge-fade clipped the dropdown; `overflow:visible` alone insufficient.
+
+**Verified:** `bunx tsc --noEmit` 0 errors. Headless Puppeteer (system Chrome, against Christos's exact `bunx serve dist`): filter panel `panelIndexInStack:0` (was −1 = clipped → now hit-testable), search "jazz" renders 3 results 598×66 (was 0×0), homepage search 8 results. Christos local click-confirmed before deploy. AI surfaces: `llms.txt` (210 events), `api/events.json` DataFeed (2811 items), this-weekend SSR 20 JSON-LD Events. OG intact (og-parity 81 pass; `/en/this-weekend/` self-canonical + `og:locale=en_US`). Full suite **2586 pass / 5 fail — all date-conditional/config-drift missing hubs** (en/tomorrow, en/exhibitions, + en/today ×3 because today had 1 event < the ≥3 hub threshold); none from this session, none OG regressions. **Deployed `netlify deploy --prod --dir=dist`** (5331 files, 6m47s); live site re-verified — colophon "About", search `display:'block'` ×3, `mask-image:none` in `?v=3c95caa005` CSS, kept UROK page 200.
+
+**Learnings:** (1) DOM-present ≠ rendered — diagnose "nothing shows" with `getBoundingClientRect` + `elementsFromPoint`, not node count / computed `display` (`patterns.md`/`mistakes.md` S159). (2) `style.display=''` reverts to the stylesheet — force-show needs an explicit value. (3) un-clipping a dropdown means auditing ALL ancestor clip mechanisms (overflow + mask + stacking), not just overflow. (4) verify-the-premise: the diagnostic refuting the brief's single-cascade model was the unlock.
+
+**Open items (post-S159):**
+1. 🟡 EN cornerstone/date-conditional hubs (today/tomorrow/exhibitions/cinema/dance) declared in `config/hub-pages.json` but not always built → cornerstone + og-parity tests red when the hub is empty/below threshold. **Same item as S158 Open #4**; route to the EN-locale workstream owner. Out of this session's scope (hub generation = do-not-touch).
+2. 🎨 Colophon final visual treatment (position polish; EL-page dialog content is English) → Design Navigator post-demo.
+3. 📖 "Πηγή" source label renders as `<a href>` to source when `event.url` present (`event-page.ts:513-515`) → Design Navigator with the S28 "display-name-only, no link" constraint (read-only this session).
+
+### Session 160 — Stranded-Work Recovery (colophon · search · filter) — 2026-05-27
+
+> Note: the Session 159 entry above was recovered from `stash@{0}` on 2026-05-27 — S159's notes were stranded in the same stash as its code (code recovered in deploy commit `bb96a3808`; notes back-filled here). The "S159, S160 (2×)" basis for the promoted diagnostic prior in `known-issues.md` now rests on committed history.
+
+**Premise (from Christos):** "filter resurfaced + about/colophon + search broke together — diagnose and revert to working state."
+**Verdict:** NOT a regression. Stranded working-tree work. No revert.
+
+**Diagnosis (read-only, plan mode):**
+- HEAD dist == production byte-for-byte (2893 lines); 5 inline scripts parse clean → no cascade, no stale deploy.
+- 3 behaviors live in independent inline `<script>`s (search-overlay / filter-bar / site-chrome) → single shared-shell failure impossible.
+- Real cause: S158c/S159 demo-hardening (2026-05-26) stashed 05-27 01:33 (`stash@{0}`, "pre-save-drop-fix WIP", base `0e9a4298e`) to clear the tree for the urgent save-drop fix → committed save-drop `936cbf0d9` / streetAddress `b1c5902eb` / daily `1d8b8f174` on clean tree → stash never re-applied → 05-27 daily rebuild shipped `dist/` without it.
+
+**Per-thread (all recovered from stash, 3 independent bugs):**
+- Colophon: wiring never committed (`86b0f4018` added colophon.ts only, 0 deletions). `site-chrome.ts` +7, colophon.ts label, test ordering flip, design-system.css.
+- Filter: S158c iOS bottom-sheet trapped by `position:fixed` ancestor → relocate panel to `<body>` (+19); S159 `mask-image:none` clip.
+- Search: reveal bug, NOT data. `/search-index.json` present, 185 KB. `search-overlay.ts` +6 (`display:''`→`'block'`).
+
+**Recovery method:** SHA-pinned stash (`79f4f9f1b`) after STOP-gate drift check → selective `git checkout 79f4f9f1b -- <6 UI files>` → never wholesale apply (same stash carried stale db/validator deletions that would have reverted `936cbf0d9` + `b1c5902eb`). Index-aware boundary check (`git status --short`) confirmed exactly 6 files, nothing under `src/db/` or `src/validators/`.
+
+**Verification:** colophon.test.ts 32/32; full suite 2606 pass / 1 skip / 1 pre-existing unrelated fail (en-cornerstone-presence, /en/exhibitions/ not built); clean build exit 0; Puppeteer runtime-VISIBLE (`getBoundingClientRect>0`, 0 page errors) on all three. Committed `bb96a3808`, deployed `netlify deploy --prod --dir=dist`, production confirmed at agentathens.com. `stash@{0}` preserved as rollback.
+
+**Pattern (3rd confirmation):** "filter+search+colophon broke together" = three independent issues, not a cascade (S159, S160). Promoted to named diagnostic prior — see known-issues.
+
+**Carry-forwards (post-demo):** (1) deploy-gate gap; (2) stash-strand failure mode; (3) pre-existing /en/exhibitions/ cornerstone.
