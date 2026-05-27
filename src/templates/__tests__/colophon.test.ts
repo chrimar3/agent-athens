@@ -129,7 +129,7 @@ describe('site-chrome integration (Option A — coextensive by construction)', (
   test('renderSiteNav output contains colophon-dialog (markup rides with nav)', () => {
     expect(renderSiteNav()).toContain('colophon-dialog');
   });
-  test('trigger renders AFTER nav-search-btn and BEFORE hamburger-btn', () => {
+  test('trigger renders BEFORE nav-search-btn and BEFORE hamburger-btn (left of search)', () => {
     const nav = renderSiteNav();
     const searchIdx = nav.indexOf('nav-search-btn');
     const colophonIdx = nav.indexOf('colophon-trigger');
@@ -137,7 +137,7 @@ describe('site-chrome integration (Option A — coextensive by construction)', (
     expect(searchIdx).toBeGreaterThan(-1);
     expect(colophonIdx).toBeGreaterThan(-1);
     expect(hamburgerIdx).toBeGreaterThan(-1);
-    expect(colophonIdx).toBeGreaterThan(searchIdx);
+    expect(colophonIdx).toBeLessThan(searchIdx);
     expect(colophonIdx).toBeLessThan(hamburgerIdx);
   });
   test('renderHamburgerScript output includes colophon behavior script', () => {

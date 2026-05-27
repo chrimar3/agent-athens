@@ -55,8 +55,8 @@ export function renderColophonContent(): string {
 }
 
 export function renderColophonTrigger(): string {
-  return `<button class="colophon-trigger nav-colophon-btn" type="button" aria-label="About me — open colophon" aria-haspopup="dialog" aria-controls="colophon-dialog" data-colophon-open data-colophon-href="/en/colophon/">About me</button>
-<noscript><a href="/en/colophon/" class="colophon-trigger-noscript">About me</a></noscript>`;
+  return `<button class="colophon-trigger nav-colophon-btn" type="button" aria-label="About me — open colophon" aria-haspopup="dialog" aria-controls="colophon-dialog" data-colophon-open data-colophon-href="/en/colophon/">About</button>
+<noscript><a href="/en/colophon/" class="colophon-trigger-noscript">About</a></noscript>`;
 }
 
 export function renderColophonDialog(): string {

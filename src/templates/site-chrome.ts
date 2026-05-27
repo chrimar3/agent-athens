@@ -6,6 +6,7 @@
  * Injected by all page templates for consistent site framing.
  */
 import { STRINGS, type Locale } from '../i18n/strings';
+import { renderColophonTrigger, renderColophonDialog, renderColophonScript } from './colophon';
 
 // Routing: Greek renders at the bare root (/saved/, /about/), English under /en/.
 // (Do NOT use utils/locale-url.ts — it encodes an abandoned English-first posture
@@ -33,6 +34,7 @@ export function renderSiteNav(locale: Locale = 'el'): string {
       <a href="${homeHref(locale)}" class="site-logo">agent athens</a>
     </div>
     <div class="site-header-right">
+      ${renderColophonTrigger()}
       <button class="nav-search-btn" aria-label="${s.navSearch}" type="button">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -44,7 +46,8 @@ export function renderSiteNav(locale: Locale = 'el'): string {
       </button>
     </div>
   </div>
-</header>`;
+</header>
+${renderColophonDialog()}`;
 }
 
 export function renderHamburgerMenu(locale: Locale = 'el'): string {
@@ -196,5 +199,5 @@ export function renderHamburgerScript(): string {
     }
   });
 })();
-</script>`;
+</script>${renderColophonScript()}`;
 }

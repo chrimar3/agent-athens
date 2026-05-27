@@ -382,7 +382,7 @@ export function renderSearchScript(): string {
 
     if (eventResults.length > 0) {
       var group = resultsEl.querySelector('[data-group="events"]');
-      group.style.display = '';
+      group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       eventResults.slice(0, 5).forEach(function(r) { items.appendChild(renderEventResult(r.item)); });
       addSeeAllLink(group, eventResults.length, query);
@@ -390,7 +390,7 @@ export function renderSearchScript(): string {
 
     if (venueResults.length > 0) {
       var group = resultsEl.querySelector('[data-group="venues"]');
-      group.style.display = '';
+      group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       venueResults.slice(0, 5).forEach(function(r) { items.appendChild(renderVenueResult(r.item)); });
       addSeeAllLink(group, venueResults.length, query);
@@ -398,7 +398,7 @@ export function renderSearchScript(): string {
 
     if (catResults.length > 0) {
       var group = resultsEl.querySelector('[data-group="categories"]');
-      group.style.display = '';
+      group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       catResults.slice(0, 5).forEach(function(r) { items.appendChild(renderCategoryResult(r.item)); });
       addSeeAllLink(group, catResults.length, query);

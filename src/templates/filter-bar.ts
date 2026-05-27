@@ -341,7 +341,14 @@ export function renderFilterBarScript(): string {
 
   function closeAll() {
     pills.forEach(function(p) { p.classList.remove('is-open'); });
-    panels.forEach(function(p) { p.classList.remove('is-open'); });
+    panels.forEach(function(p) {
+      p.classList.remove('is-open');
+      // S158c: restore any mobile-relocated panel to its original anchor.
+      if (p._origParent && p.parentNode === document.body) {
+        p._origParent.appendChild(p);
+        p._origParent = null;
+      }
+    });
     if (backdrop) backdrop.classList.remove('is-open');
     if (bar) bar.classList.remove('has-open-panel');
     unlockScroll();
@@ -353,6 +360,16 @@ export function renderFilterBarScript(): string {
     var pill = document.querySelector('.filter-pill[data-panel="' + panelName + '"]');
     var panel = document.querySelector('.filter-panel[data-panel-for="' + panelName + '"]');
     if (pill && panel) {
+      // S158c: on mobile the panel is position:fixed (bottom sheet). Move it to
+      // <body> so NO trapping ancestor (.filter-bar sticky/isolation,
+      // .filter-bar-scroll mask) captures its containing block — iOS WebKit was
+      // resolving "fixed" against the ancestor and dropping the panel into flow
+      // below the fold. Desktop (absolute dropdown anchored to the pill) is left
+      // untouched: no relocation, so positioning/behavior is unchanged.
+      if (isMobile.matches && panel.parentNode !== document.body) {
+        panel._origParent = panel.parentNode;
+        document.body.appendChild(panel);
+      }
       pill.classList.add('is-open');
       panel.classList.add('is-open');
       if (backdrop) backdrop.classList.add('is-open');

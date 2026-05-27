@@ -1553,6 +1553,8 @@ div#main-content {
 }
 .filter-bar.has-open-panel .filter-bar-scroll {
   overflow: visible;
+  mask-image: none;
+  -webkit-mask-image: none;
 }
 
 .filter-pill-dismiss {
@@ -1662,8 +1664,13 @@ div#main-content {
   }
   .filter-panel-backdrop.is-open {
     background: var(--bg-overlay);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    /* S158: NO backdrop-filter. WebKit/iOS promotes a backdrop-filter element to
+       its own compositing layer that paints OVER the filter panel — the panel
+       lives in .filter-bar's `isolation:isolate` stacking context (z:200 when
+       open), the backdrop in root (z:199); WebKit ignores that cross-context
+       z-order for the composited blur layer, so the panel opened invisibly
+       behind the blur on iOS. Solid dim only → z-order honored on WebKit.
+       (Chromium tolerated it; the engine mismatch was the bug.) */
   }
 
   .filter-sheet-handle {
@@ -2852,3 +2859,134 @@ div#main-content {
   text-decoration: none;
 }
 .overflow-back a:hover { text-decoration: underline; }
+
+/* ── Colophon ─────────────────────────────────── */
+/* Trigger button (in site-chrome nav, between search and hamburger) */
+.colophon-trigger {
+  display: flex;
+  align-items: center; justify-content: center;
+  height: 44px;
+  padding: 0 var(--space-sm-md);
+  background: none; border: none; cursor: pointer;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: var(--type-ui);
+  transition: color var(--t-base);
+  white-space: nowrap;
+}
+.colophon-trigger:hover { color: var(--text-primary); }
+.colophon-trigger:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.colophon-trigger-noscript { display: none; }
+
+/* Dialog overlay — mirrors search-overlay pattern */
+.colophon-dialog {
+  display: none;
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  isolation: isolate;
+  align-items: center; justify-content: center;
+  padding: var(--space-md);
+}
+.colophon-dialog.is-open { display: flex; }
+
+.colophon-dialog-backdrop {
+  position: fixed; inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.colophon-dialog-panel {
+  position: relative;
+  max-width: 640px; width: 100%;
+  max-height: calc(100vh - var(--space-xl-2xl));
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  padding: var(--space-lg) var(--space-md-lg);
+}
+
+.colophon-dialog-close {
+  position: absolute;
+  top: var(--space-sm); right: var(--space-sm);
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  font-size: 24px; line-height: 1;
+  color: var(--text-secondary);
+  border-radius: var(--radius-circle);
+  transition: background var(--t-base), color var(--t-base);
+}
+.colophon-dialog-close:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+.colophon-dialog-close:focus-visible {
+  outline: 2px solid var(--focus-ring); outline-offset: 2px;
+}
+
+/* Content — used by BOTH dialog AND /en/colophon/ mirror page */
+.colophon-content-header { margin: 0 0 var(--space-lg) 0; }
+.colophon-name {
+  margin: 0 0 var(--space-xs) 0;
+  color: var(--text-primary);
+  font-size: var(--type-h2);
+}
+.colophon-tagline {
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--text-secondary);
+}
+.colophon-one-liner {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+.colophon-section { margin: 0 0 var(--space-md-lg) 0; }
+.colophon-section p {
+  margin: 0 0 var(--space-sm-md) 0;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+.colophon-section p:last-child { margin: 0; }
+.colophon-links {
+  list-style: none;
+  padding: 0; margin: var(--space-lg) 0 var(--space-md) 0;
+  display: flex; flex-wrap: wrap; gap: var(--space-md);
+}
+.colophon-links a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.colophon-links a:hover { color: var(--accent-primary); }
+.colophon-cv { margin: var(--space-md-lg) 0 0 0; }
+.colophon-cv a {
+  display: inline-block;
+  font-size: var(--type-ui);
+  color: var(--text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.colophon-cv a:hover { color: var(--text-primary); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .colophon-trigger,
+  .colophon-dialog-close { transition: none; }
+}
+
+/* Mobile: panel uses near-full viewport, edge padding shrinks */
+@media (max-width: 768px) {
+  .colophon-dialog { padding: var(--space-sm); align-items: stretch; }
+  .colophon-dialog-panel {
+    max-height: 100%;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md-lg) var(--space-md);
+  }
+}
