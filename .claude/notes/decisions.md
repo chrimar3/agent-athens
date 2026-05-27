@@ -4404,3 +4404,13 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 3. **Defect 3 (dedup duplication) deferred — high blast radius (Guard 6).** Root cause: `id = md5(title + start_date [+ venue])` bakes an unstable field into identity. A stable key (source + URL slug) touches the copy-pasted `generateEventId` across all 8 scrapers + every `ON CONFLICT(id)` + an id-migration for existing rows. Its own session with a parity test. See `specs/onassis-dedup-S117-checkpoint.md`.
 
 **Cross-references:** `specs/onassis-ingestion-defects-S117.md`, `specs/onassis-dedup-S117-checkpoint.md`; `mistakes.md`/`patterns.md` S162.
+
+## S164 — Onassis scraper rewrite: precise selectors + content-typing + date fix (2026-05-27)
+
+1. **cheerio for the pure parse function (first active, non-archive use).** The "precise selectors" goal is best served by real CSS selectors; cheerio (`^1.1.2`, already a dependency) lets `parseOnassisEvents(html)` express `article.sm-col-28-18` directly and be unit-tested against a saved fixture. The active-code convention is regex, but regex is brittle for nested DOM and contradicts the precision goal. Puppeteer stays only as the fetch (`page.content()`); all selection moved into the pure function.
+2. **Enumerated 1-line boundary expansion into `scrape-all.ts`.** The brief was "Onassis-bounded," but the orchestrated adapter (`:1466-1482`) independently hardcoded type + `genres:['Art','Contemporary']`. Type self-corrects at `:1387`; **genres do not** — so the genres hardcode was the real live defect on non-exhibition events. Fixed by reading `e.type`/`e.genres` (+ `time` exhibition-conditional, `''` otherwise, to avoid stamping a fabricated 11:00 on cinema/concerts). The `:1387` categorizer is left untouched as the safety net.
+3. **Non-exhibition genres intentionally left empty, pending GEO Strategist.** Exhibition → `['visual-arts']` (correct); other types → `[]`. Empty is the existing codebase norm (most adapters emit empty genres) and schema-safer than a wrong blanket genre, but "is empty `genre` schema-safe / what genre for theater/cinema/concert?" is a routed GEO question, not an executor guess.
+4. **Standalone save path now applies the S117 scope-filter.** `saveOnassisExhibitions` calls `shouldExcludeEvent` before upsert (read-only import; `scope-filter.ts` untouched), closing the asymmetry where only the orchestrated path was protected.
+5. **Dedup (Defect 3) still deferred** — `generateEventId` untouched; the two ONX Showcase dupes remain for that session.
+
+**Cross-references:** `specs/onassis-rewrite-S164.md`, `specs/onassis-dedup-S117-checkpoint.md`; `mistakes.md`/`patterns.md` S164.

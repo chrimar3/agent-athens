@@ -38,6 +38,7 @@ import { validateSeasonalEvent } from '../src/validators/seasonal-filter';
 import { categorizeEventSimple } from '../src/categorizer';
 import { normalizeTheaterSpelling } from '../src/validators/event-categorizer';
 import { extractOgImage } from '../src/utils/image-extractor';
+import { upgradeAthinoramaImage } from '../src/utils/athinorama-image';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -626,11 +627,12 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
         // Athinorama og:image returns HTTP 502 — use body image instead
         const bodyImage = extractAthinoramaBodyImage(eventHtml);
         if (bodyImage) {
-          event.image_url = bodyImage;
+          // Upgrade the 250x300/300x380 listing thumbnail to a floor-passing 1200x1440 (S165)
+          event.image_url = upgradeAthinoramaImage(bodyImage);
         } else {
           const imageResult = extractOgImage(eventHtml, event.url);
           if (imageResult) {
-            event.image_url = imageResult.imageUrl;
+            event.image_url = upgradeAthinoramaImage(imageResult.imageUrl);
           }
         }
       }
@@ -1460,18 +1462,20 @@ async function scrapeSNFCCAdapter(): Promise<ScrapedEvent[]> {
   }));
 }
 
-// Adapter for Onassis Stegi exhibitions
+// Adapter for Onassis Stegi events (mixed-type listing — type/genres derived by the scraper)
 async function scrapeOnassisAdapter(): Promise<ScrapedEvent[]> {
-  const exhibitions = await scrapeOnassis();
-  return exhibitions.map(e => ({
+  const events = await scrapeOnassis();
+  return events.map(e => ({
     id: generateEventId(e.title, e.start_date, e.venue_name),
     title: e.title,
     description: e.description,
     start_date: e.start_date,
     end_date: e.end_date,
-    time: '11:00', // Default opening time
-    type: 'exhibition',
-    genres: JSON.stringify(['Art', 'Contemporary']),
+    // '11:00' is the exhibition opening time; non-exhibitions have no scraped clock
+    // time, so leave it empty (avoids stamping a fabricated time on cinema/concerts).
+    time: e.type === 'exhibition' ? '11:00' : '',
+    type: e.type,                       // was hardcoded 'exhibition'
+    genres: JSON.stringify(e.genres),   // was the blanket ['Art','Contemporary']
     venue_name: e.venue_name || 'Onassis Stegi',
     url: e.url,
     price_type: e.price_type,

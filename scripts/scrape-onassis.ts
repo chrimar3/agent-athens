@@ -1,22 +1,33 @@
 #!/usr/bin/env bun
 
 /**
- * Onassis Stegi Exhibition Scraper
+ * Onassis Stegi Event Scraper
  *
- * Scrapes exhibitions from Onassis Stegi (onassis.org)
- * Uses Puppeteer because the site blocks direct requests
+ * Scrapes the Onassis "What's On" listing (onassis.org/el/whats-on).
+ * Uses Puppeteer (system Chrome) because the page is JS-rendered and blocks
+ * direct requests. Parsing is a pure, testable function (`parseOnassisEvents`)
+ * driven by precise selectors discovered in specs/onassis-rewrite-S164.md.
+ *
+ * The listing is mixed-type (exhibitions, cinema, music, theater, …). Type is
+ * derived from the page's own Greek category label (authoritative), falling
+ * back to the shared categorizer when the label is missing/unmapped. Dates are
+ * "DD.MM[.YYYY] — DD.MM.YYYY" with an em-dash; see parseOnassisDateRange.
  */
 
 import puppeteer from 'puppeteer';
-import { upsertEvent, getDatabase } from '../src/db/database';
+import * as cheerio from 'cheerio';
+import { upsertEvent } from '../src/db/database';
+import { shouldExcludeEvent } from '../src/validators/scope-filter';
+import { categorizeEventSimple } from '../src/categorizer';
 import { log } from '../src/utils/logger';
 import { createHash } from 'crypto';
-import type { Event } from '../src/types';
+import type { Event, EventType } from '../src/types';
 
 const SOURCE_ID = 'onassis';
 const BASE_URL = 'https://www.onassis.org';
+const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-// Onassis Stegi opening hours
+// Onassis Stegi opening hours (only attached to exhibitions)
 const ONASSIS_OPENING_HOURS = {
   'mon': 'closed',
   'tue': '11:00-20:00',
@@ -36,15 +47,46 @@ interface ScrapedExhibition {
   image_url?: string;
   venue_name: string;
   price_type: 'open' | 'with-ticket';
+  type: EventType;
+  genres: string[];
 }
 
 function generateEventId(title: string, startDate: string): string {
+  // NOTE: dedup identity key — OUT OF SCOPE (Defect 3, specs/onassis-dedup-S117-checkpoint.md).
   const normalized = `${title.toLowerCase().trim()}-${startDate}`;
   return createHash('md5').update(normalized).digest('hex').substring(0, 16);
 }
 
+/**
+ * Map Onassis's explicit Greek category label to an EventType.
+ * Mirrors scrape-megaron.ts:categoryToType — the page category is the most
+ * authoritative type signal (the shared categorizer's keyword config has no
+ * Greek terms). Unmapped/missing → 'other' (caller falls back to the categorizer).
+ */
+export function onassisCategoryToType(rawCategory: string): EventType {
+  const c = (rawCategory || '').replace(/&amp;/g, '&').normalize('NFC').trim();
+  switch (c) {
+    case 'Έκθεση':                 return 'exhibition';
+    case 'Κινηματογράφος':
+    case 'Προβολές ταινιών':       return 'cinema';
+    case 'Μουσική':
+    case 'Συναυλία':
+    case 'Όπερα':                  return 'concert';
+    case 'Θέατρο':                 return 'theater';
+    case 'Παράσταση':              return 'performance';
+    case 'Χορός':                  return 'dance';
+    case 'Εκπαιδευτικό πρόγραμμα':
+    case 'Εργαστήριο':
+    case 'Εκπαιδευτικά & Δράσεις':  return 'workshop';
+    case 'Φεστιβάλ':               return 'festival';
+    case 'Συζήτηση':
+    case 'Διάλεξη':                return 'other';
+    default:                       return 'other';
+  }
+}
+
 function parseGreekDate(dateStr: string): string | null {
-  // Parse dates like "7 Μαρτίου 2026" or "7/3/2026" or "07.03.2026"
+  // Parse "7 Μαρτίου 2026" or "7/3/2026" or "07.03.2026" → ISO YYYY-MM-DD
   const greekMonths: Record<string, number> = {
     'ιανουαρίου': 1, 'φεβρουαρίου': 2, 'μαρτίου': 3, 'απριλίου': 4,
     'μαΐου': 5, 'ιουνίου': 6, 'ιουλίου': 7, 'αυγούστου': 8,
@@ -53,7 +95,7 @@ function parseGreekDate(dateStr: string): string | null {
     'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
   };
 
-  // Try Greek format: "7 Μαρτίου 2026"
+  // Greek format: "7 Μαρτίου 2026"
   const greekMatch = dateStr.match(/(\d{1,2})\s+(\S+)\s+(\d{4})/i);
   if (greekMatch) {
     const day = parseInt(greekMatch[1]);
@@ -65,7 +107,7 @@ function parseGreekDate(dateStr: string): string | null {
     }
   }
 
-  // Try numeric format: "7/3/2026" or "07.03.2026"
+  // Numeric format: "7/3/2026" or "07.03.2026"
   const numMatch = dateStr.match(/(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})/);
   if (numMatch) {
     const day = parseInt(numMatch[1]);
@@ -77,124 +119,144 @@ function parseGreekDate(dateStr: string): string | null {
   return null;
 }
 
+// Range separators seen on Onassis: em-dash (—, U+2014), en-dash (–), hyphen, "έως", "to".
+const RANGE_SEP = /\s*(?:—|–|-|έως|to)\s*/i;
+
+/**
+ * Classify and parse an Onassis date cell into start/end ISO dates.
+ *
+ * Real formats (specs/onassis-rewrite-S164.md):
+ *   "17.05 — 28.06.2026"     range, shared year (start lacks year → inherits end's)
+ *   "14.10.2025 — 28.05.2026" range, both years (cross-year)
+ *   "07.03.2026"             single date → end null
+ *   "Ongoing" / unparseable  → {null, null} (caller skips; never fabricate an end)
+ *
+ * This replaces the old fallback that ran parseGreekDate() on the whole range
+ * string and matched the LAST date, writing the END date into start_date (S117).
+ */
+export function parseOnassisDateRange(dateText: string): { start_date: string | null; end_date: string | null } {
+  if (!dateText) return { start_date: null, end_date: null };
+
+  // Defensive: strip Greek time tokens (μ.μ./π.μ.) if a time leaks into the cell.
+  const cleaned = dateText.replace(/\d{1,2}([.:]\d{2})?\s*(μ\.μ\.|π\.μ\.)/gi, '').trim();
+
+  const parts = cleaned.split(RANGE_SEP).map(s => s.trim()).filter(Boolean);
+
+  if (parts.length >= 2) {
+    let startRaw = parts[0];
+    const endRaw = parts[parts.length - 1];
+    const endYear = endRaw.match(/(\d{4})/)?.[1];
+    // Shared-year range: inject the end's year into a year-less "DD.MM" start.
+    if (endYear && !/\d{4}/.test(startRaw) && /^\d{1,2}[./]\d{1,2}$/.test(startRaw)) {
+      startRaw = `${startRaw}.${endYear}`;
+    }
+    return { start_date: parseGreekDate(startRaw), end_date: parseGreekDate(endRaw) };
+  }
+
+  // Single date or open-ended → never fabricate an end.
+  return { start_date: parseGreekDate(cleaned), end_date: null };
+}
+
+/**
+ * Pure parser — extract events from rendered Onassis "What's On" HTML.
+ * Precise selectors: event cards are `article.sm-col-28-18` (the `article.bg-white`
+ * wrapper holds the page chrome / filter strings and is intentionally excluded).
+ */
+export function parseOnassisEvents(html: string): ScrapedExhibition[] {
+  const $ = cheerio.load(html);
+  const events: ScrapedExhibition[] = [];
+
+  $('article.sm-col-28-18').each((_, el) => {
+    const $card = $(el);
+    const title = $card.find('h3').first().text().trim();
+    if (!title || title.length <= 3) return;
+
+    const primaryCategory = $card.find('p.blue').first().text().trim();
+    const dateText = $card.find('time').first().text().trim();
+    const desc = $card.find('p.dark-grey').first().text().trim();
+    const href = $card.find('a[href]').first().attr('href') || '';
+    const url = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+
+    const { start_date, end_date } = parseOnassisDateRange(dateText);
+    if (!start_date) return; // no usable date → skip (never fabricate)
+
+    // The page's own category label is authoritative. Fall back to the shared
+    // categorizer only when missing/unmapped — Onassis is a "mixed venue", so
+    // the fallback won't venue-lock to a wrong type.
+    let type = onassisCategoryToType(primaryCategory);
+    if (type === 'other') {
+      type = categorizeEventSimple({
+        title,
+        description: desc,
+        venue: 'Onassis Stegi',
+        url,
+        source: SOURCE_ID,
+        currentType: 'other',
+      });
+    }
+
+    // Genres: 'visual-arts' is correct for exhibitions. Non-exhibition genres are
+    // intentionally left empty (the existing codebase norm, schema-safer than a
+    // wrong blanket genre) pending GEO Strategist guidance — see the spec.
+    const genres = type === 'exhibition' ? ['visual-arts'] : [];
+
+    events.push({
+      title,
+      description: desc || 'Event at Onassis Stegi',
+      start_date,
+      end_date,
+      url,
+      venue_name: 'Onassis Stegi',
+      price_type: 'with-ticket',
+      type,
+      genres,
+    });
+  });
+
+  return events;
+}
+
 export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
   const startTime = Date.now();
-  log('INFO', SOURCE_ID, 'Starting Onassis Stegi exhibition scrape');
+  log('INFO', SOURCE_ID, 'Starting Onassis Stegi event scrape');
 
   const browser = await puppeteer.launch({
     headless: true,
+    executablePath: CHROME_PATH,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
-  const exhibitions: ScrapedExhibition[] = [];
+  let events: ScrapedExhibition[] = [];
 
   try {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
-    // Try the exhibitions/what's on page
+    // /el/exhibitions is dead (404); the listing lives at /el/whats-on.
     const urls = [
       `${BASE_URL}/el/whats-on`,
       `${BASE_URL}/onassis-stegi`,
-      `${BASE_URL}/el/exhibitions`
     ];
 
     for (const url of urls) {
       try {
         log('INFO', SOURCE_ID, `Trying URL: ${url}`);
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-
-        // Wait for content to load
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
         await page.waitForSelector('body', { timeout: 10000 });
 
-        // Extract exhibition data from the page
-        const pageExhibitions = await page.evaluate(() => {
-          const results: any[] = [];
+        const html = await page.content();
+        events = parseOnassisEvents(html);
 
-          // Look for event cards, exhibition items, etc.
-          const selectors = [
-            '.event-card', '.exhibition-item', '.program-item',
-            '[data-type="exhibition"]', '.card', 'article'
-          ];
-
-          for (const selector of selectors) {
-            const items = document.querySelectorAll(selector);
-            items.forEach(item => {
-              const titleEl = item.querySelector('h2, h3, .title, [class*="title"]');
-              const dateEl = item.querySelector('.date, [class*="date"], time');
-              const linkEl = item.querySelector('a[href]');
-              const descEl = item.querySelector('p, .description, [class*="desc"]');
-
-              if (titleEl) {
-                const title = titleEl.textContent?.trim() || '';
-                const dateText = dateEl?.textContent?.trim() || '';
-                const link = linkEl?.getAttribute('href') || '';
-                const desc = descEl?.textContent?.trim() || '';
-
-                // Only include if it looks like an exhibition
-                const text = (title + ' ' + desc).toLowerCase();
-                if (text.includes('έκθεση') || text.includes('exhibition') ||
-                    text.includes('φωτογραφ') || text.includes('photo') ||
-                    text.includes('τέχν') || text.includes('art')) {
-                  results.push({ title, dateText, link, desc });
-                }
-              }
-            });
-          }
-
-          return results;
-        });
-
-        for (const item of pageExhibitions) {
-          if (item.title && item.title.length > 3) {
-            // Parse date range if present (e.g., "7 Μαρτίου - 17 Μαΐου 2026")
-            let startDate = null;
-            let endDate = null;
-
-            const dateRangeMatch = item.dateText?.match(/(\d{1,2}[\/\.\s]\S+[\/\.\s]?\d{0,4})\s*[-–]\s*(\d{1,2}[\/\.\s]\S+[\/\.\s]?\d{4})/);
-            if (dateRangeMatch) {
-              startDate = parseGreekDate(dateRangeMatch[1] + (dateRangeMatch[1].includes('202') ? '' : ' 2026'));
-              endDate = parseGreekDate(dateRangeMatch[2]);
-            } else {
-              startDate = parseGreekDate(item.dateText || '');
-            }
-
-            if (startDate) {
-              exhibitions.push({
-                title: item.title,
-                description: item.desc || `Exhibition at Onassis Stegi`,
-                start_date: startDate,
-                end_date: endDate,
-                url: item.link?.startsWith('http') ? item.link : `${BASE_URL}${item.link}`,
-                venue_name: 'Onassis Stegi',
-                price_type: 'with-ticket'
-              });
-            }
-          }
-        }
-
-        if (exhibitions.length > 0) break; // Found data, stop trying URLs
+        if (events.length > 0) break; // found real events, stop trying URLs
       } catch (err) {
         log('WARN', SOURCE_ID, `Failed to load ${url}: ${err}`);
       }
     }
 
-    // If no exhibitions found from scraping, add known exhibitions from search
-    if (exhibitions.length === 0) {
-      log('INFO', SOURCE_ID, 'Adding known exhibitions from research');
-
-      // Yorgos Lanthimos: Photographs
-      exhibitions.push({
-        title: 'Yorgos Lanthimos: Photographs',
-        description: 'Photographs from the past five years by acclaimed filmmaker Yorgos Lanthimos, including work made around film productions and soundstage environments, alongside a distinct series created in Athens and the Aegean.',
-        start_date: '2026-03-07',
-        end_date: '2026-05-17',
-        url: 'https://www.onassis.org/onassis-stegi',
-        venue_name: 'Onassis Stegi',
-        price_type: 'with-ticket'
-      });
+    if (events.length === 0) {
+      // Never fabricate. An empty scrape is a valid (logged) outcome.
+      log('WARN', SOURCE_ID, 'Scrape returned 0 events');
     }
-
   } catch (error) {
     log('ERROR', SOURCE_ID, `Scrape failed: ${error}`);
   } finally {
@@ -202,26 +264,39 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
   }
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-  log('INFO', SOURCE_ID, `Completed: ${exhibitions.length} exhibitions in ${duration}s`);
+  log('INFO', SOURCE_ID, `Completed: ${events.length} events in ${duration}s`);
 
-  return exhibitions;
+  return events;
 }
 
 /**
- * Save scraped exhibitions to database
+ * Save scraped events to the database.
+ * Standalone path: applies the S117 scope-filter (the orchestrated scrape-all
+ * path already does) so garbage can't slip through here either.
  */
-export async function saveOnassisExhibitions(exhibitions: ScrapedExhibition[]): Promise<number> {
+export async function saveOnassisExhibitions(events: ScrapedExhibition[]): Promise<number> {
   let saved = 0;
 
-  for (const exh of exhibitions) {
+  for (const exh of events) {
+    const scope = shouldExcludeEvent({
+      title: exh.title,
+      venue: exh.venue_name,
+      description: exh.description,
+      url: exh.url,
+    });
+    if (!scope.inScope) {
+      log('WARN', SOURCE_ID, `Excluded by scope-filter (${scope.reason}): ${exh.title}`);
+      continue;
+    }
+
     const event: Event = {
       id: generateEventId(exh.title, exh.start_date),
       title: exh.title,
       description: exh.description,
       startDate: exh.start_date,
       endDate: exh.end_date || undefined,
-      type: 'exhibition',
-      genres: ['visual-arts'],
+      type: exh.type,
+      genres: exh.genres,
       tags: [],
       venue: {
         name: exh.venue_name,
@@ -235,14 +310,16 @@ export async function saveOnassisExhibitions(exhibitions: ScrapedExhibition[]): 
       url: exh.url,
       source: SOURCE_ID,
       locationStatus: 'verified_athens',
-      openingHours: ONASSIS_OPENING_HOURS,
-      permanentCollection: false
+      // Exhibition-specific fields only when the event is actually an exhibition.
+      ...(exh.type === 'exhibition'
+        ? { openingHours: ONASSIS_OPENING_HOURS, permanentCollection: false }
+        : {}),
     };
 
     try {
       upsertEvent(event);
       saved++;
-      log('INFO', SOURCE_ID, `Saved: ${event.title}`);
+      log('INFO', SOURCE_ID, `Saved [${event.type}]: ${event.title}`);
     } catch (error) {
       log('ERROR', SOURCE_ID, `Failed to save ${event.title}: ${error}`);
     }
@@ -253,22 +330,28 @@ export async function saveOnassisExhibitions(exhibitions: ScrapedExhibition[]): 
 
 // Run as standalone script
 if (import.meta.main) {
-  console.log('🏛️  Onassis Stegi Exhibition Scraper');
+  const dryRun = Bun.argv.includes('--dry-run');
+
+  console.log('🏛️  Onassis Stegi Event Scraper' + (dryRun ? ' (DRY RUN)' : ''));
   console.log('====================================\n');
 
-  const exhibitions = await scrapeOnassis();
+  const events = await scrapeOnassis();
 
-  console.log(`\n📊 Found ${exhibitions.length} exhibitions`);
+  console.log(`\n📊 Found ${events.length} events`);
 
-  if (exhibitions.length > 0) {
-    console.log('\nExhibitions:');
-    for (const exh of exhibitions) {
-      console.log(`  - ${exh.title} (${exh.start_date} to ${exh.end_date || 'ongoing'})`);
+  if (events.length > 0) {
+    console.log('\nEvents:');
+    for (const e of events) {
+      console.log(`  - [${e.type}] ${e.title} (${e.start_date} → ${e.end_date ?? 'open-ended'})`);
     }
+  }
 
+  if (dryRun) {
+    console.log('\n🟡 DRY RUN — nothing saved to the database.');
+  } else if (events.length > 0) {
     console.log('\n💾 Saving to database...');
-    const saved = await saveOnassisExhibitions(exhibitions);
-    console.log(`✅ Saved ${saved} exhibitions`);
+    const saved = await saveOnassisExhibitions(events);
+    console.log(`✅ Saved ${saved} events`);
   }
 }
 
