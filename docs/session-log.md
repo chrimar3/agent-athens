@@ -6540,3 +6540,19 @@ constant feeding both surfaces.
 **Learnings:** (1) Add a gate that tests whether the gap is *open* before the gates that test how to close it — a brief can pass every gate it specifies and still build the wrong thing (`mistakes.md` S161). (2) A brief's query path is an unverified premise; a wrong jq path returns `null` ≡ "empty gap" (`patterns.md` S161). (3) Segment by type before calling a field a gap.
 
 **Open items:** (1) **Near-term — reject/hide the 3 artifact rows** (`location_status='problematic'`, 2-min, reversible). (2) Scraper root-cause session: filter-string title leak + Onassis date parsing/dedup. (3) `image` finder — first move is a routing question to GEO Strategist (source/fallback policy) + Design Navigator (no-image treatment), THEN a capture-layer spike, against the 174-missing number, with the gap-is-open gate placed first. (4) Possible venue `sameAs` emission gap (`venueSameAs.populated=5` vs 10 QIDs in config) — separate diagnostic.
+
+### Session 162 — Onassis ingestion defects: ship the recurrence-killer (Defect 1) at the save seam — 2026-05-27
+
+**Plan:** Diagnose the 3 Onassis ingestion defects behind the S161 hidden garbage rows; ship the one that kills recurrence (filter-string / bare-venue titles saved as events) before the daily pipeline re-publishes them. Defect 2 (date) conditional; Defect 3 (dedup) checkpoint.
+
+**What happened:**
+- **Step 0-1 (verified, not assumed):** entrypoint is `bun run scripts/scrape-all.ts --crossref` (`daily-automated.sh:161`); Onassis via `scrapeOnassisAdapter`. Save seam = `saveEvents` (`:1321`); scope filter at `:1359` skips insert on exclusion. Root cause: `scrape-onassis.ts:115-118` over-broad selectors capture a filter-UI string + the header "Onassis Stegi" as events.
+- **Defect 1 — FIXED (TDD) at the save seam.** Extended S100 `shouldExcludeEvent` + `event-scope.json` with `excludedTitlePatterns` + `rejectTitleEqualsVenue` (run before override keywords). 3 failing tests → green; +7 false-positive guards. Integration proof: the 3 real hidden rows now excluded (2 title-pattern, 1 title===venue); legit event still passes. Recurrence killed for all sources.
+- **Defect 2 — checkpointed** (bounded to Onassis date parser, but instances subsumed by Defect 1 + Tier-1-sensitive; needs a live sample).
+- **Defect 3 — checkpointed** (dedup identity bakes unstable `start_date` into `id`; high blast radius across all 8 scrapers; needs id-migration + parity test).
+
+**Verified:** scope-filter tests 38/38; full suite **2616 pass / 1 skip / 1 fail** — the 1 fail = pre-existing `dist/en/exhibitions/index.html` EN-cornerstone gap (unrelated, already tracked, named-file confirmed). `bunx tsc --noEmit`: 0 new errors (`scope-filter.ts` clean; the 6 `scrape-all.ts` errors are pre-existing Puppeteer/encoding, file untouched). Committed by explicit path; no deploy (recurrence fix takes effect at next build's scrape→save).
+
+**Learnings:** save-seam rejection > per-scraper patching (reuse the shared chokepoint); identity keys must exclude unstable fields; ship false-positive guards with any reject. (`mistakes.md`/`patterns.md`/`decisions.md` S162.)
+
+**Open items:** (1) Scraper-quality rewrite session: precise Onassis selectors + content-typed events + Defect 2 date fix + stable-identity dedup key with id-migration (`specs/onassis-dedup-S117-checkpoint.md`). (2) The 3 hidden rows stay `problematic` (Defect 1 now blocks re-save; deletable in the rewrite session). (3) `image` finder (carried from S161).

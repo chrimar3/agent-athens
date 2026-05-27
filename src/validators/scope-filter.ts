@@ -19,6 +19,13 @@ interface ScopeConfig {
   excludedVenues: string[];
   allowedKeywordsOverride: string[];
   excludedUrlPatterns?: string[];
+  excludedTitlePatterns?: string[];
+  rejectTitleEqualsVenue?: boolean;
+}
+
+/** Normalize a title/venue for artifact comparison: trim + collapse whitespace + lowercase. */
+function normalizeForCompare(s: string): string {
+  return s.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
 // Load scope configuration
@@ -49,6 +56,25 @@ export function shouldExcludeEvent(event: {
       if (event.url.includes(pattern)) {
         return { inScope: false, reason: `excluded_url_pattern:${pattern}` };
       }
+    }
+  }
+
+  // Scraper-artifact rejections run before allowedKeywordsOverride: filter-UI
+  // strings and bare venue-name titles are never real events, so no content-level
+  // override should resurrect them (mirrors the URL deny-list's not-overridable policy).
+  const titleNorm = normalizeForCompare(event.title || '');
+
+  if (scopeConfig.excludedTitlePatterns) {
+    for (const pattern of scopeConfig.excludedTitlePatterns) {
+      if (titleNorm.includes(normalizeForCompare(pattern))) {
+        return { inScope: false, reason: `excluded_title_pattern:${pattern}` };
+      }
+    }
+  }
+
+  if (scopeConfig.rejectTitleEqualsVenue && event.venue) {
+    if (titleNorm.length > 0 && titleNorm === normalizeForCompare(event.venue)) {
+      return { inScope: false, reason: 'title_equals_venue' };
     }
   }
 

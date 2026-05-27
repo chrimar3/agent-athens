@@ -40,6 +40,14 @@
     "productledhub.com",
     "athensseo.com"
   ],
+  "excludedTitlePatterns": [
+    "εμφανίζονται όλες οι εκδηλώσεις"
+  ],
+  "rejectTitleEqualsVenue": true,
+  "_titleArtifacts_principle": "S117 (2026-05-27): over-broad scraper selectors capture site chrome (filter-UI strings, header/logo text) as events. These are never real events. excludedTitlePatterns rejects known filter-UI substrings (whitespace/case-normalized, title only); rejectTitleEqualsVenue rejects a title that exactly equals its own venue name (the bare 'Onassis Stegi' homepage artifact). Both run at the save seam (scrape-all.ts saveEvents) so they protect ALL sources, and run before allowedKeywordsOverride so an override keyword cannot resurrect an artifact.",
+  "_titleArtifacts_log": [
+    "εμφανίζονται όλες οι εκδηλώσεις — Onassis /el/whats-on filter-status string (S117, 2026-05-27)"
+  ],
   "_excludedUrlPatterns_principle": "Per Editorial 2026-05-02: cultural participation, not professional networking. Tech meetups, business conferences, marketing/SEO/startup gatherings excluded regardless of venue. Tiebreaker: would non-practitioners attend for cultural enjoyment? If no, exclude.",
   "_excludedUrlPatterns_log": [
     "/tickets/sports/ — sports content category (S100, 2026-04-28)",

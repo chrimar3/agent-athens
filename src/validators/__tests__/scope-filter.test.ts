@@ -196,6 +196,51 @@ describe('shouldExcludeEvent', () => {
       expect(result.inScope).toBe(true);
     });
   });
+
+  describe('scraper-artifact titles (S117 — Onassis recurrence-killer)', () => {
+    // The exact filter-UI string the Onassis scraper captured as an event
+    // (note: double spaces, as stored in the DB).
+    const FILTER_STRING = 'εμφανίζονται  όλες οι εκδηλώσεις  σε  όλες τις τοποθεσίες  από  όλες τις ημερομηνίες';
+
+    test('excludes the Onassis filter-UI string title (defect 1a)', () => {
+      const result = shouldExcludeEvent({ title: FILTER_STRING, venue: 'Onassis Stegi' });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toContain('excluded_title_pattern');
+    });
+
+    test('excludes a title that exactly equals its venue name (defect 1b — bare venue)', () => {
+      const result = shouldExcludeEvent({ title: 'Onassis Stegi', venue: 'Onassis Stegi' });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toBe('title_equals_venue');
+    });
+
+    test('title===venue match is normalized (case + whitespace)', () => {
+      const result = shouldExcludeEvent({ title: '  onassis   stegi ', venue: 'Onassis Stegi' });
+      expect(result.inScope).toBe(false);
+      expect(result.reason).toBe('title_equals_venue');
+    });
+
+    // GUARDS: a too-broad reject is a new bug class. These MUST stay in scope.
+    test('GUARD: a legit short title (not equal to venue) is NOT excluded', () => {
+      const result = shouldExcludeEvent({ title: 'Eivor', venue: 'Gagarin 205' });
+      expect(result.inScope).toBe(true);
+    });
+
+    test('GUARD: a title that merely CONTAINS the venue name is NOT excluded', () => {
+      const result = shouldExcludeEvent({ title: 'Tilda Swinton at Onassis Stegi', venue: 'Onassis Stegi' });
+      expect(result.inScope).toBe(true);
+    });
+
+    test('GUARD: a real Onassis exhibition title is NOT excluded', () => {
+      const result = shouldExcludeEvent({ title: 'Yorgos Lanthimos: Photographs', venue: 'Onassis Stegi' });
+      expect(result.inScope).toBe(true);
+    });
+
+    test('GUARD: title===venue check is skipped when no venue is provided', () => {
+      const result = shouldExcludeEvent({ title: 'Some Event' });
+      expect(result.inScope).toBe(true);
+    });
+  });
 });
 
 describe('filterInScopeEvents', () => {

@@ -4396,3 +4396,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 3. **The `image` finder's source/fallback policy is a routed decision, not an executor call.** GEO Strategist rules what image source we may use/republish; Design Navigator rules the no-image treatment. The capture-layer spike (recover the `og:image` the scraper currently discards) is the executor's, but it is *gated* on the policy ruling — spiking a capture mechanism for images we can't legally use would be wasted.
 
 **Cross-references:** `specs/geo-finder-S116.md`, `specs/geo-finder-residual-S116.md`, `specs/enddate-gap-S116.md`; `mistakes.md`/`patterns.md` S161.
+
+## S162 — Onassis ingestion: fix Defect 1 at save seam; defer dedup-identity + date parser (2026-05-27)
+
+1. **Defect 1 (filter-string / bare-venue titles) fixed at the save seam**, by extending the S100 `shouldExcludeEvent` + `config/event-scope.json` mechanism (`excludedTitlePatterns`, `rejectTitleEqualsVenue`) rather than patching the Onassis scraper. Rationale: the save seam is the single chokepoint for all 10 sources, so the guard is durable across every future scrape; per-scraper selector precision is a separate quality fix. Verified: the 3 real hidden rows now excluded (2 title-pattern, 1 title===venue), 7 false-positive guard tests pass.
+2. **Defect 2 (single/wrong date → start_date, end_date empty) deferred.** Bounded to `scrape-onassis.ts`, but every observable instance is a Defect-1-rejected row, and a correct fix needs a live input sample and touches Tier-1 `COALESCE(end_date,start_date)` pageability. Folded into the scraper-quality checkpoint.
+3. **Defect 3 (dedup duplication) deferred — high blast radius (Guard 6).** Root cause: `id = md5(title + start_date [+ venue])` bakes an unstable field into identity. A stable key (source + URL slug) touches the copy-pasted `generateEventId` across all 8 scrapers + every `ON CONFLICT(id)` + an id-migration for existing rows. Its own session with a parity test. See `specs/onassis-dedup-S117-checkpoint.md`.
+
+**Cross-references:** `specs/onassis-ingestion-defects-S117.md`, `specs/onassis-dedup-S117-checkpoint.md`; `mistakes.md`/`patterns.md` S162.
