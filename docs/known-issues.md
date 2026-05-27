@@ -1146,3 +1146,14 @@ Pair with a `bun:test` assertion verifying every `LIGHT_TEXT_BADGES` member's `-
 **Workaround:** None — generation gap.
 **Fix plan:** Owner of the EN-locale workstream to wire EN cornerstone hub generation/routing so these dist pages emit. Verify the 6 `tests/build/` assertions pass.
 **Status:** Open — concurrent-workstream surface, flagged for the EN-locale owner; not from S158.
+
+## 🟡 Scraper-artifact rows published as events + Onassis exhibition date confusion (S161, 2026-05-27)
+
+**First seen:** Session 161 endDate diagnosis — surfaced while classifying pageable exhibitions.
+**Frequency:** 3 live `verified_athens` rows at time of writing; recurs on daily rescrape of the Onassis "ongoing-*" / whats-on listing.
+**Symptoms:**
+- 2 rows titled with a scraped filter-UI string `"εμφανίζονται όλες οι εκδηλώσεις … όλες τις ημερομηνίες"` and 1 bare `"Onassis Stegi"` (homepage URL) — published as exhibitions; crawlable garbage pages that dilute citability.
+- Onassis "ongoing-*" exhibitions: parser puts the **end** date into `start_date` (id `3c9f7063`: span "17 May → 28 Jun" stored as `start_date=2026-06-28`, `end_date` empty); same exhibition duplicated across multiple scrape-date `start_date`s (Barbara Kruger ×3, Μαζί Ορατές ×2).
+**Workaround (near-term, ~2 min, reversible):** set `location_status='problematic'` on the 3 artifact rows — removes them from the live site (shows `verified_athens`+`pass_through` only) without hard-delete.
+**Fix plan (root-cause session, separate):** in the Onassis scraper/parser — (a) reject titles matching the filter-string / bare-venue-name patterns before insert; (b) fix start/end assignment for "ongoing" exhibition listings (span "17 May → 28 Jun" must map start→17 May, end→28 Jun); (c) dedup on stable event identity, not scrape-date `start_date`. **Tier-1 reminder:** any `end_date` parse fix must be checked against `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')` so corrected exhibitions don't flip pageability unexpectedly.
+**Status:** Open — 3 artifact rows flagged for near-term hide; parser root-cause sized as its own session. See `specs/enddate-gap-S116.md §5`.

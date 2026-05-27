@@ -4388,3 +4388,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 4. **Urok dedup via reversible hide.** `merge-duplicates.ts` is auto-detect (no id-pair arg), so the 2 empty duplicates were hidden with `location_status='problematic'` (reversible, preserves dedup history); the rich row `27635738cfec4676` kept untouched. Per the brief's do-not-hard-delete constraint.
 
 **Cross-references:** `mistakes.md`/`patterns.md` 2026-05-26 (S159); `src/templates/site-chrome.ts`, `src/templates/colophon.ts`, `src/templates/search-overlay.ts` (385/393/401), `src/styles/design-system.css` (`.filter-bar.has-open-panel .filter-bar-scroll`); `src/templates/__tests__/colophon.test.ts`.
+
+## S161 — Geo is closed via `venues-master.json` (not QID/OSM); next finder is `image` (2026-05-27)
+
+1. **`location.geo` is sourced from `data/venues-master.json`, full stop — not Wikidata QIDs, not OSM.** 296/296 master venues carry curated lat/lng; the emitter reads them (`src/utils/normalize.ts` → `event-page.ts:209-216` / `venue-page.ts:164-176`); `fieldValidation.location.coverage="full"`. No QID finder, no OSM finder. Resolving QID→P625 closes zero geo and risks overwriting a correct curated coord with a divergent authority value (Tier-1 FAIL). This is the **third** time a geo brief assumed `config/athens-venues.json` is the geo source (S135 caught the same — `specs/s135-geo-coverage-spec.md §1`); `athens-venues.json` is a whitelist with no coordinates. Recorded so it isn't re-litigated.
+2. **Next finder = `image`, chosen against measured numbers.** Pageable image coverage 64.2% (191/534 missing), concentrated in concerts (174 missing, 30.4%). Genuinely open and citation-driving, unlike geo (full) and endDate (expected-absence).
+3. **The `image` finder's source/fallback policy is a routed decision, not an executor call.** GEO Strategist rules what image source we may use/republish; Design Navigator rules the no-image treatment. The capture-layer spike (recover the `og:image` the scraper currently discards) is the executor's, but it is *gated* on the policy ruling — spiking a capture mechanism for images we can't legally use would be wasted.
+
+**Cross-references:** `specs/geo-finder-S116.md`, `specs/geo-finder-residual-S116.md`, `specs/enddate-gap-S116.md`; `mistakes.md`/`patterns.md` S161.

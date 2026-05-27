@@ -6524,3 +6524,19 @@ constant feeding both surfaces.
 **Pattern (3rd confirmation):** "filter+search+colophon broke together" = three independent issues, not a cascade (S159, S160). Promoted to named diagnostic prior — see known-issues.
 
 **Carry-forwards (post-demo):** (1) deploy-gate gap; (2) stash-strand failure mode; (3) pre-existing /en/exhibitions/ cornerstone.
+
+### Session 161 — Geo finder diagnosis (refuted) + endDate next-candidate (refuted) → image is the real gap — 2026-05-27
+
+**Plan:** Verify venue Wikidata QID coverage, spike QID→P625 coordinate resolution, and (only if it held) backfill `location.geo` for every QID-having venue via a cached resolver. Gated: STOP if QID coverage near-zero or spike <4/5.
+
+**What happened:** Read-only throughout (plan mode). Both candidate finders refuted before any code:
+- **Geo finder — STOP.** QID coverage 10/346 (at the brief's `<10` floor). More decisively, geo is *already* fully covered via `data/venues-master.json` (296/296 venues, `fieldValidation.location.coverage="full"`); all 5 spike QID venues already have curated coords. A finder would close zero geo and risk overwriting curated coords with divergent Wikidata P625 (Tier-1 FAIL). OSM fallback also unwarranted (another geocoder for a full field).
+- **endDate next-candidate — also refuted.** No `end_date=''` (no blocker). Corpus-wide absence is *expected* (concert/theater/dj_set have no end date). Exhibition-specific real gap = 3 pageable events, not cleanly Class-A; not a finder.
+- **Real open gap named: `image`** — 64.2% pageable coverage (191/534 missing), concert 174 missing (30.4%).
+- **Incidental defect:** 3 live `verified_athens` scraper-artifact rows (filter-string / homepage titles) + Onassis exhibition start=end-date confusion / daily-rescrape dup → known-issues.
+
+**Verified:** All read-only — counts via `jq`/`sqlite3` against `config/athens-venues.json`, `data/venues-master.json`, `data/build-completeness.json`, `data/events.db`. No build, no deploy. Evidence in `specs/geo-finder-S116.md`, `specs/geo-finder-residual-S116.md`, `specs/enddate-gap-S116.md`.
+
+**Learnings:** (1) Add a gate that tests whether the gap is *open* before the gates that test how to close it — a brief can pass every gate it specifies and still build the wrong thing (`mistakes.md` S161). (2) A brief's query path is an unverified premise; a wrong jq path returns `null` ≡ "empty gap" (`patterns.md` S161). (3) Segment by type before calling a field a gap.
+
+**Open items:** (1) **Near-term — reject/hide the 3 artifact rows** (`location_status='problematic'`, 2-min, reversible). (2) Scraper root-cause session: filter-string title leak + Onassis date parsing/dedup. (3) `image` finder — first move is a routing question to GEO Strategist (source/fallback policy) + Design Navigator (no-image treatment), THEN a capture-layer spike, against the 174-missing number, with the gap-is-open gate placed first. (4) Possible venue `sameAs` emission gap (`venueSameAs.populated=5` vs 10 QIDs in config) — separate diagnostic.
