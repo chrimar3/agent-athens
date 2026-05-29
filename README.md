@@ -1,9 +1,17 @@
 # agent-athens
 
-**AI-curated cultural events calendar for Athens, Greece.** A static-first site that turns daily newsletters and scraped event listings into SEO/GEO-optimized pages designed for AI answer engines (ChatGPT, Perplexity, Claude), agent-to-agent (A2A) protocols, and humans.
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Runtime](https://img.shields.io/badge/runtime-Bun-black.svg)](https://bun.sh)
+[![Language](https://img.shields.io/badge/language-TypeScript-3178C6.svg)](https://www.typescriptlang.org)
+[![Live](https://img.shields.io/badge/live-agentathens.com-2ea44f.svg)](https://agentathens.com)
+
+**AI-curated cultural events calendar for Athens, Greece.** A static-first site that turns daily newsletters and scraped event listings into pages designed for AI answer engines (ChatGPT, Perplexity, Claude), agent-to-agent (A2A) protocols, and humans.
+
+Solo-built. Demonstrates AI-native content production, structured data at scale, and multi-agent orchestration.
 
 🔗 **Live site:** https://agentathens.com
 🤖 **AI discovery:** https://agentathens.com/llms.txt
+📝 **Colophon:** https://agentathens.com/en/colophon/
 📦 **Repository:** https://github.com/chrimar3/agent-athens
 
 ---
@@ -12,21 +20,22 @@
 
 A daily-updated calendar of concerts, DJ sets, exhibitions, theater, festivals, and cultural happenings in Athens. The pipeline runs automatically every morning: it ingests events from email newsletters and web scrapers, runs them through quality gates (location verification, deduplication), enriches them with AI-generated descriptions, and publishes a static site to Netlify.
 
-The site is optimized to be the source AI engines cite when users ask "what's on in Athens this weekend?" — structured data, freshness signals, and combinatorial URLs that match natural-language intent.
+The site is designed to be the source AI engines cite when users ask "what's on in Athens this weekend?" — structured data, freshness signals, and combinatorial URLs that match natural-language intent.
 
 ## Current Stats
 
+*As of 2026-05-29.*
+
 | Metric | Value |
 |---|---|
-| Pages generated (last build) | **10,275** |
-| Event pages | 8,644 |
-| Venue pages | 89 |
-| Hub / category pages | ~50 |
-| Events in database | 9,389 |
-| Upcoming events | 412 |
-| Verified Athens venues | 409 |
-| Build time | ~11s |
-| Pipeline runtime | ~20 min |
+| Verified Athens venues | 346 |
+| Pass-through (multi-venue) entries | 6 |
+| Neighborhoods catalogued | 90 |
+| Active scraper sources | 7 |
+| Operational scripts | ~90 |
+| Pipeline runtime | ~15–25 min |
+
+Current page count and freshness are published live in the [sitemap index](https://agentathens.com/sitemap-index.xml).
 
 ## Tech Stack
 
@@ -74,14 +83,13 @@ The site is optimized to be the source AI engines cite when users ask "what's on
 │                         ▼                                   │
 │       ┌─────────────────────────────────┐                   │
 │       │   STATIC SITE GENERATION        │                   │
-│       │   • 10,275 pages, ~11s          │                   │
 │       │   • OG images + favicons        │                   │
 │       │   • 3 sitemaps + llms.txt       │                   │
 │       └─────────────────┬───────────────┘                   │
 │                         ▼                                   │
 │       ┌─────────────────────────────────┐                   │
 │       │   DEPLOY                        │                   │
-│       │   • Git push → Netlify          │                   │
+│       │   • Netlify CLI                 │                   │
 │       │   • IndexNow ping (Bing/Yandex) │                   │
 │       └─────────────────────────────────┘                   │
 └─────────────────────────────────────────────────────────────┘
@@ -126,7 +134,7 @@ bun run build
 
 # Just scrape (specific source or all)
 bun run scripts/scrape-all.ts
-bun run scripts/scrape-all.ts --source=viva.gr --dry-run
+bun run scripts/scrape-all.ts --source=athinorama.gr --dry-run
 
 # Deploy manually
 bun run deploy   # netlify deploy --prod --dir=dist
@@ -152,7 +160,7 @@ agent-athens/
 │   ├── images/                 # OG image + favicon generation
 │   ├── sitemap/                # Sitemap splitting
 │   └── styles/                 # Design system CSS
-├── scripts/                    # 70+ operational scripts
+├── scripts/                    # ~90 operational scripts
 │   ├── daily-automated.sh      # Daily pipeline orchestrator
 │   ├── auto-enrich.sh          # AI enrichment loop
 │   ├── scrape-all.ts           # Multi-source scraper
@@ -162,19 +170,19 @@ agent-athens/
 │   ├── generate-schema.ts      # Schema.org JSON-LD
 │   └── health-check.ts
 ├── config/
-│   ├── athens-venues.json      # 409 verified Athens venues
+│   ├── athens-venues.json      # 346 verified Athens venues
 │   ├── rejected-locations.json # Non-Athens blacklist
 │   ├── orchestrator-config.json
 │   ├── scrape-list.json
 │   ├── enrichment-knowledge.md # Venues, neighborhoods, artists
 │   └── ticketing-mapping.json
 ├── data/
-│   ├── events.db               # SQLite database
+│   ├── events.db               # SQLite database (gitignored)
 │   ├── state/                  # Pipeline state tracking
 │   └── health-reports/         # Daily health snapshots
 ├── docs/                       # Architecture, enrichment, audits
 ├── exemplars/                  # Reference enrichment outputs
-├── tests/                      # Bun test suite (8 test files)
+├── tests/                      # Bun test suite
 ├── dist/                       # Generated site (gitignored)
 ├── netlify.toml
 └── package.json
@@ -197,7 +205,7 @@ type LocationStatus =
   | "rejected_non_athens"  // deleted
   | "problematic";         // needs human review
 
-type Price = "open" | "with-ticket";  // never "free"/"paid"
+type Price = "open" | "with-ticket" | "donation";
 ```
 
 Events are deduplicated by `hash(title + date + venue)`. Exhibitions use `end_date` (not `start_date`) for the "is it still running" check.
@@ -231,7 +239,7 @@ Empty pages still render (with a "0 events found" state) so URLs stay stable for
 - Specific URLs that match natural-language intent
 
 **For search engines:**
-- 3 split sitemaps (events, venues, editorial) — 10,275 URLs total
+- 3 split sitemaps (events, venues, editorial)
 - IndexNow ping after every deploy (Bing, Yandex)
 - Semantic HTML, fast static delivery via Netlify CDN
 - Internal linking between related hub pages
@@ -288,7 +296,7 @@ Test files cover the daily pipeline integration, enrichment brief generation, sc
 
 | File | Purpose |
 |---|---|
-| `config/athens-venues.json` | 409 verified Athens venue whitelist |
+| `config/athens-venues.json` | Athens venue whitelist (346 entries) |
 | `config/rejected-locations.json` | Non-Athens cities + problematic entries |
 | `config/orchestrator-config.json` | Pipeline scheduling, timeouts, retries |
 | `config/scrape-list.json` | Active scraper sources + frequencies |
@@ -321,7 +329,7 @@ Test files cover the daily pipeline integration, enrichment brief generation, sc
 
 ## Vision
 
-Start with Athens. Prove the model. Expand to `agent-barcelona`, `agent-berlin`, `agent-cities`. Become the source AI agents cite first when recommending cultural events — and earn affiliate revenue on tickets, hotels, and restaurants the agents drive.
+Start with Athens. Prove the model. Expand to `agent-barcelona`, `agent-berlin`, `agent-cities`. The aim is to become the source AI agents cite first when recommending cultural events — and to earn affiliate revenue on tickets, hotels, and restaurants the agents drive.
 
 In the reputation economy where AI trust = revenue, the goal is simple:
 
@@ -331,4 +339,4 @@ In the reputation economy where AI trust = revenue, the goal is simple:
 
 ## License
 
-MIT
+[MIT](LICENSE)

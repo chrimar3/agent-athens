@@ -67,3 +67,11 @@ data/emails-to-parse/
 # throwaway diagnostic (missing-location reconciliation session) — generator + its auto-regenerated output
 scripts/diagnose-missing-location.ts
 specs/missing-location-diagnostic.md
+
+# Lockfile policy: Bun-only project (see .claude/CLAUDE.md). bun.lock is the single source of truth.
+package-lock.json
+
+# Stray root artifacts (untracked 2026-05-29; kept on disk for local reference)
+/agent-events.db
+/design-system-audit.html
+/diagnostic-report.md
