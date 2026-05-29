@@ -35,8 +35,6 @@ The site is designed to be the source AI engines cite when users ask "what's on 
 | Operational scripts | ~90 |
 | Pipeline runtime | ~15–25 min |
 
-Current page count and freshness are published live in the [sitemap index](https://agentathens.com/sitemap-index.xml).
-
 ## Tech Stack
 
 - **Runtime:** [Bun](https://bun.sh) (never Node.js — see `.claude/CLAUDE.md`)
