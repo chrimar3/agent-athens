@@ -143,6 +143,9 @@ const INDEXES_DDL: string[] = [
   "CREATE INDEX IF NOT EXISTS idx_bwt_grounding_window ON bwt_grounding_queries(export_window_end);",
   "CREATE INDEX IF NOT EXISTS idx_gsc_observed ON gsc_queries_long(observed_date);",
   "CREATE INDEX IF NOT EXISTS idx_ga4_observed ON ga4_ai_referrals(observed_date);",
+  // Idempotency grain for scripts/kpi-import-ga4.ts upsert (S100b): one row per
+  // engine per landing page per day. UNIQUE so ON CONFLICT(...) DO UPDATE works.
+  "CREATE UNIQUE INDEX IF NOT EXISTS idx_ga4_airef_grain ON ga4_ai_referrals (observed_date, referrer_engine, landing_page);",
   "CREATE INDEX IF NOT EXISTS idx_botlog_ts ON server_log_ai_bots(ts);",
   "CREATE INDEX IF NOT EXISTS idx_botlog_bot ON server_log_ai_bots(bot_name);",
 ];

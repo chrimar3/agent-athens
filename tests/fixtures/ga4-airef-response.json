@@ -1,0 +1,15 @@
+{
+  "_note": "Synthesized from the real runReport() response shape captured in the S100b Step-1 Bun gRPC spike (property 525325167). Real data showed sessionSource='chatgpt.com' (27 sessions/28d); the perplexity.ai and copilot.microsoft.com rows are fabricated-shape (NOT fabricated data — fixtures only) so the host-filter test can prove all three brief hosts map. Dimension order: date, sessionSource, landingPage. Metric order: sessions, activeUsers.",
+  "dimensionHeaders": [{ "name": "date" }, { "name": "sessionSource" }, { "name": "landingPage" }],
+  "metricHeaders": [{ "name": "sessions" }, { "name": "activeUsers" }],
+  "rowCount": 7,
+  "rows": [
+    { "dimensionValues": [{ "value": "20260526" }, { "value": "chatgpt.com" }, { "value": "/en/this-week" }], "metricValues": [{ "value": "9" }, { "value": "7" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "chatgpt.com" }, { "value": "/" }], "metricValues": [{ "value": "4" }, { "value": "3" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "(direct)" }, { "value": "/" }], "metricValues": [{ "value": "6" }, { "value": "6" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "google" }, { "value": "/" }], "metricValues": [{ "value": "3" }, { "value": "1" }] },
+    { "dimensionValues": [{ "value": "20260528" }, { "value": "perplexity.ai" }, { "value": "/exhibitions" }], "metricValues": [{ "value": "2" }, { "value": "2" }] },
+    { "dimensionValues": [{ "value": "20260528" }, { "value": "copilot.microsoft.com" }, { "value": "/en/" }], "metricValues": [{ "value": "1" }, { "value": "1" }] },
+    { "dimensionValues": [{ "value": "20260529" }, { "value": "bing" }, { "value": "/" }], "metricValues": [{ "value": "5" }, { "value": "4" }] }
+  ]
+}
