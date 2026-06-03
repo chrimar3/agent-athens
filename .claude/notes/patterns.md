@@ -5408,3 +5408,15 @@ Recurrence #10 in the verify-paths-in-briefs ledger (the brief asserted a curren
 **Naming convention for refuted briefs (decided):** original S-number + `-refutation` suffix (e.g. `specs/genre-emission-gate-S165-refutation.md`). Numbers are not burned — burning creates index gaps that read as missing sessions; suffixes preserve the linear ledger and make refutations searchable as a class. Applies to spec file names and to notes-entry titles (disambiguate with topic when the S-number has been bound multiple times, e.g. `S165 (refutation, genre-emission-gate)`).
 
 **Connects to:** `specs/genre-emission-gate-S165-refutation.md`; `specs/image-finder-S165.md` (prior S165 refutation); `decisions.md` / `mistakes.md` S165 (refutation); user-memory `feedback_verify_paths_in_briefs`, `feedback_gate_gap_is_open_before_how_to_close`; sister-pattern "Dual build paths diverge silently" above.
+
+## S100b (GA4 leg) — Bun-native GA4 import: default gRPC runs in-process (2026-06-03)
+
+**Reusable GA4-import runtime/transport.** `@google-analytics/data@6.1.0`'s `BetaAnalyticsDataClient` runs **inside Bun under its default gRPC transport** — no REST fallback needed, no Python edge, no subprocess. Scenario A (pure-Bun) won the Step-1 runtime gate on the first probe (property 525325167, service-account key at `~/.config/agentathens/gcp-kpi-reader.json` via `GOOGLE_APPLICATION_CREDENTIALS`). The `protobufjs` postinstall stays **untrusted/blocked** and the client still works — gRPC under Bun does not need that codegen step. So the default `bun pm` security posture (block postinstalls) is compatible with this client; don't reflexively `bun pm trust`.
+
+Field mapping confirmed against the live response (positional — request dimension/metric order must match read order): dimensions `date`(YYYYMMDD) / `sessionSource` / `landingPage`; metrics `sessions`(index 0) / `activeUsers`(index 1). GA4 reports ChatGPT referrals as `sessionSource = "chatgpt.com"` (confirmed, 27 sessions/28d); perplexity/copilot had no live traffic to confirm their exact host strings — hence the near-miss guard below.
+
+**Near-miss guard pattern (instrument the unknown without importing it).** When an allow-list maps a small set of known host strings but the *exact* string for some members is unconfirmed, log dropped sources whose substring matches an engine name (`perplexity`/`copilot`/`gemini`/`claude`) to stderr as `UNMATCHED_AI_SOURCE=<value>` — surface the first real referral under an unexpected host instead of silently missing it, while still NOT importing an unconfirmed string. Fail-loud beats fail-silent for the one signal a table exists to catch.
+
+**Window discipline:** query COMPLETE days only (`8daysAgo→1daysAgo`), never `…→today` — GA4's current day is partial and revises for ~48h, which would turn idempotent "latest wins" into "latest churns."
+
+**Connects to:** `scripts/kpi-import-ga4.ts`; `decisions.md`/`mistakes.md` S100b; `feedback_verify_paths_in_briefs` (memory — B-pivot premise was stale).
