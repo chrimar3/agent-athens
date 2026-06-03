@@ -1006,3 +1006,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 | `ga4_ai_referrals` had no UNIQUE constraint on its natural grain, so the brief's literal `INSERT OR REPLACE` could not dedupe — it would silently append duplicates on every re-run. The idempotency the brief assumed was not enforceable against the schema as built. | Surfaced the gap before writing the importer; operator chose DB-enforced idempotency: add `idx_ga4_airef_grain UNIQUE(observed_date, referrer_engine, landing_page)` to `kpi-init.ts` (canonical schema) + `ON CONFLICT … DO UPDATE` upsert (true in-place update, unlike `INSERT OR REPLACE` which delete-reinserts and burns the autoincrement id). Importer also runs the `CREATE UNIQUE INDEX IF NOT EXISTS` defensively at startup against an un-migrated db. Lesson: "make it idempotent via INSERT OR REPLACE" is only realizable if a UNIQUE/PK conflict target exists — check the schema, don't assume the conflict target. |
 
 **Cross-references:** `patterns.md`/`decisions.md` S100b; `scripts/kpi-import-ga4.ts`, `scripts/kpi-init.ts`; user-memory `feedback_verify_paths_in_briefs`, `feedback_propagation_is_finishing_guard6`.
+
+## S102 (Session 170) — Alias undercount: a near-miss, not a shipped bug (2026-06-03)
+
+| What | Why | Fix |
+|------|-----|-----|
+| The S101 importer's last-write-wins upsert (`SET sessions = excluded.sessions`) would have silently **undercounted** an engine once two host strings mapped to it on the same (date, landing) grain. NOT a shipped bug — S101 had exactly one source string per engine, so no grain ever collided; the latent defect would have activated the moment `chat.openai.com` (chatgpt alias) was added without pre-summing. | Caught at design time (Step 0 read of the as-shipped upsert confirmed last-write-wins, not summing) rather than after undercounting shipped. Logged as a near-miss per the brief's "near-miss note only" guidance. | S102 added in-memory grain-summing in `transformRows` before the upsert; the upsert stays last-write-wins so idempotency holds. The general rule lives in `patterns.md` S102: **before adding an alias to a token map, verify the write path sums or pre-sum in memory.** |
+
+**Cross-references:** `patterns.md`/`decisions.md` S102; `scripts/kpi-import-ga4.ts`.

@@ -4460,3 +4460,17 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 **Real first import:** 18 rows / 19 sessions, 100% `chatgpt` (2026-05-26→2026-06-02). Zero perplexity/copilot — honest zero, no `UNMATCHED_AI_SOURCE` fired (no near-miss hiding under an unexpected host). kpi.db gitignored; no deploy.
 
 **Cross-references:** `patterns.md`/`mistakes.md` S100b; `scripts/kpi-import-ga4.ts`, `scripts/kpi-report.ts`, `scripts/kpi-init.ts`; user-memory `feedback_verify_paths_in_briefs`.
+
+## S102 (Session 170) — GA4 importer reconciled to full 5-engine channel (2026-06-03)
+
+**Decision: widen kpi-import-ga4.ts from 3 hosts to the full 5-engine channel** (chatgpt, perplexity, gemini, copilot, claude) per the locked 2026-02-19 channel definition. **Membership, not schema promotion** — `ga4_ai_referrals`'s CHECK already permitted all five since S101; `kpi-init.ts` untouched, `idx_ga4_airef_grain` unchanged. The S101 3-host narrowing (2026-05-30 GEO ruling) is superseded; gemini (#2 AI engine) was a measurement blind spot.
+
+**Host→engine map (6 hosts → 5 tokens):** added `gemini.google.com→gemini`, `claude.ai→claude`, and the `chat.openai.com→chatgpt` **alias**. Exact-host equality only — `google` must never substring-match `gemini` (GEO point #2; locked by the exactness test: a 30-session `google` decoy is dropped, not attributed to gemini).
+
+**Alias-sum implementation:** `transformRows` aggregates sessions on the (observed_date, referrer_engine, landing_page) grain via an in-memory `Map` **before** the upsert. Chosen over SQL-side summing (`SET sessions = sessions + excluded.sessions`) because that would break idempotency — re-runs would double-count. The upsert stays last-write-wins (`SET sessions = excluded.sessions`); the batch is pre-summed, so re-imports overwrite with the same total. See `patterns.md` S102.
+
+**Near-miss guard re-scoped:** with all hosts mapped, `UNMATCHED_AI_SOURCE` now fires only on host-string DRIFT; `AI_ENGINE_HINTS` gained `chatgpt`/`openai` so a chatgpt/openai host variant also surfaces.
+
+**Live state:** dry-run unchanged (18 chatgpt rows, no organic pulled in, no drift fired); gemini/claude/perplexity/copilot honest-zero (no traffic yet — empty ≠ broken per GEO ruling + GA4 native-channel docs). Real run idempotent (18→18). Single commit `3181d305b`, 3 files, no deploy.
+
+**Cross-references:** `patterns.md`/`mistakes.md` S102; `scripts/kpi-import-ga4.ts`; decisions.md S100b (the S101 3-host narrowing this supersedes).

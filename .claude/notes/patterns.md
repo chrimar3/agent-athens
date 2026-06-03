@@ -5420,3 +5420,13 @@ Field mapping confirmed against the live response (positional — request dimens
 **Window discipline:** query COMPLETE days only (`8daysAgo→1daysAgo`), never `…→today` — GA4's current day is partial and revises for ~48h, which would turn idempotent "latest wins" into "latest churns."
 
 **Connects to:** `scripts/kpi-import-ga4.ts`; `decisions.md`/`mistakes.md` S100b; `feedback_verify_paths_in_briefs` (memory — B-pivot premise was stale).
+
+## S102 (Session 170) — Alias-to-single-engine summing BEFORE a last-write-wins upsert (2026-06-03)
+
+**Reusable trap.** When two source keys map to one canonical token (`chatgpt.com` + `chat.openai.com` → `chatgpt`), they collide on the storage grain. If the upsert is last-write-wins (`ON CONFLICT … DO UPDATE SET x = excluded.x`), the second colliding row silently **overwrites** the first instead of adding to it → undercount. The fix is **in-memory aggregation on the grain before the upsert**, NOT SQL-side accumulation.
+
+**Why not sum in SQL** (`SET sessions = sessions + excluded.sessions`): it would break idempotency — every re-import would add to the stored value, so running twice doubles it. The correct shape is: sum within the import batch (a `Map` keyed by the grain tuple), then upsert with plain last-write-wins. Re-imports overwrite with the same batch total → idempotent AND alias-correct. Single source per engine (the S101 state) hid this; the alias is what introduces the first same-grain collision.
+
+**Diagnostic before widening any map to include an alias:** check whether the write path is last-write-wins or summing. If last-write-wins, an alias mapping is a latent undercount until you pre-sum. `kpi-import-ga4.ts:transformRows` is the reference implementation; the load-bearing test is the 5+3→8 single-row assertion.
+
+**Connects to:** `scripts/kpi-import-ga4.ts`; `decisions.md`/`mistakes.md` S102; patterns.md S100b (Bun-native GA4 import).
