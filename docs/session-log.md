@@ -6729,3 +6729,18 @@ constant feeding both surfaces.
 - perplexity.ai / copilot.microsoft.com host strings unconfirmed (no traffic yet) — near-miss guard surfaces them on first hit.
 - 5-engine CHECK (chatgpt/perplexity/gemini/copilot/claude) vs 3-host GEO scope — standing GEO Strategist question if gemini/claude ever in scope. 2-line importer change, no schema churn.
 - GSC + server-log S100b importer siblings remain parked (kpi-import-logs.ts still gated on BWT CSV header probe).
+
+### Session 170 — S102 GA4 5-Engine Reconciliation + Alias-Sum — 2026-06-03
+
+**Plan:** Widen kpi-import-ga4.ts from S101's 3 hosts to the locked 5-engine channel (+gemini +claude +chat.openai.com alias), with alias-summing before upsert.
+
+**What happened:** Step 0 confirmed upsert is last-write-wins → alias-sum required. Map → 6 hosts/5 tokens; transformRows sums on the (observed_date, referrer_engine, landing_page) grain before the upsert (in-memory, not SQL-side — SQL `+=` would break idempotency); near-miss guard re-scoped to host-string drift (+chatgpt/openai hints). 9 importer tests green.
+
+**Verified:** dry-run 18 chatgpt rows, no organic→gemini, no drift fired; gemini/claude/perplexity/copilot honest-zero; real run idempotent (18→18); report renders unedited; full suite 2660 pass + tsc at S101 baseline (1 pre-existing httpbin flake, 24 pre-existing scraper tsc errors, all unchanged). Commits 3181d30 (feat), 77e09cc (docs). No deploy (kpi.db gitignored).
+
+**Learnings:** (in notes — patterns: alias-to-single-engine summing before a last-write-wins upsert; decisions: 5-engine membership-not-promotion + exact-host map; mistakes: alias undercount caught at design time, near-miss not shipped.)
+
+**Open items:**
+- gemini/claude/perplexity/copilot host strings still unconfirmed against live traffic — drift guard surfaces variants on first hit.
+- GSC + server-log S100b importer siblings remain parked (kpi-import-gsc.ts; kpi-import-logs.ts gated on the BWT CSV header probe).
+- Dormant GA4-native-channel consolidation flag wakes only if Google ships a recognized-referrer list covering Perplexity + Copilot.
