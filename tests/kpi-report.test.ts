@@ -11,7 +11,7 @@ import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
 import { Database } from 'bun:sqlite';
 import { mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
-import { LAYERS, renderReport } from '../scripts/kpi-report';
+import { LAYERS, renderReport, openReportDb } from '../scripts/kpi-report';
 
 const TMP_DIR = join(import.meta.dir, 'tmp/kpi-report');
 const TMP_DB = join(TMP_DIR, 'test-kpi.db');
@@ -92,6 +92,26 @@ describe('renderReport — honest empty-state (not fabricated zeros)', () => {
     for (const layer of LAYERS) {
       expect(lineFor(report, layer.label)).not.toBe('');
     }
+  });
+});
+
+describe('openReportDb — WAL compatibility (regression)', () => {
+  test('opens a WAL-mode db for reading without SQLITE_CANTOPEN', () => {
+    // Reproduce the live failure mode: the importer leaves kpi.db in WAL mode,
+    // and `{ readonly: true }` cannot open it (needs to write the -shm).
+    db = makeDb();
+    db.exec('PRAGMA journal_mode = WAL;');
+    db.prepare('INSERT INTO ga4_ai_referrals (referrer_engine, landing_page, sessions, observed_date, imported_at) VALUES (?,?,?,?,?)')
+      .run('chatgpt', '/en/x', 7, '2026-06-01', 'x');
+    db.close();
+
+    const ro = openReportDb(TMP_DB);
+    const report = renderReport(ro); // must not throw
+    expect(lineFor(report, 'GA4 AI referrals')).toContain('7 sessions');
+    // query_only is enforced: writes are rejected at the connection level.
+    expect(() => ro.exec("INSERT INTO ga4_ai_referrals (referrer_engine, landing_page, sessions, observed_date, imported_at) VALUES ('chatgpt','/y',1,'2026-06-01','x')")).toThrow();
+    ro.close();
+    db = makeDb(); // reset handle for afterEach close()
   });
 });
 

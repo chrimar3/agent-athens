@@ -73,8 +73,20 @@ export function renderReport(db: Database): string {
   return lines.join('\n');
 }
 
+/**
+ * Open kpi.db for reading. Deliberately NOT `{ readonly: true }`: the importer
+ * runs the db in WAL mode, and SQLite cannot open a WAL database read-only (it
+ * needs write access to the -shm wal-index → SQLITE_CANTOPEN). Instead open a
+ * normal handle and enforce read-only at the connection level via query_only.
+ */
+export function openReportDb(path: string): Database {
+  const db = new Database(path);
+  db.exec('PRAGMA query_only = ON;');
+  return db;
+}
+
 function main(): void {
-  const db = new Database(DB_PATH, { readonly: true });
+  const db = openReportDb(DB_PATH);
   console.log(renderReport(db));
   db.close();
 }
