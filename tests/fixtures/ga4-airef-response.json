@@ -1,15 +1,17 @@
 {
-  "_note": "Synthesized from the real runReport() response shape captured in the S100b Step-1 Bun gRPC spike (property 525325167). Real data showed sessionSource='chatgpt.com' (27 sessions/28d); the perplexity.ai and copilot.microsoft.com rows are fabricated-shape (NOT fabricated data — fixtures only) so the host-filter test can prove all three brief hosts map. Dimension order: date, sessionSource, landingPage. Metric order: sessions, activeUsers.",
+  "_note": "Synthesized from the real runReport() response shape captured in the S100b Step-1 Bun gRPC spike (property 525325167). Only chatgpt.com was observed in real data; the chat.openai.com alias, perplexity.ai, claude.ai, gemini.google.com, and copilot.microsoft.com rows are fabricated-SHAPE (NOT fabricated data — fixtures only) to exercise the full 5-engine channel (S102 reconciliation). Rows 2+3 are the SAME-grain alias pair (chatgpt.com + chat.openai.com on 2026-05-26 /en/festivals) for the alias-sum test → one chatgpt row, sessions 5+3=8. The google (organic, 30 sessions) and (direct) rows are decoys that MUST drop and MUST NOT be attributed to gemini. Dimension order: date, sessionSource, landingPage. Metric order: sessions, activeUsers.",
   "dimensionHeaders": [{ "name": "date" }, { "name": "sessionSource" }, { "name": "landingPage" }],
   "metricHeaders": [{ "name": "sessions" }, { "name": "activeUsers" }],
-  "rowCount": 7,
+  "rowCount": 9,
   "rows": [
     { "dimensionValues": [{ "value": "20260526" }, { "value": "chatgpt.com" }, { "value": "/en/this-week" }], "metricValues": [{ "value": "9" }, { "value": "7" }] },
-    { "dimensionValues": [{ "value": "20260527" }, { "value": "chatgpt.com" }, { "value": "/" }], "metricValues": [{ "value": "4" }, { "value": "3" }] },
-    { "dimensionValues": [{ "value": "20260527" }, { "value": "(direct)" }, { "value": "/" }], "metricValues": [{ "value": "6" }, { "value": "6" }] },
-    { "dimensionValues": [{ "value": "20260527" }, { "value": "google" }, { "value": "/" }], "metricValues": [{ "value": "3" }, { "value": "1" }] },
-    { "dimensionValues": [{ "value": "20260528" }, { "value": "perplexity.ai" }, { "value": "/exhibitions" }], "metricValues": [{ "value": "2" }, { "value": "2" }] },
-    { "dimensionValues": [{ "value": "20260528" }, { "value": "copilot.microsoft.com" }, { "value": "/en/" }], "metricValues": [{ "value": "1" }, { "value": "1" }] },
-    { "dimensionValues": [{ "value": "20260529" }, { "value": "bing" }, { "value": "/" }], "metricValues": [{ "value": "5" }, { "value": "4" }] }
+    { "dimensionValues": [{ "value": "20260526" }, { "value": "chatgpt.com" }, { "value": "/en/festivals" }], "metricValues": [{ "value": "5" }, { "value": "4" }] },
+    { "dimensionValues": [{ "value": "20260526" }, { "value": "chat.openai.com" }, { "value": "/en/festivals" }], "metricValues": [{ "value": "3" }, { "value": "2" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "perplexity.ai" }, { "value": "/en/exhibitions" }], "metricValues": [{ "value": "2" }, { "value": "2" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "claude.ai" }, { "value": "/en/kids" }], "metricValues": [{ "value": "4" }, { "value": "3" }] },
+    { "dimensionValues": [{ "value": "20260528" }, { "value": "gemini.google.com" }, { "value": "/en/nightlife" }], "metricValues": [{ "value": "6" }, { "value": "5" }] },
+    { "dimensionValues": [{ "value": "20260528" }, { "value": "copilot.microsoft.com" }, { "value": "/en/open" }], "metricValues": [{ "value": "1" }, { "value": "1" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "google" }, { "value": "/" }], "metricValues": [{ "value": "30" }, { "value": "20" }] },
+    { "dimensionValues": [{ "value": "20260527" }, { "value": "(direct)" }, { "value": "/" }], "metricValues": [{ "value": "6" }, { "value": "6" }] }
   ]
 }
