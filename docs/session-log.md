@@ -6706,3 +6706,26 @@ constant feeding both surfaces.
 **Open items:**
 - Optional: add `onassis.org`/`tickets.onassis.org` to the ticket-host allowlist OR register Onassis Stegi in the venue registry, so venue box-office ticket URLs persist.
 - Gran Ballo: DB `type=dj_set` but it is a 19th-c. historical ball — written accurately; no valid concern_type for type mismatch, flagged in batch review for editor. Brief also lists batch-2 (separate run).
+
+### Session 169 — S100b GA4 Importer Leg (Bun-native) [arc S100b/S101] — 2026-06-03
+
+**Plan:** Ship single-runtime GA4 AI-referral importer (kpi-import-ga4.ts) + kpi.db reader (kpi-report.ts), completing the S100b GA4 leg. A (pure-Bun) attempted first, B (Python→JSON→Bun) as in-session fallback.
+
+**What happened:**
+- Step 1 runtime gate: @google-analytics/data@6.1.0 BetaAnalyticsDataClient ran in-process under Bun default gRPC on first probe — no REST fallback, no Python. A viable; B never triggered. Real fields confirmed: dims date/sessionSource/landingPage, metrics sessions/activeUsers. ChatGPT sessionSource = "chatgpt.com".
+- Target table ga4_ai_referrals (referrer_engine, landing_page, sessions, observed_date, imported_at). No unique grain constraint existed → Option 2: idx_ga4_airef_grain UNIQUE added to kpi-init.ts + ON CONFLICT DO UPDATE upsert.
+- Importer: live Bun fetch → 3-host filter → upsert, --dry-run, near-miss UNMATCHED_AI_SOURCE stderr guard. Reader: per-layer summary, honest empty-state.
+- First real import: 18 rows / 19 sessions, 100% chatgpt (2026-05-26→06-02). Re-run idempotent (18→18). Zero perplexity/copilot (honest zero, guard didn't fire).
+
+**Verified:** 14 new tests green; full suite 2657 pass / 1 pre-existing network flake (httpbin, untouched). My files tsc-clean (24 pre-existing scraper-baseline errors unchanged). 3 commits (e618f45 feat, 5e1d56e docs, c128224 WAL fix), no push, no deploy (kpi.db gitignored).
+
+**Surprises:**
+- WAL/readonly bug caught at real-run, not unit tests: reader opened kpi.db {readonly:true} → SQLITE_CANTOPEN on WAL-mode db. Tests injected an already-open non-WAL handle, never exercising the open path. Fixed via PRAGMA query_only=ON on a normal handle + WAL regression test.
+- B-pivot premise stale: no live src/scraping/ Python scrapers (all Bun/TS; .py only in _archive/). Moot (A won) but logged.
+
+**Learnings:** (in notes — patterns: Bun-native gRPC GA4 import pattern; mistakes: prior spike proceeded in Python past Bun-check, halts bind on runtime conformance; decisions: A-vs-B outcome + dim/metric mapping + Option 2 idempotency.)
+
+**Open items:**
+- perplexity.ai / copilot.microsoft.com host strings unconfirmed (no traffic yet) — near-miss guard surfaces them on first hit.
+- 5-engine CHECK (chatgpt/perplexity/gemini/copilot/claude) vs 3-host GEO scope — standing GEO Strategist question if gemini/claude ever in scope. 2-line importer change, no schema churn.
+- GSC + server-log S100b importer siblings remain parked (kpi-import-logs.ts still gated on BWT CSV header probe).
