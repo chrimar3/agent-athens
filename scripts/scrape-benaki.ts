@@ -12,6 +12,12 @@ import { upsertEvent, getDatabase } from '../src/db/database';
 import { log } from '../src/utils/logger';
 import { createHash } from 'crypto';
 import type { Event } from '../src/types';
+import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
+import type { DomDocument } from './dom-eval-types';
+
+// Browser surface for page.evaluate() callbacks — module-local on purpose;
+// see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
+declare const document: DomDocument;
 
 const SOURCE_ID = 'benaki';
 const BASE_URL = 'https://www.benaki.org';
@@ -245,6 +251,15 @@ export async function saveBenakiExhibitions(exhibitions: ScrapedExhibition[]): P
     const venueInfo = BENAKI_VENUES[exh.venue_key] || BENAKI_VENUES['greek-culture'];
 
     const event: Event = {
+      // Schema/enrichment fields the DB mapper derives on read (rowToEvent);
+      // set here to explicit scrape-time defaults — never fabricated values.
+      "@context": 'https://schema.org',
+      "@type": SCHEMA_TYPE_MAP['exhibition'] || 'Event',
+      hasNativeGreek: false,        // no Greek description exists at scrape time
+      ticketUrlResolved: null,      // "not yet resolved" must be explicit null (D11)
+      language: 'en',               // mirrors rowToEvent: 'en' when no descriptions yet
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       id: generateEventId(exh.title, exh.start_date),
       title: exh.title,
       description: exh.description,

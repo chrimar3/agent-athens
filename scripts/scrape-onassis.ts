@@ -22,6 +22,7 @@ import { categorizeEventSimple } from '../src/categorizer';
 import { log } from '../src/utils/logger';
 import { createHash } from 'crypto';
 import type { Event, EventType } from '../src/types';
+import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 
 const SOURCE_ID = 'onassis';
 const BASE_URL = 'https://www.onassis.org';
@@ -290,6 +291,15 @@ export async function saveOnassisExhibitions(events: ScrapedExhibition[]): Promi
     }
 
     const event: Event = {
+      // Schema/enrichment fields the DB mapper derives on read (rowToEvent);
+      // set here to explicit scrape-time defaults — never fabricated values.
+      "@context": 'https://schema.org',
+      "@type": SCHEMA_TYPE_MAP[exh.type] || 'Event',
+      hasNativeGreek: false,        // no Greek description exists at scrape time
+      ticketUrlResolved: null,      // "not yet resolved" must be explicit null (D11)
+      language: 'en',               // mirrors rowToEvent: 'en' when no descriptions yet
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       id: generateEventId(exh.title, exh.start_date),
       title: exh.title,
       description: exh.description,

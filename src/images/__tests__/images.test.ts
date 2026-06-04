@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
+import { describe, test, expect, beforeAll, afterAll, mock } from 'bun:test';
 import { Database } from 'bun:sqlite';
 import { getReferer } from '../download-image';
 import { optimizeImage } from '../optimize-image';
@@ -135,16 +135,28 @@ describe('processEventImage', () => {
   });
 
   test('returns null and leaves DB unchanged on failed download', async () => {
-    const result = await processEventImage(
-      'test-pipeline-1',
-      'https://httpbin.org/status/404',
-      'unknown',
-      db
-    );
+    // Deterministic 404: stub global fetch (same pattern as geocode.test.ts)
+    // instead of hitting a real endpoint — the live httpbin.org call made this
+    // test flaky whenever the response exceeded the 5s bun-test timeout.
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = mock(() =>
+      Promise.resolve(new Response('Not Found', { status: 404 }))
+    ) as unknown as typeof fetch;
 
-    expect(result).toBeNull();
+    try {
+      const result = await processEventImage(
+        'test-pipeline-1',
+        'https://example.invalid/missing.jpg',
+        'unknown',
+        db
+      );
 
-    const row = db.prepare('SELECT image_local FROM events WHERE id = ?').get('test-pipeline-1') as any;
-    expect(row.image_local).toBeNull();
+      expect(result).toBeNull();
+
+      const row = db.prepare('SELECT image_local FROM events WHERE id = ?').get('test-pipeline-1') as any;
+      expect(row.image_local).toBeNull();
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

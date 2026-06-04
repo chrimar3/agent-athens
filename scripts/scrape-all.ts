@@ -39,6 +39,12 @@ import { categorizeEventSimple } from '../src/categorizer';
 import { normalizeTheaterSpelling } from '../src/validators/event-categorizer';
 import { extractOgImage } from '../src/utils/image-extractor';
 import { upgradeAthinoramaImage } from '../src/utils/athinorama-image';
+import type { DomDocument, DomElement } from './dom-eval-types';
+
+// Browser surface for page.evaluate() callbacks — module-local on purpose;
+// see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
+declare const document: DomDocument;
+type HTMLElement = DomElement;
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -87,6 +93,10 @@ function generateEventId(title: string, date: string, venue: string): string {
 }
 
 function decodeWindows1253(buffer: ArrayBuffer): string {
+  // bun-types' Encoding union omits 'windows-1253', but the Bun runtime
+  // supports it (decodes Greek ICS feeds in production daily). The directive
+  // below self-reports as unused when bun-types widens the union.
+  // @ts-expect-error -- narrow bun-types Encoding union; runtime-verified
   const decoder = new TextDecoder('windows-1253');
   return decoder.decode(buffer);
 }

@@ -20,6 +20,12 @@ import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType } from '../src/db/database';
+import type { DomDocument, DomAnchor } from './dom-eval-types';
+
+// Browser surface for page.evaluate() callbacks — module-local on purpose;
+// see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
+declare const document: DomDocument;
+type HTMLAnchorElement = DomAnchor;
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
