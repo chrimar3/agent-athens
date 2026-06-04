@@ -4474,3 +4474,24 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 **Live state:** dry-run unchanged (18 chatgpt rows, no organic pulled in, no drift fired); gemini/claude/perplexity/copilot honest-zero (no traffic yet — empty ≠ broken per GEO ruling + GA4 native-channel docs). Real run idempotent (18→18). Single commit `3181d305b`, 3 files, no deploy.
 
 **Cross-references:** `patterns.md`/`mistakes.md` S102; `scripts/kpi-import-ga4.ts`; decisions.md S100b (the S101 3-host narrowing this supersedes).
+
+## Portfolio claim-string policy — locked (2026-06-04)
+
+**Decision: all public claim surfaces (README, CV, outreach email) use floor-framed, live-verifiable numbers with a monotonic headline.** Locked after the 2026-06-04 read-only audit (`specs/portfolio-claims-audit.md`) found the CV underselling pages by 37% (~2,820 vs 4,468 built) while outreach email oversold ~3× ("~12,000 pages" — almost certainly DB *events* conflated with *pages*).
+
+**The locked string set:**
+- Pages: **"3,800+ daily-rebuilt pages (live sitemap-indexed URLs)"** — sitemap floor (3,785 live on audit day), never a precise count. Sitemap basis chosen because a recruiter can verify it in one click (`/sitemap-index.xml`); HTML-file basis (4,468) includes non-indexed /en/ mirrors and drifts with build internals.
+- Headline (monotonic, README stats block): **"10 scraper sources · 2,660+ tests · ~80% measured coverage · 13,900+ events ingested · automated daily build & deploy"** — every figure floor-framed so drift only makes it MORE true.
+- Sources: **"10"** (scrape-all.ts SOURCES registry 9 + snfcc). `config/scrape-list.json` says 7 — that config is stale and was the README's bad witness; its reconciliation is a separate follow-up. Do NOT cite it for source counts.
+- Coverage: **"~80% measured coverage"** — never "full test coverage" (measured 80.73% func / 79.29% line). Never "fully type-checked" (tsc has ~25 errors confined to scripts/scrape-*.ts).
+- Enrichment: **"headless Claude Code (claude -p), zero external API cost"** — never "subagent pipelines" (no Task/subagent fan-out exists in the production pipeline).
+- Neighborhoods: **"70+"** (venues-master basis, 72 measured). The old "90" reproduced from no catalog (49 config / 65 utils / 72 master) — retired.
+- Daily-drifting exact stats (e.g. pass-through count) do not belong on claim surfaces — floors or nothing.
+
+**Why floors:** events accumulate and pages/tests only grow, so floor strings age into understatement (safe) instead of overstatement (credibility burn). Exact-but-stale numbers do the opposite.
+
+**CV is a deployed asset, not a doc:** `static/root-files/cv.pdf` serves live at `agentathens.com/cv.pdf` — PDF-only, no text source in repo (Branch B: swap strings emitted to Christos rather than binary surgery). Any future CV regeneration should land the locked strings.
+
+**llms.txt needs no policy:** its source count is computed live from the DB (`src/generate-site.ts:1383`) — self-maintaining by construction, the model other surfaces should aspire to.
+
+**Cross-references:** `specs/portfolio-claims-audit.md` (full discrepancy matrix); README.md stats block (2026-06-04); user-memory `feedback_verify_paths_in_briefs` (+3 entries from the audit session).

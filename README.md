@@ -24,14 +24,16 @@ The site is designed to be the source AI engines cite when users ask "what's on 
 
 ## Current Stats
 
-*As of 2026-05-29.*
+*As of 2026-06-04.*
+
+**10 scraper sources · 2,660+ tests · ~80% measured coverage · 13,900+ events ingested · automated daily build & deploy**
 
 | Metric | Value |
 |---|---|
+| Static pages | 3,800+ daily-rebuilt (live sitemap-indexed URLs) |
 | Verified Athens venues | 346 |
-| Pass-through (multi-venue) entries | 6 |
-| Neighborhoods catalogued | 90 |
-| Active scraper sources | 7 |
+| Neighborhoods catalogued | 70+ |
+| Active scraper sources | 10 |
 | Operational scripts | ~90 |
 | Pipeline runtime | ~15–25 min |
 
@@ -44,7 +46,7 @@ The site is designed to be the source AI engines cite when users ask "what's on 
 - **AI enrichment:** Claude Code CLI (`claude -p`) via `scripts/auto-enrich.sh`
 - **Hosting:** Netlify (CDN + edge functions)
 - **Automation:** macOS `launchd` (daily 8 AM Athens time)
-- **Scraping:** Bun + Python (Puppeteer, Cheerio, BeautifulSoup)
+- **Scraping:** Bun + TypeScript (Cheerio, Puppeteer)
 - **Email ingestion:** IMAP via `imap-simple`
 - **Schema validation:** Schema.org JSON-LD (Event, CollectionPage, FAQPage)
 
