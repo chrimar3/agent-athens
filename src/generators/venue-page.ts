@@ -17,7 +17,8 @@ import { slugify, generateEventSlug } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderEventCardList } from '../templates/card-variants';
-import { formatSchemaDate, SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { formatSchemaDate } from '../enrichment/quality-gates';
+import { resolveEventSchemaType } from '../utils/comedy-format';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
@@ -181,7 +182,8 @@ function generateVenueSchema(venue: VenueData): string | null {
   // passthrough and DST-aware offset appending for naive-ts.
   if (venue.events.length > 0) {
     venueEntity.event = venue.events.slice(0, 10).map(event => ({
-      '@type': SCHEMA_TYPE_MAP[event.type] || 'Event',
+      // S175: derived @type (comedy-format) — parity with the detail emitter
+      '@type': resolveEventSchemaType(event),
       'name': event.title,
       'startDate': formatSchemaDate(event.startDate),
       'url': `${BASE_URL}/events/${generateEventSlug(event)}/`

@@ -1,0 +1,4 @@
+{
+  "_comment": "Curated allow-list of venues whose EVERY event is stand-up comedy (S175 ComedyEvent derivation). Exact name match only — NEVER substring (Doryphora Comedy Gig Space audited 2026-06-05: all 4 events are concerts; 'comedy' in a venue name is not a format guarantee). A venue earns an entry only after a DB audit shows its full event set is stand-up.",
+  "venues": []
+}

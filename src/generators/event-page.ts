@@ -19,7 +19,8 @@ import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
-import { getAthensTimezone, formatSchemaDate, SCHEMA_TYPE_MAP, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
+import { getAthensTimezone, formatSchemaDate, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
+import { resolveEventSchemaType } from '../utils/comedy-format';
 import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
@@ -147,7 +148,7 @@ export function generateEventSlug(event: Event): string {
  * these as `dataFeedElement[]` entries — see `src/generators/datafeed.ts`).
  */
 function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<string, any> {
-  const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
+  const schemaType = resolveEventSchemaType(event); // S175: comedy-format derivation above EventType→@type
   const eventSlug = generateEventSlug(event);
 
   // formatSchemaDate handles all inputs: date-only passthrough (no midnight
@@ -244,8 +245,10 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     schema.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
   }
 
-  // Add performer sameAs if available (concerts, dj_sets, festivals, performances, shows, dance)
-  const performer = getPerformerSameAs(event.title, event.type);
+  // Add performer sameAs if available (concerts, dj_sets, festivals,
+  // performances, shows, dance — and derived ComedyEvent rows, S175: their
+  // EventType stays theater/other, so eligibility keys on schemaType).
+  const performer = getPerformerSameAs(event.title, event.type, schemaType);
   if (performer) {
     schema.performer = performer;
   }
@@ -431,7 +434,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const ogImage = getOgImage(event);
   const schemaJson = generateEventSchema(event, locale, pagedVenueSlugs);
   const practicalBlock = generatePracticalBlock(event, null, locale);
-  const schemaType = SCHEMA_TYPE_MAP[event.type] || 'Event';
+  const schemaType = resolveEventSchemaType(event); // S175: comedy-format derivation above EventType→@type
 
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);

@@ -3,7 +3,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { RawEvent, Event, EventType, Venue, Price } from '../types';
-import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { resolveEventSchemaType } from './comedy-format';
 import { normalizeDateField } from './date-format';
 
 // Load venue coordinates from canonical source (venues-master.json)
@@ -30,17 +30,21 @@ export function normalizeEvents(rawEvents: { events: RawEvent[] }): Event[] {
     const venue = normalizeVenue(raw.venue, raw.location);
     const price = normalizePrice(raw.price);
     const startDate = normalizeDate(raw.date, raw.time);
+    // S175: compute signal fields before @type — comedy-format resolver
+    // reads title/tags/genres/venue (parse-before-assign, same as rowToEvent).
+    const genres = [raw.genre];
+    const tags = generateTags(price, type);
 
     return {
       "@context": "https://schema.org",
-      "@type": SCHEMA_TYPE_MAP[type] || 'Event',
+      "@type": resolveEventSchemaType({ title: raw.title, type, tags, genres, venue }),
       id,
       title: raw.title,
       description: raw.description,
       startDate,
       type,
-      genres: [raw.genre],
-      tags: generateTags(price, type),
+      genres,
+      tags,
       venue,
       price,
       url: raw.url,

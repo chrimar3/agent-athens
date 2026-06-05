@@ -11,13 +11,15 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 // Types for performer data
+// S175: PerformingGroup added for comedy ensembles (Sooshi Mango is a trio —
+// group entity, not Person; same precedent as S49's LPO → MusicGroup fix).
 export interface PerformerEntry {
-  type: 'Person' | 'MusicGroup';
+  type: 'Person' | 'MusicGroup' | 'PerformingGroup';
   sameAs: string[];
 }
 
 export interface PerformerSchema {
-  '@type': 'Person' | 'MusicGroup';
+  '@type': 'Person' | 'MusicGroup' | 'PerformingGroup';
   name: string;
   sameAs: string[];
 }
@@ -98,8 +100,11 @@ function extractArtist(title: string): string | null {
     }
   }
 
-  // Remove quotes and clean up
+  // Remove quotes and clean up. S175: also strip HTML-ENTITY quotes —
+  // some DB titles carry literal &quot;/&#171; (e.g. 'Gabriel &quot;Fluffy&quot;
+  // Iglesias'), which otherwise blocks registry matching.
   cleaned = cleaned
+    .replace(/&quot;|&#34;|&#39;|&#171;|&#187;|&laquo;|&raquo;/gi, '')
     .replace(/["""''«»‹›]/g, '')
     .replace(/&amp;/g, '&')
     .replace(/\s+/g, ' ')
@@ -134,25 +139,51 @@ function findPerformer(name: string): { canonicalName: string; entry: PerformerE
  *
  * @param title - Event title (artist name extracted from it)
  * @param eventType - Event type (only performer types get results)
+ * @param schemaType - Derived Schema.org @type (S175). ComedyEvent rows are
+ *   performer-eligible regardless of EventType — they stay theater/other in
+ *   the DB by design, so eligibility MUST key on the derived type or
+ *   performer silently never emits on them.
  * @returns Schema.org performer object or null
  */
-export function getPerformerSameAs(title: string, eventType?: string): PerformerSchema | null {
-  // Only add performer for eligible event types
-  if (eventType && !PERFORMER_EVENT_TYPES.has(eventType)) {
+export function getPerformerSameAs(title: string, eventType?: string, schemaType?: string): PerformerSchema | null {
+  const isComedyEvent = schemaType === 'ComedyEvent';
+
+  // Only add performer for eligible event types (derived ComedyEvent qualifies)
+  if (!isComedyEvent && eventType && !PERFORMER_EVENT_TYPES.has(eventType)) {
     return null;
   }
 
+  const candidates: string[] = [];
   const artistName = extractArtist(title);
-  if (!artistName) return null;
+  if (artistName) candidates.push(artistName);
 
-  const match = findPerformer(artistName);
-  if (!match) return null;
+  // S175, ComedyEvent only: tour-billing titles put the comedian AFTER the
+  // separator ("The Superior Comedy Tour - Mario Adrion"), where extractArtist
+  // keeps the first segment. Try the remaining segments too — registry-gated,
+  // so a segment only ever produces output on an exact curated match.
+  if (isComedyEvent) {
+    for (const sep of [' - ', ' | ', ':', '–', '—']) {
+      if (title.includes(sep)) {
+        for (const part of title.split(sep).slice(1)) {
+          const cleaned = extractArtist(part.trim());
+          if (cleaned && !candidates.includes(cleaned)) candidates.push(cleaned);
+        }
+      }
+    }
+  }
 
-  return {
-    '@type': match.entry.type,
-    name: match.canonicalName,
-    sameAs: match.entry.sameAs,
-  };
+  for (const candidate of candidates) {
+    const match = findPerformer(candidate);
+    if (match) {
+      return {
+        '@type': match.entry.type,
+        name: match.canonicalName,
+        sameAs: match.entry.sameAs,
+      };
+    }
+  }
+
+  return null;
 }
 
 /**

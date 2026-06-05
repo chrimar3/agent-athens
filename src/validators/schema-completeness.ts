@@ -9,14 +9,19 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { SCHEMA_TYPE_MAP } from '../enrichment/quality-gates';
+import { COMEDY_EVENT_TYPE } from '../utils/comedy-format';
 import { classifyDateFormat } from '../utils/date-format';
 import { getRegionName } from '../utils/schema-geo';
 import { BASE_URL } from '../config/site-url';
 import { getLifecyclePhase } from '../utils/event-lifecycle';
 import { HREFLANG_GATE_OPEN } from '../utils/hreflang';
 
-// Valid @type values from our canonical type map
-const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
+// Valid @type values from our canonical type map, plus derived types that
+// never appear as map values: ComedyEvent comes from the S175 comedy-format
+// detector layered above EventType→@type (src/utils/comedy-format.ts) — the
+// validator recognizes it BEFORE emission per S101a-B (validator-coverage-
+// audit-precedes-FAIL-rule).
+const VALID_SCHEMA_TYPES: Set<string> = new Set([...Object.values(SCHEMA_TYPE_MAP), COMEDY_EVENT_TYPE]);
 
 const PLACEHOLDER_VALUES = ['tba', 'unknown', 'n/a', 'tbd', 'none'];
 

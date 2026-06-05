@@ -1097,3 +1097,49 @@ describe("selectRelatedEvents — excludes past events from venue block", () => 
     expect(result.map(e => e.id)).toEqual(["future-0", "future-1", "future-2", "future-3", "future-4", "future-5"]);
   });
 });
+
+// ── S175: ComedyEvent derivation + performer at the emission layer ──
+describe("buildEventSchemaObject — derived ComedyEvent (S175)", () => {
+  const standupEvent: Event = {
+    ...sampleConcert,
+    id: "standup-fixture",
+    title: "Kevin Bridges - Here if you need me",
+    type: "other" as any,
+    tags: ["Comedy", "Stand-up-comedy"],
+    startDate: futureStartDate,
+    endDate: undefined,
+  };
+
+  test("standup-tagged other-type event emits @type ComedyEvent + performer", () => {
+    const schema = buildEventSchemaObject(standupEvent);
+    expect(schema["@type"]).toBe("ComedyEvent");
+    expect(schema.performer).toBeDefined();
+    expect(schema.performer.name).toBe("Kevin Bridges");
+    expect(schema.performer["@type"]).toBe("Person");
+  });
+
+  test("club-night ComedyEvent emits WITHOUT performer (omit > wrong value)", () => {
+    const clubNight: Event = {
+      ...standupEvent,
+      id: "club-fixture",
+      title: "Athens English Comedy Club",
+      type: "show" as any,
+    };
+    const schema = buildEventSchemaObject(clubNight);
+    expect(schema["@type"]).toBe("ComedyEvent");
+    expect(schema.performer).toBeUndefined();
+  });
+
+  test("comedic play with bare Comedy tag stays TheaterEvent, no performer", () => {
+    const play: Event = {
+      ...standupEvent,
+      id: "play-fixture",
+      title: "Η Πριγκίπισσα των Αγίων Σαράντα! 2ος Χρόνος",
+      type: "theater" as any,
+      tags: ["Comedy", "Theater"],
+    };
+    const schema = buildEventSchemaObject(play);
+    expect(schema["@type"]).toBe("TheaterEvent");
+    expect(schema.performer).toBeUndefined();
+  });
+});

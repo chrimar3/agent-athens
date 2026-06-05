@@ -47,6 +47,24 @@ const testCache = {
         'https://www.wikidata.org/wiki/Q5499883',
       ],
     },
+    // S175 — ComedyEvent derived-eligibility fixtures
+    'Kevin Bridges': {
+      type: 'Person' as const,
+      sameAs: ['https://en.wikipedia.org/wiki/Kevin_Bridges'],
+    },
+    'Mario Adrion': {
+      type: 'Person' as const,
+      sameAs: ['https://en.wikipedia.org/wiki/Mario_Adrion'],
+    },
+    'Sooshi Mango': {
+      type: 'PerformingGroup' as const,
+      sameAs: ['https://en.wikipedia.org/wiki/Sooshi_Mango'],
+    },
+    'Gabriel Fluffy Iglesias': {
+      type: 'Person' as const,
+      sameAs: ['https://en.wikipedia.org/wiki/Gabriel_Iglesias'],
+    },
+    'Athens English Comedy Club': null,
   },
 };
 
@@ -161,4 +179,50 @@ afterAll(() => {
   if (originalCache) {
     writeFileSync(TEST_CACHE_PATH, originalCache);
   }
+});
+
+// ── S175: ComedyEvent eligibility keys on DERIVED @type ──
+// Stand-up rows keep EventType theater/other by design; without the
+// schemaType param, performer would silently never emit on them.
+describe("getPerformerSameAs — ComedyEvent derived-type eligibility (S175)", () => {
+  test("type=other + schemaType=ComedyEvent → performer emits (Kevin Bridges)", () => {
+    const p = getPerformerSameAs("Kevin Bridges - Here if you need me", "other", "ComedyEvent");
+    expect(p).not.toBeNull();
+    expect(p!.name).toBe("Kevin Bridges");
+    expect(p!["@type"]).toBe("Person");
+    expect(p!.sameAs).toContain("https://en.wikipedia.org/wiki/Kevin_Bridges");
+  });
+
+  test("type=theater + schemaType=ComedyEvent: comedian AFTER separator is found (Mario Adrion)", () => {
+    const p = getPerformerSameAs("The Superior Comedy Tour - Mario Adrion", "theater", "ComedyEvent");
+    expect(p).not.toBeNull();
+    expect(p!.name).toBe("Mario Adrion");
+  });
+
+  test("group act resolves as PerformingGroup (Sooshi Mango)", () => {
+    const p = getPerformerSameAs("Sooshi Mango in Athens", "other", "ComedyEvent");
+    expect(p).not.toBeNull();
+    expect(p!["@type"]).toBe("PerformingGroup");
+  });
+
+  test("club night stays performer-less — null registry entry honored (omit > wrong value)", () => {
+    expect(getPerformerSameAs("Athens English Comedy Club", "show", "ComedyEvent")).toBeNull();
+  });
+
+  test("type=theater WITHOUT ComedyEvent derivation stays ineligible (no regression)", () => {
+    expect(getPerformerSameAs("Kevin Bridges - Here if you need me", "theater")).toBeNull();
+    expect(getPerformerSameAs("Kevin Bridges - Here if you need me", "theater", "TheaterEvent")).toBeNull();
+  });
+
+  test("HTML-entity quotes in title are stripped before matching (Iglesias &quot;Fluffy&quot;)", () => {
+    const p = getPerformerSameAs('Gabriel &quot;Fluffy&quot; Iglesias: The 1976 Tour', "theater", "ComedyEvent");
+    expect(p).not.toBeNull();
+    expect(p!.name).toBe("Gabriel Fluffy Iglesias");
+  });
+
+  test("segment fallback is ComedyEvent-only — concerts keep first-segment-only extraction", () => {
+    // A concert titled "Tribute Night - Kevin Bridges" must NOT match via the
+    // second segment; the fallback is gated to derived ComedyEvent rows.
+    expect(getPerformerSameAs("Tribute Night - Kevin Bridges", "concert", "MusicEvent")).toBeNull();
+  });
 });

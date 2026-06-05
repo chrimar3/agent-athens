@@ -6,6 +6,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { isAthensEvent } from "../utils/athens-filter";
 import { SCHEMA_TYPE_MAP } from "../enrichment/quality-gates";
+import { resolveEventSchemaType } from "../utils/comedy-format";
 import { normalizeDateField } from "../utils/date-format";
 import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
 import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
@@ -167,9 +168,22 @@ export function rowToEvent(row: any): Event {
 
   const fullDescription = fullDescEn || fullDescGr || fullDescLegacy || undefined;
 
+  // S175: parse tags/genres BEFORE the @type assignment — the comedy-format
+  // resolver reads them; deriving @type from the unparsed JSON columns would
+  // silently never fire and leave a stale @type on every field-reading
+  // consumer (schema-graph-builders reads event['@type'] directly).
+  const genres: string[] = JSON.parse(row.genres || "[]");
+  const tags: string[] = JSON.parse(row.tags || "[]");
+
   return {
     "@context": "https://schema.org",
-    "@type": SCHEMA_TYPE_MAP[row.type] || 'Event',
+    "@type": resolveEventSchemaType({
+      title: row.title,
+      type: row.type,
+      tags,
+      genres,
+      venue: { name: row.venue_name },
+    }),
     id: row.id,
     title: row.title,
     description: row.description || "",
@@ -180,8 +194,8 @@ export function rowToEvent(row: any): Event {
     startDate: row.start_date,
     endDate: row.end_date,
     type: row.type,
-    genres: JSON.parse(row.genres || "[]"),
-    tags: JSON.parse(row.tags || "[]"),
+    genres,
+    tags,
     venue: {
       name: row.venue_name,
       address: row.venue_address,

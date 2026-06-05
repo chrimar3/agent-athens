@@ -805,3 +805,55 @@ describe("round-trip conversion", () => {
     expect(event.price.amount).toBe(sampleConcert.price.amount);
   });
 });
+
+// ── S175: loader-level ComedyEvent derivation (hard gate) ──
+// rowToEvent must parse tags/genres BEFORE deriving @type — if @type were
+// derived from the unparsed JSON columns, the comedy-format resolver would
+// silently never fire and event['@type'] would stay stale for every
+// field-reading consumer (schema-graph-builders.ts reads it directly).
+describe("rowToEvent — comedy-format @type derivation at the loader", () => {
+  const baseRow = {
+    id: "standup-row", title: "Kevin Bridges - Here if you need me",
+    description: "", full_description: null,
+    start_date: "2026-06-22T19:30:00+03:00", end_date: null,
+    type: "other",
+    genres: "[]",
+    tags: JSON.stringify(["Comedy", "Stand-up-comedy", "Mainstream"]),
+    venue_name: "Floyd", venue_address: "x", venue_neighborhood: null,
+    venue_lat: null, venue_lng: null, venue_capacity: null,
+    price_type: "with-ticket", price_amount: 20, price_currency: "EUR", price_range: null,
+    url: null, source: "athinorama.gr", ai_context: null, schema_json: null,
+    created_at: "2026-06-01T12:00:00Z", updated_at: "2026-06-01T12:00:00Z",
+  };
+
+  test("standup-tagged row (type=other) gets @type ComedyEvent at load time", () => {
+    const event = rowToEvent(baseRow);
+    expect(event["@type"]).toBe("ComedyEvent");
+    expect(event.type).toBe("other"); // EventType column UNCHANGED — derivation only
+  });
+
+  test("standup-tagged theater row also derives ComedyEvent (Mario Adrion class)", () => {
+    const event = rowToEvent({
+      ...baseRow, id: "adrion-row", type: "theater",
+      title: "The Superior Comedy Tour - Mario Adrion",
+      tags: JSON.stringify(["comedy", "Stand-up-comedy"]),
+    });
+    expect(event["@type"]).toBe("ComedyEvent");
+    expect(event.type).toBe("theater");
+  });
+
+  test("bare Comedy tag does NOT derive — comedic play stays TheaterEvent", () => {
+    const event = rowToEvent({
+      ...baseRow, id: "coronet-row", type: "theater",
+      title: "Η Πριγκίπισσα των Αγίων Σαράντα! 2ος Χρόνος",
+      tags: JSON.stringify(["Comedy", "Theater", "Seated"]),
+    });
+    expect(event["@type"]).toBe("TheaterEvent");
+  });
+
+  test("empty/null tags column never fires (parse-before-assign regression guard)", () => {
+    const event = rowToEvent({ ...baseRow, id: "no-tags-row", tags: null, type: "concert" });
+    expect(event["@type"]).toBe("MusicEvent");
+    expect(event.tags).toEqual([]);
+  });
+});
