@@ -73,6 +73,12 @@ Policy decisions about what fields to keep, drop, or compress in these files bel
 ## Commands
 
 ```bash
+# One-time per clone — installs the pre-commit type-check hook (S178)
+# Blocks staging-strand commits (importer staged + util on disk but unstaged)
+# via `bunx tsc --noEmit` against the post-commit state. Bypass with `git
+# commit --no-verify`.
+bash scripts/install-hooks.sh
+
 # Session planning
 ./scripts/session-diagnostic.sh
 
