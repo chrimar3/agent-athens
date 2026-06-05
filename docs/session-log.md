@@ -6786,3 +6786,63 @@ constant feeding both surfaces.
 2. **Scrape-time missing-address guard** (Planner): at ~33 drift venues/day, the guard is a prerequisite-or-companion for arming the hard-stop — recommend own brief, not Pattern-G rider.
 3. 269-venue no-address config tail (no active pages) — Editorial-assisted pass.
 4. 4 wrong neighborhood anchors — Editorial.
+
+### Session 174 — S161 imageless event-card typographic tile
+
+**Plan:** Build the Satori → inline SVG tile that owns the imageless card image-slot per Design Navigator ruling 2026-06-03; retire the .card-image--fallback gradient (S124); leave the Satori → PNG OG fallback (D11) untouched. Closes the Session-161 bounded open item and the S165-routed divergence.
+
+**What happened:**
+- Step 0 recon: 6 fallback-emission sites in templates/generators, 1 CSS ruleset, 1 test file. Body anchor with full title confirmed in every card variant (inner-anchor or outer-wrapping). Wiring nuance: badges + card-badge-open + save button must remain DOM siblings overlaying the SVG (brief had simplified this).
+- Step 1 (autofit, TDD): Satori vectorizes text to `<path>` glyphs (no `<text>` nodes) — measurement primitive switched to the SVG `<mask>` rect's `height` attribute, divided by `fontSize × lineHeight` to recover line count. 7 tests green including the load-bearing long-Greek anchor case.
+- Step 2 (tile generator, TDD): `generateEventTile(event, opts) → SVG`. 6 tests + 6 locked snapshots (short-EN / short-EL / medium / long / very-long-truncated / unbreakable-word).
+- Step 3 (wiring): 6 emission sites updated to use the imaged variant's wrapper class + `${getEventTile(event.id) ?? ''}`. Badges/save-button/anchor preserved. Async-precompute bridge: `precomputeEventTiles` populates a module-level cache, `getEventTile` is sync lookup. Wired into generate-site.ts right after pageableEvents filter, before any render.
+- Step 4 (CSS): deleted .card-image--fallback ruleset + 6 type-tint variants + list-variant override; simplified `:not(--fallback)` selector.
+- Step 5 (snapshots + test cleanup): 6 SVG snapshots locked (170 KB); card-fallback.test.ts flipped — now asserts `<svg` present, --fallback absent, full-title anchor preserved.
+
+**Verified:**
+- `bun test`: 2,695 pass, 3 fail — all pre-existing **hreflang** failures (Hub @graph envelope + English hub page hreflang × 2), none touch cards/tiles. 19 new tests green.
+- `bunx tsc --noEmit`: 0 errors in touched files.
+- `bun run build`: 326 tiles precomputed, 4,331 pages generated, 0 errors.
+- Guard 6 (live build): 1,007 dist HTMLs carry the inline tile SVG. Body anchor with full untruncated title preserved on imageless cards (verified DISMISS + long Greek). og:image / twitter:image / JSON-LD image on imageless detail page all resolve to /images/og/events/{slug}.png unchanged. Microdata image absent (expected, not a regression). Zero `card-image--fallback` in regenerated dist.
+
+**Learnings:**
+- Satori-as-oracle: measure layout from the renderer you'll ship with — read the `<mask>` rect's `height` instead of approximating font metrics.
+- Async generator → sync renderer: bridge via precompute cache (Map<id, output>) populated once at build entry. Mirrors og-image.ts pattern.
+- Tile branch reusing the imaged wrapper's class = free parity on badge/save-button positioning.
+
+**Open items:**
+- 8 stale dist HTML orphans from May 27–Jun 1 were deleted by hand (their source venues had been filtered out of the build; their May markup contained old --fallback class). A follow-up session could add dist orphan-cleanup to the build.
+- Detail-hero wider-canvas variant of the tile generator: not wired this session; the DN ruling allows it, deferred.
+- Pre-existing hreflang test failures (3, all in hub-page suites) remain — unrelated to S161, not gated.
+
+### Session 174 — Scrape-time address guard + hard-stop ARMED [arc: GEO/SEO infra, brief S174] — 2026-06-05
+
+**Plan:** Import-seam guard for missing venue addresses (warn-not-block), clear the 11-venue mangled residual, arm the exit-code fix gated on residual 0.
+
+**What happened:**
+- Brief premise corrected: `src/ingest/`+`src/importers/` hold no `venue_address` write site — the chokepoint is `upsertEvent` (src/db/database.ts), one layer lower and better (covers email ingest + future scrapers). Guard fires only when the streetAddress cascade would bottom out; deduped per venue; `[address-guard]` greppable in pipeline logs. TDD red→green (3 tests; the load-bearing assertion: event still persists). Commit fa1c28c88.
+- 11/11 mangled addresses resolved by research agents, zero skips (ΦΙΑΤ "conflict" = one building/two frontages, Falirou 97 canonical; Εκάτη "Θεσσαλονίκης" was a mis-capture — real street Ekatis 11; Στοά disambiguated to Zografou; 4 more wrong config anchors flagged → Editorial list now 8). Config 99→110 venues with address. Commit 86e2dc993.
+- **Hard-stop ARMED (d213608f9):** gate read from output — post-build `.events.totals.fail` = 0 ✓, guard committed ✓ → `main().catch((e) => { console.error(e); process.exit(1); })`. Armed build: exit 0, halt pages 0.
+
+**Verified:** Full suite 2,685 pass / 0 fail at arming; drift re-check post-arming: 0 new fails (overnight scrape introduced no new address-less venues; contrast 33/day on 06-04).
+
+**Open items:** (1) working-tree-deploy sharp edge logged 2nd instance — 3rd strike triggers a dirty-tree pipeline guard (mistakes.md); (2) 269-venue no-address config tail (no active pages) — Editorial; (3) 8 wrong neighborhood anchors — Editorial.
+
+### Session 175 — /en/ sitemap phase-partition + indexing recon [arc: GEO/SEO infra, brief S175, read-only] — 2026-06-05
+
+**What happened:** The hinge integer is **0** — all 655 /en/ event pages ARE in sitemap-events.xml ("674 absent" premise stale); the only 11 sitemap-absent /en/ pages are noindexed `/all` overflow variants (intentional). **P1 sitemap brief killed**; dark-engine investigation moves to the next candidate. Manual GSC/Bing columns confirmed empty since 05-11 (fresh pulls owed by Christos; CSV is gitignored — brief's `git show` was a phantom query path). Step-3 hreflang check found the S144 **lagged parallel surface**: hub-page.ts + venue-page.ts still emitted hreflang/x-default incl. dormant-Greek alternates; llms.txt claim sided with the emitters. Routed → S176.
+
+**Errata (corrected same-day in S176):** the spec's claim "4-phase lifecycle taxonomy doesn't exist in code" was a false negative from a truncated read — `getLifecyclePhase` (event-lifecycle.ts:107) IS `active|just-passed|cooling|archive`. Hinge integer unaffected (empty set). Lesson in mistakes.md.
+
+### Session 176 — hreflang single-gate + paired S110 validator [arc: GEO/SEO infra, brief S176] — 2026-06-05
+
+**What happened:**
+- Step-0 enumeration: 8 sites — 3 ungated (hub-page el/en/x-default injection; venue-page ×2), 3 S144-closed `''` locals, 1 comment, 2 llms.txt prose claims.
+- Topology: no shared emitter existed → new `src/utils/hreflang.ts` (`HREFLANG_GATE_OPEN` + `renderHreflangLinks`); ALL surfaces routed through it; gate-open per-URL-parity shape pinned in helper tests (reactivation contract preserved). 3 pre-existing tests that PINNED the ungated emission flipped to gate-closed parity.
+- llms.txt claims now derive from the gate constant (doc/code single source).
+- Paired validator `checkUngatedHreflang` (FAIL) wired into all 5 page classes + new build hard-stop (exit 1, real since S174).
+- **Live regression assert:** first armed build exited 1 catching **18 stale venue artifacts** (venues with no current events never regenerate; pre-patch HTML survives in dist). Stripped surgically (dist gitignored); rebuild exit 0. Stale-artifact class → mistakes.md.
+
+**Verified:** build exit 0; location hard-stop 0; hreflang hard-stop 0; dist sweep 0 hreflang; llms.txt 0 claims; full suite **2,699 pass / 1 skip / 0 fail**. Commits e01b5fd14 (feat), 6b5f20ad7 (chore + S175 correction).
+
+**Open items:** (1) when Greek launches: flip `HREFLANG_GATE_OPEN` per GEO Strategist ruling — every surface + llms.txt + validator disarm together; extend the helper for the sitemap XML format then; (2) stale-venue-artifact tail in dist is a standing class — any future emission-policy change needs a dist sweep check.

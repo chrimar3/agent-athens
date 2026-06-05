@@ -4513,3 +4513,32 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 - **Comedy ΑΛΛΟ deferral (Step 0c gate):** in-session remap REFUSED — 3/4 gate conditions failed (`other` is canonical, targets split show/theater, re-type of valid value). Branch ruling: categorizer-fix (no comedy/stand-up rule exists in `src/categorizer/categorize-event.ts` — falls to `other` fallback at line 436) + separate gated re-type of 4-5 rows. Full brief: `specs/comedy-type-cleanup-brief.md`. Binding guard carried: tag="comedy" never written to `type` or `@type`; `ComedyEvent` stays out of `SCHEMA_TYPE_MAP`.
 
 **Cross-references:** `specs/comedy-type-diagnostic.md`; `specs/comedy-type-cleanup-brief.md`; patterns.md Pattern 3.
+
+## Sessions 174–176 — Hard-stop armed; hreflang single-gate; seam + scope rulings (2026-06-05)
+
+- **Location hard-stop ARMED (d213608f9):** `main().catch` → `process.exit(1)`. Gate read from output (post-build fail == 0 AND guard committed), per the S172 operator rule. From now on an address-less drift venue blocks the daily deploy BY DESIGN; the `[address-guard]` ingest warning is the same-morning early signal.
+- **Guard seam:** upsertEvent chokepoint (covers all ingest paths), NOT src/ingest//importers (brief premise — no write site there). Condition is cascade-aware (config-covered venues stay silent).
+- **hreflang topology:** no shared emitter existed → introduced `utils/hreflang.ts` (helper + `HREFLANG_GATE_OPEN`). All surfaces route through it; flip requires GEO Strategist ruling and reactivates everything together (S144 Decision 4 preserved). Sitemap XML surface keeps its closed local (different format) — extend the helper when Greek launches.
+- **UNGATED_HREFLANG severity:** FAIL + build halt on ALL page classes (corruption class, parity with location-absence — GEO ruling 2026-06-05).
+- **llms.txt claims derive from the gate constant** — same single-source discipline as the lifecycle machine; prose can't drift from emission again.
+- **S175 ruling consumed:** /en/ sitemap absence = none (trigger 0) → P1 sitemap brief killed; dark-engine work moves to next candidate. English-default flip remains NO-GO (S144 state confirmed, now enforced by validator).
+
+## S161 — Tile architecture: Satori → inline SVG for on-page, separate from Satori → PNG for OG (2026-06-05)
+
+**Decision: two render targets, ONE renderer principle held — but split into TWO generator modules.** The on-page imageless tile (`src/generators/event-tile.ts`, Satori → inline SVG, 200×267) and the OG fallback image (`src/generators/og-image.ts`, Satori → resvg → PNG, 1200×630) are now two SEPARATE generators that BOTH use Satori as the layout engine. They share `src/utils/satori-fonts.ts` (Manrope fonts loaded once) but otherwise have their own JSX, color tokens, and dimensions.
+
+**Why not one shared generator?** The two surfaces have different binding constraints:
+- On-page tile: 200×267 (3:4), constrained 168px text-fit basis, lineCap 4, `--bg-elevated` (#1a1a1a), inline SVG output (no rasterization needed).
+- OG card: 1200×630 (1.91:1), type-color stripe, 2-line title, `#111114` background, PNG output (Twitter/Facebook can't render inline SVG OG).
+
+Forcing one renderer would mean conditional JSX trees and conditional output paths inside one function — more complexity than two narrow generators. The shared font util IS the actual reuse point; the JSX is naturally different per target.
+
+**Two-tier emphasis model (binding for future similar surfaces):** card grid uses "rhythm" emphasis (small typographic tiles, lots of them, the page's gestalt matters more than any single card); OG uses "poster" emphasis (one large card, drama and brand presence matter, single-impression context). Treat these as different design problems with different constraints — don't over-converge.
+
+**Other decisions:**
+- Color token for `--text-tertiary` is `#888` per DN 2026-06-03 (tile only); `og-image.ts` keeps its own `#707070` (S128) untouched. Don't retrofit unless DN rules.
+- `escapeForSatori` helper duplicated (5 lines) in `event-tile.ts` rather than exported from `og-image.ts` — boundary "do not modify og-image.ts" honored.
+- Tile branch uses the imaged variant's wrapper class (`card-image-wrapper`, `list-image-wrapper`, etc.), not a tile-specific class — parity on badge/save-button positioning, no new CSS hooks needed.
+- `data-event-type` attribute deleted (was the S124 type-tint hook); `data-type` (imaged variant's existing attribute, no CSS/JS hooks) retained.
+
+**Cross-references:** `specs/imageless-tile-S161.md`; `patterns.md`/`mistakes.md` S161; `decisions.md` D11 (Satori OG, prior); D-S124 (Tier 1 gradient, retired).
