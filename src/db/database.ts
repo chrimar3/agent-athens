@@ -10,12 +10,16 @@ import { normalizeDateField } from "../utils/date-format";
 import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
 import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
 import { decodeEventFields } from "../utils/decode-html-entities";
+import { findVenueConfig } from "../quality/location-filter";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
 const SCHEMA_PATH = join(import.meta.dir, "schema.sql");
 
 let dbInstance: Database | null = null;
+
+// S174 address-guard dedup — one warning per venue per process run.
+const warnedMissingAddressVenues = new Set<string>();
 
 /**
  * Get or create database connection
@@ -238,6 +242,23 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
   if (!isAthensEvent({ venue_name: event.venue.name, venue_address: event.venue.address, title: event.title })) {
     console.log(`⚠️  Skipping non-Athens event: ${event.title}`);
     return { success: false, isNew: false };
+  }
+
+  // S174: scrape-time missing-address guard — warn-not-block. Fires exactly
+  // when the JSON-LD streetAddress cascade (event.venue.address ||
+  // findVenueConfig(name)?.address || '') would bottom out at '' and create a
+  // future build-halt page. Config-covered venues stay silent (cascade fills
+  // them). The event ALWAYS persists — completeness never blocks collection.
+  // Deduped per venue per process run so one venue with 40 events warns once.
+  // @see specs/scrape-guard-S174.md
+  if (!event.venue.address?.trim() && !findVenueConfig(event.venue.name)?.address?.trim()) {
+    if (!warnedMissingAddressVenues.has(event.venue.name)) {
+      warnedMissingAddressVenues.add(event.venue.name);
+      console.warn(
+        `[address-guard] venue="${event.venue.name}" missing address (event=${event.id}, source=${event.source}) — ` +
+          'streetAddress will emit empty; add to config/athens-venues.json',
+      );
+    }
   }
 
   const database = db || getDatabase();

@@ -187,3 +187,78 @@ describe("upsertEvent", () => {
     expect(stored).not.toContain("Megaro Mousikis");
   });
 });
+
+// =============================================================================
+// S174 — scrape-time missing-address guard (warn-not-block)
+//
+// The streetAddress JSON-LD cascade (event.venue.address ||
+// findVenueConfig(name)?.address || '') bottoms out at '' when neither the
+// event row nor the venue config carries an address — the fail class S172
+// cleared 311→14 of. The guard surfaces that class at the ingest chokepoint
+// (upsertEvent) instead of letting it accumulate until the build halt.
+//
+// Load-bearing assertion: the event STILL PERSISTS. Enrichment/completeness
+// never blocks collection — the guard warns, it does not gate.
+//
+// @see specs/scrape-guard-S174.md
+// =============================================================================
+
+import { spyOn } from "bun:test";
+
+describe("upsertEvent — S174 missing-address guard", () => {
+  let db: Database;
+  let warnSpy: ReturnType<typeof spyOn>;
+
+  beforeEach(() => {
+    db = createTestDB();
+    warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
+    cleanupDB(db);
+  });
+
+  const guardCalls = () =>
+    warnSpy.mock.calls.filter((c: any[]) => String(c[0]).includes("[address-guard]"));
+
+  test("warns AND persists when neither event nor config has an address", () => {
+    const event: Event = {
+      ...sampleConcert,
+      id: "s174-guard-test-1",
+      venue: { ...sampleConcert.venue, name: "Testarosa Hall Zeta One", address: "" },
+    };
+    const result = upsertEvent(event, db);
+
+    expect(result.success).toBe(true); // non-blocking half — load-bearing
+    expect(eventExists(db, "s174-guard-test-1")).toBe(true);
+    expect(guardCalls().length).toBe(1);
+    expect(String(guardCalls()[0][0])).toContain('venue="Testarosa Hall Zeta One"');
+  });
+
+  test("does NOT warn when the venue config covers the address (cascade fills it)", () => {
+    const event: Event = {
+      ...sampleConcert,
+      id: "s174-guard-test-2",
+      venue: { ...sampleConcert.venue, name: "Μέγαρο Μουσικής Αθηνών", address: "" },
+    };
+    const result = upsertEvent(event, db);
+
+    expect(result.success).toBe(true);
+    expect(guardCalls().length).toBe(0);
+  });
+
+  test("dedupes: N events at the same missing-address venue warn once", () => {
+    const mk = (id: string): Event => ({
+      ...sampleConcert,
+      id,
+      venue: { ...sampleConcert.venue, name: "Testarosa Hall Zeta Two", address: "" },
+    });
+    upsertEvent(mk("s174-guard-test-3a"), db);
+    upsertEvent(mk("s174-guard-test-3b"), db);
+
+    expect(eventExists(db, "s174-guard-test-3a")).toBe(true);
+    expect(eventExists(db, "s174-guard-test-3b")).toBe(true);
+    expect(guardCalls().length).toBe(1);
+  });
+});
