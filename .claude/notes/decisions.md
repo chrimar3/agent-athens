@@ -4505,3 +4505,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 - **Conservative-skip over plausible-fix:** wrong streetAddress propagates to Schema.org and is worse than empty — mangled DB values ("Εν Αθήναις, 19") were skipped, not "cleaned by inference".
 
 **Cross-references:** `specs/streetaddress-backfill-S172.md`; patterns.md/mistakes.md Session 173.
+
+## Session 174 — selectRelatedEvents shared helper + comedy-type deferral (2026-06-05)
+
+- **New shared helper:** `selectRelatedEvents(venueEvents, currentEventId)` in `src/generators/event-page.ts` — the single source for the "Επόμενες εκδηλώσεις"/"Upcoming events at" block: excludes self, filters `classifyEventLifecycle === 'upcoming'` (exhibition-safe via end_date), sorts soonest-first, caps 6. Used by BOTH the EL path (`generateEventPages`) and the EN path (`src/generate-site.ts` ~line 627). Any future related-events surface must use it, not re-derive from `pageableEvents`.
+- **Boundary override precedent:** the brief's "do not touch generate-site.ts" was premised on a single surface; Guard 6's "if a second surface exists, fix both" took precedence once the EN duplicate was found. Premise-scoped boundaries yield to explicit guard clauses.
+- **Comedy ΑΛΛΟ deferral (Step 0c gate):** in-session remap REFUSED — 3/4 gate conditions failed (`other` is canonical, targets split show/theater, re-type of valid value). Branch ruling: categorizer-fix (no comedy/stand-up rule exists in `src/categorizer/categorize-event.ts` — falls to `other` fallback at line 436) + separate gated re-type of 4-5 rows. Full brief: `specs/comedy-type-cleanup-brief.md`. Binding guard carried: tag="comedy" never written to `type` or `@type`; `ComedyEvent` stays out of `SCHEMA_TYPE_MAP`.
+
+**Cross-references:** `specs/comedy-type-diagnostic.md`; `specs/comedy-type-cleanup-brief.md`; patterns.md Pattern 3.
