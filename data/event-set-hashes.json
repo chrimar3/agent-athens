@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-05T08:24:48.704+03:00",
+  "generatedAt": "2026-06-05T09:51:09.760+03:00",
   "entries": {
     "this-weekend": {
       "hash": "a0e43fa44ca0105a",
@@ -19,11 +19,11 @@
       "lastModified": "2026-06-05"
     },
     "this-month": {
-      "hash": "70e65ed861252eea",
+      "hash": "dcf1b84bda5c4664",
       "lastModified": "2026-06-05"
     },
     "en/this-month": {
-      "hash": "70e65ed861252eea",
+      "hash": "dcf1b84bda5c4664",
       "lastModified": "2026-06-05"
     },
     "open": {

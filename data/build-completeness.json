@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-06-05T05:24:56.068Z"
+    "lastUpdate": "2026-06-05T06:51:16.243Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,19 +13,19 @@
     "byType": [
       {
         "type": "concert",
-        "total": 731,
+        "total": 730,
         "pass": 693,
-        "warn": 25,
-        "fail": 13,
-        "info": 723,
+        "warn": 37,
+        "fail": 0,
+        "info": 722,
         "passRate": 95
       },
       {
         "type": "dj_set",
         "total": 460,
         "pass": 429,
-        "warn": 25,
-        "fail": 6,
+        "warn": 31,
+        "fail": 0,
         "info": 460,
         "passRate": 93
       },
@@ -51,8 +51,8 @@
         "type": "theater",
         "total": 1654,
         "pass": 1389,
-        "warn": 238,
-        "fail": 27,
+        "warn": 252,
+        "fail": 13,
         "info": 1651,
         "passRate": 84
       },
@@ -78,8 +78,8 @@
         "type": "show",
         "total": 19,
         "pass": 15,
-        "warn": 0,
-        "fail": 4,
+        "warn": 4,
+        "fail": 0,
         "info": 19,
         "passRate": 79
       },
@@ -114,18 +114,18 @@
         "type": "other",
         "total": 28,
         "pass": 21,
-        "warn": 4,
-        "fail": 3,
+        "warn": 7,
+        "fail": 0,
         "info": 28,
         "passRate": 75
       }
     ],
     "totals": {
-      "total": 3080,
+      "total": 3079,
       "pass": 2685,
-      "warn": 342,
-      "fail": 53,
-      "info": 3069,
+      "warn": 381,
+      "fail": 13,
+      "info": 3068,
       "passRate": 87
     },
     "orphanSlugs": [
@@ -135,8 +135,8 @@
   "hubs": {
     "total": 29,
     "pass": 4,
-    "warn": 7,
-    "fail": 18,
+    "warn": 17,
+    "fail": 8,
     "info": 0
   },
   "venues": {
@@ -181,11 +181,11 @@
       "info": 56
     },
     "event_template": {
-      "total": 3080,
+      "total": 3079,
       "pass": 2685,
-      "warn": 342,
-      "fail": 53,
-      "info": 3069
+      "warn": 381,
+      "fail": 13,
+      "info": 3068
     },
     "byVenue": [
       {
@@ -512,8 +512,8 @@
         "venue": "dunk athens",
         "total": 5,
         "pass": 3,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 5,
         "passRate": 60,
         "sameAsState": "missing"
@@ -542,8 +542,8 @@
         "venue": "eliart",
         "total": 7,
         "pass": 6,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 7,
         "passRate": 86,
         "sameAsState": "missing"
@@ -642,8 +642,8 @@
         "venue": "gustav athens",
         "total": 5,
         "pass": 4,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 5,
         "passRate": 80,
         "sameAsState": "missing"
@@ -719,16 +719,6 @@
         "sameAsState": "missing"
       },
       {
-        "venue": "live music space",
-        "total": 1,
-        "pass": 0,
-        "warn": 0,
-        "fail": 1,
-        "info": 1,
-        "passRate": 0,
-        "sameAsState": "missing"
-      },
-      {
         "venue": "metron stage",
         "total": 8,
         "pass": 8,
@@ -782,8 +772,8 @@
         "venue": "olvio",
         "total": 28,
         "pass": 27,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 28,
         "passRate": 96,
         "sameAsState": "missing"
@@ -822,8 +812,8 @@
         "venue": "parnassos literary society",
         "total": 11,
         "pass": 9,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 11,
         "passRate": 82,
         "sameAsState": "missing"
@@ -842,8 +832,8 @@
         "venue": "piraeus club academy",
         "total": 6,
         "pass": 4,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 6,
         "passRate": 67,
         "sameAsState": "missing"
@@ -872,8 +862,8 @@
         "venue": "rabbithole",
         "total": 17,
         "pass": 15,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 17,
         "passRate": 88,
         "sameAsState": "missing"
@@ -882,8 +872,8 @@
         "venue": "red jasper cabaret theatre",
         "total": 10,
         "pass": 6,
-        "warn": 0,
-        "fail": 4,
+        "warn": 4,
+        "fail": 0,
         "info": 10,
         "passRate": 60,
         "sameAsState": "missing"
@@ -1052,8 +1042,8 @@
         "venue": "universe",
         "total": 23,
         "pass": 20,
-        "warn": 0,
-        "fail": 3,
+        "warn": 3,
+        "fail": 0,
         "info": 23,
         "passRate": 87,
         "sameAsState": "missing"
@@ -1222,8 +1212,8 @@
         "venue": "αυλαια πολυχωρος",
         "total": 22,
         "pass": 21,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 22,
         "passRate": 95,
         "sameAsState": "missing"
@@ -1372,8 +1362,8 @@
         "venue": "θεατρο nous",
         "total": 11,
         "pass": 10,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 11,
         "passRate": 91,
         "sameAsState": "missing"
@@ -1612,8 +1602,8 @@
         "venue": "θησειον",
         "total": 20,
         "pass": 19,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 20,
         "passRate": 95,
         "sameAsState": "missing"
@@ -1642,8 +1632,8 @@
         "venue": "ιλιον plus",
         "total": 36,
         "pass": 35,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 36,
         "passRate": 97,
         "sameAsState": "missing"
@@ -1652,8 +1642,8 @@
         "venue": "ιλισια",
         "total": 12,
         "pass": 11,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 12,
         "passRate": 92,
         "sameAsState": "missing"
@@ -1672,8 +1662,8 @@
         "venue": "καμιρος",
         "total": 13,
         "pass": 12,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 13,
         "passRate": 92,
         "sameAsState": "missing"
@@ -1742,8 +1732,8 @@
         "venue": "κυτταρο",
         "total": 17,
         "pass": 15,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 17,
         "passRate": 88,
         "sameAsState": "missing"
@@ -1992,8 +1982,8 @@
         "venue": "ραδιο",
         "total": 8,
         "pass": 6,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 8,
         "passRate": 75,
         "sameAsState": "missing"
@@ -2032,8 +2022,8 @@
         "venue": "σκηνη brecht - 2510",
         "total": 24,
         "pass": 23,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 24,
         "passRate": 96,
         "sameAsState": "missing"
@@ -2092,8 +2082,8 @@
         "venue": "στουντιο ευρυχωρος",
         "total": 2,
         "pass": 1,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 2,
         "passRate": 50,
         "sameAsState": "missing"
@@ -2152,8 +2142,8 @@
         "venue": "το τρενο στο ρουφ",
         "total": 4,
         "pass": 2,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 4,
         "passRate": 50,
         "sameAsState": "missing"
@@ -2202,8 +2192,8 @@
         "venue": "χωρος τεχνης ηχοδραση",
         "total": 30,
         "pass": 28,
-        "warn": 0,
-        "fail": 2,
+        "warn": 2,
+        "fail": 0,
         "info": 30,
         "passRate": 93,
         "sameAsState": "missing"
@@ -2212,8 +2202,8 @@
         "venue": "ωδειο αθηνων",
         "total": 29,
         "pass": 24,
-        "warn": 0,
-        "fail": 5,
+        "warn": 5,
+        "fail": 0,
         "info": 29,
         "passRate": 83,
         "sameAsState": "missing"
@@ -2221,9 +2211,9 @@
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.03,
+        "coverage": 0.03015075376884422,
         "populated": 6,
-        "total": 200,
+        "total": 199,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
