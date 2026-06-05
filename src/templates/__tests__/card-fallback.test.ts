@@ -1,65 +1,83 @@
 /**
- * Tier 1 image fallback markup tests (S124).
+ * S161 — Imageless tile integration into card renderers (renames in spirit
+ * from "Tier 1 fallback markup", which retired with .card-image--fallback).
  *
  * When an event has no imageLocal/imageUrl/venueImage, the card emits:
- *   <div class="card-image card-image--fallback" data-event-type="{type}">
- *     <span class="card-image__fallback-text" aria-hidden="true">{title}</span>
+ *   <div class="card-image-wrapper" data-type="{type}">
+ *     <svg>...inline tile...</svg>
+ *     <span class="card-badge ...">...</span>
+ *     ...optional badges + save button
  *   </div>
- *
- * When an image source is present, the existing <img class="card-image"> markup
- * is preserved unchanged.
+ * The body anchor (<h3><a href={detailUrl}>{event.title}</a></h3>) is unchanged
+ * and remains the GEO floor.
  */
 
-import { describe, test, expect } from "bun:test";
-import { renderEventCard } from "../page";
-import { renderEventCardList } from "../card-variants";
-import { sampleConcert } from "../../../tests/fixtures/events";
-import type { Event } from "../../types";
+import { describe, test, expect, beforeAll } from 'bun:test';
+import { renderEventCard } from '../page';
+import { renderEventCardList } from '../card-variants';
+import { precomputeEventTiles, clearEventTileCache } from '../../generators/event-tile';
+import { sampleConcert } from '../../../tests/fixtures/events';
+import type { Event } from '../../types';
 
-describe("Tier 1 image fallback — grid card", () => {
-  test("imageless event renders fallback div with class and data-event-type", () => {
+// Precompute tiles for fixtures used in these tests — renderers look up the
+// SVG synchronously from the module-level cache populated by this call.
+beforeAll(async () => {
+  clearEventTileCache();
+  await precomputeEventTiles([sampleConcert]);
+});
+
+describe('S161 imageless tile — grid card', () => {
+  test('imageless event emits the new tile wrapper with an inline SVG', () => {
     const html = renderEventCard(sampleConcert);
-    expect(html).toContain('class="card-image card-image--fallback"');
-    expect(html).toContain('data-event-type="concert"');
+    expect(html).toContain('class="card-image-wrapper" data-type="concert"');
+    expect(html).toContain('<svg');
+    // The retired class must NOT reappear.
+    expect(html).not.toContain('card-image--fallback');
+    expect(html).not.toContain('card-image__fallback-text');
   });
 
-  test("fallback contains aria-hidden text span with the event title", () => {
+  test('body anchor with the full untruncated title is preserved (GEO floor)', () => {
     const html = renderEventCard(sampleConcert);
-    expect(html).toContain(
-      `<span class="card-image__fallback-text" aria-hidden="true">${sampleConcert.title}</span>`
+    expect(html).toMatch(
+      new RegExp(`<a href="[^"]+" class="card-link">${escapeRegex(sampleConcert.title)}</a>`),
     );
   });
 
-  test("event with imageUrl renders <img>, no fallback div", () => {
+  test('event with imageUrl renders <img class="card-image">, no inline tile SVG', () => {
     const eventWithImage: Event = {
       ...sampleConcert,
-      imageUrl: "https://example.com/concert.jpg",
+      imageUrl: 'https://example.com/concert.jpg',
     };
     const html = renderEventCard(eventWithImage);
-    expect(html).not.toContain("card-image--fallback");
     expect(html).toMatch(/<img\s[^>]*class="card-image"/);
+    // The tile SVG is distinct from icon SVGs by its 200×267 viewport.
+    expect(html).not.toMatch(/<svg\s[^>]*width="200"\s+height="267"/);
   });
 });
 
-describe("Tier 1 image fallback — list-row card", () => {
-  test("list-row imageless gets card-image--list modifier on same div", () => {
+describe('S161 imageless tile — list-row card', () => {
+  test('list-row imageless uses list-image-wrapper with inline SVG', () => {
     const html = renderEventCardList(sampleConcert);
-    expect(html).toContain("card-image--fallback");
-    expect(html).toContain("card-image--list");
+    expect(html).toContain('class="list-image-wrapper" data-type="concert"');
+    expect(html).toContain('<svg');
+    expect(html).not.toContain('card-image--fallback');
   });
 });
 
-describe("Tier 1 image fallback — Greek long title", () => {
-  test("60-char Greek title renders verbatim inside fallback text span", () => {
-    const longGreekTitle = "Δημήτρης Κόψης παρουσιάζει νέα μουσική ζωντανά στο EXA Ψυρρή";
-    const longGreekEvent: Event = {
-      ...sampleConcert,
-      title: longGreekTitle,
-    };
+describe('S161 imageless tile — Greek long title', () => {
+  test('long Greek title renders without throwing; title appears in body anchor unchanged', async () => {
+    const longGreekTitle = 'Δημήτρης Κόψης παρουσιάζει νέα μουσική ζωντανά στο EXA Ψυρρή';
+    const longGreekEvent: Event = { ...sampleConcert, title: longGreekTitle };
+    // Tile must be precomputed for this event id too (sampleConcert's id is reused
+    // because we spread it). Precompute again with the long-title variant.
+    await precomputeEventTiles([longGreekEvent]);
     expect(() => renderEventCard(longGreekEvent)).not.toThrow();
     const html = renderEventCard(longGreekEvent);
-    expect(html).toContain(
-      `<span class="card-image__fallback-text" aria-hidden="true">${longGreekTitle}</span>`
-    );
+    // Tile may have truncated the SVG copy, but the body anchor carries the full title.
+    expect(html).toContain(`>${longGreekTitle}</a>`);
   });
 });
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

@@ -10,6 +10,7 @@ import { formatDateOnly } from '../utils/i18n-date';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
+import { getEventTile } from '../generators/event-tile';
 import { buildCollectionPageMember, buildHomepageGraph } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
@@ -305,8 +306,8 @@ export function renderEventCard(event: Event): string {
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
       ${renderCardSaveButton(event.id, slug, event.title)}
     </div>`
-      : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
-      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      : `<div class="card-image-wrapper" data-type="${event.type}">
+      ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
       ${renderCardSaveButton(event.id, slug, event.title)}

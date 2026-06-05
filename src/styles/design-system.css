@@ -365,59 +365,14 @@ div#main-content {
   overflow: hidden;
 }
 
-/* ── Tier 1 image fallback (S124 — Design Navigator spec) ──
-   Used when an event has no imageLocal/imageUrl/venueImage.
-   Markup: <div class="card-image card-image--fallback" data-event-type="..."><span class="card-image__fallback-text" aria-hidden="true">{title}</span></div>
-   Per-type tints cover concert/theater/exhibition/cinema/performance/workshop;
-   other types fall through to the default yellow tint via the base rule's CSS variable fallback.
+/* ── Imageless tile (S161 — replaces S124 .card-image--fallback) ──
+   Tier 1 gradient retired in favor of a Satori → inline-SVG typographic tile
+   per Design Navigator ruling 2026-06-03. Tile generation lives in
+   src/generators/event-tile.ts; precompute is wired in src/generate-site.ts.
+   No CSS hooks remain for the tile — the SVG owns its background and layout.
 */
 
-.card-image--fallback {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  background: linear-gradient(
-    135deg,
-    var(--type-tint, rgba(245, 230, 66, 0.15)) 0%,
-    var(--bg-elevated) 70%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.card-image__fallback-text {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: clamp(18px, 3.2vw, 24px);
-  line-height: 1.15;
-  color: var(--text-primary);
-  text-align: center;
-  letter-spacing: -0.2px;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-image--fallback.card-image--list {
-  aspect-ratio: 16 / 9;
-}
-.card-image--fallback.card-image--list .card-image__fallback-text {
-  font-size: clamp(14px, 1.6vw, 18px);
-  -webkit-line-clamp: 3;
-}
-
-.card-image--fallback[data-event-type="concert"]     { --type-tint: rgba(245, 230, 66, 0.15); }
-.card-image--fallback[data-event-type="theater"]     { --type-tint: rgba(239, 44, 70, 0.15); }
-.card-image--fallback[data-event-type="exhibition"]  { --type-tint: rgba(126, 184, 247, 0.15); }
-.card-image--fallback[data-event-type="cinema"]      { --type-tint: rgba(184, 126, 247, 0.15); }
-.card-image--fallback[data-event-type="performance"] { --type-tint: rgba(245, 167, 66, 0.15); }
-.card-image--fallback[data-event-type="workshop"]    { --type-tint: rgba(126, 247, 184, 0.15); }
-
-.card-image:not(.card-image--fallback) {
+.card-image {
   position: absolute;
   inset: 0;
   width: 100%;

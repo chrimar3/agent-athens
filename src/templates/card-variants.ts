@@ -3,6 +3,7 @@
 
 import type { Event } from '../types';
 import { prepareCardData, TYPE_ICONS } from './page';
+import { getEventTile } from '../generators/event-tile';
 
 export type BadgeTreatment = 'yellow' | 'neutral';
 
@@ -22,8 +23,8 @@ export function renderEventCardList(event: Event): string {
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
-      : `<div class="card-image card-image--fallback card-image--list" data-event-type="${event.type}">
-      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      : `<div class="list-image-wrapper" data-type="${event.type}">
+      ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`}
     <div class="list-content">
@@ -51,8 +52,8 @@ export function renderFeatureCard(event: Event): string {
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
-      : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
-      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      : `<div class="feature-image-wrapper" data-type="${event.type}">
+      ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`}
     <div class="feature-body">
@@ -147,8 +148,8 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
         <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${featuredIcon}</span>
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`
-        : `<div class="card-image card-image--fallback" data-event-type="${featured.type}">
-        <span class="card-image__fallback-text" aria-hidden="true">${featured.title}</span>
+        : `<div class="hero-card-image-wrapper" data-type="${featured.type}">
+        ${getEventTile(featured.id) ?? ''}
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`}
       <div class="hero-card-body">
@@ -172,8 +173,8 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
           <img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
           <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
         </div>`
-          : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
-          <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+          : `<div class="hero-pick-image" data-type="${event.type}">
+          ${getEventTile(event.id) ?? ''}
         </div>`}
         <div class="hero-pick-body">
           <h3 class="hero-pick-title">${event.title}</h3>
@@ -224,8 +225,8 @@ export function renderFeaturedEventCard(
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
     </div>`
-      : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
-      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      : `<div class="featured-editorial-image" data-type="${event.type}">
+      ${getEventTile(event.id) ?? ''}
       <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
     </div>`}
     <div class="featured-editorial-body">
