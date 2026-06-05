@@ -62,7 +62,7 @@
     "times": "24h format with colon (e.g., '21:00', never '9 PM')",
     "currency": "EUR symbol before amount (e.g., '15 EUR' or 'EUR 15', never '$15')",
     "venue_names": "Use Latin transliteration of Greek venue names (e.g., 'Stegi Idrimatos Onasi' not 'Onassis Foundation Stoa'). If venue has an established English brand name (e.g., 'Half Note Jazz Club', 'Megaron Athens Concert Hall'), use that.",
-    "neighborhoods": "Use established Latin transliterations (e.g., 'Koukaki', 'Exarchia', 'Psyrri', never translate to English equivalents)",
+    "neighborhoods": "Use established Latin transliterations (e.g., 'Koukaki', 'Exarchia', 'Psyri', never translate to English equivalents)",
     "metro_stations": "Station name only, no line colors (e.g., 'Thissio metro', never 'Thissio metro on the Green Line')",
     "artist_names": "Latin transliteration of Greek names (e.g., 'Giorgos Dalaras' not 'George Dalaras'). Respect artist's preferred English spelling if known."
   },
@@ -72,7 +72,7 @@
     "Θησείο": "Thissio",
     "Κουκάκι": "Koukaki",
     "Εξάρχεια": "Exarchia",
-    "Ψυρρή": "Psyrri",
+    "Ψυρρή": "Psyri",
     "Γκάζι": "Gazi",
     "Πλάκα": "Plaka",
     "Μοναστηράκι": "Monastiraki",

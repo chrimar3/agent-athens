@@ -2007,7 +2007,7 @@ Within each category, prioritize events that:
 
 These fields are required for E-E-A-T compliance and must appear in every enrichment, regardless of event type:
 
-1. **Neighborhood name** — Plaka, Kolonaki, Monastiraki, Gazi, Exarchia, Psyrri, Koukaki, Pangrati, Metaxourgeio, Petralona, Thiseio, Neos Kosmos, Kifisia
+1. **Neighborhood name** — Plaka, Kolonaki, Monastiraki, Gazi, Exarchia, Psyri, Koukaki, Pangrati, Metaxourgeio, Petralona, Thiseio, Neos Kosmos, Kifisia
 2. **Nearest metro station** — practical info that proves local expertise
 3. **At least one "insider" detail** — something not available from the source listing (e.g., "arrive 30 minutes early for unreserved seating on the terrace" or "the museum's ground-floor cafe serves the best freddo in Kolonaki")
 

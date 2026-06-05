@@ -166,7 +166,7 @@
         "DYBBUK",
         "Dybbuk, Πατριάρχου Ιωακείμ 37, Κολωνάκι, Αθήνα, Greece"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyri"
     },
     {
       "canonical_name": "Six D.O.G.S",
@@ -194,7 +194,7 @@
       "variations": [
         "Cantina Social, Λεωκορίου 6-8, Ψυρρή, Αθήνα, Greece"
       ],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Psyri",
       "address": "Leokoriou 6-8, Athens 105 54"
     },
     {
@@ -307,7 +307,7 @@
         "WAVVES Bios Ρομαντσο",
         "Bios Romantso"
       ],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Psyri",
       "address": "Anaxagora 3, Athina 105 52"
     },
     {
@@ -349,7 +349,7 @@
         "HOOD",
         "Hood Art Space"
       ],
-      "neighborhood": "Metaxourgeio",
+      "neighborhood": "Psyri",
       "address": "Polykleitou 21, Athens 105 52"
     },
     {
@@ -457,7 +457,7 @@
     {
       "canonical_name": "Theatre Of The No",
       "variations": [],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Metaxourgeio",
       "address": "Konstantinou Paleologou 3, Athens 104 38"
     },
     {
@@ -523,7 +523,7 @@
         "Άβατον",
         "Avaton"
       ],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Psyri",
       "address": "Eupatridon 3, Athens 118 54"
     },
     {
@@ -1250,7 +1250,7 @@
         "Radar Theater",
         "Θέατρο Radar"
       ],
-      "neighborhood": "Central Athens",
+      "neighborhood": "Neos Kosmos",
       "address": "Pitheou 93, Athens 117 44"
     },
     {
@@ -1431,7 +1431,7 @@
       "variations": [
         "Τεχνοχώρος&#160;Εργοτάξιον"
       ],
-      "neighborhood": "Gazi",
+      "neighborhood": "Agios Dimitrios",
       "address": "Diogenous 1, Agios Dimitrios 172 37"
     },
     {
@@ -1470,7 +1470,7 @@
       "variations": [
         "Σατωβριάνδου 36, Αθήνα"
       ],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Psyri",
       "website": "https://aggelonvima.com",
       "ticketing": null,
       "sameAs": []
@@ -1602,7 +1602,7 @@
         "DEATH DISCO"
       ],
       "neighborhood": "Gazi",
-      "address": "Ogygou 16, Psyrri, Athens 105 54"
+      "address": "Ogygou 16, Psyri, Athens 105 54"
     },
     {
       "canonical_name": "HolyWood Stage",
@@ -1824,7 +1824,7 @@
         "Θέατρο Βασιλάκου _ Μαριάννα Τόλη",
         "Vasilakou Theatre"
       ],
-      "neighborhood": "Central Athens",
+      "neighborhood": "Gazi",
       "address": "Profiti Daniil 3 & Plataion, Athens 104 35"
     },
     {
@@ -1852,7 +1852,7 @@
       "variations": [
         "Θέατρο Στοά"
       ],
-      "neighborhood": "Syntagma",
+      "neighborhood": "Zografou",
       "address": "Biskini 55, Athens 157 71"
     },
     {
@@ -1876,7 +1876,7 @@
         "Los Angelez",
         "Los Angeles"
       ],
-      "neighborhood": "Exarchia",
+      "neighborhood": "Koukaki",
       "address": "Koryzi 4-6, Athens 117 43"
     },
     {
@@ -1956,7 +1956,7 @@
       "variations": [
         "Psirri Theatre"
       ],
-      "neighborhood": "Psyrri",
+      "neighborhood": "Psyri",
       "address": "Sachtouri 4, Athens 105 54"
     },
     {
@@ -2305,7 +2305,7 @@
       "variations": [
         "Boo!, Λεπενιώτου 22, Αθήνα, 10554, Greece"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyri"
     },
     {
       "canonical_name": "Σκηνή Brecht",
@@ -2587,7 +2587,7 @@
         "ΓΕΡΜΑΝΙΚΗ ΕΚΚΛΗΣΙΑ ΑΘΗΝΩΝ",
         "German Church Athens"
       ],
-      "neighborhood": "Syntagma",
+      "neighborhood": "Kolonaki",
       "address": "Sina 66, Athens 106 72"
     },
     {
@@ -2776,7 +2776,7 @@
     "Γκάζι",
     "Gazi",
     "Ψυρρή",
-    "Psyrri",
+    "Psyri",
     "Εξάρχεια",
     "Exarchia",
     "Κολωνάκι",
@@ -2859,7 +2859,8 @@
     "Athens Riviera"
   ],
   "neighborhood_aliases": {
-    "Psyrri": [
+    "Psyri": [
+      "Psyrri",
       "Psiri"
     ],
     "Pangrati": [
@@ -2881,6 +2882,9 @@
     "Ampelokipoi": [
       "Ambelokipi",
       "Ambelokipoi"
+    ],
+    "Exarchia": [
+      "Exarcheia"
     ]
   },
   "pass_through_venues": [

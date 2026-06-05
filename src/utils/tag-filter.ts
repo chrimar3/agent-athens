@@ -24,7 +24,7 @@ export interface VenuesConfig {
   neighborhoods: string[];
   pass_through_venues: string[];
   // S2 taxonomy hygiene: optional sibling map of canonical neighborhood →
-  // transliteration variants (Psyrri ↔ Psiri, Pangrati ↔ Pagrati, etc.).
+  // transliteration variants (Psyri ↔ Psyrri/Psiri, Pangrati ↔ Pagrati, etc.).
   // Schema invariant: every key MUST also exist in `.neighborhoods`.
   // Empty arrays valid (slot reserved for canonical with no current variants).
   neighborhood_aliases?: Record<string, string[]>;
@@ -97,8 +97,8 @@ export function buildEntityExclusionSet(config: ExclusionConfig): Set<string> {
   // S2: explicit transliteration variants from the sibling map. Variants stay
   // variants (taxonomy correct) — they're not promoted to neighborhoods. The
   // canonical key was already added above via `.neighborhoods`; here we add
-  // each value-array entry so "Psiri" filters even though `.neighborhoods` has
-  // "Psyrri" only.
+  // each value-array entry so "Psyrri"/"Psiri" filter even though `.neighborhoods`
+  // has the canonical "Psyri" only.
   if (config.venues.neighborhood_aliases) {
     for (const variants of Object.values(config.venues.neighborhood_aliases)) {
       for (const variant of variants) {

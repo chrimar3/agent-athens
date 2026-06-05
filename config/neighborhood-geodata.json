@@ -1,80 +1,98 @@
 {
   "Kolonaki": {
     "name": "Kolonaki",
-    "qid": "Q6427208",
+    "qid": "Q1779602",
     "lat": 37.9778,
     "lng": 23.7425
   },
   "Mets": {
     "name": "Mets",
-    "qid": "Q6823368",
+    "qid": "Q2614301",
     "lat": 37.9639,
     "lng": 23.7383
   },
   "Gazi": {
     "name": "Gazi",
-    "qid": "Q5528361",
+    "qid": "Q1496656",
     "lat": 37.9785,
     "lng": 23.7145
   },
   "Koukaki": {
     "name": "Koukaki",
-    "qid": "Q6433832",
+    "qid": "Q2613998",
     "lat": 37.9621,
     "lng": 23.7262
   },
   "Marousi": {
     "name": "Marousi",
-    "qid": "Q648092",
+    "qid": "Q992348",
     "lat": 38.0502,
     "lng": 23.8063
   },
   "Exarchia": {
     "name": "Exarchia",
-    "qid": "Q1384288",
+    "qid": "Q531602",
     "lat": 37.9862,
-    "lng": 23.7340
+    "lng": 23.734
   },
   "Pangrati": {
     "name": "Pangrati",
-    "qid": "Q7130447",
+    "qid": "Q2336775",
     "lat": 37.9681,
-    "lng": 23.7480
+    "lng": 23.748
   },
   "Psyri": {
     "name": "Psyri",
-    "qid": "Q7256286",
+    "qid": "Q2984834",
     "lat": 37.9792,
     "lng": 23.7237
   },
   "Monastiraki": {
     "name": "Monastiraki",
-    "qid": "Q1952011",
+    "qid": "Q1235440",
     "lat": 37.9763,
     "lng": 23.7256
   },
   "Plaka": {
     "name": "Plaka",
-    "qid": "Q1061405",
+    "qid": "Q1231816",
     "lat": 37.9727,
-    "lng": 23.7300
+    "lng": 23.73
   },
   "Metaxourgeio": {
     "name": "Metaxourgeio",
-    "qid": "Q6822710",
+    "qid": "Q1235412",
     "lat": 37.9862,
-    "lng": 23.7200
+    "lng": 23.72
   },
   "Thiseio": {
     "name": "Thiseio",
-    "qid": "Q7784882",
+    "qid": "Q2984896",
     "lat": 37.9757,
     "lng": 23.7198
   },
   "Kerameikos": {
     "name": "Kerameikos",
-    "qid": "Q464266",
+    "qid": "Q630974",
     "lat": 37.9782,
     "lng": 23.7178
+  },
+  "Agios Dimitrios": {
+    "name": "Agios Dimitrios",
+    "qid": "Q204361",
+    "lat": 37.9333,
+    "lng": 23.7333
+  },
+  "Zografou": {
+    "name": "Zografou",
+    "qid": "Q218375",
+    "lat": 37.9762,
+    "lng": 23.7638
+  },
+  "Neos Kosmos": {
+    "name": "Neos Kosmos",
+    "qid": "Q2569363",
+    "lat": 37.959,
+    "lng": 23.727
   }
 }

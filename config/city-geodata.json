@@ -1,14 +1,19 @@
 {
   "municipality": {
     "name": "Municipality of Athens",
-    "name_forms": ["Athens", "Athina", "Αθήνα", "Αθηνά"],
+    "name_forms": [
+      "Athens",
+      "Athina",
+      "Αθήνα",
+      "Αθηνά"
+    ],
     "qid": "Q1524",
     "lat": 37.9838,
     "lng": 23.7275
   },
   "region": {
     "name": "Attica",
-    "qid": "Q178517",
+    "qid": "Q758056",
     "lat": 37.9908,
     "lng": 23.7033
   },

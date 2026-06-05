@@ -12,7 +12,7 @@ describe('buildContainedInPlace', () => {
     const chain = buildContainedInPlace('Mets') as any;
     expect(chain['@type']).toBe('Place');
     expect(chain.name).toBe('Mets');
-    expect(chain.sameAs).toContain('Q6823368');
+    expect(chain.sameAs).toContain('Q2614301'); // Mets — verified Athens neighborhood (old Q6823368 was a fabricated QID)
     expect(chain.geo['@type']).toBe('GeoCoordinates');
   });
 
@@ -30,19 +30,19 @@ describe('buildContainedInPlace', () => {
   test('Gazi neighborhood resolves correctly', () => {
     const chain = buildContainedInPlace('Gazi') as any;
     expect(chain.name).toBe('Gazi');
-    expect(chain.sameAs).toContain('Q5528361');
+    expect(chain.sameAs).toContain('Q1496656'); // Gazi — verified (old Q5528361 was a fabricated QID)
   });
 
   test('Greek value Γκάζι resolves to Gazi', () => {
     const chain = buildContainedInPlace('Γκάζι') as any;
     expect(chain.name).toBe('Gazi');
-    expect(chain.sameAs).toContain('Q5528361');
+    expect(chain.sameAs).toContain('Q1496656'); // Gazi — verified (old Q5528361 was a fabricated QID)
   });
 
   test('Greek value Κουκάκι resolves to Koukaki', () => {
     const chain = buildContainedInPlace('Κουκάκι') as any;
     expect(chain.name).toBe('Koukaki');
-    expect(chain.sameAs).toContain('Q6433832');
+    expect(chain.sameAs).toContain('Q2613998'); // Koukaki — verified (old Q6433832 was a fabricated QID)
   });
 
   test('unknown neighborhood falls back to municipality', () => {
@@ -57,7 +57,7 @@ describe('buildContainedInPlace', () => {
     expect(municipality.name).toBe('Municipality of Athens');
     const attica = municipality.containedInPlace;
     expect(attica.name).toBe('Attica');
-    expect(attica.sameAs).toContain('Q178517');
+    expect(attica.sameAs).toContain('Q758056'); // Attica Region — verified (old Q178517 was David Gilmour, a fabricated QID)
     const greece = attica.containedInPlace;
     expect(greece.name).toBe('Greece');
     expect(greece.sameAs).toContain('Q41');
