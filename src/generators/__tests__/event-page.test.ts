@@ -1038,3 +1038,62 @@ describe("Event schema — streetAddress config fallback (2.2)", () => {
     expect(schema.location.address.streetAddress).toBe("");
   });
 });
+
+// ── selectRelatedEvents — "Επόμενες εκδηλώσεις" venue block (S172) ──
+// callers pass pageableEvents (upcoming + past-active ≤45d), so the
+// related-events list must filter to lifecycle 'upcoming' only.
+// Exhibition-safety: a running exhibition (started in the past, end_date
+// in the future) counts as upcoming — COALESCE(end_date, start_date) >= today.
+import { selectRelatedEvents } from "../event-page";
+
+describe("selectRelatedEvents — excludes past events from venue block", () => {
+  const DAY = 86400000;
+  const iso = (offsetDays: number) => new Date(Date.now() + offsetDays * DAY).toISOString();
+  const atVenue = (overrides: Partial<Event>): Event => ({
+    ...sampleConcert,
+    venue: { ...sampleConcert.venue, name: "Fixture Venue" },
+    ...overrides,
+  });
+
+  const currentEvent = atVenue({ id: "current-event", startDate: iso(3) });
+  const pastConcert = atVenue({ id: "past-concert", startDate: iso(-10), endDate: undefined });
+  const endedExhibition = atVenue({
+    id: "ended-exhibition", type: "exhibition",
+    startDate: iso(-60), endDate: iso(-5),
+  });
+  const runningExhibition = atVenue({
+    id: "running-exhibition", type: "exhibition",
+    startDate: iso(-30), endDate: iso(20),
+  });
+  const futureConcert = atVenue({ id: "future-concert", startDate: iso(7), endDate: undefined });
+  const todayConcert = atVenue({ id: "today-concert", startDate: iso(0), endDate: undefined });
+
+  const venueEvents = [currentEvent, pastConcert, endedExhibition, runningExhibition, futureConcert, todayConcert];
+
+  test("contains only upcoming events (no past-active leak)", () => {
+    const ids = selectRelatedEvents(venueEvents, currentEvent.id).map(e => e.id);
+    expect(ids).not.toContain("past-concert");
+    expect(ids).not.toContain("ended-exhibition");
+  });
+
+  test("running exhibition (past start, future end_date) IS included — exhibition-safe filter", () => {
+    const ids = selectRelatedEvents(venueEvents, currentEvent.id).map(e => e.id);
+    expect(ids).toContain("running-exhibition");
+  });
+
+  test("future and same-day events are included, current event excluded", () => {
+    const ids = selectRelatedEvents(venueEvents, currentEvent.id).map(e => e.id);
+    expect(ids).toContain("future-concert");
+    expect(ids).toContain("today-concert");
+    expect(ids).not.toContain("current-event");
+  });
+
+  test("caps at 6 upcoming events, soonest first", () => {
+    const many = Array.from({ length: 9 }, (_, i) =>
+      atVenue({ id: `future-${i}`, startDate: iso(i + 1), endDate: undefined })
+    );
+    const result = selectRelatedEvents([currentEvent, pastConcert, ...many], currentEvent.id);
+    expect(result.length).toBe(6);
+    expect(result.map(e => e.id)).toEqual(["future-0", "future-1", "future-2", "future-3", "future-4", "future-5"]);
+  });
+});

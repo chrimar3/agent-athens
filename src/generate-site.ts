@@ -601,7 +601,7 @@ async function main() {
 
   // Generate English event pages for events with fullDescriptionEn
   console.log('\n🇬🇧 Generating English event pages...');
-  const { renderEventDetailPage, generateEventSlug } = await import('./generators/event-page');
+  const { renderEventDetailPage, generateEventSlug, selectRelatedEvents } = await import('./generators/event-page');
   const englishEvents = pageableEvents.filter(e => e.fullDescriptionEn);
   const bilingualSlugs = new Set<string>();
   const enEventsDir = join(DIST_DIR, 'en/events');
@@ -621,12 +621,10 @@ async function main() {
     const slug = generateEventSlug(event);
     bilingualSlugs.add(slug);
 
-    // Related events at same venue (max 6)
+    // Related events at same venue (max 6, upcoming only — shared helper
+    // with the Greek pages; pageableEvents includes past-active ≤45d)
     const venueEvents = eventsByVenueEn.get(event.venue.name) || [];
-    const relatedEvents = venueEvents
-      .filter(e => e.id !== event.id)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-      .slice(0, 6);
+    const relatedEvents = selectRelatedEvents(venueEvents, event.id);
 
     const html = renderEventDetailPage(event, relatedEvents, 'en', pagedVenueSlugs);
     const pageDir = join(enEventsDir, slug);

@@ -800,6 +800,22 @@ export function renderEventDetailScript(): string {
 }
 
 /**
+ * Select the "upcoming at this venue" related-events list for an event page.
+ * Max 6 events at the same venue, excluding the current event, soonest first.
+ *
+ * Note: callers pass pageableEvents (upcoming + past-active ≤45d retention),
+ * so this list must filter to upcoming only — the block is titled
+ * "Επόμενες εκδηλώσεις" and must never show past events.
+ */
+export function selectRelatedEvents(venueEvents: Event[], currentEventId: string): Event[] {
+  return venueEvents
+    .filter(e => e.id !== currentEventId)
+    .filter(e => classifyEventLifecycle(e) === 'upcoming')
+    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+    .slice(0, 6);
+}
+
+/**
  * Generate all individual event pages
  * Returns list of generated URLs for sitemap
  */
@@ -842,10 +858,7 @@ export async function generateEventPages(events: Event[], pagedVenueSlugs?: Set<
 
     // Get related events at same venue (max 6, excluding current)
     const venueEvents = eventsByVenue.get(event.venue.name) || [];
-    const relatedEvents = venueEvents
-      .filter(e => e.id !== event.id)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-      .slice(0, 6);
+    const relatedEvents = selectRelatedEvents(venueEvents, event.id);
 
     // Generate page HTML
     const html = renderEventDetailPage(event, relatedEvents, 'el', pagedVenueSlugs);
