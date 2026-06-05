@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Performer → sameAs links cache. Maps performer names to Schema.org performer blocks with Wikidata, Wikipedia, and MusicBrainz sameAs URIs.",
-    "updated": "2026-03-04",
+    "updated": "2026-06-05",
     "generated_by": "scripts/lookup-performer-sameAs.ts"
   },
   "performers": {
@@ -724,6 +724,43 @@
     "Pantelis Thalassinos & Panos Dimitrakopoulos With guitar and kanun": null,
     "Vangelis Germanos Silence Session": null,
     "Δαυίδ Ναχμίας ΔΑΝΑΗ": null,
-    "FERMA Label Night": null
+    "FERMA Label Night": null,
+    "Kevin Bridges": {
+      "type": "Person",
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Kevin_Bridges"
+      ]
+    },
+    "Mario Adrion": {
+      "type": "Person",
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Mario_Adrion",
+        "https://www.marioadrion.com/"
+      ]
+    },
+    "Dara Ó Briain": {
+      "type": "Person",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q983613",
+        "https://en.wikipedia.org/wiki/Dara_%C3%93_Briain",
+        "https://daraobriain.com/"
+      ]
+    },
+    "Gabriel Fluffy Iglesias": {
+      "type": "Person",
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Gabriel_Iglesias",
+        "https://fluffyguy.com/"
+      ]
+    },
+    "Sooshi Mango": {
+      "type": "PerformingGroup",
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Sooshi_Mango",
+        "https://www.sooshimango.com/"
+      ]
+    },
+    "Athens English Comedy Club": null,
+    "Στάξε το φαρμάκι σου": null
   }
 }
