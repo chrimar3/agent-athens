@@ -26,7 +26,10 @@
         "provider": "megaron.gr",
         "search_pattern": "https://www.megaron.gr/event-search/?keyword={title}"
       },
-      "sameAs": ["https://www.wikidata.org/wiki/Q582203", "https://en.wikipedia.org/wiki/Athens_Concert_Hall"]
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q582203",
+        "https://en.wikipedia.org/wiki/Athens_Concert_Hall"
+      ]
     },
     {
       "canonical_name": "Gazarte",
@@ -38,7 +41,8 @@
         "Gazarte - Κεντρική Σκηνή",
         "Gazarte Κεντρική Σκηνή"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Voutadon 32-34, Athens 118 54"
     },
     {
       "canonical_name": "Universe",
@@ -50,7 +54,8 @@
         "Universe - Multispace",
         "Universe Multispace"
       ],
-      "neighborhood": "Votanikos"
+      "neighborhood": "Votanikos",
+      "address": "Leoforos Kifisou 87, Athens 122 41"
     },
     {
       "canonical_name": "ΚΠΙΣΝ",
@@ -70,7 +75,8 @@
         "Πάρκο Σταύρος Νιάρχος",
         "Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος (ΚΠΙΣΝ)"
       ],
-      "neighborhood": "Kallithea"
+      "neighborhood": "Kallithea",
+      "address": "Leoforos Andrea Syngrou 364, Kallithea 176 74"
     },
     {
       "canonical_name": "Ωδείο Αθηνών",
@@ -83,7 +89,8 @@
         "Conservatoire (in Greek)",
         "Athens Conservatoire (in Greek)"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Rigillis & Vasileos Georgiou B' 17-19, Athens 106 75"
     },
     {
       "canonical_name": "ΟΑΚΑ",
@@ -116,7 +123,8 @@
         "Kyttaro Live",
         "Athens Κυτταρο Live"
       ],
-      "neighborhood": "Patisia"
+      "neighborhood": "Patisia",
+      "address": "Ipeirou 48, Athens 104 39"
     },
     {
       "canonical_name": "Christmas Theater",
@@ -142,7 +150,8 @@
         "Arch Club",
         "ARCH"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Leoforos Konstantinoupoleos 111, Athens 104 47"
     },
     {
       "canonical_name": "Floyd",
@@ -194,7 +203,8 @@
         "Piraeus Academy",
         "Club Academy Piraeus"
       ],
-      "neighborhood": "Piraeus"
+      "neighborhood": "Piraeus",
+      "address": "Piraeus 105, Athens 118 54"
     },
     {
       "canonical_name": "Astron",
@@ -339,7 +349,8 @@
         "HOOD",
         "Hood Art Space"
       ],
-      "neighborhood": "Metaxourgeio"
+      "neighborhood": "Metaxourgeio",
+      "address": "Polykleitou 21, Athens 105 52"
     },
     {
       "canonical_name": "Half Note Jazz Club",
@@ -385,21 +396,24 @@
         "Rabbit Hole",
         "RABBITHOLE"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Lekka 12, Athens 105 62"
     },
     {
       "canonical_name": "Μικρός Κεραμεικός",
       "variations": [
         "Mikros Kerameikos"
       ],
-      "neighborhood": "Kerameikos"
+      "neighborhood": "Kerameikos",
+      "address": "Eumolpidon 13, Athens 118 54"
     },
     {
       "canonical_name": "Ράδιο",
       "variations": [
         "Radio"
       ],
-      "neighborhood": "Koukaki"
+      "neighborhood": "Koukaki",
+      "address": "Dekeleon 24, Athens 118 54"
     },
     {
       "canonical_name": "Σταυρός του Νότου",
@@ -443,7 +457,8 @@
     {
       "canonical_name": "Theatre Of The No",
       "variations": [],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyrri",
+      "address": "Konstantinou Paleologou 3, Athens 104 38"
     },
     {
       "canonical_name": "Δημοτικό Θέατρο Λυκαβηττού",
@@ -453,7 +468,8 @@
         "LYCABETTUS THEATER",
         "Δημοτικο Θεατρο Λυκαβηττου"
       ],
-      "neighborhood": "Kolonaki"
+      "neighborhood": "Kolonaki",
+      "address": "Lofos Lykavittou (Lycabettus Hill), Athens 114 71"
     },
     {
       "canonical_name": "Θέατρο Αμαλία",
@@ -477,7 +493,8 @@
         "Theatro tou Neou Kosmou",
         "Neos Kosmos Theatre"
       ],
-      "neighborhood": "Neos Kosmos"
+      "neighborhood": "Neos Kosmos",
+      "address": "Antisthenous 7 & Tharypou, Athens 117 43"
     },
     {
       "canonical_name": "Γυάλινο Μουσικό Θέατρο",
@@ -495,7 +512,8 @@
         "Dimotiko Theatro Piraia",
         "Δημοτικο Θεατρο Πειραια"
       ],
-      "neighborhood": "Piraeus"
+      "neighborhood": "Piraeus",
+      "address": "Iroon Polytechniou 32, Piraeus 185 35"
     },
     {
       "canonical_name": "Θέατρο Άβατον",
@@ -505,7 +523,8 @@
         "Άβατον",
         "Avaton"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyrri",
+      "address": "Eupatridon 3, Athens 118 54"
     },
     {
       "canonical_name": "Θέατρο Δρόμος",
@@ -561,6 +580,7 @@
         "ΙΛΙΟΝ Plus"
       ],
       "neighborhood": "Central Athens",
+      "address": "Kodrigktonos 17, Athens 104 34",
       "website": "https://www.ilionplus.gr",
       "ticketing": {
         "provider": "more.com",
@@ -581,7 +601,8 @@
         "Studio Mavromichali",
         "Studio Mαυρομιχάλη"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Mavromichali 134, Athens 114 72"
     },
     {
       "canonical_name": "Θέατρο ΕΛΕΡ",
@@ -591,7 +612,8 @@
         "Θέατρο ΕΛΕΡ Ελένη Ερήμου",
         "ELER Theatre"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Frynichou 10, Athens 105 58"
     },
     {
       "canonical_name": "Μουσείο Μπενάκη - Πινακοθήκη Γουλανδρή",
@@ -665,7 +687,8 @@
         "Poreia Victoria",
         "Πορεία"
       ],
-      "neighborhood": "Victoria"
+      "neighborhood": "Victoria",
+      "address": "Trikorfon 3-5, Athens 104 33"
     },
     {
       "canonical_name": "Το Τρένο στο Ρουφ",
@@ -674,7 +697,8 @@
         "Το Τρένο στο Ρουφ - Μουσικό Βαγόνι Orient Express",
         "Orient Express Rouf"
       ],
-      "neighborhood": "Rouf"
+      "neighborhood": "Rouf",
+      "address": "Konstantinoupoleos, Rouf Station, Athens 118 54"
     },
     {
       "canonical_name": "Άλσος",
@@ -711,7 +735,8 @@
     {
       "canonical_name": "Parnassos Literary Society",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Agiou Georgiou Karitsi 8, Athens 105 61"
     },
     {
       "canonical_name": "Astron Club",
@@ -774,7 +799,10 @@
         "provider": "onassis.org",
         "search_pattern": "https://www.onassis.org/el/calendar?search={title}"
       },
-      "sameAs": ["https://www.wikidata.org/wiki/Q43064509", "https://en.wikipedia.org/wiki/Onassis_Stegi"]
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q43064509",
+        "https://en.wikipedia.org/wiki/Onassis_Stegi"
+      ]
     },
     {
       "canonical_name": "GREEK NATIONAL OPERA - SNFCC",
@@ -814,7 +842,8 @@
     {
       "canonical_name": "Gustav Athens",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Char. Trikoupi 6-10, Athina 106 79"
     },
     {
       "canonical_name": "El Chapo, Φίλωνος 95, Πειραιάς, Αθήνα, 18535, Greece",
@@ -926,7 +955,8 @@
         "Σκηνή «Brecht» - 2510",
         "Σκηνή &#171;Brecht&#187; - 2510"
       ],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "3is Septemvriou 38, Athens 104 31"
     },
     {
       "canonical_name": "Πολιτιστικό Κέντρο Δαΐς",
@@ -1043,14 +1073,18 @@
       "canonical_name": "STAVROS NIARCHOS FOUNDATION CULTURAL CENTER",
       "variations": [],
       "neighborhood": "Unknown",
-      "sameAs": ["https://www.wikidata.org/wiki/Q17511186", "https://en.wikipedia.org/wiki/Stavros_Niarchos_Foundation_Cultural_Center"]
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q17511186",
+        "https://en.wikipedia.org/wiki/Stavros_Niarchos_Foundation_Cultural_Center"
+      ]
     },
     {
       "canonical_name": "Red Jasper Cabaret Theatre",
       "variations": [
         "Red Jasper"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Kefallinias 18, Athina 113 61"
     },
     {
       "canonical_name": "Patision65",
@@ -1187,7 +1221,9 @@
         "Μουσείο Μπενάκη"
       ],
       "neighborhood": "Syntagma",
-      "sameAs": ["https://www.wikidata.org/wiki/Q816669"]
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q816669"
+      ]
     },
     {
       "canonical_name": "Zelus",
@@ -1203,7 +1239,8 @@
         "Alkmini",
         "ΑΛΚΜΗΝΗ"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Alkminis 8-12, Athens 118 54"
     },
     {
       "canonical_name": "ΘΕΑΤΡΟ RADAR",
@@ -1218,7 +1255,8 @@
       "variations": [
         "OLVIO"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Iera Odos 67, Athens 104 35"
     },
     {
       "canonical_name": "Θέατρο Nous",
@@ -1226,7 +1264,8 @@
         "Θέατρο Nous - Creative space",
         "Nous Creative Space"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Trias 34, Athens 112 55"
     },
     {
       "canonical_name": "ΠΛΥΦΑ",
@@ -1242,7 +1281,8 @@
         "Stathmos Theatre",
         "Σταθμός"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Viktoros Ougko 55, Athens 104 37"
     },
     {
       "canonical_name": "Κέντρο Ελέγχου Τηλεοράσεων",
@@ -1278,14 +1318,16 @@
         "ROES",
         "Roes"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Iakchou 16, Athens 118 54"
     },
     {
       "canonical_name": "Αυλαία Πολυχώρος",
       "variations": [
         "Αυλαία"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "V' Merarchias & Kountouriotou 182, Piraeus 185 35"
     },
     {
       "canonical_name": "Calderone Art Space",
@@ -1327,14 +1369,16 @@
         "Θέατρο Άνεσις",
         "Anesis"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Kifisias 14, Athens 115 26"
     },
     {
       "canonical_name": "Studio Κυψέλης",
       "variations": [
         "Studio Kypselis"
       ],
-      "neighborhood": "Kypseli"
+      "neighborhood": "Kypseli",
+      "address": "Spetsopoulas 9, Athens 113 61"
     },
     {
       "canonical_name": "Stage 7",
@@ -1371,7 +1415,8 @@
       "variations": [
         "Θέατρο 104"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Eumolpidon 41, Athens 118 54"
     },
     {
       "canonical_name": "Μορφές Έκφρασης",
@@ -1383,7 +1428,8 @@
       "variations": [
         "Τεχνοχώρος&#160;Εργοτάξιον"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Diogenous 1, Agios Dimitrios 172 37"
     },
     {
       "canonical_name": "Τεχνοχώρος Φάμπρικα",
@@ -1405,18 +1451,22 @@
         "Θέατρο Αργώ",
         "Θέατρο Αργώ - Κεντρική Σκηνή"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Elefsinion 13-15, Athens 104 37"
     },
     {
       "canonical_name": "Αλίκη",
       "variations": [
         "Θέατρο Αλίκη"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Amerikis 4, Athens 105 64"
     },
     {
       "canonical_name": "Αγγέλων Βήμα",
-      "variations": ["Σατωβριάνδου 36, Αθήνα"],
+      "variations": [
+        "Σατωβριάνδου 36, Αθήνα"
+      ],
       "neighborhood": "Psyrri",
       "website": "https://aggelonvima.com",
       "ticketing": null,
@@ -1443,7 +1493,10 @@
         "Εθνική Λυρική Σκηνή - αίθουσα &#171;Σταύρος Νιάρχος&#187;"
       ],
       "neighborhood": "Kallithea",
-      "sameAs": ["https://www.wikidata.org/wiki/Q582625", "https://en.wikipedia.org/wiki/Greek_National_Opera"]
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q582625",
+        "https://en.wikipedia.org/wiki/Greek_National_Opera"
+      ]
     },
     {
       "canonical_name": "Θέατρο Τζένη Καρέζη",
@@ -1451,7 +1504,8 @@
         "«Τζένη Καρέζη»",
         "&#171;Τζένη Καρέζη&#187;"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Akadimias 3, Athens 106 71"
     },
     {
       "canonical_name": "Θέατρο Χορν",
@@ -1481,7 +1535,8 @@
       "variations": [
         "Θέατρο Eliart"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Konstantinoupoleos 127, Athens 104 47"
     },
     {
       "canonical_name": "Μουσείο Γουλανδρή",
@@ -1504,7 +1559,11 @@
         "Τεχνόπολις"
       ],
       "neighborhood": "Gazi",
-      "sameAs": ["https://www.wikidata.org/wiki/Q174552", "https://en.wikipedia.org/wiki/Technopolis_(Gazi)"]
+      "address": "Pireos 100, Athens 118 54",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q174552",
+        "https://en.wikipedia.org/wiki/Technopolis_(Gazi)"
+      ]
     },
     {
       "canonical_name": "Θέατρο Τέχνης",
@@ -1522,7 +1581,8 @@
         "Πατάρι (στο θέατρο Μεταξουργείο)",
         "Metaxourgeio Theatre"
       ],
-      "neighborhood": "Metaxourgeio"
+      "neighborhood": "Metaxourgeio",
+      "address": "Akadimou 14, Athens 104 36"
     },
     {
       "canonical_name": "Θέατρο Μετς",
@@ -1624,7 +1684,8 @@
         "Neos Akadimos",
         "New Academy"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Ippokratous 17 & Akadimias, Athens 106 79"
     },
     {
       "canonical_name": "Oldschool",
@@ -1663,7 +1724,8 @@
         "Spiti Art Bar",
         "Σπίτι"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Evpatridon 7, Athens 118 54"
     },
     {
       "canonical_name": "Απανεμιά",
@@ -1776,7 +1838,8 @@
       "variations": [
         "Θέατρο Χώρα"
       ],
-      "neighborhood": "Kypseli"
+      "neighborhood": "Kypseli",
+      "address": "Amorgou 20, Athens 112 56"
     },
     {
       "canonical_name": "Στοά",
@@ -1797,7 +1860,8 @@
       "variations": [
         "Θέατρο Παραμυθίας"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Paramythias 27, Athens 104 35"
     },
     {
       "canonical_name": "Λοσάντζελε",
@@ -1805,7 +1869,8 @@
         "Los Angelez",
         "Los Angeles"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Koryzi 4-6, Athens 117 43"
     },
     {
       "canonical_name": "Θυμέλη Έλλης Βοζικιάδου",
@@ -1827,7 +1892,8 @@
       "variations": [
         "Kallirois Theatre"
       ],
-      "neighborhood": "Koukaki"
+      "neighborhood": "Koukaki",
+      "address": "Kallirois 10, Athens 117 43"
     },
     {
       "canonical_name": "Θέατρο Μπέλλος",
@@ -1844,7 +1910,8 @@
       "variations": [
         "Epi Kolono"
       ],
-      "neighborhood": "Kolonos"
+      "neighborhood": "Kolonos",
+      "address": "Naupliou 12 & Lenorman 94, Athens 104 44"
     },
     {
       "canonical_name": "Εν Αθήναις",
@@ -1873,21 +1940,24 @@
       "variations": [
         "Kamiros"
       ],
-      "neighborhood": "Kypseli"
+      "neighborhood": "Kypseli",
+      "address": "Ithakis 32, Athens 112 57"
     },
     {
       "canonical_name": "Θέατρο Ψυρρή",
       "variations": [
         "Psirri Theatre"
       ],
-      "neighborhood": "Psyrri"
+      "neighborhood": "Psyrri",
+      "address": "Sachtouri 4, Athens 105 54"
     },
     {
       "canonical_name": "Θέατρο Μαβίλη",
       "variations": [
         "Mavili Theatre"
       ],
-      "neighborhood": "Ambelokipi"
+      "neighborhood": "Ambelokipi",
+      "address": "Dorylaiou 10-12, Athens 115 21"
     },
     {
       "canonical_name": "Εσωθέατρο",
@@ -1930,7 +2000,8 @@
         "Θησείον, Ένα Θέατρο Για Τις Τέχνες",
         "Theseion Theatre"
       ],
-      "neighborhood": "Thiseio"
+      "neighborhood": "Thiseio",
+      "address": "Apostolou Pavlou 7, Athens 118 51"
     },
     {
       "canonical_name": "Εθνικό Θέατρο",
@@ -1939,7 +2010,11 @@
         "Εθνικό Θέατρο Rex"
       ],
       "neighborhood": "Syntagma",
-      "sameAs": ["https://www.wikidata.org/wiki/Q61650955", "https://en.wikipedia.org/wiki/National_Theatre_of_Greece"]
+      "address": "Agiou Konstantinou 22-24, Athens 104 37",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q61650955",
+        "https://en.wikipedia.org/wiki/National_Theatre_of_Greece"
+      ]
     },
     {
       "canonical_name": "Εθνική Γλυπτοθήκη",
@@ -1955,7 +2030,8 @@
         "Άττις - Νέος Χώρος",
         "Attis Theatre"
       ],
-      "neighborhood": "Metaxourgeio"
+      "neighborhood": "Metaxourgeio",
+      "address": "Leonidou 7, Athens 104 37"
     },
     {
       "canonical_name": "Βρετάνια",
@@ -2018,7 +2094,8 @@
       "variations": [
         "Skini Beckett"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Zaimi 38, Athens 106 83"
     },
     {
       "canonical_name": "Τόπος Αλλού",
@@ -2095,7 +2172,8 @@
       "variations": [
         "Oikos Erminias Eleftheria"
       ],
-      "neighborhood": "Piraeus"
+      "neighborhood": "Piraeus",
+      "address": "Nikolaou Klapanara 34A, Piraeus 186 48"
     },
     {
       "canonical_name": "Περοκέ",
@@ -2118,7 +2196,8 @@
         "Στούντιο Ευρυ-χώρος",
         "Eurychoros Studio"
       ],
-      "neighborhood": "Koukaki"
+      "neighborhood": "Koukaki",
+      "address": "Ikonomou 3, Athina 106 83"
     },
     {
       "canonical_name": "Χώρος Θέατρο",
@@ -2132,7 +2211,8 @@
       "variations": [
         "Ichodrasi"
       ],
-      "neighborhood": "Koukaki"
+      "neighborhood": "Koukaki",
+      "address": "Genneou Kolokotroni 12, Athina 117 41"
     },
     {
       "canonical_name": "Άλφα Ληναίος-Φωτίου",
@@ -2147,7 +2227,8 @@
       "variations": [
         "Cartel"
       ],
-      "neighborhood": "Aigaleo"
+      "neighborhood": "Aigaleo",
+      "address": "Kifisou 41, Aigaleo 122 42"
     },
     {
       "canonical_name": "Ον Off Studio",
@@ -2168,7 +2249,8 @@
       "variations": [
         "OPBO"
       ],
-      "neighborhood": "Piraeus"
+      "neighborhood": "Piraeus",
+      "address": "Filonos 86, Piraeus 185 36"
     },
     {
       "canonical_name": "Poetry Bar",
@@ -2188,7 +2270,8 @@
       "variations": [
         "Ilisia Theatre"
       ],
-      "neighborhood": "Ilisia"
+      "neighborhood": "Ilisia",
+      "address": "Papadiamantopoulou 4, Athina 115 28"
     },
     {
       "canonical_name": "Άβατον",
@@ -2517,7 +2600,8 @@
       "variations": [
         "Dunk"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Alexi Pavli 37, Athina 115 24"
     },
     {
       "canonical_name": "Foyer Art Stage",
@@ -2764,14 +2848,29 @@
     "Athens Riviera"
   ],
   "neighborhood_aliases": {
-    "Psyrri": ["Psiri"],
-    "Pangrati": ["Pagrati"],
+    "Psyrri": [
+      "Psiri"
+    ],
+    "Pangrati": [
+      "Pagrati"
+    ],
     "Athens Riviera": [],
-    "Kerameikos": ["Keramikos"],
-    "Omonoia": ["Omonia"],
-    "Thiseio": ["Thissio"],
-    "Victoria": ["Viktoria"],
-    "Ampelokipoi": ["Ambelokipi", "Ambelokipoi"]
+    "Kerameikos": [
+      "Keramikos"
+    ],
+    "Omonoia": [
+      "Omonia"
+    ],
+    "Thiseio": [
+      "Thissio"
+    ],
+    "Victoria": [
+      "Viktoria"
+    ],
+    "Ampelokipoi": [
+      "Ambelokipi",
+      "Ambelokipoi"
+    ]
   },
   "pass_through_venues": [
     "Πολλαπλοί Χώροι",

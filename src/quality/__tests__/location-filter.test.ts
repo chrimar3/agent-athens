@@ -439,3 +439,32 @@ describe('findVenueConfig — S146 extracted matcher (full config record access)
     // Exact slug value tested in venue-identity.test.ts T1 (one-source-of-truth assertion).
   });
 });
+
+// =============================================================================
+// S172 — venue registry resolves a street address for active-page venues
+//
+// The JSON-LD streetAddress cascade (event.venue.address ||
+// findVenueConfig(name)?.address || '') bottoms out at '' when the config
+// entry has no address — the cause of the 310-page schema-fail cluster
+// cleared in S172. These venues had active event pages failing validation;
+// their config entries must keep a non-empty address so the cascade never
+// re-emits an empty streetAddress for them.
+//
+// @see specs/streetaddress-backfill-S172.md
+// =============================================================================
+
+describe('findVenueConfig — S172 backfilled addresses (streetAddress cascade floor)', () => {
+  const representativeVenues = [
+    'ΚΠΙΣΝ', // top failing venue pre-S172 (22 pages)
+    'Εθνικό Θέατρο', // National Theatre — flagship venue must never regress
+    'Θέατρο Ψυρρή',
+  ];
+
+  for (const name of representativeVenues) {
+    test(`${name} resolves a non-empty address from config`, () => {
+      const cfg = findVenueConfig(name);
+      expect(cfg).not.toBeNull();
+      expect(cfg?.address?.trim()).toBeTruthy();
+    });
+  }
+});
