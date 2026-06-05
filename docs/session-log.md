@@ -6787,7 +6787,7 @@ constant feeding both surfaces.
 3. 269-venue no-address config tail (no active pages) — Editorial-assisted pass.
 4. 4 wrong neighborhood anchors — Editorial.
 
-### Session 174 — S161 imageless event-card typographic tile
+### Session 177 — S161 imageless event-card typographic tile [arc: GEO/Design infra, brief S161] — 2026-06-05
 
 **Plan:** Build the Satori → inline SVG tile that owns the imageless card image-slot per Design Navigator ruling 2026-06-03; retire the .card-image--fallback gradient (S124); leave the Satori → PNG OG fallback (D11) untouched. Closes the Session-161 bounded open item and the S165-routed divergence.
 
