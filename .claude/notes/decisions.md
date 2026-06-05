@@ -4595,3 +4595,15 @@ All three gate on the S179 rule: QIDs enter config only via resolver output; aud
 3. **Ambiguous-entity drops.** An identifier that resolves to a wrong or contested entity is worse than absence. Drop with reason-code `underivable: ambiguous-entity` (distinct from `underivable: no-anchor`) — these re-enter only via human confirmation, not a better query. Applied: Μίνως Μάτσας homonym, Chevy (ptwiki gloss contradicts Athens act).
 
 **Spec amendments to specs/performer-sameas-audit-S177.md (S180):** struck the en-only-anchor line and the anchorless-QID drop line ("no Wikipedia anchor → no QID"). Both were spec under-specification of the resolver, not principle; left un-amended they re-open the audit. Replacement text in the spec's fix-path item 1; amendment trail recorded inline.
+
+## S103 (Session 181) — Colophon engine stats: 4 shipped, validity held (2026-06-05)
+
+**Shipped 4 of 5 stats; schema-validity HELD + routed to Editorial+GEO.** /proof publicly states "100% pass — 0 structural errors"; the strict pass rate is 87% (2,685/3,079 — 394 non-blocking warnings, 0 errors). Shipping 87% on the colophon would contradict /proof on the same metric (cross-surface citation poison). Neither framing ships unilaterally: 87% implies 394 false failures; bare error-based 100% overrides Editorial's deliberate X-of-Y reframe (which was written blind to the 87/100 split). One reconciled framing must ship IDENTICALLY on both surfaces. Build-ordering constraint for when it lands: must NOT read build-completeness.json at colophon-render time (written line 1255, after the colophon at 1015 → one-build lag) — source the current-build validation.
+
+**Sources = 10 via derived registry** (operator ruling). The canonical "10" lives only in scrape-all.ts SOURCES; no config yielded it (source-attribution.json + DB both = 16, incl. 6 legacy/one-off non-rebuild sources). Resolved by `src/config/active-source-ids.ts` (the 10 ids) with `scrape-all.ts` deriving `SourceId` from it → compile-time no-drift, lightweight build import. See patterns.md S103.
+
+**Events sourced from `pageableEvents.length`** (current build, in-memory) to match /proof exactly — NOT build-completeness.json (stale by one build at render time). **Venues = active reachable venue keys** (199; post-45-day, not cumulative; /proof shows no venue count so colophon-only). **Last-rebuilt = build-run date** (buildStartTime, single date, Athens tz) — distinct from the content-hash "last updated" token and from /proof's "last validated". **Cadence confirmed genuinely daily** (08:00, com.agentathens.daily.plist) → "rebuilt" copy is truthful.
+
+**/proof exists** (at /en/proof) — discovered mid-session; the attached session-log (~S114, stale ~2 days) said it didn't. Reframed the whole session around cross-surface consistency. Parked: /proof-vs-colophon overlap (dedicated metrics page vs inline craft note) — decide after both seen live.
+
+**Cross-references:** `patterns.md` S103; `src/templates/colophon-stats.ts`, `src/templates/colophon.ts`, `src/generate-site.ts`, `src/config/active-source-ids.ts`; proof-recon.md.

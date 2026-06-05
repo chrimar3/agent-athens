@@ -6906,3 +6906,22 @@ constant feeding both surfaces.
 **Learnings:** mistakes.md ×5 (systemic fabrication confirmed; count-mutation across briefs + jq wrapper trap; corrupt-fixture-defends-defect; label-existence ≠ owner — occupation gate; self-defeating ownership check). patterns.md: verified-derivation manifest (offline gate + deliberate online re-verify); strict-equality ownership (Dimitri Vegas containment trap).
 
 **Open items:** 1,149 uncached artists awaiting a generator run (rate-limited, hours — schedule separately). Multi-edition sameAs emission policy → GEO ratification (non-blocking). Μίνως Μάτσας/Chevy re-add pending human confirmation. Catharsis/Imminence/The Gathering Wikipedia-URL ownership of the Athens-billed acts remains per-performer review (deterministically unresolvable).
+
+### Session 181 — S103 Colophon engine stats: 4 of 5 shipped + deployed, cross-surface lock [arc: GEO/SEO infra, brief S103] — 2026-06-05
+
+**Plan:** Surface build-time engine stats in the colophon (dialog + /en/colophon/ mirror) via one shared emitter, sourced from build output, SSR'd. Branch-dependent on shared-vs-duplicated markup.
+
+**What happened:**
+- Branch A confirmed: both surfaces already share `renderColophonContent()` → no consolidation. Threading the per-page dialog would hit `renderSiteNav`'s 22 call sites (Guard-6) → used a build-stats **singleton** set once in generate-site (BUILD_STAMP precedent); `renderColophonStats()` stays a pure emitter.
+- **Mid-session reframe (operator): /proof EXISTS** (at /en/proof — built in an unlogged session; stale attached log said it didn't). Cross-surface number consistency became the dominant constraint. Read /proof: it publishes events (`pageableEvents.length`), tests, schema ("100% pass — 0 structural errors"), Bing indexing. Only **events** is shared with the colophon.
+- **Shipped 4 stats**, held the 5th: events = `pageableEvents.length` (SAME value /proof uses → identical by construction), venues = active reachable venue keys (199, post-45-day), sources = **10** via a derived registry (`src/config/active-source-ids.ts`; scrape-all.ts derives `SourceId` from it → compile-time no-drift; build imports the 3-line module, not scrape-all's puppeteer graph), last-rebuilt = build-run date (single date, Athens tz). **Schema-validity HELD** — strict pass is 87% (2,685/3,079; 394 warnings, 0 errors) which would contradict /proof's 100%; routed to Editorial+GEO.
+- Cadence confirmed genuinely daily (08:00). Colophon EN-only → ship EN.
+
+**Verified:** 9 new emitter tests (incl. Guard-6 parity) + 46 existing colophon/site-chrome pass; full suite **2760 pass / 0 fail**; tsc **0 errors** (S173-178 cleared the old 24); build exit 0 (location + hreflang hard-stops pass). **Live cross-surface lock on production: /en/colophon/ events 2,424 = /en/proof events 2,424.** Stats SSR'd in source on both surfaces; zero accent in CSS.
+
+**Deploy:** `git push origin main` + `netlify deploy --prod --dir=dist` → live at agentathens.com (deploy 6a23015ad9f06307b7265957). **This push also carried Sessions 172–180** (street-address hardening, armed location + hreflang hard-stops, S178 pre-commit hook, fabricated-QID purges, ComedyEvent schema, image strand) — origin had not been pushed since Session 170; **origin = local = live again for the first time in two days.**
+
+**Open items:**
+- **Validity (5th stat) — Editorial+GEO reconciliation.** One framing must ship identically on /proof AND colophon. Build-ordering constraint: it CANNOT read build-completeness.json at colophon-render time (written line 1255, after the colophon at 1015) or it lags one build — source the current-build validation, not the on-disk file.
+- **/proof vs colophon-stats overlap** — the original no-overlap instinct, now with a concrete second metrics surface. Decide after seeing both live.
+- **Stale attached session-log/known-issues snapshots** — demonstrably cost planning twice this arc (missed /proof; 23 invisible commits). Refresh before the next planning-heavy session.
