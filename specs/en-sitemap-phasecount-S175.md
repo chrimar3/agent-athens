@@ -13,7 +13,7 @@
 ## Premise corrections (ledger)
 
 1. **"674 absent /en/ pages"** → 0 absent event pages. The S171 open-item figure described a state that no longer exists (if it ever did — S144's sitemap design *prefers* /en/ for bilingual slugs).
-2. **The ruling's 4-phase taxonomy `{Active, Just-passed, Cooling, Archive}` does not exist** in code or decisions.md. The real machine: `src/utils/event-lifecycle.ts` → `upcoming | past-active (≤45d) | past-expired` (3 time-phases; Tier-1 rule: exhibitions key on endDate). S144 added an **indexability axis** ("lifecycle is now 4-way... explicit 'indexable' axis distinct from 'emitted'", session-log Sprint-3 closeout) — that is likely what the ruling's "4 phases" garbled. The brief's stop-condition fired; partition was computed with the real machine (empty either way) rather than silently translated.
+2. ~~"The ruling's 4-phase taxonomy does not exist in code"~~ — **CORRECTED same-day (S176): it DOES exist.** `getLifecyclePhase` at `src/utils/event-lifecycle.ts:107` is exactly `active | just-passed | cooling | archive` (past-active splits at day 14), coexisting below the 3-phase `classifyEventLifecycle` in the same file. The original claim was a false negative from a truncated (lines 1-60) file read — itself a ledger lesson: a negative existence claim from a partial read is an unverified measurement. The hinge integer (0) is unaffected: an empty absent set partitions identically under either taxonomy.
 3. **`data/search-visibility-log.csv` is gitignored** — the brief's `git show HEAD:` read is a phantom query path; the disk file is canonical.
 
 ## Step 2 — operator manual readings (out-of-band, owed by Christos)

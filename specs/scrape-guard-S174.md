@@ -46,6 +46,10 @@ Red→green in `src/db/__tests__/upsert.test.ts` (3 tests: warn+persist for unco
 
 Config now holds **110 venues with address** (37 pre-S172 → 99 → 110). New wrong-anchor flags for Editorial: Στοά (Syntagma→Zografou), Γερμανική Εκκλησία (Syntagma→Kolonaki), ΘΕΑΤΡΟ RADAR (Central→Neos Kosmos), Θέατρο Βασιλάκου (Central→Kerameikos) — total anchor-flag list now 8.
 
-## Step 4 — Hard-stop arming gate (filled after build read)
+## Step 4 — Hard-stop ARMED (commit d213608f9)
 
-## Step 5 — Drift re-check (filled at session end)
+Gate read from output: post-build `jq '.events.totals.fail'` = **0** ✓; guard committed (fa1c28c88) ✓. Exit line `src/generate-site.ts:1591` → `main().catch((e) => { console.error(e); process.exit(1); })`. Armed verification: `bun run build; echo $?` → **0**, "missing required location: 0", full suite 2,685 pass / 0 fail. The 2.1′ rule ("never deploy incomplete Schema.org location") is enforced for the first time since it shipped.
+
+## Step 5 — Drift re-check
+
+Post-arming rebuild: **0 fails** — no new drift cluster since S172's wave-2 (the overnight 06-05 scrape introduced none; contrast 33/day measured on 06-04). Going forward, drift venues surface same-morning as `[address-guard]` lines in `logs/pipeline-*.log`, and a venue with no address anywhere blocks deploy by design — config backfill (or suppression) is the unblock.
