@@ -6846,3 +6846,51 @@ constant feeding both surfaces.
 **Verified:** build exit 0; location hard-stop 0; hreflang hard-stop 0; dist sweep 0 hreflang; llms.txt 0 claims; full suite **2,699 pass / 1 skip / 0 fail**. Commits e01b5fd14 (feat), 6b5f20ad7 (chore + S175 correction).
 
 **Open items:** (1) when Greek launches: flip `HREFLANG_GATE_OPEN` per GEO Strategist ruling — every surface + llms.txt + validator disarm together; extend the helper for the sitemap XML format then; (2) stale-venue-artifact tail in dist is a standing class — any future emission-policy change needs a dist sweep check.
+
+### Session 178 — S178 pre-commit hook: tsc against post-commit state (closes the staging-strand vector) [arc: dev-infra mitigation, brief S178] — 2026-06-05
+
+**Plan:** Wire a pre-commit hook that runs `bunx tsc --noEmit` against the post-commit state (staged set, not working tree) to block staging-strand commits — the failure mode that struck three times in four sessions (S164, S165, S174).
+
+**What happened:**
+- Step 0(a): no hook framework exists → install via per-clone symlink to a tracked script. Baseline `bunx tsc --noEmit` runs in 1–2s and is exit-0 clean (S172 hardening).
+- Step 0(c): empirically confirmed working-tree tsc CANNOT catch the strand (file on disk → import resolves → false negative). `git stash push --keep-index --include-untracked` correctly simulates post-commit state; tsc against that view emits `TS2307`. Probe also surfaced an edge case: `git stash` requires HEAD, so the hook needs a no-HEAD guard for brand-new repos.
+- Step 1: `scripts/precommit-tsc.sh` + 5 TDD tests (A clean / B strand-blocked / C working-tree preservation / D no-op stash / E no-HEAD edge case). First run caught two bugs: `grep -qFx` against `git stash list --format='%s'` never matched because of the `On <branch>:` prefix (fix: substring match), and the original test used `execSync` with shell interpolation (refactored to `execFileSync` with arg arrays per security guidance — even though all inputs were hardcoded, the pattern is the right one). 5/5 green after fix.
+- Step 2: `scripts/install-hooks.sh` (idempotent `ln -sf` + `chmod +x`). Ran once, hook live on this clone.
+- Step 3: end-to-end live probe on a throwaway branch. Strand commit BLOCKED with `TS2307: Cannot find module './__probe-util'`; `--no-verify` bypass succeeds (commit `9bdd9a49a`); zero orphan stashes after the blocked run. Cleanup left no traces.
+- Step 4: docs — CLAUDE.md install line in `## Commands`, decisions.md + patterns.md S178 entries, this session-log entry. Memory `feedback_stage_precisely` recurrence ledger now closed pending a 4th instance.
+
+**Verified:**
+- 5/5 hook tests green (incl. working-tree preservation, the load-bearing safety check).
+- Live probe: hook blocks the strand commit with TS2307; `--no-verify` bypasses; no orphan stash.
+- `bunx tsc --noEmit` clean (post-hook, baseline preserved).
+- Hook runtime in practice: ~1–2s — feels instant.
+
+**Learnings:**
+- TypeScript is filesystem-bound, zero git-awareness — working-tree checks cannot catch staging strands.
+- `git stash list --format='%s'` includes the `"On <branch>: "` prefix; marker matching needs substring grep.
+- `git stash` requires HEAD; hooks need a no-HEAD guard for empty repos.
+- Always use `execFileSync(file, [...args])` over `execSync('shell string')` even with hardcoded inputs.
+
+**Open items:**
+- 4 collaborator WIP files staged out-of-session (config/* and data/*); left untouched per `feedback_stage_precisely`.
+- Mitigation candidate already noted in memory: a similar hook for `bun test` could be added as Phase 2 if test regressions become a recurring pattern; not built — single-mitigation discipline.
+
+**Hook eats its own dogfood:** the commit introducing this hook passes the hook on its own commit.
+
+### Session 179 — Fabricated-QID purge: 14 wrong entities replaced, 8 anchors, Psyri canonical [arc: GEO/SEO infra + Editorial, brief S177/Pattern-G] — 2026-06-05
+
+**Plan:** 8 neighborhood corrections + 3 geodata extensions + Psyri normalization + 2 ED log entries, one Pattern-G commit. Step-1 QID-verify was a hard precondition.
+
+**What happened:**
+- **The QID-verify precondition fired catastrophically: ALL 13 existing neighborhood-geodata QIDs were fabricated** — Psyri pointed at "psycho-biddy" (horror-film subgenre), Kerameikos at Dura-Europos, Pangrati at a British police panda car, Kolonaki at an Indonesian high school. AND `city-geodata.json`'s Attica was **Q178517 = David Gilmour of Pink Floyd**, emitted as `sameAs` on **3,339 pages**. Every Place hierarchy on the site cited wrong entities. All 16 keys (13 fixed + Agios Dimitrios Q204361 / Zografou Q218375 / Neos Kosmos Q2569363) now resolve to wbsearchentities-verified Athens entities; file lat/lng kept (verified accurate vs P625, max Δ0.55km — only the QIDs were invented).
+- 8 anchors per ED rulings (Βασιλάκου→Gazi per the 2026-03-02 corridor rule, NOT Kerameikos; HOOD→Psyri). 4 more wrong-anchor flags cleared from the S172/S174 list.
+- **Psyri canonical** (Wikidata Q2984834 label basis): 5 layers moved together per Guard-6 propagation — venue fields, whitelist + alias map (Psyrri/Psiri stay input variants), entity-lock `Ψυρρή` mapping, hub-pages prose ×14 + enrichment-knowledge, tag-filter comments, **and 236 DB `venue_neighborhood` rows** (the brief's grep-verify amended: 0 outside `neighborhood_aliases`). Exarcheia→ input variant added; Exarchia stays canonical (Wikidata label is "Exarcheia" — tension noted in ED log; QID binds the entity, spelling is editorial).
+- `docs/editorial-decisions.md` created (brief referenced it as existing — premise corrected; 2 entries as-filed).
+- 4 test pins on fabricated QIDs flipped; 16 stale dist artifacts patched (S176's never-regenerated venue class, third occurrence).
+- **Checkpointed out-of-scope:** `performer-sameAs.json` has the same disease — correct Wikipedia URLs + fabricated QIDs (Αλκίνοος Ιωαννίδης = Qazi Muhammad; Rotting Christ = a 1568 Morisco uprising), ≥17 hard-wrong of 62, live on event pages. Fix path = derive QIDs from Wikipedia `wikibase_item` pageprops (deterministic). → `specs/performer-sameas-audit-S177.md`. Venue-level sameAs QIDs all verified correct.
+
+**Verified:** 2,731 tests / 0 fail; build exit 0 (location + hreflang hard-stops both 0); dist sweeps: 0 fabricated QIDs, 0 "Psyrri", Q758056 (real Attica) on 3,326 pages. Commit d8d9afc2b (single Pattern-G commit, staged by path).
+
+**Learnings:** A QID is a plausible-format identifier — fabrication is silent until something resolves it. New rule (decisions.md + performer spec): **QIDs enter config only via resolver output (wbgetentities/wbsearchentities/pageprops), never via generation.**
+
+**Open items:** (1) performer-sameAs re-derivation brief (spec above); (2) operator GSC/Bing pulls still owed; (3) Psyri 0-page emission gap — no current venue maps to the Psyri place node until HOOD books events (expected, self-heals).

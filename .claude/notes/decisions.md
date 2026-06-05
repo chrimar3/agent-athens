@@ -4552,3 +4552,28 @@ Forcing one renderer would mean conditional JSX trees and conditional output pat
 - **Remaining open (this arc):** underlying-type re-map other→show/theater for the 5 S174 rows (badge still ΑΛΛΟ on Kevin Bridges); «Δόρα Στράτου» venue verification (074415dc has no page); emission-side HTML-entity decode (`&quot;` leaks into JSON-LD name).
 
 **Cross-references:** specs/comedy-type-cleanup-brief.md (S175 resolution section); patterns.md Patterns 4–5; mistakes.md S175 config-layer grep.
+
+## S178 — Pre-commit hook simulates post-commit state via `stash --keep-index` (2026-06-05)
+
+**Decision: ship `scripts/precommit-tsc.sh` as the pre-commit hook**, wired by a per-clone symlink (`bash scripts/install-hooks.sh`). The hook runs `bunx tsc --noEmit` against the **post-commit working-tree view** — what HEAD would look like after the commit — to catch the staging-strand failure mode (importer staged + imported file on disk but unstaged) that working-tree tsc cannot see.
+
+**Why working-tree tsc would miss it.** TypeScript's compiler resolves modules via `ts.sys.readFile` / `ts.sys.fileExists` — filesystem-bound, zero git-awareness. With the imported file on disk (even if unstaged), the import resolves and tsc passes (false negative). Post-commit, the file is gone, the import dangles, and a fresh checkout breaks. Three instances of this exact shape in four sessions (S164, S165, S174) closed this mitigation gap.
+
+**Why `git stash push --keep-index --include-untracked`.** It strips the working tree to exactly what the commit will create: staged changes stay in place, unstaged + untracked move to a stash. `.gitignore` is respected so `dist/`, `node_modules/`, and `data/events.db` are untouched. Trap-based cleanup pops the stash on every exit path (success / tsc failure / SIGINT / SIGTERM). Tests A–E (`scripts/__tests__/precommit-tsc.test.ts`) cover happy path, strand-blocked, working-tree preservation after failure, no-op stash, and brand-new repo with no HEAD.
+
+**Why a per-clone symlink instead of husky/simple-git-hooks/lefthook.** No framework dep existed; introducing one for one hook is overkill. The hook script is tracked in `scripts/`; only the `.git/hooks/pre-commit` symlink is per-clone (run `bash scripts/install-hooks.sh` once). Idempotent.
+
+**Bypass intact.** `git commit --no-verify` skips all pre-commit hooks (git feature). Verified in the Step 3 live probe.
+
+**Edge case worth keeping in mind: empty repos.** `git stash` requires HEAD; the hook skips the stash dance via `git rev-parse --verify HEAD` and falls through to plain `bunx tsc --noEmit` when no commit exists yet. Step 0(c) probe surfaced this.
+
+**Watch for: stash-list message format.** `git stash list --format='%s'` emits `"On <branch>: <user-msg>"`, so the marker grep MUST be substring (`grep -qF`), not exact-line (`grep -qFx`). Tests C and D caught this in TDD.
+
+**Cross-references:** `scripts/precommit-tsc.sh`, `scripts/install-hooks.sh`, `scripts/__tests__/precommit-tsc.test.ts`; `patterns.md`/`session-log.md` S178; memory `feedback_stage_precisely` (recurrence note now closed).
+
+## Session 179 — QID provenance rule; Kerameikos scope-widening; geodata 13→16 (2026-06-05)
+
+- **QID provenance (binding):** a Wikidata QID may enter any config only as resolver output (wbgetentities/wbsearchentities/Wikipedia `wikibase_item` pageprop) — never generated. Cause: 14 fabricated QIDs live in Place sameAs (incl. Attica = David Gilmour on 3,339 pages); see mistakes.md S177.
+- **Kerameikos corridor scope-widening (ED-2026-06-05-a):** ALL cultural venues in the Kerameikos/Gazi corridor anchor to Gazi going forward (was case-by-case). Kerameikos key stays for residential/archaeological context (Q630974 — combined ancient+modern entity; no separate modern-quarter item).
+- **Geodata 13→16:** + Agios Dimitrios (Q204361), Zografou (Q218375), Neos Kosmos (Q2569363). No count-assertion tests existed (Step-0 grep); the 4 QID test pins were the only consumers and are flipped.
+- **Psyri canonical / Exarchia exception (ED-2026-06-05-b):** canonical follows Wikidata label for Psyri but NOT for Exarchia ("Exarcheia" on Wikidata) — canonical spelling is editorial; the QID binds the entity. Old spellings live as input variants in `neighborhood_aliases`, never emitted. The "grep → 0" Pattern-G verify is amended to "0 outside the alias map" — variant arrays MUST keep old spellings.
