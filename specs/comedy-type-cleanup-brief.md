@@ -40,3 +40,21 @@ Hub membership (`tag="comedy"`) must NOT be written to the `type` column or emit
 
 - **Duplicate pair:** 56d4e8a5 / e8b05f6d ("Αι γυμνισταί") — same title, same source; run through dedup before or with the re-type so the correction isn't done twice.
 - 3e7c62be has no generated page — verify lifecycle before spending a re-type on it.
+
+---
+
+## S175 RESOLUTION (2026-06-05, commits c1666e7e0 + a66541e74) — @type branch SHIPPED
+
+**Locked parameters executed:** structured-token detector (`src/utils/comedy-format.ts`) — `/\bstand[- ]?up\b/i` on tags/title/genres + curated venue allow-list in `config/standup-venues.json` (ships EMPTY: Doryphora audit showed all 4 events are concerts — venue-name "comedy" is not a format guarantee). Description never consulted. Derivation wired at all 5 sites (loader `rowToEvent` with parse-before-assign hard gate, normalize, event-page ×2, venue-page); `schema-graph-builders` inherits via `event['@type']`. Validator recognizes ComedyEvent. Known non-wired residual: `generateSchemaOrg` (enrichment-side `schema_json`, no emission path reads its @type).
+
+**Premise corrections vs this brief:**
+- "No comedy rule in categorize-event.ts" was WRONG one layer down — rules live in `config/categorization-keywords.json`, which HAS a complete stand-up→show rule. The real cause of `other` rows: ingest-time signal poverty (athinorama: title-only). **No categorizer change shipped** — build-time derivation is the correct layer; the underlying-type re-map (other→show/theater for the 5 rows) remains OPEN as this brief's remaining scope.
+- ΑΛΛΟ badge: unchanged this session — badge is EventType-driven; Kevin Bridges still shows ΑΛΛΟ until the re-map ships.
+
+**Backfill:** 36 rows tagged `Stand-up-comedy` across 9 titles (+4 already-signaled; idempotent re-run = 40/40 skip). Named headliners with verified performer entries: Kevin Bridges, Mario Adrion, Dara Ó Briain, Gabriel Fluffy Iglesias (Person), Sooshi Mango (PerformingGroup). Club nights null-registered. Excluded: 648708ce (description: "not stand-up").
+
+**Verified in dist:** exactly 9 ComedyEvent pages (5 events × EL/EN), all named headliners emit performer, comedic plays unchanged (Coronet/Καρυάτιδα/Rantou = TheaterEvent; Sexy laundry/Αι γυμνισταί = Event), validator fail=0, /comedy/ membership intact (4/4).
+
+**New side findings for triage:**
+- `074415dc` (Ξαφνικό stand up στου Φιλοπάππου) venue «Δόρα Στράτου» is `location_status=unverified` → no page until venue review; queue it (Dora Stratou is a real Philopappou venue).
+- HTML-entity encoding in DB titles leaks into emitted JSON-LD `name` (`Gabriel &quot;Fluffy&quot; Iglesias`) — worked around in performer matching; the emission-side entity decode is a separate defect worth its own pass.

@@ -4542,3 +4542,13 @@ Forcing one renderer would mean conditional JSX trees and conditional output pat
 - `data-event-type` attribute deleted (was the S124 type-tint hook); `data-type` (imaged variant's existing attribute, no CSS/JS hooks) retained.
 
 **Cross-references:** `specs/imageless-tile-S161.md`; `patterns.md`/`mistakes.md` S161; `decisions.md` D11 (Satori OG, prior); D-S124 (Tier 1 gradient, retired).
+
+## Session 175 — ComedyEvent @type derivation shipped (2026-06-05, c1666e7e0 + a66541e74)
+
+- **Mechanism:** `resolveEventSchemaType()` in `src/utils/comedy-format.ts` — derived @type layered above SCHEMA_TYPE_MAP; EventType column untouched (locked ruling). Structured tokens only; venue allow-list is config (`config/standup-venues.json`), exact-match, ships EMPTY (Doryphora = concerts).
+- **Operator ruling honored:** performer entries only for web-verified named acts (5: Bridges/Adrion/Ó Briain/Iglesias Person, Sooshi Mango PerformingGroup); club nights = null registry entries, ComedyEvent WITHOUT performer (omit > wrong value). `performer ≥1` gate applies to named-headliner rows only.
+- **Step 0c fired Branch 2:** TheaterEvent emits, workPerformed=0 → workPerformed clauses dropped from all checks.
+- **Known non-wired residual:** `generateSchemaOrg` (enrichment `schema_json`) — no emission path reads its @type; documented in comedy-format.ts docstring. Do not trust schema_json @type without wiring it.
+- **Remaining open (this arc):** underlying-type re-map other→show/theater for the 5 S174 rows (badge still ΑΛΛΟ on Kevin Bridges); «Δόρα Στράτου» venue verification (074415dc has no page); emission-side HTML-entity decode (`&quot;` leaks into JSON-LD name).
+
+**Cross-references:** specs/comedy-type-cleanup-brief.md (S175 resolution section); patterns.md Patterns 4–5; mistakes.md S175 config-layer grep.
