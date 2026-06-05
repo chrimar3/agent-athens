@@ -593,7 +593,8 @@
         "Sygchrono Theatro",
         "Contemporary Theatre"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Evmolpidon 45, Athens 118 54"
     },
     {
       "canonical_name": "Studio Μαυρομιχάλη",
@@ -1168,7 +1169,8 @@
         "Θέατρο ΦΙΑΤ",
         "FIAT Theatre"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Falirou 97, Athens 117 41"
     },
     {
       "canonical_name": "St. Paul's Anglican Church",
@@ -1248,7 +1250,8 @@
         "Radar Theater",
         "Θέατρο Radar"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Pitheou 93, Athens 117 44"
     },
     {
       "canonical_name": "Olvio",
@@ -1573,7 +1576,8 @@
         "Θέατρο Τέχνης Κάρολος Κουν",
         "Karolos Koun Art Theatre"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Frynichou 14, Athens 105 58"
     },
     {
       "canonical_name": "Θέατρο Μεταξουργείο",
@@ -1654,7 +1658,8 @@
         "Knossos Theatre",
         "Κνωσός"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Knosou 11, Athens 112 53"
     },
     {
       "canonical_name": "Κ4",
@@ -1819,7 +1824,8 @@
         "Θέατρο Βασιλάκου _ Μαριάννα Τόλη",
         "Vasilakou Theatre"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Profiti Daniil 3 & Plataion, Athens 104 35"
     },
     {
       "canonical_name": "Χώρος Τέχνης Ασωμάτων",
@@ -1846,7 +1852,8 @@
       "variations": [
         "Θέατρο Στοά"
       ],
-      "neighborhood": "Syntagma"
+      "neighborhood": "Syntagma",
+      "address": "Biskini 55, Athens 157 71"
     },
     {
       "canonical_name": "Ρεκτιφιέ",
@@ -1918,7 +1925,8 @@
       "variations": [
         "En Athinais"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Iakchou 19, Athens 118 54"
     },
     {
       "canonical_name": "41 Street Cafe",
@@ -2059,7 +2067,8 @@
       "variations": [
         "Kivotos"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Pireos 115, Athens 118 54"
     },
     {
       "canonical_name": "Μουσούρη",
@@ -2158,7 +2167,8 @@
       "variations": [
         "Ekati"
       ],
-      "neighborhood": "Kypseli"
+      "neighborhood": "Kypseli",
+      "address": "Ekatis 11, Athens 113 64"
     },
     {
       "canonical_name": "Οικία Ιλίτς",
@@ -2577,7 +2587,8 @@
         "ΓΕΡΜΑΝΙΚΗ ΕΚΚΛΗΣΙΑ ΑΘΗΝΩΝ",
         "German Church Athens"
       ],
-      "neighborhood": "Syntagma"
+      "neighborhood": "Syntagma",
+      "address": "Sina 66, Athens 106 72"
     },
     {
       "canonical_name": "Island Athens Riviera",
