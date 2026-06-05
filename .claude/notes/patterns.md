@@ -5496,3 +5496,7 @@ Field mapping confirmed against the live response (positional — request dimens
 **Reusable guard — label-derived entities need an occupation gate.** Exact label + uniqueness + P31 Q5 admits any unique same-named human (ancient diplomats). For humans found by label: declared P106 must intersect performer occupations; entities with NO P106 statement pass (Greek-artist Wikidata stubs are sparse — the uniqueness and exact-label gates still hold).
 
 **Connects to:** S110 paired-validator pattern (hreflang S176); QID-provenance rule (decisions.md S179/S180); `scripts/lib/performer-qid-resolver.ts`, `src/validators/performer-qid-manifest.ts`.
+
+**Two-layer validator for online-only facts (S180).** Facts verifiable only via network (QID ownership, label uniqueness) cannot gate a network-free build. Split: (1) offline build gate checks pure file consistency — cache and manifest must agree, manifest written only by resolver scripts; (2) online drift (ownership/uniqueness change) re-checked by deliberately re-running the audit script out-of-band. Distinct from the S110 paired-validator pattern (both sides of S110 run in-build); this is S110 adapted for facts that have no offline source of truth.
+
+**Recurrence ledger note (S180):** verify-the-premise count unchanged. QID fabrications were an audit-caught data-integrity class, not a brief-premise failure.
