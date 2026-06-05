@@ -2930,6 +2930,29 @@ div#main-content {
 }
 .colophon-cv a:hover { color: var(--text-primary); }
 
+/* S103 engine stats — build-time figures, shared by dialog + /en/colophon/.
+   Auto-fit grid wraps within the dialog; figures --text-primary, labels
+   --text-tertiary, ZERO accent (Design lock). */
+.colophon-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-lg) 0 0 0;
+  padding: 0;
+}
+.colophon-stats .colophon-stat { margin: 0; }
+.colophon-stat-label {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--type-ui);
+}
+.colophon-stat-figure {
+  margin: var(--space-xs) 0 0 0;
+  color: var(--text-primary);
+  font-size: var(--type-h3);
+  font-weight: 600;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .colophon-trigger,

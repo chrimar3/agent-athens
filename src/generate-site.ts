@@ -43,6 +43,8 @@ import { proofMetrics } from './utils/proof-metrics';
 import { renderProofBody } from './templates/proof-body';
 import { buildProofSchema } from './templates/proof-schema';
 import { renderColophonContent } from './templates/colophon';
+import { setColophonStats } from './templates/colophon-stats';
+import { ACTIVE_SOURCE_COUNT } from './config/active-source-ids';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -322,6 +324,22 @@ async function main() {
     console.log(`🏛️ ${venueImageMap.size} venue images loaded, ${venueImgCount} events get venue fallback`);
   }
   console.log();
+
+  // S103: colophon engine stats — set ONCE here (before any page renders) so the
+  // dialog (on every page via site-chrome) and the /en/colophon/ mirror read the
+  // same singleton. events = pageableEvents.length — the SAME value /proof emits,
+  // so the two surfaces can never show different event counts (cross-surface lock).
+  // Schema-validity is intentionally omitted this session (held for Editorial+GEO
+  // reconciliation with /proof's "100% pass" framing). Date is the build-run date
+  // (single date, Athens tz), NOT a precise timestamp and NOT the content-hash token.
+  setColophonStats({
+    events: pageableEvents.length,
+    venues: totalVenues,
+    sources: ACTIVE_SOURCE_COUNT,
+    lastBuildDate: new Date(buildStartTime).toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Athens',
+    }),
+  });
 
   // Save normalized events
   const normalizedPath = join(DIST_DIR, 'data');

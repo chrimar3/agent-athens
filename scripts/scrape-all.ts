@@ -40,6 +40,7 @@ import { normalizeTheaterSpelling } from '../src/validators/event-categorizer';
 import { extractOgImage } from '../src/utils/image-extractor';
 import { upgradeAthinoramaImage } from '../src/utils/athinorama-image';
 import type { DomDocument, DomElement } from './dom-eval-types';
+import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -81,7 +82,10 @@ interface ScrapeResult {
   duration: number;
 }
 
-type SourceId = 'more' | 'athinorama' | 'clubber' | 'ticketservices' | 'halfnote' | 'ra' | 'snfcc' | 'onassis' | 'benaki' | 'megaron';
+// SourceId is derived from the canonical id list (src/config/active-source-ids.ts)
+// so SOURCES (Record<SourceId, …>) and the colophon's source count cannot drift
+// — divergence is a compile error. Adding a scraper: add its id there first.
+type SourceId = typeof ACTIVE_SOURCE_IDS[number];
 
 // ============================================================================
 // UTILITY FUNCTIONS

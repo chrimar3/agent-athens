@@ -15,12 +15,19 @@
  * aria-labelledby on the dialog targets a heading defined ONLY in the dialog wrapper.
  */
 
+import { renderColophonStats, getColophonStats } from './colophon-stats';
+
 // S155 (2026-05-25): name heading is <h2>, NOT <h1>. The colophon dialog rides
 // into every page via site-chrome.ts → renderSiteNav, so an <h1> here makes
 // every page emit two H1s — Bing flagged this on /en/this-weekend/ (the demo
 // cornerstone) as "Duplicate H1." Single-H1 semantic-uniqueness rule. The
 // dialog's heading hierarchy starts at <h2> below the page's own <h1>.
 // Coordination note for the colophon owner: specs/colophon-h1-handoff-2026-05-25.md.
+//
+// S103 (2026-06-05): the static prose lives in COLOPHON_CONTENT; the build-time
+// engine stats are appended at render time by renderColophonContent() from the
+// build-stats singleton (set once in generate-site.ts). Keeping COLOPHON_CONTENT
+// a const preserves the "edit once, both surfaces update" property for the prose.
 export const COLOPHON_CONTENT = `<header class="colophon-content-header">
   <h2 class="colophon-name">Christos Maragkoudakis</h2>
   <p class="colophon-tagline">AI systems, built end to end · Economics + LLMs · Athens</p>
@@ -51,7 +58,10 @@ export const COLOPHON_CONTENT = `<header class="colophon-content-header">
 </p>`;
 
 export function renderColophonContent(): string {
-  return COLOPHON_CONTENT;
+  // Build-time stats append after the static prose. The singleton is shared by
+  // both surfaces, so the dialog and the mirror emit byte-identical stat markup.
+  const stats = renderColophonStats(getColophonStats());
+  return stats ? `${COLOPHON_CONTENT}\n\n${stats}` : COLOPHON_CONTENT;
 }
 
 export function renderColophonTrigger(): string {
