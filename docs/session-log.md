@@ -6760,3 +6760,29 @@ constant feeding both surfaces.
 **Verified:** `bunx tsc --noEmit` exit **0**. Image test **5/5 × 128–152ms** (was 743–5,001ms network-dependent). Full suite **2,661 pass / 1 skip / 0 fail** (2,662 across 125 files). tsconfig.json clean in `git status`.
 **Learnings:** Triple-slash `/// <reference lib="dom" />` is program-wide, not file-scoped — the genuinely scoped mechanism is top-level `declare` in a module. `@ts-expect-error` in a rationale comment line is itself parsed as a directive (TS2578). Both in patterns.md S172.
 **Open items:** (1) CV swap strings still pending Christos's PDF re-export (S171); (2) `config/scrape-list.json` 7-vs-10 reconciliation; (3) /en/ mirrors absent from sitemaps — intentional?; (4) bun test side-effect: full suite dirties `data/build-completeness.json` + `data/event-set-hashes.json` (pre-existing, surfaced while staging by path).
+
+### Session 173 — streetAddress backfill: 311→14 schema fails, hard-stop unmasked as toothless [arc: GEO/SEO infra] — 2026-06-05
+
+**Plan:** Clear ~311 missing-streetAddress fails via venue-address backfill (brief S172); classify A/B/C first; exit-code fix gated on residual 0.
+
+**What happened:**
+- Diagnostic reframed the brief: 40/40 failing venues **Class B** (in config, `address` empty — config had 346 venues, only 37 with addresses); zero Class C → no cascade fix needed. Brief's jq paths phantom (no per-event `.fails`); classification rebuilt from dist JSON-LD `"streetAddress": ""` scan + live `findVenueConfig`.
+- **Found the real "dual-build-path divergence": there is none.** `main().catch(console.error)` exits 0 — the 2.1′ hard-stop never halted; production deployed through 311 fails daily (06-04 log: halt printed, deploy ready). Retires the divergence premise that burned S166 + both audits.
+- Wave 1: 40 addresses (4 parallel research agents, own-site/authoritative sources; 2 agent-skips resolved from DB `venue_address` two-source agreement). Red→green TDD (3 tests pinning ΚΠΙΣΝ/Εθνικό Θέατρο/Θέατρο Ψυρρή).
+- Rebuild → 46 residual: **33 NEW venues from one day of scrape drift** (all Class B, all with DB addresses). Operator ruled "clean-24 only": 22 clean two-source DB values applied; 11 mangled/conflicting checkpointed. Final: **fails 311 → 14**.
+- Exit fix **checkpointed, not shipped** — gate read `.events.totals.fail` = 14 ≠ 0 (operator rule: read the artifact, not intent).
+
+**Verified:** Full suite 2,668 pass / 1 skip / 0 fail (3 consecutive clean runs); `bun run build` completes with 14 halt-pages (exit still 0 — fix checkpointed); config 37→99 venues with address; commits 5fb6e6163 (feat) + 784227bc2 (chore artifacts + S171 audit spec). No deploy (daily pipeline deploys; note: the 06-05 05:24 production build already picked up the uncommitted Wave-1 backfill from the working tree — fail 311→53 before this session committed anything).
+
+**Surprises:**
+- Mid-session 25–33 test fails were enrichment-pipeline DB/disk contention (lock/IO errors in test setup, suites green in isolation, three clean runs after 22:17 pipeline completion) — a config-only bisect falsely "reproduced" it; bisect time before content (mistakes.md).
+- Live collaborator WIP appeared mid-session (`selectRelatedEvents` refactor in event-page.ts + generate-site.ts) — excluded from staging by path.
+- 4 config neighborhood anchors wrong (Λοσάντζελε, HOOD, Εργοτάξιον, Theatre Of The No) — Editorial flag in spec, not changed.
+
+**Learnings:** (notes — patterns: DB-as-address-verifier, dist-JSON-LD classification; mistakes: toothless `.catch(console.error)` hard-stop, contention-confounded bisect; decisions: exit-fix gating, conservative-skip, guard-before-arming.)
+
+**Open items:**
+1. 11-venue mangled-address research round → residual 14 → 0, then ship the gated exit fix (`specs/streetaddress-backfill-S172.md`).
+2. **Scrape-time missing-address guard** (Planner): at ~33 drift venues/day, the guard is a prerequisite-or-companion for arming the hard-stop — recommend own brief, not Pattern-G rider.
+3. 269-venue no-address config tail (no active pages) — Editorial-assisted pass.
+4. 4 wrong neighborhood anchors — Editorial.

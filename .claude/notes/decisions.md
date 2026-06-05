@@ -4495,3 +4495,13 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 **llms.txt needs no policy:** its source count is computed live from the DB (`src/generate-site.ts:1383`) — self-maintaining by construction, the model other surfaces should aspire to.
 
 **Cross-references:** `specs/portfolio-claims-audit.md` (full discrepancy matrix); README.md stats block (2026-06-04); user-memory `feedback_verify_paths_in_briefs` (+3 entries from the audit session).
+
+## Session 173 — streetAddress backfill scope + exit-fix gating (2026-06-05)
+
+- **Address format:** Latin transliteration "Street Number, Area PostalCode" (e.g. "Leoforos Andrea Syngrou 364, Kallithea 176 74"), matching the dominant existing convention; DB-sourced Wave-2 values applied verbatim when clean. Piraeus/Aigaleo/Agios Dimitrios keep their own locality name, not "Athens".
+- **Scope ruling (operator):** Wave 1 = the 40 classified venues only; Wave-2 drift continuation = "clean-24 only" (actual: 22 applied, 11 mangled/conflicting checkpointed). The 269-venue no-address config tail stays unfilled — no active pages, no fails today.
+- **Exit-fix gating rule (operator):** `process.exit(1)` on build halt ships only when the post-build `jq '.events.totals.fail'` reads 0 — the gate reads the artifact, not intent. Read 14 → checkpointed.
+- **Sequencing implication (for Planner):** measured drift = 33 new address-less venues in one day. An armed hard-stop without a scrape-time missing-address guard converts every drift venue into a blocked daily deploy. Guard first (or together), then arm.
+- **Conservative-skip over plausible-fix:** wrong streetAddress propagates to Schema.org and is worse than empty — mangled DB values ("Εν Αθήναις, 19") were skipped, not "cleaned by inference".
+
+**Cross-references:** `specs/streetaddress-backfill-S172.md`; patterns.md/mistakes.md Session 173.
