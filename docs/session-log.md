@@ -6894,3 +6894,15 @@ constant feeding both surfaces.
 **Learnings:** A QID is a plausible-format identifier — fabrication is silent until something resolves it. New rule (decisions.md + performer spec): **QIDs enter config only via resolver output (wbgetentities/wbsearchentities/pageprops), never via generation.**
 
 **Open items:** (1) performer-sameAs re-derivation brief (spec above); (2) operator GSC/Bing pulls still owed; (3) Psyri 0-page emission gap — no current venue maps to the Psyri place node until HOOD books events (expected, self-heals).
+
+### Session 180 — Performer QID re-derivation: 27/52 fabricated, resolver-only generator, manifest-paired build gate [arc: GEO/SEO infra, brief S179-followup] — 2026-06-05
+
+**Plan:** Re-derive all performer QIDs from Wikipedia URLs (brief said 62), patch the generator to resolver-only, add a paired validator — closing the fabricated-QID class on its 2nd surface.
+
+**What happened:** Step-0 scope check: universe is **52 QIDs** across 56 link-bearing entries of 394 total (brief's "62" was S177's performer+venue combined count; 338 entries are `sameAs: null`). Read-only audit (new `scripts/audit-performer-qids.ts`): **27/52 fabricated** — 23 correct-Wikipedia/wrong-QID pairs + 4 hard-wrong underivable. Git provenance: entries arrived via enrichment-session commits, not generator runs — two corruption vectors (SPARQL weak label-match + LLM hand-writes). Operator ratified: any-language Wikipedia anchors (el/de rescue 6 entries), uniqueness-gated `wikidata-label` method for sitelink-less entities (+P106 occupation gate after Q11916529 "Leon of Athens" = ancient diplomat nearly slipped through), forced drops for Μίνως Μάτσας + Chevy. Applied: 23 confirmed / 24 corrected / 3 added / 4 dropped / 2 forced; manifest `config/performer-qid-verification.json` (50 records). Generator rewritten resolver-only; offline build gate `src/validators/performer-qid-manifest.ts` wired pre-generation, exit 1.
+
+**Verified:** bun test 2,751 pass / 0 fail (+21 new); negative test: poisoned QID → build exit 1 with actionable message; real build exit 0, gate ✓ 50 QIDs, location/hreflang hard-stops 0; dist sweep: 0 files with any of the 23 fabricated QIDs, corrected QIDs emitting on EL+EN event pages + api/events.json. Consumer test fixture had carried the fabricated QIDs — updated with provenance comment.
+
+**Learnings:** mistakes.md ×5 (systemic fabrication confirmed; count-mutation across briefs + jq wrapper trap; corrupt-fixture-defends-defect; label-existence ≠ owner — occupation gate; self-defeating ownership check). patterns.md: verified-derivation manifest (offline gate + deliberate online re-verify); strict-equality ownership (Dimitri Vegas containment trap).
+
+**Open items:** 1,149 uncached artists awaiting a generator run (rate-limited, hours — schedule separately). Multi-edition sameAs emission policy → GEO ratification (non-blocking). Μίνως Μάτσας/Chevy re-add pending human confirmation. Catharsis/Imminence/The Gathering Wikipedia-URL ownership of the Athens-billed acts remains per-performer review (deterministically unresolvable).

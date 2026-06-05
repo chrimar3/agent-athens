@@ -1,0 +1,365 @@
+{
+  "_meta": {
+    "description": "Performer QID verification manifest. Every wikidata sameAs QID in performer-sameAs.json must have a record here, written ONLY by the resolver (scripts/audit-performer-qids.ts --apply or scripts/lookup-performer-sameAs.ts). The build-time validator (src/validators/performer-qid-manifest.ts) FAILs the build on any cache QID without a matching record — hand-editing QIDs into the cache will not deploy.",
+    "updated": "2026-06-05",
+    "generated_by": "scripts/audit-performer-qids.ts"
+  },
+  "verified": {
+    "Αλκίνοος Ιωαννίδης": {
+      "qid": "Q1380313",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Alkinoos_Ioannidis",
+      "matchedLabel": "Αλκίνοος Ιωαννίδης",
+      "verifiedAt": "2026-06-05"
+    },
+    "Villagers of Ioannina City": {
+      "qid": "Q18211729",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Villagers_of_Ioannina_City",
+      "matchedLabel": "Villagers of Ioannina City",
+      "verifiedAt": "2026-06-05"
+    },
+    "Rotting Christ": {
+      "qid": "Q938889",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Rotting_Christ",
+      "matchedLabel": "Rotting Christ",
+      "verifiedAt": "2026-06-05"
+    },
+    "Catharsis": {
+      "qid": "Q1964023",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Catharsis_(Russian_band)",
+      "matchedLabel": "Catharsis",
+      "verifiedAt": "2026-06-05"
+    },
+    "Imminence": {
+      "qid": "Q20164937",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Imminence_(band)",
+      "matchedLabel": "Imminence",
+      "verifiedAt": "2026-06-05"
+    },
+    "The Aristocrats": {
+      "qid": "Q7714239",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/The_Aristocrats_(band)",
+      "matchedLabel": "The Aristocrats",
+      "verifiedAt": "2026-06-05"
+    },
+    "Godspeed You! Black Emperor": {
+      "qid": "Q181341",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Godspeed_You!_Black_Emperor",
+      "matchedLabel": "Godspeed You! Black Emperor",
+      "verifiedAt": "2026-06-05"
+    },
+    "Florence + the Machine": {
+      "qid": "Q217360",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Florence_and_the_Machine",
+      "matchedLabel": "Florence + the Machine",
+      "verifiedAt": "2026-06-05"
+    },
+    "The Cure": {
+      "qid": "Q484427",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/The_Cure",
+      "matchedLabel": "The Cure",
+      "verifiedAt": "2026-06-05"
+    },
+    "David Byrne": {
+      "qid": "Q336640",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/David_Byrne",
+      "matchedLabel": "David Byrne",
+      "verifiedAt": "2026-06-05"
+    },
+    "Gorillaz": {
+      "qid": "Q189991",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Gorillaz",
+      "matchedLabel": "Gorillaz",
+      "verifiedAt": "2026-06-05"
+    },
+    "Moby": {
+      "qid": "Q14045",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Moby",
+      "matchedLabel": "Moby",
+      "verifiedAt": "2026-06-05"
+    },
+    "Nick Cave & The Bad Seeds": {
+      "qid": "Q1051182",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Nick_Cave_and_the_Bad_Seeds",
+      "matchedLabel": "Nick Cave and the Bad Seeds",
+      "verifiedAt": "2026-06-05"
+    },
+    "Nick Cave": {
+      "qid": "Q192668",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Nick_Cave",
+      "matchedLabel": "Nick Cave",
+      "verifiedAt": "2026-06-05"
+    },
+    "Limp Bizkit": {
+      "qid": "Q240767",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Limp_Bizkit",
+      "matchedLabel": "Limp Bizkit",
+      "verifiedAt": "2026-06-05"
+    },
+    "Sabaton": {
+      "qid": "Q740159",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Sabaton_(band)",
+      "matchedLabel": "Sabaton",
+      "verifiedAt": "2026-06-05"
+    },
+    "The Offspring": {
+      "qid": "Q157041",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/The_Offspring",
+      "matchedLabel": "The Offspring",
+      "verifiedAt": "2026-06-05"
+    },
+    "Bad Religion": {
+      "qid": "Q201669",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Bad_Religion",
+      "matchedLabel": "Bad Religion",
+      "verifiedAt": "2026-06-05"
+    },
+    "Three Days Grace": {
+      "qid": "Q486825",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Three_Days_Grace",
+      "matchedLabel": "Three Days Grace",
+      "verifiedAt": "2026-06-05"
+    },
+    "Helloween": {
+      "qid": "Q158895",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Helloween",
+      "matchedLabel": "Helloween",
+      "verifiedAt": "2026-06-05"
+    },
+    "Saxon": {
+      "qid": "Q504090",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Saxon_(band)",
+      "matchedLabel": "Saxon",
+      "verifiedAt": "2026-06-05"
+    },
+    "Freddie Gibbs": {
+      "qid": "Q1246237",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Freddie_Gibbs",
+      "matchedLabel": "Freddie Gibbs",
+      "verifiedAt": "2026-06-05"
+    },
+    "Δημήτρης Σγουρός": {
+      "qid": "Q718484",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Dimitris_Sgouros",
+      "matchedLabel": "Δημήτρης Σγούρος",
+      "verifiedAt": "2026-06-05"
+    },
+    "Μυρτώ Βασιλείου": {
+      "qid": "Q116001155",
+      "method": "wikidata-label",
+      "anchor": "label:Μυρτώ Βασιλείου",
+      "matchedLabel": "Μυρτώ Βασιλείου",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "1000mods": {
+      "qid": "Q19200857",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/1000mods",
+      "matchedLabel": "1000mods",
+      "verifiedAt": "2026-06-05"
+    },
+    "Tinariwen": {
+      "qid": "Q262317",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Tinariwen",
+      "matchedLabel": "Tinariwen",
+      "verifiedAt": "2026-06-05"
+    },
+    "Autechre": {
+      "qid": "Q247237",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Autechre",
+      "matchedLabel": "Autechre",
+      "verifiedAt": "2026-06-05"
+    },
+    "WAVVES": {
+      "qid": "Q1406448",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Wavves",
+      "matchedLabel": "Wavves",
+      "verifiedAt": "2026-06-05"
+    },
+    "The Gathering": {
+      "qid": "Q687651",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/The_Gathering_(band)",
+      "matchedLabel": "The Gathering",
+      "verifiedAt": "2026-06-05"
+    },
+    "Ορέστης Ντάντος": {
+      "qid": "Q131375146",
+      "method": "wikidata-label",
+      "anchor": "label:Ορέστης Ντάντος",
+      "matchedLabel": "Ορέστης Ντάντος",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "Απόστολος Ρίζος": {
+      "qid": "Q99471944",
+      "method": "wikidata-label",
+      "anchor": "label:Απόστολος Ρίζος",
+      "matchedLabel": "Απόστολος Ρίζος",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "Vincent Peirani": {
+      "qid": "Q15451381",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Vincent_Peirani",
+      "matchedLabel": "Vincent Peirani",
+      "verifiedAt": "2026-06-05"
+    },
+    "Dimitri Vegas": {
+      "qid": "Q12308641",
+      "method": "wikidata-label",
+      "anchor": "label:Dimitri Vegas",
+      "matchedLabel": "Dimitri Vegas",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "Ηρώ Σαΐα": {
+      "qid": "Q38119205",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://el.wikipedia.org/wiki/%CE%97%CF%81%CF%8E_%CE%A3%CE%B1%CE%90%CE%B1",
+      "matchedLabel": "Ηρώ Σαΐα",
+      "verifiedAt": "2026-06-05"
+    },
+    "Yorgos Lanthimos": {
+      "qid": "Q975410",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Yorgos_Lanthimos",
+      "matchedLabel": "Yorgos Lanthimos",
+      "verifiedAt": "2026-06-05"
+    },
+    "Βασίλης Γισδάκης": {
+      "qid": "Q111031092",
+      "method": "wikidata-label",
+      "anchor": "label:Βασίλης Γισδάκης",
+      "matchedLabel": "Βασίλης Γισδάκης",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "Κανών": {
+      "qid": "Q53677492",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://el.wikipedia.org/wiki/%CE%9A%CE%B1%CE%BD%CF%8E%CE%BD",
+      "matchedLabel": "Κανών",
+      "verifiedAt": "2026-06-05"
+    },
+    "Σταύρος Σιόλας": {
+      "qid": "Q133871329",
+      "method": "wikidata-label",
+      "anchor": "label:Σταύρος Σιόλας",
+      "matchedLabel": "Σταύρος Σιόλας",
+      "matchCount": 1,
+      "verifiedAt": "2026-06-05"
+    },
+    "Αντώνης Καλογιάννης": {
+      "qid": "Q12873783",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Antonis_Kalogiannis",
+      "matchedLabel": "Αντώνης Καλογιάννης",
+      "verifiedAt": "2026-06-05"
+    },
+    "Haig Yazdjian": {
+      "qid": "Q2622788",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Haig_Yazdjian",
+      "matchedLabel": "Haig Yazdjian",
+      "verifiedAt": "2026-06-05"
+    },
+    "Εισβολέας": {
+      "qid": "Q16331073",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://el.wikipedia.org/wiki/%CE%95%CE%B9%CF%83%CE%B2%CE%BF%CE%BB%CE%AD%CE%B1%CF%82",
+      "matchedLabel": "Εισβολέας",
+      "verifiedAt": "2026-06-05"
+    },
+    "Μιρέλα Πάχου": {
+      "qid": "Q109579112",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://el.wikipedia.org/wiki/%CE%9C%CE%B9%CF%81%CE%AD%CE%BB%CE%B1_%CE%A0%CE%AC%CF%87%CE%BF%CF%85",
+      "matchedLabel": "Μιρέλα Πάχου",
+      "verifiedAt": "2026-06-05"
+    },
+    "Marika Rossa": {
+      "qid": "Q100151777",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://de.wikipedia.org/wiki/Marika_Rossa",
+      "matchedLabel": "Marika Rossa",
+      "verifiedAt": "2026-06-05"
+    },
+    "London Philharmonic Orchestra": {
+      "qid": "Q863397",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/London_Philharmonic_Orchestra",
+      "matchedLabel": "London Philharmonic Orchestra",
+      "verifiedAt": "2026-06-05"
+    },
+    "Πέτρος Γαϊτάνος": {
+      "qid": "Q6102198",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Petros_Gaitanos",
+      "matchedLabel": "Πέτρος Γαϊτάνος",
+      "verifiedAt": "2026-06-05"
+    },
+    "Ευρυδίκη": {
+      "qid": "Q158124",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Evridiki",
+      "matchedLabel": "Ευρυδίκη",
+      "verifiedAt": "2026-06-05"
+    },
+    "Kevin Bridges": {
+      "qid": "Q6395897",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Kevin_Bridges",
+      "matchedLabel": "Kevin Bridges",
+      "verifiedAt": "2026-06-05"
+    },
+    "Mario Adrion": {
+      "qid": "Q110149017",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Mario_Adrion",
+      "matchedLabel": "Mario Adrion",
+      "verifiedAt": "2026-06-05"
+    },
+    "Dara Ó Briain": {
+      "qid": "Q983613",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Dara_%C3%93_Briain",
+      "matchedLabel": "Dara Ó Briain",
+      "verifiedAt": "2026-06-05"
+    },
+    "Sooshi Mango": {
+      "qid": "Q100978587",
+      "method": "wikipedia-pageprops",
+      "anchor": "https://en.wikipedia.org/wiki/Sooshi_Mango",
+      "matchedLabel": "Sooshi Mango",
+      "verifiedAt": "2026-06-05"
+    }
+  }
+}

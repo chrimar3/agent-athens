@@ -174,6 +174,25 @@ async function main() {
     return PUBLISHABLE_STATUSES.includes(status);
   });
 
+  // Pre-build performer QID gate (S179): every wikidata QID in
+  // config/performer-sameAs.json must carry a resolver-written verification
+  // record in config/performer-qid-verification.json — 27/52 QIDs were
+  // LLM-fabricated (Moby = Edward Furlong class; 3rd fabricated-QID surface).
+  // Without this gate the S179 data fix lasts until the next unverified write.
+  {
+    const { validatePerformerQidConfig } = await import('./validators/performer-qid-manifest');
+    const qidReport = validatePerformerQidConfig();
+    if (qidReport.failures.length > 0) {
+      console.error(`\n❌ Performer QID gate FAILED: ${qidReport.failures.length} unverified QID${qidReport.failures.length === 1 ? '' : 's'}`);
+      for (const f of qidReport.failures) {
+        console.error(`   [performer-qid-gate] ${f}`);
+      }
+      console.error('   Fix: bun run scripts/audit-performer-qids.ts --apply (resolver re-derivation), then rebuild.');
+      process.exit(1);
+    }
+    console.log(`  ✓ performer QID gate: ${qidReport.passed} QIDs verified against manifest${qidReport.warnings.length ? ` (${qidReport.warnings.length} stale manifest records)` : ''}`);
+  }
+
   // Pre-build Tier 1 vocabulary guard (s-tba-bypass session, 2026-05-13):
   // detective control for any future writer that bypasses normalizePriceType().
   // Single-call-site normalizers in multi-writer codebases fail silently; this

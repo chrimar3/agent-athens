@@ -17,9 +17,30 @@ Batch label-check of all 62 unique QIDs across performer-sameAs + venue sameAs: 
 ## Fix path for the follow-up brief
 
 1. **Deterministic re-derivation, no lookup model:** for each entry, take the existing (correct) Wikipedia URL and query `en.wikipedia.org/w/api.php?action=query&prop=pageprops&ppprop=wikibase_item&titles=<title>` — Wikipedia returns the authoritative QID. Replace all 62; drop QIDs where no Wikipedia link exists to derive from (absence beats fabrication).
+   **[S179 amendment, operator-ratified]** (a) *Any-language* Wikipedia edition is a valid derivation anchor — the wikibase_item binding is language-independent, and en-only manufactures a fake underivable class (5 Greek artists + Marika Rossa anchor via el/de). Label-vs-owner comparison must be language-matched (compare against el labels for Greek names). (b) "No Wikipedia anchor → no QID" is a proxy, not the principle. A `wikidata-label` derivation is also verified **iff** exactly ONE entity has a normalized-label match with performer-class P31 (+P106 occupation gate for humans — exact label + uniqueness alone let an ancient diplomat through for "Leon of Athens"). Ambiguity (matchCount ≠ 1) is treated as absence. Multi-edition sameAs emission policy (en vs el when both exist) is a GEO ratification item, non-blocking — current batch has no contention (non-en anchors exist only where en doesn't).
 2. **Patch the generator** (`scripts/lookup-performer-sameAs.ts`) to derive QIDs the same way — never emit a QID that didn't come from the wikibase_item pageprop.
 3. **Paired validator** (S110 pattern): emitted wikidata sameAs URIs must exist in the (re-derived) cache; consider a periodic label-spot-check script.
 4. Stale-dist sweep after the fix (S176/S177 lesson: never-regenerated venue/event pages keep old QIDs).
+
+## S179 follow-up audit — derived-vs-stored diff (2026-06-05, pre-patch)
+
+Read-only audit via `scripts/audit-performer-qids.ts` (wikibase_item pageprops + wbgetentities label/P31/sitelink checks). Universe: **52 stored QIDs** across 56 link-bearing entries (brief's "62" was the S177 combined performer+venue unique-QID count; 394 total entries, 338 `sameAs: null`).
+
+**27 of 52 stored QIDs are wrong** (S177's ≥17 was a floor):
+
+| Class | Count | Treatment |
+|---|---|---|
+| QID_MISMATCH (Wikipedia URL correct, QID unrelated — e.g. The Cure=Giro di Lombardia, Moby=Edward Furlong; 5 deleted entities) | 23 | Replace with pageprops-derived QID |
+| Hard-wrong, underivable (Claudio PRC=scientific article, Polar Inertia=Wikimedia category, Μυρτώ Βασιλείου=disambiguation page, Leon of Athens=Q11916529 → cawiki "Damis d'Atenes" ancient homonym) | 4 | Drop QID (absence beats fabrication) |
+| MATCH (stored == derived, label owns performer) | 13 | Keep |
+| elwiki-anchored exact match (Μίνως Μάτσας, Ηρώ Σαΐα, Κανών, Εισβολέας, Μιρέλα Πάχου) — en-only audit missed their el.wikipedia sitelinks | 5 | Derivable via elwiki pageprops; Μίνως Μάτσας homonym (grandfather/grandson) needs human confirm |
+| Foreign-wiki anchored (Marika Rossa dewiki ✓; Chevy ptwiki "Chevy (banda)" — ownership of Athens billing unconfirmed) | 2 | Marika Rossa keep; Chevy review |
+| Wikidata-only, exact Greek label + musician P31/description, no sitelinks (Ορέστης Ντάντος, Απόστολος Ρίζος, Βασίλης Γισδάκης, Σταύρος Σιόλας) + Dimitri Vegas (commons only, "Belgian DJ" matches) | 5 | Policy decision: keep label-verified vs drop underivable |
+| WIKIPEDIA_ONLY — no stored QID, derivation adds one (Kevin Bridges, Mario Adrion, Gabriel Iglesias, Sooshi Mango) | 4 (additions) | Add derived QID |
+
+Ownership caveats persisting after derivation (per-performer confirmation, can't be resolved deterministically): Catharsis → "Catharsis (Russian band)", Imminence → "Imminence (band)", The Gathering → "The Gathering (band)" — Wikipedia URL itself may not belong to the Athens-billed act.
+
+**SHIPPED (S179, 2026-06-05):** final tally 23 confirmed / 24 corrected / 3 added / 4 dropped / 2 operator-forced drops (Μίνως Μάτσας homonym, Chevy unowned). **27 of 52 stored QIDs were fabricated.** Resolver: `scripts/lib/performer-qid-resolver.ts`; re-derivation + periodic online re-verify (ownership AND label-uniqueness drift): `scripts/audit-performer-qids.ts [--apply]`; generator rewritten resolver-only (SPARQL first-label-match engine removed); paired offline build gate `src/validators/performer-qid-manifest.ts` FAILs the build on any cache QID without a matching record in `config/performer-qid-verification.json` (negative-tested: poisoned QID → exit 1). Dist swept: 0 fabricated QIDs emitted. Backlog: 1,149 uncached artists awaiting a generator run; multi-edition emission policy → GEO.
 
 ## Why this class keeps appearing (for decisions.md)
 

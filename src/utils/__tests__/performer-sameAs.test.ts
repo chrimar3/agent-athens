@@ -9,14 +9,17 @@ const TEST_CACHE_PATH = join(import.meta.dir, '../../../config/performer-sameAs.
 // Save original cache so we can restore it after tests
 const originalCache = existsSync(TEST_CACHE_PATH) ? readFileSync(TEST_CACHE_PATH, 'utf-8') : null;
 
-// Seed test data into the cache before module import
+// Seed test data into the cache before module import.
+// QIDs are the S179 resolver-verified values — earlier revisions of this
+// fixture carried the fabricated QIDs copied from the corrupted production
+// file (Q379849 = Qazi Muhammad for Αλκίνοος Ιωαννίδης, etc.).
 const testCache = {
   _meta: { description: 'Test cache', updated: '2026-03-03', generated_by: 'test' },
   performers: {
     'Αλκίνοος Ιωαννίδης': {
       type: 'Person' as const,
       sameAs: [
-        'https://www.wikidata.org/wiki/Q379849',
+        'https://www.wikidata.org/wiki/Q1380313',
         'https://en.wikipedia.org/wiki/Alkinoos_Ioannidis',
         'https://musicbrainz.org/artist/test-mbid',
       ],
@@ -24,27 +27,27 @@ const testCache = {
     'Villagers of Ioannina City': {
       type: 'MusicGroup' as const,
       sameAs: [
-        'https://www.wikidata.org/wiki/Q20649047',
+        'https://www.wikidata.org/wiki/Q18211729',
         'https://en.wikipedia.org/wiki/Villagers_of_Ioannina_City',
       ],
     },
     'Rotting Christ': {
       type: 'MusicGroup' as const,
       sameAs: [
-        'https://www.wikidata.org/wiki/Q685757',
+        'https://www.wikidata.org/wiki/Q938889',
       ],
     },
     'Moby': {
       type: 'Person' as const,
       sameAs: [
-        'https://www.wikidata.org/wiki/Q309631',
+        'https://www.wikidata.org/wiki/Q14045',
         'https://en.wikipedia.org/wiki/Moby',
       ],
     },
     'Freddie Gibbs': {
       type: 'Person' as const,
       sameAs: [
-        'https://www.wikidata.org/wiki/Q5499883',
+        'https://www.wikidata.org/wiki/Q1246237',
       ],
     },
     // S175 — ComedyEvent derived-eligibility fixtures
@@ -85,7 +88,7 @@ describe('getPerformerSameAs', () => {
     expect(result).not.toBeNull();
     expect(result!['@type']).toBe('Person');
     expect(result!.name).toBe('Αλκίνοος Ιωαννίδης');
-    expect(result!.sameAs).toContain('https://www.wikidata.org/wiki/Q379849');
+    expect(result!.sameAs).toContain('https://www.wikidata.org/wiki/Q1380313');
     expect(result!.sameAs).toContain('https://en.wikipedia.org/wiki/Alkinoos_Ioannidis');
     expect(result!.sameAs.length).toBeGreaterThanOrEqual(2);
   });

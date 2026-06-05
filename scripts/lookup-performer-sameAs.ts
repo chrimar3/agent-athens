@@ -1,10 +1,20 @@
 #!/usr/bin/env bun
 /**
- * Wikidata SPARQL Batch Lookup for Performer sameAs Links
+ * Performer sameAs Lookup — resolver-only (S179 rewrite)
  *
- * Queries Wikidata for performer names extracted from visible events,
- * finds Wikidata Q-IDs, Wikipedia URLs, and MusicBrainz IDs.
- * Writes results to config/performer-sameAs.json.
+ * Looks up performer names extracted from visible events and writes verified
+ * Wikidata Q-IDs, Wikipedia URLs, and MusicBrainz IDs to
+ * config/performer-sameAs.json + config/performer-qid-verification.json.
+ *
+ * S179 QID-provenance rule: every QID comes from the resolver
+ * (scripts/lib/performer-qid-resolver.ts) — Wikipedia wikibase_item pageprops
+ * anchor, or uniqueness-gated exact-label match — and is verified
+ * label-vs-owner before it is emitted. The previous SPARQL first-label-match
+ * engine was corruption vector 1 (Catharsis → wrong same-name band); LLM
+ * hand-edits to the cache were vector 2 (27/52 QIDs fabricated, see
+ * specs/performer-sameas-audit-S177.md). The paired build validator
+ * (src/validators/performer-qid-manifest.ts) FAILs the build on any cache QID
+ * that lacks a matching manifest record, so neither vector can deploy again.
  *
  * Usage:
  *   bun run scripts/lookup-performer-sameAs.ts              # Full run
@@ -15,14 +25,17 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import Database from 'bun:sqlite';
+import {
+  resolvePerformerQid,
+  fetchEntity,
+  schemaTypeFromP31,
+  type VerificationRecord,
+} from './lib/performer-qid-resolver';
 
 const DB_PATH = 'data/events.db';
 const CACHE_PATH = join(import.meta.dir, '../config/performer-sameAs.json');
-const SPARQL_ENDPOINT = 'https://query.wikidata.org/sparql';
+const MANIFEST_PATH = join(import.meta.dir, '../config/performer-qid-verification.json');
 const PERFORMER_TYPES = ['concert', 'dj_set', 'festival', 'performance', 'show', 'dance'];
-
-// Rate limit: 1 request per 2 seconds (conservative for Wikidata)
-const DELAY_MS = 2000;
 
 interface PerformerEntry {
   type: 'Person' | 'MusicGroup';
@@ -34,12 +47,9 @@ interface PerformerCache {
   performers: Record<string, PerformerEntry>;
 }
 
-interface WikidataResult {
-  item: { value: string };
-  itemLabel: { value: string };
-  instanceLabel?: { value: string };
-  wp?: { value: string };
-  mb?: { value: string };
+interface Manifest {
+  _meta: { description: string; updated: string; generated_by: string };
+  verified: Record<string, VerificationRecord>;
 }
 
 // ============================================================================
@@ -100,85 +110,38 @@ function extractArtist(title: string): string | null {
 }
 
 // ============================================================================
-// Wikidata SPARQL
+// Verified lookup (resolver-only — S179)
 // ============================================================================
 
-function buildSparqlQuery(name: string): string {
-  // Try Greek label first, then English
-  // Look for humans (Q5) or music groups (Q215380)
-  const escaped = name.replace(/"/g, '\\"');
-  return `
-SELECT ?item ?itemLabel ?instanceLabel ?wp ?mb WHERE {
-  {
-    ?item rdfs:label "${escaped}"@el .
-  } UNION {
-    ?item rdfs:label "${escaped}"@en .
-  }
-  ?item wdt:P31 ?instance .
-  FILTER(?instance IN (wd:Q5, wd:Q215380, wd:Q2088357))
-  OPTIONAL {
-    ?wp schema:about ?item ;
-        schema:isPartOf <https://en.wikipedia.org/> .
-  }
-  OPTIONAL { ?item wdt:P434 ?mb }
-  SERVICE wikibase:label {
-    bd:serviceParam wikibase:language "el,en" .
-  }
-}
-LIMIT 3
-  `.trim();
-}
+/**
+ * Resolve one artist name to a verified cache entry + manifest record.
+ * Returns null when no verified entity exists (absence beats fabrication).
+ */
+async function lookupVerified(
+  name: string,
+  today: string,
+): Promise<{ entry: PerformerEntry; record: VerificationRecord } | null> {
+  const { resolved } = await resolvePerformerQid(name, { today });
+  if (!resolved) return null;
 
-async function querySparql(name: string): Promise<WikidataResult[]> {
-  const query = buildSparqlQuery(name);
-  const url = `${SPARQL_ENDPOINT}?query=${encodeURIComponent(query)}&format=json`;
+  const ent = await fetchEntity(resolved.qid);
+  if (!ent) return null;
 
-  const response = await fetch(url, {
-    headers: {
-      'Accept': 'application/sparql-results+json',
-      'User-Agent': 'AgentAthens/1.0 (https://agentathens.com; cultural events calendar)',
+  const sameAs: string[] = [`https://www.wikidata.org/wiki/${resolved.qid}`];
+  if (resolved.wikipediaUrl) sameAs.push(resolved.wikipediaUrl);
+  if (ent.musicbrainzId) sameAs.push(`https://musicbrainz.org/artist/${ent.musicbrainzId}`);
+
+  return {
+    entry: { type: schemaTypeFromP31(ent.p31), sameAs },
+    record: {
+      qid: resolved.qid,
+      method: resolved.method,
+      anchor: resolved.anchor,
+      matchedLabel: resolved.matchedLabel,
+      ...(resolved.matchCount !== undefined && { matchCount: resolved.matchCount }),
+      verifiedAt: resolved.verifiedAt,
     },
-  });
-
-  if (!response.ok) {
-    if (response.status === 429) {
-      console.log(`  Rate limited, waiting 10s...`);
-      await Bun.sleep(10000);
-      return querySparql(name);
-    }
-    throw new Error(`SPARQL query failed: ${response.status} ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  return data.results?.bindings || [];
-}
-
-function resultsToEntry(results: WikidataResult[]): PerformerEntry | null {
-  if (results.length === 0) return null;
-
-  const first = results[0];
-  const qid = first.item.value.replace('http://www.wikidata.org/entity/', '');
-
-  // Determine type from instance
-  const instanceLabel = first.instanceLabel?.value?.toLowerCase() || '';
-  const type: 'Person' | 'MusicGroup' =
-    instanceLabel.includes('band') || instanceLabel.includes('group') || instanceLabel.includes('duo')
-      ? 'MusicGroup'
-      : 'Person';
-
-  const sameAs: string[] = [`https://www.wikidata.org/wiki/${qid}`];
-
-  // Add Wikipedia URL if found
-  if (first.wp?.value) {
-    sameAs.push(first.wp.value);
-  }
-
-  // Add MusicBrainz URL if found
-  if (first.mb?.value) {
-    sameAs.push(`https://musicbrainz.org/artist/${first.mb.value}`);
-  }
-
-  return { type, sameAs };
+  };
 }
 
 // ============================================================================
@@ -237,7 +200,26 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Query Wikidata for each artist
+  // Load the verification manifest — every emitted QID gets a record here,
+  // and the build validator FAILs on cache QIDs without one.
+  let manifest: Manifest;
+  try {
+    manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf-8'));
+  } catch {
+    manifest = {
+      _meta: {
+        description: 'Performer QID verification manifest. Written only by resolver scripts.',
+        updated: '',
+        generated_by: 'scripts/lookup-performer-sameAs.ts',
+      },
+      verified: {},
+    };
+  }
+
+  // Resolve each artist through the verified pipeline (S179: resolver output
+  // only — Wikipedia pageprops anchor or uniqueness-gated label match,
+  // label-vs-owner checked; rate limiting lives inside the resolver)
+  const today = new Date().toISOString().split('T')[0];
   let found = 0;
   let notFound = 0;
   let errors = 0;
@@ -247,17 +229,17 @@ async function main(): Promise<void> {
     if (processed >= limit) break;
 
     try {
-      const results = await querySparql(name);
-      const entry = resultsToEntry(results);
+      const result = await lookupVerified(name, today);
 
-      if (entry) {
-        cache.performers[name] = entry;
+      if (result) {
+        cache.performers[name] = result.entry;
+        manifest.verified[name] = result.record;
         found++;
-        console.log(`  + ${name} → ${entry.type}, ${entry.sameAs.length} links`);
+        console.log(`  + ${name} → ${result.entry.type}, ${result.record.qid} (${result.record.method}), ${result.entry.sameAs.length} links`);
       } else {
-        cache.performers[name] = null as any; // Mark as looked-up, no match
+        cache.performers[name] = null as any; // Mark as looked-up, no verified match
         notFound++;
-        console.log(`  - ${name} → not found`);
+        console.log(`  - ${name} → no verified match`);
       }
     } catch (err) {
       errors++;
@@ -265,23 +247,25 @@ async function main(): Promise<void> {
     }
 
     processed++;
-
-    // Rate limiting
-    if (processed < artistNames.size) {
-      await Bun.sleep(DELAY_MS);
-    }
   }
 
-  // Save updated cache
-  cache._meta.updated = new Date().toISOString().split('T')[0];
+  // Save updated cache + manifest together — they must move as a pair or the
+  // build validator trips (by design)
+  cache._meta.updated = today;
   writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + '\n', 'utf-8');
+  manifest._meta.updated = today;
+  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + '\n', 'utf-8');
 
   console.log(`\n=== Summary ===`);
-  console.log(`Found: ${found}`);
+  console.log(`Found (verified): ${found}`);
   console.log(`Not found: ${notFound}`);
   console.log(`Errors: ${errors}`);
   console.log(`Total cached: ${Object.keys(cache.performers).length}`);
   console.log(`Saved to: ${CACHE_PATH}`);
+  console.log(`Manifest: ${MANIFEST_PATH} (${Object.keys(manifest.verified).length} records)`);
 }
 
-main().catch(console.error);
+main().then(
+  () => process.exit(0),
+  err => { console.error(err); process.exit(1); },
+);

@@ -5486,3 +5486,13 @@ Field mapping confirmed against the live response (positional — request dimens
 **Reusable design — install via a tracked installer rather than checking in `.git/hooks` (which can't be tracked).** `scripts/install-hooks.sh` is idempotent and makes the per-clone wiring a one-liner. No husky dep, no framework lock-in.
 
 **Connects to:** `scripts/precommit-tsc.sh`; `decisions.md`/`mistakes.md`/`session-log.md` S178; `feedback_stage_precisely` (memory — 3-instance ledger now closed by this hook); sister-pattern S100b/S102 ("precompute pattern", S161 ("Satori-as-oracle").
+
+## S180 — Resolver-derive + manifest-paired offline gate (2026-06-05)
+
+**Reusable pattern — verified-derivation manifest.** When config values can only be verified ONLINE (QID label-vs-owner needs Wikidata), don't put network in the build. Instead: the resolver writes a verification manifest (`config/performer-qid-verification.json`) recording HOW each value was verified (method + anchor + matchCount + date); the build validator is a pure OFFLINE consistency check (every cache QID must have a matching record; pageprops records must have their anchor URL present in sameAs; label records must have matchCount=1). Hand-editing the cache without running the resolver trips the gate. Online drift (ownership, label-uniqueness) is re-checked by re-running the audit script — two layers, network only in the one that's run deliberately.
+
+**Reusable trap — ownership is strict normalized equality, never containment.** enwiki redirects "Dimitri Vegas" → "Dimitri Vegas & Like Mike" (the duo); containment match accepts the wrong owner. Normalization handles the legitimate variance (diacritics incl. Greek tonos, &/+/"and", trailing "(band)" parentheticals, nickname quotes) so equality can stay strict. Same trap inverted: a promote-path check that includes the entity's labels in its candidate set re-verifies the evidence that selected the entity — title-only or nothing (Leon of Athens / "Damis d'Atenes").
+
+**Reusable guard — label-derived entities need an occupation gate.** Exact label + uniqueness + P31 Q5 admits any unique same-named human (ancient diplomats). For humans found by label: declared P106 must intersect performer occupations; entities with NO P106 statement pass (Greek-artist Wikidata stubs are sparse — the uniqueness and exact-label gates still hold).
+
+**Connects to:** S110 paired-validator pattern (hreflang S176); QID-provenance rule (decisions.md S179/S180); `scripts/lib/performer-qid-resolver.ts`, `src/validators/performer-qid-manifest.ts`.
