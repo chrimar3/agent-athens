@@ -323,19 +323,20 @@ describe('Hub @graph envelope (S139)', () => {
     expect(elHtml!).not.toContain('<link rel="canonical" href="https://agentathens.com/today/">');
   });
 
-  test('Hreflang en + x-default emit trailing-slash; el stays no-slash', () => {
-    // Hub-page.ts post-render-injects hreflang for bilingual hubs (Guard 6:
-    // 6th URL emitter, hand-rolled, independent of metadata.url). Per-URL parity
-    // applies here too — EN slash, EL no-slash.
+  test('Hreflang gate-closed: bilingual hub emits NO hreflang (S176 — page.ts parity)', () => {
+    // Pre-S176 this test pinned the UNGATED hub emission — the lagged parallel
+    // surface that contradicted S144. The hub now routes through
+    // utils/hreflang.ts renderHreflangLinks; gate-closed output is '' on every
+    // surface. Gate-OPEN per-URL parity (EN slash, EL no-slash, x-default=en)
+    // is pinned in src/utils/__tests__/hreflang.test.ts so the emission shape
+    // can't rot while dormant.
     const events = makeTodayEvents(5);
     const englishHubConfig: HubConfig = {
       ...todayHubConfig,
       answerCapsuleEn: 'Today in Athens.',
     };
     const enHtml = renderHubPage(englishHubConfig, events, events, undefined, 'en');
-    expect(enHtml!).toContain('<link rel="alternate" hreflang="en" href="https://agentathens.com/en/today/">');
-    expect(enHtml!).toContain('<link rel="alternate" hreflang="x-default" href="https://agentathens.com/en/today/">');
-    expect(enHtml!).toContain('<link rel="alternate" hreflang="el" href="https://agentathens.com/today">');
+    expect(enHtml!).not.toContain('hreflang=');
   });
 
   test('Overflow page canonical (EN) is trailing-slash form', () => {

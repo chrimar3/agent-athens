@@ -13,6 +13,7 @@ import { classifyDateFormat } from '../utils/date-format';
 import { getRegionName } from '../utils/schema-geo';
 import { BASE_URL } from '../config/site-url';
 import { getLifecyclePhase } from '../utils/event-lifecycle';
+import { HREFLANG_GATE_OPEN } from '../utils/hreflang';
 
 // Valid @type values from our canonical type map
 const VALID_SCHEMA_TYPES: Set<string> = new Set(Object.values(SCHEMA_TYPE_MAP));
@@ -1078,6 +1079,40 @@ export function checkPhaseKeyedNoindex(htmlContent: string, pagePath: string): S
 }
 
 /**
+ * S176 — UNGATED_HREFLANG (all page classes, paired with utils/hreflang.ts).
+ *
+ * No page may emit hreflang/x-default while the S144 flip gate is closed
+ * (Greek dormant). Severity FAIL — corruption class, parity with
+ * location-absence: advertising dormant Greek alternates corrupts the
+ * Tier-B crawl signal the same week's rulings protect.
+ *
+ * This is the S110 paired-validator half of the single-emitter fix: the
+ * emitter (renderHreflangLinks) makes ungated emission structurally
+ * impossible at write time; this check makes it build-FAILing at validate
+ * time, so a future generator that hand-rolls <link rel="alternate"> cannot
+ * deploy. Gate state is read from HREFLANG_GATE_OPEN (single source) — when
+ * Greek launches and the gate opens, this rule disarms without edit.
+ */
+export function checkUngatedHreflang(
+  htmlContent: string,
+  pagePath: string,
+  opts?: { gateOpenForTests?: boolean },
+): SchemaValidationResult {
+  const errors: string[] = [];
+  const gateOpen = opts?.gateOpenForTests ?? HREFLANG_GATE_OPEN;
+  if (!gateOpen) {
+    const matches = htmlContent.match(/<link[^>]+hreflang=/g);
+    if (matches) {
+      errors.push(
+        `UNGATED_HREFLANG: page emits ${matches.length} hreflang link(s) while the S144 flip gate is closed — ` +
+          `route emission through utils/hreflang.ts renderHreflangLinks (page: ${pagePath})`,
+      );
+    }
+  }
+  return { slug: pagePath, errors, warnings: [], info: [] };
+}
+
+/**
  * Validate Schema.org microdata in hub-card markup (S101a-B).
  *
  * Per S101a-A audit: validateSchemaCompleteness only parses JSON-LD
@@ -1181,6 +1216,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       checkOrphanReferences(html, slug, canonicalUrls, internalHost),
       checkMemberOrdering(html, slug, 'event', BASE_URL),
       checkCrossLocaleCanonical(html, `events/${slug}/`),
+      checkUngatedHreflang(html, `events/${slug}/`),
       checkPhaseKeyedNoindex(html, `events/${slug}/`),
       // S146 Layer-2 defense-in-depth — FAIL on `@id` containing empty slug
       // segment. Dry-run 2026-05-23 confirmed 0 violations across 3,808 pages
@@ -1205,6 +1241,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
         checkOrphanReferences(html, `en/${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `en/${slug}`, 'event', BASE_URL),
         checkCrossLocaleCanonical(html, `en/events/${slug}/`),
+        checkUngatedHreflang(html, `en/events/${slug}/`),
         checkPhaseKeyedNoindex(html, `en/events/${slug}/`),
       );
       details.push(enResult);
@@ -1226,6 +1263,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
       checkOrphanReferences(html, `hub:${slug}`, canonicalUrls, internalHost),
       checkMemberOrdering(html, `hub:${slug}`, 'hub', BASE_URL),
       checkCrossLocaleCanonical(html, `${slug}.html`),
+      checkUngatedHreflang(html, `${slug}.html`),
     );
     details.push(hubResult);
   }
@@ -1245,6 +1283,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
         checkOrphanReferences(html, `hub:en/${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `hub:en/${slug}`, 'hub', BASE_URL),
         checkCrossLocaleCanonical(html, `en/${slug}/`),
+        checkUngatedHreflang(html, `en/${slug}/`),
       );
       details.push(hubResult);
     }
@@ -1266,6 +1305,7 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
         checkOrphanReferences(html, `venue:${slug}`, canonicalUrls, internalHost),
         checkMemberOrdering(html, `venue:${slug}`, 'venue', BASE_URL),
         checkCrossLocaleCanonical(html, `venues/${slug}/`),
+        checkUngatedHreflang(html, `venues/${slug}/`),
       );
       details.push(venueResult);
     }

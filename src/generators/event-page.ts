@@ -14,6 +14,7 @@ import { writeFileIfChangedSync, writeHtmlIfChangedSync } from '../utils/write-i
 import { join } from 'path';
 import type { Event } from '../types';
 import { generatePracticalBlock } from './practical-block';
+import { getEventTile } from './event-tile';
 import { formatGreekDateOnly, formatGreekTime, formatPriceGreek } from '../utils/i18n';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { formatDateOnly, formatPrice } from '../utils/i18n-date';
@@ -24,6 +25,7 @@ import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
+import { renderHreflangLinks } from '../utils/hreflang';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
@@ -553,8 +555,13 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // "Greek bytes exist." Dormant-Greek bare-root pages don't qualify; emitting
   // alternates to a noindex Greek alternate builds an inconsistent cluster
   // (Google may down-rank /en/ from associating with a noindex alternate).
-  // Re-emit per decisions.md 2026-05-21 when Greek-as-product ships.
-  const hreflangHtml = '';
+  // S176: routed through the single gated emitter — reactivates with the
+  // HREFLANG_GATE_OPEN flip, together with every other surface.
+  const hreflangHtml = renderHreflangLinks({
+    el: `${BASE_URL}/events/${slug}`,
+    en: `${BASE_URL}/en/events/${slug}/`,
+    xDefault: `${BASE_URL}/en/events/${slug}/`,
+  });
 
   // 1.5a: meta/title attributes carry event-derived free text that can contain raw
   // double-quotes (which truncate the HTML attribute at the first ") and, on
@@ -756,8 +763,8 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
       ${renderCardSaveButton(event.id, slug, event.title)}
     </div>`
-      : `<div class="card-image card-image--fallback" data-event-type="${event.type}">
-      <span class="card-image__fallback-text" aria-hidden="true">${event.title}</span>
+      : `<div class="card-image-wrapper" data-type="${event.type}">
+      ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
       ${renderCardSaveButton(event.id, slug, event.title)}

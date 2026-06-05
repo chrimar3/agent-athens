@@ -27,6 +27,7 @@ import { renderSearchOverlay, renderSearchScript } from '../templates/search-ove
 const DIST_DIR = join(import.meta.dir, '../../dist');
 import { BASE_URL } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
+import { renderHreflangLinks } from '../utils/hreflang';
 
 // Load IndexNow config for Bing WMT verification
 const indexNowConfig = JSON.parse(
@@ -238,8 +239,8 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   <!-- Canonical URL -->
   <link rel="canonical" href="${canonicalUrl}">
 
-  <!-- Language alternates -->
-  <link rel="alternate" hreflang="el" href="${canonicalUrl}">
+  <!-- Language alternates — S176: routed through the gated single emitter -->
+  ${renderHreflangLinks({ el: canonicalUrl })}
 
   <!-- Open Graph -->
   <meta property="og:title" content="${venue.name} - Εκδηλώσεις">
@@ -451,8 +452,8 @@ function generateVenueIndex(venues: VenueData[]): void {
 
   <link rel="canonical" href="${BASE_URL}/venues/">
 
-  <!-- Language alternates -->
-  <link rel="alternate" hreflang="el" href="${BASE_URL}/venues/">
+  <!-- Language alternates — S176: routed through the gated single emitter -->
+  ${renderHreflangLinks({ el: `${BASE_URL}/venues/` })}
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <!-- Open Graph -->

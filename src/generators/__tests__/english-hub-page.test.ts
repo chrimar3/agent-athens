@@ -177,21 +177,17 @@ describe("English hub page — FAQ schema", () => {
 });
 
 describe("English hub page — hreflang", () => {
-  test("bilingual hub emits el + en + x-default hreflang", () => {
+  test("bilingual hub emits NO hreflang while the S144 gate is closed (S176)", () => {
+    // Pre-S176 these tests pinned the ungated emission (the S144 lagged
+    // surface). Gate-open shape (el/en/x-default, per-URL parity) is pinned
+    // in src/utils/__tests__/hreflang.test.ts.
     const html = renderHubPage(bilingualHub, testEvents, testEvents, undefined, "en");
-    // Per-URL parity (canonical-must-equal-served-form): EN /en/today/ matches
-    // Netlify's directory-served form (dist/en/today/index.html); EL /today
-    // matches its flat-file-served form (dist/today.html). x-default = en.
-    expect(html!).toContain('hreflang="el" href="https://agentathens.com/today"');
-    expect(html!).toContain('hreflang="en" href="https://agentathens.com/en/today/"');
-    expect(html!).toContain('hreflang="x-default" href="https://agentathens.com/en/today/"');
+    expect(html!).not.toContain('hreflang=');
   });
 
-  test("Greek version of bilingual hub also has hreflang", () => {
+  test("Greek version of bilingual hub also emits NO hreflang gate-closed (S176)", () => {
     const html = renderHubPage(bilingualHub, testEvents, testEvents, undefined, "el");
-    expect(html!).toContain('hreflang="el"');
-    expect(html!).toContain('hreflang="en"');
-    expect(html!).toContain('hreflang="x-default"');
+    expect(html!).not.toContain('hreflang=');
   });
 
   test("hub without answerCapsuleEn has no English hreflang", () => {

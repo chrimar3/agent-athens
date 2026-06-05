@@ -29,6 +29,7 @@ import { BASE_URL } from '../config/site-url';
 import { buildHubGraph } from '../utils/schema-graph-builders';
 import { hubFilterToExcludedDimension } from '../utils/hub-identity';
 import { buildWeekendCapsule } from '../templates/weekend-capsule';
+import { renderHreflangLinks } from '../utils/hreflang';
 
 // TODO(D3-city_descriptor): replace with config read once home is picked
 // (config/site.json vs schema-geo ORG_*). Value is final-locked; only the home is open.
@@ -447,17 +448,19 @@ export function renderHubPage(
   // (2026-05-14 canonical-to-root posture). Post-render regex-patch removed —
   // page.ts emits `${BASE_URL}/${url}` uniformly, achieving consolidation.
 
-  // hreflang tags — bilingual hubs get el + en + x-default.
-  // Per-URL parity: EN emits slash (directory-served), EL emits no-slash
-  // (flat-file-served). x-default uses enUrl. See :311 comment for the
-  // per-URL parity rationale.
+  // hreflang tags — bilingual hubs get el + en + x-default WHEN the S144 flip
+  // gate is open. S176: routed through the single emitter (utils/hreflang.ts);
+  // this surface lagged S144's drop and shipped dormant-Greek alternates for
+  // two weeks (lagged-parallel-surface class — see specs/hreflang-sweep-S176.md).
+  // Per-URL parity preserved for gate-open: EN slash (directory-served), EL
+  // no-slash (flat-file-served), x-default = enUrl. See :311 comment.
   if (config.answerCapsuleEn) {
     const elUrl = `${BASE_URL}/${config.slug}`;
     const enUrl = `${BASE_URL}/en/${config.slug}/`;
-    const hreflangHtml = `<link rel="alternate" hreflang="el" href="${elUrl}">
-  <link rel="alternate" hreflang="en" href="${enUrl}">
-  <link rel="alternate" hreflang="x-default" href="${enUrl}">`;
-    html = html.replace('</head>', `  ${hreflangHtml}\n</head>`);
+    const hreflangHtml = renderHreflangLinks({ el: elUrl, en: enUrl, xDefault: enUrl });
+    if (hreflangHtml) {
+      html = html.replace('</head>', `  ${hreflangHtml}\n</head>`);
+    }
   }
 
   // Part 1: Answer Capsule + category-nav now composed via preFilterBarContent

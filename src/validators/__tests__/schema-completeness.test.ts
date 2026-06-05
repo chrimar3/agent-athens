@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, checkCrossLocaleCanonical, checkPhaseKeyedNoindex, isEnLocalePath, validateVenueIdAndSlug, type SchemaValidationResult, type PageClass } from '../schema-completeness';
+import { validateSchemaCompleteness, validateHubSchema, validateAllPages, validateDataFeed, validateVenueSchema, printSchemaSummary, validatePriceTypeVocabulary, flattenGraph, resolveSamePageReferences, validateOfferShape, checkOrphanReferences, checkMemberOrdering, checkCrossLocaleCanonical, checkPhaseKeyedNoindex, checkUngatedHreflang, isEnLocalePath, validateVenueIdAndSlug, type SchemaValidationResult, type PageClass } from '../schema-completeness';
 
 // Helper: wrap a JSON-LD object in minimal HTML
 function wrapInHtml(schema: Record<string, unknown>): string {
@@ -1899,5 +1899,44 @@ describe('S146 — validateVenueIdAndSlug', () => {
     </head><body></body></html>`;
     const result = validateVenueIdAndSlug(html, 'test-page');
     expect(result.errors.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+// =============================================================================
+// S176 — UNGATED_HREFLANG guard (paired validator for the single-emitter gate)
+//
+// No page class may emit hreflang/x-default while the S144 flip gate is
+// closed. Severity FAIL — corruption class, parity with location-absence.
+// The paired validator is what makes "four surfaces can't drift a third
+// time" structurally true (S110 pattern: emitter change ships with a
+// validator that fails the build on regression).
+// =============================================================================
+
+describe('checkUngatedHreflang — S176', () => {
+  const head = (inner: string) =>
+    `<!DOCTYPE html><html><head>${inner}</head><body></body></html>`;
+
+  test('FAIL: hreflang link emitted while gate closed', () => {
+    const html = head('<link rel="alternate" hreflang="el" href="https://agentathens.com/concerts">');
+    const result = checkUngatedHreflang(html, 'en/concerts/');
+    expect(result.errors.some(e => e.includes('UNGATED_HREFLANG'))).toBe(true);
+  });
+
+  test('FAIL: x-default emitted while gate closed', () => {
+    const html = head('<link rel="alternate" hreflang="x-default" href="https://agentathens.com/en/concerts/">');
+    const result = checkUngatedHreflang(html, 'en/concerts/');
+    expect(result.errors.some(e => e.includes('UNGATED_HREFLANG'))).toBe(true);
+  });
+
+  test('PASS: page with no hreflang emission', () => {
+    const html = head('<link rel="canonical" href="https://agentathens.com/en/concerts/">');
+    const result = checkUngatedHreflang(html, 'en/concerts/');
+    expect(result.errors).toHaveLength(0);
+  });
+
+  test('gate-open override: emission is legal (reactivation contract)', () => {
+    const html = head('<link rel="alternate" hreflang="el" href="https://agentathens.com/concerts">');
+    const result = checkUngatedHreflang(html, 'en/concerts/', { gateOpenForTests: true });
+    expect(result.errors).toHaveLength(0);
   });
 });

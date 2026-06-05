@@ -4,6 +4,7 @@
 
 import { readFileSync, mkdirSync, existsSync, readdirSync, statSync } from 'fs';
 import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats } from './utils/write-if-changed';
+import { HREFLANG_GATE_OPEN } from './utils/hreflang';
 import { join, dirname } from 'path';
 import { Database } from 'bun:sqlite';
 import type { Event, EventType, TimeRange, PriceFilter, Filters, HubConfig } from './types';
@@ -22,6 +23,7 @@ import { generateVenuePages, computePagedVenueSlugs } from './generators/venue-p
 import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
 import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
+import { precomputeEventTiles } from './generators/event-tile';
 import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
@@ -325,6 +327,13 @@ async function main() {
 
   let pagesGenerated = 0;
   const generatedUrls: string[] = [];
+
+  // S161: precompute imageless-card tiles (Satori → inline SVG) before any
+  // renderer runs. Card renderers do a sync getEventTile(id) lookup; this
+  // populates the cache for every imageless pageable event.
+  console.log('🎴 Precomputing imageless-card tiles...');
+  const tilesGenerated = await precomputeEventTiles(pageableEvents);
+  console.log(`  ✓ Generated ${tilesGenerated} tiles`);
 
   // Generate core time pages
   console.log('📄 Generating core pages...');
@@ -1278,6 +1287,28 @@ async function main() {
         'Backfill the venue in config/athens-venues.json or suppress the event (see location-filter).',
     );
   }
+
+  // S176: UNGATED_HREFLANG is a build-FAIL on ALL page classes (parity with
+  // location-absence — corruption class per GEO ruling 2026-06-05). The
+  // paired validator (checkUngatedHreflang) flags any page emitting
+  // hreflang/x-default while the S144 flip gate is closed; this wires those
+  // errors to a non-zero exit so a future generator that hand-rolls
+  // <link rel="alternate"> cannot deploy. Disarms automatically when
+  // HREFLANG_GATE_OPEN flips (the validator reads the same constant).
+  const hreflangHaltPages = schemaResults.details.filter((r) =>
+    r.errors.some((e) => e.includes('UNGATED_HREFLANG')),
+  );
+  console.log('\n=== hreflang hard-stop (S176, all page classes) ===');
+  console.log(`   Pages emitting ungated hreflang: ${hreflangHaltPages.length}`);
+  if (hreflangHaltPages.length > 0) {
+    for (const p of hreflangHaltPages.slice(0, 20)) {
+      console.error(`   ✗ ${p.slug}`);
+    }
+    throw new Error(
+      `Build halted: ${hreflangHaltPages.length} page(s) emit hreflang while the S144 gate is closed. ` +
+        'Route emission through src/utils/hreflang.ts renderHreflangLinks (see specs/hreflang-sweep-S176.md).',
+    );
+  }
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
@@ -1413,13 +1444,12 @@ ${venueExamples}
 
 ${englishEventCount > 0 ? `## English Event Pages
 
-${englishEventCount} events have full English descriptions at \`/en/events/{slug}/\`.
-Each English page has bidirectional hreflang tags linking to the Greek version.
+${englishEventCount} events have full English descriptions at \`/en/events/{slug}/\`.${HREFLANG_GATE_OPEN ? '\nEach English page has bidirectional hreflang tags linking to the Greek version.' : ''}
 
 ` : ''}${englishHubCount > 0 ? `## English Hub Pages
 
 ${englishHubCount} hub pages have English versions at \`/en/{slug}/\`.
-Hub pages include answer capsules, comparison tables, FAQ sections and hreflang tags.
+Hub pages include answer capsules, comparison tables and FAQ sections${HREFLANG_GATE_OPEN ? ', with hreflang tags' : ''}.
 
 ` : ''}## JSON API
 

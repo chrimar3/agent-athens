@@ -6,6 +6,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 
 import { BASE_URL } from '../config/site-url';
+import { renderHreflangLinks } from '../utils/hreflang';
 import { renderAnalytics } from '../config/analytics';
 
 interface ContentPageOptions {
@@ -45,9 +46,15 @@ export function renderContentPage(
   const canonicalUrl = `${BASE_URL}/${slug}/`;
 
   // S144: hreflang DROPPED until Greek launches as a published+indexable+
-  // quality-gated product (GEO 2026-05-21 ruling). Re-emit then per
-  // decisions.md 2026-05-21.
-  const hreflangHtml = '';
+  // quality-gated product (GEO 2026-05-21 ruling). S176: routed through the
+  // single gated emitter; alternateSlug (when present) supplies the twin.
+  const altUrl = options?.alternateSlug ? `${BASE_URL}/${options.alternateSlug}/` : undefined;
+  const isEnPage = slug.startsWith('en/');
+  const hreflangHtml = renderHreflangLinks({
+    el: isEnPage ? altUrl : canonicalUrl,
+    en: isEnPage ? canonicalUrl : altUrl,
+    xDefault: isEnPage ? canonicalUrl : altUrl,
+  });
 
   return `<!DOCTYPE html>
 <html lang="${locale}">
