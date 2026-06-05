@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-06-05T06:51:16.243Z"
+    "lastUpdate": "2026-06-05T08:33:50.128Z"
   },
   "layers": {
     "event_level": "measured",
@@ -51,8 +51,8 @@
         "type": "theater",
         "total": 1654,
         "pass": 1389,
-        "warn": 252,
-        "fail": 13,
+        "warn": 265,
+        "fail": 0,
         "info": 1651,
         "passRate": 84
       },
@@ -123,8 +123,8 @@
     "totals": {
       "total": 3079,
       "pass": 2685,
-      "warn": 381,
-      "fail": 13,
+      "warn": 394,
+      "fail": 0,
       "info": 3068,
       "passRate": 87
     },
@@ -134,9 +134,9 @@
   },
   "hubs": {
     "total": 29,
-    "pass": 4,
-    "warn": 17,
-    "fail": 8,
+    "pass": 10,
+    "warn": 19,
+    "fail": 0,
     "info": 0
   },
   "venues": {
@@ -183,8 +183,8 @@
     "event_template": {
       "total": 3079,
       "pass": 2685,
-      "warn": 381,
-      "fail": 13,
+      "warn": 394,
+      "fail": 0,
       "info": 3068
     },
     "byVenue": [
@@ -1242,8 +1242,8 @@
         "venue": "γερμανικη εκκλησια αθηνων",
         "total": 5,
         "pass": 4,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 5,
         "passRate": 80,
         "sameAsState": "missing"
@@ -1332,8 +1332,8 @@
         "venue": "εκατη",
         "total": 10,
         "pass": 9,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 10,
         "passRate": 90,
         "sameAsState": "missing"
@@ -1342,8 +1342,8 @@
         "venue": "εν αθηναις",
         "total": 3,
         "pass": 0,
-        "warn": 0,
-        "fail": 3,
+        "warn": 3,
+        "fail": 0,
         "info": 3,
         "passRate": 0,
         "sameAsState": "missing"
@@ -1372,8 +1372,8 @@
         "venue": "θεατρο radar",
         "total": 13,
         "pass": 12,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 13,
         "passRate": 92,
         "sameAsState": "missing"
@@ -1392,8 +1392,8 @@
         "venue": "θεατρο βασιλακου",
         "total": 3,
         "pass": 2,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 3,
         "passRate": 67,
         "sameAsState": "missing"
@@ -1452,8 +1452,8 @@
         "venue": "θεατρο κνωσος",
         "total": 5,
         "pass": 4,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 5,
         "passRate": 80,
         "sameAsState": "missing"
@@ -1522,8 +1522,8 @@
         "venue": "θεατρο τεχνης",
         "total": 10,
         "pass": 9,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 10,
         "passRate": 90,
         "sameAsState": "missing"
@@ -1712,8 +1712,8 @@
         "venue": "κιβωτος",
         "total": 15,
         "pass": 14,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 15,
         "passRate": 93,
         "sameAsState": "missing"
@@ -2072,8 +2072,8 @@
         "venue": "στοα",
         "total": 11,
         "pass": 10,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 11,
         "passRate": 91,
         "sameAsState": "missing"
@@ -2092,8 +2092,8 @@
         "venue": "συγχρονο θεατρο",
         "total": 18,
         "pass": 17,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 18,
         "passRate": 94,
         "sameAsState": "missing"
@@ -2162,8 +2162,8 @@
         "venue": "φιατ",
         "total": 7,
         "pass": 6,
-        "warn": 0,
-        "fail": 1,
+        "warn": 1,
+        "fail": 0,
         "info": 7,
         "passRate": 86,
         "sameAsState": "missing"

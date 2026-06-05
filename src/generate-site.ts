@@ -1587,5 +1587,11 @@ ${renderAnalytics()}
   console.log('  ✓ 404.html');
 }
 
-// Run generator
-main().catch(console.error);
+// Run generator. S174: exit non-zero on failure — the 2.1′ hard-stop throw
+// was silently swallowed by `.catch(console.error)` (exit 0), so production
+// deployed through 311 location fails daily. Armed only after the residual
+// reached 0 and the ingest address-guard shipped (specs/scrape-guard-S174.md).
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
