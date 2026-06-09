@@ -4607,3 +4607,15 @@ All three gate on the S179 rule: QIDs enter config only via resolver output; aud
 **/proof exists** (at /en/proof) — discovered mid-session; the attached session-log (~S114, stale ~2 days) said it didn't. Reframed the whole session around cross-surface consistency. Parked: /proof-vs-colophon overlap (dedicated metrics page vs inline craft note) — decide after both seen live.
 
 **Cross-references:** `patterns.md` S103; `src/templates/colophon-stats.ts`, `src/templates/colophon.ts`, `src/generate-site.ts`, `src/config/active-source-ids.ts`; proof-recon.md.
+
+## S176 (Session 182) — /theatre+/comedy membership re-keyed to comedy-format; S110 subset invariant; badge=SHARED (2026-06-09)
+
+**GEO ruling (locked, executed):** full re-key of /theatre + /comedy **hub** membership to the comedy-format signal (`isStandUpComedy`, the same signal that drives `@type`), NOT invariant-only. No EventType/enum mutation. The S110 invariant is membership-subset, node-keyed on `@type` (`/theatre members ⊆ {TheaterEvent, PerformingArtsEvent}`), severity FAIL, wired to a build hard-stop (parity with location/hreflang). Scope = the two hubs only.
+
+**Mechanism:** opt-in `comedyFormat?: 'exclude'|'include'` on `HubConfig`, applied as a post-filter in `getHubEvents` (theatre=exclude, comedy=include-union). Keeps the 19-hub shared engine generic. See patterns.md S176.
+
+**Badge clause resolved → SHARED.** Step 0c recon found the comedy-card badge label is `BADGE_LABELS[event.type]` via `prepareCardData()` (page.ts:267) feeding 6 call sites + 1 inline dup (event-page.ts:749). Per the locked recon-gated decision, SHARED → NOT re-keyed in-session; registered `specs/comedy-badge-shared-surface.md` with the re-key recipe + the inline-dup Guard-6 note. The badge is knowingly still `event_type`-keyed by explicit deferral (not silently).
+
+**Category surface = scheduled extension of THIS ruling, not a new ruling.** The same leak exists on the category-page predicate (`filterEventsByCategory`, `config/categories.json` theatre category, ~13 dist files) — same leak, same `isStandUpComedy` fix, different predicate. Operator ruled honor-locked-scope (hubs only) and queue the category fix as a follow-up. It is NOT a fresh GEO round-trip; it is the same S176 ruling with a second predicate behind it. Registered `specs/s176-category-surface-followup.md`. **Note: the S110 invariant does NOT cover the category surface — it is fixed nowhere and tripwired nowhere there, so the category follow-up is higher-priority than a dormant item.**
+
+**Cross-references:** `patterns.md` S176; `src/generators/hub-page.ts`, `src/utils/comedy-format.ts`, `src/validators/schema-completeness.ts`, `src/generate-site.ts`, `config/hub-pages.json`; `specs/comedy-badge-shared-surface.md`, `specs/s176-category-surface-followup.md`.
