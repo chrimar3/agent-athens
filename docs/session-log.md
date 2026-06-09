@@ -6966,3 +6966,23 @@ constant feeding both surfaces.
 - **D2 stale-entity re-decode/migration** — upstream.
 - **Editorial whitelist/blacklist pass over the 105 residual** (Method 2/3) → `specs/location-verification-residual-S182.md`.
 - Memory-ledger reframe ("throughput" → "verification-eligibility") held for planner per prior agreement.
+
+### Session 184 — Dormant-locale noindex sweep: close sitemap↔robots drift on /today + paired build-FAIL invariant [arc: GEO/SEO infra, brief S(sitemap-noindex)] — 2026-06-09
+
+**Plan:** Bing flagged `agentathens.com/today` "missing from sitemaps." Diagnose root cause, then (per operator ruling — Option B/noindex, full-22 scope) emit `noindex, follow` on all dormant bilingual bare-root hubs + content pages from the runtime sitemap-drop predicate, with a paired output-keyed build-FAIL invariant.
+
+**What happened:**
+- **Root cause (diagnostic-first):** NOT stale, NOT trailing-slash (Case A), NOT deploy-lag (Case C) — **Case B**: S144 dropped bilingual bare-roots from the sitemap but never noindexed them. Live `/today` = 200, self-canonical, **no robots meta** → indexable orphan absent from all sitemaps (the contradiction Bing flags). Systemic across the dormant-bare-root class, not a /today one-off.
+- **Class (live-verified, supersedes GEO's from-memory "24"):** **22 drift pages** across 2 templates — 19 hub slugs (hub-page.ts, runtime `bilingualHubSlugs` = `answerCapsuleEn && events≥3`) + 3 content slugs (content-page.ts, `BILINGUAL_CONTENT_SLUGS`). proof/colophon/saved already noindex (saved had the inverse defect, below); ~160 combos are Greek-only (no twin → correctly indexable); /en/ untouched.
+- **Emission:** el dormant hubs + content pages emit `noindex, follow`, each driven by the SAME set that drops it from the sitemap (single-sourced — `BILINGUAL_CONTENT_SLUGS` hoisted/exported from generate-sitemaps.ts), gated by `!HREFLANG_GATE_OPEN` (inverse-on-flip). 18 hubs noindexed this build; `dance` correctly stayed indexable (no live twin today).
+- **Paired invariant (TDD, output-keyed):** `validateDormantLocaleNoindex` — Rule 1 (in-sitemap ⟹ indexable) + Rule 2 (live /en/ twin ⟹ noindex ∧ sitemap-absent), `process.exit(1)`. Standalone cross-artifact pass (mirrors `validateDistCanonicalParity`, not `validateAllPages` which is per-page-HTML only). **Live-twin keyed off sitemap membership of `en/<slug>/`, NOT disk** — the first armed build red-flagged a stale `dist/en/dance/` from Jun 8; disk-keying would have false-FAILed. Regression test locks it.
+- **Adjacent defect fixed:** `/saved/` (both locales) was `noindex` AND in the sitemap (inverse drift — advertising a noindex URL for crawl). Excluded from sitemaps (same policy as /all/ overflow). Rule 1 caught it. **Class effectively 23 surfaces touched.**
+
+**Verified:** build EXIT 0; invariant verified **1165 bare-roots / 0 drift**; suite **2784 pass**; `tsc` clean. Committed `20692ee14` (7 files, precise stage, pre-commit hook passed). Deployed `6a281eb903bb9430d0d247c6` → **state=ready** (CLI exit 0 had state=null — verified via getSiteDeploy). LIVE: `/today` noindex,follow + self-canonical + sitemap-absent; `/en/today/` unchanged (indexable, in sitemap); `/about/` noindex,follow; `saved` absent. IndexNow `/today` → 200 OK.
+
+**Learnings:** patterns.md (output-keyed cross-artifact biconditional — robots-meta sibling to S175 hreflang sweep; runtime-keyed not disk-keyed). mistakes.md (inverse-drift class + stale-twin false-FAIL trap). decisions.md (full-22/+saved=23, both-directions, runtime-keyed; 22-vs-24 correction back to GEO — ruling stands). known-issues.md (orphan-sweep stale `/en/<low-event-hub>/` follow-up).
+
+**Open items:**
+- **Bing Webmaster Tools resubmit `sitemap-index.xml` + re-run the recommendation scan** — operator manual step (the "High" flag clears only on Bing's re-crawl; now benign — page is noindex).
+- **Orphan-sweep stale-twin hygiene** — prod doesn't arm `SWEEP_ORPHANS=1`, so stale `/en/<low-event-hub>/` pages (e.g. en/dance) are served but sitemap-invisible. Same shape as the original Bing complaint one layer down; needs the protect-registry wired first (orphan-sweep.ts:43). Filed, NOT scoped into this deploy.
+- **Inverse-on-flip sitemap gap** — generate-sitemaps.ts:136-139 drop doesn't read `HREFLANG_GATE_OPEN`; the invariant enforces the coupling (flipping the gate without lifting the drop build-FAILs). Coordinated reactivation is separate future work.

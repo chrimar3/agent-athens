@@ -5540,3 +5540,16 @@ Result: the "mechanical" subset was **empty (0/201)** — every unverified venue
 **Collapse guard (carried from S172–S180 wrong-binding class):** when a normalization *would* match, also assert it maps to exactly ONE entry and not a different venue — a rule that promotes by matching the wrong entry is worse than leaving it unverified. (Moot in S182 at 0 matches, but the check belongs in the harness.)
 
 **Connects to:** `src/quality/location-filter.ts` (`findVenueConfig`, `normalize`), `src/utils/decode-html-entities.ts`, `config/athens-venues.json` (`variations[]`); `specs/location-verification-residual-S182.md`; mistakes.md "Location / Venue Verification"; decisions.md S182.
+
+## Output-keyed cross-artifact invariant — robots-meta sibling to the S175 hreflang sweep (Session 184)
+
+When two emitted surfaces must agree (here: a page's **sitemap membership** and its **robots-meta**), the build-FAIL guard should key off the **emitted artifacts**, not off a re-derived class list. This is the robots-meta sibling of the S175 single-hreflang-emitter pattern: same "all surfaces move together" doctrine, applied to a *validator* instead of an emitter.
+
+Three properties that make it robust:
+1. **Cross-artifact pass, not per-page.** The biconditional needs the HTML robots tag + all 3 sitemaps + the en-twin set *in scope together*. `validateAllPages` is per-page-HTML-only and structurally can't see sitemaps — so this lives in its own pass (`src/validators/dormant-locale-noindex.ts`), mirroring `validateDistCanonicalParity`. The brief's requirement was the *behavior* (`process.exit(1)` hard-stop), not the file location.
+2. **Runtime-keyed, NOT disk-keyed, for "liveness."** "Has an /en/ twin THIS build" = `en/<slug>/` present in a (freshly regenerated) **sitemap**, NOT `dist/en/<slug>/index.html` exists. Sitemaps are rebuilt from the live URL set every build; dist accumulates stale artifacts. The first armed build proved it: a hub that dropped below the ≥3-event threshold (`dance`) left a Jun-8 `dist/en/dance/` behind — disk-keying would have false-FAILed a correct build. **Named check: liveness comes from the regenerated manifest, not the file tree.**
+3. **Catch BOTH drift directions.** Rule 1 (in any sitemap ⟹ NOT noindex) + Rule 2 (live twin ⟹ noindex ∧ sitemap-absent). The original Bing defect was dropped-but-indexable (Rule 2); the SAME invariant caught the inverse — `/saved/` was noindex-but-in-sitemap (Rule 1). A one-directional guard would have shipped the inverse defect.
+
+It also makes a latent coupling build-enforced: noindex reads `!HREFLANG_GATE_OPEN` (inverse-on-flip), while the sitemap-drop doesn't read the gate yet — so flipping the gate without lifting the drop now build-FAILs (page indexable but sitemap-absent → Rule 2). The validator turns "reactivate every surface together" from a comment into a wall.
+
+**Connects to:** `src/validators/dormant-locale-noindex.ts` (+ test), `src/generators/hub-page.ts`, `src/templates/content-page.ts`, `src/sitemap/generate-sitemaps.ts` (`BILINGUAL_CONTENT_SLUGS`), `src/utils/hreflang.ts` (`HREFLANG_GATE_OPEN`, S175 sibling); `specs/dormant-locale-robots-meta-checkpoint.md`; mistakes.md "SEO / Indexing"; decisions.md S184.
