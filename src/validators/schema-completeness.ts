@@ -23,6 +23,14 @@ import { HREFLANG_GATE_OPEN } from '../utils/hreflang';
 // audit-precedes-FAIL-rule).
 const VALID_SCHEMA_TYPES: Set<string> = new Set([...Object.values(SCHEMA_TYPE_MAP), COMEDY_EVENT_TYPE]);
 
+// S176 / S110 — the @type values a /theatre listing member may carry. The
+// theatre hub's base filter admits event_type ∈ {theater, performance}, which
+// resolve to TheaterEvent / PerformingArtsEvent; the only way a non-eligible
+// @type reaches the ListItem is the ComedyEvent override (a stand-up that
+// leaked past the membership predicate). Membership-subset invariant below
+// asserts /theatre members ⊆ this set (node-keyed on @type, severity FAIL).
+const THEATRE_ELIGIBLE_TYPES: Set<string> = new Set(['TheaterEvent', 'PerformingArtsEvent']);
+
 const PLACEHOLDER_VALUES = ['tba', 'unknown', 'n/a', 'tbd', 'none'];
 
 export interface SchemaValidationResult {
@@ -849,6 +857,23 @@ export function validateHubSchema(htmlContent: string, hubSlug: string): SchemaV
           errors.push(`CollectionPage.itemListElement[${i}].item.location.address.streetAddress is missing or empty`);
         }
       }
+
+      // S176 / S110 — /theatre membership-subset invariant. Theatre-hub members
+      // must be theatre-eligible @type only; a ComedyEvent node here means a
+      // stand-up leaked past the comedy-format membership predicate. Node-keyed
+      // on @type, severity FAIL → wired to a build hard-stop in generate-site.ts
+      // (S110_THEATRE_COMEDY_LEAK token). Scoped to the theatre hub (el +
+      // en/theatre); /comedy and every other hub are exempt.
+      if ((hubSlug === 'theatre' || hubSlug === 'en/theatre') && event && typeof event === 'object') {
+        const itemType = (event as Record<string, any>)['@type'];
+        if (typeof itemType === 'string' && !THEATRE_ELIGIBLE_TYPES.has(itemType)) {
+          errors.push(
+            `S110_THEATRE_COMEDY_LEAK: CollectionPage.itemListElement[${i}].item @type "${itemType}" ` +
+            `is not theatre-eligible (expected TheaterEvent or PerformingArtsEvent) — a comedy-format ` +
+            `event leaked into /theatre membership.`,
+          );
+        }
+      }
     }
   }
 
@@ -1254,8 +1279,11 @@ export function validateAllPages(distDir: string, sameAsSeverity: 'info' | 'warn
   }
 
   // Scan hub pages (dist/*.html for known hub slugs + dist/en/*/index.html)
+  // S176: 'theatre' (British) is the real hub slug → dist/theatre.html. The list
+  // previously held 'theater' (American), which matches no dist file, so the
+  // theatre hub was never validated (incl. the S110 subset invariant below).
   const HUB_SLUGS = [
-    'today', 'this-weekend', 'this-month', 'concerts', 'theater',
+    'today', 'this-weekend', 'this-month', 'concerts', 'theatre',
     'nightlife', 'festivals', 'kids', 'exhibitions', 'open',
     'cinema', 'dance', 'classical-music', 'with-ticket', 'comedy', 'greek-music'
   ];

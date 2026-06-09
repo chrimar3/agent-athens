@@ -754,6 +754,48 @@ describe('validateHubSchema', () => {
   });
 });
 
+// S176 — /theatre membership-subset invariant. After the predicate re-key,
+// /theatre membership must be a subset of theatre-eligible @type values
+// {TheaterEvent, PerformingArtsEvent}. A ComedyEvent node leaking back into the
+// /theatre ItemList is a corruption-class FAIL (node-keyed on @type), wired to
+// the build hard-stop in generate-site.ts so the deploy halts. Scoped to the
+// theatre hub (el + en/theatre); other hubs (incl. /comedy) are unaffected.
+describe('S110 — /theatre membership-subset invariant (comedy-format leak)', () => {
+  function makeTheatreCpWithItemType(itemType: string): Record<string, unknown> {
+    const cp = makeValidCollectionPage();
+    cp.name = 'Theater in Athens';
+    const items = (cp.mainEntity as any).itemListElement as any[];
+    items[0].item['@type'] = itemType;
+    return cp;
+  }
+
+  test('ComedyEvent node in /theatre ItemList → FAIL with S110 token', () => {
+    const html = wrapMultiJsonLd(makeTheatreCpWithItemType('ComedyEvent'), makeValidFAQPage());
+    const result = validateHubSchema(html, 'theatre');
+    expect(result.errors.some(e => e.includes('S110_THEATRE_COMEDY_LEAK'))).toBe(true);
+  });
+
+  test('en/theatre hub also enforces the subset invariant', () => {
+    const html = wrapMultiJsonLd(makeTheatreCpWithItemType('ComedyEvent'), makeValidFAQPage());
+    const result = validateHubSchema(html, 'en/theatre');
+    expect(result.errors.some(e => e.includes('S110_THEATRE_COMEDY_LEAK'))).toBe(true);
+  });
+
+  test('TheaterEvent and PerformingArtsEvent items pass the invariant', () => {
+    const r1 = validateHubSchema(wrapMultiJsonLd(makeTheatreCpWithItemType('TheaterEvent'), makeValidFAQPage()), 'theatre');
+    expect(r1.errors.some(e => e.includes('S110_THEATRE_COMEDY_LEAK'))).toBe(false);
+    const r2 = validateHubSchema(wrapMultiJsonLd(makeTheatreCpWithItemType('PerformingArtsEvent'), makeValidFAQPage()), 'theatre');
+    expect(r2.errors.some(e => e.includes('S110_THEATRE_COMEDY_LEAK'))).toBe(false);
+  });
+
+  test('invariant is scoped to /theatre — a ComedyEvent in /comedy ItemList is allowed', () => {
+    const cp = makeTheatreCpWithItemType('ComedyEvent');
+    cp.name = 'Comedy and Stand-up in Athens';
+    const result = validateHubSchema(wrapMultiJsonLd(cp, makeValidFAQPage()), 'comedy');
+    expect(result.errors.some(e => e.includes('S110_THEATRE_COMEDY_LEAK'))).toBe(false);
+  });
+});
+
 describe('validateOfferShape (S139-fix helper)', () => {
   function validOffer(): Record<string, any> {
     return {

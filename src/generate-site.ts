@@ -1346,6 +1346,31 @@ async function main() {
         'Route emission through src/utils/hreflang.ts renderHreflangLinks (see specs/hreflang-sweep-S176.md).',
     );
   }
+
+  // S176 / S110: /theatre membership-subset invariant is a build-FAIL (parity
+  // with location/hreflang — corruption class). A ComedyEvent @type node in the
+  // /theatre ItemList means a stand-up leaked past the comedy-format membership
+  // predicate (config/hub-pages.json theatre comedyFormat:"exclude"). The paired
+  // validator (validateHubSchema, scoped to hub:theatre / hub:en/theatre) flags
+  // it with the S110_THEATRE_COMEDY_LEAK token; this wires those errors to a
+  // non-zero exit so the leak cannot deploy. Disarms automatically once the
+  // predicate keeps stand-ups out.
+  const theatreLeakPages = schemaResults.details.filter((r) =>
+    r.errors.some((e) => e.includes('S110_THEATRE_COMEDY_LEAK')),
+  );
+  console.log('\n=== /theatre comedy-format hard-stop (S110, theatre hub) ===');
+  console.log(`   Theatre-hub pages with a comedy-format (ComedyEvent) member: ${theatreLeakPages.length}`);
+  if (theatreLeakPages.length > 0) {
+    for (const p of theatreLeakPages) {
+      const leakErrs = p.errors.filter((e) => e.includes('S110_THEATRE_COMEDY_LEAK'));
+      console.error(`   ✗ ${p.slug}: ${leakErrs.join('; ')}`);
+    }
+    throw new Error(
+      `Build halted: ${theatreLeakPages.length} theatre-hub page(s) list a comedy-format (ComedyEvent) ` +
+        'event. /theatre membership must exclude stand-ups (config/hub-pages.json theatre ' +
+        'comedyFormat:"exclude", src/utils/comedy-format.ts isStandUpComedy).',
+    );
+  }
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {

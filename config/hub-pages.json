@@ -181,6 +181,7 @@
           "performance"
         ]
       },
+      "comedyFormat": "exclude",
       "answerCapsuleEl": "Η Αθήνα διαθέτει πάνω από 150 θεατρικές σκηνές — από το ιστορικό Ωδείο Ηρώδου Αττικού και το Θέατρο Κάρολος Κουν στην Πλάκα ως σύγχρονες σκηνές στον Κεραμεικό και τα Εξάρχεια. Η θεατρική σεζόν κορυφώνεται Οκτώβριο-Μάιο με παραστάσεις σε ελληνικά και αγγλικά.",
       "faqs": [
         {
@@ -677,6 +678,7 @@
           "Stand up"
         ]
       },
+      "comedyFormat": "include",
       "answerCapsuleEl": "Η αθηναϊκή σκηνή κωμωδίας περιλαμβάνει stand-up comedy, θεατρική κωμωδία και improv σε σκηνές από τα Εξάρχεια ως τον Κεραμεικό. Βρείτε παραστάσεις, ώρες, χώρους και τιμές εισιτηρίων.",
       "answerCapsuleEn": "Comedy in Athens, Greece is a small but growing scene — most shows run in Greek, but international English-language comedians perform at mid-size venues including the Odeion Athinon. Check listings for touring acts; the scene punches above its size for a city this culturally dense.",
       "faqs": [

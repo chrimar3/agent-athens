@@ -30,6 +30,7 @@ import { buildHubGraph } from '../utils/schema-graph-builders';
 import { hubFilterToExcludedDimension } from '../utils/hub-identity';
 import { buildWeekendCapsule } from '../templates/weekend-capsule';
 import { renderHreflangLinks } from '../utils/hreflang';
+import { isStandUpComedy } from '../utils/comedy-format';
 
 // TODO(D3-city_descriptor): replace with config read once home is picked
 // (config/site.json vs schema-geo ORG_*). Value is final-locked; only the home is open.
@@ -51,10 +52,9 @@ export const HUB_EVENT_LIMIT = 30;
 const PULL_QUOTE_INTERVAL = 10;
 
 /**
- * Get hub-filtered events based on config
+ * Apply the config's base `filter` to the event set (no comedy-format layer).
  */
-export function getHubEvents(config: HubConfig, allEvents: Event[]): Event[] {
-  const filter = config.filter;
+function applyHubFilter(filter: HubConfig['filter'], allEvents: Event[]): Event[] {
   if (filter.type === 'date') {
     return filterEvents(allEvents, { time: filter.value as TimeRange });
   }
@@ -75,6 +75,38 @@ export function getHubEvents(config: HubConfig, allEvents: Event[]): Event[] {
     return allEvents.filter(e => e.price.type === filter.value);
   }
   return [];
+}
+
+/**
+ * Get hub-filtered events based on config.
+ *
+ * S176: after the base `filter`, an optional `comedyFormat` post-filter keys on
+ * the comedy-format detector (isStandUpComedy — the SAME signal that drives
+ * @type), so /theatre and /comedy membership track the stand-up format rather
+ * than the coarse event_type. The detector is a POSITIVE structured-token match
+ * (title/tags/genres/venue allow-list), never bare workPerformed-absence, so
+ * circus/variety/magic/drag with no stand-up token stay in /theatre.
+ */
+export function getHubEvents(config: HubConfig, allEvents: Event[]): Event[] {
+  const base = applyHubFilter(config.filter, allEvents);
+
+  if (config.comedyFormat === 'exclude') {
+    return base.filter(e => !isStandUpComedy(e));
+  }
+  if (config.comedyFormat === 'include') {
+    // Union the base set with all comedy-format events, deduped by id so an
+    // event already matched by the tag filter is not listed twice.
+    const seen = new Set(base.map(e => e.id));
+    const result = [...base];
+    for (const e of allEvents) {
+      if (!seen.has(e.id) && isStandUpComedy(e)) {
+        seen.add(e.id);
+        result.push(e);
+      }
+    }
+    return result;
+  }
+  return base;
 }
 
 /**

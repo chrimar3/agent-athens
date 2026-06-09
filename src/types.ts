@@ -180,6 +180,17 @@ export interface HubConfig {
   answerCapsuleEn?: string;
   faqs: HubFaq[];
   cornerstone?: boolean;
+  /**
+   * S176 — comedy-format membership post-filter, layered on top of `filter`.
+   * Keys on the same isStandUpComedy detector that drives @type (see
+   * src/utils/comedy-format.ts), NOT on event_type, so a theatre-typed stand-up
+   * leaves /theatre by predicate rather than by lifecycle accident.
+   *   'exclude' — drop comedy-format events from this hub (/theatre)
+   *   'include' — add comedy-format events to this hub's base set (/comedy),
+   *               unioned with the existing filter (scripted comedies stay).
+   * Omitted → no comedy-format post-filter (every other hub is unchanged).
+   */
+  comedyFormat?: 'exclude' | 'include';
   metaDescriptionEl?: string;
   metaDescriptionEn?: string;
   seasonalNarrativeEn?: string;

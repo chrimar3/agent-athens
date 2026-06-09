@@ -614,6 +614,84 @@ describe('Hub filtering', () => {
   });
 });
 
+// S176 — /theatre + /comedy membership keyed on the comedy-format signal
+// (the same isStandUpComedy detector that drives @type), NOT on event_type.
+// A theatre-typed stand-up must leave /theatre by predicate, not by lifecycle.
+describe('Comedy-format hub membership (S176)', () => {
+  const theatreHubConfig: HubConfig = {
+    slug: 'theatre',
+    titleEl: 'Θέατρο στην Αθήνα',
+    titleEn: 'Theater in Athens',
+    filter: { type: 'event_types', values: ['theater', 'performance'] },
+    comedyFormat: 'exclude',
+    answerCapsuleEl: 'Test capsule',
+    faqs: testFaqs,
+  };
+  const comedyHubConfig: HubConfig = {
+    slug: 'comedy',
+    titleEl: 'Κωμωδία και Stand-up στην Αθήνα',
+    titleEn: 'Comedy and Stand-up in Athens',
+    filter: { type: 'tag', values: ['Comedy', 'Stand-up', 'Standup', 'Stand up'] },
+    comedyFormat: 'include',
+    answerCapsuleEl: 'Test capsule',
+    faqs: testFaqs,
+  };
+
+  // theatre-typed stand-up (Mario Adrion class): EventType=theater, stand-up token in tags
+  const standUpTagged = makeEvent({ id: 'standup-tagged', type: 'theater', title: 'Mario Adrion Live', tags: ['Stand-up'] });
+  // stand-up detected by TITLE only, carrying NO /comedy tag — proves the include
+  // branch adds membership BEYOND the existing tag filter
+  const standUpTitleOnly = makeEvent({ id: 'standup-title', type: 'theater', title: 'Mike Stand-up Hour', tags: [] });
+  // scripted theatre comedy: tag "Comedy" but NO stand-up token — must stay in /theatre
+  const scriptedComedy = makeEvent({ id: 'scripted-comedy', type: 'theater', title: 'Η Κωμωδία των Παρεξηγήσεων', tags: ['Comedy'] });
+  // non-comedy non-scripted (circus/variety), no stand-up token — BINDING precision
+  // guard: bare workPerformed-absence must NOT sweep this out of /theatre
+  const circusVariety = makeEvent({ id: 'circus-variety', type: 'performance', title: 'Cirque Variety Night', tags: ['circus', 'variety'] });
+  const plainTheatre = makeEvent({ id: 'plain-theatre', type: 'theater', title: 'Αντιγόνη', tags: [] });
+
+  const all = [standUpTagged, standUpTitleOnly, scriptedComedy, circusVariety, plainTheatre];
+
+  test('theatre EXCLUDES comedy-format (stand-up) events by predicate', () => {
+    const ids = getHubEvents(theatreHubConfig, all).map(e => e.id);
+    expect(ids).not.toContain('standup-tagged');
+    expect(ids).not.toContain('standup-title');
+  });
+
+  test('theatre KEEPS scripted comedy, circus/variety and plain theatre (precision guard)', () => {
+    const ids = getHubEvents(theatreHubConfig, all).map(e => e.id);
+    expect(ids).toContain('scripted-comedy');   // tag "Comedy" ≠ stand-up format
+    expect(ids).toContain('circus-variety');     // must NOT be swept by absence-of-stand-up
+    expect(ids).toContain('plain-theatre');
+  });
+
+  test('comedy INCLUDES comedy-format events, incl. title-only stand-up with no /comedy tag', () => {
+    const ids = getHubEvents(comedyHubConfig, all).map(e => e.id);
+    expect(ids).toContain('standup-tagged');
+    expect(ids).toContain('standup-title');      // appears ONLY via the new format-include
+  });
+
+  test('comedy still includes scripted comedy via the existing tag filter (union preserved)', () => {
+    const ids = getHubEvents(comedyHubConfig, all).map(e => e.id);
+    expect(ids).toContain('scripted-comedy');
+  });
+
+  test('comedy does not pull in plain theatre / circus (no comedy signal, no comedy tag)', () => {
+    const ids = getHubEvents(comedyHubConfig, all).map(e => e.id);
+    expect(ids).not.toContain('plain-theatre');
+    expect(ids).not.toContain('circus-variety');
+  });
+
+  test('comedy include does not duplicate an event already matched by tag', () => {
+    const matches = getHubEvents(comedyHubConfig, all).map(e => e.id).filter(id => id === 'standup-tagged');
+    expect(matches).toHaveLength(1);
+  });
+
+  test('comedyFormat is opt-in: hubs without the flag are unchanged', () => {
+    // concertsHubConfig has no comedyFormat → identical to legacy behavior
+    expect(getHubEvents(concertsHubConfig, all)).toHaveLength(0); // none are concerts
+  });
+});
+
 describe('extractExcerpt utility', () => {
   test('Returns first 2 sentences', () => {
     const text = 'First sentence. Second sentence. Third sentence.';
