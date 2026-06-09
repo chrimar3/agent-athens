@@ -5524,3 +5524,19 @@ Field mapping confirmed against the live response (positional — request dimens
 **A wrong slug spelling silently disables a whole validator scope.** `HUB_SLUGS` held `'theater'` while the real slug/file was `'theatre'` → `validateHubSchema` skipped the theatre hub for an unknown duration (the loop `continue`s on `!existsSync`). Symptom is invisible (fail:0, just nothing validated). When wiring a new per-page rule, first confirm the page is actually in the validator's walk (grep the slug list against the real dist filename).
 
 **Connects to:** `src/generators/hub-page.ts` (getHubEvents), `src/utils/comedy-format.ts`, `src/validators/schema-completeness.ts` (THEATRE_ELIGIBLE_TYPES, HUB_SLUGS), `src/generate-site.ts` (S110 hard-stop); `specs/comedy-badge-shared-surface.md`, `specs/s176-category-surface-followup.md`; decisions.md S176.
+
+## Compute the mechanical-vs-residual split with the REAL matcher before batching (S182)
+
+When a brief says "fix the *mechanical* subset" of a list (string normalization, entity decode, dedup) before handing the rest to a human, **don't estimate the subset from the messy strings — compute it by running the actual production matcher over each item.** S182's brief assumed entity/variant venue strings were the blocker; the real split was computed read-only as:
+
+```ts
+import he from 'he';
+import { findVenueConfig } from '../src/quality/location-filter';
+const decodedMatch = findVenueConfig(he.decode(venueName)); // null ⇒ residual, not mechanical
+```
+
+Result: the "mechanical" subset was **empty (0/201)** — every unverified venue was *absent* from the whitelist, not malformed, because the matcher already normalizes+substring-matches. The lesson generalizes: a "fix the easy ones first" brief is only valid if the easy set is non-empty, and the only honest way to size it is the real resolver, not eyeballing the inputs. **Refuting the mechanical premise at the discovery step is a valid, complete session outcome** — it shrinks the human's job by re-segmenting (objective tags: city-token / entity / dup-cluster), even when zero items were auto-fixed.
+
+**Collapse guard (carried from S172–S180 wrong-binding class):** when a normalization *would* match, also assert it maps to exactly ONE entry and not a different venue — a rule that promotes by matching the wrong entry is worse than leaving it unverified. (Moot in S182 at 0 matches, but the check belongs in the harness.)
+
+**Connects to:** `src/quality/location-filter.ts` (`findVenueConfig`, `normalize`), `src/utils/decode-html-entities.ts`, `config/athens-venues.json` (`variations[]`); `specs/location-verification-residual-S182.md`; mistakes.md "Location / Venue Verification"; decisions.md S182.

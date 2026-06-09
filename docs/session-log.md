@@ -6944,3 +6944,25 @@ constant feeding both surfaces.
 - **Badge re-key (SHARED)** → `specs/comedy-badge-shared-surface.md`. Needs a ComedyEvent badge label from Editorial + the inline dup (event-page.ts:749) moved with the shared path.
 - **Category-page surface NOT tripwired** → `specs/s176-category-surface-followup.md`. Higher-priority; fix + tripwire must ship together (arming the tripwire alone = live landmine).
 - Deploy pending operator confirmation (`netlify deploy --prod --dir=dist`).
+
+### Session 183 — Location-verification Method-1 (mechanical venue-string subset): REFUTED at Step 0 [arc: Enrichment Pipeline (upstream: location-verification), brief S182] — 2026-06-09
+
+**Note on numbering:** the brief's "S182" is a *stream label* for the Method-1-mechanical work (follow-up to the S181 throughput forensic), distinct from log-182 (the /theatre+/comedy re-key, same date). This is log-183.
+
+**Plan:** Promote the *mechanical* subset of the 201 unverified-upcoming events — venues whose decoded/normalized `venue_name` matches an **already-whitelisted** `athens-venues.json` entry (failing only on string form) — via config-only `variations[]` additions, then hand the residual to Editorial. Read-only Step 0 to route config-vs-code first.
+
+**What happened:**
+- **Method 1 refuted at Step 0.** Split computed read-only with the REAL matcher (`findVenueConfig`) + REAL `he.decode`: **0 of 201 events / 0 of 105 venues** are mechanical. `findVenueConfig` already normalizes + substring-matches, so a venue in `unverified` means nothing in the whitelist matches it even loosely — the venues are **absent from the whitelist, not malformed strings**. The brief's own examples (`Κατράκειο`/`Κατράκειο Θέατρο`, the Θέατρο Βράχων pair) were all residual. Harness sanity-checked (Μέγαρο Μουσικής + variation resolve). No config change, no DB mutation, no test written — there was nothing mechanical to fix.
+- **Reframe of S181's open question:** the "201 stranded backlog" is **substantially other-city noise**, not stranded Athens value — Crete/Thessaloniki/Larisa/Patras/Volos/Preveza/Lefkada/Argos touring venues dominate. Genuinely-Athens stranded venues (Herodion, Δόρα Στράτου, Θέατρο Βράχων, Ζάππειο, Πεδίον του Άρεως, Βοτανικός Κήπος) are a minority.
+- **Two code-path defects surfaced (flagged, NOT fixed — planner's call):** **D1** — `normalize()` is accent-blind, so other-city ALL-CAPS venues (`ΗΡΑΚΛΕΙΟ` vs blacklist `Ηράκλειο`) escape into `unverified` instead of `rejected` (≥9 venues/14 events, a floor); accent-fold is shared across all match sites (Guard 6) and only *rejects* noise. **D2** — 5 venues/16 events still carry raw HTML entities despite decode-at-scrape (S154); self-heal on re-scrape, don't re-add entity variations (deprecated direction).
+- **Residual handed to Editorial:** all 201/105 → `specs/location-verification-residual-S182.md`, pre-tagged by objective signals (rejected-city-token / undecoded-entity / internal-duplicate-cluster). No per-venue Athens determination made.
+
+**Verified:** boundary clean — `config/`, `src/`, `data/events.db` untouched; `location_status` unchanged (62 verified_athens / 201 unverified / 5 problematic); nothing staged before the docs commit. Split + segmentation reproducible from gitignored `temp-research/s182-*.ts`.
+
+**Learnings:** patterns.md (compute the mechanical-vs-residual split with the REAL matcher before batching — refuting an empty mechanical premise at discovery is a complete, valid outcome; carries the S172–S180 collapse guard). mistakes.md (new "Location / Venue Verification": absent≠malformed; accent-blind normalize; deprecated entity-variation workaround). decisions.md (config-vs-code routing outcome; D1/D2 deferred).
+
+**Open items:**
+- **D1 accent-fold `normalize()`** — code-path, shared match-logic; Method-3 hygiene win (rejects noise, promotes 0).
+- **D2 stale-entity re-decode/migration** — upstream.
+- **Editorial whitelist/blacklist pass over the 105 residual** (Method 2/3) → `specs/location-verification-residual-S182.md`.
+- Memory-ledger reframe ("throughput" → "verification-eligibility") held for planner per prior agreement.
