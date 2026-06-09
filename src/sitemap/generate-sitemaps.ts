@@ -9,6 +9,15 @@ const DIST_DIR = join(import.meta.dir, '../../dist');
 type SitemapBucket = 'events' | 'venues' | 'editorial';
 
 /**
+ * Bare-root content slugs (trailing-slash form) whose /en/ twin exists and which
+ * are therefore DROPPED from the sitemap as dormant Greek alternates (S144 D3).
+ * Exported as the single source of truth: src/generate-site.ts reads it to drive
+ * the paired robots-meta noindex on the same el pages, so sitemap-absence and
+ * noindex stay in lockstep (see validateDormantLocaleNoindex).
+ */
+export const BILINGUAL_CONTENT_SLUGS = new Set(['about/', 'editorial/', 'corrections/']);
+
+/**
  * Classify a URL into one of three sitemap buckets.
  * Simple prefix check — reliable because URL structure is controlled by our generator.
  */
@@ -125,7 +134,8 @@ export function generateSplitSitemaps(
   // URLs (homepage, llms.txt-style content) stay. Per GEO ruling, hreflang trigger
   // is published+indexable+quality-gated — dormant Greek alternates pollute the
   // crawl signal. Re-add bare-root + hreflang per decisions.md when Greek launches.
-  const BILINGUAL_CONTENT_SLUGS = new Set(['about/', 'editorial/', 'corrections/']);
+  // BILINGUAL_CONTENT_SLUGS hoisted to module scope (single source of truth — the
+  // paired robots-meta noindex in generate-site.ts reads the same set).
   const generatedUrlSet = new Set(generatedUrls);
   const filteredUrls = generatedUrls.filter(url => {
     // Bare-root event with /en/ equivalent → drop

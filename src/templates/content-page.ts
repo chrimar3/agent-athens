@@ -63,7 +63,7 @@ export function renderContentPage(
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${title} | agent-athens</title>
   <meta name="description" content="${metaDesc}">
-  <link rel="canonical" href="${canonicalUrl}">${options?.noindex ? '\n  <meta name="robots" content="noindex">' : ''}${hreflangHtml}
+  <link rel="canonical" href="${canonicalUrl}">${options?.noindex ? '\n  <meta name="robots" content="noindex, follow">' : ''}${hreflangHtml}
   <meta property="og:title" content="${title} | agent-athens">
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${canonicalUrl}">

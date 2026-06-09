@@ -28,6 +28,7 @@ import { renderHeroSection } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
+import { BILINGUAL_CONTENT_SLUGS } from './sitemap/generate-sitemaps';
 import { STRINGS } from './i18n/strings';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
@@ -1067,11 +1068,18 @@ async function main() {
       const altSlug = isEnOnly
         ? undefined
         : (locale === 'el' ? pair.en.slug : pair.el!.slug);
+      // S(this) — dormant-locale noindex for bilingual el content pages. Driven
+      // by the SAME set that drops them from the sitemap (BILINGUAL_CONTENT_SLUGS,
+      // imported from generate-sitemaps.ts) so noindex and sitemap-absence stay
+      // in lockstep. en twins (slug 'en/about') are not in the set → indexable.
+      // Flips to index with the gate. Paired invariant: validateDormantLocaleNoindex.
+      const dormantNoindex = !HREFLANG_GATE_OPEN && BILINGUAL_CONTENT_SLUGS.has(`${page.slug}/`);
       const html = renderContentPage(page.slug, page.title, page.bodyHtml, {
         metaDescription: page.metaDescription,
         schemaJson: page.schemaJson,
         locale,
         alternateSlug: altSlug,
+        noindex: dormantNoindex,
       });
       const pageDir = join(DIST_DIR, page.slug);
       if (!existsSync(pageDir)) {
@@ -1110,9 +1118,13 @@ async function main() {
     const savedPageDir = join(DIST_DIR, savedSlug);
     if (!existsSync(savedPageDir)) mkdirSync(savedPageDir, { recursive: true });
     writeHtmlIfChangedSync(join(savedPageDir, 'index.html'), savedHtml);
-    generatedUrls.push(`${savedSlug}/`);
+    // S(this) — saved pages are noindex (JS-only, no server-rendered content), so
+    // they must NOT be advertised in any sitemap (a noindex URL in the sitemap is
+    // the inverse sitemap↔robots drift). NOT added to generatedUrls — same policy
+    // as /all/ overflow pages above. Paired invariant: validateDormantLocaleNoindex
+    // (Rule 1: in-sitemap ⟹ indexable).
     pagesGenerated++;
-    console.log(`  ✓ /${savedSlug}/`);
+    console.log(`  ✓ /${savedSlug}/ (noindex, sitemap-excluded)`);
   }
 
   // Generate 404 page
@@ -1245,6 +1257,26 @@ async function main() {
     process.exit(1);
   }
   console.log(`  ✓ canonical parity invariant: ${parityReport.passed} URLs verified`);
+
+  // Build-time invariant: dormant-locale bare-root pages must be noindex AND
+  // absent from every sitemap; any sitemap URL must stay indexable. Output-keyed
+  // (reads emitted HTML + the 3 sitemaps + the dist/en/ twin set), so it survives
+  // the runtime ≥3-event flip and never rots against a hardcoded slug list. This
+  // is the paired half of the noindex emission (hub-page.ts + content-page el):
+  // emission makes the dormant pages noindex; this makes any drift build-FAILing,
+  // so a future generator that adds an /en/ twin without noindexing the bare-root
+  // (the original Bing /today defect) cannot deploy. Tier-1 hard-stop discipline.
+  const { validateDormantLocaleNoindex } = await import('./validators/dormant-locale-noindex');
+  const dormantReport = validateDormantLocaleNoindex(DIST_DIR);
+  if (dormantReport.failures.length > 0) {
+    console.error(`\n❌ Dormant-locale noindex invariant FAILED: ${dormantReport.failures.length} violation${dormantReport.failures.length === 1 ? '' : 's'}`);
+    for (const f of dormantReport.failures) {
+      console.error(`   ✗ [${f.rule}] ${f.reason}`);
+    }
+    console.error(`\nFix: a bare-root page with an /en/ twin must emit <meta name="robots" content="noindex, follow"> AND be dropped from all sitemaps; a page in a sitemap must be indexable. See validateDormantLocaleNoindex + specs/dormant-locale-robots-meta-checkpoint.md.`);
+    process.exit(1);
+  }
+  console.log(`  ✓ dormant-locale noindex invariant: ${dormantReport.passed} bare-root pages verified`);
 
   const buildDurationMs = Date.now() - buildStartTime;
 

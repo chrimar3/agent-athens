@@ -29,7 +29,7 @@ import { BASE_URL } from '../config/site-url';
 import { buildHubGraph } from '../utils/schema-graph-builders';
 import { hubFilterToExcludedDimension } from '../utils/hub-identity';
 import { buildWeekendCapsule } from '../templates/weekend-capsule';
-import { renderHreflangLinks } from '../utils/hreflang';
+import { renderHreflangLinks, HREFLANG_GATE_OPEN } from '../utils/hreflang';
 import { isStandUpComedy } from '../utils/comedy-format';
 
 // TODO(D3-city_descriptor): replace with config read once home is picked
@@ -493,6 +493,24 @@ export function renderHubPage(
     if (hreflangHtml) {
       html = html.replace('</head>', `  ${hreflangHtml}\n</head>`);
     }
+  }
+
+  // S(this) — dormant-locale noindex. A bare-root (el) hub that has a published
+  // /en/ twin is noindexed while the flip gate is closed. The predicate is the
+  // SAME runtime test that drops it from the editorial sitemap
+  // (generate-sitemaps.ts: bilingualHubSlugs = answerCapsuleEn && events ≥
+  // MIN_EVENTS_THRESHOLD), so robots-meta and sitemap-absence stay in lockstep —
+  // closing the Bing drift where /today was indexable yet absent from sitemaps.
+  // 'follow' preserves link-equity flow (45-Day Lifecycle convention). Flips to
+  // index together with sitemap + hreflang when HREFLANG_GATE_OPEN opens. Paired
+  // build-FAIL invariant: validateDormantLocaleNoindex.
+  if (
+    locale === 'el' &&
+    !!config.answerCapsuleEn &&
+    filteredEvents.length >= MIN_EVENTS_THRESHOLD &&
+    !HREFLANG_GATE_OPEN
+  ) {
+    html = html.replace('</head>', '  <meta name="robots" content="noindex, follow">\n</head>');
   }
 
   // Part 1: Answer Capsule + category-nav now composed via preFilterBarContent
