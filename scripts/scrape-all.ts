@@ -468,6 +468,72 @@ function extractTimeFromAthinoramaPage(html: string): string | null {
   return null;
 }
 
+export interface TheaterDateRange {
+  startDate: string | null;
+  endDate: string | null;
+}
+
+/**
+ * Parse an athinorama theater-guide card's date range (S-F2a).
+ * Card markup carries "Πρεμιέρα: </strong>DD/MM" and/or "Εως: </strong>DD/MM";
+ * years are inferred relative to refDate (months behind the current month roll
+ * into next year). Exported pure for fixture tests. The Greek strings here are
+ * athinorama's source HTML labels, not our data vocabulary — our run-end token
+ * lives in config/parsing-tokens.json.
+ */
+export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateRange {
+  const currentYear = refDate.getFullYear();
+  const currentMonth = refDate.getMonth() + 1;
+  const today = refDate.toISOString().split('T')[0];
+
+  let startDate: string | null = null;
+  let endDate: string | null = null;
+
+  // Theater page format: "Εως: </strong>DD/MM" - date is AFTER the closing tag
+  // Pattern 1: "Πρεμιέρα: </strong>DD/MM" followed by "Εως: </strong>DD/MM"
+  const premiereMatch = card.match(/Πρεμιέρα:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
+  // Pattern 2: "Εως: </strong>DD/MM" (ongoing show with end date)
+  const untilMatch = card.match(/Εως:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
+
+  if (premiereMatch && untilMatch) {
+    // Both premiere and end date
+    const [, startDay, startMonth] = premiereMatch;
+    const [, endDay, endMonth] = untilMatch;
+    let startYear = currentYear;
+    let endYear = currentYear;
+
+    const sm = parseInt(startMonth);
+    const em = parseInt(endMonth);
+
+    if (sm < currentMonth) startYear++;
+    if (em < currentMonth || (em < sm && startYear === currentYear)) endYear++;
+
+    startDate = `${startYear}-${String(sm).padStart(2, '0')}-${String(parseInt(startDay)).padStart(2, '0')}`;
+    endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+  } else if (untilMatch) {
+    // Ongoing show - use today as start, parse end
+    const [, endDay, endMonth] = untilMatch;
+    let endYear = currentYear;
+    const em = parseInt(endMonth);
+    if (em < currentMonth) endYear++;
+
+    startDate = today; // Already running
+    endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+  } else if (premiereMatch) {
+    // Premiere - single performance
+    const [, day, month] = premiereMatch;
+    const d = parseInt(day);
+    const m = parseInt(month);
+    let year = currentYear;
+    if (m < currentMonth || (m === currentMonth && d < refDate.getDate())) {
+      year++;
+    }
+    startDate = `${year}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
+  return { startDate, endDate };
+}
+
 async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
   console.log('   Fetching athinorama.gr guides...');
 
@@ -527,54 +593,7 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
         let endDate: string | null = null;
 
         if (guide.hasDateRanges) {
-          // Theater page format: "Εως: </strong>DD/MM" - date is AFTER the closing tag
-          // Pattern 1: "Πρεμιέρα: </strong>DD/MM" followed by "Εως: </strong>DD/MM"
-          const premiereMatch = card.match(/Πρεμιέρα:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
-          // Pattern 2: "Εως: </strong>DD/MM" (ongoing show with end date)
-          const untilMatch = card.match(/Εως:?\s*<\/strong>\s*(\d{1,2})\/(\d{1,2})/i);
-
-          // Both premiere and end date
-          const rangeMatch = premiereMatch && untilMatch;
-          // Only end date (ongoing)
-          const ongoingMatch = !premiereMatch && untilMatch;
-          // Only premiere (no end date yet)
-          const singleMatch = premiereMatch && !untilMatch;
-
-          if (rangeMatch && premiereMatch && untilMatch) {
-            // Both premiere and end date
-            const [, startDay, startMonth] = premiereMatch;
-            const [, endDay, endMonth] = untilMatch;
-            let startYear = currentYear;
-            let endYear = currentYear;
-
-            const sm = parseInt(startMonth);
-            const em = parseInt(endMonth);
-
-            if (sm < currentMonth) startYear++;
-            if (em < currentMonth || (em < sm && startYear === currentYear)) endYear++;
-
-            startDate = `${startYear}-${String(sm).padStart(2, '0')}-${String(parseInt(startDay)).padStart(2, '0')}`;
-            endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
-          } else if (ongoingMatch && untilMatch) {
-            // Ongoing show - use today as start, parse end
-            const [, endDay, endMonth] = untilMatch;
-            let endYear = currentYear;
-            const em = parseInt(endMonth);
-            if (em < currentMonth) endYear++;
-
-            startDate = today; // Already running
-            endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
-          } else if (singleMatch && premiereMatch) {
-            // Premiere - single performance
-            const [, day, month] = premiereMatch;
-            const d = parseInt(day);
-            const m = parseInt(month);
-            let year = currentYear;
-            if (m < currentMonth || (m === currentMonth && d < now.getDate())) {
-              year++;
-            }
-            startDate = `${year}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-          }
+          ({ startDate, endDate } = parseTheaterDateRange(card, now));
 
           // Skip if end date is in the past
           if (endDate && endDate < today) continue;
@@ -604,8 +623,11 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
         events.push({
           id: generateEventId(title, startDate!, venue),
           title,
-          description: endDate ? `Εως ${endDate}` : '',
+          // S-F2a: run end-date is structured data (end_date below), never
+          // description prose. Empty description → NULL at the saveEvents bind (G5).
+          description: '',
           start_date: startDate!,
+          end_date: endDate,
           time: '',
           type: effectiveType,
           genres: '',
@@ -1416,7 +1438,8 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
       stmt.run({
         $id: e.id,
         $title: e.title,
-        $description: e.description,
+        // G5 (S-F2a): never persist empty-string descriptions — NULL instead.
+        $description: e.description || null,
         $start_date: normalizeDateField(startDateTime),
         $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
         $time_doors: e.time || null,

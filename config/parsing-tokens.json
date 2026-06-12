@@ -1,0 +1,6 @@
+{
+  "_note": "Language-specific parsing tokens consumed by src/utils/run-end-token.ts. Per GEO ruling G5 (S-F2a): run-end tokens are per-city DATA, never hardcoded in src/.",
+  "runEndTokens": {
+    "el": ["Εως", "Έως", "έως"]
+  }
+}
