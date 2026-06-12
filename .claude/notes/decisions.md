@@ -4660,3 +4660,16 @@ Bing flagged `/today` "missing from sitemaps." Root cause was S144's half-edit: 
 **Open (NOT decided here):** (1) orphan-sweep hygiene for stale `/en/<low-event-hub>/` artifacts (prod doesn't arm `SWEEP_ORPHANS=1`; needs the protect-registry wired first — orphan-sweep.ts:43); (2) inverse-on-flip — `generate-sitemaps.ts:136-139` drop doesn't read `HREFLANG_GATE_OPEN`, so Greek-launch reactivation must lift the drop + flip noindex + emit hreflang together (the invariant enforces the coupling by build-failing a half-flip).
 
 **Cross-references:** `specs/dormant-locale-robots-meta-checkpoint.md`; `src/validators/dormant-locale-noindex.ts` (+ test); `src/generators/hub-page.ts`, `src/templates/content-page.ts`, `src/sitemap/generate-sitemaps.ts` (`BILINGUAL_CONTENT_SLUGS`), `src/generate-site.ts`, `src/utils/hreflang.ts` (`HREFLANG_GATE_OPEN`); `patterns.md` S184; `mistakes.md` "SEO / Indexing"; commit `20692ee14`, deploy `6a281eb903bb9430d0d247c6`.
+
+### Εως run-end backfill: parser-driven selection, G5 NULL-not-empty, capture fix at the push (S186, 2026-06-12)
+
+Audit A2 F2 remediation (S-F2a brief). Data layer only; lifecycle/eventStatus/sitemap untouched (F2b owns them — verified safe because `resolveEventStatus` and lifecycle consult end_date ONLY for `type='exhibition'`).
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Run-end tokens live in `config/parsing-tokens.json`, never in src/ | GEO ruling G5: per-city data, not code. Parser (`src/utils/run-end-token.ts`) builds its regex from config at load. | 2026-06-12 (S186) |
+| Migration selects parser-positive rows, not `LIKE 'Εως %'` | Avoids hardcoding the Greek literal in the script AND the `(A AND B) OR C` precedence trap the operator flagged in plan review; the post-verify re-runs the parser over the remainder (must be 0). | 2026-06-12 (S186) |
+| Global `''→NULL` description normalization (2,828 rows) + `$description: e.description \|\| null` at the saveEvents bind | Operator-approved; G5 says omit-never-empty; the bind change makes it durable for ALL scrapers, not just athinorama. | 2026-06-12 (S186) |
+| Theater run end-dates now flow `parseTheaterDateRange() → end_date` (structured) | The capture fix; `ON CONFLICT` already protects backfilled rows (`end_date = COALESCE(...)`, description never updated on conflict). | 2026-06-12 (S186) |
+
+**Cross-references:** `specs/eos-backfill-residual.md` (zero residual, queue delta, corrected architecture map); `scripts/migrate-eos-end-date.ts`; `data/events.db.bak-sf2a` (local backup, untracked); commit `e988f9228`; deploy `6a2c50cb8a01267bd9e34fad` (state=ready); A2 report `specs/audit-A2-surface-geo.md` F2.

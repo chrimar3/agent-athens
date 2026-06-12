@@ -5553,3 +5553,13 @@ Three properties that make it robust:
 It also makes a latent coupling build-enforced: noindex reads `!HREFLANG_GATE_OPEN` (inverse-on-flip), while the sitemap-drop doesn't read the gate yet — so flipping the gate without lifting the drop now build-FAILs (page indexable but sitemap-absent → Rule 2). The validator turns "reactivate every surface together" from a comment into a wall.
 
 **Connects to:** `src/validators/dormant-locale-noindex.ts` (+ test), `src/generators/hub-page.ts`, `src/templates/content-page.ts`, `src/sitemap/generate-sitemaps.ts` (`BILINGUAL_CONTENT_SLUGS`), `src/utils/hreflang.ts` (`HREFLANG_GATE_OPEN`, S175 sibling); `specs/dormant-locale-robots-meta-checkpoint.md`; mistakes.md "SEO / Indexing"; decisions.md S184.
+
+## A machine-generated defect corpus is uniform — diagnose the generator, then trust the uniformity (S186)
+
+The 11,633 "Εως YYYY-MM-DD" descriptions came from ONE template literal (`scrape-all.ts:607`), so the Step-1 classification matrix collapsed to a single class: 100% exact-form, zero prose variants, zero invalid dates, zero end<start. Two reusable moves:
+
+**1. Before designing a parser for "messy" data, check whether the data is actually machine-generated.** One `git grep` of the literal found the generator; the diagnostic then *confirmed* uniformity instead of discovering variety. The brief's prose-variant test cases were still written (defensive, trivial) but the migration design didn't need to carry prose-handling risk.
+
+**2. Spike gates on uniform corpora are formalities you run anyway** — if the 20/20 sample is NOT clean on a machine-generated corpus, that itself is the finding (a second writer exists). 20/20 OK here confirmed single-writer provenance; the 14 more.com/megaron riders matched the same shape because they copied the same convention.
+
+**Connects to:** `src/utils/run-end-token.ts`, `scripts/migrate-eos-end-date.ts`, mistakes.md "Scraping / Data Integrity (S186)", decisions.md S186, `specs/eos-backfill-residual.md`.
