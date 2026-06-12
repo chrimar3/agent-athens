@@ -113,7 +113,8 @@
         "Πλατεια Νερου, Φαληρο",
         "Water Plaza Faliro"
       ],
-      "neighborhood": "Faliro"
+      "neighborhood": "Faliro",
+      "address": "Leoforos Syngrou & Leoforos Posidonos, Faliro"
     },
     {
       "canonical_name": "Κύτταρο",
@@ -707,7 +708,8 @@
         "Alsos",
         "Alsos Pedion Areos"
       ],
-      "neighborhood": "Pedion Areos"
+      "neighborhood": "Pedion Areos",
+      "address": "Evelpidon 4, Athens 114 74"
     },
     {
       "canonical_name": "Κινηματοθέατρο Ορφέας",
@@ -2146,7 +2148,8 @@
       "variations": [
         "Apo Micnanis Theatre"
       ],
-      "neighborhood": "Metaxourgeio"
+      "neighborhood": "Metaxourgeio",
+      "address": "Akadimou 13, Athens 104 36"
     },
     {
       "canonical_name": "Θέατρο ΕΝ-Α",
@@ -2548,7 +2551,8 @@
         "&#171;Δημήτρης Χορν&#187;",
         "Θέατρο Χορν"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Amerikis 10, Athens 106 71"
     },
     {
       "canonical_name": "Θέατρο Κολλεγίου Αθηνών",
@@ -2579,7 +2583,8 @@
       "variations": [
         "Κηποθέατρο Παπάγου"
       ],
-      "neighborhood": "Papagou"
+      "neighborhood": "Papagou",
+      "address": "Koritsas, Papagos 156 69"
     },
     {
       "canonical_name": "Γερμανική Εκκλησία Αθηνών",
