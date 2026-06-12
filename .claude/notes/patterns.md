@@ -5563,3 +5563,15 @@ The 11,633 "Εως YYYY-MM-DD" descriptions came from ONE template literal (`scr
 **2. Spike gates on uniform corpora are formalities you run anyway** — if the 20/20 sample is NOT clean on a machine-generated corpus, that itself is the finding (a second writer exists). 20/20 OK here confirmed single-writer provenance; the 14 more.com/megaron riders matched the same shape because they copied the same convention.
 
 **Connects to:** `src/utils/run-end-token.ts`, `scripts/migrate-eos-end-date.ts`, mistakes.md "Scraping / Data Integrity (S186)", decisions.md S186, `specs/eos-backfill-residual.md`.
+
+## A semantics generalization is a Guard-6 sweep with a disposition table, not an edit (S187)
+
+F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites across 4 grep families. What made it land clean: every file in the sweep was explicitly EDITED or CLEARED-WITH-REASON before any edit (the brief's "done when" required the table). Three sub-lessons:
+
+**1. The cleared half of the table is as load-bearing as the edited half.** filters/search-index/ICS kept exhibition-only daily-presence semantics deliberately (theater runs play select days — listing them daily over-asserts; routed to Editorial). Without the written reason, the next session reads those sites as missed.
+
+**2. Date-typed semantics changes wake dormant fixture data.** 16 "regressions" were stale 2025 endDates in fixtures that pre-F2b semantics ignored. Sweep fixtures for the newly load-bearing field before debugging the change.
+
+**3. The dead-code finding rides the sweep.** `cleanupOldEvents` (a DELETE with the old exhibition-only COALESCE) has zero callers — flagged, not edited; a dead destructive path with stale semantics is a trap for whoever revives it.
+
+**Connects to:** decisions.md S187, mistakes.md "Lifecycle / Schema semantics (S187)", `specs/f2b-residual.md`, A2 F2/F3/F4.

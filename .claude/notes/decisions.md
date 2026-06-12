@@ -4673,3 +4673,17 @@ Audit A2 F2 remediation (S-F2a brief). Data layer only; lifecycle/eventStatus/si
 | Theater run end-dates now flow `parseTheaterDateRange() → end_date` (structured) | The capture fix; `ON CONFLICT` already protects backfilled rows (`end_date = COALESCE(...)`, description never updated on conflict). | 2026-06-12 (S186) |
 
 **Cross-references:** `specs/eos-backfill-residual.md` (zero residual, queue delta, corrected architecture map); `scripts/migrate-eos-end-date.ts`; `data/events.db.bak-sf2a` (local backup, untracked); commit `e988f9228`; deploy `6a2c50cb8a01267bd9e34fad` (state=ready); A2 report `specs/audit-A2-surface-geo.md` F2.
+
+### F2b — G1/G1-b/G3 semantics core: presumption windows, status omission, sitemap↔noindex single predicate (S187, 2026-06-12/13)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| `resolveEffectiveEnd()` in event-lifecycle.ts is the ONLY derivation of "when does an event effectively end" | The exhibition-only special case had metastasized into 20+ hardcoded `type==='exhibition'` sites (A2 F2/F3 root). Status, lifecycle, phases all consume it; consumers that re-derive locally are the next F2. | 2026-06-13 (S187) |
+| Presumption expiry → cooling immediately, skipping just-passed | just-passed is "we KNOW it recently ended" (indexed 14d). A presumed end is not knowledge — err short per G1. | 2026-06-13 (S187) |
+| G1 invariant (b) is a structural throw at emission, not a validator check | HTML-level validation can't see DB-null end_date; making synthesized-endDate-on-NULL-end unconstructable is stronger than detecting it. Deviation from brief documented in specs/f2b-residual.md. | 2026-06-13 (S187) |
+| Schema validator failCount>0 now exits 1 (armed in generate-site.ts) | A2 F1 deployed 5 FAILs for weeks because this layer was warning-only. Armed at fail=0 baseline. Any future FAIL = blocked deploy BY DESIGN. | 2026-06-13 (S187) |
+| Sitemap membership and robots-noindex read the SAME `shouldNoindexEvent` predicate, both locales | G3 single-state-machine guard; parallel flags are how the 422-page drift happened. | 2026-06-13 (S187) |
+| Ticket-CTA past-check uses real end_date for any type, but NEVER presumption | Sellability is a fact claim; presumption affects status/indexing only. | 2026-06-13 (S187) |
+| Conditional routing: presumed-running theater band (46 rows) is more.com-dominated (38) = plausible runs, NOT athinorama singles (2) | Brief's "dominated by singles" premise refuted; window stays 45; more.com run-end capture routed to Editorial via specs/f2b-residual.md. | 2026-06-13 (S187) |
+
+**Cross-references:** `config/lifecycle-presumption.json` (G1-b values; GEO's to change); `specs/f2b-residual.md`; commit `bb735c003`; deploy `6a2c9b5df5e5fa13241cd887`; audit `specs/audit-A2-surface-geo.md` F2/F3/F4.
