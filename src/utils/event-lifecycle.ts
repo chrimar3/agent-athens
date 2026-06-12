@@ -6,19 +6,109 @@
  * - past-active: event ended ≤45 days ago (generate page with banner, exclude from listings)
  * - past-expired: event ended >45 days ago (no page, no listing)
  *
- * Tier 1 rule: exhibitions use endDate, everything else uses startDate.
+ * F2b (GEO rulings G1/G1-b, 2026-06): all classification keys on the EFFECTIVE
+ * end — end_date when present (ANY type, real dates → real semantics), the
+ * presumption window for run-implying types with NULL end_date, start_date
+ * otherwise. The old Tier-1 "exhibitions use endDate" rule is the special case
+ * this generalizes. Presumption binding constraints: never EventCompleted from
+ * presumption (schema-geo.ts owns status); presumption expiry cools to noindex
+ * immediately (no just-passed grace — we don't KNOW it just passed; err short);
+ * never 410 (no phase emits one anywhere — verified F2b Step 0).
+ *
  * Timezone: Europe/Athens (manual offset, matching resolveEventStatus in schema-geo.ts).
  */
+
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export type LifecycleStatus = 'upcoming' | 'past-active' | 'past-expired';
 
 const RETENTION_DAYS = 45;
 
+// ── G1-b presumption config (per-city DATA, same posture as parsing-tokens) ──
+
+interface PresumptionConfig {
+  runImplyingTypes: string[];
+  presumed_run_days: Record<string, number>;
+}
+
+/**
+ * Shift-left validation (G1-b): a presumed_run_days entry for a type not in
+ * runImplyingTypes is rejected at load — it would otherwise silently change
+ * semantics the day someone adds the type to the list. Exported for tests.
+ */
+export function validatePresumptionConfig(raw: PresumptionConfig): void {
+  const runSet = new Set(raw.runImplyingTypes);
+  for (const [type, days] of Object.entries(raw.presumed_run_days)) {
+    if (type !== '_default' && !runSet.has(type)) {
+      throw new Error(
+        `lifecycle-presumption.json: presumed_run_days entry '${type}' is not in runImplyingTypes — remove it or add the type deliberately`
+      );
+    }
+    if (!Number.isInteger(days) || days <= 0) {
+      throw new Error(`lifecycle-presumption.json: presumed_run_days.${type} must be a positive integer (got ${days})`);
+    }
+  }
+  for (const type of raw.runImplyingTypes) {
+    if (raw.presumed_run_days[type] === undefined && raw.presumed_run_days._default === undefined) {
+      throw new Error(`lifecycle-presumption.json: run-implying type '${type}' has no window and no _default`);
+    }
+  }
+}
+
+const presumptionConfig: PresumptionConfig = JSON.parse(
+  readFileSync(join(import.meta.dir, '../../config/lifecycle-presumption.json'), 'utf-8')
+);
+validatePresumptionConfig(presumptionConfig);
+
+const RUN_IMPLYING_TYPES = new Set(presumptionConfig.runImplyingTypes);
+
+export function isRunImplyingType(type: string | undefined): boolean {
+  return type !== undefined && RUN_IMPLYING_TYPES.has(type);
+}
+
+export function presumptionWindowDays(type: string): number {
+  return presumptionConfig.presumed_run_days[type] ?? presumptionConfig.presumed_run_days._default;
+}
+
+export interface EffectiveEnd {
+  /** Date-only YYYY-MM-DD the lifecycle/status comparison keys on. */
+  date: string;
+  /** True when the date is a presumption (NULL end_date, run-implying type). */
+  presumed: boolean;
+}
+
+/**
+ * Single source of truth for "when does this event effectively end".
+ * Consumers: lifecycle classifier (here), resolveEventStatus (schema-geo.ts).
+ * Do not re-derive this rule locally — that is how the exhibition-only special
+ * case metastasized into 20+ hardcoded sites (audit A2 F2/F3).
+ */
+export function resolveEffectiveEnd(event: {
+  startDate: string;
+  endDate?: string | null;
+  type?: string;
+}): EffectiveEnd {
+  if (event.endDate) {
+    return { date: event.endDate.substring(0, 10), presumed: false };
+  }
+  const startOnly = event.startDate.substring(0, 10);
+  if (isRunImplyingType(event.type)) {
+    const d = new Date(startOnly + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() + presumptionWindowDays(event.type!));
+    return { date: d.toISOString().substring(0, 10), presumed: true };
+  }
+  return { date: startOnly, presumed: false };
+}
+
 /**
  * Get today's date string (YYYY-MM-DD) in Europe/Athens timezone.
  * Reuses the same DST calculation as resolveEventStatus() in schema-geo.ts.
+ * Exported (F2b) so date-sensitive tests can anchor fixtures to the SAME
+ * "today" the classifier uses — UTC-anchored fixtures flake in the 00:00–03:00
+ * Athens window when the UTC date is still yesterday.
  */
-function getAthensTodayStr(): string {
+export function getAthensTodayStr(): string {
   const now = new Date();
   const year = now.getUTCFullYear();
   const marchLast = new Date(Date.UTC(year, 2, 31));
@@ -46,9 +136,7 @@ export function classifyEventLifecycle(event: {
   endDate?: string | null;
   type?: string;
 }): LifecycleStatus {
-  const isExhibition = event.type === 'exhibition';
-  const relevantDate = (isExhibition && event.endDate) ? event.endDate : event.startDate;
-  const dateOnly = relevantDate.substring(0, 10);
+  const dateOnly = resolveEffectiveEnd(event).date;
   const todayStr = getAthensTodayStr();
 
   if (dateOnly >= todayStr) {
@@ -117,12 +205,14 @@ export function getLifecyclePhase(event: {
   if (status === 'upcoming') return 'active';
   if (status === 'past-expired') return 'archive';
 
-  // past-active: split into just-passed (≤14 days) vs cooling (15-44 days)
-  const isExhibition = event.type === 'exhibition';
-  const relevantDate = (isExhibition && event.endDate) ? event.endDate : event.startDate;
-  const dateOnly = relevantDate.substring(0, 10);
+  // past-active: split into just-passed (≤14 days) vs cooling (15-44 days).
+  // Presumed ends skip just-passed entirely (G1: we don't KNOW it just passed —
+  // the window merely expired; err short → straight to cooling/noindex).
+  const effective = resolveEffectiveEnd(event);
+  if (effective.presumed) return 'cooling';
+
   const todayStr = getAthensTodayStr();
-  const eventDate = new Date(dateOnly + 'T00:00:00Z');
+  const eventDate = new Date(effective.date + 'T00:00:00Z');
   const todayDate = new Date(todayStr + 'T00:00:00Z');
   const daysPast = Math.floor((todayDate.getTime() - eventDate.getTime()) / (86400 * 1000));
 

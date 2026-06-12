@@ -94,15 +94,16 @@ describe('resolveEventStatus', () => {
       .toBe('https://schema.org/EventCompleted');
   });
 
-  test('non-exhibition ignores endDate', () => {
-    // Concert with past start but future end — should still be Completed
+  // F2b (G1, 2026-06-12): both assertions below previously pinned the pre-F2b
+  // defect semantics (real end_date ignored for non-exhibitions; EventCompleted
+  // asserted from a NULL-end exhibition). Updated to the ruling.
+  test('non-exhibition with real endDate: end governs (running multi-day → Scheduled)', () => {
     expect(resolveEventStatus('2020-01-01', '2099-12-31', 'concert'))
-      .toBe('https://schema.org/EventCompleted');
+      .toBe('https://schema.org/EventScheduled');
   });
 
-  test('exhibition without endDate uses startDate', () => {
-    expect(resolveEventStatus('2020-01-01', null, 'exhibition'))
-      .toBe('https://schema.org/EventCompleted');
+  test('exhibition without endDate, past presumption window → status OMITTED (null), never Completed', () => {
+    expect(resolveEventStatus('2020-01-01', null, 'exhibition')).toBeNull();
   });
 });
 

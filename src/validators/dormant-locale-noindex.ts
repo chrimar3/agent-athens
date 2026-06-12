@@ -159,6 +159,32 @@ export function validateDormantLocaleNoindex(distDir: string): DormantNoindexRep
     else passed++;
   }
 
+  // 5. F2b/G3 (closes audit F4's enforcement gap): Rule 1 globalized to EVERY
+  //    sitemap-advertised page, not just the bare-root candidate set — 422
+  //    noindexed cooling event pages sat in sitemap-events.xml precisely
+  //    because this invariant was "enforced on a subset" (= documentation).
+  //    Multi-segment tokens only; single-segment bare-roots were checked above.
+  //    Rule 2 deliberately does NOT extend here: an EL event page with an /en/
+  //    twin is legitimately indexable + sitemap-absent (S144 EL→EN substitution).
+  for (const tok of sitemapPaths) {
+    if (!tok || !tok.includes('/')) continue;
+    const dirFile = join(distDir, tok, 'index.html');
+    const flatFile = join(distDir, `${tok}.html`);
+    const file = existsSync(dirFile) ? dirFile : existsSync(flatFile) ? flatFile : null;
+    if (!file) continue; // canonical-parity invariant owns loc→file existence
+    if (readRobotsIsNoindex(readFileSync(file, 'utf-8'))) {
+      failures.push({
+        page: `${tok}/`,
+        rule: 'NOINDEX_IN_SITEMAP',
+        reason:
+          `${tok}/ emits noindex but is present in a sitemap — a sitemap URL must be ` +
+          `indexable (lifecycle should have dropped it from the sitemap)`,
+      });
+    } else {
+      passed++;
+    }
+  }
+
   return { passed, failures };
 }
 

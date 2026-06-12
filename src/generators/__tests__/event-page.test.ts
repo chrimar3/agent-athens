@@ -62,6 +62,7 @@ const futureStartDate = new Date(Date.now() + 86400000 * 14).toISOString();
 const shortDescEvent: Event = {
   ...sampleConcert,
   startDate: futureStartDate,
+  endDate: undefined,
   fullDescription: undefined,
   description: "A short event description.",
 };
@@ -180,7 +181,7 @@ describe("Event Detail Page — Hero section", () => {
   });
 
   test("CTA renders when ticketUrl exists (upcoming event)", () => {
-    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-cta edp-cta-hero");
     expect(html).toContain(sampleConcertWithTicket.ticketUrl!);
@@ -293,7 +294,7 @@ describe("Event Detail Page — Source", () => {
 
 describe("Event Detail Page — Mobile bar", () => {
   test("renders when ticketUrl exists (upcoming event)", () => {
-    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-mobile-bar");
   });
@@ -304,7 +305,7 @@ describe("Event Detail Page — Mobile bar", () => {
   });
 
   test("contains title and price text (upcoming event)", () => {
-    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain("edp-mobile-bar-title");
     expect(html).toContain(sampleConcertWithTicket.title);
@@ -422,7 +423,7 @@ describe("Event Detail Page — Past event lifecycle", () => {
 
   test('Upcoming event does NOT show banner', () => {
     const futureDate = new Date(Date.now() + 86400000 * 7).toISOString();
-    const futureEvent: Event = { ...sampleConcert, startDate: futureDate };
+    const futureEvent: Event = { ...sampleConcert, startDate: futureDate, endDate: undefined };
     const html = renderEventDetailPage(futureEvent, []);
     expect(html).not.toContain('event-passed-banner');
   });
@@ -445,7 +446,7 @@ describe("Event Detail Page — Past event lifecycle", () => {
 
   test('Upcoming event has no noindex meta', () => {
     const futureDate = new Date(Date.now() + 86400000 * 7).toISOString();
-    const futureEvent: Event = { ...sampleConcert, startDate: futureDate };
+    const futureEvent: Event = { ...sampleConcert, startDate: futureDate, endDate: undefined };
     const html = renderEventDetailPage(futureEvent, []);
     expect(html).not.toContain('name="robots" content="noindex"');
   });
@@ -483,7 +484,7 @@ describe("Event Detail Page — GEO source order", () => {
 
 describe("Event Detail Page — Inline CTA", () => {
   test("inline CTA rendered for upcoming event with ticket URL", () => {
-    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).toContain('edp-inline-cta');
   });
@@ -509,7 +510,7 @@ describe("Event Detail Page — data-past attribute", () => {
   });
 
   test("upcoming event has no data-past attribute", () => {
-    const futureEvent: Event = { ...sampleConcert, startDate: futureStartDate };
+    const futureEvent: Event = { ...sampleConcert, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(futureEvent, []);
     expect(html).not.toContain('data-past=');
   });
@@ -517,7 +518,7 @@ describe("Event Detail Page — data-past attribute", () => {
 
 describe("Event Detail Page — CTA uses accent-primary (not type color)", () => {
   test("hero CTA has no light-text modifier", () => {
-    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate };
+    const upcomingWithTicket: Event = { ...sampleConcertWithTicket, startDate: futureStartDate, endDate: undefined };
     const html = renderEventDetailPage(upcomingWithTicket, []);
     expect(html).not.toContain('edp-cta--light-text');
   });
@@ -595,6 +596,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.athinorama.gr/music/gig/some-event-12345/',
       venue: {
         ...sampleConcertWithTicket.venue,
@@ -611,6 +613,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.athinorama.gr/x/y/',
       venue: {
         ...sampleConcertWithTicket.venue,
@@ -627,6 +630,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.more.com/gr-el/music/some-event/',
     };
     const schema = parse(event);
@@ -646,6 +650,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.halfnote.gr/en/calendar/',
       venue: {
         ...sampleConcertWithTicket.venue,
@@ -665,6 +670,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.benaki.org/event/123/',
       venue: {
         ...sampleConcertWithTicket.venue,
@@ -684,6 +690,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.athinorama.gr/x/y/',
     };
     const schema = parse(event);
@@ -699,6 +706,7 @@ describe("Event Detail Page — offers emission", () => {
       const event: Event = {
         ...sampleConcertWithTicket,
         startDate: futureStartDate,
+  endDate: undefined,
         ticketUrl: 'https://example-not-in-config.com/event/123',
       };
       const schema = parse(event);
@@ -757,6 +765,7 @@ describe("Event Detail Page — offers emission", () => {
     const futureWithTicket: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.more.com/x/',
     };
     const schema = parse(futureWithTicket);
@@ -771,6 +780,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.athinorama.gr/event/x/',  // listing_aggregator
       ticketUrlResolved: 'https://www.viva.gr/tickets/event-y/',  // known_merchant
     };
@@ -782,6 +792,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.viva.gr/tickets/event-x/',
       ticketUrlResolved: null,
     };
@@ -793,6 +804,7 @@ describe("Event Detail Page — offers emission", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.athinorama.gr/event/x/',
       ticketUrlResolved: null,
     };
@@ -862,6 +874,7 @@ describe("Event schema — @graph envelope contract (S139)", () => {
     const event: Event = {
       ...sampleConcertWithTicket,
       startDate: futureStartDate,
+  endDate: undefined,
       ticketUrl: 'https://www.more.com/gr-el/music/x/',
     };
     const envelope = JSON.parse(generateEventSchema(event, 'el'));
@@ -894,6 +907,7 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     const event: Event = {
       ...sampleConcert,
       startDate: upcomingDate,
+      endDate: undefined,
       price: { type: "with-ticket", amount: 15, currency: "EUR" },
       ticketUrl: "https://www.viva.gr/tickets/foo",
       ticketUrlResolved: null,
@@ -916,6 +930,7 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     const event: Event = {
       ...sampleConcert,
       startDate: upcomingDate,
+      endDate: undefined,
       price: { type: "with-ticket", amount: 15, currency: "EUR" },
       ticketUrl: "https://www.athinorama.gr/music/gig/abc/",
       ticketUrlResolved: null,
@@ -929,6 +944,7 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     const event: Event = {
       ...sampleConcert,
       startDate: upcomingDate,
+      endDate: undefined,
       price: { type: "with-ticket", amount: 15, currency: "EUR" },
       ticketUrl: "https://unknown-host-not-in-config.example/x",
       ticketUrlResolved: null,
@@ -955,6 +971,7 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     const event: Event = {
       ...sampleConcert,
       startDate: upcomingDate,
+      endDate: undefined,
       price: { type: "with-ticket", amount: 15, currency: "EUR" },
       ticketUrl: "https://www.halfnote.gr/en/calendar/",
       ticketUrlResolved: null,
@@ -983,6 +1000,7 @@ describe("Event Detail Page — S134 classifier-gated Offer emission", () => {
     const event: Event = {
       ...sampleConcert,
       startDate: upcomingDate,
+      endDate: undefined,
       price: { type: "with-ticket", amount: 15, currency: "EUR" },
       ticketUrl: "https://www.athinorama.gr/x",
       ticketUrlResolved: "https://www.viva.gr/y",
@@ -1045,6 +1063,7 @@ describe("Event schema — streetAddress config fallback (2.2)", () => {
 // Exhibition-safety: a running exhibition (started in the past, end_date
 // in the future) counts as upcoming — COALESCE(end_date, start_date) >= today.
 import { selectRelatedEvents } from "../event-page";
+import { getAthensTodayStr } from "../../utils/event-lifecycle";
 
 describe("selectRelatedEvents — excludes past events from venue block", () => {
   const DAY = 86400000;
@@ -1066,7 +1085,7 @@ describe("selectRelatedEvents — excludes past events from venue block", () => 
     startDate: iso(-30), endDate: iso(20),
   });
   const futureConcert = atVenue({ id: "future-concert", startDate: iso(7), endDate: undefined });
-  const todayConcert = atVenue({ id: "today-concert", startDate: iso(0), endDate: undefined });
+  const todayConcert = atVenue({ id: "today-concert", startDate: getAthensTodayStr(), endDate: undefined });
 
   const venueEvents = [currentEvent, pastConcert, endedExhibition, runningExhibition, futureConcert, todayConcert];
 

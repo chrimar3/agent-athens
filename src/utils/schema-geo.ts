@@ -10,6 +10,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NEIGHBORHOOD_GREEK } from './neighborhoods';
 import { BASE_URL } from '../config/site-url';
+import { resolveEffectiveEnd } from './event-lifecycle';
 
 // Load geodata configs
 const neighborhoodGeodata: Record<string, { name: string; qid: string; lat: number; lng: number }> =
@@ -93,16 +94,17 @@ export function buildContainedInPlace(neighborhood?: string | null): object {
 /**
  * Resolve eventStatus based on whether the event is past or future.
  *
- * Tier 1 rule: exhibitions use endDate, everything else uses startDate.
+ * F2b (GEO G1/G1-b): keys on the effective end via resolveEffectiveEnd —
+ * end_date when present (ANY type), presumption window for run-implying types
+ * with NULL end_date, start_date otherwise. Binding constraints:
+ * - EventCompleted only from REAL dates, never from presumption.
+ * - Past the presumption window → returns NULL: the eventStatus property must
+ *   be OMITTED entirely (callers conditionally add it), never empty/placeholder.
  * Comparison is date-only (YYYY-MM-DD) in Europe/Athens timezone.
  */
-export function resolveEventStatus(startDate: string, endDate?: string | null, type?: string): string {
-  // Determine which date to compare
-  const isExhibition = type === 'exhibition';
-  const relevantDate = (isExhibition && endDate) ? endDate : startDate;
-
-  // Extract YYYY-MM-DD from the date string
-  const dateOnly = relevantDate.substring(0, 10);
+export function resolveEventStatus(startDate: string, endDate?: string | null, type?: string): string | null {
+  const effective = resolveEffectiveEnd({ startDate, endDate, type });
+  const dateOnly = effective.date;
 
   // Get today in Athens timezone (date-only comparison)
   const now = new Date();
@@ -124,6 +126,11 @@ export function resolveEventStatus(startDate: string, endDate?: string | null, t
 
   if (dateOnly >= todayStr) {
     return 'https://schema.org/EventScheduled';
+  }
+  // Past the effective end. A PRESUMED end is not knowledge of completion —
+  // G1: never EventCompleted from presumption; omit the property instead.
+  if (effective.presumed) {
+    return null;
   }
   return 'https://schema.org/EventCompleted';
 }

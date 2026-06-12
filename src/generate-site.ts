@@ -244,7 +244,7 @@ async function main() {
   });
 
   // pageableEvents: upcoming + past events within 45-day retention window
-  const { classifyEventLifecycle } = await import('./utils/event-lifecycle');
+  const { classifyEventLifecycle, shouldNoindexEvent } = await import('./utils/event-lifecycle');
   const pageableEvents = locationFiltered.filter(event => {
     const lifecycle = classifyEventLifecycle(event);
     return lifecycle !== 'past-expired';
@@ -642,9 +642,9 @@ async function main() {
   // (same input venue-page.ts uses), so url/href emission in event pages stays
   // in lockstep with which venue pages actually generate. Drift = dangling links.
   const pagedVenueSlugs = computePagedVenueSlugs(events);
-  const { urls: eventPageUrls, slugMap: currentSlugs, pastEventUrls } = await generateEventPages(pageableEvents, pagedVenueSlugs);
+  const { urls: eventPageUrls, slugMap: currentSlugs, pastEventUrls, pagesWritten: eventPagesWritten } = await generateEventPages(pageableEvents, pagedVenueSlugs);
   generatedUrls.push(...eventPageUrls);
-  pagesGenerated += eventPageUrls.length;
+  pagesGenerated += eventPagesWritten;
 
   // Generate English event pages for events with fullDescriptionEn
   console.log('\n🇬🇧 Generating English event pages...');
@@ -679,7 +679,11 @@ async function main() {
       mkdirSync(pageDir, { recursive: true });
     }
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
-    generatedUrls.push(`en/events/${slug}/`);
+    // F2b/G3: same gate as the EL push — a noindexed (cooling) EN page is
+    // generated but never advertised. One lifecycle predicate, both locales.
+    if (!shouldNoindexEvent(event)) {
+      generatedUrls.push(`en/events/${slug}/`);
+    }
   }
   pagesGenerated += englishEvents.length;
   console.log(`  ✓ Generated ${englishEvents.length} English event pages`);
@@ -1285,7 +1289,7 @@ async function main() {
 
   console.log(`\n✅ Site generation complete!`);
   console.log(`📊 Total pages generated: ${pagesGenerated}`);
-  console.log(`   - ${eventPageUrls.length} event pages (${englishEvents.length} English)`);
+  console.log(`   - ${eventPagesWritten} event pages (${englishEvents.length} English; ${eventPageUrls.length} in sitemap)`);
   console.log(`   - ${hubSlugs.length} hub pages (${bilingualHubSlugs.size} English, ${overflowCount} overflow)`);
   console.log(`   - ${venuePageUrls.length} venue pages`);
   console.log(`   - ${categoryUrls.length} category pages`);
@@ -1295,10 +1299,20 @@ async function main() {
   console.log(`⏱️  Build time: ${(buildDurationMs / 1000).toFixed(1)}s`);
   console.log(`📁 Output directory: ${DIST_DIR}`);
 
-  // Schema completeness validation (warning-only, never blocks build).
-  // sameAsSeverity decided at build start (Sprint 2 Component B-2 ratchet).
+  // Schema completeness validation. F2b ARMED: failCount > 0 now exits 1 —
+  // audit A2's F1 (5 streetAddress FAILs deployed for weeks) shipped precisely
+  // because this layer was warning-only. Baseline at arming time was fail=0;
+  // warnings stay non-blocking. The G1 invariants (EventCompleted-without-
+  // endDate on run-implying types) ride this same gate.
   const schemaResults = validateAllPages(DIST_DIR, sameAsSeverity);
   printSchemaSummary(schemaResults);
+  if (schemaResults.failCount > 0) {
+    console.error(`\n❌ Schema completeness FAILED: ${schemaResults.failCount} page(s) with structural errors — build blocked (F2b arming, 2026-06-12).`);
+    for (const d of schemaResults.details.filter(x => x.errors.length > 0).slice(0, 10)) {
+      console.error(`   ✗ ${d.slug}: ${d.errors.join('; ')}`);
+    }
+    process.exit(1);
+  }
 
   // Sprint 2 Component C — aria aggregate is produced by scripts/audit-aria.ts
   // and persisted to data/build-aria-aggregate.json. Build never depends on

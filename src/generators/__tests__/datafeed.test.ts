@@ -57,6 +57,7 @@ describe('buildDataFeed', () => {
     const venueDirectEvent: Event = {
       ...sampleConcertWithTicket,
       startDate: new Date(Date.now() + 86400000 * 14).toISOString(),
+      endDate: undefined,
       ticketUrl: 'https://www.benaki.org/event/123/',
       venue: {
         ...sampleConcertWithTicket.venue,

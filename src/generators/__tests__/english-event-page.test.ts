@@ -10,6 +10,7 @@ const futureStartDate = new Date(Date.now() + 86400000 * 14).toISOString();
 const bilingualEvent: Event = {
   ...sampleConcert,
   startDate: futureStartDate,
+  endDate: undefined,
   fullDescriptionEn: "Experience an unforgettable evening of smooth jazz at Athens' premier jazz venue. This night promises world-class performances in an intimate setting. The Half Note Jazz Club has been a cornerstone of Athens' music scene for decades. Tonight's program includes classic standards and contemporary compositions.",
   fullDescriptionGr: "Ζήστε ένα αξέχαστο βράδυ smooth jazz στο κορυφαίο jazz venue της Αθήνας. Η βραδιά υπόσχεται παγκόσμιας κλάσης παραστάσεις σε μια οικεία ατμόσφαιρα.",
 };
@@ -18,6 +19,7 @@ const bilingualEvent: Event = {
 const greekOnlyEvent: Event = {
   ...sampleConcert,
   startDate: futureStartDate,
+  endDate: undefined,
   fullDescriptionEn: undefined,
   fullDescriptionGr: "Μια ελληνική περιγραφή μόνο.",
 };

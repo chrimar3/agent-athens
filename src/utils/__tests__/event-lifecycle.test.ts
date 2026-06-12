@@ -105,12 +105,16 @@ describe('classifyEventLifecycle', () => {
     })).toBe('past-expired');
   });
 
-  test('non-exhibition with endDate in future, startDate in past → past-active (uses startDate)', () => {
+  // F2b (G1, 2026-06-12): real end_date governs for ALL types now — a running
+  // multi-day event is upcoming until its end passes. The previous assertion
+  // ("uses startDate" → past-active) pinned the pre-F2b exhibition-only special
+  // case; it was the defect, not the contract.
+  test('non-exhibition with endDate in future, startDate in past → upcoming (real end governs)', () => {
     expect(classifyEventLifecycle({
       startDate: daysFromNow(-5),
       endDate: dateOnlyFromNow(10),
       type: 'concert',
-    })).toBe('past-active');
+    })).toBe('upcoming');
   });
 });
 

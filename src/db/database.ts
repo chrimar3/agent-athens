@@ -111,7 +111,9 @@ export function eventToRow(event: Event): Record<string, any> {
   return {
     $id: event.id,
     $title: event.title,
-    $description: event.description || "",
+    // G5 (F2b ride-along): NULL, never '' — keeps the enrichment write path
+    // from unwinding the S186 normalization.
+    $description: event.description || null,
     $full_description: event.fullDescription || null,
     $start_date: normalizeDateField(event.startDate),
     $end_date: event.endDate ? normalizeDateField(event.endDate) : null,

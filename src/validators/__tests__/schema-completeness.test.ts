@@ -1982,3 +1982,46 @@ describe('checkUngatedHreflang — S176', () => {
     expect(result.errors).toHaveLength(0);
   });
 });
+
+// ── F2b (G1/G1-b): eventStatus omission + invariant (a) ──────────────────────
+// Run-implying @types (ExhibitionEvent, TheaterEvent, Festival, ComedyEvent)
+// may legally omit eventStatus when endDate is absent (presumption expired);
+// EventCompleted without endDate on those types is a FAIL (never EventCompleted
+// from presumption). Point types keep the strict missing-status error.
+
+describe('F2b — G1 eventStatus invariants', () => {
+  test('run-implying @type, no endDate, no eventStatus → LEGAL (no error)', () => {
+    const schema = makeValidSchema({ '@type': 'TheaterEvent' });
+    delete schema.eventStatus;
+    delete schema.endDate;
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 'presumption-expired');
+    expect(result.errors.some(e => e.includes('eventStatus'))).toBe(false);
+  });
+
+  test('point @type, no eventStatus → still an error (strict path unchanged)', () => {
+    const schema = makeValidSchema({ '@type': 'MusicEvent' });
+    delete schema.eventStatus;
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 'point-missing-status');
+    expect(result.errors.some(e => e.includes('eventStatus is missing'))).toBe(true);
+  });
+
+  test('invariant (a): EventCompleted without endDate on run-implying @type → FAIL', () => {
+    const schema = makeValidSchema({
+      '@type': 'ExhibitionEvent',
+      eventStatus: 'https://schema.org/EventCompleted',
+    });
+    delete schema.endDate;
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 'false-completion');
+    expect(result.errors.some(e => e.includes('never EventCompleted from presumption'))).toBe(true);
+  });
+
+  test('EventCompleted WITH past endDate on run-implying @type → legal (real completion)', () => {
+    const schema = makeValidSchema({
+      '@type': 'ExhibitionEvent',
+      eventStatus: 'https://schema.org/EventCompleted',
+      endDate: '2026-01-15',
+    });
+    const result = validateSchemaCompleteness(wrapInHtml(schema), 'real-completion');
+    expect(result.errors.some(e => e.includes('EventCompleted'))).toBe(false);
+  });
+});

@@ -27,6 +27,7 @@ import {
   ORG_LANGUAGES,
 } from './schema-geo';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
+import { isRunImplyingType } from './event-lifecycle';
 import { generateEventSlug } from '../generators/event-page';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
 import { getOgImage } from './og-image-fallback';
@@ -39,16 +40,25 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
     const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
     const selfCanonicalUrl = `${BASE_URL}/events/${generateEventSlug(event)}/`;
 
+    // F2b (G1): real endDate emitted for any type; single-day proxy only for
+    // non-run-implying types; run-implying NULL-end → endDate OMITTED (the old
+    // `end ?? start` branch synthesized a false 1-day span on NULL-end
+    // exhibitions in hub ListItems — invariant (b) violation). eventStatus
+    // omitted when null (past presumption window), never empty.
+    const endDate = event.endDate
+      ? formatSchemaDate(event.endDate)
+      : isRunImplyingType(event.type)
+        ? undefined
+        : formatSchemaDate(event.startDate);
+
     const item: Record<string, unknown> = {
       '@type': event['@type'],
       '@id': selfCanonicalUrl,
       name: event.title,
       description: `${event.type} event in Athens`,
       startDate: formatSchemaDate(event.startDate),
-      endDate: event.type === 'exhibition' && event.endDate
-        ? formatSchemaDate(event.endDate)
-        : formatSchemaDate(event.endDate ?? event.startDate),
-      eventStatus,
+      ...(endDate ? { endDate } : {}),
+      ...(eventStatus ? { eventStatus } : {}),
       isAccessibleForFree: event.price.type === 'open' || event.price.type === 'donation',
       location: {
         '@type': VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
@@ -83,7 +93,7 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
       ticketUrl: event.ticketUrl,
       ticketUrlResolved: event.ticketUrlResolved,
       venue: event.venue,
-      eventStatus,
+      eventStatus: eventStatus ?? undefined,
       selfCanonicalUrl,
     });
     if ('offer' in offerDecision) {

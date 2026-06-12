@@ -35,15 +35,16 @@ export type TicketUrlStatus =
   | 'open_entry';
 
 /**
- * Tier 1 rule (CLAUDE.md "Exhibitions use end_date, not start_date"):
- * exhibitions check end_date; everything else checks start_date. Uniform
- * start_date filter silently drops running exhibitions. Kept as a named
- * helper with docstring to guard against future skim-past-this refactors.
+ * F2b generalization of the Tier-1 rule: a REAL end_date governs the past
+ * check for ANY type — a theater run through June 30 is still selling tickets
+ * after opening night, so suppressing its CTA by start_date was the same
+ * defect class as dropping running exhibitions. NULL end_date keeps the
+ * start_date check (no presumption here: presumption affects status/indexing,
+ * never "is this still sellable" — err short on CTAs).
  */
 function isPastEvent(event: ResolverEvent): boolean {
   const today = new Date().toISOString().slice(0, 10); // ISO date, naive-local per CLAUDE.md
-  const ref =
-    event.type === 'exhibition' && event.end_date ? event.end_date : event.start_date;
+  const ref = event.end_date || event.start_date;
   if (!ref) return false;
   return ref.slice(0, 10) < today;
 }

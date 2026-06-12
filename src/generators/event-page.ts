@@ -31,7 +31,7 @@ import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
-import { classifyEventLifecycle, shouldNoindexEvent } from '../utils/event-lifecycle';
+import { classifyEventLifecycle, shouldNoindexEvent, isRunImplyingType } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { getOgImage } from '../utils/og-image-fallback';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
@@ -164,7 +164,6 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
       ? (event.fullDescriptionEn || event.description || event.title)
       : (event.fullDescriptionGr || event.fullDescription || event.description || event.title),
     'startDate': startDate,
-    'eventStatus': resolveEventStatus(event.startDate, event.endDate, event.type),
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'inLanguage': locale === 'en' ? 'en' : 'el',
     'url': `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${eventSlug}/`,
@@ -188,20 +187,37 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     }
   };
 
-  // Add end date for exhibitions. Passes through date-only to emit all-day
+  // F2b (G1): eventStatus from real dates or in-window presumption; null past
+  // the presumption window → the property is OMITTED entirely (never empty,
+  // never EventCompleted from presumption).
+  const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
+  if (eventStatus) {
+    schema.eventStatus = eventStatus;
+  }
+
+  // Add end date when real. Passes through date-only to emit all-day
   // Schema.org endDate (matches startDate passthrough).
   if (event.endDate) {
     schema.endDate = formatSchemaDate(event.endDate);
   }
 
-  // 1.3b: endDate=startDate proxy is honest only for genuinely single-day
-  // events. Multi-day types (exhibition, festival) without a real end_date are
-  // NOT one-day — emitting the proxy would assert a false 1-day span. Leave
-  // endDate absent for those (honest absence); the validator surfaces a
-  // type-conditional WARN. Single-occurrence types keep the proxy (correct).
-  const MULTI_DAY_TYPES = new Set(['exhibition', 'festival']);
-  if (!schema.endDate && !MULTI_DAY_TYPES.has(event.type)) {
+  // 1.3b generalized by F2b: endDate=startDate proxy is honest only for
+  // genuinely single-day events. Run-implying types (exhibition, theater,
+  // festival — config/lifecycle-presumption.json) without a real end_date are
+  // NOT one-day — the proxy would assert a false 1-day span. Honest absence
+  // instead. Single-occurrence types keep the proxy (correct).
+  if (!schema.endDate && !isRunImplyingType(event.type)) {
     schema.endDate = startDate;
+  }
+
+  // G1 invariant (b), structural form: a synthesized endDate on a NULL-end
+  // run-implying row must be impossible by construction. The HTML-level
+  // validator cannot see DB-null, so the guard lives at emission. Throwing
+  // here fails the build — which is the point.
+  if (!event.endDate && isRunImplyingType(event.type) && schema.endDate) {
+    throw new Error(
+      `G1 invariant: synthesized endDate for NULL-end run-implying event ${event.id} (${event.type}) — emission bug`
+    );
   }
 
   // Add door time if available
@@ -830,9 +846,10 @@ export function selectRelatedEvents(venueEvents: Event[], currentEventId: string
  * Returns list of generated URLs for sitemap
  */
 export async function generateEventPages(events: Event[], pagedVenueSlugs?: Set<string>): Promise<{
-  urls: string[];
+  urls: string[];                // sitemap-eligible URLs only (noindex pages excluded — F2b/G3)
   slugMap: Map<string, string>;  // eventId -> current slug
   pastEventUrls: Set<string>;    // URLs of past-active events (for sitemap priority)
+  pagesWritten: number;          // ALL pages written, incl. noindexed (urls.length undercounts)
 }> {
   const eventsDir = join(DIST_DIR, 'events');
   if (!existsSync(eventsDir)) {
@@ -888,13 +905,20 @@ export async function generateEventPages(events: Event[], pagedVenueSlugs?: Set<
     writeHtmlIfChangedSync(join(pageDir, 'index.html'), html);
     writeFileIfChangedSync(join(pageDir, 'event.ics'), generateIcs(event, `${BASE_URL}/events/${slug}/`));
 
-    urls.push(urlPath);
+    // F2b/G3 (closes audit F4): sitemap membership consults the SAME lifecycle
+    // predicate that decides the page's noindex meta — one state machine. A
+    // cooling/archive (noindexed) page is generated but never advertised;
+    // 422 noindex-in-sitemap entries existed because this gate was missing.
+    if (!shouldNoindexEvent(event)) {
+      urls.push(urlPath);
+    }
   }
 
   const pastCount = pastEventUrls.size;
-  console.log(`  ✓ Generated ${urls.length} event pages (${pastCount} past-active with banner)`);
+  const pagesWritten = events.length;
+  console.log(`  ✓ Generated ${pagesWritten} event pages (${pastCount} past-active with banner; ${pagesWritten - urls.length} noindexed → sitemap-excluded)`);
   logValidationSummary(schemaValidationResults);
-  return { urls, slugMap, pastEventUrls };
+  return { urls, slugMap, pastEventUrls, pagesWritten };
 }
 
 /**

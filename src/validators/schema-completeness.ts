@@ -23,6 +23,18 @@ import { HREFLANG_GATE_OPEN } from '../utils/hreflang';
 // audit-precedes-FAIL-rule).
 const VALID_SCHEMA_TYPES: Set<string> = new Set([...Object.values(SCHEMA_TYPE_MAP), COMEDY_EVENT_TYPE]);
 
+// F2b (G1): @type values whose DB EventType is run-implying (exhibition,
+// theater, festival — config/lifecycle-presumption.json). These may legally
+// omit eventStatus when endDate is absent (presumption expired) and must NEVER
+// assert EventCompleted without an endDate. ComedyEvent included: the comedy-
+// format override re-types DB `theater` rows above the EventType→@type map.
+const RUN_IMPLYING_SCHEMA_TYPES: Set<string> = new Set([
+  'ExhibitionEvent',
+  'TheaterEvent',
+  'Festival',
+  COMEDY_EVENT_TYPE,
+]);
+
 // S176 / S110 — the @type values a /theatre listing member may carry. The
 // theatre hub's base filter admits event_type ∈ {theater, performance}, which
 // resolve to TheaterEvent / PerformingArtsEvent; the only way a non-eligible
@@ -362,8 +374,24 @@ export function validateSchemaCompleteness(
     errors.push('isAccessibleForFree is missing or not boolean');
   }
 
+  // F2b (G1): eventStatus absence is LEGAL — expected, even — for a run-implying
+  // @type with no endDate (presumption window expired → property omitted, never
+  // EventCompleted, never a placeholder). For every other shape it stays an error.
+  // ComedyEvent is in the set because the S175 comedy-format override can re-type
+  // a run-implying DB `theater` row.
+  const mayOmitStatus = RUN_IMPLYING_SCHEMA_TYPES.has(String(schema['@type'])) && !schema.endDate;
   if (!isNonEmpty(schema.eventStatus)) {
-    errors.push('eventStatus is missing');
+    if (!mayOmitStatus) {
+      errors.push('eventStatus is missing');
+    }
+  } else if (
+    RUN_IMPLYING_SCHEMA_TYPES.has(String(schema['@type'])) &&
+    !schema.endDate &&
+    String(schema.eventStatus).endsWith('EventCompleted')
+  ) {
+    // G1 invariant (a): EventCompleted asserted with NO endDate on a run-implying
+    // type can only come from presumption or a stale emitter — both forbidden.
+    errors.push('EventCompleted without endDate on run-implying type (G1: never EventCompleted from presumption)');
   }
 
   if (!isNonEmpty(schema.eventAttendanceMode)) {

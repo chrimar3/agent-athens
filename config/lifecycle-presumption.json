@@ -1,0 +1,10 @@
+{
+  "_note": "G1/G1-b presumption windows (GEO rulings, 2026-06). For run-implying types with NULL end_date, the event is presumed running until start_date + presumed_run_days; past the window, eventStatus is OMITTED (never EventCompleted from presumption) and the page cools to noindex (never 410). Values are citability semantics — GEO's to change, not dev's. Keys in presumed_run_days (except _default) MUST appear in runImplyingTypes; the loader rejects otherwise.",
+  "runImplyingTypes": ["exhibition", "theater", "festival"],
+  "presumed_run_days": {
+    "exhibition": 90,
+    "theater": 45,
+    "festival": 30,
+    "_default": 90
+  }
+}
