@@ -47,3 +47,24 @@ their message). My earlier `git add` of the backfill brief was undone (brief is 
   a build halt may reflect a tree on no branch. Read results from emitted `dist/` with the
   **standalone validator**, not the build's own pass, when the tree may be contaminated.
 - **Two sessions must not share one working tree** — use separate worktrees/clones. Workflow fix.
+
+## Triage cycle 2 (2026-06-12) — new drift accumulated over the 4-day freeze
+
+11 new detail-page location fails → 6 venues. Native `failCount` **17 → 4** after this cycle.
+
+**Backfilled (5, two-source verified at true granularity):**
+| canonical_name | `address` | sources |
+|---|---|---|
+| AN Club | `Solomou 13-15, Athens 106 83` | thisisathens + anclub.gr/listings (Exarchia) |
+| EXA | `Ierofanton 13, Athens 118 54` | jazzeventslive + search (Gazi) |
+| Skull Bar | `Lambrou Katsoni 13, Athens 114 71` | thisisathens + Greek directory (both "13") |
+| Bòtoxe | `Petrou Ralli 38, Egaleo 122 41` | athens24 + search (Aigaleo) |
+| Οικία Ιλίτς | `Lampsakou 11, Athens` | cityportal + monopoli + theatromania (Ilisia; site-specific apartment theatre) |
+
+**HELD (1): Smut** — queer warehouse club, street address deliberately unpublished; no
+two-source. Left EMPTY (NOT suppressed — real, identifiable venue). Its 2 events stay blocked,
+so the build still halts at the location hard-stop (failCount 4, all Smut). Frozen-on-Smut is
+the honest state, not a force-past.
+
+Note: the "2 unresolved-name venues" from the first trace were a parser artifact (EN-mirror
+`en/...` paths), not unnamed venues — so NO suppression was warranted in this cycle.

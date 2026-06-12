@@ -264,7 +264,8 @@
         "AN",
         "A.N. Club"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Solomou 13-15, Athens 106 83"
     },
     {
       "canonical_name": "Eightball Club",
@@ -342,7 +343,8 @@
       "variations": [
         "Exa"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Ierofanton 13, Athens 118 54"
     },
     {
       "canonical_name": "HOOD art space",
@@ -779,7 +781,8 @@
     {
       "canonical_name": "Skull Bar",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Lambrou Katsoni 13, Athens 114 71"
     },
     {
       "canonical_name": "Myrtillo Cafe",
@@ -1134,7 +1137,8 @@
     {
       "canonical_name": "Bòtoxe",
       "variations": [],
-      "neighborhood": "Unknown"
+      "neighborhood": "Unknown",
+      "address": "Petrou Ralli 38, Egaleo 122 41"
     },
     {
       "canonical_name": "Block 33",
@@ -2178,7 +2182,8 @@
       "variations": [
         "Oikia Ilits"
       ],
-      "neighborhood": "Ilisia"
+      "neighborhood": "Ilisia",
+      "address": "Lampsakou 11, Athens"
     },
     {
       "canonical_name": "Οίκος Ερμηνείας Ελευθερία",
