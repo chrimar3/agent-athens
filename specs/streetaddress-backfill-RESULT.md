@@ -68,3 +68,29 @@ the honest state, not a force-past.
 
 Note: the "2 unresolved-name venues" from the first trace were a parser artifact (EN-mirror
 `en/...` paths), not unnamed venues — so NO suppression was warranted in this cycle.
+
+## Smut quarantine — GEO ruling (2026-06-12)
+
+**GEO ruling:** Smut = **address-withheld-by-policy, a declared class, NOT a drift FAIL.**
+Interim handling is the sanctioned **monitored quarantine lane** (the 2026-05-25 mechanism) —
+NOT suppress, NOT fabricate, NOT accept the sitewide freeze.
+
+**Implemented (interim bridge, not the fix):** added `Smut` to
+`config/rejected-locations.json` → `problematic_entries`, with an honest GEO-classed reason.
+`scripts/filter-athens-only.ts` re-classified Smut's 2 events to `location_status='problematic'`
+(filter logged "⚠️ Problematic: 7" — counted, surfaced, never a silent per-event drop). The
+build (`generate-site.ts:172`) excludes `problematic` from the pageable set. **Reversible** the
+moment addressDisclosure lands (remove the entry → next filter run re-publishes).
+
+**Result:** clean `bun run build` → **EXIT 0 (green)**, location hard-stop 0, native
+`failCount` **0** (standalone validator). Production can ship.
+
+**NOT done tonight (next session, scoped separately):** the `addressDisclosure` schema fix +
+the Editorial prose line ("location on request / shared with ticket holders") per GEO Q1 —
+the honest, citable form of the withheld fact. The quarantine is the bridge, not the fix.
+
+**Doc note:** the formal `decisions.md` ruling entry is DEFERRED — `decisions.md` carries the
+concurrent session's uncommitted S184 entry, so a clean explicit-path commit of just this
+ruling isn't possible without sweeping their work (forbidden) or git surgery (forbidden).
+Ruling captured here + in the quarantine commit message; append to `decisions.md` once the
+tree is clean.

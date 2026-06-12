@@ -306,6 +306,10 @@
       {
         "name": "Ελλάδα",
         "reason": "Country name, not a specific venue"
+      },
+      {
+        "name": "Smut",
+        "reason": "Address withheld by venue policy (queer warehouse club; location shared with ticket holders). GEO-declared address-withheld class 2026-06-12 — held-and-counted quarantine pending addressDisclosure, NOT drift, NOT suppress."
       }
     ]
   }
