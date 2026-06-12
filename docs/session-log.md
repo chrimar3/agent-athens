@@ -7017,7 +7017,7 @@ constant feeding both surfaces.
 
 **Open items:** F2b (run-aware lifecycle for theater — end_dates now data-ready; 214-page EventCompleted population unchanged by design); `eventToRow` in `src/db/database.ts:114` still coerces description to '' on the enrichment path (G5 gap, flagged in residual spec); enrichment-queue delta recorded in `specs/eos-backfill-residual.md` (active queue unchanged: 11,152 past / 88 upcoming).
 
-### Session 187 — F2b: end_date-aware lifecycle/status for all types + G1/G1-b presumption windows + G3 sitemap gates [arc: GEO/SEO infrastructure, brief F2b] — 2026-06-12/13
+### Session 189 — F2b: end_date-aware lifecycle/status for all types + G1/G1-b presumption windows + G3 sitemap gates [arc: GEO/SEO infrastructure, brief F2b] — 2026-06-12/13
 
 **Plan:** Generalize the exhibition-only end_date rule (status, lifecycle, sitemap, validator scope) per GEO rulings G1/G1-b/G3; eventToRow G5 ride-along. Hard constraint set: never EventCompleted from presumption; omit eventStatus past window; noindex never 410.
 
