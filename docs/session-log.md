@@ -7004,3 +7004,15 @@ constant feeding both surfaces.
 **Open items:**
 - **Online drift gate** (`specs/performer-qid-online-drift-gate.md`) — periodic WARN audit; cadence + severity → GEO Strategist before building. Re-running the audit dry-run is the interim manual spot-check.
 - 30/50 QIDs have no live event today — emission re-confirms automatically as those performers' events enter the window (no action).
+
+### Session 186 — S-F2a: Εως run-end backfill (11,633) + athinorama capture fix + G5 description hygiene [arc: scraping/data integrity, brief S-F2a from audit A2 F2] — 2026-06-12
+
+**Plan:** Backfill end_date from "Εως YYYY-MM-DD" description prose, fix the scraper to capture run-end as structured data, clean descriptions per G5. Hard boundary: no lifecycle/eventStatus/sitemap edits (F2b).
+
+**What happened:** Plan-mode discovery corrected two brief paths (scraper is `scripts/scrape-all.ts:471` `scrapeAthinorama()`, not `src/scraping/`; write path is `saveEvents()` same file, not `src/importers/`) and found the root cause is one line — the scraper parsed the end date correctly then serialized it into prose (`:607`). Diagnostic matrix: corpus 100% machine-generated exact-form (11,633), all variant/invalid classes empty. Shipped: `config/parsing-tokens.json` (G5: token is data), `src/utils/run-end-token.ts` (13 tests), parser-driven guarded migration (spike 20/20 → 11,633 backfilled + 2,828 ''→NULL in one transaction, 3 invariants green), `parseTheaterDateRange()` extraction (6 fixture tests), event push now sets `end_date`, saveEvents bind writes NULL-never-''. no-bypass guard's line-range allowlist updated (+~50 shift). Step 6 emission fix was a verified no-op (endDate already emits from end_date; description cascades, never "").
+
+**Verified:** `bun test` 2,803/0 after allowlist fix; tsc clean; build exit 0, schema validator fail=0; dist: zero Εως descriptions, `336eb7eb` endDate=2026-06-30, eventStatus unchanged (boundary held); deploy `6a2c50cb8a01267bd9e34fad` state=ready; live `agentathens.com/events/336eb7eb--/` serving the endDate. Deploy rode with dirty tracked files (F6 exposure, accepted): data/build-completeness.json, data/event-set-hashes.json, data/parsed/newsletter-events.json, data/venues-master.json, specs/location-verification-residual-S182.md + S184 notes WIP. Mid-session commit `c03e79a28` (parallel S104 session: Smut quarantine + streetAddress backfills) is what cleared audit F1's fail cluster.
+
+**Learnings:** Parsed-then-serialized-to-prose is a defect signature (mistakes.md S186); machine-generated corpora are uniform — diagnose the generator first (patterns.md S186); parser-driven migration selection beats LIKE predicates (no Greek literal, no precedence trap).
+
+**Open items:** F2b (run-aware lifecycle for theater — end_dates now data-ready; 214-page EventCompleted population unchanged by design); `eventToRow` in `src/db/database.ts:114` still coerces description to '' on the enrichment path (G5 gap, flagged in residual spec); enrichment-queue delta recorded in `specs/eos-backfill-residual.md` (active queue unchanged: 11,152 past / 88 upcoming).
