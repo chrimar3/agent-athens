@@ -5564,7 +5564,7 @@ The 11,633 "Εως YYYY-MM-DD" descriptions came from ONE template literal (`scr
 
 **Connects to:** `src/utils/run-end-token.ts`, `scripts/migrate-eos-end-date.ts`, mistakes.md "Scraping / Data Integrity (S186)", decisions.md S186, `specs/eos-backfill-residual.md`.
 
-## A semantics generalization is a Guard-6 sweep with a disposition table, not an edit (S187)
+## A semantics generalization is a Guard-6 sweep with a disposition table, not an edit (S189)
 
 F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites across 4 grep families. What made it land clean: every file in the sweep was explicitly EDITED or CLEARED-WITH-REASON before any edit (the brief's "done when" required the table). Three sub-lessons:
 
@@ -5574,4 +5574,4 @@ F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites
 
 **3. The dead-code finding rides the sweep.** `cleanupOldEvents` (a DELETE with the old exhibition-only COALESCE) has zero callers — flagged, not edited; a dead destructive path with stale semantics is a trap for whoever revives it.
 
-**Connects to:** decisions.md S187, mistakes.md "Lifecycle / Schema semantics (S187)", `specs/f2b-residual.md`, A2 F2/F3/F4.
+**Connects to:** decisions.md S189, mistakes.md "Lifecycle / Schema semantics (S189)", `specs/f2b-residual.md`, A2 F2/F3/F4.

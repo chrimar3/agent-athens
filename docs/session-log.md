@@ -7017,6 +7017,30 @@ constant feeding both surfaces.
 
 **Open items:** F2b (run-aware lifecycle for theater — end_dates now data-ready; 214-page EventCompleted population unchanged by design); `eventToRow` in `src/db/database.ts:114` still coerces description to '' on the enrichment path (G5 gap, flagged in residual spec); enrichment-queue delta recorded in `specs/eos-backfill-residual.md` (active queue unchanged: 11,152 past / 88 upcoming).
 
+### Session 187 — Meta-description length probe: Bing "too short" claim = REAL but NARROW (venues template + short-composite EL events); brief's own probe command would have inverted the verdict [arc: GEO/SEO infra, brief S185] — 2026-06-12
+
+**Plan:** Read-only probe of meta description length distribution across dist/ per template type; classify Bing's "too short" recommendation as real/partial/stale. Boundary: no template changes; spec + route to GEO Strategist.
+
+**What happened:** Probed all 3,325 dist/ HTML pages (Python, UTF-8-decoded chars, entity-unescaped — NOT the brief's awk byte-count, which under-reports the short tail 54 vs 202 and whose `--include='index.html'` filter missed all 1,164 root hub pages). Overall median 129 chars, max capped at 155 everywhere. Short tail (<100: 202 pages, 6.1%) clusters in exactly three generators: `venues/` 48/62 under 100 (generateVenueMetaDescription has NO floor), unenriched EL events 121 (padToFloor is a single fixed pad that under-shoots short composites; its ≥120 test passes on a too-healthy fixture), low-count Greek hubs 22 marginal at 95–99 (no floor). en/events: 0 under 120 — the 1.5b fix fully works where wired. Wrote `specs/meta-description-length-S185.md` with distribution, per-template table, root causes at file:line, routing options.
+
+**Verified:** Distribution numbers reproducible from /tmp/meta_desc_rows.json walk; root causes confirmed by reading meta-descriptions.ts:99-104,196-228 and venue-page.ts:239; floor-test blind spot confirmed at meta-descriptions.test.ts:182.
+
+**Learnings:** (1) Byte-vs-char is the query-path trap for length claims on Greek surfaces — unit mismatch silently inverts classification. (2) Per-template classification beats site-wide medians for external-tool claims: "fixed" (en/events) and "broken" (venues) coexist. (3) Floor/ceiling tests need adversarial-extreme fixtures.
+
+**Open items:** Bing per-URL export (brief Step 0) never landed — cross-reference pending; prediction recorded in spec (flags should cluster venues/* + short-title events/*). Fix method routes through GEO Strategist (enrich-with-real-facts vs tagline-padding is a citation-density strategy call). Side observation: several hub pages advertise "0 events" — thin-content question, separate from length. Batch note: backlinks baseline + GSC/Bing indexed-count refresh (Pattern G batch) not run this session — no Webmaster export available.
+
+### Session 188 — D5: bare Ηράκλειο token defused (all-landmine/no-backstop premise inverted); 3 Crete venue entries added first; four-suburb coverage grounded [arc: location-verification, brief S185/D5] — 2026-06-12
+
+**Plan:** Diagnostic-first config defuse: read-only DB pass (four-suburb coverage, postal-field feasibility, Crete-backstop confirmation) → conditional removal of bare `Ηράκλειο`/`Heraklion` from `rejected-locations.json` cities[]. Boundary: edit only that config; no matcher/whitelist/geodata changes; no deletion sweep.
+
+**What happened:** Step 0 inverted the brief's backstop premise — dry-run of the real `checkLocation` over the 8 live Crete-Ηράκλειο events (ticketservices summer-tour stops at 3 venues) showed all `unverified` WITH the token in place: the S182 accent-asymmetry means the bare token never matched the all-caps rows, while hypothetical accented-nominative Ηράκλειο-Αττικής events DID reject (landmine armed only against the Athens side). DB-wide token match-set: 0 events. Per the brief's conditional branch: added 3 disambiguated venue entries (exact DB strings: ΘΕΑΤΡΟ ΤΕΧΝΟΠΟΛΙΣ/ΕΛ.ΜΕ.ΠΑ./ΚΗΠΟΘΕΑΤΡΟ ΜΑΝΟΣ ΧΑΤΖΙΔΑΚΙΣ - ΗΡΑΚΛΕΙΟ), then removed the bare city token. Four-suburb coverage: only Καλλιθέα has live events (Στάδιο Καλλιθέας «Γρηγόρης Λαμπράκης», 2 events, 2 quote-variants, NOT whitelisted → Editorial); Ηράκλειο-Αττικής/Νίκαια/Νέα Ιωνία zero. Postal lever dead: no postal column; `venue_address` empty on the whole affected corpus.
+
+**Verified:** Post-defuse dry-run: all 8 Crete events `rejected_non_athens` via the new venue entries (upgrade from accidental-hide), all 4 Attica hypotheticals no longer rejected, Παραμυθιάς guard untouched (`unverified`), JSON parses. `filter-athens-only.ts` NOT run (config defuse only). Staged by explicit path: `config/rejected-locations.json`, `specs/d5-iraklio-step0.md`.
+
+**Learnings:** (1) A homonym token's coverage must be measured by dry-running the matcher over real rows, never read off the config — this one rejected nothing it was supposed to and everything it wasn't. (2) Intersection discipline: 5 of 6 Editorial candidate tokens weren't in the config at all — config-targeting briefs need the file in hand. (3) Four-state ambiguous-token rule (in-config? × live-matches?) → patterns.md S188. (4) Venue entries copied verbatim from DB `venue_name` make exact-match normalization symmetric by construction.
+
+**Open items:** Editorial: whitelist Στάδιο Καλλιθέας «Γρηγόρης Λαμπράκης» (canonical + both quote variants); keep the five absent suburb tokens absent (token-class rule, decisions.md S188). The 8 Crete rows remain `unverified` in DB until the next routine filter pass applies the new classification. ΠΟΛΙΤΙΣΤΙΚΟ ΣΥΝΕΔΡΙΑΚΟ ΚΕΝΤΡΟ ΗΡΑΚΛΕΙΟΥ entry (genitive) still carries its own rejection — untouched.
+
 ### Session 189 — F2b: end_date-aware lifecycle/status for all types + G1/G1-b presumption windows + G3 sitemap gates [arc: GEO/SEO infrastructure, brief F2b] — 2026-06-12/13
 
 **Plan:** Generalize the exhibition-only end_date rule (status, lifecycle, sitemap, validator scope) per GEO rulings G1/G1-b/G3; eventToRow G5 ride-along. Hard constraint set: never EventCompleted from presumption; omit eventStatus past window; noindex never 410.
@@ -7025,6 +7049,6 @@ constant feeding both surfaces.
 
 **Verified:** 2,830 pass / 0 fail; tsc clean; armed build exit 0; fresh dist 4,618 pages 0 FAIL; F4 re-measured 422→0 noindex-in-sitemap; 333 NULL-end run-implying pages 0 false EventCompleted; cooling page 200+noindex+no-eventStatus, sitemap-absent; live: Kruger EventScheduled (was EventCompleted since A2), 336eb7eb Scheduled+endDate, cooling 200. Deploy 6a2c9b5df5e5fa13241cd887 state=ready (first attempt 6a2c81bdcf hung uploading 70+min → cancelled to state=error unpublished → retry landed in minutes off the primed CAS). Sitemap-events 1,415→1,579 (cooling out, presumption-window pages in).
 
-**Learnings:** invariant-domain ≠ invariant-statement (F4 mechanism); UTC fixture anchors flake 00:00–03:00 Athens; semantics changes wake dormant fixture data (see mistakes.md S187).
+**Learnings:** invariant-domain ≠ invariant-statement (F4 mechanism); UTC fixture anchors flake 00:00–03:00 Athens; semantics changes wake dormant fixture data (see mistakes.md S189).
 
 **Open items:** F2b conditional refuted — presumed-running theater is more.com runs (38/46), not singles; more.com run-end capture → Editorial (specs/f2b-residual.md). Stale dist artifacts carry pre-F2b markup until orphan-sweep (protect-registry blocker). cleanupOldEvents dead DELETE: generalize-or-delete in maintenance batch. Maintenance batch (G2/G4/F6/F11) then A1′ remain.
