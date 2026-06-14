@@ -7052,3 +7052,17 @@ constant feeding both surfaces.
 **Learnings:** invariant-domain ≠ invariant-statement (F4 mechanism); UTC fixture anchors flake 00:00–03:00 Athens; semantics changes wake dormant fixture data (see mistakes.md S189).
 
 **Open items:** F2b conditional refuted — presumed-running theater is more.com runs (38/46), not singles; more.com run-end capture → Editorial (specs/f2b-residual.md). Stale dist artifacts carry pre-F2b markup until orphan-sweep (protect-registry blocker). cleanupOldEvents dead DELETE: generalize-or-delete in maintenance batch. Maintenance batch (G2/G4/F6/F11) then A1′ remain.
+
+### Session 190 — D6-pilot: recon gate FAILED (geo schema is Athens-only) → Βεάκειο+Kastella held as D8; only Καλλιθέα decoded-variation durability fix shipped [arc: GEO/schema geo-ancestry, brief S190] — 2026-06-14
+
+**Plan:** Whitelist Βεάκειο (Kastella, Piraeus) as verified_athens + add a Kastella geodata key with honest Piraeus ancestry, gated on a READ-ONLY Step-0 recon. Plus a Step-0.5 Καλλιθέα durability fix.
+
+**What happened:** Step-0c failed the binding sub-check. `buildContainedInPlace` (src/utils/schema-geo.ts:83) hardcodes the municipality hop `Q1524` (Municipality of Athens) for EVERY neighborhood; geodata keys store only `{name,qid,lat,lng}` — no per-key ancestry. The schema structurally cannot represent a Piraeus chain; a Kastella key (or even a bare Βεάκειο whitelist via the line-88 fallback) would emit a false Piraeus-as-Athens chain. Per operator routing (Option 1): held Step 1 + Step 2 as **D8** → GEO; shipped only Step 0.5.
+- Step 0.5: ran the scraper's decode path (`decodeEventFields`) on each Καλλιθέα variation. Only `&quot;` changed → added one decoded variation `Στάδιο Καλλιθέας "Γρηγόρης Λαμπράκης"` alongside the entity forms (guillemets + curly/straight quotes are `he.decode` no-ops — brief's predicted second twin doesn't exist).
+- Confirmed 3 candidate Piraeus QIDs via `fetchEntity` (label + P31): Kastella Q12878825, Piraeus Municipality Q12875755, Piraeus Regional Unit Q1784863 — all correct entities (P131 not exposed; pending for D8).
+
+**Verified:** JSON valid (347 venues). Live `checkLocation`: both current Καλλιθέα DB rows + the new decoded form → verified_athens (stored `unverified` was a stale snapshot). No build/deploy/push; no filter-athens-only.
+
+**Learnings:** scope-flag (verified_athens) ≠ geo-ancestry; "stranding" a non-Athens venue isn't clean omission — it inherits the Q1524 Athens fallback. Brief's assumed Athens QIDs (Q1224979/Q5765570) don't exist — real hop is Q1524; Attica = Q758056 (city-geodata.json). No geodata QID resolver exists. Decoder decides, don't predict.
+
+**Open items:** D8 — schema needs per-key municipality ancestry before any non-Athens neighborhood key; then ship Βεάκειο + Kastella. Sweep the 24 pre-existing `neighborhood:"Piraeus"` venues that already emit the false Q1524 chain. Confirm P131 ancestry hops for the Piraeus QIDs. See `specs/d6-kastella-step0.md`.

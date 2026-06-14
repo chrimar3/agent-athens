@@ -4719,3 +4719,8 @@ Audit A2 F2 remediation (S-F2a brief). Data layer only; lifecycle/eventStatus/si
 | Conditional routing: presumed-running theater band (46 rows) is more.com-dominated (38) = plausible runs, NOT athinorama singles (2) | Brief's "dominated by singles" premise refuted; window stays 45; more.com run-end capture routed to Editorial via specs/f2b-residual.md. | 2026-06-13 (S189) |
 
 **Cross-references:** `config/lifecycle-presumption.json` (G1-b values; GEO's to change); `specs/f2b-residual.md`; commit `bb735c003`; deploy `6a2c9b5df5e5fa13241cd887`; audit `specs/audit-A2-surface-geo.md` F2/F3/F4.
+
+| D6 held → **D8**: no non-Athens neighborhood geodata key until schema supports per-key municipality ancestry | `buildContainedInPlace` hardcodes `Q1524` (Athens) for every neighborhood; a Kastella key or a bare Βεάκειο whitelist would emit a false Piraeus-as-Athens chain. scope-flag ≠ geo-ancestry. Granularity preserved: terminal key = Kastella (neighborhood tier), Piraeus only as ancestry. | 2026-06-14 (S190) |
+| Step 0.5 (Καλλιθέα decoded variation) ships independently of D6 | Known-certainty durability fix; decoder-derived (`&quot;`→`"`), one variation added alongside the entity forms. Live matcher: both DB rows + decoded form → verified_athens. | 2026-06-14 (S190) |
+
+**Cross-references (S190):** Attica node = `Q758056` (config/city-geodata.json, for D7 record); Athens hop = `Q1524`; candidate Piraeus QIDs Kastella `Q12878825` / Piraeus Municipality `Q12875755` / Piraeus Regional Unit `Q1784863` (confirmed label+P31, P131 pending); 24 pre-existing `neighborhood:"Piraeus"` venues emit the false chain today (sweep under D8); `specs/d6-kastella-step0.md`.

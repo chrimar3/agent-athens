@@ -5612,3 +5612,13 @@ F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites
 **3. The dead-code finding rides the sweep.** `cleanupOldEvents` (a DELETE with the old exhibition-only COALESCE) has zero callers — flagged, not edited; a dead destructive path with stale semantics is a trap for whoever revives it.
 
 **Connects to:** decisions.md S189, mistakes.md "Lifecycle / Schema semantics (S189)", `specs/f2b-residual.md`, A2 F2/F3/F4.
+
+## S190 — scope-flag ≠ geo-ancestry; resolver-before-write; decoder-decides
+
+**1. scope-flag ≠ geo-ancestry (standing schema rule).** `verified_athens` means "list this event"; it is NOT a claim that the venue sits inside Athens Municipality. The `containedInPlace` chain must be geographically honest independent of the scope flag. Today `schema-geo.ts:83` conflates them by hardcoding `Q1524` for every neighborhood — that's the D8 gap. A non-Athens neighborhood key cannot ship until the chain is per-key.
+
+**2. Resolver-confirm QIDs before any geodata write.** The 3 Piraeus QIDs were confirmed via the performer resolver's `fetchEntity` (label + P31), NOT web search or hand-assertion. Caveat: `fetchEntity` exposes no P131, and there is NO geodata-specific resolver — the located-in ancestry hops still need a `Special:EntityData` fetch for D8. QID enters config only via resolver output, never generation.
+
+**3. Decoder decides, don't predict.** Step 0.5 ran the scraper's actual decode path (`decodeEventFields`, not a parallel raw `he.decode`) over each Καλλιθέα variation. Only `&quot;` changed (`he.decode` is a no-op on guillemets `«»` and curly/straight quotes `‘’''`). The brief predicted two decoded twins; the decoder produced one. Add a decoded variation ONLY when the decoder output differs — let it decide.
+
+**Connects to:** decisions.md S190, mistakes.md "Geo schema is Athens-only (S190)", `specs/d6-kastella-step0.md`.
