@@ -4644,6 +4644,24 @@ All three gate on the S179 rule: QIDs enter config only via resolver output; aud
 
 **Cross-references:** `specs/location-verification-residual-S182.md`; `specs/enrichment-throughput-forensic-S181.md`; `src/quality/location-filter.ts` (`findVenueConfig`, `normalize`, blacklist `containsAny`), `src/utils/decode-html-entities.ts`, `config/athens-venues.json`, `config/rejected-locations.json`; `patterns.md` S182; `mistakes.md` "Location / Venue Verification".
 
+### Location verification — D1 accent-fold REFUTED as standing infrastructure (S184, 2026-06-10)
+
+S182's deferred D1 ("accent-fold `normalize()` so other-city ALL-CAPS venues hit the blacklist") was attempted in S184, spike-gated, and **refuted before any apply.** Ruling: **ship nothing; the blanket-blacklist fold is unsafe.** The fold *implementation* (reuse `normalizeGreek()`) is sound and survives for a redesigned, audited reject path (D5). DB untouched; full 209/105 residual still hands to Editorial unchanged (D1 auto-rejected nothing). *(This S184 is the location-verification stream — distinct from the concurrent S184 SEO/sitemap dormant-locale ruling above.)*
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Do NOT fold the shared `normalize()` (full-fold) | It feeds whitelist + neighborhood matching, not just the blacklist → 19 `unverified→verified_athens` promotions incl. a distinct-place false positive (Epirus `Παραμυθιάς` → Gazi `Παραμυθίας`). Breaks the reject-only invariant; substring-collapse is the S172–S180 wrong-binding class. | 2026-06-10 (S184) |
+| Do NOT ship even the asymmetric (reject-path-only) fold | Invariant was clean (0 promotions, 0 Athens false-rejects, N=17) but the same-name trap scan flagged 12/17: `Ηράκλειο` (blacklist) = also Ηράκλειο Αττικής (Athens). A folded rule applies to the FULL blacklist forever; the spike only validates today's sample. Auto-reject = archive+DELETE (silent, irreversible). Un-audited forever-risk. | 2026-06-10 (S184) |
+| Report-only refutation is the session outcome | Per spike-before-batch + the destructive-action bar: when collapse + same-name-trap both fire on a delete path, refuse the blanket apply and document. A documented refutation is a complete session, not a failure. | 2026-06-10 (S184) |
+
+**Routed (NOT decided here):**
+- **D5 (designed reject path) → Editorial Director** for the taxonomy half: audit `config/rejected-locations.json` for Athens-ambiguous bare tokens (Attica suburb-name collisions). Policy: ambiguous tokens hold in `unverified`, never auto-reject; fold only audited-unambiguous tokens. Dev Planner implements after Editorial supplies the list.
+- **D6 (multi-city pipe recovery) → Editorial Director:** add Βεάκειο to `config/athens-venues.json`; the pipe pre-pass then recovers the Athens dates in the Rokkos/Paparizou multi-city rows (verify after).
+- **D4 (accept-side anti-collapse fold)** parked — exact-match/word-boundary only (never substring); the 19 stranded-Athens promotions are real value but need a guarded design.
+- **D3 (triage-script consolidation)** parked — `auto-verify-venues.ts`/`batch-venue-review.ts` hold hardcoded accent-blind classifiers (Guard-6 finding); after the Editorial pass.
+
+**Cross-references:** `specs/location-verification-residual-S182.md` §5; `src/quality/location-filter.ts` (`normalize` :127 module-private, `checkLocation` Step-1/Step-2 precedence), `src/utils/normalize-greek.ts`, `config/rejected-locations.json`, `config/athens-venues.json`; `patterns.md` "A folded-match rule is validated against the whole match-set's ambiguity (S184)"; `mistakes.md` "Location / Venue Verification".
+
 ### Dormant-locale noindex: close the sitemap↔robots drift via noindex (NOT sitemap re-inclusion) (S184, 2026-06-09)
 
 Bing flagged `/today` "missing from sitemaps." Root cause was S144's half-edit: it dropped bilingual bare-roots from the sitemap (D3, correct) but never noindexed them, leaving indexable orphans absent from sitemaps. Ruling: **close the drift by noindexing the dormant bare-roots, NOT by re-including them in the sitemap** — S144 D3 stands; the bare-root stays out of the sitemap, the page becomes `noindex, follow`.
@@ -4673,6 +4691,20 @@ Audit A2 F2 remediation (S-F2a brief). Data layer only; lifecycle/eventStatus/si
 | Theater run end-dates now flow `parseTheaterDateRange() → end_date` (structured) | The capture fix; `ON CONFLICT` already protects backfilled rows (`end_date = COALESCE(...)`, description never updated on conflict). | 2026-06-12 (S186) |
 
 **Cross-references:** `specs/eos-backfill-residual.md` (zero residual, queue delta, corrected architecture map); `scripts/migrate-eos-end-date.ts`; `data/events.db.bak-sf2a` (local backup, untracked); commit `e988f9228`; deploy `6a2c50cb8a01267bd9e34fad` (state=ready); A2 report `specs/audit-A2-surface-geo.md` F2.
+
+### D5 defuse: bare Ηράκλειο/Heraklion removed from cities[]; rejection carried by disambiguated venue entries + region token (S188, 2026-06-12)
+
+Ηράκλειο is a homonym: Ηράκλειο Κρήτης (reject) vs Ηράκλειο Αττικής (North Athens, Line 1 — genuine catchment). S184 flagged the bare token as the wrong-binding class; D5 ruled defuse. Step-0 dry-run inverted the brief's backstop premise: the token rejected **nothing** (accent asymmetry missed the all-caps Crete rows; DB-wide match-set 0) while it would reject any accented-nominative Ηράκλειο-Αττικής arrival.
+
+| Decision | Rationale | Date |
+|----------|-----------|------|
+| Remove bare `Ηράκλειο`/`Heraklion` from `cities[]` | All landmine, no backstop (match-set 0 at removal). Κρήτη/Crete stays in `regions[]`. | 2026-06-12 (S188) |
+| Add 3 disambiguated venue entries (ΘΕΑΤΡΟ ΤΕΧΝΟΠΟΛΙΣ - ΗΡΑΚΛΕΙΟ, ΕΛ.ΜΕ.ΠΑ. (πρώην ΤΕΙ) - ΗΡΑΚΛΕΙΟ, ΚΗΠΟΘΕΑΤΡΟ ΜΑΝΟΣ ΧΑΤΖΙΔΑΚΙΣ - ΗΡΑΚΛΕΙΟ) BEFORE removal | The 8 live Crete events had NO reject path at all (sat `unverified`, hidden by accident). Exact DB strings → exact-match normalization symmetric, immune to accent/sigma traps. Post-defuse: all 8 `rejected_non_athens`, an upgrade. | 2026-06-12 (S188) |
+| Token-class rule adopted: Attica-suburb homonyms must NEVER be bare reject tokens | Rejection for homonym cities is carried by disambiguated venue-strings + region tokens only. The other five Editorial candidates (Νίκαια, Καλλιθέα, Νέα Ιωνία, Παλλήνη, Μάκρη) are absent from the config — keep them absent; protect forward via Editorial. | 2026-06-12 (S188) |
+| Postal disambiguation lever ruled NOT viable for the live corpus | No postal/region column in `events`; `venue_address` (a blacklist input) is empty across the affected ticketservices rows. Rule degrades to venue-string + region. | 2026-06-12 (S188) |
+| No deletion sweep this session | `filter-athens-only.ts` NOT run — goal was the config defuse; the 8 Crete rows stay hidden (`unverified` in DB) until the next routine filter pass applies `rejected_non_athens`. | 2026-06-12 (S188) |
+
+**Cross-references:** `specs/d5-iraklio-step0.md` (Step-0 numbers); `config/rejected-locations.json`; `src/quality/location-filter.ts` (`normalize()` :127, venue exact-match :363); mistakes.md "Location / Venue Verification" S188 row; patterns.md S188 (four-state ambiguous-token rule). Editorial routing: Στάδιο Καλλιθέας «Γρηγόρης Λαμπράκης» whitelist entry (only live suburb venue, 2 events).
 
 ### F2b — G1/G1-b/G3 semantics core: presumption windows, status omission, sitemap↔noindex single predicate (S189, 2026-06-12/13)
 

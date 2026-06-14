@@ -5541,6 +5541,18 @@ Result: the "mechanical" subset was **empty (0/201)** — every unverified venue
 
 **Connects to:** `src/quality/location-filter.ts` (`findVenueConfig`, `normalize`), `src/utils/decode-html-entities.ts`, `config/athens-venues.json` (`variations[]`); `specs/location-verification-residual-S182.md`; mistakes.md "Location / Venue Verification"; decisions.md S182.
 
+## A folded-match rule is validated against the whole match-set's ambiguity, not just today's sample (S184)
+
+S184 tried to ship the S182-proposed accent-fold. It was spike-gated and **refuted before any apply** — the refutation is the reusable lesson:
+
+**1. A shared normalizer change is bidirectional — prove it, don't assume it.** Folding the single shared `normalize()` was framed as "reject-only hygiene," but `normalize()` also feeds `findVenueConfig` (whitelist) + neighborhood matching. The symmetric collapse check (re-run the matcher BOTH ways over real events, diff ALL transitions) caught **19 `unverified→verified_athens` promotions**, including a distinct-place substring-collapse (Epirus camp `Παραμυθιάς` → Gazi street `Παραμυθίας`). **Always diff every transition, not just the one you intended.** If reject-only is the mandate, fold only the reject-side helpers and leave the accept-side (whitelist/neighborhood) untouched — then re-spike, because precedence matters (blacklist fires before the whitelist in `checkLocation`, so accept-side protection that existed in the full-fold spike vanishes in the asymmetric one).
+
+**2. The spike sees today; the rule lives forever — audit the match-set, not the sample.** The asymmetric (reject-only) fold passed the invariant cleanly (0 promotions, 0 Athens false-rejects, N=17) — yet was still refuted. A **same-name trap scan** of the reject set found `Ηράκλειο` (blacklist city) is also `Ηράκλειο Αττικής` (Athens municipality): folding bakes in `ΗΡΑΚΛΕΙΟ→reject`, which silently+irreversibly deletes a future Athens-suburb event. Today's matches happened to be Crete (right-by-accident — the exact failure class S172–S180 exists to kill). **A folded/fuzzy match rule applies to the FULL match-set forever; a spike only validates the items with events in today's batch.** Before shipping, audit the match-set for ambiguous members (here: Attica suburb names colliding with other-Greece places — Νέα Μάκρη, Μαραθώνας, Παλλήνη, Νέα Σμύρνη/Σμύρνη). Ambiguous members **hold for human triage**, never auto-act — especially when the action is destructive (archive+DELETE).
+
+**3. A destructive auto-action needs a higher bar than a non-destructive one.** `filter-athens-only.ts` rejects by archiving + DELETING from `events`. Reversibility changes the calculus: a fuzzy promote (recoverable) tolerates more risk than a fuzzy delete (not). When the spike's mirror checks (collapse + same-name trap) both fire on a destructive path, the correct outcome is **report-only refutation** — the fold *implementation* (`normalizeGreek`) survives for a later audited design; only the blanket application is refused.
+
+**Connects to:** `src/quality/location-filter.ts` (`normalize`, `checkLocation` Step-1 blacklist vs Step-2 whitelist precedence, `findVenueConfig`, `getBlacklistTerms`/`containsAny`), `src/utils/normalize-greek.ts` (`normalizeGreek`), `config/rejected-locations.json`; `specs/location-verification-residual-S182.md` §5; mistakes.md "Location / Venue Verification"; decisions.md "Location verification — D1 refuted (S184)".
+
 ## Output-keyed cross-artifact invariant — robots-meta sibling to the S175 hreflang sweep (Session 184)
 
 When two emitted surfaces must agree (here: a page's **sitemap membership** and its **robots-meta**), the build-FAIL guard should key off the **emitted artifacts**, not off a re-derived class list. This is the robots-meta sibling of the S175 single-hreflang-emitter pattern: same "all surfaces move together" doctrine, applied to a *validator* instead of an emitter.
@@ -5563,6 +5575,31 @@ The 11,633 "Εως YYYY-MM-DD" descriptions came from ONE template literal (`scr
 **2. Spike gates on uniform corpora are formalities you run anyway** — if the 20/20 sample is NOT clean on a machine-generated corpus, that itself is the finding (a second writer exists). 20/20 OK here confirmed single-writer provenance; the 14 more.com/megaron riders matched the same shape because they copied the same convention.
 
 **Connects to:** `src/utils/run-end-token.ts`, `scripts/migrate-eos-end-date.ts`, mistakes.md "Scraping / Data Integrity (S186)", decisions.md S186, `specs/eos-backfill-residual.md`.
+
+## S187 — External-tool claims about length/size: verify the unit before the value
+
+**1. When an external tool (Bing, GSC, validators) flags a length/size threshold, the first probe question is "what unit does the tool count, and what unit does my probe count?"** Bytes vs characters inverted this session's classification (54 vs 202 pages under 100). The unit mismatch is invisible in the output — both probes print plausible numbers.
+
+**2. "Fixed last month" and "still broken" can both be true on different template surfaces.** The 1.5b meta floor fully fixed `en/events/` (0 under 120) while `venues/` (no floor wired) and short-composite EL events (pad under-shoots) carry the same symptom. Classify external claims per-generator, not site-wide — a site-wide median ≥ 120 coexisted with a 77%-defective venue template.
+
+**Connects to:** `specs/meta-description-length-S185.md`, `src/utils/meta-descriptions.ts` (padToFloor :99, venue generator :196), mistakes.md "SEO Measurement / Probe Methodology (S187)".
+
+## S188 (brief S185/D5) — Intersection discipline + the four-state ambiguous-token rule
+
+**1. Config-targeting briefs need the file in hand, never memory.** Of six Editorial ambiguous-token candidates (Ηράκλειο, Νίκαια, Καλλιθέα, Νέα Ιωνία, Παλλήνη, Μάκρη), only bare `Ηράκλειο` was actually in `config/rejected-locations.json`. The other five were hypothetical — no live landmine, nothing to defuse. The D5 intersection (candidate list ∩ actual config) collapsed the work to one token; without it, the session would have "defused" five entries that don't exist.
+
+**2. Four-state ambiguous-token rule.** Classify each homonym token on two axes — *in the reject config?* × *live events matching it?* — and the action falls out:
+
+| | In config | Absent |
+|---|---|---|
+| **Matches live rows** | Active misclassification — event-level triage BEFORE removal | Coverage gap — route venue/whitelist entries to Editorial (Καλλιθέα stadium: 2 events, 2 quote-variants, not whitelisted) |
+| **Matches nothing** | Silent landmine — defuse now while it's cheap (bare Ηράκλειο: DB-wide match-set was 0) | Hypothetical — no config action; Editorial awareness only |
+
+Bare Ηράκλειο sat in the cheapest cell: zero current matches meant removal had zero blast radius, provable with one read-only query pass.
+
+**3. Disambiguation levers degrade in a fixed order: postal → region-token → venue-string.** Schema check killed the postal lever (no postal/region column; `venue_address` is blacklist input but empty on the whole affected corpus — ticketservices doesn't populate it). Region token Κρήτη had nothing to bite on for the same reason. The only lever that actually fires for tour-stop rows is the exact venue-string entry (Καφενείο Ο Σωκράτης Αμφισσα pattern) — copied verbatim from DB `venue_name` so normalization is symmetric.
+
+**Connects to:** `specs/d5-iraklio-step0.md`, `config/rejected-locations.json` (3 S185 venue entries), mistakes.md "Location / Venue Verification" (S182 accent-asymmetry, S184 ambiguous-token rows), decisions.md S188.
 
 ## A semantics generalization is a Guard-6 sweep with a disposition table, not an edit (S189)
 

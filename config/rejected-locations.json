@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-02-05",
+  "last_updated": "2026-06-12",
   "notes": "Locations that should trigger automatic rejection of events",
   "cities": [
     {
@@ -10,10 +10,6 @@
     {
       "greek": "Πάτρα",
       "latin": "Patras"
-    },
-    {
-      "greek": "Ηράκλειο",
-      "latin": "Heraklion"
     },
     {
       "greek": "Λάρισα",
@@ -194,6 +190,18 @@
     {
       "name": "ΠΟΛΙΤΙΣΤΙΚΟ ΣΥΝΕΔΡΙΑΚΟ ΚΕΝΤΡΟ ΗΡΑΚΛΕΙΟΥ",
       "reason": "Heraklion, Crete"
+    },
+    {
+      "name": "ΘΕΑΤΡΟ ΤΕΧΝΟΠΟΛΙΣ - ΗΡΑΚΛΕΙΟ",
+      "reason": "Heraklion, Crete (S185: disambiguated venue entry — bare Ηράκλειο city token removed; Ηράκλειο Αττικής is genuine Athens catchment)"
+    },
+    {
+      "name": "ΕΛ.ΜΕ.ΠΑ. (πρώην ΤΕΙ) - ΗΡΑΚΛΕΙΟ",
+      "reason": "Heraklion, Crete (Hellenic Mediterranean University; S185 disambiguated venue entry)"
+    },
+    {
+      "name": "ΚΗΠΟΘΕΑΤΡΟ ΜΑΝΟΣ ΧΑΤΖΙΔΑΚΙΣ - ΗΡΑΚΛΕΙΟ",
+      "reason": "Heraklion, Crete (S185 disambiguated venue entry)"
     },
     {
       "name": "ΔΗΠΕΘΕ ΚΟΜΟΤΗΝΗΣ",
