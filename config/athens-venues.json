@@ -1,6 +1,6 @@
 {
   "version": "1.2",
-  "last_updated": "2026-04-24",
+  "last_updated": "2026-06-14",
   "notes": "Consolidated venue whitelist with proper canonical_name format. Updated neighborhoods from web search.",
   "venues": [
     {
@@ -2774,6 +2774,16 @@
         "https://cycladic.gr",
         "https://en.wikipedia.org/wiki/Goulandris_Museum_of_Cycladic_Art"
       ]
+    },
+    {
+      "canonical_name": "Δημοτικό Στάδιο Καλλιθέας «Γρηγόρης Λαμπράκης»",
+      "variations": [
+        "Στάδιο Καλλιθέας «Γρηγόρης Λαμπράκης»",
+        "Δημ. Στάδιο Καλλιθέας ‘’Γρηγόρης Λαμπράκης''",
+        "Στάδιο Καλλιθέας &quot;Γρηγόρης Λαμπράκης&quot;"
+      ],
+      "neighborhood": "Kallithea",
+      "address": "Γρηγορίου Λαμπράκη 28-30 & Καλυψούς, Καλλιθέα 176 71"
     }
   ],
   "neighborhoods": [

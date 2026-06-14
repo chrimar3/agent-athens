@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-06-12",
+  "last_updated": "2026-06-14",
   "notes": "Locations that should trigger automatic rejection of events",
   "cities": [
     {
@@ -254,10 +254,6 @@
     {
       "name": "Vergina Theatro!",
       "reason": "Thessaloniki venue (variation with exclamation)"
-    },
-    {
-      "name": "Terra Vibe",
-      "reason": "Malakasa, outside Athens metro area"
     },
     {
       "name": "Δημοτικό Γήπεδο Σερρών \\",
