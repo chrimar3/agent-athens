@@ -4720,7 +4720,40 @@ Audit A2 F2 remediation (S-F2a brief). Data layer only; lifecycle/eventStatus/si
 
 **Cross-references:** `config/lifecycle-presumption.json` (G1-b values; GEO's to change); `specs/f2b-residual.md`; commit `bb735c003`; deploy `6a2c9b5df5e5fa13241cd887`; audit `specs/audit-A2-surface-geo.md` F2/F3/F4.
 
-| D6 held → **D8**: no non-Athens neighborhood geodata key until schema supports per-key municipality ancestry | `buildContainedInPlace` hardcodes `Q1524` (Athens) for every neighborhood; a Kastella key or a bare Βεάκειο whitelist would emit a false Piraeus-as-Athens chain. scope-flag ≠ geo-ancestry. Granularity preserved: terminal key = Kastella (neighborhood tier), Piraeus only as ancestry. | 2026-06-14 (S190) |
+### D6-pilot held → D12 (geodata ancestry); Καλλιθέα durability fix (S190, 2026-06-14)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| D6 held → **D12**: no non-Athens neighborhood geodata key until schema supports per-key municipality ancestry | `buildContainedInPlace` hardcodes `Q1524` (Athens) for every neighborhood; a Kastella key or a bare Βεάκειο whitelist would emit a false Piraeus-as-Athens chain. scope-flag ≠ geo-ancestry. Granularity preserved: terminal key = Kastella (neighborhood tier), Piraeus only as ancestry. | 2026-06-14 (S190) |
 | Step 0.5 (Καλλιθέα decoded variation) ships independently of D6 | Known-certainty durability fix; decoder-derived (`&quot;`→`"`), one variation added alongside the entity forms. Live matcher: both DB rows + decoded form → verified_athens. | 2026-06-14 (S190) |
 
-**Cross-references (S190):** Attica node = `Q758056` (config/city-geodata.json, for D7 record); Athens hop = `Q1524`; candidate Piraeus QIDs Kastella `Q12878825` / Piraeus Municipality `Q12875755` / Piraeus Regional Unit `Q1784863` (confirmed label+P31, P131 pending); 24 pre-existing `neighborhood:"Piraeus"` venues emit the false chain today (sweep under D8); `specs/d6-kastella-step0.md`.
+**Cross-references (S190):** Attica node = `Q758056` (config/city-geodata.json, for D7 record); Athens hop = `Q1524`; candidate Piraeus QIDs Kastella `Q12878825` / Piraeus Municipality `Q12875755` / Piraeus Regional Unit `Q1784863` (confirmed label+P31, P131 pending); 24 pre-existing `neighborhood:"Piraeus"` venues emit the false chain today (sweep under D12); `specs/d6-kastella-step0.md`.
+
+### D12 — Geodata Ancestry: Per-Key Parent-Pointer Model, Emitter Owns Zero Geography (2026-06-14)
+
+The fixed-depth `buildContainedInPlace` design (`src/utils/schema-geo.ts:77-92`) hardcodes the `Q1524` (Athens) municipality hop for every neighborhood — Athens-shaped, code-owned geography. Any non-Athens neighborhood (Kastella, Βεάκειο) emits a false Piraeus-as-Athens chain, and unknown keys fall back to the same chain (stranding ≠ clean omission). D12 rules the replacement design: geography is data, not code.
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Each neighborhood key owns an explicit parent pointer (optional `municipalityQid`/parent-chain), resolved per-key — the emitter hardcodes no municipality | Geography is data, not code. `buildContainedInPlace` stops assuming `Q1524`; it walks whatever ancestry the key declares. Athens keys unchanged; Piraeus keys root in Piraeus. | 2026-06-14 (S190) |
+| Emitter owns zero geography | The Athens-shaped fixed-depth chain is the root defect (S172–S180 failure class). The emitter's only job is to render the chain a key declares; it never supplies a hop. | 2026-06-14 (S190) |
+| Terminal geodata key stays at neighborhood tier (e.g. Kastella); municipality/region enter only as ancestry | Granularity ruling preserved from D6 recon: Piraeus is never the terminal key, only an ancestry hop. | 2026-06-14 (S190) |
+
+**Body provenance:** D12 design ruling authored from specs/d6-kastella-step0.md:68-76 (GEO's staged entry not in this session's context). Pending GEO verbatim-substance ratification before the D12-S1 checkpoint arms.
+
+**Connects-to:**
+- "Neighborhood Wikidata Mapping" containedInPlace chain (logged at lines 812–843) — D12 corrects the emitter's implementation drift and supersedes the hardcoded fixed-depth ancestry emitter design (Athens-shaped, code-owned geography); it does NOT overturn the logged chain decision.
+- The specific municipality anchor (Q1524 vs Q1224979) and Attica node (Q758056 vs Q758085) are OPEN pending D12-S1 resolver output — not pre-resolved here; the live log and GEO's mount currently disagree on the logged anchor, which the resolver settles.
+- Performer SPARQL helper (`scripts/lib/performer-qid-resolver.ts`, ~line 4583, reused not shared). verified_athens→verified_core (sibling, sequenced after). D6a/D6b unblocked on landing.
+
+### verified_athens is a scope flag, NOT a geo-ancestry claim (2026-06-13)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| `verified_athens` means "in our verified inclusion set," not "geographically inside the Municipality of Athens" | Conflating scope-membership with geographic containment produced the false Piraeus-as-Athens ancestry chain (S172–S180 class). Load-bearing under D12: a venue can be verified_athens (shown on site) yet root its containedInPlace chain outside Athens. | 2026-06-13 (D6/Kastella routing) |
+
+### Piraeus venues root their ancestry chain in Piraeus, not Athens (2026-06-14)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Piraeus-metro venues are `verified_athens` (scope) but their `containedInPlace` chain roots in Piraeus (Kastella → Piraeus Municipality → Piraeus Regional Unit → Attica → Greece), not the Municipality of Athens | The Kastella/Βεάκειο decision. They show on site (Greater Athens metro, verified_athens — logged Piraeus-venue inclusion at line 994) but their geography is Piraeus. Specific Piraeus-chain QIDs (candidates Q12878825 / Q12875755 / Q1784863) are NOT yet verified — pending D12-S1 resolver confirmation (P131 hops unconfirmed). Blocked on D12's emitter fix. | 2026-06-14 (S190) |
