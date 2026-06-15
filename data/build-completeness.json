@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-06-14T07:33:49.377Z"
+    "lastUpdate": "2026-06-15T07:12:37.406Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,20 +13,20 @@
     "byType": [
       {
         "type": "concert",
-        "total": 687,
-        "pass": 656,
+        "total": 661,
+        "pass": 630,
         "warn": 31,
         "fail": 0,
-        "info": 679,
+        "info": 653,
         "passRate": 95
       },
       {
         "type": "dj_set",
-        "total": 450,
-        "pass": 397,
+        "total": 439,
+        "pass": 386,
         "warn": 53,
         "fail": 0,
-        "info": 450,
+        "info": 439,
         "passRate": 88
       },
       {
@@ -49,29 +49,29 @@
       },
       {
         "type": "theater",
-        "total": 3020,
-        "pass": 2908,
-        "warn": 112,
+        "total": 2806,
+        "pass": 2691,
+        "warn": 115,
         "fail": 0,
-        "info": 3017,
+        "info": 2803,
         "passRate": 96
       },
       {
         "type": "festival",
-        "total": 48,
-        "pass": 46,
+        "total": 46,
+        "pass": 44,
         "warn": 2,
         "fail": 0,
-        "info": 48,
+        "info": 46,
         "passRate": 96
       },
       {
         "type": "performance",
-        "total": 22,
-        "pass": 22,
+        "total": 20,
+        "pass": 20,
         "warn": 0,
         "fail": 0,
-        "info": 22,
+        "info": 20,
         "passRate": 100
       },
       {
@@ -112,12 +112,12 @@
       }
     ],
     "totals": {
-      "total": 4418,
-      "pass": 4189,
-      "warn": 229,
+      "total": 4163,
+      "pass": 3931,
+      "warn": 232,
       "fail": 0,
-      "info": 4407,
-      "passRate": 95
+      "info": 4152,
+      "passRate": 94
     },
     "orphanSlugs": [
       "homepage"
@@ -172,11 +172,11 @@
       "info": 50
     },
     "event_template": {
-      "total": 4418,
-      "pass": 4189,
-      "warn": 229,
+      "total": 4163,
+      "pass": 3931,
+      "warn": 232,
       "fail": 0,
-      "info": 4407
+      "info": 4152
     },
     "byVenue": [
       {
@@ -201,12 +201,12 @@
       },
       {
         "venue": "an club",
-        "total": 12,
-        "pass": 10,
+        "total": 11,
+        "pass": 9,
         "warn": 2,
         "fail": 0,
-        "info": 12,
-        "passRate": 83,
+        "info": 11,
+        "passRate": 82,
         "sameAsState": "missing"
       },
       {
@@ -251,12 +251,12 @@
       },
       {
         "venue": "astron",
-        "total": 41,
+        "total": 40,
         "pass": 30,
-        "warn": 11,
+        "warn": 10,
         "fail": 0,
-        "info": 41,
-        "passRate": 73,
+        "info": 40,
+        "passRate": 75,
         "sameAsState": "missing"
       },
       {
@@ -271,11 +271,11 @@
       },
       {
         "venue": "aux club",
-        "total": 18,
-        "pass": 18,
+        "total": 15,
+        "pass": 15,
         "warn": 0,
         "fail": 0,
-        "info": 18,
+        "info": 15,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -321,12 +321,12 @@
       },
       {
         "venue": "bolivar",
-        "total": 79,
+        "total": 80,
         "pass": 75,
-        "warn": 4,
+        "warn": 5,
         "fail": 0,
-        "info": 79,
-        "passRate": 95,
+        "info": 80,
+        "passRate": 94,
         "sameAsState": "missing"
       },
       {
@@ -361,11 +361,11 @@
       },
       {
         "venue": "caja de musica",
-        "total": 3,
-        "pass": 3,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -381,12 +381,12 @@
       },
       {
         "venue": "cantina social",
-        "total": 36,
+        "total": 37,
         "pass": 30,
-        "warn": 6,
+        "warn": 7,
         "fail": 0,
-        "info": 36,
-        "passRate": 83,
+        "info": 37,
+        "passRate": 81,
         "sameAsState": "missing"
       },
       {
@@ -411,11 +411,11 @@
       },
       {
         "venue": "concert #1 baumstrasse",
-        "total": 11,
-        "pass": 11,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 11,
+        "info": 10,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -461,12 +461,12 @@
       },
       {
         "venue": "death disco",
-        "total": 15,
-        "pass": 13,
+        "total": 14,
+        "pass": 12,
         "warn": 2,
         "fail": 0,
-        "info": 15,
-        "passRate": 87,
+        "info": 14,
+        "passRate": 86,
         "sameAsState": "missing"
       },
       {
@@ -560,16 +560,6 @@
         "sameAsState": "missing"
       },
       {
-        "venue": "foyer art stage",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
         "venue": "fuzz club",
         "total": 4,
         "pass": 4,
@@ -621,11 +611,11 @@
       },
       {
         "venue": "half note jazz club",
-        "total": 47,
-        "pass": 47,
+        "total": 46,
+        "pass": 46,
         "warn": 0,
         "fail": 0,
-        "info": 47,
+        "info": 46,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -651,22 +641,22 @@
       },
       {
         "venue": "island athens riviera",
-        "total": 34,
-        "pass": 24,
-        "warn": 10,
+        "total": 31,
+        "pass": 22,
+        "warn": 9,
         "fail": 0,
-        "info": 34,
+        "info": 31,
         "passRate": 71,
         "sameAsState": "missing"
       },
       {
         "venue": "it athens",
-        "total": 33,
-        "pass": 29,
+        "total": 31,
+        "pass": 27,
         "warn": 4,
         "fail": 0,
-        "info": 33,
-        "passRate": 88,
+        "info": 31,
+        "passRate": 87,
         "sameAsState": "missing"
       },
       {
@@ -811,11 +801,11 @@
       },
       {
         "venue": "roes theater",
-        "total": 7,
-        "pass": 7,
+        "total": 6,
+        "pass": 6,
         "warn": 0,
         "fail": 0,
-        "info": 7,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -861,21 +851,21 @@
       },
       {
         "venue": "smut athens",
-        "total": 28,
-        "pass": 26,
+        "total": 26,
+        "pass": 24,
         "warn": 2,
         "fail": 0,
-        "info": 28,
-        "passRate": 93,
+        "info": 26,
+        "passRate": 92,
         "sameAsState": "missing"
       },
       {
         "venue": "smut, βατσαξη 4, 10438, αθηνα, greece",
-        "total": 3,
-        "pass": 3,
+        "total": 1,
+        "pass": 1,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -901,12 +891,12 @@
       },
       {
         "venue": "studio κυψελης",
-        "total": 95,
+        "total": 96,
         "pass": 93,
-        "warn": 2,
+        "warn": 3,
         "fail": 0,
-        "info": 95,
-        "passRate": 98,
+        "info": 96,
+        "passRate": 97,
         "sameAsState": "missing"
       },
       {
@@ -931,21 +921,21 @@
       },
       {
         "venue": "temple",
-        "total": 24,
-        "pass": 23,
+        "total": 23,
+        "pass": 22,
         "warn": 1,
         "fail": 0,
-        "info": 24,
+        "info": 23,
         "passRate": 96,
         "sameAsState": "missing"
       },
       {
         "venue": "theatre of the no",
-        "total": 74,
-        "pass": 70,
+        "total": 73,
+        "pass": 69,
         "warn": 4,
         "fail": 0,
-        "info": 74,
+        "info": 73,
         "passRate": 95,
         "sameAsState": "missing"
       },
@@ -970,22 +960,12 @@
         "sameAsState": "missing"
       },
       {
-        "venue": "venue",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
         "venue": "αγγλικανικη εκκλησια αγιου παυλου",
-        "total": 3,
-        "pass": 3,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -996,16 +976,6 @@
         "warn": 0,
         "fail": 0,
         "info": 2,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
-        "venue": "αιθουσα συναυλιων φιλιππος νακας",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1071,12 +1041,12 @@
       },
       {
         "venue": "ανεσις",
-        "total": 109,
-        "pass": 100,
+        "total": 63,
+        "pass": 54,
         "warn": 9,
         "fail": 0,
-        "info": 109,
-        "passRate": 92,
+        "info": 63,
+        "passRate": 86,
         "sameAsState": "missing"
       },
       {
@@ -1121,11 +1091,11 @@
       },
       {
         "venue": "βαφειο - λακης καραλης",
-        "total": 40,
-        "pass": 40,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 40,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1201,21 +1171,21 @@
       },
       {
         "venue": "διπυλον",
-        "total": 58,
-        "pass": 58,
+        "total": 26,
+        "pass": 26,
         "warn": 0,
         "fail": 0,
-        "info": 58,
+        "info": 26,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "εθνικη λυρικη σκηνη",
-        "total": 4,
-        "pass": 4,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 4,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "present"
       },
@@ -1341,12 +1311,12 @@
       },
       {
         "venue": "θεατρο καλλιρροης",
-        "total": 38,
+        "total": 39,
         "pass": 34,
-        "warn": 4,
+        "warn": 5,
         "fail": 0,
-        "info": 38,
-        "passRate": 89,
+        "info": 39,
+        "passRate": 87,
         "sameAsState": "missing"
       },
       {
@@ -1451,11 +1421,11 @@
       },
       {
         "venue": "θεατρο τζενη καρεζη",
-        "total": 14,
-        "pass": 14,
+        "total": 13,
+        "pass": 13,
         "warn": 0,
         "fail": 0,
-        "info": 14,
+        "info": 13,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1511,11 +1481,11 @@
       },
       {
         "venue": "θησειον",
-        "total": 28,
-        "pass": 28,
+        "total": 27,
+        "pass": 27,
         "warn": 0,
         "fail": 0,
-        "info": 28,
+        "info": 27,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1531,11 +1501,11 @@
       },
       {
         "venue": "ιλιον plus",
-        "total": 26,
-        "pass": 26,
+        "total": 25,
+        "pass": 25,
         "warn": 0,
         "fail": 0,
-        "info": 26,
+        "info": 25,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1591,11 +1561,11 @@
       },
       {
         "venue": "κεντρο ελεγχου τηλεορασεων",
-        "total": 12,
-        "pass": 12,
+        "total": 11,
+        "pass": 11,
         "warn": 0,
         "fail": 0,
-        "info": 12,
+        "info": 11,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1611,21 +1581,21 @@
       },
       {
         "venue": "κπισν",
-        "total": 163,
+        "total": 164,
         "pass": 136,
-        "warn": 27,
+        "warn": 28,
         "fail": 0,
-        "info": 163,
+        "info": 164,
         "passRate": 83,
         "sameAsState": "missing"
       },
       {
         "venue": "κυτταρο",
-        "total": 13,
-        "pass": 13,
+        "total": 12,
+        "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 13,
+        "info": 12,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1651,11 +1621,11 @@
       },
       {
         "venue": "μεγαρο μουσικης αθηνων",
-        "total": 214,
-        "pass": 214,
+        "total": 211,
+        "pass": 211,
         "warn": 0,
         "fail": 0,
-        "info": 214,
+        "info": 211,
         "passRate": 100,
         "sameAsState": "present"
       },
@@ -1671,22 +1641,12 @@
       },
       {
         "venue": "μικρος κεραμεικος",
-        "total": 157,
-        "pass": 155,
+        "total": 111,
+        "pass": 109,
         "warn": 2,
         "fail": 0,
-        "info": 157,
-        "passRate": 99,
-        "sameAsState": "missing"
-      },
-      {
-        "venue": "μουσειο γουλανδρη",
-        "total": 2,
-        "pass": 2,
-        "warn": 0,
-        "fail": 0,
-        "info": 2,
-        "passRate": 100,
+        "info": 111,
+        "passRate": 98,
         "sameAsState": "missing"
       },
       {
@@ -1761,11 +1721,11 @@
       },
       {
         "venue": "ορφεας cafe bar",
-        "total": 22,
-        "pass": 22,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
-        "info": 22,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1821,11 +1781,11 @@
       },
       {
         "venue": "πλυφα",
-        "total": 37,
-        "pass": 37,
+        "total": 23,
+        "pass": 23,
         "warn": 0,
         "fail": 0,
-        "info": 37,
+        "info": 23,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1921,21 +1881,21 @@
       },
       {
         "venue": "σκηνη μπεκετ",
-        "total": 29,
-        "pass": 29,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 29,
+        "info": 10,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "σπιτι art bar",
-        "total": 14,
-        "pass": 14,
+        "total": 12,
+        "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 14,
+        "info": 12,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1951,11 +1911,11 @@
       },
       {
         "venue": "σταυρος του νοτου",
-        "total": 10,
-        "pass": 10,
+        "total": 8,
+        "pass": 8,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 8,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -2001,12 +1961,12 @@
       },
       {
         "venue": "τεχνοπολη",
-        "total": 49,
-        "pass": 41,
+        "total": 47,
+        "pass": 39,
         "warn": 8,
         "fail": 0,
-        "info": 41,
-        "passRate": 84,
+        "info": 39,
+        "passRate": 83,
         "sameAsState": "present"
       },
       {
@@ -2041,12 +2001,12 @@
       },
       {
         "venue": "φιατ",
-        "total": 6,
-        "pass": 4,
+        "total": 5,
+        "pass": 3,
         "warn": 2,
         "fail": 0,
-        "info": 6,
-        "passRate": 67,
+        "info": 5,
+        "passRate": 60,
         "sameAsState": "missing"
       },
       {
@@ -2081,20 +2041,20 @@
       },
       {
         "venue": "ωδειο αθηνων",
-        "total": 22,
-        "pass": 19,
+        "total": 21,
+        "pass": 18,
         "warn": 3,
         "fail": 0,
-        "info": 22,
+        "info": 21,
         "passRate": 86,
         "sameAsState": "missing"
       }
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.031746031746031744,
+        "coverage": 0.03225806451612903,
         "populated": 6,
-        "total": 189,
+        "total": 186,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
