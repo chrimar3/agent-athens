@@ -5622,3 +5622,9 @@ F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites
 **3. Decoder decides, don't predict.** Step 0.5 ran the scraper's actual decode path (`decodeEventFields`, not a parallel raw `he.decode`) over each Καλλιθέα variation. Only `&quot;` changed (`he.decode` is a no-op on guillemets `«»` and curly/straight quotes `‘’''`). The brief predicted two decoded twins; the decoder produced one. Add a decoded variation ONLY when the decoder output differs — let it decide.
 
 **Connects to:** decisions.md S190, mistakes.md "Geo schema is Athens-only (S190)", `specs/d6-kastella-step0.md`.
+
+## decisions.md write-discipline (D-recon learning)
+
+Writes to decisions.md must: (1) confirm single-canonical log first; (2) read the existing entry format + D-number scheme; (3) match both; (4) verify number-uniqueness before appending; (5) never pin a QID/anchor the resolver hasn't adjudicated. Failures this prevents: the S190 orphan (headerless rows, colliding D8 number) and the Q1524/Q1224979 anchor confusion (stale-mount vs live-log disagreement asserted as settled).
+
+**Connects to:** decisions.md D12 + re-homed S190 section, `specs/d6-kastella-step0.md`.
