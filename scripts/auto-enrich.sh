@@ -322,8 +322,32 @@ log "Warm-up complete"
 # 8b. Pre-flight auth check (S89) — fail fast on 401 instead of burning
 #     30 min of BATCH_TIMEOUT per batch when the CLI session is expired.
 log "Running auth pre-check..."
-if ! echo "ok" | "$CLAUDE_BIN" -p --output-format json >/dev/null 2>&1; then
-  log_error "Claude CLI auth check failed — aborting enrichment run"
+# Persist the pre-check result instead of discarding it. A discarded stderr
+# (>/dev/null 2>&1) hid a 10-day version-regression auth outage (CLI 2.1.177→2.1.191,
+# Jun 14–25, 2026): the literal "Not logged in" was never logged, so the drought was
+# undiagnosable on sight. The captured log also records an env fingerprint so a
+# genuine launchd-context failure is distinguishable from a stripped-env
+# reproduction (env -i drops the login context → a FALSE "Not logged in"; see
+# S101/S109). Control flow is unchanged: fail iff the command exits non-zero.
+AUTH_PRECHECK_LOG="$LOG_DIR/auth-precheck-last.log"
+{
+  echo "=== auth pre-check $(date '+%Y-%m-%d %H:%M:%S') ==="
+  echo "env: USER=${USER:-<unset>} HOME=${HOME:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>} TERM=${TERM:-<unset>}"
+  echo "bin=$CLAUDE_BIN version=$("$CLAUDE_BIN" --version 2>/dev/null || echo '?')"
+} > "$AUTH_PRECHECK_LOG"
+AUTH_OUTPUT="$(echo "ok" | "$CLAUDE_BIN" -p --output-format json 2>&1)"
+AUTH_RC=$?
+{ echo "exit=$AUTH_RC"; echo "$AUTH_OUTPUT"; } >> "$AUTH_PRECHECK_LOG"
+if [ "$AUTH_RC" -ne 0 ]; then
+  AUTH_REASON="$(echo "$AUTH_OUTPUT" | grep -oE '"result":"[^"]*"' | head -1 | sed 's/^"result":"//; s/"$//')"
+  [ -z "$AUTH_REASON" ] && AUTH_REASON="(unparsed reason; see $AUTH_PRECHECK_LOG)"
+  # USER is present under launchd but absent under an `env -i` reproduction — the
+  # disambiguator that keeps a test-harness "Not logged in" from reading as a real outage.
+  if echo "$AUTH_OUTPUT" | grep -qi "Not logged in"; then
+    log_error "Claude CLI auth check failed — NOT LOGGED IN (re-auth: run 'claude' interactively once + /login). reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>}] — full: $AUTH_PRECHECK_LOG"
+  else
+    log_error "Claude CLI auth check failed — reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>}] — full: $AUTH_PRECHECK_LOG"
+  fi
   exit 1
 fi
 log "Auth pre-check passed"
