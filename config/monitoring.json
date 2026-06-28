@@ -1,0 +1,11 @@
+{
+  "deploy_stale_hours": 36,
+  "enrich_stale_hours": 36,
+  "pipeline_health_labels": ["com.agentathens.daily", "com.agentathens.auto-enrich"],
+  "notify": { "enabled": true },
+  "email": {
+    "enabled": true,
+    "recipient": "cmaragre@gmail.com",
+    "msmtp_account": "gmail"
+  }
+}
