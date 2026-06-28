@@ -156,6 +156,7 @@
     },
     {
       "canonical_name": "Floyd",
+      "address": "Πειραιώς 117, Αθήνα 118 54",
       "variations": [
         "Floyd Athens"
       ],
@@ -1495,6 +1496,7 @@
     },
     {
       "canonical_name": "Εθνική Λυρική Σκηνή",
+      "address": "Λεωφόρος Συγγρού 364, Καλλιθέα 176 74",
       "slug": "greek-national-opera",
       "variations": [
         "Εθνική Λυρική Σκηνή - Εναλλακτική Σκηνή",
@@ -1518,6 +1520,7 @@
     },
     {
       "canonical_name": "Θέατρο Χορν",
+      "address": "Αμερικής 10, Αθήνα 106 71",
       "variations": [
         "«Δημήτρης Χορν»",
         "&#171;Δημήτρης Χορν&#187;"
@@ -2002,6 +2005,7 @@
     },
     {
       "canonical_name": "Θέατρον Ελληνικός Κόσμος",
+      "address": "Πειραιώς 254, Ταύρος 177 78",
       "variations": [
         "Θέατρον του Κέντρου Πολιτισμού Ελληνικός Κόσμος",
         "Hellenic World Theatre"
@@ -2056,6 +2060,7 @@
     },
     {
       "canonical_name": "Θεατράλε",
+      "address": "Κοσομούλη 30, Νέος Κόσμος",
       "variations": [
         "Theatrale"
       ],
@@ -2142,6 +2147,7 @@
     },
     {
       "canonical_name": "Από Κοινού",
+      "address": "Ευπατριδών 4, Αθήνα",
       "variations": [
         "Apo Koinou"
       ],
@@ -2656,6 +2662,7 @@
     },
     {
       "canonical_name": "Μύρτιλλο",
+      "address": "Τριφυλίας & Λάμψα, Αμπελόκηποι 115 24",
       "variations": [
         "Myrtillo"
       ],
