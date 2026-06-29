@@ -5628,3 +5628,20 @@ F2b changed ONE rule (effective end governs) but the rule had ~25 consumer sites
 Writes to decisions.md must: (1) confirm single-canonical log first; (2) read the existing entry format + D-number scheme; (3) match both; (4) verify number-uniqueness before appending; (5) never pin a QID/anchor the resolver hasn't adjudicated. Failures this prevents: the S190 orphan (headerless rows, colliding D8 number) and the Q1524/Q1224979 anchor confusion (stale-mount vs live-log disagreement asserted as settled).
 
 **Connects to:** decisions.md D12 + re-homed S190 section, `specs/d6-kastella-step0.md`.
+
+## Every health check and every gate must persist its failure reason (2026-06-28)
+
+A check that emits only an exit code is undiagnosable by design. The auth pre-check (`auto-enrich.sh:325`, `echo ok | claude -p --output-format json >/dev/null 2>&1`) discarded stderr → the literal failure was never captured, so the enrichment fire stayed unexplained for weeks. This is the micro-version of the deploy drought running 20 days behind an ALERT log nobody reads: **signal discarded at the source.** Rule: every gate/health-check writes its failure reason to a durable, *delivered* place (a log that's read, or an active alert) — never `2>/dev/null` on the one line that tells you why it failed, never a passive marker file as the only record.
+
+**Connects to:** mistakes.md "Armed build-gate silently froze deploys", `specs/enrichment-auth-diagnostic-brief.md`, the deadman-watchdog follow-up.
+
+## Deadman watchdog: cause-agnostic active-delivery monitor (2026-06-29)
+
+A drought-class monitor must have four properties, learned from 4 silent outages:
+1. **Watches all failure families** — deploy freshness, enrich freshness, pipeline health in one classifier; a new cause surfaces as stale-outcome even if its mechanism is novel.
+2. **Runs independently** — own launchd slot (`com.agentathens.deadman`, 6h, RunAtLoad), never depends on the pipeline slots it watches; fires even when they're dead/unloaded.
+3. **Watches outcomes, not just precursors** — `MAX(enriched_at)` / deploy-success age are PRIMARY (the user-visible symptom); auth-precheck / launchd-exit are CORROBORATING. June's auth precursor degraded gradually while the outcome (no fresh enrichment) was the clean trigger.
+4. **Pluggable health-source** — pipeline-health behind an adapter interface (launchd today → routine-status after cloud session) so the substrate swaps without touching the delivery arms.
+Plus: **every alert delivered three ways** (notification + email + heartbeat row); email-send failure escalates the local channel rather than failing silent; one email path, no flaky fallback transport. Epoch-ms end to end to kill TZ-parse phantom alerts.
+
+**Connects to:** mistakes.md "silent-drought class", decisions.md deadman alert-channel, `specs/june-drought-diagnostic-2026-06-28.md`, `specs/enrichment-auth-diagnostic-2026-06-28.md`.

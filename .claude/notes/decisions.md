@@ -4757,3 +4757,23 @@ The fixed-depth `buildContainedInPlace` design (`src/utils/schema-geo.ts:77-92`)
 | Decision | Why | Date |
 |----------|-----|------|
 | Piraeus-metro venues are `verified_athens` (scope) but their `containedInPlace` chain roots in Piraeus (Kastella → Piraeus Municipality → Piraeus Regional Unit → Attica → Greece), not the Municipality of Athens | The Kastella/Βεάκειο decision. They show on site (Greater Athens metro, verified_athens — logged Piraeus-venue inclusion at line 994) but their geography is Piraeus. Specific Piraeus-chain QIDs (candidates Q12878825 / Q12875755 / Q1784863) are NOT yet verified — pending D12-S1 resolver confirmation (P131 hops unconfirmed). Blocked on D12's emitter fix. | 2026-06-14 (S190) |
+
+### OPEN QUESTION (unresolved — Christos's call): Claude CLI version float vs. pin (2026-06-28)
+
+Not a decision yet — surfaced for ruling. The enrichment-auth outage (Jun 15–25) was a headless-auth regression in CLI 2.1.177, auto-fixed by 2.1.191. Auto-update both **caused and fixed** it within 11 days.
+
+- **Float (current):** stays current on security/bugfixes; exposed to regressions like this one.
+- **Pin to known-good ≥2.1.191:** prevents headless-auth regressions; forgoes fixes/security; trades one risk class for another (stale-version bugs).
+- **Dev Planner recommendation (contingent on deadman shipping): float + detect** — leave auto-update on, let the deadman's enrichment-freshness arm catch a future regression in ~36h instead of 10 days. May make pinning unnecessary.
+
+Evidence: `specs/enrichment-auth-diagnostic-2026-06-28.md`. Resolve after the deadman watchdog lands.
+
+### Deadman watchdog alert channels = local notification + email (msmtp) (2026-06-29)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Alert delivery = osascript notification + msmtp(Gmail app-password) email + heartbeat CSV; one email path, no fallback transport | Closes the silent-drought class (4 outages, 1 root: no active delivery). msmtp chosen over `/usr/bin/mail` (won't relay to Gmail) and Mail.app AppleScript (GUI/TCC-flaky). Email send-failure escalates the LOCAL channel + marks heartbeat `email=FAILED` rather than adding a flaky second transport. | 2026-06-29 |
+
+**OPEN follow-up:** Mac-fully-offline edge — a local watchdog can't alert if the Mac is asleep/off. Session B (cloud execution) closes this structurally with an always-on host; until then it's a known gap.
+
+**Verified 2026-06-29 (Session A):** email delivery proven end-to-end — `msmtp` spike returned exit 0, and a forced-stale run (thresholds → 0) delivered BOTH the osascript notification AND a received `STALE_DEPLOY` email, with heartbeat `email=sent`; thresholds reset to 36/36 (re-run → `OK`/`n/a`). Credential storage refined from the original "plaintext in `$HOME`" plan to the **macOS Keychain**: `security` item `msmtp-gmail` holds the Gmail app-password, and `~/.msmtprc` (chmod 600) pulls it via `passwordeval "security find-generic-password …"`. So the rc file contains **no secret**, and the app-password lives in neither the repo nor any shell transcript. (Gotcha caught: Google displays app-passwords with spaces — they must be stored space-stripped to 16 chars or Gmail returns `535 BadCredentials`.)
