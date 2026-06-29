@@ -14,6 +14,19 @@ Track recurring problems, known workarounds, and failure patterns here. When the
 
 ---
 
+## ⚠️ ACTIVE STRAND GUARD — Session B routines spike (2026-06-29)
+
+### Throwaway branch `spike/cloud-routine-eval` carries a force-added 66M `data/events.db` blob on `origin`
+**Severity:** 🟡
+**First seen:** 2026-06-29 (Session B — seeded at spike start, logged here at seed time, not closeout)
+**Frequency:** One-time; persists on `origin` until explicitly deleted.
+**Symptoms:** `data/events.db` is normally gitignored (66M). The routines spike force-adds it (`git add -f`) onto branch `spike/cloud-routine-eval` so a cloud routine has a DB to build from (Blocker 1 unsolved until Session C). If Session B overflows or strands, the blob sits in the remote indefinitely — the classic cleanup-on-success-only failure.
+**Workaround:** N/A (intended temporary state).
+**Fix plan:** Delete local + remote the moment the spike closes (or if it strands): `git push origin --delete spike/cloud-routine-eval && git branch -D spike/cloud-routine-eval`. Command also at the top of `specs/routines-spike.md`. Remove THIS entry once deleted.
+**Status:** 🟡 Open — delete on Session B close.
+
+---
+
 ## S97a Audit Reconciliation (2026-04-28)
 
 The S97 Phase 1 audit's "Items Confirmed FIXED" list was independently re-verified at the start of S97a per the rule "audit-derived FIXED claims must be re-verified before being marked Fixed in known-issues.md, even when sourced from a recent audit." All 9 items pass independent verification.
