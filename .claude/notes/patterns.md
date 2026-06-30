@@ -5659,3 +5659,32 @@ Three reusable floors (`scripts/backup-events-db.sh`, `src/watchdog/classifier.t
 **Tested:** `tests/backup-events-db.test.ts` (8) drives the shell script as a subprocess with `SOURCE_DB`/`BACKUP_DIR`/threshold overrides + a regression guard against the real preserved `data/events.db.empty-2026-06-30` dud; `tests/watchdog/deadman.test.ts` (+5) covers `DB_MISSING` priority.
 
 **Connects to:** mistakes.md "S194 backup-amplifies-loss", `specs/db-loss-incident-2026-06-30.md`, the deadman pattern above.
+
+## Validity-not-existence gate; one canonical health predicate per language (2026-06-30, S195)
+
+The 06-30 daily ran the whole pipeline against a tableless `events.db` because the wrapper's
+dependency check was existence-only (`[[ -f events.db ]]`) and `getDatabase()` opens
+`{create:true}` — so a missing DB gets auto-materialised as an empty 114B file that PASSES `-f`.
+Fix family (the 4th and last degeneracy surface; backup + deadman were the first two):
+
+1. **Gate on validity, never existence.** `[[ -f db ]]` is meaningless for a file that something
+   else can auto-create empty. The real predicate is `events readable AND COUNT(*)>0 AND
+   integrity_check='ok'`. New: `scripts/assert-events-db-healthy.sh` (wrapper) + `assertEventsDbHealthy()`
+   in `src/db/db-health.ts` (build entry, before the 13,606-image copy).
+
+2. **One canonical predicate per language, cross-referenced** (Guard 6 across backup/deadman/build).
+   True single-source is impossible — the assertion lives in both shell (wrapper + backup) and TS
+   (build + deadman). So keep ONE shell copy and ONE TS copy, each header-linking the other; don't
+   spawn a third divergent inline copy. We did NOT refactor the shipped/tested backup this session.
+
+3. **The guard must not become the thing it guards against.** `assertEventsDbHealthy` opens its OWN
+   read-only handle with `create:false` — never the `create:true` singleton — so checking for a
+   missing DB can't manufacture the empty file. (Descoped the singleton split — ~20 callers + 50+
+   scripts + bootstrap dependency on `create:true`; the guard's own no-create open closes the
+   re-fire without it.)
+
+**Tested:** `tests/db-health.test.ts` (in-memory + real-dud regression), `tests/assert-db-healthy.test.ts`
+(shell subprocess, `SOURCE_DB` override + real-dud). Full suite 2870 pass / 0 fail, tsc clean.
+
+**Connects to:** "Integrity floor before overwrite" pattern above, mistakes.md "WAL read-time trap"
++ "build-against-degenerate-DB", `specs/db-availability-build-2026-06-30.md`.

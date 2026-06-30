@@ -4785,3 +4785,19 @@ Evidence: `specs/enrichment-auth-diagnostic-2026-06-28.md`. Resolve after the de
 | Backup refuses a degenerate source (`row-count > 0 AND integrity_check = ok`), writes to a temp slot and commits only after a size floor; prune purges duds by size before mtime; deadman gains a first-class `DB_MISSING` status (outranks `STALE_DEPLOY`) | The 06-30 DB loss was amplified by a backup of the empty DB overwriting the day's slot + a time-only prune. Floors defend against ANY loss cause (the actual one was unattributable). Fail-loud (exit 1) over silent-skip — the S90 class. | 2026-06-30 |
 
 **Thresholds chosen (all env-overridable):** `BACKUP_MIN_SIZE_RATIO=0.5` (refuse new backup < 50% of prior good — generous enough never to false-refuse a real DB, which only grows; strict enough to catch truncation). `BACKUP_MIN_VALID_BYTES=100000` (100 KB dud floor — real backups ~11 MB, the incident dud was 114 B). `SOURCE_DB` made overridable for tests; `DEADMAN_DRY_RUN`/`DEADMAN_DB_PATH` added for safe verification. No `monitoring.json` change — the DB check is presence/row-based, not time-thresholded. Evidence: `specs/db-loss-incident-2026-06-30.md`, `tests/backup-events-db.test.ts` (8), `tests/watchdog/deadman.test.ts` (+5). All TDD; full suite 2855 pass / 0 fail, tsc clean.
+
+### Build + wrapper fail-fast on a degenerate DB; singleton create:false flip descoped (2026-06-30, S195)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Add a validity gate (`events readable AND COUNT(*)>0 AND integrity_check='ok'`) at build entry (`assertEventsDbHealthy` in `src/db/db-health.ts`, before image/OG work) and at the daily wrapper's dependency check (`scripts/assert-events-db-healthy.sh` replacing `[[ -f events.db ]]`) | 06-30: a missing DB was auto-created empty by `getDatabase({create:true})`, passed the existence-only check, and the build code-1'd mid-generation. Converts a deterministic mid-stream crash into a clean loud abort before any work. | 2026-06-30 |
+| Guard opens its OWN read-only handle (`{readonly}`→`{readwrite,create:false}` fallback), NOT the shared `getDatabase()` singleton | So the act of checking for a missing DB can never manufacture the empty file it guards against. | 2026-06-30 |
+| **Descoped:** do NOT flip the `getDatabase()` singleton to `create:false` | The singleton is shared by ~20 read+write callers and `initializeDatabase()` relies on `create:true` to bootstrap schema; a selective flip needs a split-accessor refactor across ~20 callers + 50+ scripts (shotgun surgery). The guard's own no-create open + the wrapper gate already close the deterministic re-fire. Routed to Planner as a separate hardening item. | 2026-06-30 |
+| **Deferred:** atomic restore + restore/daily mutual exclusion (forensic Step 4) | Future-race surface, not 06-30's cause (today was a benign loss-window coincidence; restore came after the build failed). Build only if a restore-vs-daily race is ever observed. | 2026-06-30 |
+
+**WAL gotcha that shaped the open strategy:** `{readonly:true}` on the live WAL DB *opens* fine but
+the first table read throws `unable to open database file` (can't map `-shm`). An open-time-only
+fallback (as in `deadman-watchdog.ts:83-89`) misses this; the guard probes a real table read under
+readonly and falls back to `{readwrite,create:false}` on EITHER failure. Evidence:
+`specs/db-availability-build-2026-06-30.md`, `tests/db-health.test.ts`, `tests/assert-db-healthy.test.ts`.
+All TDD; full suite 2870 pass / 0 fail, tsc clean.
