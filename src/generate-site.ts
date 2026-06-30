@@ -113,6 +113,17 @@ async function main() {
   resetOfferOmissionsCounter();
   console.log('🚀 Starting site generation...\n');
 
+  // DB-health gate (2026-06-30): fail-fast on a degenerate DB BEFORE any expensive
+  // work (image copy / OG / favicons). Opens read-only — never the create:true
+  // singleton — so it can't manufacture the empty file it's guarding against. A
+  // missing/empty/tableless/corrupt DB aborts loud here instead of a confusing
+  // mid-stream "no such table" at getAllEvents. @see specs/db-availability-build-2026-06-30.md
+  {
+    const { assertEventsDbHealthy } = await import('./db/db-health');
+    const dbHealth = assertEventsDbHealthy();
+    console.log(`  ✓ DB health: ${dbHealth.rowCount} rows, integrity ok`);
+  }
+
   // Create dist directory
   if (!existsSync(DIST_DIR)) {
     mkdirSync(DIST_DIR, { recursive: true });

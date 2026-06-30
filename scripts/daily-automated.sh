@@ -83,8 +83,12 @@ check_dependencies() {
         exit 1
     fi
 
-    if [[ ! -f "$PROJECT_DIR/data/events.db" ]]; then
-        log_error "Database not found at $PROJECT_DIR/data/events.db"
+    # DB VALIDITY gate (2026-06-30), not mere existence. An auto-created empty
+    # events.db passes `-f` but is tableless — that's what ran the whole pipeline
+    # against a degenerate DB on 06-30. Refuse a missing/empty/tableless/corrupt DB
+    # here so we abort loud BEFORE any phase. @see specs/db-availability-build-2026-06-30.md
+    if ! bash "$SCRIPT_DIR/assert-events-db-healthy.sh"; then
+        log_error "events.db degenerate (missing/empty/tableless/corrupt) — aborting daily. Restore from backup ($HOME/agent-athens-backups) then re-run. The deadman watchdog also breaches on this."
         exit 1
     fi
 
