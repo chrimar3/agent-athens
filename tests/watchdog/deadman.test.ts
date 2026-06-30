@@ -11,6 +11,7 @@ function inputs(over: Partial<DeadmanInputs> = {}): DeadmanInputs {
     lastEnrichMs: NOW - 2 * HOUR,
     pipelineHealthy: true,
     authPrecheckOk: true,
+    dbRowCount: 15506, // healthy DB; null = missing/unreadable, 0 = empty
     nowMs: NOW,
     thresholds: { deployStaleHours: 36, enrichStaleHours: 36 },
     ...over,
@@ -77,5 +78,32 @@ describe("classifyDeadman", () => {
   test("stale reason names the stale-by duration in hours", () => {
     const r = classifyDeadman(inputs({ lastDeployMs: NOW - 48 * HOUR }));
     expect(r.reasons.join(" ")).toMatch(/48(\.0)?h/);
+  });
+
+  // ── DB presence/row floor (2026-06-30 incident: events.db deleted overnight;
+  //    three pipeline runs logged "Database not found" to an unread file). A
+  //    missing/empty DB must be a FIRST-CLASS, highest-priority breach. ──
+  test("events.db missing (null row count) → DB_MISSING", () => {
+    expect(classifyDeadman(inputs({ dbRowCount: null })).status).toBe("DB_MISSING");
+  });
+
+  test("events.db empty (0 rows) → DB_MISSING", () => {
+    expect(classifyDeadman(inputs({ dbRowCount: 0 })).status).toBe("DB_MISSING");
+  });
+
+  test("DB_MISSING outranks STALE_DEPLOY (catastrophe headlines), reasons name both", () => {
+    const r = classifyDeadman(inputs({ dbRowCount: 0, lastDeployMs: NOW - 50 * HOUR }));
+    expect(r.status).toBe("DB_MISSING");
+    expect(r.reasons.join(" ")).toMatch(/db:/i);
+    expect(r.reasons.join(" ")).toMatch(/deploy/i); // every failing signal still named
+  });
+
+  test("DB_MISSING reason states recovery is required", () => {
+    const r = classifyDeadman(inputs({ dbRowCount: null }));
+    expect(r.reasons.join(" ")).toMatch(/restore|backup|catastroph/i);
+  });
+
+  test("healthy row count preserves prior behavior (deploy stale → STALE_DEPLOY)", () => {
+    expect(classifyDeadman(inputs({ lastDeployMs: NOW - 50 * HOUR })).status).toBe("STALE_DEPLOY");
   });
 });

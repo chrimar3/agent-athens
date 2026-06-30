@@ -13,7 +13,7 @@
 // staleness is PRIMARY; auth-precheck state only CORROBORATES (can force a flag when
 // the DB still looks fresh, never silences one).
 
-export type DeadmanStatus = "OK" | "STALE_DEPLOY" | "STALE_ENRICH" | "PIPELINE_FAIL";
+export type DeadmanStatus = "OK" | "DB_MISSING" | "STALE_DEPLOY" | "STALE_ENRICH" | "PIPELINE_FAIL";
 
 export interface DeadmanThresholds {
   deployStaleHours: number;
@@ -29,6 +29,8 @@ export interface DeadmanInputs {
   pipelineHealthy: boolean;
   /** corroborating only: false forces STALE_ENRICH; null = unknown (log absent), ignored. */
   authPrecheckOk: boolean | null;
+  /** events table row count; null = DB missing/unreadable, 0 = empty — both CATASTROPHIC. */
+  dbRowCount: number | null;
   nowMs: number;
   thresholds: DeadmanThresholds;
 }
@@ -50,8 +52,21 @@ function isStale(tsMs: number | null, nowMs: number, thresholdHours: number): bo
 }
 
 export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
-  const { lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, nowMs, thresholds } = inputs;
+  const { lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, dbRowCount, nowMs, thresholds } = inputs;
   const reasons: string[] = [];
+
+  // DB presence/row floor — the catastrophe that precedes every other signal: if
+  // events.db is gone or empty, the deploy is serving a frozen/stale site and
+  // enrichment can't run. Highest priority so "restore required" headlines instead
+  // of being masked under STALE_DEPLOY (the 2026-06-30 incident).
+  const dbDegenerate = dbRowCount === null || dbRowCount <= 0;
+  if (dbDegenerate) {
+    reasons.push(
+      dbRowCount === null
+        ? "db: events.db missing or unreadable — CATASTROPHIC, restore from backup required"
+        : "db: events.db has 0 rows (empty) — CATASTROPHIC, restore from backup required",
+    );
+  }
 
   // Deploy freshness (outcome — a dark site is the highest-impact symptom).
   const deployStale = isStale(lastDeployMs, nowMs, thresholds.deployStaleHours);
@@ -84,8 +99,10 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   }
 
   // Primary status by outcome-first priority; reasons[] still names every breach.
+  // DB_MISSING outranks all — it's the precondition failure under the others.
   let status: DeadmanStatus = "OK";
-  if (deployStale) status = "STALE_DEPLOY";
+  if (dbDegenerate) status = "DB_MISSING";
+  else if (deployStale) status = "STALE_DEPLOY";
   else if (enrichStale) status = "STALE_ENRICH";
   else if (!pipelineHealthy) status = "PIPELINE_FAIL";
 

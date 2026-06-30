@@ -25,7 +25,10 @@ const ROOT = resolve(import.meta.dir, "..");
 const CONFIG_PATH = join(ROOT, "config", "monitoring.json");
 const DEPLOY_LOG = join(ROOT, "logs", "deploy-cadence.log");
 const AUTH_LOG = join(ROOT, "logs", "auth-precheck-last.log");
-const DB_PATH = join(ROOT, "data", "events.db");
+const DB_PATH = process.env.DEADMAN_DB_PATH || join(ROOT, "data", "events.db");
+// DEADMAN_DRY_RUN=1 → classify + print, skip all delivery (notify/email/heartbeat).
+// Lets the watchdog be verified against a degenerate DB without spamming channels.
+const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
 const HEARTBEAT_CSV = join(ROOT, "logs", "deadman-heartbeat.csv");
 const SITEMAP_URL = "https://agentathens.com/sitemap-events.xml";
 
@@ -93,6 +96,18 @@ function enrichSignalMs(): number | null {
     // enriched_at is stored "YYYY-MM-DD HH:MM:SS" in Athens local wall-time; parse as such.
     const ms = Date.parse(row.m.replace(" ", "T")); // local-tz interpretation, → epoch-ms
     return Number.isNaN(ms) ? null : ms;
+  } finally {
+    db.close();
+  }
+}
+
+/** DB presence/row floor: events table row count. Reuses openEventsDb (the single
+ *  DB-open seam) — a missing DB throws (create:false) → caller maps to null → DB_MISSING. */
+function dbRowCountSignal(): number {
+  const db = openEventsDb();
+  try {
+    const row = db.prepare("SELECT COUNT(*) AS c FROM events").get() as { c: number };
+    return row?.c ?? 0;
   } finally {
     db.close();
   }
@@ -177,6 +192,7 @@ const nowMs = Date.now();
 const safe = <T>(fn: () => T, fallback: T): T => { try { return fn(); } catch { return fallback; } };
 const lastDeployMs = await deploySignalMs().catch(() => null);
 const lastEnrichMs = safe(enrichSignalMs, null);
+const dbRowCount = safe(dbRowCountSignal, null); // null = DB missing/unreadable → DB_MISSING
 const authOk = safe(authPrecheckOk, null);
 const pipelineHealthy = safe(() => launchdHealth.isHealthy(cfg.pipeline_health_labels), true);
 
@@ -185,12 +201,21 @@ const inputs: DeadmanInputs = {
   lastEnrichMs,
   pipelineHealthy,
   authPrecheckOk: authOk,
+  dbRowCount,
   nowMs,
   thresholds: { deployStaleHours: cfg.deploy_stale_hours, enrichStaleHours: cfg.enrich_stale_hours },
 };
 
 const result: DeadmanResult = classifyDeadman(inputs);
 const tsIso = new Date(nowMs).toISOString().replace(/\.\d+Z$/, "Z");
+
+// Dry-run: report the classification + exit code without firing any delivery layer.
+if (DRY_RUN) {
+  console.log(`[deadman:DRY_RUN] @ ${tsIso} status=${result.status} (would exit ${result.status === "OK" ? 0 : 1})`);
+  console.log(`  signals: deploy=${ageH(lastDeployMs, nowMs)}h enrich=${ageH(lastEnrichMs, nowMs)}h dbRows=${dbRowCount ?? "null"} pipeline=${pipelineHealthy ? "ok" : "FAIL"}`);
+  for (const r of result.reasons) console.log(`  • ${r}`);
+  process.exit(result.status === "OK" ? 0 : 1);
+}
 
 let emailState = "n/a";
 
