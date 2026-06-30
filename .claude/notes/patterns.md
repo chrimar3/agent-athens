@@ -5645,3 +5645,17 @@ A drought-class monitor must have four properties, learned from 4 silent outages
 Plus: **every alert delivered three ways** (notification + email + heartbeat row); email-send failure escalates the local channel rather than failing silent; one email path, no flaky fallback transport. Epoch-ms end to end to kill TZ-parse phantom alerts.
 
 **Connects to:** mistakes.md "silent-drought class", decisions.md deadman alert-channel, `specs/june-drought-diagnostic-2026-06-28.md`, `specs/enrichment-auth-diagnostic-2026-06-28.md`.
+
+## Integrity floor before overwrite; breach on degenerate state (2026-06-30)
+
+**Generalize:** any backup/replicate/snapshot phase must assert its SOURCE is non-degenerate BEFORE it overwrites a known-good copy — and any monitor must treat a degenerate primary (missing/empty) as a FIRST-CLASS, highest-priority breach, never an inferred side-effect. Born from the 06-30 incident where a backup of an empty `events.db` (114 B dud) overwrote the day's slot and the prune counted it as a retained day. The deletion was unattributable; the *amplification* was ours, so the fix targets the amplification — which is why it defends against any future cause, known or not.
+
+Three reusable floors (`scripts/backup-events-db.sh`, `src/watchdog/classifier.ts`):
+1. **Integrity floor before write** — gate the write on `row-count > 0 AND integrity_check = ok`; refuse loud (exit 1, stderr), never silent-skip (silent exit 0 on degenerate state is the S90 bug class). Write to a temp slot, validate, then commit — so a refusal leaves the prior good copy untouched.
+2. **Size floor vs prior** — refuse if the new artifact is anomalously smaller than the last good one (`new < prior × ratio`); catches truncation that still passes a structural check. Ratio configurable, 0 = off.
+3. **Validity-aware retention** — prune evaluates artifact validity (size/row floor), not just mtime; a degenerate artifact is purged regardless of age and can never displace a good copy from the retention window.
+4. **Monitor on degenerate primary** — "the DB is gone/empty" outranks every freshness breach (it's the precondition under them). Don't let it surface only as a low-priority consequence (e.g. enrich-null masked by STALE_DEPLOY). Add `DRY_RUN`/path-override env hooks so the monitor is verifiable against a degenerate fixture without firing real delivery.
+
+**Tested:** `tests/backup-events-db.test.ts` (8) drives the shell script as a subprocess with `SOURCE_DB`/`BACKUP_DIR`/threshold overrides + a regression guard against the real preserved `data/events.db.empty-2026-06-30` dud; `tests/watchdog/deadman.test.ts` (+5) covers `DB_MISSING` priority.
+
+**Connects to:** mistakes.md "S194 backup-amplifies-loss", `specs/db-loss-incident-2026-06-30.md`, the deadman pattern above.
