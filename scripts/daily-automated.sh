@@ -221,16 +221,23 @@ run_dedup_removal() {
 }
 
 # Phase 3a-ii: Cross-source deduplication with field merging
+#
+# --exclude-layers artist_extraction: Layer 4 (bare headliner vs full-lineup
+# title, e.g. "Monolink" vs "Jafari: Monolink + Nick Jojo + Magda Kay") is
+# new as of 2026-07-02. It's detected and logged every run but never
+# executed here — burn-in period to build confidence before trusting it to
+# delete rows unattended. Remove this flag once the shadow log has been
+# reviewed and the layer is trusted. See src/quality/duplicate-detector.ts.
 run_dedup_merge() {
     log_phase "DEDUP - CROSS-SOURCE MERGE"
     log "Merging cross-source duplicate events..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75 (lowered from 0.9 to catch token-overlap pairs)"
+        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --exclude-layers artist_extraction"
         return 0
     fi
 
-    if bun run scripts/merge-duplicates.ts --execute --min-confidence 0.75 >> "$LOG_FILE" 2>&1; then
+    if bun run scripts/merge-duplicates.ts --execute --exclude-layers artist_extraction >> "$LOG_FILE" 2>&1; then
         log "Cross-source merge completed"
         return 0
     else
