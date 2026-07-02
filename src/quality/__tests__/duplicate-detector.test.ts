@@ -314,6 +314,101 @@ describe('Layer 3 — Token Overlap', () => {
 });
 
 // ============================================================================
+// Layer 4: Artist Extraction (confidence 0.6)
+// ============================================================================
+
+describe('Layer 4 — Artist Extraction', () => {
+  test('bare headliner vs promoter lineup listing: Monolink', () => {
+    // Real production case (2026-07-02): athinorama titles by headliner only,
+    // clubber.gr titles by promoter + full lineup. Same venue, same date.
+    const events = [
+      makeDbRow({
+        id: 'monolink-athinorama',
+        title: 'Monolink',
+        venue_name: 'Bolivar Beach Bar',
+        source: 'athinorama.gr',
+      }),
+      makeDbRow({
+        id: 'monolink-clubber',
+        title: 'Jafari: Monolink + Nick Jojo + Magda Kay',
+        venue_name: 'Bolivar',
+        source: 'clubber.gr',
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    const match = findPair(pairs, 'monolink-athinorama', 'monolink-clubber');
+    expect(match).toBeDefined();
+    expect(match!.confidence).toBe(0.6);
+    expect(match!.layer).toBe('artist_extraction');
+  });
+
+  test('headliner NOT in lineup → no match', () => {
+    // Guard: a different artist name must not match just because it shares
+    // venue + date with an unrelated lineup listing.
+    const events = [
+      makeDbRow({
+        id: 'moojo-athinorama',
+        title: 'Moojo',
+        venue_name: 'Bolivar Beach Bar',
+        source: 'athinorama.gr',
+      }),
+      makeDbRow({
+        id: 'jafari-clubber',
+        title: 'Jafari: Monolink + Nick Jojo + Magda Kay',
+        venue_name: 'Bolivar',
+        source: 'clubber.gr',
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    const match = findPair(pairs, 'moojo-athinorama', 'jafari-clubber');
+    expect(match).toBeUndefined();
+  });
+
+  test('short generic word must not match via extraction (< 5 chars)', () => {
+    const events = [
+      makeDbRow({
+        id: 'dj-short',
+        title: 'Alex',
+        venue_name: 'Bolivar Beach Bar',
+        source: 'athinorama.gr',
+      }),
+      makeDbRow({
+        id: 'dj-lineup',
+        title: 'Promoter: Alex + Nick Jojo + Magda Kay',
+        venue_name: 'Bolivar',
+        source: 'clubber.gr',
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    const match = findPair(pairs, 'dj-short', 'dj-lineup');
+    expect(match).toBeUndefined();
+  });
+
+  test('title with no delimiter yields no segments → no false extraction match', () => {
+    const events = [
+      makeDbRow({
+        id: 'plain-a',
+        title: 'Monolink',
+        venue_name: 'Bolivar Beach Bar',
+        source: 'athinorama.gr',
+      }),
+      makeDbRow({
+        id: 'plain-b',
+        title: 'Monolink Live Show Special',
+        venue_name: 'Bolivar',
+        source: 'clubber.gr',
+      }),
+    ];
+    const pairs = findDuplicates(events, testVenueConfig);
+    // No lineup delimiter present — Layer 2 containment should catch this
+    // instead of Layer 4 (verifying Layer 4 doesn't mask/replace Layer 2).
+    const match = findPair(pairs, 'plain-a', 'plain-b');
+    expect(match).toBeDefined();
+    expect(match!.layer).toBe('containment');
+  });
+});
+
+// ============================================================================
 // Guard Tests — MUST NOT MATCH
 // ============================================================================
 

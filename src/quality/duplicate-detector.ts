@@ -8,7 +8,7 @@
  * 1. Exact canonical title match (1.0)
  * 2. Title containment (0.9)
  * 3. Token overlap ≥ 70% (0.75)
- * 4. Artist extraction (0.6) — reserved for future use
+ * 4. Artist extraction (0.6) — bare headliner vs. full-lineup listing
  *
  * Safety: events MUST share canonical venue + overlapping dates
  * before any title comparison. Protected events are always skipped.
@@ -18,6 +18,7 @@ import {
   canonicalizeTitle,
   canonicalizeVenue,
   extractSignificantTokens,
+  extractArtistSegments,
   type VenueEntry,
 } from '../utils/text-normalize';
 
@@ -278,9 +279,30 @@ function matchTitle(
     }
   }
 
-  // Layer 4: Artist extraction — reserved for future implementation
-  // Would extract artist names from structured title patterns like
-  // "Venue pres. Artist + Artist2" and match on extracted artists.
+  // Layer 4: Artist extraction
+  // Bare-headliner vs full-lineup mismatch — e.g. "Monolink" vs
+  // "Jafari: Monolink + Nick Jojo + Magda Kay". Split the longer title on
+  // lineup delimiters and check whether the shorter title is one of the
+  // extracted segments. The shorter title must clear the same significance
+  // bar as Layer 2 (avoids a generic short word matching by accident).
+  const shortC = ca.title.length <= cb.title.length ? ca : cb;
+  const longC = ca.title.length <= cb.title.length ? cb : ca;
+  const shortIsSignificant =
+    shortC.tokens.length >= 2 ||
+    (shortC.tokens.length === 1 && shortC.tokens[0].length >= 5);
+
+  if (shortIsSignificant && shortC.title.length >= 5) {
+    const segments = extractArtistSegments(longC.title);
+    if (segments.includes(shortC.title)) {
+      return {
+        eventA: a.id,
+        eventB: b.id,
+        confidence: 0.6,
+        layer: 'artist_extraction',
+        reason: `"${shortC.title}" found as lineup segment in "${longC.title}"`,
+      };
+    }
+  }
 
   return null;
 }

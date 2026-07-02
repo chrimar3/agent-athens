@@ -129,6 +129,31 @@ export function canonicalizeTitle(title: string): string {
 }
 
 // ============================================================================
+// Artist/Lineup Segment Extraction (duplicate-detector Layer 4)
+// ============================================================================
+
+// Marks a lineup or promoter-prefix split point, e.g.
+// "Jafari: Monolink + Nick Jojo + Magda Kay" → ["jafari", "monolink", "nick jojo", "magda kay"]
+const LINEUP_DELIMITERS = /:|\+|&(?!amp;)|\/|,|\bvs\.?\b|\bb2b\b/gi;
+
+/**
+ * Split a title into candidate lineup segments for matching against a bare
+ * headliner title from another source (e.g. "Monolink" vs a promoter's
+ * full-lineup listing "Jafari: Monolink + Nick Jojo + Magda Kay"). Each
+ * segment is run through canonicalizeTitle so segment equality lines up
+ * with whole-title equality elsewhere in the matcher.
+ *
+ * Titles with no delimiter aren't lineup listings, so they yield no segments
+ * — this keeps the caller from ever comparing a plain title against itself.
+ */
+export function extractArtistSegments(title: string): string[] {
+  if (!title) return [];
+  const parts = title.split(LINEUP_DELIMITERS);
+  if (parts.length < 2) return [];
+  return parts.map((p) => canonicalizeTitle(p)).filter((p) => p.length > 0);
+}
+
+// ============================================================================
 // Venue Canonicalization
 // ============================================================================
 
