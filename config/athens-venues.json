@@ -134,7 +134,8 @@
         "Christmas Theater Athens",
         "Christmas Theater (Ολυμπιακά Ακίνητα Γαλατσίου)"
       ],
-      "neighborhood": "Galatsi"
+      "neighborhood": "Galatsi",
+      "address": "Leoforos Veikou 139, Galatsi 111 46"
     },
     {
       "canonical_name": "Θέατρο Φούρνος",
@@ -1074,8 +1075,13 @@
     },
     {
       "canonical_name": "Underflow",
-      "variations": [],
-      "neighborhood": "Unknown"
+      "variations": [
+        "Underflow Records",
+        "Underflow Record Store",
+        "Underflow Record Store & Art Gallery"
+      ],
+      "neighborhood": "Neos Kosmos",
+      "address": "Kallirrois 39, Athens 117 43"
     },
     {
       "canonical_name": "STAVROS NIARCHOS FOUNDATION CULTURAL CENTER",
@@ -2653,7 +2659,8 @@
         "Bageion Hotel",
         "Bageion"
       ],
-      "neighborhood": "Omonoia"
+      "neighborhood": "Omonoia",
+      "address": "Plateia Omonoias 18, Athens 105 52"
     },
     {
       "canonical_name": "Leof. Mesogeion 15",
