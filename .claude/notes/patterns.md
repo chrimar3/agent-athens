@@ -5688,3 +5688,20 @@ Fix family (the 4th and last degeneracy surface; backup + deadman were the first
 
 **Connects to:** "Integrity floor before overwrite" pattern above, mistakes.md "WAL read-time trap"
 + "build-against-degenerate-DB", `specs/db-availability-build-2026-06-30.md`.
+
+## Gate-failure class = run the emission resolver, not a config-only grep (2026-07-04)
+
+The F2b streetAddress hard-stop failed on 1 event page (Christmas Theater). To size the *whole class* before fixing (so we don't fix one and rebuild into the next), the instinct is `jq` over `config/athens-venues.json` for entries missing `address` — that returned **~200 venues** and is wrong. The gate validates the **emitted** JSON-LD, and the render resolves streetAddress as a fallback chain:
+
+```
+streetAddress = event.venue.address (DB row)  ||  findVenueConfig(name)?.address (config)  ||  ''
+```
+(`src/generators/event-page.ts:178`; error raised in `src/validators/schema-completeness.ts:424`, only when `location.address` exists AND streetAddress is empty.)
+
+So a page only errors when **both** the DB row and config resolve empty. The config-only grep over-counts massively because most of those ~200 venues carry their address on the DB `venue_address` column, not in config.
+
+**The correct way to enumerate a gate-failure class: replicate the emission resolver, not one input to it.** I ran the real `findVenueConfig` (imported from `src/quality/location-filter.ts`) over every pageable row (`location_status IN ('verified_athens','pass_through')`) with an empty DB address, and kept only rows where config *also* resolved empty. True class = **3** venues (Christmas Theater, Underflow, Μπάγκειον), not 200. Only 1 built a failing page (the other two: one far-future beyond the build horizon, one past → no page emitted), but all 3 are one scrape/horizon-shift from re-blocking, so all 3 got backfilled.
+
+**Reusable rule:** when a build gate fails, count the class by running the field's *resolution function* against the real data set, not by grepping a single upstream source. Over-counting from a config grep would have sent a "backfill 200 venues" brief when the actual gap was 3. Extends the "verify the premise against actual data" ledger to **gate-failure sizing**.
+
+**Connects to:** MEMORY verify-the-premise ledger, `feedback_gate_gap_is_open_before_how_to_close.md` (segment by type before calling a field a gap), `specs/phase-0-reality-check.md`.
