@@ -4366,6 +4366,8 @@ disclosure line.
 
 **Connects to:** 2026-07-04 Authority/Entity-Presence ruling (same design-now/commit-later split; both No-Go on live changes this window; authority ruling explicitly mirrors this one) and 2026-07-04 Past-Event URLs ruling (both cite this as the redesign antecedent); build-gate repair + IndexNow hygiene (pipeline workstream, decoupled here as plain dev); freshness-recovery read (the commit gate the redesign shares with the authority play); 2026-02-20 45-Day Lifecycle + canonical-must-be-200 / single-flip-gate invariants (surfaces a live IA change would churn).
 
+**Spec:** `specs/redesign-spec-v2.md` (authored 2026-07-04, NOT YET ratified — IA/token sign-off pending Design Navigator, URL-implication clearance pending GEO). Discoverability pointer only; records where the artifact lives, does not ratify its contents.
+
 **Status:** LOGGED 2026-07-04 — canonical docs/geo-decisions.md
 
 ---
