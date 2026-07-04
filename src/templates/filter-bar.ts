@@ -207,14 +207,18 @@ export function renderFilterBar(
     ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">${s.filterClear}</a>` : ''}
   </div>`;
 
+  // F8: the result-count meta sits OUTSIDE .filter-bar-scroll. Inside it, the
+  // right-edge mask-image gradient (scroll affordance) faded the count into
+  // transparency at every width ("11 εκδηλώσ…"). As a sibling it renders full,
+  // unmasked, and stays pinned right instead of scrolling away with the pills.
   return `<div class="filter-bar" data-locale="${locale}">
     <div class="filter-bar-scroll">
       ${datePill}
       ${typePill}
       ${pricePill}
       ${sortPill}
-      ${meta}
     </div>
+    ${meta}
   </div>
   <div class="filter-panel-backdrop"></div>`;
 }

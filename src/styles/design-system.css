@@ -2467,9 +2467,15 @@ div#main-content {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-md);
+  flex-wrap: wrap; /* F8: stamp drops below H1 instead of clipping the viewport edge */
 }
 .page-header h1 { font-size: var(--type-h1); margin: 0; }
 .last-update { font-size: var(--type-ui); color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0; }
+/* F8: at mobile widths the stamp gets its own row and may still exceed 390px —
+   let it wrap within the viewport rather than truncate ("…4 Ιουλίο"). */
+@media (max-width: 767px) {
+  .last-update { white-space: normal; flex-shrink: 1; min-width: 0; }
+}
 .related-pages { margin: var(--space-md-lg) 0; padding: var(--space-md); background: var(--bg-surface); border-radius: var(--radius-md); }
 .related-pages ul { list-style: none; display: flex; gap: var(--space-md); flex-wrap: wrap; margin-top: var(--space-sm); }
 

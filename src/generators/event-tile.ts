@@ -17,6 +17,7 @@ import type { Event } from '../types';
 import { SATORI_FONTS } from '../utils/satori-fonts';
 import { computeTileFit } from '../utils/tile-autofit';
 import { formatGreekDateOnly } from '../utils/i18n';
+import { decodeHtmlEntities } from '../utils/text-normalize';
 
 /** Color tokens per DN ruling 2026-06-03 (--bg-elevated, --text-primary, --text-tertiary). */
 const COLORS = {
@@ -68,11 +69,15 @@ export async function generateEventTile(
   const o = { ...DEFAULT_TILE_OPTS, ...opts };
   const innerWidth = o.width - PADDING * 2;
 
-  // Autofit uses the same Satori + fonts + lineHeight that we render at below.
-  const fit = await computeTileFit(event.title, { maxWidth: innerWidth });
+  // F4: decode HTML entities BEFORE autofit + escape. DB titles can carry raw
+  // entities (e.g. "C&#39;mon"); escapeForSatori would re-escape the `&` into
+  // `&amp;#39;` and render it literally on the tile (the HTML card path decodes
+  // natively, so only the SVG tile showed the double-escape). Decode-then-escape
+  // matches the S154 meta/action-bar pattern.
+  const fit = await computeTileFit(decodeHtmlEntities(event.title), { maxWidth: innerWidth });
 
   const title = escapeForSatori(fit.displayTitle);
-  const venue = escapeForSatori(event.venue.name);
+  const venue = escapeForSatori(decodeHtmlEntities(event.venue.name));
   const dateStr = escapeForSatori(formatGreekDateOnly(event.startDate));
 
   return satori(

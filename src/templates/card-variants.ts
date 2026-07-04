@@ -144,7 +144,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
     <a href="${featuredData.href}" class="hero-card hero-card--featured">
       ${featuredImg
         ? `<div class="hero-card-image-wrapper" data-type="${featured.type}">
-        <img class="hero-card-image" src="${featuredImg}" alt="${featured.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+        <img class="hero-card-image" src="${featuredImg}" alt="${featured.title}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
         <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${featuredIcon}</span>
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`
