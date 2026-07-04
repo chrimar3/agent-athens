@@ -140,8 +140,10 @@ describe('lifecycle — end_date-aware for all types', () => {
     expect(shouldNoindexEvent(e)).toBe(true);
   });
 
-  test('presumption long-expired → archive (page not generated; still never 410)', () => {
+  test('presumption long-expired → archive (page not generated; archive drives a 410 at the emission layer — generateArchiveGoneRules)', () => {
     const e = { startDate: daysFromNow(-140), endDate: null, type: 'exhibition' };
+    // Classifier is unchanged by GEO Ruling 2 — archive still classifies
+    // past-expired; the 410 is added at the redirects EMISSION layer, not here.
     expect(classifyEventLifecycle(e)).toBe('past-expired');
     expect(getLifecyclePhase(e)).toBe('archive');
   });
@@ -151,5 +153,32 @@ describe('lifecycle — end_date-aware for all types', () => {
     expect(getLifecyclePhase({ startDate: daysFromNow(-10), endDate: null, type: 'concert' })).toBe('just-passed');
     expect(getLifecyclePhase({ startDate: daysFromNow(-20), endDate: null, type: 'concert' })).toBe('cooling');
     expect(classifyEventLifecycle({ startDate: daysFromNow(-50), endDate: null, type: 'concert' })).toBe('past-expired');
+  });
+});
+
+describe('GEO Ruling 2 §1 — exhibition-endDate invariant LOCK (red-on-removal)', () => {
+  // GEO binding invariant: no event with a FUTURE effective end may classify
+  // Cooling or Archive. A future end_date must hold the event 'active' no matter
+  // how far past its start_date is — the single predicate the state machine
+  // reads (resolveEffectiveEnd), NOT a second age-based check.
+  //
+  // Red-on-removal: with startDate -140d, BOTH fallbacks would archive this
+  // event — raw start_date (-140d > 45d past) AND the 90d exhibition presumption
+  // window (start -140d + 90d = -50d, also past). Only honouring the future
+  // end_date keeps it active. Delete the `if (event.endDate)` branch in
+  // resolveEffectiveEnd and these go RED (verified by stub-and-revert; see
+  // commit message). This test exists to make that deletion fail loudly.
+  test('future endDate + aged startDate (exhibition) → active, indexed — never cooling/archive', () => {
+    const e = { startDate: daysFromNow(-140), endDate: daysFromNow(30), type: 'exhibition' };
+    expect(classifyEventLifecycle(e)).toBe('upcoming');
+    expect(getLifecyclePhase(e)).toBe('active');
+    expect(shouldNoindexEvent(e)).toBe(false);
+  });
+
+  test('future endDate + aged startDate — endDate-wins is generalized to point types (concert)', () => {
+    const e = { startDate: daysFromNow(-140), endDate: daysFromNow(30), type: 'concert' };
+    expect(classifyEventLifecycle(e)).toBe('upcoming');
+    expect(getLifecyclePhase(e)).toBe('active');
+    expect(shouldNoindexEvent(e)).toBe(false);
   });
 });
