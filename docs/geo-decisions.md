@@ -4431,3 +4431,19 @@ Reject as standalone policies: **A (404)** = the regression to eliminate. **Unif
 **Status:** LOGGED 2026-07-04 — canonical docs/geo-decisions.md
 
 ---
+
+## 2026-07-04 — INTERIM FLAG: cross-locale 410 asymmetry (bare-root only)
+
+**State:** Archive 410s (45–90d band, 6,246 rules) cover bare-root `/events/{slug}/` ONLY. The `/en/events/{slug}/` mirror still 404s for archive events — NOT 410'd.
+
+**Why accepted (GEO Ruling, Option A):** canonical value is vestigial on dead events; the asymmetry is pure removal-SPEED on URLs being deleted anyway (404 de-indexes over a multi-week queue vs 410's single cycle). Bounded, self-resolving, zero live surface. Holding instead would extend the 6-day freshness drought — a compounding hit to LIVE citability. Trade is lopsided toward shipping.
+
+**Named closure:** Netlify Edge Function + archived-slug manifest — covers both locales, unbounded, one 410 signal from one source. Sequenced as the immediately-next item (NOT backlog). Spec: `specs/edge-function-410-recon.md`.
+
+**Not benign-by-assumption:** verified clean 2026-07-04 (`specs/ruling2-deploy-gates.md`) — no dead `/en/` URL in sitemap or hreflang (hreflang gate globally closed; sitemap sources pageable-only). So the asymmetry is genuinely removal-speed only, not a drift. **Re-confirm this holds if `HREFLANG_GATE_OPEN` ever flips to true** — a bilingual launch could start emitting hreflang to dead `/en/` archive URLs, at which point the asymmetry stops being benign and becomes real drift. Named here so the condition can't get lost (future-Guard-6 landmine, defused now).
+
+**Closes when:** edge function ships. Until then this flag stays open on the ledger.
+
+**Status:** OPEN (interim) — LOGGED 2026-07-04, canonical `docs/geo-decisions.md`; closes when the edge-function 410 ships.
+
+---

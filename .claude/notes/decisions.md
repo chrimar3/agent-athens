@@ -4801,3 +4801,13 @@ fallback (as in `deadman-watchdog.ts:83-89`) misses this; the guard probes a rea
 readonly and falls back to `{readwrite,create:false}` on EITHER failure. Evidence:
 `specs/db-availability-build-2026-06-30.md`, `tests/db-health.test.ts`, `tests/assert-db-healthy.test.ts`.
 All TDD; full suite 2870 pass / 0 fail, tsc clean.
+
+### INTERIM FLAG: cross-locale 410 asymmetry — bare-root only, /en/ still 404s (2026-07-04, GEO Ruling 2)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Ship archive 410s (45–90d band, 6,246 rules via `generateArchiveGoneRules`) covering bare-root `/events/{slug}/` ONLY; accept that `/en/events/{slug}/` archive URLs keep 404-ing (Option A) | Netlify `_redirects` force-410 needs a full-path rule per URL; a splat 410 falls through to 404 (project's own prior finding) and the band is a date-defined subset with no shared URL prefix, so covering `/en/` = doubling to ~12.5k rules → breaches Netlify's ~10k ceiling. Canonical value is vestigial on dead events; the asymmetry is pure removal-SPEED (404 de-indexes over a multi-week queue vs 410's single cycle) on URLs being deleted anyway. Holding for symmetry would extend the 6-day freshness drought — a compounding hit to LIVE citability. Trade is lopsided toward shipping. | 2026-07-04 |
+
+**Named closure (immediately-next, NOT backlog):** Netlify Edge Function + archived-slug manifest → both locales, unbounded, one 410 source. Recon: `specs/edge-function-410-recon.md`.
+
+**Live tripwire (future-Guard-6):** the "asymmetry is benign" argument rests on `HREFLANG_GATE_OPEN = false` (utils/hreflang.ts:25). If that gate ever opens (bilingual launch), dead `/en/` archive URLs could start carrying hreflang — asymmetry stops being removal-speed-only and becomes real drift. Re-run `specs/ruling2-deploy-gates.md` GATE-1 the moment that flag flips. Verified clean 2026-07-04 (no dead `/en/` in sitemap or hreflang; both globally off). Evidence: `specs/ruling2-fix-checkpoint.md`, `specs/ruling2-deploy-gates.md`. Flag stays OPEN until the edge function ships.
