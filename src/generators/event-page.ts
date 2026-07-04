@@ -31,7 +31,7 @@ import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
-import { classifyEventLifecycle, shouldNoindexEvent, isRunImplyingType } from '../utils/event-lifecycle';
+import { classifyEventLifecycle, shouldNoindexEvent, isRunImplyingType, resolveEffectiveEnd, getAthensTodayStr } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
 import { getOgImage } from '../utils/og-image-fallback';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
@@ -426,8 +426,25 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el', pagedVenue
  * `src/generators/datafeed.ts`, schema-validator at `src/utils/schema-validator.ts`),
  * call `buildEventSchemaObject` directly.
  */
-function generateEventSchema(event: Event, locale: Locale = 'el', pagedVenueSlugs?: Set<string>): string {
-  return JSON.stringify(buildEventGraphEnvelope(event, locale, pagedVenueSlugs), null, 2);
+function generateEventSchema(
+  event: Event,
+  locale: Locale = 'el',
+  pagedVenueSlugs?: Set<string>,
+  opts: { omitEventNode?: boolean } = {}
+): string {
+  const envelope = buildEventGraphEnvelope(event, locale, pagedVenueSlugs);
+  if (opts.omitEventNode && Array.isArray(envelope['@graph'])) {
+    // GEO Ruling 2 §3 — cooling-phase (noindexed) pages drop the Event entity so
+    // an ended event never presents as a rankable live Event while suppressed,
+    // but PRESERVE non-Event nodes (venue Place, seller/publisher Organization) —
+    // the page is never left schema-silent. The Event node is the sole @graph
+    // member whose @id ends '#event' (venue=#venue, orgs=#organization).
+    envelope['@graph'] = envelope['@graph'].filter(
+      (node: Record<string, any>) =>
+        !(typeof node['@id'] === 'string' && (node['@id'] as string).endsWith('#event'))
+    );
+  }
+  return JSON.stringify(envelope, null, 2);
 }
 
 /**
@@ -448,7 +465,6 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const localePrefix = locale === 'en' ? '/en' : '';
   const canonicalUrl = `${BASE_URL}${localePrefix}/events/${slug}/`;
   const ogImage = getOgImage(event);
-  const schemaJson = generateEventSchema(event, locale, pagedVenueSlugs);
   const practicalBlock = generatePracticalBlock(event, null, locale);
   const schemaType = resolveEventSchemaType(event); // S175: comedy-format derivation above EventType→@type
 
@@ -461,6 +477,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const lifecycle = classifyEventLifecycle(event);
   const isPast = lifecycle !== 'upcoming';
   const shouldNoindex = shouldNoindexEvent(event);
+
+  // GEO Ruling 2 §3 — cooling pages (noindex) drop the Event JSON-LD node but
+  // keep non-Event nodes. Computed after shouldNoindex so the flag threads in.
+  const schemaJson = generateEventSchema(event, locale, pagedVenueSlugs, { omitEventNode: shouldNoindex });
 
   // Date display — locale-aware
   const timeStr = event.startDate.includes('T')
@@ -981,6 +1001,64 @@ export function generateRedirects(
   }
 
   return redirects;
+}
+
+/** Trailing window (days) below which archived event URLs stop emitting a 410
+ *  and fall through to a natural 404. Aging past this bound IS the prune —
+ *  keeps `_redirects` bounded under Netlify's ~10k ceiling (GEO Ruling 2). */
+export const ARCHIVE_410_WINDOW_DAYS = 90;
+
+/**
+ * GEO Ruling 2 §2 — explicit 410 for archive-phase (past-expired, >45d) events,
+ * BOUNDED to the trailing 45–90d band. Replaces 404-by-omission (the current
+ * bug) with an honest, faster de-index signal on the whole >45d surface.
+ *
+ * Enumeration source: the DB set (`locationFiltered`), keyed on the classifier's
+ * own `resolveEffectiveEnd` — NOT raw start_date — so a running exhibition with
+ * a future endDate never lands here (locked by lifecycle-presumption.test.ts §1).
+ * slugHistory is NOT used: it self-prunes to the pageable set and loses archived
+ * events within one build.
+ *
+ * Bound: past-expired AND effective-end within the last 90 days → 45–90d band
+ * (~3k rules, self-sliding). Older → no rule (natural 404).
+ *
+ * Emission: force-410 (`410!`) so a lingering un-swept `dist/events/{slug}/`
+ * directory cannot shadow the rule (Netlify serves a matching static file before
+ * a non-forced redirect — the shadowing trap the orphan-sweep note flagged).
+ *
+ * `preservedUrls`: dormant, city-agnostic backlink allowlist (empty by design).
+ * A URL present here is skipped — the seam where the authority play (once it
+ * lands real inbound links) would begin to 301-preserve instead of 410. Wire
+ * nothing to a paid API.
+ *
+ * Event pages ONLY. Never emits a hub/combinatorial path.
+ */
+export function generateArchiveGoneRules(
+  events: Event[],
+  opts: { preservedUrls?: Set<string> } = {}
+): string[] {
+  const preserved = opts.preservedUrls ?? new Set<string>();
+  const todayMs = new Date(getAthensTodayStr() + 'T00:00:00Z').getTime();
+  const rules: string[] = [];
+
+  for (const event of events) {
+    // Lower bound: only past-expired (>45d) events — same classifier the page
+    // generator uses, so the two layers can never disagree.
+    if (classifyEventLifecycle(event) !== 'past-expired') continue;
+
+    // Upper bound: effective-end within the trailing window. Keyed on
+    // resolveEffectiveEnd (endDate-aware) to match the classifier's own arithmetic.
+    const effEndMs = new Date(resolveEffectiveEnd(event).date + 'T00:00:00Z').getTime();
+    const daysPast = Math.floor((todayMs - effEndMs) / 86_400_000);
+    if (daysPast > ARCHIVE_410_WINDOW_DAYS) continue;
+
+    const url = `/events/${generateEventSlug(event)}/`;
+    if (preserved.has(url)) continue;
+
+    rules.push(`${url} /410.html 410!`);
+  }
+
+  return rules;
 }
 
 // Exports for other modules

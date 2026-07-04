@@ -1,0 +1,4 @@
+{
+  "_note": "GEO Ruling 2 (2026-07-04) dormant backlink allowlist. Any event URL listed here is SKIPPED by the archive-410 emission (generateArchiveGoneRules) — the seam where the authority play, once it lands real inbound links, would 301-preserve an equity-bearing archived URL instead of 410-ing it. EMPTY BY DESIGN: populate ONLY from free Bing WMT / GSC referring-domain data once real backlinks exist. Never wire to a paid API (zero-API-cost constraint). City-agnostic — the mechanism ships for every city; the DATA (which URLs) is per-city.",
+  "preserved_urls": []
+}

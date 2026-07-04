@@ -12,8 +12,14 @@
  * otherwise. The old Tier-1 "exhibitions use endDate" rule is the special case
  * this generalizes. Presumption binding constraints: never EventCompleted from
  * presumption (schema-geo.ts owns status); presumption expiry cools to noindex
- * immediately (no just-passed grace — we don't KNOW it just passed; err short);
- * never 410 (no phase emits one anywhere — verified F2b Step 0).
+ * immediately (no just-passed grace — we don't KNOW it just passed; err short).
+ *
+ * 410 policy (GEO Ruling 2, 2026-07-04): this classifier emits NO status code —
+ * it is classification only. The ARCHIVE phase now drives an explicit 410 at the
+ * redirects EMISSION layer (generateArchiveGoneRules in event-page.ts), bounded
+ * to the trailing 45–90d band. The just-passed and cooling phases never 410
+ * (they serve 200; cooling is noindex). The classifier is unchanged by this —
+ * archive still classifies past-expired; only emission gained a 410.
  *
  * Timezone: Europe/Athens (manual offset, matching resolveEventStatus in schema-geo.ts).
  */
