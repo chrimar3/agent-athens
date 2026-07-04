@@ -4811,3 +4811,11 @@ All TDD; full suite 2870 pass / 0 fail, tsc clean.
 **Named closure (immediately-next, NOT backlog):** Netlify Edge Function + archived-slug manifest → both locales, unbounded, one 410 source. Recon: `specs/edge-function-410-recon.md`.
 
 **Live tripwire (future-Guard-6):** the "asymmetry is benign" argument rests on `HREFLANG_GATE_OPEN = false` (utils/hreflang.ts:25). If that gate ever opens (bilingual launch), dead `/en/` archive URLs could start carrying hreflang — asymmetry stops being removal-speed-only and becomes real drift. Re-run `specs/ruling2-deploy-gates.md` GATE-1 the moment that flag flips. Verified clean 2026-07-04 (no dead `/en/` in sitemap or hreflang; both globally off). Evidence: `specs/ruling2-fix-checkpoint.md`, `specs/ruling2-deploy-gates.md`. Flag stays OPEN until the edge function ships.
+
+### GEO Ruling 2 SHIPPED — archive 410 (bounded band) + cooling schema suppression + edge sequel viable (2026-07-04)
+
+| Decision | Why | Date |
+|----------|-----|------|
+| Archive 410 via bounded 45–90d `_redirects` band (6,246 force-410 rules, ~62% of 10k), classifier-derived | Unbounded (>45d ≈ 11.3k) breaches Netlify's ~10k ceiling; the band self-slides. Bare-root only (interim `/en/` asymmetry logged). SHIPPED + prod-verified (410/404/200/200 on `.com`). Deploys `6a494ce6` (A). | 2026-07-04 |
+| Cooling pages drop the Event JSON-LD `#event` node; preserve non-Event nodes; F2b structural gate made phase-aware to match | Ruling 2 §3 (ratified). The F2b gate (2026-06-12) required an Event node on every event page — reconciled by keying the skip on the noindex CAUSE (indexed pages still FAIL). Commit d336bb94b. | 2026-07-04 |
+| Edge-function 410 (both-locale, unbounded) = the named closure; sequel is VIABLE | Deploy-B probe proved edge functions ship under `--no-build --dir=dist` → no Tier-1 collision. Supersedes the `_redirects` band next session; closes the `/en/` asymmetry. `specs/edge-function-410-step0.md`. | 2026-07-04 |

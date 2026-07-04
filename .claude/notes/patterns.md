@@ -5705,3 +5705,9 @@ So a page only errors when **both** the DB row and config resolve empty. The con
 **Reusable rule:** when a build gate fails, count the class by running the field's *resolution function* against the real data set, not by grepping a single upstream source. Over-counting from a config grep would have sent a "backfill 200 venues" brief when the actual gap was 3. Extends the "verify the premise against actual data" ledger to **gate-failure sizing**.
 
 **Connects to:** MEMORY verify-the-premise ledger, `feedback_gate_gap_is_open_before_how_to_close.md` (segment by type before calling a field a gap), `specs/phase-0-reality-check.md`.
+
+### GEO Ruling 2 (2026-07-04) — three patterns
+
+- **recon-refuted-premise (14d-sweep misread):** the ruling's "orphan-sweep removes past-event dirs at ~14 days" was wrong. 14d = the just-passed→cooling (index→noindex) `JUST_PASSED_DAYS` boundary; 45d = `RETENTION_DAYS` (past-expired, page not generated). Deletion is non-deterministic w.r.t. age (lifecycle-gated non-regeneration + an env-gated sweep that's normally off), NOT a timed sweep. Read the boundary constants before trusting a prose premise.
+- **enumeration-bound-by-band:** archive-410 emitted via `_redirects` is ceiling-bound (~10k Netlify rules) → bound to a trailing 45–90d band (aging past 90d IS the prune). Correct `resolveEffectiveEnd` keying gave 6,246 (not the spike's raw-COALESCE 3,068 — multi-day runs ended-in-band but started-out-of-band). Force-410 (`410!`) defeats lingering-dist-dir shadowing.
+- **build-time-manifest + fail-open edge (Deploy-B confirmed viable):** edge functions DO deploy under `netlify deploy --no-build --dir=dist` (probe: `/__edge-probe` → 200, `x-edge-probe: deployed`, quarantine clean). The both-locale unbounded 410 closure = a build-time classifier-derived slug manifest + a path-scoped fail-open edge function that Set-checks it. Recon: `specs/edge-function-410-step0.md`.
