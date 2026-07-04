@@ -355,14 +355,18 @@ describe("Event Detail Page — Schema.org / SEO", () => {
   });
 
   test("uses SCHEMA_TYPE_MAP for JSON-LD @type (concert → MusicEvent)", () => {
-    const html = renderEventDetailPage(sampleConcert, []);
+    // Render an ACTIVE event: the Event JSON-LD node is only emitted for
+    // indexable phases (cooling/archive suppress it per GEO Ruling 2 §3). These
+    // fixtures carry 2025 dates, now archive — override to future so the @type
+    // mapping under test is exercised on an Event-node-bearing page.
+    const html = renderEventDetailPage({ ...sampleConcert, startDate: futureStartDate, endDate: undefined }, []);
     // Post-microdata-strip: itemtype on <article> is gone. JSON-LD carries @type.
     expect(html).not.toContain('itemtype="https://schema.org/MusicEvent"');
     expect(html).toMatch(/"@type"\s*:\s*"MusicEvent"/);
   });
 
   test("exhibition uses ExhibitionEvent JSON-LD @type", () => {
-    const html = renderEventDetailPage(sampleFreeExhibition, []);
+    const html = renderEventDetailPage({ ...sampleFreeExhibition, startDate: futureStartDate, endDate: undefined }, []);
     expect(html).not.toContain('itemtype="https://schema.org/ExhibitionEvent"');
     expect(html).toMatch(/"@type"\s*:\s*"ExhibitionEvent"/);
   });
