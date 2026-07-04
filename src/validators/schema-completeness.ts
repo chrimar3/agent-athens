@@ -14,6 +14,23 @@ import { classifyDateFormat } from '../utils/date-format';
 import { getRegionName } from '../utils/schema-geo';
 import { BASE_URL } from '../config/site-url';
 import { getLifecyclePhase } from '../utils/event-lifecycle';
+
+/**
+ * GEO Ruling 2 §3 (2026-07-04): does the page emit a noindex robots meta? Same
+ * signal the emitter uses (`shouldNoindexEvent` → `<meta name="robots"
+ * content="noindex">`) and the same extraction as `checkPhaseKeyedNoindex`.
+ *
+ * A cooling (noindex) event page legitimately carries NO Event JSON-LD node
+ * (dropped by ratified design; venue Place + publisher Organization retained).
+ * The structural "must have an Event node" checks key on THIS — the intentional
+ * CAUSE (noindex/cooling phase) — never on "page has no Event node" (the SYMPTOM
+ * the F2b gate exists to catch on INDEXED pages). An indexed page missing its
+ * Event node must still FAIL.
+ */
+function isNoindexPage(html: string): boolean {
+  const m = html.match(/<meta name="robots" content="([^"]*)"/);
+  return !!m && m[1].includes('noindex');
+}
 import { HREFLANG_GATE_OPEN } from '../utils/hreflang';
 
 // Valid @type values from our canonical type map, plus derived types that
@@ -294,6 +311,14 @@ export function validateSchemaCompleteness(
   //   - exactly one block → fall through and validate it (yields the existing
   //     specific "@type is not a valid Schema.org event type" error path)
   //   - multiple blocks, none Event-typed → emit the new structural error
+  // GEO Ruling 2 §3: a cooling (noindex) event page legitimately has NO Event
+  // node — dropped by ratified design. The retained graph is venue + org, or
+  // org-only when the event has no venue address. Either way there is no Event
+  // to validate → clean. INDEXED pages missing their Event node still FAIL below
+  // (skip keys on the noindex CAUSE, not the no-Event SYMPTOM the gate catches).
+  if (eventBlocks.length === 0 && isNoindexPage(htmlContent)) {
+    return { slug: eventSlug, errors: [], warnings: [], info: [] };
+  }
   if (eventBlocks.length === 0 && blocks.length > 1) {
     return {
       slug: eventSlug,
@@ -739,7 +764,13 @@ export function checkMemberOrdering(
       break;
   }
 
-  if (!firstOk) {
+  // GEO Ruling 2 §3: on a cooling (noindex) event page the Event node is dropped
+  // by design, so the first @graph member is legitimately the venue. Exempt only
+  // noindex EVENT pages from the first-member expectation; an INDEXED event page
+  // whose first member isn't an event subclass still FAILS. (Last-member check
+  // below is unaffected — the publisher Organization is still last on cooling.)
+  const coolingEventExempt = pageClass === 'event' && isNoindexPage(html);
+  if (!firstOk && !coolingEventExempt) {
     errors.push(
       `@graph member order: first member @type is "${firstType}", expected ${expectedFirstDesc} for ${pageClass} page`,
     );

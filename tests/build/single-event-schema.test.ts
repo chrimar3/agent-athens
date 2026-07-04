@@ -76,9 +76,15 @@ describe("output-layer: single Event JSON-LD per event page (S132')", () => {
       test.skip(`${slug} not in current dist — skip`, () => {});
       continue;
     }
-    test(`${slug} emits exactly one Event-typed JSON-LD block`, () => {
+    test(`${slug}: at most one Event-typed JSON-LD block (exactly one when indexed)`, () => {
       const html = readFileSync(htmlPath, "utf-8");
-      expect(countEventBlocks(html)).toBe(1);
+      const n = countEventBlocks(html);
+      // S132' core invariant: never a SECOND Event block (dual emission).
+      expect(n).toBeLessThanOrEqual(1);
+      // GEO Ruling 2 §3: cooling (noindex) pages drop the Event node by design →
+      // 0 blocks is correct. An INDEXED page must still carry exactly one.
+      const noindex = /<meta name="robots" content="[^"]*noindex[^"]*"/.test(html);
+      if (!noindex) expect(n).toBe(1);
     });
   }
 });

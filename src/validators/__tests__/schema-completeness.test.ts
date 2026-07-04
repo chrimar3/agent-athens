@@ -8,6 +8,26 @@ function wrapInHtml(schema: Record<string, unknown>): string {
   </head><body></body></html>`;
 }
 
+// Wrap an @graph envelope, optionally with a noindex robots meta. Used by the
+// GEO Ruling 2 §3 phase-aware structural-gate tests: a cooling (noindex) event
+// page legitimately carries NO Event node (venue + org only).
+function wrapGraphInHtml(graph: Record<string, unknown>[], opts: { noindex?: boolean } = {}): string {
+  const robots = opts.noindex ? '<meta name="robots" content="noindex">' : '';
+  return `<!DOCTYPE html><html><head>
+    ${robots}
+    <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}</script>
+  </head><body></body></html>`;
+}
+
+// A cooling-page @graph: Event node dropped (GEO Ruling 2 §3), venue Place +
+// publisher Organization retained. First member is the venue; last is the org.
+function coolingGraphNoEvent(): Record<string, unknown>[] {
+  return [
+    { '@type': 'MusicVenue', '@id': 'https://agentathens.com/venues/half-note-jazz-club/#venue', 'name': 'Half Note Jazz Club', 'address': { '@type': 'PostalAddress', 'streetAddress': 'Trivonianou 17', 'addressLocality': 'Athens' } },
+    { '@type': 'Organization', '@id': 'https://agentathens.com/#organization', 'name': 'agent athens', 'url': 'https://agentathens.com/' },
+  ];
+}
+
 // A fully valid schema matching what generateEventSchema() produces
 function makeValidSchema(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
@@ -2023,5 +2043,52 @@ describe('F2b — G1 eventStatus invariants', () => {
     });
     const result = validateSchemaCompleteness(wrapInHtml(schema), 'real-completion');
     expect(result.errors.some(e => e.includes('EventCompleted'))).toBe(false);
+  });
+});
+
+describe('GEO Ruling 2 §3 — phase-aware structural gate (cooling exemption, indexed still fails)', () => {
+  const BASE = 'https://agentathens.com';
+
+  describe('validateSchemaCompleteness — "No Event JSON-LD found"', () => {
+    test('COOLING (noindex) event page, no Event node (venue+org only) → PASSES (reconciliation)', () => {
+      const html = wrapGraphInHtml(coolingGraphNoEvent(), { noindex: true });
+      const result = validateSchemaCompleteness(html, 'cooling-no-event');
+      expect(result.errors.some(e => e.includes('No Event JSON-LD found'))).toBe(false);
+    });
+
+    test('⚠️ INDEXED event page (no noindex), no Event node → STILL FAILS (skip must not blind the gate)', () => {
+      const html = wrapGraphInHtml(coolingGraphNoEvent(), { noindex: false });
+      const result = validateSchemaCompleteness(html, 'indexed-no-event');
+      expect(result.errors.some(e => e.includes('No Event JSON-LD found'))).toBe(true);
+    });
+
+    // Org-only sub-case: cooling event with NO venue address → single Organization
+    // block (no venue node). Falls through to single-block validation without the
+    // noindex exemption; must be exempted too.
+    test('COOLING (noindex) org-only page (no venue node, 1 non-Event block) → PASSES (no Org-as-event errors)', () => {
+      const orgOnly = [{ '@type': 'Organization', '@id': 'https://agentathens.com/#organization', 'name': 'agent athens', 'url': 'https://agentathens.com/' }];
+      const result = validateSchemaCompleteness(wrapGraphInHtml(orgOnly, { noindex: true }), 'cooling-org-only');
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('⚠️ INDEXED org-only page (no noindex) → STILL FAILS (Organization validated as broken event)', () => {
+      const orgOnly = [{ '@type': 'Organization', '@id': 'https://agentathens.com/#organization', 'name': 'agent athens', 'url': 'https://agentathens.com/' }];
+      const result = validateSchemaCompleteness(wrapGraphInHtml(orgOnly, { noindex: false }), 'indexed-org-only');
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('checkMemberOrdering — first-member event-subclass expectation', () => {
+    test('COOLING (noindex) event page, first member = venue → PASSES (Event legitimately dropped)', () => {
+      const html = wrapGraphInHtml(coolingGraphNoEvent(), { noindex: true });
+      const result = checkMemberOrdering(html, 'cooling-order', 'event', BASE);
+      expect(result.errors.some(e => e.includes('first member @type'))).toBe(false);
+    });
+
+    test('⚠️ INDEXED event page (no noindex), first member = venue → STILL FAILS', () => {
+      const html = wrapGraphInHtml(coolingGraphNoEvent(), { noindex: false });
+      const result = checkMemberOrdering(html, 'indexed-order', 'event', BASE);
+      expect(result.errors.some(e => e.includes('first member @type'))).toBe(true);
+    });
   });
 });
