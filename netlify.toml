@@ -9,6 +9,12 @@
 [functions]
   directory = "netlify/functions"
 
+# Deploy-B capability probe (GEO Ruling 2 sequel): does `--no-build --dir=dist`
+# ship an edge function? Scoped to a throwaway path only — never real routes.
+[[edge_functions]]
+  path = "/__edge-probe"
+  function = "edge-probe"
+
 # Enable Netlify Blobs for click storage
 [dev]
   framework = "#custom"
