@@ -4447,3 +4447,27 @@ Reject as standalone policies: **A (404)** = the regression to eliminate. **Unif
 **Status:** OPEN (interim) — LOGGED 2026-07-04, canonical `docs/geo-decisions.md`; closes when the edge-function 410 ships.
 
 ---
+
+## 2026-07-04 — Ruling 2 Implementation Closure (append; cross-refs the 2026-07-04 Ruling 2 Ratification + Amendment)
+
+Clarifying supersession of the Ruling-2 ratification entry. Carries the three commit-hash artifacts and the three Option-A conditions as tracked flags. Does not edit the ratification body.
+
+**Implementation shipped (Steps 0→3, deploy authorized separately):** Bare-root archive 410s via bounded 45–90d DB band, cooling Event-JSON-LD suppression, exhibition-endDate regression lock. `bun test` 2895/0, `tsc` clean.
+
+**Commits (local → pushed):** `8ce5e5af9` (implementation) · `434693b4c` (exhibition lock + flipped anchor) · `e91f341e9` (emission/cooling/partition suites).
+
+**Amendment ratifications carried:**
+- **Artifact 1 — exhibition invariant RED-on-removal lock:** RATIFIED. Verified: stubbing `resolveEffectiveEnd` to drop its `endDate` branch → §1 lock tests RED (6 fail) → revert → 19/19 green. Keyed on single predicate `endDate in future`, no second surface. Commit `434693b4c`.
+- **Artifact 2 — no-410s combinatorial test categorical:** RATIFIED. Asserts zero non-event 410s AND single-hop AND no loops across the partition. Commit `e91f341e9`.
+- **Artifact 3 — cooling drop-#event-node:** CONFIRMED + GATE CLEARED. Drops `#event`, preserves venue `Place` / publisher-seller `Organization`. GEO's orphaned-edge gate verified CLEAN (`specs/ruling2-deploy-gates.md`): Offer is nested inline on `Event.offers` → drops with the Event; all `@id` edges outbound from `#event`, nothing references into it; empirically confirmed on a cooling with-ticket event. Commit `8ce5e5af9`.
+
+**Band-count correction (FYI):** correct `resolveEffectiveEnd` keying yields 6,246 rules, not the spike's raw-COALESCE estimate of 3,068 — multi-day non-exhibition runs (started >90d ago, ended 45–90d ago) correctly enter the band. The 3,068 estimate would have stranded ~3,178 long-run URLs at 404-by-omission. Ceiling: 62% of 10k. The invariant working as designed.
+
+**Option-A conditions (tracked flags):**
+1. **Edge-function spike = immediately-next sequenced item** (not backlog). Named recon gates: manifest freshness, cold-start on 404 paths, `_redirects` eval-order. Spec authored: `specs/edge-function-410-recon.md`. Retires the 45–90d band, covers both locales unbounded.
+2. **Deploy-gates verified CLEAN** (`specs/ruling2-deploy-gates.md`): no dead `/en/` URL in sitemap or hreflang (hreflang gate globally closed; sitemap sources pageable-only; three independent mechanisms), no orphaned schema edge. No MUST-FIX surfaced.
+3. **INTERIM ASYMMETRY FLAG — OPEN:** Archive 410s cover bare-root `/events/{slug}/` only; `/en/` mirror still 404s. Accepted per Option A (canonical value vestigial on dead events → pure removal-SPEED lag on URLs being deleted; holding would extend the freshness drought — a compounding live-surface hit). Benign-status VERIFIED, not assumed. **Tripwire:** rests on `HREFLANG_GATE_OPEN = false` — if that flips (bilingual launch), dead `/en/` URLs could carry hreflang and the asymmetry becomes real drift; re-verify at that point. **Closes when:** edge function ships.
+
+**Status:** Ratified. Interim flag OPEN until edge-function closure.
+
+---
