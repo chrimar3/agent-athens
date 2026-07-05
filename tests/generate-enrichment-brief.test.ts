@@ -47,7 +47,9 @@ function createBriefTestDB(): Database {
       ticket_url TEXT,
       ticket_url_status TEXT,
       needs_enrichment INTEGER DEFAULT 1,
-      location_status TEXT DEFAULT 'verified_athens'
+      location_status TEXT DEFAULT 'verified_athens',
+      merged_into TEXT,
+      merged_at TEXT
     );
   `);
 

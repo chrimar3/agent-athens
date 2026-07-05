@@ -83,6 +83,8 @@ function setupTestDatabase(db: Database): void {
       needs_enrichment INTEGER DEFAULT 1,
       enriched_at TEXT,
       full_description TEXT,
+      merged_into TEXT,
+      merged_at TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     )

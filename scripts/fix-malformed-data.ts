@@ -75,7 +75,9 @@ async function main() {
       const existing = db.prepare('SELECT id FROM events WHERE id = ?').get(newId);
       if (existing) {
         console.log(`      ⚠️ New ID already exists, deleting duplicate`);
-        db.prepare('DELETE FROM events WHERE id = ?').run(event.id);
+        // merged_into IS NULL (S198): never delete a marked merge loser — it's a
+        // reversible tombstone. If this collision-row is a loser, leave it (0 rows).
+        db.prepare('DELETE FROM events WHERE id = ? AND merged_into IS NULL').run(event.id);
       } else {
         db.prepare('UPDATE events SET id = ?, updated_at = ? WHERE id = ?').run(newId, now, event.id);
       }
@@ -108,7 +110,8 @@ async function main() {
           // Check for duplicate
           const existing = db.prepare('SELECT id FROM events WHERE id = ?').get(newId);
           if (existing && existing !== event.id) {
-            db.prepare('DELETE FROM events WHERE id = ?').run(event.id);
+            // merged_into IS NULL (S198): never delete a marked merge loser (reversible tombstone).
+            db.prepare('DELETE FROM events WHERE id = ? AND merged_into IS NULL').run(event.id);
           } else {
             db.prepare(`
               UPDATE events

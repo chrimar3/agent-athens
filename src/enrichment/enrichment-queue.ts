@@ -96,6 +96,7 @@ export function getEnrichmentQueue(
       FROM events
       WHERE needs_enrichment = 1
         AND location_status IN (${statusPlaceholders})
+        AND merged_into IS NULL
       ORDER BY start_date ASC
     `;
   } else {
@@ -115,6 +116,7 @@ export function getEnrichmentQueue(
       FROM events
       WHERE needs_enrichment = 1
         AND location_status IN (${statusPlaceholders})
+        AND merged_into IS NULL
       ORDER BY date ASC
     `;
   }

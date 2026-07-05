@@ -222,26 +222,33 @@ run_dedup_removal() {
 
 # Phase 3a-ii: Cross-source deduplication with field merging
 #
-# --exclude-layers artist_extraction: Layer 4 (bare headliner vs full-lineup
-# title, e.g. "Monolink" vs "Jafari: Monolink + Nick Jojo + Magda Kay") is
-# new as of 2026-07-02. It's detected and logged every run but never
-# executed here — burn-in period to build confidence before trusting it to
-# delete rows unattended. Remove this flag once the shadow log has been
-# reviewed and the layer is trusted. See src/quality/duplicate-detector.ts.
+# S198 (2026-07-05): swapped from merge-duplicates.ts (DELETE-based) to
+# mark-duplicates.ts (reversible). Losers are marked merged_into=survivor
+# instead of deleted, so a merge is undoable with one UPDATE and loser-URL
+# disposition stays a GEO decision. This is now the canonical daily dedup
+# path; merge-duplicates.ts / remove-duplicates.ts remain on disk but are
+# disconnected from automation.
+#
+# No --exclude-layers here: mark-duplicates uses findDuplicateGroups (all 4
+# layers incl. artist_extraction). The S197 burn-in reason for shadowing
+# Layer 4 was fear of unattended DELETEs — moot under a reversible marker.
+# At the current daily population, Layer 4 attributes 5 of ~27 marks (the
+# bare-headliner-vs-lineup cases it was built for), zero false merges in the
+# S197 self-gate. See src/quality/duplicate-detector.ts.
 run_dedup_merge() {
-    log_phase "DEDUP - CROSS-SOURCE MERGE"
-    log "Merging cross-source duplicate events..."
+    log_phase "DEDUP - CROSS-SOURCE MARK"
+    log "Marking cross-source duplicate events (reversible)..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        log "[DRY RUN] Would run: bun run scripts/merge-duplicates.ts --execute --exclude-layers artist_extraction"
+        log "[DRY RUN] Would run: bun run scripts/mark-duplicates.ts --execute"
         return 0
     fi
 
-    if bun run scripts/merge-duplicates.ts --execute --exclude-layers artist_extraction >> "$LOG_FILE" 2>&1; then
-        log "Cross-source merge completed"
+    if bun run scripts/mark-duplicates.ts --execute >> "$LOG_FILE" 2>&1; then
+        log "Cross-source mark completed"
         return 0
     else
-        log_error "Cross-source merge failed (continuing...)"
+        log_error "Cross-source mark failed (continuing...)"
         return 0  # Non-fatal
     fi
 }

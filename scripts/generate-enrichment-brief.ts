@@ -237,6 +237,7 @@ export function selectDiverseBatch(
     FROM events
     WHERE full_description IS NOT NULL AND full_description <> ''
       AND location_status IN ('verified_athens', 'pass_through')
+      AND merged_into IS NULL
   `).all() as { venue: string; date: string }[];
   for (const r of enrichedRows) {
     enrichedCombos.add(`${r.venue}|${r.date}`);
@@ -257,6 +258,7 @@ export function selectDiverseBatch(
     WHERE (full_description IS NULL OR full_description = '')
       AND needs_enrichment = 1
       AND location_status IN ('verified_athens', 'pass_through')
+      AND merged_into IS NULL
       AND ${effectiveDate} >= date('now')
       ${typeClause}
     ORDER BY

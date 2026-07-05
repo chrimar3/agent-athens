@@ -174,9 +174,14 @@ async function cleanDatabase() {
   // Complex deduplication is handled by remove-duplicates.ts
   console.log('🔍 Step 5: Removing exact duplicates (same title + date + time)...');
 
+  // merged_into IS NULL (dedup arc S198): marked merge losers are reversible
+  // tombstones — they must be invisible to this exact-match dedup or it would
+  // DELETE them and destroy the S197 mark's reversibility. Guarded at BOTH the
+  // grouping query and the per-group fetch below.
   const duplicateGroups = db.query<{ title: string; start_date: string; cnt: number }, []>(`
     SELECT title, start_date, COUNT(*) as cnt
     FROM events
+    WHERE merged_into IS NULL
     GROUP BY title, start_date
     HAVING cnt > 1
     ORDER BY cnt DESC
@@ -192,6 +197,7 @@ async function cleanDatabase() {
              price_amount, updated_at, url
       FROM events
       WHERE title = ? AND start_date = ?
+        AND merged_into IS NULL
     `).all(title, start_date);
 
     const scored = events.map(e => ({

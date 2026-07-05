@@ -362,6 +362,7 @@ export function syncQueueFromEvents(db: Database): {
     FROM events
     WHERE needs_enrichment = 1
       AND location_status IN ('verified_athens', 'pass_through')
+      AND merged_into IS NULL
   `).all() as Array<EventForEnrichment & { source: string }>;
 
   // Check existing queue entries
@@ -453,6 +454,7 @@ export function getNextBatch(
     JOIN events e ON q.event_id = e.id
     WHERE q.status = 'pending'
       AND q.priority_score >= ?
+      AND e.merged_into IS NULL
   `;
 
   const params: (string | number)[] = [minPriority];

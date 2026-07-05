@@ -140,6 +140,8 @@ function createTestDatabase(): Database {
       needs_enrichment INTEGER DEFAULT 1,
       full_description TEXT,
       enriched_at TEXT,
+      merged_into TEXT,
+      merged_at TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     )
@@ -407,7 +409,9 @@ describe('Enrichment Queue', () => {
           location_status TEXT DEFAULT 'unverified',
           needs_enrichment INTEGER DEFAULT 1,
           full_description TEXT,
-          enriched_at TEXT
+          enriched_at TEXT,
+          merged_into TEXT,
+          merged_at TEXT
         )
       `);
 
