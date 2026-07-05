@@ -27,6 +27,18 @@ Track recurring problems, known workarounds, and failure patterns here. When the
 
 ---
 
+## Archived dedup scripts contain unguarded DELETEs (2026-07-05, S198)
+
+**Severity:** 🟢
+**First seen:** 2026-07-05 (S198 behavior-owner enumeration)
+**Frequency:** Dormant — only a hazard if a script is un-archived and run.
+**Symptoms:** `scripts/_archive/fix-duplicates.ts` and `scripts/_archive/deduplicate-events.ts` each contain a `DELETE FROM events` dedup path that does **not** carry the `merged_into IS NULL` guard added to the live dedup scripts in S197/S198. They are currently unreachable (archived, not referenced by `daily-automated.sh` or any launchd plist). If either is un-archived and run against production, it would delete marked merge losers and destroy the S197 reversibility (the row-count invariant + `dedup_merges` undo path).
+**Workaround:** Do not run archived dedup scripts against production.
+**Fix plan:** If either is ever un-archived, add `AND merged_into IS NULL` to its dedup DELETE eligibility BEFORE re-wiring it — same guard as `remove-duplicates.ts` / `merge-duplicates.ts` / `clean-database.ts` Step 5. Preferably migrate its behavior to `mark-duplicates.ts` (the canonical reversible path) instead of resurrecting a deleter.
+**Status:** 🟢 Open — documented so an un-archive doesn't silently resurrect the hazard.
+
+---
+
 ## S97a Audit Reconciliation (2026-04-28)
 
 The S97 Phase 1 audit's "Items Confirmed FIXED" list was independently re-verified at the start of S97a per the rule "audit-derived FIXED claims must be re-verified before being marked Fixed in known-issues.md, even when sourced from a recent audit." All 9 items pass independent verification.
