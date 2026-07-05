@@ -249,7 +249,8 @@
       "variations": [
         "Smut, Βατσαξή 4, 10438, Αθήνα, Greece"
       ],
-      "neighborhood": "Central Athens"
+      "neighborhood": "Central Athens",
+      "address": "Vatsaxi 4, Athens 104 38"
     },
     {
       "canonical_name": "Temple",
@@ -283,7 +284,8 @@
       "variations": [
         "EL CHAPO"
       ],
-      "neighborhood": "Gazi"
+      "neighborhood": "Gazi",
+      "address": "Filonos 95, Piraeus 185 35"
     },
     {
       "canonical_name": "Wild Poppies",
@@ -2320,7 +2322,8 @@
       "variations": [
         "Skullbar, Ιπποκράτους 200, Εξάρχεια, Αθήνα, 11471, Greece"
       ],
-      "neighborhood": "Exarchia"
+      "neighborhood": "Exarchia",
+      "address": "Lambrou Katsoni 13, Athens 114 72"
     },
     {
       "canonical_name": "Boo!",
