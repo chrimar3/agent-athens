@@ -29,20 +29,6 @@ const COLORS = {
 const PADDING = 16;
 
 /**
- * Escape XML-special characters for safe rendering in Satori. Mirrors the
- * `escapeForSatori` helper at src/generators/og-image.ts:298 — duplicated
- * (5 lines) rather than imported, to honor the S161 boundary that og-image.ts
- * stays untouched.
- */
-function escapeForSatori(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-/**
  * Narrow input shape — structurally satisfied by Event (src/types.ts). Defined
  * locally so the tile is testable without the full Event surface area.
  */
@@ -69,16 +55,18 @@ export async function generateEventTile(
   const o = { ...DEFAULT_TILE_OPTS, ...opts };
   const innerWidth = o.width - PADDING * 2;
 
-  // F4: decode HTML entities BEFORE autofit + escape. DB titles can carry raw
-  // entities (e.g. "C&#39;mon"); escapeForSatori would re-escape the `&` into
-  // `&amp;#39;` and render it literally on the tile (the HTML card path decodes
-  // natively, so only the SVG tile showed the double-escape). Decode-then-escape
-  // matches the S154 meta/action-bar pattern.
+  // F4: Satori renders `children` as a PLAIN STRING — it vectorizes glyphs and
+  // does NOT XML-decode. So the text must already be the final human-readable
+  // string: decode DB entities ("&amp;" → "&", "&#171;" → "«", "&#39;" → "'"),
+  // and do NOT XML-escape. Escaping "&" → "&amp;" made Satori draw the literal
+  // "&amp;" — the residual F4 bug the Brief-1 decode-then-ESCAPE missed for
+  // &/</>/" (guillemets/apostrophes worked only because escape left them alone).
+  // Caught by visual tile verification, not code review.
   const fit = await computeTileFit(decodeHtmlEntities(event.title), { maxWidth: innerWidth });
 
-  const title = escapeForSatori(fit.displayTitle);
-  const venue = escapeForSatori(decodeHtmlEntities(event.venue.name));
-  const dateStr = escapeForSatori(formatGreekDateOnly(event.startDate));
+  const title = fit.displayTitle;
+  const venue = decodeHtmlEntities(event.venue.name);
+  const dateStr = formatGreekDateOnly(event.startDate);
 
   return satori(
     {

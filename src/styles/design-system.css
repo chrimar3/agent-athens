@@ -1401,7 +1401,11 @@ div#main-content {
 .filter-bar-scroll::-webkit-scrollbar { display: none; }
 
 @media (max-width: 767px) {
-  .filter-bar { top: 56px; height: 52px; padding: var(--space-md) 0; }
+  /* F12: the 16px top/bottom padding shrank the 52px bar's content box to 20px
+     (border-box), clipping the coarse-pointer 44px tap-target pills to their
+     rounded side-ends — the "( )" arcs. Drop the vertical padding so the 44px
+     pills fit the full 52px height (scroll wrapper no longer clips them). */
+  .filter-bar { top: 56px; height: 52px; padding: 0; }
 }
 
 /* ── Filter Pills ─────────────────────────────── */
