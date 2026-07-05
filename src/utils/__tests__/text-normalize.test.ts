@@ -99,22 +99,22 @@ describe('decodeHtmlEntities', () => {
 describe('canonicalizeTitle', () => {
   test('decodes HTML entities first', () => {
     const result = canonicalizeTitle('&#171;Νέκυια&#187;');
-    expect(result).toBe('νέκυια');
+    expect(result).toBe('νεκυια'); // accent-folded matching key
   });
 
   test('strips "Συναυλία Μουσικής Δωματίου " prefix', () => {
     const result = canonicalizeTitle('Συναυλία Μουσικής Δωματίου Παντελής Σταματέλος');
-    expect(result).toBe('παντελής σταματέλος');
+    expect(result).toBe('παντελησ σταματελοσ'); // accent + final-sigma folded
   });
 
   test('strips "Συναυλία " prefix', () => {
     const result = canonicalizeTitle('Συναυλία Θάνος Μικρούτσικος');
-    expect(result).toBe('θάνος μικρούτσικος');
+    expect(result).toBe('θανοσ μικρουτσικοσ'); // accent + final-sigma folded
   });
 
   test('does NOT strip "Συναυλία" if it IS the entire title', () => {
     const result = canonicalizeTitle('Συναυλία');
-    expect(result).toBe('συναυλία');
+    expect(result).toBe('συναυλια'); // accent-folded
   });
 
   test('strips " live in Athens" suffix', () => {
@@ -132,7 +132,7 @@ describe('canonicalizeTitle', () => {
   });
 
   test('strips Greek quotes «»', () => {
-    expect(canonicalizeTitle('«Νέκυια»')).toBe('νέκυια');
+    expect(canonicalizeTitle('«Νέκυια»')).toBe('νεκυια'); // accent-folded matching key
   });
 
   test('SHADOW KNIGHT and Shadow Knight, Phyrosun & FRS are different', () => {

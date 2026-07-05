@@ -51,6 +51,15 @@ CREATE TABLE IF NOT EXISTS events (
   is_featured INTEGER DEFAULT 0,          -- Boolean: promoted event
   view_count INTEGER DEFAULT 0,           -- Track popularity
 
+  -- Dedup protection (present in production since the recurring-events work;
+  -- canonicalized here so test DBs match production shape)
+  dedup_protected INTEGER DEFAULT 0,      -- 1 = never treat as duplicate (THEATER_RUN, WEEKLY_RECURRING, FESTIVAL)
+  dedup_reason TEXT,                      -- Why protected
+
+  -- Dedup merge marking (migration 013 — reversible, never DELETE losers)
+  merged_into TEXT,                       -- Survivor event id (NULL = live event)
+  merged_at TEXT,                         -- When the merge pass marked this row
+
   -- Image fields
   image_url TEXT,                         -- og:image URL from source page (hotlinked)
   image_source TEXT,                      -- 'scraped_listing' | 'scraped_detail' | 'backfill' | 'not_found'

@@ -30,8 +30,11 @@ const db = new Database('data/events.db');
 const DRY_RUN = process.argv.includes('--dry-run');
 const REMOVAL_THRESHOLD = 0.20; // Alert if >20% would be removed
 
-// Exhibition-safe date filter: running exhibitions (start_date in past, end_date in future) must not be excluded
-const UPCOMING_FILTER = `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`;
+// Exhibition-safe date filter: running exhibitions (start_date in past, end_date in future) must not be excluded.
+// merged_into IS NULL: rows marked as merge losers by scripts/mark-duplicates.ts
+// (migration 013) are reversibly-merged tombstones — they must never be
+// re-detected as duplicates and DELETED here, that would destroy reversibility.
+const UPCOMING_FILTER = `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now') AND merged_into IS NULL`;
 
 if (DRY_RUN) {
   console.log('🔍 DRY RUN MODE - No changes will be made\n');

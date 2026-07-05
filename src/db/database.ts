@@ -12,6 +12,7 @@ import { filterEntityTags, loadDefaultExclusionSet } from "../utils/tag-filter";
 import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
 import { decodeEventFields } from "../utils/decode-html-entities";
 import { findVenueConfig } from "../quality/location-filter";
+import { checkImportDuplicate } from "../quality/import-gate";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -241,10 +242,16 @@ export function rowToEvent(row: any): Event {
 
 /**
  * Insert or update event
- * Returns: { success: boolean, isNew: boolean }
- * NOTE: Automatically filters out non-Athens events
+ * Returns: { success: boolean, isNew: boolean, duplicateOf?: string }
+ * NOTE: Automatically filters out non-Athens events.
+ * NOTE: New ids are checked against existing live rows by the import-time
+ * duplicate gate (dedup arc) — a cross-source re-listing of an event we
+ * already have is rejected, with duplicateOf naming the existing row.
  */
-export function upsertEvent(event: Event, db?: Database): { success: boolean; isNew: boolean } {
+export function upsertEvent(
+  event: Event,
+  db?: Database
+): { success: boolean; isNew: boolean; duplicateOf?: string } {
   // S154 (2026-05-25): Decode HTML entities at ingest chokepoint, BEFORE
   // isAthensEvent below. Pre-fix, athinorama.gr ships venue names like
   // `Νέο Θέατρο &#171;Κατερίνα...&#187;` undecoded — they reached the DB
@@ -283,6 +290,23 @@ export function upsertEvent(event: Event, db?: Database): { success: boolean; is
   // Check if event already exists
   const existing = database.prepare('SELECT id FROM events WHERE id = ?').get(event.id);
   const isNew = !existing;
+
+  // Import-time duplicate gate (dedup arc): only NEW ids are gated — same-id
+  // re-scrapes take the UPDATE path below. Catches cross-source re-listings
+  // ("Monolink" vs "Jafari: Monolink + …"), title variants under new
+  // title-hashed ids (S140 Pavlopoulos class), and edit-distance-1 typos
+  // ("MONILINK"). The event is skipped, not persisted — the existing row
+  // already represents it.
+  if (isNew) {
+    const dup = checkImportDuplicate(event, database);
+    if (dup) {
+      console.log(
+        `🚫 [import-gate] Skipping duplicate: "${event.title}" (${event.source}) ` +
+          `duplicates ${dup.existingId} [${dup.pair.layer} ${dup.pair.confidence.toFixed(2)}]`
+      );
+      return { success: false, isNew: false, duplicateOf: dup.existingId };
+    }
+  }
 
   const stmt = database.prepare(`
     INSERT INTO events (

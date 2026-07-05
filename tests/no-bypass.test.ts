@@ -28,7 +28,7 @@ type Bypass = { file: string; lines: [number, number]; reason: string };
 // edits (e.g. adding the normalizeDateField call) don't break the guard.
 const CANONICAL_SEAM: Bypass = {
   file: 'src/db/database.ts',
-  lines: [170, 305],  // upsertEvent() body 227-303 (INSERT at 251); range bumped after adding normalizeGenres() above it (2026-05-27 save-drop fix)
+  lines: [170, 375],  // upsertEvent() body 251-364 (INSERT at 312); range bumped after adding the import-time duplicate gate above the INSERT (dedup arc, 2026-07-05)
   reason: 'Canonical seam: upsertEvent(). All non-bypass writes converge here.',
 };
 

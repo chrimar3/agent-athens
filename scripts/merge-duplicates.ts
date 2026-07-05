@@ -126,6 +126,7 @@ function main() {
       `SELECT * FROM events
        WHERE (location_status IN ('verified_athens', 'pass_through') OR location_status IS NULL)
          AND (dedup_protected = 0 OR dedup_protected IS NULL)
+         AND merged_into IS NULL
          AND COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now', '-7 days')`
     )
     .all() as Record<string, any>[];

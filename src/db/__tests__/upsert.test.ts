@@ -249,13 +249,18 @@ describe("upsertEvent — S174 missing-address guard", () => {
   });
 
   test("dedupes: N events at the same missing-address venue warn once", () => {
-    const mk = (id: string): Event => ({
+    // Distinct titles: two identical events under different ids would now be
+    // (correctly) blocked by the import-time duplicate gate (dedup arc). This
+    // test is about per-VENUE warn dedup, so the events must be genuinely
+    // different events at the same venue.
+    const mk = (id: string, title: string): Event => ({
       ...sampleConcert,
       id,
+      title,
       venue: { ...sampleConcert.venue, name: "Testarosa Hall Zeta Two", address: "" },
     });
-    upsertEvent(mk("s174-guard-test-3a"), db);
-    upsertEvent(mk("s174-guard-test-3b"), db);
+    upsertEvent(mk("s174-guard-test-3a", "Aphex Twin"), db);
+    upsertEvent(mk("s174-guard-test-3b", "Kiasmos"), db);
 
     expect(eventExists(db, "s174-guard-test-3a")).toBe(true);
     expect(eventExists(db, "s174-guard-test-3b")).toBe(true);

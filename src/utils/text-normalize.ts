@@ -8,6 +8,8 @@
  * @see scripts/remove-duplicates.ts — could adopt these functions
  */
 
+import { normalize } from './normalize-key';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -93,10 +95,14 @@ const TITLE_PREFIXES = [
 const TITLE_SUFFIXES = [
   /\s+live\s+in\s+(athens|greece|thessaloniki|αθήνα|ελλάδα|θεσσαλονίκη)$/i,
   /\s+live\s+@\s+[\w\s]+$/i,
+  // residentadvisor date tails: "Rivo I Sat Aug 8", "Mayans with Max Styler
+  // I Thu 30 July", "KAS:ST I Anfisa Letyago I Fri July 24" (strips the last
+  // " I <day?> <month> <num>" / " I <day?> <num> <month>" segment only).
+  /\s+i\s+(?:(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*\s+)?(?:(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{1,2}|\d{1,2}\s+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*)$/i,
 ];
 
 // Leading articles
-const LEADING_ARTICLES = /^(οι|η|ο|το|the)\s+/i;
+const LEADING_ARTICLES = /^(οι|η|ο|το|τα|the)\s+/i;
 
 export function canonicalizeTitle(title: string): string {
   if (!title) return '';
@@ -122,10 +128,11 @@ export function canonicalizeTitle(title: string): string {
   // Strip leading articles
   result = result.replace(LEADING_ARTICLES, '');
 
-  // Collapse whitespace and trim
-  result = result.replace(/\s+/g, ' ').trim();
-
-  return result;
+  // Final fold: accent-fold (Greek + Latin), final-sigma fold, punctuation
+  // strip, whitespace collapse. Makes ALL-CAPS unaccented Greek titles
+  // ("ΘΕΟΦΙΛΟΣ Sold") compare equal to accented ones ("Θεόφιλος Sold") —
+  // the largest missed-duplicate class in specs/dedup-diagnostic.md.
+  return normalize(result);
 }
 
 // ============================================================================
@@ -134,7 +141,11 @@ export function canonicalizeTitle(title: string): string {
 
 // Marks a lineup or promoter-prefix split point, e.g.
 // "Jafari: Monolink + Nick Jojo + Magda Kay" → ["jafari", "monolink", "nick jojo", "magda kay"]
-const LINEUP_DELIMITERS = /:|\+|&(?!amp;)|\/|,|\bvs\.?\b|\bb2b\b/gi;
+// Literal pipe (residentadvisor: "MONILINK | NICK JOJO | MAGDA KAY"),
+// spaced dashes (subtitle/lineup split), "pres."/"with" promoter connectors,
+// and residentadvisor's spaced-I separator are all split points.
+const LINEUP_DELIMITERS =
+  /:|\+|&(?!amp;)|\/|,|\||–|—|\s-\s|\bvs\.?\b|\bb2b\b|\bpres\b\.?|\bwith\b|\si\s/gi;
 
 /**
  * Split a title into candidate lineup segments for matching against a bare
@@ -223,10 +234,11 @@ export function _resetVenueCache(): void {
 // Token Extraction
 // ============================================================================
 
-const STOPWORDS = new Set([
+const STOPWORDS_RAW = [
   // Greek articles and prepositions
   'οι', 'η', 'ο', 'το', 'τα', 'τη', 'τον', 'τους', 'στο', 'στη', 'στον',
   'στην', 'στα', 'στις', 'στους', 'από', 'για', 'με', 'και', 'σε',
+  'του', 'της', 'των', 'μια', 'ένα',
   // English articles and prepositions
   'the', 'a', 'an', 'in', 'at', 'on', 'of', 'to', 'for', 'and', 'or',
   // Music-specific stopwords
@@ -239,34 +251,69 @@ const STOPWORDS = new Set([
   'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec',
   'january', 'february', 'march', 'april', 'june', 'july', 'august',
   'september', 'october', 'november', 'december',
-]);
+];
+
+// Tokens are accent-folded via normalize(), so the stopword set must hold
+// folded forms too ('από' → 'απο') or Greek stopwords would never match.
+const STOPWORDS = new Set(STOPWORDS_RAW.map((w) => normalize(w)));
 
 const MIN_TOKEN_LENGTH = 3;
-
-/**
- * Strip diacritics from Latin characters (NFD decomposition).
- * Leaves Greek accents intact since they're meaningful in Greek text.
- * Examples: "Giolì" → "Gioli", "PLISSKËN" → "PLISSKEN", "café" → "cafe"
- */
-function stripLatinDiacritics(text: string): string {
-  // NFD decomposes accented chars into base + combining mark.
-  // Remove only combining marks (U+0300..U+036F) that follow Latin chars.
-  return text.normalize('NFD').replace(/(?<=[a-zA-Z])[\u0300-\u036f]/g, '');
-}
 
 export function extractSignificantTokens(title: string): string[] {
   if (!title) return [];
 
-  const decoded = decodeHtmlEntities(title);
-  const stripped = stripLatinDiacritics(decoded);
-
-  // Split on non-alphanumeric (keep Greek letters)
-  const tokens = stripped
-    .toLowerCase()
-    .split(/[^a-zA-Zα-ωά-ώϊϋΐΰ0-9]+/)
-    .filter(Boolean);
+  // normalize() folds case + accents (Greek AND Latin — the old
+  // stripLatinDiacritics helper left Greek accents in, so ALL-CAPS
+  // unaccented Greek never token-matched accented Greek) and splits
+  // punctuation to spaces.
+  const tokens = normalize(decodeHtmlEntities(title)).split(' ').filter(Boolean);
 
   return tokens.filter(
     (token) => token.length >= MIN_TOKEN_LENGTH && !STOPWORDS.has(token)
   );
+}
+
+// ============================================================================
+// Edit Distance (typo tolerance)
+// ============================================================================
+
+/**
+ * True when a and b are identical or one single-character edit apart
+ * (substitution, insertion, or deletion) — "monilink" ≈ "monolink".
+ *
+ * Policy (enforced by callers, not here): fuzzy matching only applies to
+ * tokens/segments ≥5 chars with no digits, so sequels ("… 2" vs "… 3")
+ * and short names ("anna"/"anny") never fuzzy-match.
+ */
+export function withinEditDistanceOne(a: string, b: string): boolean {
+  if (a === b) return true;
+  const la = a.length;
+  const lb = b.length;
+  if (Math.abs(la - lb) > 1) return false;
+
+  if (la === lb) {
+    // Exactly one substitution allowed
+    let diffs = 0;
+    for (let i = 0; i < la; i++) {
+      if (a[i] !== b[i] && ++diffs > 1) return false;
+    }
+    return diffs === 1;
+  }
+
+  // One insertion/deletion: shorter must match longer with one skip
+  const [short, long] = la < lb ? [a, b] : [b, a];
+  let i = 0;
+  let j = 0;
+  let skipped = false;
+  while (i < short.length && j < long.length) {
+    if (short[i] === long[j]) {
+      i++;
+      j++;
+    } else {
+      if (skipped) return false;
+      skipped = true;
+      j++; // skip one char in the longer string
+    }
+  }
+  return true;
 }
