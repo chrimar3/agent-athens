@@ -522,15 +522,29 @@ div#main-content {
   .date-group { grid-template-columns: 1fr; }
 }
 
+/* F7 orphan-grid (corrected 2026-07-05, DN-ratified Option A): a lone card must
+   match a STANDARD card's width, left-aligned to column 1. The old max-width:
+   66/50/100% resolved against the grid TRACK (~292px at 4-col) → a 146px squeeze.
+   grid-column:1/-1 makes 100% resolve against the full grid content width; the
+   calc then caps to exactly ONE column per band. Gutter derived live from
+   --space-md-lg (24px) — NOT a fixed px (fixed-px-from-stale-doc was the bug).
+   Divisors mirror the .date-group grid's own breakpoint cascade above:
+   base 3-col (1025–1279) / ≥1280 4-col / ≤1024 2-col / ≤767 1-col. */
 .date-group[data-count="1"] .event-card {
-  max-width: 66%;
+  grid-column: 1 / -1;
+  justify-self: start;
+  max-width: calc((100% - 2 * var(--space-md-lg)) / 3);
 }
 
 @media (min-width: 1280px) {
-  .date-group[data-count="1"] .event-card { max-width: 50%; }
+  .date-group[data-count="1"] .event-card { max-width: calc((100% - 3 * var(--space-md-lg)) / 4); }
 }
 
 @media (max-width: 1024px) {
+  .date-group[data-count="1"] .event-card { max-width: calc((100% - 1 * var(--space-md-lg)) / 2); }
+}
+
+@media (max-width: 767px) {
   .date-group[data-count="1"] .event-card { max-width: 100%; }
 }
 
