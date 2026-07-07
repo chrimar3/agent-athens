@@ -1,0 +1,4 @@
+{
+  "_comment": "Clean-tree deploy gate (Option 3 Phase 1, 2026-07-07). sourceScope = paths whose uncommitted state makes dist/ non-correspondent to HEAD (code + build-affecting config). Deliberately EXCLUDES data/, docs/, specs/, .claude/, logs/ — the daily pipeline mutates data/* by design and commits its allowlisted artifacts AFTER the gate runs (gate sits before that commit in run_deploy, so strict sha equality holds). Consumed by BOTH src/utils/build-provenance.ts (stamp) and scripts/deploy-gate.sh (gate) — one source of truth for the scope.",
+  "sourceScope": ["src", "config", "scripts", "package.json", "tsconfig.json"]
+}

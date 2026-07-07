@@ -46,6 +46,7 @@ import { buildProofSchema } from './templates/proof-schema';
 import { renderColophonContent } from './templates/colophon';
 import { setColophonStats } from './templates/colophon-stats';
 import { ACTIVE_SOURCE_COUNT } from './config/active-source-ids';
+import { writeBuildProvenance } from './utils/build-provenance';
 
 const DIST_DIR = join(import.meta.dir, '../dist');
 const DATA_DIR = join(import.meta.dir, 'data');
@@ -1445,6 +1446,13 @@ async function main() {
         'comedyFormat:"exclude", src/utils/comedy-format.ts isStandUpComedy).',
     );
   }
+
+  // Provenance stamp — LAST, after every gate has passed, so a failed build
+  // never leaves a fresh stamp. scripts/deploy-gate.sh refuses any deploy
+  // whose stamp is missing, sha-mismatched vs HEAD, or built-from-dirty
+  // (clean-tree deploy gate, Option 3 Phase 1 — 2026-07-07 breach closure).
+  writeBuildProvenance(DIST_DIR, process.cwd());
+  console.log('🔏 Build provenance stamped (dist/.build-provenance)');
 }
 
 async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {

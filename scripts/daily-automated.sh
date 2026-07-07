@@ -518,6 +518,19 @@ run_deploy() {
         return 0
     fi
 
+    # Step 0: Clean-tree deploy gate (Option 3 Phase 1, 2026-07-07). Refuses
+    # unless dist/.build-provenance == HEAD, built from a clean SOURCE scope,
+    # and the source scope is clean NOW. Runs BEFORE the Step-1 artifact
+    # commit so strict sha equality holds (the build upstream stamped the
+    # same HEAD this gate sees). Closes the 2026-07-06 23:17Z breach where a
+    # local build from an uncommitted tree was auto-deployed. Guard tests:
+    # scripts/__tests__/deploy-gate.test.ts.
+    if ! bash "$SCRIPT_DIR/deploy-gate.sh" >> "$LOG_FILE" 2>&1; then
+        log_error "[deploy-gate] REFUSED — dist/ does not correspond to committed HEAD (see log for the named condition). Skipping deploy."
+        return 1
+    fi
+    log "[deploy-gate] PASS — dist/ corresponds to committed HEAD"
+
     # Step 1: Commit and push pipeline outputs (dist/ is gitignored)
     #
     # Explicit-allowlist staging (replaces prior `git add -A`). Pipeline must
