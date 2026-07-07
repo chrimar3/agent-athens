@@ -68,7 +68,39 @@ CREATE TABLE IF NOT EXISTS events (
   -- Exhibition-specific fields
   opening_hours TEXT,                     -- JSON: {"mon": "closed", "tue": "10:00-18:00", ...}
   closed_days TEXT,                       -- "Monday" or "Monday, Tuesday"
-  permanent_collection INTEGER DEFAULT 0  -- Boolean: permanent vs temporary exhibition
+  permanent_collection INTEGER DEFAULT 0, -- Boolean: permanent vs temporary exhibition
+
+  -- Column parity with production (2026-07-07). These columns were added to
+  -- data/events.db by ad-hoc ALTERs over time but never landed here, so test
+  -- DBs built from this file silently diverged from production shape — the
+  -- S197/S198 recurring class ("no such column: dedup_protected" / 13 test
+  -- crashes on merged_into). Definitions mirror production PRAGMA table_info.
+  full_description_en TEXT,
+  full_description_gr TEXT,
+  language_preference TEXT DEFAULT 'both',
+  source_full_description TEXT,
+  all_day INTEGER DEFAULT 0,
+  location_status TEXT DEFAULT 'unverified',
+  needs_enrichment INTEGER DEFAULT 1,
+  enriched_at TEXT,
+  enrichment_tier TEXT DEFAULT 'stub',
+  time_peak TEXT,
+  time_doors TEXT,
+  time_source TEXT,
+  door_policy TEXT,
+  door_policy_note TEXT,
+  price_advance REAL,
+  price_door REAL,
+  price_source TEXT,
+  ticket_url TEXT,
+  ticket_url_status TEXT,
+  ticket_url_resolved TEXT DEFAULT NULL,
+  ticket_url_resolved_at TEXT,
+  ticket_url_source TEXT,
+  schema_valid INTEGER DEFAULT 0,
+  venue_metro_station TEXT,
+  venue_metro_line TEXT,
+  editorial_pick_rank INTEGER
 );
 
 -- Indexes for fast filtering

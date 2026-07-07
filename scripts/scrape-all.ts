@@ -41,6 +41,8 @@ import { extractOgImage } from '../src/utils/image-extractor';
 import { upgradeAthinoramaImage } from '../src/utils/athinorama-image';
 import type { DomDocument, DomElement } from './dom-eval-types';
 import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
+import { checkImportDuplicate } from '../src/quality/import-gate';
+import type { Event } from '../src/types';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -1356,14 +1358,25 @@ function recordScrapeStats(
 
 // `dbArg` lets tests inject an in-memory DB; in production it defaults to the prod file
 // and is owned/closed here. A caller-injected DB is left open for the caller to manage.
-export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Database): { saved: number; outOfScope: number; failed: number } {
-  if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0, failed: 0 };
+export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Database): { saved: number; outOfScope: number; failed: number; dupSkipped: number } {
+  if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0, failed: 0, dupSkipped: 0 };
 
   const db = dbArg ?? new Database(DB_PATH);
   const ownsDb = !dbArg;
   let saved = 0;
   let outOfScope = 0;
   let failed = 0;
+  let dupSkipped = 0;
+
+  // Import-time duplicate gate at THIS seam (campaign Phase 4, 2026-07-07).
+  // The gate was wired only into upsertEvent, but the daily pipeline writes
+  // ~95% of rows through this raw INSERT — cross-source re-listings and
+  // title-variant re-hashes (S140 Pavlopoulos class) entered ungated and were
+  // only mopped up post-hoc by mark-duplicates. Contract mirrors upsertEvent:
+  // NEW ids only (same-id re-scrapes take the ON CONFLICT UPDATE path), and
+  // checkImportDuplicate fails OPEN internally — a gate error must never
+  // silently drop a genuinely new event.
+  const existsStmt = db.prepare('SELECT 1 FROM events WHERE id = ?');
 
   const stmt = db.prepare(`
     INSERT INTO events (
@@ -1435,6 +1448,31 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
       // normalizeDateField enforces canonical naive-local format at bind time.
       const startDateTime = e.time ? `${e.start_date}T${e.time}:00` : e.start_date;
       const timeSource = e.time ? 'scraped_listing' : null;
+
+      // Duplicate gate — NEW ids only; see seam comment above the prepare().
+      if (!existsStmt.get(e.id)) {
+        const match = checkImportDuplicate(
+          {
+            id: e.id,
+            title: e.title,
+            startDate: normalizeDateField(startDateTime),
+            endDate: e.end_date ? normalizeDateField(e.end_date) : undefined,
+            type: eventType,
+            source: e.source,
+            venue: { name: e.venue_name },
+          } as Event,
+          db,
+        );
+        if (match) {
+          console.log(
+            `   🚫 [import-gate] Skipping duplicate: "${e.title.substring(0, 60)}" (${e.source}) ` +
+            `duplicates ${match.existingId} [${match.pair.layer} ${match.pair.confidence.toFixed(2)}]`,
+          );
+          dupSkipped++;
+          continue;
+        }
+      }
+
       stmt.run({
         $id: e.id,
         $title: e.title,
@@ -1469,7 +1507,7 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
   }
 
   if (ownsDb) db.close();
-  return { saved, outOfScope, failed };
+  return { saved, outOfScope, failed, dupSkipped };
 }
 
 // ============================================================================
@@ -1683,15 +1721,18 @@ async function main() {
   // Save to database
   if (!dryRun && allEvents.length > 0) {
     console.log('\n💾 Saving to database...');
-    const { saved, outOfScope, failed } = saveEvents(allEvents, dryRun);
+    const { saved, outOfScope, failed, dupSkipped } = saveEvents(allEvents, dryRun);
     // Measure health at row-creation, not scrape-report: surface found -> persisted divergence.
-    log('INFO', 'system', `Found ${allEvents.length} -> Saved ${saved} (${failed} failed, ${outOfScope} out of scope)`);
-    console.log(`   ✅ Found ${allEvents.length} → Saved ${saved} (${failed} failed, ${outOfScope} out-of-scope)`);
+    log('INFO', 'system', `Found ${allEvents.length} -> Saved ${saved} (${failed} failed, ${outOfScope} out of scope, ${dupSkipped} import-gate dup)`);
+    console.log(`   ✅ Found ${allEvents.length} → Saved ${saved} (${failed} failed, ${outOfScope} out-of-scope, ${dupSkipped} import-gate dup)`);
     if (failed > 0) {
       console.log(`   ❗ ${failed} events FAILED to persist — see ERROR logs above (was previously hidden)`);
     }
     if (outOfScope > 0) {
       console.log(`   ⛔ Filtered ${outOfScope} out-of-scope events (sports, corporate, etc.)`);
+    }
+    if (dupSkipped > 0) {
+      console.log(`   🚫 [import-gate] Skipped ${dupSkipped} duplicate(s) of existing live rows — see lines above`);
     }
   }
 
