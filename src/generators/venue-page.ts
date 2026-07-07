@@ -17,6 +17,7 @@ import { slugify, generateEventSlug } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderEventCardList } from '../templates/card-variants';
+import { renderSavedEventsScript, renderCardSaveScript } from '../templates/action-bar';
 import { formatSchemaDate } from '../enrichment/quality-gates';
 import { resolveEventSchemaType } from '../utils/comedy-format';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
@@ -320,6 +321,8 @@ ${renderAnalytics()}
   ${renderSiteFooter('el')}
   ${renderHamburgerScript()}
   ${renderSearchScript()}
+  ${renderSavedEventsScript()}
+  ${renderCardSaveScript()}
 </body>
 </html>`;
 }

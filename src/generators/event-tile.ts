@@ -19,9 +19,14 @@ import { computeTileFit } from '../utils/tile-autofit';
 import { formatGreekDateOnly } from '../utils/i18n';
 import { decodeHtmlEntities } from '../utils/text-normalize';
 
-/** Color tokens per DN ruling 2026-06-03 (--bg-elevated, --text-primary, --text-tertiary). */
+/** Color tokens per DN ruling 2026-06-03 (--bg-elevated, --text-primary, --text-tertiary).
+ *  Redesign loop 20260707: bg aligned to the media-slot background (--bg-elevated
+ *  #151515) so letterboxed placements read seamless, and the brand accent
+ *  (--accent-primary) added — the tile is the branded typographic fallback, and
+ *  a fallback without the yellow reads as an empty template slot. */
 const COLORS = {
-  bg: '#1a1a1a',
+  bg: '#151515',
+  accent: '#f5e642',
   textPrimary: '#f0f0f0',
   textTertiary: '#888888',
 } as const;
@@ -80,6 +85,11 @@ export async function generateEventTile(
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Manrope',
+          // Yellow spine — the identity device the intro card established,
+          // carried onto every imageless media slot.
+          borderLeftWidth: 4,
+          borderLeftStyle: 'solid',
+          borderLeftColor: COLORS.accent,
         },
         children: [
           // Title block: flex-grows to fill the area above the footer; the
@@ -112,7 +122,8 @@ export async function generateEventTile(
                 lineHeight: 1.3,
               },
               children: [
-                { type: 'div', props: { children: dateStr, style: {} } },
+                // Date in the accent — mirrors the event-hero's yellow date line.
+                { type: 'div', props: { children: dateStr, style: { color: COLORS.accent, fontWeight: 700 } } },
                 { type: 'div', props: { children: venue, style: {} } },
               ],
             },
