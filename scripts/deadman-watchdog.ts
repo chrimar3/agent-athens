@@ -20,6 +20,8 @@ import { readFileSync, existsSync, appendFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/watchdog/classifier";
+import { findVenueConfig } from "../src/quality/location-filter";
+import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
 
 const ROOT = resolve(import.meta.dir, "..");
 const CONFIG_PATH = join(ROOT, "config", "monitoring.json");
@@ -113,6 +115,98 @@ function dbRowCountSignal(): number {
   }
 }
 
+/** Busy-vs-missing disambiguation (campaign Phase 5). On 2026-07-05 the watchdog
+ *  emailed CATASTROPHIC "DB missing" twice during ordinary WAL contention (the
+ *  S195 class: readonly open succeeds, first read throws while the enrichment
+ *  writer holds the lock). Retry once after 30s; if the file EXISTS but reads
+ *  still fail, report busy — the classifier then declines to declare DB_MISSING. */
+function dbRowCountWithBusyRetry(): { count: number | null; busy: boolean } {
+  try {
+    return { count: dbRowCountSignal(), busy: false };
+  } catch {
+    if (!existsSync(DB_PATH)) return { count: null, busy: false }; // genuinely missing
+    Bun.sleepSync(30_000);
+    try {
+      return { count: dbRowCountSignal(), busy: false };
+    } catch {
+      return { count: null, busy: true }; // present but unreadable twice → writer contention
+    }
+  }
+}
+
+/** Silent source death (campaign Phase 5): an active source whose last
+ *  SOURCE_DEAD_STREAK runs all returned 0 events or failed, but which produced
+ *  events within the last 30 days (so long-dormant/seasonal sources and brand-new
+ *  sources don't false-trip — low-volume sources like benaki must not flap). */
+const SOURCE_DEAD_STREAK = 3;
+function deadSourcesSignal(): string[] {
+  const db = openEventsDb();
+  try {
+    const dead: string[] = [];
+    for (const src of ACTIVE_SOURCE_IDS) {
+      const lastRuns = db.prepare(
+        `SELECT events_found, success FROM scrape_stats
+         WHERE source = ? ORDER BY scraped_at DESC LIMIT ?`,
+      ).all(src, SOURCE_DEAD_STREAK) as Array<{ events_found: number; success: number }>;
+      if (lastRuns.length < SOURCE_DEAD_STREAK) continue;
+      const allDegenerate = lastRuns.every((r) => r.events_found === 0 || r.success === 0);
+      if (!allDegenerate) continue;
+      const producedRecently = db.prepare(
+        `SELECT 1 FROM scrape_stats
+         WHERE source = ? AND events_found > 0 AND scraped_at >= datetime('now', '-30 days')
+         LIMIT 1`,
+      ).get(src);
+      if (producedRecently) dead.push(src);
+    }
+    return dead;
+  } finally {
+    db.close();
+  }
+}
+
+/** Addressless publishable venues (campaign Phase 5): the pre-drought signal.
+ *  Mirrors the [address-guard] cascade (event.venue_address || config address):
+ *  a publishable, still-current event whose venue resolves to no address is a
+ *  future F2b hard-stop. The standing mitigation idea from mistakes.md
+ *  2026-07-05, finally built — delivered through the one channel that reaches
+ *  a human instead of a warn line in an unread scrape log. */
+function addresslessVenuesSignal(): string[] {
+  const db = openEventsDb();
+  try {
+    const rows = db.prepare(
+      `SELECT DISTINCT venue_name FROM events
+       WHERE location_status IN ('verified_athens', 'pass_through')
+         AND merged_into IS NULL
+         AND is_cancelled = 0
+         AND (venue_address IS NULL OR TRIM(venue_address) = '')
+         AND COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`,
+    ).all() as Array<{ venue_name: string }>;
+    return rows
+      .map((r) => r.venue_name)
+      .filter((name) => !findVenueConfig(name)?.address?.trim());
+  } finally {
+    db.close();
+  }
+}
+
+/** Last build-failure line from logs/build-outcome.log, if newer than the last
+ *  deploy-success — so a drought's first alert already names the failing gate. */
+function buildFailureCauseSignal(lastDeployMs: number | null): string | null {
+  const path = join(ROOT, "logs", "build-outcome.log");
+  if (!existsSync(path)) return null;
+  const lines = readFileSync(path, "utf-8").split("\n").map((l) => l.trim()).filter(Boolean);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    // Format (run_generate): 2026-07-07T01:00:00Z build-failure <last error line>
+    const m = lines[i].match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)\s+build-failure\s+(.*)$/);
+    if (!m) continue;
+    const ms = Date.parse(m[1]);
+    if (Number.isNaN(ms)) return null;
+    if (lastDeployMs !== null && ms <= lastDeployMs) return null; // deploy since → stale cause
+    return m[2];
+  }
+  return null;
+}
+
 /** Corroborating auth state: parse the last `exit=N` in auth-precheck-last.log. null if absent. */
 function authPrecheckOk(): boolean | null {
   if (!existsSync(AUTH_LOG)) return null;
@@ -192,9 +286,16 @@ const nowMs = Date.now();
 const safe = <T>(fn: () => T, fallback: T): T => { try { return fn(); } catch { return fallback; } };
 const lastDeployMs = await deploySignalMs().catch(() => null);
 const lastEnrichMs = safe(enrichSignalMs, null);
-const dbRowCount = safe(dbRowCountSignal, null); // null = DB missing/unreadable → DB_MISSING
+// Busy-aware DB signal: retries once after 30s and reports lock-contention as
+// busy (NOT missing) — kills the 2026-07-05 false-CATASTROPHIC class.
+const { count: dbRowCount, busy: dbBusy } = safe(dbRowCountWithBusyRetry, { count: null, busy: false });
 const authOk = safe(authPrecheckOk, null);
 const pipelineHealthy = safe(() => launchdHealth.isHealthy(cfg.pipeline_health_labels), true);
+// Cause signals (Phase 5) — fault-isolated; a failing adapter degrades to
+// "no signal", never blocks the freshness classification.
+const deadSources = safe(deadSourcesSignal, []);
+const addresslessVenues = safe(addresslessVenuesSignal, []);
+const buildFailureCause = safe(() => buildFailureCauseSignal(lastDeployMs), null);
 
 const inputs: DeadmanInputs = {
   lastDeployMs,
@@ -202,6 +303,10 @@ const inputs: DeadmanInputs = {
   pipelineHealthy,
   authPrecheckOk: authOk,
   dbRowCount,
+  dbBusy,
+  deadSources,
+  addresslessVenues,
+  buildFailureCause,
   nowMs,
   thresholds: { deployStaleHours: cfg.deploy_stale_hours, enrichStaleHours: cfg.enrich_stale_hours },
 };

@@ -106,4 +106,59 @@ describe("classifyDeadman", () => {
   test("healthy row count preserves prior behavior (deploy stale → STALE_DEPLOY)", () => {
     expect(classifyDeadman(inputs({ lastDeployMs: NOW - 50 * HOUR })).status).toBe("STALE_DEPLOY");
   });
+
+  // ── Cause signals (campaign Phase 5, 2026-07-07): the deadman is the only
+  //    alerting that reaches a human — it must say WHAT died, not just "stale". ──
+
+  test("dead source (≥3 consecutive zero/failed runs) → SOURCE_DEAD, reason names it", () => {
+    const r = classifyDeadman(inputs({ deadSources: ["clubber"] }));
+    expect(r.status).toBe("SOURCE_DEAD");
+    expect(r.reasons.join(" ")).toMatch(/clubber/);
+  });
+
+  test("addressless publishable venues → ADDRESSLESS_VENUES, reason names venue + F2b", () => {
+    const r = classifyDeadman(inputs({ addresslessVenues: ["Gazi View"] }));
+    expect(r.status).toBe("ADDRESSLESS_VENUES");
+    expect(r.reasons.join(" ")).toMatch(/Gazi View/);
+    expect(r.reasons.join(" ")).toMatch(/F2b|address/i);
+  });
+
+  test("ADDRESSLESS_VENUES outranks SOURCE_DEAD (it blocks the NEXT build)", () => {
+    const r = classifyDeadman(inputs({ addresslessVenues: ["X"], deadSources: ["y"] }));
+    expect(r.status).toBe("ADDRESSLESS_VENUES");
+    expect(r.reasons.join(" ")).toMatch(/y/); // dead source still named
+  });
+
+  test("STALE_DEPLOY outranks both cause signals", () => {
+    const r = classifyDeadman(
+      inputs({ lastDeployMs: NOW - 50 * HOUR, addresslessVenues: ["X"], deadSources: ["y"] }),
+    );
+    expect(r.status).toBe("STALE_DEPLOY");
+  });
+
+  test("busy DB (locked, file present) is NOT DB_MISSING — no false catastrophe", () => {
+    const r = classifyDeadman(inputs({ dbRowCount: null, dbBusy: true }));
+    expect(r.status).toBe("OK"); // all other signals fresh; contention is normal during enrichment
+  });
+
+  test("null row count WITHOUT busy marker stays DB_MISSING", () => {
+    expect(classifyDeadman(inputs({ dbRowCount: null, dbBusy: false })).status).toBe("DB_MISSING");
+  });
+
+  test("stale deploy + captured build failure cause → reason includes the cause line", () => {
+    const r = classifyDeadman(
+      inputs({
+        lastDeployMs: NOW - 50 * HOUR,
+        buildFailureCause: "dedup-301: survivor 378ae10c… not in the emitted set",
+      }),
+    );
+    expect(r.status).toBe("STALE_DEPLOY");
+    expect(r.reasons.join(" ")).toMatch(/dedup-301/);
+  });
+
+  test("fresh deploy ignores a leftover build failure cause", () => {
+    const r = classifyDeadman(inputs({ buildFailureCause: "old error" }));
+    expect(r.status).toBe("OK");
+    expect(r.reasons).toHaveLength(0);
+  });
 });

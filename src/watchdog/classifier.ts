@@ -13,7 +13,14 @@
 // staleness is PRIMARY; auth-precheck state only CORROBORATES (can force a flag when
 // the DB still looks fresh, never silences one).
 
-export type DeadmanStatus = "OK" | "DB_MISSING" | "STALE_DEPLOY" | "STALE_ENRICH" | "PIPELINE_FAIL";
+export type DeadmanStatus =
+  | "OK"
+  | "DB_MISSING"
+  | "STALE_DEPLOY"
+  | "STALE_ENRICH"
+  | "PIPELINE_FAIL"
+  | "ADDRESSLESS_VENUES"
+  | "SOURCE_DEAD";
 
 export interface DeadmanThresholds {
   deployStaleHours: number;
@@ -31,6 +38,19 @@ export interface DeadmanInputs {
   authPrecheckOk: boolean | null;
   /** events table row count; null = DB missing/unreadable, 0 = empty — both CATASTROPHIC. */
   dbRowCount: number | null;
+  /** true = the DB read failed BUSY/LOCKED while the file exists (writer active).
+   *  Suppresses DB_MISSING — WAL contention during enrichment is normal, not a
+   *  catastrophe (the 2026-07-05 double false-alarm). Default false. */
+  dbBusy?: boolean;
+  /** active source ids with ≥3 consecutive zero/failed scrape runs (adapter-computed).
+   *  Silent source death — each shrinks the product invisibly. Default []. */
+  deadSources?: string[];
+  /** venue names of publishable events whose address resolves empty (DB + config).
+   *  Each is a future F2b hard-stop → deploy drought (the June freeze class). Default []. */
+  addresslessVenues?: string[];
+  /** last build-failure error line (from logs/build-outcome.log) newer than the last
+   *  deploy; surfaced with STALE_DEPLOY so a drought arrives pre-diagnosed. Default null. */
+  buildFailureCause?: string | null;
   nowMs: number;
   thresholds: DeadmanThresholds;
 }
@@ -52,14 +72,19 @@ function isStale(tsMs: number | null, nowMs: number, thresholdHours: number): bo
 }
 
 export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
-  const { lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, dbRowCount, nowMs, thresholds } = inputs;
+  const {
+    lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, dbRowCount, nowMs, thresholds,
+    dbBusy = false, deadSources = [], addresslessVenues = [], buildFailureCause = null,
+  } = inputs;
   const reasons: string[] = [];
 
   // DB presence/row floor — the catastrophe that precedes every other signal: if
   // events.db is gone or empty, the deploy is serving a frozen/stale site and
   // enrichment can't run. Highest priority so "restore required" headlines instead
   // of being masked under STALE_DEPLOY (the 2026-06-30 incident).
-  const dbDegenerate = dbRowCount === null || dbRowCount <= 0;
+  // dbBusy exception: an unreadable-but-present DB under an active writer is WAL
+  // contention, not loss — no reason pushed (the adapter already retried once).
+  const dbDegenerate = (dbRowCount === null && !dbBusy) || (dbRowCount !== null && dbRowCount <= 0);
   if (dbDegenerate) {
     reasons.push(
       dbRowCount === null
@@ -98,13 +123,39 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
     reasons.push("pipeline: a scheduled job last-exited non-zero (health adapter)");
   }
 
+  // Build-failure cause (campaign Phase 5): a drought should arrive pre-diagnosed.
+  // Only meaningful alongside a stale deploy — a fresh deploy supersedes old causes.
+  if (deployStale && buildFailureCause) {
+    reasons.push(`build: last failure — ${buildFailureCause}`);
+  }
+
+  // Addressless publishable venues (pre-drought warning): each one is a future
+  // F2b schema-gate hard-stop → blocked deploy (the June 2026 3-week freeze class).
+  if (addresslessVenues.length > 0) {
+    reasons.push(
+      `venues: ${addresslessVenues.length} publishable venue(s) missing address — ` +
+      `F2b gate will hard-stop the next build. Add to config/athens-venues.json: ` +
+      addresslessVenues.join(', '),
+    );
+  }
+
+  // Silent source death: ≥3 consecutive zero/failed runs for a source that used
+  // to produce. Not a freshness breach, but the product shrinks invisibly.
+  for (const src of deadSources) {
+    reasons.push(`source: ${src} returned 0 events / failed for ≥3 consecutive runs (SOURCE_DEAD)`);
+  }
+
   // Primary status by outcome-first priority; reasons[] still names every breach.
   // DB_MISSING outranks all — it's the precondition failure under the others.
+  // ADDRESSLESS_VENUES outranks SOURCE_DEAD: it blocks the NEXT build, a dead
+  // source only thins future content.
   let status: DeadmanStatus = "OK";
   if (dbDegenerate) status = "DB_MISSING";
   else if (deployStale) status = "STALE_DEPLOY";
   else if (enrichStale) status = "STALE_ENRICH";
   else if (!pipelineHealthy) status = "PIPELINE_FAIL";
+  else if (addresslessVenues.length > 0) status = "ADDRESSLESS_VENUES";
+  else if (deadSources.length > 0) status = "SOURCE_DEAD";
 
   return { status, reasons };
 }

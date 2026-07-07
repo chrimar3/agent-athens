@@ -470,6 +470,13 @@ run_generate() {
         return 0
     else
         log_error "Site generation failed"
+        # Capture the failing error line into a structured log the deadman
+        # watchdog reads (campaign Phase 5) — a deploy drought's first alert
+        # then already names the failing gate instead of just "stale".
+        local build_err
+        build_err=$(grep -E "^error:|Error:|Build aborted|FAILED" "$LOG_FILE" | tail -1 | tr -d '\n' | cut -c1-300)
+        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) build-failure ${build_err:-unknown (no error line matched; see $LOG_FILE)}" \
+            >> "$PROJECT_DIR/logs/build-outcome.log"
         return 1
     fi
 }
