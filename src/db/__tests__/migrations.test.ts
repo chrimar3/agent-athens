@@ -13,25 +13,34 @@
 
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import Database from 'bun:sqlite';
-import { existsSync, unlinkSync, copyFileSync } from 'fs';
+import { copyFileSync, mkdtempSync, rmSync } from 'fs';
 import { join } from 'path';
+import { tmpdir } from 'os';
 
 const PROJECT_ROOT = join(import.meta.dir, '../../..');
-const TEST_DB_PATH = join(PROJECT_ROOT, 'data/test-migrations.db');
 const PROD_DB_PATH = join(PROJECT_ROOT, 'data/events.db');
 
 describe('Database Migrations', () => {
   let db: Database;
+  let workDir: string;
 
   beforeAll(() => {
-    // Use production database for schema verification
-    // (Migration has already been applied)
-    // Note: readonly:true fails when WAL mode is active and SHM doesn't exist
-    db = new Database(PROD_DB_PATH);
+    // Schema verification runs against a COPY of the migrated production DB —
+    // NEVER the production file itself. The previous writable prod open here
+    // was the S200 mark-flip mutation hole (4 merged_into rows flipped during
+    // a bun-test run, no audit row); the prod-db-guard preload now blocks any
+    // prod open from tests, and this copy is the sanctioned fixture route.
+    // No {readonly:true} on the copy: a WAL-mode copy without -wal/-shm fails
+    // readonly opens in Bun 1.3.0 (banked in mistakes.md).
+    workDir = mkdtempSync(join(tmpdir(), 'migrations-test-'));
+    const copy = join(workDir, 'events-copy.db');
+    copyFileSync(PROD_DB_PATH, copy);
+    db = new Database(copy);
   });
 
   afterAll(() => {
     db.close();
+    rmSync(workDir, { recursive: true, force: true });
   });
 
   // =========================================================================

@@ -1,0 +1,10 @@
+# Bun configuration.
+#
+# [test].preload arms tests/preload/prod-db-guard.preload.ts for EVERY
+# `bun test` run: any bun:sqlite open of data/events.db from a test throws
+# (read or write). Added 2026-07-07 after a test run mutated 4 production
+# merged_into marks (S200 mark-flip incident). Do not remove — the guard
+# test (tests/prod-db-guard.test.ts) fails the suite if this preload is
+# disarmed.
+[test]
+preload = ["./tests/preload/prod-db-guard.preload.ts"]
