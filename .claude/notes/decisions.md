@@ -4840,3 +4840,15 @@ All TDD; full suite 2870 pass / 0 fail, tsc clean.
 3. **Dangling / non-emitting terminal survivors remain build-FAIL** — explicitly ruling-ordained; not softened.
 4. **No manual deploy, no src commit tonight:** the next deploy ships a 43-loser suppression + 301 wave whose ruling is NOT recorded in geo-decisions.md, and the implementation is an unlogged foreign strand. Landing both belongs to the strand owner / GEO. The 08:00 Athens automation (the ratified path) deploys on its own now that the build passes.
 **Consequence:** working tree carries strand + hardening uncommitted (production reads it — same state as the past 2 days); loss risk documented in session log.
+
+## Session 201 (2026-07-07, fable-impact) — Unfreeze + harden campaign decisions
+
+**Deadman signal priority**: DB_MISSING > STALE_DEPLOY > STALE_ENRICH > PIPELINE_FAIL > ADDRESSLESS_VENUES > SOURCE_DEAD. Rationale: addressless venues block the NEXT build (imminent drought) so they outrank source death (gradual content thinning); both are below live freshness breaches. Busy-but-present DB (WAL contention, 30s retry) is NOT DB_MISSING — kills the 2026-07-05 false-CATASTROPHIC class.
+
+**SOURCE_DEAD tuning**: streak ≥3 consecutive zero/failed runs AND produced events within 30 days. Flapping sources (clubber: zeros broken by one good day) fire only after 3 clean consecutive zeros; low-volume (benaki 4/day) and long-dormant/seasonal sources never false-trip.
+
+**Import gate at saveEvents mirrors upsertEvent verbatim**: NEW ids only, fail-open on error, loud [import-gate] line per skip + dupSkipped in the summary. A false positive must never silently drop a genuinely new event. Watch [import-gate] counts for ~a week before trusting.
+
+**Survivor election emission-awareness NOT implemented this session** (was campaign Phase 3): a live parallel session (S200 arc) was actively editing src/generate-site.ts + src/generators/event-page.ts mid-campaign (mtimes moved, diff grew 151→220 lines). Editing/committing those files would have raced a collaborator — gated out per never-sweep-WIP. The data-side unfreeze (Phase 1 swaps) holds because mark-duplicates only scans merged_into IS NULL rows; the election fix remains checkpointed for whoever owns the dedup arc.
+
+**effectiveEndSql migration is incremental by design**: guard test is the permanent fix; 9 raw-predicate files stay allowlisted with TODOs, 10 stale COALESCE sites listed in specs/effective-end-migration-remaining.md. Dedup-script windows need operator review per migration (a wider window surfaces new duplicate groups).

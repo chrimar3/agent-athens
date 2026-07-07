@@ -5739,3 +5739,15 @@ The design-system.md corrective-sweep brief targeted `docs/design-system.md` wit
 
 ### Normalize the pointer graph BEFORE gating on it (2026-07-07, dedup-301 hardening)
 A build gate whose invariant quantifies over redirect targets ("every 301 target emits a page") is only sound over the *condensation* of the loser→survivor graph — chains collapsed to terminals, cycles quarantined — never over raw edges. The edge-writer (daily marker) guarantees only per-run local consistency; across runs, marks flip and interleave. Consuming raw edges turned one corrupt pair into a site-wide freshness freeze (Jul 6). General form: when automation A writes pointers incrementally and automation B enforces a global invariant over them, B must canonicalize (resolve + partition unresolvable) before enforcing, and the unresolvable partition needs an explicit disposition (here: per-group fail-open + loud warn, freeze reserved for ruling-ordained cases). Fail-open beats freeze when the invariant can be preserved vacuously (emit NO redirect for the corrupt group ≠ emit a wrong redirect).
+
+## Reconcile colliding gates by fixing data, never by weakening a gate (2026-07-07, Session 201)
+The dedup-301 gate (no 301 to a non-emitting target) and the A0 hard-stop composed into a deterministic build freeze: survivor election never consults emission-visibility. The unfreeze re-pointed `merged_into` (reversible UPDATEs, swap survivor/loser) so BOTH gates stayed fail-closed. Pattern: when two correct guards deadlock, the bug is in the DATA or in an upstream policy (election), not in either guard — weakening a guard converts a loud freeze into a silent defect.
+
+## SQL predicates mirroring TS logic must be GENERATED from the same source + parity-tested (2026-07-07)
+`src/db/effective-end-sql.ts` builds the "is this event current" CASE expression from `config/lifecycle-presumption.json` via the same accessors the TS resolver uses, and `tests/effective-end-guard.test.ts` proves SQL ≡ `resolveEffectiveEnd` over an event-shape matrix. Hand-copying the rule produced 3 drift waves over 4 months. Companion seam guard (S95 no-bypass shape) fails the suite on NEW raw `start_date >= date('now')` predicates; allowlist is self-pruning (a migrated file still listed fails the test).
+
+## Watchdog extension pattern: adapter → optional pure-classifier input → priority slot (2026-07-07)
+New deadman signals (SOURCE_DEAD, ADDRESSLESS_VENUES, buildFailureCause, dbBusy) are OPTIONAL DeadmanInputs fields with defaults, computed by fault-isolated adapters (`safe()`), classified purely, and slotted into an explicit priority order. Zero risk to existing behavior (all existing tests unchanged), exhaustively unit-testable, and the delivery layers are untouched. Add future signals the same way — never inline I/O into the classifier.
+
+## Deploy verification: platform state is the ONLY truth (re-confirmed 2026-07-07)
+First manual deploy exited 0 through a pipe while the platform recorded state=error (422 at finalize). `netlify api getSiteDeploy` state=ready is the done-condition; a live curl of a changed URL is the belt-and-braces check.
