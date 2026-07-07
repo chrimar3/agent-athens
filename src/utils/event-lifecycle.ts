@@ -73,6 +73,12 @@ export function isRunImplyingType(type: string | undefined): boolean {
   return type !== undefined && RUN_IMPLYING_TYPES.has(type);
 }
 
+/** Ordered list of run-implying types — consumed by effectiveEndSql() so the
+ *  SQL mirror of resolveEffectiveEnd is generated from the SAME config. */
+export function getRunImplyingTypes(): string[] {
+  return [...presumptionConfig.runImplyingTypes];
+}
+
 export function presumptionWindowDays(type: string): number {
   return presumptionConfig.presumed_run_days[type] ?? presumptionConfig.presumed_run_days._default;
 }

@@ -14,6 +14,7 @@
 
 import type Database from 'bun:sqlite';
 import { determineEnrichmentTier, type EventForEnrichment } from './description-generator';
+import { isCurrentSql, athensTodaySql } from '../db/effective-end-sql';
 
 // ============================================================================
 // Types
@@ -284,15 +285,18 @@ function calculateDaysUntil(dateStr: string): number {
 export function getCoverageGapBonus(db: Database, eventType: string): number {
   if (!eventType) return 0;
 
-  // +15 if first of type this week
+  // +15 if first of type this week. "This week" = still current (effective
+  // end, so running exhibitions/theater count — they occur this week) AND
+  // started before the 7-day horizon. Athens-anchored $today, not UTC
+  // date('now') (campaign Phase 6; raw predicate silently dropped running rows).
   const thisWeekCount = db.prepare(`
     SELECT COUNT(*) as count FROM enrichment_queue q
     JOIN events e ON q.event_id = e.id
     WHERE q.status = 'completed'
-    AND e.type = ?
-    AND e.start_date >= date('now')
-    AND e.start_date <= date('now', '+7 days')
-  `).get(eventType) as { count: number };
+    AND e.type = $type
+    AND ${isCurrentSql('e.')}
+    AND substr(e.start_date, 1, 10) <= date($today, '+7 days')
+  `).get({ $type: eventType, $today: athensTodaySql() }) as { count: number };
 
   if (thisWeekCount.count === 0) return 15;
 
@@ -633,21 +637,24 @@ export function calculateVelocityMetrics(db: Database): VelocityMetrics {
     AND status = 'pending'
   `).get() as { count: number }).count;
 
-  // Total visible events (verified_athens + pass_through, future only)
+  // Total visible events (verified_athens + pass_through, still CURRENT by
+  // effective end — running exhibitions/theater included; the raw start_date
+  // predicate silently excluded 288 running rows from coverage/velocity
+  // metrics as of 2026-07-07: 399 → 687 visible. Campaign Phase 6.
   const totalVisible = (db.prepare(`
     SELECT COUNT(*) as count FROM events
     WHERE location_status IN ('verified_athens', 'pass_through')
-    AND start_date >= date('now')
-  `).get() as { count: number }).count;
+    AND ${isCurrentSql()}
+  `).get({ $today: athensTodaySql() }) as { count: number }).count;
 
   // Total enriched among visible events
   const totalEnriched = (db.prepare(`
     SELECT COUNT(*) as count FROM events e
     JOIN enrichment_queue q ON e.id = q.event_id
     WHERE e.location_status IN ('verified_athens', 'pass_through')
-    AND e.start_date >= date('now')
+    AND ${isCurrentSql('e.')}
     AND q.status = 'completed'
-  `).get() as { count: number }).count;
+  `).get({ $today: athensTodaySql() }) as { count: number }).count;
 
   // CORRECT: velocity = enriched - newStubs only
   const velocity = enrichedThisWeek - newStubsThisWeek;
