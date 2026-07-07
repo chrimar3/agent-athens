@@ -1442,7 +1442,9 @@ div#main-content {
   top: 64px;
   z-index: var(--z-filter-bar);
   isolation: isolate;
-  height: 56px;
+  /* min-height, not height: active-filter chips (44px pills + nested dismiss
+     targets) can exceed the closed-state height; a fixed bar clips them. */
+  min-height: 56px;
   display: flex;
   background: var(--bg-primary);
   box-shadow: 0 1px 0 var(--border-whisper);
@@ -1472,7 +1474,17 @@ div#main-content {
      (border-box), clipping the coarse-pointer 44px tap-target pills to their
      rounded side-ends — the "( )" arcs. Drop the vertical padding so the 44px
      pills fit the full 52px height (scroll wrapper no longer clips them). */
-  .filter-bar { top: 56px; height: 52px; padding: 0; }
+  .filter-bar { top: 56px; min-height: 52px; padding: 0; }
+  /* Applied-filter chips WRAP on mobile instead of scrolling under the edge
+     fade: the mask made the last chip read as truncated mid-word and the
+     result count as painted over it. Bar grows via min-height above. */
+  .filter-bar-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding: 4px 0;
+  }
 }
 
 /* ── Filter Pills ─────────────────────────────── */
@@ -1495,6 +1507,20 @@ div#main-content {
   user-select: none;
   flex-shrink: 0;
 }
+/* Active chip: the nested dismiss <a> gets the coarse-pointer 44×44 minimum,
+   which inflated the whole pill to 66px inside a 52px bar (the clip). Give the
+   dismiss its full tap target via negative margins absorbed by the pill box,
+   and pin the pill itself at the 44px target height. */
+.filter-pill.is-active { min-height: 44px; }
+.filter-pill .filter-pill-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -12px -14px -12px -6px;
+}
+
 .filter-pill:hover {
   border-color: var(--border-active);
   color: var(--text-primary);
@@ -1775,8 +1801,13 @@ div#main-content {
   flex-shrink: 0;
 }
 
-/* Type panel wider for 3-column grid */
-.filter-panel[data-panel-for="type"] { min-width: 420px; }
+/* Type panel wider for 3-column grid — DESKTOP ONLY. Unscoped, this rule sat
+   later in the cascade than the mobile block's `min-width: 0` (same
+   specificity) and silently re-widened the 390px bottom sheet to 420px,
+   clipping the grid's right column off-viewport. */
+@media (min-width: 768px) {
+  .filter-panel[data-panel-for="type"] { min-width: 420px; }
+}
 
 /* ── Filter Panel Footer ─────────────────────── */
 
