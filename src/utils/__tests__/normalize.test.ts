@@ -78,6 +78,17 @@ describe("normalizeEvents", () => {
     }
   });
 
+  test("unknown venue gets NO coordinates — never the Syntagma sentinel", () => {
+    const unknownVenueEvent = {
+      ...sampleRawConcert,
+      venue: "Άγνωστος Χώρος Που Δεν Υπάρχει Στο Registry",
+    };
+    const result = normalizeEvents({ events: [unknownVenueEvent] });
+    const event = result[0];
+
+    expect(event.venue.coordinates).toBeUndefined();
+  });
+
   test("should normalize open price correctly", () => {
     const result = normalizeEvents({ events: [sampleRawFreeExhibition] });
     const event = result[0];

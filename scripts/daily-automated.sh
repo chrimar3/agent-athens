@@ -438,11 +438,21 @@ run_geocode() {
     # rate limiting at 1 req/sec). Remaining venues get picked up on the next run.
     if bun run scripts/geocode-missing-venues.ts --confidence=high --limit=20 >> "$LOG_FILE" 2>&1; then
         log "Venue geocoding completed"
-        return 0
     else
         log_error "Venue geocoding failed (non-fatal, continuing...)"
-        return 0  # Non-fatal
     fi
+
+    # Unconditional coordinate backfill (2026-07-07). The geocoder only spawns
+    # the backfill when it geocoded NEW venues (it exits early on 0 geocoded),
+    # so events at already-known venues stayed geo-less forever — ~147 visible
+    # events at 48 venues whose coords already sat in venues-master.json.
+    # backfill-venue-geo.ts is idempotent: fills only NULL/0/sentinel rows.
+    if bun run scripts/backfill-venue-geo.ts >> "$LOG_FILE" 2>&1; then
+        log "Venue geo backfill completed"
+    else
+        log_error "Venue geo backfill failed (non-fatal, continuing...)"
+    fi
+    return 0  # Non-fatal phase
 }
 
 # Phase 4: Generate site

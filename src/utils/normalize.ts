@@ -113,16 +113,16 @@ function normalizeType(rawType: string): EventType {
 }
 
 function normalizeVenue(venueName: string, location: string): Venue {
-  const coords = VENUE_COORDINATES[venueName] || { lat: 37.9838, lon: 23.7276 };
+  // Unknown venue → NO coordinates. A city-center sentinel is fabricated
+  // precision that leaks into JSON-LD GeoCoordinates (Tier-1 never-fabricate);
+  // backfill-venue-geo.ts fills real coords once the venue enters venues-master.
+  const coords = VENUE_COORDINATES[venueName];
 
   return {
     name: venueName,
     address: location,
-    neighborhood: coords.neighborhood,
-    coordinates: {
-      lat: coords.lat,
-      lon: coords.lon
-    }
+    neighborhood: coords?.neighborhood,
+    ...(coords ? { coordinates: { lat: coords.lat, lon: coords.lon } } : {})
   };
 }
 
