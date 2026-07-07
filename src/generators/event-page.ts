@@ -27,6 +27,7 @@ import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderHreflangLinks } from '../utils/hreflang';
+import { hostOf } from '../ticketing/validator';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
@@ -558,8 +559,11 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
     : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
 
-  // Source attribution — use display name from mapping, fall back to raw ID
-  const sourceDisplayName = sourceAttributionMap[event.source] || event.source;
+  // Source attribution — when a URL exists, label with its actual host so the
+  // link text never contradicts the destination (cross-listed events carry a
+  // source id whose merchant differs from the URL host); mapped display name
+  // only for URL-less attributions.
+  const sourceDisplayName = (event.url && hostOf(event.url)) || sourceAttributionMap[event.source] || event.source;
   const sourceHtml = event.url
     ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
     : `<div class="edp-source">${t.source}: ${sourceDisplayName}</div>`;

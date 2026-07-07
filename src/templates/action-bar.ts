@@ -75,6 +75,15 @@ export function renderSavedEventsScript(): string {
   window.addEventListener('storage', function(e) {
     if (e.key === KEY) document.dispatchEvent(new CustomEvent('aa:saved-change'));
   });
+  function syncCount() {
+    var n = read().length;
+    document.querySelectorAll('[data-saved-count]').forEach(function(el) {
+      el.textContent = n > 0 ? String(n) : '';
+      if (n > 0) { el.removeAttribute('hidden'); } else { el.setAttribute('hidden', ''); }
+    });
+  }
+  document.addEventListener('aa:saved-change', syncCount);
+  syncCount();
 })();
 </script>`;
 }

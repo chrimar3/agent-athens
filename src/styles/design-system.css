@@ -591,6 +591,41 @@ div#main-content {
 .site-header-left { display: flex; align-items: center; gap: var(--space-md); }
 .site-header-right { display: flex; align-items: center; gap: var(--space-sm-md); }
 
+/* Inline header nav — visible at desktop widths; hamburger covers narrower. */
+.site-nav-inline { display: none; }
+@media (min-width: 1024px) {
+  .site-nav-inline { display: flex; align-items: center; gap: var(--space-md-lg); margin-left: var(--space-md); }
+  .site-nav-inline > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-secondary);
+    font-size: var(--type-small);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    transition: color var(--t-base);
+  }
+  .site-nav-inline > a:hover { color: var(--text-primary); text-decoration: none; }
+  .site-nav-inline > a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+}
+
+.nav-saved-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 6px;
+  background: var(--accent-primary);
+  color: var(--text-on-bright);
+  border-radius: 999px;
+  font-size: var(--type-ui);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+.nav-saved-count[hidden] { display: none; }
+
 /* Nav search button */
 .nav-search-btn {
   display: flex;
@@ -641,10 +676,15 @@ div#main-content {
 .hamburger-icon::after { top: 6px; }
 .hamburger-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
 
+/* Hamburger carries navigation wherever the inline nav is hidden (<1024px) —
+   previously it vanished at ≥768px leaving tablet/desktop with footer-only nav. */
+@media (max-width: 1023px) {
+  .hamburger-btn { display: flex; }
+}
+
 @media (max-width: 767px) {
   .site-header { height: 56px; padding: 0 var(--space-md); padding-top: var(--safe-top); }
   .site-header-right { gap: var(--space-sm); }
-  .hamburger-btn { display: flex; }
   .site-header .lang-toggle { display: none; }
 }
 
@@ -1259,8 +1299,8 @@ div#main-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   background: rgba(13, 13, 13, 0.6);
   backdrop-filter: blur(4px);
@@ -1268,15 +1308,16 @@ div#main-content {
   border-radius: var(--radius-circle);
   color: var(--text-primary);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity var(--t-fast) var(--ease-out);
+  /* Always visible — a hover-gated save is undiscoverable with a mouse and the
+     compare/shortlist affordance is the point of the card. */
+  opacity: 1;
+  transition: color var(--t-fast) var(--ease-out);
 }
 
-.event-card:hover .card-save-btn,
-.card-save-btn:focus-visible { opacity: 1; }
+.card-save-btn:hover { color: var(--accent-primary); }
 
 .card-save-btn.is-saved {
-  opacity: 1;
+  color: var(--accent-primary);
 }
 
 .card-save-btn__icon {
@@ -1301,10 +1342,6 @@ div#main-content {
 .card-save-btn:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-}
-
-@media (hover: none) {
-  .card-save-btn { opacity: 1; }
 }
 
 /* ── Toast Notification ────────────────────────── */
@@ -1886,6 +1923,18 @@ div#main-content {
   border-top: 1px solid var(--border-subtle);
   position: relative;
   isolation: isolate;
+}
+
+/* List rows: reserve a lane for the absolute save button so it never overlaps
+   titles/meta (grid cards float it over the image instead). */
+.event-card-list .card-save-btn {
+  top: var(--space-md);
+  right: 0;
+  background: none;
+  backdrop-filter: none;
+}
+.event-card-list .list-content {
+  padding-right: 56px;
 }
 
 .event-card-list:has(.card-link:focus-visible) {

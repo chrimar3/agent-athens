@@ -107,6 +107,14 @@ export function resolveCtaForEvent(event: Event, t: UIStrings): CtaResult {
     return { kind: 'door', label: t.doorOnly, href: null };
   }
 
+  // D7 rule 4.5 (redesign loop 20260707): ticketed event with no trusted ticket
+  // URL — the scrape-source event page is the only real booking route the site
+  // knows. Emit it as a "Find tickets" CTA instead of dead-ending on the venue
+  // homepage or none; every trusted tier above still wins when present.
+  if (event.price?.type === 'with-ticket' && event.url) {
+    return { kind: 'tickets', label: t.findTicketsArrow, href: event.url };
+  }
+
   // D7 rule 5: venue website fallback (covers venue_fallback, unresolved, expired,
   // legacy undefined status). Key distinction from rule 2/3 is no ticketUrl trust.
   if (venueWebsite) {

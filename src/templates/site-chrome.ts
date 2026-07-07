@@ -27,11 +27,20 @@ function homeHref(locale: Locale): string {
 
 export function renderSiteNav(locale: Locale = 'el'): string {
   const s = STRINGS[locale];
+  const prefix = localePrefix(locale);
+  // Venues has no /en/ counterpart yet — omit on English (see renderHamburgerMenu).
+  const venuesItem = locale === 'en' ? '' : `<a href="/venues/">${s.navVenues}</a>`;
   return `<a href="#main-content" class="skip-link">${s.navSkipToContent}</a>
 <header class="site-header" role="banner">
   <div class="site-header-inner">
     <div class="site-header-left">
       <a href="${homeHref(locale)}" class="site-logo">agent athens</a>
+      <nav class="site-nav-inline" aria-label="${s.navMainNav}">
+        <a href="${homeHref(locale)}">${s.navEvents}</a>
+        ${venuesItem}
+        <a href="${prefix}/saved/">${s.savedEvents}<span class="nav-saved-count" data-saved-count hidden></span></a>
+        <a href="${prefix}/about/">${s.navAbout}</a>
+      </nav>
     </div>
     <div class="site-header-right">
       ${renderColophonTrigger()}
