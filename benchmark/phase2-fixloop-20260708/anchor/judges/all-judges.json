@@ -1,0 +1,675 @@
+[
+ {
+  "pageId": "event-el-rich",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "JSON-LD PerformingArtsEvent in raw HTML with name 'Book Stroller', startDate/endDate 2026-07-15, eventStatus EventScheduled, inLanguage 'el', offers price 0 EUR + isAccessibleForFree:true, image URL, and canonical URL — fully machine-readable without JS",
+     "Venue entity in JSON-LD: EventVenue 'ΚΠΙΣΝ' with PostalAddress, geo 37.941042/23.693306, venue URL, and a containedInPlace chain with Wikidata sameAs for Athens (Q1524), Attica (Q758056), Greece (Q41)",
+     "HTML practical-info <table> near top: Ημερομηνία 'Τετάρτη 15 Ιουλίου', Τιμή 'Ελεύθερη είσοδος', Χώρος 'ΚΠΙΣΝ', Διεύθυνση — weekday (Wednesday) is correct for 2026-07-15",
+     "Full ~700-word description present in raw HTML (both as <p> body and JSON-LD description) with concrete facts: SNFCC LEED Platinum certification, 210-stremma park, Kallithea between Syngrou Ave and Faliro coast, no metro at the door, free SNFCC shuttle from Syntagma, no ticket/reservation needed, books read on-site not borrowed, single-day stop 15 July, sustainability theme",
+     "Machine dates in <time datetime='2026-07-15'> and calendar links (Google/ics/Outlook) encoding 20260715 — year recoverable even though the visible date omits it",
+     "Source attribution link to snfcc.org event page",
+     "meta name='date' content='2026-07-08' (crawl-current) and og/twitter metadata",
+     "Related-events rail for the same venue with per-card <time datetime> values and prices"
+    ],
+    "cannot_extract": [
+     "Any Greek-language description: the page is lang='el' but the entire body text is English, explicitly flagged 'Περιγραφή στα Αγγλικά' — a Greek-only reader/query surface gets only the title, table, and nav in Greek",
+     "Start time of day: no hours anywhere (startDate is date-only, no doorsTime/startTime; text says only 'makes its rounds') — 'when should I go' is unanswerable",
+     "A visible 'Updated {date}' or JSON-LD dateModified/datePublished: only a hidden meta date and boilerplate 'Updated daily' in the meta description; the freshness marker '<!-- timeliness-expires: 2026-07-16 -->' is an HTML comment",
+     "A usable street address: streetAddress is 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' — venue name plus a bare number with the street (Syngrou Ave 364) missing",
+     "Year in the visible date ('Τετάρτη 15 Ιουλίου' has no year; year exists only in machine attributes)",
+     "A clean related-events list: 'Barbara Kruger: Untitled (Pride and Contempt)' appears 3 times and 'Μαζί, Ορατές' twice as separate cards (dedup failure), and a workshop dated 11 Ιαν (2026-01-11) sits under 'Επόμενες εκδηλώσεις' (upcoming) marked 'Σε εξέλιξη'",
+     "Performer/organizer entity: offers.seller names ΚΠΙΣΝ but no organizer field; event typed PerformingArtsEvent though it is a children's mobile-library activity (type mismatch)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 6,
+    "freshness_signaling": 4,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong raw-HTML surface (JSON-LD + practical table + full text server-rendered) undercut by a language mismatch — the entire description is English on an el page — no visible updated-date or dateModified, no start time, a malformed streetAddress (street name missing), and a related rail with triplicate/duplicate cards plus a January item under 'upcoming'. Body copy is fact-rich but written in an editorial-promotional register with unsourced scene-setting ('lowest-stakes cultural outing Athens offers'), which caps factual_density_tone."
+  }
+ },
+ {
+  "pageId": "event-el-rich",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "Full JSON-LD @graph in raw HTML: PerformingArtsEvent 'Book Stroller', startDate/endDate 2026-07-15, isAccessibleForFree:true, offers price 0 EUR, image URL, canonical URL, eventStatus Scheduled",
+     "Venue entity in JSON-LD: EventVenue 'ΚΠΙΣΝ' with PostalAddress, precise geo (37.941042, 23.693306), venue page URL, and Wikidata sameAs chain for Athens (Q1524) / Attica (Q758056) / Greece (Q41)",
+     "Server-rendered practical-info HTML table near top: Ημερομηνία / Τιμή (Ελεύθερη είσοδος) / Χώρος (ΚΠΙΣΝ) / Διεύθυνση — extractable without JS",
+     "Rich factual description in raw HTML: SNFCC mobile children's library, one-day stop 15 July, theme sustainability, no ticket/reservation/booking, books read on-site not borrowed, open to all ages",
+     "Concrete venue facts: SNFCC in Kallithea between Syngrou Avenue and Faliro coast, LEED Platinum certification, 210-stremma park, no metro at door, tram/bus or free SNFCC shuttle from Syntagma",
+     "Source attribution link to snfcc.org event page",
+     "Machine-readable <time datetime='2026-07-15'> on the visible date and <meta name='date' content='2026-07-08'>",
+     "Related-events rail for same venue with dates and prices in static HTML"
+    ],
+    "cannot_extract": [
+     "A Greek answer capsule: the entire description is English on a lang='el' page (page itself flags 'Περιγραφή στα Αγγλικά'), and JSON-LD claims inLanguage 'el' while the description text is English — a Greek-language engine cannot quote this page in its own language",
+     "Event start TIME — no time anywhere (visible text, table, or JSON-LD startDate is date-only); 'what time does it start' is unanswerable",
+     "A usable street address: 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' is the venue name with a dangling street number — no street name (Syngrou 364?) and no locality in the visible address",
+     "Year in any visible date ('Τετάρτη 15 Ιουλίου' — year only in the datetime attribute)",
+     "Any visible 'Updated {date}' or JSON-LD dateModified/datePublished — freshness exists only as meta name='date' and an unverifiable 'Updated daily' claim in the meta description",
+     "The opening sentence as a declarative capsule — it opens with literary imagery ('A stroller crosses Stavros Niarchos Park carrying no child') rather than what/when/where/price",
+     "A trustworthy 'upcoming at this venue' rail: it contains a January event ('Γνωριμία με το σκάκι', 11 Ιαν) under 'Επόμενες εκδηλώσεις' and the same Barbara Kruger exhibition duplicated 3 times plus 'Μαζί, Ορατές' duplicated twice",
+     "Accurate genre: typed Παράσταση / PerformingArtsEvent though the content describes a children's mobile-library activity, misdirecting genre-based fan-out"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 6,
+    "freshness_signaling": 3,
+    "factual_density_tone": 7
+   },
+   "notes": "Strong static surface (complete JSON-LD, practical table, sourced facts) undermined by a full EL/EN language mismatch on the main description (inLanguage 'el' is false), a malformed street address with a dangling '364', no start time, no visible year, no dateModified/'Updated' surface, and a related rail mixing a past January listing and triplicate duplicates into 'upcoming'. Description tone is literary-editorial with mild persuasive flourishes ('lowest-stakes cultural outing Athens offers') but remains fact-dense."
+  }
+ },
+ {
+  "pageId": "event-el-rich",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "Event name 'Book Stroller', date Wednesday 15 July (JSON-LD startDate/endDate 2026-07-15), venue ΚΠΙΣΝ/SNFCC, free admission — all present in raw HTML both as a 'Πρακτικές Πληροφορίες' table near the top and as schema.org PerformingArtsEvent JSON-LD",
+     "JSON-LD offers price '0' EUR + isAccessibleForFree:true, eventStatus EventScheduled, venue geo coordinates 37.941042/23.693306, Wikidata sameAs chain for Athens/Attica/Greece, og:image, canonical URL",
+     "How-to-attend facts in body text: no ticket, no reservation, no minimum age; books read on the spot, not borrowed; day's theme is sustainability",
+     "Transport specifics: SNFCC is in Kallithea between Syngrou Avenue and the Faliro coast, no metro at the door, tram/bus toward the coast or free SNFCC shuttle from Syntagma",
+     "Verifiable venue facts: LEED Platinum certification, 210-stremma park, built by the Stavros Niarchos Foundation and handed to the Greek state, National Library and Greek National Opera on campus",
+     "Source attribution link to snfcc.org event page; freshness meta name='date' content='2026-07-08' in head; all content server-rendered (raw HTML matches rendered view, JS not required)"
+    ],
+    "cannot_extract": [
+     "A start TIME — date only, no time-of-day anywhere (visible text, table, or JSON-LD); an engine cannot answer 'what time is the Book Stroller on 15 July'",
+     "The year in any VISIBLE text — 'Τετάρτη 15 Ιουλίου' has no year; 2026 exists only in JSON-LD and a hidden 'timeliness-expires: 2026-07-16' HTML comment",
+     "A Greek-language description on this Greek (lang='el') page — the entire body is English, flagged by the page itself ('Περιγραφή στα Αγγλικά'); JSON-LD even declares inLanguage:'el' for an English description",
+     "A usable street address — 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' has a dangling number 364 with no street name (Syngrou is never stated in the address field)",
+     "A visible 'Updated {date}' or any dateModified in JSON-LD — freshness is only a head meta tag and a meta-description tail '...Updated daily.'",
+     "The stroller's route/stops or duration within the day — 'the setting is wherever the stroller has stopped' explicitly leaves location-within-park unresolvable",
+     "A tight 40-60w answer capsule — the opening paragraph is a literary scene ('A stroller crosses Stavros Niarchos Park carrying no child'), not a capsule; key facts must be assembled from table + prose",
+     "Clean related-events data: rail contains an 11 January workshop and the same Barbara Kruger exhibition listed three times with three different start dates (28 Apr / 26 May / 27 May)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 5,
+    "freshness_signaling": 4,
+    "factual_density_tone": 5
+   },
+   "notes": "EL page whose entire description is English with a mistagged inLanguage:'el'; no start time and no visible year anywhere; street address is malformed ('...Νιάρχος, 364' with no street); no visible Updated date or dateModified; related rail shows a January item and triplicate Barbara Kruger entries; body prose is literary-evaluative ('lowest-stakes cultural outing Athens offers') diluting fact density."
+  }
+ },
+ {
+  "pageId": "event-en-rich",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/en/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "JSON-LD PerformingArtsEvent in raw HTML with name 'Book Stroller', startDate/endDate 2026-07-15, isAccessibleForFree:true, offers price 0 EUR, EventVenue with geo coordinates (37.941042, 23.693306) and Wikidata containedInPlace chain (Athens Q1524, Attica Q758056, Greece Q41)",
+     "Server-rendered Practical Information <table> near top of body: Date 'Wednesday 15 July 2026', Price 'Free entry', Venue 'ΚΠΙΣΝ', Address 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364'",
+     "Opening paragraph works as an answer capsule: what (SNFCC's mobile children's library), when (15 July), where (Stavros Niarchos Park), how it works (no queue, pick a book, read on the lawn)",
+     "Self-contained extractable sections: admission ('no ticket, no reservation'), transport ('no metro at the door: tram or bus toward the coast, or the SNFCC shuttle from Syntagma at no charge'), venue location ('SNFCC (ΚΠΙΣΝ) sits in Kallithea between Syngrou Avenue and the Faliro coast')",
+     "Verifiable facts in flat HTML: LEED Platinum certification, 210-stremma park, books read on-site not borrowed, single-day stop, sibling 'Stroller Peiramaton' science program, day's theme sustainability",
+     "Source attribution link to https://www.snfcc.org/event/book-stroller-2/",
+     "Canonical URL, og:image, <time datetime='2026-07-15'>, .ics/Google Calendar links, <meta name='date' content='2026-07-08'>",
+     "All description content present in raw HTML (JS-disabled) — nothing render-only except the collapsed-state styling"
+    ],
+    "cannot_extract": [
+     "Start time / hours of the event — no clock time anywhere on the page or in JSON-LD (startDate is date-only), so 'what time is the Book Stroller' is unanswerable",
+     "An English venue name from the structured surfaces: <title>, breadcrumb, table, JSON-LD location.name and offers.seller.name all say only 'ΚΠΙΣΝ' (Greek acronym); English form 'SNFCC' appears only mid-prose",
+     "A usable street address: 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' is the venue name plus a bare number (Greek-only, no street name), on an /en/ page",
+     "Any visible 'Updated {date}' or dateModified/datePublished — freshness exists only as a hidden meta name='date' and a 'Updated daily.' phrase in meta description; a timeliness marker exists only as an HTML comment (timeliness-expires: 2026-07-16)",
+     "Consistent related-events data: rail titled 'Upcoming events at ΚΠΙΣΝ' leads with 'Γνωριμία με το σκάκι Jan 11 · Now running' (a January date presented as running in July) and lists the same Barbara Kruger exhibition 3 times with three conflicting date ranges (Apr 28–Nov 1, May 26–Ongoing, May 27–Ongoing) plus a duplicate Greek-titled photo exhibition",
+     "Precise where-in-the-park / schedule of stops — prose says the location is 'wherever the stroller has stopped'"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 4,
+    "freshness_signaling": 3,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong raw-HTML surface (practical table + full JSON-LD + capsule opening) undercut by no event time anywhere, Greek-only venue name and malformed Greek-only address on an /en/ page, zero visible updated-date or dateModified, and a related rail that contradicts itself (Jan 11 'Now running' under 'Upcoming', triplicate Barbara Kruger with three different date ranges). Description carries real sourced facts but pads them with literary/evaluative prose ('lowest-stakes cultural outing Athens offers') that dilutes density."
+  }
+ },
+ {
+  "pageId": "event-en-rich",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/en/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "Event name 'Book Stroller', date Wednesday 15 July 2026 (with <time datetime=\"2026-07-15\"> and year), venue ΚΠΙΣΝ, 'Free entry' — all present in raw HTML in a Practical Information <table> near the top (rows: Date / Price / Venue / Address)",
+     "Full JSON-LD @graph in raw HTML: PerformingArtsEvent with startDate/endDate 2026-07-15, eventStatus EventScheduled, isAccessibleForFree true, Offer price 0 EUR, EventVenue with geo coordinates 37.941042,23.693306, nested Place chain with Wikidata sameAs (Athens Q1524, Attica Q758056, Greece Q41), Organization node",
+     "Entire ~600-word enriched description is server-rendered in raw HTML (not JS-gated), duplicated verbatim in JSON-LD description",
+     "How-to-attend facts: no ticket, no reservation, no minimum age, books read on-site not borrowed; single-day stop (15 July)",
+     "Transport specifics: SNFCC in Kallithea between Syngrou Avenue and Faliro coast, no metro at the door, tram/bus toward the coast, free SNFCC shuttle from Syntagma",
+     "Concrete venue facts: LEED Platinum certification, 210-stremma park, built by Stavros Niarchos Foundation and handed to the Greek state, National Library of Greece and Greek National Opera at the park's edge; sibling program 'Stroller Peiramaton' named",
+     "Source attribution link to https://www.snfcc.org/event/book-stroller-2/ visible on page",
+     "Venue named in English in prose: 'the SNFCC's mobile library', 'The Stavros Niarchos Foundation Cultural Center', 'The SNFCC (ΚΠΙΣΝ)'",
+     "Canonical URL, og:type event, meta name=date 2026-07-08, Google Maps link with coordinates, .ics/Google/Outlook calendar links with correct 2026-07-15 date",
+     "Related links: /performances/, venue page /venues/snfcc/, eight English collection hubs (today, this-weekend, exhibitions, open, etc.)"
+    ],
+    "cannot_extract": [
+     "Any start time or hours — no time-of-day anywhere on the page, in the table, in JSON-LD (startDate is date-only), or in the .ics links (all-day); 'makes its rounds' is the only schedule information",
+     "A visible 'Updated {date}' or any dateModified/datePublished — JSON-LD has neither; only a machine-only <meta name=\"date\" content=\"2026-07-08\"> and an unquantified 'Updated daily.' claim in the truncated meta description",
+     "An English venue name or usable street address from the structured surfaces: table Venue = 'ΚΠΙΣΝ' (Greek-only), Address = 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' — the venue's own name plus a bare number, not a street (Syngrou 364 is never stated as the address); JSON-LD streetAddress carries the same malformed Greek string",
+     "A clean 40–60w declarative answer capsule — the opening paragraph is a literary hook ('A stroller crosses… carrying no child') and the meta description truncates mid-sentence ('the SNFCC's mobile...')",
+     "Trustworthy related-events data: 'Upcoming events at ΚΠΙΣΝ' rail lists 'Barbara Kruger: Untitled (Pride and Contempt)' THREE times with three different dates/IDs (Apr 28, May 26, May 27) and 'Έκθεση φωτογραφίας | Μαζί, Ορατές' twice, plus a workshop dated 'Jan 11 · Now running' (a January date presented as currently running under an 'Upcoming' heading in July); all rail titles Greek-only on the /en/ page",
+     "hreflang alternates — none in the head; the JSON-LD event @id and offers.url point to the non-/en/ URL /events/5016ec38--book-stroller/ while the canonical is /en/",
+     "Any performer/organizer beyond the venue; offers.seller is just 'ΚΠΙΣΝ'"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 5,
+    "freshness_signaling": 3,
+    "factual_density_tone": 7
+   },
+   "notes": "Strong raw-HTML surface (practical table, full prose, rich JSON-LD) undermined by: no event time anywhere, no dateModified or visible updated-date, Greek-only venue name and a malformed streetAddress ('venue name, 364') in every structured field on an /en/ page, a duplicate-ridden related rail with a January item shown as 'Now running' under 'Upcoming', and JSON-LD @id/offers.url pointing at the non-/en/ URL."
+  }
+ },
+ {
+  "pageId": "event-en-rich",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/en/events/5016ec38--book-stroller/",
+   "evidence": {
+    "can_extract": [
+     "Raw HTML contains a Practical Information table near the top: Date = Wednesday 15 July 2026, Price = Free entry, Venue = ΚΠΙΣΝ, Address = Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364 — all server-rendered, no JS needed",
+     "JSON-LD @graph with PerformingArtsEvent: name 'Book Stroller', startDate/endDate 2026-07-15, eventStatus EventScheduled, isAccessibleForFree true, offers price 0 EUR, location EventVenue with PostalAddress (Athens/Attica/GR) and geo 37.941042,23.693306, image URL",
+     "Venue Wikidata linking in JSON-LD: Municipality of Athens Q1524, Attica Q758056, Greece Q41, nested containedInPlace chain",
+     "First paragraph is a usable capsule: what (SNFCC mobile library on wheels), when (15 July), where (Stavros Niarchos Park), theme (sustainability), how it works (no queue, read on the spot)",
+     "Self-contained factual sections in raw HTML: admission is open with no ticket/no reservation; books read on-site not borrowed; single-day stop; SNFCC in Kallithea between Syngrou Avenue and Faliro coast; no metro at the door — tram, bus, or free SNFCC shuttle from Syntagma; campus holds LEED Platinum; 210-stremma park; National Library of Greece and Greek National Opera on campus",
+     "Source attribution link to snfcc.org event page; canonical URL to the /en/ page; <time datetime='2026-07-15'> with full year; meta name='date' 2026-07-08; Google Maps link with coordinates; .ics/Google/Outlook calendar links with 20260715 dates"
+    ],
+    "cannot_extract": [
+     "Start time / time-of-day: startDate is date-only, no doorTime or hours anywhere — an engine cannot answer 'what time does the Book Stroller run on 15 July'",
+     "English form of the venue in structured surfaces: H1 meta, breadcrumb, practical table, title tag, and JSON-LD all say only 'ΚΠΙΣΝ' (Greek acronym); 'SNFCC' appears only inside prose paragraphs",
+     "A usable street address: 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' is the venue name plus a dangling number with no street name (Syngrou 364 presumably), Greek-only, on an /en/ page",
+     "Visible 'Updated {date}' or JSON-LD dateModified — freshness exists only as meta name='date' and an HTML comment 'timeliness-expires: 2026-07-16'",
+     "Trustworthy related-events data: the 'Upcoming events at ΚΠΙΣΝ' rail lists 'Γνωριμία με το σκάκι — Jan 11 · Now running' (a January date presented as running/upcoming in July) and the same Barbara Kruger exhibition 3 times with three different date ranges (Apr 28–Nov 1, May 26–Ongoing, May 27–Ongoing) plus 'Μαζί, Ορατές' duplicated",
+     "Organizer/performer entity: JSON-LD has no organizer; offers.seller is Organization 'ΚΠΙΣΝ' with no sameAs; offers.url and event @id point to the non-/en/ URL while canonical is /en/"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 4,
+    "factual_density_tone": 7
+   },
+   "notes": "Strong server-rendered capsule, practical table, and Event JSON-LD, but the venue exists only as the Greek acronym ΚΠΙΣΝ across every structured surface of an /en/ page with a malformed Greek-only address; no time-of-day; no visible updated date or dateModified; related rail carries duplicates and a January item labeled 'Now running' under 'Upcoming events'. Description is fact-dense but padded with unverifiable atmospheric color ('the door does not exist', 'toddlers who treat the stroller as furniture') that dilutes citability."
+  }
+ },
+ {
+  "pageId": "home-el",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/",
+   "evidence": {
+    "can_extract": [
+     "Raw HTML (JS disabled) contains the full listing content — all event names, dates, venues, and prices grep-confirmed in raw.html (e.g. 'Robert Plant', '€65', 'Δημοτικό Κηποθέατρο Παπάγου'), so non-JS crawlers see everything the rendered view shows",
+     "A short answer capsule near the top, present in raw HTML: 'Η Αθήνα έχει 245 πολιτιστικές εκδηλώσεις αυτή την εβδομάδα σε 10 κατηγορίες. Ενημερώνεται καθημερινά.' plus chip counts (Σήμερα 8, Σαββατοκύριακο 25, Συναυλίες 119, Θέατρο 33, Ελεύθερη Είσοδος 26)",
+     "Per-event atomic facts as self-contained cards with semantic <time datetime='2026-07-08T21:00:00'> attributes: name, weekday+date+time, venue with neighborhood (e.g. 'Lockbird — Τετάρτη 8 Ιουλίου στις 21:00 — Cantina Social · Ψυρρή — Με εισιτήριο'), explicit euro prices (€10, €15, €18, €25, €65, €80) or 'Ελεύθερη είσοδος'/'Με εισιτήριο'",
+     "One JSON-LD @graph (WebSite + CollectionPage + Organization) with an ItemList of 24 typed events (ExhibitionEvent, MusicEvent etc.): ISO startDate/endDate with +03:00 offsets, eventStatus, isAccessibleForFree, nested PostalAddress + GeoCoordinates, Wikidata sameAs for Athens (Q1524)/Attica/Greece, 9 items with Offer price+priceCurrency EUR",
+     "Strong freshness: visible 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 05:14 μμ ώρα Αθήνας' (matches capture date) and JSON-LD dateModified 2026-07-08T14:14:36Z; all listed events are today/future; the Apr 28–Nov 1 exhibition is correctly segregated under 'Σε εξέλιξη' (ongoing), not shown as upcoming",
+     "19 category/time fan-out links with counts (today, tomorrow, weekend, this week, this/next month, concerts, theater, nightlife, festivals, kids, exhibitions, free-entry, cinema, dance, classical, comedy/stand-up, Greek music, ticketed)",
+     "Machine-readable alternates advertised: link rel=alternate to /api/index.json and /api/events.json, plus a footer llms.txt pointer and explicit AI-agent citation instruction",
+     "lang='el' page with Greek entity names matching page language; venues disambiguated by neighborhood (Ψυρρή, Γκάζι/Κεραμεικός, Άλιμος, Παπάγου)"
+    ],
+    "cannot_extract": [
+     "A single consistent event count for the same claim: visible body says 245 events this week in 10 categories, the 'this week' category chip says 40, while <title>-adjacent meta description, og:description and JSON-LD CollectionPage all say 24 (24 = items-on-page, but stated as '24 εκδηλώσεις στην Αθήνα' with no scope) — an engine quoting a count cannot tell which is true",
+     "Consistent theater count on the SAME page: 'Θέατρο (33)' in the capsule chip row vs 'Θέατρο στην Αθήνα (37)' in the category grid and footer",
+     "Consistent category count: capsule says 'σε 10 κατηγορίες' but 19 category links are listed",
+     "Any real per-event description from JSON-LD: all 24 item descriptions are placeholders ('concert event in Athens', 'dj_set event in Athens') — no extractable substance beyond name/date/venue",
+     "A canonical URL for the homepage: <link rel=canonical> points to https://agentathens.com/index, not https://agentathens.com/ — machine identity of this page is off-root; no hreflang link elements present (comment says deliberately omitted)",
+     "A full ~40–60w what/when/where/price/how-to-book capsule: the opener is ~15 words and books nothing; no how-to-book guidance anywhere on the page",
+     "Venue-based fan-out from this page (no per-venue links beyond the nav 'Χώροι'); ΚΠΙΣΝ never expanded to its full name in visible text, and its JSON-LD streetAddress is malformed ('Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364')",
+     "Ticket prices for the 15 of 24 events marked only 'Με εισιτήριο' (no numeric price in HTML or JSON-LD)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 8,
+    "freshness_signaling": 9,
+    "factual_density_tone": 8
+   },
+   "notes": ""
+  }
+ },
+ {
+  "pageId": "home-el",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/",
+   "evidence": {
+    "can_extract": [
+     "Full event listing is server-rendered in raw HTML (JS disabled): 24 events for 8-10 July 2026, each with name, weekday+date, start time, venue, neighborhood, and price (e.g. 'Robert Plant — Πέμπτη 9 Ιουλίου στις 21:00 — Δημοτικό Θέατρο Λυκαβηττού — €65')",
+     "A near-top capsule: 'Η Αθήνα έχει 245 πολιτιστικές εκδηλώσεις αυτή την εβδομάδα σε 10 κατηγορίες. Ενημερώνεται καθημερινά.' plus inline counts (Σήμερα 8, Σαββατοκύριακο 25, Συναυλίες 119, Θέατρο 33, Ελεύθερη Είσοδος 26)",
+     "Visible freshness line 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 05:14 μμ ώρα Αθήνας' matching JSON-LD dateModified 2026-07-08T14:14:36Z; all listed dates are current/forward, none past",
+     "JSON-LD @graph with WebSite, Organization, and CollectionPage containing an ItemList of 24 typed events (MusicEvent/TheaterEvent/ExhibitionEvent/EducationEvent) with ISO startDate incl. +03:00 timezone, eventStatus, isAccessibleForFree, canonical per-event @id URLs, and location objects carrying venue name, streetAddress, addressLocality, and GeoCoordinates",
+     "9/24 events carry an Offer with price, EUR currency, availability, and a booking url (e.g. RELEASE ATHENS 2026 80 EUR, Storyville Ragtimers 25 EUR)",
+     "19 time/genre/price-based category hub links with counts (Σήμερα 8, Αύριο 8, Σαββατοκύριακο 25, Συναυλίες 119, Θέατρο 37, Ελεύθερη Είσοδος 26, Αυτόν τον Μήνα 82, Με Εισιτήριο 219, ...) enabling fan-out sub-queries",
+     "Machine-readable alternates declared: /api/index.json, /api/events.json, plus llms.txt and an explicit footer instruction for AI agents to cite agentathens.com",
+     "Greek-language entity names consistent with the page's lang=el (ΚΠΙΣΝ, Πλατεία Νερού, Μέγαρο Μουσικής Αθηνών, Cantina Social · Ψυρρή), og:locale el_GR"
+    ],
+    "cannot_extract": [
+     "A single trustworthy 'this week' count: hero says 245 events this week, the this-week hub chip says 40, and the meta description says '24 εκδηλώσεις στην Αθήνα' — three different numbers for overlapping claims on one page",
+     "Consistent theater count: hero chip 'Θέατρο (33)' vs category grid 'Θέατρο στην Αθήνα (37)' on the same page",
+     "Reliable price data from JSON-LD: only 9/24 events have offers — visibly priced events (Robert Plant €65, Dwarves €15, Ledisi €15, Σ' αγαπώ €18, Queen G €10, Swingin' Cats €15) have no Offer; and 'Release Athens 2026 / Sabaton / Savatage / Epica' is shown 'Με εισιτήριο' on the page but its JSON-LD Offer asserts price 0 EUR — a false-free contradiction",
+     "Any per-event descriptive content from structured data: all 24 JSON-LD descriptions are placeholder stubs ('concert event in Athens', 'dj_set event in Athens'); no performer entities anywhere in the graph",
+     "A self-contained 120-180w prose section: the only prose is the Barbara Kruger blurb, truncated mid-sentence with '…'; everything else is listing rows and link chips",
+     "A correct canonical for the homepage: <link rel=\"canonical\" href=\"https://agentathens.com/index\"> while the page URL is https://agentathens.com/ — canonical does not self-reference the served URL",
+     "hreflang alternates (deliberately dropped per an HTML comment), so the EL/EN relationship is not machine-declared",
+     "Correct typing of the children's animation workshop: labeled ΘΕΑΤΡΟ on-page and TheaterEvent in JSON-LD though it is a workshop; one event @id has a malformed empty slug (…/events/d1f062e5--/)",
+     "How-to-book guidance in visible text: rows say '€15' or 'Με εισιτήριο' but no visible ticketing link/instructions (offer urls exist only in JSON-LD for 9 events)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 6,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 8,
+    "freshness_signaling": 9,
+    "factual_density_tone": 7
+   },
+   "notes": "Fully server-rendered listing with strong visible freshness, but the page contradicts itself on core counts (245 vs 40 this-week, 33 vs 37 theater, 24 in meta description), JSON-LD offers cover only 9/24 events with one ticketed event asserted as 0 EUR, event descriptions are placeholder stubs, and the homepage canonical points to /index instead of the served URL."
+  }
+ },
+ {
+  "pageId": "home-el",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/",
+   "evidence": {
+    "can_extract": [
+     "Raw HTML is fully static: all rendered content (event names, dates, times, venues, prices) is present with JS disabled — e.g. 'Robert Plant, Πέμπτη 9 Ιουλίου στις 21:00, Δημοτικό Θέατρο Λυκαβηττού, €65'",
+     "Visible freshness line in raw HTML: 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 05:14 μμ ώρα Αθήνας' — current to capture date, with year and timezone",
+     "JSON-LD @graph (WebSite + CollectionPage + Organization) with dateModified 2026-07-08T14:14:36Z matching the visible timestamp",
+     "JSON-LD ItemList of 24 typed events (MusicEvent/TheaterEvent/ExhibitionEvent/EducationEvent) with ISO startDate incl. +03:00 times, venue name, streetAddress, geo coordinates, Wikidata sameAs chain (Athens Q1524 / Attica / Greece), offers, image",
+     "Short answer capsule near top: 'Η Αθήνα έχει 245 πολιτιστικές εκδηλώσεις αυτή την εβδομάδα σε 10 κατηγορίες. Ενημερώνεται καθημερινά.'",
+     "Fan-out hub links with counts covering time (σήμερα 8, αύριο 8, Σαββατοκύριακο 25, εβδομάδα 40, μήνας 82, επόμενος μήνας 29), genre (Συναυλίες 119, Θέατρο 37, Παιδιά 19, Κινηματογράφος 11, Χορός 2, Κλασική 12, Κωμωδία 11, Ελληνική Μουσική 12), and price (Ελεύθερη Είσοδος 26, Με Εισιτήριο 219)",
+     "<time datetime=\"2026-07-08T21:00:00\"> machine-readable dates on listings",
+     "Per-event price facts in visible text: €10/€15/€18/€25/€65/€80, 'Ελεύθερη είσοδος', 'Με εισιτήριο'",
+     "Neighborhood context per venue (Ψυρρή, Γκάζι / Κεραμεικός, Άλιμος, Παπάγου, Ιλίσια)",
+     "All listed dates are current or future (Jul 8–10, 2026; exhibition 28 Apr–1 Nov 2026) — no past event shown as upcoming",
+     "Explicit AI-agent affordances: llms.txt link, /api/events.json ld+json alternate, 'Για AI Agents' page link"
+    ],
+    "cannot_extract": [
+     "A consistent theater count — capsule says 'Θέατρο (33)' while the category grid and footer say 'Θέατρο στην Αθήνα (37)' on the same page",
+     "A consistent this-week count — capsule claims '245 πολιτιστικές εκδηλώσεις αυτή την εβδομάδα' while the 'Εκδηλώσεις αυτή την Εβδομάδα' hub says 40; same claim-scope, two numbers",
+     "A consistent total from metadata — <title>-adjacent meta description, og:description, and CollectionPage description all say '24 εκδηλώσεις/24 cultural events' with no scope, contradicting the visible 245",
+     "A consistent category count — capsule says 'σε 10 κατηγορίες' but 19 category hubs are listed",
+     "The homepage's canonical identity — <link rel=canonical> and og:url point to https://agentathens.com/index, not https://agentathens.com/",
+     "Reliable structured prices — JSON-LD item 18 (Release Athens / Sabaton, visibly 'Με εισιτήριο') carries price '0' with isAccessibleForFree:false; and visible prices (Dwarves €15, Ledisi €15, Κώστας Τριανταφυλλίδης €10, Σ' αγαπώ €18, Swingin' Cats €15, Robert Plant €65 etc.) are absent from their offers",
+     "Informative per-event JSON-LD descriptions — they are boilerplate ('exhibition event in Athens', 'theater event in Athens')",
+     "A 40–60w answer capsule with what/when/where/price/how-to-book — the capsule is ~15 words and there is no booking guidance anywhere on the page",
+     "hreflang alternates — deliberately dropped per an HTML comment (S144), so no EL/EN language mapping for engines",
+     "Concrete ticket amounts for many listings — numerous events show only 'Με εισιτήριο' with no price",
+     "Venue-based fan-out content — 'Χώροι' is only a nav link; no venue entities enumerated on this page"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 6,
+    "semantic_completeness_fanout": 8,
+    "entity_clarity": 8,
+    "freshness_signaling": 9,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong static surface and current freshness, but the page contradicts itself on core numbers (33 vs 37 theater, 245 vs 40 this-week, 24 vs 245 in metadata, 10 vs 19 categories), the canonical points to /index instead of the homepage URL, and JSON-LD prices diverge from visible prices including a false price:0 on a ticketed event — an engine cannot trust which count or price to cite."
+  }
+ },
+ {
+  "pageId": "home-en",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/en/today/",
+   "evidence": {
+    "can_extract": [
+     "All 8 listings are fully static in RAW HTML (JS-disabled): an Overview table with EVENT/VENUE/DATE/ENTRY columns giving name, venue, date, and price (Free/€10/€18/€15/Ticket) per event",
+     "One JSON-LD @graph with CollectionPage (inLanguage:en, url canonical to /en/today/, dateModified 2026-07-08), ItemList numberOfItems:8, and 8 typed events (MusicEvent/TheaterEvent/ExhibitionEvent) with ISO startDate incl. Europe/Athens offset (e.g. 2026-07-08T21:30:00+03:00), venue Place with streetAddress (e.g. 'Leokoriou 6-8, Athens 105 54', '32-34 Voutadon St, Gazi') and GeoCoordinates",
+     "Offer objects (price 0, EUR, event URL) for the three free events",
+     "FAQPage JSON-LD with 8 Q&A pairs whose full answer text is also visible in the raw body, with concrete facts (concerts start 21:00–22:00, theater 20:30–21:00, door tickets vs more.com/viva.gr, metro stations Monastiraki/Thiseio/Gazi/Syntagma/Evangelismos)",
+     "A ~55-word intro capsule at the top (what/where/when/price scope) and a visible update line 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00 πμ ώρα Αθήνας'",
+     "Self-contained 80–180w 'In Detail' sections per event with specific facts: Kruger = 90-meter mural, 13 site-specific works, curator Katerina Stathopoulou, first Greek solo show; Dwarves = 40th-anniversary tour, 2026 album «Jenkem», standing-only, 18+; Lockbird = Leokoriou doorway, 21:00 start, runs toward 04:00",
+     "<time datetime> attributes with correct full 2026 dates on every card"
+    ],
+    "cannot_extract": [
+     "No Offer/price in JSON-LD for any ticketed event — the visible €10/€18/€15 exist only as body text; a parser reading structured data gets prices only for the free events",
+     "No per-event url or real description in the event JSON-LD nodes (descriptions are boilerplate: 'concert event in Athens', 'dj_set event in Athens')",
+     "English forms of most entities on this /en/ page: venue names render as Greek-only 'ΚΠΙΣΝ', 'Δημοτικό Κηποθέατρο Παπάγου', 'Από Κοινού'; card dates ('Τετάρτη 8 Ιουλίου'), category badges (ΘΕΑΤΡΟ/ΣΥΝΑΥΛΙΑ/DJ SET), prices ('Ελεύθερη είσοδος', 'Με εισιτήριο'), the update line, Related Pages links, and footer are all Greek on lang=\"en\"",
+     "A correct seasonal section: 'What to Expect' is entirely about March ('March in Athens…', 'Practical notes for March', Apokries/Clean Monday) on a July 8 page",
+     "A consistent event count: intro says 'dozens of cultural events happening today' and FAQ says '30–50 events on any given day' while the page lists exactly 8; intro's named examples (live jazz at Half Note, gallery openings in Kolonaki, theater premieres in Psyri) match nothing in the listings",
+     "The end of the Σ' αγαπώ description — it truncates mid-name ('…played by G.')",
+     "hreflang alternate links (none in raw HTML head)",
+     "An English-labeled freshness statement; the Kruger exhibition row shows only its past start date 'Tuesday 28 April 2026' in the today table and In Detail header (the 28 Apr–1 Nov range appears only on the Now-running card)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 5,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong static surface (full table, ItemList, FAQPage, dated JSON-LD) undermined by missing Offers for all ticketed events, Greek-only entity names/labels/dates throughout an /en/ page, a March seasonal section served on July 8, a dozens/30–50-vs-8 count contradiction with unbacked venue examples in the capsule, one description truncated mid-sentence, and a past start date presented as the date of a today listing."
+  }
+ },
+ {
+  "pageId": "home-en",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/en/today/",
+   "evidence": {
+    "can_extract": [
+     "Answer capsule (~55w) directly under H1 in raw HTML (section.hub-answer-capsule) plus '8 events' count",
+     "Overview comparison table in raw HTML: 8 rows of Event / Venue / Date / Entry with explicit prices (Free, €10, €15, €18) and full dates with year ('Wednesday 8 July 2026')",
+     "Seven self-contained 'In Detail' blocks (~60-130w each) with meta line 'venue · date · price' — extractable without surrounding context (e.g. Dwarves: 40-year US punk band, 2026 album «Jenkem», standing-only Ground Stage, 18+, €15, 21:30)",
+     "Machine-readable start times via <time datetime='2026-07-08T21:00:00'> attributes on every card",
+     "Full JSON-LD @graph in raw HTML: CollectionPage + ItemList (8 events, ISO startDate/endDate, eventStatus, venue postal addresses, isAccessibleForFree, Wikidata sameAs for Athens/Attica/Greece/Kerameikos) + FAQPage (8 Q&As) + Organization",
+     "8 FAQ answers present as real text in raw HTML (details/summary), covering start times, transport (metro stations, €5-15 taxi), free-entry patterns, ticket platforms (more.com, viva.gr)",
+     "Fan-out facets in raw HTML: type counts (Concerts 4, DJ Sets 1, Exhibitions 1, Theatre 2), price counts (Free entry 3, Ticketed 5), neighborhood per venue (Ψυρρή, Κεραμεικός, Γκάζι, Παπάγου)",
+     "Freshness: meta date/last-modified 2026-07-08, JSON-LD datePublished/dateModified 2026-07-08, visible 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00' line, exhibition date range 28 Apr–1 Nov in card + endDate 2026-11-01 in JSON-LD",
+     "Alternate machine format advertised: <link rel='alternate' type='application/json' href='/api/en/today.json'> and /llms.txt"
+    ],
+    "cannot_extract": [
+     "English forms of key entities on this /en/ page: venue 'ΚΠΙΣΝ' (never expanded to SNFCC in table/cards/JSON-LD), 'Δημοτικό Κηποθέατρο Παπάγου', 'Από Κοινού', event titles 'Εκπαιδευτικά εργαστήρια animation για παιδιά', 'Σ' αγαπώ', 'Κώστας Τριανταφυλλίδης'; card dates, price labels ('Ελεύθερη είσοδος', 'Με εισιτήριο'), type badges (ΘΕΑΤΡΟ/ΣΥΝΑΥΛΙΑ), the visible updated-line, and all three Related Pages links are Greek-only",
+     "Prices for the 5 paid events from structured data — JSON-LD items at positions 4-8 carry no offers node at all (€10/€15/€18 exist only as visible text); free events get offers price '0'",
+     "Per-event booking/ticket URLs (only a generic FAQ mention of more.com/viva.gr)",
+     "A correct seasonal picture: the entire 'What to Expect' section describes MARCH (Apokries, Clean Monday, 'if Easter falls late March') on a 8 July page, and asserts summer has 'fewer options' while it is summer",
+     "A consistent event-count claim: capsule says 'dozens of cultural events happening today', FAQ says '30-50 on any given day', actual listing is 8; capsule also cites Half Note jazz and Kolonaki gallery openings that appear nowhere in today's 8 listings",
+     "Complete cast for Σ' αγαπώ — excerpt truncates mid-sentence: 'played by G.'",
+     "Meaningful per-event descriptions from JSON-LD (all are placeholder strings like 'concert event in Athens'); a non-past date for Barbara Kruger in the Overview table and In-Detail meta, which surface only 'Tuesday 28 April 2026' — a past date presented as the listing date on a 'today' page",
+     "An unambiguous ΚΠΙΣΝ street address — JSON-LD streetAddress is malformed: 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364'"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 4,
+    "freshness_signaling": 5,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong extractable skeleton (capsule, table, In-Detail blocks, FAQ, rich JSON-LD all in raw HTML) undermined by an /en/ page saturated with Greek-only entity names, labels, dates and update-line; a March seasonal narrative served on 8 July; capsule/FAQ counts ('dozens', '30-50') contradicting the 8 listed events; paid events missing offers in JSON-LD; and a past start date (28 April 2026) shown as the date for the Kruger row on a 'today' page."
+  }
+ },
+ {
+  "pageId": "home-en",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/en/today/",
+   "evidence": {
+    "can_extract": [
+     "Answer capsule (~55 words) near top in raw HTML: 'Athens, Greece has dozens of cultural events happening today...' plus an '8 events' count line",
+     "Overview table in raw HTML with all 8 events: name, venue, date, entry price (Free/€10/€15/€18/Ticket) — machine-readable without JS",
+     "JSON-LD @graph in raw HTML: CollectionPage with ItemList of 8 events carrying ISO startDate/endDate (with +03:00 timezone on timed events), venue names, street addresses, GeoCoordinates, Wikidata sameAs for Athens/Attica/Greece, datePublished/dateModified 2026-07-08",
+     "Offers with price '0' EUR and isAccessibleForFree:true for the 3 free events in JSON-LD",
+     "FAQPage JSON-LD plus matching visible <details> FAQ: 8 Q&A with specifics (concerts start 21:00-22:00, taxis €5-15, metro stations Monastiraki/Thiseio/Gazi/Syntagma/Evangelismos, ticket vendors more.com/viva.gr)",
+     "'In Detail' section: 8 self-contained 50-120w excerpts each with a venue/date/price meta line (e.g. Dwarves at Gazarte, 40-year US punk band, 2026 album «Jenkem», standing-only, 18+; Kruger: 90m mural on National Library facade, 13 site-specific works, curator Katerina Stathopoulou, runs 28 Apr-1 Nov)",
+     "Freshness meta: <meta name='date'> and 'last-modified' 2026-07-08, canonical https://agentathens.com/en/today/, alternate JSON feed /api/en/today.json, visible 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00'",
+     "Filter counts by type (4 concerts, 1 DJ set, 1 exhibition, 2 theatre) and price (3 free, 5 ticketed) present in raw HTML",
+     "Full year present in Overview table dates ('Wednesday 8 July 2026') and in <time datetime> attributes"
+    ],
+    "cannot_extract": [
+     "Paid ticket prices in structured data: JSON-LD items 4-8 (Κώστας Τριανταφυλλίδης €10, Lockbird, Σ' αγαπώ €18, Dwarves €15, Ledisi €15) have NO offers node at all — only isAccessibleForFree:false; prices exist only in visible HTML",
+     "English forms of key entities: ΚΠΙΣΝ is never expanded to SNFCC in the table, cards, or JSON-LD location name; Δημοτικό Κηποθέατρο Παπάγου, Από Κοινού, and event titles (Εκπαιδευτικά εργαστήρια animation για παιδιά, Σ' αγαπώ, Κώστας Τριανταφυλλίδης) appear Greek-only on this /en/ page",
+     "English-language card metadata: badges (ΘΕΑΤΡΟ/ΣΥΝΑΥΛΙΑ/ΕΚΘΕΣΗ), card dates (Τετάρτη 8 Ιουλίου — no year in visible text), prices (Ελεύθερη είσοδος / Με εισιτήριο), Related Pages links, footer tagline, and the visible last-updated line are all Greek on the /en/ page",
+     "A capsule consistent with the actual listing: it cites Half Note jazz, Kolonaki gallery openings, and Psyri theater premieres — none of which are among the 8 listed events — and says 'dozens' directly above the '8 events' count",
+     "Season-correct 'What to Expect' content: the entire section describes MARCH (Apokries, Clean Monday, 'if Easter falls late March') on a page dated 8 July 2026",
+     "Real event descriptions in JSON-LD: all description fields are stubs ('concert event in Athens', 'exhibition event in Athens')",
+     "A complete cast for Σ' αγαπώ: the excerpt truncates mid-sentence at 'played by G.'",
+     "An explicit 'runs until 1 Nov' signal in the Overview table for Barbara Kruger — its DATE column shows only 'Tuesday 28 April 2026', a past start date that reads as stale without the Greek-only 'Now running' card"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 4,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong extraction skeleton (table, In Detail blocks, FAQPage, ItemList) undermined by a stale March 'What to Expect' section on a July page, a capsule citing venues/events not in the listing ('dozens' vs 8), missing offers/prices for all 5 paid events in JSON-LD, and pervasive Greek-only entity names, dates, and the last-updated line on an /en/ page."
+  }
+ },
+ {
+  "pageId": "hub-time-el",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/this-weekend",
+   "evidence": {
+    "can_extract": [
+     "A ~40-word Greek answer capsule at top: weekend overview naming concerts/exhibitions/theater and neighborhoods (Μετς, Εξάρχεια, Κολωνάκι), followed by an explicit count '25 εκδηλώσεις' that matches JSON-LD ItemList numberOfItems=25",
+     "Server-rendered overview table (ΕΚΔΗΛΩΣΗ/ΧΩΡΟΣ/ΗΜΕΡΟΜΗΝΙΑ/ΕΙΣΟΔΟΣ) with 20 rows plus per-day sections (Παρ 10, Σάβ 11, Κυρ 12 Ιουλίου) giving event, venue, neighborhood, time, and price (€10-€40 or 'Ελεύθερη είσοδος'/'Με εισιτήριο') — all present in raw HTML with JS disabled",
+     "Visible freshness line 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00 πμ ώρα Αθήνας' plus JSON-LD datePublished/dateModified 2026-07-08 matching capture date",
+     "Single JSON-LD @graph: CollectionPage > ItemList of 25 events (24 MusicEvent + 1 ExhibitionEvent) with ISO startDate incl. timezone (+03:00), all 25 locations carrying PostalAddress + GeoCoordinates + Wikidata sameAs chain (Municipality of Athens Q1524 → Attica → Greece), plus FAQPage (8 Q&A) and Organization",
+     "Self-contained ~80-120w 'Αναλυτικά' detail sections for 8 of 25 events with venue, date, time, price in a header line (e.g. 'Τεχνόπολη · Παρασκευή 10 Ιουλίου · €10')",
+     "Canonical link to https://agentathens.com/this-weekend and machine-readable alternate /api/this-weekend.json"
+    ],
+    "cannot_extract": [
+     "The page is <meta name=\"robots\" content=\"noindex, follow\"> — compliant engines will not index or cite this page at all, regardless of content quality",
+     "Trustworthy prices from JSON-LD: only 10/25 events carry an Offer while ~14 events show visible prices; worse, 'Release Athens 2026 / Sabaton / Savatage / Epica' has price:\"0\" in JSON-LD while the visible text says 'Με εισιτήριο' and the offer URL is a more.com ticket page — a false-free assertion",
+     "Event page URLs: 0/25 ItemList events carry a top-level url property (only some Offer.url values exist)",
+     "Answers about THIS weekend from the FAQ: all 8 FAQ answers are generic evergreen boilerplate (citing Half Note and Πλάκα ταβέρνες, none of which appear in the 25 listings) rather than answers computed from this weekend's data",
+     "Correct seasonal context: the 'Τι να Περιμένετε' section describes March weekends ('Τα Σαββατοκύριακα του Μαρτίου είναι ιδανικά...') on a July 8 page — stale template text",
+     "Unambiguous currency of the Barbara Kruger row: the overview table dates it 'Τρίτη 28 Απριλίου' (past, no year) under a weekend-events heading; only the lower card reveals '28 Απρ - 1 Νοε · Ανοιχτή'",
+     "Greek-language descriptions: all 8 long-form 'Αναλυτικά' descriptions are in English on this lang=el page; JSON-LD also carries the HTML entity 'Am&#233;m&#233;' as an event name and English-only description '25 cultural events in Athens, Greece' on the EL CollectionPage",
+     "hreflang alternates: no hreflang links to an /en/ equivalent are present"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 7,
+    "freshness_signaling": 6,
+    "factual_density_tone": 5
+   },
+   "notes": "Strong server-rendered capsule + table + schema, but the page is noindexed — a hard ceiling on citation independent of content. Data-integrity defects (false price:\"0\" on a ticketed Release Athens event, 15/25 offers missing despite visible prices), stale March boilerplate on a July page, generic FAQ answers, and promotional filler in several detail blurbs ('The first notes arrive as a wall... an architecture of sound') drag freshness and tone; English prose and an HTML-entity performer name mar the EL surface."
+  }
+ },
+ {
+  "pageId": "hub-time-el",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/this-weekend",
+   "evidence": {
+    "can_extract": [
+     "Raw HTML (JS-disabled) contains a single JSON-LD @graph with CollectionPage (datePublished/dateModified 2026-07-08), an ItemList of all 25 events with full ISO startDate/endDate, typed venues, PostalAddress, geo, Wikidata sameAs chains, and image URLs",
+     "A 21-row HTML overview table near the top (event / venue / date / price) is present in raw HTML and machine-readable: e.g. 'Ταφ Λάθος | Τεχνόπολη | Παρασκευή 10 Ιουλίου | €10'",
+     "A ~38-word Greek intro capsule at top states what the weekend includes and which neighborhoods (Μετς, Εξάρχεια, Κολωνάκι), plus an explicit visible count '25 εκδηλώσεις'",
+     "Visible freshness line 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00 πμ ώρα Αθήνας' matching meta date/last-modified 2026-07-08 and JSON-LD dateModified",
+     "Per-day sections (Παρασκευή 10 / Σάββατο 11 / Κυριακή 12 Ιουλίου) with per-event type tag (ΣΥΝΑΥΛΙΑ/DJ SET/ΕΚΘΕΣΗ), start time, venue + neighborhood (e.g. 'Astron · Κεραμεικός'), and concrete price (€10–€40) or 'Ελεύθερη είσοδος'",
+     "8-question FAQPage present both as visible text with full answers in raw HTML and as FAQPage JSON-LD",
+     "Eight self-contained 80–150w event write-ups ('Αναλυτικά') with verifiable specifics: doors 18:00 at Plateia Nerou, Ταφ Λάθος 20 years/six albums, Storyville Ragtimers founded Athens 2015, Kruger exhibition 28 Apr–1 Nov at ΚΠΙΣΝ",
+     "rel=alternate application/json feed at /api/this-weekend.json and llms.txt pointer in footer"
+    ],
+    "cannot_extract": [
+     "An indexable page: raw HTML carries <meta name=\"robots\" content=\"noindex, follow\"> — engines honoring it will never index or cite this hub, regardless of content quality",
+     "offers/price in JSON-LD for 15 of 25 events (Ταφ Λάθος, Queen G, Meduza, etc.) even though prices (€10/€15) are visible on-page — schema consumers cannot extract those prices",
+     "A consistent Release Athens 10 July lineup: two separate listings for the same venue/date/time give contradictory bills ('Sabaton / Savatage / Epica' vs 'Helloween, Saxon & more'; the Helloween blurb says 'Saxon and Ashes of Ares') and Helloween itself appears as both a standalone event and inside the festival listing; Meduza and Amémé are each listed twice",
+     "Season-correct evergreen copy: 'Τι να Περιμένετε' opens with 'Τα Σαββατοκύριακα του Μαρτίου...' (March weekends) on a page dated 8 July 2026",
+     "Weekend-specific FAQ answers: all 8 answers are generic evergreen boilerplate (e.g. 'δεκάδες συναυλίες... jazz στο Half Note') referencing venues/genres not on this weekend's list",
+     "Greek-language event detail prose: all 8 'Αναλυτικά' write-ups are in English on this lang=el Greek page",
+     "Any theater events, despite the intro capsule promising 'θεατρικές παραστάσεις' — the 25 items are only concerts, DJ sets, and one exhibition",
+     "A clean entity string for Amémé in JSON-LD: emitted as 'Am&#233;m&#233;' (unescaped HTML entities inside JSON); Kruger's table row shows only the past start date 'Τρίτη 28 Απριλίου' with no year or end date, readable as a past/stale listing"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 7,
+    "freshness_signaling": 6,
+    "factual_density_tone": 5
+   },
+   "notes": "Strong extraction surface (full 25-item JSON-LD ItemList, price/venue/date table, dated update line) is undercut by meta robots noindex,follow — the page is invisible to compliant engines — plus stale March boilerplate on a July page, duplicate/contradictory Release Athens and Meduza/Amémé listings, 15/25 events missing JSON-LD offers despite visible prices, English-only detail prose and generic FAQ answers on a Greek page, and purple promotional passages ('an architecture of sound') that dilute factual density."
+  }
+ },
+ {
+  "pageId": "hub-time-el",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/this-weekend",
+   "evidence": {
+    "can_extract": [
+     "Raw HTML is fully server-rendered: all 25 listings, table, and prose exist without JS",
+     "JSON-LD @graph with CollectionPage (inLanguage: el, datePublished/dateModified 2026-07-08) containing an ItemList of 25 typed events (MusicEvent/ExhibitionEvent) each with @id URL, name, ISO startDate (21/25 include time+Europe/Athens offset), eventStatus, isAccessibleForFree, venue PostalAddress with streetAddress, and geo + Wikidata sameAs chain (Municipality of Athens Q1524, Attica, Greece)",
+     "FAQPage JSON-LD with 8 Greek Q&A pairs (answers present in markup even though rendered view shows only the questions)",
+     "Visible answer capsule near top: ~40-word Greek paragraph + '25 εκδηλώσεις' count + 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00 πμ ώρα Αθήνας'",
+     "Overview table with event/venue/date/price columns and concrete visible prices (€10–€40, 'Ελ. είσοδος')",
+     "Per-day sections (Παρασκευή 10 / Σάββατο 11 / Κυριακή 12 Ιουλίου) with <time datetime=\"2026-07-10T20:00:00\"> attributes and venue + neighborhood (e.g. 'Astron · Κεραμεικός')",
+     "Eight self-contained ~80–150w 'Αναλυτικά' prose blocks with venue/date/price header line, extractable without surrounding context",
+     "Canonical https://agentathens.com/this-weekend, og:locale el_GR, and a machine-readable alternate /api/this-weekend.json"
+    ],
+    "cannot_extract": [
+     "Page carries <meta name=\"robots\" content=\"noindex, follow\"> — indexing engines cannot cite this page at all regardless of content",
+     "Offers missing on 15/25 JSON-LD events: visible prices (Ταφ Λάθος €10, Meduza €15, NAΪKA €40) are NOT mirrored into offers; Release Athens offer has priceCurrency but no price",
+     "JSON-LD event descriptions are boilerplate English placeholders ('concert event in Athens', 'exhibition event in Athens') — no real description extractable from structured data",
+     "No performer or organizer property on any of the 25 JSON-LD events",
+     "How-to-book: no ticket links or booking mechanism extractable ('Με εισιτήριο' with no target)",
+     "Duplicate entities inflate the 25 count: 'Helloween' standalone AND inside 'Release Athens 2026 / Helloween, Saxon & more' (same venue/date); 'Meduza' AND 'Bolivar & Minotaur pres. Meduza + Dino Mfu'; 'Amémé' AND 'Jafari: Amémé + Agent Greg + Nastazia' — an engine cannot tell these apart as one event",
+     "'Τι να Περιμένετε' block describes 'Τα Σαββατοκύριακα του Μαρτίου' (March weekends) on a July page — stale template text contradicting the freshness stamp",
+     "Table date cell for the exhibition shows 'Τρίτη 28 Απριλίου' with no year, reading as a past date in an upcoming-weekend table",
+     "Capsule promises θεατρικές παραστάσεις and venues in Μετς/Εξάρχεια/Κολωνάκι, but the 25 listings contain no theater and none of those neighborhoods — templated claim not backed by page data",
+     "The 8 'Αναλυτικά' prose blocks are in English on a Greek-language page; some venue names mix scripts ('Φάληρο / Palaio Faliro', 'Lycabettus Hill')",
+     "FAQ answers are evergreen boilerplate (Half Note jazz, ρεμπέτικα in Πλάκα) not tied to any event actually listed this weekend",
+     "No hreflang alternates (an HTML comment states hreflang was deliberately dropped)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 7,
+    "freshness_signaling": 6,
+    "factual_density_tone": 5
+   },
+   "notes": "Fatal upstream defect: robots noindex makes the page uncitable by indexing engines despite strong server-rendered content and a 25-item typed JSON-LD ItemList. Content defects: three duplicate event pairs, boilerplate English JSON-LD descriptions, 15/25 events missing offers while prices are visible, a stale March 'what to expect' block and a year-less April date contradicting the fresh 8-July stamp, and templated capsule/FAQ claims (theater, Μετς/Εξάρχεια/Κολωνάκι, Half Note) unsupported by the actual listings; several detail blocks drift into promotional prose ('The first notes arrive as a wall...')."
+  }
+ },
+ {
+  "pageId": "hub-time-en",
+  "judge": 1,
+  "verdict": {
+   "url": "https://agentathens.com/en/this-weekend/",
+   "evidence": {
+    "can_extract": [
+     "~60-word answer capsule in raw HTML near top: '25 cultural events across Concert, DJ Set and Exhibition, Friday to Sunday... 3 open events and 22 with-ticket events across 13 venues', server-rendered (line 229)",
+     "Real HTML <table> 'Overview' with Event/Venue/Date/Entry columns, 20 rows with event links, dates incl. year, and euro prices — fully present with JS disabled",
+     "Full JSON-LD @graph in raw HTML: CollectionPage + ItemList of all 25 events (startDate with timezone, venue PostalAddress, geo, Wikidata sameAs chains, offers with numeric prices), FAQPage with 8 Q/A pairs, Organization — plus datePublished/dateModified 2026-07-08",
+     "Day-grouped sections (Friday 10 July 2026 / Saturday 11 / Sunday 12 / Now running) with <time datetime> attributes on every card, all server-rendered",
+     "8 self-contained ~60-160w 'In Detail' blocks with venue · date · price meta line and factual prose (e.g. Storyville Ragtimers: founded 2015, 10 July 2026 at 20:30, Megaron Garden, €25)",
+     "FAQ answers exist in raw HTML inside <details> (collapsed in rendered view but crawler-visible), with concrete price bands (club entry €8–15, concerts €15–40) and ticketing platforms (more.com, aefestival.gr)",
+     "Visible freshness line 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00' matching today, plus meta date/last-modified 2026-07-08 and canonical https://agentathens.com/en/this-weekend/",
+     "Type/price fan-out counts with crawlable links: Concerts 14, DJ Sets 10, Exhibitions 1; Free entry 3, Ticketed 22",
+     "Alternate machine-readable format advertised: <link rel=alternate type=application/json href=/api/en/this-weekend.json>"
+    ],
+    "cannot_extract": [
+     "English names for most venues: table/cards give ΚΠΙΣΝ, Πλατεία Νερού, Τεχνόπολη, Μέγαρο Μουσικής Αθηνών, ΠΛΥΦΑ, Δημοτικό Θέατρο Λυκαβηττού in Greek script only on an /en/ page (JSON-LD venue names also Greek); only some rows add Latin glosses",
+     "English dates/labels on event cards: 'Παρασκευή 10 Ιουλίου', 'Ελεύθερη είσοδος', 'Με εισιτήριο', badges 'ΣΥΝΑΥΛΙΑ'/'ΕΚΘΕΣΗ', the visible updated-line, and all three Related Pages links are Greek-only on the English page",
+     "Prices for 6 events shown only as 'Ticket' (Helloween, both Release Athens bills, Thievery Corporation, Anatolian Weapons, Irini Karaoglou) — no numeric price on page or in their JSON-LD offers",
+     "A consistent update cadence: capsule says 'refreshed daily', FAQ and What to Expect say 'updated every Thursday'",
+     "Correct seasonal context: 'What to Expect' says 'The weather in March…' on a July page — stale template text; FAQ claims 'Expect 60–100+ events' vs the page's 25",
+     "Theatre events: the <title> and meta description promise 'concerts, theatre & open exhibitions' but zero theater events are listed",
+     "Overview table rows for 5 of the 25 events (table stops at 20 rows); In Detail covers only 8 of 25",
+     "Clean entity string for one performer: JSON-LD name 'Am&#233;m&#233;' is double-encoded (should be Amémé); stray dev comment '<!-- timeliness-expires: 2026-10-08 -->' leaks inside a visible excerpt",
+     "Unambiguous weekend status for the exhibition row: Barbara Kruger appears in the weekend table dated 'Tuesday 28 April 2026' (a past start date) with no end-date in that row — reads as a past listing among upcoming ones (card elsewhere shows 28 Apr–1 Nov)"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 6,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong server-rendered surface (capsule, HTML table, ItemList+FAQ JSON-LD) undercut by pervasive Greek-only entity names, dates, and UI labels on an /en/ page; freshness contradicts itself (daily vs every-Thursday, 'weather in March' in July, past April date in the weekend table), several 'Ticket' rows carry no price, and a few In Detail excerpts drift into atmospheric promo prose ('the first notes arrive as a wall')."
+  }
+ },
+ {
+  "pageId": "hub-time-en",
+  "judge": 2,
+  "verdict": {
+   "url": "https://agentathens.com/en/this-weekend/",
+   "evidence": {
+    "can_extract": [
+     "~60-word answer capsule directly under the H1 in raw HTML: '25 cultural events across Concert, DJ Set and Exhibition, Friday to Sunday', '3 open events and 22 with-ticket events across 13 venues in central Athens' — a genuine what/when/where/price summary",
+     "Overview table in raw HTML with EVENT / VENUE / DATE / ENTRY columns for all 25 events, with English-format dates including the year (e.g. 'Friday 10 July 2026') and concrete prices (€10-€40, Free, Ticket)",
+     "One JSON-LD @graph with CollectionPage (datePublished/dateModified 2026-07-08, inLanguage 'en') containing an ItemList of 25 full Event objects: schema @type (MusicEvent/ExhibitionEvent), startDate/endDate, eventStatus, venue with PostalAddress + street address + nested Place/geo/Wikidata sameAs chain; 10/25 carry offers with numeric prices",
+     "FAQPage JSON-LD with 8 Q&As whose full answer text (e.g. 'Expect 60-100+ events... updated every Thursday') also exists in raw HTML inside <details> elements, extractable without JS",
+     "25 <time datetime> attributes with ISO values incl. start times (e.g. 2026-07-10T20:00:00) in the per-day card sections",
+     "8 self-contained ~80-160w 'In Detail' editorial blocks (Kruger, In Orbit, Helloween, Taf Lathos, Storyville Ragtimers, etc.) with concrete facts: doors 18:00/20:00, first solo show in Greece, curator name, band origin/year",
+     "Day-grouped sections (Friday 10 / Saturday 11 / Sunday 12 July 2026) enabling time-based fan-out; 'Now running' section separates the ongoing exhibition",
+     "canonical https://agentathens.com/en/this-weekend/, <html lang='en'>, English <title> and meta description; no noindex"
+    ],
+    "cannot_extract": [
+     "English names for most venues — JSON-LD and visible cards use Greek-script names on this /en/ page (ΚΠΙΣΝ, Πλατεία Νερού, Τεχνόπολη, Μέγαρο Μουσικής Αθηνών, ΠΛΥΦΑ, Δημοτικό Θέατρο Λυκαβηττού); only a few get Latin glosses (Palaio Faliro, Lycabettus Hill)",
+     "English event-card metadata: per-card dates (Παρασκευή 10 Ιουλίου, no year), price labels (Ελεύθερη είσοδος, Με εισιτήριο), and category badges (ΣΥΝΑΥΛΙΑ, ΕΚΘΕΣΗ) are Greek-only on the /en/ page; CollectionPage JSON-LD name is also Greek despite inLanguage:en",
+     "An English 'Updated' line — the only visible freshness stamp is Greek ('Τελευταία ενημέρωση: 8 Ιουλίου 2026...')",
+     "Per-event descriptions in JSON-LD — all 25 are the identical boilerplate 'concert/exhibition event in Athens'",
+     "Numeric prices for 15/25 events in JSON-LD (no offers node), including events whose visible entry shows €10/€15/€20; several visible entries say only 'Ticket' with no amount",
+     "startTime in JSON-LD startDate (date-only) even where the page shows 20:00/21:00 times",
+     "A consistent update cadence — 'refreshed daily' (4x) contradicts 'updated every Thursday' (3x) on the same page",
+     "A weekend-scoped date for the first table row: Barbara Kruger shows 'Tuesday 28 April 2026' (past date) in the DATE column of a this-weekend list; only the later 'Now running' card clarifies it as an ongoing exhibition to 1 Nov",
+     "Season-correct boilerplate — 'The weather in March is usually mild' appears on a July page; 'Expect 60-100+ events' in the FAQ contradicts the page's own 25",
+     "Unambiguous unique events — Helloween appears both standalone and inside 'Release Athens 2026 / Helloween, Saxon & more'; Meduza and Amémé each appear as two overlapping listings, inflating the 25-event count"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 6,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong raw-HTML surface (capsule, full table, 25-item Event JSON-LD, FAQ in <details>) is undercut by pervasive Greek-only entity names, dates, and price labels on an /en/ page, a Greek-only visible updated stamp, boilerplate JSON-LD descriptions, missing offers on 15/25 items, contradictory update-cadence claims, a March-weather fossil in July, and duplicate/overlapping listings (Helloween, Meduza, Amémé) plus a past April date in the weekend table; several In Detail blocks drift into promotional purple prose ('the first notes arrive as a wall')."
+  }
+ },
+ {
+  "pageId": "hub-time-en",
+  "judge": 3,
+  "verdict": {
+   "url": "https://agentathens.com/en/this-weekend/",
+   "evidence": {
+    "can_extract": [
+     "Answer capsule near top of raw HTML (~55 words): '25 cultural events across Concert, DJ Set and Exhibition, Friday to Sunday... 3 open events and 22 with-ticket events across 13 venues in central Athens'",
+     "Overview table in raw HTML (21 rows) with EVENT / VENUE / DATE / ENTRY columns including specific prices (€10, €12, €15, €20, €25, €40, Free)",
+     "25 <time> elements with machine-readable ISO datetime attributes (e.g. datetime=\"2026-07-10T20:00:00\") in raw HTML",
+     "Visible last-updated line with full date: 'Τελευταία ενημέρωση: 8 Ιουλίου 2026 στις 03:00 πμ' matching capture date; JSON-LD dateModified/datePublished 2026-07-08",
+     "8 self-contained 'In Detail' sections (~70–150w each) with venue · full date · price header lines, extractable without surrounding context (e.g. Storyville Ragtimers, Μέγαρο Μουσικής Αθηνών, Friday 10 July 2026 20:30, €25)",
+     "FAQPage JSON-LD with 8 Q&As whose full answer text is present in raw HTML (ticketing via more.com, neighborhoods Gazi/Psyri/Exarchia, aefestival.gr)",
+     "Canonical link to https://agentathens.com/en/this-weekend/, html lang=\"en\", English <title> and meta description",
+     "Per-day sections (Friday 10 / Saturday 11 / Sunday 12 July 2026) with year present, plus a separate 'Now running' exhibitions block"
+    ],
+    "cannot_extract": [
+     "Any Event or ItemList structured data — JSON-LD @graph contains only CollectionPage, FAQPage, Organization; zero schema.org Event nodes for the 25 listings",
+     "English venue names for most venues: ΚΠΙΣΝ, Πλατεία Νερού, Τεχνόπολη, Μέγαρο Μουσικής Αθηνών, ΠΛΥΦΑ, Δημοτικό Θέατρο Λυκαβηττού appear in Greek script only in the table and cards of this /en/ page (only a few get Latin glosses in prose)",
+     "English event-card metadata: dates ('Παρασκευή 10 Ιουλίου'), price labels ('Ελεύθερη είσοδος', 'Με εισιτήριο'), and category badges ('ΣΥΝΑΥΛΙΑ', 'ΕΚΘΕΣΗ') are Greek-only on the English page",
+     "A consistent update cadence: capsule says 'refreshed daily', the last-updated stamp is 03:00 daily, but FAQ and What-to-Expect both say 'updated every Thursday'",
+     "Specific prices for 7 'Ticket' rows (e.g. all Πλατεία Νερού headliners: Helloween, Thievery Corporation) — no amount given",
+     "A correct date signal for the Barbara Kruger row: table and In Detail header show 'Tuesday 28 April 2026' (a past date) as its DATE on a this-weekend page, with the 28 Apr–1 Nov run range only in the Greek-labeled 'Now running' card",
+     "Season-correct guidance: What to Expect says 'The weather in March is usually mild...' on a July page — stale template text",
+     "Consistent event-count scope: FAQ answer claims '60–100+ events on a typical weekend' while the page lists 25",
+     "An English JSON-LD page name: CollectionPage name is mixed 'Εκδηλώσεις στην Αθήνα Αυτό το Σαββατοκύριακο | Cultural Events in Athens' with description '25 cultural events in Athens, Greece' despite inLanguage:'en'"
+    ]
+   },
+   "scores": {
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 5,
+    "factual_density_tone": 6
+   },
+   "notes": "Strong raw-HTML surface (capsule, table, ISO time tags, self-contained detail sections, FAQ text) but no Event/ItemList JSON-LD at all; heavy Greek-only entity names, dates, and price/category labels on an /en/ page; freshness undermined by a past 'Tuesday 28 April 2026' date row, 'refreshed daily' vs 'updated every Thursday' contradiction, and leftover March weather text; several In Detail blurbs drift into atmospheric promotional prose ('the first notes arrive as a wall')."
+  }
+ }
+]

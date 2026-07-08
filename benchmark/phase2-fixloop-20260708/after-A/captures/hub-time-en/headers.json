@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/en/this-weekend/",
+  "canonicalUrl": "https://agentathens.com/en/this-weekend/",
+  "headers": {
+    "content-length": "350648",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 14:28:10 GMT"
+  }
+}

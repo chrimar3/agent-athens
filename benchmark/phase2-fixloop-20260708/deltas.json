@@ -1,0 +1,182 @@
+{
+ "home-el": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 6,
+    "render_integrity": 10,
+    "structured_data": 5,
+    "performance": 9.7,
+    "answer_extractability": 6,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 8,
+    "freshness_signaling": 9,
+    "factual_density_tone": 7
+   },
+   "composite": 7.19
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 5,
+    "performance": 9.7,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 8,
+    "entity_clarity": 7,
+    "freshness_signaling": 9,
+    "factual_density_tone": 8
+   },
+   "composite": 8.0
+  }
+ },
+ "home-en": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 2.5,
+    "performance": 9.7,
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 5,
+    "factual_density_tone": 6
+   },
+   "composite": 6.69
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 5,
+    "performance": 9.7,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 6,
+    "factual_density_tone": 7
+   },
+   "composite": 7.31
+  }
+ },
+ "hub-time-el": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 0,
+    "render_integrity": 10,
+    "structured_data": 2.5,
+    "performance": 9.5,
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 7,
+    "freshness_signaling": 6,
+    "factual_density_tone": 5
+   },
+   "composite": 5.26
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 0,
+    "render_integrity": 10,
+    "structured_data": 5,
+    "performance": 9.5,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 7,
+    "freshness_signaling": 7,
+    "factual_density_tone": 6
+   },
+   "composite": 5.88
+  }
+ },
+ "hub-time-en": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 2.5,
+    "performance": 8.5,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 6,
+    "factual_density_tone": 6
+   },
+   "composite": 6.86
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 5,
+    "performance": 8.5,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 4,
+    "freshness_signaling": 6,
+    "factual_density_tone": 7
+   },
+   "composite": 7.21
+  }
+ },
+ "event-el-rich": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 5,
+    "render_integrity": 10,
+    "structured_data": 8.7,
+    "performance": 9.3,
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 6,
+    "freshness_signaling": 4,
+    "factual_density_tone": 6
+   },
+   "composite": 6.76
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 5,
+    "render_integrity": 10,
+    "structured_data": 8.7,
+    "performance": 9.3,
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 6,
+    "freshness_signaling": 4,
+    "factual_density_tone": 7
+   },
+   "composite": 6.91
+  }
+ },
+ "event-en-rich": {
+  "anchor": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 8.7,
+    "performance": 9.2,
+    "answer_extractability": 7,
+    "semantic_completeness_fanout": 6,
+    "entity_clarity": 4,
+    "freshness_signaling": 3,
+    "factual_density_tone": 7
+   },
+   "composite": 7.14
+  },
+  "after": {
+   "dims": {
+    "accessibility_crawl": 8,
+    "render_integrity": 10,
+    "structured_data": 8.7,
+    "performance": 9.2,
+    "answer_extractability": 8,
+    "semantic_completeness_fanout": 7,
+    "entity_clarity": 5,
+    "freshness_signaling": 4,
+    "factual_density_tone": 7
+   },
+   "composite": 7.59
+  }
+ }
+}

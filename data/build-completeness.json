@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-07-08T11:56:49.771Z"
+    "lastUpdate": "2026-07-08T14:15:23.702Z"
   },
   "layers": {
     "event_level": "measured",
@@ -124,18 +124,18 @@
     ]
   },
   "hubs": {
-    "total": 32,
-    "pass": 9,
-    "warn": 23,
+    "total": 30,
+    "pass": 8,
+    "warn": 22,
     "fail": 0,
     "info": 0
   },
   "venues": {
-    "total": 63,
-    "pass": 63,
+    "total": 31,
+    "pass": 31,
     "warn": 0,
     "fail": 0,
-    "info": 51
+    "info": 27
   },
   "datafeed": {
     "total": 1,
@@ -165,11 +165,11 @@
   },
   "place": {
     "venue_template": {
-      "total": 63,
-      "pass": 63,
+      "total": 31,
+      "pass": 31,
       "warn": 0,
       "fail": 0,
-      "info": 51
+      "info": 27
     },
     "event_template": {
       "total": 3213,

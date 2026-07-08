@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/en/today/",
+  "canonicalUrl": "https://agentathens.com/en/today/",
+  "headers": {
+    "content-length": "153820",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 14:20:17 GMT"
+  }
+}

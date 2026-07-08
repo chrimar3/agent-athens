@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/jazz-concert-this-week",
+  "canonicalUrl": "https://agentathens.com/jazz-concert-this-week",
+  "headers": {
+    "content-length": "48601",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 14:49:11 GMT"
+  }
+}
