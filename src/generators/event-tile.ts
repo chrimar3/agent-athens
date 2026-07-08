@@ -85,6 +85,10 @@ export async function generateEventTile(
           height: o.height,
           backgroundColor: COLORS.bg,
           padding: PADDING,
+          // Reserve the bottom-left corner: the HTML .card-badge overlays the
+          // wrapper there (absolute bottom/left) and was covering the tile's
+          // venue/date footer.
+          paddingBottom: PADDING + 30,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Manrope',
@@ -108,6 +112,9 @@ export async function generateEventTile(
                 fontSize: fit.fontSize,
                 fontWeight: 700,
                 lineHeight: 1.2,
+                // Long unbreakable words (Greek surnames) must wrap, not clip
+                // at the tile edge. Mirrored in tile-autofit's measuring probe.
+                wordBreak: 'break-word',
               },
               children: title,
             },

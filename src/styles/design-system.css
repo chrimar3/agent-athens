@@ -402,6 +402,28 @@ div#main-content {
   height: 100%;
 }
 
+/* Card media is decorative and must NEVER intercept input: touch/pointer
+   events hit the stretched-link ::before overlay, but Chrome's synthesized
+   mouse/click events re-hit-test and landed on the IMG (which is not an
+   ancestor of the anchor) — taps on ~80% of a card died silently on touch
+   devices. pointer-events:none makes every input pipeline fall through to
+   the link; save buttons and badges are siblings with their own z-index
+   and keep their interactivity. */
+.card-image-wrapper img,
+.card-image-wrapper > svg,
+.hero-card-image-wrapper img,
+.hero-card-image-wrapper > svg,
+.hero-pick-image img,
+.hero-pick-image > svg,
+.feature-image-wrapper img,
+.feature-image-wrapper > svg,
+.featured-editorial-image img,
+.featured-editorial-image > svg,
+.list-image-wrapper img,
+.list-image-wrapper > svg {
+  pointer-events: none;
+}
+
 /* ── Image Lazy-Load Fade ──────────────────────────── */
 /* Images visible by default; JS adds .will-fade before load,
    then .is-loaded on complete — so images never get stuck invisible. */
