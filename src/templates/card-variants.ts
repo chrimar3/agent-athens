@@ -140,7 +140,12 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
   const featuredData = prepareCardData(featured);
   const featuredImg = featured.imageLocal || featured.imageUrl || featured.venueImage;
   const featuredIcon = TYPE_ICONS[featured.type] || TYPE_ICONS.other;
-  const featuredDesc = (featured.fullDescription || featured.description || '').substring(0, 160);
+  // Cut at a word boundary — a hard substring produced mid-word truncations
+  // ("Barbara Kruger has tra") on the highest-visibility card of the page.
+  const featuredRaw = featured.fullDescription || featured.description || '';
+  const featuredDesc = featuredRaw.length > 160
+    ? featuredRaw.substring(0, 160).replace(/\s+\S*$/, '') + '…'
+    : featuredRaw;
 
   const featuredHtml = `
     <a href="${featuredData.href}" class="hero-card hero-card--featured">

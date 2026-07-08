@@ -695,8 +695,8 @@ ${renderAnalytics()}
           <h1 class="edp-title">${event.title}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
-            · ${venueLinkable ? `<a href="/venues/${venueSlug}/">${venueDisplayName}</a>` : venueDisplayName}
-            · ${priceDisplay}
+            <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${venueDisplayName}</a>` : venueDisplayName}</span>
+            <span class="edp-meta-item">${priceDisplay}</span>
           </div>
           ${ctaHtml}
           ${(() => {
@@ -787,9 +787,26 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
     dateStr = formatExhibitionDateRange(event, exhibitionLocale);
     if (exhibitionIsOpen) dateStr += ` · ${t.exhibitionOpenRelated}`;
   } else {
-    dateStr = formatDateOnly(event.startDate, locale);
-    const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
-    if (timeStr && timeStr !== '00:00') dateStr += ` ${t.atTime} ${timeStr}`;
+    // Running multi-date events show their range, not a past start date —
+    // a June start under an "upcoming" rail heading read as stale data.
+    const todayStr = getAthensTodayStr();
+    const startedBeforeToday = event.startDate.substring(0, 10) < todayStr;
+    const isRunning = Boolean(event.endDate)
+      && startedBeforeToday
+      && String(event.endDate).substring(0, 10) >= todayStr;
+    if (isRunning) {
+      const exhibitionLocale = locale === 'en' ? 'en-US' : 'el-GR';
+      dateStr = `${formatExhibitionDateRange(event, exhibitionLocale)} · ${locale === 'en' ? 'Now running' : 'Σε εξέλιξη'}`;
+    } else if (startedBeforeToday) {
+      // Implied run (no endDate; lifecycle keeps run-implying types visible):
+      // "Από <start>" / "Since <start>" is factual; a bare past date+time
+      // under an "upcoming" heading read as stale data.
+      dateStr = `${locale === 'en' ? 'Since' : 'Από'} ${formatDateOnly(event.startDate, locale)}`;
+    } else {
+      dateStr = formatDateOnly(event.startDate, locale);
+      const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
+      if (timeStr && timeStr !== '00:00') dateStr += ` ${t.atTime} ${timeStr}`;
+    }
   }
 
   const priceText = formatPrice(event, locale);

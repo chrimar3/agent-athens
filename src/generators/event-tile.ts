@@ -58,7 +58,10 @@ export async function generateEventTile(
   opts: Partial<TileOpts> = {},
 ): Promise<string> {
   const o = { ...DEFAULT_TILE_OPTS, ...opts };
-  const innerWidth = o.width - PADDING * 2;
+  // Inner width accounts for the 4px yellow spine (borderLeft) — fitting the
+  // title to the full padded width made long titles clip at the tile edge.
+  const SPINE_WIDTH = 4;
+  const innerWidth = o.width - PADDING * 2 - SPINE_WIDTH;
 
   // F4: Satori renders `children` as a PLAIN STRING — it vectorizes glyphs and
   // does NOT XML-decode. So the text must already be the final human-readable
