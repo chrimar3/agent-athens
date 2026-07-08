@@ -170,6 +170,12 @@ time, [data-price], [data-count] {
   padding: 0;
 }
 
+/* Form controls and disclosure summaries don't inherit fonts by default —
+   without this, Read-more/⌘K/× rendered in the UA's Arial fallback. */
+button, summary, input, select, textarea {
+  font-family: inherit;
+}
+
 /* ── Base Styles ─────────────────────────────────────── */
 
 body {
@@ -378,6 +384,44 @@ div#main-content {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Satori tile fallbacks (inline <svg>) must scale like .card-image. Without
+   this the fixed 200×267 tile sits in normal flow below the aspect-ratio
+   padding box and overflow:hidden clips it to nothing — the "empty black
+   card" failure. viewBox + xMidYMid keeps the composition intact. */
+.card-image-wrapper > svg,
+.hero-card-image-wrapper > svg,
+.hero-pick-image > svg,
+.feature-image-wrapper > svg,
+.featured-editorial-image > svg,
+.list-image-wrapper > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Card media is decorative and must NEVER intercept input: touch/pointer
+   events hit the stretched-link ::before overlay, but Chrome's synthesized
+   mouse/click events re-hit-test and landed on the IMG (which is not an
+   ancestor of the anchor) — taps on ~80% of a card died silently on touch
+   devices. pointer-events:none makes every input pipeline fall through to
+   the link; save buttons and badges are siblings with their own z-index
+   and keep their interactivity. */
+.card-image-wrapper img,
+.card-image-wrapper > svg,
+.hero-card-image-wrapper img,
+.hero-card-image-wrapper > svg,
+.hero-pick-image img,
+.hero-pick-image > svg,
+.feature-image-wrapper img,
+.feature-image-wrapper > svg,
+.featured-editorial-image img,
+.featured-editorial-image > svg,
+.list-image-wrapper img,
+.list-image-wrapper > svg {
+  pointer-events: none;
 }
 
 /* ── Image Lazy-Load Fade ──────────────────────────── */
@@ -591,6 +635,41 @@ div#main-content {
 .site-header-left { display: flex; align-items: center; gap: var(--space-md); }
 .site-header-right { display: flex; align-items: center; gap: var(--space-sm-md); }
 
+/* Inline header nav — visible at desktop widths; hamburger covers narrower. */
+.site-nav-inline { display: none; }
+@media (min-width: 1024px) {
+  .site-nav-inline { display: flex; align-items: center; gap: var(--space-md-lg); margin-left: var(--space-md); }
+  .site-nav-inline > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-secondary);
+    font-size: var(--type-small);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    transition: color var(--t-base);
+  }
+  .site-nav-inline > a:hover { color: var(--text-primary); text-decoration: none; }
+  .site-nav-inline > a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+}
+
+.nav-saved-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 6px;
+  background: var(--accent-primary);
+  color: var(--text-on-bright);
+  border-radius: 999px;
+  font-size: var(--type-ui);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+.nav-saved-count[hidden] { display: none; }
+
 /* Nav search button */
 .nav-search-btn {
   display: flex;
@@ -641,10 +720,15 @@ div#main-content {
 .hamburger-icon::after { top: 6px; }
 .hamburger-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
 
+/* Hamburger carries navigation wherever the inline nav is hidden (<1024px) —
+   previously it vanished at ≥768px leaving tablet/desktop with footer-only nav. */
+@media (max-width: 1023px) {
+  .hamburger-btn { display: flex; }
+}
+
 @media (max-width: 767px) {
   .site-header { height: 56px; padding: 0 var(--space-md); padding-top: var(--safe-top); }
   .site-header-right { gap: var(--space-sm); }
-  .hamburger-btn { display: flex; }
   .site-header .lang-toggle { display: none; }
 }
 
@@ -804,8 +888,29 @@ div#main-content {
 .edp-hero {
   position: relative;
   padding: 80px 40px 48px;
-  overflow: hidden;
+  /* No overflow:hidden — it hit-clipped the downward calendar panel out of
+     existence. The blur bleed it guarded is contained on .edp-hero-bg via
+     clip-path (applies after filter). z-index lifts the hero's stacking
+     context above the following content section so the open panel paints
+     on top. */
   isolation: isolate;
+  z-index: 1;
+  /* The intro card's yellow spine, carried onto the event hero — the same
+     identity device the imageless tiles use. */
+  border-left: 4px solid var(--accent-primary);
+}
+
+/* Genre tint over the blurred artwork wash: keys the hero to the event type
+   (--edp-type-color is set inline per page) so imageless heroes stop reading
+   as one generic dark gradient. */
+.edp-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 15% 0%,
+    color-mix(in srgb, var(--edp-type-color, var(--accent-primary)) 16%, transparent),
+    transparent 62%);
+  pointer-events: none;
 }
 .edp-hero-bg {
   position: absolute;
@@ -813,6 +918,7 @@ div#main-content {
   background-size: cover;
   background-position: center;
   filter: blur(40px) saturate(1.8);
+  clip-path: inset(0);
   opacity: 0.4;
   z-index: 0;
 }
@@ -874,6 +980,11 @@ div#main-content {
 .edp-meta-date {
   color: var(--edp-type-color, var(--accent-primary));
   font-weight: var(--font-weight-bold);
+}
+/* Separators are generated, never literal text nodes — a wrapped meta line
+   used to open with an orphaned '·'. */
+.edp-meta > * + *::before {
+  content: '· ';
 }
 .edp-cta {
   display: inline-flex;
@@ -1146,8 +1257,18 @@ div#main-content {
 .edp-action-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* 44px pills must wrap at 390px, never clip off-screen */
   gap: var(--space-sm);
   margin-top: var(--space-md);
+}
+
+/* Open calendar disclosure must paint ABOVE the following content section —
+   opening downward (C4) put the panel into z-order behind it; hit-tests
+   showed all three options untappable. The [open] state gets its own
+   overlay-level stacking context. */
+.cal-disclosure[open] {
+  position: relative;
+  z-index: var(--z-overlay);
 }
 
 .edp-save-btn,
@@ -1156,7 +1277,7 @@ div#main-content {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-sm) 12px;
+  padding: var(--space-sm) 14px;
   background: transparent;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
@@ -1165,7 +1286,8 @@ div#main-content {
   font-family: inherit;
   cursor: pointer;
   transition: color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
-  min-height: 36px;
+  /* 44px touch minimum — every mobile judge measured these at 38px. */
+  min-height: 44px;
 }
 
 .edp-save-btn:hover,
@@ -1222,7 +1344,10 @@ div#main-content {
 
 .cal-disclosure__panel {
   position: absolute;
-  bottom: calc(100% + 8px);
+  /* Opens DOWNWARD: the action row sits near the page top, and the upward
+     panel clipped its first option behind the 56px fixed header (measured
+     option top 28px vs header bottom 56px — Google Calendar untappable). */
+  top: calc(100% + 8px);
   right: 0;
   z-index: 2;
   display: flex;
@@ -1259,8 +1384,8 @@ div#main-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   background: rgba(13, 13, 13, 0.6);
   backdrop-filter: blur(4px);
@@ -1268,15 +1393,16 @@ div#main-content {
   border-radius: var(--radius-circle);
   color: var(--text-primary);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity var(--t-fast) var(--ease-out);
+  /* Always visible — a hover-gated save is undiscoverable with a mouse and the
+     compare/shortlist affordance is the point of the card. */
+  opacity: 1;
+  transition: color var(--t-fast) var(--ease-out);
 }
 
-.event-card:hover .card-save-btn,
-.card-save-btn:focus-visible { opacity: 1; }
+.card-save-btn:hover { color: var(--accent-primary); }
 
 .card-save-btn.is-saved {
-  opacity: 1;
+  color: var(--accent-primary);
 }
 
 .card-save-btn__icon {
@@ -1301,10 +1427,6 @@ div#main-content {
 .card-save-btn:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-}
-
-@media (hover: none) {
-  .card-save-btn { opacity: 1; }
 }
 
 /* ── Toast Notification ────────────────────────── */
@@ -1389,7 +1511,9 @@ div#main-content {
   top: 64px;
   z-index: var(--z-filter-bar);
   isolation: isolate;
-  height: 56px;
+  /* min-height, not height: active-filter chips (44px pills + nested dismiss
+     targets) can exceed the closed-state height; a fixed bar clips them. */
+  min-height: 56px;
   display: flex;
   background: var(--bg-primary);
   box-shadow: 0 1px 0 var(--border-whisper);
@@ -1419,7 +1543,17 @@ div#main-content {
      (border-box), clipping the coarse-pointer 44px tap-target pills to their
      rounded side-ends — the "( )" arcs. Drop the vertical padding so the 44px
      pills fit the full 52px height (scroll wrapper no longer clips them). */
-  .filter-bar { top: 56px; height: 52px; padding: 0; }
+  .filter-bar { top: 56px; min-height: 52px; padding: 0; }
+  /* Applied-filter chips WRAP on mobile instead of scrolling under the edge
+     fade: the mask made the last chip read as truncated mid-word and the
+     result count as painted over it. Bar grows via min-height above. */
+  .filter-bar-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding: 4px 0;
+  }
 }
 
 /* ── Filter Pills ─────────────────────────────── */
@@ -1442,6 +1576,20 @@ div#main-content {
   user-select: none;
   flex-shrink: 0;
 }
+/* Active chip: the nested dismiss <a> gets the coarse-pointer 44×44 minimum,
+   which inflated the whole pill to 66px inside a 52px bar (the clip). Give the
+   dismiss its full tap target via negative margins absorbed by the pill box,
+   and pin the pill itself at the 44px target height. */
+.filter-pill.is-active { min-height: 44px; }
+.filter-pill .filter-pill-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -12px -14px -12px -6px;
+}
+
 .filter-pill:hover {
   border-color: var(--border-active);
   color: var(--text-primary);
@@ -1722,8 +1870,13 @@ div#main-content {
   flex-shrink: 0;
 }
 
-/* Type panel wider for 3-column grid */
-.filter-panel[data-panel-for="type"] { min-width: 420px; }
+/* Type panel wider for 3-column grid — DESKTOP ONLY. Unscoped, this rule sat
+   later in the cascade than the mobile block's `min-width: 0` (same
+   specificity) and silently re-widened the 390px bottom sheet to 420px,
+   clipping the grid's right column off-viewport. */
+@media (min-width: 768px) {
+  .filter-panel[data-panel-for="type"] { min-width: 420px; }
+}
 
 /* ── Filter Panel Footer ─────────────────────── */
 
@@ -1888,6 +2041,18 @@ div#main-content {
   isolation: isolate;
 }
 
+/* List rows: reserve a lane for the absolute save button so it never overlaps
+   titles/meta (grid cards float it over the image instead). */
+.event-card-list .card-save-btn {
+  top: var(--space-md);
+  right: 0;
+  background: none;
+  backdrop-filter: none;
+}
+.event-card-list .list-content {
+  padding-right: 56px;
+}
+
 .event-card-list:has(.card-link:focus-visible) {
   outline: 2px solid var(--focus-ring);
   outline-offset: var(--space-xs);
@@ -1898,6 +2063,7 @@ div#main-content {
   width: 200px;
   height: 112px;
   flex-shrink: 0;
+  position: relative;
   border-radius: var(--radius-md);
   background: var(--bg-elevated);
   overflow: hidden;
@@ -2106,6 +2272,8 @@ div#main-content {
   width: 120px;
   height: 80px;
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
   border-radius: 8px;
   background: var(--bg-elevated);
   overflow: hidden;

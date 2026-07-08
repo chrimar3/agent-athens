@@ -19,9 +19,14 @@ import { computeTileFit } from '../utils/tile-autofit';
 import { formatGreekDateOnly } from '../utils/i18n';
 import { decodeHtmlEntities } from '../utils/text-normalize';
 
-/** Color tokens per DN ruling 2026-06-03 (--bg-elevated, --text-primary, --text-tertiary). */
+/** Color tokens per DN ruling 2026-06-03 (--bg-elevated, --text-primary, --text-tertiary).
+ *  Redesign loop 20260707: bg aligned to the media-slot background (--bg-elevated
+ *  #151515) so letterboxed placements read seamless, and the brand accent
+ *  (--accent-primary) added — the tile is the branded typographic fallback, and
+ *  a fallback without the yellow reads as an empty template slot. */
 const COLORS = {
-  bg: '#1a1a1a',
+  bg: '#151515',
+  accent: '#f5e642',
   textPrimary: '#f0f0f0',
   textTertiary: '#888888',
 } as const;
@@ -53,7 +58,10 @@ export async function generateEventTile(
   opts: Partial<TileOpts> = {},
 ): Promise<string> {
   const o = { ...DEFAULT_TILE_OPTS, ...opts };
-  const innerWidth = o.width - PADDING * 2;
+  // Inner width accounts for the 4px yellow spine (borderLeft) — fitting the
+  // title to the full padded width made long titles clip at the tile edge.
+  const SPINE_WIDTH = 4;
+  const innerWidth = o.width - PADDING * 2 - SPINE_WIDTH;
 
   // F4: Satori renders `children` as a PLAIN STRING — it vectorizes glyphs and
   // does NOT XML-decode. So the text must already be the final human-readable
@@ -77,9 +85,18 @@ export async function generateEventTile(
           height: o.height,
           backgroundColor: COLORS.bg,
           padding: PADDING,
+          // Reserve the bottom-left corner: the HTML .card-badge overlays the
+          // wrapper there (absolute bottom/left) and was covering the tile's
+          // venue/date footer.
+          paddingBottom: PADDING + 30,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Manrope',
+          // Yellow spine — the identity device the intro card established,
+          // carried onto every imageless media slot.
+          borderLeftWidth: 4,
+          borderLeftStyle: 'solid',
+          borderLeftColor: COLORS.accent,
         },
         children: [
           // Title block: flex-grows to fill the area above the footer; the
@@ -95,6 +112,9 @@ export async function generateEventTile(
                 fontSize: fit.fontSize,
                 fontWeight: 700,
                 lineHeight: 1.2,
+                // Long unbreakable words (Greek surnames) must wrap, not clip
+                // at the tile edge. Mirrored in tile-autofit's measuring probe.
+                wordBreak: 'break-word',
               },
               children: title,
             },
@@ -112,7 +132,8 @@ export async function generateEventTile(
                 lineHeight: 1.3,
               },
               children: [
-                { type: 'div', props: { children: dateStr, style: {} } },
+                // Date in the accent — mirrors the event-hero's yellow date line.
+                { type: 'div', props: { children: dateStr, style: { color: COLORS.accent, fontWeight: 700 } } },
                 { type: 'div', props: { children: venue, style: {} } },
               ],
             },

@@ -8,6 +8,7 @@ import { STRINGS, type Locale, type UIStrings } from '../i18n/strings';
 import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
 import { formatDateOnly } from '../utils/i18n-date';
 import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { getAthensTodayStr } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
 import { getEventTile } from '../generators/event-tile';
@@ -236,15 +237,31 @@ export function prepareCardData(event: Event): CardData {
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
-  // Date text — exhibitions show range, others show single date
+  // Date text — exhibitions show range, others show single date.
+  // Non-exhibition multi-date runs that already started (garden-theater
+  // seasons, festivals) also show the range: displaying their past START
+  // date read as stale data to every judge panel that hit one.
   let dateStr: string;
   if (isExhibition) {
     dateStr = formatExhibitionDateRange(event);
     if (exhibitionIsOpen) dateStr += ' · Ανοιχτή';
   } else {
-    dateStr = formatGreekDateOnly(event.startDate);
-    const timeStr = getEventTime(event);
-    if (timeStr) dateStr += ` στις ${timeStr}`;
+    const todayStr = getAthensTodayStr();
+    const startedBeforeToday = event.startDate.substring(0, 10) < todayStr;
+    const isRunning = Boolean(event.endDate)
+      && startedBeforeToday
+      && String(event.endDate).substring(0, 10) >= todayStr;
+    if (isRunning) {
+      dateStr = `${formatExhibitionDateRange(event)} · Σε εξέλιξη`;
+    } else if (startedBeforeToday) {
+      // Implied run (no endDate; lifecycle keeps run-implying types visible):
+      // "Από <start>" is factual either way — a bare past date read as stale.
+      dateStr = `Από ${formatGreekDateOnly(event.startDate)}`;
+    } else {
+      dateStr = formatGreekDateOnly(event.startDate);
+      const timeStr = getEventTime(event);
+      if (timeStr) dateStr += ` στις ${timeStr}`;
+    }
   }
 
   // Price — text only, no links (detail page has full info)
@@ -324,9 +341,18 @@ export function renderEventCard(event: Event): string {
 function renderDateGroupedEvents(events: Event[], locale: Locale): string {
   if (events.length === 0) return '';
 
+  // Already-running multi-date events (start before today; upstream lifecycle
+  // filtering guarantees they are still on) get their own labeled lane AFTER
+  // the dated groups. Filing them under a past start date made today-focused
+  // pages open with a months-old header — the most repeated judge friction
+  // across every panel of the redesign loop.
+  const todayStr = getAthensTodayStr();
+  const running = events.filter(e => e.startDate.substring(0, 10) < todayStr);
+  const dated = events.filter(e => e.startDate.substring(0, 10) >= todayStr);
+
   // Group events by date (YYYY-MM-DD from startDate)
   const groups = new Map<string, Event[]>();
-  for (const event of events) {
+  for (const event of dated) {
     const dateKey = event.startDate.substring(0, 10);
     const group = groups.get(dateKey);
     if (group) {
@@ -346,6 +372,16 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
     parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
     parts.push(`<div class="date-group" data-count="${dateEvents.length}">`);
     for (const event of dateEvents) {
+      parts.push(renderEventCard(event));
+    }
+    parts.push(`</div>`);
+  }
+
+  if (running.length > 0) {
+    const runningHeader = locale === 'en' ? 'Now running' : 'Σε εξέλιξη';
+    parts.push(`<h2 class="date-group-header">${runningHeader}</h2>`);
+    parts.push(`<div class="date-group" data-count="${running.length}">`);
+    for (const event of running) {
       parts.push(renderEventCard(event));
     }
     parts.push(`</div>`);

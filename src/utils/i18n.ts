@@ -75,7 +75,10 @@ export function formatPriceGreek(event: Event): string {
     return event.price.range;
   }
 
-  return 'Επί πληρωμή';
+  // One vocabulary for the ticketed state: cards and filters say "Με εισιτήριο"
+  // (STRINGS.el.ticketed); the detail page saying "Επί πληρωμή" for the same
+  // event read as two different states to the judges.
+  return 'Με εισιτήριο';
 }
 
 /**

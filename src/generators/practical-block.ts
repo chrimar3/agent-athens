@@ -13,6 +13,7 @@ import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
 import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { resolveCtaForEvent } from '../ticketing/cta';
+import { normalizeGreek } from '../utils/normalize-greek';
 
 export interface VenueInfo {
   address?: string;
@@ -130,11 +131,15 @@ export function generatePracticalBlock(
     });
   }
 
-  // Venue name
+  // Venue name — gloss the multi-venue placeholder on /en/ (same rule as the
+  // event-page hero: a Greek-only pseudo-venue answers "where" for no one).
+  const venueDisplay = locale === 'en' && normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι')
+    ? 'Multiple venues'
+    : event.venue.name;
   fields.push({
     label: 'Χώρος',
     labelEn: 'Venue',
-    value: event.venue.name + (event.venue.neighborhood ? ` (${event.venue.neighborhood})` : '')
+    value: venueDisplay + (event.venue.neighborhood ? ` (${event.venue.neighborhood})` : '')
   });
 
   // Address - only if available

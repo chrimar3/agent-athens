@@ -68,6 +68,9 @@ export async function measureLineCount(
           fontWeight: 700,
           fontFamily: 'Manrope',
           lineHeight: opts.lineHeight,
+          // Must mirror the tile's title style exactly — the measurement is
+          // only valid if the probe wraps the same way the tile does.
+          wordBreak: 'break-word',
         },
         children: text,
       },

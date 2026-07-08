@@ -75,6 +75,15 @@ export function renderSavedEventsScript(): string {
   window.addEventListener('storage', function(e) {
     if (e.key === KEY) document.dispatchEvent(new CustomEvent('aa:saved-change'));
   });
+  function syncCount() {
+    var n = read().length;
+    document.querySelectorAll('[data-saved-count]').forEach(function(el) {
+      el.textContent = n > 0 ? String(n) : '';
+      if (n > 0) { el.removeAttribute('hidden'); } else { el.setAttribute('hidden', ''); }
+    });
+  }
+  document.addEventListener('aa:saved-change', syncCount);
+  syncCount();
 })();
 </script>`;
 }
@@ -130,6 +139,19 @@ export function renderCardSaveScript(): string {
       slug: btn.dataset.eventSlug,
       title: btn.dataset.eventTitle
     });
+  });
+  // Card-body click delegation: the stretched-link ::before overlay wins
+  // touch/pointer hit-testing but Chrome's SYNTHESIZED mouse click re-hit-
+  // tests and lands on the card media/wrapper (not an ancestor of the
+  // anchor), silently killing taps on most of the card's surface. Route any
+  // non-interactive click inside a card to its link.
+  document.addEventListener('click', function(e) {
+    if (e.defaultPrevented) return;
+    if (e.target.closest('a, button, summary, input, [role="button"]')) return;
+    var card = e.target.closest('.event-card, .event-card-list, .event-card-feature, .event-card-featured-editorial');
+    if (!card) return;
+    var link = card.querySelector('.card-link');
+    if (link) link.click();
   });
   document.addEventListener('aa:saved-change', syncAll);
   syncAll();

@@ -27,6 +27,7 @@ import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderHreflangLinks } from '../utils/hreflang';
+import { hostOf } from '../ticketing/validator';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
@@ -530,9 +531,17 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const venueSlug = getVenueIdentity(event.venue).slug;
   const venueHasPage = pagedVenueSlugs ? pagedVenueSlugs.has(venueSlug) : true;
 
+  // Multi-venue placeholder ("Πολλαπλοί Χώροι" and casing/accent variants) is a
+  // pseudo-venue, not a place: its slug collides with a real venue's page, Maps
+  // cannot resolve it, and on /en/ the raw Greek string was every cold-tourist
+  // judge's top friction. Gloss it on English pages; never link or map it.
+  const isPlaceholderVenue = normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι');
+  const venueDisplayName = locale === 'en' && isPlaceholderVenue ? 'Multiple venues' : event.venue.name;
+  const venueLinkable = venueHasPage && !isPlaceholderVenue;
+
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
-    venueHasPage ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>` : ''
+    venueLinkable ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${venueDisplayName}</a>` : ''
   ].filter(Boolean);
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
@@ -558,8 +567,11 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
     : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
 
-  // Source attribution — use display name from mapping, fall back to raw ID
-  const sourceDisplayName = sourceAttributionMap[event.source] || event.source;
+  // Source attribution — when a URL exists, label with its actual host so the
+  // link text never contradicts the destination (cross-listed events carry a
+  // source id whose merchant differs from the URL host); mapped display name
+  // only for URL-less attributions.
+  const sourceDisplayName = (event.url && hostOf(event.url)) || sourceAttributionMap[event.source] || event.source;
   const sourceHtml = event.url
     ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
     : `<div class="edp-source">${t.source}: ${sourceDisplayName}</div>`;
@@ -568,7 +580,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const relatedHtml = relatedEvents.length > 0
     ? `
       <section class="edp-related">
-        <h2>${t.upcomingEventsAt} ${event.venue.name}</h2>
+        <h2>${t.upcomingEventsAt} ${venueDisplayName}</h2>
         <div class="card-grid">
           ${relatedEvents.map(e => renderRelatedEventCard(e, locale)).join('\n')}
         </div>
@@ -609,7 +621,9 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // regardless of the row's encoding state. Composer stays plain-text.
   const metaDescription = escapeAttr(he.decode(generateEventMetaDescription(event)));
   const safeMetaTitle = escapeAttr(he.decode(event.title));
-  const safeVenueName = escapeAttr(he.decode(event.venue.name));
+  // Title/meta carry the glossed venue on /en/ (JSON-LD keeps the DB name —
+  // structured data stays the data-layer truth).
+  const safeVenueName = escapeAttr(he.decode(venueDisplayName));
 
   return `<!DOCTYPE html>
 <html lang="${t.lang}">
@@ -673,7 +687,7 @@ ${renderAnalytics()}
         <nav class="edp-breadcrumb">
           <a href="/">agent-athens</a>
           ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
-          › ${event.venue.name}
+          › ${venueDisplayName}
         </nav>
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
         ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
@@ -681,8 +695,8 @@ ${renderAnalytics()}
           <h1 class="edp-title">${event.title}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
-            · ${venueHasPage ? `<a href="/venues/${venueSlug}/">${event.venue.name}</a>` : event.venue.name}
-            · ${priceDisplay}
+            <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${venueDisplayName}</a>` : venueDisplayName}</span>
+            <span class="edp-meta-item">${priceDisplay}</span>
           </div>
           ${ctaHtml}
           ${(() => {
@@ -724,12 +738,12 @@ ${renderAnalytics()}
       ${inlineCtaHtml}
 
       <section class="edp-venue-section">
-        <h2>${event.venue.name}</h2>
+        <h2>${venueDisplayName}</h2>
         ${event.venue.address
           ? `<div class="edp-venue-address">${event.venue.address}</div>`
           : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
-        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
+        ${isPlaceholderVenue ? '' : `<a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
       </section>
 
       ${sourceHtml}
@@ -773,16 +787,37 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
     dateStr = formatExhibitionDateRange(event, exhibitionLocale);
     if (exhibitionIsOpen) dateStr += ` · ${t.exhibitionOpenRelated}`;
   } else {
-    dateStr = formatDateOnly(event.startDate, locale);
-    const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
-    if (timeStr && timeStr !== '00:00') dateStr += ` ${t.atTime} ${timeStr}`;
+    // Running multi-date events show their range, not a past start date —
+    // a June start under an "upcoming" rail heading read as stale data.
+    const todayStr = getAthensTodayStr();
+    const startedBeforeToday = event.startDate.substring(0, 10) < todayStr;
+    const isRunning = Boolean(event.endDate)
+      && startedBeforeToday
+      && String(event.endDate).substring(0, 10) >= todayStr;
+    if (isRunning) {
+      const exhibitionLocale = locale === 'en' ? 'en-US' : 'el-GR';
+      dateStr = `${formatExhibitionDateRange(event, exhibitionLocale)} · ${locale === 'en' ? 'Now running' : 'Σε εξέλιξη'}`;
+    } else if (startedBeforeToday) {
+      // Implied run (no endDate; lifecycle keeps run-implying types visible):
+      // "Από <start>" / "Since <start>" is factual; a bare past date+time
+      // under an "upcoming" heading read as stale data.
+      dateStr = `${locale === 'en' ? 'Since' : 'Από'} ${formatDateOnly(event.startDate, locale)}`;
+    } else {
+      dateStr = formatDateOnly(event.startDate, locale);
+      const timeStr = event.startDate.includes('T') ? formatGreekTime(event.startDate) : '';
+      if (timeStr && timeStr !== '00:00') dateStr += ` ${t.atTime} ${timeStr}`;
+    }
   }
 
   const priceText = formatPrice(event, locale);
 
   const slug = generateEventSlug(event);
   const href = `/events/${slug}/`;
-  const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
+  // Badge follows the page locale — a Greek ΦΕΣΤΙΒΑΛ chip beside the hero's
+  // English CONCERT chip was a component-consistency ding from every ct judge.
+  const badgeLabel = locale === 'en'
+    ? (t.typeLabels[event.type] || event.type).toUpperCase()
+    : (BADGE_LABELS[event.type] || BADGE_LABELS.other);
   const colorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;

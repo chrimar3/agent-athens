@@ -46,11 +46,19 @@ export function addHours(p: DateParts, hours: number): DateParts {
 export interface ResolvedTimes {
   start: DateParts;
   end: DateParts;
+  /** True when the event has no real clock time (date-only startDate, no
+   *  timePeak). Builders must emit all-day entries — the 23:59 sentinel from
+   *  parseIsoLocal is a parse default, not a showtime, and putting it in a
+   *  calendar reads as a fabricated time. */
+  allDay: boolean;
 }
 
 export function resolveEventTimes(event: Event): ResolvedTimes | null {
   const startParts = parseIsoLocal(event.startDate);
   if (!startParts) return null;
+
+  const hasClockTime = /T\d{2}:\d{2}/.test(event.startDate)
+    || Boolean(event.timePeak && /^\d{2}:\d{2}$/.test(event.timePeak));
 
   if (event.timePeak && /^\d{2}:\d{2}$/.test(event.timePeak)) {
     const pm = event.timePeak.match(/^(\d{2}):(\d{2})$/)!;
@@ -66,7 +74,7 @@ export function resolveEventTimes(event: Event): ResolvedTimes | null {
     endParts = addHours(startParts, 3);
   }
 
-  return { start: startParts, end: endParts };
+  return { start: startParts, end: endParts, allDay: !hasClockTime };
 }
 
 // RFC 5545 §3.3.11 — escape order matters: backslash MUST come first
@@ -123,6 +131,20 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
   const loc = [venueName, address].filter(Boolean).join(", ");
   const uid = (event.id || "event") + "@agentathens.com";
 
+  // No-time single-day events become all-day entries (RFC 5545 VALUE=DATE,
+  // end exclusive) — the 23:59 parse sentinel must never reach a calendar.
+  // Exhibitions keep their existing endDate-range emission.
+  const singleAllDay = times.allDay && !(event.type === "exhibition" && event.endDate);
+  const dtLines = singleAllDay
+    ? [
+        "DTSTART;VALUE=DATE:" + formatDateOnly(start),
+        "DTEND;VALUE=DATE:" + formatDateOnly(addOneDay(start)),
+      ]
+    : [
+        "DTSTART;TZID=Europe/Athens:" + formatICS(start),
+        "DTEND;TZID=Europe/Athens:" + formatICS(end),
+      ];
+
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -132,8 +154,7 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
     "BEGIN:VEVENT",
     foldLine("UID:" + uid),
     "DTSTAMP:" + nowUtcStamp(),
-    "DTSTART;TZID=Europe/Athens:" + formatICS(start),
-    "DTEND;TZID=Europe/Athens:" + formatICS(end),
+    ...dtLines,
     foldLine("SUMMARY:" + escIcs(event.title)),
     foldLine("LOCATION:" + escIcs(loc)),
     foldLine("DESCRIPTION:" + escIcs(event.title) + "\\n" + escIcs(canonicalUrl)),
@@ -227,14 +248,18 @@ export function buildOutlookUrl(event: Event, canonicalUrl: string): string {
   const times = resolveEventTimes(event);
   if (!times) return "";
 
-  const isAllDay =
+  const isExhibitionRange =
     event.type === "exhibition" && /^\d{4}-\d{2}-\d{2}$/.test(event.endDate ?? "");
+  // Date-only events (no showtime) are all-day too — see resolveEventTimes.allDay.
+  const isAllDay = isExhibitionRange || times.allDay;
   const startdt = isAllDay
     ? partsToDateOnlyIso(times.start)
     : partsToAthensIso(times.start);
-  const enddt = isAllDay
+  const enddt = isExhibitionRange
     ? partsToDateOnlyIso(times.end)
-    : partsToAthensIso(times.end);
+    : isAllDay
+      ? partsToDateOnlyIso(addOneDay(times.start))
+      : partsToAthensIso(times.end);
 
   const venueName = event.venue?.name ?? "";
   const address = event.venue?.address ?? "";
@@ -264,6 +289,10 @@ export function buildGCalUrl(event: Event, canonicalUrl: string): string {
     // All-day exhibition: YYYYMMDD/YYYYMMDD end-EXCLUSIVE (GCal convention)
     const endExclusive = addOneDay(end);
     datesParam = `${formatDateOnly(start)}/${formatDateOnly(endExclusive)}`;
+  } else if (times.allDay) {
+    // Date-only event with no showtime: single all-day entry — never the
+    // 23:59 parse sentinel dressed up as a start time.
+    datesParam = `${formatDateOnly(start)}/${formatDateOnly(addOneDay(start))}`;
   } else {
     // Timed event: UTC basic format on both ends
     datesParam = `${athensPartsToUtcBasic(start)}/${athensPartsToUtcBasic(end)}`;

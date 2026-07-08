@@ -4,15 +4,16 @@
 import type { Event } from '../types';
 import { prepareCardData, TYPE_ICONS } from './page';
 import { getEventTile } from '../generators/event-tile';
+import { renderCardSaveButton } from './action-bar';
 
 export type BadgeTreatment = 'yellow' | 'neutral';
 
 /**
  * Horizontal list row: image left, content right.
- * Component only — not yet integrated into any page layout.
+ * Used by venue pages for the upcoming-events list.
  */
 export function renderEventCardList(event: Event): string {
-  const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event);
+  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event);
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
   return `
@@ -33,6 +34,7 @@ export function renderEventCardList(event: Event): string {
       <span class="card-venue">${venueText}</span>
       <span class="card-price">${priceText}</span>
     </div>
+    ${renderCardSaveButton(event.id, slug, event.title)}
   </article>`;
 }
 
@@ -138,7 +140,12 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
   const featuredData = prepareCardData(featured);
   const featuredImg = featured.imageLocal || featured.imageUrl || featured.venueImage;
   const featuredIcon = TYPE_ICONS[featured.type] || TYPE_ICONS.other;
-  const featuredDesc = (featured.fullDescription || featured.description || '').substring(0, 160);
+  // Cut at a word boundary — a hard substring produced mid-word truncations
+  // ("Barbara Kruger has tra") on the highest-visibility card of the page.
+  const featuredRaw = featured.fullDescription || featured.description || '';
+  const featuredDesc = featuredRaw.length > 160
+    ? featuredRaw.substring(0, 160).replace(/\s+\S*$/, '') + '…'
+    : featuredRaw;
 
   const featuredHtml = `
     <a href="${featuredData.href}" class="hero-card hero-card--featured">

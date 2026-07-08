@@ -42,8 +42,10 @@ describe('generateEventTile', () => {
 
   test('emits DN-ruling color tokens as literal hex (no unresolved --var)', async () => {
     const svg = await generateEventTile(concertEvent);
-    // --bg-elevated, --text-primary, --text-tertiary per DN 2026-06-03
-    expect(svg).toContain('#1a1a1a');
+    // --bg-elevated (#151515, aligned to media slots), --accent-primary spine/date,
+    // --text-primary, --text-tertiary — redesign loop 20260707
+    expect(svg).toContain('#151515');
+    expect(svg.toLowerCase()).toContain('#f5e642');
     expect(svg).toContain('#f0f0f0');
     expect(svg.toLowerCase()).toMatch(/#888(888)?/);
     // No unresolved CSS custom properties leaked
