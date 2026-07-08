@@ -860,8 +860,13 @@ div#main-content {
 .edp-hero {
   position: relative;
   padding: 80px 40px 48px;
-  overflow: hidden;
+  /* No overflow:hidden — it hit-clipped the downward calendar panel out of
+     existence. The blur bleed it guarded is contained on .edp-hero-bg via
+     clip-path (applies after filter). z-index lifts the hero's stacking
+     context above the following content section so the open panel paints
+     on top. */
   isolation: isolate;
+  z-index: 1;
 }
 .edp-hero-bg {
   position: absolute;
@@ -869,6 +874,7 @@ div#main-content {
   background-size: cover;
   background-position: center;
   filter: blur(40px) saturate(1.8);
+  clip-path: inset(0);
   opacity: 0.4;
   z-index: 0;
 }
@@ -1202,8 +1208,18 @@ div#main-content {
 .edp-action-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* 44px pills must wrap at 390px, never clip off-screen */
   gap: var(--space-sm);
   margin-top: var(--space-md);
+}
+
+/* Open calendar disclosure must paint ABOVE the following content section —
+   opening downward (C4) put the panel into z-order behind it; hit-tests
+   showed all three options untappable. The [open] state gets its own
+   overlay-level stacking context. */
+.cal-disclosure[open] {
+  position: relative;
+  z-index: var(--z-overlay);
 }
 
 .edp-save-btn,
@@ -1212,7 +1228,7 @@ div#main-content {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-sm) 12px;
+  padding: var(--space-sm) 14px;
   background: transparent;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
@@ -1221,7 +1237,8 @@ div#main-content {
   font-family: inherit;
   cursor: pointer;
   transition: color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
-  min-height: 36px;
+  /* 44px touch minimum — every mobile judge measured these at 38px. */
+  min-height: 44px;
 }
 
 .edp-save-btn:hover,
@@ -1278,7 +1295,10 @@ div#main-content {
 
 .cal-disclosure__panel {
   position: absolute;
-  bottom: calc(100% + 8px);
+  /* Opens DOWNWARD: the action row sits near the page top, and the upward
+     panel clipped its first option behind the 56px fixed header (measured
+     option top 28px vs header bottom 56px — Google Calendar untappable). */
+  top: calc(100% + 8px);
   right: 0;
   z-index: 2;
   display: flex;

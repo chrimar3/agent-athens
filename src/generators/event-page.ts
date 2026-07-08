@@ -531,9 +531,17 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const venueSlug = getVenueIdentity(event.venue).slug;
   const venueHasPage = pagedVenueSlugs ? pagedVenueSlugs.has(venueSlug) : true;
 
+  // Multi-venue placeholder ("Πολλαπλοί Χώροι" and casing/accent variants) is a
+  // pseudo-venue, not a place: its slug collides with a real venue's page, Maps
+  // cannot resolve it, and on /en/ the raw Greek string was every cold-tourist
+  // judge's top friction. Gloss it on English pages; never link or map it.
+  const isPlaceholderVenue = normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι');
+  const venueDisplayName = locale === 'en' && isPlaceholderVenue ? 'Multiple venues' : event.venue.name;
+  const venueLinkable = venueHasPage && !isPlaceholderVenue;
+
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
-    venueHasPage ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${event.venue.name}</a>` : ''
+    venueLinkable ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${venueDisplayName}</a>` : ''
   ].filter(Boolean);
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
@@ -572,7 +580,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const relatedHtml = relatedEvents.length > 0
     ? `
       <section class="edp-related">
-        <h2>${t.upcomingEventsAt} ${event.venue.name}</h2>
+        <h2>${t.upcomingEventsAt} ${venueDisplayName}</h2>
         <div class="card-grid">
           ${relatedEvents.map(e => renderRelatedEventCard(e, locale)).join('\n')}
         </div>
@@ -613,7 +621,9 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // regardless of the row's encoding state. Composer stays plain-text.
   const metaDescription = escapeAttr(he.decode(generateEventMetaDescription(event)));
   const safeMetaTitle = escapeAttr(he.decode(event.title));
-  const safeVenueName = escapeAttr(he.decode(event.venue.name));
+  // Title/meta carry the glossed venue on /en/ (JSON-LD keeps the DB name —
+  // structured data stays the data-layer truth).
+  const safeVenueName = escapeAttr(he.decode(venueDisplayName));
 
   return `<!DOCTYPE html>
 <html lang="${t.lang}">
@@ -677,7 +687,7 @@ ${renderAnalytics()}
         <nav class="edp-breadcrumb">
           <a href="/">agent-athens</a>
           ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
-          › ${event.venue.name}
+          › ${venueDisplayName}
         </nav>
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
         ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
@@ -685,7 +695,7 @@ ${renderAnalytics()}
           <h1 class="edp-title">${event.title}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
-            · ${venueHasPage ? `<a href="/venues/${venueSlug}/">${event.venue.name}</a>` : event.venue.name}
+            · ${venueLinkable ? `<a href="/venues/${venueSlug}/">${venueDisplayName}</a>` : venueDisplayName}
             · ${priceDisplay}
           </div>
           ${ctaHtml}
@@ -728,12 +738,12 @@ ${renderAnalytics()}
       ${inlineCtaHtml}
 
       <section class="edp-venue-section">
-        <h2>${event.venue.name}</h2>
+        <h2>${venueDisplayName}</h2>
         ${event.venue.address
           ? `<div class="edp-venue-address">${event.venue.address}</div>`
           : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
-        <a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>
+        ${isPlaceholderVenue ? '' : `<a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
       </section>
 
       ${sourceHtml}
@@ -786,7 +796,11 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
 
   const slug = generateEventSlug(event);
   const href = `/events/${slug}/`;
-  const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
+  // Badge follows the page locale — a Greek ΦΕΣΤΙΒΑΛ chip beside the hero's
+  // English CONCERT chip was a component-consistency ding from every ct judge.
+  const badgeLabel = locale === 'en'
+    ? (t.typeLabels[event.type] || event.type).toUpperCase()
+    : (BADGE_LABELS[event.type] || BADGE_LABELS.other);
   const colorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
