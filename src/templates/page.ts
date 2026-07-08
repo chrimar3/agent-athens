@@ -18,7 +18,7 @@ import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 import type { HubIdentity } from '../utils/hub-identity';
 import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript } from './action-bar';
-import { BASE_URL } from '../config/site-url';
+import { BASE_URL, pageUrl } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
 
 // Load IndexNow config for Bing WMT verification
@@ -99,7 +99,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="keywords" content="${keywords}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
 
   <!-- Canonical URL (English slug for international SEO) -->
-  <link rel="canonical" href="${BASE_URL}/${url}">
+  <link rel="canonical" href="${pageUrl(url)}">${metadata.noindex ? '\n  <meta name="robots" content="noindex, follow">' : ''}
 
   <!-- S144 (GEO 2026-05-21): hreflang dropped until Greek launches as a real
        published+indexable+quality-gated product. See decisions.md 2026-05-21. -->
@@ -115,7 +115,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <!-- OpenGraph: Greek Primary, English Secondary -->
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
-  <meta property="og:url" content="${BASE_URL}/${url}">
+  <meta property="og:url" content="${pageUrl(url)}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="${locale === 'en' ? 'en_US' : 'el_GR'}">
   <!-- og:locale:alternate omitted: availableLanguage single-element per 2026-05-14 GEO canonical-to-root decision -->

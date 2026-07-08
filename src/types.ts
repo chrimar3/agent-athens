@@ -141,6 +141,11 @@ export interface PageMetadata {
   // Absent for category / all-events / saved pages — those fall through to
   // the flat CollectionPage path.
   pageType?: 'hub' | 'homepage';
+  // Phase-2 A2 (visibility baseline 2026-07-08): empty combinatorial filter
+  // pages are noindexed and sitemap-excluded — an indexable hub with zero
+  // events is crawl-signal pollution. Recomputed every build, so a hub
+  // regains indexability the same day it has inventory.
+  noindex?: boolean;
 }
 
 export interface FilterCountOption {

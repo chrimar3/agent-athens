@@ -16,7 +16,7 @@
 import type { Event, PageMetadata, HubFaq } from '../types';
 import type { Locale } from '../i18n/strings';
 import type { EditorPick } from '../templates/editor-picks';
-import { BASE_URL } from '../config/site-url';
+import { BASE_URL, pageUrl } from '../config/site-url';
 import {
   buildContainedInPlace,
   resolveEventStatus,
@@ -283,7 +283,7 @@ export function buildHomepageGraph(params: {
         events,
         metadata,
         locale,
-        url: `${BASE_URL}/${metadata.url}`,
+        url: pageUrl(metadata.url),
         atId: `${BASE_URL}/#collectionpage`,
       }),
       buildSiteOrganizationGraphMember(),

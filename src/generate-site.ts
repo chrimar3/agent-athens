@@ -376,7 +376,9 @@ async function main() {
   );
 
   let pagesGenerated = 0;
-  const generatedUrls: string[] = [];
+  // null entries = generated-but-noindexed empty filter pages (Phase-2 A2);
+  // stripped before the manifest + sitemap consumers below.
+  const generatedUrls: Array<string | null> = [];
 
   // S161: precompute imageless-card tiles (Satori → inline SVG) before any
   // renderer runs. Card renderers do a sync getEventTile(id) lookup; this
@@ -1173,7 +1175,7 @@ async function main() {
   let unchangedCount = 0;
   let changedCount = 0;
 
-  const uniqueUrls = [...new Set(generatedUrls)];
+  const uniqueUrls = [...new Set(generatedUrls.filter((u): u is string => u !== null))];
 
   for (const url of uniqueUrls) {
     // Map URL to file on disk
@@ -1271,7 +1273,7 @@ async function main() {
   for (const url of pastEventUrls) {
     priorityOverrides.set(url, '0.3');
   }
-  const sitemapUrlCount = generateSplitSitemaps(generatedUrls, newManifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs);
+  const sitemapUrlCount = generateSplitSitemaps(generatedUrls.filter((u): u is string => u !== null), newManifest, priorityOverrides, bilingualSlugs, bilingualHubSlugs);
   await generateIndexNowKeyFile();
 
   // Build-time invariant: every declared canonical / sitemap <loc> must match
@@ -1455,10 +1457,17 @@ async function main() {
   console.log('🔏 Build provenance stamped (dist/.build-provenance)');
 }
 
-async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string> {
+async function generatePage(filters: Filters, allEvents: Event[], preContentHtml?: string): Promise<string | null> {
   const filteredEvents = filterEvents(allEvents, filters);
   const url = buildURL(filters);
   const metadata = buildPageMetadata(filters, filteredEvents.length);
+
+  // Phase-2 A2: an EMPTY filter page gets noindex and is dropped from the
+  // sitemap (return null → filtered before the manifest/sitemap consumers).
+  // The page still generates (stable URL, users can land on it), but engines
+  // are not invited to 1,000+ zero-content dead ends. Homepage exempt.
+  const noindexEmpty = filteredEvents.length === 0 && url !== 'index';
+  if (noindexEmpty) metadata.noindex = true;
 
   // Generate HTML (pass allEvents for filter bar count computation)
   const html = renderPage(metadata, filteredEvents, allEvents, preContentHtml);
@@ -1486,8 +1495,8 @@ async function generatePage(filters: Filters, allEvents: Event[], preContentHtml
 
   writeJsonApiIfChangedSync(join(apiDir, `${url}.json`), jsonData);
 
-  console.log(`  ✓ ${url} (${filteredEvents.length} events)`);
-  return url;
+  console.log(`  ✓ ${url} (${filteredEvents.length} events${noindexEmpty ? ', empty → noindex + sitemap-excluded' : ''})`);
+  return noindexEmpty ? null : url;
 }
 
 /**
