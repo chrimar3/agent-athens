@@ -169,7 +169,12 @@ export function buildOfferOrOmit(event: OfferBuilderEvent): OfferDecision {
   }
 
   const priceStr = event.price.amount != null ? String(event.price.amount).trim() : '';
-  if (priceStr === '') {
+  // Phase-2 B (visibility 2026-07-08): amount 0 on a with-ticket event is a
+  // data contradiction (a truly free event is price.type 'open'), and price:"0"
+  // asserts "free" on a paid event — a trust defect (live example: Release
+  // Athens/Sabaton, an €80 festival, shipped price:"0"). Same policy as
+  // price-less: omit the Offer rather than assert an unsourced price.
+  if (priceStr === '' || Number(priceStr) === 0) {
     // Schema.org Offer without a price field is malformed. Omit the whole
     // Offer block rather than emit a price-less merchant Offer.
     incrementOmission('no-price-amount');

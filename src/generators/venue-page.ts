@@ -23,6 +23,7 @@ import { resolveEventSchemaType } from '../utils/comedy-format';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
+import { buildBreadcrumbListMember } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -75,7 +76,9 @@ function buildVenueMap(events: Event[]): Map<string, VenueData> {
       venueData = {
         name: event.venue.name,
         slug,
-        address: event.venue.address,
+        // Phase-2 B4: config-first (parity with the event emitters) — the
+        // curated whitelist address beats whatever the first scraped row had.
+        address: findVenueConfig(event.venue.name)?.address || event.venue.address,
         neighborhood: event.venue.neighborhood,
         coordinates: event.venue.coordinates,
         sameAs: event.venue.sameAs,
@@ -191,9 +194,19 @@ function generateVenueSchema(venue: VenueData): string | null {
     }));
   }
 
+  // Phase-2 B (visibility 2026-07-08): rubric-expected BreadcrumbList
+  // (Home → Χώροι → venue). Page-scoped member, before the Organization
+  // singleton per the Q2 ordering ruling.
+  const breadcrumb = buildBreadcrumbListMember({
+    locale: 'el',
+    pageName: venue.name,
+    pageUrl: `${BASE_URL}/venues/${venue.slug}/`,
+    middle: { name: 'Χώροι', url: `${BASE_URL}/venues/` },
+  });
+
   const envelope = {
     '@context': 'https://schema.org',
-    '@graph': [venueEntity, buildSiteOrganizationGraphMember()],
+    '@graph': [venueEntity, breadcrumb, buildSiteOrganizationGraphMember()],
   };
   return JSON.stringify(envelope, null, 2);
 }

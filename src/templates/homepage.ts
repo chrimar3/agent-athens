@@ -55,7 +55,7 @@ function getDotColor(hub: HubNavItem): string {
 export function renderHomepageCapsule(stats: CapsuleStats): string {
   return `<section class="hub-answer-capsule">
   <p class="answer-capsule-text">
-    Η Αθήνα έχει ${stats.total} πολιτιστικές εκδηλώσεις αυτή την εβδομάδα
+    Η Αθήνα έχει ${stats.total} επερχόμενες πολιτιστικές εκδηλώσεις
     σε ${stats.typeCount} κατηγορίες. Ενημερώνεται καθημερινά.
   </p>
   <p class="hub-stats">

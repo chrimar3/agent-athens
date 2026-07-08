@@ -173,10 +173,13 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
       'name': event.venue.name,
       'address': {
         '@type': 'PostalAddress',
-        // 2.2: fall back to the whitelisted config address when the scraped DB
-        // venue_address is empty — closes GSC "missing address in location" for
-        // verified venues whose row carries no address (Bolivar, Cantina, etc.).
-        'streetAddress': event.venue.address || findVenueConfig(event.venue.name)?.address || '',
+        // Phase-2 B4 (visibility 2026-07-08): whitelist config is now the
+        // AUTHORITATIVE address; the scraped row only fills unlisted venues.
+        // The prior scraped-first order let malformed scrapes win over the
+        // curated address (live: ΚΠΙΣΝ shipped "Κέντρο Πολιτισμού Ίδρυμα
+        // Σταύρος Νιάρχος, 364" while config held the correct Syngrou 364).
+        // Still closes the original GSC empty-address case (Bolivar, Cantina).
+        'streetAddress': findVenueConfig(event.venue.name)?.address || event.venue.address || '',
         // S145: locality now config-driven via getLocalityName() (was hardcoded 'Athens').
         // Single source of truth shared with microdata block below (Constitution Rule 6).
         'addressLocality': getLocalityName(),
@@ -889,10 +892,28 @@ export function renderEventDetailScript(): string {
  * "Επόμενες εκδηλώσεις" and must never show past events.
  */
 export function selectRelatedEvents(venueEvents: Event[], currentEventId: string): Event[] {
+  // Phase-2 B5 (visibility 2026-07-08): dedupe duplicate DB rows of the same
+  // event, which rendered as triplicate rail cards (Barbara Kruger at SNFCC:
+  // one canonical run row + daily-scraped date-instance rows sharing the
+  // title). Key by folded title; for NON-run-implying types the start date
+  // joins the key so a residency (same show title, different nights) is NOT
+  // collapsed — an exhibition run at one venue is one card regardless of the
+  // date-instance rows. Rail-level fold only: the rows themselves belong to
+  // the dedup arc (merged_into) and are NOT touched here. Running exhibitions
+  // (past start, future end) legitimately appear — the card carries its own
+  // "Σε εξέλιξη" state; that is not a past-listing defect.
+  const seenKeys = new Set<string>();
   return venueEvents
     .filter(e => e.id !== currentEventId)
     .filter(e => classifyEventLifecycle(e) === 'upcoming')
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+    .filter(e => {
+      const title = normalizeGreek(e.title.trim().toLowerCase());
+      const key = isRunImplyingType(e.type) ? title : `${title}|${e.startDate.slice(0, 10)}`;
+      if (seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    })
     .slice(0, 6);
 }
 

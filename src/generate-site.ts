@@ -437,14 +437,23 @@ async function main() {
     }))
     .filter(h => h.eventCount > 0);
 
-  // Compute capsule stats from ALL events (not truncated)
+  // Compute capsule stats from ALL events (not truncated).
+  // Phase-2 B3 (visibility 2026-07-08): every capsule chip links to a hub —
+  // its number MUST be the number that hub states, or the homepage contradicts
+  // itself on the same claim (Θέατρο said 33 in the capsule, 37 in the grid:
+  // the capsule counted type==='theater' while the hub includes performance).
+  // One source per claim: getHubEvents, same as the grid and the hub page.
+  const hubCount = (slug: string, fallback: number): number => {
+    const hub = hubPagesConfig.hubs.find(h => h.slug === slug);
+    return hub ? getHubEvents(hub, events).length : fallback;
+  };
   const capsuleStats: CapsuleStats = {
     total: events.length,
-    today: todayEvents.length,
-    weekend: weekendEvents.length,
-    concerts: events.filter(e => e.type === 'concert').length,
-    theater: events.filter(e => e.type === 'theater').length,
-    open: events.filter(e => e.price.type === 'open').length,
+    today: hubCount('today', todayEvents.length),
+    weekend: hubCount('this-weekend', weekendEvents.length),
+    concerts: hubCount('concerts', events.filter(e => e.type === 'concert').length),
+    theater: hubCount('theatre', events.filter(e => e.type === 'theater').length),
+    open: hubCount('open', events.filter(e => e.price.type === 'open').length),
     typeCount: new Set(events.map(e => e.type)).size,
   };
 
@@ -457,7 +466,10 @@ async function main() {
   const homepagePostContent = renderTerminalCta(hubNavData);
 
   // Bypass generatePage — render directly without filter bar (no allEvents)
-  const homeMetadata = buildPageMetadata({}, homepageEvents.length);
+  // Phase-2 B3: metadata eventCount feeds the "N εκδηλώσεις στην Αθήνα"
+  // meta/og description — an Athens-wide claim gets the Athens-wide count,
+  // not the 24-card page cap (the old value contradicted the capsule total).
+  const homeMetadata = buildPageMetadata({}, events.length);
   homeMetadata.pageType = 'homepage';
   const homeHtml = renderPage(homeMetadata, homepageEvents, undefined, homepagePreContent, 'el', homepagePostContent);
   const homeFilepath = join(DIST_DIR, 'index.html');
@@ -824,7 +836,7 @@ async function main() {
         <p>Agent athens is a daily cultural events calendar for Athens. We aggregate, verify and enrich events from dozens of sources, combining AI enrichment with human oversight.</p>
 
         <h2>What we do</h2>
-        <p>Every day, automated scrapers collect events from more than 15 verified venues and ticketing platforms across Athens. We cover concerts, exhibitions, theatre, classical music, DJ sets, cinema, dance performances, workshops, festivals and tech events.</p>
+        <p>Every day, automated scrapers collect events from ${ACTIVE_SOURCE_COUNT} verified venues and ticketing platforms across Athens. We cover concerts, exhibitions, theatre, classical music, DJ sets, cinema, dance performances, workshops, festivals and tech events.</p>
         <p>Every event passes through automated location filtering — only events at verified Attica venues are shown. Descriptions are enriched with access information, venue history and practical details.</p>
 
         <h2>How it works</h2>
@@ -864,7 +876,7 @@ async function main() {
         <p>Το agent athens συνδυάζει αυτοματοποιημένη συλλογή δεδομένων, εμπλουτισμό με τεχνητή νοημοσύνη, και ανθρώπινη επίβλεψη για να παρέχει αξιόπιστες πληροφορίες πολιτιστικών εκδηλώσεων.</p>
 
         <h2>Πηγές δεδομένων</h2>
-        <p>Συλλέγουμε εκδηλώσεις από πάνω από 15 επαληθευμένες πηγές, συμπεριλαμβανομένων:</p>
+        <p>Συλλέγουμε εκδηλώσεις από ${ACTIVE_SOURCE_COUNT} επαληθευμένες πηγές, συμπεριλαμβανομένων:</p>
         <ul>
           <li>Ιστοσελίδες χώρων (Half Note, Μέγαρο Μουσικής, Στέγη Ωνάση, Μουσείο Μπενάκη κ.ά.)</li>
           <li>Πλατφόρμες εισιτηρίων (Ticket Services, More.com, Eventbrite)</li>
@@ -917,7 +929,7 @@ async function main() {
         <p>Agent athens combines automated data collection, AI enrichment and human oversight to provide reliable cultural event information.</p>
 
         <h2>Data sources</h2>
-        <p>We collect events from more than 15 verified sources, including:</p>
+        <p>We collect events from ${ACTIVE_SOURCE_COUNT} verified sources, including:</p>
         <ul>
           <li>Venue websites (Half Note, Megaron Moussikis, Onassis Stegi, Benaki Museum and others)</li>
           <li>Ticketing platforms (Ticket Services, More.com, Eventbrite)</li>

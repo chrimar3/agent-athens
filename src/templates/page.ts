@@ -12,7 +12,8 @@ import { getAthensTodayStr } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
 import { getEventTile } from '../generators/event-tile';
-import { buildCollectionPageMember, buildHomepageGraph } from '../utils/schema-graph-builders';
+import { buildCollectionPageMember, buildHomepageGraph, buildBreadcrumbListMember } from '../utils/schema-graph-builders';
+import { buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
@@ -444,17 +445,27 @@ function generateSchemaMarkup(events: Event[], metadata: PageMetadata, locale: L
     return JSON.stringify(buildHomepageGraph({ events, metadata, locale }), null, 2);
   }
 
-  // Default: flat CollectionPage block for category / all-events / saved /
+  // Default path for category / combinatorial-filter / all-events / saved /
   // overflow pages. Routed through buildCollectionPageMember so the per-event
   // Offer/availability/location logic stays in one place (shared with the
-  // hub + homepage @graph envelopes). No `@id` is passed, so the output is
-  // byte-equivalent to the prior inline schema for the fall-through path.
+  // hub + homepage @graph envelopes).
+  // Phase-2 B3 (visibility 2026-07-08): the prior FLAT block left every
+  // combinatorial listing page without BreadcrumbList/Organization (genre×time
+  // hubs scored structured_data 0 in the baseline). Same @graph envelope as
+  // hubs now: CollectionPage → BreadcrumbList → Organization.
+  const selfUrl = pageUrl(metadata.url);
   const member = buildCollectionPageMember({
     events,
     metadata,
     locale,
-    url: `${BASE_URL}/${metadata.url}`,
+    url: selfUrl,
+    atId: `${selfUrl}#collectionpage`,
   });
-  return JSON.stringify({ '@context': 'https://schema.org', ...member }, null, 2);
+  const graph = [
+    member,
+    buildBreadcrumbListMember({ locale, pageName: metadata.title, pageUrl: selfUrl }),
+    buildSiteOrganizationGraphMember(),
+  ];
+  return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, null, 2);
 }
 
