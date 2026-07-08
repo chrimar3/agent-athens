@@ -28,12 +28,14 @@ describe('computeTileFit', () => {
     expect(fit.displayTitle).toBe('Jazz Live');
   });
 
-  test('single unbreakable word: returns 1 line within bounds; no throw', async () => {
-    // Satori has no break-point inside a single word; renders 1 line at any size.
-    // Algorithm therefore picks sizeMax — and that is fine: Step 7 will catch
-    // visual overflow if it surfaces on real DB titles.
+  test('single unbreakable word: wraps within bounds; no throw', async () => {
+    // wordBreak:'break-word' (redesign loop 20260707) lets Satori wrap inside
+    // a single long word instead of clipping it at the tile edge — the probe
+    // mirrors the tile style, so the fit reflects the wrap. The old premise
+    // ("renders 1 line at any size") asserted the overflow defect.
     const fit = await computeTileFit('Χριστουγεννιάτικη');
-    expect(fit.lineCount).toBe(1);
+    expect(fit.lineCount).toBeGreaterThanOrEqual(1);
+    expect(fit.lineCount).toBeLessThanOrEqual(DEFAULT_TILE_FIT_OPTS.lineCap);
     expect(fit.fontSize).toBeGreaterThanOrEqual(DEFAULT_TILE_FIT_OPTS.sizeMin);
     expect(fit.fontSize).toBeLessThanOrEqual(DEFAULT_TILE_FIT_OPTS.sizeMax);
     expect(fit.truncated).toBe(false);
