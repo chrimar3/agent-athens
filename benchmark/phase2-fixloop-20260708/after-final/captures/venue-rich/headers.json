@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/venues/snfcc/",
+  "canonicalUrl": "https://agentathens.com/venues/snfcc/",
+  "headers": {
+    "content-length": "73920",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 15:02:15 GMT"
+  }
+}

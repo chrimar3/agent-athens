@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/cabaret-show-today",
+  "canonicalUrl": "https://agentathens.com/cabaret-show-today",
+  "headers": {
+    "content-length": "49637",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 15:02:22 GMT"
+  }
+}

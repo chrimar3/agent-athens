@@ -1,0 +1,18 @@
+{
+  "note": "Phase-2 local sample. canonicalUrl = the page's production identity (what canonical/sitemap checks assert against); localPath = where the local server serves it. home-en maps to /en/today/ because /en/ is a 302 (A1 premise refuted for /en/ — redirect, not canonical defect).",
+  "pages": [
+    { "id": "home-el",        "template": "homepage",       "instance": "el",       "canonicalUrl": "https://agentathens.com/",        "localPath": "/" },
+    { "id": "home-en",        "template": "homepage",       "instance": "en",       "canonicalUrl": "https://agentathens.com/en/today/", "localPath": "/en/today/" },
+    { "id": "event-el-rich",  "template": "event-detail-el", "instance": "enriched", "canonicalUrl": "https://agentathens.com/events/5016ec38--book-stroller/", "localPath": "/events/5016ec38--book-stroller/" },
+    { "id": "event-el-thin",  "template": "event-detail-el", "instance": "thin",     "canonicalUrl": "https://agentathens.com/events/a48d9ab1-island-athens-riviera-valeron/", "localPath": "/events/a48d9ab1-island-athens-riviera-valeron/" },
+    { "id": "event-en-rich",  "template": "event-detail-en", "instance": "enriched", "canonicalUrl": "https://agentathens.com/en/events/5016ec38--book-stroller/", "localPath": "/en/events/5016ec38--book-stroller/" },
+    { "id": "event-en-thin",  "template": "event-detail-en", "instance": "thin",     "canonicalUrl": "https://agentathens.com/en/events/16082449-bios-extrasauce-002/", "localPath": "/en/events/16082449-bios-extrasauce-002/" },
+    { "id": "venue-rich",     "template": "venue",          "instance": "enriched", "canonicalUrl": "https://agentathens.com/venues/snfcc/", "localPath": "/venues/snfcc/" },
+    { "id": "venue-thin",     "template": "venue",          "instance": "thin",     "canonicalUrl": "https://agentathens.com/venues/el-chapo/", "localPath": "/venues/el-chapo/" },
+    { "id": "hub-genre-rich", "template": "genre-time-hub", "instance": "enriched", "canonicalUrl": "https://agentathens.com/jazz-concert-this-week", "localPath": "/jazz-concert-this-week" },
+    { "id": "hub-genre-thin", "template": "genre-time-hub", "instance": "thin",     "canonicalUrl": "https://agentathens.com/cabaret-show-today", "localPath": "/cabaret-show-today" },
+    { "id": "hub-time-el",    "template": "time-hub",       "instance": "el",       "canonicalUrl": "https://agentathens.com/this-weekend", "localPath": "/this-weekend" },
+    { "id": "hub-time-en",    "template": "time-hub",       "instance": "en",       "canonicalUrl": "https://agentathens.com/en/this-weekend/", "localPath": "/en/this-weekend/" },
+    { "id": "editorial",      "template": "editorial",      "instance": "only",     "canonicalUrl": "https://agentathens.com/editorial/", "localPath": "/editorial/" }
+  ]
+}

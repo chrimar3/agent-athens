@@ -1048,10 +1048,19 @@ describe("Event schema — streetAddress config fallback (2.2)", () => {
     expect(schema.location.address.streetAddress).toBe("Leoforos Poseidonos, Alimos 174 55");
   });
 
-  test("DB venue address is preferred when present (no override)", () => {
+  test("config address overrides the scraped row for whitelisted venues (Phase-2 B4)", () => {
+    // Config-first since 2026-07-08: the curated whitelist address is
+    // authoritative — malformed scrapes (ΚΠΙΣΝ shipped "…, 364") used to win.
+    // Scraped rows only fill venues absent from the whitelist.
     const event: Event = { ...sampleConcert, venue: { ...sampleConcert.venue, name: "Bolivar", address: "Real Scraped Address 1" } };
     const schema = buildEventSchemaObject(event);
-    expect(schema.location.address.streetAddress).toBe("Real Scraped Address 1");
+    expect(schema.location.address.streetAddress).toBe("Leoforos Poseidonos, Alimos 174 55");
+  });
+
+  test("scraped address is used for venues absent from the whitelist", () => {
+    const event: Event = { ...sampleConcert, venue: { ...sampleConcert.venue, name: "Totally Unknown Venue XYZ", address: "Scraped Only 7" } };
+    const schema = buildEventSchemaObject(event);
+    expect(schema.location.address.streetAddress).toBe("Scraped Only 7");
   });
 
   test("unresolvable venue with empty address stays empty (no fabrication)", () => {

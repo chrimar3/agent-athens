@@ -9,7 +9,7 @@
  * - Venue must have complete data (address + neighborhood)
  */
 
-import { mkdirSync, existsSync, readFileSync } from 'fs';
+import { mkdirSync, existsSync, readFileSync, readdirSync, rmSync } from 'fs';
 import { writeHtmlIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import type { Event } from '../types';
@@ -23,6 +23,7 @@ import { resolveEventSchemaType } from '../utils/comedy-format';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, getCountryCode, getRegionName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
+import { buildBreadcrumbListMember } from '../utils/schema-graph-builders';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 
@@ -75,7 +76,9 @@ function buildVenueMap(events: Event[]): Map<string, VenueData> {
       venueData = {
         name: event.venue.name,
         slug,
-        address: event.venue.address,
+        // Phase-2 B4: config-first (parity with the event emitters) — the
+        // curated whitelist address beats whatever the first scraped row had.
+        address: findVenueConfig(event.venue.name)?.address || event.venue.address,
         neighborhood: event.venue.neighborhood,
         coordinates: event.venue.coordinates,
         sameAs: event.venue.sameAs,
@@ -191,9 +194,19 @@ function generateVenueSchema(venue: VenueData): string | null {
     }));
   }
 
+  // Phase-2 B (visibility 2026-07-08): rubric-expected BreadcrumbList
+  // (Home → Χώροι → venue). Page-scoped member, before the Organization
+  // singleton per the Q2 ordering ruling.
+  const breadcrumb = buildBreadcrumbListMember({
+    locale: 'el',
+    pageName: venue.name,
+    pageUrl: `${BASE_URL}/venues/${venue.slug}/`,
+    middle: { name: 'Χώροι', url: `${BASE_URL}/venues/` },
+  });
+
   const envelope = {
     '@context': 'https://schema.org',
-    '@graph': [venueEntity, buildSiteOrganizationGraphMember()],
+    '@graph': [venueEntity, breadcrumb, buildSiteOrganizationGraphMember()],
   };
   return JSON.stringify(envelope, null, 2);
 }
@@ -376,7 +389,22 @@ export async function generateVenuePages(events: Event[], venueImageMap?: Map<st
     Array.from(venueMap.values()).filter(v => isPageEligibleByName(v.name) && meetsMinimumThreshold(v))
   );
 
-  console.log(`  ✓ Generated ${urls.length} venue pages (${skipped} skipped - below threshold or identity-only)`);
+  // Phase-2 A3 (visibility baseline 2026-07-08): sweep orphaned venue dirs.
+  // dist/ accumulates across builds and is the deploy source, so a venue that
+  // stops meeting the generation gate leaves a STALE page that keeps deploying
+  // — indexable, never in the sitemap, never regenerated (36 such orphans were
+  // live on 2026-07-08, incl. /venues/el-chapo/). Venues have no archive
+  // policy (unlike event pages — GEO Ruling 2 keeps those), so on-disk-but-
+  // not-generated here means delete. index.html is the venue index, not a slug.
+  const generatedSlugs = new Set(urls.map(u => u.replace(/^venues\//, '').replace(/\/$/, '')));
+  let sweptOrphans = 0;
+  for (const entry of readdirSync(venuesDir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || generatedSlugs.has(entry.name)) continue;
+    rmSync(join(venuesDir, entry.name), { recursive: true, force: true });
+    sweptOrphans++;
+  }
+
+  console.log(`  ✓ Generated ${urls.length} venue pages (${skipped} skipped - below threshold or identity-only${sweptOrphans ? `; ${sweptOrphans} stale orphan dir(s) swept` : ''})`);
   return urls;
 }
 

@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/",
+  "canonicalUrl": "https://agentathens.com/",
+  "headers": {
+    "content-length": "375543",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 15:02:03 GMT"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/editorial/",
+  "canonicalUrl": "https://agentathens.com/editorial/",
+  "headers": {
+    "content-length": "36761",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 14:49:19 GMT"
+  }
+}

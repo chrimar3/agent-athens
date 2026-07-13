@@ -251,12 +251,14 @@ describe('Hub @graph envelope (S139)', () => {
     expect(editorPicks).toBeUndefined();
   });
 
-  test('Non-cornerstone hub @graph contains only CollectionPage + Organization', () => {
+  test('Non-cornerstone hub @graph contains CollectionPage + BreadcrumbList + Organization', () => {
+    // Phase-2 B (2026-07-08): BreadcrumbList member added to every hub graph
+    // (rubric-expected trail), page-scoped so ordered before Organization.
     const events = makeTodayEvents(5);
     const html = renderHubPage(nonCornerstoneHubConfig, events, events);
     const envelope = extractSingleJsonLdBlock(html!);
     const types = getGraph(envelope).map((m: Record<string, any>) => m['@type']);
-    expect(types).toEqual(['CollectionPage', 'Organization']);
+    expect(types).toEqual(['CollectionPage', 'BreadcrumbList', 'Organization']);
   });
 
   test('English-locale hub with no English FAQ translations omits FAQPage', () => {

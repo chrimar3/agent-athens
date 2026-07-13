@@ -33,7 +33,10 @@ describe('Homepage Answer Capsule', () => {
 
   test('contains live event counts', () => {
     const html = renderHomepageCapsule(mockStats);
-    expect(html).toContain('472 πολιτιστικές εκδηλώσεις');
+    // Phase-2 B3 (2026-07-08): total is ALL upcoming events, so the claim
+    // reads "επερχόμενες" — the old "αυτή την εβδομάδα" wording contradicted
+    // the this-week hub's own (smaller) count for the same claim.
+    expect(html).toContain('472 επερχόμενες πολιτιστικές εκδηλώσεις');
     expect(html).toContain('9 κατηγορίες');
   });
 

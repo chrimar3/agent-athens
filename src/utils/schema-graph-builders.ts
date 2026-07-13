@@ -16,7 +16,7 @@
 import type { Event, PageMetadata, HubFaq } from '../types';
 import type { Locale } from '../i18n/strings';
 import type { EditorPick } from '../templates/editor-picks';
-import { BASE_URL } from '../config/site-url';
+import { BASE_URL, pageUrl } from '../config/site-url';
 import {
   buildContainedInPlace,
   resolveEventStatus,
@@ -35,7 +35,21 @@ import { findVenueConfig } from '../quality/location-filter';
 
 // --- Per-event ListItem builder (extracted verbatim from page.ts:459-512) ---
 
-function buildItemListElements(events: Event[]): Array<Record<string, unknown>> {
+// Phase-2 B (visibility 2026-07-08): a real, locale-appropriate excerpt or
+// nothing. The prior fixed stub ("concert event in Athens") carried zero
+// information on every ListItem site-wide; omit-beats-boilerplate.
+function itemDescriptionOrOmit(event: Event, locale: Locale): string | undefined {
+  const source =
+    (locale === 'en'
+      ? event.fullDescriptionEn || event.description
+      : event.fullDescriptionGr || event.description) ||
+    event.fullDescription || '';
+  const text = source.replace(/\s+/g, ' ').trim();
+  if (!text || text === event.title) return undefined;
+  return text.length <= 200 ? text : `${text.slice(0, 200).replace(/\s+\S*$/, '')}…`;
+}
+
+function buildItemListElements(events: Event[], locale: Locale): Array<Record<string, unknown>> {
   return events.map((event, index) => {
     const eventStatus = resolveEventStatus(event.startDate, event.endDate, event.type);
     const selfCanonicalUrl = `${BASE_URL}/events/${generateEventSlug(event)}/`;
@@ -55,7 +69,7 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
       '@type': event['@type'],
       '@id': selfCanonicalUrl,
       name: event.title,
-      description: `${event.type} event in Athens`,
+      ...(() => { const d = itemDescriptionOrOmit(event, locale); return d ? { description: d } : {}; })(),
       startDate: formatSchemaDate(event.startDate),
       ...(endDate ? { endDate } : {}),
       ...(eventStatus ? { eventStatus } : {}),
@@ -65,12 +79,12 @@ function buildItemListElements(events: Event[]): Array<Record<string, unknown>> 
         name: event.venue.name,
         address: {
           '@type': 'PostalAddress',
-          // 2026-05-27: fall back to the whitelisted config address when the
-          // scraped DB venue_address is empty — parity with the detail emitter
-          // (event-page.ts:176). Without this, hub ListItems emitted
-          // streetAddress:'' for config-address venues (Cantina Social, Astron,
-          // Bolivar, 2ten, …) whose row carries no address (237 nodes pre-fix).
-          streetAddress: event.venue.address || findVenueConfig(event.venue.name)?.address || '',
+          // Phase-2 B4 (visibility 2026-07-08): config-first, parity with the
+          // detail emitter (event-page.ts) — the curated whitelist address is
+          // authoritative; scraped rows only fill unlisted venues (malformed
+          // scrapes used to win, e.g. ΚΠΙΣΝ). Original 2026-05-27 empty-row
+          // fallback case (Cantina Social, Astron, Bolivar, 2ten) still holds.
+          streetAddress: findVenueConfig(event.venue.name)?.address || event.venue.address || '',
           addressLocality: 'Athens',
           addressRegion: 'Attica',
           addressCountry: getCountryCode(),
@@ -150,7 +164,7 @@ export function buildCollectionPageMember(params: {
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: events.length,
-      itemListElement: buildItemListElements(events),
+      itemListElement: buildItemListElements(events, locale),
     },
     datePublished: metadata.lastUpdate,
     dateModified: metadata.lastUpdate,
@@ -260,8 +274,34 @@ export function buildHubGraph(params: {
     const picksMember = buildEditorPicksItemList({ picks: editorPicks, hubCanonicalUrl });
     if (picksMember) graph.push(picksMember);
   }
+  graph.push(buildBreadcrumbListMember({ locale, pageName: metadata.title, pageUrl: hubCanonicalUrl }));
   graph.push(buildSiteOrganizationGraphMember());
   return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+// --- BreadcrumbList member ---
+// Phase-2 B (visibility 2026-07-08): rubric-expected breadcrumb trail
+// (Home → page) for hub + venue pages. Page-scoped, so ordered before the
+// site-publisher Organization member per the Q2 ordering ruling.
+
+export function buildBreadcrumbListMember(params: {
+  locale: Locale;
+  pageName: string;
+  pageUrl: string;
+  middle?: { name: string; url: string };
+}): Record<string, any> {
+  const { locale, pageName, pageUrl, middle } = params;
+  const homeUrl = locale === 'en' ? `${BASE_URL}/en/today/` : `${BASE_URL}/`;
+  const trail = [
+    { '@type': 'ListItem', position: 1, name: locale === 'en' ? 'Home' : 'Αρχική', item: homeUrl },
+    ...(middle ? [{ '@type': 'ListItem', position: 2, name: middle.name, item: middle.url }] : []),
+    { '@type': 'ListItem', position: middle ? 3 : 2, name: pageName, item: pageUrl },
+  ];
+  return {
+    '@type': 'BreadcrumbList',
+    '@id': `${pageUrl}#breadcrumb`,
+    itemListElement: trail,
+  };
 }
 
 // --- Homepage envelope ---
@@ -283,7 +323,7 @@ export function buildHomepageGraph(params: {
         events,
         metadata,
         locale,
-        url: `${BASE_URL}/${metadata.url}`,
+        url: pageUrl(metadata.url),
         atId: `${BASE_URL}/#collectionpage`,
       }),
       buildSiteOrganizationGraphMember(),

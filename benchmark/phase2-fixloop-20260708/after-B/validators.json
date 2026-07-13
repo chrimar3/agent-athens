@@ -1,0 +1,564 @@
+{
+  "site": {
+    "robotsStatus": 200,
+    "sitemapChildren": [
+      "https://agentathens.com/sitemap-events.xml",
+      "https://agentathens.com/sitemap-venues.xml",
+      "https://agentathens.com/sitemap-editorial.xml"
+    ],
+    "indexNowWired": true
+  },
+  "pages": {
+    "home-el": {
+      "url": "https://agentathens.com/",
+      "template": "homepage",
+      "instance": "el",
+      "accessibility_crawl": {
+        "score": 8,
+        "evidence": [
+          "no hreflang though counterpart exists"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "hub heading",
+          "event links",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 5,
+        "parseError": false,
+        "typesFound": [
+          "WebSite",
+          "CollectionPage",
+          "Organization"
+        ],
+        "hits": [
+          "Organization",
+          "WebSite"
+        ],
+        "misses": [
+          "ItemList",
+          "BreadcrumbList"
+        ]
+      }
+    },
+    "home-en": {
+      "url": "https://agentathens.com/en/today/",
+      "template": "homepage",
+      "instance": "en",
+      "accessibility_crawl": {
+        "score": 8,
+        "evidence": [
+          "no hreflang though counterpart exists"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "hub heading",
+          "event links",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 5,
+        "parseError": false,
+        "typesFound": [
+          "CollectionPage",
+          "FAQPage",
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "hits": [
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "misses": [
+          "ItemList",
+          "WebSite"
+        ]
+      }
+    },
+    "event-el-rich": {
+      "url": "https://agentathens.com/events/5016ec38--book-stroller/",
+      "template": "event-detail-el",
+      "instance": "enriched",
+      "accessibility_crawl": {
+        "score": 5,
+        "evidence": [
+          "no hreflang though counterpart exists",
+          "URL not in any sitemap"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "event name in <h1>",
+          "date present",
+          "venue named",
+          "price info",
+          "description >200 chars of prose",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 8.7,
+        "parseError": false,
+        "typesFound": [
+          "PerformingArtsEvent",
+          "EventVenue",
+          "Organization"
+        ],
+        "hits": [
+          "name",
+          "startDate",
+          "endDate",
+          "location.name",
+          "location.address",
+          "offers.price",
+          "offers.priceCurrency",
+          "offers.url",
+          "offers.availability",
+          "image",
+          "description",
+          "eventStatus",
+          "eventAttendanceMode"
+        ],
+        "misses": [
+          "location.geo",
+          "performer"
+        ]
+      }
+    },
+    "event-el-thin": {
+      "url": "https://agentathens.com/events/a48d9ab1-island-athens-riviera-valeron/",
+      "template": "event-detail-el",
+      "instance": "thin",
+      "accessibility_crawl": {
+        "score": 8,
+        "evidence": [
+          "no hreflang though counterpart exists"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "event name in <h1>",
+          "date present",
+          "venue named",
+          "price info",
+          "description >200 chars of prose",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 6,
+        "parseError": false,
+        "typesFound": [
+          "MusicEvent",
+          "MusicVenue",
+          "Organization"
+        ],
+        "hits": [
+          "name",
+          "startDate",
+          "endDate",
+          "location.name",
+          "location.address",
+          "image",
+          "description",
+          "eventStatus",
+          "eventAttendanceMode"
+        ],
+        "misses": [
+          "location.geo",
+          "offers.price",
+          "offers.priceCurrency",
+          "offers.url",
+          "offers.availability",
+          "performer"
+        ]
+      }
+    },
+    "event-en-rich": {
+      "url": "https://agentathens.com/en/events/5016ec38--book-stroller/",
+      "template": "event-detail-en",
+      "instance": "enriched",
+      "accessibility_crawl": {
+        "score": 8,
+        "evidence": [
+          "no hreflang though counterpart exists"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "event name in <h1>",
+          "date present",
+          "venue named",
+          "price info",
+          "description >200 chars of prose",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 8.7,
+        "parseError": false,
+        "typesFound": [
+          "PerformingArtsEvent",
+          "EventVenue",
+          "Organization"
+        ],
+        "hits": [
+          "name",
+          "startDate",
+          "endDate",
+          "location.name",
+          "location.address",
+          "offers.price",
+          "offers.priceCurrency",
+          "offers.url",
+          "offers.availability",
+          "image",
+          "description",
+          "eventStatus",
+          "eventAttendanceMode"
+        ],
+        "misses": [
+          "location.geo",
+          "performer"
+        ]
+      }
+    },
+    "event-en-thin": {
+      "url": "https://agentathens.com/en/events/16082449-bios-extrasauce-002/",
+      "template": "event-detail-en",
+      "instance": "thin",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "noindex"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "event name in <h1>",
+          "date present",
+          "venue named",
+          "price info",
+          "description >200 chars of prose",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 0,
+        "parseError": false,
+        "typesFound": [
+          "MusicVenue",
+          "Organization"
+        ],
+        "hits": [],
+        "misses": [
+          "name",
+          "startDate",
+          "endDate",
+          "location.name",
+          "location.address",
+          "location.geo",
+          "offers.price",
+          "offers.priceCurrency",
+          "offers.url",
+          "offers.availability",
+          "performer",
+          "image",
+          "description",
+          "eventStatus",
+          "eventAttendanceMode"
+        ]
+      }
+    },
+    "venue-rich": {
+      "url": "https://agentathens.com/venues/snfcc/",
+      "template": "venue",
+      "instance": "enriched",
+      "accessibility_crawl": {
+        "score": 10,
+        "evidence": []
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "venue name in <h1>",
+          "address",
+          "upcoming events listed",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 8,
+        "parseError": false,
+        "typesFound": [
+          "LocalBusiness",
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "hits": [
+          "Place|LocalBusiness|PerformingArtsTheater|MusicVenue",
+          "address",
+          "geo",
+          "BreadcrumbList"
+        ],
+        "misses": [
+          "ItemList"
+        ]
+      }
+    },
+    "venue-thin": {
+      "url": "https://agentathens.com/venues/el-chapo/",
+      "template": "venue",
+      "instance": "thin",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "status 404"
+        ]
+      },
+      "render_integrity": {
+        "score": 5,
+        "found": [
+          "venue name in <h1>",
+          "address"
+        ],
+        "missing": [
+          "upcoming events listed",
+          "JSON-LD present"
+        ],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 0,
+        "parseError": false,
+        "typesFound": [],
+        "hits": [],
+        "misses": [
+          "Place|LocalBusiness|PerformingArtsTheater|MusicVenue",
+          "address",
+          "geo",
+          "BreadcrumbList",
+          "ItemList"
+        ]
+      }
+    },
+    "hub-genre-rich": {
+      "url": "https://agentathens.com/jazz-concert-this-week",
+      "template": "genre-time-hub",
+      "instance": "enriched",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "noindex"
+        ]
+      },
+      "render_integrity": {
+        "score": 7.5,
+        "found": [
+          "hub heading",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [
+          "event links"
+        ],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 0,
+        "parseError": false,
+        "typesFound": [
+          "CollectionPage"
+        ],
+        "hits": [],
+        "misses": [
+          "ItemList",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ]
+      }
+    },
+    "hub-genre-thin": {
+      "url": "https://agentathens.com/cabaret-show-today",
+      "template": "genre-time-hub",
+      "instance": "thin",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "noindex"
+        ]
+      },
+      "render_integrity": {
+        "score": 7.5,
+        "found": [
+          "hub heading",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [
+          "event links"
+        ],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 0,
+        "parseError": false,
+        "typesFound": [
+          "CollectionPage"
+        ],
+        "hits": [],
+        "misses": [
+          "ItemList",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ]
+      }
+    },
+    "hub-time-el": {
+      "url": "https://agentathens.com/this-weekend",
+      "template": "time-hub",
+      "instance": "el",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "noindex"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "hub heading",
+          "event links",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 5,
+        "parseError": false,
+        "typesFound": [
+          "CollectionPage",
+          "FAQPage",
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "hits": [
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "misses": [
+          "ItemList",
+          "WebSite"
+        ]
+      }
+    },
+    "hub-time-en": {
+      "url": "https://agentathens.com/en/this-weekend/",
+      "template": "time-hub",
+      "instance": "en",
+      "accessibility_crawl": {
+        "score": 8,
+        "evidence": [
+          "no hreflang though counterpart exists"
+        ]
+      },
+      "render_integrity": {
+        "score": 10,
+        "found": [
+          "hub heading",
+          "event links",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 5,
+        "parseError": false,
+        "typesFound": [
+          "CollectionPage",
+          "FAQPage",
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "hits": [
+          "BreadcrumbList",
+          "Organization"
+        ],
+        "misses": [
+          "ItemList",
+          "WebSite"
+        ]
+      }
+    },
+    "editorial": {
+      "url": "https://agentathens.com/editorial/",
+      "template": "editorial",
+      "instance": "only",
+      "accessibility_crawl": {
+        "score": 0,
+        "evidence": [
+          "noindex"
+        ]
+      },
+      "render_integrity": {
+        "score": 7.5,
+        "found": [
+          "hub heading",
+          "dates on cards",
+          "JSON-LD present"
+        ],
+        "missing": [
+          "event links"
+        ],
+        "jsOnly": []
+      },
+      "structured_data": {
+        "score": 0,
+        "parseError": false,
+        "typesFound": [
+          "WebPage"
+        ],
+        "hits": [],
+        "misses": [
+          "ItemList",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ]
+      }
+    }
+  }
+}

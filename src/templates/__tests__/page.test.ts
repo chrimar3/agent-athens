@@ -85,7 +85,11 @@ describe("renderPage", () => {
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
     expect(jsonLdMatch).toBeTruthy();
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
     expect(jsonLd.url).toBe("https://agentathens.com/jazz-concert-this-week");
     expect(jsonLd.inLanguage).toBe("en");
   });
@@ -401,7 +405,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
     expect(jsonLdMatch).toBeTruthy();
 
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
     expect(jsonLd["@context"]).toBe("https://schema.org");
   });
 
@@ -409,7 +417,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     expect(jsonLd["@type"]).toBe("CollectionPage");
   });
@@ -418,7 +430,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     expect(jsonLd.name).toContain("Test Events");
     expect(jsonLd.description).toBeTruthy();
@@ -430,7 +446,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     expect(jsonLd.about).toBeDefined();
     expect(jsonLd.about["@type"]).toBe("Place");
@@ -443,7 +463,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert, sampleFreeExhibition]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     expect(jsonLd.mainEntity).toBeDefined();
     expect(jsonLd.mainEntity["@type"]).toBe("ItemList");
@@ -455,7 +479,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     const firstEvent = jsonLd.mainEntity.itemListElement[0];
 
@@ -470,7 +498,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     const firstEvent = jsonLd.mainEntity.itemListElement[0].item;
 
@@ -480,7 +512,9 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     expect(firstEvent.location.name).toBe(sampleConcert.venue.name);
     // Address is now a PostalAddress object
     expect(firstEvent.location.address["@type"]).toBe("PostalAddress");
-    expect(firstEvent.location.address.streetAddress).toBe(sampleConcert.venue.address);
+    // Phase-2 B4 (2026-07-08): config-first — Half Note is whitelisted, so the
+    // curated config address is emitted, not the fixture's scraped variant.
+    expect(firstEvent.location.address.streetAddress).toBe("17 Trivonianou Street, Athens 116 36");
   });
 
   test("should include offer/price information", () => {
@@ -489,7 +523,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [futureEvent]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     const firstEvent = jsonLd.mainEntity.itemListElement[0].item;
 
@@ -509,7 +547,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [futureFreeEvent]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     const firstEvent = jsonLd.mainEntity.itemListElement[0].item;
 
@@ -521,7 +563,11 @@ describe("Schema.org JSON-LD generation (via renderPage)", () => {
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
 
     expect(jsonLd.datePublished).toBe(metadata.lastUpdate);
     expect(jsonLd.dateModified).toBe(metadata.lastUpdate);
@@ -693,7 +739,11 @@ describe("Hub JSON-LD Offer.availability via availabilityForEventStatus", () => 
     const html = renderPage(metadata, [sampleConcert]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
     const firstItem = jsonLd.mainEntity.itemListElement[0].item;
 
     // Past event → no offers block at all (helper returned omit_offer)
@@ -702,7 +752,8 @@ describe("Hub JSON-LD Offer.availability via availabilityForEventStatus", () => 
     // Future event → offers present with availability emitted by helper
     const futureHtml = renderPage(metadata, [getTomorrowEvent()]);
     const futureMatch = futureHtml.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const futureJsonLd = JSON.parse(futureMatch![1]);
+    const futureParsed = JSON.parse(futureMatch![1]);
+    const futureJsonLd = futureParsed['@graph'] ? futureParsed['@graph'][0] : futureParsed;
     const futureItem = futureJsonLd.mainEntity.itemListElement[0].item;
 
     expect(futureItem.offers).toBeDefined();
@@ -737,7 +788,11 @@ describe("Hub ItemList JSON-LD items carry image field", () => {
     const html = renderPage(metadata, [sampleConcert, sampleFreeExhibition]);
 
     const jsonLdMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-    const jsonLd = JSON.parse(jsonLdMatch![1]);
+    // Phase-2 B3 (2026-07-08): fall-through pages now emit the same @graph
+    // envelope as hubs (CollectionPage → BreadcrumbList → Organization);
+    // unwrap to the CollectionPage member, keeping @context reachable.
+    const parsed = JSON.parse(jsonLdMatch![1]);
+    const jsonLd = parsed['@graph'] ? { '@context': parsed['@context'], ...parsed['@graph'][0] } : parsed;
     const items = jsonLd.mainEntity.itemListElement;
 
     expect(items.length).toBeGreaterThan(0);

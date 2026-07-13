@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "finalUrl": "http://localhost:8517/en/events/5016ec38--book-stroller/",
+  "canonicalUrl": "https://agentathens.com/en/events/5016ec38--book-stroller/",
+  "headers": {
+    "content-length": "64566",
+    "content-type": "text/html;charset=utf-8",
+    "date": "Wed, 08 Jul 2026 14:20:23 GMT"
+  }
+}

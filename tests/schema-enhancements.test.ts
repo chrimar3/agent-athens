@@ -135,7 +135,12 @@ describe('Organization schema', () => {
     expect(html).toContain('"@type": "Organization"');
   });
 
-  test('non-homepage does NOT include Organization JSON-LD', () => {
+  test('non-homepage filter pages emit the @graph envelope incl. Organization (Phase-2 B3)', () => {
+    // Pre-S139 this pinned "no Organization off the homepage", but every hub
+    // page has emitted Organization as the LAST @graph member since S139 (Q2
+    // ordering ruling) — flat filter pages were simply never routed through an
+    // envelope. Phase-2 (2026-07-08) gives them the same envelope:
+    // CollectionPage → BreadcrumbList → Organization.
     const metadata: PageMetadata = {
       title: 'Concerts',
       description: 'Concert events',
@@ -146,7 +151,8 @@ describe('Organization schema', () => {
       filters: { type: 'concert' }
     };
     const html = renderPage(metadata, [sampleConcert]);
-    expect(html).not.toContain('"@type": "Organization"');
+    expect(html).toContain('"@type": "Organization"');
+    expect(html).toContain('"@type": "BreadcrumbList"');
   });
 });
 
