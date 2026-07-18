@@ -694,6 +694,28 @@ run_deploy() {
     done
 }
 
+# Phase 6b: GSC sitemap submission (Phase-3 T1, 2026-07-19). Google's
+# discovery of new event pages stalled (~Jul 1: 13/15 sampled event pages
+# "URL unknown to Google"; sitemap-events pending since a manual 2026-05-11
+# submission). IndexNow covers Bing only — Google needs the Search Console
+# sitemaps API. Non-fatal like the IndexNow ping; the script itself exits 0
+# on any failure so Google API downtime never blocks a deploy.
+run_gsc_sitemap_submit() {
+    log_phase "GSC SITEMAP SUBMIT"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/gsc-submit-sitemaps.ts"
+        return 0
+    fi
+
+    if bun run scripts/gsc-submit-sitemaps.ts >> "$LOG_FILE" 2>&1; then
+        log "GSC sitemap submission completed"
+    else
+        log_error "GSC sitemap submission failed (non-fatal, continuing...)"
+    fi
+    return 0
+}
+
 # Phase 6: IndexNow ping (notify search engines)
 run_indexnow_ping() {
     log_phase "INDEXNOW PING"
@@ -868,6 +890,8 @@ main() {
             # already live from the last successful deploy, so a failed deploy
             # today doesn't invalidate the ping — don't gate on deploy success.
             run_indexnow_ping
+            # Same rationale for the Google-side sitemap submission (Phase-3 T1).
+            run_gsc_sitemap_submit
         else
             log_error "Site generation failed — skipping deploy"
         fi
