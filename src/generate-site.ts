@@ -2,7 +2,7 @@
 
 // Main site generator - generates all combinatorial pages
 
-import { readFileSync, mkdirSync, existsSync, readdirSync, statSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync } from 'fs';
 import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats } from './utils/write-if-changed';
 import { HREFLANG_GATE_OPEN } from './utils/hreflang';
 import { join, dirname } from 'path';
@@ -637,6 +637,8 @@ async function main() {
   const { HUB_EVENT_LIMIT, renderOverflowPage } = await import('./generators/hub-page');
   console.log('\n📄 Generating hub overflow pages...');
   let overflowCount = 0;
+  const overflowSlugsEl = new Set<string>();
+  const overflowSlugsEn = new Set<string>();
   for (const config of hubPagesConfig.hubs) {
     const filteredEvents = getHubEvents(config, events);
     if (filteredEvents.length <= HUB_EVENT_LIMIT) continue;
@@ -647,6 +649,7 @@ async function main() {
     mkdirSync(overflowDir, { recursive: true });
     writeHtmlIfChangedSync(join(overflowDir, 'index.html'), overflowHtml);
     // NOT added to generatedUrls — noindex pages excluded from sitemap
+    overflowSlugsEl.add(config.slug);
     overflowCount++;
 
     // English overflow page (if bilingual hub)
@@ -655,10 +658,38 @@ async function main() {
       const enDir = join(DIST_DIR, 'en', config.slug, 'all');
       mkdirSync(enDir, { recursive: true });
       writeHtmlIfChangedSync(join(enDir, 'index.html'), enHtml);
+      overflowSlugsEn.add(config.slug);
       overflowCount++;
     }
   }
   console.log(`  ✓ ${overflowCount} overflow pages generated`);
+
+  // Phase-2 follow-up (2026-07-18): sweep stale HUB artifacts — same class as
+  // the venue-orphan sweep in generateVenuePages. dist/ persists across builds
+  // and is the deploy source, so an overflow all/ dir or EN hub dir whose
+  // generation gate stops firing ships forever (live examples caught
+  // post-merge: /today/all/ from Jun 27 still carrying pre-fix JSON-LD stubs,
+  // /en/exhibitions/ from Jun 12). Deletion is BOUNDED to slugs declared in
+  // hub-pages.json — nothing outside the hub page class (en/events/,
+  // en/about/, …) is ever a candidate. Order matters: en/<slug>/all is listed
+  // before en/<slug> (removing the latter also removes the former).
+  let sweptHubArtifacts = 0;
+  for (const config of hubPagesConfig.hubs) {
+    const slug = config.slug;
+    const staleCandidates: Array<[string, boolean]> = [
+      [join(DIST_DIR, slug, 'all'), overflowSlugsEl.has(slug)],
+      [join(DIST_DIR, 'en', slug, 'all'), overflowSlugsEn.has(slug)],
+      [join(DIST_DIR, 'en', slug), bilingualHubSlugs.has(slug)],
+    ];
+    for (const [dir, generatedThisBuild] of staleCandidates) {
+      if (generatedThisBuild || !existsSync(dir)) continue;
+      rmSync(dir, { recursive: true, force: true });
+      sweptHubArtifacts++;
+    }
+  }
+  if (sweptHubArtifacts > 0) {
+    console.log(`  ✓ swept ${sweptHubArtifacts} stale hub artifact dir(s)`);
+  }
 
   // Generate individual event pages (Phase C.3)
   // Uses pageableEvents: upcoming + past-active events (≤45 days) get pages
