@@ -1300,6 +1300,8 @@ async function main() {
     categoryConfigs: CATEGORIES_CONFIG.categories,
     englishEventCount: englishEvents.length,
     englishHubCount: bilingualHubSlugs.size,
+    bilingualHubSlugs,
+    hubConfigs: hubPagesConfig.hubs,
   });
   await generateRobotsTxt();
 
@@ -1598,9 +1600,20 @@ async function generateLLMsTxt(params: {
   categoryConfigs: CategoryConfig[];
   englishEventCount?: number;
   englishHubCount?: number;
+  bilingualHubSlugs?: Set<string>;
+  hubConfigs?: HubConfig[];
 }) {
-  const { events, venuePageUrls, categoryConfigs, englishEventCount = 0, englishHubCount = 0 } = params;
+  const { events, venuePageUrls, categoryConfigs, englishEventCount = 0, englishHubCount = 0, bilingualHubSlugs, hubConfigs } = params;
   const base = BASE_URL;
+
+  // Phase-3 T2 (2026-07-19): llms.txt is the AI-agent discovery surface, but
+  // it linked every category/time page at its bare-root (EL) URL — the exact
+  // pages the dormant-locale policy NOINDEXES when an /en/ twin exists —
+  // while the /en/ hubs (the only pages Perplexity cites and ChatGPT's top
+  // referral targets) appeared only as an unlinked count. Every link now
+  // points at its INDEXABLE variant: /en/<slug>/ when the EL page is dormant.
+  const indexableUrl = (slug: string) =>
+    bilingualHubSlugs?.has(slug) ? `${base}/en/${slug}/` : `${base}/${slug}`;
 
   const eventCount = events.length;
   const venueCount = venuePageUrls.length;
@@ -1608,7 +1621,12 @@ async function generateLLMsTxt(params: {
   const sourceCount = new Set(events.map(e => e.source)).size;
 
   const categoryLines = categoryConfigs
-    .map(c => `- [${c.titleEn}](${base}/${c.slug}): ${c.description}`)
+    .map(c => `- [${c.titleEn}](${indexableUrl(c.slug)}): ${c.description}`)
+    .join('\n');
+
+  const enHubLines = (hubConfigs ?? [])
+    .filter(h => bilingualHubSlugs?.has(h.slug))
+    .map(h => `- [${h.titleEn}](${base}/en/${h.slug}/)`)
     .join('\n');
 
   const venueExamples = venuePageUrls
@@ -1629,9 +1647,9 @@ ${categoryLines}
 
 ## Browse by Time
 
-- [Today](${base}/today), [Tomorrow](${base}/tomorrow), [This Weekend](${base}/this-weekend)
-- [This Week](${base}/this-week), [This Month](${base}/this-month)
-- [Free Events Today](${base}/open-today)
+- [Today](${indexableUrl('today')}), [Tomorrow](${indexableUrl('tomorrow')}), [This Weekend](${indexableUrl('this-weekend')})
+- [This Week](${indexableUrl('this-week')}), [This Month](${indexableUrl('this-month')})
+- [Free Events](${indexableUrl('open')})
 
 ## Venues
 
@@ -1644,8 +1662,9 @@ ${englishEventCount} events have full English descriptions at \`/en/events/{slug
 
 ` : ''}${englishHubCount > 0 ? `## English Hub Pages
 
-${englishHubCount} hub pages have English versions at \`/en/{slug}/\`.
-Hub pages include answer capsules, comparison tables and FAQ sections${HREFLANG_GATE_OPEN ? ', with hreflang tags' : ''}.
+${englishHubCount} curated English hub pages with answer capsules, comparison tables and FAQ sections${HREFLANG_GATE_OPEN ? ', with hreflang tags' : ''}:
+
+${enHubLines}
 
 ` : ''}## JSON API
 
