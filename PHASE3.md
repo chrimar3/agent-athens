@@ -134,10 +134,17 @@ Every autonomous session runs THIS order:
 
 ## §5 Automation & environment [IMMUTABLE facts, PLAYBOOK status]
 
-- **Cloud watcher (armed):** `agentathens-phase3-visibility-watcher`
-  (trig_018stnwUThMXJJsX8QGK4Sad), Sundays 09:47 Athens, first fire 07-26. Keyless public-web
-  scope: site-health spot-checks (incl. the D2 weekend check), 20-query search-presence panel
-  (labeled NON-frozen), thisisathens.org watch.
+**Cloud automation runs via Claude Routines, inside the operator's Claude subscription (Max plan)
+— no separate API billing.** Cadence is deliberately weekly on `claude-sonnet-5` (a bounded
+~30–60-min read-only session) to stay comfortably within subscription usage limits; if limits ever
+tighten, reduce scope before reducing cadence (drop the 20-query panel first, keep site-health).
+Any NEW routine or cadence increase is an operator decision (§2.6 spend rule applies in spirit).
+
+- **Cloud watcher (armed and VALIDATED):** `agentathens-phase3-visibility-watcher`
+  (trig_018stnwUThMXJJsX8QGK4Sad), Sundays 09:47 Athens, next fire 07-26. Validation run executed
+  2026-07-19 (session cse_01UswaR7vQFZTnrQ9e2PZvED) — confirms the routine executes end-to-end
+  under the subscription. Keyless public-web scope: site-health spot-checks (incl. the D2 weekend
+  check), 20-query search-presence panel (labeled NON-frozen), thisisathens.org watch.
   Reports: https://claude.ai/code/routines/trig_018stnwUThMXJJsX8QGK4Sad
 - **Local weekly script (drafted, unarmed):** `scripts/phase3-weekly.sh` — measurement layer +
   headless judgment session; arming under launchd is a one-step operator request.
