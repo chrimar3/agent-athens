@@ -75,9 +75,15 @@ interface SearchIndex {
 }
 
 /**
- * Generate search index from filtered events array and write to dist/search-index.json
+ * Generate search index from filtered events array and write to
+ * `<outDir>/search-index.json` (defaults to dist/).
+ *
+ * outDir exists so tests can write to a temp dir. Before 2026-07-19 the path was
+ * hardcoded, so running the suite overwrote the production deploy artifact with
+ * fixture data — invisible to the deploy gate, since dist/ is gitignored.
+ * Tests must always pass an explicit outDir; see __tests__/search-index.test.ts.
  */
-export function generateSearchIndex(events: Event[]): void {
+export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR): void {
   // Build event records
   const eventRecords: EventRecord[] = events.map(event => ({
     id: event.id,
@@ -155,7 +161,7 @@ export function generateSearchIndex(events: Event[]): void {
       type: e.type,
     }));
 
-  const indexPath = join(DIST_DIR, 'search-index.json');
+  const indexPath = join(outDir, 'search-index.json');
   let generated = new Date().toISOString();
   if (existsSync(indexPath)) {
     try {
