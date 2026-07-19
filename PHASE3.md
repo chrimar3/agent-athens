@@ -45,7 +45,7 @@ carries its measurement date.
 3. **Never tune to the proxy.** The composite is a regression guard; the probe + GA4 AI-referrals
    are the goal metrics. A change whose only justification is "raises a score" is rejected.
 4. **Workspace discipline:** never work in the main worktree (the daily pipeline auto-deploys it
-   ~08:30 Athens). Branch per change-set in the phase-3 worktree; merge to `fable-impact` only with
+   ~08:30 Athens). Branch per change-set in the phase-3 worktree; merge to `main` only with
    build exit 0 + `bun test` 0 fail + tsc clean; deploys happen via the pipeline only.
 5. **Credentials** stay in `~/.config/agentathens/` — never committed, echoed, or relocated.
    GSC/Bing API scope: read + sitemap-submit + URL-inspect ONLY. GA4: read-only.
@@ -162,7 +162,7 @@ Any NEW routine or cadence increase is an operator decision (§2.6 spend rule ap
 
 | Artifact | Location |
 |---|---|
-| THIS file (operative law + playbook) | `PHASE3.md`, repo root, on `fable-impact` — edit via phase-3 worktree branch, merge with gates |
+| THIS file (operative law + playbook) | `PHASE3.md`, repo root, on `main` — edit via phase-3 worktree branch, merge with gates |
 | Session bootstrap | `../agent-athens-phase3/CLAUDE.md` (pointer only — no content lives there) |
 | Loop log (append-only audit: predictions, verdicts, rationale) | benchmark branch → `benchmark/visibility-baseline-20260708/PHASE3-LOG.md` |
 | Per-query battle plan | same dir → `T2-SURFACE-MAP.md` |
