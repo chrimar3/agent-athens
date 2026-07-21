@@ -170,9 +170,25 @@ export async function precomputeEventTiles(events: Event[]): Promise<number> {
   );
   for (const event of imageless) {
     const svg = await generateEventTile(event);
-    tileCache.set(event.id, svg);
+    tileCache.set(event.id, uniquifySvgIds(svg, event.id));
   }
   return imageless.length;
+}
+
+/**
+ * Satori emits fixed internal ids (`satori_om-id` etc.) in every SVG. With
+ * multiple tiles inlined on one page those ids collide — WCAG 4.1.1 F77
+ * duplicate-id errors — and mask/clipPath resolution is per-document, so a
+ * colliding tile silently resolves against ANOTHER tile's mask (renders OK
+ * today, fragile by construction). Suffix every id and its url(#…)/href="#…"
+ * reference with the event-id prefix so each tile is self-contained.
+ */
+export function uniquifySvgIds(svg: string, eventId: string): string {
+  const suffix = `-${eventId.substring(0, 8)}`;
+  return svg
+    .replace(/\bid="([^"]+)"/g, (_m, id) => `id="${id}${suffix}"`)
+    .replace(/url\(#([^)]+)\)/g, (_m, id) => `url(#${id}${suffix})`)
+    .replace(/\bhref="#([^"]+)"/g, (_m, id) => `href="#${id}${suffix}"`);
 }
 
 /**
