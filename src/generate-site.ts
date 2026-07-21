@@ -262,6 +262,30 @@ async function main() {
     return lifecycle !== 'past-expired';
   });
 
+  // Event-count floor gate: every other hard-stop gate fires on the PRESENCE
+  // of bad pages, so a build emitting nothing satisfies all of them vacuously
+  // and would publish an empty calendar with every alarm green. Runs here —
+  // all counts final, before setColophonStats — so a collapsed build never
+  // stamps `events: 0` onto the colophon//proof and fails in seconds instead
+  // of after emission. Floors are ABSOLUTE (relative checks rejected: healthy
+  // runs swing 35%); thresholds pinned in src/validators/event-count-floor.ts.
+  {
+    const { validateEventCountFloor } = await import('./validators/event-count-floor');
+    const floorReport = validateEventCountFloor({
+      locationFiltered: locationFiltered.length,
+      upcomingEvents: upcomingEvents.length,
+    });
+    if (floorReport.failures.length > 0) {
+      console.error(`\n❌ Event-count floor gate FAILED: publishable events collapsed`);
+      for (const f of floorReport.failures) {
+        console.error(`   [event-count-floor] ${f}`);
+      }
+      console.error('   Fix: inspect the pipeline/database — sqlite3 data/events.db "SELECT location_status, COUNT(*) FROM events GROUP BY location_status;" — then rebuild.');
+      process.exit(1);
+    }
+    console.log(`  ✓ event-count floor gate: locationFiltered=${floorReport.counts.locationFiltered} (floor 5000), upcoming=${floorReport.counts.upcomingEvents} (floor 50)`);
+  }
+
   // Alias for backward compat — listing pages, hubs, etc. use `events`
   const events = upcomingEvents;
 
