@@ -1224,6 +1224,33 @@ describe("generateEventSlug — Greek transliteration fallback", () => {
     expect(slug).toMatch(/[a-z]/);
   });
 
+  test("KILL SWITCH: SLUG_TRANSLITERATE=0 reverts a Greek event to the pre-migration slug", () => {
+    // Reversibility valve. With the switch off, the empty-fallback is skipped and
+    // the slug returns to its old contentless `${idPrefix}--` form, so a rebuild
+    // (or Netlify redeploy) rolls the migration back without a code revert; the
+    // slug-history seam then emits forced new→old 301s. Default (unset) = on.
+    const prev = process.env.SLUG_TRANSLITERATE;
+    try {
+      process.env.SLUG_TRANSLITERATE = "0";
+      const idPrefix = greekEvent.id.substring(0, 8);
+      expect(generateEventSlug(greekEvent)).toBe(`${idPrefix}--`);
+    } finally {
+      if (prev === undefined) delete process.env.SLUG_TRANSLITERATE;
+      else process.env.SLUG_TRANSLITERATE = prev;
+    }
+  });
+
+  test("KILL SWITCH default (unset) keeps transliteration ON — migration ships by default", () => {
+    const prev = process.env.SLUG_TRANSLITERATE;
+    try {
+      delete process.env.SLUG_TRANSLITERATE;
+      expect(generateEventSlug(greekEvent)).not.toBe(`${greekEvent.id.substring(0, 8)}--`);
+    } finally {
+      if (prev === undefined) delete process.env.SLUG_TRANSLITERATE;
+      else process.env.SLUG_TRANSLITERATE = prev;
+    }
+  });
+
   test("REGRESSION GUARD: Latin/ASCII slug is BYTE-IDENTICAL to raw slugify form (zero churn)", () => {
     // sampleConcert is fully ASCII. Its slug MUST equal the pre-change formula
     // exactly — a byte of drift here churns already-good live URLs.

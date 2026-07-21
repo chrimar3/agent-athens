@@ -153,8 +153,17 @@ export function generateEventSlug(event: Event): string {
   // BYTE-IDENTICAL, so already-good URLs never churn (no new 301s, _redirects
   // stays under Netlify's ~10k ceiling). The idPrefix is untouched, so each
   // changed URL shares its old prefix and generateRedirects emits a clean 301.
-  const venueSlug = slugify(event.venue.name) || transliteratedSlugify(event.venue.name);
-  const titleSlug = slugify(event.title) || transliteratedSlugify(event.title);
+  // Reversibility valve: SLUG_TRANSLITERATE=0 disables the fallback, reverting
+  // to the pre-migration contentless slug. A rebuild+redeploy with the flag off
+  // rolls the 2026-07-21 migration back with no code revert; the slug-history
+  // seam then emits forced new→old 301s. Default (unset) = on. See docs/ROLLBACK.md.
+  // Off ⇒ empty (reproduces the pre-migration `slugify(x)` result for Greek,
+  // i.e. `${idPrefix}--`), NOT the raw text.
+  const fallback = process.env.SLUG_TRANSLITERATE === '0'
+    ? () => ''
+    : transliteratedSlugify;
+  const venueSlug = slugify(event.venue.name) || fallback(event.venue.name);
+  const titleSlug = slugify(event.title) || fallback(event.title);
   return `${idPrefix}-${venueSlug}-${titleSlug}`;
 }
 
