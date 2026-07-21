@@ -750,18 +750,45 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
 // CLUBBER.GR SCRAPER (iCal)
 // ============================================================================
 
-async function scrapeClubber(): Promise<ScrapedEvent[]> {
+/**
+ * Guard: an empty feed and a non-feed must be distinguishable.
+ *
+ * For ~2 months clubber.gr served HTML at the feed URL; `split('BEGIN:VEVENT')`
+ * on a non-iCal body yields one element, the loop never runs, and scrape_stats
+ * recorded success=1 / 0 events / no error — a dead source disguised as a quiet
+ * week. The BODY SENTINEL (`BEGIN:VCALENDAR`, mandatory in every iCal stream per
+ * RFC 5545) is the authoritative check: a content-type-only check would falsely
+ * reject a misconfigured-but-valid feed (clubber.gr already mislabels assets —
+ * it served text/html for a .jpg — so its headers cannot be trusted either way).
+ * The served content-type goes into the error message for diagnosis, giving
+ * scrape_stats a usable error_message instead of a silent zero.
+ */
+export function assertClubberFeedIsICal(body: string, contentType: string | null): void {
+  if (body.includes('BEGIN:VCALENDAR')) return;
+  const preview = body.slice(0, 120).replace(/\s+/g, ' ').trim();
+  throw new Error(
+    `clubber.gr feed is not iCal: body lacks BEGIN:VCALENDAR ` +
+    `(content-type: ${contentType ?? 'unknown'}; body starts: "${preview}")`
+  );
+}
+
+// `fetchFn` is injectable so tests exercise the non-feed guard with synthetic
+// bodies and zero live network calls. Errors PROPAGATE (no internal swallow):
+// the main loop records success=0 + error_message in scrape_stats, so a broken
+// feed can no longer masquerade as a quiet week.
+export async function scrapeClubber(fetchFn: typeof fetch = fetch): Promise<ScrapedEvent[]> {
   console.log('   Fetching clubber.gr iCal feed...');
   const events: ScrapedEvent[] = [];
   const today = new Date().toISOString().split('T')[0];
 
-  try {
-    const response = await fetch('https://www.clubber.gr/events/?ical=1', {
+  {
+    const response = await fetchFn('https://www.clubber.gr/events/?ical=1', {
       headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'text/calendar, */*' }
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const ical = await response.text();
+    assertClubberFeedIsICal(ical, response.headers.get('content-type'));
     const eventBlocks = ical.split('BEGIN:VEVENT');
 
     for (let i = 1; i < eventBlocks.length; i++) {
@@ -808,8 +835,6 @@ async function scrapeClubber(): Promise<ScrapedEvent[]> {
     }
 
     console.log(`   Found ${events.length} events`);
-  } catch (e) {
-    console.log(`   ⚠️ Error: ${e}`);
   }
 
   return events;

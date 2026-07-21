@@ -5,11 +5,13 @@
 // the pipeline slots so it fires even when they are dead/unloaded. Closes the silent-
 // drought class (4 occurrences, 4 distinct causes, 1 shared root: no active delivery).
 //
-// Three signals → pure classifier (src/watchdog/classifier.ts) → THREE delivery layers
-// on breach: (1) osascript notification, (2) msmtp email, (3) heartbeat row. If the
-// email send itself fails, layer (1) escalates with a distinct "EMAIL DELIVERY FAILED"
-// notification and layer (3) records email_ok=false — we never silently lose the alert,
-// and we never add a second email transport (one path, no GUI/TCC-flaky fallback).
+// Three signals → pure classifier (src/watchdog/classifier.ts) → FOUR delivery layers
+// on breach: (1) osascript notification, (2) msmtp email, (3) heartbeat row,
+// (4) ntfy.sh push (off-machine; the unguessable topic is the only access control,
+// so no stored credential). If the email send itself fails, layer (1) escalates with
+// a distinct "EMAIL DELIVERY FAILED" notification and layer (3) records email_ok=false
+// — we never silently lose the alert, and we never add a second EMAIL transport (one
+// SMTP path, no GUI/TCC-flaky fallback; the push layer is a different axis, not email).
 //
 // Everything is epoch-ms end to end: each adapter normalizes its timestamp (ISO-UTC
 // deploy log, date-only/offset sitemap lastmod) to epoch-ms BEFORE the classifier, so
@@ -27,19 +29,25 @@ const ROOT = resolve(import.meta.dir, "..");
 const CONFIG_PATH = join(ROOT, "config", "monitoring.json");
 const DEPLOY_LOG = join(ROOT, "logs", "deploy-cadence.log");
 const AUTH_LOG = join(ROOT, "logs", "auth-precheck-last.log");
-const DB_PATH = process.env.DEADMAN_DB_PATH || join(ROOT, "data", "events.db");
+// Resolved at CALL time (not module load) so tests can point at a fixture DB via
+// DEADMAN_DB_PATH regardless of module-import order.
+const dbPath = (): string => process.env.DEADMAN_DB_PATH || join(ROOT, "data", "events.db");
 // DEADMAN_DRY_RUN=1 → classify + print, skip all delivery (notify/email/heartbeat).
 // Lets the watchdog be verified against a degenerate DB without spamming channels.
 const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
 const HEARTBEAT_CSV = join(ROOT, "logs", "deadman-heartbeat.csv");
 const SITEMAP_URL = "https://agentathens.com/sitemap-events.xml";
 
-interface MonitoringConfig {
+export interface MonitoringConfig {
   deploy_stale_hours: number;
   enrich_stale_hours: number;
   pipeline_health_labels: string[];
   notify: { enabled: boolean };
   email: { enabled: boolean; recipient: string; msmtp_account: string };
+  // Layer 4 — off-machine push via ntfy. Optional so older configs stay valid.
+  // The topic name is the ONLY access control: it must stay unguessable (random
+  // hex suffix) and must never appear in alert bodies or logs beyond this config.
+  push?: { enabled: boolean; server?: string; topic: string };
 }
 
 function loadConfig(): MonitoringConfig {
@@ -84,9 +92,9 @@ async function deploySignalMs(): Promise<number | null> {
  *  WAL state forces it. create:false → a missing DB throws → null → stale (fail-loud). */
 function openEventsDb(): Database {
   try {
-    return new Database(DB_PATH, { readonly: true });
+    return new Database(dbPath(), { readonly: true });
   } catch {
-    return new Database(DB_PATH, { readwrite: true, create: false });
+    return new Database(dbPath(), { readwrite: true, create: false });
   }
 }
 
@@ -124,7 +132,7 @@ function dbRowCountWithBusyRetry(): { count: number | null; busy: boolean } {
   try {
     return { count: dbRowCountSignal(), busy: false };
   } catch {
-    if (!existsSync(DB_PATH)) return { count: null, busy: false }; // genuinely missing
+    if (!existsSync(dbPath())) return { count: null, busy: false }; // genuinely missing
     Bun.sleepSync(30_000);
     try {
       return { count: dbRowCountSignal(), busy: false };
@@ -135,11 +143,23 @@ function dbRowCountWithBusyRetry(): { count: number | null; busy: boolean } {
 }
 
 /** Silent source death (campaign Phase 5): an active source whose last
- *  SOURCE_DEAD_STREAK runs all returned 0 events or failed, but which produced
- *  events within the last 30 days (so long-dormant/seasonal sources and brand-new
- *  sources don't false-trip — low-volume sources like benaki must not flap). */
+ *  SOURCE_DEAD_STREAK runs all returned 0 events or failed.
+ *
+ *  Two rules, one anti-flap intent:
+ *  - Zero-event runs that still report success=1 are AMBIGUOUS (dormant/seasonal
+ *    sources legitimately produce nothing for weeks — low-volume sources like
+ *    benaki must not flap), so those only count as dead while the source produced
+ *    events within the last 30 days.
+ *  - A streak of HARD failures (success=0) is never seasonal quietness — a dormant
+ *    source succeeds with 0 events; a broken one errors. So an all-hard-failed
+ *    streak is reported REGARDLESS of when the source last produced. Without this,
+ *    a source dead longer than 30 days silently dropped out of the alert set —
+ *    going quiet precisely because it had been broken too long (the clubber.gr
+ *    blind spot: alerts would have stopped ~2026-08-04). Brand-new sources are
+ *    still protected by the streak-length floor, and there is no flap: hard
+ *    failures either persist (keep alerting) or resolve (stop alerting). */
 const SOURCE_DEAD_STREAK = 3;
-function deadSourcesSignal(): string[] {
+export function deadSourcesSignal(): string[] {
   const db = openEventsDb();
   try {
     const dead: string[] = [];
@@ -151,6 +171,14 @@ function deadSourcesSignal(): string[] {
       if (lastRuns.length < SOURCE_DEAD_STREAK) continue;
       const allDegenerate = lastRuns.every((r) => r.events_found === 0 || r.success === 0);
       if (!allDegenerate) continue;
+      // Rule B — long-dead: every recent run HARD-FAILED. Not window-limited.
+      const allHardFailed = lastRuns.every((r) => r.success === 0);
+      if (allHardFailed) {
+        dead.push(src);
+        continue;
+      }
+      // Rule A — fresh death: quiet/failed streak on a source that was producing
+      // within the window. (Beyond the window, quiet-but-succeeding is dormancy.)
       const producedRecently = db.prepare(
         `SELECT 1 FROM scrape_stats
          WHERE source = ? AND events_found > 0 AND scraped_at >= datetime('now', '-30 days')
@@ -263,6 +291,43 @@ function sendEmail(cfg: MonitoringConfig, subject: string, body: string): { ok: 
   return { ok: false, skipped: false, detail: `msmtp exit ${proc.exitCode}: ${new TextDecoder().decode(proc.stderr).trim()}` };
 }
 
+/** Layer 4 — off-machine push via ntfy (https://ntfy.sh). A DIFFERENT AXIS from
+ *  email, so it does not violate the "never a second email transport" rule above:
+ *  it reaches the operator's phone/browser when they are away from this machine.
+ *  No auth, no stored secret — the unguessable random topic in monitoring.json is
+ *  the only access control, which is exactly why the alert body must carry no
+ *  secrets (status + reasons only; the topic itself never goes in a body).
+ *  Same { ok, skipped, detail } contract as sendEmail. NEVER throws/rejects —
+ *  that non-throw guarantee is the fault isolation that keeps a push failure
+ *  from crashing or silencing the other delivery layers. `fetchFn` is injectable
+ *  so tests exercise this with zero live network calls. */
+export async function sendPush(
+  cfg: MonitoringConfig,
+  title: string,
+  body: string,
+  fetchFn: typeof fetch = fetch,
+): Promise<{ ok: boolean; skipped: boolean; detail: string }> {
+  try {
+    // Belt-and-braces: main() already exits before delivery in dry-run, but the
+    // guard lives here too so no caller can push during DEADMAN_DRY_RUN=1.
+    if (process.env.DEADMAN_DRY_RUN === "1") return { ok: false, skipped: true, detail: "dry-run" };
+    if (!cfg.push?.enabled) return { ok: false, skipped: true, detail: "push disabled in config" };
+    const topic = cfg.push.topic?.trim();
+    if (!topic) return { ok: false, skipped: true, detail: "push topic not configured" };
+    const server = (cfg.push.server || "https://ntfy.sh").replace(/\/+$/, "");
+    const res = await fetchFn(`${server}/${topic}`, {
+      method: "POST",
+      headers: { Title: title, Priority: "high", Tags: "rotating_light" },
+      body,
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (res.ok) return { ok: true, skipped: false, detail: "sent" };
+    return { ok: false, skipped: false, detail: `ntfy HTTP ${res.status}` };
+  } catch (e) {
+    return { ok: false, skipped: false, detail: `ntfy unreachable: ${e instanceof Error ? e.message : String(e)}` };
+  }
+}
+
 function writeHeartbeat(row: Record<string, string | number | boolean>): void {
   const header = "timestamp,status,deploy_age_h,enrich_age_h,pipeline_ok,email,reasons";
   const line = [
@@ -278,6 +343,9 @@ function ageH(ms: number | null, now: number): string {
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
+// Wrapped in a function + import.meta.main guard so importing this module (tests
+// export deadSourcesSignal / sendPush) can NEVER run the watchdog or fire delivery.
+async function main(): Promise<never> {
 const cfg = loadConfig();
 const nowMs = Date.now();
 
@@ -354,6 +422,21 @@ if (result.status === "OK") {
       fireNotification("Agent Athens", "⚠️ EMAIL DELIVERY FAILED", `${result.status} — email could not be sent; ${mail.detail}`);
     }
   }
+  // Layer 4 — off-machine push (ntfy). Body is status + reasons ONLY — never
+  // config values, never the topic. sendPush never throws; the extra .catch is
+  // defense-in-depth so no future edit can let a push failure reach layer 3.
+  const push = await sendPush(
+    cfg,
+    `Agent Athens DEADMAN: ${result.status}`,
+    `${result.status} @ ${tsIso}\n` + result.reasons.map((r) => `- ${r}`).join("\n"),
+  ).catch((e) => ({ ok: false, skipped: false, detail: `sendPush threw: ${e}` }));
+  if (push.ok) {
+    console.error(`[deadman] push sent`);
+  } else if (push.skipped) {
+    console.error(`[deadman] push skipped: ${push.detail}`);
+  } else {
+    console.error(`[deadman] PUSH DELIVERY FAILED: ${push.detail}`);
+  }
   console.error(`[deadman] ${result.status} @ ${tsIso}\n${result.reasons.map((r) => "  • " + r).join("\n")}`);
 }
 
@@ -369,3 +452,8 @@ writeHeartbeat({
 });
 
 process.exit(result.status === "OK" ? 0 : 1);
+}
+
+if (import.meta.main) {
+  await main();
+}
