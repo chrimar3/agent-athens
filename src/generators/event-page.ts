@@ -109,8 +109,18 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
  * with callers (venue-page.ts, search-index.ts) that already import from this
  * module. Internal uses below also resolve to the same binding.
  */
-import { slugify } from '../utils/normalize-greek';
+import { slugify, transliterateGreekId } from '../utils/normalize-greek';
 export { slugify };
+
+/**
+ * slugify with Greek→Latin transliteration fallback; same 60-char cap as
+ * slugify, plus a trailing-dash trim (the cap can sever a word mid-token and
+ * leave a `-`). ELOT-derived via S146's contract-stable transliterateGreekId.
+ * Used ONLY as the empty-fallback below — never unconditionally.
+ */
+function transliteratedSlugify(text: string): string {
+  return transliterateGreekId(text).substring(0, 60).replace(/-+$/, '');
+}
 
 /**
  * Generate a stable slug for an event
@@ -136,8 +146,15 @@ export { slugify };
  */
 export function generateEventSlug(event: Event): string {
   const idPrefix = event.id.substring(0, 8);
-  const venueSlug = slugify(event.venue.name);
-  const titleSlug = slugify(event.title);
+  // Empty-fallback (visibility 2026-07-19): raw slugify accent-strips then
+  // drops all non-Latin chars, so a fully-Greek title/venue yields '' and the
+  // URL collapses to a contentless `${idPrefix}--` (576 live URLs). Transliterate
+  // ONLY when slugify() is empty — Latin/ASCII slugs short-circuit and stay
+  // BYTE-IDENTICAL, so already-good URLs never churn (no new 301s, _redirects
+  // stays under Netlify's ~10k ceiling). The idPrefix is untouched, so each
+  // changed URL shares its old prefix and generateRedirects emits a clean 301.
+  const venueSlug = slugify(event.venue.name) || transliteratedSlugify(event.venue.name);
+  const titleSlug = slugify(event.title) || transliteratedSlugify(event.title);
   return `${idPrefix}-${venueSlug}-${titleSlug}`;
 }
 
@@ -1050,8 +1067,12 @@ export function generateRedirects(
     const previousSlugs = previousHistory.get(eventId) || [];
     for (const oldSlug of previousSlugs) {
       if (oldSlug !== currentSlug) {
-        // Generate 301 redirect
-        redirects.push(`/events/${oldSlug}/* /events/${currentSlug}/:splat 301`);
+        // Force (301!) so a lingering un-swept dist/events/{oldSlug}/ directory
+        // cannot shadow the rule — Netlify serves a matching static file before a
+        // NON-forced redirect (the shadowing trap generateArchiveGoneRules defeats
+        // with 410! for the same reason). Without the bang, a slug migration emits
+        // redirects that never fire because the old dir still serves 200.
+        redirects.push(`/events/${oldSlug}/* /events/${currentSlug}/:splat 301!`);
       }
     }
   }

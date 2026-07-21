@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema, buildEventSchemaObject, buildEventGraphEnvelope } from "../event-page";
+import { renderEventDetailPage, renderRelatedEventCard, renderEventDetailScript, generateEventSlug, generateEventSchema, buildEventSchemaObject, buildEventGraphEnvelope, generateRedirects, slugify } from "../event-page";
 import { BASE_URL } from "../../config/site-url";
 
 // S139 stage 1 test helpers — extract entities from @graph envelope.
@@ -1173,5 +1173,110 @@ describe("buildEventSchemaObject — derived ComedyEvent (S175)", () => {
     const schema = buildEventSchemaObject(play);
     expect(schema["@type"]).toBe("TheaterEvent");
     expect(schema.performer).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Greek-title slug lexicality + zero-churn regression guard + redirect seam.
+//
+// Defect: `slugify()` accent-strips then drops all non-Latin chars, so a
+// fully-Greek event title/venue slugifies to '' and generateEventSlug emits a
+// contentless `${idPrefix}--` URL (576 live URLs). Fix: empty-fallback to
+// transliteratedSlugify — transliterate ONLY when slugify() is empty, so
+// Latin/ASCII slugs stay byte-identical (no churn on ~4,328-line _redirects).
+// ---------------------------------------------------------------------------
+describe("generateEventSlug — Greek transliteration fallback", () => {
+  // Synthetic Greek fixture. Precondition asserted below so the test fails
+  // loudly if slugify ever stops emptying Greek text (guarding against a
+  // vacuous fixture per CLAUDE.md).
+  const greekEvent: Event = {
+    ...sampleConcert,
+    id: "9811f812-greek-fixture-row",
+    title: "Συναυλία στο Ηρώδειο",
+    venue: {
+      ...sampleConcert.venue,
+      name: "Ηρώδειο",
+    },
+  };
+
+  test("FIXTURE PRECONDITION: raw slugify empties this Greek title and venue", () => {
+    // If either becomes non-empty, the fixture no longer exercises the empty
+    // fallback and the guards below would pass vacuously.
+    expect(slugify(greekEvent.title)).toBe("");
+    expect(slugify(greekEvent.venue.name)).toBe("");
+  });
+
+  test("Greek-titled/Greek-venue event gets a NON-EMPTY lexical slug (no `--`, no trailing `-`)", () => {
+    const slug = generateEventSlug(greekEvent);
+    const idPrefix = greekEvent.id.substring(0, 8); // "9811f812"
+
+    // Success #3: id prefix preserved so old→new redirect is a clean pair.
+    expect(slug.startsWith(idPrefix)).toBe(true);
+
+    // Success #1: lexical content beyond the prefix, no empty portions.
+    const remainder = slug.slice(idPrefix.length + 1); // strip "9811f812-"
+    expect(remainder.length).toBeGreaterThan(0);
+    expect(slug).not.toContain("--");
+    expect(slug.endsWith("-")).toBe(false);
+    // Must NOT be the defective contentless form.
+    expect(slug).not.toBe(`${idPrefix}--`);
+    // Transliteration is lexical Latin (venue Ηρώδειο → irodio, title carries συναυλια).
+    expect(slug).toMatch(/[a-z]/);
+  });
+
+  test("REGRESSION GUARD: Latin/ASCII slug is BYTE-IDENTICAL to raw slugify form (zero churn)", () => {
+    // sampleConcert is fully ASCII. Its slug MUST equal the pre-change formula
+    // exactly — a byte of drift here churns already-good live URLs.
+    const idPrefix = sampleConcert.id.substring(0, 8);
+    const expected = `${idPrefix}-${slugify(sampleConcert.venue.name)}-${slugify(sampleConcert.title)}`;
+    expect(generateEventSlug(sampleConcert)).toBe(expected);
+    // Hard literal pin — catches drift even if slugify itself changed.
+    expect(generateEventSlug(sampleConcert)).toBe(
+      "jazz-nig-half-note-jazz-club-jazz-night-at-half-note"
+    );
+
+    // Divergence pin (kills the "always transliterate" mutant): a long Latin
+    // title whose 60-char cap lands on a `-`. Today's slugify trims trailing
+    // dashes BEFORE the cut, so it KEEPS that boundary dash; transliteratedSlugify
+    // trims AFTER, dropping it. The live URL has the dash — generateEventSlug
+    // must reproduce it byte-for-byte. Unconditional transliteration would strip
+    // it and churn the URL.
+    const longLatin: Event = {
+      ...sampleConcert,
+      id: "abcd1234-long-latin-row",
+      venue: { ...sampleConcert.venue, name: "Hall" },
+      title: "a".repeat(59) + " bravo",
+    };
+    const expectedLong = `${longLatin.id.substring(0, 8)}-${slugify(longLatin.venue.name)}-${slugify(longLatin.title)}`;
+    expect(generateEventSlug(longLatin)).toBe(expectedLong);
+    // Precondition: this fixture genuinely exercises the divergence (title slug
+    // ends in a trailing dash today), else the pin is vacuous.
+    expect(slugify(longLatin.title).endsWith("-")).toBe(true);
+    expect(generateEventSlug(longLatin).endsWith("-")).toBe(true);
+  });
+
+  test("REDIRECT SEAM: changed Greek slug emits a 301 old→new via generateRedirects", () => {
+    const eventId = greekEvent.id;
+    const oldDefectiveSlug = `${eventId.substring(0, 8)}--`; // what .slug-history.json holds
+    const newSlug = generateEventSlug(greekEvent);
+
+    // The fix must actually move the slug, else no redirect fires.
+    expect(newSlug).not.toBe(oldDefectiveSlug);
+
+    const currentSlugs = new Map<string, string>([[eventId, newSlug]]);
+    const previousHistory = new Map<string, string[]>([[eventId, [oldDefectiveSlug]]]);
+    const redirects = generateRedirects(currentSlugs, previousHistory);
+
+    // Must be FORCED (301!). The old-slug directory lingers in dist/ (orphan-sweep
+    // is not armed for event paths), and Netlify serves a matching static file
+    // before a NON-forced redirect — the exact shadowing trap that generateArchiveGoneRules
+    // documents and defeats with 410!. Without the bang, all 1,058 migration redirects
+    // are silently shadowed by their lingering old dirs and never fire.
+    expect(redirects).toContain(
+      `/events/${oldDefectiveSlug}/* /events/${newSlug}/:splat 301!`
+    );
+    // Guard the bang explicitly so a regression to a bare 301 is caught.
+    const rule = redirects.find((r) => r.startsWith(`/events/${oldDefectiveSlug}/`));
+    expect(rule?.endsWith(" 301!")).toBe(true);
   });
 });
