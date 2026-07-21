@@ -18,7 +18,7 @@
 // run `bun run build` first to populate dist/.
 
 import { describe, test, expect } from "bun:test";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import { join } from "path";
 
 const DIST = join(import.meta.dir, "..", "..", "dist");
@@ -38,12 +38,33 @@ const CONTENT_HUBS = [
 ] as const;
 const ALL_HUBS = [...CORNERSTONE_HUBS, ...CONTENT_HUBS] as const;
 
-// Event slug with confirmed presence in both `dist/events/<slug>/` and
-// `dist/en/events/<slug>/` (verified via Probe 4 in
-// specs/en-deployment-state-2026-05-13.md §4).
-const EVENT_PAIR_SLUG = "00013a1f--phantom-spell";
+// An event slug present as a rendered page in BOTH dist/events/<slug>/ and
+// dist/en/events/<slug>/. Derived from dist at load rather than hardcoded: a
+// pinned production slug (was "00013a1f--phantom-spell") silently goes stale
+// the moment slug generation changes — e.g. the Greek-transliteration migration
+// renamed that very event to 00013a1f-kyttaro-phantom-spell. Deriving keeps the
+// parity invariant under test without coupling it to any one event's slug.
+function findEventPairSlug(): string | null {
+  const rootEvents = join(DIST, "events");
+  const enEvents = join(DIST, "en", "events");
+  if (!existsSync(rootEvents) || !existsSync(enEvents)) return null;
+  for (const slug of readdirSync(rootEvents)) {
+    const rootHtml = join(rootEvents, slug, "index.html");
+    const enHtml = join(enEvents, slug, "index.html");
+    if (!existsSync(rootHtml) || !existsSync(enHtml)) continue;
+    // Parity applies to fully-rendered, INDEXABLE events only. Cooling/past
+    // pages are noindex and deliberately strip the Event JSON-LD node
+    // (event-page.ts) — they have no self JSON-LD url to match, so selecting one
+    // as the fixture is a false negative. Require both surfaces indexable.
+    if (readFileSync(rootHtml, "utf8").includes('content="noindex"')) continue;
+    if (readFileSync(enHtml, "utf8").includes('content="noindex"')) continue;
+    return slug;
+  }
+  return null;
+}
 
 const distAvailable = existsSync(DIST) && existsSync(join(DIST, "index.html"));
+const EVENT_PAIR_SLUG = distAvailable ? findEventPairSlug() : null;
 
 function extractCanonical(html: string): string | undefined {
   return html.match(/<link rel="canonical" href="([^"]+)">/)?.[1];
@@ -134,12 +155,19 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
     });
   }
 
+  // Precondition: with dist present, a root/en event pair MUST be derivable —
+  // else the six event tests below skip silently and pin nothing (the vacuous
+  // failure the hardcoded slug already caused once).
+  test("precondition: an event slug is present in both dist/events and dist/en/events", () => {
+    expect(EVENT_PAIR_SLUG).not.toBeNull();
+  });
+
   // /en/ event pair: self-canonical to /en/...
   const eventRootUrl = `${BASE_URL}/events/${EVENT_PAIR_SLUG}/`;
   const eventEnUrl = `${BASE_URL}/en/events/${EVENT_PAIR_SLUG}/`;
 
-  test(`Root event /events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL (self)`, () => {
-    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`Root event /events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = root URL (self)`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG!), "utf8");
     const canonical = extractCanonical(html);
     const ogUrl = extractOgUrl(html);
     const jsonLdUrl = extractJsonLdUrl(html);
@@ -149,8 +177,8 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
     expect(jsonLdUrl).toBe(eventRootUrl);
   });
 
-  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
-    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`English event /en/events/${EVENT_PAIR_SLUG}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG!), "utf8");
     const canonical = extractCanonical(html);
     const ogUrl = extractOgUrl(html);
     const jsonLdUrl = extractJsonLdUrl(html);
@@ -174,13 +202,13 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
     });
   }
 
-  test(`Root event /events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
-    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`Root event /events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG!), "utf8");
     expect(extractOgLocaleAlternate(html)).toBeUndefined();
   });
 
-  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
-    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`English event /en/events/${EVENT_PAIR_SLUG}/ — no og:locale:alternate emitted`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG!), "utf8");
     expect(extractOgLocaleAlternate(html)).toBeUndefined();
   });
 
@@ -197,13 +225,13 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
     });
   }
 
-  test(`Root event /events/${EVENT_PAIR_SLUG}/ — og:locale = el_GR`, () => {
-    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`Root event /events/${EVENT_PAIR_SLUG}/ — og:locale = el_GR`, () => {
+    const html = readFileSync(rootEventPath(EVENT_PAIR_SLUG!), "utf8");
     expect(extractOgLocale(html)).toBe("el_GR");
   });
 
-  test(`English event /en/events/${EVENT_PAIR_SLUG}/ — og:locale = en_US`, () => {
-    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG), "utf8");
+  test.skipIf(!EVENT_PAIR_SLUG)(`English event /en/events/${EVENT_PAIR_SLUG}/ — og:locale = en_US`, () => {
+    const html = readFileSync(englishEventPath(EVENT_PAIR_SLUG!), "utf8");
     expect(extractOgLocale(html)).toBe("en_US");
   });
 });
