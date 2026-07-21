@@ -44,11 +44,43 @@ Edit `com.agentathens.daily.plist` and update the paths:
 
 **Important:** Replace `$HOME/Projects/agent-athens` with your actual project path.
 
-### 2. Copy to LaunchAgents
+### 2. Install into LaunchAgents — never blind-copy over an existing install
+
+**Constraint: `~/Library/LaunchAgents/` is the LIVE operational configuration, not a build
+product of this repo.** Operational fixes land in the installed plist first — environment-variable
+overrides (enrichment batch timeouts, Claude CLI stream watchdogs), extra `PATH` entries the
+scheduled run needs to find its tools (the `claude` CLI lives in `~/.local/bin`, which the repo
+template's `PATH` does not include), and schedule changes — and they are not reliably back-ported
+to the repo copy. Copying repo → installed therefore silently reverts those fixes. Silent divergence between the
+installed plists and the repo/script is exactly the failure class that once went undetected for
+roughly three weeks: installed plists pinned `BATCH_TIMEOUT` to a stale 900s after the script
+default had been raised to 1200s, and every launchd-triggered enrichment run died at the cap edge
+(S166, 2026-05-08 → 2026-05-29; see `docs/known-issues.md` and `docs/session-log.md`). A blind
+`cp` creates the same divergence in the other direction, with the same symptom: scheduled runs
+break and nothing says why. Verified on 2026-07-19: the installed `daily` plist carried
+timeout/watchdog overrides and `PATH` entries absent from the repo copy, and the repo
+`enrichment-check` plist disagreed with the installed one on the scheduled hour.
+
+**First install only** (nothing exists yet at the destination):
 
 ```bash
-cp com.agentathens.daily.plist ~/Library/LaunchAgents/
+test -f ~/Library/LaunchAgents/com.agentathens.daily.plist \
+  && echo "ALREADY INSTALLED — do NOT cp; diff first (below)" \
+  || cp com.agentathens.daily.plist ~/Library/LaunchAgents/
 ```
+
+**If a plist is already installed, diff before touching anything** (read-only):
+
+```bash
+diff <(plutil -p com.agentathens.daily.plist) \
+     <(plutil -p ~/Library/LaunchAgents/com.agentathens.daily.plist)
+```
+
+If the diff is non-empty, assume the installed side is the operational truth until proven
+otherwise. Reconcile deliberately, key by key — usually by back-porting the installed values
+into the repo template — and never resolve a diff by copying repo → installed wholesale.
+The same applies to every other `com.agentathens.*` plist in the repo root and
+`config/launchd/`.
 
 ### 3. Load the job
 
@@ -217,12 +249,16 @@ Then close the application holding the lock.
 
 ## Environment Variables
 
-The plist sets these environment variables:
+The **repo template** plist sets `PATH` (to find bun, git, etc.) and `TZ=Europe/Athens`.
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `PATH` | `/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:$HOME/.bun/bin` | Find bun, git, etc. |
-| `TZ` | `Europe/Athens` | Correct timezone for Athens |
+The **installed** plist is expected to carry more than the template: operational overrides
+(e.g. enrichment `BATCH_TIMEOUT`, Claude CLI watchdog variables) and additional `PATH` entries
+are applied there directly. Do not trust this document — or the repo template — for what the
+live job actually runs with; read it from the installed file:
+
+```bash
+plutil -p ~/Library/LaunchAgents/com.agentathens.daily.plist
+```
 
 Additional variables from `.env` are loaded by the script.
 

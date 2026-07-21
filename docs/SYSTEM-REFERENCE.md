@@ -243,10 +243,24 @@ Generates:
 ### 5. Deployment
 
 ```bash
-netlify deploy --prod --dir=dist
+bun run deploy
 ```
 
-Or via daily automation: `./scripts/daily-automated.sh`
+The `deploy` script in `package.json` is the authoritative manual deploy path. It runs
+`scripts/deploy-gate.sh` and only then `netlify deploy --prod --no-build --dir=dist`.
+
+**Never run `netlify deploy --prod` directly — that bypasses the deploy gate.** The gate
+refuses a forward deploy unless `dist/` provably corresponds to committed code at HEAD
+(build-provenance stamp, clean source scope; see the header of `scripts/deploy-gate.sh`).
+It exists because on 2026-07-06 a build from an uncommitted working tree reached
+production; a raw `netlify deploy` re-opens exactly that breach. The `--no-build` flag is
+also load-bearing: it stops Netlify from rebuilding server-side, so the artifact that
+passed the gate is the artifact that goes live. The gate deliberately does not cover
+`netlify rollback`, so emergency rollback stays fast. Its behavior is pinned by
+`scripts/__tests__/deploy-gate.test.ts` — do not weaken either without updating those tests.
+
+Or via daily automation: `./scripts/daily-automated.sh` (which runs the same gate before
+its deploy step)
 
 ---
 
@@ -372,7 +386,7 @@ bun run scripts/run-enrichment-pipeline.ts --validate --id=ID
 
 # Build & deploy
 bun run src/generate-site.ts
-netlify deploy --prod --dir=dist
+bun run deploy   # gated deploy — never `netlify deploy --prod` directly (see "5. Deployment")
 
 # Database checks
 sqlite3 data/events.db "SELECT source, COUNT(*) FROM events GROUP BY source;"
