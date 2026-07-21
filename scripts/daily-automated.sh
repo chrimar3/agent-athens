@@ -35,6 +35,10 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 LOG_DIR="$PROJECT_DIR/logs"
 STATE_FILE="$PROJECT_DIR/data/state/pipeline-state.json"
 
+# The ONLY ref the pipeline is ever allowed to push. Guarded by the push-gate
+# in run_deploy (scripts/__tests__/deploy-gate.test.ts pins both).
+readonly PRODUCTION_BRANCH="main"
+
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
 
@@ -572,11 +576,28 @@ run_deploy() {
         log "No pipeline-output changes to commit"
     else
         git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
-        if git push origin main >> "$LOG_FILE" 2>&1; then
+        # push-gate:begin (block extracted VERBATIM by scripts/__tests__/deploy-gate.test.ts — keep both markers)
+        #
+        # Pushing a branch NAME sends the LOCAL ref of that name — a valid
+        # refspec (exit 0) even when HEAD is on a different branch entirely.
+        # 2026-07 incident: repo sat on a feature branch for 3 days, the
+        # commit above landed there daily, while a STALE local production ref
+        # was pushed and "Pipeline outputs pushed to git" logged every time.
+        # Compare resolved SHAs, not branch names: the invariant that matters
+        # is "the ref we push IS the commit we just made", SHA equality states
+        # it directly, and it stays correct under detached HEAD and this
+        # repo's worktrees where name comparison misleads.
+        local head_sha branch_sha
+        head_sha=$(git rev-parse HEAD 2>/dev/null) || head_sha=""
+        branch_sha=$(git rev-parse "refs/heads/$PRODUCTION_BRANCH" 2>/dev/null) || branch_sha=""
+        if [[ -z "$head_sha" || -z "$branch_sha" || "$head_sha" != "$branch_sha" ]]; then
+            log_error "[push-gate] REFUSED — HEAD (${head_sha:-unresolvable}) != refs/heads/$PRODUCTION_BRANCH (${branch_sha:-unresolvable}). The artifact commit did not land on $PRODUCTION_BRANCH; pushing would ship a stale ref while reporting success. SKIPPING push (non-fatal, continuing to deploy) — reconcile the branch and push manually."
+        elif git push origin "$PRODUCTION_BRANCH" >> "$LOG_FILE" 2>&1; then
             log "Pipeline outputs pushed to git"
         else
             log_error "Git push failed (non-fatal, continuing to deploy)"
         fi
+        # push-gate:end
     fi
 
     # Step 2: Deploy dist/ via Netlify CLI + verify platform-side state.
