@@ -3,15 +3,35 @@
     "allow": [
       "Bash(bun run src/generate-site.ts)",
       "Bash(bun test)",
-      "Bash(sqlite3 data/events.db *)",
+      "Bash(sqlite3 -readonly data/events.db *)",
       "Bash(./scripts/session-diagnostic.sh)",
       "Bash(cat *)",
       "Bash(ls *)",
       "Bash(head *)",
       "Bash(tail *)",
       "Bash(wc *)",
-      "Bash(grep *)",
-      "Bash(find *)"
+      "Bash(grep *)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(dd:*)",
+      "Bash(tee:*)",
+      "Bash(truncate:*)",
+      "Bash(shred:*)",
+      "Bash(git clean:*)",
+      "Write(./data/**)",
+      "Edit(./data/**)",
+      "Write(./scripts/hooks/**)",
+      "Edit(./scripts/hooks/**)",
+      "Write(./.claude/settings.json)",
+      "Edit(./.claude/settings.json)",
+      "Write(./.claude/settings.local.json)",
+      "Edit(./.claude/settings.local.json)",
+      "Write(./bunfig.toml)",
+      "Edit(./bunfig.toml)",
+      "Write(./tests/preload/**)",
+      "Edit(./tests/preload/**)"
     ]
   },
   "hooks": {
