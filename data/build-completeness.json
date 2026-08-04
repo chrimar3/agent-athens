@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-08-03T14:08:49.934Z"
+    "lastUpdate": "2026-08-04T05:25:59.727Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,8 +13,8 @@
     "byType": [
       {
         "type": "concert",
-        "total": 455,
-        "pass": 453,
+        "total": 448,
+        "pass": 446,
         "warn": 2,
         "fail": 0,
         "info": 271,
@@ -22,8 +22,8 @@
       },
       {
         "type": "dj_set",
-        "total": 247,
-        "pass": 247,
+        "total": 238,
+        "pass": 238,
         "warn": 0,
         "fail": 0,
         "info": 110,
@@ -49,11 +49,11 @@
       },
       {
         "type": "theater",
-        "total": 559,
-        "pass": 559,
+        "total": 548,
+        "pass": 548,
         "warn": 0,
         "fail": 0,
-        "info": 254,
+        "info": 257,
         "passRate": 100
       },
       {
@@ -103,20 +103,20 @@
       },
       {
         "type": "other",
-        "total": 49,
-        "pass": 49,
+        "total": 47,
+        "pass": 47,
         "warn": 0,
         "fail": 0,
-        "info": 24,
+        "info": 22,
         "passRate": 100
       }
     ],
     "totals": {
-      "total": 1720,
-      "pass": 1718,
+      "total": 1691,
+      "pass": 1689,
       "warn": 2,
       "fail": 0,
-      "info": 879,
+      "info": 880,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -124,9 +124,9 @@
     ]
   },
   "hubs": {
-    "total": 30,
-    "pass": 8,
-    "warn": 22,
+    "total": 29,
+    "pass": 6,
+    "warn": 23,
     "fail": 0,
     "info": 0
   },
@@ -172,11 +172,11 @@
       "info": 28
     },
     "event_template": {
-      "total": 1720,
-      "pass": 1718,
+      "total": 1691,
+      "pass": 1689,
       "warn": 2,
       "fail": 0,
-      "info": 879
+      "info": 880
     },
     "byVenue": [
       {
@@ -201,11 +201,11 @@
       },
       {
         "venue": "arch club",
-        "total": 11,
-        "pass": 11,
+        "total": 12,
+        "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 7,
+        "info": 8,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -241,8 +241,8 @@
       },
       {
         "venue": "b side athens",
-        "total": 16,
-        "pass": 16,
+        "total": 15,
+        "pass": 15,
         "warn": 0,
         "fail": 0,
         "info": 2,
@@ -250,19 +250,9 @@
         "sameAsState": "missing"
       },
       {
-        "venue": "bios ρομαντσο",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 0,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
         "venue": "bolivar",
-        "total": 74,
-        "pass": 74,
+        "total": 72,
+        "pass": 72,
         "warn": 0,
         "fail": 0,
         "info": 42,
@@ -281,8 +271,8 @@
       },
       {
         "venue": "burger disco club",
-        "total": 5,
-        "pass": 5,
+        "total": 4,
+        "pass": 4,
         "warn": 0,
         "fail": 0,
         "info": 0,
@@ -301,8 +291,8 @@
       },
       {
         "venue": "cantina social",
-        "total": 18,
-        "pass": 18,
+        "total": 17,
+        "pass": 17,
         "warn": 0,
         "fail": 0,
         "info": 3,
@@ -401,8 +391,8 @@
       },
       {
         "venue": "exa",
-        "total": 4,
-        "pass": 4,
+        "total": 2,
+        "pass": 2,
         "warn": 0,
         "fail": 0,
         "info": 2,
@@ -461,8 +451,8 @@
       },
       {
         "venue": "island athens riviera",
-        "total": 25,
-        "pass": 25,
+        "total": 22,
+        "pass": 22,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -471,8 +461,8 @@
       },
       {
         "venue": "it athens",
-        "total": 14,
-        "pass": 14,
+        "total": 12,
+        "pass": 12,
         "warn": 0,
         "fail": 0,
         "info": 6,
@@ -741,21 +731,21 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 92,
-        "pass": 92,
+        "total": 90,
+        "pass": 90,
         "warn": 0,
         "fail": 0,
-        "info": 48,
+        "info": 45,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "δημοτικο θεατρο πειραια",
-        "total": 15,
-        "pass": 15,
+        "total": 16,
+        "pass": 16,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -765,7 +755,7 @@
         "pass": 19,
         "warn": 0,
         "fail": 0,
-        "info": 14,
+        "info": 13,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -881,8 +871,8 @@
       },
       {
         "venue": "θεατρο καλλιρροης",
-        "total": 32,
-        "pass": 32,
+        "total": 17,
+        "pass": 17,
         "warn": 0,
         "fail": 0,
         "info": 0,
@@ -901,11 +891,11 @@
       },
       {
         "venue": "θεατρο μικρο χορν",
-        "total": 5,
-        "pass": 5,
+        "total": 6,
+        "pass": 6,
         "warn": 0,
         "fail": 0,
-        "info": 5,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -916,6 +906,16 @@
         "warn": 0,
         "fail": 0,
         "info": 0,
+        "passRate": 100,
+        "sameAsState": "missing"
+      },
+      {
+        "venue": "θεατρο πειραιως 131",
+        "total": 2,
+        "pass": 2,
+        "warn": 0,
+        "fail": 0,
+        "info": 2,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1271,8 +1271,8 @@
       },
       {
         "venue": "τεχνοπολη",
-        "total": 44,
-        "pass": 44,
+        "total": 40,
+        "pass": 40,
         "warn": 0,
         "fail": 0,
         "info": 14,
