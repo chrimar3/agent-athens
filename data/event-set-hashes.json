@@ -1,38 +1,38 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-04T08:25:54.212+03:00",
+  "generatedAt": "2026-08-05T10:54:51.053+03:00",
   "entries": {
     "this-weekend": {
-      "hash": "76656c73c348d0f4",
-      "lastModified": "2026-08-03"
+      "hash": "03e07f1ca31b1fab",
+      "lastModified": "2026-08-05"
     },
     "en/this-weekend": {
-      "hash": "76656c73c348d0f4",
-      "lastModified": "2026-08-03"
+      "hash": "03e07f1ca31b1fab",
+      "lastModified": "2026-08-05"
     },
     "today": {
-      "hash": "631d881e929a35ba",
-      "lastModified": "2026-08-04"
+      "hash": "39990edfcb8188b5",
+      "lastModified": "2026-08-05"
     },
     "en/today": {
-      "hash": "631d881e929a35ba",
-      "lastModified": "2026-08-04"
+      "hash": "39990edfcb8188b5",
+      "lastModified": "2026-08-05"
     },
     "this-month": {
-      "hash": "857ca9adf3ef49aa",
-      "lastModified": "2026-08-04"
+      "hash": "56a0a7ddfb82ca12",
+      "lastModified": "2026-08-05"
     },
     "en/this-month": {
-      "hash": "857ca9adf3ef49aa",
-      "lastModified": "2026-08-04"
+      "hash": "56a0a7ddfb82ca12",
+      "lastModified": "2026-08-05"
     },
     "open": {
-      "hash": "bff84c130d93d3a7",
-      "lastModified": "2026-08-04"
+      "hash": "921ba3f42ffb6daf",
+      "lastModified": "2026-08-05"
     },
     "en/open": {
-      "hash": "bff84c130d93d3a7",
-      "lastModified": "2026-08-04"
+      "hash": "921ba3f42ffb6daf",
+      "lastModified": "2026-08-05"
     }
   }
 }
