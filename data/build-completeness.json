@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-08-09T07:38:20.363Z"
+    "lastUpdate": "2026-08-10T15:26:03.101Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,29 +13,29 @@
     "byType": [
       {
         "type": "concert",
-        "total": 422,
-        "pass": 420,
+        "total": 419,
+        "pass": 417,
         "warn": 2,
         "fail": 0,
-        "info": 255,
+        "info": 256,
         "passRate": 100
       },
       {
         "type": "dj_set",
-        "total": 229,
-        "pass": 229,
+        "total": 222,
+        "pass": 222,
         "warn": 0,
         "fail": 0,
-        "info": 106,
+        "info": 104,
         "passRate": 100
       },
       {
         "type": "exhibition",
-        "total": 130,
-        "pass": 130,
+        "total": 131,
+        "pass": 131,
         "warn": 0,
         "fail": 0,
-        "info": 127,
+        "info": 128,
         "passRate": 100
       },
       {
@@ -49,11 +49,11 @@
       },
       {
         "type": "theater",
-        "total": 464,
-        "pass": 464,
+        "total": 467,
+        "pass": 467,
         "warn": 0,
         "fail": 0,
-        "info": 252,
+        "info": 255,
         "passRate": 100
       },
       {
@@ -67,20 +67,20 @@
       },
       {
         "type": "performance",
-        "total": 83,
-        "pass": 83,
+        "total": 85,
+        "pass": 85,
         "warn": 0,
         "fail": 0,
-        "info": 6,
+        "info": 8,
         "passRate": 100
       },
       {
         "type": "show",
-        "total": 35,
-        "pass": 35,
+        "total": 36,
+        "pass": 36,
         "warn": 0,
         "fail": 0,
-        "info": 33,
+        "info": 34,
         "passRate": 100
       },
       {
@@ -103,20 +103,20 @@
       },
       {
         "type": "other",
-        "total": 49,
-        "pass": 49,
+        "total": 53,
+        "pass": 53,
         "warn": 0,
         "fail": 0,
-        "info": 30,
+        "info": 34,
         "passRate": 100
       }
     ],
     "totals": {
-      "total": 1581,
-      "pass": 1579,
+      "total": 1582,
+      "pass": 1580,
       "warn": 2,
       "fail": 0,
-      "info": 864,
+      "info": 874,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -131,11 +131,11 @@
     "info": 0
   },
   "venues": {
-    "total": 33,
-    "pass": 33,
+    "total": 32,
+    "pass": 32,
     "warn": 0,
     "fail": 0,
-    "info": 29
+    "info": 28
   },
   "datafeed": {
     "total": 1,
@@ -165,18 +165,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 33,
-      "pass": 33,
+      "total": 32,
+      "pass": 32,
       "warn": 0,
       "fail": 0,
-      "info": 29
+      "info": 28
     },
     "event_template": {
-      "total": 1581,
-      "pass": 1579,
+      "total": 1582,
+      "pass": 1580,
       "warn": 2,
       "fail": 0,
-      "info": 864
+      "info": 874
     },
     "byVenue": [
       {
@@ -211,11 +211,11 @@
       },
       {
         "venue": "astron",
-        "total": 24,
-        "pass": 24,
+        "total": 22,
+        "pass": 22,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 8,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -241,8 +241,8 @@
       },
       {
         "venue": "bolivar",
-        "total": 72,
-        "pass": 72,
+        "total": 69,
+        "pass": 69,
         "warn": 0,
         "fail": 0,
         "info": 31,
@@ -331,8 +331,8 @@
       },
       {
         "venue": "don't be a dick",
-        "total": 15,
-        "pass": 15,
+        "total": 13,
+        "pass": 13,
         "warn": 0,
         "fail": 0,
         "info": 4,
@@ -631,11 +631,11 @@
       },
       {
         "venue": "αλικη",
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -671,11 +671,11 @@
       },
       {
         "venue": "απο κοινου",
-        "total": 43,
-        "pass": 43,
+        "total": 45,
+        "pass": 45,
         "warn": 0,
         "fail": 0,
-        "info": 43,
+        "info": 45,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -711,11 +711,11 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 94,
-        "pass": 94,
+        "total": 98,
+        "pass": 98,
         "warn": 0,
         "fail": 0,
-        "info": 50,
+        "info": 54,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -821,11 +821,11 @@
       },
       {
         "venue": "θεατρο ελερ",
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1031,11 +1031,11 @@
       },
       {
         "venue": "κπισν",
-        "total": 405,
-        "pass": 405,
+        "total": 408,
+        "pass": 408,
         "warn": 0,
         "fail": 0,
-        "info": 199,
+        "info": 202,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1121,11 +1121,11 @@
       },
       {
         "venue": "οικος ερμηνειας ελευθερια",
-        "total": 27,
-        "pass": 27,
+        "total": 28,
+        "pass": 28,
         "warn": 0,
         "fail": 0,
-        "info": 27,
+        "info": 28,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1151,8 +1151,8 @@
       },
       {
         "venue": "πλατεια νερου",
-        "total": 37,
-        "pass": 37,
+        "total": 35,
+        "pass": 35,
         "warn": 0,
         "fail": 0,
         "info": 0,
@@ -1271,8 +1271,8 @@
       },
       {
         "venue": "τεχνοπολη",
-        "total": 34,
-        "pass": 34,
+        "total": 32,
+        "pass": 32,
         "warn": 0,
         "fail": 0,
         "info": 12,
