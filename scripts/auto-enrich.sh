@@ -27,7 +27,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 DB_PATH="$PROJECT_DIR/data/events.db"
 BRIEFS_DIR="$PROJECT_DIR/temp-briefs"
-LOG_DIR="$PROJECT_DIR/logs"
+# LOG_DIR_OVERRIDE (2026-08-11): test seam. Without it, the auth-precheck
+# tests wrote stub "NOT LOGGED IN" lines into the PRODUCTION log and
+# clobbered auth-precheck-last.log — which deadman's authPrecheckOk() reads —
+# whenever the suite ran concurrently with a real slot (observed canary-2).
+LOG_DIR="${LOG_DIR_OVERRIDE:-$PROJECT_DIR/logs}"
 
 # Resolve claude binary: try PATH first, then known install locations
 CLAUDE_BIN="$(command -v claude 2>/dev/null || true)"

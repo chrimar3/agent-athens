@@ -24,10 +24,15 @@ function makeStubClaude(dir: string, behavior: 'ok' | 'not-logged-in'): string {
 function runAuthCheck(stubBehavior: 'ok' | 'not-logged-in') {
   const dir = mkdtempSync(join(tmpdir(), 'aa-auth-'));
   const stub = makeStubClaude(dir, stubBehavior);
-  return Bun.spawnSync(['bash', SCRIPT, '--auth-check-only'], {
+  // LOG_DIR_OVERRIDE keeps stub output out of the production logs/ dir —
+  // canary-2 (2026-08-11) caught this test writing fake "NOT LOGGED IN"
+  // lines into the live log mid-run and clobbering the file deadman reads.
+  const logDir = join(dir, 'logs');
+  const r = Bun.spawnSync(['bash', SCRIPT, '--auth-check-only'], {
     cwd: ROOT,
-    env: { ...process.env, CLAUDE_BIN_OVERRIDE: stub },
+    env: { ...process.env, CLAUDE_BIN_OVERRIDE: stub, LOG_DIR_OVERRIDE: logDir },
   });
+  return { r, logDir };
 }
 
 describe('auto-enrich --auth-check-only', () => {
@@ -36,13 +41,15 @@ describe('auto-enrich --auth-check-only', () => {
   });
 
   test('healthy CLI → exit 0', () => {
-    expect(runAuthCheck('ok').exitCode).toBe(0);
+    expect(runAuthCheck('ok').r.exitCode).toBe(0);
   });
 
   test('failing CLI → exit 1 WITH the failure logged (the Aug 6-10 silent-death regression)', () => {
-    const r = runAuthCheck('not-logged-in');
+    const { r, logDir } = runAuthCheck('not-logged-in');
     expect(r.exitCode).toBe(1);
-    const log = readFileSync(join(ROOT, 'logs', 'auth-precheck-last.log'), 'utf8');
+    // Read from the ISOLATED log dir — if the LOG_DIR_OVERRIDE seam is ever
+    // dropped, this read ENOENTs and the test fails (isolation is pinned).
+    const log = readFileSync(join(logDir, 'auth-precheck-last.log'), 'utf8');
     expect(log).toContain('exit=1'); // the line set -e used to make unreachable
     expect(log).toContain('Not logged in'); // the evidence that was never captured
   });
