@@ -626,11 +626,32 @@ run_deploy() {
     for attempt in 1 2; do
         log "Deploying dist/ to Netlify via CLI (attempt $attempt)..."
 
+        # Env fingerprint (2026-08-11): the Aug 6-10 outage produced exit 1
+        # with empty stdout and zero captured context; version/PATH divergence
+        # between interactive and launchd environments is the leading suspect
+        # class (same class as the auth-precheck CLI regression, Jun 14-25).
+        log "[deploy-env] netlify=$(netlify --version 2>/dev/null | head -1) node=$(node -v 2>/dev/null || echo '?') PATH=$PATH"
+
         # stdout -> tmpfile for jq; stderr -> $LOG_FILE for diagnostics.
+        # Wall-clock watchdog (pattern from auto-enrich.sh): a hanging CLI ate
+        # ~44 min silently on 2026-08-10; date +%s advances through sleep.
         netlify deploy --prod --no-build --dir=dist \
             --message "Daily deploy $(date +%Y-%m-%d)" --json \
-            >"$deploy_tmp" 2>>"$LOG_FILE"
-        local cli_exit=$?
+            >"$deploy_tmp" 2>>"$LOG_FILE" &
+        local NETLIFY_PID=$!
+        ( WATCHDOG_END=$(( $(date +%s) + ${DEPLOY_TIMEOUT:-900} ))
+          while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do
+            kill -0 "$NETLIFY_PID" 2>/dev/null || exit 0
+            sleep 15
+          done
+          echo "[$(date '+%Y-%m-%d %H:%M:%S')] [deploy] watchdog killed CLI after ${DEPLOY_TIMEOUT:-900}s" >> "$LOG_FILE"
+          kill "$NETLIFY_PID" 2>/dev/null
+        ) &
+        local DEPLOY_WATCHDOG_PID=$!
+        local cli_exit=0
+        wait "$NETLIFY_PID" || cli_exit=$?
+        kill "$DEPLOY_WATCHDOG_PID" 2>/dev/null || true
+        wait "$DEPLOY_WATCHDOG_PID" 2>/dev/null || true
         cat "$deploy_tmp" >> "$LOG_FILE"
 
         # Netlify API responses occasionally embed ASCII control chars in
