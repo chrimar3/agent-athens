@@ -201,7 +201,11 @@ export function deadSourcesSignal(): string[] {
     // Phase 2A: already-quarantined sources are handled — the digest lists
     // them; repeating SOURCE_DEAD every 6h for a known-quarantined source is
     // alert fatigue (clubber pushed 8+ identical alerts, S222).
-    return filterQuarantined(dead, loadQuarantine(join(ROOT, "config", "quarantined-sources.json")));
+    // DEADMAN_QUARANTINE_PATH: test seam, same pattern as DEADMAN_DB_PATH —
+    // the dead-sources-window fixtures use clubber as their long-dead specimen
+    // and must not be silenced by the REAL registry quarantining real clubber.
+    const quarantinePath = process.env.DEADMAN_QUARANTINE_PATH || join(ROOT, "config", "quarantined-sources.json");
+    return filterQuarantined(dead, loadQuarantine(quarantinePath));
   } finally {
     db.close();
   }
