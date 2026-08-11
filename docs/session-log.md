@@ -7121,6 +7121,66 @@ constant feeding both surfaces.
 
 **Open items:** Singleton split (`getDatabaseReadOnly`/`getDatabaseWritable` + ~20 callers + 50+ scripts) routed to Planner — the empty-file engine; not required to close the re-fire. Atomic restore + restore/daily lock deferred (future-race surface). **Durable proof = tomorrow's 08:00 daily** runs clean OR aborts loud at the dep check — both now correct. Upstream overnight-loss root cause (why the DB vanished at 01:03) still unattributed.
 
+### Session 196 — Enrichment Batch 2: five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-09
+
+**Plan:** Execute the batch-2 enrichment brief: research five events (2× ΚΠΙΣΝ/snfcc, 3× athinorama), write tiered descriptions to temp-descriptions/batch-2/, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five written and saved on first pass — scores 99/100/100/100/99, word counts 269 (200–300), 344 (250–400), 179 (120–200), 462 (400–600), 161 (120–180). Memory carried most of the research load: the «Μικρής Αυλαίας» festival re-confirmed as Mikri Avlaia @ Notara 49, Exarchia (DB venue string still points at the Piraeus Αυλαία Πολυχώρος — venue-mismatch flagged); the China Cultural Center rubbing workshop (15 Jul) slotted into the documented Common Grounds standalone-scrape pattern, confirmed by press coverage of China among the 16 participating countries. «Μαζί, Ορατές» (MOMus × SNFCC, WOW Athens 2026) has a published end date of 30 June yet was scraped live on 9 July — wrote "borrowed time" framing, flagged date-conflict. Six concerns logged (2× venue/date on the festival, date conflicts on the exhibition and the Wednesdays-only Άλσος show, more.com unverifiable for Stand-upάντεχα, thin-context on the rubbing workshop). No ticket_url fabricated; the Stand-upάντεχα more.com URL was reported from the prior session's verified memory with the merchant-unverified caveat.
+
+**Verified:** auto-gate-check PASS on all five (accent-strip/Greek-title warnings recognized as documented false positives, not padded for); save-batch.ts saved 5/5, ingested 6 concerns, cleaned batch dir.
+
+**Learnings:** Nothing new for mistakes.md/patterns.md — every gate quirk hit this session (title accent-strip, HAS_MARKDOWN_TABLE warn, MISSING_PRACTICAL:time with times present, NO_SECOND_PERSON keying on literal "you") was already documented. The ALL-CAPS Greek title token (ΜΑΖΙ ΟΡΑΤΕΣ / ΜΙΚΡΗΣ ΑΥΛΑΙΑΣ / ΘΕΑΤΡΟ ΑΛΣΟΣ) continues to clear the title-match cleanly.
+
+**Open items:** Exhibition b27605d1e2cc8121 may already be down (published close 30 June) — post-save validator should re-check the snfcc listing before long-term display. Festival DB row carries wrong venue + off-by-one start date; venue re-resolution belongs to the venue pipeline, not this batch.
+
+### Session 197b — Enrichment Batch 1: five events written, gated 94–100, saved 5/5 [arc: enrichment, brief batch-1] — 2026-07-09
+
+**Plan:** Execute the batch-1 enrichment brief: research five events (2× ΚΠΙΣΝ/snfcc Ethiopian workshops, ticketservices metal bill, athinorama stand-up, RA club night), write tiered descriptions to temp-descriptions/batch-1/, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — scores 100 (basketry, 495w premium), 100 (weaving, 457w premium), 95 (Coroner, 119w stub after a 121w→119w trim), 99 (Sevasteris, 170w standard), 94 (Romantso, 119w stub). Both Ethiopian workshops resolved into the documented Common Grounds standalone-scrape pattern (2nd edition, 15–17 Jul, Ξέφωτο, workshops 19:00–21:00 / performances 20:30–23:00, open entry); craft context web-verified (Harar coiled basketry/mesob; shemma/netela/tibeb/shemane weaving) with no claims about session specifics. "Live Music Space" turned out to be a scraper truncation of Gagarin 205 Live Music Space (Rock Hard GR press release: Coroner's first Athens show in 15 yrs, Dissonance Theory 2025 comeback, Depressive Age first Greek date, 40/43/45 EUR). Romantso club night written venue-forward: BODY DOUBLE/SPANIA unresolvable (ra.co 403), Bios Ρομάντσο fuzzy-match handled per the documented venue-mismatch pattern — Bios intel in the brief deliberately unused. Seven concerns logged (3× Romantso, 2× thin-context snfcc, Gagarin truncation, more.com merchant-unverified for Sevasteris).
+
+**Verified:** auto-gate-check PASS ≥94 on all five; save-batch.ts saved 5/5, ingested 7 concerns, appended 5 openings, cleaned batch dir.
+
+**Learnings:** New venue-name truncation instance for the trap family: DB "Live Music Space" = Gagarin 205 (Liosion 205) — banked to auto-memory. All other gate quirks hit were already documented (HAS_MARKDOWN_TABLE warn on mandated table, MISSING_PRACTICAL:time with times present in prose, NO_EXPERIENCE keying on stub tier).
+
+**Open items:** Venue KB lacks entries for Gagarin 205 Live Music Space and Romantso (Anaxagora 3-5, Omonia) — both flagged in concerns for the venue pipeline. Sevasteris more.com purchase page exists but is queue-it-blocked; post-save validator should confirm before rendering a ticket link.
+
+### Session 198 — Enrichment Batch 1 (2026-07-09 refresh): four events written, gated 100 across, saved 4/4 [arc: enrichment, brief batch-1] — 2026-07-09
+
+**Plan:** Execute the regenerated batch-1 brief: research four events (athinorama theater at Από Κοινού; 2× Common Grounds Ethiopian workshops at ΚΠΙΣΝ; snfcc kids animation workshop), write tiered descriptions, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All four saved at 100/100 — Σ' αγαπώ (170w standard), Ethiopian hairstyling (498w premium), animation workshops (179w standard), Kileliboshe (469w premium). Σ' αγαπώ verified as the Greek premiere of Shaw's Village Wooing (MusicCorner + athinorama premieres-of-the-week): dir. Liakopoulos, cast Kontopodis/Souti/Lazaridis, music Giannis Spanos, Wednesdays 21:15 through 26 Aug, 18/15 EUR. Both Ethiopian events resolved into the documented Common Grounds standalone-scrape pattern (2nd ed., 15–17 Jul, Ξέφωτο, workshops 19:00–21:00, open entry), hosted by the Honorary Consulate of Ethiopia + Ethiofils; Kileliboshe verified as the Kelebosh/Handaie stone-tossing game (odd stones, no-drop elimination), shuruba braiding background web-verified. Animation workshop resolved via Cozy Vibe: last of four ANIMASYROS/ASIFA Hellas sessions (18:30–20:30, Πευκώνας), water-themed relay film headed to Green Weekend + ANIMASYROS Syros. Four concerns logged (Σ' αγαπώ date off-by-one + ticketservices merchant-unverified; 2× thin-context snfcc).
+
+**Verified:** auto-gate-check PASS 100 on all four (two after single closer rewrites to plant exact timeliness keywords "premiere"/"limited"); save-batch.ts saved 4/4, ingested 4 concerns, appended 4 openings, cleaned batch dir.
+
+**Learnings:** No new gate quirks — NO_TIMELINESS keyword-blindness and MISSING_PRACTICAL:time-with-time-in-prose both matched documented behavior. Από Κοινού ticket channel drifted again: this production sells via ticketservices.gr + mobile 6931158784 (not the venue's spring phone-only pattern, not more.com) — channel is per-production, verify each time.
+
+**Open items:** Σ' αγαπώ DB start date 2026-07-09 is a Thursday against a Wednesdays-only schedule (premiere was Wed 8 Jul) — post-save validator should correct. DB type for the animation workshop is "theater" (actual: kids workshop); no matching concern_type existed, noted in batch-1-review.md.
+
+### Session 199 — Enrichment Batch 2 (2026-07-10 regen): five events written, gated 94–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-10
+
+**Plan:** Execute the regenerated batch-2 brief: research five events (2× Common Grounds workshops at ΚΠΙΣΝ, 2× Bolivar from athinorama/RA, athinorama theater in Drapetsona), write tiered descriptions, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — Khustka (521w premium, 100), Henna (495w premium, 100), Anna (113w stub, 100), Faithless (118w stub, 95), Ημερολόγιο ενός τρελού (180w standard, 94). Both ΚΠΙΣΝ workshops resolved into the documented Common Grounds standalone-scrape pattern (2nd ed., 15–17 Jul, Ξέφωτο, workshops 19:00–21:00 / performances 20:30–23:00, open entry); craft context web-verified (khustka regional tying + Ukrainian Headscarf Day since 2019; henna/mehndi as multi-culture craft, attributed to no specific participant). The brief's artist intel was wrong-entity TWICE in one batch: Joanna Mattrey (NY violist) attached to ANNA — actually the Brazilian techno producer (Drumcode/Afterlife, RA 2418199 "Mayans with ANNA") — and Konstantinos Chatzis (theater director) attached to a henna workshop. Both ignored, both flagged. ANNA's DB date 2027-07-09 confirmed as athinorama year-rollover of Thu 9 Jul 2026 (event already passed) — date-conflict flagged. Diary of a Madman verified as second summer season (koukidaki 2025 review, same venue/actor); this production's athinorama page now links the more.com URL directly, so ticket_url_discovered was reported WITH the queue-it merchant-unverified caveat (evolves the S19x omit decision: the venue tie previously missing is now established). Faithless 2026 performer unnamed (past Bolivar editions were Sister Bliss — unverified for this date). Eight concerns logged.
+
+**Verified:** auto-gate-check PASS ≥94 on all five; save-batch.ts saved 5/5, ingested 8 concerns, appended 5 openings, cleaned batch dir.
+
+**Learnings:** NO_TIMELINESS contiguity trap extends to hyphenation: "one-night" (hyphenated compound) does NOT clear the detector; "one night only" does. Same word count, rephrase not pad (Anna 94→100, Faithless 89→95). Banked to auto-memory. Everything else hit documented quirks (HAS_MARKDOWN_TABLE warn on mandated table, ENTITY_RECURRENCE case-sensitivity on lowercase "khustka", NO_EXPERIENCE keying on stub/standard tiers, gate counting the timeliness comment → 1-word overshoots).
+
+**Open items:** ANNA row (d04adf2405061060) carries a rolled-over 2027 date for an event that already happened 9 Jul 2026 — post-save validator should expire it rather than display. Venue KB still lacks ΚΠΙΣΝ/SNFCC and Bolivar Beach Bar profiles beyond the budget table; Common Grounds standalone scrapes will keep arriving through 17 Jul.
+
+### Session 200 — Enrichment Batch 2 (2026-07-10 second regen): five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-10
+
+**Plan:** Execute the second regenerated batch-2 brief: Pantera @ Πλατεία Νερού, two Λοσάντζελε stand-up runs, Common Grounds percussion workshop @ ΚΠΙΣΝ, Sunset Frequencies @ ΚΠΙΣΝ.
+
+**What happened:** All five saved (Pantera 114w stub 100, Sevasteris 170w standard 100, percussion workshop 495w premium 100, Sunset Frequencies 465w premium 100, Κωμωδία της γειτονιάς 2 172w standard 99). Two more athinorama year-rollovers confirmed in one batch, both dated 2027-07-09: Pantera/Trivium/Bodysnatcher headlined Release Athens at Πλατεία Νερού on 2026-07-09 (band's first-ever Greece show — rocking.gr, musicity.gr), and Sunset Frequencies is the documented SNFCC 7-Wednesday 2026 series (athinorama's own page says Είσοδος ελεύθερη, so the DB's with-ticket is also wrong — written open per the SNFCC free-price-trap precedent, both conflicts in one concern). Both Λοσάντζελε "theater" listings written truthfully as stand-up per venue memory (Maliatsis's own club, Korizi 4-6); the Maliatsis ticket search surfaced the On Tour slug first — memory's resident-vs-tour warning caught it, correct resident slug (komodia-tis-geitonias-kostas-maliatsis-salas) confirmed via search snippet. Workshop framed inside Common Grounds (leader unrecoverable, snfcc.org 403s) — thin-context flagged. Four concerns logged; two ticket URLs reported (Sevasteris queue-it-unverified, Maliatsis snippet-confirmed); Pantera URL withheld (points at the 2026 show).
+
+**Verified:** auto-gate-check PASS on all five (four 100, one 99); save-batch.ts saved 5/5, ingested 4 concerns, appended 5 openings, cleaned batch dir.
+
+**Learnings:** Nothing new broke — every gate warning hit a documented quirk (mandated-table warn, Greek-title GENERIC false positive, ENTITY_RECURRENCE body-count on premium, word counter counting the timeliness comment: 181-count at 179 header words). Rollover class now at 9 confirmed instances; two independent listings dated 2027-07-09 in one brief is the strongest signal yet that "yesterday + 1 year" should be auto-flagged pre-brief.
+
+**Open items:** Pantera (64b9a34c90cd2a70) and Sunset Frequencies (8cac91e64e16b4df) both carry rolled 2027-07-09 dates — Pantera's event already happened; Sunset Frequencies is live through 2026-09-09 but under the wrong date and price, so the row needs a date+price correction to surface while the series still runs. Venue KB still lacks ΚΠΙΣΝ/SNFCC and Πλατεία Νερού profiles.
+
 ### S203 — Phase-2 visibility fix loop: indexing correctness + structured-data/data-integrity cluster [arc: GEO visibility, brief phase2-fix-loop] — 2026-07-08
 
 **Plan:** Close clusters A (canonicals, conditional noindex, sitemap membership) and B (JSON-LD emission, counts, addresses, rails) from the visibility baseline REPORT.md (branch `benchmark/visibility-baseline-20260708`, composite 5.84), on an isolated worktree branch `fix/visibility-phase2-20260708`, measuring against a LOCAL anchor of the unfixed branch (never live-vs-local).
@@ -7132,3 +7192,238 @@ constant feeding both surfaces.
 **Learnings:** dist/ accumulates across builds and IS the deploy source — page classes without an archive policy need a generation-set sweep or stale pages ship forever. A baseline's own sample can rot: two instances (empty hubs, orphan venue) no longer measure their template. Rail dedupe keys must be lifecycle-aware (title-only for run-implying types, title+date otherwise) or residencies collapse / date-instance dupes survive.
 
 **Open items:** operator decisions — dormant-locale flip (EL hubs/editorial noindex), Bios/Ρομάντσο venue split, production-DB repairs (Release Athens price row; Kruger date-instance rows pending dedup-arc authorization); minor residual: CollectionPage JSON-LD description states its ItemList size (24) beside the 245 headline; Class-3/4 keys still needed for citation truth.
+
+### Session 204 — Enrichment Batch 2 (2026-07-13): four events written, gated 94–95, saved 4/4 [arc: enrichment, brief batch-2] — 2026-07-13
+
+**Plan:** Execute the batch-2 brief: Amémé @ Island Athens Riviera (stub), Κωμωδία της γειτονιάς 2 @ Λοσάντζελε (standard), NAΪKA @ Τεχνόπολη (stub), Σ' αγαπώ @ Από Κοινού (standard); research, write, gate, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All four saved (Amémé 117w stub 94, Κωμωδία 2 179w standard 94, NAΪKA 114w stub 95, Σ' αγαπώ 176w standard 95). Both concerts confirmed as athinorama year-rollovers sharing 2027-07-12 (instances 12–13 of the class, second same-date pair): Amémé played Island Sun 12 Jul 2026 18:00 (cometogether/venue site); NAΪKA + Marseaux (ECLESIA Tour, first Athens show) played Τεχνόπολη Sun 12 Jul 2026 doors 19:30 (musiccorner/stagenews) — both written with the "listing carries 2027" caution, ticket URLs withheld. Both theater rows carried Monday 2026-07-13 range-start artefacts against Wednesdays-only schedules — date-conflicts flagged. Λοσάντζελε listing written truthfully as stand-up (Maliatsis's own club, home run vs the separate On Tour more.com slug — only the tour page findable, merchant-unverified). Σ' αγαπώ confirmed as the first Greek staging of Shaw's Village Wooing (dir. Alexandros Liakopoulos, Kontopodis/Souti), Wednesdays 21:15 through 26 Aug, ticketservices.gr + phone with no findable direct URL. Six concerns logged; zero ticket_url_discovered emitted.
+
+**Verified:** auto-gate-check PASS ≥94 on all four; save-batch.ts saved 4/4, ingested 6 concerns, appended 4 openings, cleaned batch dir; DB spot-check shows full_description_en lengths 713–1072 and tag counts 5–6 on all four ids.
+
+**Learnings:** Nothing new broke — one 181-word overshoot traced to the documented comment-counting quirk plus a "seem to" SPECULATION warn, both cleared by one phrase edit (181→179, warn gone, score unchanged 94). Rollover class updated in auto-memory: same-date rollover pairs within a batch are now the expected shape, not a coincidence.
+
+**Open items:** Amémé (354669106e826b9a) and NAΪKA (6064b27c42d020ab) rows carry rolled 2027-07-12 dates for events that already happened 12 Jul 2026 — post-save validator should expire rather than display. Κωμωδία 2 (58c5f9e2ca2de0f7) and Σ' αγαπώ (dccf65a6c1963b5e) DB start dates are Mondays against Wednesdays-only runs — need date correction to first real showdate (15 Jul).
+
+### Session 205 — Enrichment Batch 2 (2026-07-17): five events written, gated 94–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-17
+
+**Plan:** Execute the batch-2 brief: research five events (2× Common Grounds Ethiopian workshops @ ΚΠΙΣΝ, athinorama concert @ Τεχνόπολη, athinorama theater @ "Σπίτι Art Bar", RA club night @ Astron), write tiered descriptions, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — basketry (542w premium, 100), weaving (522w premium, 100), Χατζηφραγκέτα (113w stub, 95), Πορφυρένιος έρωτας (179w standard, 94), ACN (115w stub, 95). Pre-write DB check found the two Ethiopian workshops are the **17 July** rows of sessions that repeat nightly 15/16/17 July under identical snfcc URLs — the 15 July siblings (57eaa4f5bca2203e, 835c9fef0e73991e) are already enriched, which supplied the web-verified craft context (Harar coiled basketry/mesob; shemma/netela/tibeb/shemane) without re-researching it. Those live 15 Jul descriptions assert a false run length ("Ethiofils takes the opening one"; "one night only — after 15 July, the thread moves on"); the 17 Jul rows written here use the truthful closing-night-of-three framing and the discrepancy was flagged. "Σπίτι Art Bar" turned out to be a fuzzy match on the bare word Σπίτι: athinorama places the production at **Το Σπίτι του Ηθοποιού** (Panathinaion 5 & Alkamenous 175, Patisia — Anna Fonsou's actors' foundation, 200-seat outdoor «Νίκος Κούρκουλος» stage, work staged at no charge), not the Kerameikos jazz bar at Eupatridon 7 — and the same page gives free entry with voluntary contribution against the DB's with-ticket, so both were written truthfully and flagged. Χατζηφραγκέτα resolved via Greek Wikipedia: duo formed Athens 2007 by Vangelis Chatzigiannis + Panos Fragkiadakis, Sivitanideios classmates, name welded from the two surnames, first gigs Pangrati 2008, opened for Tsopana Rave in Exarchia, deliberately label-less (self-release on YouTube/Facebook for stated class reasons). Mavridis unresolvable (only a theatre/ambient composer surfaces — wrong-entity shape of anti-pattern 12); written venue-forward, Re/Act verified as an Athens act with prior Astron and ATHarea (w/ Bonso) bills. Eight concerns logged; one ticket URL reported with the queue-it caveat.
+
+**Verified:** auto-gate-check PASS on all five (2×100, 2×95, 1×94); true body word counts recomputed excluding the timeliness comment (542/113/179/115/522) — all inside brief targets; save-batch.ts saved 5/5, ingested 8 concerns into event_concerns, appended 5 openings; DB re-queried post-save (full_description non-empty, tags present, needs_enrichment=0 on all five).
+
+**Learnings:** New venue-collision instance for the trap family — DB "Σπίτι Art Bar" fuzzy-matches any production whose venue string starts with Σπίτι, here Το Σπίτι του Ηθοποιού in Patisia. Also new: the SNFCC repeat-session shape — one festival session, identical URL, one row per festival date — means per-date rows must not claim "one night only"; the already-shipped 15 Jul copy did and is wrong. Every gate warning hit was documented (Greek-title GENERIC/ENTITY_RECURRENCE accent-strip false positives, mandated-table warn, NO_EXPERIENCE on stub/standard, comment-counting overshoot).
+
+**Open items:** Two live 15 Jul descriptions (57eaa4f5bca2203e, 835c9fef0e73991e) carry false "one night only"/"opening night" claims and need correction. ff2d05aaa2257751 needs a venue re-resolution (Σπίτι Art Bar → Το Σπίτι του Ηθοποιού, Patisia) and a price correction (with-ticket → open/donation). The 16 July Ethiopian rows (d1cf92bac6e73ba5, 9aa3db4d7d6baff5) are unenriched and will arrive in a future batch — same closing/middle-night framing question. Venue KB still lacks ΚΠΙΣΝ/SNFCC and Το Σπίτι του Ηθοποιού profiles.
+
+### S204 — Stale hub-artifact sweep + benchmark v2 re-sample & probe readiness [arc: GEO visibility, Phase-2 follow-ups] — 2026-07-18
+
+**Plan:** Close the two Phase-2 follow-ups: (4) extend the venue-orphan sweep to overflow `/all` + EN hub dirs; (5) re-sample the rotted baseline instances and stand up the Class-3 probe pending keys.
+
+**What happened:** Sweep implemented in generate-site.ts after overflow generation, deletion bounded to hub-pages.json slugs (en/events, en/about can never be candidates); merged `3d0e2411d`. The en-cornerstone-presence test was re-pinned to config-declaration + no-husk-dirs — its raw disk-presence assertion had "passed" for a month via the Jun-12 /en/exhibitions zombie the sweep now removes. Benchmark branch (`167bf6635`): sample-v2.json replaces the three rotted v1 instances (el-chapo orphan→art-63; empty jazz/cabaret hubs→dj_set-this-week 12 events + cinema-today 1 event, all verified live 200+indexable), RESAMPLE-NOTE.md carries comparability rules (deltas valid only for the 10 unchanged ids); tooling/probe-perplexity.ts is the key-ready Class-3 harness (frozen 20-query set parsed verbatim, refuses without PERPLEXITY_API_KEY, geo limitation recorded as protocol deviation).
+
+**Verified:** planted fakes swept while live gates regenerated their dirs (filesystem == generation set); tsc clean; suite 2,979 pass / 0 fail; merged main tree tsc clean; v2 picks confirmed live.
+
+**Learnings:** a dist-state test can be kept green by the very staleness it should catch — when adding a sweep, audit which tests were leaning on the swept artifacts. Instrument vs sample: the sample was never frozen; replacing rotted instances (with re-pick rules embedded) is maintenance, not a comparability break, so long as replaced ids start fresh series.
+
+**Open items:** PERPLEXITY_API_KEY → `bun run tooling/probe-perplexity.ts` is one command from the first citation scorecard; GSC/Bing/GA4 creds for Class-4; dormant-locale flip, Bios/Ρομάντσο split, prod-DB price-row repair unchanged from S203.
+
+### Session 206 — Enrichment Batch 2 (2026-07-20): five events written, gated 94–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-20
+
+**Plan:** Execute the batch-2 brief: five athinorama events (Stand-upάντεχα @ Από Κοινού, Το ημερολόγιο ενός τρελού @ Οίκος Ερμηνείας Ελευθερία, Πέρσες @ Λυκαβηττός, and two Λοσάντζελε stand-up shows), write hybrid-tier descriptions, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — Stand-upάντεχα (194w, 95), Το ημερολόγιο ενός τρελού (181w, 94), Πέρσες (203w, 95), Best of Μιχάλης Σεβαστέρης (179w, 100), Κωμωδία της γειτονιάς 2 (176w, 100); average 97. All five venues/productions were already carried in stored memory from prior batch-2 runs, so the session ran as targeted re-verification rather than fresh research. Re-verified the two least-fresh items live: the Πέρσες Lycabettus stop (Wed 2 Sep 2026, 21:00, from €16 — confirmed against the elculture tour table) and the Stand-upάντεχα schedule (athinorama `Σάβ. 9 μ.μ. (εκτός από 15/8)` through 29/08/2026). A theatromania WebFetch on the latter claimed nightly performances; that was a misparse of the site's `Δ Τ Τ Π Π Σ Κ` weekday header row, caught by cross-checking the athinorama source string. **Four of the five events carry a run-range start artefact** — DB start_date 2026-07-20 is a Monday and none of those four plays Mondays (Saturdays-only, Wednesdays-only, tour-range, and a printed July list that omits the 19th/20th respectively). Both Λοσάντζελε shows were written truthfully as **stand-up**, not as the scripted theatre their `theater_contemporary` typing implies. Nine concerns logged.
+
+**Verified:** auto-gate-check PASS on all five (2×100, 2×95, 1×94), all above the ≥80 save threshold; word counts inside each event's hard constraint (194/181/203/179/176 against caps 200/180/200/180/180, gate count including the timeliness comment); save-batch.ts saved 5/5 and ingested 9 concerns; DB re-queried post-save — `full_description` non-empty (1115/1037/1158/1010/1046 chars, matching the written files) and tags present on all five; `event_concerns` shows 4 date-conflict, 3 ticket-merchant-unverified, 1 neighborhood-mismatch, 1 venue-mismatch.
+
+**Learnings:** New source failure mode — a theatromania WebFetch reports the weekday *header row* as the performance schedule, producing a false "plays nightly". That is dangerous precisely because it disarms the day-of-week check that catches range-start artefacts; performance days must come from the athinorama printed schedule line. Also: `NO_TIMELINESS` was cleared on three events by adding genuinely verified markers (premiere date 20 June 2026; "limited run" against real closing dates) rather than padding — the keyword-only detector rewards a true marker as readily as a hollow one, so there is never a reason to fabricate for it. One draft sensory claim about the Λοσάντζελε room ("back row is still close") was cut as unsourced (anti-pattern 10).
+
+**Open items:** The Monday-start artefact now spans four of five events in a single batch and reads as a scraper-level defect rather than per-event cleanup — worth a fix at the ingest layer that stores the first *actual* showdate. Λοσάντζελε still has no confirmed nearest metro station (descriptions correctly omit one) and remains absent from the venue KB, as do Από Κοινού and Οίκος Ερμηνείας Ελευθερία. The DB venue record for Οίκος Ερμηνείας Ελευθερία is still wrong (`Kypseli` / `Eleftherias, Athina 113 63`; actual Nik. Klapanara 34A, Drapetsona) and needs correcting at source, not just flagging per batch.
+
+### Session 207 — Enrichment Batch 2 (2026-07-21): five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-21
+
+**Plan:** Execute the batch-2 brief: Stand-upάντεχα @ Από Κοινού, Ανα - τίναξε την ανθισμένη αμυγδαλιά @ Άλσος, Athens Baroque Festival 2026 @ Γερμανική Εκκλησία Αθηνών, EDEN presetns HAAi b2b Romy @ Ωδείο Αθηνών, Πέρσες @ Λυκαβηττός. Write, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — Stand-upάντεχα (179w, 100), Ανα - τίναξε την ανθισμένη αμυγδαλιά (162w, 100), Athens Baroque Festival 2026 (348w premium, 100), EDEN presetns HAAi b2b Romy (108w stub, 99), Πέρσες (183w, 99); average 100. Three of the five venues/productions were already carried in stored memory, so research concentrated on the two genuinely new events. **Athens Baroque Festival**: the ticketservices page (event 14963) fetched cleanly and yielded the full four-night programme (24–27 Sep 2026, German Church of Athens) — Me Muero d'amor–Estampas with Mariana Castello-Branco, L'inconnu (Hotteterre/de la Barre), a noon children's period-instruments workshop, and a two-night Bach tribute (BWV 1044/1014/211) — plus 20/15 EUR pricing. No edition ordinal was claimed: festivalfinder dates the founding to 2017 and calls 2026 a revival after 2019, which contradicts the attested 2024 and 2025 editions. **EDEN**: `ra.co` returned 403, so the booking was corroborated indirectly — RA club 179045 and four prior EDEN dates place the series at the **Athens Conservatoire** (Rigillis, Pangrati), so the usual `Ωδείο Αθηνών`→Herodion fuzzy-match collision resolves the *other* way here; the Sunday 17:30 door also fits the daytime "Eden is for Lovers" format rather than a festival tragedy slot. HAAi and Romy were confirmed as a real pairing via their 16 Jan 2026 Lot Radio b2b and a shared credit on Fred again..'s "Lights Out". **Three of five rows carry dates the show does not play** — 2026-07-21 is a Tuesday; Stand-upάντεχα is Saturdays-only, Ανα - τίναξε is Wednesdays-only, and Πέρσες carries the whole 21 Jul→28 Sep tour range against a single verified Lycabettus night of Wed 2 Sep 2026. Eight concerns logged.
+
+**Verified:** auto-gate-check PASS on all five (3×100, 2×99), all above the ≥80 threshold; word counts inside each hard constraint (179/162/348/108/183 against caps 200/180/400/120/200); `date -j -f "%Y-%m-%d" 2026-07-21 "+%A"` → Tuesday, confirming the three phantom rows; save-batch.ts saved 5/5 and ingested 8 concerns; DB re-queried post-save — `full_description` and `full_description_en` both non-empty (1013/958/2033/576/1078 chars) and tags present on all five.
+
+**Learnings:** The recent-openings do-not-reuse list did real work this session — two of the five events (Stand-upάντεχα, Ανα - τίναξε) had their strongest natural opening already spent in a prior batch, and both facts survived by being moved into the body rather than dropped. Worth keeping that as the default move: a banned opening is a banned *position*, not a banned fact. Also: fetching ticketservices for a *programme* (rather than a run schedule) was reliable here, in contrast to the known confabulation/staleness on its date fields — the failure mode appears specific to schedules, not to line-ups and prices.
+
+**Open items:** Athens Baroque Festival edition number remains unresolved and the festival will scrape three more rows (24, 26, 27 Sep) that need the same treatment. Neither Γερμανική Εκκλησία Αθηνών nor the Athens Conservatoire is in the venue KB, and both are now recurring. The run-range start artefact flagged as a scraper-level defect in Session 206 recurred at the same 3-of-5 rate, unchanged.
+
+### Session 208 — Enrichment Batch 2 (2026-07-25): five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-25
+
+**Plan:** Execute the batch-2 brief: Stand-upάντεχα @ Από Κοινού, Το Χριστουγεννιάτικο ορατόριο του Λιστ @ Μέγαρο Μουσικής (premium), Ayshel @ Cantina Social (stub), Το ημερολόγιο ενός τρελού @ Οίκος Ερμηνείας Ελευθερία, Μήδεια @ Λυκαβηττός. Write, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — Stand-upάντεχα (189w, 99), Το Χριστουγεννιάτικο ορατόριο του Λιστ (491w premium, 100), Ayshel (118w stub, 99), Το ημερολόγιο ενός τρελού (162w, 99), Μήδεια (179w, 99); average 99. Three venues/productions were already in stored memory; fresh research concentrated on the Megaron premium and Ayshel. **Megaron**: the event page fetched cleanly (KOA + Χορωδία Δήμου Αθηναίων, cond. Michalis Zeke; soloists Maliamani/Spitadi/Karaoulis/Magoulas; €50/40/30/20/12; presale 27 Jul) — the verbatim name re-read caught the summarizer translating «βαθύφωνος» as "baritone" (Magoulas is a bass); Christus Part I movements and Kodály's Budavári Te Deum (1936, Buda 250th anniversary, Matthias Church premiere) independently web-verified, and the listing's own "first KOA performance" claim used as the Tier-1 hook. **Ayshel**: ra.co event page 403'd as usual, but the artist triangulated from the RA bio snippet, stegi.radio artist page, SoundCloud "Call Now!" session, and three 2026 Astron ACN rows in our own DB — written artist-forward; the PeekYou-sourced real-name claim deliberately omitted. **Μήδεια is the batch's data finding**: the DB holds **25 phantom per-date rows** (1–25 July daily at Lycabettus, range end 15 Sep) off the single conflated athinorama tour listing; the production's only Lycabettus date is Sun 6 Sep 2026 21:00 (added after the 7 Jul sell-out), so the description was written toward 6 Sep and date-conflict flagged. Counter-instance worth noting: the Stand-upάντεχα row's start 2026-07-25 IS a genuine Saturday showdate — first non-artefact start from Από Κοινού after four artefacts. Four concerns logged.
+
+**Verified:** auto-gate-check PASS on all five (1×100, 4×99); word counts inside each hard constraint (189/491/118/162/179 against caps 200/600/120/180/200, gate count); save-batch.ts saved 5/5 and ingested 4 concerns; DB re-queried post-save — `full_description` non-empty (1111/2965/687/971/1087 chars), tags present, `event_concerns` shows the 4 rows (1 date-conflict, 2 ticket-merchant-unverified, 1 neighborhood-mismatch).
+
+**Learnings:** The megaron.gr "clean fetch" caveat held again — structured fields verbatim-reliable, but the summarizer silently *translated* a voice type (βαθύφωνος→"baritone"), so the verbatim re-read must cover role/voice labels, not just names. The phantom-row class scales worse than previously seen: one conflated tour listing manufactured 25 daily rows, meaning every future date until 15 Sep will surface another Μήδεια row needing the same 6-Sep correction unless fixed at ingest.
+
+**Open items:** Μήδεια phantom rows (26 Jul–15 Sep remainder) will keep entering briefs — scraper-level fix for run-range expansion still owed (third session flagging it). Οίκος Ερμηνείας Ελευθερία DB venue record still wrong (Kypseli/Eleftherias vs Nik. Klapanara 34A, Drapetsona) — source-level correction still owed. Από Κοινού, Οίκος Ερμηνείας Ελευθερία, Cantina Social still absent from the venue KB.
+
+### Session 209 — Enrichment Batch 1 (2026-07-25): five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-1] — 2026-07-25
+
+**Plan:** Execute the batch-1 brief: Ο Πετρούσκα του Στραβίνσκυ @ Μέγαρο Μουσικής (premium), JAPANESE SHAKUHACHI MUSIC CONCERTS @ Parnassos (stub), Ανα-τίναξε την ανθισμένη αμυγδαλιά @ Άλσος, Βάκχες @ Λυκαβηττός, Μαζί Ορατές @ ΚΠΙΣΝ. Write, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — Πετρούσκα (468w premium, 100), shakuhachi (116w stub, 99), αμυγδαλιά (165w, 100), Βάκχες (200w, 100), Μαζί Ορατές (274w, 99); average 100 per save-batch. Four of five were substantially covered by stored memory (Alsos Wednesdays-only, Βάκχες 30-Aug single night, Μαζί Ορατές run dates, Parnassos venue); fresh research concentrated on the Megaron premium. **Πετρούσκα**: megaron.gr fetched cleanly — KOA under Georgios Balatsinos (Greco-Swiss, KOA artistic director per press), Mozart Sinfonia concertante K. 364 (Keramidis violin — Kavala-born, deputy concertmaster Munich Philharmonic; Livieratos viola — no verifiable credential, role stated only) + Petrushka 1947 version; €35/25/20/15/€10 reduced; presale 27 Jul on webtics.megaron.gr. **Shakuhachi is the batch's data finding**: two direct ticketservices fetches (id 14794 and named URL) returned "June 24–25" with internally impossible weekday labels (24 Jun 2026 is a Wednesday, page claimed Saturday) — weekday math + the indexed Greek listing (Fri 24/Sat 25 July, weekday-consistent) + ESS Summer School 2026 Athens dates (23–26 Jul) confirm the DB's 25 Jul as correct; the 38-day-old memory note reading "June 24-25" was the same confabulation, not a real earlier run. Also flagged: the row's event_type=dj_set is a misclassification (seated chamber concert). Two known date conflicts re-confirmed and written around (αμυγδαλιά → Wednesdays only, closes 29 Jul; Βάκχες → Sun 30 Aug 21:00). Four concerns logged.
+
+**Verified:** auto-gate-check PASS on all five (3×100, 2×99); word counts inside each hard constraint (468/116/165/200/274 against caps 600/120/180/200/300, gate count); save-batch.ts saved 5/5 and ingested 4 concerns; DB re-queried post-save — full_description non-empty (2791/752/1039/1271/1693 chars), tags present, event_concerns shows the 4 rows (2 date-conflict, 1 ticket-merchant-unverified, 1 entity-resolution-uncertain).
+
+**Learnings:** The ticketservices confabulation class extends to *dates with fabricated weekday labels* — the weekday-vs-date cross-check (already the phantom-row tool) is also the fastest way to falsify a confabulated merchant fetch. Memory hygiene: a confabulated fetch recorded 38 days ago propagated as a "listing showed June 24-25" memory claim; corrected this session — merchant-page reads should be memorialized only with a weekday-consistency note.
+
+**Open items:** Shakuhachi event_type=dj_set misclassification in DB (flagged, not fixed — source-level). Megaron, Parnassos, Theatro Alsos, Lycabettus, ΚΠΙΣΝ still absent from the venue KB per the brief's "Not in database" intel lines despite repeated enrichment traffic. Βάκχες DB row still carries the 25-Jul range start (second session flagging this row's class).
+
+### Session 210 — Enrichment Batch 2 (2026-07-25b): five events written, gated 99–100, saved 5/5 [arc: enrichment, brief batch-2] — 2026-07-25
+
+**Plan:** Execute the batch-2 brief: SUBLUNAR x SMUT (stub), Κωμωδία της γειτονιάς 2 @ Λοσάντζελε, Η Δεκάτη του Σοστακόβιτς @ Μέγαρο Μουσικής (premium), Horsepower Productions @ "Bios Ρομάντσο" (stub), Σ' αγαπώ @ Από Κοινού. Write, gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:** All five saved — SUBLUNAR x SMUT (114w stub, 100), Κωμωδία της γειτονιάς 2 (164w, 99), Η Δεκάτη του Σοστακόβιτς (526w premium, 100), Horsepower Productions (118w stub, 99), Σ' αγαπώ (175w, 100). Two events (Κωμωδία 2, Σ' αγαπώ) were fully covered by stored memory including their recurring range-start artefacts; fresh research concentrated on the two RA nights and the Megaron premium. **SUBLUNAR x SMUT** resolved as a label showcase — Sublunar is Sciahri's own label (est. 2017 with Dagdrom) and co-billed Hertz Collision has released on it; BIDOBEN verified as the Moroccan producer behind Truncate's "Couloir des Insomnies". **Megaron premium**: page fetched cleanly (KOA, cond. Michalis Oikonomou, Natalia Michailidou piano, Travlos Piano Concerto + Shostakovich 10; €25/20/15/€8; 19:30 intro talk; presale 27 Jul) — the verbatim name re-read caught the summarizer drifting ΤΡΑΥΛΟΣ to "Trahlos"; Oikonomou (ERT NSO, Qatar Phil, first Greek on the RPO podium), Michailidou (École Normale, Debussy specialist) and Travlos (Isang Yun student, two ministry prizes) independently web-verified. **Horsepower Productions** (Benny Ill, Tempa, In Fine Style 2002) written Romantso-forward per the standing Bios-vs-Romantso rule with venue-mismatch flagged (RA 403s, building unconfirmed); supports verified as Athens acts Raw Future Sound and Saber Rider (Aliki Leftherioti). Both theater rows carried Saturday 2026-07-25 DB starts against Wednesdays-only schedules (Κωμωδία re-verified live from athinorama; Σ' αγαπώ = fifth consecutive Από Κοινού artefact) — both date-conflicts flagged. Three concerns logged. Ticket URLs surfaced for both theater events (more.com resident-run page; ticketservices Σ' αγαπώ page).
+
+**Verified:** auto-gate-check PASS on all five (3×100, 2×99); word counts inside each hard constraint (114/164/526/118/175 against caps 120/180/600/120/180, gate count); save-batch.ts saved 5/5 and ingested 3 concerns; DB re-queried post-save — full_description_en non-empty (705/942/3159/717/1033 chars), event_concerns shows the 3 rows (2 date-conflict, 1 venue-mismatch).
+
+**Learnings:** The verbatim-re-read rule caught its second silent transformation in two sessions ("Trahlos" for Τραυλός, after Session 208's βαθύφωνος→"baritone") — name-drift extends to Latin-transliterating Greek names, not just blending adjacent ones. The same-day pair of Από Κοινού-class rows (Session 208's genuine Saturday Stand-upάντεχα vs today's artefact Saturday Σ' αγαπώ) shows the weekday-first check must run per-production, not per-venue.
+
+**Open items:** Λοσάντζελε, Από Κοινού, Romantso still absent from the venue KB despite repeated traffic. "Bios Ρομάντσο" venue-string ambiguity still unresolved at scraper level — every RA row under that string needs the manual Romantso-forward call. Run-range start-date expansion still owed a scraper-level fix (fifth Από Κοινού instance).
+
+### Session 211 — Enrichment batch-1 (25 Jul): 2 Megaron premiums, Cantina stub, Sevasteris, Perses date-fix
+
+**Plan:** Enrich the 5 events in temp-briefs/batch-1 (449813c3594ecdcd, 05c2abacc5201258, e2320c99f05b001b, 8069b43ab1c8f9db, 1908c18192d93520) per the brief; pre-enrich-check first.
+
+**What happened:** All 5 written, gated and saved (scores 100/100/99/100/100, avg 100 per save-batch). Timpani και Ορχήστρα (premium, 562w): Symeonidis bio verbatim-verified from GNO virtual museum via curl -k (WebFetch cert failure on that host); Thärichen/Desyllas/Karabits web-verified. Εποχές Τέσσερις (premium, 430w): Moreno 2017 Piazzolla recording + Méndez Tenerife verified; dropped an unverifiable Malko-win claim from a search snippet; presale 27 Jul 2026 used as insider detail. Harris Markou @ Cantina Social: artist unresolvable (RA 403, no profiles) → venue-forward stub, entity-resolution-uncertain + thin-context concerns. Best of Σεβαστέρης: 25 Jul is a real date per athinorama printed schedule (no range-start artefact); written as stand-up; resident more.com ticket URL reported. Πέρσες @ Λυκαβηττός: DB 25 Jul→28 Sep is the tour-range conflation — athinorama tour table re-verified today gives Lycabettus Wed 2 Sep 21:00 only, €16+; description anchored to 2 Sep, date-conflict concern filed.
+
+**Verified:** gate PASS output for all 5; save-batch 5/5; sqlite SELECT confirms full_description populated for all 5 IDs at 2026-07-25 19:13:40.
+
+**Learnings:** megaron.gr event pages link only generic webtics.megaron.gr — no per-event purchase URL discoverable there. Both Πέρσες (~20 rows) and Σεβαστέρης (~40 rows, three runs) sit in events.db as one-row-per-day phantom siblings — dedup candidates.
+
+**Open items:** phantom-row dedup for the two productions above (pipeline scope, not enrichment); Megaron ticket URLs remain unpopulated for the two Jan 2027 concerts.
+
+### Session 212 — Enrichment batch-1 (26 Jul): four KOA/Megaron 2026-27 season premiums, all gated 100 [arc: enrichment, brief batch-1] — 2026-07-26
+
+**Plan:** Enrich 4 premium concerts (400-600w full-8-section), all Athens State Orchestra at Christos Lambrakis Hall from megaron.gr: Bronfman–Rachmaninoff (26 Feb 2027), Ταξίδι στο κέντρο της Μουσικής – Ροντό (5 Mar 2027), Tchaikovsky 4th (19 Mar 2027), Beethoven's Ninth bicentennial (26 Mar 2027).
+
+**What happened:** All 4 written, gated, tagged, saved 4/4 at 100/100 (Rondo first passed at 95 with a real NO_TIMELINESS keyword miss — "two performances only" doesn't trip the detector; rewrote closer to "a limited run of two performances" → 100). Credentials web-verified: Bronfman (Grammy 1997 Bartók/Salonen, Avery Fisher 1991), Grammenos (first wind EYM of the Year, ECHO Rising Star 2013), Ziavras (Oper Wuppertal principal), Poppen (Cherubini Quartet, HK Sinfonietta), Stavrakakis (1st prize 2019 Tchaikovsky Comp), Gourzi Ishaón viola concerto premiered by Mönkemeyer/Bremen Phil Feb 2026 (so no Athens world-premiere claim).
+
+**Verified:** Gate output 100/100 ×4; DB full_description lengths 3080–3180 chars for all four IDs post-save.
+
+**Learnings:** megaron.gr fetch again clean and complete (conductor/soloists/programme/prices/presale). KOA 2026-27 pattern: presale for all four opens 27 Jul 2026; intro lecture 19:30 for ticket holders on symphonic nights; Rondo family series uses earlier curtains (19:00 Fri / 18:00 Sat). No per-event webtics URLs exist pre-presale → ticket_url_discovered omitted for all four.
+
+**Open items:** Rondo DB time wrong (20:30 vs verified 19:00) + missing 6 Mar sibling row — concern filed (date-conflict-or-unparseable). Re-scrape ticket URLs after 27 Jul 2026 presale opening.
+
+### Session 213 — Enrichment batch-1 (26 Jul): two KOA 2026-27 premiums + three summer-run hybrids, avg 97 [arc: enrichment, brief batch-1] — 2026-07-26
+
+**Plan:** Enrich 5 events: Προκόφιεφ με Πέτριν (KOA/Megaron 28 May 2027, premium), Spectrum – Η Ορχήστρα και οι Μουσικοί της (KOA/Megaron 11 Jun 2027, premium), Κωμωδία της γειτονιάς 2 (Λοσάντζελε, hybrid), Πέρσες (Λυκαβηττός, hybrid), Σ' αγαπώ (Από Κοινού, hybrid).
+
+**What happened:** All 5 written, gated, tagged, saved 5/5 — scores 100/99/95/95/95, avg 97. Credentials web-verified: Gavriilidis-Petrin (KOA solo cellist, Curtis under Wiley/Brey, Paulo prizewinner, Apollon Ensemble since 2021, 2025 GENUIN debut), Downie Dear (1st prize 2020 Mahler Competition, unanimous jury), Sakalak (cellist ~30y Camerata → KOA March 2022, published photo collections on both orchestras — verified radio984/protoporia after verbatim credits re-read). Three metadata concerns: both Wednesday-only shows carry Sunday 26 Jul range-start artefacts; Πέρσες DB range is the tour conflation (real Lycabettus date Wed 2 Sep); Spectrum DB time 20:30 vs megaron.gr verbatim 21:00.
+
+**Verified:** Gate outputs (100/99/95/95/95); DB full_description_en lengths 1018–3146 for all five IDs post-save; save-batch ingested 5 concerns.
+
+**Learnings:** Maliatsis 89→99 by adding true keyword markers ("limited run", "crowd at comedy-club range") — NO_TIMELINESS/NO_EXPERIENCE are keyword detectors, confirmed again. Spectrum is the second KOA event where the scraper wrote 20:30 against a different printed time (after Rondo's 19:00) — check every non-standard KOA production's time against megaron.gr. Πέρσες/Σεβαστέρης-style phantom one-row-per-day siblings continue to arrive as fresh IDs (both Wednesday-run events re-enriched today under new IDs).
+
+**Open items:** DB time fix for 858b6c820a1270ab (20:30→21:00); Megaron ticket URLs re-check after 27 Jul presale; phantom-row dedup still pipeline-scope.
+
+### Session 214 — Enrichment batch-2 (28 Jul): five hybrids/stubs, avg 96, three date-artefact flags [arc: enrichment, brief batch-2] — 2026-07-28
+
+**Plan:** Execute the batch-2 brief: research five events (Stand-upάντεχα @ Από Κοινού, Gogol Diary @ Drapetsona, Nikolas Gale afterhours @ Skull Bar, Μήδεια phantom row @ Lycabettus, Naxatras @ Floyd), write tiered descriptions, gate, tag, log concerns, save.
+
+**What happened:**
+- Four of five events resolved almost entirely from auto-memory (Από Κοινού schedule, Drapetsona venue + wrong DB neighborhood, Skull Bar format, Medea tour table); fresh research only for Nikolas Gale (muzitee/RA bio) and Naxatras (rocking.gr/floyd.gr: first time at Floyd, biggest Greek headline show, album V 2025, 15 EUR limited presale).
+- Gate scores 95/99/94/95/95; save-batch 5/5, avg 96, 7 concerns ingested, batch dir cleaned, review written post-clean.
+- Date artefacts flagged on 3 of 5 rows: two Tuesday range-starts (Stand-upάντεχα Saturdays-only; Diary Wed–Sun) and the 28-Jul Μήδεια phantom (only real Lycabettus night: Sun 6 Sep 21:00).
+
+**Verified:** sqlite spot-check — all five `full_description_en` lengths match written files, `needs_enrichment=0`, 7 rows in `event_concerns`.
+
+**Learnings:** NO_TIMELINESS literal-token trap again: "return to the booth" does not clear the detector, "returns to the booth" does (89→94, rephrase not pad). All other warnings were documented quirks (stub-tier NO_EXPERIENCE, hyphen-strip and accent-strip title false positives).
+
+**Open items:** Diary row's DB neighborhood/address still wrong (Kypseli vs Drapetsona) — flagged for post-save validator; Μήδεια phantom-row class keeps producing one row per day through 15 Sep.
+
+### Session 215 — Enrichment Batch 2 (2026-07-29): two theater events written, gated 95/95, saved 2/2 [arc: enrichment, brief batch-2] — 2026-07-29
+
+**Plan:** Execute the batch-2 brief: research and write 120-180w hybrid descriptions for Νεφέλωμα Ωμέγα (Θέατρο Ροές, Gazi) and Σ' αγαπώ (Από Κοινού, Kerameikos), gate-check, tag, log concerns, save via save-batch.ts.
+
+**What happened:**
+- Νεφέλωμα Ωμέγα resolved to a dance-acrobatics piece by κι όμΩς κινείται (Christina Sougioultzi, company 20+ years; dramaturgy/performance Yannos Perlegkas, music Leandros Spyros Fratnik) — four nights 28-31 Jul, athinorama schedule line confirms DB start 29 Jul is a range artifact missing opening night (flagged date-conflict).
+- Σ' αγαπώ resolved to Shaw's Village Wooing in Angelos Andreopoulos's adaptation with Yannis Spanos songs, dir. Alexandros Liakopoulos — billed first Greek staging (press-release provenance, verbatim confirmed on theatromania), Wednesdays-only 21:15 to 26 Aug in the Από Κοινού courtyard; DB date 29 Jul = Wednesday ✓.
+- Both gated 95 after one keyword rephrase ("limited four-performance run" cleared NO_TIMELINESS; "final night" is not a detector marker). Residual WARNs all documented false positives.
+- ticket_url_discovered accepted for both (ticketservices.gr event pages, verified live before writing). save-batch: 2/2, avg 95, 3 concerns ingested, 2 openings appended.
+
+**Verified:** DB rows show full_description (1046/1062 chars), tags (4/5), ticket_url set for both; event_concerns has the 3 new rows. batch-2-review.md written post---clean.
+
+**Learnings:** No new gate quirks — NO_TIMELINESS keyword-blindness ("final night" misses), Greek-title GENERIC_NO_EVENT_REFERENCE, NO_EXPERIENCE-at-standard, MISSING_PRACTICAL:time all matched documented behavior. Edit tool on batch files hit a permission wall; write-description.ts rewrite + shell append worked as the sanctioned path. theatroroes.gr serves 2015 content — dead as a source; ticketservices carries Roes presale. ticketservices labels the Από Κοινού summer stage «Σκηνή Κύνθια».
+
+**Open items:** Venue KB lacks Θέατρο Ροές and Από Κοινού — both flagged venue-mismatch-or-unknown for the venue pipeline. Post-save validator should correct Νεφέλωμα start_date (run opened 28 Jul, stored 29 Jul; moot after 31 Jul).
+
+### Session 216 — Enrichment batch-1 (31 Jul): five events, avg 99, wrong-entity intel caught [arc: enrichment, brief batch-1] — 2026-07-31
+
+**Plan:** Enrich brief batch-1 (81119ac525d136d3 Μήδεια, 2afacd18c62f7451 Gogol solo, 3617d347bcef1baf Hatzis @ Gustav, 5c10d7f1dbe4b840 Nachmias @ Parnassos, feec2126761bcf32 Stand-upάντεχα).
+
+**What happened:** All five written, gated (100/99/99/99/100), tagged, saved 5/5 with save-batch --clean; 7 concerns ingested; all five ticket_url_discovered accepted (medea-tour-summer-2026, more.com trellou, ticketservices 15062/15063, more.com stand-upantexa). Three events resolved almost entirely from memory (Μήδεια phantom-row → written toward Sun 6 Sep Lycabettus; Gogol Drapetsona + second-season; Stand-upάντεχα Saturdays-only, ninth Από Κοινού range-start artefact). Hatzis brief intel was the wrong entity (described a theater director) — web-verified as the singer, fabrication-temptation-resisted flagged; ticketservices' "Gustav grand opening" claim also refuted (venue active June 2026). Nachmias fetch weekday-confabulated ("Saturday" for Sunday 13 Dec) — prose written weekday-free.
+
+**Verified:** sqlite3 SELECT after save: 5 rows enriched_at set, descriptions 667–1109 chars, ticket_url populated; event_concerns holds all 7 rows.
+
+**Learnings:** Gustav's first weekday-consistent date (Fri 18 Sep) — the falsify-by-weekday check can pass there; third Gustav street variant (Μιλιώνη 6-10) confirms keeping the street unpinned. New memory: reference_david_nachmias_artist (presents/plays piano, does not sing).
+
+**Open items:** 5c10d7f1dbe4b840 event_type=dj_set is wrong (operetta recital) — second Parnassos type-mislabel; needs a type-correction pass. Μήδεια phantom siblings keep arriving daily through 15 Sep.
+
+### Session 217 — Enrichment batch-2 (3 Aug): five events, avg 93, Πέρσες tour-range date caught [arc: enrichment, brief batch-2] — 2026-08-03
+
+**Plan:** Execute batch-2 brief: 3 hybrids (Stand-upάντεχα, Πέρσες, Σ’ αγαπώ) + 2 stubs (Χαρούλης, Skullbar Afterhours), gate, tag, save.
+
+**What happened:** All 5 researched via athinorama fetches + press search. Πέρσες DB start_date 2026-08-03 recognized as athinorama tour-range artefact (matches reference memory); Lycabettus single night verified Wed 2 Sep 21:00 — description anchored there, date-conflict concern filed. RA 403 for Skullbar event; venue/series-forward stub with thin-context concern. Gates 94/94/95/94/89. Three ticket_url_discovered accepted (more.com: stand-upantexa, perses-periodeia, giannis-xaroulis-live-tour-2026); Σ’ αγαπώ has phone-only booking, URL omitted. save-batch 5/5, 2 concerns ingested, 5 openings appended.
+
+**Verified:** sqlite3 SELECT after save: 5 rows with descriptions (622–1129 chars), needs_enrichment=0, tags 4–5, three ticket_url rows status=ai_discovered.
+
+**Learnings:** Nothing new — all quirks hit (NO_TIMELINESS keyword miss on "remain/closes/gone", NO_EXPERIENCE on stubs, more.com queue-it) were already documented. Charoulis return-to-Lycabettus hook (Thiveos invitation quote, news247) is a strong Tier-1 timeliness pattern for venue-return concerts.
+
+**Open items:** Πέρσες row c268198d235bcaed still carries start_date 2026-08-03; post-save validator should pick up the date-conflict concern and correct to 2026-09-02.
+
+### Session 218 — Enrichment batch-1 (3 Aug): five events, avg 100, Medea phantom row + Gogol dark-Monday caught [arc: enrichment, brief batch-1] — 2026-08-03
+
+**Plan:** Enrich batch-1 (030dc5c3e2fedd24 Μήδεια, b6a960a23da86b97 Ημερολόγιο ενός τρελού, eb92e2095bcb0648 Samolis/Τεχνόπολη, b62860abc2e4aa14 metamorphosis/Astron, 58c832b0a510cdcf Μαζί Ορατές).
+
+**What happened:** All five written, gated (100/100/100/99/99, saved avg 100), saved 5/5 with 3 ticket URLs accepted (ticketservices Medea tour; more.com Gogol + Samolis). Memory pre-empted three traps: Μήδεια row is another phantom per-date row of athinorama 10090711 (written toward the verified 6 Sep Lycabettus night); Gogol row starts Mon 3 Aug — a dark day (Wed+Thu–Sun schedule) — plus the standing Kypseli/Drapetsona DB corruption; Μαζί Ορατές fully covered by memory (MOMUS, 27 Mar–30 Aug run). Samolis verified fresh (viral Cretan lyra player from Aimonas Mylopotamou; 2 Sep = opening night of Technopolis' 16-night September program per dnews). Astron 'metamorphosis': ra.co 403s, no lineup recoverable → venue-forward write, thin-context flagged.
+
+**Verified:** save-batch 5/5; `event_concerns` shows all 5 concerns ingested; descriptions + ticket_urls confirmed via sqlite3 SELECT.
+
+**Learnings:** Nothing new — every trap hit was already in memory/mistakes (phantom-row class, dark-day range-start, stale Rule-4 table wording, word-counter overshoot on first Gogol draft 182→175).
+
+**Open items:** Medea phantom rows keep arriving daily (expect one per day through 15 Sep); Astron lineup unrecoverable if a fact-check pass wants it.
+
+### Session 219 — Enrichment batch-1 (3 Aug): five events, avg 95, phantom-row scale quantified [arc: enrichment, brief batch-1] — 2026-08-03
+
+**Plan:** Enrich brief batch-1: Βάκχες (Lycabettus), ΕΝΟΙΚΙΑΖΕΤΑΙ (Μικρό Χορν), ACID ARAB (ARCH Club), Ο υπηρέτης δύο αφεντάδων (Lycabettus), DOGVILLE/Μπινιάρης (Δημ. Θέατρο Πειραιά).
+
+**What happened:** All five researched, written, gated ≥94, tagged, saved (avg 95). Two date-conflict concerns filed: Βάκχες DB date 08-03 → true single night Sun 30 Aug 21:15; Υπηρέτης DB 08-03 21:30 → Lycabettus is Thu 10 Sep 21:00, the tour's FINAL performance (08-03 is the Volos stop). Two first-draft fixes: ΕΝΟΙΚΙΑΖΕΤΑΙ gate-counted 181w vs 180 cap (trimmed; "opens"→"premieres" cleared NO_TIMELINESS) and ACID ARAB "one November night" missed the keyword detector ("one night only" → 100/100). Ticket URLs discovered for all five (more.com; two tour pages found via search for the athinorama events). Quantified the phantom-row class on both tour listings: bakxes-10091044 = 18 rows / 9 enriched; o_upiretis_duo_afentadon-10086446 = 50 rows / 3 enriched — one new row per scrape-day, dedup needed before publish.
+
+**Verified:** save-batch 5/5; sqlite3 SELECT confirms full_description lengths + 2 concerns in event_concerns; gate re-runs after both rewrites.
+
+**Learnings:** Nothing structurally new — phantom-row class already logged (S218 Medea); timeliness detector keyword quirk already in memory (confirmed "one night only" and "premieres" fire, "one November night" and "opens" don't). Four venues in one batch absent from the KB (Λυκαβηττού, Μικρό Χορν, ARCH, Δημ. Θέατρο Πειραιά) — KB expansion notes in batch review; Piraeus venue memory created (metro station named after the theatre doubles as archaeology exhibit — verified insider detail).
+
+**Open items:** Βάκχες + Υπηρέτης phantom rows keep arriving daily (expect one per day until 30 Aug / 10 Sep respectively); dedup-before-publish still pending for both slugs.
+
+### Session 220 — Enrichment batch-2 (4 Aug): four events, avg 99, WebFetch venue↔date pairing inversion caught [arc: enrichment, brief batch-2] — 2026-08-04
+
+**Plan:** Enrich brief batch-2: Σ' αγαπώ (Από Κοινού), Βάκχες (Lycabettus), Η ΣΥΓΚΑΤΟΙΚΟΣ (Πειραιώς 131), Ο υπηρέτης δύο αφεντάδων (Lycabettus).
+
+**What happened:** All four written, gated (99/99/100/99), tagged, saved 4/4 with all four ticket URLs accepted (ticketservices Σ' αγαπώ; more.com ×3). Three date-conflict concerns filed: Σ' αγαπώ DB start Tue 04-08 = 10th Από Κοινού range-start artefact (Wednesdays only → 26 Aug); Βάκχες phantom row → true night Sun 30 Aug 21:15; Υπηρέτης phantom row → Lycabettus Thu 10 Sep 21:00, tour final. Η ΣΥΓΚΑΤΟΙΚΟΣ was the one fresh event: Jen Silverman's The Roommate, Greek premiere Mon 12 Oct, Mon+Tue 20:00, Volioti/Aslanoglou/Brebou, Broadway-2024 Farrow–LuPone credential verified; DB date matched the premiere — no conflict.
+
+**Verified:** save-batch 4/4; sqlite3 SELECT confirms 4 descriptions (976–1184 chars), tags, ticket_urls, 3 rows in event_concerns; gate scores from fresh runs.
+
+**Learnings:** New WebFetch failure mode variant: on a two-venue athinorama page, the summarizer INVERTED the venue↔date pairing (claimed Lycabettus = 2 Aug, Lavrio = 10 Sep; truth is the reverse — the DB's 21:30 time is the Lavrio stop's). Verbatim re-read asking for venue headings + their date lines resolved it; the verbatim-reread pattern covers pairing drift, not just name drift. Also: athinorama "Τελευταία ευκαιρία" article 3060076 is dated 02 Sep 2025 — last season's farewell tour list, a year-stale trap for anyone re-verifying the 2026 tour.
+
+**Open items:** Βάκχες + Υπηρέτης phantom rows continue daily; dedup-before-publish still pending for both slugs. Πειραιώς 131 venue absent from KB (memory file created: reference_sygkatoikos_peiraios131_2026).
+
+### Session 221 — Enrichment batch-1 (4 Aug): five events, avg 100, phantom-row cluster + Kypseli/Drapetsona mismatch flagged [arc: enrichment, brief batch-1] — 2026-08-04
+
+**Plan:** Execute enrichment brief batch-1 (35a3f5b3, 3e01a386, c0b00693, 144fbe94, 392aff2e).
+
+**What happened:** All five events are per-date siblings of productions enriched 3 Aug under different IDs — every athinorama row carries a phantom 4-Aug date (Μήδεια's only Lycabettus night is Sun 6 Sep, GR/EN-surtitled; Πέρσες Wed 2 Sep; the Gogol plays Wed+Thu–Sun; Stand-upάντεχα Saturdays only, dark 15 Aug). Anchored true dates in prose, filed 7 concerns (5× date-conflict, 1× neighborhood-mismatch — DB says Kypseli, venue is Klapanara 34A Drapetsona — 1× entity-resolution duplicate cluster). Exhibition row had empty end_date; MOMus confirms 27 Mar–30 Aug 2026. Fresh opening strategies required (all five productions on the recent-openings blocklist): temporal / premise / geographic-contrast / imperative / historical. Ticket URLs found for all four ticketed events (ticketservices Medea tour; more.com × 3).
+
+**Verified:** Gate scores 100/99/100/99/100 (all PASS, word caps held: 183/174/295/197/196). save-batch 5/5, 7 concerns ingested, DB rows confirmed via sqlite3 (full_description_en + tags + enriched_at). Complimentary-bar detail re-verified on athinorama venue page ("Λειτουργεί δωρεάν μπαρ"); 17,000+ Epidaurus figure confirmed by three outlets; drink-included-both-tiers pricing confirmed via katiousa.gr.
+
+**Learnings:** Gate keyword lists unchanged; "three dates left"/"stay only until X" fail Q2 while "limited run" clears honestly (memory updated). ENTITY_RECURRENCE_FAIL fires on piped exhibition titles even with the meaningful segment 3× in body — warn-only false positive. Chorus size for Πέρσες conflicts across outlets (17 vs 18) — omitted from prose rather than pick one.
+
+**Open items:** DB metadata patches for the flagged rows (phantom start dates, Kypseli→Drapetsona, exhibition end_date 2026-08-30) belong to the post-save validator/operator, not the batch executor.
