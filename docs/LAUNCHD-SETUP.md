@@ -1,4 +1,17 @@
-# launchd Setup Guide
+# launchd Setup
+
+## Machine wake schedule (Phase 1, 2026-08-11)
+
+launchd fires missed StartCalendarInterval jobs on wake, but a lid-closed
+Mac at 08:00 delays the daily run by hours (observed class: "no full run
+fired today", S193). Two `sudo` commands pin the schedule — run manually
+(operator password required; agents cannot sudo):
+
+    sudo pmset repeat wakeorpoweron MTWRFSU 07:50:00
+    sudo pmset -c sleep 0        # never sleep on AC power
+
+Verify: `pmset -g sched` shows the repeat; `pmset -g | grep ' sleep'` shows 0.
+Revert: `sudo pmset repeat cancel` / `sudo pmset -c sleep 1`. Guide
 
 This guide explains how to configure macOS launchd to run the Agent Athens daily pipeline automatically at 8:00 AM Athens time.
 
