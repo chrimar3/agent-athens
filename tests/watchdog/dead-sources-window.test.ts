@@ -24,6 +24,11 @@ import { join } from "node:path";
 const dir = mkdtempSync(join(tmpdir(), "deadman-fixture-"));
 const FIXTURE_DB = join(dir, "scrape-stats-fixture.db");
 const savedEnv = process.env.DEADMAN_DB_PATH;
+// Phase 2A: isolate from the REAL quarantine registry — production genuinely
+// quarantines clubber, this fixture's long-dead specimen. An empty registry
+// preserves the invariants pinned here; the quarantine filter has its own test.
+const savedQuarantineEnv = process.env.DEADMAN_QUARANTINE_PATH;
+process.env.DEADMAN_QUARANTINE_PATH = join(dir, "empty-quarantine.json");
 
 function isoDaysAgo(days: number, offsetMinutes = 0): string {
   return new Date(Date.now() - days * 86_400_000 + offsetMinutes * 60_000).toISOString();
@@ -125,6 +130,18 @@ describe("deadSourcesSignal — long-dead sources stay surfaced, dormant ones st
 
   test("brand-new source with fewer than 3 runs is NOT reported", () => {
     expect(deadSourcesSignal()).not.toContain("ra");
+  });
+
+  test("a QUARANTINED long-dead source is filtered from the alert set (Phase 2A — no repeat spam)", () => {
+    const { writeFileSync } = require("node:fs") as typeof import("node:fs");
+    const qPath = join(dir, "quarantine-clubber.json");
+    writeFileSync(qPath, JSON.stringify({ sources: { clubber: { since: "2026-08-11", reason: "captcha" } } }));
+    process.env.DEADMAN_QUARANTINE_PATH = qPath;
+    try {
+      expect(deadSourcesSignal()).not.toContain("clubber");
+    } finally {
+      process.env.DEADMAN_QUARANTINE_PATH = join(dir, "empty-quarantine.json");
+    }
   });
 
   test("mixed hard-fail/quiet-success streak beyond the window stays conservative — NOT reported", () => {

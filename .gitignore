@@ -75,3 +75,4 @@ package-lock.json
 /agent-events.db
 /design-system-audit.html
 /diagnostic-report.md
+data/responder-state.json
