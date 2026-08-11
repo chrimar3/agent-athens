@@ -21,8 +21,8 @@ import {
 describe('floor constants are pinned', () => {
   // Observed healthy range 12,879–13,725; no seasonality. A mutant that
   // weakens this floor must die here.
-  test('locationFiltered floor is exactly 5000', () => {
-    expect(LOCATION_FILTERED_FLOOR).toBe(5000);
+  test('locationFiltered floor is exactly 2000 (recalibrated 2026-08-11: pre-dedup baseline was phantom-inflated)', () => {
+    expect(LOCATION_FILTERED_FLOOR).toBe(2000);
   });
 
   // Observed healthy range 224–267; seasonal, so deliberately low.
@@ -42,7 +42,7 @@ describe('validateEventCountFloor', () => {
 
   test('counts exactly at the floors pass (floor is inclusive)', () => {
     const report = validateEventCountFloor({
-      locationFiltered: 5000,
+      locationFiltered: 2000,
       upcomingEvents: 50,
     });
     expect(report.failures).toEqual([]);
@@ -50,13 +50,13 @@ describe('validateEventCountFloor', () => {
 
   test('counts one below a floor FAIL', () => {
     const locReport = validateEventCountFloor({
-      locationFiltered: 4999,
+      locationFiltered: 1999,
       upcomingEvents: 240,
     });
     expect(locReport.failures).toHaveLength(1);
     expect(locReport.failures[0]).toContain('locationFiltered');
-    expect(locReport.failures[0]).toContain('4999');
-    expect(locReport.failures[0]).toContain('5000');
+    expect(locReport.failures[0]).toContain('1999');
+    expect(locReport.failures[0]).toContain('2000');
 
     const upReport = validateEventCountFloor({
       locationFiltered: 13000,

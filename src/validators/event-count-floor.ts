@@ -13,14 +13,18 @@
  * (1,531 → 2,356 observed). Do not add a baseline/relative check, and do not
  * threshold on pageableEvents.
  *
- * Floors vs observed healthy values (2026-07):
- * - locationFiltered: healthy 12,879–13,725, no seasonality → floor 5000
- *   (the collapse detector).
+ * Floors vs observed healthy values:
+ * - locationFiltered (2026-07 baseline): healthy 12,879–13,725 → floor 5000.
+ *   RECALIBRATED 2026-08-11: those "healthy" values were phantom-inflated —
+ *   74% of rows were per-scrape-day duplicates of ~900 athinorama productions
+ *   (one production = up to 50 rows). The post-save validator's URL-sibling
+ *   collapse brings the TRUE catalog to ~3,400 locationFiltered; floor set to
+ *   ~60% of that. Do not raise it back without checking merged_into counts.
  * - upcomingEvents: healthy 224–267, seasonal → floor deliberately low at 50.
  */
 
-/** Collapse detector — healthy is ~13k; below this the pipeline lost its data. */
-export const LOCATION_FILTERED_FLOOR = 5000;
+/** Collapse detector — true (post-dedup) healthy is ~3.4k; below this the pipeline lost its data. */
+export const LOCATION_FILTERED_FLOOR = 2000;
 
 /** Deliberately low (seasonal count); healthy is ~224–267. */
 export const UPCOMING_EVENTS_FLOOR = 50;
