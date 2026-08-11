@@ -113,3 +113,12 @@ describe('executeActions', () => {
     expect(out[0].detail.length).toBeGreaterThan(0);
   });
 });
+
+describe('deadman wiring pin', () => {
+  test('deadman-watchdog invokes the responder layer', () => {
+    const src = readFileSync(join(import.meta.dir, '..', 'scripts', 'deadman-watchdog.ts'), 'utf8');
+    expect(src).toContain('planResponse(');
+    expect(src).toContain('executeActions(');
+    expect(src).toContain('responder-state.json');
+  });
+});

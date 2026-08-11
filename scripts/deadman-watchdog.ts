@@ -22,6 +22,7 @@ import { readFileSync, existsSync, appendFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/watchdog/classifier";
+import { planResponse, executeActions, type ResponderState } from "../src/watchdog/responders";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
 
@@ -36,6 +37,16 @@ const dbPath = (): string => process.env.DEADMAN_DB_PATH || join(ROOT, "data", "
 // Lets the watchdog be verified against a degenerate DB without spamming channels.
 const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
 const HEARTBEAT_CSV = join(ROOT, "logs", "deadman-heartbeat.csv");
+// Responder cooldown state (Phase 2A) — gitignored; deleting it merely
+// re-enables actions immediately, so it is safe to lose.
+const RESPONDER_STATE_PATH = join(ROOT, "data", "responder-state.json");
+function loadResponderState(path: string): ResponderState {
+  try {
+    return JSON.parse(readFileSync(path, "utf8")) as ResponderState;
+  } catch {
+    return { lastActionMs: {} };
+  }
+}
 const SITEMAP_URL = "https://agentathens.com/sitemap-events.xml";
 
 export interface MonitoringConfig {
@@ -382,11 +393,26 @@ const inputs: DeadmanInputs = {
 const result: DeadmanResult = classifyDeadman(inputs);
 const tsIso = new Date(nowMs).toISOString().replace(/\.\d+Z$/, "Z");
 
+// Responder layer (Phase 2A): scoped action BEFORE notification so the alert
+// arrives with its outcome ("redeploy attempted → verified ready"). Fault-
+// isolated like every adapter; DRY_RUN plans but never executes.
+const plannedActions = safe(() => planResponse(result, loadResponderState(RESPONDER_STATE_PATH), nowMs), []);
+const responderOutcomes = await executeActions(plannedActions, {
+  dryRun: DRY_RUN,
+  statePath: RESPONDER_STATE_PATH,
+  projectDir: ROOT,
+}).catch(() => [] as Awaited<ReturnType<typeof executeActions>>);
+const responderLine =
+  responderOutcomes
+    .map((o) => `${o.kind}${o.target ? ":" + o.target : ""}=${o.ok === null ? "planned" : o.ok ? "ok" : "FAILED"}`)
+    .join(" ") || "none";
+
 // Dry-run: report the classification + exit code without firing any delivery layer.
 if (DRY_RUN) {
   console.log(`[deadman:DRY_RUN] @ ${tsIso} status=${result.status} (would exit ${result.status === "OK" ? 0 : 1})`);
   console.log(`  signals: deploy=${ageH(lastDeployMs, nowMs)}h enrich=${ageH(lastEnrichMs, nowMs)}h dbRows=${dbRowCount ?? "null"} pipeline=${pipelineHealthy ? "ok" : "FAIL"}`);
   for (const r of result.reasons) console.log(`  • ${r}`);
+  console.log(`  responder (planned only): ${responderLine}`);
   process.exit(result.status === "OK" ? 0 : 1);
 }
 
@@ -401,6 +427,8 @@ if (result.status === "OK") {
     `Deadman watchdog breach at ${tsIso} (host wall-clock).\n\n` +
     `Status: ${result.status}\n\nFailing signals:\n` +
     result.reasons.map((r) => `  • ${r}`).join("\n") +
+    `\n\nResponder: ${responderLine}\n` +
+    responderOutcomes.map((o) => `  → ${o.summary}: ${o.detail}`).join("\n") +
     `\n\nSignal ages: deploy=${ageH(lastDeployMs, nowMs)}h, enrich=${ageH(lastEnrichMs, nowMs)}h, pipeline=${pipelineHealthy ? "ok" : "non-zero-exit"}.\n` +
     `Thresholds: deploy ${cfg.deploy_stale_hours}h, enrich ${cfg.enrich_stale_hours}h.\n`;
 
@@ -428,7 +456,9 @@ if (result.status === "OK") {
   const push = await sendPush(
     cfg,
     `Agent Athens DEADMAN: ${result.status}`,
-    `${result.status} @ ${tsIso}\n` + result.reasons.map((r) => `- ${r}`).join("\n"),
+    `${result.status} @ ${tsIso}\n` +
+      result.reasons.map((r) => `- ${r}`).join("\n") +
+      `\nresponder: ${responderLine}`,
   ).catch((e) => ({ ok: false, skipped: false, detail: `sendPush threw: ${e}` }));
   if (push.ok) {
     console.error(`[deadman] push sent`);
@@ -448,6 +478,7 @@ writeHeartbeat({
   enrich_age_h: ageH(lastEnrichMs, nowMs),
   pipeline_ok: pipelineHealthy,
   email: emailState,
+  responder: responderLine,
   reasons: result.reasons.join(" | "),
 });
 
