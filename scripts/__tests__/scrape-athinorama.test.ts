@@ -22,22 +22,22 @@ describe('parseTheaterDateRange', () => {
       card('<strong>Πρεμιέρα: </strong>20/6 <strong>Εως: </strong>30/6'),
       REF
     );
-    expect(r).toEqual({ startDate: '2026-06-20', endDate: '2026-06-30' });
+    expect(r).toEqual({ startDate: '2026-06-20', endDate: '2026-06-30', startIsRangeArtifact: false });
   });
 
   test('ongoing show — end date only, start = today', () => {
     const r = parseTheaterDateRange(card('<strong>Εως: </strong>30/6'), REF);
-    expect(r).toEqual({ startDate: '2026-06-12', endDate: '2026-06-30' });
+    expect(r).toEqual({ startDate: '2026-06-12', endDate: '2026-06-30', startIsRangeArtifact: true });
   });
 
   test('premiere only — single performance, no end date', () => {
     const r = parseTheaterDateRange(card('<strong>Πρεμιέρα: </strong>25/10'), REF);
-    expect(r).toEqual({ startDate: '2026-10-25', endDate: null });
+    expect(r).toEqual({ startDate: '2026-10-25', endDate: null, startIsRangeArtifact: false });
   });
 
   test('end month behind current month rolls into next year', () => {
     const r = parseTheaterDateRange(card('<strong>Εως: </strong>25/01'), REF);
-    expect(r).toEqual({ startDate: '2026-06-12', endDate: '2027-01-25' });
+    expect(r).toEqual({ startDate: '2026-06-12', endDate: '2027-01-25', startIsRangeArtifact: true });
   });
 
   test('range wrapping the year boundary', () => {
@@ -45,11 +45,11 @@ describe('parseTheaterDateRange', () => {
       card('<strong>Πρεμιέρα: </strong>17/12 <strong>Εως: </strong>25/01'),
       REF
     );
-    expect(r).toEqual({ startDate: '2026-12-17', endDate: '2027-01-25' });
+    expect(r).toEqual({ startDate: '2026-12-17', endDate: '2027-01-25', startIsRangeArtifact: false });
   });
 
   test('no date labels — both null (caller skips the card)', () => {
     const r = parseTheaterDateRange(card('<p>Χωρίς ημερομηνίες</p>'), REF);
-    expect(r).toEqual({ startDate: null, endDate: null });
+    expect(r).toEqual({ startDate: null, endDate: null, startIsRangeArtifact: false });
   });
 });

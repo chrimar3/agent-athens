@@ -474,6 +474,11 @@ function extractTimeFromAthinoramaPage(html: string): string | null {
 export interface TheaterDateRange {
   startDate: string | null;
   endDate: string | null;
+  /** true when startDate was synthesized (ongoing-show branch: "today"),
+   *  not parsed from a printed premiere — S206: the range-start artefact is
+   *  "the modal state of the field" for non-daily runs. Consumers must not
+   *  treat a flagged start as a showdate. */
+  startIsRangeArtifact: boolean;
 }
 
 /**
@@ -489,8 +494,20 @@ export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateR
   const currentMonth = refDate.getMonth() + 1;
   const today = refDate.toISOString().split('T')[0];
 
+  // Rollover window (2026-08-11, S204 class — 13 confirmed instances): the
+  // month-behind-current heuristic rolled PAST events a year forward on
+  // re-scrape (a July premiere re-scraped in August became next July). A
+  // rolled date more than ROLLOVER_WINDOW_MONTHS ahead is a stale past
+  // listing, not a real early booking — return null instead.
+  const ROLLOVER_WINDOW_MONTHS = 10;
+  const windowEnd = new Date(refDate);
+  windowEnd.setMonth(windowEnd.getMonth() + ROLLOVER_WINDOW_MONTHS);
+  const withinWindow = (iso: string): boolean => new Date(`${iso}T12:00:00Z`) <= windowEnd;
+  const windowed = (iso: string): string | null => (withinWindow(iso) ? iso : null);
+
   let startDate: string | null = null;
   let endDate: string | null = null;
+  let startIsRangeArtifact = false;
 
   // Theater page format: "Εως: </strong>DD/MM" - date is AFTER the closing tag
   // Pattern 1: "Πρεμιέρα: </strong>DD/MM" followed by "Εως: </strong>DD/MM"
@@ -511,8 +528,8 @@ export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateR
     if (sm < currentMonth) startYear++;
     if (em < currentMonth || (em < sm && startYear === currentYear)) endYear++;
 
-    startDate = `${startYear}-${String(sm).padStart(2, '0')}-${String(parseInt(startDay)).padStart(2, '0')}`;
-    endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+    startDate = windowed(`${startYear}-${String(sm).padStart(2, '0')}-${String(parseInt(startDay)).padStart(2, '0')}`);
+    endDate = windowed(`${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`);
   } else if (untilMatch) {
     // Ongoing show - use today as start, parse end
     const [, endDay, endMonth] = untilMatch;
@@ -520,8 +537,11 @@ export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateR
     const em = parseInt(endMonth);
     if (em < currentMonth) endYear++;
 
-    startDate = today; // Already running
-    endDate = `${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`;
+    endDate = windowed(`${endYear}-${String(em).padStart(2, '0')}-${String(parseInt(endDay)).padStart(2, '0')}`);
+    if (endDate !== null) {
+      startDate = today; // Already running — synthesized, not a showdate
+      startIsRangeArtifact = true;
+    }
   } else if (premiereMatch) {
     // Premiere - single performance
     const [, day, month] = premiereMatch;
@@ -531,10 +551,10 @@ export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateR
     if (m < currentMonth || (m === currentMonth && d < refDate.getDate())) {
       year++;
     }
-    startDate = `${year}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    startDate = windowed(`${year}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
   }
 
-  return { startDate, endDate };
+  return { startDate, endDate, startIsRangeArtifact };
 }
 
 async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
