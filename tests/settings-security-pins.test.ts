@@ -84,4 +84,10 @@ describe('auto-enrich allowlist', () => {
       expect(line).toContain(s);
     }
   });
+
+  test('read-only sqlite3 stays available to headless sessions (canary 2026-08-11: denial stalled research)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
+    const line = src.split('\n').find((l) => l.startsWith('ALLOWED_TOOLS='));
+    expect(line).toContain('Bash(sqlite3 -readonly *)');
+  });
 });
