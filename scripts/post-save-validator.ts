@@ -130,7 +130,10 @@ if (import.meta.main) {
   // VALIDATOR_DB_PATH: same seam pattern as DEADMAN_DB_PATH — lets a worktree
   // dry-run point at the production DB and tests at fixtures.
   const dbPath = process.env.VALIDATOR_DB_PATH || join(ROOT, 'data', 'events.db');
-  const db = new Database(dbPath, { readonly: dryRun });
+  // Bun quirk: { readonly: false } yields zero open-flags → SQLITE_MISUSE.
+  // Write mode must be explicit readwrite — and NEVER create:true (the S194
+  // "empty-file engine": a missing DB must fail loudly, not be manufactured).
+  const db = dryRun ? new Database(dbPath, { readonly: true }) : new Database(dbPath, { readwrite: true });
 
   const groups = findUrlSiblingGroups(db);
   const planned = groups.reduce((s, g) => s + g.rows.length - 1, 0);
