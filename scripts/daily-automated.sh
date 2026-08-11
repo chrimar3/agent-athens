@@ -250,11 +250,18 @@ run_dedup_merge() {
 
     if bun run scripts/mark-duplicates.ts --execute >> "$LOG_FILE" 2>&1; then
         log "Cross-source mark completed"
-        return 0
     else
         log_error "Cross-source mark failed (continuing...)"
-        return 0  # Non-fatal
     fi
+
+    # Phase 2B: post-save validator — URL-sibling collapse (reversible) +
+    # rollover-expiry proposals for the decisions queue. Non-fatal.
+    if bun run scripts/post-save-validator.ts >> "$LOG_FILE" 2>&1; then
+        log "Post-save validator completed"
+    else
+        log_error "Post-save validator failed (non-fatal, continuing...)"
+    fi
+    return 0  # Non-fatal phase
 }
 
 # Phase 3b: Price acquisition
