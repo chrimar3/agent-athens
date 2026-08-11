@@ -462,6 +462,15 @@ run_geocode() {
 # Phase 4: Generate site
 run_generate() {
     log_phase "SITE GENERATION"
+
+    # Phase 2A: propose addresses for addressless publishable venues BEFORE
+    # the build, so the F2b streetAddress gate never fires blind again (the
+    # June 3-week drought class). Advisory — the gate stays the enforcer.
+    if [[ "$DRY_RUN" != "true" ]]; then
+        bun run scripts/venue-address-autofix.ts >> "$LOG_FILE" 2>&1 \
+            || log_error "venue-address-autofix advisory failed (non-fatal, continuing...)"
+    fi
+
     log "Generating static site..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
