@@ -70,6 +70,23 @@ export interface BatchManifest {
   output_dir: string;
 }
 
+/** Domains that hang or confabulate under WebFetch in headless runs.
+ *  more.com: queue-it wall → observed 572s hang → wall-clock batch kill
+ *  (logs/auto-enrich-2026-08-10.log). snfcc.org: 403. ra.co: 403.
+ *  The brief instructs WebSearch as the substitute — do not silently drop
+ *  the research step. Pinned by tests/enrichment-brief-blocklist.test.ts. */
+export const FETCH_BLOCKLIST = ['more.com', 'snfcc.org', 'ra.co'] as const;
+
+export function renderFetchBlocklistSection(): string {
+  return [
+    '## Fetch blocklist (hard rule)',
+    '',
+    `Do NOT WebFetch these domains — they hang or block and will kill the whole batch: ${FETCH_BLOCKLIST.join(', ')}.`,
+    'Use WebSearch for facts you would have fetched from them. If a fact exists only on a blocked domain, write what the other sources support and flag the gap in concerns.jsonl instead of fetching.',
+    '',
+  ].join('\n');
+}
+
 export function writeManifest(batchNumber: number, eventIds: string[]): string {
   const outputDir = `temp-descriptions/batch-${batchNumber}`;
   const manifest: BatchManifest = {
@@ -539,6 +556,7 @@ export function buildBrief(
   lines.push('24. **VENUE-SPECIFIC INSIDER DETAIL**: Every enrichment must contain at least one concrete, venue-or-event-specific detail not derivable from structured fields (address, metro, price, capacity, event time) or from the venue profile\'s standing character. Qualifying: door/arrival timing, terrace or smoking policy, late-night atmosphere shifts, sightline or acoustic notes, seasonal operation changes, crowd-by-hour patterns, walking quirks between transit and venue, seating or standing dynamics. Woven into narrative prose — never a header, bullet list, or "Practical info" coda. Required for hybrid (201–400w) and full (400w+) — absence is a fail. Attempted for three-part blocks (≤200w) — may be omitted if topical load is heavy (log as "insider omitted: topical load"). If venue is not in the Enrichment Knowledge Base and no insider detail is verifiable, lead with genre-prototypical experience (Safe Inferences) and flag the gap to the ED for KB expansion. Never fabricate insider detail.');
   lines.push('25. **INCOMPLETE WRITES**: If you cannot complete a description body — corrupt input, conflicting required fields, event type missing from matrix, unrecoverable Master Template violation — do not stall. Write the minimum schema description: "[Event name] is a [event type] at [venue name] in [neighborhood], Athens[, on [date]]. [Admission language]." Save via save-batch.ts. Append concern with concern_type="incomplete-write" and one-sentence concern_text describing what blocked the full write. Continue to next event.');
   lines.push('');
+  lines.push(renderFetchBlocklistSection());
 
   // Concerns taxonomy (S110f)
   lines.push('## Concerns');

@@ -61,3 +61,27 @@ describe('permission deny block', () => {
     expect(REQUIRED_DENY.filter((r) => !deny.includes(r))).toEqual([]);
   });
 });
+
+describe('db-guard hook wiring', () => {
+  test('PreToolUse wires db-guard for all inspected tools', () => {
+    const pre: Array<{ matcher?: string; hooks?: Array<{ command?: string }> }> =
+      settings?.hooks?.PreToolUse ?? [];
+    const entry = pre.find((e) => e.hooks?.some((h) => h.command?.includes('db-guard.ts')));
+    expect(entry).toBeDefined();
+    for (const tool of ['Bash', 'Write', 'Edit', 'MultiEdit', 'NotebookEdit']) {
+      expect(entry!.matcher).toContain(tool);
+    }
+  });
+});
+
+describe('auto-enrich allowlist', () => {
+  test('grants no bare Bash (the 2026-07-28 audit gap)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
+    const line = src.split('\n').find((l) => l.startsWith('ALLOWED_TOOLS='));
+    expect(line).toBeDefined();
+    expect(line).not.toMatch(/Bash(?!\()/); // "Bash" allowed only as "Bash(…)"
+    for (const s of ['write-description.ts', 'auto-gate-check.ts', 'write-tags.ts', 'save-batch.ts']) {
+      expect(line).toContain(s);
+    }
+  });
+});
