@@ -61,3 +61,15 @@ describe('permission deny block', () => {
     expect(REQUIRED_DENY.filter((r) => !deny.includes(r))).toEqual([]);
   });
 });
+
+describe('db-guard hook wiring', () => {
+  test('PreToolUse wires db-guard for all inspected tools', () => {
+    const pre: Array<{ matcher?: string; hooks?: Array<{ command?: string }> }> =
+      settings?.hooks?.PreToolUse ?? [];
+    const entry = pre.find((e) => e.hooks?.some((h) => h.command?.includes('db-guard.ts')));
+    expect(entry).toBeDefined();
+    for (const tool of ['Bash', 'Write', 'Edit', 'MultiEdit', 'NotebookEdit']) {
+      expect(entry!.matcher).toContain(tool);
+    }
+  });
+});
