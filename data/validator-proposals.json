@@ -1,0 +1,191 @@
+[
+  {
+    "event_id": "6fea36dbb4202495",
+    "title": "aux: SOLE DOSI",
+    "current_start": "2028-05-05T23:59:00",
+    "proposed_date": null,
+    "concern": "Event date 2028-05-05T23:59:00 is a placeholder (implausible year, 23:59 default time); real date/day-of-week unknown, so timeliness is Tier-3 programming-context only."
+  },
+  {
+    "event_id": "f02e3d0d1cb0c0b9",
+    "title": "Release Athens 2026 X SNF Nostos - Jean Michel Jarre, S&#233;bastien Tellier",
+    "current_start": "2027-06-22",
+    "proposed_date": "2027-06-22",
+    "concern": "Brief stores 2027-06-22, but SNF Nostos, Release Athens, more.com and athinorama all confirm the concert was 22 June 2026 (SNF Nostos festival ran 21-28 June 2026). Stored year appears off by one."
+  },
+  {
+    "event_id": "c56f17d8b6ec1cb0",
+    "title": "Εισβολέας",
+    "current_start": "2027-06-23",
+    "proposed_date": "2027-06-23",
+    "concern": "Brief date 2027-06-23 conflicts with the source program: athinorama and CultureNow list Eisvoleas at Technopolis for summer 2026, so the year is likely an off-by-one parse artifact — prose frames timeliness as 'summer' rather than printing a wrong year."
+  },
+  {
+    "event_id": "60a6880af85e9eff",
+    "title": "Γιώργος Σαμπάνης",
+    "current_start": "2027-06-22",
+    "proposed_date": "2027-06-22",
+    "concern": "Brief dates Giorgos Sampanis 2027-06-22, but in.gr, star.gr, topontiki and more.com confirm Monday 22 June 2026 at Theatro Alsos DEI — same year-rollover error as the Skiadareses entry."
+  },
+  {
+    "event_id": "e4792fbafaa16ba5",
+    "title": "Evidence",
+    "current_start": "2027-07-06",
+    "proposed_date": "2027-07-06",
+    "concern": "DB date is 2027-07-06 but every source (more.com, rapnroll.gr, athens24) places the Evidence/Gazarte show on 2026-07-06 and reports it sold out; the DB year is almost certainly a scrape artifact."
+  },
+  {
+    "event_id": "25fbb840fdf1ad96",
+    "title": "Νατάσα Θεοδωρίδου",
+    "current_start": "2027-07-06T21:00:00",
+    "proposed_date": "2027-07-06",
+    "concern": "DB date is 2027-07-06 but multiple sources place Natasa Theodoridou at Theatro Alsos on 6 & 7 July 2026 (double sold-out, third night added 21 July 2026); DB year appears to be a scrape artifact."
+  },
+  {
+    "event_id": "f34762ca3f805b76",
+    "title": "Joe Lovano &amp; Antonio Fara&#242;",
+    "current_start": "2027-07-06",
+    "proposed_date": "2027-07-06",
+    "concern": "Brief/DB date is 2027-07-06 but every source (ertnews, cosmopoliti) dates the Athens 'Explorations' show at Ellinikos Kosmos to 6 July 2026 (a probable scraper year roll-forward); wrote artist/venue-forward without asserting the disputed year."
+  },
+  {
+    "event_id": "f12baeaf00ed1862",
+    "title": "The Offspring και Bad Religion",
+    "current_start": "2027-07-07",
+    "proposed_date": "2027-07-07",
+    "concern": "DB date 2027-07-07 conflicts with all external evidence: this exact double bill played Plateia Nerou on 2026-07-07 as Release Athens 2026's punk day (releaseathens.gr timetable; doors 18:00, High Vis 18:35, Bad Religion 20:00, Offspring 22:00). No Release Athens 2027 lineup is announced, and the organizer has said the 2027 edition moves to a NEW venue (Forbes Greece). Suspected athinorama passed-date year-rollover (same class previously seen at Theatron Ellinikos Kosmos). Description uses 'listed for 7 July 2027' phrasing and states the 2026 show as history; recommend re-verifying or archiving this row."
+  },
+  {
+    "event_id": "5ae549b40b23e4d5",
+    "title": "Σωτήρης Ντούβας και Κωστής Χριστοδούλου - C&#39;mon",
+    "current_start": "2027-07-07",
+    "proposed_date": "2027-07-07",
+    "concern": "DB date 2027-07-07 is an athinorama year-rollover: press (thebest.gr, ertnews.gr) and Gazarte billing confirm C'MON! played Tuesday 7 July 2026 at Gazarte Roof Stage, i.e. the event has already passed. Description follows the listed 2027 date per Offspring/Plateia Nerou precedent."
+  },
+  {
+    "event_id": "bfbd4a4aa45f3744",
+    "title": "Γιαγκίνηδες",
+    "current_start": "2027-07-07",
+    "proposed_date": "2027-07-07",
+    "concern": "DB date 2027-07-07 is an athinorama year-rollover: athens-technopolis.gr official listing says Tuesday 7 July 2026 (already passed). Description follows the listed 2027 date and flags it as 'the calendar lists'."
+  },
+  {
+    "event_id": "9186a0dc1e6bc271",
+    "title": "Κώστας Τριανταφυλλίδης",
+    "current_start": "2027-07-08",
+    "proposed_date": "2027-07-08",
+    "concern": "DB date 2027-07-08 is an athinorama year-rollover: multiple press sources (athina984.gr, sinwebradio.com, monopoli.gr) and ticketservices.gr confirm the recital was Wednesday 8 July 2026, 21:00. Event has already passed; description avoids asserting a date."
+  },
+  {
+    "event_id": "cd8181f17221f7c6",
+    "title": "Dwarves",
+    "current_start": "2027-07-08",
+    "proposed_date": "2027-07-08",
+    "concern": "DB date 2027-07-08 is an athinorama year-rollover: gazarte.gr, rockoverdose.gr, sinwebradio.com and public.gr tickets confirm the 40 Years Anniversary Show was Wednesday 8 July 2026, 20:30, Ground Stage. Event has already passed; description avoids asserting a date."
+  },
+  {
+    "event_id": "ada16d64d4158a5c",
+    "title": "Robert Plant",
+    "current_start": "2027-07-09",
+    "proposed_date": "2027-07-09",
+    "concern": "athinorama year-rollover (7th confirmed instance of the class): DB lists 2027-07-09, but Robert Plant with Saving Grace and Suzi Dian played Δημοτικό Θέατρο Λυκαβηττού on 2026-07-09, 21:00, EUR 65-150 (High Priority / ticketmaster.gr, thisisathens.org). No 2027 Athens date is announced. Wrote 'listed for' phrasing and withheld ticket URL per rollover handling."
+  },
+  {
+    "event_id": "d04adf2405061060",
+    "title": "Anna",
+    "current_start": "2027-07-09",
+    "proposed_date": "2027-07-09",
+    "concern": "DB date 2027-07-09 is a near-certain athinorama year-rollover: RA event 2418199 ('Mayans with ANNA I Thu July 9') and summer-2026 Greek press place this at Bolivar on Thursday 9 July 2026, i.e. the event has likely already occurred. Description avoids stating a date."
+  },
+  {
+    "event_id": "64b9a34c90cd2a70",
+    "title": "Pantera",
+    "current_start": "2027-07-09",
+    "proposed_date": "2027-07-09",
+    "concern": "DB date 2027-07-09 is a near-certain athinorama year rollover (instance matches documented class): the identical bill Pantera/Trivium/Bodysnatcher headlined Release Athens at Plateia Nerou on 2026-07-09 (band's first-ever Greece show, rocking.gr/musicity.gr); no 2027 Plateia Nerou lineup announced and Release Athens 2027 reportedly moves venue. Description uses 'listed for' phrasing; ticket URL withheld."
+  },
+  {
+    "event_id": "8cac91e64e16b4df",
+    "title": "Sunset Frequencies",
+    "current_start": "2027-07-09T20:00:00",
+    "proposed_date": "2026-07-08",
+    "concern": "DB date 2027-07-09T20:00 is a rollover artifact: Sunset Frequencies is SNFCC's summer 2026 series (7 Wednesdays, 8 Jul-9 Sep 2026; next date 15 Jul Quad Piano Trio). Additionally DB price 'with-ticket' conflicts with verified open entry (athinorama: Eisodos eleftheri) — description written as open per SNFCC free-price-trap precedent."
+  },
+  {
+    "event_id": "49d7a09ff2ba78ea",
+    "title": "Πέτρος Κλαμπάνης",
+    "current_start": "2027-07-09",
+    "proposed_date": "2027-07-09",
+    "concern": "DB date 2027-07-09 is near-certain athinorama year-rollover: identical billing (Klampanis + CHÓRES guests, Gazarte Roof Stage, Jazz Week On The Roof) is web-verified for 2026-07-09, which passed yesterday. Description hedges with 'Athinorama lists ... for 9 July 2027'. Recommend date correction or expiry review."
+  },
+  {
+    "event_id": "83502b73813c5397",
+    "title": "Liva K",
+    "current_start": "2027-07-09T20:00:00",
+    "proposed_date": "2027-07-09",
+    "concern": "DB date 2027-07-09 is a near-certain athinorama year-rollover: ComeTogether lists the INFINITY series Thursdays 11 Jun-9 Jul 2026 (2026-07-09 = Thursday, passed at scrape time) and the venue page lists Liva K dates 22 May-18 Sep 2026; no source supports a 2027 date. Description avoids asserting the year."
+  },
+  {
+    "event_id": "ba71295a40575d55",
+    "title": "Exotica Lunatica",
+    "current_start": "2027-07-11",
+    "proposed_date": "2027-07-11",
+    "concern": "DB date 2027-07-11 is an athinorama year-rollover artifact. ticketservices.gr (plyfa-exotica-lunatica) and culturenow both confirm the actual date as Saturday 11 July 2026, 21:00 — which has already PASSED (today 13 July 2026). Event is stale, not a 2027 booking. Do not publish as upcoming."
+  },
+  {
+    "event_id": "b872d45a70c95411",
+    "title": "Meduza",
+    "current_start": "2027-07-11",
+    "proposed_date": "2027-07-11",
+    "concern": "DB date 2027-07-11 is an athinorama year-rollover artifact. more.com ('Meduza I Sat July 11'), Bolivar and culturenow confirm the actual date as Saturday 11 July 2026, 21:00, with Dino MFU opening — already PASSED (today 13 July 2026). Event is stale, not a 2027 booking. Do not publish as upcoming."
+  },
+  {
+    "event_id": "51310b657a55c4fa",
+    "title": "Veronica Swift",
+    "current_start": "2027-07-11",
+    "proposed_date": "2027-07-11",
+    "concern": "DB dates this 2027-07-11, but musicity.gr, stagenews.gr and more.com all place Veronica Swift at Gazarte Roof Stage on Saturday 11 July 2026 (22:00, from EUR 25), closing Jazz Week On The Roof (5-11 July 2026); 11 July 2026 is a Saturday and 11 July 2027 is a Sunday, confirming the known athinorama year-rollover pattern. No 2027 Athens date is announced anywhere. Description deliberately asserts no calendar date."
+  },
+  {
+    "event_id": "fda717bc384344a4",
+    "title": "Thievery Corporation",
+    "current_start": "2027-07-11",
+    "proposed_date": "2027-07-11",
+    "concern": "Near-certain athinorama year-rollover: DB date 2027-07-11, but the announced Thievery Corporation / The Wailers / BALTHVS bill played Release Athens at Plateia Nerou on Saturday 11 July 2026 (11 July 2027 is a Sunday). The show has already passed; ticket URL deliberately withheld and the description warns the reader about the year."
+  },
+  {
+    "event_id": "354669106e826b9a",
+    "title": "Am&#233;m&#233;",
+    "current_start": "2027-07-12",
+    "proposed_date": "2027-07-12",
+    "concern": "athinorama year-rollover (12th confirmed instance): DB date 2027-07-12 is a Monday, but Amémé's announced Island Athens Riviera date played Sunday 12 July 2026 18:00 (cometogether.live event 4874 + islandclubrestaurant.gr); no 2027 date announced — ticket URL withheld."
+  },
+  {
+    "event_id": "6064b27c42d020ab",
+    "title": "NAΪKA",
+    "current_start": "2027-07-12",
+    "proposed_date": "2027-07-12",
+    "concern": "athinorama year-rollover (same 2027-07-12 date as Amémé in this batch): NAΪKA + Marseaux (ECLESIA Tour, first Athens show) played Τεχνόπολη Sunday 12 July 2026, doors 19:30 (musiccorner.gr, stagenews.gr, more.com presale); DB 2027-07-12 is a Monday — ticket URL withheld."
+  },
+  {
+    "event_id": "a4bab7d3cf31b824",
+    "title": "Αφιέρωμα στον Γιάννη Σπανό",
+    "current_start": "2027-07-12",
+    "proposed_date": "2027-07-12",
+    "concern": "DB date 2027-07-12 is an athinorama year-rollover: press (infowoman, topontiki) and ticketservices.gr confirm the concert was Sunday 12 July 2026 21:00 at Δημοτικό Θέατρο Λυκαβηττού, and a news247 review shows it already took place. Event is past; description written without asserting a date."
+  },
+  {
+    "event_id": "70e4603c1998a36d",
+    "title": "Τραβιάτα",
+    "current_start": "2027-07-23T20:00:00",
+    "proposed_date": "2027-07-23",
+    "concern": "DB date 2027-07-23 is an athinorama year-rollover artifact: the verified run (nationalopera.gr + athinorama schedule) is 18-31 July 2026 at the Stavros Niarchos Hall, SNFCC. No 2027 performance is announced. Description avoids asserting any calendar date; DB date should be corrected to 2026-07-23 (already past) or the row retired when the run closes 31 July 2026."
+  },
+  {
+    "event_id": "858b6c820a1270ab",
+    "title": "Spectrum – Η Ορχήστρα και οι Μουσικοί της",
+    "current_start": "2027-06-11T20:30:00",
+    "proposed_date": null,
+    "concern": "DB time 20:30 contradicts megaron.gr verbatim 'Παρασκευή 11.6.2027 - 21:00'; description states 21:00. DB time field should be corrected to 21:00."
+  }
+]
