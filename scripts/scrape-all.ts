@@ -27,6 +27,7 @@ import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType, normalizeGenres } from '../src/db/database';
 import { join } from 'path';
 import { loadQuarantine, filterQuarantined } from '../src/utils/quarantine';
+import { scrapeCometogether } from './scrape-cometogether';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { scrapeSNFCC, ScrapedExhibition } from './scrape-snfcc';
@@ -1681,6 +1682,7 @@ const SOURCES: Record<SourceId, { name: string; scraper: () => Promise<ScrapedEv
   onassis: { name: 'Onassis Stegi', scraper: scrapeOnassisAdapter },
   benaki: { name: 'Benaki Museum', scraper: scrapeBenakiAdapter },
   megaron: { name: 'Megaron Mousikis', scraper: scrapeMegaronAdapter },
+  cometogether: { name: 'CoMeToGether.live', scraper: scrapeCometogether },
 };
 
 async function main() {

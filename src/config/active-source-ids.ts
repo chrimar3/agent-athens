@@ -23,6 +23,7 @@ export const ACTIVE_SOURCE_IDS = [
   'onassis',
   'benaki',
   'megaron',
+  'cometogether', // 2026-08-11 (Phase 2B): cometogether.live/el — plain-fetch, server-rendered
 ] as const;
 
 export const ACTIVE_SOURCE_COUNT = ACTIVE_SOURCE_IDS.length;
