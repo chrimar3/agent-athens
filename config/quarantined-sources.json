@@ -1,0 +1,8 @@
+{
+  "sources": {
+    "clubber": {
+      "since": "2026-08-11",
+      "reason": "sgcaptcha wall since 2026-07-29 (S222); feed returns HTML challenge instead of iCal. Un-quarantine after verifying the feed serves BEGIN:VCALENDAR again."
+    }
+  }
+}

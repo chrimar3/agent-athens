@@ -23,6 +23,7 @@ import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/watchdog/classifier";
 import { planResponse, executeActions, type ResponderState } from "../src/watchdog/responders";
+import { loadQuarantine, filterQuarantined } from "../src/utils/quarantine";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
 
@@ -197,7 +198,10 @@ export function deadSourcesSignal(): string[] {
       ).get(src);
       if (producedRecently) dead.push(src);
     }
-    return dead;
+    // Phase 2A: already-quarantined sources are handled — the digest lists
+    // them; repeating SOURCE_DEAD every 6h for a known-quarantined source is
+    // alert fatigue (clubber pushed 8+ identical alerts, S222).
+    return filterQuarantined(dead, loadQuarantine(join(ROOT, "config", "quarantined-sources.json")));
   } finally {
     db.close();
   }

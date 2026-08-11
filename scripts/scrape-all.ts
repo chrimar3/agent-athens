@@ -26,6 +26,7 @@ import { Database } from 'bun:sqlite';
 import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType, normalizeGenres } from '../src/db/database';
 import { join } from 'path';
+import { loadQuarantine, filterQuarantined } from '../src/utils/quarantine';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { scrapeSNFCC, ScrapedExhibition } from './scrape-snfcc';
@@ -1658,9 +1659,21 @@ async function main() {
   const doCrossRef = args.includes('--crossref');
 
   const sourceIdx = args.indexOf('--source');
-  const selectedSources = sourceIdx >= 0
+  let selectedSources = sourceIdx >= 0
     ? args[sourceIdx + 1].split(',') as SourceId[]
     : Object.keys(SOURCES) as SourceId[];
+
+  // Phase 2A: quarantined sources are skipped entirely — no scrape, no
+  // scrape_stats row (a fake success row would poison deadSourcesSignal
+  // history). Un-quarantining is a decisions-queue item.
+  const quarantine = loadQuarantine(join(import.meta.dir, '..', 'config', 'quarantined-sources.json'));
+  for (const id of selectedSources) {
+    if (id in quarantine.sources) {
+      const q = quarantine.sources[id];
+      console.log(`⏸  QUARANTINED ${id} (since ${q.since}: ${q.reason}) — skipping`);
+    }
+  }
+  selectedSources = filterQuarantined(selectedSources, quarantine);
 
   if (dryRun) {
     console.log('🔍 DRY RUN MODE - No changes will be saved\n');
