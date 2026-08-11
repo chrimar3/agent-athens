@@ -232,7 +232,7 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
       console.log(`   Scraping ${category.label} (${category.slug})...`);
 
       try {
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
         // Wait for content to load
         await page.waitForSelector('article, .x-box, .item, [class*="event"]', { timeout: 10000 }).catch(() => {
@@ -386,7 +386,7 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
         if (hasNextPage) {
           console.log(`   Checking page 2 for ${category.label}...`);
           try {
-            await page.goto(hasNextPage, { waitUntil: 'networkidle2', timeout: 30000 });
+            await page.goto(hasNextPage, { waitUntil: 'networkidle2', timeout: 60000 });
             // Re-extract from page 2 (same logic)
             const page2Events = await page.evaluate(() => {
               const events: Array<{
@@ -467,7 +467,7 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
     // PHASE 2: Scrape main events page for any events not found in categories
     console.log('   Scraping main events page (/ekdiloseis/)...');
     try {
-      await page.goto('https://www.snfcc.org/ekdiloseis/', { waitUntil: 'networkidle2', timeout: 30000 });
+      await page.goto('https://www.snfcc.org/ekdiloseis/', { waitUntil: 'networkidle2', timeout: 60000 });
       await page.waitForSelector('a[href*="/event/"]', { timeout: 10000 }).catch(() => {});
 
       const mainPageEvents = await page.evaluate(() => {

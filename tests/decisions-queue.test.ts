@@ -62,6 +62,18 @@ describe('renderQueue self-clearing', () => {
     expect(md).toContain('Nothing pending');
   });
 
+  test('validator date proposals render with proposed date and count in total', () => {
+    const md = renderQueue({
+      ...base,
+      dateProposals: [
+        { event_id: 'ev-roll', title: 'Παλιό έργο', current_start: '2027-07-09', proposed_date: '2026-09-02', concern: 'correct to 2026-09-02' },
+      ],
+    });
+    expect(md).toContain('ev-roll');
+    expect(md).toContain('2026-09-02');
+    expect(md).toContain('**Pending: 1**');
+  });
+
   test('operator one-timers render until marked done in the registry', () => {
     const md = renderQueue({
       ...base,
