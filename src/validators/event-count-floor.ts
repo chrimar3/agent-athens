@@ -15,16 +15,16 @@
  *
  * Floors vs observed healthy values:
  * - locationFiltered (2026-07 baseline): healthy 12,879–13,725 → floor 5000.
- *   RECALIBRATED 2026-08-11: those "healthy" values were phantom-inflated —
- *   74% of rows were per-scrape-day duplicates of ~900 athinorama productions
- *   (one production = up to 50 rows). The post-save validator's URL-sibling
- *   collapse brings the TRUE catalog to ~3,400 locationFiltered; floor set to
- *   ~60% of that. Do not raise it back without checking merged_into counts.
+ *   2026-08-11 NOTE: the counted population INCLUDES merged_into rows (getAllEvents
+ *   feeds them to the dedup-301 redirect layer), so the 2026-08-11 phantom
+ *   collapse did NOT shrink this count (13,185 observed post-collapse).
+ *   A briefly-committed 2000 recalibration was based on the wrong population
+ *   model and is reverted — 5000 remains correct for including-merged counts.
  * - upcomingEvents: healthy 224–267, seasonal → floor deliberately low at 50.
  */
 
-/** Collapse detector — true (post-dedup) healthy is ~3.4k; below this the pipeline lost its data. */
-export const LOCATION_FILTERED_FLOOR = 2000;
+/** Collapse detector — healthy is ~13k incl. merged rows; below this the pipeline lost its data. */
+export const LOCATION_FILTERED_FLOOR = 5000;
 
 /** Deliberately low (seasonal count); healthy is ~224–267. */
 export const UPCOMING_EVENTS_FLOOR = 50;

@@ -270,7 +270,7 @@ async function main() {
   // of after emission. Floors are ABSOLUTE (relative checks rejected: healthy
   // runs swing 35%); thresholds pinned in src/validators/event-count-floor.ts.
   {
-    const { validateEventCountFloor } = await import('./validators/event-count-floor');
+    const { validateEventCountFloor, LOCATION_FILTERED_FLOOR, UPCOMING_EVENTS_FLOOR } = await import('./validators/event-count-floor');
     const floorReport = validateEventCountFloor({
       locationFiltered: locationFiltered.length,
       upcomingEvents: upcomingEvents.length,
@@ -283,7 +283,7 @@ async function main() {
       console.error('   Fix: inspect the pipeline/database — sqlite3 data/events.db "SELECT location_status, COUNT(*) FROM events GROUP BY location_status;" — then rebuild.');
       process.exit(1);
     }
-    console.log(`  ✓ event-count floor gate: locationFiltered=${floorReport.counts.locationFiltered} (floor 5000), upcoming=${floorReport.counts.upcomingEvents} (floor 50)`);
+    console.log(`  ✓ event-count floor gate: locationFiltered=${floorReport.counts.locationFiltered} (floor ${LOCATION_FILTERED_FLOOR}), upcoming=${floorReport.counts.upcomingEvents} (floor ${UPCOMING_EVENTS_FLOOR})`);
   }
 
   // Alias for backward compat — listing pages, hubs, etc. use `events`

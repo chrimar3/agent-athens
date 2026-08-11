@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-08-11T05:18:03.603Z"
+    "lastUpdate": "2026-08-11T12:28:05.023Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,20 +13,20 @@
     "byType": [
       {
         "type": "concert",
-        "total": 418,
-        "pass": 416,
+        "total": 417,
+        "pass": 415,
         "warn": 2,
         "fail": 0,
-        "info": 257,
+        "info": 256,
         "passRate": 100
       },
       {
         "type": "dj_set",
-        "total": 216,
-        "pass": 216,
+        "total": 217,
+        "pass": 217,
         "warn": 0,
         "fail": 0,
-        "info": 106,
+        "info": 107,
         "passRate": 100
       },
       {
@@ -49,11 +49,11 @@
       },
       {
         "type": "theater",
-        "total": 467,
-        "pass": 467,
+        "total": 466,
+        "pass": 466,
         "warn": 0,
         "fail": 0,
-        "info": 259,
+        "info": 258,
         "passRate": 100
       },
       {
@@ -112,11 +112,11 @@
       }
     ],
     "totals": {
-      "total": 1582,
-      "pass": 1580,
+      "total": 1581,
+      "pass": 1579,
       "warn": 2,
       "fail": 0,
-      "info": 886,
+      "info": 885,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -131,11 +131,11 @@
     "info": 0
   },
   "venues": {
-    "total": 33,
-    "pass": 33,
+    "total": 32,
+    "pass": 32,
     "warn": 0,
     "fail": 0,
-    "info": 29
+    "info": 28
   },
   "datafeed": {
     "total": 1,
@@ -165,18 +165,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 33,
-      "pass": 33,
+      "total": 32,
+      "pass": 32,
       "warn": 0,
       "fail": 0,
-      "info": 29
+      "info": 28
     },
     "event_template": {
-      "total": 1582,
-      "pass": 1580,
+      "total": 1581,
+      "pass": 1579,
       "warn": 2,
       "fail": 0,
-      "info": 886
+      "info": 885
     },
     "byVenue": [
       {
@@ -281,11 +281,11 @@
       },
       {
         "venue": "cantina social",
-        "total": 24,
-        "pass": 24,
+        "total": 25,
+        "pass": 25,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 11,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -641,11 +641,11 @@
       },
       {
         "venue": "αλικη",
-        "total": 4,
-        "pass": 4,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 4,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1230,16 +1230,6 @@
         "sameAsState": "missing"
       },
       {
-        "venue": "σπιτι art bar",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
         "venue": "σταθμος θεατρο",
         "total": 2,
         "pass": 2,
@@ -1322,9 +1312,9 @@
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.04424778761061947,
+        "coverage": 0.044642857142857144,
         "populated": 5,
-        "total": 113,
+        "total": 112,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
