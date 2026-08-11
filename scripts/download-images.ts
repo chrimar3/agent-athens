@@ -22,6 +22,30 @@ const force = args.includes('--force');
 // Concurrency control
 const CONCURRENCY = 5;
 
+/** Rows worth downloading. Exclusions (2026-08-11, the 0/481 daily-retry loop):
+ *  - /lmnts/events/ URLs are permanently dead (502/404 — fix-athinorama-images.ts:5);
+ *    retrying them every run made the summary read "Downloaded: 0 | Failed: 481".
+ *  - merged_into rows are phantom losers with no live page — no image needed. */
+export function selectImageRows(
+  db: Database,
+  opts: { force?: boolean; sourceFilter?: string | null; limit?: number | null },
+): Array<{ id: string; image_url: string; source: string }> {
+  const conditions = [
+    'image_url IS NOT NULL',
+    "image_url NOT LIKE '%/lmnts/events/%'",
+    'merged_into IS NULL',
+  ];
+  const params: Record<string, string> = {};
+  if (!opts.force) conditions.push('image_local IS NULL');
+  if (opts.sourceFilter) {
+    conditions.push('source = $source');
+    params.$source = opts.sourceFilter;
+  }
+  let query = `SELECT id, image_url, source FROM events WHERE ${conditions.join(' AND ')} ORDER BY start_date DESC`;
+  if (opts.limit) query += ` LIMIT ${opts.limit}`;
+  return db.prepare(query).all(params) as Array<{ id: string; image_url: string; source: string }>;
+}
+
 async function main() {
   const db = new Database(DB_PATH);
   db.exec('PRAGMA journal_mode = WAL;');
@@ -34,32 +58,7 @@ async function main() {
     console.log('✅ Added image_local column to events table');
   }
 
-  // Build query with parameterized source filter
-  const conditions = ['image_url IS NOT NULL'];
-  const params: Record<string, string> = {};
-
-  if (!force) {
-    conditions.push('image_local IS NULL');
-  }
-  if (sourceFilter) {
-    conditions.push('source = $source');
-    params.$source = sourceFilter;
-  }
-
-  let query = `
-    SELECT id, image_url, source FROM events
-    WHERE ${conditions.join(' AND ')}
-    ORDER BY start_date DESC
-  `;
-  if (limit) {
-    query += ` LIMIT ${limit}`;
-  }
-
-  const rows = db.prepare(query).all(params) as Array<{
-    id: string;
-    image_url: string;
-    source: string;
-  }>;
+  const rows = selectImageRows(db, { force, sourceFilter, limit });
 
   console.log(`📸 Found ${rows.length} events to process${sourceFilter ? ` (source: ${sourceFilter})` : ''}${force ? ' (force re-download)' : ''}`);
   if (rows.length === 0) {
@@ -109,7 +108,12 @@ async function main() {
   console.log(`\n📊 Summary: Downloaded: ${downloaded} | Failed: ${failed} | Skipped: ${skipped}`);
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+// import.meta.main guard (2026-08-11): importing this module (tests import
+// selectImageRows) must never trigger downloads — same class as the
+// health-check main-on-import bug the prod-db-guard caught.
+if (import.meta.main) {
+  main().catch(err => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+  });
+}
