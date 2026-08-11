@@ -46,9 +46,13 @@ CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
 # so the spaced Bash(...) patterns survive the single-string --allowedTools
 # pass-through at the claude -p invocation. Pinned by
 # tests/settings-security-pins.test.ts ("auto-enrich allowlist").
-ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
+# Canary iteration 2026-08-11: the first tightening denied `sqlite3 -readonly`
+# (legitimate verification reads the brief itself encourages) and the session
+# fell back to slower paths. Read-only sqlite3 is granted; the db-guard hook
+# (Layer 2) still vets ATTACH/dot-command/mode= escapes under it.
+ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(sqlite3 -readonly *),Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
 MAX_BATCHES=2
-EVENTS_PER_BATCH=4  # 5→4 on 2026-08-11: Aug 5-11 batches hit the 1200s fence with 0 saves; 4 restores the pre-S81 margin (observed 285-854s). Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
+EVENTS_PER_BATCH=3  # 4→3 on 2026-08-11 canary iteration: the ~30 remaining upcoming stubs are the research-heavy tail (easy events enriched Jul 28-Aug 5); canary batches of 4 were still in research at the 1200s kill with zero writes. 3 fits the observed per-hard-event cost. Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
 MIN_QUEUE=3
 # S99 (2026-04-28): tightened BATCH_TIMEOUT from 1800→900 on the
 # theory that server-side stream-watchdog (5min) + wrapper stdout-idle

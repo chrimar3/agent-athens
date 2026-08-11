@@ -18,6 +18,19 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const REPORTS_DIR = join(import.meta.dir, '../data/health-reports');
 
+// 40 min. Was 30s — which fired on every run once builds grew to 342-1883s,
+// making the report unreadable as truth. 2400s catches genuine runaways only.
+export const BUILD_TIME_WARN_MS = 2_400_000;
+
+// One population for every ratio the report prints: visible upcoming events,
+// end_date-aware for exhibitions (Tier-1 rule — a running exhibition is
+// upcoming). Numerator and denominator must both use this, or the report
+// prints nonsense like "2546/421 (604.8%) enriched" (2026-08-10 report).
+const VISIBLE_UPCOMING = `
+  location_status IN ('verified_athens', 'pass_through')
+  AND date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
+`;
+
 interface ScrapeStats {
   source: string;
   scraped_at: string;
@@ -148,41 +161,37 @@ function getNewUnverifiedVenues(): string[] {
   }
 }
 
-function getEnrichmentStats(): { enriched: number; total: number } {
-  const db = getDb();
+export function getEnrichmentStats(dbIn?: Database): { enriched: number; total: number } {
+  const db = dbIn ?? getDb();
   try {
     const enriched = (db.prepare(`
       SELECT COUNT(*) as count FROM events
-      WHERE needs_enrichment = 0
-      AND location_status IN ('verified_athens', 'pass_through')
+      WHERE needs_enrichment = 0 AND ${VISIBLE_UPCOMING}
     `).get() as { count: number }).count;
     const total = (db.prepare(`
       SELECT COUNT(*) as count FROM events
-      WHERE location_status IN ('verified_athens', 'pass_through')
-      AND date(start_date) >= date('now')
+      WHERE ${VISIBLE_UPCOMING}
     `).get() as { count: number }).count;
     return { enriched, total };
   } finally {
-    db.close();
+    if (!dbIn) db.close();
   }
 }
 
-function getSchemaValidationStats(): { valid: number; total: number } {
-  const db = getDb();
+export function getSchemaValidationStats(dbIn?: Database): { valid: number; total: number } {
+  const db = dbIn ?? getDb();
   try {
     const valid = (db.prepare(`
       SELECT COUNT(*) as count FROM events
-      WHERE schema_json IS NOT NULL
-      AND location_status IN ('verified_athens', 'pass_through')
+      WHERE schema_json IS NOT NULL AND ${VISIBLE_UPCOMING}
     `).get() as { count: number }).count;
     const total = (db.prepare(`
       SELECT COUNT(*) as count FROM events
-      WHERE location_status IN ('verified_athens', 'pass_through')
-      AND date(start_date) >= date('now')
+      WHERE ${VISIBLE_UPCOMING}
     `).get() as { count: number }).count;
     return { valid, total };
   } finally {
-    db.close();
+    if (!dbIn) db.close();
   }
 }
 
@@ -318,8 +327,8 @@ function generateDailyReport(): string {
     const schemaStats = getSchemaValidationStats();
     lines.push(`  v ${buildTime}s | ${genStats.pages_generated} pages | Schema valid: ${schemaStats.valid}/${schemaStats.total}`);
 
-    if (genStats.build_duration_ms > 30000) {
-      alerts.push({ level: 'WARNING', message: `Build time ${buildTime}s exceeds 30s threshold` });
+    if (genStats.build_duration_ms > BUILD_TIME_WARN_MS) {
+      alerts.push({ level: 'WARNING', message: `Build time ${buildTime}s exceeds ${BUILD_TIME_WARN_MS / 1000}s threshold` });
     }
   } else {
     lines.push('  No build data recorded');
@@ -512,4 +521,9 @@ async function main() {
   }
 }
 
-main().catch(console.error);
+// import.meta.main guard (2026-08-11): without it, merely importing this
+// module (e.g. from tests) ran the full report against the production DB —
+// caught by the prod-db-guard preload the first time a test imported it.
+if (import.meta.main) {
+  main().catch(console.error);
+}
