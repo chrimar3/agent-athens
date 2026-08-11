@@ -73,3 +73,15 @@ describe('db-guard hook wiring', () => {
     }
   });
 });
+
+describe('auto-enrich allowlist', () => {
+  test('grants no bare Bash (the 2026-07-28 audit gap)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
+    const line = src.split('\n').find((l) => l.startsWith('ALLOWED_TOOLS='));
+    expect(line).toBeDefined();
+    expect(line).not.toMatch(/Bash(?!\()/); // "Bash" allowed only as "Bash(…)"
+    for (const s of ['write-description.ts', 'auto-gate-check.ts', 'write-tags.ts', 'save-batch.ts']) {
+      expect(line).toContain(s);
+    }
+  });
+});

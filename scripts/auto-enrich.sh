@@ -39,9 +39,16 @@ fi
 # Test seam + responder hook (2026-08-11): CLAUDE_BIN_OVERRIDE lets tests
 # inject a stub CLI and lets Phase-2 responder runbooks pin a binary.
 CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
-ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
+# Task 3 of the 2026-07-28 hardening plan, landed 2026-08-11: bare Bash was
+# the primary injected-session risk (canonical attack: sqlite3 DELETE FROM
+# events). Bash is granted ONLY for the four sanctioned enrichment commands;
+# the db-guard PreToolUse hook (Layer 2) backstops even these. COMMA-separated
+# so the spaced Bash(...) patterns survive the single-string --allowedTools
+# pass-through at the claude -p invocation. Pinned by
+# tests/settings-security-pins.test.ts ("auto-enrich allowlist").
+ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
 MAX_BATCHES=2
-EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. Architectural target: 10 events × 6 slots = 60 events/day (2 batches × 5 events × 6 daily triggers). S89 (2026-04-20): overnight slots 01:00 + 22:00 unloaded — laptop lid closed; effective throughput is 40/day until always-on hardware available.
+EVENTS_PER_BATCH=4  # 5→4 on 2026-08-11: Aug 5-11 batches hit the 1200s fence with 0 saves; 4 restores the pre-S81 margin (observed 285-854s). Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
 MIN_QUEUE=3
 # S99 (2026-04-28): tightened BATCH_TIMEOUT from 1800→900 on the
 # theory that server-side stream-watchdog (5min) + wrapper stdout-idle
