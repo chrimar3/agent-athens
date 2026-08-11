@@ -36,6 +36,9 @@ if [[ -z "$CLAUDE_BIN" ]]; then
         [[ -x "$candidate" ]] && CLAUDE_BIN="$candidate" && break
     done
 fi
+# Test seam + responder hook (2026-08-11): CLAUDE_BIN_OVERRIDE lets tests
+# inject a stub CLI and lets Phase-2 responder runbooks pin a binary.
+CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
 ALLOWED_TOOLS="Bash Read Write WebSearch Glob Grep WebFetch"
 MAX_BATCHES=2
 EVENTS_PER_BATCH=5  # Raised from 4 on 2026-04-09 (S81 — parallel batches + 4 daily runs). Observed 4-event variance 285-854s → 5-event projection ~1070s worst, safe under BATCH_TIMEOUT=1800. Architectural target: 10 events × 6 slots = 60 events/day (2 batches × 5 events × 6 daily triggers). S89 (2026-04-20): overnight slots 01:00 + 22:00 unloaded — laptop lid closed; effective throughput is 40/day until always-on hardware available.
@@ -77,6 +80,53 @@ log() {
 log_error() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1" | tee -a "$LOG_FILE" >&2
 }
+
+# ============================================================================
+# Auth pre-check (S89; extracted 2026-08-11)
+# ----------------------------------------------------------------------------
+# Fail fast on 401 instead of burning 30 min of BATCH_TIMEOUT per batch when
+# the CLI session is expired.
+# ============================================================================
+run_auth_precheck() {
+    log "Running auth pre-check..."
+    AUTH_PRECHECK_LOG="$LOG_DIR/auth-precheck-last.log"
+    {
+      echo "=== auth pre-check $(date '+%Y-%m-%d %H:%M:%S') ==="
+      echo "env: USER=${USER:-<unset>} HOME=${HOME:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>} TERM=${TERM:-<unset>}"
+      echo "bin=$CLAUDE_BIN version=$("$CLAUDE_BIN" --version 2>/dev/null || echo '?')"
+    } > "$AUTH_PRECHECK_LOG"
+    # Aug 6-10 2026: a bare AUTH_OUTPUT="$( … )" aborted the whole script here
+    # under `set -e` when the CLI exited non-zero — BEFORE any of the logging
+    # below could run. Five days of logs ended at "Running auth pre-check..."
+    # with zero evidence. The `|| AUTH_RC=$?` guard is what keeps the failure
+    # path reachable. Do not "simplify" it away.
+    local AUTH_RC=0 AUTH_OUTPUT=""
+    AUTH_OUTPUT="$(echo "ok" | "$CLAUDE_BIN" -p --output-format json 2>&1)" || AUTH_RC=$?
+    { echo "exit=$AUTH_RC"; echo "$AUTH_OUTPUT"; } >> "$AUTH_PRECHECK_LOG"
+    if [ "$AUTH_RC" -ne 0 ]; then
+      local AUTH_REASON
+      AUTH_REASON="$(echo "$AUTH_OUTPUT" | grep -oE '"result":"[^"]*"' | head -1 | sed 's/^"result":"//; s/"$//')"
+      [ -z "$AUTH_REASON" ] && AUTH_REASON="(unparsed reason; see $AUTH_PRECHECK_LOG)"
+      # USER is present under launchd but absent under an `env -i` reproduction — the
+      # disambiguator that keeps a test-harness "Not logged in" from reading as a real outage.
+      if echo "$AUTH_OUTPUT" | grep -qi "Not logged in"; then
+        log_error "Claude CLI auth check failed — NOT LOGGED IN (re-auth: run 'claude' interactively once + /login). reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>}] — full: $AUTH_PRECHECK_LOG"
+      else
+        log_error "Claude CLI auth check failed — reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>}] — full: $AUTH_PRECHECK_LOG"
+      fi
+      return 1
+    fi
+    log "Auth pre-check passed"
+    return 0
+}
+
+# --auth-check-only: run ONLY the auth pre-check and exit with its status.
+# Used by tests and by Phase-2 responder runbooks. Placed before lock/orphan
+# handling: this mode must never contend with or disturb a live enrichment run.
+if [[ "${1:-}" == "--auth-check-only" ]]; then
+    run_auth_precheck
+    exit $?
+fi
 
 # ============================================================================
 # Kill orphaned claude CLI processes from previous auto-enrich runs
@@ -319,38 +369,10 @@ kill "$WATCHDOG_PID" 2>/dev/null || true
 wait "$WATCHDOG_PID" 2>/dev/null || true
 log "Warm-up complete"
 
-# 8b. Pre-flight auth check (S89) — fail fast on 401 instead of burning
-#     30 min of BATCH_TIMEOUT per batch when the CLI session is expired.
-log "Running auth pre-check..."
-# Persist the pre-check result instead of discarding it. A discarded stderr
-# (>/dev/null 2>&1) hid a 10-day version-regression auth outage (CLI 2.1.177→2.1.191,
-# Jun 14–25, 2026): the literal "Not logged in" was never logged, so the drought was
-# undiagnosable on sight. The captured log also records an env fingerprint so a
-# genuine launchd-context failure is distinguishable from a stripped-env
-# reproduction (env -i drops the login context → a FALSE "Not logged in"; see
-# S101/S109). Control flow is unchanged: fail iff the command exits non-zero.
-AUTH_PRECHECK_LOG="$LOG_DIR/auth-precheck-last.log"
-{
-  echo "=== auth pre-check $(date '+%Y-%m-%d %H:%M:%S') ==="
-  echo "env: USER=${USER:-<unset>} HOME=${HOME:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>} TERM=${TERM:-<unset>}"
-  echo "bin=$CLAUDE_BIN version=$("$CLAUDE_BIN" --version 2>/dev/null || echo '?')"
-} > "$AUTH_PRECHECK_LOG"
-AUTH_OUTPUT="$(echo "ok" | "$CLAUDE_BIN" -p --output-format json 2>&1)"
-AUTH_RC=$?
-{ echo "exit=$AUTH_RC"; echo "$AUTH_OUTPUT"; } >> "$AUTH_PRECHECK_LOG"
-if [ "$AUTH_RC" -ne 0 ]; then
-  AUTH_REASON="$(echo "$AUTH_OUTPUT" | grep -oE '"result":"[^"]*"' | head -1 | sed 's/^"result":"//; s/"$//')"
-  [ -z "$AUTH_REASON" ] && AUTH_REASON="(unparsed reason; see $AUTH_PRECHECK_LOG)"
-  # USER is present under launchd but absent under an `env -i` reproduction — the
-  # disambiguator that keeps a test-harness "Not logged in" from reading as a real outage.
-  if echo "$AUTH_OUTPUT" | grep -qi "Not logged in"; then
-    log_error "Claude CLI auth check failed — NOT LOGGED IN (re-auth: run 'claude' interactively once + /login). reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>} CLAUDECODE=${CLAUDECODE:-<unset>}] — full: $AUTH_PRECHECK_LOG"
-  else
-    log_error "Claude CLI auth check failed — reason=\"$AUTH_REASON\" rc=$AUTH_RC env[USER=${USER:-<unset>}] — full: $AUTH_PRECHECK_LOG"
-  fi
-  exit 1
-fi
-log "Auth pre-check passed"
+# 8b. Pre-flight auth check (S89) — see run_auth_precheck() definition above.
+# The persist-don't-discard rationale (10-day CLI-regression outage, Jun 14-25)
+# and the env-fingerprint disambiguator live with the function.
+run_auth_precheck || exit 1
 
 # 9. Run claude -p on all batches in parallel (S80)
 #    Each batch's save-batch.ts invocation (inside its own claude -p) opens its
