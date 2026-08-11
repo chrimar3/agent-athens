@@ -469,6 +469,8 @@ run_generate() {
     if [[ "$DRY_RUN" != "true" ]]; then
         bun run scripts/venue-address-autofix.ts >> "$LOG_FILE" 2>&1 \
             || log_error "venue-address-autofix advisory failed (non-fatal, continuing...)"
+        bun run scripts/decisions-queue.ts >> "$LOG_FILE" 2>&1 \
+            || log_error "decisions-queue generation failed (non-fatal, continuing...)"
     fi
 
     log "Generating static site..."
