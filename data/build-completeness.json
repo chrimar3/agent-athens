@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-08-11T01:36:23.542Z"
+    "lastUpdate": "2026-08-11T05:18:03.603Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,29 +13,29 @@
     "byType": [
       {
         "type": "concert",
-        "total": 417,
-        "pass": 415,
+        "total": 418,
+        "pass": 416,
         "warn": 2,
         "fail": 0,
-        "info": 256,
+        "info": 257,
         "passRate": 100
       },
       {
         "type": "dj_set",
-        "total": 214,
-        "pass": 214,
+        "total": 216,
+        "pass": 216,
         "warn": 0,
         "fail": 0,
-        "info": 104,
+        "info": 106,
         "passRate": 100
       },
       {
         "type": "exhibition",
-        "total": 131,
-        "pass": 131,
+        "total": 135,
+        "pass": 135,
         "warn": 0,
         "fail": 0,
-        "info": 126,
+        "info": 130,
         "passRate": 100
       },
       {
@@ -49,11 +49,11 @@
       },
       {
         "type": "theater",
-        "total": 463,
-        "pass": 463,
+        "total": 467,
+        "pass": 467,
         "warn": 0,
         "fail": 0,
-        "info": 255,
+        "info": 259,
         "passRate": 100
       },
       {
@@ -67,20 +67,20 @@
       },
       {
         "type": "performance",
-        "total": 85,
-        "pass": 85,
+        "total": 84,
+        "pass": 84,
         "warn": 0,
         "fail": 0,
-        "info": 8,
+        "info": 7,
         "passRate": 100
       },
       {
         "type": "show",
-        "total": 36,
-        "pass": 36,
+        "total": 37,
+        "pass": 37,
         "warn": 0,
         "fail": 0,
-        "info": 34,
+        "info": 35,
         "passRate": 100
       },
       {
@@ -103,20 +103,20 @@
       },
       {
         "type": "other",
-        "total": 53,
-        "pass": 53,
+        "total": 56,
+        "pass": 56,
         "warn": 0,
         "fail": 0,
-        "info": 34,
+        "info": 37,
         "passRate": 100
       }
     ],
     "totals": {
-      "total": 1568,
-      "pass": 1566,
+      "total": 1582,
+      "pass": 1580,
       "warn": 2,
       "fail": 0,
-      "info": 872,
+      "info": 886,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -124,18 +124,18 @@
     ]
   },
   "hubs": {
-    "total": 29,
-    "pass": 6,
+    "total": 31,
+    "pass": 8,
     "warn": 23,
     "fail": 0,
     "info": 0
   },
   "venues": {
-    "total": 32,
-    "pass": 32,
+    "total": 33,
+    "pass": 33,
     "warn": 0,
     "fail": 0,
-    "info": 28
+    "info": 29
   },
   "datafeed": {
     "total": 1,
@@ -165,18 +165,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 32,
-      "pass": 32,
+      "total": 33,
+      "pass": 33,
       "warn": 0,
       "fail": 0,
-      "info": 28
+      "info": 29
     },
     "event_template": {
-      "total": 1568,
-      "pass": 1566,
+      "total": 1582,
+      "pass": 1580,
       "warn": 2,
       "fail": 0,
-      "info": 872
+      "info": 886
     },
     "byVenue": [
       {
@@ -196,6 +196,16 @@
         "warn": 0,
         "fail": 0,
         "info": 8,
+        "passRate": 100,
+        "sameAsState": "missing"
+      },
+      {
+        "venue": "arroyo theater",
+        "total": 1,
+        "pass": 1,
+        "warn": 0,
+        "fail": 0,
+        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -241,11 +251,11 @@
       },
       {
         "venue": "bolivar",
-        "total": 69,
-        "pass": 69,
+        "total": 70,
+        "pass": 70,
         "warn": 0,
         "fail": 0,
-        "info": 31,
+        "info": 32,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -271,11 +281,11 @@
       },
       {
         "venue": "cantina social",
-        "total": 23,
-        "pass": 23,
+        "total": 24,
+        "pass": 24,
         "warn": 0,
         "fail": 0,
-        "info": 9,
+        "info": 10,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -371,11 +381,11 @@
       },
       {
         "venue": "floyd",
-        "total": 14,
-        "pass": 14,
+        "total": 15,
+        "pass": 15,
         "warn": 0,
         "fail": 0,
-        "info": 8,
+        "info": 9,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -631,11 +641,11 @@
       },
       {
         "venue": "αλικη",
-        "total": 3,
-        "pass": 3,
+        "total": 4,
+        "pass": 4,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -671,11 +681,11 @@
       },
       {
         "venue": "απο κοινου",
-        "total": 45,
-        "pass": 45,
+        "total": 47,
+        "pass": 47,
         "warn": 0,
         "fail": 0,
-        "info": 45,
+        "info": 47,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -711,11 +721,11 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 98,
-        "pass": 98,
+        "total": 101,
+        "pass": 101,
         "warn": 0,
         "fail": 0,
-        "info": 54,
+        "info": 57,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -731,21 +741,21 @@
       },
       {
         "venue": "δημοτικο κηποθεατρο παπαγου",
-        "total": 19,
-        "pass": 19,
+        "total": 20,
+        "pass": 20,
         "warn": 0,
         "fail": 0,
-        "info": 8,
+        "info": 9,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "διανα",
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1031,11 +1041,11 @@
       },
       {
         "venue": "κπισν",
-        "total": 406,
-        "pass": 406,
+        "total": 408,
+        "pass": 408,
         "warn": 0,
         "fail": 0,
-        "info": 202,
+        "info": 204,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1312,9 +1322,9 @@
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.044642857142857144,
+        "coverage": 0.04424778761061947,
         "populated": 5,
-        "total": 112,
+        "total": 113,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
