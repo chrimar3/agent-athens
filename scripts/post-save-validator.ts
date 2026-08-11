@@ -140,15 +140,21 @@ if (import.meta.main) {
   }
   const merged = collapseGroups(db, groups, dryRun);
 
-  // Rollover-expiry proposals (never auto-applied).
-  const year = new Date().getFullYear();
+  // Rollover-expiry proposals (never auto-applied). Cutoff computed in TS
+  // (Europe/Athens) and bound — no raw date('now') predicate in SQL, per the
+  // effective-end seam guard. This is a rollover-artifact window, not a
+  // lifecycle currency check, so isCurrentSql() is deliberately not used.
+  const { DateTime } = await import('luxon');
+  const nowAthens = DateTime.now().setZone('Europe/Athens');
+  const year = nowAthens.year;
+  const cutoff = nowAthens.plus({ months: 10 }).toISODate()!;
   const farOut = db
     .query(
       `SELECT e.id, e.title, e.start_date, c.concern_text FROM events e
        JOIN event_concerns c ON c.event_id = e.id AND c.concern_type = 'date-conflict-or-unparseable'
-       WHERE e.merged_into IS NULL AND e.start_date > date('now', '+10 months')`,
+       WHERE e.merged_into IS NULL AND e.start_date > $cutoff`,
     )
-    .all() as Array<{ id: string; title: string; start_date: string; concern_text: string | null }>;
+    .all({ $cutoff: cutoff }) as Array<{ id: string; title: string; start_date: string; concern_text: string | null }>;
   const proposals = farOut.map((r) => ({
     event_id: r.id,
     title: r.title,
