@@ -94,7 +94,7 @@ type SourceId = typeof ACTIVE_SOURCE_IDS[number];
 // UTILITY FUNCTIONS
 // ============================================================================
 
-function generateEventId(title: string, date: string, venue: string): string {
+export function generateEventId(title: string, date: string, venue: string): string {
   const normalized = `${title.toLowerCase().trim()}|${date}|${venue.toLowerCase().trim()}`;
   return createHash('md5').update(normalized).digest('hex').substring(0, 16);
 }
@@ -471,6 +471,22 @@ function extractTimeFromAthinoramaPage(html: string): string | null {
   return null;
 }
 
+/** Production identity from the athinorama URL slug (2026-08-11).
+ *
+ *  The legacy id hashes (title, date, venue) — and ongoing runs stamp
+ *  startDate = "today" (see startIsRangeArtifact), so ONE production minted a
+ *  NEW row every scrape-day (Βάκχες 18 rows, Υπηρέτης 50 — the phantom-row
+ *  class flagged in 8+ consecutive sessions). The numeric slug id
+ *  (…/bakxes-10091044/) is stable per production; keying on it makes
+ *  re-scrapes hit ON CONFLICT(id) DO UPDATE instead of inserting.
+ *  Returns null when the URL carries no slug id (caller falls back). */
+export function generateAthinoramaId(url: string): string | null {
+  const path = url.replace(/^https?:\/\/[^/]+/, '').replace(/\/+$/, '');
+  const m = path.match(/-(\d{5,})$/);
+  if (!m) return null;
+  return createHash('md5').update(`athinorama:${m[1]}`).digest('hex').substring(0, 16);
+}
+
 export interface TheaterDateRange {
   startDate: string | null;
   endDate: string | null;
@@ -644,7 +660,9 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
         const effectiveType = (guide.type === 'theater' && isMixedVenue) ? 'other' : guide.type;
 
         events.push({
-          id: generateEventId(title, startDate!, venue),
+          // URL-slug identity kills the phantom-row mint; legacy fallback for
+          // slug-less URLs keeps the guide pages that lack numeric ids.
+          id: generateAthinoramaId(eventUrl) ?? generateEventId(title, startDate!, venue),
           title,
           // S-F2a: run end-date is structured data (end_date below), never
           // description prose. Empty description → NULL at the saveEvents bind (G5).
