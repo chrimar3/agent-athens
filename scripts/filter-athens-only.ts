@@ -76,6 +76,10 @@ for (const event of events) {
   const eventLocation: EventLocation = {
     title: event.title,
     description: event.description || undefined,
+    // S224: source feeds the nationwide-source multi-venue guard — dropping
+    // it here silently disabled the guard on the live path (unit tests
+    // passed, production didn't demote).
+    source: event.source,
     venue_name: event.venue_name,
     venue_address: event.venue_address || undefined,
     venue_neighborhood: event.venue_neighborhood || undefined,

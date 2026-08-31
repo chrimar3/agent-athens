@@ -468,3 +468,24 @@ describe('findVenueConfig — S172 backfilled addresses (streetAddress cascade f
     });
   }
 });
+
+describe('nationwide-source multi-venue guard (S224: the reworks-2026 leak)', () => {
+  // "Πολλαπλοί Χώροι → pass_through (show)" predates any nationwide source.
+  // cometogether serves all Greece: its multi-venue events (Reworks 2026 —
+  // Thessaloniki's festival) were waved onto the site by the pass-through
+  // rule. Multi-venue from a nationwide source needs human review instead.
+  test('cometogether multi-venue → problematic, never pass_through', () => {
+    const r = checkLocation({ title: 'reworks 2026', venue_name: 'Πολλαπλοί χώροι', source: 'cometogether' });
+    expect(r.status).toBe('problematic');
+  });
+
+  test('Athens-scoped sources keep the standing pass_through behavior', () => {
+    const r = checkLocation({ title: 'The Gathering live', venue_name: 'Πολλαπλοί Χώροι', source: 'more.com' });
+    expect(r.status).toBe('pass_through');
+  });
+
+  test('sourceless events (legacy rows) keep pass_through (no behavior change)', () => {
+    const r = checkLocation({ title: 'x', venue_name: 'Πολλαπλοί Χώροι' });
+    expect(r.status).toBe('pass_through');
+  });
+});

@@ -23,8 +23,9 @@ const OUT_PATH = join(ROOT, 'docs', 'DECISIONS-QUEUE.md');
 // Operator one-timers: flip done:true when completed (this file is the
 // registry — a one-liner edit, reviewed like any code change).
 const OPERATOR_ONE_TIMERS: OperatorItem[] = [
-  { id: 'pmset-wake', summary: 'Run the two `sudo pmset` commands (docs/LAUNCHD-SETUP.md §Machine wake schedule)', done: false },
+  { id: 'pmset-wake', summary: 'Run the two `sudo pmset` commands (docs/LAUNCHD-SETUP.md §Machine wake schedule) — the Aug 13-27 machine-asleep gap was the root of the 18-day outage', done: false },
   { id: 'github-app', summary: 'Install the Claude GitHub App so the cloud watcher can read the repo and file issues (PHASE3.md §5 cloud-track step 1)', done: false },
+  { id: 'circus-venue-city', summary: 'Verify "Circus Entertainment Hub" (whitelist says Gazi; S224 found it during the Eightball/Block 33 Thessaloniki sweep — confirm it is genuinely Athens or remove it)', done: false },
 ];
 
 export interface OperatorItem {

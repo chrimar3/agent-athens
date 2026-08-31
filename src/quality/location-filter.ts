@@ -35,6 +35,8 @@ export interface LocationResult {
 export interface EventLocation {
   title?: string;
   description?: string;
+  /** Scraper source id/name — used by the nationwide-source multi-venue guard. */
+  source?: string;
   venue_name?: string;
   venue_address?: string;
   venue_neighborhood?: string;
@@ -302,11 +304,25 @@ export function checkLocation(event: EventLocation): LocationResult {
 
   // -------------------------------------------------------------------------
   // Step 0: Pass-through venues (e.g., "Πολλαπλοί Χώροι")
+  //
+  // S224 nationwide-source guard: pass-through-and-SHOW predates any source
+  // that covers all of Greece. cometogether's multi-venue events include
+  // Thessaloniki festivals (Reworks 2026) — for nationwide sources the
+  // multi-venue placeholder goes to problematic (human review), never
+  // straight to the site.
   // -------------------------------------------------------------------------
+  const NATIONWIDE_SOURCES = ['cometogether'];
   if (venueName && athensConfig?.pass_through_venues) {
     for (const passThrough of athensConfig.pass_through_venues) {
       if (normalizedVenue.includes(normalize(passThrough)) ||
           normalize(passThrough).includes(normalizedVenue)) {
+        if (event.source && NATIONWIDE_SOURCES.includes(event.source)) {
+          return {
+            status: 'problematic',
+            rejection_reason: `multi-venue placeholder from nationwide source ${event.source} — needs city review`,
+            original_venue: venueName,
+          };
+        }
         return {
           status: 'pass_through',
           matched_venue: passThrough,

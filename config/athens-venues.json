@@ -271,15 +271,6 @@
       "address": "Solomou 13-15, Athens 106 83"
     },
     {
-      "canonical_name": "Eightball Club",
-      "variations": [
-        "Eightball",
-        "8ball Club",
-        "8ball"
-      ],
-      "neighborhood": "Petralona"
-    },
-    {
       "canonical_name": "El Chapo",
       "variations": [
         "EL CHAPO"
@@ -1149,11 +1140,6 @@
       "variations": [],
       "neighborhood": "Unknown",
       "address": "Petrou Ralli 38, Egaleo 122 41"
-    },
-    {
-      "canonical_name": "Block 33",
-      "variations": [],
-      "neighborhood": "Unknown"
     },
     {
       "canonical_name": "Baumstrasse",
