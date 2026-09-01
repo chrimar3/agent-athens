@@ -7,8 +7,8 @@ description: Pre-scrape checklist — run before any scraping session
 Before running any scraper, complete these checks:
 
 ## 1. Read Required Context
-- [ ] Read `.claude/notes/mistakes.md` (especially Scraping and Pipeline Issues sections)
-- [ ] Read `.claude/notes/patterns.md` (Scraper Pattern, Time Extraction Pattern)
+- [ ] Read `.claude/notes/ledger.md` § Mistakes (especially Scraping and Pipeline Issues sections)
+- [ ] Read `.claude/notes/ledger.md` § Patterns (Scraper Pattern, Time Extraction Pattern)
 
 ## 2. Run Session Diagnostic
 ```bash

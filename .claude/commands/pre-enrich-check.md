@@ -7,8 +7,8 @@ description: Pre-enrichment checklist — run before any enrichment session
 Before running enrichment, complete these checks:
 
 ## 1. Read Required Context
-- [ ] Read `.claude/notes/mistakes.md` (especially Enrichment and Time Enrichment sections)
-- [ ] Read `.claude/notes/patterns.md` (AI Enrichment Pattern, Time Extraction Pattern)
+- [ ] Read `.claude/notes/ledger.md` § Mistakes (especially Enrichment and Time Enrichment sections)
+- [ ] Read `.claude/notes/ledger.md` § Patterns (AI Enrichment Pattern, Time Extraction Pattern)
 - [ ] Read `docs/MASTER-ENRICHMENT-TEMPLATE.md` for description standards
 - [ ] Read `config/venue-intelligence.md` for venue context
 

@@ -227,8 +227,8 @@ project/
 Reference from main CLAUDE.md with pointers, not inline content:
 ```markdown
 ## Extended Documentation
-- See `.claude/notes/decisions.md` for architecture decisions
-- See `.claude/notes/patterns.md` for established patterns
+- See `.claude/notes/ledger.md` § Decisions for architecture decisions
+- See `.claude/notes/ledger.md` § Patterns for established patterns
 ```
 
 ### CLAUDE.md Evolution

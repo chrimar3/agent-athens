@@ -7,8 +7,8 @@ description: Pre-venue-change checklist — run before modifying venue config
 Before modifying `config/athens-venues.json` or `config/rejected-locations.json`:
 
 ## 1. Read Required Context
-- [ ] Read `.claude/notes/mistakes.md` (especially Venue Matching section)
-- [ ] Read `.claude/notes/patterns.md` (Venue Variation Pattern, Venue Review Workflow)
+- [ ] Read `.claude/notes/ledger.md` § Mistakes (especially Venue Matching section)
+- [ ] Read `.claude/notes/ledger.md` § Patterns (Venue Variation Pattern, Venue Review Workflow)
 
 ## 2. Current State
 ```bash
@@ -49,4 +49,4 @@ When adding a venue, include ALL these variations:
 ## 6. After Changes
 - [ ] Run `./scripts/session-diagnostic.sh` to confirm visible count changed
 - [ ] If new neighborhoods were assigned, verify they match the taxonomy
-- [ ] Update `.claude/notes/decisions.md` if significant batch was processed
+- [ ] Update `.claude/notes/ledger.md` § Decisions if significant batch was processed

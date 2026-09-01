@@ -312,9 +312,9 @@ Test files cover the daily pipeline integration, enrichment brief generation, sc
 | Document | Purpose |
 |---|---|
 | `.claude/CLAUDE.md` | Tier 1 rules, commands, data model (start here) |
-| `.claude/notes/mistakes.md` | Bug ledger — read before any change |
-| `.claude/notes/patterns.md` | Code patterns and conventions |
-| `.claude/notes/decisions.md` | Architecture decisions |
+| `.claude/notes/ledger.md` § Mistakes | Bug ledger — read before any change |
+| `.claude/notes/ledger.md` § Patterns | Code patterns and conventions |
+| `.claude/notes/ledger.md` § Decisions | Architecture decisions |
 | `docs/SYSTEM-REFERENCE.md` | Full architecture + DB schema |
 | `docs/SCRAPING-PIPELINE.md` | Scraping internals |
 | `docs/MASTER-ENRICHMENT-TEMPLATE.md` | Description writing standard (v2.5) |
