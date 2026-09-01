@@ -18,6 +18,7 @@ import {
   checkLocation,
   categorizeEvents,
   getFilterStats,
+  filterWindowClause,
   type LocationResult,
   type EventLocation,
 } from '../src/quality/location-filter';
@@ -49,13 +50,16 @@ interface DBEvent {
   location_status: string | null;
 }
 
+const daysBackArg = process.argv.find((a) => a.startsWith('--days-back='));
+const windowSpec = filterWindowClause(daysBackArg ? parseInt(daysBackArg.split('=')[1]) : undefined);
+
 const events = db.prepare(`
   SELECT
     id, title, description, venue_name, venue_address,
     venue_neighborhood, start_date, source, location_status
   FROM events
-  WHERE COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')
-`).all() as DBEvent[];
+  WHERE ${windowSpec.sql}
+`).all(windowSpec.params) as DBEvent[];
 
 console.log(`   Loaded ${events.length} upcoming events\n`);
 

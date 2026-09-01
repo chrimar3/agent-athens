@@ -93,6 +93,23 @@ interface RejectedLocationsConfig {
 }
 
 // ============================================================================
+// Filter window (S224)
+// ============================================================================
+
+/** SQL window for re-classification sweeps. The generator pages events up to
+ *  45 days past (generate-site.ts:719 pageableEvents), so any filter sweep
+ *  must cover AT LEAST that window — a future-only sweep left a
+ *  de-whitelisted venue's past-dated page publishable-with-no-address, and
+ *  the F2b gate blocked every build (S224 Eightball). End_date-aware for
+ *  exhibitions (Tier-1). */
+export function filterWindowClause(daysBack = 45): { sql: string; params: { $windowStart: string } } {
+  return {
+    sql: `COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now', $windowStart)`,
+    params: { $windowStart: `-${daysBack} days` },
+  };
+}
+
+// ============================================================================
 // Config Loading
 // ============================================================================
 
