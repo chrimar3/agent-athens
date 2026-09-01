@@ -118,6 +118,16 @@ function englishEventPath(slug: string): string {
   return join(DIST, "en", "events", slug, "index.html");
 }
 
+// EN hubs are DATA-GATED: generate-site.ts emits dist/en/<hub>/index.html only
+// when the hub has >= 3 events and sweeps the dir otherwise (a 23:00 build
+// legitimately has no /en/today/). Absence is therefore a data fact, not a
+// parity failure — those EN tests skip VISIBLY (counted as skipped, never as
+// passed). Root hubs are always emitted and stay unconditional.
+function englishHubPresent(hub: string): boolean {
+  return existsSync(englishHubPath(hub));
+}
+const PRESENT_EN_HUBS = distAvailable ? ALL_HUBS.filter(englishHubPresent) : [];
+
 describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-aware self posture (S144 GEO 2026-05-21)", () => {
   // S144 supersedes the 2026-05-14 canonical-to-root decision. /en/ pages now
   // self-canonical to /en/<slug>; bare-root pages self-canonical to bare-root.
@@ -142,7 +152,7 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
       expect(jsonLdUrl).toBe(rootUrl);
     });
 
-    test(`English hub /en/${hub}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
+    test.skipIf(!englishHubPresent(hub))(`English hub /en/${hub}/ — canonical = og:url = JSON-LD url = /en/ URL (self per S144)`, () => {
       const html = readFileSync(englishHubPath(hub), "utf8");
       const canonical = extractCanonical(html);
       const ogUrl = extractOgUrl(html);
@@ -154,6 +164,13 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
       expect(jsonLdUrl).toBe(enUrl);
     });
   }
+
+  // Precondition: with dist present, at least one EN hub MUST be rendered —
+  // else every EN hub test above skips and the /en/ half of the parity
+  // invariant pins nothing (same vacuity class as the event-pair guard below).
+  test("precondition: at least one English hub is present in dist/en/", () => {
+    expect(PRESENT_EN_HUBS.length).toBeGreaterThan(0);
+  });
 
   // Precondition: with dist present, a root/en event pair MUST be derivable —
   // else the six event tests below skip silently and pin nothing (the vacuous
@@ -196,7 +213,7 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
       expect(extractOgLocaleAlternate(html)).toBeUndefined();
     });
 
-    test(`English hub /en/${hub}/ — no og:locale:alternate emitted`, () => {
+    test.skipIf(!englishHubPresent(hub))(`English hub /en/${hub}/ — no og:locale:alternate emitted`, () => {
       const html = readFileSync(englishHubPath(hub), "utf8");
       expect(extractOgLocaleAlternate(html)).toBeUndefined();
     });
@@ -219,7 +236,7 @@ describe.skipIf(!distAvailable)("og:url / canonical / JSON-LD parity — locale-
       expect(extractOgLocale(html)).toBe("el_GR");
     });
 
-    test(`English hub /en/${hub}/ — og:locale = en_US`, () => {
+    test.skipIf(!englishHubPresent(hub))(`English hub /en/${hub}/ — og:locale = en_US`, () => {
       const html = readFileSync(englishHubPath(hub), "utf8");
       expect(extractOgLocale(html)).toBe("en_US");
     });

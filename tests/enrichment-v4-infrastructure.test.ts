@@ -306,11 +306,13 @@ describe('Entity Knowledge table', () => {
       VALUES (?, ?, ?, ?, ?)
     `).run('artist', 'Old Artist', 'old artist', '2025-06-01', 'manual');
 
-    // Insert with recent last_verified
+    // Insert with recent last_verified. Relative to now, not a literal: the
+    // original '2026-02-01' aged past the 6-month window on 2026-08-01 and
+    // flipped this assertion with no code change.
     db.prepare(`
       INSERT INTO entity_knowledge (entity_type, name, canonical_name, last_verified, source)
-      VALUES (?, ?, ?, ?, ?)
-    `).run('artist', 'Recent Artist', 'recent artist', '2026-02-01', 'manual');
+      VALUES (?, ?, ?, date('now', '-1 month'), ?)
+    `).run('artist', 'Recent Artist', 'recent artist', 'manual');
 
     const stale = db.prepare(`
       SELECT * FROM entity_knowledge
