@@ -1,0 +1,43 @@
+# Required PR check `path-guard` (agent-layer Phase 4). Branch protection on
+# main requires this job by NAME — renaming the job silently drops the gate.
+#
+# Reads the protected globs from the BASE branch's .github/path-guard.json
+# (never the PR's copy — a PR editing the list must not be judged by its own
+# edit) and the changed files from the PR API; no checkout of PR code needed.
+# Any match → red check + a comment naming each path + label `needs-input`.
+# Known limit of `pull_request` triggers: the workflow definition itself runs
+# from the PR's merge ref; `.github/**` being protected flags such an edit.
+name: path-guard
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  path-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse PRs that touch protected paths
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          GLOBS=(); while IFS= read -r g; do GLOBS+=("$g"); done < <(gh api "repos/$REPO/contents/.github/path-guard.json?ref=$BASE" --jq .content | base64 -d | jq -r '.protected[]')
+          FILES=(); while IFS= read -r f; do FILES+=("$f"); done < <(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename')
+          [ ${#GLOBS[@]} -gt 0 ] || { echo "path-guard: REFUSED — could not read protected globs from $BASE:.github/path-guard.json (failing closed)"; exit 1; }
+          HITS=()
+          for f in "${FILES[@]}"; do
+            for g in "${GLOBS[@]}"; do [[ "$f" == $g ]] && { HITS+=("\`$f\` (protected by \`$g\`)"); break; }; done
+          done
+          if [ ${#HITS[@]} -eq 0 ]; then echo "path-guard: PASS — ${#FILES[@]} changed file(s), none protected"; exit 0; fi
+          printf 'path-guard: REFUSED — %d protected path(s) touched:\n' "${#HITS[@]}"; printf '  %s\n' "${HITS[@]}"
+          BODY=$(printf '**path-guard: this PR touches protected paths.** Propose changes to them via an issue instead of a PR.\n\n%s\nProtected globs: `.github/path-guard.json` on `%s`. Labeled `needs-input`.' "$(printf -- '- %s\n' "${HITS[@]}")" "$BASE")
+          gh pr comment "$PR" --repo "$REPO" --body "$BODY"
+          gh pr edit "$PR" --repo "$REPO" --add-label needs-input
+          exit 1

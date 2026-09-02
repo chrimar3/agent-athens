@@ -1,0 +1,19 @@
+{
+  "_comment": "Protected paths for the agent layer (Phase 4). A PR touching any of these fails the required `path-guard` check, gets a comment naming the path, and is labeled needs-input. Agents propose changes to these via issue, never make them. Bash pattern syntax as used by `[[ $file == $glob ]]` — `*` and `**` both span `/`. Deliberately NOT protected (the Sunday retro PR edits them): .claude/notes/**, .claude/analyst-playbook.md, exemplars/**. No root CLAUDE.md exists today; the project file is .claude/CLAUDE.md — both are listed so a future root file is covered too. No enrichment prompt-template directory exists; the docs that function as enrichment prompt templates are listed individually.",
+  "protected": [
+    "config/**",
+    "data/**",
+    "docs/MASTER-ENRICHMENT-TEMPLATE.md",
+    "docs/INTENT.md",
+    ".env*",
+    ".github/**",
+    "CLAUDE.md",
+    ".claude/CLAUDE.md",
+    ".claude/worker.md",
+    ".claude/analyst-triage.md",
+    ".claude/analyst-deep.md",
+    "docs/greek-enrichment-addendum.md",
+    "docs/enrichment-anti-patterns.md",
+    "docs/fact-check-prompt.md"
+  ]
+}
