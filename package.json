@@ -16,6 +16,7 @@
     "test:integration": "bun test tests/integration",
     "test:templates": "bun test tests/templates",
     "test:all": "bun test tests/",
+    "typecheck": "tsc --noEmit",
     "test:watch": "bun test --watch tests/",
     "test:coverage": "bun test --coverage tests/",
     "fetch-emails": "bun run src/ingest/email-ingestion.ts",
