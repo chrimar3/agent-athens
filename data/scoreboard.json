@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-03T04:51:33.345Z",
-  "total_events": 5223,
-  "upcoming_events": 1116,
+  "generated_at": "2026-09-03T07:04:14.871Z",
+  "total_events": 5246,
+  "upcoming_events": 1141,
   "per_source": {
-    "athinorama.gr": 1869,
+    "athinorama.gr": 1870,
     "benaki": 5,
     "clubber.gr": 197,
-    "cometogether": 179,
+    "cometogether": 188,
     "devoxx.gr": 1,
     "eventbrite": 4,
     "greeksin.ai": 1,
@@ -15,20 +15,20 @@
     "manual": 2,
     "meetup": 12,
     "megaron.gr": 183,
-    "more.com": 1146,
-    "onassis": 19,
-    "residentadvisor": 918,
-    "snfcc": 278,
+    "more.com": 1152,
+    "onassis": 20,
+    "residentadvisor": 922,
+    "snfcc": 280,
     "ticketservices": 343
   },
   "health_report": {
-    "report_date": "2026-09-02",
-    "report_file": "2026-09-02.txt",
+    "report_date": "2026-09-03",
+    "report_file": "2026-09-03.txt",
     "scraping": {
       "athinorama": {
         "status": "ok",
-        "events": 177,
-        "delta": 4
+        "events": 169,
+        "delta": -8
       },
       "benaki": {
         "status": "ok",
@@ -37,8 +37,8 @@
       },
       "cometogether": {
         "status": "ok",
-        "events": 154,
-        "delta": 3
+        "events": 172,
+        "delta": 18
       },
       "halfnote": {
         "status": "ok",
@@ -52,48 +52,53 @@
       },
       "more": {
         "status": "ok",
-        "events": 37,
-        "delta": -2
+        "events": 39,
+        "delta": 2
       },
       "onassis": {
         "status": "ok",
-        "events": 2,
-        "delta": 0
+        "events": 3,
+        "delta": 1
       },
       "ra": {
         "status": "ok",
-        "events": 86,
+        "events": 88,
         "delta": 2
       },
       "snfcc": {
         "status": "ok",
-        "events": 19,
+        "events": 20,
         "delta": 1
       },
       "ticketservices": {
         "status": "ok",
-        "events": 113,
-        "delta": -5
+        "events": 112,
+        "delta": -1
       }
     },
     "database": {
-      "total": 19108,
+      "total": 19133,
       "visible": 573,
-      "hidden": 18535,
-      "new_unverified_venues": 10
+      "hidden": 18560,
+      "new_unverified_venues": 18
     },
     "build": {
-      "duration_s": 28.7,
-      "pages": 2498,
+      "duration_s": 875.7,
+      "pages": 2496,
       "schema_valid": 574,
       "schema_total": 574
     },
     "enrichment": {
-      "enriched": 397,
+      "enriched": 390,
       "total": 574,
-      "pct": 69.2
+      "pct": 67.9
     },
-    "alerts": []
+    "alerts": [
+      {
+        "level": "WARNING",
+        "message": "18 new unverified venues - run venue review"
+      }
+    ]
   },
   "citations": null,
   "crawlers": null
