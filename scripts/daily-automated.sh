@@ -531,6 +531,28 @@ run_health_check() {
     fi
 }
 
+# Phase 4c: Scoreboard (Phase 8 v0). Reads the report run_health_check just
+# wrote plus events.db (read-only) and writes data/scoreboard.json. Runs BEFORE
+# run_deploy because that phase owns the commit+push — a step after it would
+# only reach main the next day. The file rides run_deploy's PIPELINE_ALLOWLIST.
+run_scoreboard() {
+    log_phase "SCOREBOARD"
+    log "Assembling data/scoreboard.json from health report + events.db..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/assemble-scoreboard.ts"
+        return 0
+    fi
+
+    if bun run scripts/assemble-scoreboard.ts >> "$LOG_FILE" 2>&1; then
+        log "Scoreboard written to: $PROJECT_DIR/data/scoreboard.json"
+        return 0
+    else
+        log_error "Scoreboard assembly failed (non-fatal, continuing...)"
+        return 0  # Non-fatal
+    fi
+}
+
 # Phase 5: Deploy
 run_deploy() {
     log_phase "DEPLOYMENT"
@@ -560,10 +582,11 @@ run_deploy() {
     # See specs/daily-pipeline-staging-audit.md (2026-05-04) — `git add -A`
     # caused recurring WIP contamination (e.g. adbaef38e, 72ce32c73, 5d49315a1).
     # Most other pipeline outputs (events.db, health-reports/, *.csv, *.db-wal)
-    # are gitignored — only these two artefacts survive to a commit.
+    # are gitignored — only these three artefacts survive to a commit.
     local PIPELINE_ALLOWLIST=(
         "data/event-set-hashes.json"
         "data/build-completeness.json"
+        "data/scoreboard.json"
     )
 
     log "Checking for pipeline-output changes..."
@@ -942,6 +965,7 @@ main() {
     if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
         if run_generate; then
             run_health_check
+            run_scoreboard
             if run_deploy; then
                 deploy_ok=1
                 run_image_cleanup

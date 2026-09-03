@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-09-03T04:51:33.345Z",
+  "total_events": 5223,
+  "upcoming_events": 1116,
+  "per_source": {
+    "athinorama.gr": 1869,
+    "benaki": 5,
+    "clubber.gr": 197,
+    "cometogether": 179,
+    "devoxx.gr": 1,
+    "eventbrite": 4,
+    "greeksin.ai": 1,
+    "hackathongreece.ai": 1,
+    "halfnote": 65,
+    "manual": 2,
+    "meetup": 12,
+    "megaron.gr": 183,
+    "more.com": 1146,
+    "onassis": 19,
+    "residentadvisor": 918,
+    "snfcc": 278,
+    "ticketservices": 343
+  },
+  "health_report": {
+    "report_date": "2026-09-02",
+    "report_file": "2026-09-02.txt",
+    "scraping": {
+      "athinorama": {
+        "status": "ok",
+        "events": 177,
+        "delta": 4
+      },
+      "benaki": {
+        "status": "ok",
+        "events": 4,
+        "delta": 0
+      },
+      "cometogether": {
+        "status": "ok",
+        "events": 154,
+        "delta": 3
+      },
+      "halfnote": {
+        "status": "ok",
+        "events": 1,
+        "delta": 0
+      },
+      "megaron": {
+        "status": "ok",
+        "events": 104,
+        "delta": 0
+      },
+      "more": {
+        "status": "ok",
+        "events": 37,
+        "delta": -2
+      },
+      "onassis": {
+        "status": "ok",
+        "events": 2,
+        "delta": 0
+      },
+      "ra": {
+        "status": "ok",
+        "events": 86,
+        "delta": 2
+      },
+      "snfcc": {
+        "status": "ok",
+        "events": 19,
+        "delta": 1
+      },
+      "ticketservices": {
+        "status": "ok",
+        "events": 113,
+        "delta": -5
+      }
+    },
+    "database": {
+      "total": 19108,
+      "visible": 573,
+      "hidden": 18535,
+      "new_unverified_venues": 10
+    },
+    "build": {
+      "duration_s": 28.7,
+      "pages": 2498,
+      "schema_valid": 574,
+      "schema_total": 574
+    },
+    "enrichment": {
+      "enriched": 397,
+      "total": 574,
+      "pct": 69.2
+    },
+    "alerts": []
+  },
+  "citations": null,
+  "crawlers": null
+}
