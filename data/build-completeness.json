@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-09-03T07:04:14.253Z"
+    "lastUpdate": "2026-09-04T07:39:04.148Z"
   },
   "layers": {
     "event_level": "measured",
@@ -22,8 +22,8 @@
       },
       {
         "type": "dj_set",
-        "total": 219,
-        "pass": 219,
+        "total": 223,
+        "pass": 223,
         "warn": 0,
         "fail": 0,
         "info": 153,
@@ -35,7 +35,7 @@
         "pass": 149,
         "warn": 0,
         "fail": 0,
-        "info": 117,
+        "info": 113,
         "passRate": 100
       },
       {
@@ -53,7 +53,7 @@
         "pass": 327,
         "warn": 0,
         "fail": 0,
-        "info": 188,
+        "info": 189,
         "passRate": 100
       },
       {
@@ -85,11 +85,11 @@
       },
       {
         "type": "workshop",
-        "total": 27,
-        "pass": 27,
+        "total": 28,
+        "pass": 28,
         "warn": 0,
         "fail": 0,
-        "info": 25,
+        "info": 26,
         "passRate": 100
       },
       {
@@ -103,11 +103,11 @@
       }
     ],
     "totals": {
-      "total": 1241,
-      "pass": 1239,
+      "total": 1246,
+      "pass": 1244,
       "warn": 2,
       "fail": 0,
-      "info": 940,
+      "info": 938,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -122,11 +122,11 @@
     "info": 0
   },
   "venues": {
-    "total": 41,
-    "pass": 41,
+    "total": 42,
+    "pass": 42,
     "warn": 0,
     "fail": 0,
-    "info": 37
+    "info": 38
   },
   "datafeed": {
     "total": 1,
@@ -156,18 +156,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 41,
-      "pass": 41,
+      "total": 42,
+      "pass": 42,
       "warn": 0,
       "fail": 0,
-      "info": 37
+      "info": 38
     },
     "event_template": {
-      "total": 1241,
-      "pass": 1239,
+      "total": 1246,
+      "pass": 1244,
       "warn": 2,
       "fail": 0,
-      "info": 940
+      "info": 938
     },
     "byVenue": [
       {
@@ -232,11 +232,11 @@
       },
       {
         "venue": "aux club",
-        "total": 10,
-        "pass": 10,
+        "total": 11,
+        "pass": 11,
         "warn": 0,
         "fail": 0,
-        "info": 10,
+        "info": 11,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -246,7 +246,7 @@
         "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 7,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -266,7 +266,7 @@
         "pass": 44,
         "warn": 0,
         "fail": 0,
-        "info": 17,
+        "info": 14,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -352,11 +352,11 @@
       },
       {
         "venue": "death disco",
-        "total": 4,
-        "pass": 4,
+        "total": 5,
+        "pass": 5,
         "warn": 0,
         "fail": 0,
-        "info": 4,
+        "info": 5,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -462,8 +462,8 @@
       },
       {
         "venue": "island athens riviera",
-        "total": 16,
-        "pass": 16,
+        "total": 17,
+        "pass": 17,
         "warn": 0,
         "fail": 0,
         "info": 14,
@@ -552,11 +552,11 @@
       },
       {
         "venue": "skull bar",
-        "total": 8,
-        "pass": 8,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 4,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -652,11 +652,11 @@
       },
       {
         "venue": "αλικη",
-        "total": 6,
-        "pass": 6,
+        "total": 7,
+        "pass": 7,
         "warn": 0,
         "fail": 0,
-        "info": 6,
+        "info": 7,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -672,8 +672,8 @@
       },
       {
         "venue": "αλσος",
-        "total": 38,
-        "pass": 38,
+        "total": 36,
+        "pass": 36,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -742,18 +742,18 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 70,
-        "pass": 70,
+        "total": 69,
+        "pass": 69,
         "warn": 0,
         "fail": 0,
-        "info": 62,
+        "info": 60,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "δημοτικο θεατρο πειραια",
-        "total": 11,
-        "pass": 11,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -832,11 +832,11 @@
       },
       {
         "venue": "θεατρο αβατον",
-        "total": 9,
-        "pass": 9,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
-        "info": 4,
+        "info": 5,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1022,11 +1022,11 @@
       },
       {
         "venue": "κιβωτος",
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1036,7 +1036,7 @@
         "pass": 251,
         "warn": 0,
         "fail": 0,
-        "info": 189,
+        "info": 185,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1072,11 +1072,11 @@
       },
       {
         "venue": "μεγαρο μουσικης αθηνων",
-        "total": 114,
-        "pass": 114,
+        "total": 115,
+        "pass": 115,
         "warn": 0,
         "fail": 0,
-        "info": 112,
+        "info": 113,
         "passRate": 100,
         "sameAsState": "present"
       },
