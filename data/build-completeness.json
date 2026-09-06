@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-09-05T08:26:53.899Z"
+    "lastUpdate": "2026-09-06T09:34:46.488Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,29 +13,29 @@
     "byType": [
       {
         "type": "concert",
-        "total": 336,
-        "pass": 334,
+        "total": 335,
+        "pass": 333,
         "warn": 2,
         "fail": 0,
-        "info": 307,
+        "info": 306,
         "passRate": 99
       },
       {
         "type": "dj_set",
-        "total": 226,
-        "pass": 226,
+        "total": 227,
+        "pass": 227,
         "warn": 0,
         "fail": 0,
-        "info": 153,
+        "info": 148,
         "passRate": 100
       },
       {
         "type": "exhibition",
-        "total": 149,
-        "pass": 149,
+        "total": 147,
+        "pass": 147,
         "warn": 0,
         "fail": 0,
-        "info": 109,
+        "info": 103,
         "passRate": 100
       },
       {
@@ -44,16 +44,16 @@
         "pass": 27,
         "warn": 0,
         "fail": 0,
-        "info": 11,
+        "info": 9,
         "passRate": 100
       },
       {
         "type": "theater",
-        "total": 331,
-        "pass": 331,
+        "total": 330,
+        "pass": 330,
         "warn": 0,
         "fail": 0,
-        "info": 197,
+        "info": 196,
         "passRate": 100
       },
       {
@@ -67,11 +67,11 @@
       },
       {
         "type": "performance",
-        "total": 13,
-        "pass": 13,
+        "total": 15,
+        "pass": 15,
         "warn": 0,
         "fail": 0,
-        "info": 11,
+        "info": 13,
         "passRate": 100
       },
       {
@@ -94,11 +94,11 @@
       },
       {
         "type": "other",
-        "total": 65,
-        "pass": 65,
+        "total": 66,
+        "pass": 66,
         "warn": 0,
         "fail": 0,
-        "info": 65,
+        "info": 66,
         "passRate": 100
       }
     ],
@@ -107,7 +107,7 @@
       "pass": 1247,
       "warn": 2,
       "fail": 0,
-      "info": 939,
+      "info": 927,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -115,18 +115,18 @@
     ]
   },
   "hubs": {
-    "total": 31,
-    "pass": 10,
-    "warn": 21,
+    "total": 30,
+    "pass": 8,
+    "warn": 22,
     "fail": 0,
     "info": 0
   },
   "venues": {
-    "total": 44,
-    "pass": 44,
+    "total": 43,
+    "pass": 43,
     "warn": 0,
     "fail": 0,
-    "info": 40
+    "info": 39
   },
   "datafeed": {
     "total": 1,
@@ -156,18 +156,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 44,
-      "pass": 44,
+      "total": 43,
+      "pass": 43,
       "warn": 0,
       "fail": 0,
-      "info": 40
+      "info": 39
     },
     "event_template": {
       "total": 1249,
       "pass": 1247,
       "warn": 2,
       "fail": 0,
-      "info": 939
+      "info": 927
     },
     "byVenue": [
       {
@@ -176,7 +176,7 @@
         "pass": 11,
         "warn": 0,
         "fail": 0,
-        "info": 7,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -246,17 +246,7 @@
         "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 5,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
-        "venue": "baumstrasse",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -276,7 +266,7 @@
         "pass": 44,
         "warn": 0,
         "fail": 0,
-        "info": 11,
+        "info": 9,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -331,6 +321,16 @@
         "sameAsState": "missing"
       },
       {
+        "venue": "concert #1 baumstrasse",
+        "total": 1,
+        "pass": 1,
+        "warn": 0,
+        "fail": 0,
+        "info": 1,
+        "passRate": 100,
+        "sameAsState": "missing"
+      },
+      {
         "venue": "coronet theater",
         "total": 2,
         "pass": 2,
@@ -362,21 +362,21 @@
       },
       {
         "venue": "death disco",
-        "total": 5,
-        "pass": 5,
+        "total": 6,
+        "pass": 6,
         "warn": 0,
         "fail": 0,
-        "info": 5,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "don't be a dick",
-        "total": 6,
-        "pass": 6,
+        "total": 7,
+        "pass": 7,
         "warn": 0,
         "fail": 0,
-        "info": 2,
+        "info": 3,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -437,6 +437,16 @@
         "warn": 0,
         "fail": 0,
         "info": 10,
+        "passRate": 100,
+        "sameAsState": "missing"
+      },
+      {
+        "venue": "gustav",
+        "total": 1,
+        "pass": 1,
+        "warn": 0,
+        "fail": 0,
+        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -586,7 +596,7 @@
         "pass": 9,
         "warn": 0,
         "fail": 0,
-        "info": 5,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -596,7 +606,7 @@
         "pass": 29,
         "warn": 0,
         "fail": 0,
-        "info": 21,
+        "info": 19,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -616,7 +626,7 @@
         "pass": 28,
         "warn": 0,
         "fail": 0,
-        "info": 28,
+        "info": 27,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -772,18 +782,18 @@
       },
       {
         "venue": "δημοτικο θεατρο λυκαβηττου",
-        "total": 71,
-        "pass": 71,
+        "total": 72,
+        "pass": 72,
         "warn": 0,
         "fail": 0,
-        "info": 62,
+        "info": 63,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "δημοτικο θεατρο πειραια",
-        "total": 10,
-        "pass": 10,
+        "total": 8,
+        "pass": 8,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -1062,11 +1072,11 @@
       },
       {
         "venue": "κπισν",
-        "total": 249,
-        "pass": 249,
+        "total": 247,
+        "pass": 247,
         "warn": 0,
         "fail": 0,
-        "info": 179,
+        "info": 171,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1323,9 +1333,9 @@
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.043859649122807015,
+        "coverage": 0.043478260869565216,
         "populated": 5,
-        "total": 114,
+        "total": 115,
         "threshold": 0.5,
         "currentSeverity": "info"
       }

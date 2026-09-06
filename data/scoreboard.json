@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-05T08:26:54.236Z",
-  "total_events": 5274,
-  "upcoming_events": 1127,
+  "generated_at": "2026-09-06T09:34:46.840Z",
+  "total_events": 5278,
+  "upcoming_events": 1102,
   "per_source": {
     "athinorama.gr": 1879,
     "benaki": 5,
     "clubber.gr": 197,
-    "cometogether": 188,
+    "cometogether": 191,
     "devoxx.gr": 1,
     "eventbrite": 4,
     "greeksin.ai": 1,
@@ -19,16 +19,16 @@
     "onassis": 20,
     "residentadvisor": 930,
     "snfcc": 281,
-    "ticketservices": 344
+    "ticketservices": 345
   },
   "health_report": {
-    "report_date": "2026-09-05",
-    "report_file": "2026-09-05.txt",
+    "report_date": "2026-09-06",
+    "report_file": "2026-09-06.txt",
     "scraping": {
       "athinorama": {
         "status": "ok",
-        "events": 177,
-        "delta": 5
+        "events": 174,
+        "delta": -3
       },
       "benaki": {
         "status": "ok",
@@ -37,23 +37,23 @@
       },
       "cometogether": {
         "status": "ok",
-        "events": 163,
-        "delta": -9
+        "events": 159,
+        "delta": -4
       },
       "halfnote": {
         "status": "ok",
         "events": 1,
-        "delta": 1
+        "delta": 0
       },
       "megaron": {
         "status": "ok",
-        "events": 108,
-        "delta": 0
+        "events": 107,
+        "delta": -1
       },
       "more": {
         "status": "ok",
-        "events": 36,
-        "delta": -2
+        "events": 19,
+        "delta": -17
       },
       "onassis": {
         "status": "ok",
@@ -62,36 +62,36 @@
       },
       "ra": {
         "status": "ok",
-        "events": 85,
-        "delta": -6
+        "events": 75,
+        "delta": -10
       },
       "snfcc": {
         "status": "ok",
-        "events": 20,
-        "delta": 1
+        "events": 19,
+        "delta": -1
       },
       "ticketservices": {
         "status": "ok",
-        "events": 110,
+        "events": 109,
         "delta": -1
       }
     },
     "database": {
-      "total": 19173,
-      "visible": 575,
-      "hidden": 18598,
-      "new_unverified_venues": 10
+      "total": 19177,
+      "visible": 564,
+      "hidden": 18613,
+      "new_unverified_venues": 3
     },
     "build": {
-      "duration_s": 20.9,
-      "pages": 2506,
-      "schema_valid": 576,
-      "schema_total": 576
+      "duration_s": 23.6,
+      "pages": 2503,
+      "schema_valid": 564,
+      "schema_total": 564
     },
     "enrichment": {
-      "enriched": 381,
-      "total": 576,
-      "pct": 66.1
+      "enriched": 375,
+      "total": 564,
+      "pct": 66.5
     },
     "alerts": []
   },
