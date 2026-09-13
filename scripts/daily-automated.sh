@@ -674,20 +674,29 @@ run_deploy() {
         log "[deploy-env] netlify=$(netlify --version 2>/dev/null | head -1) node=$(node -v 2>/dev/null || echo '?') PATH=$PATH"
 
         # stdout -> tmpfile for jq; stderr -> $LOG_FILE for diagnostics.
-        # Wall-clock watchdog (pattern from auto-enrich.sh): a hanging CLI ate
-        # ~44 min silently on 2026-08-10; date +%s advances through sleep.
+        # deploy-watchdog:begin (pinned by tests/daily-pipeline-sleep-safety.test.ts)
+        # AWAKE-time watchdog, deliberately NOT the S89 wall-clock pattern.
+        # The kernel pauses `sleep` during system sleep, so counting ticks
+        # measures time the machine was actually awake. The wall-clock form
+        # (an epoch deadline) was killing a merely SUSPENDED upload at wake — 2026-09-13
+        # pmset log: Deep Idle 18:06→22:12 with ~5 s maintenance wakes; the
+        # "hang" kills on 09-03/04/05/13 all land on such wakes and left
+        # Netlify deploys orphaned in state=uploading. A CLI hung while the
+        # machine is awake still dies after DEPLOY_TIMEOUT seconds of awake time.
         netlify deploy --prod --no-build --dir=dist \
             --message "Daily deploy $(date +%Y-%m-%d)" --json \
             >"$deploy_tmp" 2>>"$LOG_FILE" &
         local NETLIFY_PID=$!
-        ( WATCHDOG_END=$(( $(date +%s) + ${DEPLOY_TIMEOUT:-900} ))
-          while [ "$(date +%s)" -lt "$WATCHDOG_END" ]; do
+        ( AWAKE_TICKS=0
+          while [ "$(( AWAKE_TICKS * 15 ))" -lt "${DEPLOY_TIMEOUT:-900}" ]; do
             kill -0 "$NETLIFY_PID" 2>/dev/null || exit 0
             sleep 15
+            AWAKE_TICKS=$(( AWAKE_TICKS + 1 ))
           done
-          echo "[$(date '+%Y-%m-%d %H:%M:%S')] [deploy] watchdog killed CLI after ${DEPLOY_TIMEOUT:-900}s" >> "$LOG_FILE"
+          echo "[$(date '+%Y-%m-%d %H:%M:%S')] [deploy] watchdog killed CLI after ${DEPLOY_TIMEOUT:-900}s of awake time" >> "$LOG_FILE"
           kill "$NETLIFY_PID" 2>/dev/null
         ) &
+        # deploy-watchdog:end
         local DEPLOY_WATCHDOG_PID=$!
         local cli_exit=0
         wait "$NETLIFY_PID" || cli_exit=$?
@@ -876,6 +885,20 @@ main() {
             *)                 echo "Unknown arg: $arg"; echo "Usage: $0 [full|freshness|enrichment] [--dry-run]"; exit 1 ;;
         esac
     done
+
+    # caffeinate:begin (pinned by tests/daily-pipeline-sleep-safety.test.ts)
+    # Deploying runs take 2-4 h; on battery this laptop idle-sleeps after 1 min,
+    # which suspends the run mid-upload (see deploy-watchdog note). Re-exec once
+    # under `caffeinate -i` so the run holds a PreventUserIdleSystemSleep
+    # assertion for its whole life. Known limit (ledger, 2026-04-08): -i does
+    # NOT survive a closed lid on battery, and -s only works on AC. Enrichment
+    # mode is excluded — 6 runs/day holding the assertion would drain a battery
+    # for no deploy benefit.
+    if [[ "$PIPELINE_MODE" != "enrichment" && -z "${AA_CAFFEINATED:-}" ]] && command -v caffeinate >/dev/null 2>&1; then
+        export AA_CAFFEINATED=1
+        exec caffeinate -i "$0" "$@"
+    fi
+    # caffeinate:end
 
     case "$PIPELINE_MODE" in
         full|freshness|enrichment) ;;
