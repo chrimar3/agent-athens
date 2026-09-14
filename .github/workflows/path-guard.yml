@@ -5,12 +5,13 @@
 # (never the PR's copy — a PR editing the list must not be judged by its own
 # edit) and the changed files from the PR API; no checkout of PR code needed.
 # Any match → red check + a comment naming each path + label `needs-input`.
-# Known limit of `pull_request` triggers: the workflow definition itself runs
-# from the PR's merge ref; `.github/**` being protected flags such an edit.
+# Trigger is `pull_request_target`, so the workflow DEFINITION runs from the
+# base branch: a PR cannot neuter the guard by editing this file. That is only
+# safe because the job never checks out PR code (API calls only) — keep it so.
 name: path-guard
 
 on:
-  pull_request:
+  pull_request_target:
 
 permissions:
   contents: read
