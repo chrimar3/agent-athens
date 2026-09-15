@@ -590,7 +590,15 @@ run_deploy() {
     )
 
     log "Checking for pipeline-output changes..."
-    git add -- "${PIPELINE_ALLOWLIST[@]}"
+    # staging:begin (block extracted VERBATIM by tests/daily-pipeline-staging.test.ts — keep both markers)
+    # One call for the whole list is fatal on any pathspec that matches no
+    # file (exit 128) and stages NOTHING, so a single absent artefact silently
+    # dropped all three from that day's commit (issue #5). Stage per path so
+    # the others still land, and log each failure instead of swallowing it.
+    for f in "${PIPELINE_ALLOWLIST[@]}"; do
+        git add -- "$f" >> "$LOG_FILE" 2>&1 || log_error "[staging] git add failed for $f (continuing)"
+    done
+    # staging:end
 
     # Defense-in-depth guard: if anything outside the allow-list ended up in
     # the index (e.g. developer had work pre-staged when pipeline fired), abort
