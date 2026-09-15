@@ -86,7 +86,7 @@ bash scripts/install-hooks.sh
 ./scripts/daily-automated.sh
 
 # Scrapers
-bun run scripts/scrape-all.ts [--dry-run] [--source=name]
+bun run scripts/scrape-all.ts [--dry-run] [--source name]
 
 # Venue management
 bun run scripts/review-venues.ts --list

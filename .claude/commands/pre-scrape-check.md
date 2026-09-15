@@ -24,7 +24,7 @@ Note which sources are stale (check "Last Scrape Per Source" section).
 ## 4. Decide Scope
 - Full scrape: `bun run scripts/scrape-all.ts`
 - Dry run first: `bun run scripts/scrape-all.ts --dry-run`
-- Single source: `bun run scripts/scrape-all.ts --source=<name>`
+- Single source: `bun run scripts/scrape-all.ts --source <name>`
 
 ## 5. Known Source Issues
 | Source | Issue | Workaround |
