@@ -23,7 +23,39 @@ import {
   type EventLocation,
 } from '../src/quality/location-filter';
 
-const db = new Database('data/events.db');
+import { existsSync } from 'fs';
+
+const DB_PATH = 'data/events.db';
+
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`filter-athens-only: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
+// Straight-line top-level script (no main()): an unexpected throw anywhere
+// below would otherwise surface as a stack trace, so it is routed here.
+process.on('uncaughtException', (err: Error) => {
+  fail(err.message, 'rerun with --dry-run to reproduce without writing; if the DB is corrupt, restore from ~/agent-athens-backups');
+});
+
+// Argument validation runs BEFORE the DB is touched.
+const unknownArgs = process.argv.slice(2).filter((a) => a !== '--dry-run' && !a.startsWith('--days-back='));
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run and/or --days-back=<days>');
+}
+const daysBackArg = process.argv.find((a) => a.startsWith('--days-back='));
+const daysBack = daysBackArg ? parseInt(daysBackArg.split('=')[1]) : undefined;
+if (daysBackArg && (!Number.isInteger(daysBack) || (daysBack as number) < 0)) {
+  fail(`invalid ${daysBackArg} (expected a non-negative integer)`, '--days-back=45');
+}
+
+// bun:sqlite would CREATE an empty events.db here instead of failing (the
+// 2026-06-30 empty-DB incident class), so existence is checked first.
+if (!existsSync(DB_PATH)) {
+  fail(`database not found at ${DB_PATH} (cwd: ${process.cwd()})`, 'run from the repo root, where data/events.db lives');
+}
+const db = new Database(DB_PATH);
 const DRY_RUN = process.argv.includes('--dry-run');
 
 if (DRY_RUN) {
@@ -50,8 +82,7 @@ interface DBEvent {
   location_status: string | null;
 }
 
-const daysBackArg = process.argv.find((a) => a.startsWith('--days-back='));
-const windowSpec = filterWindowClause(daysBackArg ? parseInt(daysBackArg.split('=')[1]) : undefined);
+const windowSpec = filterWindowClause(daysBack);
 
 const events = db.prepare(`
   SELECT

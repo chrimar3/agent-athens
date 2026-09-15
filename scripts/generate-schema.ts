@@ -15,6 +15,7 @@
  */
 
 import Database from 'bun:sqlite';
+import { existsSync } from 'fs';
 import { generateSchemaOrg, validateQualityGates, type SchemaOrgEvent } from '../src/enrichment/quality-gates';
 import { determineEnrichmentTier, type EventForEnrichment } from '../src/enrichment/description-generator';
 
@@ -23,6 +24,12 @@ import { determineEnrichmentTier, type EventForEnrichment } from '../src/enrichm
 // ============================================================================
 
 const DB_PATH = 'data/events.db';
+
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`generate-schema: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
 
 // Athens venue coordinates (for Schema.org geo)
 const VENUE_COORDS: Record<string, { lat: number; lng: number }> = {
@@ -58,6 +65,11 @@ const NEIGHBORHOOD_COORDS: Record<string, { lat: number; lng: number }> = {
 // ============================================================================
 
 function openDatabase(): Database {
+  // bun:sqlite would CREATE an empty events.db here instead of failing (the
+  // 2026-06-30 empty-DB incident class), so existence is checked first.
+  if (!existsSync(DB_PATH)) {
+    fail(`database not found at ${DB_PATH} (cwd: ${process.cwd()})`, 'run from the repo root, where data/events.db lives');
+  }
   const db = new Database(DB_PATH);
   db.exec('PRAGMA journal_mode = WAL;');
   return db;
@@ -330,4 +342,6 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(console.error);
+main().catch((err: unknown) => {
+  fail(err instanceof Error ? err.message : String(err), 'rerun with --stats to check the DB is readable; the message above names the failing step');
+});

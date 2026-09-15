@@ -12,8 +12,19 @@
 
 import { fetchEmails } from '../src/ingest/email-ingestion';
 
-// Parse CLI arguments
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`ingest-emails: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
+// Parse CLI arguments — validated BEFORE connecting: a typo such as --dry_run
+// would otherwise fetch, mark and archive real Gmail messages.
 const args = process.argv.slice(2);
+const unknownArgs = args.filter((a) => a !== '--dry-run');
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run (the only flag) or no arguments');
+}
 const dryRun = args.includes('--dry-run');
 
 console.log('📧 Agent Athens - Email Ingestion\n');
@@ -39,7 +50,6 @@ fetchEmails()
     console.log('   3. Or ask Claude Code to parse the emails\n');
     process.exit(0);
   })
-  .catch((error) => {
-    console.error('\n❌ Email ingestion failed:', error.message);
-    process.exit(1);
+  .catch((error: unknown) => {
+    fail(`email ingestion failed: ${error instanceof Error ? error.message : String(error)}`, 'check Gmail credentials and network, then rerun; --dry-run shows the plan without connecting');
   });

@@ -20,6 +20,7 @@
  */
 
 import Database from 'bun:sqlite';
+import { existsSync } from 'fs';
 import { filterEntityTags, loadDefaultExclusionSet } from '../src/utils/tag-filter';
 import {
   syncQueueFromEvents,
@@ -52,11 +53,22 @@ import {
 
 const DB_PATH = 'data/events.db';
 
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`run-enrichment-pipeline: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
 // ============================================================================
 // Database
 // ============================================================================
 
 function openDatabase(): Database {
+  // bun:sqlite would CREATE an empty events.db here instead of failing (the
+  // 2026-06-30 empty-DB incident class), so existence is checked first.
+  if (!existsSync(DB_PATH)) {
+    fail(`database not found at ${DB_PATH} (cwd: ${process.cwd()})`, 'run from the repo root, where data/events.db lives');
+  }
   const db = new Database(DB_PATH);
   db.exec('PRAGMA journal_mode = WAL;');
   return db;
@@ -411,6 +423,9 @@ async function main(): Promise<void> {
 
   const countArg = args.find(a => a.startsWith('--count='));
   const count = countArg ? parseInt(countArg.split('=')[1]) : 5;
+  if (!Number.isInteger(count) || count <= 0) {
+    fail(`invalid ${countArg} (expected a positive integer)`, '--count=5');
+  }
 
   const tierArg = args.find(a => a.startsWith('--tier='));
   const tierFilter = tierArg
@@ -419,6 +434,13 @@ async function main(): Promise<void> {
 
   const idArg = args.find(a => a.startsWith('--id='));
   const eventId = idArg ? idArg.split('=')[1] : null;
+
+  if (tierArg && !['stub', 'standard', 'premium'].includes(tierFilter as string)) {
+    fail(`invalid ${tierArg}`, '--tier=stub, --tier=standard or --tier=premium');
+  }
+  if ((saveMode || validateMode) && !eventId) {
+    fail(`${saveMode ? '--save' : '--validate'} requires --id=<event-id>`, 'bun run scripts/run-enrichment-pipeline.ts --prompts to list ids, then add --id=<id>');
+  }
 
   const db = openDatabase();
 
@@ -450,4 +472,6 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(console.error);
+main().catch((err: unknown) => {
+  fail(err instanceof Error ? err.message : String(err), 'rerun with --sync to check the DB is readable; the message above names the failing step');
+});

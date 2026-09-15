@@ -25,8 +25,35 @@
  */
 
 import Database from 'bun:sqlite';
+import { existsSync } from 'fs';
 
-const db = new Database('data/events.db');
+const DB_PATH = 'data/events.db';
+
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`remove-duplicates: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
+// Straight-line top-level script (no main()): an unexpected throw anywhere
+// below would otherwise surface as a stack trace, so it is routed here.
+process.on('uncaughtException', (err: Error) => {
+  fail(err.message, 'rerun with --dry-run to reproduce without deleting; if the DB is corrupt, restore from ~/agent-athens-backups');
+});
+
+// Argument validation runs BEFORE the DB is touched: a typo such as
+// --dry_run must not fall through to a real deletion pass.
+const unknownArgs = process.argv.slice(2).filter((a) => a !== '--dry-run');
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run (the only flag) or no arguments');
+}
+
+// bun:sqlite would CREATE an empty events.db here instead of failing (the
+// 2026-06-30 empty-DB incident class), so existence is checked first.
+if (!existsSync(DB_PATH)) {
+  fail(`database not found at ${DB_PATH} (cwd: ${process.cwd()})`, 'run from the repo root, where data/events.db lives');
+}
+const db = new Database(DB_PATH);
 const DRY_RUN = process.argv.includes('--dry-run');
 const REMOVAL_THRESHOLD = 0.20; // Alert if >20% would be removed
 

@@ -52,6 +52,12 @@ declare const document: DomDocument;
 type HTMLElement = DomElement;
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
+
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`scrape-all: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 // ============================================================================
@@ -1695,13 +1701,29 @@ async function main() {
 
   // Parse args
   const args = process.argv.slice(2);
+  // Argument validation runs BEFORE any scraper: a typo such as --dry_run
+  // would otherwise scrape every source AND persist to the production DB.
+  const sourceIdx = args.indexOf('--source');
+  const unknownArgs = args.filter(
+    (a, i) => !['--dry-run', '--crossref', '--source'].includes(a) && !(sourceIdx >= 0 && i === sourceIdx + 1)
+  );
+  if (unknownArgs.length > 0) {
+    fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run, --crossref and/or --source <id[,id]>');
+  }
   const dryRun = args.includes('--dry-run');
   const doCrossRef = args.includes('--crossref');
 
-  const sourceIdx = args.indexOf('--source');
-  let selectedSources = sourceIdx >= 0
-    ? args[sourceIdx + 1].split(',') as SourceId[]
+  const sourceValue = sourceIdx >= 0 ? args[sourceIdx + 1] : undefined;
+  if (sourceIdx >= 0 && (!sourceValue || sourceValue.startsWith('--'))) {
+    fail('--source given without a value', `--source <id[,id]> with ids from: ${Object.keys(SOURCES).join(', ')}`);
+  }
+  let selectedSources = sourceValue
+    ? sourceValue.split(',') as SourceId[]
     : Object.keys(SOURCES) as SourceId[];
+  const unknownSources = selectedSources.filter((id) => !(id in SOURCES));
+  if (unknownSources.length > 0) {
+    fail(`unknown source(s): ${unknownSources.join(', ')}`, `one of: ${Object.keys(SOURCES).join(', ')}`);
+  }
 
   // Phase 2A: quarantined sources are skipped entirely — no scrape, no
   // scrape_stats row (a fake success row would poison deadSourcesSignal
@@ -1828,5 +1850,7 @@ async function main() {
 
 // Guard so importing this module (e.g. from tests) does not auto-run the scraper.
 if (import.meta.main) {
-  main().catch(console.error);
+  main().catch((err: unknown) => {
+    fail(err instanceof Error ? err.message : String(err), 'rerun with --dry-run --source <id> to isolate the failing source');
+  });
 }

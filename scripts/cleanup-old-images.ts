@@ -18,6 +18,19 @@ const DB_PATH = resolve('data/events.db');
 const IMAGES_DIR = resolve('data/images');
 const dryRun = process.argv.includes('--dry-run');
 
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`cleanup-old-images: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
+// Argument validation runs BEFORE anything is read or deleted: a typo such as
+// --dry_run would otherwise unlink image files for real.
+const unknownArgs = process.argv.slice(2).filter((a) => a !== '--dry-run');
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run (the only flag) or no arguments');
+}
+
 function main() {
   if (!existsSync(IMAGES_DIR)) {
     console.log('📂 No images directory found — nothing to clean up.');
@@ -30,6 +43,11 @@ function main() {
     return;
   }
 
+  // bun:sqlite would CREATE an empty events.db here instead of failing (the
+  // 2026-06-30 empty-DB incident class), so existence is checked first.
+  if (!existsSync(DB_PATH)) {
+    fail(`database not found at ${DB_PATH}`, 'run from the repo root, where data/events.db lives');
+  }
   const db = new Database(DB_PATH);
 
   // --- Pass 1: Orphan cleanup (event deleted from DB but image file remains) ---
@@ -114,4 +132,8 @@ function main() {
   console.log(`\n📊 Summary: Kept: ${kept} | Orphaned: ${orphaned} | Expired: ${expired}${dryRun ? ' (dry run)' : ''}`);
 }
 
-main();
+try {
+  main();
+} catch (err: unknown) {
+  fail(err instanceof Error ? err.message : String(err), 'rerun with --dry-run to reproduce without deleting');
+}

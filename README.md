@@ -134,7 +134,7 @@ bun run build
 
 # Just scrape (specific source or all)
 bun run scripts/scrape-all.ts
-bun run scripts/scrape-all.ts --source=athinorama.gr --dry-run
+bun run scripts/scrape-all.ts --source athinorama --dry-run
 
 # Deploy manually
 bun run deploy   # netlify deploy --prod --dir=dist

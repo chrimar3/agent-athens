@@ -19,12 +19,25 @@ import { join } from 'path';
 const PROJECT_DIR = join(import.meta.dir, '..');
 const DIST_DIR = join(PROJECT_DIR, 'dist');
 
-// Parse arguments
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`ping-indexnow: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
+// Parse arguments — validated BEFORE config/dist are read or anything is pinged.
+const unknownArgs = process.argv.slice(2).filter(a => a !== '--dry-run' && !a.startsWith('--paths='));
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run and/or --paths=/a/,/b/');
+}
 const dryRun = process.argv.includes('--dry-run');
 const pathsArg = process.argv.find(a => a.startsWith('--paths='));
 const explicitPaths = pathsArg
   ? pathsArg.slice('--paths='.length).split(',').map(p => p.trim()).filter(Boolean)
   : null;
+if (pathsArg && explicitPaths && explicitPaths.length === 0) {
+  fail('--paths= given without any paths', '--paths=/this-weekend/,/en/this-weekend/ (or omit --paths to ping the sitemap set)');
+}
 
 async function main() {
   console.log(`🔔 IndexNow Ping${dryRun ? ' (DRY RUN)' : ''}\n`);
@@ -34,9 +47,13 @@ async function main() {
   let config: { indexnow_key: string; indexnow_endpoint: string; host: string };
   try {
     config = JSON.parse(readFileSync(configPath, 'utf-8'));
-  } catch (err) {
-    console.error('❌ Failed to read config/indexnow.json:', err);
-    process.exit(0); // Non-fatal
+  } catch (err: unknown) {
+    // Non-fatal by design (the daily pipeline must not fail on a missing key),
+    // so this must NOT write to stderr: Rule 5 reserves stderr for the single
+    // FAILED line that accompanies a non-zero exit.
+    const msg = err instanceof Error ? err.message : String(err);
+    console.log(`⏭️  Could not read config/indexnow.json (${msg}) — skipping IndexNow ping.`);
+    process.exit(0);
   }
 
   if (!config.indexnow_key || config.indexnow_key.length < 16) {
@@ -193,7 +210,9 @@ async function submitUrls(
       }
     } catch (err) {
       batchFailures++;
-      console.error(`  ❌ Batch ${i + 1}/${batches.length} failed:`, err);
+      // stdout, not stderr: the single Rule 5 line emitted below is the only
+      // thing this script may write to stderr.
+      console.log(`  ❌ Batch ${i + 1}/${batches.length} failed:`, err);
     }
 
     if (i < batches.length - 1) {
@@ -212,16 +231,22 @@ async function submitUrls(
     writeFileSync(join(PROJECT_DIR, 'logs/indexnow-latest.json'), JSON.stringify(summary, null, 2));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    console.warn(`⚠️  Monitoring summary write failed: ${msg}`);
+    console.log(`⚠️  Monitoring summary write failed: ${msg}`);
   }
 
   if (batchFailures === 0) {
     console.log(`\n✅ All ${batches.length} batch${batches.length === 1 ? '' : 'es'} submitted successfully (${urlList.length} URLs total)`);
     process.exit(0);
   } else {
-    console.log(`\n⚠️  ${batchFailures}/${batches.length} batch${batches.length === 1 ? '' : 'es'} failed`);
-    process.exit(1);
+    // The one live non-zero path in this script (daily-automated.sh runs it
+    // without --dry-run), so it owes the retrier a Rule 5 line, not stdout.
+    fail(
+      `${batchFailures}/${batches.length} IndexNow batch${batches.length === 1 ? '' : 'es'} failed`,
+      'check logs/indexnow-latest.json and rerun with --dry-run',
+    );
   }
 }
 
-main();
+main().catch((err: unknown) => {
+  fail(err instanceof Error ? err.message : String(err), 'rerun with --dry-run to see the URL set without pinging');
+});
