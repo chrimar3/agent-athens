@@ -175,6 +175,34 @@ run_scrape() {
     fi
 }
 
+# Phase 2c: Scraper yield canary (issue #1). READ-ONLY look at scrape_stats:
+# trips when an active source's latest events_found falls below 60% of its
+# 30-day mean (latest run excluded, >= 3 prior successful days required) and
+# files ONE "proposed" issue per tripped source, deduped on the
+# "Yield canary: <source>" title prefix. Exit 2 = tripped, other non-zero =
+# the canary itself could not run. Non-fatal by design: a thin scrape day
+# must never block enrichment or deploy — the issue is the signal.
+run_yield_canary() {
+    log_phase "YIELD CANARY"
+    log "Checking per-source scrape yield against the 30-day mean..."
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        log "[DRY RUN] Would run: bun run scripts/yield-canary.ts"
+        return 0
+    fi
+
+    local rc=0
+    bun run scripts/yield-canary.ts >> "$LOG_FILE" 2>&1 || rc=$?
+    if [[ "$rc" -eq 0 ]]; then
+        log "Yield canary: all active sources within threshold"
+    elif [[ "$rc" -eq 2 ]]; then
+        log_error "Yield canary TRIPPED — see the 'Yield canary:' issue(s) and $LOG_FILE (non-fatal, continuing...)"
+    else
+        log_error "Yield canary could not run (exit $rc) — see $LOG_FILE (non-fatal, continuing...)"
+    fi
+    return 0  # Non-fatal
+}
+
 # Phase 3: Quality gates
 run_quality() {
     log_phase "QUALITY GATES"
@@ -964,6 +992,7 @@ main() {
         run_ingest
         run_parse
         run_scrape
+        run_yield_canary
 
         # Data quality (all non-fatal)
         run_quality
