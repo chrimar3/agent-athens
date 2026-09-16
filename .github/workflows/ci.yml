@@ -12,14 +12,23 @@ name: ci
 on:
   pull_request:
 
+# The job runs PR-controlled code (bun install, tests), so the token must be
+# read-only and must not be left in the checkout for that code to find.
+permissions:
+  contents: read
+
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.3.0"
       - run: bun install --frozen-lockfile
-      - run: bun test tests/
+      # scripts/__tests__ holds the deploy-gate and pre-commit seam tests; the
+      # scraper tests there need the network and stay out of CI.
+      - run: bun test tests/ scripts/__tests__/deploy-gate.test.ts scripts/__tests__/precommit-tsc.test.ts
       - run: bun run typecheck
