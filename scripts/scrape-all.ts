@@ -1691,6 +1691,39 @@ const SOURCES: Record<SourceId, { name: string; scraper: () => Promise<ScrapedEv
   cometogether: { name: 'CoMeToGether.live', scraper: scrapeCometogether },
 };
 
+// Declared down here, next to its only caller, and NOT beside ScrapeResult:
+// tests/no-bypass.test.ts allowlists this file's row-write site by LINE RANGE
+// (and scans for the literal SQL verb, so this note must not spell it), so any
+// line added above saveEvents() moves that write out of the allowlist.
+export interface RunOutcome {
+  failedSources: string[];
+  persistFailed: number;
+  ok: boolean;
+}
+
+/**
+ * Rule 5's second half: work that FAILED without throwing.
+ *
+ * A per-source scraper error is caught in main()'s loop (results[] gets
+ * success=false) and a row that could not be written is counted by
+ * saveEvents().failed — neither reaches the top-level catch, so neither used
+ * to affect the exit code.
+ *
+ * Quarantined sources are removed from the selection BEFORE the scrape loop,
+ * so they never appear in `results` and cannot be counted as failures here.
+ */
+export function runOutcome(
+  results: ReadonlyArray<{ source: string; success: boolean }>,
+  persistFailed: number,
+): RunOutcome {
+  const failedSources = results.filter((r) => !r.success).map((r) => r.source);
+  return {
+    failedSources,
+    persistFailed,
+    ok: failedSources.length === 0 && persistFailed === 0,
+  };
+}
+
 async function main() {
   console.log('');
   console.log('╔══════════════════════════════════════════════════════════════╗');
@@ -1819,9 +1852,11 @@ async function main() {
   console.log(`   ${'TOTAL'.padEnd(20)} | ${String(totalEvents).padStart(4)} events | ${String(totalWithPrice).padStart(4)} with price`);
 
   // Save to database
+  let persistFailed = 0;
   if (!dryRun && allEvents.length > 0) {
     console.log('\n💾 Saving to database...');
     const { saved, outOfScope, failed, dupSkipped } = saveEvents(allEvents, dryRun);
+    persistFailed = failed;
     // Measure health at row-creation, not scrape-report: surface found -> persisted divergence.
     log('INFO', 'system', `Found ${allEvents.length} -> Saved ${saved} (${failed} failed, ${outOfScope} out of scope, ${dupSkipped} import-gate dup)`);
     console.log(`   ✅ Found ${allEvents.length} → Saved ${saved} (${failed} failed, ${outOfScope} out-of-scope, ${dupSkipped} import-gate dup)`);
@@ -1844,6 +1879,28 @@ async function main() {
     duration: r.duration
   }));
   logSummary(summaryStats);
+
+  // Rule 5: a scraper that lost sources, or events that never reached the DB,
+  // is not a success. Neither reaches the top-level catch (both are caught and
+  // counted above), so the exit code has to be decided here or the pipeline
+  // reads a silent partial run as a clean one. run_scrape in
+  // scripts/daily-automated.sh logs this and CONTINUES — it is not fatal.
+  const outcome = runOutcome(results, persistFailed);
+  if (!outcome.ok) {
+    const parts: string[] = [];
+    if (outcome.failedSources.length > 0) {
+      parts.push(
+        `${outcome.failedSources.length}/${results.length} sources failed (${outcome.failedSources.join(', ')})`,
+      );
+    }
+    if (outcome.persistFailed > 0) {
+      parts.push(`${outcome.persistFailed} events failed to persist`);
+    }
+    fail(
+      parts.join('; '),
+      'bun run scripts/scrape-all.ts --dry-run --source <id> to isolate; see the per-source ERROR lines above',
+    );
+  }
 
   console.log('\n✨ Done!\n');
 }

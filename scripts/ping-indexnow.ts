@@ -43,17 +43,33 @@ async function main() {
   console.log(`🔔 IndexNow Ping${dryRun ? ' (DRY RUN)' : ''}\n`);
 
   // 1. Load config
-  const configPath = join(PROJECT_DIR, 'config/indexnow.json');
+  // INDEXNOW_CONFIG overrides the path for tests only; production leaves it
+  // unset and reads config/indexnow.json exactly as before.
+  const configPath = process.env.INDEXNOW_CONFIG || join(PROJECT_DIR, 'config/indexnow.json');
   let config: { indexnow_key: string; indexnow_endpoint: string; host: string };
+  let raw: string;
   try {
-    config = JSON.parse(readFileSync(configPath, 'utf-8'));
+    raw = readFileSync(configPath, 'utf-8');
   } catch (err: unknown) {
-    // Non-fatal by design (the daily pipeline must not fail on a missing key),
-    // so this must NOT write to stderr: Rule 5 reserves stderr for the single
-    // FAILED line that accompanies a non-zero exit.
     const msg = err instanceof Error ? err.message : String(err);
-    console.log(`⏭️  Could not read config/indexnow.json (${msg}) — skipping IndexNow ping.`);
+    if ((err as NodeJS.ErrnoException)?.code !== 'ENOENT') {
+      // Present but unreadable (permissions, a directory, I/O error) is NOT the
+      // same as "no key configured" — the configured key has become unusable.
+      fail(`could not read ${configPath} (${msg})`, 'fix the file\'s permissions, or delete it if IndexNow should be skipped');
+    }
+    // ABSENT is the deliberate skip (the daily pipeline must not fail when no
+    // key is configured), so it must NOT write to stderr: Rule 5 reserves
+    // stderr for the single FAILED line that accompanies a non-zero exit.
+    console.log(`⏭️  No IndexNow config at ${configPath} — skipping IndexNow ping.`);
     process.exit(0);
+  }
+  try {
+    config = JSON.parse(raw);
+  } catch (err: unknown) {
+    // Malformed JSON used to be swallowed into the same exit 0 as "absent",
+    // so a corrupted key file looked identical to having no key at all.
+    const msg = err instanceof Error ? err.message : String(err);
+    fail(`${configPath} is not valid JSON (${msg})`, 'fix the file, or delete it if IndexNow should be skipped');
   }
 
   if (!config.indexnow_key || config.indexnow_key.length < 16) {

@@ -164,7 +164,9 @@ function generateAllSchema(db: Database): { generated: number; updated: number; 
         }
       }
     } catch (error) {
-      console.error(`   ❌ Error for ${event.title}: ${error}`);
+      // stdout, not stderr: Rule 5 reserves stderr for the single FAILED line
+      // main() emits once the run is over, and there can be many of these.
+      console.log(`   ❌ Error for ${event.title}: ${error}`);
       errors++;
     }
   }
@@ -308,7 +310,15 @@ async function main(): Promise<void> {
   const validateMode = args.includes('--validate');
   const statsMode = args.includes('--stats');
 
+  // Argument validation runs BEFORE the DB is opened: the no-flag default is
+  // the WRITE path, so a typo for --validate/--stats must fail, not write.
+  const unknownArgs = args.filter((a) => a !== '--validate' && a !== '--stats');
+  if (unknownArgs.length > 0) {
+    fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--validate, --stats, or no arguments');
+  }
+
   const db = openDatabase();
+  let pendingFailure: string | null = null;
 
   try {
     if (statsMode) {
@@ -337,8 +347,21 @@ async function main(): Promise<void> {
 
     // Show final stats
     showStats(db);
+
+    // Rule 5: events whose schema could not be generated are counted, not
+    // thrown, so they never reached the top-level catch and the run exited 0
+    // with a silently incomplete schema set. run_schema in
+    // scripts/daily-automated.sh logs this and CONTINUES — it is not fatal.
+    if (result.errors > 0) {
+      // Deferred past the finally below: fail() calls process.exit(), which
+      // would skip db.close() and leave -wal/-shm sidecars on disk.
+      pendingFailure = `${result.errors} event(s) could not have their Schema.org JSON-LD generated`;
+    }
   } finally {
     db.close();
+  }
+  if (pendingFailure !== null) {
+    fail(pendingFailure, 'the per-event "❌ Error for <title>" lines above name them; rerun with --validate after fixing those rows');
   }
 }
 

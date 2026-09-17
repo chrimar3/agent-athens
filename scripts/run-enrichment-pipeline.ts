@@ -421,8 +421,21 @@ async function main(): Promise<void> {
   const saveMode = args.includes('--save');
   const validateMode = args.includes('--validate');
 
+  // A mistyped FLAG NAME must fail like a mistyped value: `--count-10` or
+  // `--dry_run` silently fell through to the defaults. Validated before the DB
+  // is opened. --stats is the documented alias of the default listing.
+  const KNOWN_FLAGS = ['--sync', '--prompts', '--save', '--validate', '--stats'];
+  const unknownArgs = args.filter((a) => !KNOWN_FLAGS.includes(a) && !/^--(count|tier|id)=/.test(a));
+  if (unknownArgs.length > 0) {
+    fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--sync | --prompts [--count=N] [--tier=stub|standard|premium] | --save --id=ID | --validate --id=ID | --stats');
+  }
+
+  // parseInt() stops at the first non-digit ('5junk' -> 5, '1.5' -> 1), so the
+  // raw value must be digits-only: a typo has to fail, not silently change how
+  // many events are batched.
   const countArg = args.find(a => a.startsWith('--count='));
-  const count = countArg ? parseInt(countArg.split('=')[1]) : 5;
+  const countRaw = countArg ? countArg.slice('--count='.length) : null;
+  const count = countRaw === null ? 5 : /^\d+$/.test(countRaw) ? parseInt(countRaw, 10) : NaN;
   if (!Number.isInteger(count) || count <= 0) {
     fail(`invalid ${countArg} (expected a positive integer)`, '--count=5');
   }

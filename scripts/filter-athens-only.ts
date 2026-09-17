@@ -44,8 +44,13 @@ const unknownArgs = process.argv.slice(2).filter((a) => a !== '--dry-run' && !a.
 if (unknownArgs.length > 0) {
   fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--dry-run and/or --days-back=<days>');
 }
+// parseInt() stops at the first non-digit ('45abc' -> 45, '1.5' -> 1), so the
+// raw value must be digits-only: a typo here silently widens the window whose
+// rejected_non_athens rows this script DELETEs.
 const daysBackArg = process.argv.find((a) => a.startsWith('--days-back='));
-const daysBack = daysBackArg ? parseInt(daysBackArg.split('=')[1]) : undefined;
+const daysBackRaw = daysBackArg ? daysBackArg.slice('--days-back='.length) : null;
+const daysBack =
+  daysBackRaw === null ? undefined : /^\d+$/.test(daysBackRaw) ? parseInt(daysBackRaw, 10) : NaN;
 if (daysBackArg && (!Number.isInteger(daysBack) || (daysBack as number) < 0)) {
   fail(`invalid ${daysBackArg} (expected a non-negative integer)`, '--days-back=45');
 }
