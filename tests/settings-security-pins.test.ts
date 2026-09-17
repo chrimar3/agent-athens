@@ -85,6 +85,26 @@ describe('auto-enrich allowlist', () => {
     }
   });
 
+  test('grants the BARE Write tool: a path-scoped Write(...) rule denies every Write under `claude -p` (2026-09-16/17: 0 successful writes in four production runs)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
+    const line = src.split('\n').find((l) => l.startsWith('ALLOWED_TOOLS='));
+    expect(line).toBeDefined();
+    expect(line!).toMatch(/[",]Write[",]/);
+    expect(line!).not.toMatch(/Write\(/);
+  });
+
+  test('AA_ENRICHMENT_SESSION is exported after the warm-up and auth pre-check and before the batch session (the hook scope is inert without it)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
+    const exported = src.indexOf('export AA_ENRICHMENT_SESSION=1');
+    const warmUp = src.indexOf('"$CLAUDE_BIN" -p "echo ready"');
+    const authCheck = src.indexOf('"$CLAUDE_BIN" -p --output-format json');
+    const batch = src.indexOf('"$CLAUDE_BIN" -p "$BRIEF_CONTENT"');
+    for (const i of [exported, warmUp, authCheck, batch]) expect(i).toBeGreaterThan(-1);
+    expect(exported).toBeGreaterThan(warmUp);
+    expect(exported).toBeGreaterThan(authCheck);
+    expect(exported).toBeLessThan(batch);
+  });
+
   test('read-only sqlite3 stays available to headless sessions (canary 2026-08-11: denial stalled research)', () => {
     const src = readFileSync(join(ROOT, 'scripts', 'auto-enrich.sh'), 'utf8');
     const line = src.split('\n').find((l) => l.startsWith('ALLOWED_TOOLS='));

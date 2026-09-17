@@ -14,7 +14,10 @@
  */
 
 import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { resolve } from 'path';
+import { resolveBatchOutputPath } from '../src/utils/batch-output-path';
+
+const REPO_ROOT = resolve(import.meta.dir, '..');
 
 const DEFAULT_OUTPUT_DIR = 'temp-descriptions';
 
@@ -69,14 +72,22 @@ function main(): void {
     process.exit(1);
   }
 
-  // Ensure output directory exists
-  if (!existsSync(outputDir)) {
-    mkdirSync(outputDir, { recursive: true });
-  }
-
   // Default .md for English (primary), .gr.md for Greek (secondary)
   const filename = lang === 'gr' ? `${eventId}.gr.md` : `${eventId}.md`;
-  const filePath = join(outputDir, filename);
+  // Containment: this script is a sanctioned Bash command of the headless
+  // enrichment session, so its output path must stay inside temp-descriptions/
+  // (resolved against the repo root, never the cwd) — see src/utils/batch-output-path.ts.
+  const target = resolveBatchOutputPath(REPO_ROOT, outputDir, filename);
+  if (!target.ok) {
+    console.error(`write-description: FAILED — ${target.reason} — try: --batch-dir=temp-descriptions/batch-N (output must stay inside temp-descriptions/)`);
+    process.exit(1);
+  }
+  const filePath = target.filePath;
+
+  // Ensure output directory exists
+  if (!existsSync(target.dir)) {
+    mkdirSync(target.dir, { recursive: true });
+  }
 
   // Write with explicit UTF-8 encoding
   writeFileSync(filePath, content, 'utf-8');

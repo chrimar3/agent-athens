@@ -1,5 +1,7 @@
-import { describe, test, expect } from 'bun:test';
+import { mkdtempSync, mkdirSync, symlinkSync, writeFileSync, rmSync } from 'fs';
+import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
 import { resolve, join } from 'path';
+import { tmpdir } from 'os';
 import { verdict } from '../scripts/hooks/db-guard';
 
 const ROOT = resolve(import.meta.dir, '..');
@@ -54,6 +56,18 @@ describe('db-guard: bypasses that defeated the first implementation', () => {
   test('URI filename upgrading the open mode', () => {
     expect(verdict(bash('sqlite3 -readonly "file:data/events.db?mode=rwc" "DELETE FROM events"'))).toContain('db-guard');
   });
+  test('sqlite3 -init runs dot-commands from a file the session can write (2026-09-17 Codex: `.shell` via -init escaped every check)', () => {
+    expect(verdict(bash('sqlite3 -readonly -init temp-descriptions/batch-1/payload.sql :memory: "select 1"'))).toContain('db-guard');
+    expect(verdict(bash('sqlite3 -readonly --init temp-descriptions/batch-1/payload.sql data/events.db "select 1"'))).toContain('db-guard');
+  });
+  test('sqlite3 -cmd and -A (archive extract writes files) are refused too', () => {
+    expect(verdict(bash('sqlite3 -readonly -cmd "select 1" data/events.db'))).toContain('db-guard');
+    expect(verdict(bash('sqlite3 -readonly -A --extract temp-descriptions/x.zip'))).toContain('db-guard');
+  });
+  test('a plain read-only query is still allowed (the grant must stay usable)', () => {
+    expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT title FROM events LIMIT 3"'))).toBeNull();
+  });
+
   test('find -delete (Bash(find *) was granted until Task 1)', () => {
     expect(verdict(bash(`find . -name '*.db' -delete`))).toContain('db-guard');
   });
@@ -152,5 +166,131 @@ describe('db-guard: process contract', () => {
 
   test('missing tool_input fails closed rather than throwing', () => {
     expect(run({ tool_name: 'Bash' }).exitCode).toBe(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Enrichment-session write scope.
+// scripts/auto-enrich.sh grants the headless session the Write tool; the
+// session reads scraped pages, so a prompt injection could rewrite a module
+// that a sanctioned script imports (src/utils/tag-filter.ts) and then invoke
+// the sanctioned script legitimately. PROTECTED_FILES covers the four entry
+// scripts only — it cannot enumerate their import graph. Under
+// AA_ENRICHMENT_SESSION the hook inverts to an allowlist instead.
+// ---------------------------------------------------------------------------
+describe('db-guard: enrichment-session write scope', () => {
+  beforeEach(() => {
+    process.env.AA_ENRICHMENT_SESSION = '1';
+  });
+  afterEach(() => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+  });
+
+  test('Write to a module imported by a sanctioned script is blocked', () => {
+    const v = verdict(file('Write', 'src/utils/tag-filter.ts'));
+    expect(v).toContain('db-guard');
+    expect(v).toContain('temp-descriptions');
+  });
+
+  test('Edit of a sanctioned script stays blocked (PROTECTED_FILES still applies)', () => {
+    expect(verdict(file('Edit', 'scripts/save-batch.ts'))).toContain('db-guard');
+  });
+
+  test('Write inside the batch output directory is allowed', () => {
+    expect(verdict(file('Write', 'temp-descriptions/batch-1/ev-1.md'))).toBeNull();
+    expect(verdict(file('Write', 'temp-descriptions/batch-1/concerns.jsonl'))).toBeNull();
+    expect(verdict(file('Write', './temp-descriptions/batch-1/batch-1-review.md'))).toBeNull();
+  });
+
+  test('absolute path inside the output directory is allowed', () => {
+    expect(verdict(file('Write', join(ROOT, 'temp-descriptions', 'batch-1', 'ev-1.md')))).toBeNull();
+  });
+
+  test('MultiEdit is blocked when any one path escapes the scope', () => {
+    expect(
+      verdict({
+        tool_name: 'MultiEdit',
+        tool_input: {
+          edits: [
+            { file_path: 'temp-descriptions/batch-1/ev-1.md' },
+            { file_path: 'src/utils/tag-filter.ts' },
+          ],
+        },
+      }),
+    ).toContain('db-guard');
+  });
+
+  test('traversal out of the output directory is blocked', () => {
+    expect(verdict(file('Write', 'temp-descriptions/../src/utils/tag-filter.ts'))).toContain('db-guard');
+    expect(verdict(file('Write', './temp-descriptions/batch-1/../../src/x.ts'))).toContain('db-guard');
+    expect(verdict(file('Write', join(ROOT, 'temp-descriptions', '..', 'src', 'x.ts')))).toContain('db-guard');
+  });
+
+  test('a path outside the repo is blocked', () => {
+    expect(verdict(file('Write', '/Users/chrism/.zshrc'))).toContain('db-guard');
+    expect(verdict(file('Write', 'temp-briefs/batch-1.manifest.json'))).toContain('db-guard');
+  });
+
+  test("the session's own auto-memory directory is refused on purpose (learned memory is an instruction channel — Codex 2026-09-16 default #12 / astra #13; observed live 2026-09-17: 14 refusals, batches unaffected)", () => {
+    expect(verdict(file('Write', '/Users/chrism/.claude/projects/-Users-chrism-Project-with-Claude-AgentAthens-agent-athens/memory/venue-facts.md'))).toContain('db-guard');
+    expect(verdict(file('Edit', '/Users/chrism/.claude/projects/-Users-chrism-Project-with-Claude-AgentAthens-agent-athens/memory/MEMORY.md'))).toContain('db-guard');
+  });
+
+  test('a symlink under temp-descriptions/ pointing outside is refused — as a directory and as the target file (lexical checks alone followed it)', () => {
+    const outside = mkdtempSync(join(tmpdir(), 'aa-guard-symlink-'));
+    const linkDir = join(ROOT, 'temp-descriptions', `__link-dir-${process.pid}`);
+    const realDir = join(ROOT, 'temp-descriptions', `__real-dir-${process.pid}`);
+    try {
+      mkdirSync(join(ROOT, 'temp-descriptions'), { recursive: true });
+      symlinkSync(outside, linkDir);
+      mkdirSync(realDir, { recursive: true });
+      writeFileSync(join(outside, 'target.md'), 'x');
+      symlinkSync(join(outside, 'target.md'), join(realDir, 'ev-1.md'));
+      expect(verdict(file('Write', `temp-descriptions/__link-dir-${process.pid}/ev-1.md`))).toContain('db-guard');
+      expect(verdict(file('Write', `temp-descriptions/__real-dir-${process.pid}/ev-1.md`))).toContain('db-guard');
+      // and the same real directory with a plain new file stays allowed
+      expect(verdict(file('Write', `temp-descriptions/__real-dir-${process.pid}/ev-2.md`))).toBeNull();
+    } finally {
+      rmSync(linkDir, { force: true });
+      rmSync(realDir, { recursive: true, force: true });
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
+
+  test('a sibling directory that merely shares the prefix is blocked', () => {
+    expect(verdict(file('Write', 'temp-descriptions-evil/x.md'))).toContain('db-guard');
+  });
+
+  test('NotebookEdit path field is scoped too', () => {
+    expect(verdict({ tool_name: 'NotebookEdit', tool_input: { notebook_path: 'src/x.ipynb' } })).toContain('db-guard');
+  });
+
+  test('Bash and non-file tools are unaffected by the scope', () => {
+    expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT 1"'))).toBeNull();
+    expect(
+      verdict(bash('bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean')),
+    ).toBeNull();
+    expect(verdict({ tool_name: 'WebSearch', tool_input: { query: 'venue' } })).toBeNull();
+  });
+});
+
+describe('db-guard: scope applies only inside an enrichment session', () => {
+  test('without AA_ENRICHMENT_SESSION, source edits stay allowed', () => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+    expect(verdict(file('Write', 'src/utils/tag-filter.ts'))).toBeNull();
+    expect(verdict(file('Edit', 'src/generate-site.ts'))).toBeNull();
+    expect(verdict(file('Write', 'temp-briefs/batch-1.manifest.json'))).toBeNull();
+    expect(verdict(file('Write', '.claude/notes/mistakes.md'))).toBeNull();
+  });
+
+  test('process contract: the env var reaches a spawned hook (exit 2 + stderr)', () => {
+    const r = Bun.spawnSync(['bun', 'run', HOOK], {
+      stdin: new TextEncoder().encode(
+        JSON.stringify({ tool_name: 'Write', tool_input: { file_path: 'src/utils/tag-filter.ts' } }),
+      ),
+      env: { ...process.env, AA_ENRICHMENT_SESSION: '1' },
+    });
+    expect(r.exitCode).toBe(2);
+    expect(new TextDecoder().decode(r.stderr)).toContain('enrichment session may only write under');
   });
 });

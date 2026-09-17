@@ -11,10 +11,12 @@
  */
 
 import { writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { resolve } from 'path';
+import { resolveBatchOutputPath } from '../src/utils/batch-output-path';
 import { TAG_TAXONOMY } from '../src/enrichment/description-generator';
 
 const DEFAULT_OUTPUT_DIR = 'temp-descriptions';
+const REPO_ROOT = resolve(import.meta.dir, '..');
 
 function main(): void {
   const args = process.argv.slice(2);
@@ -57,12 +59,19 @@ function main(): void {
     console.log('  These tags are not in TAG_TAXONOMY. They will be saved but may not render.');
   }
 
-  // Ensure output directory exists
-  if (!existsSync(outputDir)) {
-    mkdirSync(outputDir, { recursive: true });
+  // Containment: same rule as write-description.ts — the output path must stay
+  // inside temp-descriptions/ (see src/utils/batch-output-path.ts).
+  const target = resolveBatchOutputPath(REPO_ROOT, outputDir, `${eventId}.tags.json`);
+  if (!target.ok) {
+    console.error(`write-tags: FAILED — ${target.reason} — try: --batch-dir=temp-descriptions/batch-N (output must stay inside temp-descriptions/)`);
+    process.exit(1);
   }
+  const filePath = target.filePath;
 
-  const filePath = join(outputDir, `${eventId}.tags.json`);
+  // Ensure output directory exists
+  if (!existsSync(target.dir)) {
+    mkdirSync(target.dir, { recursive: true });
+  }
   writeFileSync(filePath, JSON.stringify(tags, null, 2), 'utf-8');
 
   console.log(`Written: ${filePath} (${tags.length} tags)`);

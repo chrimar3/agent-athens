@@ -54,6 +54,18 @@ CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
 # (legitimate verification reads the brief itself encourages) and the session
 # fell back to slower paths. Read-only sqlite3 is granted; the db-guard hook
 # (Layer 2) still vets ATTACH/dot-command/mode= escapes under it.
+# Write scope (2026-09-16 review): bare `Write` let an injected session rewrite
+# any file in the repo — including a module a sanctioned script imports — and
+# then invoke that script legitimately. The scope is enforced by the hook, and
+# Write stays BARE. The path-scoped spelling — Write(temp-descriptions/**) plus
+# Write(./temp-descriptions/**) — was tried on 2026-09-16 and `claude -p` denied
+# EVERY Write with it ("requested permissions to write ... but you haven't
+# granted it yet"): four production runs, 0 successful writes, so concerns.jsonl
+# and batch-N-review.md silently stopped (logs/auto-enrich-2026-09-1{6,7}.log).
+# The write scope lives in scripts/hooks/db-guard.ts instead: with
+# AA_ENRICHMENT_SESSION set (exported below, batch sessions only) the hook
+# refuses any file-tool write outside temp-descriptions/. Both facts are pinned
+# by tests/settings-security-pins.test.ts.
 ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(sqlite3 -readonly *),Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
 MAX_BATCHES=2
 EVENTS_PER_BATCH=3  # 4→3 on 2026-08-11 canary iteration: the ~30 remaining upcoming stubs are the research-heavy tail (easy events enriched Jul 28-Aug 5); canary batches of 4 were still in research at the 1200s kill with zero writes. 3 fits the observed per-hard-event cost. Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
@@ -447,6 +459,14 @@ for brief in "${BATCH_FILES[@]}"; do
     # BATCH_OUT consumers are format-agnostic: stdout-mtime watchdog only
     # checks file mtime; server-stream-idle grep matches in stream-json too;
     # save accounting reads enrichment_log.saved_to_events from DB, not output.
+    # Layer 2 seam: scripts/hooks/db-guard.ts reads AA_ENRICHMENT_SESSION from
+    # the claude process env and, when it is set, allows file tools ONLY under
+    # temp-descriptions/. Without it the hook cannot tell an enrichment session
+    # from an interactive one and falls back to its denylist, which protects the
+    # four sanctioned scripts but not the modules they import. Exported here,
+    # after the warm-up and auth pre-check calls, so only the batch sessions are
+    # scoped.
+    export AA_ENRICHMENT_SESSION=1
     "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format stream-json \
         --verbose \

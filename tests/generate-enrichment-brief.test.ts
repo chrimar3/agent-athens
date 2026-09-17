@@ -413,6 +413,17 @@ describe('buildBrief', () => {
     expect(brief).toContain('def-456');
   });
 
+  test('never tells the session to write a bare batch-review.md (the repo root is outside the write scope the db-guard hook enforces)', () => {
+    const events = [{
+      id: 'test-1', title: 'Test', type: 'concert', venue_name: 'V', price_type: 'open',
+      start_date: '2027-06-15T21:00:00', end_date: null, time_doors: null, url: null, description: null, source: 'test',
+    }];
+    const brief = buildBrief(events, new Map(), new Map(), [], 1);
+    expect(brief).not.toMatch(/in batch-review\.md/);
+    // The only review file the brief may ask for is the one inside the batch dir.
+    expect(brief).toMatch(/batch-\d+-review\.md/);
+  });
+
   test('includes CLI commands for write-description, write-tags, auto-gate-check', () => {
     const events = [{
       id: 'test-1', title: 'Test', type: 'concert', venue_name: 'V', price_type: 'open',
