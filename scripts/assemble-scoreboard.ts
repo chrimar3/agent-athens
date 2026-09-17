@@ -31,11 +31,31 @@ export class ScoreboardError extends Error {
 }
 
 type ScrapeStatus = 'ok' | 'warning' | 'failed' | 'unknown';
+export type SensorVerdict = 'fresh' | 'stale' | 'malformed';
+/**
+ * The report must carry the run's own Athens date: run_health_check writes it
+ * seconds before run_scoreboard in scripts/daily-automated.sh, so ANY older
+ * date means today's health check did not write — the exact case Codex #7
+ * named ("yesterday's report republished as a fresh scoreboard"). health-check
+ * dates the file with the same Athens-local helper, so there is no zone slack.
+ */
+const MAX_REPORT_AGE_DAYS = 0;
 const GLYPH_STATUS: Record<string, ScrapeStatus> = { v: 'ok', '!': 'warning', x: 'failed', '?': 'unknown' };
 
 export interface HealthReportBlock {
   report_date: string | null;
   report_file: string;
+  /** Athens today − report_date, in whole days; null when report_date is unreadable. */
+  report_age_days: number | null;
+  /**
+   * run_health_check is NON-FATAL in scripts/daily-automated.sh, so a failed
+   * health check leaves yesterday's report as the newest file and this script
+   * republishes it under a fresh generated_at. Without this flag re-stamped
+   * evidence is indistinguishable from today's. True when the report is not
+   * dated today (Athens), is dated in the future (clock skew — it would stay
+   * the lexically newest file forever), or carries no parseable date.
+   */
+  stale: boolean;
   scraping: Record<string, { status: ScrapeStatus; events: number; delta: number }>;
   database: { total: number; visible: number; hidden: number; new_unverified_venues: number } | null;
   build: { duration_s: number; pages: number; schema_valid: number; schema_total: number } | null;
@@ -51,6 +71,11 @@ export interface Scoreboard {
   upcoming_events: number;
   per_source: Record<string, number>;
   health_report: HealthReportBlock;
+  // Per-sensor verdict for the Analyst's precondition step: 'malformed' means
+  // the report parsed to none of its expected sections (a crashed or truncated
+  // health-check), 'stale' means the report is not dated the run's own Athens
+  // day (or its date is in the future or not a real calendar day).
+  sensor_status: { health_report: SensorVerdict };
   // Filled by the citation-panel and crawler-telemetry sensors (queued as
   // separate issues) — this script only reserves the keys.
   citations: null;
@@ -80,6 +105,8 @@ export function parseHealthReport(text: string, fileName: string): HealthReportB
   const block: HealthReportBlock = {
     report_date: null,
     report_file: fileName,
+    report_age_days: null,
+    stale: true, // until dated against `today` in assembleScoreboard
     scraping: {},
     database: null,
     build: null,
@@ -118,6 +145,39 @@ export function parseHealthReport(text: string, fileName: string): HealthReportB
     }
   }
   return block;
+}
+
+/** True only for a YYYY-MM-DD string that names a real calendar day. */
+function isCalendarDate(s: string): boolean {
+  const t = Date.parse(`${s}T00:00:00Z`);
+  return Number.isFinite(t) && new Date(t).toISOString().slice(0, 10) === s;
+}
+
+/** Whole days from `from` to `to`, both YYYY-MM-DD; negative when `to` is earlier. */
+function dayDiff(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+}
+
+/**
+ * Stamps report_age_days/stale onto `block` and returns the sensor verdict.
+ * Malformed wins over stale: a report that parsed to NO expected section says
+ * nothing about its own age, and the repair is different (fix health-check,
+ * not the schedule).
+ */
+export function gradeHealthReport(block: HealthReportBlock, today: string): SensorVerdict {
+  // A header like 9999-99-99 matches the regex but is not a date, and
+  // Date.parse silently rolls 2026-02-30 forward to March 2: only a value
+  // that round-trips through the calendar counts.
+  const raw = block.report_date !== null && isCalendarDate(block.report_date) ? dayDiff(block.report_date, today) : NaN;
+  const age = Number.isFinite(raw) ? raw : null;
+  block.report_age_days = age;
+  // Two-sided: a future-dated report is untrustworthy, not fresh.
+  block.stale = age === null || age < 0 || age > MAX_REPORT_AGE_DAYS;
+  // The two sections health-check always writes. Neither present = the file is
+  // not a health report at all (crash output, truncation, wrong file).
+  const malformed = Object.keys(block.scraping).length === 0 && block.database === null;
+  if (malformed) return 'malformed';
+  return block.stale ? 'stale' : 'fresh';
 }
 
 export function openEventsDbReadOnly(dbPath: string): Database {
@@ -165,19 +225,27 @@ function readDbCounts(dbPath: string): Pick<Scoreboard, 'total_events' | 'upcomi
   }
 }
 
-export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string; outPath?: string } = {}): Scoreboard {
+export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string; outPath?: string; today?: string } = {}): Scoreboard {
   const dbPath = opts.dbPath ?? DEFAULTS.dbPath;
   const reportsDir = opts.reportsDir ?? DEFAULTS.reportsDir;
   const outPath = opts.outPath ?? DEFAULTS.outPath;
+  // Injectable so the freshness pins are deterministic; athensTodaySql() is the
+  // project's Athens-local today (never the host zone, never SQLite's UTC now).
+  const today = opts.today ?? athensTodaySql();
 
   const reportFile = newestReportFile(reportsDir);
   const health_report = parseHealthReport(readFileSync(join(reportsDir, reportFile), 'utf-8'), reportFile);
+  // Deliberately NOT a throw: a malformed report must still produce a
+  // scoreboard, or the Analyst reads the previous run's file and never learns
+  // the sensor broke.
+  const health_status = gradeHealthReport(health_report, today);
   const counts = readDbCounts(dbPath);
 
   const scoreboard: Scoreboard = {
     generated_at: new Date().toISOString(),
     ...counts,
     health_report,
+    sensor_status: { health_report: health_status },
     citations: null,
     crawlers: null,
   };
@@ -204,7 +272,10 @@ function parseArgs(argv: string[]): { dbPath?: string; reportsDir?: string; outP
 if (import.meta.main) {
   try {
     const sb = assembleScoreboard(parseArgs(process.argv.slice(2)));
-    console.log(`assemble-scoreboard: wrote scoreboard (total=${sb.total_events}, upcoming=${sb.upcoming_events}, report=${sb.health_report.report_file})`);
+    console.log(
+      `assemble-scoreboard: wrote scoreboard (total=${sb.total_events}, upcoming=${sb.upcoming_events}, ` +
+        `report=${sb.health_report.report_file}, health_report=${sb.sensor_status.health_report}, age_days=${sb.health_report.report_age_days})`,
+    );
   } catch (e) {
     const msg = e instanceof ScoreboardError ? e.message : `assemble-scoreboard: FAILED — ${(e as Error).message} — try: rerun with --db/--reports-dir/--out to isolate the failing input`;
     console.error(msg);

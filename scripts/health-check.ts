@@ -14,6 +14,10 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
+// The report header/filename date must be the same Athens-local day that
+// scripts/assemble-scoreboard.ts grades against (a UTC date is yesterday's
+// between 00:00 and 03:00 Athens and would read as a stale sensor).
+import { getAthensTodayStr } from '../src/utils/event-lifecycle';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const REPORTS_DIR = join(import.meta.dir, '../data/health-reports');
@@ -260,7 +264,7 @@ function getQualityStats(): Array<{
 // ============================================================================
 
 function generateDailyReport(): string {
-  const today = new Date().toISOString().split('T')[0];
+  const today = getAthensTodayStr();
   const alerts: Alert[] = [];
   const lines: string[] = [];
 
@@ -514,7 +518,7 @@ async function main() {
     if (!existsSync(REPORTS_DIR)) {
       mkdirSync(REPORTS_DIR, { recursive: true });
     }
-    const today = new Date().toISOString().split('T')[0];
+    const today = getAthensTodayStr();
     const reportPath = join(REPORTS_DIR, `${today}.txt`);
     writeFileSync(reportPath, report);
     console.log(`\nReport saved to: ${reportPath}`);

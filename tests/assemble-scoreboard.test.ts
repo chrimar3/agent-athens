@@ -12,7 +12,7 @@ import { Database } from 'bun:sqlite';
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { assembleScoreboard, openEventsDbReadOnly } from '../scripts/assemble-scoreboard';
+import { assembleScoreboard, openEventsDbReadOnly, parseHealthReport } from '../scripts/assemble-scoreboard';
 import { isCurrentSql, athensTodaySql } from '../src/db/effective-end-sql';
 
 const ROOT = join(import.meta.dir, '..');
@@ -289,7 +289,7 @@ describe('assembleScoreboard — output shape', () => {
 
   test('required top-level keys are all present', () => {
     expect(Object.keys(parsed).sort()).toEqual(
-      ['citations', 'crawlers', 'generated_at', 'health_report', 'per_source', 'total_events', 'upcoming_events'].sort(),
+      ['citations', 'crawlers', 'generated_at', 'health_report', 'per_source', 'sensor_status', 'total_events', 'upcoming_events'].sort(),
     );
   });
 });
@@ -306,6 +306,211 @@ describe('assembleScoreboard — healthy report variant', () => {
       expect(p.health_report.alerts).toEqual([]);
       expect(p.health_report.database.new_unverified_venues).toBe(0);
       expect(p.health_report.scraping).toEqual({ athinorama: { status: 'ok', events: 170, delta: 0 } });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Freshness sensor: run_health_check is NON-FATAL in scripts/daily-automated.sh,
+// so a failed health check leaves YESTERDAY's report as the newest file and the
+// scoreboard re-stamps it under a fresh generated_at. The Analyst gates only on
+// generated_at, so without report_age_days/stale/sensor_status it can be fed
+// re-dated stale evidence indefinitely. `today` is injected here so these pins
+// do not rot with the wall clock.
+// ---------------------------------------------------------------------------
+function reportDatedHeader(date: string): string {
+  return [
+    `AGENT ATHENS HEALTH REPORT - ${date}`,
+    '='.repeat(50),
+    '',
+    'SCRAPING',
+    '-'.repeat(50),
+    '  v athinorama          170 events (same)',
+    '',
+    'DATABASE',
+    '-'.repeat(50),
+    '  Total: 19000 | Visible: 570 | Hidden: 18430',
+    '',
+  ].join('\n');
+}
+
+/** Assemble from a throwaway reports dir holding exactly one file. */
+function assembleWith(fileName: string, content: string, today: string) {
+  const dir = mkdtempSync(join(tmpdir(), 'aa-scoreboard-fresh-'));
+  try {
+    writeFileSync(join(dir, fileName), content);
+    const out = join(dir, 'scoreboard.json');
+    const returned: any = assembleScoreboard({ dbPath, reportsDir: dir, outPath: out, today });
+    const written = JSON.parse(readFileSync(out, 'utf-8'));
+    return { returned, written, raw: readFileSync(out, 'utf-8') };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+describe('health_report freshness sensor — stale evidence cannot pass as fresh', () => {
+  test("report dated today → age 0, stale false, sensor_status 'fresh'", () => {
+    const { written } = assembleWith('2026-09-02.txt', reportDatedHeader('2026-09-02'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBe(0);
+    expect(written.health_report.stale).toBe(false);
+    expect(written.sensor_status.health_report).toBe('fresh');
+  });
+
+  test("report dated yesterday → age 1, STALE: health-check writes today's report seconds before this script, so yesterday's file means today's check did not run (Codex 2026-09-16 #7)", () => {
+    const { written } = assembleWith('2026-09-01.txt', reportDatedHeader('2026-09-01'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBe(1);
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test('a FUTURE-dated report (clock skew) is stale — it would otherwise be selected as newest and read fresh forever', () => {
+    const { written } = assembleWith('2026-09-03.txt', reportDatedHeader('2026-09-03'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBe(-1);
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test('an impossible calendar date (2026-02-30) is stale with a null age — Date.parse would silently roll it to March 2', () => {
+    const { written } = assembleWith('2026-03-02.txt', reportDatedHeader('2026-02-30'), '2026-03-02');
+    expect(written.health_report.report_age_days).toBeNull();
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test('an unparseable header date (9999-99-99) is stale with a null age, never fresh', () => {
+    const { written } = assembleWith('2026-09-02.txt', reportDatedHeader('9999-99-99'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBeNull();
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test("report dated 2 days ago → stale", () => {
+    const { written } = assembleWith('2026-08-31.txt', reportDatedHeader('2026-08-31'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBe(2);
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test("report dated 3 days ago → age 3, stale true, sensor_status 'stale'", () => {
+    const { written } = assembleWith('2026-08-30.txt', reportDatedHeader('2026-08-30'), '2026-09-02');
+    expect(written.health_report.report_age_days).toBe(3);
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test('age is computed against the injected today, not the wall clock', () => {
+    const { written } = assembleWith('2026-08-30.txt', reportDatedHeader('2026-08-30'), '2026-09-06');
+    expect(written.health_report.report_age_days).toBe(7);
+  });
+
+  test('a dated file whose header date is missing → report_date null, age null, stale true', () => {
+    // Sections parse, so it is NOT malformed — only the date is unreadable.
+    const noHeader = [
+      'SCRAPING',
+      '-'.repeat(50),
+      '  v athinorama          170 events (same)',
+      '',
+      'DATABASE',
+      '-'.repeat(50),
+      '  Total: 19000 | Visible: 570 | Hidden: 18430',
+      '',
+    ].join('\n');
+    const { written } = assembleWith('2026-09-02.txt', noHeader, '2026-09-02');
+    expect(written.health_report.report_date).toBeNull();
+    expect(written.health_report.report_age_days).toBeNull();
+    expect(written.health_report.stale).toBe(true);
+    expect(written.sensor_status.health_report).toBe('stale');
+  });
+
+  test("garbage in a correctly-dated file → sensor_status 'malformed', blocks null/empty, assembly still succeeds", () => {
+    // The Analyst needs the signal more than it needs the assembly to fail:
+    // a throwing assembler leaves the PREVIOUS scoreboard.json in place, which
+    // is exactly the stale-evidence failure this sensor exists to catch.
+    const garbage = 'Traceback (most recent call last):\n  health-check died\n<<<binary noise>>>\n';
+    const { written, raw, returned } = assembleWith('2026-09-02.txt', garbage, '2026-09-02');
+    expect(written.sensor_status.health_report).toBe('malformed');
+    expect(written.health_report.report_date).toBeNull();
+    expect(written.health_report.scraping).toEqual({});
+    expect(written.health_report.database).toBeNull();
+    expect(written.health_report.build).toBeNull();
+    expect(written.health_report.enrichment).toBeNull();
+    expect(written.health_report.alerts).toEqual([]);
+    expect(written.health_report.report_file).toBe('2026-09-02.txt');
+    // Still a valid, complete scoreboard: DB counts present, JSON parses.
+    expect(() => JSON.parse(raw)).not.toThrow();
+    expect(written.total_events).toBe(EXPECTED_TOTAL);
+    expect(returned.sensor_status.health_report).toBe('malformed');
+  });
+
+  test('malformed beats stale: garbage in an OLD file still reports malformed', () => {
+    const { written } = assembleWith('2026-08-20.txt', 'nothing parseable here\n', '2026-09-02');
+    expect(written.sensor_status.health_report).toBe('malformed');
+    expect(written.health_report.stale).toBe(true);
+  });
+
+  test('a report with scraping entries but no DATABASE block is NOT malformed', () => {
+    // Health-check can emit a scraping-only report; only a report with NEITHER
+    // expected section counts as malformed, or the sensor cries wolf.
+    const scrapingOnly = [
+      'AGENT ATHENS HEALTH REPORT - 2026-09-02',
+      '',
+      'SCRAPING',
+      '-'.repeat(50),
+      '  v athinorama          170 events (same)',
+      '',
+    ].join('\n');
+    const { written } = assembleWith('2026-09-02.txt', scrapingOnly, '2026-09-02');
+    expect(written.health_report.database).toBeNull();
+    expect(Object.keys(written.health_report.scraping).length).toBeGreaterThan(0);
+    expect(written.sensor_status.health_report).toBe('fresh');
+  });
+
+  test('a report with a DATABASE block but no scraping entries is NOT malformed', () => {
+    const dbOnly = [
+      'AGENT ATHENS HEALTH REPORT - 2026-09-02',
+      '',
+      'DATABASE',
+      '-'.repeat(50),
+      '  Total: 19000 | Visible: 570 | Hidden: 18430',
+      '',
+    ].join('\n');
+    const { written } = assembleWith('2026-09-02.txt', dbOnly, '2026-09-02');
+    expect(written.health_report.scraping).toEqual({});
+    expect(written.health_report.database).not.toBeNull();
+    expect(written.sensor_status.health_report).toBe('fresh');
+  });
+
+  test('sensor_status is a top-level block with a health_report verdict', () => {
+    const { written } = assembleWith('2026-09-02.txt', reportDatedHeader('2026-09-02'), '2026-09-02');
+    expect(Object.keys(written.sensor_status)).toEqual(['health_report']);
+    expect(['fresh', 'stale', 'malformed']).toContain(written.sensor_status.health_report);
+  });
+
+  test('every pre-existing health_report field survives the new ones', () => {
+    const { written } = assembleWith('2026-09-02.txt', REPORT_WITH_ALERTS, '2026-09-02');
+    expect(Object.keys(written.health_report).sort()).toEqual(
+      ['alerts', 'build', 'database', 'enrichment', 'report_age_days', 'report_date', 'report_file', 'scraping', 'stale'].sort(),
+    );
+  });
+
+  test('the default today is the Athens-local helper, never a UTC calendar day (source pin: a runtime pin is blind to the zone for ~21 h of every day)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'assemble-scoreboard.ts'), 'utf-8');
+    expect(src).toContain('opts.today ?? athensTodaySql()');
+    expect(src).not.toMatch(/const today = .*new Date\(\)/);
+  });
+
+  test('the default today path (no injection) resolves and grades an Athens-today report as fresh', () => {
+    const today = athensTodaySql();
+    const dir = mkdtempSync(join(tmpdir(), 'aa-scoreboard-wallclock-'));
+    try {
+      writeFileSync(join(dir, `${today}.txt`), reportDatedHeader(today));
+      const out = join(dir, 'scoreboard.json');
+      assembleScoreboard({ dbPath, reportsDir: dir, outPath: out });
+      const p = JSON.parse(readFileSync(out, 'utf-8'));
+      expect(p.health_report.report_age_days).toBe(0);
+      expect(p.sensor_status.health_report).toBe('fresh');
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -420,5 +625,34 @@ describe('daily-automated.sh seam guards — scoreboard reaches the daily commit
     expect(deploy).toBeGreaterThan(-1);
     expect(health).toBeLessThan(scoreboard);
     expect(scoreboard).toBeLessThan(deploy);
+  });
+});
+
+describe('parseHealthReport — standalone contract', () => {
+  test('is pessimistic until graded: stale true and age null before gradeHealthReport runs', () => {
+    const b = parseHealthReport('AGENT ATHENS HEALTH REPORT - 2026-09-02\n', 'x.txt');
+    expect(b.report_date).toBe('2026-09-02');
+    expect(b.stale).toBe(true);
+    expect(b.report_age_days).toBeNull();
+  });
+});
+
+describe('producer/consumer seam guards — the sensor is only as good as what reads and writes it', () => {
+  test('.claude/analyst-triage.md step 0 gates on sensor_status.health_report, fail-closed on a missing key', () => {
+    const spec = readFileSync(join(ROOT, '.claude', 'analyst-triage.md'), 'utf-8');
+    const step0 = spec.split('\n').find((l) => l.startsWith('0. Preconditions'));
+    expect(step0).toBeDefined();
+    expect(step0!).toContain('sensor_status.health_report');
+    expect(step0!).toContain('not `fresh`');
+    expect(step0!).toContain('report_age_days');
+    expect(step0!).toContain('missing or non-string `sensor_status.health_report`');
+    expect(step0!).toContain('unparseable `generated_at`');
+    for (const v of ['fresh', 'stale', 'malformed']) expect(spec).toContain(v);
+  });
+
+  test('scripts/health-check.ts dates its report with the same Athens-local helper the grader uses (a UTC date reads one day old between 00:00 and 03:00 Athens)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'health-check.ts'), 'utf-8');
+    expect((src.match(/const today = getAthensTodayStr\(\);/g) ?? []).length).toBe(2);
+    expect(src).not.toMatch(/const today = new Date\(\)\.toISOString/);
   });
 });
