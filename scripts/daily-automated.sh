@@ -731,6 +731,17 @@ run_deploy() {
           done
           echo "[$(date '+%Y-%m-%d %H:%M:%S')] [deploy] watchdog killed CLI after ${DEPLOY_TIMEOUT:-900}s of awake time" >> "$LOG_FILE"
           kill "$NETLIFY_PID" 2>/dev/null
+          # TERM is advisory: a CLI that ignores it leaves the parent's `wait`
+          # blocking forever, so the "timeout" never ends the run. Grace window
+          # in awake ticks for the same reason as AWAKE_TICKS above, then KILL.
+          TERM_TICKS=0
+          while [ "$TERM_TICKS" -lt 4 ]; do
+            kill -0 "$NETLIFY_PID" 2>/dev/null || exit 0
+            sleep 5
+            TERM_TICKS=$(( TERM_TICKS + 1 ))
+          done
+          echo "[$(date '+%Y-%m-%d %H:%M:%S')] [deploy] CLI ignored TERM for 4 awake ticks; escalating to kill -9" >> "$LOG_FILE"
+          kill -9 "$NETLIFY_PID" 2>/dev/null
         ) &
         # deploy-watchdog:end
         local DEPLOY_WATCHDOG_PID=$!
@@ -951,20 +962,46 @@ main() {
     # since they write different columns and don't conflict in practice.
     LOCK_FILE="$PROJECT_DIR/.pipeline-${PIPELINE_MODE}.lock"
     LOCK_MAX_AGE=25200  # 7 hours — covers worst-case cold morning run
+    # lock:begin (extracted verbatim by tests/daily-pipeline-lock.test.ts)
+    # Liveness is asked FIRST and age only after: this machine idle-sleeps, so a
+    # run that is merely SUSPENDED can exceed LOCK_MAX_AGE of wall clock while
+    # its process is alive and still deploying. Age-first force-removed that
+    # lock and let a second pipeline start concurrently.
     if [[ -f "$LOCK_FILE" ]]; then
         LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
-        LOCK_AGE=$(( $(date +%s) - $(stat -f%m "$LOCK_FILE" 2>/dev/null || echo 0) ))
-        if [[ $LOCK_AGE -gt $LOCK_MAX_AGE ]]; then
-            log "Stale $PIPELINE_MODE lock (age: ${LOCK_AGE}s > ${LOCK_MAX_AGE}s). Force-removing."
-            rm -f "$LOCK_FILE"
-        elif [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
+        # Portable mtime: BSD/macOS `stat -f%m`, GNU `stat -c%Y` — the ci check
+        # executes this block on ubuntu (tests/daily-pipeline-lock.test.ts).
+        LOCK_MTIME=$(stat -f%m "$LOCK_FILE" 2>/dev/null || stat -c%Y "$LOCK_FILE" 2>/dev/null || echo 0)
+        LOCK_AGE=$(( $(date +%s) - LOCK_MTIME ))
+        # A live PID is our run only if its command line is this script (launchd:
+        # `/bin/bash …/daily-automated.sh <mode>`, or the same under caffeinate).
+        # Liveness-first has no age escape hatch, so a PID number recycled by an
+        # unrelated long-lived process must be told apart by IDENTITY — age is
+        # not identity: a run suspended over a weekend is still the owner.
+        LOCK_OWNER_CMD=""
+        if [[ -n "$LOCK_PID" ]]; then LOCK_OWNER_CMD=$(ps -o command= -p "$LOCK_PID" 2>/dev/null || true); fi
+        if [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null && [[ "$LOCK_OWNER_CMD" == *daily-automated* ]]; then
             log "Pipeline $PIPELINE_MODE already running (PID=$LOCK_PID, mode may differ). Exiting cleanly."
             exit 0
-        else
+        elif [[ -n "$LOCK_PID" ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
+            log_error "Pipeline $PIPELINE_MODE lock names PID=$LOCK_PID, which is alive but is not this pipeline (${LOCK_OWNER_CMD:-unknown command}) — a recycled PID. Removing."
+            rm -f "$LOCK_FILE"
+        elif [[ -n "$LOCK_PID" ]]; then
             log "Dead $PIPELINE_MODE lock (PID=$LOCK_PID not running). Removing."
             rm -f "$LOCK_FILE"
+        else
+            # No PID to interrogate (empty or unreadable lock): age is the only
+            # signal left, so keep the original stale-age rule for this case.
+            if [[ $LOCK_AGE -gt $LOCK_MAX_AGE ]]; then
+                log "Stale $PIPELINE_MODE lock (no PID, age: ${LOCK_AGE}s > ${LOCK_MAX_AGE}s). Force-removing."
+                rm -f "$LOCK_FILE"
+            else
+                log "Unreadable $PIPELINE_MODE lock (no PID, age: ${LOCK_AGE}s). Assuming a live run. Exiting cleanly."
+                exit 0
+            fi
         fi
     fi
+    # lock:end
     echo $$ > "$LOCK_FILE"
     trap 'rm -f "$LOCK_FILE"' EXIT
 

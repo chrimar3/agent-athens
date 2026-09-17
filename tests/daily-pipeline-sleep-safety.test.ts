@@ -18,8 +18,10 @@
  * exactly one test here fails.
  */
 import { describe, test, expect } from 'bun:test';
-import { readFileSync } from 'fs';
+import { readFileSync, mkdtempSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
+import { tmpdir } from 'os';
+import { spawnSync } from 'child_process';
 
 const SCRIPT = readFileSync(join(import.meta.dir, '..', 'scripts', 'daily-automated.sh'), 'utf-8');
 
@@ -45,11 +47,87 @@ describe('deploy watchdog measures AWAKE time, not wall-clock', () => {
     expect(block).toMatch(/sleep 15/);
   });
 
+  test('a CLI that ignores TERM is escalated to kill -9', () => {
+    // The parent `wait`s on the CLI pid. A single TERM the CLI chooses to
+    // ignore leaves that wait blocking forever, so the watchdog "timeout"
+    // never actually ends the run — the escalation is what makes it a timeout.
+    const block = between(SCRIPT, '# deploy-watchdog:begin', '# deploy-watchdog:end');
+    expect(block).toMatch(/kill -9 "\$NETLIFY_PID"/);
+    // Escalation, not replacement: TERM is still sent first, and the grace
+    // window is counted in awake ticks (same reason as AWAKE_TICKS above).
+    const term = block.indexOf('kill "$NETLIFY_PID"');
+    expect(term).toBeGreaterThan(-1);
+    expect(block.indexOf('kill -9 "$NETLIFY_PID"')).toBeGreaterThan(term);
+    expect(block.slice(term)).toMatch(/sleep 5\b/);
+  });
+
   test('the S89 wall-clock pattern is still used where it belongs (the enrichment batch watchdog in auto-enrich.sh)', () => {
     // Guards against "fixing" the wrong watchdog: a genuinely hung Claude CLI
     // must still die across sleep.
     const autoEnrich = readFileSync(join(import.meta.dir, '..', 'scripts', 'auto-enrich.sh'), 'utf-8');
     expect(autoEnrich).toMatch(/date \+%s/);
+  });
+});
+
+/**
+ * Behavioural pin for the escalation: the REAL watchdog block is extracted
+ * between its markers and executed with three substitutions only — the netlify
+ * CLI becomes a child that ignores TERM (or one that honours it), the two
+ * awake-tick sleeps shrink from 15 s / 5 s to 0.2 s / 0.1 s, and `local` is
+ * dropped because the block runs outside a function. Everything else — the
+ * tick arithmetic, the TERM, the grace loop, the kill -9 — is the script's own
+ * text, so a mutant that makes the KILL unreachable or stretches the grace
+ * window to hours turns into a spawn timeout here instead of a green suite.
+ */
+function runWatchdogBlock(ignoreTerm: boolean): { cliExit: string; log: string; status: number | null; elapsedMs: number } {
+  const start = SCRIPT.indexOf('# deploy-watchdog:begin');
+  const end = SCRIPT.indexOf('# deploy-watchdog:end');
+  expect(start).toBeGreaterThan(-1);
+  expect(end).toBeGreaterThan(start);
+  let block = SCRIPT.slice(SCRIPT.indexOf('\n', start) + 1, end);
+  const cli = ignoreTerm ? `bash -c 'trap "" TERM; sleep 60' >"$deploy_tmp" 2>>"$LOG_FILE" &` : `sleep 60 >"$deploy_tmp" 2>>"$LOG_FILE" &`;
+  const before = block;
+  block = block.replace(/netlify deploy[\s\S]*?>>"\$LOG_FILE" &/, cli);
+  expect(block).not.toBe(before); // the CLI line was found and replaced
+  expect(block).toMatch(/sleep 15$/m);
+  expect(block).toMatch(/sleep 5$/m);
+  block = block.replace(/sleep 15$/m, 'sleep 0.2').replace(/sleep 5$/m, 'sleep 0.1').replace(/\blocal /g, '');
+  const dir = mkdtempSync(join(tmpdir(), 'aa-watchdog-'));
+  const logFile = join(dir, 'pipeline.log');
+  const harness = [
+    'set -u',
+    `LOG_FILE=${JSON.stringify(logFile)}`,
+    `deploy_tmp=${JSON.stringify(join(dir, 'deploy.json'))}`,
+    'DEPLOY_TIMEOUT=1',
+    block,
+    'cli_exit=0',
+    'wait "$NETLIFY_PID" || cli_exit=$?',
+    'echo "cli_exit=$cli_exit"',
+  ].join('\n');
+  const t0 = Date.now();
+  const r = spawnSync('bash', ['-c', harness], { encoding: 'utf-8', timeout: 20_000 });
+  const elapsedMs = Date.now() - t0;
+  const log = existsSync(logFile) ? readFileSync(logFile, 'utf-8') : '';
+  rmSync(dir, { recursive: true, force: true });
+  return { cliExit: (r.stdout.match(/cli_exit=(\d+)/) ?? [])[1] ?? '', log, status: r.status, elapsedMs };
+}
+
+describe('deploy watchdog — the escalation actually terminates a TERM-ignoring CLI (executed, not spelled)', () => {
+  test('a child that ignores TERM is killed with -9 and `wait` returns 137 within seconds', () => {
+    const r = runWatchdogBlock(true);
+    expect(r.status).toBe(0);              // the harness itself finished (no spawn timeout)
+    expect(r.cliExit).toBe('137');
+    expect(r.log).toContain('watchdog killed CLI');
+    expect(r.log).toContain('escalating to kill -9');
+    expect(r.elapsedMs).toBeLessThan(15_000);
+  });
+
+  test('a child that honours TERM ends at the TERM and is never escalated', () => {
+    const r = runWatchdogBlock(false);
+    expect(r.status).toBe(0);
+    expect(r.cliExit).toBe('143');
+    expect(r.log).toContain('watchdog killed CLI');
+    expect(r.log).not.toContain('escalating');
   });
 });
 
