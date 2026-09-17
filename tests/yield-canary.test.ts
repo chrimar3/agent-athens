@@ -18,6 +18,7 @@ import {
   athensToday,
   dayDiff,
   computeYields,
+  pickComparisonDay,
   runCanary,
   openScrapeStatsReadOnly,
   issueTitle,
@@ -75,14 +76,20 @@ function byId(yields: SourceYield[], source: string): SourceYield {
 }
 
 let work: string;
-beforeAll(() => { work = mkdtempSync(join(tmpdir(), 'aa-yield-canary-')); });
+/** An empty quarantine registry, so CLI tests do not inherit prod's clubber entry. */
+let emptyQuarantine: string;
+beforeAll(() => {
+  work = mkdtempSync(join(tmpdir(), 'aa-yield-canary-'));
+  emptyQuarantine = join(work, 'no-quarantine.json');
+  writeFileSync(emptyQuarantine, JSON.stringify({ sources: {} }));
+});
 afterAll(() => { rmSync(work, { recursive: true, force: true }); });
 
 // ---------------------------------------------------------------------------
 // Pure math over a seeded DB: computeYields()
 // ---------------------------------------------------------------------------
 describe('computeYields — trailing mean over the prior window, latest run excluded', () => {
-  const SOURCES = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'];
+  const SOURCES = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'newbie'];
   let dbPath: string;
 
   beforeAll(() => {
@@ -111,6 +118,9 @@ describe('computeYields — trailing mean over the prior window, latest run excl
       ...history('zeta', [100, 100, 100], 11),
       { source: 'zeta', date: LATEST, found: 0, time: '01:00:00.000' },
       { source: 'zeta', date: LATEST, found: 80, time: '05:00:00.000' },
+      // newbie: a genuinely new source — ONE row, at 0, and no nonzero yield
+      // anywhere in the lookback. This is what 'insufficient' is FOR.
+      { source: 'newbie', date: LATEST, found: 0 },
       // Inactive source with a catastrophic drop: must be ignored entirely.
       ...history('eventbrite', [500, 500, 500], 11),
       { source: 'eventbrite', date: LATEST, found: 1 },
@@ -160,11 +170,29 @@ describe('computeYields — trailing mean over the prior window, latest run excl
     expect(byId(compute(0.5), 'alpha').threshold).toBe(0.5);
   });
 
-  test('fewer than 3 prior samples → insufficient history, never a trip (even at 0)', () => {
+  test('fewer than 3 prior samples but REAL nonzero history → dark, never tripped', () => {
+    // This assertion used to read 'insufficient'. That was the blind spot:
+    // gamma yielded 50 events two days running and then went to 0, and calling
+    // it "insufficient history" let a dead scraper read as healthy forever.
+    // It still never TRIPS (2 samples is too thin a baseline to compare
+    // against) — 'dark' is the separate verdict for "it HAD yield and now has
+    // none", which is evidence enough on its own.
     const gamma = byId(compute(), 'gamma');
     expect(gamma.samples).toBe(2);
     expect(gamma.latest).toBe(0);
-    expect(gamma.status).toBe('insufficient');
+    expect(gamma.status).toBe('dark');
+    expect(gamma.lastNonzeroDate).toBe(day(13));
+  });
+
+  test('a genuinely new source — no nonzero yield anywhere in the lookback — stays insufficient', () => {
+    // The other side of the dark rule: 'insufficient' must survive for sources
+    // that have never produced anything, or every newly-added scraper would
+    // file an issue on its first day.
+    const n = byId(compute(), 'newbie');
+    expect(n.samples).toBe(0);
+    expect(n.latest).toBe(0);
+    expect(n.lastNonzeroDate).toBeNull();
+    expect(n.status).toBe('insufficient');
   });
 
   test('active source with NO row in the latest window counts as 0 and trips (disabled-scraper criterion)', () => {
@@ -200,14 +228,61 @@ describe('computeYields — trailing mean over the prior window, latest run excl
     expect(y.find((s) => s.source === 'eventbrite')).toBeUndefined();
   });
 
-  test('a mean of 0 (dead-for-30-days source) cannot trip — nothing is below 0', () => {
+  test('a mean of 0 with real yield earlier in the lookback → dark (it cannot trip: nothing is below 0)', () => {
+    // REPLACES the old pin "a mean of 0 cannot trip — nothing is below 0",
+    // which asserted status 'ok'. The arithmetic is unchanged and still true —
+    // `0 < 0.6 * 0` is false — but 'ok' was the wrong VERDICT: 30 successful
+    // zero-yield days is the shape a scraper takes when its selector broke a
+    // month ago, and the canary reported it as healthy every single day.
     const p = join(work, 'zero-mean.db');
-    seedStats(p, [...history('alpha', [0, 0, 0], 11), { source: 'alpha', date: LATEST, found: 0 }]);
+    seedStats(p, [
+      { source: 'alpha', date: '2026-07-20', found: 100 }, // outside the 30-day window, inside the 90-day lookback
+      ...history('alpha', [0, 0, 0], 11),
+      { source: 'alpha', date: LATEST, found: 0 },
+    ]);
     const db = openScrapeStatsReadOnly(p);
     try {
       const alpha = byId(computeYields(db, { activeSources: ['alpha'], threshold: 0.6, windowDays: 30 }), 'alpha');
+      // Fixture precondition: the window really is all zeros with a full sample count.
       expect(alpha.mean).toBe(0);
-      expect(alpha.status).toBe('ok');
+      expect(alpha.samples).toBe(3);
+      expect(alpha.latest).toBe(0);
+      expect(alpha.status).toBe('dark');
+      expect(alpha.lastNonzeroDate).toBe('2026-07-20');
+      expect(alpha.lastNonzeroEvents).toBe(100);
+    } finally {
+      db.close();
+    }
+  });
+
+  test('a source that stopped writing rows 60 days ago → dark, and --lookback-days bounds how far back that memory reaches', () => {
+    const p = join(work, 'long-dead.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      { source: 'ghost', date: '2026-07-16', found: 120 }, // 60 days before LATEST; nothing since
+    ]);
+    const db = openScrapeStatsReadOnly(p);
+    try {
+      // Fixture precondition: ghost has NO row inside the 30-day window, so the
+      // yield-drop rule has no baseline at all (samples 0, mean null).
+      const inWindow = (db.prepare(
+        `SELECT COUNT(*) AS n FROM scrape_stats WHERE source='ghost' AND date(scraped_at) >= date(?, '-30 days')`,
+      ).get(LATEST) as { n: number }).n;
+      expect(inWindow).toBe(0);
+
+      const wide = byId(computeYields(db, { activeSources: ['alpha', 'ghost'], threshold: 0.6, windowDays: 30 }), 'ghost');
+      expect(wide.samples).toBe(0);
+      expect(wide.mean).toBeNull();
+      expect(wide.latest).toBe(0);
+      expect(wide.status).toBe('dark');
+      expect(wide.lastNonzeroDate).toBe('2026-07-16');
+      expect(wide.lookbackDays).toBe(90);
+
+      // Same data, a 30-day memory: the 60-day-old yield is out of reach, so
+      // there is no evidence this source ever produced anything → insufficient.
+      const narrow = byId(computeYields(db, { activeSources: ['alpha', 'ghost'], threshold: 0.6, windowDays: 30, lookbackDays: 30 }), 'ghost');
+      expect(narrow.lastNonzeroDate).toBeNull();
+      expect(narrow.status).toBe('insufficient');
     } finally {
       db.close();
     }
@@ -238,6 +313,87 @@ describe('computeYields — trailing mean over the prior window, latest run excl
         expect(s.latest).toBe(100);
         expect(s.status).toBe('ok');
       }
+      // The later manual run is AFTER the comparison day: it must not become the
+      // "last nonzero" evidence either (pins the `<= $latest` bound of the search).
+      expect(byId(y, 'alpha').lastNonzeroDate).toBe(LATEST);
+    } finally {
+      db.close();
+    }
+  });
+
+  test('a source that IS producing today is never dark, however thin its baseline (insufficient, not dark)', () => {
+    const p = join(work, 'thin-producer.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      ...history('thin', [50, 50], 12), { source: 'thin', date: LATEST, found: 30 },
+    ]);
+    const db = openScrapeStatsReadOnly(p);
+    try {
+      const t = byId(computeYields(db, { activeSources: ['alpha', 'thin'], threshold: 0.6, windowDays: 30 }), 'thin');
+      expect(t.samples).toBe(2);           // fixture precondition: below minSamples
+      expect(t.latest).toBe(30);           // and producing today
+      expect(t.lastNonzeroDate).toBe(LATEST);
+      expect(t.status).toBe('insufficient');
+    } finally {
+      db.close();
+    }
+  });
+
+  test('lookback edge: a nonzero run exactly --lookback-days before the comparison day still counts (dark); one day further back does not (insufficient — issue #1 open item: a dead source stops re-filing there)', () => {
+    const p = join(work, 'lookback-edge.db');
+    const EDGE = '2026-06-16'; // LATEST − 90 days
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      ...history('beta', [100, 100, 100], 11), { source: 'beta', date: LATEST, found: 100 },
+      { source: 'edge', date: EDGE, found: 40 },
+      { source: 'past', date: '2026-06-15', found: 40 },
+    ]);
+    const db = openScrapeStatsReadOnly(p);
+    try {
+      // Fixture precondition: SQLite agrees EDGE is exactly the lookback boundary.
+      expect((db.prepare(`SELECT date(?, '-90 days') AS d`).get(LATEST) as { d: string }).d).toBe(EDGE);
+      const y = computeYields(db, { activeSources: ['alpha', 'beta', 'edge', 'past'], threshold: 0.6, windowDays: 30, lookbackDays: 90 });
+      expect(byId(y, 'edge').lastNonzeroDate).toBe(EDGE);
+      expect(byId(y, 'edge').status).toBe('dark');
+      expect(byId(y, 'past').lastNonzeroDate).toBeNull();
+      expect(byId(y, 'past').status).toBe('insufficient');
+    } finally {
+      db.close();
+    }
+  });
+
+  test('a cycle that dies BELOW quorum is invisible: the previous full day stays the comparison day (documented blind spot, Codex #10 / issue #1)', () => {
+    const p = join(work, 'sub-quorum-cycle.db');
+    const five = ['s1', 's2', 's3', 's4', 's5'];
+    seedStats(p, [
+      ...five.flatMap((x) => [...history(x, [100, 100, 100], 11), { source: x, date: LATEST, found: 100 }]),
+      { source: 's1', date: '2026-09-15', found: 0 }, // a dying cycle: 2 of 5 wrote rows
+      { source: 's2', date: '2026-09-15', found: 0 },
+    ]);
+    const db = openScrapeStatsReadOnly(p);
+    try {
+      expect(pickComparisonDay(db, five, 30)).toBe(LATEST); // 2 < ceil(5/2) = 3
+      for (const s of computeYields(db, { activeSources: five, threshold: 0.6, windowDays: 30 })) expect(s.status).toBe('ok');
+    } finally {
+      db.close();
+    }
+  });
+
+  test('a partial cycle that reaches EXACTLY quorum is the comparison day, and the absent sources read 0 and trip', () => {
+    const p = join(work, 'exact-quorum-cycle.db');
+    const five = ['s1', 's2', 's3', 's4', 's5'];
+    seedStats(p, [
+      ...five.flatMap((x) => [...history(x, [100, 100, 100], 11), { source: x, date: LATEST, found: 100 }]),
+      { source: 's1', date: '2026-09-15', found: 100 }, // 3 of 5 = ceil(5/2): qualifies
+      { source: 's2', date: '2026-09-15', found: 100 },
+      { source: 's3', date: '2026-09-15', found: 100 },
+    ]);
+    const db = openScrapeStatsReadOnly(p);
+    try {
+      expect(pickComparisonDay(db, five, 30)).toBe('2026-09-15');
+      const y = computeYields(db, { activeSources: five, threshold: 0.6, windowDays: 30 });
+      for (const x of ['s1', 's2', 's3']) expect(byId(y, x).status).toBe('ok');
+      for (const x of ['s4', 's5']) { expect(byId(y, x).latest).toBe(0); expect(byId(y, x).status).toBe('tripped'); }
     } finally {
       db.close();
     }
@@ -298,6 +454,97 @@ describe('runCanary — one issue per tripped source, deduped against open issue
     expect(body).toContain('30-day mean: 100');
     expect(body).toContain('samples: 3');
     expect(body).toContain('threshold: 0.6');
+    // Operator guidance: quarantine records the decision, de-listing hides it.
+    // The old body said "remove it from src/config/active-source-ids.ts", which
+    // is the acknowledged blind spot — de-listing ends the monitoring.
+    expect(body).toContain('config/quarantined-sources.json');
+    expect(body).toContain('Do NOT simply remove it from `src/config/active-source-ids.ts`');
+    expect(body).not.toContain('If the source was intentionally disabled, remove it');
+    // The canary IS wired now — the rollback text must name the real hook.
+    expect(body).toContain('run_yield_canary');
+    expect(body).not.toContain('nothing invokes it on a schedule yet');
+  });
+
+  test('a quarantined source is never evaluated: it cannot trip, files nothing, and is named in the result', async () => {
+    const p = join(work, 'quarantined.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      ...history('qsrc', [100, 100, 100], 11), { source: 'qsrc', date: LATEST, found: 0 },
+    ]);
+    const active = ['alpha', 'qsrc'];
+    // Fixture precondition: WITHOUT the quarantine, qsrc really does trip —
+    // otherwise this test would pass with the subtraction removed.
+    const before = await runCanary({ dbPath: p, activeSources: active, threshold: 0.6, windowDays: 30, dryRun: true, sink: new FakeSink([]), today: LATEST });
+    expect(before.tripped.map((t) => t.source)).toEqual(['qsrc']);
+
+    const sink = new FakeSink([]);
+    const after = await runCanary({ dbPath: p, activeSources: active, quarantined: ['qsrc'], threshold: 0.6, windowDays: 30, dryRun: false, sink, today: LATEST });
+    expect(after.quarantined).toEqual(['qsrc']);
+    expect(after.yields.map((y) => y.source)).toEqual(['alpha']);
+    expect(after.tripped).toEqual([]);
+    expect(after.dark).toEqual([]);
+    expect(sink.created).toEqual([]);
+  });
+
+  test('a dark source files ONE issue in the same body shape, naming the last nonzero day', async () => {
+    const p = join(work, 'dark-issue.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      { source: 'ghost', date: '2026-07-16', found: 120 },
+    ]);
+    const sink = new FakeSink([]);
+    const r = await runCanary({ dbPath: p, activeSources: ['alpha', 'ghost'], threshold: 0.6, windowDays: 30, dryRun: false, sink, today: LATEST });
+    expect(r.dark.map((d) => d.source)).toEqual(['ghost']);
+    expect(r.tripped).toEqual([]);
+    expect(sink.created).toHaveLength(1);
+    const c = sink.created[0];
+    expect(c.title).toBe('Yield canary: ghost dark — no yield since 2026-07-16');
+    expect(c.title).toStartWith(issueTitlePrefix('ghost')); // same dedupe key as a trip
+    expect(c.label).toBe('proposed');
+    const order = ['Problem', 'Evidence', 'Smallest change', 'Verify at T+14', 'Rollback'].map((h) => c.body.indexOf(h));
+    for (const i of order) expect(i).toBeGreaterThan(-1);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+    expect(c.body).toContain('2026-07-16');
+    expect(c.body).toContain('config/quarantined-sources.json');
+    expect(c.body).toContain('run_yield_canary');
+  });
+
+  test('the dark issue explains WHICH condition blinded the ratio rule, with the real threshold, and never claims the site is empty', async () => {
+    const p = join(work, 'dark-why.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      // thin: 2 successful nonzero days, nothing today → dark via the sample count
+      ...history('thin', [50, 50], 12), { source: 'thin', date: LATEST, found: 0 },
+      // zero: 3 successful ZERO days in the window plus a real yield OUTSIDE the
+      // window but inside the lookback → dark via mean 0
+      { source: 'zero', date: '2026-07-20', found: 70 }, ...history('zero', [0, 0, 0], 11), { source: 'zero', date: LATEST, found: 0 },
+    ]);
+    const sink = new FakeSink([]);
+    const r = await runCanary({ dbPath: p, activeSources: ['alpha', 'thin', 'zero'], quarantined: [], threshold: 0.7, windowDays: 30, dryRun: false, sink, today: LATEST });
+    expect(r.dark.map((d) => d.source).sort()).toEqual(['thin', 'zero']); // fixture precondition
+    const thin = sink.created.find((c) => c.title.includes('thin'))!.body;
+    const zero = sink.created.find((c) => c.title.includes('zero'))!.body;
+    expect(thin).toContain('2 successful day(s) is too thin a baseline');
+    expect(thin).not.toContain('× 0');
+    expect(zero).toContain('nothing is below 0.7 × 0');
+    for (const body of [thin, zero]) {
+      expect(body).not.toContain('publishing a listing with no');
+      expect(body).toContain('no successful run recorded any events that day');
+      expect(body).not.toContain('0 = no scrape_stats row');
+    }
+  });
+
+  test('an open "Yield canary: <source>" issue suppresses a dark re-file too', async () => {
+    const p = join(work, 'dark-dedupe.db');
+    seedStats(p, [
+      ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 100 },
+      { source: 'ghost', date: '2026-07-16', found: 120 },
+    ]);
+    const sink = new FakeSink(['Yield canary: ghost dark — no yield since 2026-07-16']);
+    const r = await runCanary({ dbPath: p, activeSources: ['alpha', 'ghost'], threshold: 0.6, windowDays: 30, dryRun: false, sink, today: LATEST });
+    expect(r.dark.map((d) => d.source)).toEqual(['ghost']);
+    expect(sink.created).toEqual([]);
+    expect(r.suppressed).toEqual(['ghost']);
   });
 
   test('an OPEN issue whose title starts with "Yield canary: <source>" suppresses a duplicate for that source only', async () => {
@@ -317,10 +564,11 @@ describe('runCanary — one issue per tripped source, deduped against open issue
   });
 
   test('a source with insufficient history never trips and never files an issue, even beside a real trip', async () => {
-    // The invariant the quarantined `clubber` case rests on: 0 prior samples and
-    // latest 0 is NOT evidence of a drop, and must never reach GitHub as
-    // "clubber dropped to 0 (30-day mean 0)". Pinned at the runCanary/CLI seam,
-    // because that is where the tripped set is turned into issues.
+    // A brand-new source: 0 prior samples, latest 0, and no nonzero yield
+    // anywhere in the lookback. That is NOT evidence of a drop (nor of
+    // darkness) and must never reach GitHub as "newbie dropped to 0 (30-day
+    // mean 0)". Pinned at the runCanary/CLI seam, because that is where the
+    // tripped/dark sets are turned into issues.
     const p = join(work, 'insufficient-vs-tripped.db');
     seedStats(p, [
       ...history('alpha', [100, 100, 100], 11), { source: 'alpha', date: LATEST, found: 3 }, // genuinely tripped
@@ -331,8 +579,10 @@ describe('runCanary — one issue per tripped source, deduped against open issue
     const probe = await runCanary({ dbPath: p, activeSources: active, threshold: 0.6, windowDays: 30, dryRun: true, sink: new FakeSink([]), today: LATEST });
     expect(byId(probe.yields, 'newbie').status).toBe('insufficient');
     expect(byId(probe.yields, 'newbie').latest).toBe(0);
+    expect(byId(probe.yields, 'newbie').lastNonzeroDate).toBeNull();
     expect(byId(probe.yields, 'alpha').status).toBe('tripped');
 
+    expect(probe.dark).toEqual([]);
     expect(probe.tripped.map((t) => t.source)).toEqual(['alpha']);
     expect(probe.wouldCreate.map((w) => w.source)).toEqual(['alpha']);
     expect(JSON.stringify(probe.wouldCreate)).not.toContain('newbie');
@@ -420,8 +670,13 @@ describe('staleness — a stalled pipeline is the failure a yield canary most ne
  * LATEST forever, so without the pin every CLI run would be stale. Tests that
  * exercise staleness override it (or drop it, for the real-clock path).
  */
-function runCli(args: string[], env: Record<string, string> = {}) {
-  const r = Bun.spawnSync(['bun', 'run', SCRIPT, ...args], {
+function runCli(args: string[], env: Record<string, string> = {}, opts: { realQuarantine?: boolean } = {}) {
+  // Unless a test asks for the real config, point --quarantine at an EMPTY
+  // registry: otherwise every CLI expectation here would silently depend on
+  // whatever prod has quarantined today.
+  const full =
+    opts.realQuarantine || args.some((a) => a.startsWith('--quarantine=')) ? args : [...args, `--quarantine=${emptyQuarantine}`];
+  const r = Bun.spawnSync(['bun', 'run', SCRIPT, ...full], {
     cwd: ROOT, stdout: 'pipe', stderr: 'pipe', env: { ...process.env, YIELD_CANARY_TODAY: LATEST, ...env },
   });
   return { code: r.exitCode, out: new TextDecoder().decode(r.stdout), err: new TextDecoder().decode(r.stderr) };
@@ -450,7 +705,11 @@ echo "fake-gh: unexpected call: $*" >&2; exit 64
 describe('CLI — exit codes and rule-5 stderr', () => {
   let trippedDb: string;
   let healthyDb: string;
+  let darkDb: string;
+  let darkAndTrippedDb: string;
   const active = [...ACTIVE_SOURCE_IDS];
+  /** 60 days before LATEST: inside the 90-day lookback, far outside the 30-day window. */
+  const LONG_AGO = '2026-07-16';
 
   beforeAll(() => {
     // The CLI evaluates the REAL active list, so seed every real source.
@@ -465,6 +724,18 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     ]);
     seedStats(trippedDb, rows(53));   // 47% drop — the health-check's 50%-vs-yesterday rule misses this
     seedStats(healthyDb, rows(100));
+
+    // megaron stopped writing scrape_stats rows entirely 60 days ago: no
+    // baseline to drop against, so only the dark rule can see it.
+    darkDb = join(work, 'cli-dark.db');
+    darkAndTrippedDb = join(work, 'cli-dark-and-tripped.db');
+    const darkRows = (moreLatest: number): StatRow[] => active.flatMap((s) =>
+      s === 'megaron'
+        ? [{ source: s, date: LONG_AGO, found: 120 }]
+        : [...history(s, [100, 100, 100], 11), { source: s, date: LATEST, found: s === 'more' ? moreLatest : 100 }],
+    );
+    seedStats(darkDb, darkRows(100));
+    seedStats(darkAndTrippedDb, darkRows(30)); // `more` also craters: 30 < 0.6 × 100
   });
 
   test('--dry-run on a tripped DB → exit non-zero, ONE rule-5 stderr line naming source/latest/mean/threshold, would-be issue on stdout, gh never called', () => {
@@ -491,8 +762,123 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     expect(r.code).toBe(0);
     const outLines = r.out.trim().split('\n');
     expect(outLines).toHaveLength(1);
-    expect(outLines[0]).toContain(`${active.length} active sources`);
+    expect(outLines[0]).toContain(`${active.length} of ${active.length} active sources evaluated`);
     expect(outLines[0]).toMatch(/0 tripped/);
+    expect(existsSync(log)).toBe(false);
+  });
+
+  test('integer flags are digits-only: 1e3, 0x10, +5 and 90.0 are refused by name', () => {
+    for (const bad of ['--lookback-days=1e3', '--window-days=0x10', '--max-age-days=+5', '--lookback-days=90.0', `--max-age-days=${'9'.repeat(400)}`]) {
+      const r = runCli([`--db=${healthyDb}`, bad]);
+      expect(r.code).toBe(1);
+      expect(r.err).toContain(bad.split('=')[0]);
+    }
+  });
+
+  test('a malformed YIELD_CANARY_TODAY → exit 1 naming the variable (NaN ages would read as never stale)', () => {
+    const r = runCli([`--db=${healthyDb}`], { YIELD_CANARY_TODAY: 'bogus' });
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('YIELD_CANARY_TODAY');
+  });
+
+  test('a hanging gh is bounded: the call times out, exit 1, the trip is still named', () => {
+    const dir = mkdtempSync(join(work, 'gh-slow-'));
+    const gh = join(dir, 'slow-gh');
+    // Ignores TERM: Bun's spawnSync timeout sends SIGTERM by default, which
+    // would leave the pipeline waiting on a wedged gh for the full 5 s here —
+    // the bound only holds if the timeout escalates to SIGKILL.
+    writeFileSync(gh, "#!/bin/bash\ntrap '' TERM\nsleep 5\n");
+    chmodSync(gh, 0o755);
+    const t0 = Date.now();
+    const r = runCli([`--db=${trippedDb}`], { YIELD_CANARY_GH: gh, YIELD_CANARY_GH_TIMEOUT_MS: '500' });
+    expect(Date.now() - t0).toBeLessThan(4000);
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('timed out');
+    expect(r.err).toContain('megaron');
+  });
+
+  test('a quarantined source that craters does NOT trip and is named in the summary', () => {
+    const qf = join(work, 'q-megaron.json');
+    writeFileSync(qf, JSON.stringify({ sources: { megaron: { since: '2026-09-01', reason: 'fixture: quarantined mid-crater' } } }));
+    // Fixture precondition: the SAME db trips on megaron when nothing is quarantined.
+    const unquarantined = runCli([`--db=${trippedDb}`, '--dry-run']);
+    expect(unquarantined.code).toBe(2);
+    expect(unquarantined.err).toContain('megaron');
+
+    const r = runCli([`--db=${trippedDb}`, '--dry-run', `--quarantine=${qf}`]);
+    expect(r.err).toBe('');
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('1 quarantined [megaron]');
+    expect(r.out).toContain(`${active.length - 1} of ${active.length} active sources evaluated`);
+    expect(r.out).toContain('0 tripped');
+    expect(r.out).not.toContain('Yield canary: megaron');
+  });
+
+  test('with no --quarantine flag the real config is read: clubber is quarantined, not reported as insufficient', () => {
+    // Fixture precondition: prod really does quarantine clubber, and clubber is
+    // still on the active list (that combination is the bug this fixes).
+    const reg = JSON.parse(readFileSync(join(ROOT, 'config', 'quarantined-sources.json'), 'utf-8')) as { sources: Record<string, unknown> };
+    const quarantinedIds = Object.keys(reg.sources).filter((id) => active.includes(id as (typeof ACTIVE_SOURCE_IDS)[number]));
+    expect(quarantinedIds).toContain('clubber');
+
+    const p = join(mkdtempSync(join(work, 'qdefault-')), 'events.db');
+    seedStats(p, active.flatMap((s) =>
+      quarantinedIds.includes(s)
+        ? [...history(s, [100, 100, 100], 11)] // healthy history then nothing — dark if it were evaluated
+        : [...history(s, [100, 100, 100], 11), { source: s, date: LATEST, found: 100 }]));
+    const r = runCli([`--db=${p}`, '--dry-run'], {}, { realQuarantine: true });
+    expect(r.err).toBe('');
+    expect(r.code).toBe(0);
+    expect(r.out).toContain(`${quarantinedIds.length} quarantined [${quarantinedIds.join(', ')}]`);
+    expect(r.out).toContain(`${active.length - quarantinedIds.length} of ${active.length} active sources evaluated`);
+    expect(r.out).toContain('0 insufficient history');
+  });
+
+  test('a dark source → exit 2, ONE rule-5 line naming the last nonzero day, exactly one issue filed', () => {
+    const { gh, log } = writeFakeGh(mkdtempSync(join(work, 'gh-dark-')), '[]');
+    const r = runCli([`--db=${darkDb}`], { YIELD_CANARY_GH: gh });
+    expect(r.code).toBe(2);
+    const errLines = r.err.trim().split('\n');
+    expect(errLines).toHaveLength(1);
+    expect(errLines[0]).toStartWith('yield-canary: FAILED — ');
+    expect(errLines[0]).toContain('dark');
+    expect(errLines[0]).toContain('megaron');
+    expect(errLines[0]).toContain(LONG_AGO);
+    expect(errLines[0]).toMatch(/ — try: /);
+    expect(r.out).toContain('1 dark');
+
+    const calls = readFileSync(log, 'utf-8').trim().split('\n');
+    const creates = calls.filter((c) => c.startsWith('issue create'));
+    expect(creates).toHaveLength(1);
+    expect(creates[0]).toContain(`Yield canary: megaron dark — no yield since ${LONG_AGO}`);
+    expect(creates[0]).toContain('--label proposed');
+  });
+
+  test('a dark source AND a real trip in one run → two issues, both clauses on the one rule-5 line', () => {
+    const { gh, log } = writeFakeGh(mkdtempSync(join(work, 'gh-dark-trip-')), '[]');
+    const r = runCli([`--db=${darkAndTrippedDb}`], { YIELD_CANARY_GH: gh });
+    expect(r.code).toBe(2);
+    const errLines = r.err.trim().split('\n');
+    expect(errLines).toHaveLength(1);
+    expect(errLines[0]).toContain('yield drop:');
+    expect(errLines[0]).toContain('more latest=30');
+    expect(errLines[0]).toContain('dark:');
+    expect(errLines[0]).toContain('megaron');
+
+    const creates = readFileSync(log, 'utf-8').trim().split('\n').filter((c) => c.startsWith('issue create'));
+    expect(creates).toHaveLength(2);
+    expect(creates.filter((c) => c.includes('Yield canary: more dropped to 30'))).toHaveLength(1);
+    expect(creates.filter((c) => c.includes('Yield canary: megaron dark'))).toHaveLength(1);
+  });
+
+  test('--lookback-days=30 puts the 60-day-old yield out of reach → insufficient, exit 0, nothing filed', () => {
+    const { gh, log } = writeFakeGh(mkdtempSync(join(work, 'gh-lookback-')), '[]');
+    const r = runCli([`--db=${darkDb}`, '--lookback-days=30'], { YIELD_CANARY_GH: gh });
+    expect(r.err).toBe('');
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('0 dark');
+    expect(r.out).toContain('1 insufficient history');
+    expect(r.out).toContain('megaron');
     expect(existsSync(log)).toBe(false);
   });
 
@@ -593,6 +979,10 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     expect(t.code).toBe(1);
     expect(t.err).toContain('yield-canary: FAILED');
     expect(t.err).toContain('abc');
+    const lb = runCli([`--db=${healthyDb}`, '--lookback-days=0']);
+    expect(lb.code).toBe(1);
+    expect(lb.err).toContain('yield-canary: FAILED');
+    expect(lb.err).toContain('--lookback-days');
   });
 
   test('WAL-mode DB with NO -wal/-shm sidecars → not SQLITE_CANTOPEN, and no write ever happens', () => {
