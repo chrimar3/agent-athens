@@ -1,5 +1,5 @@
 {
-  "_comment": "Protected paths for the agent layer (Phase 4). A PR touching any of these fails the required `path-guard` check, gets a comment naming the path, and is labeled needs-input. Agents propose changes to these via issue, never make them. Bash pattern syntax as used by `[[ $file == $glob ]]` — `*` and `**` both span `/`. Deliberately NOT protected (the Sunday retro PR edits them): .claude/notes/**, .claude/analyst-playbook.md, exemplars/**. No root CLAUDE.md exists today; the project file is .claude/CLAUDE.md — both are listed so a future root file is covered too. No enrichment prompt-template directory exists; the docs that function as enrichment prompt templates are listed individually.",
+  "_comment": "Protected paths for the agent layer (Phase 4). A PR touching any of these fails the required `path-guard` check, gets a comment naming the path, and is labeled needs-input. Agents propose changes to these via issue, never make them. Matching is done by .github/scripts/path-guard.sh with bash pattern syntax as used by `[[ $file == $glob ]]` — `*` and `**` both span `/` — and BOTH the new and the previous filename of a rename are matched, so a protected file cannot be moved out of its directory to escape. Three groups: (1) the agent's own instructions and prompt templates, (2) the local-safety enforcement layer — the harness settings, the git/Claude hooks, the test preload and the pipeline/gate shell scripts that keep agents off production data, since a PR that edits its own guard is a PR that has no guard, (3) the production publishing path and the launchd plists. package.json, tsconfig.json and bun.lock are listed because package.json defines the build, typecheck and deploy entry points that the pipeline and the required ci check run (a PR could otherwise set typecheck to a no-op); scripts/redeploy.sh and scripts/phase3-weekly.sh are publishing paths beside daily-automated.sh. src/config/active-source-ids.ts is listed because it defines the population the yield canary monitors: dropping a source from it silences the canary for that source, which is a human decision. Deliberately NOT protected (the Sunday retro PR edits them): .claude/notes/**, .claude/analyst-playbook.md, exemplars/**. No root CLAUDE.md exists today; the project file is .claude/CLAUDE.md — both are listed so a future root file is covered too. No enrichment prompt-template directory exists; the docs that function as enrichment prompt templates are listed individually.",
   "protected": [
     "config/**",
     "data/**",
@@ -12,8 +12,26 @@
     ".claude/worker.md",
     ".claude/analyst-triage.md",
     ".claude/analyst-deep.md",
+    ".claude/settings.json",
+    ".claude/settings.local.json",
     "docs/greek-enrichment-addendum.md",
     "docs/enrichment-anti-patterns.md",
-    "docs/fact-check-prompt.md"
+    "docs/fact-check-prompt.md",
+    "scripts/hooks/**",
+    "bunfig.toml",
+    "tests/preload/**",
+    "scripts/daily-automated.sh",
+    "scripts/deploy-gate.sh",
+    "scripts/auto-enrich.sh",
+    "scripts/precommit-tsc.sh",
+    "scripts/install-hooks.sh",
+    "scripts/redeploy.sh",
+    "scripts/phase3-weekly.sh",
+    "package.json",
+    "tsconfig.json",
+    "bun.lock",
+    "netlify.toml",
+    "com.agentathens.*.plist",
+    "src/config/active-source-ids.ts"
   ]
 }
