@@ -45,6 +45,28 @@ function isSymlink(p: string): boolean {
  * Resolves `outputDir` (relative paths against `repoRoot`, never the cwd) and
  * `filename` inside it, and refuses either escaping `<repoRoot>/temp-descriptions/`.
  */
+/**
+ * True if `p` resolves inside one of `roots` (each relative to `repoRoot`), with
+ * the SAME real-path/symlink safety as resolveBatchOutputPath. Used to confine
+ * the sanctioned save step: the manifest it reads must live under temp-briefs/
+ * or temp-descriptions/, and the output_dir the manifest names must be under
+ * temp-descriptions/ — a manifest written inside an allowed dir must not be able
+ * to redirect saves or --clean deletes anywhere on disk (2026-09-17 review).
+ */
+export type WithinRoots = { ok: true; real: string } | { ok: false; reason: string };
+export function pathWithinRoots(repoRoot: string, p: string, roots: string[]): WithinRoots {
+  const abs = resolve(repoRoot, p);
+  for (const root of roots) {
+    const scope = resolve(repoRoot, root);
+    if (!inside(scope, abs)) continue;
+    if (isSymlink(abs)) return { ok: false, reason: `symlink in the path is refused: ${abs}` };
+    const scopeReal = realExistingAncestor(scope);
+    if (inside(scopeReal, realExistingAncestor(abs))) return { ok: true, real: realExistingAncestor(abs) };
+    return { ok: false, reason: `path resolves (through a symlink) outside ${root}/: ${abs}` };
+  }
+  return { ok: false, reason: `path is outside ${roots.join('/, ')}/: ${abs}` };
+}
+
 export function resolveBatchOutputPath(repoRoot: string, outputDir: string, filename: string): BatchOutputPath {
   const scope = resolve(repoRoot, BATCH_OUTPUT_ROOT);
   const dir = resolve(repoRoot, outputDir);

@@ -17,7 +17,8 @@
  */
 
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import { pathWithinRoots } from '../src/utils/batch-output-path';
 import Database from 'bun:sqlite';
 import { filterEntityTags, loadDefaultExclusionSet } from '../src/utils/tag-filter';
 import { validateQualityGates, validateEnglishDescription } from '../src/enrichment/quality-gates';
@@ -28,6 +29,7 @@ import { isTicketDomain, isVenueWebsiteHost } from '../src/ticketing/validator';
 import { getVenueByName } from '../src/ticketing/venue-registry';
 
 const DB_PATH = 'data/events.db';
+const REPO_ROOT = resolve(import.meta.dir, '..');
 const DESCRIPTIONS_DIR = 'temp-descriptions';
 const RECENT_OPENINGS_PATH = join(DESCRIPTIONS_DIR, 'recent-openings.json');
 const MAX_RECENT_OPENINGS = 30;
@@ -440,7 +442,25 @@ function main(): void {
   console.log(`\n=== Save Batch ${dryRun ? '(DRY RUN)' : ''} ===`);
   console.log(`Session: ${session} | Batch: ${batch} | Manifest: ${manifestPath}\n`);
 
+  // Confinement (2026-09-17 review): this is a sanctioned Bash command of the
+  // headless enrichment session, so the manifest it reads — and the output_dir
+  // that manifest names, which drives saving and the --clean unlink/rmdir — must
+  // stay under the batch directories. A manifest written inside an allowed dir
+  // must not be able to redirect writes or deletes anywhere on disk.
+  const mp = pathWithinRoots(REPO_ROOT, manifestPath, ['temp-briefs', 'temp-descriptions']);
+  if (!mp.ok) {
+    console.error(`save-batch: FAILED — --manifest ${mp.reason} — try: a manifest under temp-briefs/ (e.g. temp-briefs/batch-N.manifest.json)`);
+    process.exit(1);
+  }
+
   const manifest = loadManifest(manifestPath);
+  if (manifest.output_dir !== undefined) {
+    const od = pathWithinRoots(REPO_ROOT, manifest.output_dir, ['temp-descriptions']);
+    if (!od.ok) {
+      console.error(`save-batch: FAILED — manifest output_dir ${od.reason} — the output_dir must be under temp-descriptions/`);
+      process.exit(1);
+    }
+  }
   console.log(`Manifest: ${manifest.event_ids.length} event(s) from batch ${manifest.batch_id}\n`);
 
   const db = new Database(DB_PATH);

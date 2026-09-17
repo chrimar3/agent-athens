@@ -10,7 +10,7 @@
  *   bun run scripts/ingest-emails.ts --dry-run    # Preview without fetching
  */
 
-import { fetchEmails } from '../src/ingest/email-ingestion';
+import { fetchEmails, type IngestionResult } from '../src/ingest/email-ingestion';
 
 // Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
 function fail(what: string, tryNext: string): never {
@@ -18,6 +18,16 @@ function fail(what: string, tryNext: string): never {
   process.exit(1);
 }
 
+/** A non-empty errors array means the run did unsuccessful work — Rule 5. */
+export function failuresFrom(result: IngestionResult): string | null {
+  return result.errors.length > 0
+    ? `${result.errors.length} of ${result.fetched} email(s) failed to ingest`
+    : null;
+}
+
+// Guarded so importing this module for its seam (failuresFrom) has no side
+// effects — arg parsing and the Gmail fetch run only on a direct invocation.
+if (import.meta.main) {
 // Parse CLI arguments — validated BEFORE connecting: a typo such as --dry_run
 // would otherwise fetch, mark and archive real Gmail messages.
 const args = process.argv.slice(2);
@@ -42,7 +52,11 @@ if (dryRun) {
 
 // Run email ingestion
 fetchEmails()
-  .then(() => {
+  .then((result) => {
+    const failure = failuresFrom(result);
+    if (failure) {
+      fail(failure, 'the per-email errors are logged above; fix them and rerun (partial saves are kept)');
+    }
     console.log('\n✅ Email ingestion completed successfully');
     console.log('\n💡 Next steps:');
     console.log('   1. Emails saved to: data/emails-to-parse/');
@@ -53,3 +67,4 @@ fetchEmails()
   .catch((error: unknown) => {
     fail(`email ingestion failed: ${error instanceof Error ? error.message : String(error)}`, 'check Gmail credentials and network, then rerun; --dry-run shows the plan without connecting');
   });
+}

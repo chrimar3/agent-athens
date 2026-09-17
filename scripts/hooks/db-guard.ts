@@ -17,6 +17,11 @@ export interface HookInput {
 }
 
 const FILE_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
+// The hook must also see MCP filesystem write tools: an mcp__filesystem__write_file
+// to data/events.db or a protected path would otherwise bypass every check
+// (2026-09-17 Codex review). Read tools are intentionally not matched.
+const MCP_FILE_TOOL = /^mcp__[a-z0-9_]+__(write_file|edit_file|move_file|create_directory)$/i;
+const isFileTool = (name: string): boolean => FILE_TOOLS.has(name) || MCP_FILE_TOOL.test(name);
 
 const block = (why: string) => `db-guard: ${why}`;
 
@@ -122,6 +127,10 @@ function collectPaths(input: Record<string, unknown>): string[] {
   const out: string[] = [];
   if (typeof input.file_path === 'string') out.push(input.file_path);
   if (typeof input.notebook_path === 'string') out.push(input.notebook_path);
+  // MCP filesystem tools use path / source / destination instead of file_path.
+  if (typeof input.path === 'string') out.push(input.path);
+  if (typeof input.source === 'string') out.push(input.source);
+  if (typeof input.destination === 'string') out.push(input.destination);
   if (Array.isArray(input.edits)) {
     for (const e of input.edits) {
       if (e && typeof e === 'object' && typeof (e as Record<string, unknown>).file_path === 'string') {
@@ -180,7 +189,7 @@ export function verdict(input: HookInput): string | null {
     return bashVerdict(cmd);
   }
 
-  if (FILE_TOOLS.has(tool_name)) {
+  if (isFileTool(tool_name)) {
     const paths = collectPaths(tool_input ?? {});
     if (paths.length === 0) return block(`${tool_name} call with no inspectable path (fail closed)`);
     for (const p of paths) {

@@ -68,6 +68,19 @@ describe('db-guard: bypasses that defeated the first implementation', () => {
     expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT title FROM events LIMIT 3"'))).toBeNull();
   });
 
+  test('mcp__filesystem__write_file to the DB is blocked (the hook was blind to mcp__* file tools — 2026-09-17 Codex)', () => {
+    expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'data/events.db' } })).toContain('db-guard');
+  });
+  test('mcp__filesystem__edit_file to a protected file is blocked', () => {
+    expect(verdict({ tool_name: 'mcp__filesystem__edit_file', tool_input: { path: '.claude/settings.json' } })).toContain('db-guard');
+  });
+  test('mcp__filesystem__move_file is inspected on BOTH source and destination', () => {
+    expect(verdict({ tool_name: 'mcp__filesystem__move_file', tool_input: { source: 'x.txt', destination: 'data/events.db' } })).toContain('db-guard');
+  });
+  test('a non-file mcp tool (read) still passes through', () => {
+    expect(verdict({ tool_name: 'mcp__filesystem__read_file', tool_input: { path: 'data/events.db' } })).toBeNull();
+  });
+
   test('find -delete (Bash(find *) was granted until Task 1)', () => {
     expect(verdict(bash(`find . -name '*.db' -delete`))).toContain('db-guard');
   });
@@ -229,6 +242,11 @@ describe('db-guard: enrichment-session write scope', () => {
   test('a path outside the repo is blocked', () => {
     expect(verdict(file('Write', '/Users/chrism/.zshrc'))).toContain('db-guard');
     expect(verdict(file('Write', 'temp-briefs/batch-1.manifest.json'))).toContain('db-guard');
+  });
+
+  test('an mcp__filesystem__write_file outside temp-descriptions/ is refused in an enrichment session', () => {
+    expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'src/utils/tag-filter.ts' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'temp-descriptions/batch-1/ev.md' } })).toBeNull();
   });
 
   test("the session's own auto-memory directory is refused on purpose (learned memory is an instruction channel — Codex 2026-09-16 default #12 / astra #13; observed live 2026-09-17: 14 refusals, batches unaffected)", () => {

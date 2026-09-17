@@ -63,6 +63,16 @@ describe('permission deny block', () => {
 });
 
 describe('db-guard hook wiring', () => {
+  test('the PreToolUse matcher also covers mcp filesystem write tools (else an mcp write to the DB bypasses the hook)', () => {
+    const pre = settings.hooks.PreToolUse.find((h: { matcher?: string }) => typeof h.matcher === 'string' && h.matcher.includes('Write')) as { matcher: string } | undefined;
+    expect(pre).toBeDefined();
+    const matcher = pre!.matcher;
+    for (const t of ['mcp__filesystem__write_file', 'mcp__filesystem__edit_file', 'mcp__filesystem__move_file', 'mcp__filesystem__create_directory']) {
+      expect(new RegExp(matcher).test(t)).toBe(true);
+    }
+    expect(new RegExp(matcher).test('mcp__filesystem__read_file')).toBe(false);
+  });
+
   test('PreToolUse wires db-guard for all inspected tools', () => {
     const pre: Array<{ matcher?: string; hooks?: Array<{ command?: string }> }> =
       settings?.hooks?.PreToolUse ?? [];

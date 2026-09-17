@@ -48,7 +48,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit",
+        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit|mcp__[a-z0-9_]+__(write_file|edit_file|move_file|create_directory)",
         "hooks": [
           {
             "type": "command",
