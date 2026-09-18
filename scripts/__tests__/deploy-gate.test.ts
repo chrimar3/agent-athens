@@ -215,7 +215,7 @@ describe('push-gate — pipeline must not push a ref HEAD does not equal (seam g
     const body = daily.slice(runDeployStart);
     const commitIdx = body.indexOf('chore: daily pipeline update');
     const gateIdx = body.indexOf('[push-gate]');
-    const pushIdx = body.indexOf('git push origin');
+    const pushIdx = body.indexOf('push origin');
     expect(commitIdx).toBeGreaterThan(-1);
     expect(gateIdx).toBeGreaterThan(-1);
     expect(pushIdx).toBeGreaterThan(-1);
@@ -236,7 +236,7 @@ describe('push-gate — pipeline must not push a ref HEAD does not equal (seam g
 
   test('the push goes through the shared constant — no literal `git push origin main` can bypass the gate', () => {
     expect(daily).not.toContain('git push origin main');
-    expect(daily).toContain('git push origin "$PRODUCTION_BRANCH"');
+    expect(daily).toContain('push origin "$PRODUCTION_BRANCH"');
   });
 });
 
@@ -294,10 +294,27 @@ describe('push-gate — behavior (real gate block extracted from the script, run
   }
 
   /** Run the extracted gate block in the fixture with stubbed log helpers. */
-  function runPushGate(dir: string) {
+  function runPushGate(dir: string, fakePush?: string) {
+    const realGit = sh(dir, ['which', 'git']).out.trim();
+    const bin = join(dir, 'fake-bin');
+    mkdirSync(bin, { recursive: true });
+    if (fakePush) {
+      writeFileSync(join(bin, 'git'), `#!/bin/bash
+if [[ " $* " == *" push "* ]]; then
+  echo "prompt=$GIT_TERMINAL_PROMPT args=$*" > push-call
+  ${fakePush}
+fi
+exec "${realGit}" "$@"
+`, { mode: 0o755 });
+    }
+    // Accelerate awake ticks only; no real credential helpers or network.
+    writeFileSync(join(bin, 'sleep'), '#!/bin/bash\nexec /bin/sleep 0.05\n', { mode: 0o755 });
+    writeFileSync(join(bin, 'gh'), '#!/bin/bash\nexit 99\n', { mode: 0o755 });
     const harness = [
       '#!/bin/bash',
       'PRODUCTION_BRANCH="main"',
+      `export PATH="${bin}:$PATH"`,
+      'PUSH_TIMEOUT=30',
       `LOG_FILE="${join(dir, 'push-gate.log')}"`,
       'log(){ echo "$1"; }',
       'log_error(){ echo "ERROR: $1" >&2; }',
@@ -305,10 +322,51 @@ describe('push-gate — behavior (real gate block extracted from the script, run
       extractGateBlock(),
       '}',
       'gate',
+      'echo continued-to-deploy',
     ].join('\n');
     const f = join(dir, 'gate-harness.sh');
     writeFileSync(f, harness);
-    return sh(dir, ['bash', f]);
+    const p = spawnSync(['/bin/bash', f], { cwd: dir, stdout: 'pipe', stderr: 'pipe', timeout: 2000, killSignal: 'SIGKILL' });
+    return { code: p.exitCode, out: p.stdout.toString(), err: p.stderr.toString() };
+  }
+
+  test('push disables terminal prompting and supplies gh credential helper', () => {
+    const { dir } = mkPushFixture('main');
+    const res = runPushGate(dir, 'exit 0');
+    expect(res.code).toBe(0);
+    const call = readFileSync(join(dir, 'push-call'), 'utf8');
+    expect(call).toContain('prompt=0 ');
+    expect(call).toContain('-c credential.helper=!gh auth git-credential push origin main');
+  });
+
+  test('fast auth failure logs an error and continues to deploy', () => {
+    const { dir } = mkPushFixture('main');
+    const res = runPushGate(dir, 'echo "fatal: authentication failed" >&2; exit 128');
+    expect(res.code).toBe(0);
+    expect(res.err).toContain('ERROR: Git push failed');
+    expect(res.err).toContain('non-interactive auth/transport failure (exit 128)');
+    expect(res.out).toContain('continued-to-deploy');
+    expect(res.out).not.toContain('Pipeline outputs pushed');
+  });
+
+  for (const ignoreTerm of [false, true]) {
+    test(`hung push is killed within awake tick budget (ignore TERM=${ignoreTerm})`, () => {
+      const { dir, remote } = mkPushFixture('main');
+      const oldSha = remoteMainSha(remote);
+      commitChange(dir, 'unpublished\n');
+      // Exec avoids leaving a shell child; Python sleep ignores our fake sleep.
+      const started = performance.now();
+      const res = runPushGate(dir, `exec python3 -c 'import os, signal, time; open("push-pid", "w").write(str(os.getpid())); ${ignoreTerm ? 'signal.signal(signal.SIGTERM, signal.SIG_IGN);' : ''} time.sleep(1.5)'`);
+      expect(res.code).toBe(0);
+      expect(res.err).toContain('ERROR: Git push failed');
+      expect(performance.now() - started).toBeLessThan(1000); // 2 deadline + 4 grace ticks at 50 ms each
+      expect(res.err).toContain('timeout after 30s of awake time');
+      expect(res.out).toContain('continued-to-deploy');
+      expect(res.out).not.toContain('Pipeline outputs pushed');
+      expect(remoteMainSha(remote)).toBe(oldSha);
+      const pid = Number(readFileSync(join(dir, 'push-pid'), 'utf8'));
+      expect(() => process.kill(pid, 0)).toThrow();
+    });
   }
 
   test('gate block markers exist in the script (extraction contract)', () => {

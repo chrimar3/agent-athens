@@ -669,10 +669,47 @@ run_deploy() {
         branch_sha=$(git rev-parse "refs/heads/$PRODUCTION_BRANCH" 2>/dev/null) || branch_sha=""
         if [[ -z "$head_sha" || -z "$branch_sha" || "$head_sha" != "$branch_sha" ]]; then
             log_error "[push-gate] REFUSED — HEAD (${head_sha:-unresolvable}) != refs/heads/$PRODUCTION_BRANCH (${branch_sha:-unresolvable}). The artifact commit did not land on $PRODUCTION_BRANCH; pushing would ship a stale ref while reporting success. SKIPPING push (non-fatal, continuing to deploy) — reconcile the branch and push manually."
-        elif git push origin "$PRODUCTION_BRANCH" >> "$LOG_FILE" 2>&1; then
-            log "Pipeline outputs pushed to git"
         else
-            log_error "Git push failed (non-fatal, continuing to deploy)"
+            local push_timeout_file
+            push_timeout_file=$(mktemp)
+            if [[ -z "$push_timeout_file" ]]; then
+                log_error "Git push failed — cannot create watchdog status file; skipping push (non-fatal, continuing to deploy)"
+            else
+                GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push origin "$PRODUCTION_BRANCH" >> "$LOG_FILE" 2>&1 &
+                local PUSH_PID=$!
+                # Same AWAKE-TICK policy as deploy-watchdog: no epoch deadline
+                # that could mistake a suspended laptop for a stalled push.
+                ( AWAKE_TICKS=0
+                  while [ "$(( AWAKE_TICKS * 15 ))" -lt "${PUSH_TIMEOUT:-120}" ]; do
+                    kill -0 "$PUSH_PID" 2>/dev/null || exit 0
+                    sleep 15
+                    AWAKE_TICKS=$(( AWAKE_TICKS + 1 ))
+                  done
+                  kill -0 "$PUSH_PID" 2>/dev/null || exit 0
+                  echo timeout > "$push_timeout_file"
+                  kill "$PUSH_PID" 2>/dev/null
+                  TERM_TICKS=0
+                  while [ "$TERM_TICKS" -lt 4 ]; do
+                    kill -0 "$PUSH_PID" 2>/dev/null || exit 0
+                    sleep 5
+                    TERM_TICKS=$(( TERM_TICKS + 1 ))
+                  done
+                  kill -9 "$PUSH_PID" 2>/dev/null
+                ) &
+                local PUSH_WATCHDOG_PID=$! push_exit=0
+                wait "$PUSH_PID" || push_exit=$?
+                kill "$PUSH_WATCHDOG_PID" 2>/dev/null || true
+                wait "$PUSH_WATCHDOG_PID" 2>/dev/null || true
+                if [[ -s "$push_timeout_file" ]]; then
+                    push_exit=124
+                    log_error "Git push failed — timeout after ${PUSH_TIMEOUT:-120}s of awake time (exit $push_exit; non-fatal, continuing to deploy)"
+                elif [[ "$push_exit" -ne 0 ]]; then
+                    log_error "Git push failed — non-interactive auth/transport failure (exit $push_exit); see git diagnostics in $LOG_FILE (non-fatal, continuing to deploy)"
+                else
+                    log "Pipeline outputs pushed to git"
+                fi
+                rm -f "$push_timeout_file"
+            fi
         fi
         # push-gate:end
     fi
