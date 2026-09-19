@@ -9,6 +9,7 @@
  */
 
 import { describe, test, expect } from 'bun:test';
+import { Settings } from 'luxon';
 import { formatSchemaDate, getAthensTimezone } from '../quality-gates';
 
 describe('formatSchemaDate — date-only passthrough (live-bug fix)', () => {
@@ -91,5 +92,39 @@ describe('getAthensTimezone — basic correctness', () => {
 
   test('winter date returns +02:00', () => {
     expect(getAthensTimezone(new Date(2026, 0, 15))).toBe('+02:00'); // January
+  });
+});
+
+
+describe('formatSchemaDate — DST wall-time ambiguity and gaps', () => {
+  for (const buildClock of ['2026-01-15T12:00:00Z', '2026-07-15T12:00:00Z']) {
+    test('chooses the earlier repeated-hour instant regardless of build clock: ' + buildClock, () => {
+      const originalNow = Settings.now;
+      try {
+        Settings.now = () => Date.parse(buildClock);
+        expect(formatSchemaDate('2026-10-25T03:30:00')).toBe('2026-10-25T03:30:00+03:00');
+        expect(formatSchemaDate('2026-10-25', '03:30')).toBe('2026-10-25T03:30:00+03:00');
+        expect(formatSchemaDate('2026-10-25T03:30:00.123')).toBe('2026-10-25T03:30:00.123+03:00');
+      } finally {
+        Settings.now = originalNow;
+      }
+    });
+
+    test('rejects nonexistent spring-forward wall times: ' + buildClock, () => {
+      const originalNow = Settings.now;
+      try {
+        Settings.now = () => Date.parse(buildClock);
+        expect(() => formatSchemaDate('2026-03-29T03:30:00')).toThrow('nonexistent Athens wall time');
+        expect(() => formatSchemaDate('2026-03-29', '03:30')).toThrow('nonexistent Athens wall time');
+      } finally {
+        Settings.now = originalNow;
+      }
+    });
+  }
+
+  test('preserves explicit offsets through repeated and skipped hours', () => {
+    for (const input of ['2026-10-25T03:30:00+02:00', '2026-10-25T03:30:00+03:00', '2026-03-29T03:30:00+02:00']) {
+      expect(formatSchemaDate(input)).toBe(input);
+    }
   });
 });

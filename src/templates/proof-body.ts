@@ -55,7 +55,7 @@ const STRINGS = {
     indexingH2: 'Indexing',
     indexingAbsent: 'Indexing snapshot not available.',
     indexingBody: (impHtml: string, posHtml: string, top10Html: string) =>
-      `${impHtml} Bing impressions over the last 7 days, average position ${posHtml}, ${top10Html} queries in the top 10. Indexing underway; live coverage tracked via Bing.`,
+      `${impHtml} Bing impressions over the last 7 days, average position ${posHtml}, ${top10Html} pages in the top 10. Indexing underway; live coverage tracked via Bing.`,
   },
 } as const;
 

@@ -7502,3 +7502,15 @@ constant feeding both surfaces.
 **Learnings:** Keep the application's ARIA dialog selector in verification scripts; it uses a div with role=dialog, not a native dialog tag. A production release can preserve unrelated local work by building from a committed clone and a read-only online database backup, while advancing local main separately for scheduled jobs.
 
 **Open items:** Observe comparable complete post-release GSC periods before claiming ranking/citation gains. The 23 existing schema warnings and separate indexed-page counters remain follow-ups. No unrelated working files or existing stashes were discarded.
+
+### Session 228 — Ten verified improvements to discovery, dates and evidence — 2026-09-20
+
+**Plan:** Rank and implement the ten highest-leverage demonstrated project issues, then commit, push and deploy as authorized. Keep recovered Astra work and unrelated local changes preserved; use an isolated worktree and disposable build/database backup.
+
+**What happened:** Escaped homepage hero text; completed English filtering beyond the first 30 cards with bounded loading/retry and locale-correct links; repaired weekend and month boundaries; resolved schema offsets at Athens wall time, including deterministic autumn overlap and spring-gap rejection; omitted invented date-only clocks; aligned exhibition badges with lifecycle expiry; rejected stale/malformed Bing measurements; made incomplete proof evidence unavailable; added keyboard focus management to mobile navigation. Independent review surfaced and resolved the transition-hour and stalled-request cases. Updated two older host-time test fixtures to Athens semantics with exact membership assertions.
+
+**Verified:** Verification results are recorded in docs/2026-09-20-project-improvements.md. Production publication follows required GitHub checks and the unchanged deploy gate; platform readiness and live checks are recorded in the task's final release response.
+
+**Learnings:** Luxon can normalize nonexistent clocks and choose an ambiguous offset using the build season; validate wall-time roundtrips and choose an explicit ambiguity policy. A lazy full-corpus request needs a deadline as well as retry. Missing evidence and an observed zero are different states. Emit localized URLs at the shared source renderer.
+
+**Open items:** Measure post-release search/citation impact before claiming gains. Existing 23 schema warnings remain. Multi-day non-exhibition filtering, stale image retries and citation-panel observation integration remain separate follow-ups.

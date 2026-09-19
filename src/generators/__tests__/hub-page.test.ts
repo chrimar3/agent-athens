@@ -1,5 +1,7 @@
 // Hub page tests — structure, schema, filtering, excerpt extraction, editorial content
-import { describe, test, expect } from 'bun:test';
+import { describe, test, expect, setSystemTime } from 'bun:test';
+import { DateTime } from 'luxon';
+import { ATHENS_TZ } from '../../utils/format-date';
 import {
   renderHubPage,
   renderOverflowPage,
@@ -600,19 +602,21 @@ describe('Hub filtering', () => {
   });
 
   test('/today filter uses date filtering', () => {
-    const today = new Date();
-    today.setHours(20, 0, 0, 0);
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(20, 0, 0, 0);
-
-    const events = [
-      makeEvent({ id: 'td1', title: 'Today Event', startDate: today.toISOString() }),
-      makeEvent({ id: 'tm1', title: 'Tomorrow Event', startDate: tomorrow.toISOString() }),
-    ];
-    const filtered = getHubEvents(todayHubConfig, events);
-    expect(filtered.length).toBe(1);
-    expect(filtered[0].title).toBe('Today Event');
+    setSystemTime(new Date('2026-09-20T22:30:00Z')); // Sep 21 in Athens, Sep 20 in UTC.
+    try {
+      const today = DateTime.now().setZone(ATHENS_TZ);
+      const tomorrow = today.plus({ days: 1 });
+      const events = [
+        makeEvent({ id: 'td1', title: 'Today Event', startDate: today.toISODate() + 'T20:00:00' }),
+        makeEvent({ id: 'tm1', title: 'Tomorrow Event', startDate: tomorrow.toISODate() + 'T20:00:00' }),
+      ];
+      const filtered = getHubEvents(todayHubConfig, events);
+      expect(filtered.length).toBe(1);
+      expect(filtered[0].title).toBe('Today Event');
+      expect(filtered[0].id).toBe('td1');
+    } finally {
+      setSystemTime();
+    }
   });
 });
 

@@ -1,6 +1,8 @@
 // Unit tests for event filtering logic
-import { describe, test, expect, beforeAll } from "bun:test";
+import { describe, test, expect, beforeAll, afterAll, setSystemTime } from "bun:test";
 import { filterEvents, getFilteredEventCount } from "../filters";
+import { DateTime } from "luxon";
+import { ATHENS_TZ } from "../format-date";
 import type { Event, Filters } from "../../types";
 import { sampleConcert, sampleFreeExhibition, sampleTheaterPerformance, getTodayEvent, getTomorrowEvent } from "../../../tests/fixtures/events";
 
@@ -8,14 +10,18 @@ describe("filterEvents", () => {
   let testEvents: Event[];
 
   beforeAll(() => {
+    setSystemTime(new Date('2026-09-20T22:30:00Z')); // Sep 21 in Athens, Sep 20 in UTC.
+    const today = DateTime.now().setZone(ATHENS_TZ);
     testEvents = [
       sampleConcert,           // Ticketed concert
       sampleFreeExhibition,    // Open exhibition
       sampleTheaterPerformance, // Ticketed theater
-      getTodayEvent(),         // Concert today
-      getTomorrowEvent()       // Theater tomorrow
+      { ...getTodayEvent(), id: 'today', startDate: today.toISODate() + 'T20:00:00' },
+      { ...getTomorrowEvent(), id: 'tomorrow', startDate: today.plus({ days: 1 }).toISODate() + 'T21:00:00' }
     ];
   });
+
+  afterAll(() => setSystemTime());
 
   test("should return all events when no filters applied", () => {
     const filters: Filters = {};
@@ -81,68 +87,23 @@ describe("filterEvents", () => {
   });
 
   test("should filter events happening today", () => {
-    const filters: Filters = { time: "today" };
-    const result = filterEvents(testEvents, filters);
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    result.forEach(event => {
-      const eventDate = new Date(event.startDate);
-      expect(eventDate.getTime()).toBeGreaterThanOrEqual(today.getTime());
-      expect(eventDate.getTime()).toBeLessThan(tomorrow.getTime());
-    });
+    const result = filterEvents(testEvents, { time: "today" });
+    expect(result.map(event => event.id)).toEqual(['today']);
   });
 
   test("should filter events happening tomorrow", () => {
-    const filters: Filters = { time: "tomorrow" };
-    const result = filterEvents(testEvents, filters);
-
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-    const dayAfter = new Date(tomorrow);
-    dayAfter.setDate(dayAfter.getDate() + 1);
-
-    result.forEach(event => {
-      const eventDate = new Date(event.startDate);
-      expect(eventDate.getTime()).toBeGreaterThanOrEqual(tomorrow.getTime());
-      expect(eventDate.getTime()).toBeLessThan(dayAfter.getTime());
-    });
+    const result = filterEvents(testEvents, { time: "tomorrow" });
+    expect(result.map(event => event.id)).toEqual(['tomorrow']);
   });
 
   test("should filter events this week", () => {
-    const filters: Filters = { time: "this-week" };
-    const result = filterEvents(testEvents, filters);
-
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    const weekEnd = new Date(now);
-    weekEnd.setDate(weekEnd.getDate() + 7);
-
-    result.forEach(event => {
-      const eventDate = new Date(event.startDate);
-      expect(eventDate.getTime()).toBeGreaterThanOrEqual(now.getTime());
-      expect(eventDate.getTime()).toBeLessThan(weekEnd.getTime());
-    });
+    const result = filterEvents(testEvents, { time: "this-week" });
+    expect(result.map(event => event.id)).toEqual(['today', 'tomorrow']);
   });
 
   test("should filter events this month", () => {
-    const filters: Filters = { time: "this-month" };
-    const result = filterEvents(testEvents, filters);
-
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    monthEnd.setHours(23, 59, 59, 999);
-
-    result.forEach(event => {
-      const eventDate = new Date(event.startDate);
-      expect(eventDate.getTime()).toBeGreaterThanOrEqual(now.getTime());
-      expect(eventDate.getTime()).toBeLessThanOrEqual(monthEnd.getTime());
-    });
+    const result = filterEvents(testEvents, { time: "this-month" });
+    expect(result.map(event => event.id)).toEqual(['today', 'tomorrow']);
   });
 
   test("should combine multiple filters (type + price)", () => {

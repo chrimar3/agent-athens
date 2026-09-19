@@ -172,7 +172,7 @@ export function renderFilterBar(
         </div>`
       : `<div class="filter-panel-anchor" data-filter="type">
           <button class="filter-pill" data-panel="type">${typeLabel} ${CHEVRON_SVG}</button>
-          ${renderTypePanel(counts.types, currentFilters, totalCount, s, locale)}
+          ${renderTypePanel(counts.types, currentFilters, totalCount, s, locale, locale === 'en' && hubIdentity ? '/' + hubIdentity.canonicalUrl : undefined)}
         </div>`;
 
   // ── Price pill ──
@@ -204,7 +204,7 @@ export function renderFilterBar(
   const clearHref = hubIdentity ? '/' + hubIdentity.canonicalUrl : '/';
   const meta = `<div class="filter-bar-meta">
     <span class="filter-result-count" data-events-word="${s.filterEventsWord}">${totalCount} ${s.filterEventsWord}</span>
-    ${hasActiveFilters ? `<a href="${clearHref}" class="filter-clear-all">${s.filterClear}</a>` : ''}
+    ${hasActiveFilters || locale === 'en' ? `<a href="${clearHref}" class="filter-clear-all"${hasActiveFilters ? '' : ' hidden'}>${s.filterClear}</a>` : ''}
   </div>`;
 
   // F8: the result-count meta sits OUTSIDE .filter-bar-scroll. Inside it, the
@@ -220,7 +220,8 @@ export function renderFilterBar(
     </div>
     ${meta}
   </div>
-  <div class="filter-panel-backdrop"></div>`;
+  <div class="filter-panel-backdrop"></div>
+  ${locale === 'en' ? '<p class="filter-load-status" role="status" hidden><span class="filter-load-message"></span> <button type="button" class="filter-retry" hidden>Retry</button></p>' : ''}`;
 }
 
 // ── Panel Renderers ──────────────────────────────────
@@ -251,7 +252,7 @@ function renderDatePanel(timeRanges: FilterCountOption[], currentFilters: Filter
   </div>`;
 }
 
-function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number, s: UIStrings, locale: Locale): string {
+function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, totalCount: number, s: UIStrings, locale: Locale, resetHref?: string): string {
   const tiles = types.map(opt => {
     const isSelected = currentFilters.type === opt.value;
     const colorVar = typeColorVar(opt.value as EventType);
@@ -264,7 +265,7 @@ function renderTypePanel(types: FilterCountOption[], currentFilters: Filters, to
     </a>`;
   });
 
-  const resetUrl = buildDismissUrl(currentFilters, 'type');
+  const resetUrl = resetHref || buildDismissUrl(currentFilters, 'type');
 
   return `<div class="filter-panel" data-panel-for="type">
     <button class="filter-panel-close" aria-label="${s.filterClose}">&times;</button>
@@ -403,6 +404,10 @@ export function renderFilterBarScript(): string {
     if (e.key === 'Escape') closeAll();
   });
 
+  // English sorting also needs the full hub corpus before reordering.
+  var refreshEnglish = null;
+  var priceSortSelected = false;
+
   // Sort by price: reorder .event-card elements by data-price
   var sortLinks = document.querySelectorAll('[data-sort]');
   sortLinks.forEach(function(link) {
@@ -426,6 +431,11 @@ export function renderFilterBarScript(): string {
       var cards = Array.from(grid.querySelectorAll('.event-card'));
       var headers = Array.from(grid.querySelectorAll('.date-group-header'));
 
+      if (sortBy === 'price' && refreshEnglish) {
+        priceSortSelected = true;
+        refreshEnglish();
+        return;
+      }
       if (sortBy === 'price') {
         // Remove date headers, sort cards by price
         headers.forEach(function(h) { h.remove(); });
@@ -450,6 +460,71 @@ export function renderFilterBarScript(): string {
     var countEl = document.querySelector('.filter-result-count');
     var eventsWord = countEl ? (countEl.getAttribute('data-events-word') || '') : '';
     var active = { type: null, price: null };
+    var fullLink = document.querySelector('.hub-see-all[data-events-total]');
+    var fullListReady = !fullLink;
+    var fullListPromise = null;
+    var status = document.querySelector('.filter-load-status');
+    var message = document.querySelector('.filter-load-message');
+    var retry = document.querySelector('.filter-retry');
+    var clearAll = document.querySelector('.filter-clear-all');
+
+    function ensureFullList() {
+      if (fullListReady || !grid) return Promise.resolve();
+      if (fullListPromise) return fullListPromise;
+      if (status) status.hidden = false;
+      if (message) message.textContent = 'Loading all events…';
+      if (retry) retry.hidden = true;
+      grid.setAttribute('aria-busy', 'true');
+      var controller = new AbortController();
+      // Bound both fetching headers and reading the body; a stalled transfer
+      // must release the shared request and offer Retry.
+      var timeout = setTimeout(function() { controller.abort(); }, 15000);
+      fullListPromise = fetch(fullLink.href, { signal: controller.signal }).then(function(response) {
+        if (!response.ok) throw new Error('Full event list unavailable');
+        return response.text();
+      }).then(function(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var fullGrid = doc.querySelector('.card-grid');
+        var expected = Number(fullLink.getAttribute('data-events-total'));
+        // A redirect/fallback HTML page must not silently become a partial list.
+        if (doc.documentElement.lang !== 'en' || !fullGrid || fullGrid.querySelectorAll('.event-card').length !== expected) {
+          throw new Error('Incomplete full event list');
+        }
+        // Keep existing cards (and their state/listeners), using the full page's
+        // date groups to place them. The live grid itself is never replaced.
+        var existing = new Map();
+        grid.querySelectorAll('.event-card').forEach(function(card) {
+          var link = card.querySelector('.card-link');
+          if (link) existing.set(link.getAttribute('href'), card);
+        });
+        fullGrid.querySelectorAll('.event-card').forEach(function(card) {
+          var link = card.querySelector('.card-link');
+          var previous = link && existing.get(link.getAttribute('href'));
+          if (previous) card.replaceWith(previous);
+        });
+        grid.replaceChildren.apply(grid, Array.from(fullGrid.childNodes));
+        fullListReady = true;
+        fullLink.hidden = true;
+        if (status) status.hidden = true;
+        document.dispatchEvent(new CustomEvent('aa:saved-change'));
+      }).finally(function() {
+        clearTimeout(timeout);
+        fullListPromise = null;
+        grid.removeAttribute('aria-busy');
+      });
+      return fullListPromise;
+    }
+
+    refreshEnglish = function() {
+      ensureFullList().then(function() {
+        applyFilter();
+      }).catch(function() {
+        if (status) status.hidden = false;
+        if (message) message.textContent = 'Could not load all events. The initial list is still shown.';
+        if (retry) retry.hidden = false;
+      });
+    };
+    if (retry) retry.addEventListener('click', refreshEnglish);
 
     // Capture default pill labels before any selection (chevron carries no text).
     document.querySelectorAll('.filter-pill[data-panel="type"], .filter-pill[data-panel="price"]').forEach(function(p) {
@@ -477,8 +552,16 @@ export function renderFilterBarScript(): string {
           header.style.display = anyVisible ? '' : 'none';
         }
       });
+      if (priceSortSelected) {
+        grid.querySelectorAll('.date-group-header').forEach(function(header) { header.remove(); });
+        Array.from(grid.querySelectorAll('.event-card')).sort(function(a, b) {
+          return parseFloat(a.getAttribute('data-price') || '9999') - parseFloat(b.getAttribute('data-price') || '9999');
+        }).forEach(function(card) { grid.appendChild(card); });
+      }
       if (countEl) countEl.textContent = visible + ' ' + eventsWord;
       if (emptyState) emptyState.style.display = visible === 0 ? '' : 'none';
+      document.querySelectorAll('.filter-panel-footer-count').forEach(function(el) { el.textContent = visible + ' ' + eventsWord; });
+      if (clearAll) clearAll.hidden = !active.type && !active.price;
     }
 
     function updatePill(dim) {
@@ -508,7 +591,20 @@ export function renderFilterBarScript(): string {
           opt.classList.add('is-selected');
         }
         updatePill(dim);
-        applyFilter();
+        refreshEnglish();
+        closeAll();
+      });
+    });
+    document.querySelectorAll('.filter-reset, .filter-clear-all').forEach(function(reset) {
+      reset.addEventListener('click', function(e) {
+        e.preventDefault();
+        var dimensions = reset.classList.contains('filter-clear-all') ? ['type', 'price'] : ['type'];
+        dimensions.forEach(function(dim) {
+          active[dim] = null;
+          document.querySelectorAll('[data-filter-dim="' + dim + '"]').forEach(function(opt) { opt.classList.remove('is-selected'); });
+          updatePill(dim);
+        });
+        refreshEnglish();
         closeAll();
       });
     });

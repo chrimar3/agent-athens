@@ -69,7 +69,7 @@ export function generatePracticalBlock(
 
     // Time - only if available
     const time = formatGreekTime(event.startDate);
-    if (time && time !== '00:00') {
+    if (time) {
       fields.push({
         label: 'Ώρα',
         labelEn: 'Time',
@@ -235,7 +235,7 @@ export function generateInlinePractical(event: Event): string {
   const price = formatPriceGreek(event);
 
   let inline = date;
-  if (time && time !== '00:00' && event.type !== 'exhibition') {
+  if (time && event.type !== 'exhibition') {
     inline += `, ${time}`;
   }
   inline += ` | ${price}`;

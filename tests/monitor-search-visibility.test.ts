@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 /**
  * Tests for scripts/monitor-search-visibility.ts (post-S136 27-col shape)
  *
@@ -429,7 +430,7 @@ describe('getBingMetrics', () => {
       status: 'ok',
       aggregate: { impressions_7d: 142, clicks_7d: 8, avg_position_7d: 5.3, top10_count_7d: 4 },
     }));
-    const result = getBingMetrics(TMP_BING);
+    const result = getBingMetrics(TMP_BING, DateTime.fromISO('2026-05-17T12:00:00+03:00'));
     expect(result.impressions).toBe(142);
     expect(result.clicks).toBe(8);
     expect(result.avgPosition).toBe(5.3);
@@ -442,7 +443,7 @@ describe('getBingMetrics', () => {
       status: 'stale',
       aggregate: { impressions_7d: 0, clicks_7d: 0, avg_position_7d: 0, top10_count_7d: 0 },
     }));
-    const result = getBingMetrics(TMP_BING);
+    const result = getBingMetrics(TMP_BING, DateTime.fromISO('2026-05-17T12:00:00+03:00'));
     expect(result.impressions).toBe('STALE');
     expect(result.clicks).toBe('STALE');
     expect(result.avgPosition).toBe('STALE');
@@ -455,7 +456,7 @@ describe('getBingMetrics', () => {
       status: 'auth_fail',
       aggregate: { impressions_7d: 0, clicks_7d: 0, avg_position_7d: 0, top10_count_7d: 0 },
     }));
-    const result = getBingMetrics(TMP_BING);
+    const result = getBingMetrics(TMP_BING, DateTime.fromISO('2026-05-17T12:00:00+03:00'));
     expect(result.impressions).toBe('AUTH_FAIL');
     expect(result.clicks).toBe('AUTH_FAIL');
     expect(result.avgPosition).toBe('AUTH_FAIL');
@@ -464,7 +465,7 @@ describe('getBingMetrics', () => {
 
   test('unparseable JSON → STALE markers', () => {
     writeFileSync(TMP_BING, 'not json at all');
-    const result = getBingMetrics(TMP_BING);
+    const result = getBingMetrics(TMP_BING, DateTime.fromISO('2026-05-17T12:00:00+03:00'));
     expect(result.impressions).toBe('STALE');
   });
 });

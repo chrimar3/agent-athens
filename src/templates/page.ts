@@ -235,7 +235,7 @@ export interface CardData {
   exhibitionIsOpen: boolean;
 }
 
-export function prepareCardData(event: Event): CardData {
+export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
@@ -280,7 +280,9 @@ export function prepareCardData(event: Event): CardData {
 
   // Internal link to detail page
   const slug = generateEventSlug(event);
-  const href = `/events/${slug}/`;
+  // English pages are generated only for events with fullDescriptionEn.
+  const prefix = locale === 'en' && event.fullDescriptionEn ? '/en/events' : '/events';
+  const href = `${prefix}/${slug}/`;
 
   // Badge
   const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
@@ -304,8 +306,8 @@ export function prepareCardData(event: Event): CardData {
   return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen };
 }
 
-export function renderEventCard(event: Event): string {
-  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, numericPrice, exhibitionIsOpen } = prepareCardData(event);
+export function renderEventCard(event: Event, locale: Locale = 'el'): string {
+  const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, numericPrice, exhibitionIsOpen } = prepareCardData(event, locale);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
@@ -374,7 +376,7 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
     parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
     parts.push(`<div class="date-group" data-count="${dateEvents.length}">`);
     for (const event of dateEvents) {
-      parts.push(renderEventCard(event));
+      parts.push(renderEventCard(event, locale));
     }
     parts.push(`</div>`);
   }
@@ -384,7 +386,7 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
     parts.push(`<h2 class="date-group-header">${runningHeader}</h2>`);
     parts.push(`<div class="date-group" data-count="${running.length}">`);
     for (const event of running) {
-      parts.push(renderEventCard(event));
+      parts.push(renderEventCard(event, locale));
     }
     parts.push(`</div>`);
   }

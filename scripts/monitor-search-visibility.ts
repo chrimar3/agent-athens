@@ -320,17 +320,23 @@ export interface BingMetricsRow {
   top10: number | string;
 }
 
-export function getBingMetrics(jsonPath: string = join(PROJECT_DIR, 'logs/bing-latest.json')): BingMetricsRow {
+export function getBingMetrics(jsonPath: string = join(PROJECT_DIR, 'logs/bing-latest.json'), now: DateTime = DateTime.now()): BingMetricsRow {
   const staleRow: BingMetricsRow = { impressions: 'STALE', clicks: 'STALE', avgPosition: 'STALE', top10: 'STALE' };
   try {
     if (!existsSync(jsonPath)) return staleRow;
     const data = JSON.parse(readFileSync(jsonPath, 'utf-8'));
+    const stamp = typeof data?.timestamp === 'string' ? DateTime.fromISO(data.timestamp) : null;
+    const age = stamp?.isValid ? now.diff(stamp, 'hours').hours : NaN;
+    if (!Number.isFinite(age) || age < 0 || age > 25) return staleRow;
     if (data?.status === 'auth_fail') {
       return { impressions: 'AUTH_FAIL', clicks: 'AUTH_FAIL', avgPosition: 'AUTH_FAIL', top10: 'AUTH_FAIL' };
     }
     if (data?.status === 'stale') return staleRow;
     if (data?.status === 'ok' && data?.aggregate) {
       const agg = data.aggregate;
+      const counts = [agg.impressions_7d, agg.clicks_7d, agg.top10_count_7d];
+      if (!counts.every(n => Number.isSafeInteger(n) && n >= 0) ||
+          typeof agg.avg_position_7d !== 'number' || !Number.isFinite(agg.avg_position_7d) || agg.avg_position_7d < 0) return staleRow;
       return {
         impressions: agg.impressions_7d ?? 'STALE',
         clicks: agg.clicks_7d ?? 'STALE',
