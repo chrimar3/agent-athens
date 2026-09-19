@@ -17,6 +17,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 // The report header/filename date must be the same Athens-local day that
 // scripts/assemble-scoreboard.ts grades against (a UTC date is yesterday's
 // between 00:00 and 03:00 Athens and would read as a stale sensor).
+import { isCurrentSql } from '../src/db/effective-end-sql';
 import { getAthensTodayStr } from '../src/utils/event-lifecycle';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
@@ -26,13 +27,11 @@ const REPORTS_DIR = join(import.meta.dir, '../data/health-reports');
 // making the report unreadable as truth. 2400s catches genuine runaways only.
 export const BUILD_TIME_WARN_MS = 2_400_000;
 
-// One population for every ratio the report prints: visible upcoming events,
-// end_date-aware for exhibitions (Tier-1 rule — a running exhibition is
-// upcoming). Numerator and denominator must both use this, or the report
-// prints nonsense like "2546/421 (604.8%) enriched" (2026-08-10 report).
+// Use the same Athens day and effective-end rules for every event ratio.
 const VISIBLE_UPCOMING = `
   location_status IN ('verified_athens', 'pass_through')
-  AND date(COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date)) >= date('now')
+  AND merged_into IS NULL
+  AND ${isCurrentSql()}
 `;
 
 interface ScrapeStats {
@@ -64,7 +63,9 @@ interface Alert {
 // ============================================================================
 
 function getDb(): Database {
-  return new Database(DB_PATH);
+  const db = new Database(DB_PATH);
+  db.exec('PRAGMA query_only = 1');
+  return db;
 }
 
 function getLatestScrapeStats(): ScrapeStats[] {
@@ -126,28 +127,14 @@ function getLatestGenerationStats(): GenerationStats | null {
   }
 }
 
-function getDatabaseSummary(): { total: number; visible: number; hidden: number; unverified: number } {
-  const db = getDb();
+export function getDatabaseSummary(dbIn?: Database): { total: number; visible: number; hidden: number; unverified: number } {
+  const db = dbIn ?? getDb();
   try {
-    const total = (db.prepare(`SELECT COUNT(*) as count FROM events`).get() as { count: number }).count;
-    const visible = (db.prepare(`
-      SELECT COUNT(*) as count FROM events
-      WHERE location_status IN ('verified_athens', 'pass_through')
-      AND date(start_date) >= date('now')
-    `).get() as { count: number }).count;
-    const hidden = (db.prepare(`
-      SELECT COUNT(*) as count FROM events
-      WHERE location_status NOT IN ('verified_athens', 'pass_through')
-      OR date(start_date) < date('now')
-    `).get() as { count: number }).count;
-    const unverified = (db.prepare(`
-      SELECT COUNT(*) as count FROM events
-      WHERE location_status = 'unverified'
-    `).get() as { count: number }).count;
-    return { total, visible, hidden, unverified };
-  } finally {
-    db.close();
-  }
+    const total = (db.prepare('SELECT COUNT(*) as count FROM events').get() as { count: number }).count;
+    const visible = (db.prepare(`SELECT COUNT(*) as count FROM events WHERE ${VISIBLE_UPCOMING}`).get({ $today: getAthensTodayStr() }) as { count: number }).count;
+    const unverified = (db.prepare("SELECT COUNT(*) as count FROM events WHERE location_status = 'unverified'").get() as { count: number }).count;
+    return { total, visible, hidden: total - visible, unverified };
+  } finally { if (!dbIn) db.close(); }
 }
 
 function getNewUnverifiedVenues(): string[] {
@@ -171,11 +158,11 @@ export function getEnrichmentStats(dbIn?: Database): { enriched: number; total: 
     const enriched = (db.prepare(`
       SELECT COUNT(*) as count FROM events
       WHERE needs_enrichment = 0 AND ${VISIBLE_UPCOMING}
-    `).get() as { count: number }).count;
+    `).get({ $today: getAthensTodayStr() }) as { count: number }).count;
     const total = (db.prepare(`
       SELECT COUNT(*) as count FROM events
       WHERE ${VISIBLE_UPCOMING}
-    `).get() as { count: number }).count;
+    `).get({ $today: getAthensTodayStr() }) as { count: number }).count;
     return { enriched, total };
   } finally {
     if (!dbIn) db.close();
@@ -188,11 +175,11 @@ export function getSchemaValidationStats(dbIn?: Database): { valid: number; tota
     const valid = (db.prepare(`
       SELECT COUNT(*) as count FROM events
       WHERE schema_json IS NOT NULL AND ${VISIBLE_UPCOMING}
-    `).get() as { count: number }).count;
+    `).get({ $today: getAthensTodayStr() }) as { count: number }).count;
     const total = (db.prepare(`
       SELECT COUNT(*) as count FROM events
       WHERE ${VISIBLE_UPCOMING}
-    `).get() as { count: number }).count;
+    `).get({ $today: getAthensTodayStr() }) as { count: number }).count;
     return { valid, total };
   } finally {
     if (!dbIn) db.close();
@@ -227,13 +214,13 @@ function getWeeklyStats(): Map<string, Map<string, number>> {
   }
 }
 
-function getQualityStats(): Array<{
+export function getQualityStats(dbIn?: Database): Array<{
   source: string;
   total: number;
   withPrice: number;
   withTicketUrl: number;
 }> {
-  const db = getDb();
+  const db = dbIn ?? getDb();
   try {
     const stats = db.prepare(`
       SELECT
@@ -242,11 +229,10 @@ function getQualityStats(): Array<{
         SUM(CASE WHEN price_amount IS NOT NULL OR price_type = 'open' THEN 1 ELSE 0 END) as with_price,
         SUM(CASE WHEN ticket_url IS NOT NULL THEN 1 ELSE 0 END) as with_ticket_url
       FROM events
-      WHERE location_status IN ('verified_athens', 'pass_through')
-      AND date(start_date) >= date('now')
+      WHERE ${VISIBLE_UPCOMING}
       GROUP BY source
       ORDER BY source
-    `).all() as Array<{ source: string; total: number; with_price: number; with_ticket_url: number }>;
+    `).all({ $today: getAthensTodayStr() }) as Array<{ source: string; total: number; with_price: number; with_ticket_url: number }>;
 
     return stats.map(s => ({
       source: s.source,
@@ -255,7 +241,7 @@ function getQualityStats(): Array<{
       withTicketUrl: s.with_ticket_url
     }));
   } finally {
-    db.close();
+    if (!dbIn) db.close();
   }
 }
 
@@ -529,5 +515,5 @@ async function main() {
 // module (e.g. from tests) ran the full report against the production DB —
 // caught by the prod-db-guard preload the first time a test imported it.
 if (import.meta.main) {
-  main().catch(console.error);
+  main().catch(error => { console.error('health-check: FAILED', error); process.exitCode = 1; });
 }

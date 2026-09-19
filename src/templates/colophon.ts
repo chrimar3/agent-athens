@@ -16,6 +16,8 @@
  */
 
 import { renderColophonStats, getColophonStats } from './colophon-stats';
+import { BASE_URL } from '../config/site-url';
+import { buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 
 // S155 (2026-05-25): name heading is <h2>, NOT <h1>. The colophon dialog rides
 // into every page via site-chrome.ts → renderSiteNav, so an <h1> here makes
@@ -57,11 +59,14 @@ export const COLOPHON_CONTENT = `<header class="colophon-content-header">
   <a href="/cv.pdf" download>Download CV</a>
 </p>`;
 
-export function renderColophonContent(): string {
+export function renderColophonContent(destination: 'dialog' | 'page' = 'dialog'): string {
   // Build-time stats append after the static prose. The singleton is shared by
   // both surfaces, so the dialog and the mirror emit byte-identical stat markup.
   const stats = renderColophonStats(getColophonStats());
-  return stats ? `${COLOPHON_CONTENT}\n\n${stats}` : COLOPHON_CONTENT;
+  const content = destination === 'page'
+    ? COLOPHON_CONTENT.replace('<h2 class="colophon-name">', '<h1 class="colophon-name">').replace('Christos Maragkoudakis</h2>', 'Christos Maragkoudakis</h1>')
+    : COLOPHON_CONTENT;
+  return stats ? content + '\n\n' + stats : content;
 }
 
 export function renderColophonTrigger(): string {
@@ -136,4 +141,18 @@ export function renderColophonScript(): string {
   });
 })();
 </script>`;
+}
+
+/** Identity uses only the maker details already visible in the shared colophon. */
+export function buildColophonSchema(): Record<string, unknown> {
+  const url = BASE_URL + '/en/colophon/';
+  const personId = url + '#person';
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'AboutPage', '@id': url + '#webpage', url, name: 'About me — Christos Maragkoudakis', inLanguage: 'en', mainEntity: { '@id': personId }, publisher: { '@id': BASE_URL + '/#organization' } },
+      { '@type': 'Person', '@id': personId, name: 'Christos Maragkoudakis', url, email: 'cmarag8@gmail.com', sameAs: ['https://github.com/chrimar3', 'https://linkedin.com/in/christosmarag'] },
+      buildSiteOrganizationGraphMember(),
+    ],
+  };
 }

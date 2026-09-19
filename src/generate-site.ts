@@ -32,7 +32,7 @@ import { BILINGUAL_CONTENT_SLUGS } from './sitemap/generate-sitemaps';
 import { STRINGS } from './i18n/strings';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from './templates/site-chrome';
 import { renderSearchOverlay, renderSearchScript } from './templates/search-overlay';
-import { ORGANIZATION_SCHEMA } from './utils/schema-geo';
+import { buildSiteOrganizationGraphMember } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 import { buildCompletenessReport, printBucketSummary, printHardStopSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
 import { buildDataFeed, writeDataFeed } from './generators/datafeed';
@@ -43,7 +43,7 @@ import { renderAnalytics } from './config/analytics';
 import { proofMetrics } from './utils/proof-metrics';
 import { renderProofBody } from './templates/proof-body';
 import { buildProofSchema } from './templates/proof-schema';
-import { renderColophonContent } from './templates/colophon';
+import { renderColophonContent, buildColophonSchema } from './templates/colophon';
 import { setColophonStats } from './templates/colophon-stats';
 import { ACTIVE_SOURCE_COUNT } from './config/active-source-ids';
 import { writeBuildProvenance } from './utils/build-provenance';
@@ -495,6 +495,7 @@ async function main() {
   // not the 24-card page cap (the old value contradicted the capsule total).
   const homeMetadata = buildPageMetadata({}, events.length);
   homeMetadata.pageType = 'homepage';
+  homeMetadata.apiUrl = '/api/index.json';
   const homeHtml = renderPage(homeMetadata, homepageEvents, undefined, homepagePreContent, 'el', homepagePostContent);
   const homeFilepath = join(DIST_DIR, 'index.html');
   writeHtmlIfChangedSync(homeFilepath, homeHtml);
@@ -754,7 +755,7 @@ async function main() {
     const venueEvents = eventsByVenueEn.get(event.venue.name) || [];
     const relatedEvents = selectRelatedEvents(venueEvents, event.id);
 
-    const html = renderEventDetailPage(event, relatedEvents, 'en', pagedVenueSlugs);
+    const html = renderEventDetailPage(event, relatedEvents, 'en', pagedVenueSlugs, bilingualHubSlugs);
     const pageDir = join(enEventsDir, slug);
     if (!existsSync(pageDir)) {
       mkdirSync(pageDir, { recursive: true });
@@ -819,11 +820,7 @@ async function main() {
   // Generate content pages (about, editorial, corrections)
   console.log('\n📄 Generating content pages...');
   const todayIso = DateTime.now().setZone('Europe/Athens').toISODate();
-  const publisher = {
-    '@type': 'Organization',
-    'name': ORGANIZATION_SCHEMA.name,
-    'url': ORGANIZATION_SCHEMA.url
-  };
+  const publisher = buildSiteOrganizationGraphMember();
 
   // proofMetrics: anti-drift reader. Numbers flow from live artifacts, not literals.
   // pageableEvents.length is the only correct event-count denominator (the raw
@@ -846,8 +843,7 @@ async function main() {
           'description': 'Agent Athens — Ημερήσιο πολιτιστικό ημερολόγιο Αθήνας με AI. Ποιοι είμαστε, πώς λειτουργούμε, τι καλύπτουμε.',
           'inLanguage': 'el',
           publisher,
-          'datePublished': '2026-03-02',
-          'dateModified': todayIso
+          'datePublished': '2026-03-02'
         }, null, 2),
         bodyHtml: `
         <h1>Σχετικά με το agent athens</h1>
@@ -883,8 +879,7 @@ async function main() {
           'description': 'Agent Athens — Daily AI-curated cultural events calendar for Athens. Who we are, how we work, what we cover.',
           'inLanguage': 'en',
           publisher,
-          'datePublished': '2026-03-07',
-          'dateModified': todayIso
+          'datePublished': '2026-03-07'
         }, null, 2),
         bodyHtml: `
         <h1>About agent athens</h1>
@@ -923,8 +918,7 @@ async function main() {
           'description': 'Πώς δημιουργούμε τις περιγραφές εκδηλώσεων — πηγές, μεθοδολογία, ποιοτικός έλεγχος. Agent Athens.',
           'inLanguage': 'el',
           publisher,
-          'datePublished': '2026-03-02',
-          'dateModified': todayIso
+          'datePublished': '2026-03-02'
         }, null, 2),
         bodyHtml: `
         <h1>Συντακτική πολιτική</h1>
@@ -976,8 +970,7 @@ async function main() {
           'description': 'How we create event descriptions — data sources, AI enrichment methodology, quality control. Agent Athens.',
           'inLanguage': 'en',
           publisher,
-          'datePublished': '2026-03-07',
-          'dateModified': todayIso
+          'datePublished': '2026-03-07'
         }, null, 2),
         bodyHtml: `
         <h1>Editorial policy</h1>
@@ -1032,8 +1025,7 @@ async function main() {
           'description': 'Αναφορά σφαλμάτων και πολιτική διορθώσεων — Agent Athens πολιτιστικές εκδηλώσεις Αθήνα.',
           'inLanguage': 'el',
           publisher,
-          'datePublished': '2026-03-02',
-          'dateModified': todayIso
+          'datePublished': '2026-03-02'
         }, null, 2),
         bodyHtml: `
         <h1>Πολιτική διορθώσεων</h1>
@@ -1077,8 +1069,7 @@ async function main() {
           'description': 'Report errors and correction policy — Agent Athens cultural events Athens.',
           'inLanguage': 'en',
           publisher,
-          'datePublished': '2026-03-07',
-          'dateModified': todayIso
+          'datePublished': '2026-03-07'
         }, null, 2),
         bodyHtml: `
         <h1>Correction policy</h1>
@@ -1133,25 +1124,13 @@ async function main() {
       // The page mirrors the same content rendered in the colophon dialog (via
       // src/templates/colophon.ts), so editing renderColophonContent() updates
       // both surfaces atomically — no drift.
-      // TODO(geo-strategist): Person schema + sameAs → GitHub/LinkedIn on this
-      // page. Deferred — the JSON-LD shape is owned by the GEO Strategist pass.
       enOnly: true,
       en: {
         slug: 'en/colophon',
         title: 'About me — Christos Maragkoudakis',
         metaDescription: 'Christos Maragkoudakis — AI systems, built end to end. About the maker of Agent Athens: how it was built, what it argues for, and what I\'m open to next.',
-        schemaJson: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'AboutPage',
-          'name': 'About me — Christos Maragkoudakis',
-          'url': `${BASE_URL}/en/colophon/`,
-          'description': 'Christos Maragkoudakis — AI systems, built end to end. About the maker of Agent Athens.',
-          'inLanguage': 'en',
-          publisher,
-          'datePublished': '2026-05-23',
-          'dateModified': todayIso
-        }, null, 2),
-        bodyHtml: renderColophonContent()
+        schemaJson: JSON.stringify(buildColophonSchema(), null, 2),
+        bodyHtml: renderColophonContent('page')
       },
     },
   ];
@@ -1321,8 +1300,9 @@ async function main() {
   await generateLLMsTxt({
     events,
     venuePageUrls,
-    categoryConfigs: CATEGORIES_CONFIG.categories,
-    englishEventCount: englishEvents.length,
+    categoryConfigs: CATEGORIES_CONFIG.categories.filter(c => categoryUrls.includes(c.slug)),
+    generatedUrls: generatedUrls.filter((u): u is string => u !== null),
+    englishEventCount: englishEvents.filter(e => !shouldNoindexEvent(e)).length,
     englishHubCount: bilingualHubSlugs.size,
     bilingualHubSlugs,
     hubConfigs: hubPagesConfig.hubs,
@@ -1336,6 +1316,10 @@ async function main() {
   const dataFeed = buildDataFeed(pageableEvents, 'el');
   writeDataFeed(dataFeed, join(DIST_DIR, 'api/events.json'));
   console.log(`  ✓ /api/events.json (${dataFeed.dataFeedElement.length} events)`);
+  mkdirSync(join(DIST_DIR, 'api/en'), { recursive: true });
+  const englishFeed = buildDataFeed(pageableEvents, 'en');
+  writeDataFeed(englishFeed, join(DIST_DIR, 'api/en/events.json'));
+  console.log(`  ✓ /api/en/events.json (${englishFeed.dataFeedElement.length} events)`);
 
   // Build priority overrides for past-active event pages (lower sitemap priority)
   const priorityOverrides = new Map<string, string>();
@@ -1530,6 +1514,7 @@ async function generatePage(filters: Filters, allEvents: Event[], preContentHtml
   const filteredEvents = filterEvents(allEvents, filters);
   const url = buildURL(filters);
   const metadata = buildPageMetadata(filters, filteredEvents.length);
+  metadata.apiUrl = `/api/${url}.json`;
 
   // Phase-2 A2: an EMPTY filter page gets noindex and is dropped from the
   // sitemap (return null → filtered before the manifest/sitemap consumers).
@@ -1612,7 +1597,7 @@ async function generateCategoryPages(events: Event[]): Promise<string[]> {
     writeJsonApiIfChangedSync(join(apiDir, `${category.slug}.json`), jsonData);
 
     console.log(`  ✓ /${category.slug} (${filteredEvents.length} events)`);
-    generatedUrls.push(category.slug);
+    if (filteredEvents.length > 0) generatedUrls.push(category.slug);
   }
 
   return generatedUrls;
@@ -1622,12 +1607,13 @@ async function generateLLMsTxt(params: {
   events: Event[];
   venuePageUrls: string[];
   categoryConfigs: CategoryConfig[];
+  generatedUrls: string[];
   englishEventCount?: number;
   englishHubCount?: number;
   bilingualHubSlugs?: Set<string>;
   hubConfigs?: HubConfig[];
 }) {
-  const { events, venuePageUrls, categoryConfigs, englishEventCount = 0, englishHubCount = 0, bilingualHubSlugs, hubConfigs } = params;
+  const { events, venuePageUrls, categoryConfigs, generatedUrls, englishEventCount = 0, englishHubCount = 0, bilingualHubSlugs, hubConfigs } = params;
   const base = BASE_URL;
 
   // Phase-3 T2 (2026-07-19): llms.txt is the AI-agent discovery surface, but
@@ -1636,8 +1622,12 @@ async function generateLLMsTxt(params: {
   // while the /en/ hubs (the only pages Perplexity cites and ChatGPT's top
   // referral targets) appeared only as an unlinked count. Every link now
   // points at its INDEXABLE variant: /en/<slug>/ when the EL page is dormant.
-  const indexableUrl = (slug: string) =>
-    bilingualHubSlugs?.has(slug) ? `${base}/en/${slug}/` : `${base}/${slug}`;
+  const publishedPaths = new Map(generatedUrls.map(path => [path.replace(/^\/|\/$/g, ''), path]));
+  const indexableUrl = (slug: string): string | null => {
+    const key = bilingualHubSlugs?.has(slug) ? `en/${slug}` : slug;
+    const path = publishedPaths.get(key);
+    return path ? `${base}/${path}` : null;
+  };
 
   const eventCount = events.length;
   const venueCount = venuePageUrls.length;
@@ -1645,8 +1635,11 @@ async function generateLLMsTxt(params: {
   const sourceCount = new Set(events.map(e => e.source)).size;
 
   const categoryLines = categoryConfigs
-    .map(c => `- [${c.titleEn}](${indexableUrl(c.slug)}): ${c.description}`)
+    .flatMap(c => { const url = indexableUrl(c.slug); return url ? [`- [${c.titleEn}](${url}): ${c.description}`] : []; })
     .join('\n');
+
+  const timeLines = [['Today', 'today'], ['Tomorrow', 'tomorrow'], ['This Weekend', 'this-weekend'], ['This Week', 'this-week'], ['This Month', 'this-month'], ['Open-entry Events', 'open']]
+    .flatMap(([label, slug]) => { const url = indexableUrl(slug); return url ? [`- [${label}](${url})`] : []; }).join('\n');
 
   const enHubLines = (hubConfigs ?? [])
     .filter(h => bilingualHubSlugs?.has(h.slug))
@@ -1663,7 +1656,7 @@ async function generateLLMsTxt(params: {
   const content = `# Agent Athens
 
 > AI-curated cultural events calendar for Athens, Greece.
-> ${eventCount} events across ${venueCount} venues. Updated daily at 08:00 Athens time. Data licensed CC BY 4.0.
+> ${eventCount} current listings; ${venueCount} venue guides. Collection is scheduled daily at 08:00 Europe/Athens. Data licensed CC BY 4.0.
 
 ## Browse by Category
 
@@ -1671,9 +1664,7 @@ ${categoryLines}
 
 ## Browse by Time
 
-- [Today](${indexableUrl('today')}), [Tomorrow](${indexableUrl('tomorrow')}), [This Weekend](${indexableUrl('this-weekend')})
-- [This Week](${indexableUrl('this-week')}), [This Month](${indexableUrl('this-month')})
-- [Free Events](${indexableUrl('open')})
+${timeLines}
 
 ## Venues
 
@@ -1692,10 +1683,11 @@ ${enHubLines}
 
 ` : ''}## JSON API
 
-Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
+JSON is available for the homepage, generated filter pages and categories. Curated hubs use the event feeds below; there is no universal per-page JSON URL.
 
 - [All Events](${base}/api/index.json)
-- [All Events as Schema.org DataFeed](${base}/api/events.json)
+- [Indexable Event Listings as Schema.org DataFeed](${base}/api/events.json)
+- [English Event Listings as Schema.org DataFeed](${base}/api/en/events.json)
 - [Today](${base}/api/today.json)
 - [Category example](${base}/api/categories/concerts.json)
 
@@ -1703,21 +1695,16 @@ Every HTML page has a JSON counterpart at \`/api/{slug}.json\`.
 
 - Geographic: Athens, Greece (Attica region)
 - Types: ${uniqueTypes}
-- Sources: ${sourceCount} verified venues and listing sites
+- Sources: ${sourceCount} listing sources
 - Freshness: Updated daily at 08:00 Europe/Athens
-- Structured data: Schema.org Event markup on all pages
+- Structured data: Schema.org Event markup on eligible event pages; publisher graphs and event feeds
 
 ## About
 
-- [About Agent Athens](${base}/about/): What we do, how we work
-- [Editorial Policy](${base}/editorial/): Data sources, AI enrichment methodology, quality standards
-- [Corrections](${base}/corrections/): Report errors, correction policy
-
-### English E-E-A-T Pages
-
-- [About (English)](${base}/en/about/): Who we are, how we work
-- [Editorial Policy (English)](${base}/en/editorial/): Data sources, AI methodology, quality control
-- [Corrections (English)](${base}/en/corrections/): Report errors, correction policy
+- [About Agent Athens](${base}/en/about/): Who we are, how we work
+- [Editorial Policy](${base}/en/editorial/): Data sources, AI methodology, quality control
+- [Corrections](${base}/en/corrections/): Report errors and corrections
+- [About the Maker](${base}/en/colophon/): The person who built Agent Athens
 
 ## Contact
 

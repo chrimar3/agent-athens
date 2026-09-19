@@ -1,3 +1,5 @@
+import { escapeHtml } from '../utils/html-escape';
+import { escapeJsonForHtml } from '../utils/html-json';
 /**
  * Venue Page Generator
  *
@@ -249,8 +251,8 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ${renderFontLinks()}
   ${renderCssLink()}
 
-  <title>${venue.name} - Εκδηλώσεις | agent-athens</title>
-  <meta name="description" content="${generateVenueMetaDescription({ name: venue.name, neighborhood: venue.neighborhood, events: venue.events.slice(0, 1).map(e => ({ title: e.title, startDate: e.startDate })), eventCount: venue.eventCount })}">
+  <title>${escapeHtml(venue.name)} - Εκδηλώσεις | agent-athens</title>
+  <meta name="description" content="${escapeHtml(generateVenueMetaDescription({ name: venue.name, neighborhood: venue.neighborhood, events: venue.events.slice(0, 1).map(e => ({ title: e.title, startDate: e.startDate })), eventCount: venue.eventCount }))}">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="${canonicalUrl}">
@@ -259,8 +261,8 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ${renderHreflangLinks({ el: canonicalUrl })}
 
   <!-- Open Graph -->
-  <meta property="og:title" content="${venue.name} - Εκδηλώσεις">
-  <meta property="og:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${venue.name}">
+  <meta property="og:title" content="${escapeHtml(venue.name)} - Εκδηλώσεις">
+  <meta property="og:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${escapeHtml(venue.name)}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
@@ -269,8 +271,8 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${venue.name} - Εκδηλώσεις">
-  <meta name="twitter:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${venue.name}">
+  <meta name="twitter:title" content="${escapeHtml(venue.name)} - Εκδηλώσεις">
+  <meta name="twitter:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${escapeHtml(venue.name)}">
   <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
 
   <!-- GEO: Location metadata -->
@@ -281,7 +283,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ${schemaJson ? `
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
-  ${schemaJson}
+  ${escapeJsonForHtml(schemaJson)}
   </script>
   ` : ''}
 
@@ -294,14 +296,14 @@ ${renderAnalytics()}
 
   <main class="venue-page-content" id="main-content" tabindex="-1">
     <nav class="breadcrumb">
-      <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${venue.name}
+      <a href="/">agent-athens</a> › <a href="/venues/">Χώροι</a> › ${escapeHtml(venue.name)}
     </nav>
 
     <header class="venue-header" itemscope itemtype="https://schema.org/Place">
-      <h1 itemprop="name">${venue.name}</h1>
+      <h1 itemprop="name">${escapeHtml(venue.name)}</h1>
       <div class="venue-meta">
-        ${venue.neighborhood ? `<p>Περιοχή: <strong>${displayNeighborhood(venue.neighborhood)}</strong></p>` : ''}
-        ${venue.address ? `<p itemprop="address">${venue.address}</p>` : ''}
+        ${venue.neighborhood ? `<p>Περιοχή: <strong>${escapeHtml(displayNeighborhood(venue.neighborhood))}</strong></p>` : ''}
+        ${venue.address ? `<p itemprop="address">${escapeHtml(venue.address)}</p>` : ''}
         <p>${venue.eventCount} επερχόμενες εκδηλώσεις ${typeSummary ? `(${typeSummary})` : ''}</p>
       </div>
     </header>
@@ -317,7 +319,7 @@ ${renderAnalytics()}
         <h2>Χάρτης</h2>
         <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${c.lon - 0.005},${c.lat - 0.005},${c.lon + 0.005},${c.lat + 0.005}&marker=${c.lat},${c.lon}"
           width="100%" height="300" loading="lazy"
-          title="Χάρτης — ${venue.name}"></iframe>
+          title="Χάρτης — ${escapeHtml(venue.name)}"></iframe>
         <small class="venue-map-attribution">&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></small>
       </section>`;
     })()}
@@ -426,9 +428,9 @@ function generateVenueIndex(venues: VenueData[]): void {
 
   const venueListHtml = sortedVenues.map(venue => `
     <li>
-      <a href="/venues/${venue.slug}/">${venue.name}</a>
+      <a href="/venues/${venue.slug}/">${escapeHtml(venue.name)}</a>
       <span class="event-count">${venue.eventCount} εκδηλώσεις</span>
-      ${venue.neighborhood ? `<span class="neighborhood">${displayNeighborhood(venue.neighborhood)}</span>` : ''}
+      ${venue.neighborhood ? `<span class="neighborhood">${escapeHtml(displayNeighborhood(venue.neighborhood))}</span>` : ''}
     </li>
   `).join('\n');
 
@@ -466,7 +468,7 @@ function generateVenueIndex(venues: VenueData[]): void {
       })),
     },
   };
-  const venuesJsonLdScript = `<script type="application/ld+json">\n${JSON.stringify(venuesJsonLd, null, 2)}\n  </script>`;
+  const venuesJsonLdScript = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(venuesJsonLd, null, 2))}\n  </script>`;
 
   const html = `<!DOCTYPE html>
 <html lang="el">

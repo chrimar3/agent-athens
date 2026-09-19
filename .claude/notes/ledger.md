@@ -8,6 +8,25 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-09-19 — Discovery, feed and reporting drift (S226)
+
+| What | Why | Fix |
+|---|---|---|
+| GSC aggregates stayed hardcoded STALE after access became available | Historical service-account UI failure was treated as a permanent architecture constraint | Re-probe read-only access; collect final-period totals and explicit error markers with the existing credentials |
+| English event discovery led to dormant categories; IndexNow omitted English hubs | Consumers guessed paths independently and compared configured slugs with slash-terminated URLs | Pass actual eligible English hubs to link emitters; normalize only for IndexNow matching |
+| HTML advertised missing JSON endpoints; empty/duplicate sitemap entries survived | URL conventions and category configuration were mistaken for emitted artifacts | Explicit metadata API URLs, emitted-category membership and sitemap deduplication |
+| Feed included cooling/noindex events and guessed all descriptions were Greek | Feed bypassed lifecycle gating and treated the requested route locale as evidence of source-text language | Shared lifecycle predicate, eligible English feed and language only from explicit description provenance |
+
+## 2026-09-19 — HTML, search, calendar and metric boundary failures
+
+| What | Why | Fix |
+|---|---|---|
+| JSON-LD accepted HTML script terminators; event text entered HTML unescaped | JSON escaping is not HTML escaping; scraped strings are untrusted | Escape serialized JSON at each script boundary and plain event text at HTML emission; adversarial rendered-DOM regressions |
+| Search lost early queries and linked to nonexistent destinations | Async completion did not replay input; expansion URLs had no consumer; locale and venue routing ignored build eligibility | Shared loader, retry, inline expansion, query startup, and generated-route eligibility flags |
+| Health sections disagreed; feeds rewrote unchanged revisions | Separate event predicates and unsynchronized timestamp comparison | Shared effective-end SQL with Athens binding and merged exclusion; compare both feed-level freshness fields |
+| Calendars fabricated all-day exhibition times and overlong continuation lines | Date-only values reused timed sentinels; folding omitted the continuation-space byte | All-day exclusive ranges, Luxon wall time, CR/LF escaping and UTF-8 line budgets |
+
+
 Pitfalls encountered and how to avoid them.
 
 ## Database
@@ -1308,6 +1327,15 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-09-19 — Verify discovery against emitted files (S226)
+
+Audit sitemap targets, JSON alternates, English discovery links and feed targets against the generated artifact, including robots eligibility and stable IDs. Build in a disposable source copy with an SQLite online backup. Preserve a recovery commit before changing another session's uncommitted work; verify source hashes and existing stashes. Separate Search Console property totals from the incomplete observed-query population and record final-period boundaries with each snapshot. Evidence: `docs/2026-09-19-seo-geo-presence.md`.
+
+## 2026-09-19 — Check emitted behavior at the boundary
+
+Use rendered HTML parsing for hostile text, real-browser tests for async search/focus behavior, and generated-route existence checks for discovery links. Index data must share the generator's page-eligibility predicate. Preview and full-build validation can use an isolated source copy plus SQLite online backup, keeping deploy artifacts out of the verification write path. See `docs/2026-09-19-project-improvements.md`.
+
 
 Established patterns in Agent Athens codebase.
 
@@ -7064,6 +7092,15 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-09-19 — Existing-surface SEO/GEO repair and measurement (S226)
+
+The user's ten-item implementation request is fulfilled on top of the independently saved Astra recovery commit. Prioritize broken discovery paths, measurable search reporting, accurate feed/source metadata and stable public identity. Preserve dormant-language and hreflang gates; add only the English counterpart of the existing machine-readable feed. Reuse the existing scheduled monitor and service account, with read-only API scope, instead of a new auth or scheduling system. Leave unknown description language unspecified. Technical before/after results establish correctness, not ranking or AI-citation lift. Release remains pending review/deployment.
+
+## 2026-09-19 — Bounded reliability and action-layer improvements
+
+The user's request to identify and implement ten high-impact improvements was applied to measurement, generated-content security, discovery, saved events, calendar accuracy, feed freshness and local preview. No new framework, scraper, city or public page surface was added. Storage-denied saves degrade to current-page memory; unknown English-page availability falls back to the existing root event route. Deployment configuration and safety guards remain outside this implementation. Evidence and scope: `docs/2026-09-19-project-improvements.md`.
+
 
 Accumulated decisions made during Agent Athens development.
 

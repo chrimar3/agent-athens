@@ -6,7 +6,7 @@ import {
   renderColophonScript,
   COLOPHON_CONTENT,
 } from '../colophon';
-import { renderSiteNav, renderHamburgerScript } from '../site-chrome';
+import { renderSiteNav, renderSiteFooter, renderHamburgerScript } from '../site-chrome';
 import { renderContentPage } from '../content-page';
 
 describe('COLOPHON_CONTENT', () => {
@@ -126,8 +126,9 @@ describe('site-chrome integration (Option A — coextensive by construction)', (
   test('renderSiteNav output contains colophon-trigger', () => {
     expect(renderSiteNav()).toContain('colophon-trigger');
   });
-  test('renderSiteNav output contains colophon-dialog (markup rides with nav)', () => {
-    expect(renderSiteNav()).toContain('colophon-dialog');
+  test('dialog is emitted with the footer after page content', () => {
+    expect(renderSiteNav()).not.toContain('id="colophon-dialog"');
+    expect(renderSiteFooter()).toContain('id="colophon-dialog"');
   });
   test('trigger renders BEFORE nav-search-btn and BEFORE hamburger-btn (left of search)', () => {
     const nav = renderSiteNav();

@@ -286,9 +286,18 @@ bun test tests/                   # all tests
 bun test tests/integration        # integration only
 bun test --watch tests/           # watch mode
 bun test --coverage tests/        # coverage report
+AA_BROWSER_TESTS=1 bun test tests/browser/discovery.test.ts # installed Chrome; CHROME_PATH can override
 ```
 
 Test files cover the daily pipeline integration, enrichment brief generation, schema enhancements, save-batch flow, homepage rendering, EEAT pages, and CLI gating.
+
+---
+
+### Preview an existing build
+
+`bun run serve` serves the existing `dist/` at `http://127.0.0.1:3000`. It does not rebuild. For an isolated build use `bun run src/serve.ts --dir /path/to/build/dist --port 3001`. Clean routes and genuine 404s are preserved; filesystem access is confined to the selected build.
+
+The [September 2026 improvement report](docs/2026-09-19-project-improvements.md) records the ranked changes, verification evidence, and remaining limitations.
 
 ---
 

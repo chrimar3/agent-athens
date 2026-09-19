@@ -285,6 +285,8 @@ Belongs in a dedicated session. Verification command for that session is at the 
 **Fix plan:** S138 — OAuth fallback session. Service-account JSON at `~/.config/agentathens/gcp-kpi-reader.json` is retained for the eventual S138 attempt (or replacement OAuth client). Bing half of search visibility automation shipped in S136 as compensation; GSC half pending.
 **Status:** Open — workaround path identified, not yet implemented. The 4 `gsc_*_7d` columns in `data/search-visibility-log.csv` remain `STALE` indefinitely until S138 lands. Not on Παναθήναια May 29 critical path.
 
+**S226 update (2026-09-19):** The retained service-account credentials now return HTTP 200 and final-period Search Analytics data for the domain property; the historical auth blocker is no longer reproducible through the API. The reason the earlier UI behavior changed is not established. A read-only collector and integration into the existing daily monitor are implemented on `codex/seo-geo-presence-2026-09-19`; verified final period 2026-09-10–16: 1,050 impressions, 20 clicks. **Current status:** API access verified; reporting-code rollout pending merge/deployment. Earlier reproduction notes above remain historical evidence. Absolute indexed-page counts still use the existing manual workflow.
+
 ### Google Indexing Low Coverage
 **Severity:** 🟡
 **First seen:** S90+17d capture (2026-05-08)

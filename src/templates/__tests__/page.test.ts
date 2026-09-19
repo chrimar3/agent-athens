@@ -152,8 +152,8 @@ describe("renderPage", () => {
     expect(html).toContain("/llms.txt");
   });
 
-  test("should include JSON API alternate link", () => {
-    const html = renderPage(sampleMetadata, [sampleConcert]);
+  test("should include the generated JSON API alternate link", () => {
+    const html = renderPage({ ...sampleMetadata, apiUrl: "/api/jazz-concert-this-week.json" }, [sampleConcert]);
 
     expect(html).toContain('rel="alternate" type="application/json" href="/api/jazz-concert-this-week.json"');
   });

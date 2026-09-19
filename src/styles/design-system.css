@@ -2616,15 +2616,21 @@ div#main-content {
   outline-offset: -2px;
 }
 
-/* See all link */
-.search-see-all {
+/* Search expansion and retry controls */
+.search-see-all, .search-retry-btn {
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
   display: block;
   padding: var(--space-sm) var(--space-md-lg);
   font-size: var(--type-ui);
   color: var(--accent-primary);
   text-decoration: none;
 }
-.search-see-all:hover { text-decoration: underline; }
+.search-see-all:hover, .search-retry-btn:hover { text-decoration: underline; }
+.search-error { padding: var(--space-sm) var(--space-md-lg); }
 
 /* Screen reader only */
 .sr-only {

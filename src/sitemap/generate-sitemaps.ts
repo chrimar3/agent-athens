@@ -137,7 +137,7 @@ export function generateSplitSitemaps(
   // BILINGUAL_CONTENT_SLUGS hoisted to module scope (single source of truth — the
   // paired robots-meta noindex in generate-site.ts reads the same set).
   const generatedUrlSet = new Set(generatedUrls);
-  const filteredUrls = generatedUrls.filter(url => {
+  const filteredUrls = [...generatedUrlSet].filter(url => {
     // Bare-root event with /en/ equivalent → drop
     if (url.startsWith('events/') && bilingualSlugs) {
       const slug = url.replace(/^events\//, '').replace(/\/$/, '');
@@ -187,5 +187,5 @@ export function generateSplitSitemaps(
 
   console.log(`  ✓ sitemap-index.xml → ${childFiles.map(f => `${f.name} (${f.count})`).join(', ')}`);
 
-  return generatedUrls.length;
+  return filteredUrls.length;
 }

@@ -12,8 +12,10 @@
 import { readFileSync, existsSync } from 'fs';
 import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
+import { computePagedVenueSlugs } from './venue-page';
 import type { Event } from '../types';
 import { normalizeGreek } from '../utils/normalize-greek';
+import { getAthensTodayStr, resolveEffectiveEnd } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug, slugify } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
@@ -37,6 +39,8 @@ interface EventRecord {
   neighborhood: string;
   neighborhoodN: string;
   date: string;
+  startDate: string;
+  hasEnglish: boolean;
   slug: string;
   thumb: string;
   price: string;
@@ -63,6 +67,8 @@ interface PopularRecord {
   slug: string;
   venue: string;
   date: string;
+  startDate: string;
+  hasEnglish: boolean;
   type: string;
 }
 
@@ -95,9 +101,11 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
     neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
     neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
     date: formatShortGreekDate(event.startDate),
+    startDate: event.startDate,
+    hasEnglish: Boolean(event.fullDescriptionEn),
     slug: generateEventSlug(event),
     thumb: event.imageLocal || event.imageUrl || event.venueImage || '',
-    price: event.price.type === 'open' ? 'open' : 'with-ticket',
+    price: event.price.type,
   }));
 
   // Build venue records (deduplicated by slug)
@@ -122,7 +130,9 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       });
     }
   }
+  const pagedVenueSlugs = computePagedVenueSlugs(events);
   const venueRecords = Array.from(venueMap.values())
+    .filter(venue => pagedVenueSlugs.has(venue.slug))
     .sort((a, b) => b.eventCount - a.eventCount);
 
   // Build category records from config
@@ -141,10 +151,10 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
   });
 
   // Build popular records (5 soonest upcoming events)
-  const now = new Date().toISOString().slice(0, 10);
+  const now = getAthensTodayStr();
   const popular: PopularRecord[] = [...events]
     .filter(e => {
-      const effectiveDate = (e.type === 'exhibition' && e.endDate) ? e.endDate.slice(0, 10) : e.startDate.slice(0, 10);
+      const effectiveDate = resolveEffectiveEnd(e).date;
       return effectiveDate >= now;
     })
     .sort((a, b) => {
@@ -158,6 +168,8 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       slug: generateEventSlug(e),
       venue: e.venue.name,
       date: formatShortGreekDate(e.startDate),
+      startDate: e.startDate,
+      hasEnglish: Boolean(e.fullDescriptionEn),
       type: e.type,
     }));
 

@@ -149,24 +149,23 @@ describe("resolveEventTimes", () => {
     expect(end).toEqual({ Y: 2026, M: 6, D: 1, H: 13, Mi: 0, S: 0 });
   });
 
-  test("exhibition with unparseable endDate: fallback to start + 3h", () => {
+  test("invalid supplied endDate does not become an invented end time", () => {
     const event = makeEvent({
       type: "exhibition",
       startDate: "2026-06-01T10:00:00",
       endDate: "garbage",
     });
-    const { end } = resolveEventTimes(event)!;
-    expect(end).toEqual({ Y: 2026, M: 6, D: 1, H: 13, Mi: 0, S: 0 });
+    expect(resolveEventTimes(event)).toBeNull();
   });
 
-  test("non-exhibition with endDate set: still uses start + 3h (endDate ignored for non-exhibition)", () => {
+  test("concerts honor an explicit endDate", () => {
     const event = makeEvent({
       type: "concert",
       startDate: "2026-06-15T20:00:00",
       endDate: "2026-06-15T23:30:00",
     });
     const { end } = resolveEventTimes(event)!;
-    expect(end).toEqual({ Y: 2026, M: 6, D: 15, H: 23, Mi: 0, S: 0 });
+    expect(end).toEqual({ Y: 2026, M: 6, D: 15, H: 23, Mi: 30, S: 0 });
   });
 
   test("invalid startDate returns null", () => {

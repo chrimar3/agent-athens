@@ -22,7 +22,7 @@ import {
   type ColophonStats,
 } from '../colophon-stats';
 import { renderColophonContent } from '../colophon';
-import { renderSiteNav } from '../site-chrome';
+import { renderSiteFooter } from '../site-chrome';
 
 const STATS: ColophonStats = {
   events: 3079,
@@ -86,8 +86,8 @@ describe('renderColophonStats — Guard-6 parity across both surfaces', () => {
     expect(getColophonStats()).toEqual(STATS);
   });
 
-  test('dialog (via renderSiteNav) and mirror (renderColophonContent) emit identical stat <dl>', () => {
-    const dialogHtml = renderSiteNav('en');         // embeds renderColophonDialog → renderColophonContent
+  test('dialog (via renderSiteFooter) and mirror (renderColophonContent) emit identical stat <dl>', () => {
+    const dialogHtml = renderSiteFooter('en');         // embeds renderColophonDialog → renderColophonContent
     const mirrorHtml = renderColophonContent();      // the /en/colophon/ page body
 
     const extract = (s: string) => {

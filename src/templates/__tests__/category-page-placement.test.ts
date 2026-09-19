@@ -7,6 +7,7 @@
 // filter-bar on category pages (category-page calls renderPage without allEvents).
 
 import { describe, test, expect } from 'bun:test';
+import { load } from 'cheerio';
 import { renderCategoryPage, type CategoryConfig } from '../category-page';
 import type { Event } from '../../types';
 
@@ -86,4 +87,21 @@ describe('Category-page nav placement — Path D regression (Session 1)', () => 
     expect(pageContainerIdx).toBeLessThan(navIdx);
     expect(navIdx).toBeLessThan(mainIdx);
   });
+});
+
+describe('Category-page empty inventory indexing', () => {
+  test('an empty category emits noindex, follow even when other categories have inventory', () => {
+    const html = renderCategoryPage(clubsCategory, events, allCategories);
+    expect(load(html)('meta[name="robots"]').attr('content')).toBe('noindex, follow');
+  });
+
+  test('a populated category is indexable again when inventory returns', () => {
+    const html = renderCategoryPage(clubsCategory, [makeEvent({ type: 'dj_set' })], allCategories);
+    expect(load(html)('meta[name="robots"]').attr('content') ?? '').not.toContain('noindex');
+  });
+});
+
+test('category JSON alternate resolves to its emitted category API family', () => {
+  const html = renderCategoryPage(clubsCategory, events, allCategories);
+  expect(load(html)('link[rel="alternate"][type="application/json"]').attr('href')).toBe('/api/categories/clubs.json');
 });

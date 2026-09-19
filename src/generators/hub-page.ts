@@ -1,3 +1,4 @@
+import { escapeJsonForHtml } from '../utils/html-json';
 /**
  * Hub Page Generator
  *
@@ -288,7 +289,7 @@ export function renderFaqSchema(faqs: HubFaq[], locale: Locale = 'el'): string {
     }))
   };
 
-  return `<script type="application/ld+json">\n${JSON.stringify(schema)}\n</script>`;
+  return `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(schema))}\n</script>`;
 }
 
 /**
@@ -651,7 +652,7 @@ export function renderHubPage(
     isCornerstone: config.cornerstone === true,
     hubCanonicalUrl,
   });
-  const graphBlock = `<script type="application/ld+json">\n${JSON.stringify(graphEnvelope)}\n</script>`;
+  const graphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(graphEnvelope))}\n</script>`;
   html = html.replace('</head>', `${graphBlock}\n</head>`);
 
   return html;
@@ -814,7 +815,7 @@ export function renderOverflowPage(
     isCornerstone: config.cornerstone === true,
     hubCanonicalUrl,
   });
-  const overflowGraphBlock = `<script type="application/ld+json">\n${JSON.stringify(overflowGraph)}\n</script>`;
+  const overflowGraphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(overflowGraph))}\n</script>`;
   html = html.replace('</head>', `${overflowGraphBlock}\n</head>`);
 
   return html;
