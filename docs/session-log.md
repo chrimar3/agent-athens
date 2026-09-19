@@ -7489,3 +7489,16 @@ constant feeding both surfaces.
 **Learnings:** Recheck historical auth blockers before changing the auth architecture: the retained GSC service account now works. Generated page eligibility must drive links, feeds and machine-readable directories. An Event's default locale field does not establish the language of legacy description text. API aggregates and observed query rankings are different populations.
 
 **Open items:** Merge/deploy the reviewed branch, verify live endpoints and collect comparable post-release periods before attributing traffic or citation gains. Existing 23 schema warnings and manual indexed-page counts remain. No deployment was performed.
+
+
+### Session 227 — Merge, push and production release — 2026-09-19
+
+**Plan:** Carry out the user's instruction to commit, push and deploy the saved Astra work and ten SEO/GEO improvements.
+
+**What happened:** Verified the two implementation commits and green GitHub CI/path-guard checks, then merged PR #14 as `84eb367dc6bbedfc4505bbb88c763226c8898046`. Preserved the 28 unchanged original Astra files in named stash `e9b9c5345` before fast-forwarding local main; the independent recovery branch and all five pre-existing stashes remain. Unrelated local data/docs work stayed in place. Built an isolated shallow clone from the merged commit with a fresh SQLite online backup, then deployed through the unchanged `scripts/redeploy.sh` gate. Netlify published deploy `6aae99da7a3d3d94a6bf813b` at 17:25:10 Europe/Athens (14:25:10 UTC).
+
+**Verified:** Source provenance `sourceDirty=0` at the merged SHA; deploy gate passed; fresh build completed with zero schema errors and 23 warnings. Artifact audit: 861 unique sitemap URLs, 434 JSON alternates, zero missing/noindex sitemap targets, broken JSON alternates, dormant-category English links or bad feed destinations. Netlify confirmed state=ready. All 23 live endpoint/HTML/feed checks passed: root feed 659 events, English feed 285, exact sitemap/robots/LLM-directory content matches, correct dialog placement and H1s, canonical Event identities, empty-category noindex and HTTP 403 for an unapproved ticket redirect. The same implementation tree had 3,398 local test passes and green GitHub CI before merge.
+
+**Learnings:** Keep the application's ARIA dialog selector in verification scripts; it uses a div with role=dialog, not a native dialog tag. A production release can preserve unrelated local work by building from a committed clone and a read-only online database backup, while advancing local main separately for scheduled jobs.
+
+**Open items:** Observe comparable complete post-release GSC periods before claiming ranking/citation gains. The 23 existing schema warnings and separate indexed-page counters remain follow-ups. No unrelated working files or existing stashes were discarded.

@@ -287,6 +287,8 @@ Belongs in a dedicated session. Verification command for that session is at the 
 
 **S226 update (2026-09-19):** The retained service-account credentials now return HTTP 200 and final-period Search Analytics data for the domain property; the historical auth blocker is no longer reproducible through the API. The reason the earlier UI behavior changed is not established. A read-only collector and integration into the existing daily monitor are implemented on `codex/seo-geo-presence-2026-09-19`; verified final period 2026-09-10–16: 1,050 impressions, 20 clicks. **Current status:** API access verified; reporting-code rollout pending merge/deployment. Earlier reproduction notes above remain historical evidence. Absolute indexed-page counts still use the existing manual workflow.
 
+**S227 release update (2026-09-19):** PR #14 is merged and the reporting code is installed in local main for the existing scheduled monitor. The website release is published and verified. Read-only API access was verified in S226; a future scheduled run and comparable final periods are still required to assess operational continuity and search changes.
+
 ### Google Indexing Low Coverage
 **Severity:** 🟡
 **First seen:** S90+17d capture (2026-05-08)
