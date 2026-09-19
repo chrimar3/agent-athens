@@ -48,9 +48,9 @@ export function formatGreekTime(isoDate: string): string {
   if (timeMatch) {
     return timeMatch[1];
   }
-  // Fallback to luxon parsing if no match
-  const dt = DateTime.fromISO(isoDate).setZone(ATHENS_TZ);
-  return dt.toFormat('HH:mm');
+  // A date-only value has no clock time. Parsing it as host-zone midnight
+  // manufactures 02:00/03:00 on UTC hosts when converted to Athens.
+  return '';
 }
 
 /**

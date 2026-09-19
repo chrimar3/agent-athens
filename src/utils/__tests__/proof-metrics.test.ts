@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { describe, test, expect } from 'bun:test';
 import { mkdtempSync, writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -45,7 +46,7 @@ describe('proofMetrics()', () => {
         place: {},
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema.validatedAt).toBe('2026-05-22T00:00:00.000Z');
   });
 
@@ -71,7 +72,7 @@ describe('proofMetrics()', () => {
         },
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema.passClean).toBe(true);
   });
 
@@ -92,7 +93,7 @@ describe('proofMetrics()', () => {
         },
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema.passClean).toBe(false);
   });
 
@@ -107,7 +108,7 @@ describe('proofMetrics()', () => {
         place: { venue_template: { fail: 0 }, event_template: { fail: 0 } },
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema.passClean).toBe(false);
   });
 
@@ -117,7 +118,7 @@ describe('proofMetrics()', () => {
         pass: 100, skip: 2, fail: 0, expects: 500, files: 10, ranAt: '2026-05-22T00:00:00+03:00',
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.tests).toEqual({
       pass: 100, skip: 2, fail: 0, expects: 500, files: 10, ranAt: '2026-05-22T00:00:00+03:00',
     });
@@ -125,13 +126,13 @@ describe('proofMetrics()', () => {
 
   test("honest-absence: missing test-summary.json → tests is '—'", () => {
     const dir = mkFixtureDir({}); // no files
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.tests).toBe('—');
   });
 
   test("honest-absence: missing build-completeness.json → schema = { passClean: null, validatedAt: '—' }", () => {
     const dir = mkFixtureDir({}); // no files
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema).toEqual({ passClean: null, validatedAt: '—' });
   });
 
@@ -163,7 +164,7 @@ describe('proofMetrics()', () => {
         },
       }),
     });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.schema.passClean).toBe(true);
   });
 
@@ -172,7 +173,7 @@ describe('proofMetrics()', () => {
       'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
       '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,,,STALE,STALE,STALE,STALE,21,0,9.761904761904763,2,13,0,\n';
     const dir = mkFixtureDir({ 'search-visibility-log.csv': csv });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.indexing).not.toBe('—');
     if (result.indexing !== '—') {
       expect(result.indexing.bing.impressions7d).toBe(21);
@@ -187,7 +188,7 @@ describe('proofMetrics()', () => {
       'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
       '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,7,390,STALE,STALE,STALE,STALE,21,0,9.761904761904763,2,13,0,\n';
     const dir = mkFixtureDir({ 'search-visibility-log.csv': csv });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(JSON.stringify(result).match(/gsc/i)).toBe(null);
     expect(JSON.stringify(result).match(/search.console/i)).toBe(null);
   });
@@ -197,13 +198,13 @@ describe('proofMetrics()', () => {
       'date,sitemap_events,sitemap_venues,sitemap_editorial,sitemap_total,indexnow_submitted,indexnow_success,indexnow_batches,indexnow_last_run,robots_http,sitemap_http,llms_http,sample_accessible,sample_size,gsc_indexed,bing_indexed,gsc_impressions_7d,gsc_clicks_7d,gsc_avg_position_7d,gsc_top10_count_7d,bing_impressions_7d,bing_clicks_7d,bing_avg_position_7d,bing_top10_count_7d,enriched_last_24h,wrapper_discrepancy_last_24h,notes\n' +
       '2026-05-21,3873,38,1210,5121,3940,3940,1,2026-05-20T09:44:59.684Z,200,200,200,9,10,,,STALE,STALE,STALE,STALE,,,,,13,0,\n';
     const dir = mkFixtureDir({ 'search-visibility-log.csv': csv });
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.indexing).toBe('—');
   });
 
   test("honest-absence: missing search-visibility-log.csv → indexing is '—'", () => {
     const dir = mkFixtureDir({});
-    const result = proofMetrics({ pageableCount: 1, dataDir: dir });
+    const result = proofMetrics({ pageableCount: 1, dataDir: dir, now: DateTime.fromISO('2026-05-22T12:00:00+03:00') });
     expect(result.indexing).toBe('—');
   });
 });

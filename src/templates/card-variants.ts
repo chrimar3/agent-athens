@@ -162,9 +162,9 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
       </div>`}
       <div class="hero-card-body">
         <h3 class="hero-card-title">${escapeHtml(featured.title)}</h3>
-        ${featuredDesc ? `<p class="hero-card-desc">${featuredDesc}</p>` : ''}
+        ${featuredDesc ? `<p class="hero-card-desc">${escapeHtml(featuredDesc)}</p>` : ''}
         <span class="card-date">${featuredData.dateStr}</span>
-        <span class="card-venue">${featuredData.venueText}</span>
+        <span class="card-venue">${escapeHtml(featuredData.venueText)}</span>
       </div>
     </a>`;
 
@@ -187,7 +187,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
         <div class="hero-pick-body">
           <h3 class="hero-pick-title">${escapeHtml(event.title)}</h3>
           <span class="card-date">${data.dateStr}</span>
-          <span class="card-venue">${data.venueText}</span>
+          <span class="card-venue">${escapeHtml(data.venueText)}</span>
         </div>
       </a>`;
   }).join('\n');

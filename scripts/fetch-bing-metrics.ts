@@ -74,7 +74,7 @@ function unwrap(body: unknown): BingRow[] {
       if (Array.isArray(r)) return r as BingRow[];
     }
   }
-  return [];
+  throw new Error('Unexpected Bing statistics response');
 }
 
 function isAuthFail(status: number): boolean {
@@ -98,7 +98,16 @@ async function callEndpoint(
       return { status: res.status, rows: [] };
     }
     const body = await res.json();
-    return { status: 200, rows: unwrap(body) };
+    const rows = unwrap(body);
+    for (const row of rows) {
+      if (!row || typeof row.Date !== 'string' || !parseBingDate(row.Date) ||
+          typeof row.Query !== 'string' ||
+          ![row.Impressions, row.Clicks].every(n => typeof n === 'number' && Number.isSafeInteger(n) && n >= 0) ||
+          typeof row.AvgImpressionPosition !== 'number' || !Number.isFinite(row.AvgImpressionPosition) || row.AvgImpressionPosition < 0) {
+        throw new Error('Invalid Bing statistics row');
+      }
+    }
+    return { status: 200, rows };
   } finally {
     clearTimeout(timer);
   }
@@ -138,7 +147,7 @@ export async function fetchBingMetrics(opts: FetchOpts): Promise<BingFetchResult
   const inWindow = (r: BingRow) => {
     if (!r.Date) return false;
     const dt = parseBingDate(r.Date);
-    return dt !== null && dt.toMillis() >= cutoff;
+    return dt !== null && dt.toMillis() >= cutoff && dt.toMillis() <= now.toMillis();
   };
 
   const qrows = qstats.rows.filter(inWindow);
@@ -203,6 +212,10 @@ async function main() {
 
   console.log(`Bing metrics: status=${result.status}`);
   console.log(JSON.stringify(result, null, 2));
+  if (result.status !== 'ok') {
+    console.error('Bing collection failed; check credentials or API availability and rerun scripts/fetch-bing-metrics.ts.');
+    process.exitCode = 1;
+  }
 }
 
 if (import.meta.main) {

@@ -1,8 +1,13 @@
 // Event filtering logic
 
 import type { Event, Filters, TimeRange, PriceFilter } from '../types';
+import { DateTime } from 'luxon';
+import { ATHENS_TZ } from './format-date';
+import { resolveEffectiveEnd } from './event-lifecycle';
+import { classifyDateFormat } from './date-format';
 
 export function filterEvents(events: Event[], filters: Filters): Event[] {
+  const timeWindow = filters.time ? buildDateWindow(filters.time) : null;
   return events.filter(event => {
     // Type filter
     if (filters.type && event.type !== filters.type) {
@@ -10,7 +15,7 @@ export function filterEvents(events: Event[], filters: Filters): Event[] {
     }
 
     // Time filter
-    if (filters.time && !matchesTimeRange(event, filters.time)) {
+    if (timeWindow && !matchesDateWindow(event, timeWindow)) {
       return false;
     }
 
@@ -29,86 +34,56 @@ export function filterEvents(events: Event[], filters: Filters): Event[] {
   });
 }
 
-function matchesTimeRange(event: Event, timeRange: TimeRange): boolean {
-  const eventDate = new Date(event.startDate);
-  const now = new Date();
-  now.setHours(0, 0, 0, 0); // Start of today
+interface DateWindow { start: string; end: string }
+
+/** Compute each Athens date window once, even when filtering thousands of rows. */
+function buildDateWindow(timeRange: TimeRange): DateWindow | null {
+  const today = DateTime.now().setZone(ATHENS_TZ).startOf('day');
+  let rangeStart = today;
+  let rangeEnd: DateTime;
 
   switch (timeRange) {
     case 'today':
-      const today = new Date(now);
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      // Exhibition Tier 1: running exhibitions (started in past, still open) match today
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate <= tomorrow && endDate >= today;
-      }
-      return eventDate >= today && eventDate < tomorrow;
-
+      rangeEnd = today.plus({ days: 1 });
+      break;
     case 'tomorrow':
-      const tomorrowStart = new Date(now);
-      tomorrowStart.setDate(tomorrowStart.getDate() + 1);
-      const tomorrowEnd = new Date(now);
-      tomorrowEnd.setDate(tomorrowEnd.getDate() + 2);
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate < tomorrowEnd && endDate >= tomorrowStart;
-      }
-      return eventDate >= tomorrowStart && eventDate < tomorrowEnd;
-
+      rangeStart = today.plus({ days: 1 });
+      rangeEnd = today.plus({ days: 2 });
+      break;
     case 'this-week':
-      const weekEnd = new Date(now);
-      weekEnd.setDate(weekEnd.getDate() + 7);
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate < weekEnd && endDate >= now;
-      }
-      return eventDate >= now && eventDate < weekEnd;
-
+      rangeEnd = today.plus({ days: 7 });
+      break;
     case 'this-weekend':
-      // Find next Friday-Sunday
-      const dayOfWeek = now.getDay();
-      const daysUntilFriday = (5 - dayOfWeek + 7) % 7;
-      const friday = new Date(now);
-      friday.setDate(friday.getDate() + daysUntilFriday);
-      const monday = new Date(friday);
-      monday.setDate(monday.getDate() + 3);
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate < monday && endDate >= friday;
-      }
-      return eventDate >= friday && eventDate < monday;
-
+      // Luxon weekdays are Mon=1 through Sun=7. Saturday/Sunday belong to
+      // the Friday that just passed; Monday begins the next weekend window.
+      rangeStart = today.plus({ days: 5 - today.weekday });
+      rangeEnd = rangeStart.plus({ days: 3 });
+      break;
     case 'this-month':
-      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate <= monthEnd && endDate >= now;
-      }
-      return eventDate >= now && eventDate <= monthEnd;
-
+      rangeEnd = today.startOf('month').plus({ months: 1 });
+      break;
     case 'next-month':
-      const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      const nextMonthEnd = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-      if (event.type === 'exhibition' && event.endDate) {
-        const endDate = new Date(event.endDate);
-        endDate.setHours(23, 59, 59, 999);
-        return eventDate <= nextMonthEnd && endDate >= nextMonthStart;
-      }
-      return eventDate >= nextMonthStart && eventDate <= nextMonthEnd;
-
+      rangeStart = today.startOf('month').plus({ months: 1 });
+      rangeEnd = rangeStart.plus({ months: 1 });
+      break;
     case 'all-events':
-      return true;
-
     default:
-      return true;
+      return null;
   }
+  return { start: rangeStart.toISODate()!, end: rangeEnd.toISODate()! };
+}
+
+function matchesDateWindow(event: Event, window: DateWindow): boolean {
+  // Canonical stored dates express Athens wall time. Day windows use that
+  // date portion, matching lifecycle and display semantics even for legacy
+  // rows whose historical timezone suffix is unreliable.
+  const eventDay = event.startDate.substring(0, 10);
+  if (classifyDateFormat(eventDay) !== 'date-only') return false;
+  if (event.type === 'exhibition' && event.endDate) {
+    const endDay = event.endDate.substring(0, 10);
+    return classifyDateFormat(endDay) === 'date-only' && eventDay < window.end && endDay >= window.start;
+  }
+  return eventDay >= window.start && eventDay < window.end;
 }
 
 export function getFilteredEventCount(events: Event[], filters: Filters): number {
@@ -119,7 +94,8 @@ export function getFilteredEventCount(events: Event[], filters: Filters): number
  * Check if an exhibition is currently open
  * An exhibition is "currently open" if:
  * - Its type is 'exhibition'
- * - Today's date is between start_date and end_date (inclusive)
+ * - Today in Athens falls between the start and effective end (inclusive)
+ * - A missing end date uses the existing bounded lifecycle presumption
  *
  * @param event - The event to check
  * @param referenceDate - Optional reference date (defaults to today)
@@ -128,22 +104,14 @@ export function getFilteredEventCount(events: Event[], filters: Filters): number
 export function isCurrentlyOpen(event: Event, referenceDate?: Date): boolean {
   if (event.type !== 'exhibition') return false;
 
-  const now = referenceDate || new Date();
-  now.setHours(0, 0, 0, 0); // Start of day
+  const today = DateTime.fromJSDate(referenceDate ?? new Date(), { zone: ATHENS_TZ }).toISODate();
+  const startDay = event.startDate.substring(0, 10);
+  if (!today || classifyDateFormat(startDay) !== 'date-only' || startDay > today) return false;
 
-  const start = new Date(event.startDate);
-  start.setHours(0, 0, 0, 0);
-
-  // Must have already started
-  if (now < start) return false;
-
-  // If no end date, consider it open (ongoing/permanent)
-  if (!event.endDate) return true;
-
-  const end = new Date(event.endDate);
-  end.setHours(23, 59, 59, 999); // End of day
-
-  return now <= end;
+  // Use the same real end or bounded presumption as lifecycle classification.
+  // Missing endDate is not evidence that an exhibition remains open forever.
+  const endDay = resolveEffectiveEnd(event).date;
+  return classifyDateFormat(endDay) === 'date-only' && endDay >= today;
 }
 
 /**

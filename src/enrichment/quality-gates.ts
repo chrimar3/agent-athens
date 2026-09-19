@@ -12,6 +12,8 @@
 import { TAG_TAXONOMY, FILLER_PHRASES, type EventForEnrichment } from './description-generator';
 import { getWordTarget, classifyEvent } from './enrichment-matrix';
 import { classifyDateFormat } from '../utils/date-format';
+import { DateTime } from 'luxon';
+import { ATHENS_TZ } from '../utils/format-date';
 import { getCountryCode, getCurrencyCode } from '../utils/schema-geo';
 import {
   loadBannedPhrases,
@@ -879,22 +881,7 @@ export const VENUE_TYPE_MAP: Record<string, string> = {
  * Greece observes DST from last Sunday of March to last Sunday of October
  */
 export function getAthensTimezone(date: Date): string {
-  const year = date.getFullYear();
-  const marchLastSunday = getLastSundayOfMonth(year, 2); // March (0-indexed)
-  const octoberLastSunday = getLastSundayOfMonth(year, 9); // October (0-indexed)
-  return (date >= marchLastSunday && date < octoberLastSunday) ? '+03:00' : '+02:00';
-}
-
-/**
- * Get the last Sunday of a given month
- */
-function getLastSundayOfMonth(year: number, month: number): Date {
-  // Get last day of the month
-  const lastDay = new Date(year, month + 1, 0);
-  const dayOfWeek = lastDay.getDay(); // 0 = Sunday
-  lastDay.setDate(lastDay.getDate() - dayOfWeek);
-  lastDay.setHours(3, 0, 0, 0); // DST switch happens at 03:00 local
-  return lastDay;
+  return DateTime.fromJSDate(date, { zone: ATHENS_TZ }).toFormat('ZZ');
 }
 
 /**
@@ -909,9 +896,11 @@ function getLastSundayOfMonth(year: number, month: number): Date {
  *   - tz-aware                         → passthrough (already Schema.org-shaped)
  *   - malformed                        → throws
  *
- * DST offset (+03:00 summer, +02:00 winter) is computed from the event date
- * via getAthensTimezone(). Uses the shared classifyDateFormat to stay in
- * lockstep with normalizeDateField on the write path.
+ * DST offset (+03:00 summer, +02:00 winter) is computed from the full event
+ * wall time in Europe/Athens. Nonexistent spring-forward times are rejected;
+ * ambiguous fall-back times choose the earlier instant (summer offset),
+ * independently of the build clock. Uses the shared classifyDateFormat to
+ * stay in lockstep with normalizeDateField on the write path.
  */
 export function formatSchemaDate(dateStr: string, timeStr?: string): string {
   const fmt = classifyDateFormat(dateStr);
@@ -924,23 +913,24 @@ export function formatSchemaDate(dateStr: string, timeStr?: string): string {
     return dateStr;
   }
 
-  const dateMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!dateMatch) {
-    // Unreachable given classifier contract; defensive only.
-    throw new Error(`formatSchemaDate: unparseable date portion: ${JSON.stringify(dateStr)}`);
+  // Date-only values stay all-day; an explicit clock promotes them to a
+  // timed event. Resolve the offset from the complete Athens wall time,
+  // since midnight and evening can have different offsets on a DST day.
+  if (fmt === 'date-only' && !timeStr) return dateStr;
+  const localTimestamp = fmt === 'date-only' ? dateStr + 'T' + timeStr + ':00' : dateStr;
+  const localDate = DateTime.fromISO(localTimestamp, { zone: ATHENS_TZ });
+  if (!localDate.isValid) {
+    throw new Error('formatSchemaDate: invalid Athens date/time: ' + JSON.stringify(localTimestamp));
   }
-  const [, year, month, day] = dateMatch;
-  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-  const tz = getAthensTimezone(date);
-
-  if (fmt === 'date-only') {
-    // Explicit time promotes to a timed Schema.org event.
-    // No time → emit YYYY-MM-DD unchanged (all-day Schema.org event).
-    return timeStr ? `${dateStr}T${timeStr}:00${tz}` : dateStr;
+  // Luxon normalizes times inside the spring-forward gap. Do not publish a
+  // clock time that never occurs in Athens. Fractions do not affect the offset.
+  if (localDate.toFormat("yyyy-MM-dd'T'HH:mm:ss") !== localTimestamp.slice(0, 19)) {
+    throw new Error('formatSchemaDate: nonexistent Athens wall time: ' + JSON.stringify(localTimestamp));
   }
-
-  // naive-ts: append DST-aware offset.
-  return `${dateStr}${tz}`;
+  const firstOccurrence = localDate.getPossibleOffsets().reduce((earlier, candidate) =>
+    candidate.toMillis() < earlier.toMillis() ? candidate : earlier
+  );
+  return localTimestamp + firstOccurrence.toFormat('ZZ');
 }
 
 /**

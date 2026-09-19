@@ -8,6 +8,15 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-09-20 — Discovery and evidence boundaries (S228)
+
+| What | Why | Fix |
+|---|---|---|
+| English filters missed events after card 30; hero text could become HTML | Client filtering only inspected rendered cards; shared hero text bypassed escaping | Fetch existing complete English listing on demand and escape all hero text boundaries |
+| Weekend/month/DST/date-only/open-badge inconsistencies | Host dates, inclusive midnight bounds, date-at-midnight offsets and unbounded unknown ends diverged | Athens calendar windows, wall-time offset, absent-clock omission and existing lifecycle end policy |
+| Missing measurement evidence looked successful | Unchecked payloads and missing fail counters defaulted to zero | Validate freshness, types and required evidence; use honest absence |
+
+
 ## 2026-09-19 — Discovery, feed and reporting drift (S226)
 
 | What | Why | Fix |
@@ -1327,6 +1336,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-09-20 — Test calendar and evidence boundaries (S228)
+
+Freeze time at weekend/month/DST boundaries and run date tests in separate UTC and Athens processes. Luxon normalizes spring gaps and uses the current season to guess autumn overlaps: validate wall-time roundtrips and choose the earliest possible instant deterministically. Exercise lazy-filter loading and keyboard focus in an isolated real browser. A successful HTTP status is not a validated measurement: distinguish valid empty data from malformed data, stale snapshots and missing evidence.
+
 
 ## 2026-09-19 — Release without sweeping unrelated work (S227)
 
@@ -7096,6 +7110,11 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-09-20 — Ten bounded improvements on existing surfaces (S228)
+
+Prioritize reproduced discovery, content-safety, time correctness, evidence-integrity and keyboard-access issues over speculative new pages or measurement infrastructure. Reuse existing all-events routes and lifecycle policy; no protected configuration or production data edits. User authorized implementation, commit, push and deployment. See docs/2026-09-20-project-improvements.md for the ranked scope and verification.
+
 
 ## 2026-09-19 — Existing-surface SEO/GEO repair and measurement (S226)
 

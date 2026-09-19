@@ -50,7 +50,7 @@ export function renderSiteNav(locale: Locale = 'el'): string {
         </svg>
         <kbd class="search-kbd">\u2318K</kbd>
       </button>
-      <button class="hamburger-btn" aria-label="${s.navMenu}" aria-expanded="false" type="button">
+      <button class="hamburger-btn" aria-label="${s.navMenu}" aria-expanded="false" aria-controls="mobile-menu" type="button">
         <span class="hamburger-icon"></span>
       </button>
     </div>
@@ -65,7 +65,7 @@ export function renderHamburgerMenu(locale: Locale = 'el'): string {
   // route an English label to Greek content.
   const venuesItem = locale === 'en' ? '' : `\n    <li><a href="/venues/">${s.navVenues}</a></li>`;
   return `<div class="mobile-overlay" aria-hidden="true"></div>
-<nav class="mobile-menu" aria-label="${s.navMainNav}" aria-hidden="true">
+<nav id="mobile-menu" class="mobile-menu" aria-label="${s.navMainNav}" aria-hidden="true" inert>
   <button class="mobile-menu-close" aria-label="${s.navCloseMenu}">\u00d7</button>
   <ul class="mobile-menu-items">
     <li><button class="mobile-menu-search" type="button">${s.navSearch}</button></li>
@@ -171,21 +171,25 @@ export function renderHamburgerScript(): string {
   if (!btn || !menu || !overlay) return;
 
   function open() {
+    menu.inert = false;
     menu.classList.add('open');
     menu.setAttribute('aria-hidden', 'false');
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     btn.setAttribute('aria-expanded', 'true');
     document.body.classList.add('scroll-locked-menu');
+    if (closeBtn) closeBtn.focus();
   }
 
   function close() {
+    btn.focus();
     menu.classList.remove('open');
     menu.setAttribute('aria-hidden', 'true');
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     btn.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('scroll-locked-menu');
+    menu.inert = true;
   }
 
   btn.addEventListener('click', function() {
@@ -194,8 +198,36 @@ export function renderHamburgerScript(): string {
   });
   overlay.addEventListener('click', close);
   if (closeBtn) closeBtn.addEventListener('click', close);
+  // This script precedes the search script. Close the menu first so search
+  // captures a visible return-focus target rather than an inert menu button.
+  var menuSearch = menu.querySelector('.mobile-menu-search');
+  function handOffToSearch() {
+    close();
+    var searchButton = document.querySelector('.nav-search-btn');
+    if (searchButton) searchButton.focus();
+  }
+  if (menuSearch) menuSearch.addEventListener('click', handOffToSearch);
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && menu.classList.contains('open')) close();
+    if (!menu.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+    } else if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      handOffToSearch();
+    } else if (e.key === 'Tab') {
+      var focusable = Array.from(menu.querySelectorAll('a[href], button, [tabindex]')).filter(function(el) {
+        return !el.disabled && el.tabIndex >= 0 && el.getClientRects().length > 0;
+      });
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !menu.contains(document.activeElement))) {
+        e.preventDefault();
+        if (last) last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !menu.contains(document.activeElement))) {
+        e.preventDefault();
+        if (first) first.focus();
+      }
+    }
   });
 
   document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {

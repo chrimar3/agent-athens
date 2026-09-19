@@ -614,7 +614,7 @@ export function renderHubPage(
     const seeAllText = locale === 'en'
       ? `See all ${filteredEvents.length} events →`
       : `Δείτε και τις ${filteredEvents.length} εκδηλώσεις →`;
-    seeAllHtml = `\n<div class="hub-see-all-wrapper"><a href="${allHref}" class="hub-see-all">${seeAllText}</a></div>`;
+    seeAllHtml = `\n<div class="hub-see-all-wrapper"><a href="${allHref}" class="hub-see-all" data-events-total="${filteredEvents.length}">${seeAllText}</a></div>`;
   }
 
   // Inject "see all" + parts 3-6 after the card grid's closing </section>
