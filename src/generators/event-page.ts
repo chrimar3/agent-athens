@@ -1,3 +1,5 @@
+import { escapeHtml } from '../utils/html-escape';
+import { escapeJsonForHtml } from '../utils/html-json';
 /**
  * Individual Event Page Generator
  *
@@ -543,10 +545,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   if (hasFullDescription) {
     const { narrative, metadataHtml } = stripInfoTable(String(descriptionSource));
     const fallbackLabel = isEnglishFallback ? '<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>\n' : '';
-    descriptionHtml = fallbackLabel + narrative.split('\n\n').map(para => `<p>${para.trim()}</p>`).join('\n');
+    descriptionHtml = fallbackLabel + narrative.split('\n\n').map(para => `<p>${escapeHtml(para.trim())}</p>`).join('\n');
     hiddenMetadataHtml = metadataHtml;
   } else {
-    descriptionHtml = `<p>${event.description}</p>`;
+    descriptionHtml = `<p>${escapeHtml(event.description)}</p>`;
   }
 
   // Read-more for long descriptions
@@ -570,7 +572,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   const navLinks = [
     categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
-    venueLinkable ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${venueDisplayName}</a>` : ''
+    venueLinkable ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${escapeHtml(venueDisplayName)}</a>` : ''
   ].filter(Boolean);
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
@@ -602,14 +604,14 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // only for URL-less attributions.
   const sourceDisplayName = (event.url && hostOf(event.url)) || sourceAttributionMap[event.source] || event.source;
   const sourceHtml = event.url
-    ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${sourceDisplayName}</a></div>`
-    : `<div class="edp-source">${t.source}: ${sourceDisplayName}</div>`;
+    ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${escapeHtml(sourceDisplayName)}</a></div>`
+    : `<div class="edp-source">${t.source}: ${escapeHtml(sourceDisplayName)}</div>`;
 
   // Related events as cards
   const relatedHtml = relatedEvents.length > 0
     ? `
       <section class="edp-related">
-        <h2>${t.upcomingEventsAt} ${venueDisplayName}</h2>
+        <h2>${t.upcomingEventsAt} ${escapeHtml(venueDisplayName)}</h2>
         <div class="card-grid">
           ${relatedEvents.map(e => renderRelatedEventCard(e, locale)).join('\n')}
         </div>
@@ -622,7 +624,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     ? `<div class="edp-mobile-bar">
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
-        <div class="edp-mobile-bar-title">${event.title}</div>
+        <div class="edp-mobile-bar-title">${escapeHtml(event.title)}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
       <a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
@@ -699,14 +701,14 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
-  ${schemaJson}
+  ${escapeJsonForHtml(schemaJson)}
   </script>
 ${renderAnalytics()}
 </head>
 <body>
   ${renderSiteNav(locale)}
   ${renderHamburgerMenu(locale)}
-  ${renderSearchOverlay()}
+  ${renderSearchOverlay(locale)}
 
   <main>
   <article id="main-content" tabindex="-1"${isPast ? ' data-past="true"' : ''}>
@@ -716,15 +718,15 @@ ${renderAnalytics()}
         <nav class="edp-breadcrumb">
           <a href="/">agent-athens</a>
           ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
-          › ${venueDisplayName}
+          › ${escapeHtml(venueDisplayName)}
         </nav>
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
         ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
         <header>
-          <h1 class="edp-title">${event.title}</h1>
+          <h1 class="edp-title">${escapeHtml(event.title)}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
-            <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${venueDisplayName}</a>` : venueDisplayName}</span>
+            <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${escapeHtml(venueDisplayName)}</a>` : escapeHtml(venueDisplayName)}</span>
             <span class="edp-meta-item">${priceDisplay}</span>
           </div>
           ${ctaHtml}
@@ -732,6 +734,7 @@ ${renderAnalytics()}
             const actionBar = renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale);
             const gcalUrl = buildGCalUrl(event, canonicalUrl);
             const outlookUrl = buildOutlookUrl(event, canonicalUrl);
+            if (!gcalUrl || !outlookUrl) return actionBar;
             const icsHref = `/events/${slug}/event.ics`;
             const calendarDisclosure = `<details class="cal-disclosure">
             <summary class="cal-disclosure__summary edp-calendar-btn" aria-label="${t.addToCalendar}">
@@ -767,11 +770,11 @@ ${renderAnalytics()}
       ${inlineCtaHtml}
 
       <section class="edp-venue-section">
-        <h2>${venueDisplayName}</h2>
+        <h2>${escapeHtml(venueDisplayName)}</h2>
         ${event.venue.address
-          ? `<div class="edp-venue-address">${event.venue.address}</div>`
+          ? `<div class="edp-venue-address">${escapeHtml(event.venue.address)}</div>`
           : ''}
-        ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${displayNeighborhood(event.venue.neighborhood)}</div>` : ''}
+        ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${escapeHtml(displayNeighborhood(event.venue.neighborhood))}</div>` : ''}
         ${isPlaceholderVenue ? '' : `<a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
       </section>
 
@@ -792,7 +795,7 @@ ${renderAnalytics()}
 
   ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
-  ${renderSearchScript()}
+  ${renderSearchScript(locale)}
   ${renderEventDetailScript()}
   ${renderSavedEventsScript()}
   ${renderSaveButtonScript()}
@@ -851,7 +854,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
   const venueText = event.venue.neighborhood
-    ? `${event.venue.name} · ${displayNeighborhood(event.venue.neighborhood)}`
+    ? `${event.venue.name} · ${escapeHtml(displayNeighborhood(event.venue.neighborhood))}`
     : event.venue.name;
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
@@ -860,22 +863,22 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   <article class="event-card">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
-      ${renderCardSaveButton(event.id, slug, event.title)}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
     </div>`
       : `<div class="card-image-wrapper" data-type="${event.type}">
       ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
-      ${renderCardSaveButton(event.id, slug, event.title)}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
     </div>`}
     <div class="card-body">
-      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
-      <span class="card-venue">${venueText}</span>
+      <span class="card-venue">${escapeHtml(venueText)}</span>
       <span class="card-price">${priceText}</span>
     </div>
   </article>`;

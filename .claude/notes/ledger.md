@@ -8,6 +8,16 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-09-19 — HTML, search, calendar and metric boundary failures
+
+| What | Why | Fix |
+|---|---|---|
+| JSON-LD accepted HTML script terminators; event text entered HTML unescaped | JSON escaping is not HTML escaping; scraped strings are untrusted | Escape serialized JSON at each script boundary and plain event text at HTML emission; adversarial rendered-DOM regressions |
+| Search lost early queries and linked to nonexistent destinations | Async completion did not replay input; expansion URLs had no consumer; locale and venue routing ignored build eligibility | Shared loader, retry, inline expansion, query startup, and generated-route eligibility flags |
+| Health sections disagreed; feeds rewrote unchanged revisions | Separate event predicates and unsynchronized timestamp comparison | Shared effective-end SQL with Athens binding and merged exclusion; compare both feed-level freshness fields |
+| Calendars fabricated all-day exhibition times and overlong continuation lines | Date-only values reused timed sentinels; folding omitted the continuation-space byte | All-day exclusive ranges, Luxon wall time, CR/LF escaping and UTF-8 line budgets |
+
+
 Pitfalls encountered and how to avoid them.
 
 ## Database
@@ -1308,6 +1318,11 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-09-19 — Check emitted behavior at the boundary
+
+Use rendered HTML parsing for hostile text, real-browser tests for async search/focus behavior, and generated-route existence checks for discovery links. Index data must share the generator's page-eligibility predicate. Preview and full-build validation can use an isolated source copy plus SQLite online backup, keeping deploy artifacts out of the verification write path. See `docs/2026-09-19-project-improvements.md`.
+
 
 Established patterns in Agent Athens codebase.
 
@@ -7064,6 +7079,11 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-09-19 — Bounded reliability and action-layer improvements
+
+The user's request to identify and implement ten high-impact improvements was applied to measurement, generated-content security, discovery, saved events, calendar accuracy, feed freshness and local preview. No new framework, scraper, city or public page surface was added. Storage-denied saves degrade to current-page memory; unknown English-page availability falls back to the existing root event route. Deployment configuration and safety guards remain outside this implementation. Evidence and scope: `docs/2026-09-19-project-improvements.md`.
+
 
 Accumulated decisions made during Agent Athens development.
 

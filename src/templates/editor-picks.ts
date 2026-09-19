@@ -1,3 +1,4 @@
+import { escapeJsonForHtml } from '../utils/html-json';
 /**
  * Editor's Picks template partial — S101a infrastructure.
  *
@@ -79,6 +80,6 @@ export function renderEditorPicks(props: EditorPicksProps): string {
   <ol class="picks-list">
 ${picksHtml}
   </ol>
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${escapeJsonForHtml(JSON.stringify(jsonLd))}</script>
 </section>`;
 }

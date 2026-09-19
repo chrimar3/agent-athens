@@ -1,3 +1,4 @@
+import { escapeHtml } from '../utils/html-escape';
 // Card variant templates — list row, feature card, featured carousel, featured editorial
 // All reuse prepareCardData() for consistent date/price/badge/venue logic.
 
@@ -20,7 +21,7 @@ export function renderEventCardList(event: Event): string {
   <article class="event-card-list">
     ${imgSrc
       ? `<div class="list-image-wrapper" data-type="${event.type}">
-      <img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
@@ -29,12 +30,12 @@ export function renderEventCardList(event: Event): string {
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`}
     <div class="list-content">
-      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
       <span class="card-date">${dateStr}</span>
-      <span class="card-venue">${venueText}</span>
+      <span class="card-venue">${escapeHtml(venueText)}</span>
       <span class="card-price">${priceText}</span>
     </div>
-    ${renderCardSaveButton(event.id, slug, event.title)}
+    ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
   </article>`;
 }
 
@@ -50,7 +51,7 @@ export function renderFeatureCard(event: Event): string {
   <article class="event-card-feature">
     ${imgSrc
       ? `<div class="feature-image-wrapper" data-type="${event.type}">
-      <img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
@@ -59,10 +60,10 @@ export function renderFeatureCard(event: Event): string {
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`}
     <div class="feature-body">
-      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
       <span class="card-date">${dateStr}</span>
-      <span class="card-venue">${venueText}</span>
-      ${shortDesc ? `<p class="feature-description">${shortDesc}</p>` : ''}
+      <span class="card-venue">${escapeHtml(venueText)}</span>
+      ${shortDesc ? `<p class="feature-description">${escapeHtml(shortDesc)}</p>` : ''}
       <span class="card-price">${priceText}</span>
     </div>
   </article>`;
@@ -151,7 +152,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
     <a href="${featuredData.href}" class="hero-card hero-card--featured">
       ${featuredImg
         ? `<div class="hero-card-image-wrapper" data-type="${featured.type}">
-        <img class="hero-card-image" src="${featuredImg}" alt="${featured.title}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+        <img class="hero-card-image" src="${escapeHtml(featuredImg)}" alt="${escapeHtml(featured.title)}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
         <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${featuredIcon}</span>
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`
@@ -160,7 +161,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`}
       <div class="hero-card-body">
-        <h3 class="hero-card-title">${featured.title}</h3>
+        <h3 class="hero-card-title">${escapeHtml(featured.title)}</h3>
         ${featuredDesc ? `<p class="hero-card-desc">${featuredDesc}</p>` : ''}
         <span class="card-date">${featuredData.dateStr}</span>
         <span class="card-venue">${featuredData.venueText}</span>
@@ -177,14 +178,14 @@ export function renderHeroSection(events: Event[], mode: HeroMode): string {
       <a href="${data.href}" class="hero-card hero-card--pick">
         ${imgSrc
           ? `<div class="hero-pick-image" data-type="${event.type}">
-          <img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
           <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
         </div>`
           : `<div class="hero-pick-image" data-type="${event.type}">
           ${getEventTile(event.id) ?? ''}
         </div>`}
         <div class="hero-pick-body">
-          <h3 class="hero-pick-title">${event.title}</h3>
+          <h3 class="hero-pick-title">${escapeHtml(event.title)}</h3>
           <span class="card-date">${data.dateStr}</span>
           <span class="card-venue">${data.venueText}</span>
         </div>
@@ -228,7 +229,7 @@ export function renderFeaturedEventCard(
   <article class="event-card-featured-editorial">
     ${imgSrc
       ? `<div class="featured-editorial-image" data-type="${event.type}">
-      <img src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
     </div>`
@@ -237,10 +238,10 @@ export function renderFeaturedEventCard(
       <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
     </div>`}
     <div class="featured-editorial-body">
-      <h3 class="featured-editorial-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <h3 class="featured-editorial-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
       <p class="featured-editorial-vignette">${vignette}</p>
       <span class="card-date">${dateStr}</span>
-      <span class="card-venue">${venueText}</span>
+      <span class="card-venue">${escapeHtml(venueText)}</span>
       <span class="card-price">${priceText}</span>
     </div>
   </article>`;

@@ -26,7 +26,7 @@ export function renderActionBarHtml(
   // decoded text. Same pattern as the meta-attr seam in event-page.ts.
   const safeTitle = escapeAttr(he.decode(title));
   return `<div class="edp-action-bar">
-          <button class="edp-save-btn" data-save-event data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}" data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
+          <button class="edp-save-btn" data-save-event data-event-english="${locale === 'en'}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}" data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
             ${ACTIONBAR_BOOKMARK_ICON}
             <span class="edp-save-label">${t.saveEvent}</span>
           </button>
@@ -37,8 +37,8 @@ export function renderActionBarHtml(
         </div>`;
 }
 
-export function renderCardSaveButton(eventId: string, slug: string, title: string): string {
-  return `<button class="card-save-btn" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(he.decode(title))}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
+export function renderCardSaveButton(eventId: string, slug: string, title: string, hasEnglish = false): string {
+  return `<button class="card-save-btn" data-event-english="${hasEnglish}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(he.decode(title))}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
 }
 
 export function renderSavedEventsScript(): string {
@@ -46,12 +46,29 @@ export function renderSavedEventsScript(): string {
 (function() {
   var KEY = 'agent-athens-saved';
   var MAX = 200;
+  var memory = [];
+  var storageUnavailable = false;
+  function normalize(value) {
+    if (!Array.isArray(value)) return [];
+    var seen = new Set();
+    return value.filter(function(e) {
+      if (!e || typeof e.eventId !== 'string' || !e.eventId || typeof e.title !== 'string' || typeof e.slug !== 'string' || !e.slug) return false;
+      if (seen.has(e.eventId)) return false;
+      seen.add(e.eventId);
+      return true;
+    }).map(function(e) {
+      return { eventId: e.eventId, title: e.title, savedAt: e.savedAt, hasEnglish: e.hasEnglish === true, slug: e.slug.replace(/^\\/(en\\/)?events\\//, '').replace(/\\/$/, '') };
+    }).filter(function(e) { return e.slug && e.slug !== '.' && e.slug !== '..' && !/[\\/\\\\]/.test(e.slug); }).slice(0, MAX);
+  }
   function read() {
-    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-    catch(e) { return []; }
+    if (storageUnavailable) return memory.slice();
+    try { memory = normalize(JSON.parse(localStorage.getItem(KEY) || '[]')); }
+    catch(e) { /* Keep the current session usable when storage is blocked. */ }
+    return memory.slice();
   }
   function write(arr) {
-    try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch(e) {}
+    memory = normalize(arr);
+    try { localStorage.setItem(KEY, JSON.stringify(memory)); storageUnavailable = false; } catch(e) { storageUnavailable = true; }
     document.dispatchEvent(new CustomEvent('aa:saved-change'));
   }
   window.__aaSaved = {
@@ -59,7 +76,7 @@ export function renderSavedEventsScript(): string {
     isSaved: function(id) { return read().some(function(e) { return e.eventId === id; }); },
     save: function(obj) {
       var arr = read().filter(function(e) { return e.eventId !== obj.eventId; });
-      arr.unshift({ eventId: obj.eventId, savedAt: new Date().toISOString(), slug: obj.slug, title: obj.title });
+      arr.unshift({ eventId: obj.eventId, savedAt: new Date().toISOString(), slug: obj.slug, title: obj.title, hasEnglish: obj.hasEnglish === true });
       if (arr.length > MAX) arr = arr.slice(0, MAX);
       write(arr);
     },
@@ -73,7 +90,7 @@ export function renderSavedEventsScript(): string {
     }
   };
   window.addEventListener('storage', function(e) {
-    if (e.key === KEY) document.dispatchEvent(new CustomEvent('aa:saved-change'));
+    if (e.key === KEY || e.key === null) { storageUnavailable = false; document.dispatchEvent(new CustomEvent('aa:saved-change')); }
   });
   function syncCount() {
     var n = read().length;
@@ -99,6 +116,7 @@ export function renderSaveButtonScript(): string {
       var saved = window.__aaSaved.isSaved(id);
       btn.classList.toggle('is-saved', saved);
       btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+      btn.setAttribute('aria-label', saved ? btn.dataset.unsaveLabel : btn.dataset.saveLabel);
       var label = btn.querySelector('.edp-save-label');
       if (label) label.textContent = saved ? btn.dataset.unsaveLabel : btn.dataset.saveLabel;
     });
@@ -108,6 +126,7 @@ export function renderSaveButtonScript(): string {
       window.__aaSaved.toggle({
         eventId: btn.dataset.eventId,
         slug: btn.dataset.eventSlug,
+        hasEnglish: btn.dataset.eventEnglish === 'true',
         title: btn.dataset.eventTitle
       });
     });
@@ -127,6 +146,8 @@ export function renderCardSaveScript(): string {
       var saved = window.__aaSaved.isSaved(btn.dataset.eventId);
       btn.classList.toggle('is-saved', saved);
       btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
+      var en = document.documentElement.lang === 'en';
+      btn.setAttribute('aria-label', saved ? (en ? 'Remove saved event' : 'Αφαίρεση αποθηκευμένης εκδήλωσης') : (en ? 'Save event' : 'Αποθήκευση εκδήλωσης'));
     });
   }
   document.addEventListener('click', function(e) {
@@ -137,7 +158,8 @@ export function renderCardSaveScript(): string {
     window.__aaSaved.toggle({
       eventId: btn.dataset.eventId,
       slug: btn.dataset.eventSlug,
-      title: btn.dataset.eventTitle
+      hasEnglish: btn.dataset.eventEnglish === 'true',
+        title: btn.dataset.eventTitle
     });
   });
   // Card-body click delegation: the stretched-link ::before overlay wins
@@ -210,31 +232,9 @@ export function renderSavedPageScript(locale: Locale): string {
 (function() {
   if (!window.__aaSaved) return;
 
-  // Migrate legacy entries: strip /events/ or /en/events/ prefix + trailing slash from slug
-  (function migrate() {
-    var saved = window.__aaSaved.get();
-    var changed = false;
-    saved.forEach(function(entry) {
-      var s = entry.slug;
-      if (s && (s.indexOf('/events/') === 0 || s.indexOf('/en/events/') === 0)) {
-        entry.slug = s.replace(/^\\/(en\\/)?events\\//, '').replace(/\\/$/, '');
-        changed = true;
-      }
-    });
-    if (changed) {
-      try { localStorage.setItem('agent-athens-saved', JSON.stringify(saved)); } catch(e) {}
-    }
-  })();
-
   var list = document.getElementById('saved-events-list');
   var empty = document.getElementById('saved-empty');
   if (!list || !empty) return;
-
-  function esc(s) {
-    var d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
-  }
 
   function render() {
     var saved = window.__aaSaved.get();
@@ -249,7 +249,7 @@ export function renderSavedPageScript(locale: Locale): string {
       var row = document.createElement('div');
       row.className = 'saved-event-item';
       var a = document.createElement('a');
-      a.href = '/events/' + esc(item.slug) + '/';
+      a.href = (${locale === 'en'} && item.hasEnglish ? '/en/events/' : '/events/') + encodeURIComponent(item.slug) + '/';
       a.textContent = item.title;
       var btn = document.createElement('button');
       btn.className = 'saved-event-remove';

@@ -1,5 +1,5 @@
 import type { Event } from "../types";
-import { getAthensTimezone } from "../enrichment/quality-gates";
+import { DateTime } from "luxon";
 
 export interface DateParts {
   Y: number;
@@ -16,15 +16,18 @@ export function pad(n: number): string {
 
 export function parseIsoLocal(iso: string | undefined | null): DateParts | null {
   if (!iso) return null;
-  const full = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
-  if (full) {
-    return { Y: +full[1], M: +full[2], D: +full[3], H: +full[4], Mi: +full[5], S: +full[6] };
-  }
-  const dateOnly = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (dateOnly) {
-    return { Y: +dateOnly[1], M: +dateOnly[2], D: +dateOnly[3], H: 23, Mi: 59, S: 0 };
-  }
-  return null;
+  const match = iso.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?)?$/);
+  if (!match) return null;
+  const parts = { Y: +match[1], M: +match[2], D: +match[3], H: match[4] === undefined ? 23 : +match[4], Mi: match[5] === undefined ? 59 : +match[5], S: +(match[6] || 0) };
+  return asAthensDate(parts).isValid ? parts : null;
+}
+
+function asAthensDate(p: DateParts): DateTime {
+  return DateTime.fromObject({ year: p.Y, month: p.M, day: p.D, hour: p.H, minute: p.Mi, second: p.S }, { zone: "Europe/Athens" });
+}
+
+function fromDateTime(d: DateTime): DateParts {
+  return { Y: d.year, M: d.month, D: d.day, H: d.hour, Mi: d.minute, S: d.second };
 }
 
 export function formatICS(p: DateParts): string {
@@ -32,15 +35,7 @@ export function formatICS(p: DateParts): string {
 }
 
 export function addHours(p: DateParts, hours: number): DateParts {
-  const d = new Date(p.Y, p.M - 1, p.D, p.H + hours, p.Mi, p.S);
-  return {
-    Y: d.getFullYear(),
-    M: d.getMonth() + 1,
-    D: d.getDate(),
-    H: d.getHours(),
-    Mi: d.getMinutes(),
-    S: d.getSeconds(),
-  };
+  return fromDateTime(asAthensDate(p).plus({ hours }));
 }
 
 export interface ResolvedTimes {
@@ -65,11 +60,14 @@ export function resolveEventTimes(event: Event): ResolvedTimes | null {
     startParts.H = +pm[1];
     startParts.Mi = +pm[2];
     startParts.S = 0;
+    if (!asAthensDate(startParts).isValid) return null;
   }
 
   let endParts: DateParts;
-  if (event.type === "exhibition" && event.endDate) {
-    endParts = parseIsoLocal(event.endDate) || addHours(startParts, 3);
+  if (event.endDate) {
+    const parsedEnd = parseIsoLocal(event.endDate);
+    if (!parsedEnd || asAthensDate(parsedEnd) < asAthensDate(startParts)) return null;
+    endParts = parsedEnd;
   } else {
     endParts = addHours(startParts, 3);
   }
@@ -84,7 +82,7 @@ function escIcs(s: string | undefined): string {
     .replace(/\\/g, "\\\\")
     .replace(/;/g, "\\;")
     .replace(/,/g, "\\,")
-    .replace(/\n/g, "\\n");
+    .replace(/\r\n|\r|\n/g, "\\n");
 }
 
 // RFC 5545 §3.1 line folding at 75 octets, multi-byte UTF-8 safe
@@ -95,7 +93,7 @@ function foldLine(line: string): string {
   let out = "";
   let start = 0;
   while (start < bytes.length) {
-    let end = Math.min(start + 75, bytes.length);
+    let end = Math.min(start + (start === 0 ? 75 : 74), bytes.length);
     // Don't split inside a UTF-8 multi-byte sequence
     while (end > start && end < bytes.length && (bytes[end] & 0xc0) === 0x80) {
       end--;
@@ -131,14 +129,12 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
   const loc = [venueName, address].filter(Boolean).join(", ");
   const uid = (event.id || "event") + "@agentathens.com";
 
-  // No-time single-day events become all-day entries (RFC 5545 VALUE=DATE,
-  // end exclusive) — the 23:59 parse sentinel must never reach a calendar.
-  // Exhibitions keep their existing endDate-range emission.
-  const singleAllDay = times.allDay && !(event.type === "exhibition" && event.endDate);
-  const dtLines = singleAllDay
+  // RFC 5545: DATE ranges have an exclusive end, including exhibitions.
+  const exhibitionRange = event.type === "exhibition" && /^\d{4}-\d{2}-\d{2}$/.test(event.endDate ?? "");
+  const dtLines = times.allDay || exhibitionRange
     ? [
         "DTSTART;VALUE=DATE:" + formatDateOnly(start),
-        "DTEND;VALUE=DATE:" + formatDateOnly(addOneDay(start)),
+        "DTEND;VALUE=DATE:" + formatDateOnly(addOneDay(event.endDate ? end : start)),
       ]
     : [
         "DTSTART;TZID=Europe/Athens:" + formatICS(start),
@@ -152,13 +148,13 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
-    foldLine("UID:" + uid),
+    foldLine("UID:" + escIcs(uid)),
     "DTSTAMP:" + nowUtcStamp(),
     ...dtLines,
     foldLine("SUMMARY:" + escIcs(event.title)),
     foldLine("LOCATION:" + escIcs(loc)),
     foldLine("DESCRIPTION:" + escIcs(event.title) + "\\n" + escIcs(canonicalUrl)),
-    foldLine("URL:" + canonicalUrl),
+    foldLine("URL:" + canonicalUrl.replace(/[\r\n]/g, "")),
     "END:VEVENT",
     "END:VCALENDAR",
   ];
@@ -168,42 +164,12 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
 
 // Convert Athens-local DateParts → UTC YYYYMMDDTHHMMSSZ (GCal `dates=` param format for timed events)
 function athensPartsToUtcBasic(p: DateParts): string {
-  // Construct an Athens-local Date by using the offset string.
-  // We need a Date that represents "p in Europe/Athens" — to do that without TZ libs,
-  // build the wall-clock ISO with the correct DST-aware Athens offset.
-  const tentative = new Date(p.Y, p.M - 1, p.D, p.H, p.Mi, p.S);
-  const offset = getAthensTimezone(tentative); // e.g. "+03:00"
-  const sign = offset[0] === "+" ? 1 : -1;
-  const oh = parseInt(offset.slice(1, 3), 10);
-  const om = parseInt(offset.slice(4, 6), 10);
-  const offsetMinutes = sign * (oh * 60 + om);
-
-  // UTC = local - offset
-  const utcMs = Date.UTC(p.Y, p.M - 1, p.D, p.H, p.Mi, p.S) - offsetMinutes * 60_000;
-  const d = new Date(utcMs);
-  return (
-    d.getUTCFullYear() +
-    pad(d.getUTCMonth() + 1) +
-    pad(d.getUTCDate()) +
-    "T" +
-    pad(d.getUTCHours()) +
-    pad(d.getUTCMinutes()) +
-    pad(d.getUTCSeconds()) +
-    "Z"
-  );
+  return asAthensDate(p).toUTC().toFormat("yyyyMMdd'T'HHmmss'Z'");
 }
 
 // Add 1 day to a date-only DateParts — used for GCal exhibition end-exclusive format
 function addOneDay(p: DateParts): DateParts {
-  const d = new Date(p.Y, p.M - 1, p.D + 1);
-  return {
-    Y: d.getFullYear(),
-    M: d.getMonth() + 1,
-    D: d.getDate(),
-    H: 0,
-    Mi: 0,
-    S: 0,
-  };
+  return fromDateTime(asAthensDate(p).startOf('day').plus({ days: 1 }));
 }
 
 function formatDateOnly(p: DateParts): string {
@@ -214,11 +180,7 @@ function formatDateOnly(p: DateParts): string {
 // e.g. { Y:2026, M:6, D:15, H:20, Mi:0, S:0 } → "2026-06-15T20:00:00+03:00" (summer DST)
 // Used by buildOutlookUrl — Outlook accepts offset-bearing ISO and converts client-side.
 export function partsToAthensIso(p: DateParts): string {
-  const localDate = new Date(p.Y, p.M - 1, p.D, p.H, p.Mi, p.S);
-  const offset = getAthensTimezone(localDate);
-  return (
-    `${p.Y}-${pad(p.M)}-${pad(p.D)}T${pad(p.H)}:${pad(p.Mi)}:${pad(p.S)}${offset}`
-  );
+  return asAthensDate(p).toISO({ suppressMilliseconds: true })!;
 }
 
 // Date-only ISO (YYYY-MM-DD) — used by buildOutlookUrl when allday=true (exhibitions).
@@ -256,9 +218,9 @@ export function buildOutlookUrl(event: Event, canonicalUrl: string): string {
     ? partsToDateOnlyIso(times.start)
     : partsToAthensIso(times.start);
   const enddt = isExhibitionRange
-    ? partsToDateOnlyIso(times.end)
+    ? partsToDateOnlyIso(addOneDay(times.end))
     : isAllDay
-      ? partsToDateOnlyIso(addOneDay(times.start))
+      ? partsToDateOnlyIso(addOneDay(event.endDate ? times.end : times.start))
       : partsToAthensIso(times.end);
 
   const venueName = event.venue?.name ?? "";
@@ -292,7 +254,7 @@ export function buildGCalUrl(event: Event, canonicalUrl: string): string {
   } else if (times.allDay) {
     // Date-only event with no showtime: single all-day entry — never the
     // 23:59 parse sentinel dressed up as a start time.
-    datesParam = `${formatDateOnly(start)}/${formatDateOnly(addOneDay(start))}`;
+    datesParam = `${formatDateOnly(start)}/${formatDateOnly(addOneDay(event.endDate ? end : start))}`;
   } else {
     // Timed event: UTC basic format on both ends
     datesParam = `${athensPartsToUtcBasic(start)}/${athensPartsToUtcBasic(end)}`;

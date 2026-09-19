@@ -249,18 +249,12 @@ describe("renderSavedPageScript", () => {
     expect(script).toContain("textContent");
   });
 
-  test("includes slug migration that strips /events/ prefix", () => {
-    const script = renderSavedPageScript("el");
-    expect(script).toContain("/events/");
-    expect(script).toContain("migrate");
-    // Handles both /events/ and /en/events/ prefixes
-    expect(script).toContain("(en\\/)?events\\/");
+  test("saved links encode the normalized slug and preserve English locale", () => {
+    const script = renderSavedPageScript("en");
+    expect(script).toContain("item.hasEnglish ? '/en/events/' : '/events/'");
+    expect(script).toContain("encodeURIComponent(item.slug)");
   });
 
-  test("migration is idempotent — only writes if entries changed", () => {
-    const script = renderSavedPageScript("el");
-    expect(script).toContain("if (changed)");
-  });
 });
 
 describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts)", () => {
@@ -293,7 +287,7 @@ describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts
     expect(ics).toMatch(/DTSTAMP:\d{8}T\d{6}Z/);
   });
 
-  test("exhibition with date-only endDate: DTEND uses 23:59:00 of that date (TZID-local)", () => {
+  test("exhibition with date-only endDate: all-day DTEND is the next day", () => {
     const ics = generateIcs(
       makeCalEvent({
         type: "exhibition",
@@ -302,7 +296,7 @@ describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts
       }),
       CANONICAL,
     );
-    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260930T235900");
+    expect(ics).toContain("DTEND;VALUE=DATE:20261001");
   });
 
   test("non-exhibition: DTEND falls back to start + 3h", () => {
@@ -442,7 +436,7 @@ describe("buildOutlookUrl", () => {
     );
     expect(url).toContain("allday=true");
     expect(url).toContain("startdt=2026-06-01");
-    expect(url).toContain("enddt=2026-09-30");
+    expect(url).toContain("enddt=2026-10-01");
   });
 
   test("subject param contains URL-encoded title", () => {
@@ -507,13 +501,13 @@ describe("date-agreement (anti-drift gate): all three calendar targets derive fr
     const gcal = buildGCalUrl(event, CANONICAL);
     const outlook = buildOutlookUrl(event, CANONICAL);
 
-    // ICS: 23:59 on resolver's end date
-    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260930T235900");
+    // ICS: date-only ranges use an exclusive end.
+    expect(ics).toContain("DTEND;VALUE=DATE:20261001");
     // GCal: end-exclusive next day (Oct 1) — different format, same source date
     expect(gcal).toContain("20261001");
-    // Outlook: allday=true with date-only end matching the source date (Sep 30, inclusive)
+    // Outlook: all-day ranges also use an exclusive end.
     expect(outlook).toContain("allday=true");
-    expect(outlook).toContain("enddt=2026-09-30");
+    expect(outlook).toContain("enddt=2026-10-01");
   });
 });
 

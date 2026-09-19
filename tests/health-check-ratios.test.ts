@@ -11,8 +11,8 @@ function fixtureDb(): Database {
   const db = new Database(':memory:');
   db.run(`CREATE TABLE events (
     id TEXT PRIMARY KEY, type TEXT, start_date TEXT, end_date TEXT,
-    location_status TEXT, needs_enrichment INTEGER, schema_json TEXT)`);
-  const ins = db.prepare(`INSERT INTO events VALUES (?,?,?,?,?,?,?)`);
+    location_status TEXT, needs_enrichment INTEGER, schema_json TEXT, merged_into TEXT)`);
+  const ins = db.prepare(`INSERT INTO events VALUES (?,?,?,?,?,?,?,NULL)`);
   ins.run('up-1', 'concert', '2099-01-01', null, 'verified_athens', 0, '{}');
   ins.run('up-2', 'concert', '2099-01-02', null, 'verified_athens', 1, null);
   ins.run('up-3', 'exhibition', '2000-01-01', '2099-06-01', 'pass_through', 0, '{}');

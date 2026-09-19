@@ -1,3 +1,5 @@
+import { escapeHtml } from '../utils/html-escape';
+import { escapeJsonForHtml } from '../utils/html-json';
 // Content page template — static pages (about, editorial, corrections)
 // Uses site chrome (nav, footer, hamburger) but no filter bar, cards, or hero.
 // Supports locale for bilingual E-E-A-T pages (el + en).
@@ -31,12 +33,12 @@ export function renderContentPage(
   const locale = options?.locale ?? 'el';
   const ogLocale = locale === 'en' ? 'en_US' : 'el_GR';
   const defaultDesc = locale === 'en'
-    ? `${title} — agent athens, daily Athens cultural events calendar`
-    : `${title} — agent athens, ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας`;
+    ? `${escapeHtml(title)} — agent athens, daily Athens cultural events calendar`
+    : `${escapeHtml(title)} — agent athens, ημερολόγιο πολιτιστικών εκδηλώσεων Αθήνας`;
   const metaDesc = options?.metaDescription || defaultDesc;
 
   const schemaBlock = options?.schemaJson
-    ? `\n  <script type="application/ld+json">\n  ${options.schemaJson}\n  </script>`
+    ? `\n  <script type="application/ld+json">\n  ${escapeJsonForHtml(options.schemaJson)}\n  </script>`
     : '';
 
   // S144 (GEO 2026-05-21): canonical is locale-aware self. Supersedes the
@@ -61,11 +63,11 @@ export function renderContentPage(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>${title} | agent-athens</title>
-  <meta name="description" content="${metaDesc}">
+  <title>${escapeHtml(title)} | agent-athens</title>
+  <meta name="description" content="${escapeHtml(metaDesc)}">
   <link rel="canonical" href="${canonicalUrl}">${options?.noindex ? '\n  <meta name="robots" content="noindex, follow">' : ''}${hreflangHtml}
-  <meta property="og:title" content="${title} | agent-athens">
-  <meta property="og:description" content="${metaDesc}">
+  <meta property="og:title" content="${escapeHtml(title)} | agent-athens">
+  <meta property="og:description" content="${escapeHtml(metaDesc)}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="${ogLocale}">
@@ -74,8 +76,8 @@ export function renderContentPage(
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title} | agent-athens">
-  <meta name="twitter:description" content="${metaDesc}">
+  <meta name="twitter:title" content="${escapeHtml(title)} | agent-athens">
+  <meta name="twitter:description" content="${escapeHtml(metaDesc)}">
   <meta name="twitter:image" content="${BASE_URL}/images/og/agentathens-default.png">${schemaBlock}
   <meta name="view-transition" content="same-origin">
   ${renderFaviconLinks()}
@@ -86,7 +88,7 @@ ${renderAnalytics()}
 <body>
   ${renderSiteNav(locale)}
   ${renderHamburgerMenu(locale)}
-  ${renderSearchOverlay()}
+  ${renderSearchOverlay(locale)}
 
   <main class="content-page-body" id="main-content" tabindex="-1">
     ${bodyHtml}
@@ -94,7 +96,7 @@ ${renderAnalytics()}
 
   ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
-  ${renderSearchScript()}
+  ${renderSearchScript(locale)}
   ${options?.extraScripts || ''}
 </body>
 </html>`;

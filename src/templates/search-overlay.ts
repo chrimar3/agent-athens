@@ -9,19 +9,27 @@
 /**
  * Render the search overlay HTML (hidden by default, shown via .is-open)
  */
-export function renderSearchOverlay(): string {
-  return `<div class="search-overlay" role="dialog" aria-modal="true" aria-label="Αναζήτηση" aria-hidden="true">
+import type { Locale } from '../i18n/strings';
+
+const SEARCH_LABELS = {
+  el: { search: 'Αναζήτηση', close: 'Κλείσιμο', placeholder: 'Αναζήτηση εκδηλώσεων…', input: 'Αναζήτηση εκδηλώσεων', clear: 'Καθαρισμός', popular: 'Δημοφιλή', recent: 'Πρόσφατες αναζητήσεις', results: 'Αποτελέσματα αναζήτησης', events: 'Εκδηλώσεις', venues: 'Χώροι', categories: 'Κατηγορίες', empty: 'Δεν βρέθηκαν αποτελέσματα', error: 'Η αναζήτηση δεν είναι διαθέσιμη. Δοκιμάστε ξανά.', retry: 'Δοκιμάστε ξανά', seeAll: 'Δείτε όλα', count: 'αποτελέσματα', eventCount: 'εκδηλώσεις' },
+  en: { search: 'Search', close: 'Close', placeholder: 'Search events…', input: 'Search events', clear: 'Clear', popular: 'Popular', recent: 'Recent searches', results: 'Search results', events: 'Events', venues: 'Venues', categories: 'Categories', empty: 'No results found', error: 'Search is unavailable. Please try again.', retry: 'Try again', seeAll: 'See all', count: 'results', eventCount: 'events' },
+};
+
+export function renderSearchOverlay(locale: Locale = 'el'): string {
+  const t = SEARCH_LABELS[locale];
+  return `<div class="search-overlay" role="dialog" aria-modal="true" aria-label="${t.search}" aria-hidden="true">
   <div class="search-overlay-backdrop"></div>
   <div class="search-overlay-panel">
-    <button class="search-close-btn" aria-label="Κλείσιμο" type="button">
+    <button class="search-close-btn" aria-label="${t.close}" type="button">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <div class="search-input-wrapper">
       <svg class="search-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
       </svg>
-      <input class="search-input" type="search" placeholder="Αναζήτηση εκδηλώσεων…" aria-label="Αναζήτηση εκδηλώσεων" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results-list" aria-activedescendant="" aria-haspopup="listbox">
-      <button class="search-clear-btn" aria-label="Καθαρισμός" type="button" style="display:none">&times;</button>
+      <input class="search-input" type="search" placeholder="${t.placeholder}" aria-label="${t.input}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="search-results-list" aria-activedescendant="" aria-haspopup="listbox">
+      <button class="search-clear-btn" aria-label="${t.clear}" type="button" style="display:none">&times;</button>
     </div>
     <div class="search-skeleton" style="display:none">
       <div class="skeleton-row"><div class="skeleton-thumb"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
@@ -29,28 +37,29 @@ export function renderSearchOverlay(): string {
       <div class="skeleton-row"><div class="skeleton-thumb"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
     </div>
     <div class="search-popular" style="display:none">
-      <h3 class="search-group-title">Δημοφιλή</h3>
+      <h3 class="search-group-title">${t.popular}</h3>
       <div class="search-popular-items"></div>
     </div>
     <div class="search-recent" style="display:none">
-      <h3 class="search-group-title">Πρόσφατες αναζητήσεις</h3>
+      <h3 class="search-group-title">${t.recent}</h3>
       <div class="search-recent-items"></div>
     </div>
-    <div class="search-results" id="search-results-list" role="listbox" aria-label="Αποτελέσματα αναζήτησης">
-      <div class="search-group" data-group="events" role="group" aria-label="Εκδηλώσεις">
-        <h3 class="search-group-title">Εκδηλώσεις</h3>
+    <div class="search-results" id="search-results-list" role="listbox" aria-label="${t.results}">
+      <div class="search-group" data-group="events" role="group" aria-label="${t.events}">
+        <h3 class="search-group-title">${t.events}</h3>
         <div class="search-group-items"></div>
       </div>
-      <div class="search-group" data-group="venues" role="group" aria-label="Χώροι">
-        <h3 class="search-group-title">Χώροι</h3>
+      <div class="search-group" data-group="venues" role="group" aria-label="${t.venues}">
+        <h3 class="search-group-title">${t.venues}</h3>
         <div class="search-group-items"></div>
       </div>
-      <div class="search-group" data-group="categories" role="group" aria-label="Κατηγορίες">
-        <h3 class="search-group-title">Κατηγορίες</h3>
+      <div class="search-group" data-group="categories" role="group" aria-label="${t.categories}">
+        <h3 class="search-group-title">${t.categories}</h3>
         <div class="search-group-items"></div>
       </div>
     </div>
-    <div class="search-empty" style="display:none">Δεν βρέθηκαν αποτελέσματα</div>
+    <div class="search-empty" style="display:none">${t.empty}</div>
+    <div class="search-error" hidden><p>${t.error}</p><button class="search-retry-btn" type="button">${t.retry}</button></div>
     <div class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 </div>`;
@@ -61,9 +70,11 @@ export function renderSearchOverlay(): string {
  * Uses safe DOM methods (createElement/textContent) instead of innerHTML
  * since index data passes through JSON — defense in depth.
  */
-export function renderSearchScript(): string {
+export function renderSearchScript(locale: Locale = 'el'): string {
   return `<script>
 (function() {
+  var labels = ${JSON.stringify(SEARCH_LABELS[locale])};
+  var eventPrefix = '${locale === 'en' ? '/en' : ''}/events/';
   var overlay = document.querySelector('.search-overlay');
   var backdrop = document.querySelector('.search-overlay-backdrop');
   var input = document.querySelector('.search-input');
@@ -83,6 +94,9 @@ export function renderSearchScript(): string {
   var fuseEvents, fuseVenues, fuseCategories;
   var indexData = null;
   var loaded = false;
+  var loading = null;
+  var errorEl = overlay.querySelector('.search-error');
+  var retryBtn = overlay.querySelector('.search-retry-btn');
   var debounceTimer;
   var returnFocus = null;
   var activeIndex = -1;
@@ -92,10 +106,13 @@ export function renderSearchScript(): string {
   // Recent searches (sessionStorage)
   var RECENT_KEY = 'aa_recent_searches';
   var recentSearches = [];
-  try { recentSearches = JSON.parse(sessionStorage.getItem(RECENT_KEY) || '[]'); } catch(e) {}
+  try {
+    var stored = JSON.parse(sessionStorage.getItem(RECENT_KEY) || '[]');
+    if (Array.isArray(stored)) recentSearches = stored.filter(function(q) { return typeof q === 'string' && q.trim(); }).slice(0, 5);
+  } catch(e) {}
 
   function norm(s) {
-    return s.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
+    return s.trim().toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
   }
 
   function makeEl(tag, cls) {
@@ -109,7 +126,7 @@ export function renderSearchScript(): string {
   }
 
   function collectItems() {
-    allItems = Array.from(overlay.querySelectorAll('.search-result-item:not([style*="display: none"])'));
+    allItems = Array.from(resultsEl.querySelectorAll('.search-result-item')).filter(function(el) { return el.getClientRects().length > 0; });
   }
 
   function setActive(idx) {
@@ -171,12 +188,12 @@ export function renderSearchScript(): string {
     while (popularItems.firstChild) popularItems.removeChild(popularItems.firstChild);
     indexData.popular.forEach(function(e) {
       var el = makeEl('a', 'search-result-item');
-      el.href = '/events/' + e.slug + '/';
+      el.href = (e.hasEnglish ? eventPrefix : '/events/') + encodeURIComponent(e.slug) + '/';
       var text = makeEl('div', 'search-result-text');
       var title = makeEl('div', 'search-result-title');
       title.textContent = e.title;
       var meta = makeEl('div', 'search-result-meta');
-      meta.textContent = e.date + ' \\u00B7 ' + e.venue;
+      meta.textContent = displayDate(e) + ' \\u00B7 ' + e.venue;
       text.appendChild(title);
       text.appendChild(meta);
       el.appendChild(text);
@@ -202,20 +219,22 @@ export function renderSearchScript(): string {
     if (recentEl) recentEl.style.display = 'none';
   }
 
-  function open() {
+  function open(query) {
+    clearTimeout(debounceTimer);
     returnFocus = document.activeElement;
     overlay.classList.add('is-open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('scroll-locked');
-    input.value = '';
-    if (clearBtn) clearBtn.style.display = 'none';
+    input.value = typeof query === 'string' ? query : '';
+    if (clearBtn) clearBtn.style.display = input.value ? '' : 'none';
     clearResults();
     showEmptyState();
-    setTimeout(function() { input.focus(); }, 50);
-    if (!loaded) loadIndex();
+    setTimeout(function() { if (overlay.classList.contains('is-open')) input.focus(); }, 50);
+    if (!loaded) loadIndex(); else search(input.value);
   }
 
   function close() {
+    clearTimeout(debounceTimer);
     overlay.classList.remove('is-open');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('scroll-locked');
@@ -242,12 +261,24 @@ export function renderSearchScript(): string {
   }
 
   function loadIndex() {
+    if (loading) return loading;
     showSkeleton();
-    Promise.all([
-      fetch('/search-index.json').then(function(r) { return r.json(); }),
+    if (errorEl) errorEl.hidden = true;
+    input.setAttribute('aria-busy', 'true');
+    var controller = new AbortController();
+    var timeout;
+    var deadline = new Promise(function(_, reject) {
+      timeout = setTimeout(function() { controller.abort(); reject(new Error('Search timed out')); }, 15000);
+    });
+    loading = Promise.race([Promise.all([
+      fetch('/search-index.json', { signal: controller.signal }).then(function(r) {
+        if (!r.ok) throw new Error('Search HTTP ' + r.status);
+        return r.json();
+      }),
       import('/scripts/fuse.mjs')
-    ]).then(function(results) {
+    ]), deadline]).then(function(results) {
       indexData = results[0];
+      if (!indexData || !Array.isArray(indexData.events) || !Array.isArray(indexData.venues) || !Array.isArray(indexData.categories)) throw new Error('Invalid search index');
       var Fuse = results[1].default;
 
       fuseEvents = new Fuse(indexData.events, {
@@ -280,16 +311,30 @@ export function renderSearchScript(): string {
       loaded = true;
       hideSkeleton();
       renderPopularItems();
-      if (!input.value) showEmptyState();
+      if (overlay.classList.contains('is-open')) search(input.value);
     }).catch(function(err) {
       console.error('Search index load failed:', err);
+      if (errorEl) errorEl.hidden = false;
+      announce(labels.error);
+    }).finally(function() {
+      clearTimeout(timeout);
+      loading = null;
       hideSkeleton();
+      input.setAttribute('aria-busy', 'false');
     });
+    return loading;
+  }
+  if (retryBtn) retryBtn.addEventListener('click', function() { loadIndex(); input.focus(); });
+
+  function displayDate(e) {
+    if ('${locale}' !== 'en' || !e.startDate) return e.date;
+    var date = new Date(e.startDate.slice(0, 10) + 'T12:00:00Z');
+    return isNaN(date.getTime()) ? e.date : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/Athens' });
   }
 
   function renderEventResult(e) {
     var el = makeEl('a', 'search-result-item');
-    el.href = '/events/' + e.slug + '/';
+    el.href = (e.hasEnglish ? eventPrefix : '/events/') + encodeURIComponent(e.slug) + '/';
     el.id = 'sr-' + (++resultIdCounter);
     el.setAttribute('role', 'option');
     el.setAttribute('aria-selected', 'false');
@@ -307,7 +352,7 @@ export function renderSearchScript(): string {
     var title = makeEl('div', 'search-result-title');
     title.textContent = e.title;
     var meta = makeEl('div', 'search-result-meta');
-    meta.textContent = e.date + ' \\u00B7 ' + e.venue;
+    meta.textContent = displayDate(e) + ' \\u00B7 ' + e.venue;
     text.appendChild(title);
     text.appendChild(meta);
     el.appendChild(text);
@@ -317,7 +362,7 @@ export function renderSearchScript(): string {
 
   function renderVenueResult(v) {
     var el = makeEl('a', 'search-result-item');
-    el.href = '/venues/' + v.slug + '/';
+    el.href = '/venues/' + encodeURIComponent(v.slug) + '/';
     el.id = 'sr-' + (++resultIdCounter);
     el.setAttribute('role', 'option');
     el.setAttribute('aria-selected', 'false');
@@ -325,7 +370,7 @@ export function renderSearchScript(): string {
     var title = makeEl('div', 'search-result-title');
     title.textContent = v.name;
     var meta = makeEl('div', 'search-result-meta');
-    meta.textContent = (v.neighborhood ? v.neighborhood + ' \\u00B7 ' : '') + v.eventCount + ' \\u03B5\\u03BA\\u03B4\\u03B7\\u03BB\\u03CE\\u03C3\\u03B5\\u03B9\\u03C2';
+    meta.textContent = (v.neighborhood ? v.neighborhood + ' \\u00B7 ' : '') + v.eventCount + ' ' + labels.eventCount;
     text.appendChild(title);
     text.appendChild(meta);
     el.appendChild(text);
@@ -343,7 +388,7 @@ export function renderSearchScript(): string {
     var title = makeEl('div', 'search-result-title');
     title.textContent = c.title;
     var meta = makeEl('div', 'search-result-meta');
-    meta.textContent = c.count + ' \\u03B5\\u03BA\\u03B4\\u03B7\\u03BB\\u03CE\\u03C3\\u03B5\\u03B9\\u03C2';
+    meta.textContent = c.count + ' ' + labels.eventCount;
     text.appendChild(title);
     text.appendChild(meta);
     el.appendChild(text);
@@ -351,16 +396,24 @@ export function renderSearchScript(): string {
     return el;
   }
 
-  function addSeeAllLink(group, totalCount, query) {
-    if (totalCount <= 5) return;
-    var link = makeEl('a', 'search-see-all');
-    link.href = '/?q=' + encodeURIComponent(query);
-    link.textContent = '\\u0394\\u03B5\\u03AF\\u03C4\\u03B5 \\u03CC\\u03BB\\u03B1 (' + totalCount + ')';
-    group.appendChild(link);
+  function addSeeAllLink(group, matches, renderer) {
+    if (matches.length <= 5) return;
+    var button = makeEl('button', 'search-see-all');
+    button.type = 'button';
+    button.textContent = labels.seeAll + ' (' + matches.length + ')';
+    button.addEventListener('click', function() {
+      var items = group.querySelector('.search-group-items');
+      matches.slice(5).forEach(function(r) { items.appendChild(renderer(r.item)); });
+      button.remove();
+      collectItems();
+      input.focus();
+      announce(matches.length + ' ' + labels.count);
+    });
+    group.appendChild(button);
   }
 
   function search(query) {
-    if (!loaded || !indexData) return;
+    if (!loaded || !indexData || !overlay.classList.contains('is-open')) return;
     var q = norm(query);
     if (q.length < 2) {
       clearResults();
@@ -370,9 +423,9 @@ export function renderSearchScript(): string {
 
     hideEmptyState();
 
-    var eventResults = fuseEvents.search(q, { limit: 20 });
-    var venueResults = fuseVenues.search(q, { limit: 20 });
-    var catResults = fuseCategories.search(q, { limit: 20 });
+    var eventResults = fuseEvents.search(q);
+    var venueResults = fuseVenues.search(q);
+    var catResults = fuseCategories.search(q);
 
     clearResults();
 
@@ -385,7 +438,7 @@ export function renderSearchScript(): string {
       group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       eventResults.slice(0, 5).forEach(function(r) { items.appendChild(renderEventResult(r.item)); });
-      addSeeAllLink(group, eventResults.length, query);
+      addSeeAllLink(group, eventResults, renderEventResult);
     }
 
     if (venueResults.length > 0) {
@@ -393,7 +446,7 @@ export function renderSearchScript(): string {
       group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       venueResults.slice(0, 5).forEach(function(r) { items.appendChild(renderVenueResult(r.item)); });
-      addSeeAllLink(group, venueResults.length, query);
+      addSeeAllLink(group, venueResults, renderVenueResult);
     }
 
     if (catResults.length > 0) {
@@ -401,11 +454,11 @@ export function renderSearchScript(): string {
       group.style.display = 'block';
       var items = group.querySelector('.search-group-items');
       catResults.slice(0, 5).forEach(function(r) { items.appendChild(renderCategoryResult(r.item)); });
-      addSeeAllLink(group, catResults.length, query);
+      addSeeAllLink(group, catResults, renderCategoryResult);
     }
 
     collectItems();
-    announce(totalCount + ' \\u03B1\\u03C0\\u03BF\\u03C4\\u03B5\\u03BB\\u03AD\\u03C3\\u03BC\\u03B1\\u03C4\\u03B1');
+    announce(totalCount + ' ' + labels.count);
   }
 
   // Close button
@@ -414,6 +467,7 @@ export function renderSearchScript(): string {
   // Clear button
   if (clearBtn) {
     clearBtn.addEventListener('click', function() {
+      clearTimeout(debounceTimer);
       input.value = '';
       clearBtn.style.display = 'none';
       clearResults();
@@ -456,6 +510,7 @@ export function renderSearchScript(): string {
   // Keyboard navigation
   overlay.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
+      clearTimeout(debounceTimer);
       e.preventDefault();
       if (input.value) {
         input.value = '';
@@ -523,6 +578,8 @@ export function renderSearchScript(): string {
     }
     debounceTimer = setTimeout(function() { search(val); }, 150);
   });
+  var initialQuery = new URLSearchParams(window.location.search).get('q');
+  if (initialQuery) open(initialQuery);
 })();
 </script>`;
 }

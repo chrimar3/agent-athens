@@ -23,7 +23,7 @@ export default async function handler(request: Request, context: Context) {
   const pathParts = url.pathname.split('/').filter(Boolean);
 
   // Path format: /go/[event-id]
-  if (pathParts.length < 2 || pathParts[0] !== 'go') {
+  if (pathParts.length !== 2 || pathParts[0] !== 'go') {
     return new Response('Invalid path. Use /go/[event-id]?url=...', { status: 400 });
   }
 
@@ -38,7 +38,7 @@ export default async function handler(request: Request, context: Context) {
   let validatedUrl: string;
   try {
     // URL should be properly encoded
-    validatedUrl = decodeURIComponent(destinationUrl);
+    validatedUrl = destinationUrl; // URLSearchParams has already decoded the query value.
     new URL(validatedUrl); // Throws if invalid
   } catch {
     return new Response('Invalid destination URL', { status: 400 });
@@ -65,10 +65,10 @@ export default async function handler(request: Request, context: Context) {
 
   const parsedDest = new URL(validatedUrl);
   const isAllowedDomain = allowedDomains.some(domain =>
-    parsedDest.hostname.includes(domain)
+    parsedDest.hostname === domain || parsedDest.hostname.endsWith('.' + domain)
   );
 
-  if (!isAllowedDomain) {
+  if (!isAllowedDomain || !['https:', 'http:'].includes(parsedDest.protocol) || parsedDest.username || parsedDest.password) {
     console.log(`[go] Blocked redirect to: ${parsedDest.hostname}`);
     return new Response('Redirect not allowed to this domain', { status: 403 });
   }
@@ -99,7 +99,7 @@ export default async function handler(request: Request, context: Context) {
   }
 
   // Redirect to destination
-  return Response.redirect(validatedUrl, 302);
+  return new Response(null, { status: 302, headers: { Location: parsedDest.href, 'Cache-Control': 'no-store' } });
 }
 
 // Configure function

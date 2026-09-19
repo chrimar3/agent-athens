@@ -1,3 +1,5 @@
+import { escapeHtml } from '../utils/html-escape';
+import { escapeJsonForHtml } from '../utils/html-json';
 // HTML page template with full GEO/SEO optimization
 // Greek Primary + English Metadata Strategy
 
@@ -91,13 +93,13 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Primary Title: Greek -->
-  <title>${title} | agent-athens</title>
+  <title>${escapeHtml(title)} | agent-athens</title>
 
   <!-- Primary Description: Greek -->
-  <meta name="description" content="${description}">
+  <meta name="description" content="${escapeHtml(description)}">
 
   <!-- Bilingual Keywords -->
-  <meta name="keywords" content="${keywords}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
+  <meta name="keywords" content="${escapeHtml(keywords)}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture">
 
   <!-- Canonical URL (English slug for international SEO) -->
   <link rel="canonical" href="${pageUrl(url)}">${metadata.noindex ? '\n  <meta name="robots" content="noindex, follow">' : ''}
@@ -114,7 +116,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
   <!-- OpenGraph: Greek Primary, English Secondary -->
-  <meta property="og:title" content="${title}">
+  <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
   <meta property="og:url" content="${pageUrl(url)}">
   <meta property="og:type" content="website">
@@ -125,7 +127,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
   <meta name="twitter:image" content="${BASE_URL}${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
 
@@ -140,7 +142,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- Schema.org JSON-LD -->
   ${schemaMarkup ? `<script type="application/ld+json">
-  ${schemaMarkup}
+  ${escapeJsonForHtml(schemaMarkup)}
   </script>` : ''}
 
   <!-- Design system -->
@@ -154,12 +156,12 @@ ${renderAnalytics()}
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav(locale)}
   ${renderHamburgerMenu(locale)}
-  ${renderSearchOverlay()}
+  ${renderSearchOverlay(locale)}
 
   <div class="page-container">
     <header class="page-header">
       <div class="page-header-row">
-        <h1>${h1Override ?? title}</h1>
+        <h1>${escapeHtml(h1Override ?? title)}</h1>
         <span class="last-update">Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
           month: 'long',
           day: 'numeric',
@@ -194,7 +196,7 @@ ${renderAnalytics()}
 
   ${renderSiteFooter(locale)}
   ${renderHamburgerScript()}
-  ${renderSearchScript()}
+  ${renderSearchScript(locale)}
   ${filterBarScriptHTML}
   ${renderSavedEventsScript()}
   ${renderCardSaveScript()}
@@ -318,22 +320,22 @@ export function renderEventCard(event: Event): string {
   <article class="event-card" data-price="${numericPrice}" data-type="${event.type}" data-price-type="${event.price.type}">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${imgSrc}" alt="${event.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
-      ${renderCardSaveButton(event.id, slug, event.title)}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
     </div>`
       : `<div class="card-image-wrapper" data-type="${event.type}">
       ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
-      ${renderCardSaveButton(event.id, slug, event.title)}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
     </div>`}
     <div class="card-body">
-      <h3 class="card-title"><a href="${href}" class="card-link">${event.title}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
-      <span class="card-venue">${venueText}</span>
+      <span class="card-venue">${escapeHtml(venueText)}</span>
       ${priceHtml}
     </div>
   </article>`;

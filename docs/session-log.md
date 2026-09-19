@@ -7463,3 +7463,16 @@ constant feeding both surfaces.
 **Learnings:** The responder layer's ceiling is the operator loop — all three outage roots were already queued operator items. The only layer that survives a sleeping Mac is off-machine (GitHub App / cloud backstop still pending). Nationwide sources re-open every Athens-assumption in the filter.
 
 **Open items:** (1) pmset STILL not run — now labeled as outage root in the queue. (2) Watch tonight's full run: build must clear F2b, deploy must succeed (Aug-12 failure was DNS-transient), push-gate green. (3) Phase-1 exit gate needs 7 green days from ~today; Phase-2 clock resets with it. (4) 211 address-empty whitelist entries = standing exposure; whole-config sweep next session. (5) Circus city verification (queue). (6) Digest/phase3-weekly plists: verify they fired during the gap or catch up.
+
+
+### Session 225 — Ten improvements across measurement, security and event actions — 2026-09-19
+
+**Plan:** Audit the repository, rank ten changes by expected reach/severity/confidence/cost, implement them, and verify rendered behavior. The user also requested the GitHub plugin connection.
+
+**What happened:** Corrected health-report populations; escaped JSON-LD and event text; tightened ticket redirects; repaired search loading, expansion, accessibility and locale routing; hardened saved events; corrected calendar output; stabilized DataFeed timestamps; aligned search metadata with lifecycle/page eligibility; restored the missing local preview server. Added a ranked report at `docs/2026-09-19-project-improvements.md`. GitHub plugin offered; latest check still reports not installed.
+
+**Verified:** TypeScript; broad source/test suite (two sandbox process-visibility failures passed unrestricted); focused rendering/security regressions; five real-Chrome interaction flows; complete isolated build with zero schema errors and 22 warnings; all 699 search destinations exist in the generated artifact. Commands and measured results are in the report. Existing unrelated working-tree changes were preserved. No commit, push or deployment.
+
+**Learnings:** Locale labels do not establish that localized destination pages exist. Search and saved links must carry or derive page availability. JSON-LD needs HTML-safe serialization even when JSON itself is valid. All-day calendar end dates are exclusive.
+
+**Open items:** GitHub plugin installation/account authorization; deployed Netlify click-persistence verification (the local blob package is unavailable); remaining schema/data warnings. The user's `--sandbox workspace-write --ask-for-approval never` flags were verified against local CLI help; they apply when launching a session and do not alter this running session.

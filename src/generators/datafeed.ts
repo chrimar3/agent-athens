@@ -12,6 +12,7 @@
  * not reshaped. DataFeed wraps; doesn't transform.
  */
 
+import { existsSync, readFileSync } from 'fs';
 import type { Event } from '../types';
 import type { Locale } from '../i18n/strings';
 import { buildEventSchemaObject } from './event-page';
@@ -44,5 +45,16 @@ export function buildDataFeed(events: Event[], locale: Locale = 'el'): DataFeedD
 }
 
 export function writeDataFeed(feed: DataFeedDocument, outputPath: string): boolean {
+  // Both fields describe the same content revision. Strip only these feed-level
+  // timestamps; nested event timestamps remain meaningful change signals.
+  const stable = (value: DataFeedDocument) => JSON.stringify({ ...value, dateModified: '', meta: { ...value.meta, lastUpdate: '' } });
+  if (existsSync(outputPath)) {
+    try {
+      const previous = JSON.parse(readFileSync(outputPath, 'utf8')) as DataFeedDocument;
+      if (typeof previous.dateModified === 'string' && previous.meta?.lastUpdate === previous.dateModified && stable(previous) === stable(feed)) {
+        feed = { ...feed, dateModified: previous.dateModified, meta: { ...feed.meta, lastUpdate: previous.dateModified } };
+      }
+    } catch { /* A corrupt prior artifact is replaced by the valid feed. */ }
+  }
   return writeJsonApiIfChangedSync(outputPath, feed);
 }
